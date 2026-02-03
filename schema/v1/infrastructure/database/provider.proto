@@ -1,0 +1,196 @@
+syntax = "proto3";
+
+package infrastructure.database.v1;
+
+option go_package = "leapfor.xyz/esqyma/golang/v1/infrastructure/database";
+
+// DatabaseProvider enum identifies database types
+enum DatabaseProvider {
+  DATABASE_PROVIDER_UNSPECIFIED = 0;
+  DATABASE_PROVIDER_POSTGRESQL = 1;
+  DATABASE_PROVIDER_FIRESTORE = 2;
+  DATABASE_PROVIDER_MONGODB = 3;
+  DATABASE_PROVIDER_MYSQL = 4;
+  DATABASE_PROVIDER_SQLITE = 5;
+  DATABASE_PROVIDER_MOCK = 99;
+}
+
+// DatabaseProviderConfig is the top-level config for database providers
+message DatabaseProviderConfig {
+  // Which provider to use
+  DatabaseProvider provider = 1;
+
+  // Whether this provider is enabled
+  bool enabled = 2;
+
+  // Provider-specific configuration (oneof ensures only one is set)
+  oneof config {
+    PostgreSQLConfig postgresql = 100;
+    FirestoreConfig firestore = 101;
+    MongoDBConfig mongodb = 102;
+    MySQLConfig mysql = 103;
+    SQLiteConfig sqlite = 104;
+    MockConfig mock = 199;
+  }
+}
+
+// PostgreSQL-specific configuration
+message PostgreSQLConfig {
+  // Database connection parameters
+  string host = 1;                        // Default: "localhost"
+  string port = 2;                        // Default: "5432"
+  string database = 3;                    // Required
+  string username = 4;                    // Required
+  string password = 5;                    // Required (can be empty for trust auth)
+
+  // SSL/TLS configuration
+  string ssl_mode = 6;                    // disable, require, verify-ca, verify-full
+  string ssl_cert_path = 7;               // Path to SSL certificate
+  string ssl_key_path = 8;                // Path to SSL key
+  string ssl_root_cert_path = 9;          // Path to root certificate
+
+  // Connection pool settings
+  int32 max_connections = 10;             // Default: 25
+  int32 max_idle_connections = 11;        // Default: 5
+  int32 connection_max_lifetime_seconds = 12;  // Default: 3600 (1 hour)
+  int32 connection_max_idle_time_seconds = 13; // Default: 600 (10 minutes)
+
+  // Schema and migrations
+  string migrations_path = 14;            // Path to migration files
+  string schema = 15;                     // Default: "public"
+  bool auto_migrate = 16;                 // Whether to run migrations on startup
+
+  // Query configuration
+  int32 statement_timeout_seconds = 17;   // Default: 30
+  string timezone = 18;                   // Default: "UTC"
+
+  // Logging and debugging
+  bool log_queries = 19;                  // Whether to log SQL queries
+  bool log_slow_queries = 20;             // Whether to log slow queries
+  int32 slow_query_threshold_ms = 21;     // Threshold for slow query logging
+}
+
+// Firestore-specific configuration
+message FirestoreConfig {
+  // GCP project configuration
+  string project_id = 1;                  // Required: GCP project ID
+  string database_id = 2;                 // Default: "(default)"
+
+  // Authentication
+  string credentials_path = 3;            // Path to service account JSON
+  bool use_service_account_json = 4;      // Whether to use service account from env
+
+  // Emulator support (for local development)
+  bool use_emulator = 5;                  // Whether to use Firestore emulator
+  string emulator_host = 6;               // Emulator host (e.g., "localhost:8080")
+
+  // Performance tuning
+  int32 max_pool_size = 7;                // Maximum concurrent connections
+  int32 max_idle_connections = 8;         // Maximum idle connections
+
+  // Timeouts
+  int32 connection_timeout_seconds = 9;   // Connection timeout
+  int32 request_timeout_seconds = 10;     // Request timeout
+
+  // Logging
+  bool log_requests = 11;                 // Whether to log Firestore requests
+}
+
+// MongoDB-specific configuration
+message MongoDBConfig {
+  // Connection
+  string connection_string = 1;           // Required: MongoDB connection string
+  string database = 2;                    // Required: Database name
+
+  // Connection pool
+  int32 max_pool_size = 3;                // Default: 100
+  int32 min_pool_size = 4;                // Default: 10
+
+  // Timeouts
+  int32 connection_timeout_seconds = 5;   // Default: 30
+  int32 socket_timeout_seconds = 6;       // Default: 30
+  int32 server_selection_timeout_seconds = 7;  // Default: 30
+
+  // Read/Write concern
+  string read_preference = 8;             // primary, secondary, nearest, etc.
+  string write_concern = 9;               // majority, w1, w2, w3, etc.
+
+  // Logging
+  bool log_commands = 10;                 // Whether to log MongoDB commands
+}
+
+// MySQL-specific configuration
+message MySQLConfig {
+  // Database connection parameters
+  string host = 1;                        // Default: "localhost"
+  string port = 2;                        // Default: "3306"
+  string database = 3;                    // Required
+  string username = 4;                    // Required
+  string password = 5;                    // Required
+
+  // SSL/TLS configuration
+  bool enable_tls = 6;                    // Whether to enable TLS
+  string tls_cert_path = 7;               // Path to TLS certificate
+  string tls_key_path = 8;                // Path to TLS key
+  string tls_ca_path = 9;                 // Path to CA certificate
+
+  // Connection pool
+  int32 max_connections = 10;             // Default: 25
+  int32 max_idle_connections = 11;        // Default: 5
+  int32 connection_max_lifetime_seconds = 12;  // Default: 3600
+
+  // Query configuration
+  string charset = 13;                    // Default: "utf8mb4"
+  string collation = 14;                  // Default: "utf8mb4_unicode_ci"
+  string timezone = 15;                   // Default: "UTC"
+
+  // Logging
+  bool log_queries = 16;                  // Whether to log queries
+}
+
+// SQLite-specific configuration
+message SQLiteConfig {
+  // File configuration
+  string file_path = 1;                   // Required: Path to SQLite database file
+  bool in_memory = 2;                     // Use in-memory database (for testing)
+
+  // Performance tuning
+  string journal_mode = 3;                // DELETE, TRUNCATE, PERSIST, MEMORY, WAL
+  string synchronous = 4;                 // OFF, NORMAL, FULL, EXTRA
+  int32 cache_size_kb = 5;                // Cache size in KB (default: 2000)
+  int32 page_size_bytes = 6;              // Page size in bytes (default: 4096)
+
+  // Connection pool (for SQLite, usually 1)
+  int32 max_open_connections = 7;         // Default: 1
+
+  // Pragmas
+  bool enable_foreign_keys = 8;           // Default: true
+  bool enable_triggers = 9;               // Default: true
+
+  // Migrations
+  string migrations_path = 10;            // Path to migration files
+  bool auto_migrate = 11;                 // Whether to run migrations on startup
+
+  // Logging
+  bool log_queries = 12;                  // Whether to log queries
+}
+
+// Mock database configuration (for testing)
+message MockConfig {
+  // Mock behavior
+  string name = 1;                        // Mock provider name
+  bool simulate_failures = 2;             // Whether to simulate random failures
+  int32 failure_rate_percent = 3;         // Percentage of operations that fail (0-100)
+
+  // Initial data
+  map<string, string> initial_data = 4;   // Initial data to load
+  string initial_data_path = 5;           // Path to JSON file with initial data
+
+  // Performance simulation
+  int32 latency_ms = 6;                   // Simulated latency in milliseconds
+  int32 latency_variance_ms = 7;          // Variance in latency
+
+  // Logging
+  bool log_operations = 8;                // Whether to log operations
+  bool verbose = 9;                       // Verbose logging
+}

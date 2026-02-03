@@ -1,0 +1,115 @@
+syntax = "proto3";
+
+package domain.entity.v1;
+
+option go_package = "leapfor.xyz/esqyma/golang/v1/domain/entity/client";
+
+import "domain/common/error.proto";
+import "domain/common/search.proto";
+import "domain/common/filter.proto";
+import "domain/common/sort.proto";
+import "domain/common/pagination.proto";
+
+import "domain/entity/user/user.proto";
+import "domain/entity/client_category/client_category.proto";
+
+message Client {
+  string id = 1;
+  optional User user = 2;
+  string user_id = 3;
+  optional int64 date_created = 4;
+  optional string date_created_string = 5;
+  optional int64 date_modified = 6;
+  optional string date_modified_string = 7;
+  bool active = 8;
+  string internal_id = 9;
+  optional string category_id = 10;
+  optional ClientCategory category = 11;
+}
+
+service ClientDomainService {
+  rpc CreateClient(CreateClientRequest) returns (CreateClientResponse);
+  rpc ReadClient(ReadClientRequest) returns (ReadClientResponse);
+  rpc UpdateClient(UpdateClientRequest) returns (UpdateClientResponse);
+  rpc DeleteClient(DeleteClientRequest) returns (DeleteClientResponse);
+  rpc ListClients(ListClientsRequest) returns (ListClientsResponse);
+  rpc GetClientListPageData(GetClientListPageDataRequest) returns (GetClientListPageDataResponse);
+  rpc GetClientItemPageData(GetClientItemPageDataRequest) returns (GetClientItemPageDataResponse);
+}
+
+message CreateClientRequest {
+  Client data = 1;
+}
+
+message CreateClientResponse {
+  repeated Client data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message ReadClientRequest {
+  Client data = 1;
+}
+
+message ReadClientResponse {
+  repeated Client data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message UpdateClientRequest {
+  Client data = 1;
+}
+
+message UpdateClientResponse {
+  repeated Client data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message DeleteClientRequest {
+  Client data = 1;
+}
+
+message DeleteClientResponse {
+  bool success = 1;
+  optional domain.common.v1.Error error = 2;
+}
+
+message ListClientsRequest {
+  optional domain.common.v1.SearchRequest search = 1;
+  optional domain.common.v1.FilterRequest filters = 2;
+  optional domain.common.v1.SortRequest sort = 3;
+  optional domain.common.v1.PaginationRequest pagination = 4;
+}
+
+message ListClientsResponse {
+  repeated Client data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message GetClientListPageDataRequest {
+  optional domain.common.v1.SearchRequest search = 1;
+  optional domain.common.v1.FilterRequest filters = 2;
+  optional domain.common.v1.SortRequest sort = 3;
+  optional domain.common.v1.PaginationRequest pagination = 4;
+}
+
+message GetClientListPageDataResponse {
+  repeated Client client_list = 1;
+  optional domain.common.v1.PaginationResponse pagination = 2;
+  repeated domain.common.v1.SearchResult search_results = 3;
+  bool success = 4;
+  optional domain.common.v1.Error error = 5;
+}
+
+message GetClientItemPageDataRequest {
+  string client_id = 1;
+}
+
+message GetClientItemPageDataResponse {
+  optional Client client = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}

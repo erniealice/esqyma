@@ -1,0 +1,112 @@
+syntax = "proto3";
+
+package domain.product.v1;
+
+option go_package = "leapfor.xyz/esqyma/golang/v1/domain/product/product_collection";
+
+import "domain/common/error.proto";
+import "domain/common/pagination.proto";
+import "domain/common/filter.proto";
+import "domain/common/sort.proto";
+import "domain/common/search.proto";
+
+message ProductCollection {
+  string id = 1;
+  optional int64 date_created = 2;
+  optional string date_created_string = 3;
+  optional int64 date_modified = 4;
+  optional string date_modified_string = 5;
+  bool active = 6;
+  string product_id = 7;
+  string collection_id = 8;
+  int32 sort_order = 9;
+}
+
+service ProductCollectionDomainService {
+  rpc CreateProductCollection(CreateProductCollectionRequest) returns (CreateProductCollectionResponse);
+  rpc ReadProductCollection(ReadProductCollectionRequest) returns (ReadProductCollectionResponse);
+  rpc UpdateProductCollection(UpdateProductCollectionRequest) returns (UpdateProductCollectionResponse);
+  rpc DeleteProductCollection(DeleteProductCollectionRequest) returns (DeleteProductCollectionResponse);
+  rpc ListProductCollections(ListProductCollectionsRequest) returns (ListProductCollectionsResponse);
+  rpc GetProductCollectionListPageData(GetProductCollectionListPageDataRequest)
+    returns (GetProductCollectionListPageDataResponse);
+  rpc GetProductCollectionItemPageData(GetProductCollectionItemPageDataRequest)
+    returns (GetProductCollectionItemPageDataResponse);
+}
+
+message CreateProductCollectionRequest {
+  ProductCollection data = 1;
+}
+
+message CreateProductCollectionResponse {
+  repeated ProductCollection data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message ReadProductCollectionRequest {
+  ProductCollection data = 1;
+}
+
+message ReadProductCollectionResponse {
+  repeated ProductCollection data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message UpdateProductCollectionRequest {
+  ProductCollection data = 1;
+}
+
+message UpdateProductCollectionResponse {
+  repeated ProductCollection data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message DeleteProductCollectionRequest {
+  ProductCollection data = 1;
+}
+
+message DeleteProductCollectionResponse {
+  bool success = 1;
+  optional domain.common.v1.Error error = 2;
+}
+
+message ListProductCollectionsRequest {
+  optional domain.common.v1.SearchRequest search = 1;
+  optional domain.common.v1.FilterRequest filters = 2;
+  optional domain.common.v1.SortRequest sort = 3;
+  optional domain.common.v1.PaginationRequest pagination = 4;
+}
+
+message ListProductCollectionsResponse {
+  repeated ProductCollection data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message GetProductCollectionListPageDataRequest {
+  optional domain.common.v1.SearchRequest search = 1;
+  optional domain.common.v1.FilterRequest filters = 2;
+  optional domain.common.v1.SortRequest sort = 3;
+  optional domain.common.v1.PaginationRequest pagination = 4;
+}
+
+message GetProductCollectionListPageDataResponse {
+  repeated ProductCollection product_collection_list = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+  optional domain.common.v1.PaginationResponse pagination = 4;
+  repeated domain.common.v1.SearchResult search_results = 5;
+}
+
+message GetProductCollectionItemPageDataRequest {
+  string product_collection_id = 1;
+}
+
+message GetProductCollectionItemPageDataResponse {
+  ProductCollection product_collection = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}

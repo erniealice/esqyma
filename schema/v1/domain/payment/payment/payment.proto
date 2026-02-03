@@ -1,0 +1,114 @@
+syntax = "proto3";
+
+package domain.payment.v1;
+
+option go_package = "leapfor.xyz/esqyma/golang/v1/domain/payment/payment";
+
+import "domain/common/error.proto";
+import "domain/common/pagination.proto";
+import "domain/common/search.proto";
+import "domain/common/filter.proto";
+import "domain/common/sort.proto";
+
+import "domain/subscription/subscription/subscription.proto";
+
+message Payment {
+  string id = 1;
+  optional int64 date_created = 2;
+  optional string date_created_string = 3;
+  optional int64 date_modified = 4;
+  optional string date_modified_string = 5;
+  bool active = 6;
+  string name = 7;
+  optional domain.subscription.v1.Subscription subscription = 8;
+  string subscription_id = 9;
+  double amount = 10;
+  string status = 11;
+}
+
+service PaymentDomainService {
+  rpc CreatePayment(CreatePaymentRequest) returns (CreatePaymentResponse);
+  rpc ReadPayment(ReadPaymentRequest) returns (ReadPaymentResponse);
+  rpc UpdatePayment(UpdatePaymentRequest) returns (UpdatePaymentResponse);
+  rpc DeletePayment(DeletePaymentRequest) returns (DeletePaymentResponse);
+  rpc ListPayments(ListPaymentsRequest) returns (ListPaymentsResponse);
+  rpc GetPaymentListPageData(GetPaymentListPageDataRequest) returns (GetPaymentListPageDataResponse);
+  rpc GetPaymentItemPageData(GetPaymentItemPageDataRequest) returns (GetPaymentItemPageDataResponse);
+}
+
+message CreatePaymentRequest {
+  Payment data = 1;
+}
+
+message CreatePaymentResponse {
+  repeated Payment data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message ReadPaymentRequest {
+  Payment data = 1;
+}
+
+message ReadPaymentResponse {
+  repeated Payment data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message UpdatePaymentRequest {
+  Payment data = 1;
+}
+
+message UpdatePaymentResponse {
+  repeated Payment data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message DeletePaymentRequest {
+  Payment data = 1;
+}
+
+message DeletePaymentResponse {
+  bool success = 1;
+  optional domain.common.v1.Error error = 2;
+}
+
+message ListPaymentsRequest {
+  optional domain.common.v1.SearchRequest search = 1;
+  optional domain.common.v1.FilterRequest filters = 2;
+  optional domain.common.v1.SortRequest sort = 3;
+  optional domain.common.v1.PaginationRequest pagination = 4;
+}
+
+message ListPaymentsResponse {
+  repeated Payment data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message GetPaymentListPageDataRequest {
+  optional domain.common.v1.PaginationRequest pagination = 1;
+  optional domain.common.v1.FilterRequest filters = 2;
+  optional domain.common.v1.SortRequest sort = 3;
+  optional domain.common.v1.SearchRequest search = 4;
+}
+
+message GetPaymentListPageDataResponse {
+  repeated Payment payment_list = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+  optional domain.common.v1.PaginationResponse pagination = 4;
+  repeated domain.common.v1.SearchResult search_results = 5;
+}
+
+message GetPaymentItemPageDataRequest {
+  string payment_id = 1;
+}
+
+message GetPaymentItemPageDataResponse {
+  optional Payment payment = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}

@@ -1,0 +1,263 @@
+syntax = "proto3";
+
+package infrastructure.storage.v1;
+
+option go_package = "leapfor.xyz/esqyma/golang/v1/infrastructure/storage";
+
+import "google/protobuf/timestamp.proto";
+import "infrastructure/storage/object.proto";
+
+// StorageContainer represents a bucket/container in cloud storage
+message StorageContainer {
+  // Unique identifier for the container
+  string id = 1;
+
+  // Storage provider
+  StorageProvider provider = 2;
+
+  // Container/bucket name (must be globally unique for some providers)
+  string name = 3;
+
+  // Display name or description
+  string description = 4;
+
+  // Region/location where the container is stored
+  string location = 5;
+
+  // When the container was created
+  google.protobuf.Timestamp created_at = 6;
+
+  // Whether the container is public or private
+  bool is_public = 7;
+
+  // Whether versioning is enabled
+  bool versioning_enabled = 8;
+
+  // Default storage class for objects in this container
+  string default_storage_class = 9;
+
+  // Whether encryption is enabled
+  bool encryption_enabled = 10;
+
+  // Custom metadata for the container
+  map<string, string> metadata = 11;
+
+  // Provider-specific container information
+  oneof provider_container {
+    AzureContainer azure_container = 100;
+    GcsContainer gcs_container = 101;
+    S3Container s3_container = 102;
+  }
+}
+
+// AzureContainer contains Azure Blob Storage specific fields
+message AzureContainer {
+  // Storage account name
+  string storage_account = 1;
+
+  // Public access level (None, Blob, Container)
+  string public_access = 2;
+
+  // Lease status
+  string lease_status = 3;
+
+  // Whether the container has an immutability policy
+  bool has_immutability_policy = 4;
+
+  // Whether legal hold is enabled
+  bool has_legal_hold = 5;
+
+  // Default encryption scope
+  string default_encryption_scope = 6;
+}
+
+// GcsContainer contains Google Cloud Storage specific fields
+message GcsContainer {
+  // GCP project ID
+  string project_id = 1;
+
+  // Bucket location type (Region, Dual-region, Multi-region)
+  string location_type = 2;
+
+  // Storage class (Standard, Nearline, Coldline, Archive)
+  string storage_class = 3;
+
+  // Whether hierarchical namespace is enabled
+  bool hierarchical_namespace_enabled = 4;
+
+  // Whether uniform bucket-level access is enabled
+  bool uniform_bucket_level_access = 5;
+
+  // Retention policy duration (in seconds)
+  int64 retention_period_seconds = 6;
+
+  // Whether the retention policy is locked
+  bool retention_policy_locked = 7;
+
+  // Customer-managed encryption key
+  string kms_key_name = 8;
+}
+
+// S3Container contains Amazon S3 specific fields
+message S3Container {
+  // AWS region
+  string region = 1;
+
+  // Bucket type (general purpose or directory)
+  string bucket_type = 2;
+
+  // Whether bucket is configured for static website hosting
+  bool website_enabled = 3;
+
+  // Whether transfer acceleration is enabled
+  bool transfer_acceleration_enabled = 4;
+
+  // Whether object lock is enabled
+  bool object_lock_enabled = 5;
+
+  // Object lock configuration mode
+  string object_lock_mode = 6;
+
+  // Replication configuration status
+  string replication_status = 7;
+
+  // Server-side encryption configuration
+  string sse_algorithm = 8;
+
+  // KMS key ID for encryption
+  string kms_key_id = 9;
+
+  // Whether requester pays is enabled
+  bool requester_pays_enabled = 10;
+}
+
+// CreateContainerRequest is a request to create a new storage container
+message CreateContainerRequest {
+  // Storage provider
+  StorageProvider provider = 1;
+
+  // Container name
+  string name = 2;
+
+  // Description
+  string description = 3;
+
+  // Region/location
+  string location = 4;
+
+  // Whether the container should be public
+  bool is_public = 5;
+
+  // Whether to enable versioning
+  bool versioning_enabled = 6;
+
+  // Default storage class
+  string default_storage_class = 7;
+
+  // Custom metadata
+  map<string, string> metadata = 8;
+
+  // Provider-specific configuration
+  oneof provider_config {
+    AzureContainerConfig azure_config = 100;
+    GcsContainerConfig gcs_config = 101;
+    S3ContainerConfig s3_config = 102;
+  }
+}
+
+// Azure-specific container creation config
+message AzureContainerConfig {
+  string storage_account = 1;
+  string public_access = 2;
+  string default_encryption_scope = 3;
+}
+
+// GCS-specific container creation config
+message GcsContainerConfig {
+  string project_id = 1;
+  string location_type = 2;
+  string storage_class = 3;
+  bool hierarchical_namespace_enabled = 4;
+  bool uniform_bucket_level_access = 5;
+  string kms_key_name = 6;
+}
+
+// S3-specific container creation config
+message S3ContainerConfig {
+  string region = 1;
+  string bucket_type = 2;
+  bool object_lock_enabled = 3;
+  string sse_algorithm = 4;
+  string kms_key_id = 5;
+}
+
+// CreateContainerResponse contains the created container
+message CreateContainerResponse {
+  // The created container
+  StorageContainer container = 1;
+
+  // Message about the creation
+  string message = 2;
+}
+
+// GetContainerRequest is a request to get container details
+message GetContainerRequest {
+  // Storage provider
+  StorageProvider provider = 1;
+
+  // Container name
+  string name = 2;
+}
+
+// GetContainerResponse contains the container details
+message GetContainerResponse {
+  // The container
+  StorageContainer container = 1;
+}
+
+// DeleteContainerRequest is a request to delete a container
+message DeleteContainerRequest {
+  // Storage provider
+  StorageProvider provider = 1;
+
+  // Container name
+  string name = 2;
+
+  // Whether to force delete (delete even if not empty)
+  bool force = 3;
+}
+
+// DeleteContainerResponse confirms the deletion
+message DeleteContainerResponse {
+  // Whether deletion was successful
+  bool success = 1;
+
+  // Message about the deletion
+  string message = 2;
+}
+
+// ListContainersRequest is a request to list containers
+// TODO: Implement container listing in future phase
+message ListContainersRequest {
+  // Storage provider
+  StorageProvider provider = 1;
+
+  // Pagination offset
+  int32 offset = 2;
+
+  // Pagination limit
+  int32 limit = 3;
+
+  // Filter by location
+  string location = 4;
+}
+
+// ListContainersResponse contains the list of containers
+// TODO: Implement container listing in future phase
+message ListContainersResponse {
+  // List of containers
+  repeated StorageContainer containers = 1;
+
+  // Total count
+  int32 total_count = 2;
+}

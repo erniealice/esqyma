@@ -1,0 +1,156 @@
+syntax = "proto3";
+
+package infrastructure.auth.v1;
+
+option go_package = "leapfor.xyz/esqyma/golang/v1/infrastructure/auth";
+
+import "infrastructure/auth/identity.proto";
+
+// ProviderConfig represents authentication provider configuration
+message ProviderConfig {
+  // The provider type
+  Provider provider = 1;
+
+  // Whether this provider is enabled
+  bool enabled = 2;
+
+  // Display name for the provider
+  string display_name = 3;
+
+  // Provider-specific configuration
+  oneof config {
+    AzureProviderConfig azure_config = 100;
+    GcpProviderConfig gcp_config = 101;
+    AwsProviderConfig aws_config = 102;
+    CustomProviderConfig custom_config = 103;
+  }
+}
+
+// AzureProviderConfig contains Azure/Entra ID specific configuration
+message AzureProviderConfig {
+  // Azure tenant ID
+  string tenant_id = 1;
+
+  // Azure client ID (application ID)
+  string client_id = 2;
+
+  // Azure AD authority URL
+  string authority = 3;
+
+  // Whether to use managed identity
+  bool use_managed_identity = 4;
+
+  // Managed identity client ID (if using managed identity)
+  string managed_identity_client_id = 5;
+
+  // Token endpoint URL
+  string token_endpoint = 6;
+
+  // Authorization endpoint URL
+  string authorization_endpoint = 7;
+
+  // Allowed redirect URIs for OAuth flows
+  repeated string redirect_uris = 8;
+
+  // Scopes to request by default
+  repeated string default_scopes = 9;
+}
+
+// GcpProviderConfig contains Google Cloud Platform specific configuration
+message GcpProviderConfig {
+  // GCP project ID
+  string project_id = 1;
+
+  // OAuth 2.0 client ID
+  string client_id = 2;
+
+  // Service account email (for service authentication)
+  string service_account_email = 3;
+
+  // Workload identity pool (for federated authentication)
+  string workload_identity_pool = 4;
+
+  // Workload identity provider
+  string workload_identity_provider = 5;
+
+  // Token endpoint URL
+  string token_endpoint = 6;
+
+  // Authorization endpoint URL
+  string authorization_endpoint = 7;
+
+  // Allowed redirect URIs for OAuth flows
+  repeated string redirect_uris = 8;
+
+  // Scopes to request by default
+  repeated string default_scopes = 9;
+
+  // Whether to use Application Default Credentials
+  bool use_adc = 10;
+}
+
+// AwsProviderConfig contains AWS specific configuration
+message AwsProviderConfig {
+  // AWS region
+  string region = 1;
+
+  // Cognito user pool ID (for user authentication)
+  string user_pool_id = 2;
+
+  // Cognito app client ID
+  string app_client_id = 3;
+
+  // Cognito identity pool ID (for federated authentication)
+  string identity_pool_id = 4;
+
+  // IAM role ARN (for service authentication)
+  string iam_role_arn = 5;
+
+  // Cognito domain for hosted UI
+  string cognito_domain = 6;
+
+  // Allowed redirect URIs for OAuth flows
+  repeated string redirect_uris = 7;
+
+  // OAuth scopes to request by default
+  repeated string default_scopes = 8;
+
+  // Whether to use IAM credentials
+  bool use_iam_credentials = 9;
+}
+
+// CustomProviderConfig contains custom provider configuration
+message CustomProviderConfig {
+  // Provider name/identifier
+  string provider_name = 1;
+
+  // Provider base URL
+  string base_url = 2;
+
+  // Token endpoint URL
+  string token_endpoint = 3;
+
+  // Authorization endpoint URL
+  string authorization_endpoint = 4;
+
+  // User info endpoint URL
+  string user_info_endpoint = 5;
+
+  // JWKS (JSON Web Key Set) endpoint URL
+  string jwks_endpoint = 6;
+
+  // Issuer identifier
+  string issuer = 7;
+
+  // Client ID
+  string client_id = 8;
+
+  // Allowed redirect URIs
+  repeated string redirect_uris = 9;
+
+  // Scopes to request by default
+  repeated string default_scopes = 10;
+
+  // Custom configuration parameters
+  map<string, string> custom_params = 11;
+}

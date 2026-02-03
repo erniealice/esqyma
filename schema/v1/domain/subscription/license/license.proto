@@ -1,0 +1,332 @@
+syntax = "proto3";
+
+package domain.subscription.v1;
+
+option go_package = "leapfor.xyz/esqyma/golang/v1/domain/subscription/license";
+
+import "domain/common/error.proto";
+import "domain/common/pagination.proto";
+import "domain/common/filter.proto";
+import "domain/common/sort.proto";
+import "domain/common/search.proto";
+import "domain/subscription/subscription/subscription.proto";
+import "domain/subscription/plan/plan.proto";
+
+// LicenseType defines the assignment model
+enum LicenseType {
+  LICENSE_TYPE_UNSPECIFIED = 0;
+  LICENSE_TYPE_USER = 1;        // Assigned to specific user/client
+  LICENSE_TYPE_DEVICE = 2;      // Assigned to device
+  LICENSE_TYPE_TENANT = 3;      // Org-wide, not individually assigned
+  LICENSE_TYPE_FLOATING = 4;    // Pool-based, checked out on use
+}
+
+// LicenseStatus tracks lifecycle state
+enum LicenseStatus {
+  LICENSE_STATUS_UNSPECIFIED = 0;
+  LICENSE_STATUS_PENDING = 1;     // Created but not active
+  LICENSE_STATUS_ACTIVE = 2;      // Active and usable
+  LICENSE_STATUS_SUSPENDED = 3;   // Temporarily disabled
+  LICENSE_STATUS_REVOKED = 4;     // Permanently disabled
+  LICENSE_STATUS_EXPIRED = 5;     // Past validity date
+}
+
+// LicenseEntitlement defines what access a license grants
+message LicenseEntitlement {
+  string id = 1;
+  string license_id = 2;
+
+  // Entitlement type
+  string entitlement_type = 3;  // "location_access", "feature", "usage_quota", "content", "product"
+
+  // Type-specific references
+  optional string product_id = 4;       // For product/course/subject access
+  optional string location_id = 5;      // For location access
+  optional string feature_code = 6;     // For feature flags
+  optional string content_id = 7;       // For content access
+
+  // Usage limits (for quota-based)
+  optional int32 usage_limit = 8;       // Max uses (null = unlimited)
+  optional int32 usage_count = 9;       // Current usage
+  optional string usage_period = 10;    // "daily", "weekly", "monthly", "lifetime"
+
+  // Status
+  bool active = 11;
+}
+
+// License represents a single assignable unit from subscription pool
+message License {
+  string id = 1;
+
+  // Parent reference
+  string subscription_id = 2;
+  optional Subscription subscription = 3;
+
+  // Product reference
+  string plan_id = 4;
+  optional Plan plan = 5;
+
+  // License identification
+  string license_key = 6;           // Human-readable (e.g., "GYM-2024-XXXX")
+  optional string external_key = 7; // External system reference
+
+  // Type and status
+  LicenseType license_type = 8;
+  LicenseStatus status = 9;
+
+  // Validity period (can differ from subscription)
+  optional int64 date_valid_from = 10;
+  optional string date_valid_from_string = 11;
+  optional int64 date_valid_until = 12;
+  optional string date_valid_until_string = 13;
+
+  // Assignment fields (flattened - license IS the assignment)
+  optional string assignee_id = 14;         // Who holds this license
+  optional string assignee_type = 15;       // "client", "user", "device", "tenant"
+  optional string assignee_name = 16;       // Denormalized for display
+  optional string assigned_by = 17;         // Who made the assignment
+  optional int64 date_assigned = 18;        // When assigned
+  optional string date_assigned_string = 19;
+
+  // Sequence within subscription (seat 1 of 5)
+  optional int32 sequence_number = 20;
+
+  // Flexible metadata
+  map<string, string> metadata = 21;
+
+  // Entitlements (what this license grants)
+  repeated LicenseEntitlement entitlements = 22;
+
+  // Audit fields
+  optional int64 date_created = 23;
+  optional string date_created_string = 24;
+  optional int64 date_modified = 25;
+  optional string date_modified_string = 26;
+  bool active = 27;
+}
+
+service LicenseDomainService {
+  // Standard CRUD
+  rpc CreateLicense(CreateLicenseRequest) returns (CreateLicenseResponse);
+  rpc ReadLicense(ReadLicenseRequest) returns (ReadLicenseResponse);
+  rpc UpdateLicense(UpdateLicenseRequest) returns (UpdateLicenseResponse);
+  rpc DeleteLicense(DeleteLicenseRequest) returns (DeleteLicenseResponse);
+  rpc ListLicenses(ListLicensesRequest) returns (ListLicensesResponse);
+
+  // Page data
+  rpc GetLicenseListPageData(GetLicenseListPageDataRequest)
+    returns (GetLicenseListPageDataResponse);
+  rpc GetLicenseItemPageData(GetLicenseItemPageDataRequest)
+    returns (GetLicenseItemPageDataResponse);
+
+  // Assignment operations
+  rpc AssignLicense(AssignLicenseRequest) returns (AssignLicenseResponse);
+  rpc RevokeLicenseAssignment(RevokeLicenseAssignmentRequest)
+    returns (RevokeLicenseAssignmentResponse);
+  rpc ReassignLicense(ReassignLicenseRequest) returns (ReassignLicenseResponse);
+  rpc SuspendLicense(SuspendLicenseRequest) returns (SuspendLicenseResponse);
+  rpc ReactivateLicense(ReactivateLicenseRequest) returns (ReactivateLicenseResponse);
+
+  // Validation
+  rpc ValidateLicenseAccess(ValidateLicenseAccessRequest)
+    returns (ValidateLicenseAccessResponse);
+
+  // Bulk operations
+  rpc CreateLicensesFromPlan(CreateLicensesFromPlanRequest)
+    returns (CreateLicensesFromPlanResponse);
+}
+
+// ============================================================================
+// Standard CRUD Request/Response Messages
+// ============================================================================
+
+message CreateLicenseRequest {
+  License data = 1;
+}
+
+message CreateLicenseResponse {
+  repeated License data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message ReadLicenseRequest {
+  License data = 1;
+}
+
+message ReadLicenseResponse {
+  repeated License data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message UpdateLicenseRequest {
+  License data = 1;
+}
+
+message UpdateLicenseResponse {
+  repeated License data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message DeleteLicenseRequest {
+  License data = 1;
+}
+
+message DeleteLicenseResponse {
+  bool success = 1;
+  optional domain.common.v1.Error error = 2;
+}
+
+message ListLicensesRequest {
+  optional domain.common.v1.SearchRequest search = 1;
+  optional domain.common.v1.FilterRequest filters = 2;
+  optional domain.common.v1.SortRequest sort = 3;
+  optional domain.common.v1.PaginationRequest pagination = 4;
+}
+
+message ListLicensesResponse {
+  repeated License data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+// ============================================================================
+// Page Data Request/Response Messages
+// ============================================================================
+
+message GetLicenseListPageDataRequest {
+  domain.common.v1.PaginationRequest pagination = 1;
+  domain.common.v1.FilterRequest filters = 2;
+  domain.common.v1.SortRequest sort = 3;
+  domain.common.v1.SearchRequest search = 4;
+}
+
+message GetLicenseListPageDataResponse {
+  repeated License license_list = 1;
+  domain.common.v1.PaginationResponse pagination = 2;
+  repeated domain.common.v1.SearchResult search_results = 3;
+  bool success = 4;
+  optional domain.common.v1.Error error = 5;
+}
+
+message GetLicenseItemPageDataRequest {
+  string license_id = 1;
+}
+
+message GetLicenseItemPageDataResponse {
+  License license = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+// ============================================================================
+// Assignment Operation Request/Response Messages
+// ============================================================================
+
+message AssignLicenseRequest {
+  string license_id = 1;
+  string assignee_id = 2;
+  string assignee_type = 3;       // "client", "user", "device", "tenant"
+  optional string assignee_name = 4;
+  string assigned_by = 5;         // Who is performing the assignment
+  optional string reason = 6;     // Optional reason for assignment
+}
+
+message AssignLicenseResponse {
+  License license = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message RevokeLicenseAssignmentRequest {
+  string license_id = 1;
+  string performed_by = 2;        // Who is performing the revocation
+  optional string reason = 3;     // Optional reason for revocation
+}
+
+message RevokeLicenseAssignmentResponse {
+  License license = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message ReassignLicenseRequest {
+  string license_id = 1;
+  string new_assignee_id = 2;
+  string new_assignee_type = 3;   // "client", "user", "device", "tenant"
+  optional string new_assignee_name = 4;
+  string performed_by = 5;        // Who is performing the reassignment
+  optional string reason = 6;     // Optional reason for reassignment
+}
+
+message ReassignLicenseResponse {
+  License license = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message SuspendLicenseRequest {
+  string license_id = 1;
+  string performed_by = 2;        // Who is performing the suspension
+  optional string reason = 3;     // Optional reason for suspension
+}
+
+message SuspendLicenseResponse {
+  License license = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message ReactivateLicenseRequest {
+  string license_id = 1;
+  string performed_by = 2;        // Who is performing the reactivation
+  optional string reason = 3;     // Optional reason for reactivation
+}
+
+message ReactivateLicenseResponse {
+  License license = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+// ============================================================================
+// Validation Request/Response Messages
+// ============================================================================
+
+message ValidateLicenseAccessRequest {
+  string license_id = 1;
+  optional string license_key = 2;      // Alternative to license_id
+  optional string assignee_id = 3;      // Validate for specific assignee
+  optional string assignee_type = 4;    // Validate assignee type matches
+  optional string entitlement_type = 5; // Check specific entitlement type
+  optional string resource_id = 6;      // Check access to specific resource
+}
+
+message ValidateLicenseAccessResponse {
+  bool is_valid = 1;
+  License license = 2;
+  optional string validation_message = 3;
+  bool success = 4;
+  optional domain.common.v1.Error error = 5;
+}
+
+// ============================================================================
+// Bulk Operation Request/Response Messages
+// ============================================================================
+
+message CreateLicensesFromPlanRequest {
+  string subscription_id = 1;
+  string plan_id = 2;
+  int32 quantity = 3;             // Number of licenses to create
+  optional string default_license_type = 4;  // Default license type for created licenses
+  optional bool auto_assign_to_purchaser = 5; // Auto-assign first license to subscription client
+}
+
+message CreateLicensesFromPlanResponse {
+  repeated License licenses = 1;
+  int32 created_count = 2;
+  bool success = 3;
+  optional domain.common.v1.Error error = 4;
+}

@@ -1,0 +1,116 @@
+syntax = "proto3";
+
+package domain.product.v1;
+
+option go_package = "leapfor.xyz/esqyma/golang/v1/domain/product/product_attribute";
+
+import "domain/common/error.proto";
+import "domain/common/pagination.proto";
+import "domain/common/filter.proto";
+import "domain/common/sort.proto";
+import "domain/common/search.proto";
+
+import "domain/product/product/product.proto";
+import "domain/common/attribute.proto";
+
+message ProductAttribute {
+  string id = 1;
+  string product_id = 2;
+  string attribute_id = 3;
+  string value = 4;
+  domain.product.v1.Product product = 5;
+  domain.common.v1.Attribute attribute = 6;
+  optional int64 date_created = 7;
+  optional string date_created_string = 8;
+  optional int64 date_modified = 9;
+  optional string date_modified_string = 10;
+}
+
+service ProductAttributeDomainService {
+  rpc CreateProductAttribute(CreateProductAttributeRequest) returns (CreateProductAttributeResponse);
+  rpc ReadProductAttribute(ReadProductAttributeRequest) returns (ReadProductAttributeResponse);
+  rpc UpdateProductAttribute(UpdateProductAttributeRequest) returns (UpdateProductAttributeResponse);
+  rpc DeleteProductAttribute(DeleteProductAttributeRequest) returns (DeleteProductAttributeResponse);
+  rpc ListProductAttributes(ListProductAttributesRequest) returns (ListProductAttributesResponse);
+  rpc GetProductAttributeListPageData(GetProductAttributeListPageDataRequest)
+    returns (GetProductAttributeListPageDataResponse);
+  rpc GetProductAttributeItemPageData(GetProductAttributeItemPageDataRequest)
+    returns (GetProductAttributeItemPageDataResponse);
+}
+
+message CreateProductAttributeRequest {
+  ProductAttribute data = 1;
+}
+
+message CreateProductAttributeResponse {
+  repeated ProductAttribute data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message ReadProductAttributeRequest {
+  ProductAttribute data = 1;
+}
+
+message ReadProductAttributeResponse {
+  repeated ProductAttribute data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message UpdateProductAttributeRequest {
+  ProductAttribute data = 1;
+}
+
+message UpdateProductAttributeResponse {
+  repeated ProductAttribute data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message DeleteProductAttributeRequest {
+  ProductAttribute data = 1;
+}
+
+message DeleteProductAttributeResponse {
+  bool success = 1;
+  optional domain.common.v1.Error error = 2;
+}
+
+message ListProductAttributesRequest {
+  optional domain.common.v1.SearchRequest search = 1;
+  optional domain.common.v1.FilterRequest filters = 2;
+  optional domain.common.v1.SortRequest sort = 3;
+  optional domain.common.v1.PaginationRequest pagination = 4;
+}
+
+message ListProductAttributesResponse {
+  repeated ProductAttribute data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message GetProductAttributeListPageDataRequest {
+  optional domain.common.v1.SearchRequest search = 1;
+  optional domain.common.v1.FilterRequest filters = 2;
+  optional domain.common.v1.SortRequest sort = 3;
+  optional domain.common.v1.PaginationRequest pagination = 4;
+}
+
+message GetProductAttributeListPageDataResponse {
+  repeated ProductAttribute product_attribute_list = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+  optional domain.common.v1.PaginationResponse pagination = 4;
+  repeated domain.common.v1.SearchResult search_results = 5;
+}
+
+message GetProductAttributeItemPageDataRequest {
+  string product_attribute_id = 1;
+}
+
+message GetProductAttributeItemPageDataResponse {
+  ProductAttribute product_attribute = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}

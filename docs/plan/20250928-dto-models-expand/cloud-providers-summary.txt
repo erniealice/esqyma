@@ -1,0 +1,674 @@
+================================================================================
+CLOUD PROVIDER AUTHENTICATION AND STORAGE RESEARCH SUMMARY
+================================================================================
+Date: 2025-09-30
+Purpose: Research cloud provider structures to design multi-provider proto
+         contracts for authentication and storage
+Providers: Azure, Google Cloud Platform (GCP), Amazon Web Services (AWS)
+================================================================================
+
+
+================================================================================
+PART 1: AUTHENTICATION SERVICES
+================================================================================
+
+--------------------------------------------------------------------------------
+AZURE AUTHENTICATION (Microsoft Entra ID)
+--------------------------------------------------------------------------------
+
+Core Identity Platform:
+- Microsoft Entra ID is the primary identity provider for Azure
+- Provides comprehensive identity and access management
+- Integrated with both management plane and data planes of Azure services
+
+Identity Types:
+1. Human Identities
+   - Application users
+   - Administrators
+   - Operators
+   - Auditors
+
+2. System Identities
+   - Workload identities
+   - Managed identities
+   - Service principals
+   - Azure resources
+
+3. Anonymous entities
+
+Key Authentication Components:
+
+Managed Identities:
+- Can be assigned to Azure compute resources (VMs, AKS, Service Fabric, etc.)
+- Replaces secrets, access keys, passwords, certificates
+- Automatic credential management
+- No manual credential rotation needed
+- Enhanced security over traditional PATs
+
+Service Principals:
+- Enterprise-grade access controls
+- Automatic credential management
+- Shorter token lifespans
+- Better security than personal access tokens
+
+2025 Update:
+- September 30, 2025: Retirement of AD Authentication Library (ADAL)
+- Must migrate to Microsoft Authentication Library (MSAL)
+- Affects user authentication and authorization in developer portal
+
+Authentication Methods:
+- Password-based authentication
+- Certificate-based authentication
+- Token-based authentication (OAuth 2.0, OpenID Connect)
+- Multi-factor authentication (MFA)
+- Passwordless authentication (FIDO2, Windows Hello)
+
+Key Features:
+- Centralized identity management
+- Single sign-on (SSO)
+- Conditional access policies
+- Identity protection and risk detection
+- Privileged identity management
+
+
+--------------------------------------------------------------------------------
+GOOGLE CLOUD PLATFORM (GCP) AUTHENTICATION
+--------------------------------------------------------------------------------
+
+Core Identity Products:
+
+1. Cloud Identity
+   - Identity as a Service (IDaaS) solution
+   - Centrally manages users and groups
+   - Built into Google Cloud and Google Workspace
+   - Available as standalone product
+
+2. Identity Platform
+   - Backend services for app authentication
+   - Works with SDKs and ready-made UI libraries
+   - Provides secure, easy-to-use authentication
+
+3. Google Identity Services
+   - Sign In With Google button
+   - One Tap sign-in module
+   - OAuth 2.0 authentication libraries
+
+Key Authentication Components:
+
+Identity and Access Management (IAM):
+- Primary authorization mechanism for Google Cloud
+- Granular control by principal and by resource
+- Role-based access control (RBAC)
+- Attribute-based access control (ABAC)
+
+Workload Identity Federation:
+- Grant on-premises or multicloud workloads access to GCP resources
+- Federates identities from external IdP
+- No service account key required
+- Enhanced security posture
+
+Workforce Identity Federation:
+- Use external identity provider for workforce authentication
+- Employees, partners, contractors
+- IAM-based authorization for Google Cloud services
+
+Identity-Aware Proxy (IAP):
+- Centralized authentication and authorization
+- Works for applications in Google Cloud or on-premises
+- Context-aware access control
+
+Authentication Methods:
+- Passwords
+- Phone numbers (SMS/voice)
+- Federated identity providers (Google, Facebook, Twitter)
+- SAML 2.0 protocol
+- OpenID Connect protocol
+- OAuth 2.0
+- WebAuthn/FIDO2
+
+Key Features:
+- Industry standard protocols (OAuth 2.0, OpenID Connect)
+- Tight integration with Google Cloud services
+- Multi-factor authentication support
+- Custom authentication flows via Firebase Auth
+- Token management and refresh
+
+
+--------------------------------------------------------------------------------
+AWS AUTHENTICATION (IAM & COGNITO)
+--------------------------------------------------------------------------------
+
+Core Services:
+
+1. AWS Identity and Access Management (IAM)
+   - Controls access to AWS services and resources
+   - Creates and manages AWS users and groups
+   - Permission policies for resources
+   - Role-based access control
+   - Federation support
+
+2. Amazon Cognito
+   - Identity platform for web and mobile apps
+   - User directory
+   - Authentication server
+   - Authorization service for OAuth 2.0 tokens and AWS credentials
+   - Processes 100+ billion authentications per month
+
+Cognito Components:
+
+User Pools:
+- User directories for sign-up and sign-in
+- Self-service and admin-driven user management
+- Social providers (Google, Facebook)
+- Enterprise federation (SAML 2.0, OIDC)
+- Multi-factor authentication (MFA)
+- Passwordless flows (passkeys/WebAuthn)
+- Email and SMS one-time passwords
+
+Identity Pools:
+- Provide temporary AWS credentials
+- Grant users access to AWS services
+- Role-based access control (RBAC)
+- Attribute-based access control (ABAC)
+- Support for authenticated and unauthenticated (guest) users
+
+Authentication Methods:
+- Username and password
+- Email or phone number
+- Social identity providers
+- SAML 2.0 federation
+- OpenID Connect (OIDC)
+- Custom authentication flows (Lambda triggers)
+- Multi-factor authentication
+- Passkeys (WebAuthn)
+
+Integration Features:
+- Seamless integration with AWS services
+- IAM roles for authenticated/unauthenticated users
+- Lambda for custom logic
+- API Gateway integration
+- S3 access control
+- Fine-grained authorization
+
+2025 Pricing Structure:
+- Lite and Essentials tiers
+- Free tier: 10,000 MAUs for direct/social logins
+- Free tier: 50 MAUs for SAML/OIDC federation
+- Legacy accounts: 50,000 MAU free tier until late 2025
+
+Key Features:
+- User pool groups for authorization
+- Custom attributes and schemas
+- Pre and post authentication triggers
+- Token customization
+- Advanced security features (compromised credentials, adaptive auth)
+- User migration capabilities
+
+
+================================================================================
+AUTHENTICATION COMMONALITIES ACROSS PROVIDERS
+================================================================================
+
+Common Patterns:
+1. Support for OAuth 2.0 and OpenID Connect
+2. Social identity provider integration
+3. Enterprise federation (SAML, OIDC)
+4. Multi-factor authentication
+5. Temporary credentials/tokens
+6. Role-based access control
+7. Service-to-service authentication
+8. Token refresh mechanisms
+9. Passwordless authentication options
+10. API-based user management
+
+Common Identity Types:
+- End users (human)
+- Service accounts/principals (machine)
+- Temporary/session identities
+- Federated identities
+- Anonymous/guest users
+
+Common Token Types:
+- Access tokens (short-lived)
+- Refresh tokens (long-lived)
+- ID tokens (identity claims)
+- Session tokens
+- API keys
+
+
+================================================================================
+PART 2: STORAGE SERVICES
+================================================================================
+
+--------------------------------------------------------------------------------
+AZURE STORAGE (BLOB STORAGE)
+--------------------------------------------------------------------------------
+
+Storage Structure Hierarchy:
+
+1. Storage Account
+   - Provides unique namespace in Azure
+   - Every object has address including account name
+   - Account-level configurations and limits
+
+2. Container
+   - Organizes sets of blobs (like directory)
+   - Unlimited number per storage account
+   - Cannot be nested
+   - Access policies and metadata
+
+3. Blob (Binary Large Object)
+   - Individual storage object
+   - Unlimited blobs per container
+   - Up to 190.7 TiB per blob
+
+Blob Types:
+
+1. Block Blobs
+   - Best for: Media files, documents, text files, binary files
+   - Max size: 4.75 TiB (190.7 TiB for large block blobs)
+   - Up to 50,000 blocks per blob
+   - Optimized for upload streaming
+   - Default blob type
+
+2. Append Blobs
+   - Optimized for append operations
+   - Ideal for: Logging scenarios, audit trails
+   - Max size: 195 GiB
+   - Cannot update existing blocks, only append
+
+3. Page Blobs
+   - Store random access files
+   - Max size: 8 TiB
+   - Optimized for: Virtual hard disks (VHDs)
+   - Frequent read/write operations
+
+Access Tiers (Cost Optimization):
+
+1. Hot Tier
+   - Frequently accessed data
+   - Lowest access costs
+   - Higher storage costs
+   - Online access
+
+2. Cool Tier
+   - Infrequently accessed data (30+ days)
+   - Lower storage costs than Hot
+   - Higher access costs
+   - Online access
+   - 30-day minimum storage duration
+
+3. Cold Tier
+   - Rarely accessed data (90+ days)
+   - Lower storage costs than Cool
+   - Higher access costs
+   - Fast retrieval still available
+   - 90-day minimum storage duration
+
+4. Archive Tier
+   - Offline tier
+   - Rarely accessed data (180+ days)
+   - Lowest storage cost
+   - Highest access cost
+   - Requires rehydration before access
+   - 180-day minimum storage duration
+   - Retrieval time: hours
+
+Key Features:
+- Blob versioning
+- Blob snapshots
+- Soft delete for recovery
+- Immutable storage (WORM)
+- Lifecycle management policies
+- Encryption at rest and in transit
+- Access control (RBAC, SAS tokens)
+- CDN integration
+- Static website hosting
+
+
+--------------------------------------------------------------------------------
+GOOGLE CLOUD STORAGE (GCS)
+--------------------------------------------------------------------------------
+
+Storage Structure Hierarchy:
+
+1. Project
+   - Top-level container
+   - Multiple buckets per project
+
+2. Bucket
+   - Basic container for objects
+   - Globally unique name
+   - Regional or multi-regional location
+   - Cannot be nested
+   - Unlimited objects per bucket
+
+3. Object
+   - Individual files stored in buckets
+   - Immutable (new version on update)
+   - Up to 5 TiB per object
+
+Bucket Types (2025):
+
+1. Standard Buckets
+   - Traditional flat namespace
+   - All objects at same level
+   - Prefix-based organization
+
+2. Hierarchical Namespace Enabled Buckets
+   - Logical file system structure
+   - Folder management operations (create, delete, list, rename)
+   - 8x higher initial QPS limits vs standard
+   - Better for: Analytics, AI/ML workloads, data-intensive tasks
+   - Reliability and management benefits
+
+Storage Classes:
+
+1. Standard Storage
+   - Frequently accessed data
+   - No minimum storage duration
+   - Best for: Hot data, websites, streaming, analytics
+   - Available: >99.95% (multi-region), >99.9% (region)
+
+2. Nearline Storage
+   - Infrequently accessed data (once per month)
+   - 30-day minimum storage duration
+   - Lower storage cost than Standard
+   - Retrieval cost applies
+   - Best for: Backups, long-tail content
+
+3. Coldline Storage
+   - Rarely accessed data (once per quarter)
+   - 90-day minimum storage duration
+   - Lower storage cost than Nearline
+   - Higher retrieval cost
+   - Best for: Disaster recovery, archival
+
+4. Archive Storage
+   - Long-term archival (once per year)
+   - 365-day minimum storage duration
+   - Lowest storage cost
+   - Highest retrieval cost
+   - Best for: Compliance, regulatory archives
+
+Key Features:
+- Object versioning
+- Object lifecycle management
+- Requester pays
+- Bucket lock (WORM compliance)
+- Customer-managed encryption keys (CMEK)
+- Customer-supplied encryption keys (CSEK)
+- Signed URLs for temporary access
+- IAM and ACL for access control
+- Cloud CDN integration
+- Same latency across all storage classes
+
+
+--------------------------------------------------------------------------------
+AWS STORAGE (S3)
+--------------------------------------------------------------------------------
+
+Storage Structure Hierarchy:
+
+1. Account
+   - AWS account level
+   - Multiple buckets per account
+
+2. Bucket
+   - Container for objects
+   - Globally unique name
+   - Regional location
+   - Up to 100 buckets per account (soft limit)
+   - Unlimited objects per bucket
+
+3. Object
+   - Individual files with metadata
+   - Up to 5 TiB per object
+   - Key-value structure (key = object name)
+
+Bucket Types (2025):
+
+1. General Purpose Buckets
+   - Traditional flat storage structure
+   - Prefix-based organization
+   - Most widely used
+
+2. Directory Buckets
+   - Hierarchical directory structure
+   - No prefix limits
+   - Horizontal scaling per directory
+   - Recommended for low-latency use cases
+   - Used with S3 Express One Zone storage class
+
+Storage Classes:
+
+1. S3 Express One Zone
+   - Single AZ storage
+   - 10x faster data access vs S3 Standard
+   - Up to 80% lower request costs
+   - Millisecond latency
+   - Best for: High-performance, latency-sensitive workloads
+
+2. S3 Standard
+   - Frequently accessed data
+   - High durability (99.999999999%)
+   - High availability (99.99%)
+   - Low latency, high throughput
+   - Best for: Cloud apps, websites, content distribution, big data
+
+3. S3 Intelligent-Tiering
+   - Automatic cost optimization
+   - Moves objects between access tiers
+   - No retrieval charges
+   - No minimum storage duration
+   - Best for: Unknown or changing access patterns
+
+4. S3 Standard-IA (Infrequent Access)
+   - Less frequently accessed data
+   - Requires rapid access when needed
+   - Lower storage cost than Standard
+   - Retrieval charge applies
+   - 30-day minimum storage duration
+   - Best for: Backups, disaster recovery
+
+5. S3 One Zone-IA
+   - Infrequently accessed data
+   - Single Availability Zone
+   - 20% lower cost than Standard-IA
+   - 30-day minimum storage duration
+   - Best for: Secondary backups, re-creatable data
+
+6. S3 Glacier Instant Retrieval
+   - Long-term data with instant retrieval
+   - Millisecond access time
+   - 90-day minimum storage duration
+   - Lower cost than Standard-IA
+   - Best for: Medical images, news media
+
+7. S3 Glacier Flexible Retrieval
+   - Archival data with flexible retrieval
+   - Retrieval: Minutes to hours (configurable)
+   - 90-day minimum storage duration
+   - Best for: Backup, disaster recovery
+
+8. S3 Glacier Deep Archive
+   - Lowest cost storage class
+   - Long-term retention and digital preservation
+   - Retrieval: Within 12 hours
+   - 180-day minimum storage duration
+   - Best for: Regulatory archives, compliance
+
+9. S3 Outposts
+   - S3 storage on AWS Outposts
+   - On-premises object storage
+   - S3 APIs and features
+   - Local data residency
+
+Key Features:
+- Object versioning
+- S3 Lifecycle policies
+- S3 Replication (same-region and cross-region)
+- S3 Object Lock (WORM)
+- S3 Access Points
+- S3 Bucket Policies and ACLs
+- Encryption (SSE-S3, SSE-KMS, SSE-C)
+- S3 Transfer Acceleration
+- S3 Select and Glacier Select
+- S3 Event Notifications
+- Static website hosting
+- CloudFront integration
+- S3 Batch Operations
+
+
+================================================================================
+STORAGE COMMONALITIES ACROSS PROVIDERS
+================================================================================
+
+Common Hierarchical Structure:
+1. Account/Project (top level)
+2. Bucket/Container (organization level)
+3. Object/Blob (individual files)
+
+Common Access Tiers Pattern:
+- Hot/Standard: Frequent access, higher storage cost, lower access cost
+- Cool/Nearline: Monthly access, medium storage cost, medium access cost
+- Cold/Coldline: Quarterly access, lower storage cost, higher access cost
+- Archive: Rare access, lowest storage cost, highest access cost, retrieval delay
+
+Common Operations:
+- Upload (PUT)
+- Download (GET)
+- Delete (DELETE)
+- List/Query objects
+- Copy/Move objects
+- Set metadata
+- Set access control
+- Lifecycle management
+
+Common Features:
+- Object versioning
+- Lifecycle policies
+- Encryption at rest
+- Encryption in transit
+- Access control (IAM, ACL, policies)
+- Temporary access URLs (signed URLs/SAS)
+- CDN integration
+- Event notifications
+- Immutable storage (WORM)
+- Cross-region replication
+- Audit logging
+
+Common Metadata:
+- Object key/name
+- Size
+- Last modified timestamp
+- Content type
+- ETag/checksum
+- Custom metadata
+- Storage class
+- Encryption status
+
+Common Access Control:
+- Identity-based policies (IAM)
+- Resource-based policies (bucket policies)
+- Access control lists (ACLs)
+- Temporary access tokens/URLs
+- Public vs private access
+
+
+================================================================================
+PROTO CONTRACT DESIGN CONSIDERATIONS
+================================================================================
+
+For Authentication:
+
+Provider-Agnostic Fields:
+- user_id / identity_id
+- email / username
+- authentication_method (password, oauth, saml, etc.)
+- mfa_enabled
+- token_type (access, refresh, id)
+- token_value
+- expires_at
+- issued_at
+- scopes / permissions
+- session_id
+- provider_type (azure, gcp, aws, custom)
+
+Provider-Specific Extensions:
+- Azure: tenant_id, managed_identity_id, service_principal_id
+- GCP: project_id, service_account_email, workload_identity
+- AWS: cognito_user_pool_id, identity_pool_id, iam_role_arn
+
+Common Token Structure:
+- access_token
+- refresh_token
+- id_token
+- token_type
+- expires_in
+- scope
+
+
+For Storage:
+
+Provider-Agnostic Fields:
+- storage_provider (azure, gcp, aws, custom)
+- container_name / bucket_name
+- object_key / blob_name
+- object_size
+- content_type
+- last_modified
+- etag / checksum
+- storage_class / access_tier
+- encryption_enabled
+- versioning_enabled
+- metadata (map<string, string>)
+
+Provider-Specific Extensions:
+- Azure: storage_account, blob_type (block/append/page), lease_status
+- GCP: project_id, generation, metageneration, customer_encryption
+- AWS: bucket_region, version_id, storage_class, object_lock_mode
+
+Common Operations:
+- upload_object
+- download_object
+- delete_object
+- list_objects
+- get_object_metadata
+- set_object_metadata
+- copy_object
+- get_presigned_url
+
+Common Access Tier Mapping:
+- HOT / FREQUENTLY_ACCESSED -> Azure Hot, GCS Standard, S3 Standard
+- COOL / INFREQUENTLY_ACCESSED -> Azure Cool, GCS Nearline, S3 Standard-IA
+- COLD / RARELY_ACCESSED -> Azure Cold, GCS Coldline, S3 Glacier Instant
+- ARCHIVE / LONG_TERM -> Azure Archive, GCS Archive, S3 Glacier Deep Archive
+
+
+================================================================================
+RECOMMENDED PROTO STRUCTURE
+================================================================================
+
+infrastructure/auth/
+  - identity.proto        (user, service account, managed identity)
+  - token.proto           (access, refresh, ID tokens)
+  - session.proto         (session management)
+  - authentication.proto  (login, logout, verify)
+  - authorization.proto   (permissions, scopes, roles)
+  - provider.proto        (provider-specific configurations)
+
+infrastructure/storage/
+  - object.proto          (blob/object metadata and operations)
+  - container.proto       (bucket/container management)
+  - access_tier.proto     (storage class mappings)
+  - access_control.proto  (permissions, ACLs, policies)
+  - lifecycle.proto       (lifecycle rules and policies)
+  - upload.proto          (upload operations, multipart)
+  - download.proto        (download operations, streaming)
+  - provider.proto        (provider-specific configurations)
+
+
+================================================================================
+END OF SUMMARY
+================================================================================

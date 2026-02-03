@@ -1,0 +1,15 @@
+syntax = "proto3";
+
+package domain.common.v1;
+
+option go_package = "leapfor.xyz/esqyma/golang/v1/domain/common";
+
+// Action defines the standard CRUD and list operations.
+enum Action {
+  ACTION_UNSPECIFIED = 0;
+  ACTION_CREATE = 1;
+  ACTION_READ = 2;
+  ACTION_UPDATE = 3;
+  ACTION_DELETE = 4;
+  ACTION_LIST = 5;
+}

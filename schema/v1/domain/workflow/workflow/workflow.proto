@@ -1,0 +1,134 @@
+syntax = "proto3";
+
+package domain.workflow.v1;
+
+import "domain/common/error.proto";
+import "domain/common/pagination.proto";
+import "domain/common/filter.proto";
+import "domain/common/sort.proto";
+import "domain/common/search.proto";
+
+option go_package = "leapfor.xyz/esqyma/golang/v1/domain/workflow/workflow";
+
+
+// Workflow represents a business workflow definition
+message Workflow {
+  string id = 1;
+  string name = 2;
+  optional string description = 3;
+  string status = 4;
+  optional string workspace_id = 5;
+  optional string created_by = 6;
+  optional int64 date_created = 7;
+  optional string date_created_string = 8;
+  optional int64 date_modified = 9;
+  optional string date_modified_string = 10;
+  bool active = 11;
+  optional int32 version = 12;
+  optional string workflow_template_id = 13;
+  optional string context_json = 14;
+  optional int32 current_stage_index = 15;
+}
+
+// CreateWorkflowRequest is the request message for creating a workflow
+message CreateWorkflowRequest {
+  Workflow data = 1;
+}
+
+// CreateWorkflowResponse is the response message for creating a workflow
+message CreateWorkflowResponse {
+  repeated Workflow data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+// ReadWorkflowRequest is the request message for reading a workflow
+message ReadWorkflowRequest {
+  Workflow data = 1;
+}
+
+// ReadWorkflowResponse is the response message for reading a workflow
+message ReadWorkflowResponse {
+  repeated Workflow data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+// UpdateWorkflowRequest is the request message for updating a workflow
+message UpdateWorkflowRequest {
+  Workflow data = 1;
+}
+
+// UpdateWorkflowResponse is the response message for updating a workflow
+message UpdateWorkflowResponse {
+  repeated Workflow data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+// DeleteWorkflowRequest is the request message for deleting a workflow
+message DeleteWorkflowRequest {
+  Workflow data = 1;
+}
+
+// DeleteWorkflowResponse is the response message for deleting a workflow
+message DeleteWorkflowResponse {
+  bool success = 1;
+  optional domain.common.v1.Error error = 2;
+}
+
+// ListWorkflowsRequest is the request message for listing workflows
+message ListWorkflowsRequest {
+  optional domain.common.v1.SearchRequest search = 1;
+  optional domain.common.v1.FilterRequest filters = 2;
+  optional domain.common.v1.SortRequest sort = 3;
+  optional domain.common.v1.PaginationRequest pagination = 4;
+}
+
+// ListWorkflowsResponse is the response message for listing workflows
+message ListWorkflowsResponse {
+  repeated Workflow data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+  optional string next_page_token = 4;
+}
+
+// GetWorkflowListPageDataRequest is the request message for getting workflow list page data
+message GetWorkflowListPageDataRequest {
+  optional domain.common.v1.PaginationRequest pagination = 1;
+  optional domain.common.v1.FilterRequest filters = 2;
+  optional domain.common.v1.SortRequest sort = 3;
+  optional domain.common.v1.SearchRequest search = 4;
+}
+
+// GetWorkflowListPageDataResponse is the response message for getting workflow list page data
+message GetWorkflowListPageDataResponse {
+  repeated Workflow workflow_list = 1;
+  optional domain.common.v1.PaginationResponse pagination = 2;
+  repeated domain.common.v1.SearchResult search_results = 3;
+  bool success = 4;
+  optional domain.common.v1.Error error = 5;
+}
+
+// GetWorkflowItemPageDataRequest is the request message for getting workflow item page data
+message GetWorkflowItemPageDataRequest {
+  string workflow_id = 1;
+}
+
+// GetWorkflowItemPageDataResponse is the response message for getting workflow item page data
+message GetWorkflowItemPageDataResponse {
+  optional Workflow workflow = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+// WorkflowDomainService defines the gRPC service for workflow operations
+service WorkflowDomainService {
+  rpc CreateWorkflow(CreateWorkflowRequest) returns (CreateWorkflowResponse);
+  rpc ReadWorkflow(ReadWorkflowRequest) returns (ReadWorkflowResponse);
+  rpc UpdateWorkflow(UpdateWorkflowRequest) returns (UpdateWorkflowResponse);
+  rpc DeleteWorkflow(DeleteWorkflowRequest) returns (DeleteWorkflowResponse);
+  rpc ListWorkflows(ListWorkflowsRequest) returns (ListWorkflowsResponse);
+  rpc GetWorkflowListPageData(GetWorkflowListPageDataRequest) returns (GetWorkflowListPageDataResponse);
+  rpc GetWorkflowItemPageData(GetWorkflowItemPageDataRequest) returns (GetWorkflowItemPageDataResponse);
+}

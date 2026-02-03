@@ -1,0 +1,131 @@
+syntax = "proto3";
+
+package domain.product.v1;
+
+option go_package = "leapfor.xyz/esqyma/golang/v1/domain/product/collection";
+
+import "domain/common/error.proto";
+import "domain/common/search.proto";
+import "domain/common/filter.proto";
+import "domain/common/sort.proto";
+import "domain/common/pagination.proto";
+import "domain/product/collection_plan/collection_plan.proto";
+
+message Collection {
+  string id = 1;
+  string name = 2;
+  string description = 3;
+  optional int64 date_created = 4;
+  optional string date_created_string = 5;
+  optional int64 date_modified = 6;
+  optional string date_modified_string = 7;
+  bool active = 8;
+  repeated CollectionPlan collection_plans = 9;
+}
+
+service CollectionDomainService {
+  rpc CreateCollection(CreateCollectionRequest) returns (CreateCollectionResponse);
+  rpc ReadCollection(ReadCollectionRequest) returns (ReadCollectionResponse);
+  rpc UpdateCollection(UpdateCollectionRequest) returns (UpdateCollectionResponse);
+  rpc DeleteCollection(DeleteCollectionRequest) returns (DeleteCollectionResponse);
+  rpc ListCollections(ListCollectionsRequest) returns (ListCollectionsResponse);
+  rpc GetCollectionParent(GetCollectionParentRequest) returns (GetCollectionParentResponse);
+  rpc GetRootCollections(GetRootCollectionsRequest) returns (GetRootCollectionsResponse);
+  rpc GetCollectionListPageData(GetCollectionListPageDataRequest) returns (GetCollectionListPageDataResponse);
+  rpc GetCollectionItemPageData(GetCollectionItemPageDataRequest) returns (GetCollectionItemPageDataResponse);
+}
+
+message CreateCollectionRequest {
+  Collection data = 1;
+}
+
+message CreateCollectionResponse {
+  repeated Collection data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message ReadCollectionRequest {
+  Collection data = 1;
+}
+
+message ReadCollectionResponse {
+  repeated Collection data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message UpdateCollectionRequest {
+  Collection data = 1;
+}
+
+message UpdateCollectionResponse {
+  repeated Collection data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message DeleteCollectionRequest {
+  Collection data = 1;
+}
+
+message DeleteCollectionResponse {
+  bool success = 1;
+  optional domain.common.v1.Error error = 2;
+}
+
+message ListCollectionsRequest {
+  optional domain.common.v1.SearchRequest search = 1;
+  optional domain.common.v1.FilterRequest filters = 2;
+  optional domain.common.v1.SortRequest sort = 3;
+  optional domain.common.v1.PaginationRequest pagination = 4;
+}
+
+message ListCollectionsResponse {
+  repeated Collection data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message GetCollectionParentRequest {
+  string collection_id = 1;
+}
+
+message GetCollectionParentResponse {
+  Collection data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message GetRootCollectionsRequest {}
+
+message GetRootCollectionsResponse {
+  repeated Collection data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message GetCollectionListPageDataRequest {
+  optional domain.common.v1.SearchRequest search = 1;
+  optional domain.common.v1.FilterRequest filters = 2;
+  optional domain.common.v1.SortRequest sort = 3;
+  optional domain.common.v1.PaginationRequest pagination = 4;
+}
+
+message GetCollectionListPageDataResponse {
+  repeated Collection collection_list = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+  optional domain.common.v1.PaginationResponse pagination = 4;
+  repeated domain.common.v1.SearchResult search_results = 5;
+}
+
+message GetCollectionItemPageDataRequest {
+  string collection_id = 1;
+}
+
+message GetCollectionItemPageDataResponse {
+  Collection collection = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}

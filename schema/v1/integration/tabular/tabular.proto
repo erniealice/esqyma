@@ -1,0 +1,400 @@
+syntax = "proto3";
+package integration.tabular.v1;
+option go_package = "leapfor.xyz/esqyma/golang/v1/integration/tabular";
+
+import "google/protobuf/timestamp.proto";
+import "google/protobuf/struct.proto";
+
+// =============================================================================
+// ENUMS
+// =============================================================================
+
+// TabularProviderType represents the category of tabular data provider
+enum TabularProviderType {
+  TABULAR_PROVIDER_TYPE_UNSPECIFIED = 0;
+  TABULAR_PROVIDER_TYPE_GOOGLE_SHEETS = 1;   // Google Sheets API
+  TABULAR_PROVIDER_TYPE_EXCEL_ONLINE = 2;    // Microsoft Excel Online / Graph API
+  TABULAR_PROVIDER_TYPE_AIRTABLE = 3;        // Airtable API
+  TABULAR_PROVIDER_TYPE_CSV = 4;             // CSV file format
+  TABULAR_PROVIDER_TYPE_TSV = 5;             // TSV file format
+  TABULAR_PROVIDER_TYPE_PARQUET = 6;         // Apache Parquet format
+  TABULAR_PROVIDER_TYPE_POSTGRES = 7;        // PostgreSQL database
+  TABULAR_PROVIDER_TYPE_MYSQL = 8;           // MySQL database
+  TABULAR_PROVIDER_TYPE_BIGQUERY = 9;        // Google BigQuery
+  TABULAR_PROVIDER_TYPE_REST_API = 10;       // REST API data source
+  TABULAR_PROVIDER_TYPE_GRAPHQL = 11;        // GraphQL data source
+  TABULAR_PROVIDER_TYPE_MOCK = 12;           // Mock/test provider
+}
+
+// TabularCapability represents features supported by a provider
+enum TabularCapability {
+  TABULAR_CAPABILITY_UNSPECIFIED = 0;
+  TABULAR_CAPABILITY_READ = 1;                // Read data from source
+  TABULAR_CAPABILITY_WRITE = 2;               // Write/create new data
+  TABULAR_CAPABILITY_UPDATE = 3;              // Update existing data
+  TABULAR_CAPABILITY_DELETE = 4;              // Delete data
+  TABULAR_CAPABILITY_SEARCH = 5;              // Search/query data
+  TABULAR_CAPABILITY_SCHEMA = 6;              // Schema introspection
+  TABULAR_CAPABILITY_BATCH_OPERATIONS = 7;   // Batch read/write operations
+  TABULAR_CAPABILITY_TRANSACTIONS = 8;        // Transaction support
+  TABULAR_CAPABILITY_STREAMING = 9;           // Streaming read/write
+  TABULAR_CAPABILITY_FORMULAS = 10;           // Formula support
+  TABULAR_CAPABILITY_CELL_FORMATTING = 11;    // Cell formatting support
+  TABULAR_CAPABILITY_MULTIPLE_TABLES = 12;    // Multiple tables/sheets
+  TABULAR_CAPABILITY_CELL_LEVEL_ACCESS = 13;  // Individual cell access
+  TABULAR_CAPABILITY_APPEND_ONLY = 14;        // Append-only mode
+  TABULAR_CAPABILITY_ENCODING_OPTIONS = 15;   // Character encoding options
+}
+
+// FieldType represents the data type of a field value
+enum FieldType {
+  FIELD_TYPE_UNSPECIFIED = 0;
+  FIELD_TYPE_STRING = 1;      // Text/string value
+  FIELD_TYPE_INTEGER = 2;     // Integer value
+  FIELD_TYPE_FLOAT = 3;       // Floating-point value
+  FIELD_TYPE_BOOLEAN = 4;     // Boolean true/false
+  FIELD_TYPE_DATE = 5;        // Date only (no time component)
+  FIELD_TYPE_DATETIME = 6;    // Date and time
+  FIELD_TYPE_JSON = 7;        // JSON object
+  FIELD_TYPE_BINARY = 8;      // Binary data
+  FIELD_TYPE_NULL = 9;        // Null/empty value
+  FIELD_TYPE_FORMULA = 10;    // Formula expression
+  FIELD_TYPE_ERROR = 11;      // Error value
+}
+
+// FilterOperator represents comparison operators for filters
+enum FilterOperator {
+  FILTER_OPERATOR_UNSPECIFIED = 0;
+  FILTER_OPERATOR_EQUALS = 1;                   // Equal to
+  FILTER_OPERATOR_NOT_EQUALS = 2;               // Not equal to
+  FILTER_OPERATOR_GREATER_THAN = 3;             // Greater than
+  FILTER_OPERATOR_GREATER_THAN_OR_EQUALS = 4;   // Greater than or equal to
+  FILTER_OPERATOR_LESS_THAN = 5;                // Less than
+  FILTER_OPERATOR_LESS_THAN_OR_EQUALS = 6;      // Less than or equal to
+  FILTER_OPERATOR_CONTAINS = 7;                 // Contains substring
+  FILTER_OPERATOR_NOT_CONTAINS = 8;             // Does not contain substring
+  FILTER_OPERATOR_STARTS_WITH = 9;              // Starts with prefix
+  FILTER_OPERATOR_ENDS_WITH = 10;               // Ends with suffix
+  FILTER_OPERATOR_MATCHES_REGEX = 11;           // Regular expression match
+  FILTER_OPERATOR_IS_NULL = 12;                 // Value is null
+  FILTER_OPERATOR_IS_NOT_NULL = 13;             // Value is not null
+  FILTER_OPERATOR_IS_EMPTY = 14;                // Value is empty
+  FILTER_OPERATOR_IS_NOT_EMPTY = 15;            // Value is not empty
+  FILTER_OPERATOR_IN = 16;                      // Value is in list
+  FILTER_OPERATOR_NOT_IN = 17;                  // Value is not in list
+  FILTER_OPERATOR_BETWEEN = 18;                 // Value is between two values
+}
+
+// LogicalOperator represents logical operators for combining filters
+enum LogicalOperator {
+  LOGICAL_OPERATOR_UNSPECIFIED = 0;
+  LOGICAL_OPERATOR_AND = 1;  // All conditions must match
+  LOGICAL_OPERATOR_OR = 2;   // Any condition must match
+}
+
+// SortDirection represents the sort direction
+enum SortDirection {
+  SORT_DIRECTION_UNSPECIFIED = 0;
+  SORT_DIRECTION_ASCENDING = 1;   // Sort A-Z, 0-9
+  SORT_DIRECTION_DESCENDING = 2;  // Sort Z-A, 9-0
+}
+
+// =============================================================================
+// MESSAGES - Value Types
+// =============================================================================
+
+// FieldValue represents a generic value with type discriminator
+message FieldValue {
+  // The type of the value
+  FieldType field_type = 1;
+
+  // The actual value (one of the following)
+  oneof value {
+    string string_value = 2;                    // String/text value
+    int64 integer_value = 3;                    // Integer value
+    double float_value = 4;                     // Floating-point value
+    bool boolean_value = 5;                     // Boolean value
+    string date_value = 6;                      // ISO 8601 date string (YYYY-MM-DD)
+    string datetime_value = 7;                  // ISO 8601 datetime string
+    google.protobuf.Struct json_value = 8;      // JSON object value
+    bytes binary_value = 9;                     // Binary data
+    string formula_value = 10;                  // Formula expression
+    string error_value = 11;                    // Error string
+  }
+
+  // Formatted value for display purposes
+  string display_value = 20;
+
+  // Raw string representation of the value
+  string raw_value = 21;
+}
+
+// FieldConstraints represents validation rules for a field
+message FieldConstraints {
+  // Minimum length for string values
+  int32 min_length = 1;
+
+  // Maximum length for string values
+  int32 max_length = 2;
+
+  // Regular expression pattern for validation
+  string pattern = 3;
+
+  // Minimum value for numeric fields
+  double min_value = 4;
+
+  // Maximum value for numeric fields
+  double max_value = 5;
+
+  // List of allowed values
+  repeated string allowed_values = 6;
+}
+
+// =============================================================================
+// MESSAGES - Schema Definitions
+// =============================================================================
+
+// Field represents a column/field definition
+message Field {
+  // Column index (0-based)
+  int32 index = 1;
+
+  // Field name/column header
+  string name = 2;
+
+  // Data type of the field
+  FieldType field_type = 3;
+
+  // Human-readable description
+  string description = 4;
+
+  // Whether the field is required
+  bool required = 5;
+
+  // Default value for the field
+  FieldValue default_value = 6;
+
+  // Validation constraints
+  FieldConstraints constraints = 7;
+
+  // Additional field metadata
+  map<string, string> metadata = 20;
+}
+
+// TableSchema represents the structure of a table
+message TableSchema {
+  // Unique identifier for the schema
+  string id = 1;
+
+  // Schema/table name
+  string name = 2;
+
+  // Human-readable description
+  string description = 3;
+
+  // Field definitions
+  repeated Field fields = 4;
+
+  // Indices of fields that form the primary key
+  repeated int32 primary_key_indices = 5;
+
+  // Total number of records in the table
+  int64 record_count = 6;
+
+  // Additional schema metadata
+  map<string, string> metadata = 20;
+}
+
+// =============================================================================
+// MESSAGES - Data Records
+// =============================================================================
+
+// Record represents a single row/record of data
+message Record {
+  // Row index (0-based)
+  int64 index = 1;
+
+  // Unique identifier for the record
+  string id = 2;
+
+  // Values in column order
+  repeated FieldValue values = 3;
+
+  // Values by field name
+  map<string, FieldValue> named_values = 4;
+
+  // Additional record metadata
+  map<string, string> metadata = 20;
+
+  // Record creation timestamp
+  google.protobuf.Timestamp created_at = 21;
+
+  // Record last update timestamp
+  google.protobuf.Timestamp updated_at = 22;
+}
+
+// =============================================================================
+// MESSAGES - Table and Source
+// =============================================================================
+
+// Table represents a table within a source
+message Table {
+  // Unique identifier for the table
+  string id = 1;
+
+  // Table name
+  string name = 2;
+
+  // Table schema definition
+  TableSchema schema = 3;
+
+  // Position/index within the source
+  int32 position = 4;
+
+  // Whether the table is hidden
+  bool hidden = 5;
+
+  // Additional table metadata
+  map<string, string> metadata = 20;
+}
+
+// Source represents a container for tables (spreadsheet, database, etc.)
+message Source {
+  // Unique identifier for the source
+  string id = 1;
+
+  // Source name/title
+  string name = 2;
+
+  // URL to access the source
+  string url = 3;
+
+  // Provider type
+  TabularProviderType provider_type = 4;
+
+  // Tables within this source
+  repeated Table tables = 5;
+
+  // Owner identifier (email or user ID)
+  string owner = 10;
+
+  // Additional source metadata
+  map<string, string> metadata = 20;
+
+  // Source creation timestamp
+  google.protobuf.Timestamp created_at = 21;
+
+  // Source last update timestamp
+  google.protobuf.Timestamp updated_at = 22;
+}
+
+// =============================================================================
+// MESSAGES - Selection and Ranges
+// =============================================================================
+
+// IndexRange represents a range of indices
+message IndexRange {
+  // Start index (0-based, inclusive)
+  int64 start = 1;
+
+  // End index (0-based, exclusive; -1 means end of data)
+  int64 end = 2;
+}
+
+// FieldSelection specifies which fields/columns to include
+message FieldSelection {
+  // Field indices to include (0-based)
+  repeated int32 indices = 1;
+
+  // Field names to include
+  repeated string names = 2;
+
+  // If true, specified fields are excluded instead of included
+  bool exclude_mode = 3;
+}
+
+// RecordSelection specifies which records to include
+message RecordSelection {
+  // Range of record indices
+  IndexRange index_range = 1;
+
+  // Specific record IDs to include
+  repeated string record_ids = 2;
+
+  // Filter conditions
+  FilterGroup filter = 3;
+
+  // Maximum number of records to return
+  int32 limit = 4;
+
+  // Number of records to skip
+  int32 offset = 5;
+}
+
+// Selection represents a combined selection of table, records, and fields
+message Selection {
+  // Table name or ID
+  string table = 1;
+
+  // Record selection criteria
+  RecordSelection records = 2;
+
+  // Field selection criteria
+  FieldSelection fields = 3;
+}
+
+// =============================================================================
+// MESSAGES - Filtering
+// =============================================================================
+
+// Filter represents a single filter condition
+message Filter {
+  // Field to filter on (one of the following)
+  oneof field {
+    int32 field_index = 1;   // Field index (0-based)
+    string field_name = 2;   // Field name
+  }
+
+  // Comparison operator
+  FilterOperator operator = 3;
+
+  // Value to compare against
+  FieldValue value = 4;
+
+  // Multiple values for IN/NOT_IN/BETWEEN operators
+  repeated FieldValue values = 5;
+
+  // Whether comparison is case-sensitive (for string operations)
+  bool case_sensitive = 6;
+}
+
+// FilterGroup represents a group of filters with logical operators
+message FilterGroup {
+  // Logical operator to combine filters
+  LogicalOperator operator = 1;
+
+  // Individual filter conditions
+  repeated Filter filters = 2;
+
+  // Nested filter groups for complex expressions
+  repeated FilterGroup groups = 3;
+}
+
+// =============================================================================
+// MESSAGES - Sorting
+// =============================================================================
+
+// SortSpec represents a sort specification
+message SortSpec {
+  // Field to sort by (one of the following)
+  oneof field {
+    int32 field_index = 1;   // Field index (0-based)
+    string field_name = 2;   // Field name
+  }
+
+  // Sort direction
+  SortDirection direction = 3;
+
+  // Whether null values should appear first
+  bool nulls_first = 4;
+}

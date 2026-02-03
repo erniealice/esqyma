@@ -1,0 +1,468 @@
+syntax = "proto3";
+
+package integration.email.v1;
+
+option go_package = "leapfor.xyz/esqyma/golang/v1/integration/email";
+
+import "google/protobuf/timestamp.proto";
+import "google/protobuf/any.proto";
+import "integration/email/email.proto";
+import "domain/common/error.proto";
+
+// EmailTemplate represents a reusable email template
+// Templates can be stored locally or reference provider-hosted templates
+message EmailTemplate {
+  // Unique identifier for the template (internal ID)
+  string id = 1;
+
+  // Template name
+  string name = 2;
+
+  // Template description
+  string description = 3;
+
+  // Provider identifier this template is for
+  string provider_id = 4;
+
+  // Provider-specific template ID (if template is hosted by the provider)
+  string provider_template_id = 5;
+
+  // Template type
+  TemplateType type = 6;
+
+  // Template subject line (with variable placeholders like {{user_name}})
+  string subject = 7;
+
+  // Plain text body (with variable placeholders)
+  string text_body = 8;
+
+  // HTML body (with variable placeholders)
+  string html_body = 9;
+
+  // From address override (if different from provider default)
+  EmailAddress from = 10;
+
+  // Reply-to address override
+  EmailAddress reply_to = 11;
+
+  // Template variables/placeholders definitions
+  repeated TemplateVariable variables = 12;
+
+  // Default values for variables
+  map<string, string> default_values = 13;
+
+  // Template category/folder for organization
+  string category = 14;
+
+  // Tags for organization and filtering
+  repeated string tags = 15;
+
+  // Whether this template is active and can be used
+  bool is_active = 16;
+
+  // Template version (for version control)
+  string version = 17;
+
+  // When the template was created
+  google.protobuf.Timestamp created_at = 18;
+
+  // When the template was last updated
+  google.protobuf.Timestamp updated_at = 19;
+
+  // Created by user ID
+  string created_by = 20;
+
+  // Last updated by user ID
+  string updated_by = 21;
+
+  // Custom metadata
+  map<string, string> metadata = 22;
+
+  // Provider-specific template configuration
+  map<string, string> provider_settings = 23;
+
+  // Complex provider-specific template data
+  map<string, google.protobuf.Any> provider_data = 24;
+}
+
+// TemplateType represents the type of template
+enum TemplateType {
+  TEMPLATE_TYPE_UNSPECIFIED = 0;
+  TEMPLATE_TYPE_LOCAL = 1;          // Template stored and rendered locally
+  TEMPLATE_TYPE_PROVIDER = 2;       // Template hosted by email provider
+  TEMPLATE_TYPE_HYBRID = 3;         // Local template with provider-specific features
+}
+
+// TemplateVariable represents a placeholder variable in a template
+message TemplateVariable {
+  // Variable name (e.g., "user_name", "order_number", "verification_code")
+  string name = 1;
+
+  // Variable data type
+  VariableType type = 2;
+
+  // Human-readable description of this variable
+  string description = 3;
+
+  // Whether this variable is required
+  bool is_required = 4;
+
+  // Default value if not provided
+  string default_value = 5;
+
+  // Example value for documentation/testing
+  string example_value = 6;
+
+  // Validation rules (e.g., regex pattern, min/max length)
+  repeated ValidationRule validation_rules = 7;
+
+  // Variable format hint (e.g., "email", "phone", "currency", "date")
+  string format = 8;
+}
+
+// VariableType represents the data type of a template variable
+enum VariableType {
+  VARIABLE_TYPE_UNSPECIFIED = 0;
+  VARIABLE_TYPE_STRING = 1;
+  VARIABLE_TYPE_NUMBER = 2;
+  VARIABLE_TYPE_BOOLEAN = 3;
+  VARIABLE_TYPE_DATE = 4;
+  VARIABLE_TYPE_DATETIME = 5;
+  VARIABLE_TYPE_URL = 6;
+  VARIABLE_TYPE_EMAIL = 7;
+  VARIABLE_TYPE_ARRAY = 8;          // Array of values
+  VARIABLE_TYPE_OBJECT = 9;         // Nested object
+}
+
+// ValidationRule represents a validation rule for template variables
+message ValidationRule {
+  // Rule type
+  ValidationType type = 1;
+
+  // Rule parameter (e.g., regex pattern, min value, max value)
+  string parameter = 2;
+
+  // Error message if validation fails
+  string error_message = 3;
+}
+
+// ValidationType represents types of variable validation
+enum ValidationType {
+  VALIDATION_TYPE_UNSPECIFIED = 0;
+  VALIDATION_TYPE_REGEX = 1;        // Regular expression pattern
+  VALIDATION_TYPE_MIN_LENGTH = 2;   // Minimum string length
+  VALIDATION_TYPE_MAX_LENGTH = 3;   // Maximum string length
+  VALIDATION_TYPE_MIN_VALUE = 4;    // Minimum numeric value
+  VALIDATION_TYPE_MAX_VALUE = 5;    // Maximum numeric value
+  VALIDATION_TYPE_EMAIL = 6;        // Valid email format
+  VALIDATION_TYPE_URL = 7;          // Valid URL format
+  VALIDATION_TYPE_ENUM = 8;         // Value must be in allowed list
+}
+
+// SendTemplatedEmailRequest is a request to send an email using a template
+message SendTemplatedEmailRequest {
+  TemplatedEmailData data = 1;
+}
+
+message TemplatedEmailData {
+  // Provider identifier
+  string provider_id = 1;
+
+  // Template ID (local template ID or provider template ID)
+  string template_id = 2;
+
+  // To recipients
+  repeated EmailAddress to = 3;
+
+  // CC recipients
+  repeated EmailAddress cc = 4;
+
+  // BCC recipients
+  repeated EmailAddress bcc = 5;
+
+  // Template variable values (keys must match template variable names)
+  map<string, string> variables = 6;
+
+  // Override from address
+  EmailAddress from = 7;
+
+  // Override reply-to address
+  EmailAddress reply_to = 8;
+
+  // Override subject (if template allows)
+  string subject_override = 9;
+
+  // Attachments to include
+  repeated EmailAttachment attachments = 10;
+
+  // Custom headers
+  map<string, string> headers = 11;
+
+  // Tags for tracking and categorization
+  repeated string tags = 12;
+
+  // Schedule sending for later
+  google.protobuf.Timestamp send_at = 13;
+
+  // Custom metadata
+  map<string, string> metadata = 14;
+
+  // Send options
+  SendOptions options = 15;
+}
+
+// SendOptions represents generic send options applicable across providers
+message SendOptions {
+  // Priority/importance level
+  MessagePriority priority = 1;
+
+  // Enable/disable tracking
+  bool enable_tracking = 2;
+
+  // Enable sandbox/test mode (don't actually send)
+  bool sandbox_mode = 3;
+
+  // Batch ID for grouping related emails
+  string batch_id = 4;
+
+  // Request delivery receipt
+  bool request_delivery_receipt = 5;
+
+  // Request read receipt
+  bool request_read_receipt = 6;
+
+  // Provider-specific send options as key-value pairs
+  // Examples: "ip_pool": "marketing", "category": "transactional"
+  map<string, string> provider_options = 10;
+
+  // Complex provider-specific send options
+  map<string, google.protobuf.Any> extended_options = 11;
+}
+
+// SendTemplatedEmailResponse contains the result of sending a templated email
+message SendTemplatedEmailResponse {
+  bool success = 1;
+  repeated TemplatedEmailResult data = 2;
+  domain.common.v1.Error error = 3;
+}
+
+message TemplatedEmailResult {
+  // Message ID from provider
+  string message_id = 1;
+
+  // The complete email message that was sent
+  EmailMessage message = 2;
+
+  // Provider-specific response data
+  map<string, string> provider_response = 3;
+
+  // Timestamp when sent
+  google.protobuf.Timestamp sent_at = 4;
+}
+
+// CreateTemplateRequest is a request to create a new email template
+message CreateTemplateRequest {
+  TemplateCreateData data = 1;
+}
+
+message TemplateCreateData {
+  // Provider identifier
+  string provider_id = 1;
+
+  // Template name
+  string name = 2;
+
+  // Template description
+  string description = 3;
+
+  // Template type
+  TemplateType type = 4;
+
+  // Subject line template
+  string subject = 5;
+
+  // HTML body template
+  string html_body = 6;
+
+  // Plain text body template
+  string text_body = 7;
+
+  // Variable definitions
+  repeated TemplateVariable variables = 8;
+
+  // Category for organization
+  string category = 9;
+
+  // Tags
+  repeated string tags = 10;
+
+  // Custom metadata
+  map<string, string> metadata = 11;
+
+  // Provider-specific settings
+  map<string, string> provider_settings = 12;
+}
+
+// CreateTemplateResponse contains the created template
+message CreateTemplateResponse {
+  bool success = 1;
+  repeated EmailTemplate data = 2;
+  domain.common.v1.Error error = 3;
+}
+
+// UpdateTemplateRequest is a request to update an existing template
+message UpdateTemplateRequest {
+  TemplateUpdateData data = 1;
+}
+
+message TemplateUpdateData {
+  // Template ID to update
+  string template_id = 1;
+
+  // Provider identifier
+  string provider_id = 2;
+
+  // Updated name (optional)
+  string name = 3;
+
+  // Updated description (optional)
+  string description = 4;
+
+  // Updated subject (optional)
+  string subject = 5;
+
+  // Updated HTML body (optional)
+  string html_body = 6;
+
+  // Updated text body (optional)
+  string text_body = 7;
+
+  // Updated variables (optional)
+  repeated TemplateVariable variables = 8;
+
+  // Updated metadata (optional)
+  map<string, string> metadata = 9;
+
+  // Whether to create a new version
+  bool create_version = 10;
+}
+
+// UpdateTemplateResponse contains the updated template
+message UpdateTemplateResponse {
+  bool success = 1;
+  repeated EmailTemplate data = 2;
+  domain.common.v1.Error error = 3;
+}
+
+// GetTemplateRequest is a request to retrieve a template
+message GetTemplateRequest {
+  TemplateLookup data = 1;
+}
+
+message TemplateLookup {
+  // Template ID
+  string template_id = 1;
+
+  // Provider identifier (optional, for provider-hosted templates)
+  string provider_id = 2;
+
+  // Include template history/versions
+  bool include_versions = 3;
+}
+
+// GetTemplateResponse contains the requested template
+message GetTemplateResponse {
+  bool success = 1;
+  repeated TemplateWithVersions data = 2;
+  domain.common.v1.Error error = 3;
+}
+
+message TemplateWithVersions {
+  // The requested template
+  EmailTemplate template = 1;
+
+  // Template versions (if requested)
+  repeated EmailTemplate versions = 2;
+}
+
+// ListTemplatesRequest is a request to list email templates
+message ListTemplatesRequest {
+  TemplateListFilter data = 1;
+}
+
+message TemplateListFilter {
+  // Filter by provider ID
+  string provider_id = 1;
+
+  // Filter by category
+  string category = 2;
+
+  // Filter by tags (templates must have all listed tags)
+  repeated string tags = 3;
+
+  // Only return active templates
+  bool active_only = 4;
+
+  // Template type filter
+  TemplateType type = 5;
+
+  // Search query (searches name, description)
+  string search_query = 6;
+
+  // Pagination offset
+  int32 offset = 7;
+
+  // Pagination limit
+  int32 limit = 8;
+
+  // Sort field
+  string sort_by = 9;
+
+  // Sort order
+  SortOrder sort_order = 10;
+}
+
+// SortOrder represents sort direction
+enum SortOrder {
+  SORT_ORDER_UNSPECIFIED = 0;
+  SORT_ORDER_ASC = 1;
+  SORT_ORDER_DESC = 2;
+}
+
+// ListTemplatesResponse contains the list of templates
+message ListTemplatesResponse {
+  bool success = 1;
+  repeated EmailTemplate data = 2;
+  domain.common.v1.Error error = 3;
+  int32 total_count = 4;
+  int32 offset = 5;
+  int32 limit = 6;
+}
+
+// DeleteTemplateRequest is a request to delete a template
+message DeleteTemplateRequest {
+  TemplateDeleteData data = 1;
+}
+
+message TemplateDeleteData {
+  // Template ID to delete
+  string template_id = 1;
+
+  // Provider identifier
+  string provider_id = 2;
+
+  // Whether to permanently delete (vs soft delete)
+  bool permanent = 3;
+}
+
+// DeleteTemplateResponse confirms the deletion
+message DeleteTemplateResponse {
+  bool success = 1;
+  repeated TemplateDeleteResult data = 2;
+  domain.common.v1.Error error = 3;
+}
+
+message TemplateDeleteResult {
+  // Confirmation message
+  string message = 1;
+}

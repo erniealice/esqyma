@@ -1,0 +1,125 @@
+syntax = "proto3";
+
+package domain.entity.v1;
+
+option go_package = "leapfor.xyz/esqyma/golang/v1/domain/entity/workspace_user_role";
+
+import "domain/common/error.proto";
+import "domain/common/pagination.proto";
+import "domain/common/filter.proto";
+import "domain/common/sort.proto";
+import "domain/common/search.proto";
+
+// Note: We don't import workspace_user.proto to avoid circular dependency
+// WorkspaceUser includes repeated WorkspaceUserRole, so WorkspaceUserRole cannot include WorkspaceUser
+import "domain/entity/role/role.proto";
+
+message WorkspaceUserRole {
+  string id = 1;
+  string workspace_user_id = 2;
+  // Removed: optional WorkspaceUser workspace_user = 3; (circular dependency)
+  string role_id = 4;
+  optional Role role = 5;
+  optional int64 date_created = 6;
+  optional string date_created_string = 7;
+  optional int64 date_modified = 8;
+  optional string date_modified_string = 9;
+  bool active = 10;
+}
+
+service WorkspaceUserRoleDomainService {
+  rpc CreateWorkspaceUserRole(CreateWorkspaceUserRoleRequest) returns (CreateWorkspaceUserRoleResponse);
+  rpc ReadWorkspaceUserRole(ReadWorkspaceUserRoleRequest) returns (ReadWorkspaceUserRoleResponse);
+  rpc UpdateWorkspaceUserRole(UpdateWorkspaceUserRoleRequest) returns (UpdateWorkspaceUserRoleResponse);
+  rpc DeleteWorkspaceUserRole(DeleteWorkspaceUserRoleRequest) returns (DeleteWorkspaceUserRoleResponse);
+  rpc ListWorkspaceUserRoles(ListWorkspaceUserRolesRequest) returns (ListWorkspaceUserRolesResponse);
+
+  // Enhanced list with pagination, filtering, sorting, search
+  rpc GetWorkspaceUserRoleListPageData(GetWorkspaceUserRoleListPageDataRequest)
+    returns (GetWorkspaceUserRoleListPageDataResponse);
+
+  // Enhanced item view
+  rpc GetWorkspaceUserRoleItemPageData(GetWorkspaceUserRoleItemPageDataRequest)
+    returns (GetWorkspaceUserRoleItemPageDataResponse);
+}
+
+message CreateWorkspaceUserRoleRequest {
+  WorkspaceUserRole data = 1;
+}
+
+message CreateWorkspaceUserRoleResponse {
+  repeated WorkspaceUserRole data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message ReadWorkspaceUserRoleRequest {
+  WorkspaceUserRole data = 1;
+}
+
+message ReadWorkspaceUserRoleResponse {
+  repeated WorkspaceUserRole data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message UpdateWorkspaceUserRoleRequest {
+  WorkspaceUserRole data = 1;
+}
+
+message UpdateWorkspaceUserRoleResponse {
+  repeated WorkspaceUserRole data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message DeleteWorkspaceUserRoleRequest {
+  WorkspaceUserRole data = 1;
+}
+
+message DeleteWorkspaceUserRoleResponse {
+  bool success = 1;
+  optional domain.common.v1.Error error = 2;
+}
+
+message ListWorkspaceUserRolesRequest {
+  optional domain.common.v1.SearchRequest search = 1;
+  optional domain.common.v1.FilterRequest filters = 2;
+  optional domain.common.v1.SortRequest sort = 3;
+  optional domain.common.v1.PaginationRequest pagination = 4;
+}
+
+message ListWorkspaceUserRolesResponse {
+  repeated WorkspaceUserRole data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+// Enhanced list request
+message GetWorkspaceUserRoleListPageDataRequest {
+  domain.common.v1.PaginationRequest pagination = 1;
+  domain.common.v1.FilterRequest filters = 2;
+  domain.common.v1.SortRequest sort = 3;
+  domain.common.v1.SearchRequest search = 4;
+}
+
+// Enhanced list response
+message GetWorkspaceUserRoleListPageDataResponse {
+  repeated WorkspaceUserRole workspace_user_role_list = 1;
+  domain.common.v1.PaginationResponse pagination = 2;
+  repeated domain.common.v1.SearchResult search_results = 3;
+  bool success = 4;
+  optional domain.common.v1.Error error = 5;
+}
+
+// Item request
+message GetWorkspaceUserRoleItemPageDataRequest {
+  string workspace_user_role_id = 1;
+}
+
+// Item response
+message GetWorkspaceUserRoleItemPageDataResponse {
+  WorkspaceUserRole workspace_user_role = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}

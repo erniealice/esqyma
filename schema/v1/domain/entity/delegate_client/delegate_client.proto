@@ -1,0 +1,112 @@
+syntax = "proto3";
+
+package domain.entity.v1;
+
+option go_package = "leapfor.xyz/esqyma/golang/v1/domain/entity/delegate_client";
+
+import "domain/common/error.proto";
+import "domain/common/search.proto";
+import "domain/common/filter.proto";
+import "domain/common/sort.proto";
+import "domain/common/pagination.proto";
+
+import "domain/entity/client/client.proto";
+
+message DelegateClient {
+  string id = 1;
+  string delegate_id = 2;
+  optional Client client = 3;
+  string client_id = 4;
+  optional int64 date_created = 5;
+  optional string date_created_string = 6;
+  optional int64 date_modified = 7;
+  optional string date_modified_string = 8;
+  bool active = 9;
+}
+
+service DelegateClientDomainService {
+  rpc CreateDelegateClient(CreateDelegateClientRequest) returns (CreateDelegateClientResponse);
+  rpc ReadDelegateClient(ReadDelegateClientRequest) returns (ReadDelegateClientResponse);
+  rpc UpdateDelegateClient(UpdateDelegateClientRequest) returns (UpdateDelegateClientResponse);
+  rpc DeleteDelegateClient(DeleteDelegateClientRequest) returns (DeleteDelegateClientResponse);
+  rpc ListDelegateClients(ListDelegateClientsRequest) returns (ListDelegateClientsResponse);
+  rpc GetDelegateClientListPageData(GetDelegateClientListPageDataRequest) returns (GetDelegateClientListPageDataResponse);
+  rpc GetDelegateClientItemPageData(GetDelegateClientItemPageDataRequest) returns (GetDelegateClientItemPageDataResponse);
+}
+
+message CreateDelegateClientRequest {
+  DelegateClient data = 1;
+}
+
+message CreateDelegateClientResponse {
+  repeated DelegateClient data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message ReadDelegateClientRequest {
+  DelegateClient data = 1;
+}
+
+message ReadDelegateClientResponse {
+  repeated DelegateClient data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message UpdateDelegateClientRequest {
+  DelegateClient data = 1;
+}
+
+message UpdateDelegateClientResponse {
+  repeated DelegateClient data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message DeleteDelegateClientRequest {
+  DelegateClient data = 1;
+}
+
+message DeleteDelegateClientResponse {
+  bool success = 1;
+  optional domain.common.v1.Error error = 2;
+}
+
+message ListDelegateClientsRequest {
+  optional domain.common.v1.SearchRequest search = 1;
+  optional domain.common.v1.FilterRequest filters = 2;
+  optional domain.common.v1.SortRequest sort = 3;
+  optional domain.common.v1.PaginationRequest pagination = 4;
+}
+
+message ListDelegateClientsResponse {
+  repeated DelegateClient data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message GetDelegateClientListPageDataRequest {
+  optional domain.common.v1.PaginationRequest pagination = 1;
+  optional domain.common.v1.FilterRequest filters = 2;
+  optional domain.common.v1.SortRequest sort = 3;
+  optional domain.common.v1.SearchRequest search = 4;
+}
+
+message GetDelegateClientListPageDataResponse {
+  repeated DelegateClient delegate_client_list = 1;
+  optional domain.common.v1.PaginationResponse pagination = 2;
+  repeated domain.common.v1.SearchResult search_results = 3;
+  bool success = 4;
+  optional domain.common.v1.Error error = 5;
+}
+
+message GetDelegateClientItemPageDataRequest {
+  string delegate_client_id = 1;
+}
+
+message GetDelegateClientItemPageDataResponse {
+  optional DelegateClient delegate_client = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}

@@ -1,0 +1,170 @@
+syntax = "proto3";
+
+package domain.payment.v1;
+
+option go_package = "leapfor.xyz/esqyma/golang/v1/domain/payment/payment_attribute";
+
+import "domain/common/error.proto";
+import "domain/common/pagination.proto";
+import "domain/common/filter.proto";
+import "domain/common/sort.proto";
+import "domain/common/search.proto";
+
+import "domain/payment/payment/payment.proto";
+import "domain/common/attribute.proto";
+
+message PaymentAttribute {
+  string id = 1;
+  string payment_id = 2;
+  string attribute_id = 3;
+  string value = 4;
+  Payment payment = 5;
+  domain.common.v1.Attribute attribute = 6;
+  optional int64 date_created = 7;
+  optional string date_created_string = 8;
+  optional int64 date_modified = 9;
+  optional string date_modified_string = 10;
+  bool active = 11;
+}
+
+service PaymentAttributeDomainService {
+  rpc CreatePaymentAttribute(CreatePaymentAttributeRequest) returns (CreatePaymentAttributeResponse);
+  rpc ReadPaymentAttribute(ReadPaymentAttributeRequest) returns (ReadPaymentAttributeResponse);
+  rpc UpdatePaymentAttribute(UpdatePaymentAttributeRequest) returns (UpdatePaymentAttributeResponse);
+  rpc DeletePaymentAttribute(DeletePaymentAttributeRequest) returns (DeletePaymentAttributeResponse);
+  rpc ListPaymentAttributes(ListPaymentAttributesRequest) returns (ListPaymentAttributesResponse);
+
+  // NEW: Enhanced list with pagination, filtering, sorting, search
+  rpc GetPaymentAttributeListPageData(GetPaymentAttributeListPageDataRequest)
+    returns (GetPaymentAttributeListPageDataResponse);
+
+  // NEW: Enhanced item view with related data
+  rpc GetPaymentAttributeItemPageData(GetPaymentAttributeItemPageDataRequest)
+    returns (GetPaymentAttributeItemPageDataResponse);
+}
+
+message CreatePaymentAttributeRequest {
+  PaymentAttribute data = 1;
+}
+
+message CreatePaymentAttributeResponse {
+  repeated PaymentAttribute data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message CreatePaymentAttributeBatchRequest {
+  repeated PaymentAttribute data = 1;
+}
+
+message CreatePaymentAttributeBatchResponse {
+  repeated PaymentAttribute data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+// CreatePaymentAttributesByCode creates payment attributes using attribute codes.
+// Internally resolves each code to an attribute ID before creating.
+message PaymentAttributesByCodeData {
+  string payment_id = 1;
+  map<string, string> attributes_map = 2;  // {"attribute_code": "value", ...}
+}
+
+message CreatePaymentAttributesByCodeRequest {
+  PaymentAttributesByCodeData data = 1;
+}
+
+message CreatePaymentAttributesByCodeResponse {
+  repeated PaymentAttribute data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message ReadPaymentAttributeRequest {
+  PaymentAttribute data = 1;
+}
+
+message ReadPaymentAttributeResponse {
+  repeated PaymentAttribute data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message UpdatePaymentAttributeRequest {
+  PaymentAttribute data = 1;
+}
+
+message UpdatePaymentAttributeResponse {
+  repeated PaymentAttribute data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message DeletePaymentAttributeRequest {
+  PaymentAttribute data = 1;
+}
+
+message DeletePaymentAttributeResponse {
+  bool success = 1;
+  optional domain.common.v1.Error error = 2;
+}
+
+message ListPaymentAttributesRequest {
+  optional domain.common.v1.SearchRequest search = 1;
+  optional domain.common.v1.FilterRequest filters = 2;
+  optional domain.common.v1.SortRequest sort = 3;
+  optional domain.common.v1.PaginationRequest pagination = 4;
+}
+
+message ListPaymentAttributesResponse {
+  repeated PaymentAttribute data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+// NEW: Enhanced list request with core features
+message GetPaymentAttributeListPageDataRequest {
+  // Pagination settings
+  domain.common.v1.PaginationRequest pagination = 1;
+
+  // Filter conditions
+  domain.common.v1.FilterRequest filters = 2;
+
+  // Sort settings
+  domain.common.v1.SortRequest sort = 3;
+
+  // Search settings
+  domain.common.v1.SearchRequest search = 4;
+}
+
+// NEW: Enhanced list response with metadata
+message GetPaymentAttributeListPageDataResponse {
+  // The payment attribute data
+  repeated PaymentAttribute payment_attribute_list = 1;
+
+  // Pagination metadata
+  domain.common.v1.PaginationResponse pagination = 2;
+
+  // Search results metadata (when search is used)
+  repeated domain.common.v1.SearchResult search_results = 3;
+
+  // Response status
+  bool success = 4;
+  optional domain.common.v1.Error error = 5;
+}
+
+// NEW: Simple item request
+message GetPaymentAttributeItemPageDataRequest {
+  // The payment attribute ID to retrieve
+  string payment_attribute_id = 1;
+}
+
+// NEW: Simple item response
+message GetPaymentAttributeItemPageDataResponse {
+  // The payment attribute data
+  PaymentAttribute payment_attribute = 1;
+
+  // Response status
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}

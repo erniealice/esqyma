@@ -1,0 +1,521 @@
+================================================================================
+GENERIC EMAIL INTEGRATION PROTO CONTRACTS SUMMARY
+================================================================================
+Date: 2025-09-30 (Updated)
+Purpose: Provider-agnostic proto models for email integration
+Architecture: Hexagonal - Contracts are generic, adapters handle provider specifics
+================================================================================
+
+OVERVIEW
+================================================================================
+
+Created generic, provider-agnostic email proto contracts that work across ANY
+email provider without hardcoding specific provider implementations.
+
+Key Design Principle:
+- ESQYMA (Contracts): Generic, provider-independent DTOs
+- ESPYNA (Ports): Interface definitions using generic contracts
+- ESPYNA (Adapters): Provider-specific implementations (SendGrid, Gmail, etc.)
+- ESPYNA (Use Cases): Provider-agnostic business logic
+
+This follows hexagonal architecture where contracts don't leak implementation
+details. Provider-specific behavior is handled entirely in the adapter layer.
+
+
+PROTO FILES STRUCTURE
+================================================================================
+
+1. email.proto - Core Email Models
+   - EmailProviderType enum (API, OAuth, SMTP, Mock) - categories not brands
+   - EmailCapability enum - feature declarations (templating, tracking, etc.)
+   - EmailMessage - universal message structure
+   - EmailAddress - address with optional display name
+   - EmailAttachment - file attachments with inline support
+   - MessagePriority - importance levels
+   - Generic extensibility via provider_metadata and provider_data maps
+
+2. provider.proto - Generic Provider Configuration
+   - EmailProviderConfig - provider-agnostic configuration
+   - ApiKeyAuth - API key authentication
+   - OAuth2Auth - OAuth 2.0 authentication
+   - SmtpAuth - SMTP authentication
+   - CustomAuth - extensible for custom auth methods
+   - ProviderHealthStatus - provider health monitoring
+   - AuthLocation enum - where to place auth credentials
+
+3. template.proto - Template Management
+   - EmailTemplate - reusable email templates
+   - TemplateVariable - placeholder definitions with validation
+   - TemplateType - local, provider-hosted, or hybrid
+   - SendOptions - generic send options
+   - ValidationRule - variable validation rules
+   - Full CRUD operations for templates
+
+4. email_service.proto - Service Definitions
+   - EmailDomainService - complete service interface
+   - Send operations (single, templated, batch)
+   - Inbox operations (get, search, delete, mark read, move)
+   - Provider operations (health check, capabilities)
+   - Template operations (CRUD)
+   - Rich filtering, sorting, and pagination
+
+
+KEY DESIGN DECISIONS
+================================================================================
+
+1. NO PROVIDER-SPECIFIC ENUMS
+   Instead of: EMAIL_PROVIDER_SENDGRID, EMAIL_PROVIDER_GMAIL, etc.
+   We use: string provider_id (e.g., "sendgrid", "gmail", "custom-smtp")
+   Benefits:
+   - New providers don't require schema updates
+   - Custom/internal providers are first-class citizens
+   - No compile-time coupling to specific brands
+
+2. CAPABILITY-BASED DESIGN
+   Providers declare what they support via EmailCapability enum:
+   - EMAIL_CAPABILITY_SEND
+   - EMAIL_CAPABILITY_TEMPLATING
+   - EMAIL_CAPABILITY_TRACKING
+   - EMAIL_CAPABILITY_READ_INBOX
+   - EMAIL_CAPABILITY_THREADING
+   - etc.
+
+   Benefits:
+   - Self-documenting feature support
+   - Runtime capability discovery
+   - Graceful feature degradation
+
+3. EXTENSIBILITY THROUGH MAPS
+   Common fields are first-class, provider-specific fields use:
+   - map<string, string> provider_metadata (simple key-value)
+   - map<string, google.protobuf.Any> provider_data (complex structures)
+   - map<string, string> settings (configuration)
+   - map<string, string> provider_options (send options)
+
+   Benefits:
+   - No schema changes for provider-specific features
+   - Adapters translate between generic and provider APIs
+   - Future-proof design
+
+4. AUTHENTICATION ABSTRACTION
+   oneof auth allows multiple auth methods:
+   - ApiKeyAuth (SendGrid, Brevo, etc.)
+   - OAuth2Auth (Gmail, Microsoft Graph, etc.)
+   - SmtpAuth (generic SMTP)
+   - CustomAuth (extensible for new methods)
+
+   Benefits:
+   - Provider-agnostic authentication
+   - Flexible credential management
+   - Easy to add new auth methods
+
+
+HEXAGONAL ARCHITECTURE ALIGNMENT
+================================================================================
+
+┌─────────────────────────────────────────────────────────────────┐
+│                         ESQYMA (Contracts)                       │
+│  Generic, provider-agnostic proto definitions                   │
+│  - EmailMessage with provider_id: string                        │
+│  - EmailProviderConfig with settings: map<string, string>       │
+│  - SendOptions with provider_options: map<string, string>       │
+└─────────────────────────────────────────────────────────────────┘
+                                  │
+                                  │ imports
+                                  ▼
+┌─────────────────────────────────────────────────────────────────┐
+│                         ESPYNA (Ports)                           │
+│  Interface definitions (EmailProvider interface)                │
+│  - SendEmail(EmailMessage) → Result                             │
+│  - GetInboxMessages(filters) → []EmailMessage                   │
+└─────────────────────────────────────────────────────────────────┘
+                                  │
+                  ┌───────────────┼───────────────┐
+                  │               │               │
+                  ▼               ▼               ▼
+┌──────────────────────┐ ┌─────────────────┐ ┌──────────────────┐
+│ SendGridAdapter      │ │  GmailAdapter   │ │  SMTPAdapter     │
+│ - Translate generic  │ │ - Map OAuth2    │ │ - Use SmtpAuth   │
+│   to SendGrid API    │ │   to Gmail API  │ │   credentials    │
+│ - Handle API key     │ │ - Handle tokens │ │ - Direct SMTP    │
+│ - SendGrid-specific  │ │ - Label mapping │ │ - Port 587/465   │
+└──────────────────────┘ └─────────────────┘ └──────────────────┘
+
+This design ensures:
+- Contracts never mention specific providers (SendGrid, Brevo, Gmail)
+- Adapters contain ALL provider-specific logic
+- Use cases work with generic contracts only
+- New providers = new adapter, no contract changes
+
+
+COMMON FIELDS (ALL PROVIDERS)
+================================================================================
+
+EmailMessage:
+- id, provider_id, provider_type
+- from, to, cc, bcc, reply_to
+- subject, text_body, html_body
+- attachments[], headers (map)
+- timestamp, thread_id
+- tags[], metadata (map)
+- is_draft, is_read
+- provider_metadata (map), provider_data (map)
+
+EmailAddress:
+- address (email)
+- name (display name)
+
+EmailAttachment:
+- id, name, content_type, size
+- data (base64), content_id
+- is_inline, metadata (map)
+
+SendOptions:
+- priority, enable_tracking, sandbox_mode
+- batch_id, request_delivery_receipt, request_read_receipt
+- provider_options (map), extended_options (map)
+
+
+AUTHENTICATION MODELS
+================================================================================
+
+ApiKeyAuth:
+- api_key, key_name
+- location (header/query/body)
+- parameter_name (e.g., "X-API-Key")
+- prefix (e.g., "Bearer ")
+
+OAuth2Auth:
+- access_token, refresh_token
+- client_id, client_secret
+- token_endpoint, authorization_endpoint
+- redirect_url, scopes[]
+- tenant_id, delegated_email
+- service_account_key
+- additional_params (map)
+
+SmtpAuth:
+- host, port
+- username, password
+- use_tls, use_starttls, skip_verify
+- from_email, from_name
+
+CustomAuth:
+- auth_type (identifier)
+- credentials (map)
+- extended_credentials (map)
+
+
+SERVICE OPERATIONS
+================================================================================
+
+Email Operations:
+✓ SendEmail - Send standard email
+✓ SendTemplatedEmail - Send using template
+✓ SendBatchEmails - Batch sending
+
+Inbox Operations:
+✓ GetInboxMessages - List inbox with filters
+✓ GetMessage - Get specific message
+✓ SearchMessages - Advanced search
+✓ DeleteMessage - Delete or trash
+✓ MarkAsRead - Update read status
+✓ MoveMessage - Move to folder/label
+
+Provider Operations:
+✓ CheckHealth - Health check
+✓ GetCapabilities - Feature discovery
+
+Template Operations:
+✓ CreateTemplate - Create new template
+✓ UpdateTemplate - Modify template
+✓ GetTemplate - Retrieve template
+✓ ListTemplates - Browse templates
+✓ DeleteTemplate - Remove template
+
+
+CAPABILITIES SYSTEM
+================================================================================
+
+Each provider declares its capabilities:
+
+Example SendGrid Configuration:
+{
+  provider_id: "sendgrid",
+  provider_type: EMAIL_PROVIDER_TYPE_API,
+  capabilities: [
+    EMAIL_CAPABILITY_SEND,
+    EMAIL_CAPABILITY_TEMPLATING,
+    EMAIL_CAPABILITY_SCHEDULING,
+    EMAIL_CAPABILITY_TRACKING,
+    EMAIL_CAPABILITY_WEBHOOKS
+  ],
+  auth: {
+    api_key_auth: {
+      api_key: "SG.xxx",
+      location: AUTH_LOCATION_HEADER,
+      parameter_name: "Authorization",
+      prefix: "Bearer "
+    }
+  },
+  settings: {
+    "enable_tracking": "true",
+    "sandbox_mode": "false"
+  }
+}
+
+Example Gmail Configuration:
+{
+  provider_id: "gmail",
+  provider_type: EMAIL_PROVIDER_TYPE_OAUTH,
+  capabilities: [
+    EMAIL_CAPABILITY_SEND,
+    EMAIL_CAPABILITY_READ_INBOX,
+    EMAIL_CAPABILITY_THREADING,
+    EMAIL_CAPABILITY_LABELS,
+    EMAIL_CAPABILITY_SEARCH
+  ],
+  auth: {
+    oauth2_auth: {
+      access_token: "ya29.xxx",
+      refresh_token: "1//xxx",
+      client_id: "xxx.apps.googleusercontent.com",
+      client_secret: "xxx",
+      scopes: ["https://mail.google.com/"]
+    }
+  }
+}
+
+
+ADAPTER IMPLEMENTATION PATTERN
+================================================================================
+
+Each adapter (SendGridAdapter, GmailAdapter, etc.) implements:
+
+1. Configuration Translation
+   - Read EmailProviderConfig
+   - Extract provider-specific settings from maps
+   - Initialize provider SDK
+
+2. Request Translation
+   - Receive generic SendEmailRequest
+   - Extract provider_options from maps
+   - Build provider-specific API request
+
+3. Response Translation
+   - Receive provider-specific response
+   - Map to generic EmailMessage
+   - Store provider-specific data in provider_metadata/provider_data
+
+4. Capability Declaration
+   - Return supported EmailCapability values
+   - Declare rate limits and restrictions
+   - Provide feature-specific configuration
+
+Example Adapter Method:
+```go
+func (a *SendGridAdapter) SendEmail(req *email.SendEmailRequest) (*email.SendEmailResponse, error) {
+    // 1. Build SendGrid-specific request
+    sgReq := &sendgrid.Mail{
+        From: &sendgrid.Email{
+            Address: req.From.Address,
+            Name: req.From.Name,
+        },
+        Subject: req.Subject,
+        Content: []sendgrid.Content{
+            {Type: "text/html", Value: req.HtmlBody},
+        },
+    }
+
+    // 2. Extract SendGrid-specific options
+    if ipPool, ok := req.Options.ProviderOptions["ip_pool"]; ok {
+        sgReq.IpPoolName = ipPool
+    }
+
+    // 3. Send via SendGrid API
+    resp, err := a.client.Send(sgReq)
+
+    // 4. Map to generic response
+    return &email.SendEmailResponse{
+        Success: true,
+        MessageId: resp.MessageID,
+        ProviderResponse: map[string]string{
+            "sendgrid_message_id": resp.MessageID,
+            "sendgrid_status": resp.StatusCode,
+        },
+    }, nil
+}
+```
+
+
+TEMPLATE SYSTEM
+================================================================================
+
+Templates support three types:
+
+1. TEMPLATE_TYPE_LOCAL
+   - Stored in application database
+   - Rendered locally before sending
+   - Full control over rendering logic
+
+2. TEMPLATE_TYPE_PROVIDER
+   - Stored in provider system (e.g., SendGrid Dynamic Templates)
+   - provider_template_id references external template
+   - Provider handles rendering
+
+3. TEMPLATE_TYPE_HYBRID
+   - Base template stored locally
+   - Provider-specific features via provider_settings
+
+Template Variables:
+- Strongly typed (string, number, boolean, date, url, email)
+- Validation rules (regex, min/max, enum)
+- Default values and examples
+- Documentation via description field
+
+
+BENEFITS OF GENERIC APPROACH
+================================================================================
+
+1. Provider Independence
+   ✓ Add new providers without schema changes
+   ✓ Switch providers without code changes
+   ✓ Support custom/internal providers
+   ✓ No vendor lock-in in contracts
+
+2. Maintainability
+   ✓ Single source of truth for email operations
+   ✓ Provider logic isolated in adapters
+   ✓ Easy to test (mock providers)
+   ✓ Clear separation of concerns
+
+3. Extensibility
+   ✓ Provider-specific features via maps
+   ✓ No breaking changes for new features
+   ✓ Backward compatible by design
+   ✓ Future-proof architecture
+
+4. Type Safety
+   ✓ Common fields are strongly typed
+   ✓ Compile-time validation of core structure
+   ✓ Auto-generated Go/TypeScript code
+   ✓ Protocol buffer efficiency
+
+5. Flexibility
+   ✓ Runtime provider selection
+   ✓ Multi-provider support in single app
+   ✓ A/B testing between providers
+   ✓ Failover to backup providers
+
+
+MIGRATION PATH FOR EXISTING PROVIDERS
+================================================================================
+
+For existing Go implementations (MockEmailProvider, MicrosoftGraphProvider):
+
+1. Implement adapter interface with generic contracts
+2. Map existing provider SDK calls to generic operations
+3. Store provider-specific IDs/metadata in provider_metadata
+4. Use provider_data for complex provider-specific structures
+5. Declare capabilities via GetCapabilities()
+
+No changes needed to:
+- Core domain models
+- Use case logic
+- Business rules
+
+Changes only in:
+- Adapter implementation (provider-specific translation)
+- Configuration (use EmailProviderConfig)
+
+
+NEXT STEPS
+================================================================================
+
+1. Generate Go code from updated protos
+2. Generate TypeScript code from updated protos
+3. Create adapter interface in espyna package
+4. Implement adapters for each provider:
+   - SendGridAdapter
+   - BrevoAdapter (if needed)
+   - GmailAdapter
+   - MicrosoftGraphAdapter
+   - SmtpAdapter
+   - MockAdapter (for testing)
+5. Update existing provider implementations to use adapters
+6. Write integration tests for each adapter
+7. Document adapter implementation guide
+8. Create provider configuration examples
+
+
+EXAMPLE CONFIGURATIONS
+================================================================================
+
+SendGrid (API Key):
+```json
+{
+  "provider_id": "sendgrid",
+  "provider_type": "EMAIL_PROVIDER_TYPE_API",
+  "enabled": true,
+  "capabilities": ["SEND", "TEMPLATING", "TRACKING"],
+  "auth": {
+    "api_key_auth": {
+      "api_key": "SG.xxx",
+      "location": "AUTH_LOCATION_HEADER",
+      "parameter_name": "Authorization",
+      "prefix": "Bearer "
+    }
+  },
+  "api_endpoint": "https://api.sendgrid.com/v3",
+  "settings": {
+    "enable_tracking": "true",
+    "enable_click_tracking": "true"
+  }
+}
+```
+
+Gmail (OAuth2):
+```json
+{
+  "provider_id": "gmail",
+  "provider_type": "EMAIL_PROVIDER_TYPE_OAUTH",
+  "enabled": true,
+  "capabilities": ["SEND", "READ_INBOX", "SEARCH", "THREADING"],
+  "auth": {
+    "oauth2_auth": {
+      "client_id": "xxx.apps.googleusercontent.com",
+      "client_secret": "xxx",
+      "access_token": "ya29.xxx",
+      "refresh_token": "1//xxx",
+      "scopes": ["https://mail.google.com/"]
+    }
+  },
+  "api_endpoint": "https://gmail.googleapis.com/gmail/v1"
+}
+```
+
+Custom SMTP:
+```json
+{
+  "provider_id": "company-smtp",
+  "provider_type": "EMAIL_PROVIDER_TYPE_SMTP",
+  "enabled": true,
+  "capabilities": ["SEND", "ATTACHMENTS"],
+  "auth": {
+    "smtp_auth": {
+      "host": "smtp.company.com",
+      "port": 587,
+      "username": "noreply@company.com",
+      "password": "xxx",
+      "use_starttls": true,
+      "from_email": "noreply@company.com",
+      "from_name": "Company Name"
+    }
+  }
+}
+```
+
+
+================================================================================
+END OF GENERIC EMAIL INTEGRATION SUMMARY
+================================================================================

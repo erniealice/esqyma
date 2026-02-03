@@ -1,0 +1,143 @@
+syntax = "proto3";
+
+package domain.product.v1;
+
+option go_package = "leapfor.xyz/esqyma/golang/v1/domain/product/collection_attribute";
+
+import "domain/common/error.proto";
+import "domain/common/pagination.proto";
+import "domain/common/filter.proto";
+import "domain/common/sort.proto";
+import "domain/common/search.proto";
+
+import "domain/product/collection/collection.proto";
+import "domain/common/attribute.proto";
+
+message CollectionAttribute {
+  string id = 1;
+  string collection_id = 2;
+  string attribute_id = 3;
+  string value = 4;
+  Collection collection = 5;
+  domain.common.v1.Attribute attribute = 6;
+  optional int64 date_created = 7;
+  optional string date_created_string = 8;
+  optional int64 date_modified = 9;
+  optional string date_modified_string = 10;
+  bool active = 11;
+}
+
+service CollectionAttributeDomainService {
+  rpc CreateCollectionAttribute(CreateCollectionAttributeRequest) returns (CreateCollectionAttributeResponse);
+  rpc ReadCollectionAttribute(ReadCollectionAttributeRequest) returns (ReadCollectionAttributeResponse);
+  rpc UpdateCollectionAttribute(UpdateCollectionAttributeRequest) returns (UpdateCollectionAttributeResponse);
+  rpc DeleteCollectionAttribute(DeleteCollectionAttributeRequest) returns (DeleteCollectionAttributeResponse);
+  rpc ListCollectionAttributes(ListCollectionAttributesRequest) returns (ListCollectionAttributesResponse);
+
+  // NEW: Enhanced list with pagination, filtering, sorting, search
+  rpc GetCollectionAttributeListPageData(GetCollectionAttributeListPageDataRequest)
+    returns (GetCollectionAttributeListPageDataResponse);
+
+  // NEW: Enhanced item view with related data
+  rpc GetCollectionAttributeItemPageData(GetCollectionAttributeItemPageDataRequest)
+    returns (GetCollectionAttributeItemPageDataResponse);
+}
+
+message CreateCollectionAttributeRequest {
+  CollectionAttribute data = 1;
+}
+
+message CreateCollectionAttributeResponse {
+  repeated CollectionAttribute data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message ReadCollectionAttributeRequest {
+  CollectionAttribute data = 1;
+}
+
+message ReadCollectionAttributeResponse {
+  repeated CollectionAttribute data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message UpdateCollectionAttributeRequest {
+  CollectionAttribute data = 1;
+}
+
+message UpdateCollectionAttributeResponse {
+  repeated CollectionAttribute data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message DeleteCollectionAttributeRequest {
+  CollectionAttribute data = 1;
+}
+
+message DeleteCollectionAttributeResponse {
+  bool success = 1;
+  optional domain.common.v1.Error error = 2;
+}
+
+message ListCollectionAttributesRequest {
+  optional domain.common.v1.SearchRequest search = 1;
+  optional domain.common.v1.FilterRequest filters = 2;
+  optional domain.common.v1.SortRequest sort = 3;
+  optional domain.common.v1.PaginationRequest pagination = 4;
+}
+
+message ListCollectionAttributesResponse {
+  repeated CollectionAttribute data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+// NEW: Enhanced list request with core features
+message GetCollectionAttributeListPageDataRequest {
+  // Pagination settings
+  domain.common.v1.PaginationRequest pagination = 1;
+
+  // Filter conditions
+  domain.common.v1.FilterRequest filters = 2;
+
+  // Sort settings
+  domain.common.v1.SortRequest sort = 3;
+
+  // Search settings
+  domain.common.v1.SearchRequest search = 4;
+}
+
+// NEW: Enhanced list response with metadata
+message GetCollectionAttributeListPageDataResponse {
+  // The collection attribute data
+  repeated CollectionAttribute collection_attribute_list = 1;
+
+  // Pagination metadata
+  domain.common.v1.PaginationResponse pagination = 2;
+
+  // Search results metadata (when search is used)
+  repeated domain.common.v1.SearchResult search_results = 3;
+
+  // Response status
+  bool success = 4;
+  optional domain.common.v1.Error error = 5;
+}
+
+// NEW: Simple item request
+message GetCollectionAttributeItemPageDataRequest {
+  // The collection attribute ID to retrieve
+  string collection_attribute_id = 1;
+}
+
+// NEW: Simple item response
+message GetCollectionAttributeItemPageDataResponse {
+  // The collection attribute data
+  CollectionAttribute collection_attribute = 1;
+
+  // Response status
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}

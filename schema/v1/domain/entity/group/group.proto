@@ -1,0 +1,137 @@
+syntax = "proto3";
+
+package domain.entity.v1;
+
+option go_package = "leapfor.xyz/esqyma/golang/v1/domain/entity/group";
+
+import "domain/common/error.proto";
+import "domain/common/pagination.proto";
+import "domain/common/filter.proto";
+import "domain/common/sort.proto";
+import "domain/common/search.proto";
+
+message Group {
+  string id = 1;
+  string name = 2;
+  string description = 3;
+  optional int64 date_created = 4;
+  optional string date_created_string = 5;
+  optional int64 date_modified = 6;
+  optional string date_modified_string = 7;
+  bool active = 8;
+}
+
+service GroupDomainService {
+  rpc CreateGroup(CreateGroupRequest) returns (CreateGroupResponse);
+  rpc ReadGroup(ReadGroupRequest) returns (ReadGroupResponse);
+  rpc UpdateGroup(UpdateGroupRequest) returns (UpdateGroupResponse);
+  rpc DeleteGroup(DeleteGroupRequest) returns (DeleteGroupResponse);
+  rpc ListGroups(ListGroupsRequest) returns (ListGroupsResponse);
+
+  // NEW: Enhanced list with pagination, filtering, sorting, search
+  rpc GetGroupListPageData(GetGroupListPageDataRequest)
+    returns (GetGroupListPageDataResponse);
+
+  // NEW: Enhanced item view with related data
+  rpc GetGroupItemPageData(GetGroupItemPageDataRequest)
+    returns (GetGroupItemPageDataResponse);
+}
+
+message CreateGroupRequest {
+  Group data = 1;
+}
+
+message CreateGroupResponse {
+  repeated Group data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message ReadGroupRequest {
+  Group data = 1;
+}
+
+message ReadGroupResponse {
+  repeated Group data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message UpdateGroupRequest {
+  Group data = 1;
+}
+
+message UpdateGroupResponse {
+  repeated Group data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message DeleteGroupRequest {
+  Group data = 1;
+}
+
+message DeleteGroupResponse {
+  bool success = 1;
+  optional domain.common.v1.Error error = 2;
+}
+
+message ListGroupsRequest {
+  optional domain.common.v1.SearchRequest search = 1;
+  optional domain.common.v1.FilterRequest filters = 2;
+  optional domain.common.v1.SortRequest sort = 3;
+  optional domain.common.v1.PaginationRequest pagination = 4;
+}
+
+message ListGroupsResponse {
+  repeated Group data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+// NEW: Enhanced list request with core features
+message GetGroupListPageDataRequest {
+  // Pagination settings
+  domain.common.v1.PaginationRequest pagination = 1;
+
+  // Filter conditions
+  domain.common.v1.FilterRequest filters = 2;
+
+  // Sort settings
+  domain.common.v1.SortRequest sort = 3;
+
+  // Search settings
+  domain.common.v1.SearchRequest search = 4;
+}
+
+// NEW: Enhanced list response with metadata
+message GetGroupListPageDataResponse {
+  // The group data
+  repeated Group group_list = 1;
+
+  // Pagination metadata
+  domain.common.v1.PaginationResponse pagination = 2;
+
+  // Search results metadata (when search is used)
+  repeated domain.common.v1.SearchResult search_results = 3;
+
+  // Response status
+  bool success = 4;
+  optional domain.common.v1.Error error = 5;
+}
+
+// NEW: Simple item request
+message GetGroupItemPageDataRequest {
+  // The group ID to retrieve
+  string group_id = 1;
+}
+
+// NEW: Simple item response
+message GetGroupItemPageDataResponse {
+  // The group data
+  Group group = 1;
+
+  // Response status
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}

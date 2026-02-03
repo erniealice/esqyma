@@ -1,0 +1,127 @@
+syntax = "proto3";
+
+package infrastructure.auth.v1;
+
+option go_package = "leapfor.xyz/esqyma/golang/v1/infrastructure/auth";
+
+import "google/protobuf/timestamp.proto";
+
+// Provider represents the authentication provider type
+enum Provider {
+  PROVIDER_UNSPECIFIED = 0;
+  PROVIDER_AZURE = 1;       // Microsoft Azure / Entra ID
+  PROVIDER_GCP = 2;         // Google Cloud Platform
+  PROVIDER_AWS = 3;         // Amazon Web Services
+  PROVIDER_CUSTOM = 4;      // Custom authentication provider
+}
+
+// IdentityType represents the type of identity
+enum IdentityType {
+  IDENTITY_TYPE_UNSPECIFIED = 0;
+  IDENTITY_TYPE_USER = 1;           // Human user
+  IDENTITY_TYPE_SERVICE = 2;        // Service account / machine identity
+  IDENTITY_TYPE_ANONYMOUS = 3;      // Anonymous / guest user
+}
+
+// Identity represents a user or service identity across providers
+message Identity {
+  // Unique identifier for the identity
+  string id = 1;
+
+  // Type of identity (user, service, anonymous)
+  IdentityType type = 2;
+
+  // Authentication provider
+  Provider provider = 3;
+
+  // Email address (for user identities)
+  string email = 4;
+
+  // Display name or username
+  string display_name = 5;
+
+  // Whether the identity is active
+  bool is_active = 6;
+
+  // When the identity was created
+  google.protobuf.Timestamp created_at = 7;
+
+  // When the identity was last updated
+  google.protobuf.Timestamp updated_at = 8;
+
+  // Whether the email has been verified
+  bool email_verified = 9;
+
+  // Profile photo URL
+  string photo_url = 10;
+
+  // Phone number
+  string phone_number = 11;
+
+  // Whether this is an anonymous identity
+  bool is_anonymous = 12;
+
+  // When the identity last signed in
+  google.protobuf.Timestamp last_sign_in_at = 13;
+
+  // Provider-specific identity information
+  oneof provider_identity {
+    AzureIdentity azure_identity = 100;
+    GcpIdentity gcp_identity = 101;
+    AwsIdentity aws_identity = 102;
+  }
+
+  // Custom metadata for the identity
+  map<string, string> metadata = 200;
+}
+
+// AzureIdentity contains Azure/Entra ID specific fields
+message AzureIdentity {
+  // Azure tenant ID
+  string tenant_id = 1;
+
+  // Object ID in Azure AD
+  string object_id = 2;
+
+  // User principal name (UPN)
+  string user_principal_name = 3;
+
+  // Managed identity client ID (for service identities)
+  string managed_identity_id = 4;
+
+  // Service principal ID (for application identities)
+  string service_principal_id = 5;
+}
+
+// GcpIdentity contains Google Cloud Platform specific fields
+message GcpIdentity {
+  // GCP project ID
+  string project_id = 1;
+
+  // Service account email (for service identities)
+  string service_account_email = 2;
+
+  // Unique ID from Google Identity
+  string google_id = 3;
+
+  // Workload identity pool (for federated identities)
+  string workload_identity_pool = 4;
+}
+
+// AwsIdentity contains AWS specific fields
+message AwsIdentity {
+  // AWS account ID
+  string account_id = 1;
+
+  // Cognito user pool ID (for user identities)
+  string user_pool_id = 2;
+
+  // Cognito username
+  string cognito_username = 3;
+
+  // IAM role ARN (for service identities)
+  string iam_role_arn = 4;
+
+  // Identity pool ID (for federated identities)
+  string identity_pool_id = 5;
+}

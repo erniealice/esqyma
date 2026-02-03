@@ -1,0 +1,121 @@
+syntax = "proto3";
+
+package domain.subscription.v1;
+
+option go_package = "leapfor.xyz/esqyma/golang/v1/domain/subscription/plan";
+
+import "domain/common/error.proto";
+import "domain/common/pagination.proto";
+import "domain/common/filter.proto";
+import "domain/common/sort.proto";
+import "domain/common/search.proto";
+import "domain/subscription/plan_location/plan_location.proto";
+
+message Plan {
+  optional string id = 1;
+  optional int64 date_created = 2;
+  optional string date_created_string = 3;
+  optional int64 date_modified = 4;
+  optional string date_modified_string = 5;
+  bool active = 6;
+  string name = 7;
+  optional string description = 8;
+  repeated PlanLocation plan_locations = 9;
+  optional string thumbnail_url = 10;
+  optional string fulfillment_type = 11; // Suggested values: "schedule", "license", "content", "physical"
+}
+
+service PlanDomainService {
+  rpc CreatePlan(CreatePlanRequest) returns (CreatePlanResponse);
+  rpc ReadPlan(ReadPlanRequest) returns (ReadPlanResponse);
+  rpc UpdatePlan(UpdatePlanRequest) returns (UpdatePlanResponse);
+  rpc DeletePlan(DeletePlanRequest) returns (DeletePlanResponse);
+  rpc ListPlans(ListPlansRequest) returns (ListPlansResponse);
+
+  // NEW: Enhanced list with pagination, filtering, sorting, search
+  rpc GetPlanListPageData(GetPlanListPageDataRequest)
+    returns (GetPlanListPageDataResponse);
+
+  // NEW: Enhanced item view with related data
+  rpc GetPlanItemPageData(GetPlanItemPageDataRequest)
+    returns (GetPlanItemPageDataResponse);
+}
+
+message CreatePlanRequest {
+  Plan data = 1;
+}
+
+message CreatePlanResponse {
+  repeated Plan data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message ReadPlanRequest {
+  Plan data = 1;
+}
+
+message ReadPlanResponse {
+  repeated Plan data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message UpdatePlanRequest {
+  Plan data = 1;
+}
+
+message UpdatePlanResponse {
+  repeated Plan data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message DeletePlanRequest {
+  Plan data = 1;
+}
+
+message DeletePlanResponse {
+  bool success = 1;
+  optional domain.common.v1.Error error = 2;
+}
+
+message ListPlansRequest {
+  optional domain.common.v1.SearchRequest search = 1;
+  optional domain.common.v1.FilterRequest filters = 2;
+  optional domain.common.v1.SortRequest sort = 3;
+  optional domain.common.v1.PaginationRequest pagination = 4;
+}
+
+message ListPlansResponse {
+  repeated Plan data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+// NEW: Enhanced list page data request with pagination, filtering, sorting, search
+message GetPlanListPageDataRequest {
+  optional domain.common.v1.PaginationRequest pagination = 1;
+  optional domain.common.v1.FilterRequest filters = 2;
+  optional domain.common.v1.SortRequest sort = 3;
+  optional domain.common.v1.SearchRequest search = 4;
+}
+
+message GetPlanListPageDataResponse {
+  repeated Plan plan_list = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+  optional domain.common.v1.PaginationResponse pagination = 4;
+  repeated domain.common.v1.SearchResult search_results = 5;
+}
+
+// NEW: Enhanced item page data request
+message GetPlanItemPageDataRequest {
+  string plan_id = 1;
+}
+
+message GetPlanItemPageDataResponse {
+  optional Plan plan = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}

@@ -1,0 +1,201 @@
+syntax = "proto3";
+
+package domain.workflow.v1;
+
+import "domain/common/error.proto";
+import "domain/common/pagination.proto";
+import "domain/common/filter.proto";
+import "domain/common/sort.proto";
+import "domain/common/search.proto";
+
+option go_package = "leapfor.xyz/esqyma/golang/v1/domain/workflow/stage";
+
+
+// Stage represents a specific instance of a workflow stage
+message Stage {
+  string id = 1;
+  string workflow_id = 2;
+  string workflow_instance_id = 3;
+  string stage_template_id = 4;
+  string name = 5;
+  optional string description = 6;
+  string status = 7;
+  string priority = 8;
+  optional string assigned_to = 9;
+  optional string completed_by = 10;
+  optional int64 date_started = 11;
+  optional string date_started_string = 12;
+  optional int64 date_completed = 13;
+  optional string date_completed_string = 14;
+  optional int64 date_due = 15;
+  optional string date_due_string = 16;
+  optional string result_json = 17;
+  optional string error_message = 18;
+  optional string created_by = 19;
+  optional int64 date_created = 20;
+  optional string date_created_string = 21;
+  optional int64 date_modified = 22;
+  optional string date_modified_string = 23;
+  bool active = 24;
+  optional int32 completion_percentage = 25;
+}
+
+// CreateStageRequest is the request message for creating a stage
+message CreateStageRequest {
+  Stage data = 1;
+}
+
+// CreateStageResponse is the response message for creating a stage
+message CreateStageResponse {
+  repeated Stage data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+// ReadStageRequest is the request message for reading a stage
+message ReadStageRequest {
+  Stage data = 1;
+}
+
+// ReadStageResponse is the response message for reading a stage
+message ReadStageResponse {
+  repeated Stage data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+// UpdateStageRequest is the request message for updating a stage
+message UpdateStageRequest {
+  Stage data = 1;
+}
+
+// UpdateStageResponse is the response message for updating a stage
+message UpdateStageResponse {
+  repeated Stage data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+// DeleteStageRequest is the request message for deleting a stage
+message DeleteStageRequest {
+  Stage data = 1;
+}
+
+// DeleteStageResponse is the response message for deleting a stage
+message DeleteStageResponse {
+  bool success = 1;
+  optional domain.common.v1.Error error = 2;
+}
+
+// ListStagesRequest is the request message for listing stages
+message ListStagesRequest {
+  optional domain.common.v1.SearchRequest search = 1;
+  optional domain.common.v1.FilterRequest filters = 2;
+  optional domain.common.v1.SortRequest sort = 3;
+  optional domain.common.v1.PaginationRequest pagination = 4;
+}
+
+// ListStagesResponse is the response message for listing stages
+message ListStagesResponse {
+  repeated Stage data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+  optional string next_page_token = 4;
+}
+
+// GetStageListPageDataRequest is the request message for getting stage list page data
+message GetStageListPageDataRequest {
+  optional domain.common.v1.PaginationRequest pagination = 1;
+  optional domain.common.v1.FilterRequest filters = 2;
+  optional domain.common.v1.SortRequest sort = 3;
+  optional domain.common.v1.SearchRequest search = 4;
+}
+
+// GetStageListPageDataResponse is the response message for getting stage list page data
+message GetStageListPageDataResponse {
+  repeated Stage stage_list = 1;
+  optional domain.common.v1.PaginationResponse pagination = 2;
+  repeated domain.common.v1.SearchResult search_results = 3;
+  bool success = 4;
+  optional domain.common.v1.Error error = 5;
+}
+
+// GetStageItemPageDataRequest is the request message for getting stage item page data
+message GetStageItemPageDataRequest {
+  string stage_id = 1;
+}
+
+// GetStageItemPageDataResponse is the response message for getting stage item page data
+message GetStageItemPageDataResponse {
+  optional Stage stage = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+// GetStagesByWorkflowInstanceRequest is the request message for getting stages by workflow instance
+message GetStagesByWorkflowInstanceRequest {
+  string workflow_instance_id = 1;
+}
+
+// GetStagesByWorkflowInstanceResponse is the response message for getting stages by workflow instance
+message GetStagesByWorkflowInstanceResponse {
+  repeated Stage stages = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+// StartStageRequest is the request message for starting a stage
+message StartStageRequest {
+  string stage_id = 1;
+  optional string started_by = 2;
+}
+
+// StartStageResponse is the response message for starting a stage
+message StartStageResponse {
+  optional Stage stage = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+// CompleteStageRequest is the request message for completing a stage
+message CompleteStageRequest {
+  string stage_id = 1;
+  optional string completed_by = 2;
+  optional string result_json = 3;
+}
+
+// CompleteStageResponse is the response message for completing a stage
+message CompleteStageResponse {
+  optional Stage stage = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+// CancelStageRequest is the request message for cancelling a stage
+message CancelStageRequest {
+  string stage_id = 1;
+  optional string cancelled_by = 2;
+  optional string cancellation_reason = 3;
+}
+
+// CancelStageResponse is the response message for cancelling a stage
+message CancelStageResponse {
+  optional Stage stage = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+// StageDomainService defines the gRPC service for stage operations
+service StageDomainService {
+  rpc CreateStage(CreateStageRequest) returns (CreateStageResponse);
+  rpc ReadStage(ReadStageRequest) returns (ReadStageResponse);
+  rpc UpdateStage(UpdateStageRequest) returns (UpdateStageResponse);
+  rpc DeleteStage(DeleteStageRequest) returns (DeleteStageResponse);
+  rpc ListStages(ListStagesRequest) returns (ListStagesResponse);
+  rpc GetStageListPageData(GetStageListPageDataRequest) returns (GetStageListPageDataResponse);
+  rpc GetStageItemPageData(GetStageItemPageDataRequest) returns (GetStageItemPageDataResponse);
+  rpc GetStagesByWorkflowInstance(GetStagesByWorkflowInstanceRequest) returns (GetStagesByWorkflowInstanceResponse);
+  rpc StartStage(StartStageRequest) returns (StartStageResponse);
+  rpc CompleteStage(CompleteStageRequest) returns (CompleteStageResponse);
+  rpc CancelStage(CancelStageRequest) returns (CancelStageResponse);
+}

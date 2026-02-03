@@ -1,0 +1,113 @@
+syntax = "proto3";
+
+package domain.entity.v1;
+
+option go_package = "leapfor.xyz/esqyma/golang/v1/domain/entity/client_category";
+
+import "domain/common/error.proto";
+import "domain/common/search.proto";
+import "domain/common/filter.proto";
+import "domain/common/sort.proto";
+import "domain/common/pagination.proto";
+import "domain/common/category.proto";
+
+// ClientCategory represents a category for organizing clients.
+// It references the common Category entity for reusability.
+message ClientCategory {
+  string id = 1;
+  string client_id = 2;
+  string category_id = 3;
+  domain.common.v1.Category category = 4;
+  optional int64 date_created = 5;
+  optional string date_created_string = 6;
+  optional int64 date_modified = 7;
+  optional string date_modified_string = 8;
+  bool active = 9;
+}
+
+service ClientCategoryDomainService {
+  rpc CreateClientCategory(CreateClientCategoryRequest) returns (CreateClientCategoryResponse);
+  rpc ReadClientCategory(ReadClientCategoryRequest) returns (ReadClientCategoryResponse);
+  rpc UpdateClientCategory(UpdateClientCategoryRequest) returns (UpdateClientCategoryResponse);
+  rpc DeleteClientCategory(DeleteClientCategoryRequest) returns (DeleteClientCategoryResponse);
+  rpc ListClientCategories(ListClientCategoriesRequest) returns (ListClientCategoriesResponse);
+  rpc GetClientCategoryListPageData(GetClientCategoryListPageDataRequest) returns (GetClientCategoryListPageDataResponse);
+  rpc GetClientCategoryItemPageData(GetClientCategoryItemPageDataRequest) returns (GetClientCategoryItemPageDataResponse);
+}
+
+message CreateClientCategoryRequest {
+  ClientCategory data = 1;
+}
+
+message CreateClientCategoryResponse {
+  repeated ClientCategory data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message ReadClientCategoryRequest {
+  ClientCategory data = 1;
+}
+
+message ReadClientCategoryResponse {
+  repeated ClientCategory data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message UpdateClientCategoryRequest {
+  ClientCategory data = 1;
+}
+
+message UpdateClientCategoryResponse {
+  repeated ClientCategory data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message DeleteClientCategoryRequest {
+  ClientCategory data = 1;
+}
+
+message DeleteClientCategoryResponse {
+  bool success = 1;
+  optional domain.common.v1.Error error = 2;
+}
+
+message ListClientCategoriesRequest {
+  optional domain.common.v1.SearchRequest search = 1;
+  optional domain.common.v1.FilterRequest filters = 2;
+  optional domain.common.v1.SortRequest sort = 3;
+  optional domain.common.v1.PaginationRequest pagination = 4;
+}
+
+message ListClientCategoriesResponse {
+  repeated ClientCategory data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message GetClientCategoryListPageDataRequest {
+  domain.common.v1.PaginationRequest pagination = 1;
+  domain.common.v1.FilterRequest filters = 2;
+  domain.common.v1.SortRequest sort = 3;
+  domain.common.v1.SearchRequest search = 4;
+}
+
+message GetClientCategoryListPageDataResponse {
+  repeated ClientCategory client_category_list = 1;
+  domain.common.v1.PaginationResponse pagination = 2;
+  repeated domain.common.v1.SearchResult search_results = 3;
+  bool success = 4;
+  optional domain.common.v1.Error error = 5;
+}
+
+message GetClientCategoryItemPageDataRequest {
+  string client_category_id = 1;
+}
+
+message GetClientCategoryItemPageDataResponse {
+  ClientCategory client_category = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}

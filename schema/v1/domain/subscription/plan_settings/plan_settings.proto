@@ -1,0 +1,94 @@
+syntax = "proto3";
+
+package domain.subscription.v1;
+
+option go_package = "leapfor.xyz/esqyma/golang/v1/domain/subscription/plan_settings";
+
+import "domain/common/error.proto";
+import "domain/common/pagination.proto";
+import "domain/common/filter.proto";
+import "domain/common/sort.proto";
+import "domain/common/search.proto";
+
+message PlanSettings {
+  string id = 1;
+  string plan_id = 2;
+  string name = 3;
+  string description = 4;
+  optional int64 date_created = 5;
+  optional string date_created_string = 6;
+  optional int64 date_modified = 7;
+  optional string date_modified_string = 8;
+  bool active = 9;
+}
+
+service PlanSettingsDomainService {
+  rpc CreatePlanSettings(CreatePlanSettingsRequest) returns (CreatePlanSettingsResponse);
+  rpc ReadPlanSettings(ReadPlanSettingsRequest) returns (ReadPlanSettingsResponse);
+  rpc UpdatePlanSettings(UpdatePlanSettingsRequest) returns (UpdatePlanSettingsResponse);
+  rpc DeletePlanSettings(DeletePlanSettingsRequest) returns (DeletePlanSettingsResponse);
+  rpc ListPlanSettings(ListPlanSettingsRequest) returns (ListPlanSettingsResponse);
+  rpc ListPlanSettingsByPlan(ListPlanSettingsByPlanRequest) returns (ListPlanSettingsByPlanResponse);
+}
+
+message CreatePlanSettingsRequest {
+  PlanSettings data = 1;
+}
+
+message CreatePlanSettingsResponse {
+  repeated PlanSettings data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message ReadPlanSettingsRequest {
+  PlanSettings data = 1;
+}
+
+message ReadPlanSettingsResponse {
+  repeated PlanSettings data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message UpdatePlanSettingsRequest {
+  PlanSettings data = 1;
+}
+
+message UpdatePlanSettingsResponse {
+  repeated PlanSettings data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message DeletePlanSettingsRequest {
+  PlanSettings data = 1;
+}
+
+message DeletePlanSettingsResponse {
+  bool success = 1;
+  optional domain.common.v1.Error error = 2;
+}
+
+message ListPlanSettingsRequest {
+  optional domain.common.v1.SearchRequest search = 1;
+  optional domain.common.v1.FilterRequest filters = 2;
+  optional domain.common.v1.SortRequest sort = 3;
+  optional domain.common.v1.PaginationRequest pagination = 4;
+}
+
+message ListPlanSettingsResponse {
+  repeated PlanSettings data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message ListPlanSettingsByPlanRequest {
+  string plan_id = 1;
+}
+
+message ListPlanSettingsByPlanResponse {
+  repeated PlanSettings data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}

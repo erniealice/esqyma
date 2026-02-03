@@ -1,0 +1,165 @@
+syntax = "proto3";
+
+package integration.tabular.v1;
+
+option go_package = "leapfor.xyz/esqyma/golang/v1/integration/tabular";
+
+import "google/protobuf/timestamp.proto";
+import "integration/tabular/tabular.proto";
+
+// TabularProviderConfig represents the main configuration for a tabular data provider
+message TabularProviderConfig {
+  // Unique provider identifier (e.g., "google-sheets", "csv-local", "excel-online")
+  string provider_id = 1;
+
+  // Provider type category
+  TabularProviderType provider_type = 2;
+
+  // Whether this provider is enabled
+  bool enabled = 3;
+
+  // Display name for the provider
+  string display_name = 4;
+
+  // Capabilities supported by this provider
+  repeated TabularCapability capabilities = 5;
+
+  // Authentication configuration
+  oneof auth {
+    GoogleSheetsAuth google_sheets_auth = 10;
+    OAuth2Auth oauth2_auth = 11;
+    ApiKeyAuth api_key_auth = 12;
+    ServiceAccountAuth service_account_auth = 13;
+    CsvAuth csv_auth = 14;
+    CustomAuth custom_auth = 15;
+  }
+
+  // Request timeout in seconds
+  int32 timeout_seconds = 20;
+
+  // Maximum retry attempts for failed requests
+  int32 max_retries = 21;
+
+  // Provider-specific settings as key-value pairs
+  map<string, string> settings = 30;
+}
+
+// GoogleSheetsAuth represents Google Sheets API authentication
+message GoogleSheetsAuth {
+  // Service account JSON key content or path to key file
+  string service_account_key = 1;
+
+  // Delegated email for domain-wide delegation
+  string delegated_email = 2;
+
+  // OAuth2 scopes to request
+  repeated string scopes = 3;
+
+  // Google Cloud project ID
+  string project_id = 4;
+
+  // Whether to use Google Secret Manager for credentials
+  bool use_secret_manager = 5;
+
+  // Path to secret in Secret Manager (e.g., "projects/my-project/secrets/my-secret/versions/latest")
+  string secret_manager_path = 6;
+}
+
+// OAuth2Auth represents generic OAuth 2.0 based authentication
+message OAuth2Auth {
+  // OAuth 2.0 client ID
+  string client_id = 1;
+
+  // OAuth 2.0 client secret
+  string client_secret = 2;
+
+  // OAuth 2.0 refresh token
+  string refresh_token = 3;
+
+  // OAuth 2.0 access token
+  string access_token = 4;
+
+  // Token endpoint for refreshing tokens
+  string token_url = 5;
+
+  // Authorization endpoint for initial OAuth flow
+  string auth_url = 6;
+
+  // OAuth2 scopes to request
+  repeated string scopes = 7;
+}
+
+// ApiKeyAuth represents API key based authentication
+message ApiKeyAuth {
+  // API key for authentication
+  string api_key = 1;
+
+  // Header name for API key (e.g., "Authorization", "X-API-Key")
+  string header_name = 2;
+}
+
+// ServiceAccountAuth represents service account based authentication
+message ServiceAccountAuth {
+  // Path to service account key file
+  string key_file_path = 1;
+
+  // Service account key JSON content (alternative to file path)
+  string key_json = 2;
+
+  // Project ID associated with the service account
+  string project_id = 3;
+}
+
+// CsvAuth represents CSV/file-based data source authentication
+message CsvAuth {
+  // Base path for CSV files
+  string base_path = 1;
+
+  // Whether access is read-only
+  bool read_only = 2;
+}
+
+// CustomAuth represents custom authentication methods
+message CustomAuth {
+  // Authentication type identifier
+  string auth_type = 1;
+
+  // Credentials as key-value pairs
+  map<string, string> credentials = 2;
+}
+
+// TabularProviderHealthStatus represents the health status of a tabular provider
+message TabularProviderHealthStatus {
+  // Provider identifier
+  string provider_id = 1;
+
+  // Provider type
+  TabularProviderType provider_type = 2;
+
+  // Whether the provider is healthy and operational
+  bool is_healthy = 3;
+
+  // Last health check timestamp
+  google.protobuf.Timestamp last_check = 4;
+
+  // Error message if provider is unhealthy
+  string error_message = 5;
+
+  // Response latency in milliseconds
+  int64 latency_ms = 6;
+}
+
+// TabularRateLimits represents rate limiting information for a provider
+message TabularRateLimits {
+  // Maximum requests allowed per minute
+  int32 requests_per_minute = 1;
+
+  // Maximum requests allowed per day
+  int32 requests_per_day = 2;
+
+  // Remaining requests in current window
+  int32 remaining_requests = 3;
+
+  // Timestamp when rate limit resets
+  google.protobuf.Timestamp reset_time = 4;
+}

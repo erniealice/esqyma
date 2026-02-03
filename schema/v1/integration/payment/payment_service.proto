@@ -1,0 +1,365 @@
+syntax = "proto3";
+
+package integration.payment.v1;
+
+option go_package = "leapfor.xyz/esqyma/golang/v1/integration/payment";
+
+import "google/protobuf/timestamp.proto";
+import "integration/payment/payment.proto";
+import "integration/payment/provider.proto";
+import "domain/common/error.proto";
+
+// PaymentIntegrationService provides unified payment operations
+service PaymentIntegrationService {
+  // Create a checkout session
+  rpc CreateCheckoutSession(CreateCheckoutSessionRequest) returns (CreateCheckoutSessionResponse);
+
+  // Process incoming webhook (parse raw payload into structured data)
+  rpc ProcessWebhook(ProcessWebhookRequest) returns (ProcessWebhookResponse);
+
+  // Log webhook data to integration_payment collection
+  rpc LogWebhook(LogWebhookRequest) returns (LogWebhookResponse);
+
+  // Get payment status
+  rpc GetPaymentStatus(GetPaymentStatusRequest) returns (GetPaymentStatusResponse);
+
+  // Get transaction details
+  rpc GetTransaction(GetTransactionRequest) returns (GetTransactionResponse);
+
+  // List transactions
+  rpc ListTransactions(ListTransactionsRequest) returns (ListTransactionsResponse);
+
+  // Refund a payment
+  rpc RefundPayment(RefundPaymentRequest) returns (RefundPaymentResponse);
+
+  // Void/Cancel a payment
+  rpc VoidPayment(VoidPaymentRequest) returns (VoidPaymentResponse);
+
+  // Check provider health
+  rpc CheckHealth(CheckHealthRequest) returns (CheckHealthResponse);
+
+  // Get provider capabilities
+  rpc GetCapabilities(GetCapabilitiesRequest) returns (GetCapabilitiesResponse);
+}
+
+// ===== Checkout Session =====
+
+message CreateCheckoutSessionRequest {
+  CheckoutSessionData data = 1;
+}
+
+message CheckoutSessionData {
+  // Provider to use (optional, uses default if not specified)
+  string provider_id = 1;
+
+  // Amount in base currency units (e.g., dollars, not cents)
+  // Payment providers typically convert to cents internally
+  double amount = 2;
+
+  // Currency code (ISO 4217)
+  string currency = 3;
+
+  // Payment description
+  string description = 4;
+
+  // Internal payment document ID
+  string payment_id = 5;
+
+  // Subscription ID (for recurring payments)
+  string subscription_id = 6;
+
+  // Client ID
+  string client_id = 7;
+
+  // Order reference
+  string order_ref = 8;
+
+  // Custom success URL (overrides provider default)
+  string success_url = 9;
+
+  // Custom failure URL
+  string failure_url = 10;
+
+  // Custom cancel URL
+  string cancel_url = 11;
+
+  // Session metadata
+  map<string, string> metadata = 12;
+
+  // Session expiry duration in minutes
+  int32 expires_in_minutes = 13;
+
+  // Customer information
+  CustomerInfo customer = 14;
+}
+
+message CustomerInfo {
+  string email = 1;
+  string name = 2;
+  string phone = 3;
+}
+
+message CreateCheckoutSessionResponse {
+  bool success = 1;
+  repeated CheckoutSession data = 2;
+  domain.common.v1.Error error = 3;
+}
+
+// ===== Webhook Processing =====
+
+message ProcessWebhookRequest {
+  WebhookData data = 1;
+}
+
+message WebhookData {
+  // Provider identifier
+  string provider_id = 1;
+
+  // Raw webhook payload
+  bytes payload = 2;
+
+  // Webhook headers
+  map<string, string> headers = 3;
+
+  // Content type
+  string content_type = 4;
+
+  // Signature for verification
+  string signature = 5;
+
+  // URL query parameters (e.g., ?status=success&ref=123)
+  map<string, string> query = 6;
+
+  // URL path parameters (e.g., from /webhooks/:provider/:action)
+  map<string, string> params = 7;
+
+  // Request method (POST, GET, etc.)
+  string method = 8;
+
+  // Full request URL
+  string url = 9;
+}
+
+message ProcessWebhookResponse {
+  bool success = 1;
+  repeated WebhookResult data = 2;
+  domain.common.v1.Error error = 3;
+}
+
+message WebhookResult {
+  // Processed transaction
+  PaymentTransaction transaction = 1;
+
+  // Payment status after processing
+  PaymentStatus status = 2;
+
+  // Action taken (none, success, failure, etc.)
+  string action = 3;
+
+  // Internal payment ID that was updated
+  string payment_id = 4;
+}
+
+// ===== Webhook Logging =====
+
+message LogWebhookRequest {
+  LogWebhookData data = 1;
+}
+
+message LogWebhookData {
+  // Execution ID for tracing (optional, auto-generated if not provided)
+  string execution_id = 1;
+
+  // Payment ID from the parsed webhook
+  string payment_id = 2;
+
+  // Provider ID (e.g., asiapay, maya, paypal)
+  string provider_id = 3;
+
+  // Provider's reference ID
+  string provider_ref = 4;
+
+  // Provider's payment reference
+  string provider_payment_ref = 5;
+
+  // Payment status string (success, failed, cancelled, pending)
+  string payment_status = 6;
+
+  // Amount in cents
+  int64 amount = 7;
+
+  // Currency code (e.g., PHP, USD)
+  string currency = 8;
+
+  // Payment method used (e.g., VISA, MASTERCARD)
+  string payment_method = 9;
+
+  // Provider response code
+  string response_code = 10;
+
+  // Order reference
+  string order_ref = 11;
+
+  // Raw data from provider (for debugging/audit)
+  map<string, string> raw_data = 12;
+
+  // Content type of original webhook request
+  string content_type = 13;
+
+  // Action taken (success, failure, etc.)
+  string action = 14;
+}
+
+message LogWebhookResponse {
+  bool success = 1;
+  string id = 2;
+  domain.common.v1.Error error = 3;
+}
+
+// ===== Payment Status =====
+
+message GetPaymentStatusRequest {
+  PaymentStatusLookup data = 1;
+}
+
+message PaymentStatusLookup {
+  string provider_id = 1;
+
+  // Either payment_id or provider_ref required
+  string payment_id = 2;
+  string provider_ref = 3;
+}
+
+message GetPaymentStatusResponse {
+  bool success = 1;
+  repeated PaymentStatusData data = 2;
+  domain.common.v1.Error error = 3;
+}
+
+message PaymentStatusData {
+  PaymentStatus status = 1;
+  PaymentTransaction transaction = 2;
+}
+
+// ===== Transaction =====
+
+message GetTransactionRequest {
+  TransactionLookup data = 1;
+}
+
+message TransactionLookup {
+  string provider_id = 1;
+  string transaction_id = 2;
+}
+
+message GetTransactionResponse {
+  bool success = 1;
+  repeated PaymentTransaction data = 2;
+  domain.common.v1.Error error = 3;
+}
+
+message ListTransactionsRequest {
+  TransactionListFilter data = 1;
+}
+
+message TransactionListFilter {
+  string provider_id = 1;
+  string payment_id = 2;
+  string order_ref = 3;
+  google.protobuf.Timestamp from_date = 4;
+  google.protobuf.Timestamp to_date = 5;
+  int32 limit = 6;
+  string page_token = 7;
+}
+
+message ListTransactionsResponse {
+  bool success = 1;
+  repeated PaymentTransaction data = 2;
+  domain.common.v1.Error error = 3;
+  string next_page_token = 4;
+  int32 total_count = 5;
+}
+
+// ===== Refund =====
+
+message RefundPaymentRequest {
+  RefundData data = 1;
+}
+
+message RefundData {
+  string provider_id = 1;
+  string transaction_id = 2;
+  string provider_ref = 3;
+  int64 amount = 4;  // 0 for full refund
+  string reason = 5;
+  map<string, string> metadata = 6;
+}
+
+message RefundPaymentResponse {
+  bool success = 1;
+  repeated RefundResponse data = 2;
+  domain.common.v1.Error error = 3;
+}
+
+// ===== Void =====
+
+message VoidPaymentRequest {
+  VoidData data = 1;
+}
+
+message VoidData {
+  string provider_id = 1;
+  string transaction_id = 2;
+  string provider_ref = 3;
+  string reason = 4;
+}
+
+message VoidPaymentResponse {
+  bool success = 1;
+  repeated PaymentStatus data = 2;
+  domain.common.v1.Error error = 3;
+}
+
+// ===== Health & Capabilities =====
+
+message CheckHealthRequest {
+  HealthCheckData data = 1;
+}
+
+message HealthCheckData {
+  string provider_id = 1;
+  bool deep_check = 2;
+}
+
+message CheckHealthResponse {
+  bool success = 1;
+  HealthStatus data = 2;
+  domain.common.v1.Error error = 3;
+}
+
+message HealthStatus {
+  bool is_healthy = 1;
+  ProviderHealthStatus health_status = 2;
+}
+
+message GetCapabilitiesRequest {
+  ProviderLookup data = 1;
+}
+
+message ProviderLookup {
+  string provider_id = 1;
+}
+
+message GetCapabilitiesResponse {
+  bool success = 1;
+  repeated ProviderCapabilities data = 2;
+  domain.common.v1.Error error = 3;
+}
+
+message ProviderCapabilities {
+  string provider_id = 1;
+  PaymentProviderType provider_type = 2;
+  repeated PaymentCapability capabilities = 3;
+  repeated string supported_currencies = 4;
+  map<string, string> limits = 5;
+}

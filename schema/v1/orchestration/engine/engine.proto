@@ -1,0 +1,102 @@
+syntax = "proto3";
+
+package orchestration.engine.v1;
+
+import "domain/common/error.proto";
+import "domain/workflow/workflow/workflow.proto";
+import "domain/workflow/stage/stage.proto";
+import "domain/workflow/activity/activity.proto";
+
+option go_package = "leapfor.xyz/esqyma/golang/v1/orchestration/engine";
+
+// StartWorkflowRequest
+message StartWorkflowRequest {
+  string workflow_template_id = 1;
+  string input_json = 2; // Initial data for the workflow
+  optional string workspace_id = 3;
+}
+
+message StartWorkflowResponse {
+  optional domain.workflow.v1.Workflow workflow = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+// ExecuteActivityRequest
+message ExecuteActivityRequest {
+  string activity_id = 1;
+  string workflow_id = 2;
+}
+
+message ExecuteActivityResponse {
+  bool success = 1;
+  optional domain.common.v1.Error error = 2;
+  string output_json = 3;
+}
+
+// AdvanceWorkflowRequest
+message AdvanceWorkflowRequest {
+  string workflow_id = 1;
+}
+
+message AdvanceWorkflowResponse {
+  bool success = 1;
+  optional domain.common.v1.Error error = 2;
+  string next_stage_id = 3;
+  bool workflow_completed = 4;
+}
+
+// GetWorkflowStatusRequest retrieves current workflow state including pending activities
+message GetWorkflowStatusRequest {
+  string workflow_id = 1;
+}
+
+message GetWorkflowStatusResponse {
+  bool success = 1;
+  optional domain.common.v1.Error error = 2;
+  optional domain.workflow.v1.Workflow workflow = 3;
+  optional domain.workflow.v1.Stage current_stage = 4;
+  repeated domain.workflow.v1.Activity activities = 5;
+  optional string pending_activity_id = 6;  // ID of activity awaiting human input
+}
+
+// ContinueWorkflowRequest submits human input to continue a paused workflow
+message ContinueWorkflowRequest {
+  string workflow_id = 1;
+  string activity_id = 2;   // The pending human activity to continue
+  string input_json = 3;    // Human-provided input data
+}
+
+message ContinueWorkflowResponse {
+  bool success = 1;
+  optional domain.common.v1.Error error = 2;
+  optional string output_json = 3;
+  bool workflow_advanced = 4;                   // True if workflow moved to next stage
+  optional string next_pending_activity_id = 5; // Next pending activity if any
+}
+
+// RunToCompletion - Executes a workflow from start to finish in a single call
+// Loops through all automated activities until completion or error
+message RunToCompletionRequest {
+  string workflow_template_id = 1;  // Template ID from database
+  string input_json = 2;             // Initial workflow context as JSON
+  optional string workspace_id = 3;  // Optional workspace context
+  optional int32 max_iterations = 4; // Safety limit (default 100)
+}
+
+message RunToCompletionResponse {
+  bool success = 1;
+  optional domain.common.v1.Error error = 2;
+  optional domain.workflow.v1.Workflow workflow = 3;  // Final workflow state
+  string output_json = 4;  // Final workflow context as JSON
+}
+
+// WorkflowEngineService defines the gRPC service for workflow engine operations
+service WorkflowEngineService {
+  rpc StartWorkflowFromTemplate(StartWorkflowRequest) returns (StartWorkflowResponse);
+  rpc ExecuteActivity(ExecuteActivityRequest) returns (ExecuteActivityResponse);
+  rpc AdvanceWorkflow(AdvanceWorkflowRequest) returns (AdvanceWorkflowResponse);
+  rpc GetWorkflowStatus(GetWorkflowStatusRequest) returns (GetWorkflowStatusResponse);
+  rpc ContinueWorkflow(ContinueWorkflowRequest) returns (ContinueWorkflowResponse);
+  rpc RunToCompletion(RunToCompletionRequest) returns (RunToCompletionResponse);
+}

@@ -1,0 +1,148 @@
+syntax = "proto3";
+
+package integration.payment.v1;
+
+option go_package = "leapfor.xyz/esqyma/golang/v1/integration/payment";
+
+import "integration/payment/payment.proto";
+
+// PaymentProviderConfig represents payment provider configuration
+message PaymentProviderConfig {
+  // Unique provider identifier
+  string provider_id = 1;
+
+  // Provider type
+  PaymentProviderType provider_type = 2;
+
+  // Whether provider is enabled
+  bool enabled = 3;
+
+  // Display name
+  string display_name = 4;
+
+  // Supported capabilities
+  repeated PaymentCapability capabilities = 5;
+
+  // Supported currencies
+  repeated string supported_currencies = 6;
+
+  // Default currency
+  string default_currency = 7;
+
+  // API endpoint (production)
+  string api_endpoint = 8;
+
+  // API endpoint (sandbox/test)
+  string sandbox_endpoint = 9;
+
+  // Whether to use sandbox mode
+  bool sandbox_mode = 10;
+
+  // Authentication configuration
+  oneof auth {
+    ApiKeyAuth api_key_auth = 20;
+    AsiaPayAuth asiapay_auth = 21;
+    OAuth2Auth oauth2_auth = 22;
+    CustomAuth custom_auth = 23;
+  }
+
+  // Webhook configuration
+  WebhookConfig webhook_config = 30;
+
+  // Redirect URL templates
+  RedirectUrls redirect_urls = 31;
+
+  // Request timeout in seconds
+  int32 timeout_seconds = 40;
+
+  // Max retry attempts
+  int32 max_retries = 41;
+
+  // Provider-specific settings
+  map<string, string> settings = 50;
+}
+
+// ApiKeyAuth for simple API key authentication
+message ApiKeyAuth {
+  string api_key = 1;
+  string api_secret = 2;
+}
+
+// AsiaPayAuth for AsiaPay-specific authentication
+message AsiaPayAuth {
+  // Merchant ID
+  string merchant_id = 1;
+
+  // Secure hash secret
+  string secure_secret = 2;
+
+  // Currency code (numeric: 608=PHP, 344=HKD, 840=USD)
+  string currency_code = 3;
+
+  // Payment type (N=Normal, H=Hold)
+  string payment_type = 4;
+
+  // Language (E=English)
+  string language = 5;
+
+  // Payment method filter
+  string payment_method = 6;
+}
+
+// OAuth2Auth for OAuth-based providers
+message OAuth2Auth {
+  string client_id = 1;
+  string client_secret = 2;
+  string access_token = 3;
+  string refresh_token = 4;
+  string token_endpoint = 5;
+  repeated string scopes = 6;
+}
+
+// CustomAuth for non-standard authentication
+message CustomAuth {
+  string auth_type = 1;
+  map<string, string> credentials = 2;
+}
+
+// WebhookConfig for webhook settings
+message WebhookConfig {
+  // Webhook endpoint path
+  string endpoint_path = 1;
+
+  // Secret for signature verification
+  string signing_secret = 2;
+
+  // Verification method (hmac_sha256, etc.)
+  string verification_method = 3;
+
+  // Events to subscribe
+  repeated string subscribed_events = 4;
+}
+
+// RedirectUrls for payment flow redirects
+message RedirectUrls {
+  // Base URL for redirects
+  string base_url = 1;
+
+  // Success page path
+  string success_path = 2;
+
+  // Failure page path
+  string failure_path = 3;
+
+  // Cancel page path
+  string cancel_path = 4;
+
+  // Webhook/datafeed path
+  string webhook_path = 5;
+}
+
+// ProviderHealthStatus for health monitoring
+message ProviderHealthStatus {
+  string provider_id = 1;
+  bool is_healthy = 2;
+  string status_message = 3;
+  int64 response_time_ms = 4;
+  map<string, string> details = 5;
+}

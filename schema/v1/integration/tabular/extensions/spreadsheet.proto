@@ -1,0 +1,236 @@
+syntax = "proto3";
+package integration.tabular.extensions.spreadsheet.v1;
+option go_package = "leapfor.xyz/esqyma/golang/v1/integration/tabular/extensions/spreadsheet";
+
+import "integration/tabular/tabular.proto";
+
+// =============================================================================
+// ENUMS
+// =============================================================================
+
+// HorizontalAlignment represents horizontal text alignment in a cell
+enum HorizontalAlignment {
+  HORIZONTAL_ALIGNMENT_UNSPECIFIED = 0;
+  HORIZONTAL_ALIGNMENT_LEFT = 1;
+  HORIZONTAL_ALIGNMENT_CENTER = 2;
+  HORIZONTAL_ALIGNMENT_RIGHT = 3;
+}
+
+// VerticalAlignment represents vertical text alignment in a cell
+enum VerticalAlignment {
+  VERTICAL_ALIGNMENT_UNSPECIFIED = 0;
+  VERTICAL_ALIGNMENT_TOP = 1;
+  VERTICAL_ALIGNMENT_MIDDLE = 2;
+  VERTICAL_ALIGNMENT_BOTTOM = 3;
+}
+
+// BorderStyle represents the style of a cell border
+enum BorderStyle {
+  BORDER_STYLE_UNSPECIFIED = 0;
+  BORDER_STYLE_SOLID = 1;
+  BORDER_STYLE_DASHED = 2;
+  BORDER_STYLE_DOTTED = 3;
+  BORDER_STYLE_DOUBLE = 4;
+}
+
+// ValidationType represents the type of data validation
+enum ValidationType {
+  VALIDATION_TYPE_UNSPECIFIED = 0;
+  VALIDATION_TYPE_DROPDOWN = 1;
+  VALIDATION_TYPE_CHECKBOX = 2;
+  VALIDATION_TYPE_DATE = 3;
+  VALIDATION_TYPE_NUMBER = 4;
+  VALIDATION_TYPE_TEXT_LENGTH = 5;
+  VALIDATION_TYPE_CUSTOM_FORMULA = 6;
+}
+
+// =============================================================================
+// MESSAGES - Cell Reference and Selection
+// =============================================================================
+
+// SpreadsheetSelection extends Selection with A1 notation support
+message SpreadsheetSelection {
+  // Base selection from tabular
+  integration.tabular.v1.Selection base = 1;
+
+  // A1 notation for the selection (e.g., "Sheet1!A1:D10")
+  string a1_notation = 2;
+
+  // Named range reference
+  string named_range = 3;
+}
+
+// CellReference represents a reference to a specific cell
+message CellReference {
+  // Sheet name
+  string sheet = 1;
+
+  // Row number (1-based for spreadsheet compatibility)
+  int32 row = 2;
+
+  // Column number (1-based for spreadsheet compatibility)
+  int32 column = 3;
+
+  // Alternative A1 notation (e.g., "A1", "B2")
+  string a1 = 4;
+}
+
+// =============================================================================
+// MESSAGES - Cell Formatting
+// =============================================================================
+
+// Border represents a single border configuration
+message Border {
+  // Border color in hex format (e.g., "#000000")
+  string color = 1;
+
+  // Border style
+  BorderStyle style = 2;
+
+  // Border width in pixels
+  int32 width = 3;
+}
+
+// Borders represents all four borders of a cell
+message Borders {
+  // Top border
+  Border top = 1;
+
+  // Bottom border
+  Border bottom = 2;
+
+  // Left border
+  Border left = 3;
+
+  // Right border
+  Border right = 4;
+}
+
+// CellFormat represents the formatting of a cell
+message CellFormat {
+  // Background color in hex format (e.g., "#FFFFFF")
+  string background_color = 1;
+
+  // Text color in hex format (e.g., "#000000")
+  string text_color = 2;
+
+  // Font family (e.g., "Arial", "Times New Roman")
+  string font_family = 3;
+
+  // Font size in points
+  int32 font_size = 4;
+
+  // Whether text is bold
+  bool bold = 5;
+
+  // Whether text is italic
+  bool italic = 6;
+
+  // Whether text is underlined
+  bool underline = 7;
+
+  // Whether text has strikethrough
+  bool strikethrough = 8;
+
+  // Horizontal text alignment
+  HorizontalAlignment horizontal_alignment = 9;
+
+  // Vertical text alignment
+  VerticalAlignment vertical_alignment = 10;
+
+  // Number format pattern (e.g., "#,##0.00", "yyyy-mm-dd")
+  string number_format = 11;
+
+  // Cell borders
+  Borders borders = 12;
+}
+
+// =============================================================================
+// MESSAGES - Data Validation
+// =============================================================================
+
+// DataValidation represents validation rules for a cell
+message DataValidation {
+  // Type of validation
+  ValidationType type = 1;
+
+  // Allowed values for dropdown validation
+  repeated string values = 2;
+
+  // Custom formula for validation
+  string custom_formula = 3;
+
+  // Input message shown when cell is selected
+  string input_message = 4;
+
+  // Error message shown when validation fails
+  string error_message = 5;
+
+  // Whether validation is strict (reject invalid input)
+  bool strict = 6;
+}
+
+// =============================================================================
+// MESSAGES - Spreadsheet Cell and Record
+// =============================================================================
+
+// SpreadsheetCell represents a cell with spreadsheet-specific features
+message SpreadsheetCell {
+  // Cell value from tabular
+  integration.tabular.v1.FieldValue value = 1;
+
+  // Cell reference
+  CellReference reference = 2;
+
+  // Cell formatting
+  CellFormat format = 3;
+
+  // Cell note/comment
+  string note = 4;
+
+  // Hyperlink URL
+  string hyperlink = 5;
+
+  // Data validation rules
+  DataValidation validation = 6;
+}
+
+// SpreadsheetRecord represents a row with spreadsheet-specific features
+message SpreadsheetRecord {
+  // Base record from tabular
+  integration.tabular.v1.Record base = 1;
+
+  // Cells with formatting and validation
+  repeated SpreadsheetCell cells = 2;
+
+  // Row height in pixels
+  int32 row_height = 3;
+
+  // Whether the row is hidden
+  bool hidden = 4;
+}
+
+// =============================================================================
+// MESSAGES - Sheet Metadata
+// =============================================================================
+
+// SheetMetadata represents spreadsheet-specific sheet properties
+message SheetMetadata {
+  // Number of frozen rows at the top
+  int32 frozen_rows = 1;
+
+  // Number of frozen columns on the left
+  int32 frozen_columns = 2;
+
+  // Tab color in hex format (e.g., "#FF0000")
+  string tab_color = 3;
+
+  // Whether the sheet is right-to-left
+  bool right_to_left = 4;
+
+  // Default column width in pixels
+  int32 default_column_width = 5;
+
+  // Default row height in pixels
+  int32 default_row_height = 6;
+}

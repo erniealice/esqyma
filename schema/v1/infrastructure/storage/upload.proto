@@ -1,0 +1,309 @@
+syntax = "proto3";
+
+package infrastructure.storage.v1;
+
+option go_package = "leapfor.xyz/esqyma/golang/v1/infrastructure/storage";
+
+import "google/protobuf/timestamp.proto";
+import "infrastructure/storage/object.proto";
+import "infrastructure/storage/access_tier.proto";
+
+// UploadObjectRequest is a request to upload an object to storage
+message UploadObjectRequest {
+  // Storage provider
+  StorageProvider provider = 1;
+
+  // Container/bucket name
+  string container_name = 2;
+
+  // Object key/name (path within the container)
+  string object_key = 3;
+
+  // File content (for small files, use this field)
+  bytes content = 4;
+
+  // Content type (MIME type)
+  string content_type = 5;
+
+  // File size in bytes
+  int64 size = 6;
+
+  // Access tier for the object
+  AccessTier access_tier = 7;
+
+  // Whether to enable encryption
+  bool enable_encryption = 8;
+
+  // Custom metadata for the object
+  map<string, string> metadata = 9;
+
+  // Whether to overwrite if object already exists
+  bool overwrite = 10;
+
+  // Cache control header
+  string cache_control = 11;
+
+  // Content disposition header
+  string content_disposition = 12;
+
+  // Provider-specific upload options
+  oneof provider_options {
+    AzureUploadOptions azure_options = 100;
+    GcsUploadOptions gcs_options = 101;
+    S3UploadOptions s3_options = 102;
+  }
+}
+
+// AzureUploadOptions contains Azure-specific upload configuration
+message AzureUploadOptions {
+  // Blob type (block, append, page)
+  string blob_type = 1;
+
+  // Access tier (Hot, Cool, Cold, Archive)
+  string access_tier = 2;
+
+  // Encryption scope
+  string encryption_scope = 3;
+
+  // Whether to use server-side encryption
+  bool use_server_side_encryption = 4;
+}
+
+// GcsUploadOptions contains GCS-specific upload configuration
+message GcsUploadOptions {
+  // Storage class
+  string storage_class = 1;
+
+  // KMS key name for customer-managed encryption
+  string kms_key_name = 2;
+
+  // Predefined ACL (private, public-read, etc.)
+  string predefined_acl = 3;
+
+  // Whether to use customer-supplied encryption
+  bool use_customer_encryption = 4;
+}
+
+// S3UploadOptions contains S3-specific upload configuration
+message S3UploadOptions {
+  // Storage class
+  string storage_class = 1;
+
+  // Server-side encryption algorithm
+  string sse_algorithm = 2;
+
+  // KMS key ID for encryption
+  string kms_key_id = 3;
+
+  // ACL (private, public-read, etc.)
+  string acl = 4;
+
+  // Whether to enable object lock
+  bool enable_object_lock = 5;
+
+  // Object lock mode
+  string object_lock_mode = 6;
+
+  // Object lock retain until date
+  google.protobuf.Timestamp object_lock_retain_until = 7;
+}
+
+// UploadObjectResponse contains the upload result
+message UploadObjectResponse {
+  // Whether the upload was successful
+  bool success = 1;
+
+  // The uploaded object details
+  StorageObject object = 2;
+
+  // Upload duration in milliseconds
+  int64 upload_duration_ms = 3;
+
+  // Message about the upload
+  string message = 4;
+}
+
+// InitiateMultipartUploadRequest starts a multipart upload for large files
+// TODO: Implement multipart upload in future phase
+message InitiateMultipartUploadRequest {
+  // Storage provider
+  StorageProvider provider = 1;
+
+  // Container/bucket name
+  string container_name = 2;
+
+  // Object key/name
+  string object_key = 3;
+
+  // Content type
+  string content_type = 4;
+
+  // Total file size (optional, for progress tracking)
+  int64 total_size = 5;
+
+  // Access tier
+  AccessTier access_tier = 6;
+
+  // Custom metadata
+  map<string, string> metadata = 7;
+}
+
+// InitiateMultipartUploadResponse contains the upload ID
+// TODO: Implement multipart upload in future phase
+message InitiateMultipartUploadResponse {
+  // Whether initiation was successful
+  bool success = 1;
+
+  // Upload ID to use for subsequent part uploads
+  string upload_id = 2;
+
+  // Recommended part size in bytes
+  int64 recommended_part_size = 3;
+
+  // Message about the initiation
+  string message = 4;
+}
+
+// UploadPartRequest uploads a single part of a multipart upload
+// TODO: Implement multipart upload in future phase
+message UploadPartRequest {
+  // Storage provider
+  StorageProvider provider = 1;
+
+  // Container/bucket name
+  string container_name = 2;
+
+  // Object key/name
+  string object_key = 3;
+
+  // Upload ID from InitiateMultipartUpload
+  string upload_id = 4;
+
+  // Part number (1-indexed)
+  int32 part_number = 5;
+
+  // Part content
+  bytes content = 6;
+
+  // Part size in bytes
+  int64 size = 7;
+}
+
+// UploadPartResponse contains the upload part result
+// TODO: Implement multipart upload in future phase
+message UploadPartResponse {
+  // Whether the upload was successful
+  bool success = 1;
+
+  // Part number that was uploaded
+  int32 part_number = 2;
+
+  // ETag for this part
+  string etag = 3;
+
+  // Message about the upload
+  string message = 4;
+}
+
+// CompleteMultipartUploadRequest finalizes a multipart upload
+// TODO: Implement multipart upload in future phase
+message CompleteMultipartUploadRequest {
+  // Storage provider
+  StorageProvider provider = 1;
+
+  // Container/bucket name
+  string container_name = 2;
+
+  // Object key/name
+  string object_key = 3;
+
+  // Upload ID
+  string upload_id = 4;
+
+  // List of uploaded parts
+  repeated UploadedPart parts = 5;
+}
+
+// UploadedPart represents a completed part
+// TODO: Implement multipart upload in future phase
+message UploadedPart {
+  // Part number
+  int32 part_number = 1;
+
+  // ETag for this part
+  string etag = 2;
+}
+
+// CompleteMultipartUploadResponse contains the final upload result
+// TODO: Implement multipart upload in future phase
+message CompleteMultipartUploadResponse {
+  // Whether completion was successful
+  bool success = 1;
+
+  // The completed object
+  StorageObject object = 2;
+
+  // Total upload duration in milliseconds
+  int64 total_duration_ms = 3;
+
+  // Message about the completion
+  string message = 4;
+}
+
+// AbortMultipartUploadRequest cancels a multipart upload
+// TODO: Implement multipart upload in future phase
+message AbortMultipartUploadRequest {
+  // Storage provider
+  StorageProvider provider = 1;
+
+  // Container/bucket name
+  string container_name = 2;
+
+  // Object key/name
+  string object_key = 3;
+
+  // Upload ID to abort
+  string upload_id = 4;
+}
+
+// AbortMultipartUploadResponse confirms the abort
+// TODO: Implement multipart upload in future phase
+message AbortMultipartUploadResponse {
+  // Whether abort was successful
+  bool success = 1;
+
+  // Message about the abort
+  string message = 2;
+}
+
+// GetUploadProgressRequest gets the progress of an ongoing upload
+// TODO: Implement upload progress tracking in future phase
+message GetUploadProgressRequest {
+  // Upload ID
+  string upload_id = 1;
+
+  // Storage provider
+  StorageProvider provider = 2;
+}
+
+// GetUploadProgressResponse contains the upload progress
+// TODO: Implement upload progress tracking in future phase
+message GetUploadProgressResponse {
+  // Upload ID
+  string upload_id = 1;
+
+  // Bytes uploaded so far
+  int64 bytes_uploaded = 2;
+
+  // Total bytes to upload
+  int64 total_bytes = 3;
+
+  // Upload progress percentage (0-100)
+  float progress_percentage = 4;
+
+  // Current upload speed in bytes per second
+  int64 speed_bps = 5;
+
+  // Estimated time remaining in seconds
+  int64 estimated_seconds_remaining = 6;
+}
