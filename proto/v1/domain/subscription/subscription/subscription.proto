@@ -1,0 +1,159 @@
+syntax = "proto3";
+
+package domain.subscription.v1;
+
+option go_package = "github.com/erniealice/esqyma/golang/v1/domain/subscription/subscription";
+
+import "domain/common/error.proto";
+import "domain/common/pagination.proto";
+import "domain/common/filter.proto";
+import "domain/common/sort.proto";
+import "domain/common/search.proto";
+
+import "domain/subscription/price_plan/price_plan.proto";
+import "domain/entity/client/client.proto";
+import "options/db.proto";
+
+message Subscription {
+  option (options.v1.table).table = true;
+  string id = 1;
+  optional int64 date_created = 2;
+  optional string date_created_string = 3;
+  optional int64 date_modified = 4;
+  optional string date_modified_string = 5;
+  bool active = 6 [(options.v1.db).default = "true"];
+  string name = 7;
+  optional PricePlan price_plan = 8;
+  string price_plan_id = 9 [(options.v1.db).references = "price_plan", (options.v1.db).index = true];
+  optional domain.entity.v1.Client client = 10;
+  string client_id = 11 [(options.v1.db).references = "client", (options.v1.db).index = true];
+  optional int64 date_start = 12;
+  optional string date_start_string = 13;
+  optional int64 date_end = 14;
+  optional string date_end_string = 15;
+  map<string, string> metadata = 16;
+
+  // License pool management
+  optional int32 quantity = 17;           // Number of licenses purchased
+  optional int32 assigned_count = 18;     // Currently assigned (denormalized)
+  optional int32 available_count = 19;    // quantity - assigned (denormalized)
+
+  // License configuration
+  optional string default_license_type = 20;  // Default for created licenses
+  optional bool auto_assign = 21;             // Auto-assign to purchaser
+}
+
+service SubscriptionDomainService {
+  rpc CreateSubscription(CreateSubscriptionRequest) returns (CreateSubscriptionResponse);
+  rpc ReadSubscription(ReadSubscriptionRequest) returns (ReadSubscriptionResponse);
+  rpc UpdateSubscription(UpdateSubscriptionRequest) returns (UpdateSubscriptionResponse);
+  rpc DeleteSubscription(DeleteSubscriptionRequest) returns (DeleteSubscriptionResponse);
+  rpc ListSubscriptions(ListSubscriptionsRequest) returns (ListSubscriptionsResponse);
+
+  // NEW: Enhanced list with pagination, filtering, sorting, search
+  rpc GetSubscriptionListPageData(GetSubscriptionListPageDataRequest)
+    returns (GetSubscriptionListPageDataResponse);
+
+  // NEW: Enhanced item view with related data
+  rpc GetSubscriptionItemPageData(GetSubscriptionItemPageDataRequest)
+    returns (GetSubscriptionItemPageDataResponse);
+}
+
+message CreateSubscriptionRequest {
+  Subscription data = 1;
+}
+
+message CreateSubscriptionResponse {
+  repeated Subscription data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message ReadSubscriptionRequest {
+  Subscription data = 1;
+}
+
+message ReadSubscriptionResponse {
+  repeated Subscription data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message UpdateSubscriptionRequest {
+  Subscription data = 1;
+}
+
+message UpdateSubscriptionResponse {
+  repeated Subscription data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message DeleteSubscriptionRequest {
+  Subscription data = 1;
+}
+
+message DeleteSubscriptionResponse {
+  bool success = 1;
+  optional domain.common.v1.Error error = 2;
+}
+
+message ListSubscriptionsRequest {
+  optional domain.common.v1.SearchRequest search = 1;
+  optional domain.common.v1.FilterRequest filters = 2;
+  optional domain.common.v1.SortRequest sort = 3;
+  optional domain.common.v1.PaginationRequest pagination = 4;
+}
+
+message ListSubscriptionsResponse {
+  repeated Subscription data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+// NEW: Enhanced list request with core features
+message GetSubscriptionListPageDataRequest {
+  // Pagination settings
+  domain.common.v1.PaginationRequest pagination = 1;
+
+  // Filter conditions
+  domain.common.v1.FilterRequest filters = 2;
+
+  // Sort settings
+  domain.common.v1.SortRequest sort = 3;
+
+  // Search settings
+  domain.common.v1.SearchRequest search = 4;
+}
+
+// NEW: Enhanced list response with metadata
+message GetSubscriptionListPageDataResponse {
+  // The subscription data
+  repeated Subscription subscription_list = 1;
+
+  // Pagination metadata
+  domain.common.v1.PaginationResponse pagination = 2;
+
+  // Search results metadata (when search is used)
+  repeated domain.common.v1.SearchResult search_results = 3;
+
+  // Response status
+  bool success = 4;
+  optional domain.common.v1.Error error = 5;
+}
+
+// NEW: Simple item request
+message GetSubscriptionItemPageDataRequest {
+  // The subscription ID to retrieve
+  string subscription_id = 1;
+}
+
+// NEW: Simple item response
+message GetSubscriptionItemPageDataResponse {
+  // The subscription data
+  Subscription subscription = 1;
+
+  // Response status
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}

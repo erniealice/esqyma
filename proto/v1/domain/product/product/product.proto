@@ -1,0 +1,143 @@
+syntax = "proto3";
+
+package domain.product.v1;
+
+option go_package = "github.com/erniealice/esqyma/golang/v1/domain/product/product";
+
+import "domain/common/error.proto";
+import "domain/common/pagination.proto";
+import "domain/common/filter.proto";
+import "domain/common/sort.proto";
+import "domain/common/search.proto";
+import "domain/product/product_collection/product_collection.proto";
+import "options/db.proto";
+
+message Product {
+  option (options.v1.table).table = true;
+  string id = 1;
+  optional int64 date_created = 2;
+  optional string date_created_string = 3;
+  optional int64 date_modified = 4;
+  optional string date_modified_string = 5;
+  bool active = 6 [(options.v1.db).default = "true"];
+  string name = 7;
+  optional string description = 8;
+  double price = 9;
+  string currency = 10;
+  repeated ProductCollection product_collections = 11;
+}
+
+service ProductDomainService {
+  rpc CreateProduct(CreateProductRequest) returns (CreateProductResponse);
+  rpc ReadProduct(ReadProductRequest) returns (ReadProductResponse);
+  rpc UpdateProduct(UpdateProductRequest) returns (UpdateProductResponse);
+  rpc DeleteProduct(DeleteProductRequest) returns (DeleteProductResponse);
+  rpc ListProducts(ListProductsRequest) returns (ListProductsResponse);
+
+  // NEW: Enhanced list with pagination, filtering, sorting, search
+  rpc GetProductListPageData(GetProductListPageDataRequest)
+    returns (GetProductListPageDataResponse);
+
+  // NEW: Enhanced item view with related data
+  rpc GetProductItemPageData(GetProductItemPageDataRequest)
+    returns (GetProductItemPageDataResponse);
+}
+
+message CreateProductRequest {
+  Product data = 1;
+}
+
+message CreateProductResponse {
+  repeated Product data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message ReadProductRequest {
+  Product data = 1;
+}
+
+message ReadProductResponse {
+  repeated Product data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message UpdateProductRequest {
+  Product data = 1;
+}
+
+message UpdateProductResponse {
+  repeated Product data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message DeleteProductRequest {
+  Product data = 1;
+}
+
+message DeleteProductResponse {
+  bool success = 1;
+  optional domain.common.v1.Error error = 2;
+}
+
+message ListProductsRequest {
+  optional domain.common.v1.SearchRequest search = 1;
+  optional domain.common.v1.FilterRequest filters = 2;
+  optional domain.common.v1.SortRequest sort = 3;
+  optional domain.common.v1.PaginationRequest pagination = 4;
+}
+
+message ListProductsResponse {
+  repeated Product data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+// NEW: Enhanced list request with core features
+message GetProductListPageDataRequest {
+  // Pagination settings
+  domain.common.v1.PaginationRequest pagination = 1;
+
+  // Filter conditions
+  domain.common.v1.FilterRequest filters = 2;
+
+  // Sort settings
+  domain.common.v1.SortRequest sort = 3;
+
+  // Search settings
+  domain.common.v1.SearchRequest search = 4;
+}
+
+// NEW: Enhanced list response with metadata
+message GetProductListPageDataResponse {
+  // The product data
+  repeated Product product_list = 1;
+
+  // Pagination metadata
+  domain.common.v1.PaginationResponse pagination = 2;
+
+  // Search results metadata (when search is used)
+  repeated domain.common.v1.SearchResult search_results = 3;
+
+  // Response status
+  bool success = 4;
+  optional domain.common.v1.Error error = 5;
+}
+
+// NEW: Simple item request
+message GetProductItemPageDataRequest {
+  // The product ID to retrieve
+  string product_id = 1;
+}
+
+// NEW: Simple item response
+message GetProductItemPageDataResponse {
+  // The product data
+  Product product = 1;
+
+  // Response status
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}

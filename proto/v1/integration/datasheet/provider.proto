@@ -1,0 +1,308 @@
+syntax = "proto3";
+
+package integration.datasheet.v1;
+
+option go_package = "github.com/erniealice/esqyma/golang/v1/integration/datasheet";
+
+import "google/protobuf/any.proto";
+import "google/protobuf/timestamp.proto";
+import "integration/datasheet/datasheet.proto";
+
+// DatasheetProviderConfig represents generic datasheet provider configuration
+// The hexagonal architecture adapters will handle provider-specific implementation details
+message DatasheetProviderConfig {
+  // Unique provider identifier (e.g., "google-sheets", "excel-online", "airtable")
+  string provider_id = 1;
+
+  // Provider type category
+  DatasheetProviderType provider_type = 2;
+
+  // Whether this provider is enabled
+  bool enabled = 3;
+
+  // Display name for the provider
+  string display_name = 4;
+
+  // Capabilities supported by this provider
+  repeated DatasheetCapability capabilities = 5;
+
+  // Authentication configuration
+  oneof auth {
+    GoogleSheetsAuth google_sheets_auth = 10;
+    OAuth2Auth oauth2_auth = 11;
+    ApiKeyAuth api_key_auth = 12;
+    AirtableAuth airtable_auth = 13;
+    CustomAuth custom_auth = 14;
+  }
+
+  // API endpoint (for providers with configurable endpoints)
+  string api_endpoint = 20;
+
+  // Request timeout in seconds
+  int32 timeout_seconds = 21;
+
+  // Maximum retry attempts for failed requests
+  int32 max_retries = 22;
+
+  // Retry backoff multiplier (in milliseconds)
+  int32 retry_backoff_ms = 23;
+
+  // Default spreadsheet ID (for operations that don't specify one)
+  string default_spreadsheet_id = 24;
+
+  // Default sheet name
+  string default_sheet_name = 25;
+
+  // Provider-specific settings as key-value pairs
+  // Examples: "batch_size": "100", "include_formulas": "true"
+  map<string, string> settings = 30;
+
+  // Provider-specific complex configuration data
+  // Use this for nested structures that don't fit in simple key-value pairs
+  map<string, google.protobuf.Any> extended_config = 31;
+}
+
+// GoogleSheetsAuth represents Google Sheets API authentication
+message GoogleSheetsAuth {
+  // Service account JSON key content (base64 encoded or JSON string)
+  string service_account_key = 1;
+
+  // Path to service account JSON key file (alternative to key content)
+  string service_account_key_path = 2;
+
+  // Delegated email for domain-wide delegation
+  string delegated_email = 3;
+
+  // OAuth2 scopes to request
+  repeated string scopes = 4;
+
+  // Google Cloud project ID
+  string project_id = 5;
+
+  // API key (for public sheets, read-only access)
+  string api_key = 6;
+
+  // OAuth2 credentials (alternative to service account)
+  GoogleOAuth2Credentials oauth2_credentials = 7;
+}
+
+// GoogleOAuth2Credentials represents OAuth2 credentials for Google Sheets
+message GoogleOAuth2Credentials {
+  // OAuth2 access token
+  string access_token = 1;
+
+  // OAuth2 refresh token
+  string refresh_token = 2;
+
+  // Client ID
+  string client_id = 3;
+
+  // Client secret
+  string client_secret = 4;
+
+  // Token expiry timestamp
+  google.protobuf.Timestamp token_expiry = 5;
+}
+
+// OAuth2Auth represents generic OAuth 2.0 based authentication
+// Used for Microsoft Excel Online / Graph API and similar providers
+message OAuth2Auth {
+  // OAuth 2.0 access token
+  string access_token = 1;
+
+  // OAuth 2.0 refresh token
+  string refresh_token = 2;
+
+  // Client ID
+  string client_id = 3;
+
+  // Client secret
+  string client_secret = 4;
+
+  // Token endpoint for refreshing tokens
+  string token_endpoint = 5;
+
+  // Authorization endpoint (for initial OAuth flow)
+  string authorization_endpoint = 6;
+
+  // Redirect URL for OAuth callback
+  string redirect_url = 7;
+
+  // Scopes requested/granted
+  repeated string scopes = 8;
+
+  // Tenant/domain identifier (e.g., for Azure AD)
+  string tenant_id = 9;
+
+  // Token expiry timestamp
+  google.protobuf.Timestamp token_expiry = 10;
+
+  // Resource URL (for Microsoft Graph API)
+  string resource = 11;
+
+  // Additional OAuth parameters
+  map<string, string> additional_params = 20;
+}
+
+// ApiKeyAuth represents API key based authentication
+message ApiKeyAuth {
+  // API key for authentication
+  string api_key = 1;
+
+  // API endpoint/base URL
+  string api_endpoint = 2;
+
+  // Header name for API key (e.g., "Authorization", "X-API-Key")
+  string header_name = 3;
+
+  // Header value prefix (e.g., "Bearer ", "ApiKey ")
+  string header_prefix = 4;
+
+  // Additional headers to include
+  map<string, string> additional_headers = 5;
+}
+
+// AirtableAuth represents Airtable-specific authentication
+message AirtableAuth {
+  // Airtable API key (legacy) or Personal Access Token
+  string api_key = 1;
+
+  // Airtable base ID
+  string base_id = 2;
+
+  // OAuth2 access token (for OAuth apps)
+  string access_token = 3;
+
+  // OAuth2 refresh token
+  string refresh_token = 4;
+
+  // Token expiry timestamp
+  google.protobuf.Timestamp token_expiry = 5;
+
+  // Scopes for OAuth access
+  repeated string scopes = 6;
+}
+
+// CustomAuth represents custom authentication methods
+// Use this for providers with non-standard authentication
+message CustomAuth {
+  // Authentication type identifier
+  string auth_type = 1;
+
+  // Credentials as key-value pairs
+  map<string, string> credentials = 2;
+
+  // Complex credential data
+  map<string, google.protobuf.Any> extended_credentials = 3;
+}
+
+// ProviderHealthStatus represents the health status of a datasheet provider
+message ProviderHealthStatus {
+  // Provider identifier
+  string provider_id = 1;
+
+  // Whether the provider is healthy and operational
+  bool is_healthy = 2;
+
+  // Health status message
+  string status_message = 3;
+
+  // Last successful connection timestamp
+  google.protobuf.Timestamp last_success = 4;
+
+  // Last failed connection timestamp
+  google.protobuf.Timestamp last_failure = 5;
+
+  // Failure count since last success
+  int32 failure_count = 6;
+
+  // Response time in milliseconds (for health check)
+  int64 response_time_ms = 7;
+
+  // Current rate limit status
+  RateLimitStatus rate_limit_status = 8;
+
+  // Additional health details
+  map<string, string> details = 9;
+}
+
+// RateLimitStatus represents current rate limit information
+message RateLimitStatus {
+  // Remaining requests in current window
+  int32 remaining_requests = 1;
+
+  // Total requests allowed in window
+  int32 limit = 2;
+
+  // Window reset timestamp
+  google.protobuf.Timestamp reset_at = 3;
+
+  // Current usage percentage
+  double usage_percentage = 4;
+}
+
+// ConnectionTestResult represents the result of a connection test
+message ConnectionTestResult {
+  // Whether the connection test succeeded
+  bool success = 1;
+
+  // Test result message
+  string message = 2;
+
+  // Connection latency in milliseconds
+  int64 latency_ms = 3;
+
+  // Test spreadsheet ID (if test spreadsheet was used)
+  string test_spreadsheet_id = 4;
+
+  // Provider version/API version
+  string provider_version = 5;
+
+  // Detected capabilities during test
+  repeated DatasheetCapability detected_capabilities = 6;
+
+  // Test timestamp
+  google.protobuf.Timestamp tested_at = 7;
+
+  // Error details if test failed
+  string error_details = 8;
+}
+
+// ProviderMetadata represents metadata about a datasheet provider
+message ProviderMetadata {
+  // Provider identifier
+  string provider_id = 1;
+
+  // Provider type
+  DatasheetProviderType provider_type = 2;
+
+  // Provider display name
+  string display_name = 3;
+
+  // Provider description
+  string description = 4;
+
+  // Provider documentation URL
+  string documentation_url = 5;
+
+  // Provider icon URL
+  string icon_url = 6;
+
+  // Supported authentication methods
+  repeated string supported_auth_methods = 7;
+
+  // Maximum file size supported (in bytes)
+  int64 max_file_size = 8;
+
+  // Maximum cells per spreadsheet
+  int64 max_cells = 9;
+
+  // Maximum sheets per spreadsheet
+  int32 max_sheets = 10;
+
+  // Supported export formats
+  repeated string export_formats = 11;
+
+  // Provider-specific limitations
+  map<string, string> limitations = 12;
+}

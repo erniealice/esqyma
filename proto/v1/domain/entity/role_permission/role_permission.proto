@@ -1,0 +1,145 @@
+syntax = "proto3";
+
+package domain.entity.v1;
+
+option go_package = "github.com/erniealice/esqyma/golang/v1/domain/entity/role_permission";
+
+import "domain/common/error.proto";
+import "domain/common/pagination.proto";
+import "domain/common/filter.proto";
+import "domain/common/sort.proto";
+import "domain/common/search.proto";
+
+import "domain/entity/permission/permission.proto";
+import "options/db.proto";
+
+message RolePermission {
+  option (options.v1.table).table = true;
+  option (options.v1.table).unique_together = "role_id,permission_id";
+
+  string id = 1;
+  string role_id = 2 [(options.v1.db).references = "role", (options.v1.db).index = true];
+  string permission_id = 3 [(options.v1.db).references = "permission", (options.v1.db).index = true];
+  optional Permission permission = 4;
+  PermissionType permission_type = 5;
+  optional int64 date_created = 6;
+  optional string date_created_string = 7;
+  optional int64 date_modified = 8;
+  optional string date_modified_string = 9;
+  bool active = 10 [(options.v1.db).default = "true"];
+}
+
+service RolePermissionDomainService {
+  rpc CreateRolePermission(CreateRolePermissionRequest) returns (CreateRolePermissionResponse);
+  rpc ReadRolePermission(ReadRolePermissionRequest) returns (ReadRolePermissionResponse);
+  rpc UpdateRolePermission(UpdateRolePermissionRequest) returns (UpdateRolePermissionResponse);
+  rpc DeleteRolePermission(DeleteRolePermissionRequest) returns (DeleteRolePermissionResponse);
+  rpc ListRolePermissions(ListRolePermissionsRequest) returns (ListRolePermissionsResponse);
+
+  // NEW: Enhanced list with pagination, filtering, sorting, search
+  rpc GetRolePermissionListPageData(GetRolePermissionListPageDataRequest)
+    returns (GetRolePermissionListPageDataResponse);
+
+  // NEW: Enhanced item view with related data
+  rpc GetRolePermissionItemPageData(GetRolePermissionItemPageDataRequest)
+    returns (GetRolePermissionItemPageDataResponse);
+}
+
+message CreateRolePermissionRequest {
+  RolePermission data = 1;
+}
+
+message CreateRolePermissionResponse {
+  repeated RolePermission data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message ReadRolePermissionRequest {
+  RolePermission data = 1;
+}
+
+message ReadRolePermissionResponse {
+  repeated RolePermission data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message UpdateRolePermissionRequest {
+  RolePermission data = 1;
+}
+
+message UpdateRolePermissionResponse {
+  repeated RolePermission data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message DeleteRolePermissionRequest {
+  RolePermission data = 1;
+}
+
+message DeleteRolePermissionResponse {
+  bool success = 1;
+  optional domain.common.v1.Error error = 2;
+}
+
+message ListRolePermissionsRequest {
+  optional domain.common.v1.SearchRequest search = 1;
+  optional domain.common.v1.FilterRequest filters = 2;
+  optional domain.common.v1.SortRequest sort = 3;
+  optional domain.common.v1.PaginationRequest pagination = 4;
+}
+
+message ListRolePermissionsResponse {
+  repeated RolePermission data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+// NEW: Enhanced list request with pagination, filtering, sorting, search
+message GetRolePermissionListPageDataRequest {
+  // Pagination settings
+  domain.common.v1.PaginationRequest pagination = 1;
+
+  // Filter conditions
+  domain.common.v1.FilterRequest filters = 2;
+
+  // Sort settings
+  domain.common.v1.SortRequest sort = 3;
+
+  // Search settings
+  domain.common.v1.SearchRequest search = 4;
+}
+
+// NEW: Enhanced list response with metadata
+message GetRolePermissionListPageDataResponse {
+  // The role permission data
+  repeated RolePermission role_permission_list = 1;
+
+  // Pagination metadata
+  domain.common.v1.PaginationResponse pagination = 2;
+
+  // Search results metadata (when search is used)
+  repeated domain.common.v1.SearchResult search_results = 3;
+
+  // Response status
+  bool success = 4;
+  optional domain.common.v1.Error error = 5;
+}
+
+// NEW: Simple item request
+message GetRolePermissionItemPageDataRequest {
+  // The role permission ID to retrieve
+  string role_permission_id = 1;
+}
+
+// NEW: Simple item response
+message GetRolePermissionItemPageDataResponse {
+  // The role permission data
+  RolePermission role_permission = 1;
+
+  // Response status
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}

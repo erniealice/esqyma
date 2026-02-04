@@ -1,2 +1,15 @@
-golang
-typescript
+# Dependencies
+node_modules
+
+# Environment
+.env
+.env.local
+
+# Build artifacts
+*.exe
+*.dll
+*.so
+*.dylib
+
+# Proto descriptors
+proto/v1/descriptors.bin

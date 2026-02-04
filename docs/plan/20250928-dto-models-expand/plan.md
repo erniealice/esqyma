@@ -115,7 +115,7 @@ Based on research of proven patterns from large-scale protobuf projects (SpiceDB
 1. Create new directory structure under `schema/v1/`
 2. **KEEP existing models in their current locations unchanged** (maintaining backward compatibility)
 3. Create new models in the expanded structure with improved go_package declarations:
-   - Update go_package option from `"leapfor.xyz/esqyma/golang/v1/[module]"` to `"leapfor.xyz/esqyma/golang/v1/domain/[module]"`
+   - Update go_package option from `"github.com/erniealice/esqyma/golang/v1/[module]"` to `"github.com/erniealice/esqyma/golang/v1/domain/[module]"`
 4. Modify `buf.gen.yaml` to handle new directory structure while preserving existing generation
 
 ### Phase 2: API Layer Implementation

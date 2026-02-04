@@ -1,0 +1,88 @@
+syntax = "proto3";
+
+package domain.event.v1;
+
+option go_package = "github.com/erniealice/esqyma/golang/v1/domain/event/event_settings";
+
+import "domain/common/error.proto";
+import "domain/common/search.proto";
+import "domain/common/filter.proto";
+import "domain/common/sort.proto";
+import "domain/common/pagination.proto";
+import "options/db.proto";
+
+// Defines the settings for an event, including its schedule and recurrence.
+message EventSettings {
+  option (options.v1.table).table = true;
+  string id = 1;
+  optional int64 date_created = 2;
+  optional string date_created_string = 3;
+  optional int64 date_modified = 4;
+  optional string date_modified_string = 5;
+  bool active = 6 [(options.v1.db).default = "true"];
+  string event_id = 7 [(options.v1.db).references = "event", (options.v1.db).index = true];
+  int64 start_date_time_utc = 8; // Start date and time in UTC timestamp
+  int64 end_date_time_utc = 9;   // End date and time in UTC timestamp
+  string timezone = 10;           // Timezone in IANA format (e.g., "America/New_York")
+  string event_recurrence_id = 11 [(options.v1.db).references = "event_recurrence", (options.v1.db).index = true]; // Reference to external recurrence configuration
+}
+
+service EventSettingsDomainService {
+  rpc CreateEventSettings(CreateEventSettingsRequest) returns (CreateEventSettingsResponse);
+  rpc ReadEventSettings(ReadEventSettingsRequest) returns (ReadEventSettingsResponse);
+  rpc UpdateEventSettings(UpdateEventSettingsRequest) returns (UpdateEventSettingsResponse);
+  rpc DeleteEventSettings(DeleteEventSettingsRequest) returns (DeleteEventSettingsResponse);
+  rpc ListEventSettings(ListEventSettingsRequest) returns (ListEventSettingsResponse);
+}
+
+message CreateEventSettingsRequest {
+  EventSettings data = 1;
+}
+
+message CreateEventSettingsResponse {
+  repeated EventSettings data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message ReadEventSettingsRequest {
+  EventSettings data = 1;
+}
+
+message ReadEventSettingsResponse {
+  repeated EventSettings data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message UpdateEventSettingsRequest {
+  EventSettings data = 1;
+}
+
+message UpdateEventSettingsResponse {
+  repeated EventSettings data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message DeleteEventSettingsRequest {
+  EventSettings data = 1;
+}
+
+message DeleteEventSettingsResponse {
+  bool success = 1;
+  optional domain.common.v1.Error error = 2;
+}
+
+message ListEventSettingsRequest {
+  optional domain.common.v1.SearchRequest search = 1;
+  optional domain.common.v1.FilterRequest filters = 2;
+  optional domain.common.v1.SortRequest sort = 3;
+  optional domain.common.v1.PaginationRequest pagination = 4;
+}
+
+message ListEventSettingsResponse {
+  repeated EventSettings data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}

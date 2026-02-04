@@ -4,14 +4,14 @@
     "module": "ESNext",
     "moduleResolution": "node",
     "declaration": true,
-    "outDir": "./typescript/v1",
-    "rootDir": "./typescript/v1",
+    "outDir": "./dist/schema/v1",
+    "rootDir": "./dist/schema/v1",
     "strict": true,
     "esModuleInterop": true,
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
     "lib": ["ES2020"]
   },
-  "include": ["typescript/v1/**/*"],
+  "include": ["dist/schema/v1/**/*"],
   "exclude": ["node_modules", "**/*.test.ts"]
 }

@@ -1,0 +1,100 @@
+syntax = "proto3";
+
+package domain.common.v1;
+
+option go_package = "github.com/erniealice/esqyma/golang/v1/domain/common";
+
+// Filter request with multiple typed filters
+message FilterRequest {
+  repeated TypedFilter filters = 1;
+  FilterLogic logic = 2; // AND/OR logic for combining filters
+}
+
+// Logic for combining multiple filters
+enum FilterLogic {
+  AND = 0;
+  OR = 1;
+}
+
+// Typed filter that can be one of several filter types
+message TypedFilter {
+  string field = 1; // Field to filter on (supports dot notation)
+
+  oneof filter_type {
+    StringFilter string_filter = 2;
+    NumberFilter number_filter = 3;
+    DateFilter date_filter = 4;
+    ListFilter list_filter = 5;
+    RangeFilter range_filter = 6;
+    BooleanFilter boolean_filter = 7;
+  }
+}
+
+// String filter operations
+message StringFilter {
+  string value = 1;
+  StringOperator operator = 2;
+  bool case_sensitive = 3;
+}
+
+enum StringOperator {
+  STRING_EQUALS = 0;
+  STRING_NOT_EQUALS = 1;
+  STRING_CONTAINS = 2;
+  STRING_STARTS_WITH = 3;
+  STRING_ENDS_WITH = 4;
+  STRING_REGEX = 5;
+}
+
+// Number filter operations
+message NumberFilter {
+  double value = 1;
+  NumberOperator operator = 2;
+}
+
+enum NumberOperator {
+  NUMBER_EQUALS = 0;
+  NUMBER_NOT_EQUALS = 1;
+  NUMBER_GREATER_THAN = 2;
+  NUMBER_GREATER_THAN_OR_EQUAL = 3;
+  NUMBER_LESS_THAN = 4;
+  NUMBER_LESS_THAN_OR_EQUAL = 5;
+}
+
+// Date filter operations
+message DateFilter {
+  string value = 1; // ISO 8601 date string
+  DateOperator operator = 2;
+  optional string range_end = 3; // For BETWEEN operator
+}
+
+enum DateOperator {
+  DATE_EQUALS = 0;
+  DATE_BEFORE = 1;
+  DATE_AFTER = 2;
+  DATE_BETWEEN = 3;
+}
+
+// List filter operations (IN/NOT_IN)
+message ListFilter {
+  repeated string values = 1;
+  ListOperator operator = 2;
+}
+
+enum ListOperator {
+  LIST_IN = 0;
+  LIST_NOT_IN = 1;
+}
+
+// Range filter for numeric values
+message RangeFilter {
+  double min = 1;
+  double max = 2;
+  bool include_min = 3;
+  bool include_max = 4;
+}
+
+// Boolean filter
+message BooleanFilter {
+  bool value = 1;
+}

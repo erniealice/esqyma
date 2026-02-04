@@ -2,382 +2,388 @@
   "name": "@leapfor/esqyma",
   "version": "1.0.0",
   "type": "module",
-  "main": "typescript/index.js",
-  "types": "typescript/index.d.ts",
+  "main": "dist/schema/v1/index.js",
+  "types": "dist/schema/v1/index.d.ts",
   "exports": {
     ".": {
-      "types": "./typescript/index.d.ts",
-      "import": "./typescript/index.js",
-      "default": "./typescript/index.js"
-    },
-    "./typescript/v1/domain/entity/admin": {
-      "types": "./typescript/v1/domain/entity/admin/admin_pb.d.ts",
-      "import": "./typescript/v1/domain/entity/admin/admin_pb.js",
-      "default": "./typescript/v1/domain/entity/admin/admin_pb.js"
-    },
-    "./typescript/v1/domain/entity/client": {
-      "types": "./typescript/v1/domain/entity/client/client_pb.d.ts",
-      "import": "./typescript/v1/domain/entity/client/client_pb.js",
-      "default": "./typescript/v1/domain/entity/client/client_pb.js"
-    },
-    "./typescript/v1/domain/entity/client_attribute": {
-      "types": "./typescript/v1/domain/entity/client_attribute/client_attribute_pb.d.ts",
-      "import": "./typescript/v1/domain/entity/client_attribute/client_attribute_pb.js",
-      "default": "./typescript/v1/domain/entity/client_attribute/client_attribute_pb.js"
-    },
-    "./typescript/v1/domain/entity/client_category": {
-      "types": "./typescript/v1/domain/entity/client_category/client_category_pb.d.ts",
-      "import": "./typescript/v1/domain/entity/client_category/client_category_pb.js",
-      "default": "./typescript/v1/domain/entity/client_category/client_category_pb.js"
-    },
-    "./typescript/v1/domain/entity/delegate": {
-      "types": "./typescript/v1/domain/entity/delegate/delegate_pb.d.ts",
-      "import": "./typescript/v1/domain/entity/delegate/delegate_pb.js",
-      "default": "./typescript/v1/domain/entity/delegate/delegate_pb.js"
-    },
-    "./typescript/v1/domain/entity/delegate_client": {
-      "types": "./typescript/v1/domain/entity/delegate_client/delegate_client_pb.d.ts",
-      "import": "./typescript/v1/domain/entity/delegate_client/delegate_client_pb.js",
-      "default": "./typescript/v1/domain/entity/delegate_client/delegate_client_pb.js"
-    },
-    "./typescript/v1/domain/entity/group": {
-      "types": "./typescript/v1/domain/entity/group/group_pb.d.ts",
-      "import": "./typescript/v1/domain/entity/group/group_pb.js",
-      "default": "./typescript/v1/domain/entity/group/group_pb.js"
-    },
-    "./typescript/v1/domain/entity/location": {
-      "types": "./typescript/v1/domain/entity/location/location_pb.d.ts",
-      "import": "./typescript/v1/domain/entity/location/location_pb.js",
-      "default": "./typescript/v1/domain/entity/location/location_pb.js"
-    },
-    "./typescript/v1/domain/entity/manager": {
-      "types": "./typescript/v1/domain/entity/manager/manager_pb.d.ts",
-      "import": "./typescript/v1/domain/entity/manager/manager_pb.js",
-      "default": "./typescript/v1/domain/entity/manager/manager_pb.js"
-    },
-    "./typescript/v1/domain/entity/permission": {
-      "types": "./typescript/v1/domain/entity/permission/permission_pb.d.ts",
-      "import": "./typescript/v1/domain/entity/permission/permission_pb.js",
-      "default": "./typescript/v1/domain/entity/permission/permission_pb.js"
-    },
-    "./typescript/v1/domain/entity/role": {
-      "types": "./typescript/v1/domain/entity/role/role_pb.d.ts",
-      "import": "./typescript/v1/domain/entity/role/role_pb.js",
-      "default": "./typescript/v1/domain/entity/role/role_pb.js"
-    },
-    "./typescript/v1/domain/entity/role_permission": {
-      "types": "./typescript/v1/domain/entity/role_permission/role_permission_pb.d.ts",
-      "import": "./typescript/v1/domain/entity/role_permission/role_permission_pb.js",
-      "default": "./typescript/v1/domain/entity/role_permission/role_permission_pb.js"
-    },
-    "./typescript/v1/domain/entity/staff": {
-      "types": "./typescript/v1/domain/entity/staff/staff_pb.d.ts",
-      "import": "./typescript/v1/domain/entity/staff/staff_pb.js",
-      "default": "./typescript/v1/domain/entity/staff/staff_pb.js"
-    },
-    "./typescript/v1/domain/entity/user": {
-      "types": "./typescript/v1/domain/entity/user/user_pb.d.ts",
-      "import": "./typescript/v1/domain/entity/user/user_pb.js",
-      "default": "./typescript/v1/domain/entity/user/user_pb.js"
-    },
-    "./typescript/v1/domain/entity/workspace": {
-      "types": "./typescript/v1/domain/entity/workspace/workspace_pb.d.ts",
-      "import": "./typescript/v1/domain/entity/workspace/workspace_pb.js",
-      "default": "./typescript/v1/domain/entity/workspace/workspace_pb.js"
-    },
-    "./typescript/v1/domain/entity/workspace_user": {
-      "types": "./typescript/v1/domain/entity/workspace_user/workspace_user_pb.d.ts",
-      "import": "./typescript/v1/domain/entity/workspace_user/workspace_user_pb.js",
-      "default": "./typescript/v1/domain/entity/workspace_user/workspace_user_pb.js"
-    },
-    "./typescript/v1/domain/entity/workspace_user_role": {
-      "types": "./typescript/v1/domain/entity/workspace_user_role/workspace_user_role_pb.d.ts",
-      "import": "./typescript/v1/domain/entity/workspace_user_role/workspace_user_role_pb.js",
-      "default": "./typescript/v1/domain/entity/workspace_user_role/workspace_user_role_pb.js"
-    },
-    "./typescript/v1/domain/error/error": {
-      "types": "./typescript/v1/domain/error/error/error_pb.d.ts",
-      "import": "./typescript/v1/domain/error/error/error_pb.js",
-      "default": "./typescript/v1/domain/error/error/error_pb.js"
-    },
-    "./typescript/v1/domain/event/event": {
-      "types": "./typescript/v1/domain/event/event/event_pb.d.ts",
-      "import": "./typescript/v1/domain/event/event/event_pb.js",
-      "default": "./typescript/v1/domain/event/event/event_pb.js"
-    },
-    "./typescript/v1/domain/event/event_client": {
-      "types": "./typescript/v1/domain/event/event_client/event_client_pb.d.ts",
-      "import": "./typescript/v1/domain/event/event_client/event_client_pb.js",
-      "default": "./typescript/v1/domain/event/event_client/event_client_pb.js"
-    },
-    "./typescript/v1/domain/event/event_settings": {
-      "types": "./typescript/v1/domain/event/event_settings/event_settings_pb.d.ts",
-      "import": "./typescript/v1/domain/event/event_settings/event_settings_pb.js",
-      "default": "./typescript/v1/domain/event/event_settings/event_settings_pb.js"
-    },
-    "./typescript/v1/domain/payment/payment": {
-      "types": "./typescript/v1/domain/payment/payment/payment_pb.d.ts",
-      "import": "./typescript/v1/domain/payment/payment/payment_pb.js",
-      "default": "./typescript/v1/domain/payment/payment/payment_pb.js"
-    },
-    "./typescript/v1/domain/payment/payment_method": {
-      "types": "./typescript/v1/domain/payment/payment_method/payment_method_pb.d.ts",
-      "import": "./typescript/v1/domain/payment/payment_method/payment_method_pb.js",
-      "default": "./typescript/v1/domain/payment/payment_method/payment_method_pb.js"
-    },
-    "./typescript/v1/domain/payment/payment_profile": {
-      "types": "./typescript/v1/domain/payment/payment_profile/payment_profile_pb.d.ts",
-      "import": "./typescript/v1/domain/payment/payment_profile/payment_profile_pb.js",
-      "default": "./typescript/v1/domain/payment/payment_profile/payment_profile_pb.js"
-    },
-    "./typescript/v1/domain/ping/ping": {
-      "types": "./typescript/v1/domain/ping/ping/ping_pb.d.ts",
-      "import": "./typescript/v1/domain/ping/ping/ping_pb.js",
-      "default": "./typescript/v1/domain/ping/ping/ping_pb.js"
-    },
-    "./typescript/v1/domain/product/collection": {
-      "types": "./typescript/v1/domain/product/collection/collection_pb.d.ts",
-      "import": "./typescript/v1/domain/product/collection/collection_pb.js",
-      "default": "./typescript/v1/domain/product/collection/collection_pb.js"
-    },
-    "./typescript/v1/domain/product/product_collection": {
-      "types": "./typescript/v1/domain/product/product_collection/product_collection_pb.d.ts",
-      "import": "./typescript/v1/domain/product/product_collection/product_collection_pb.js",
-      "default": "./typescript/v1/domain/product/product_collection/product_collection_pb.js"
-    },
-    "./typescript/v1/domain/product/collection_parent": {
-      "types": "./typescript/v1/domain/product/collection/collection_parent_pb.d.ts",
-      "import": "./typescript/v1/domain/product/collection/collection_parent_pb.js",
-      "default": "./typescript/v1/domain/product/collection/collection_parent_pb.js"
-    },
-    "./typescript/v1/domain/product/price_product": {
-      "types": "./typescript/v1/domain/product/price_product/price_product_pb.d.ts",
-      "import": "./typescript/v1/domain/product/price_product/price_product_pb.js",
-      "default": "./typescript/v1/domain/product/price_product/price_product_pb.js"
-    },
-    "./typescript/v1/domain/product/product": {
-      "types": "./typescript/v1/domain/product/product/product_pb.d.ts",
-      "import": "./typescript/v1/domain/product/product/product_pb.js",
-      "default": "./typescript/v1/domain/product/product/product_pb.js"
-    },
-    "./typescript/v1/domain/product/product_attribute": {
-      "types": "./typescript/v1/domain/product/product_attribute/product_attribute_pb.d.ts",
-      "import": "./typescript/v1/domain/product/product_attribute/product_attribute_pb.js",
-      "default": "./typescript/v1/domain/product/product_attribute/product_attribute_pb.js"
-    },
-    "./typescript/v1/domain/product/product_plan": {
-      "types": "./typescript/v1/domain/product/product_plan/product_plan_pb.d.ts",
-      "import": "./typescript/v1/domain/product/product_plan/product_plan_pb.js",
-      "default": "./typescript/v1/domain/product/product_plan/product_plan_pb.js"
-    },
-    "./typescript/v1/domain/product/resource": {
-      "types": "./typescript/v1/domain/product/resource/resource_pb.d.ts",
-      "import": "./typescript/v1/domain/product/resource/resource_pb.js",
-      "default": "./typescript/v1/domain/product/resource/resource_pb.js"
-    },
-    "./typescript/v1/domain/product/collection_attribute": {
-      "types": "./typescript/v1/domain/product/collection_attribute/collection_attribute_pb.d.ts",
-      "import": "./typescript/v1/domain/product/collection_attribute/collection_attribute_pb.js",
-      "default": "./typescript/v1/domain/product/collection_attribute/collection_attribute_pb.js"
-    },
-    "./typescript/v1/domain/workflow/workflow": {
-      "types": "./typescript/v1/domain/workflow/workflow/workflow_pb.d.ts",
-      "import": "./typescript/v1/domain/workflow/workflow/workflow_pb.js",
-      "default": "./typescript/v1/domain/workflow/workflow/workflow_pb.js"
-    },
-    "./typescript/v1/domain/workflow/workflow_template": {
-      "types": "./typescript/v1/domain/workflow/workflow_template/workflow_template_pb.d.ts",
-      "import": "./typescript/v1/domain/workflow/workflow_template/workflow_template_pb.js",
-      "default": "./typescript/v1/domain/workflow/workflow_template/workflow_template_pb.js"
-    },
-    "./typescript/v1/domain/workflow/stage_template": {
-      "types": "./typescript/v1/domain/workflow/stage_template/stage_template_pb.d.ts",
-      "import": "./typescript/v1/domain/workflow/stage_template/stage_template_pb.js",
-      "default": "./typescript/v1/domain/workflow/stage_template/stage_template_pb.js"
-    },
-    "./typescript/v1/domain/workflow/activity_template": {
-      "types": "./typescript/v1/domain/workflow/activity_template.d.ts",
-      "import": "./typescript/v1/domain/workflow/activity_template.js",
-      "default": "./typescript/v1/domain/workflow/activity_template.js"
-    },
-    "./typescript/v1/domain/workflow/stage": {
-      "types": "./typescript/v1/domain/workflow/stage/stage_pb.d.ts",
-      "import": "./typescript/v1/domain/workflow/stage/stage_pb.js",
-      "default": "./typescript/v1/domain/workflow/stage/stage_pb.js"
-    },
-    "./typescript/v1/domain/workflow/activity": {
-      "types": "./typescript/v1/domain/workflow/activity/activity_pb.d.ts",
-      "import": "./typescript/v1/domain/workflow/activity/activity_pb.js",
-      "default": "./typescript/v1/domain/workflow/activity/activity_pb.js"
-    },
-    "./typescript/v1/domain/subscription/balance": {
-      "types": "./typescript/v1/domain/subscription/balance/balance_pb.d.ts",
-      "import": "./typescript/v1/domain/subscription/balance/balance_pb.js",
-      "default": "./typescript/v1/domain/subscription/balance/balance_pb.js"
-    },
-    "./typescript/v1/domain/subscription/invoice": {
-      "types": "./typescript/v1/domain/subscription/invoice/invoice_pb.d.ts",
-      "import": "./typescript/v1/domain/subscription/invoice/invoice_pb.js",
-      "default": "./typescript/v1/domain/subscription/invoice/invoice_pb.js"
-    },
-    "./typescript/v1/domain/subscription/plan": {
-      "types": "./typescript/v1/domain/subscription/plan/plan_pb.d.ts",
-      "import": "./typescript/v1/domain/subscription/plan/plan_pb.js",
-      "default": "./typescript/v1/domain/subscription/plan/plan_pb.js"
-    },
-    "./typescript/v1/domain/subscription/price_plan": {
-      "types": "./typescript/v1/domain/subscription/price_plan/price_plan_pb.d.ts",
-      "import": "./typescript/v1/domain/subscription/price_plan/price_plan_pb.js",
-      "default": "./typescript/v1/domain/subscription/price_plan/price_plan_pb.js"
-    },
-    "./typescript/v1/domain/subscription/plan_location": {
-      "types": "./typescript/v1/domain/subscription/plan_location/plan_location_pb.d.ts",
-      "import": "./typescript/v1/domain/subscription/plan_location/plan_location_pb.js",
-      "default": "./typescript/v1/domain/subscription/plan_location/plan_location_pb.js"
-    },
-    "./typescript/v1/domain/subscription/subscription": {
-      "types": "./typescript/v1/domain/subscription/subscription/subscription_pb.d.ts",
-      "import": "./typescript/v1/domain/subscription/subscription/subscription_pb.js",
-      "default": "./typescript/v1/domain/subscription/subscription/subscription_pb.js"
-    },
-    "./typescript/v1/domain/product/collection_plan": {
-      "types": "./typescript/v1/domain/product/collection_plan/collection_plan_pb.d.ts",
-      "import": "./typescript/v1/domain/product/collection_plan/collection_plan_pb.js",
-      "default": "./typescript/v1/domain/product/collection_plan/collection_plan_pb.js"
-    },
-    "./typescript/v1/domain/common/pagination": {
-      "types": "./typescript/v1/domain/common/pagination_pb.d.ts",
-      "import": "./typescript/v1/domain/common/pagination_pb.js",
-      "default": "./typescript/v1/domain/common/pagination_pb.js"
-    },
-    "./typescript/v1/domain/common/filter": {
-      "types": "./typescript/v1/domain/common/filter_pb.d.ts",
-      "import": "./typescript/v1/domain/common/filter_pb.js",
-      "default": "./typescript/v1/domain/common/filter_pb.js"
-    },
-    "./typescript/v1/domain/common/sort": {
-      "types": "./typescript/v1/domain/common/sort_pb.d.ts",
-      "import": "./typescript/v1/domain/common/sort_pb.js",
-      "default": "./typescript/v1/domain/common/sort_pb.js"
-    },
-    "./typescript/v1/domain/common/search": {
-      "types": "./typescript/v1/domain/common/search_pb.d.ts",
-      "import": "./typescript/v1/domain/common/search_pb.js",
-      "default": "./typescript/v1/domain/common/search_pb.js"
-    },
-    "./typescript/v1/domain/common/error": {
-      "types": "./typescript/v1/domain/common/error_pb.d.ts",
-      "import": "./typescript/v1/domain/common/error_pb.js",
-      "default": "./typescript/v1/domain/common/error_pb.js"
-    },
-    "./typescript/v1/domain/common/attribute": {
-      "types": "./typescript/v1/domain/common/attribute_pb.d.ts",
-      "import": "./typescript/v1/domain/common/attribute_pb.js",
-      "default": "./typescript/v1/domain/common/attribute_pb.js"
-    },
-    "./typescript/v1/domain/common/action": {
-      "types": "./typescript/v1/domain/common/action_pb.d.ts",
-      "import": "./typescript/v1/domain/common/action_pb.js",
-      "default": "./typescript/v1/domain/common/action_pb.js"
-    },
-    "./typescript/v1/domain/entity/location_attribute": {
-      "types": "./typescript/v1/domain/entity/location_attribute/location_attribute_pb.d.ts",
-      "import": "./typescript/v1/domain/entity/location_attribute/location_attribute_pb.js",
-      "default": "./typescript/v1/domain/entity/location_attribute/location_attribute_pb.js"
-    },
-    "./typescript/v1/domain/entity/delegate_attribute": {
-      "types": "./typescript/v1/domain/entity/delegate_attribute/delegate_attribute_pb.d.ts",
-      "import": "./typescript/v1/domain/entity/delegate_attribute/delegate_attribute_pb.js",
-      "default": "./typescript/v1/domain/entity/delegate_attribute/delegate_attribute_pb.js"
-    },
-    "./typescript/v1/domain/entity/group_attribute": {
-      "types": "./typescript/v1/domain/entity/group_attribute/group_attribute_pb.d.ts",
-      "import": "./typescript/v1/domain/entity/group_attribute/group_attribute_pb.js",
-      "default": "./typescript/v1/domain/entity/group_attribute/group_attribute_pb.js"
-    },
-    "./typescript/v1/domain/entity/staff_attribute": {
-      "types": "./typescript/v1/domain/entity/staff_attribute/staff_attribute_pb.d.ts",
-      "import": "./typescript/v1/domain/entity/staff_attribute/staff_attribute_pb.js",
-      "default": "./typescript/v1/domain/entity/staff_attribute/staff_attribute_pb.js"
-    },
-    "./typescript/v1/domain/event/event_product": {
-      "types": "./typescript/v1/domain/event/event_product/event_product_pb.d.ts",
-      "import": "./typescript/v1/domain/event/event_product/event_product_pb.js",
-      "default": "./typescript/v1/domain/event/event_product/event_product_pb.js"
-    },
-    "./typescript/v1/domain/event/event_attribute": {
-      "types": "./typescript/v1/domain/event/event_attribute/event_attribute_pb.d.ts",
-      "import": "./typescript/v1/domain/event/event_attribute/event_attribute_pb.js",
-      "default": "./typescript/v1/domain/event/event_attribute/event_attribute_pb.js"
-    },
-    "./typescript/v1/domain/payment/payment_profile_payment_method": {
-      "types": "./typescript/v1/domain/payment/payment_profile_payment_method/payment_profile_payment_method_pb.d.ts",
-      "import": "./typescript/v1/domain/payment/payment_profile_payment_method/payment_profile_payment_method_pb.js",
-      "default": "./typescript/v1/domain/payment/payment_profile_payment_method/payment_profile_payment_method_pb.js"
-    },
-    "./typescript/v1/domain/payment/payment_attribute": {
-      "types": "./typescript/v1/domain/payment/payment_attribute/payment_attribute_pb.d.ts",
-      "import": "./typescript/v1/domain/payment/payment_attribute/payment_attribute_pb.js",
-      "default": "./typescript/v1/domain/payment/payment_attribute/payment_attribute_pb.js"
-    },
-    "./typescript/v1/domain/subscription/plan_settings": {
-      "types": "./typescript/v1/domain/subscription/plan_settings/plan_settings_pb.d.ts",
-      "import": "./typescript/v1/domain/subscription/plan_settings/plan_settings_pb.js",
-      "default": "./typescript/v1/domain/subscription/plan_settings/plan_settings_pb.js"
-    },
-    "./typescript/v1/domain/subscription/subscription_attribute": {
-      "types": "./typescript/v1/domain/subscription/subscription_attribute/subscription_attribute_pb.d.ts",
-      "import": "./typescript/v1/domain/subscription/subscription_attribute/subscription_attribute_pb.js",
-      "default": "./typescript/v1/domain/subscription/subscription_attribute/subscription_attribute_pb.js"
-    },
-    "./typescript/v1/domain/subscription/plan_attribute": {
-      "types": "./typescript/v1/domain/subscription/plan_attribute/plan_attribute_pb.d.ts",
-      "import": "./typescript/v1/domain/subscription/plan_attribute/plan_attribute_pb.js",
-      "default": "./typescript/v1/domain/subscription/plan_attribute/plan_attribute_pb.js"
-    },
-    "./typescript/v1/domain/subscription/invoice_attribute": {
-      "types": "./typescript/v1/domain/subscription/invoice_attribute/invoice_attribute_pb.d.ts",
-      "import": "./typescript/v1/domain/subscription/invoice_attribute/invoice_attribute_pb.js",
-      "default": "./typescript/v1/domain/subscription/invoice_attribute/invoice_attribute_pb.js"
-    },
-    "./typescript/v1/domain/subscription/balance_attribute": {
-      "types": "./typescript/v1/domain/subscription/balance_attribute/balance_attribute_pb.d.ts",
-      "import": "./typescript/v1/domain/subscription/balance_attribute/balance_attribute_pb.js",
-      "default": "./typescript/v1/domain/subscription/balance_attribute/balance_attribute_pb.js"
-    },
-    "./typescript/v1/infrastructure/auth/identity": {
-      "types": "./typescript/v1/infrastructure/auth/identity_pb.d.ts",
-      "import": "./typescript/v1/infrastructure/auth/identity_pb.js",
-      "default": "./typescript/v1/infrastructure/auth/identity_pb.js"
-    },
-    "./typescript/v1/infrastructure/auth/provider": {
-      "types": "./typescript/v1/infrastructure/auth/provider_pb.d.ts",
-      "import": "./typescript/v1/infrastructure/auth/provider_pb.js",
-      "default": "./typescript/v1/infrastructure/auth/provider_pb.js"
-    },
-    "./typescript/v1/infrastructure/auth/authentication": {
-      "types": "./typescript/v1/infrastructure/auth/authentication_pb.d.ts",
-      "import": "./typescript/v1/infrastructure/auth/authentication_pb.js",
-      "default": "./typescript/v1/infrastructure/auth/authentication_pb.js"
-    },
-    "./typescript/v1/infrastructure/auth/jwt": {
-      "types": "./typescript/v1/infrastructure/auth/jwt_pb.d.ts",
-      "import": "./typescript/v1/infrastructure/auth/jwt_pb.js",
-      "default": "./typescript/v1/infrastructure/auth/jwt_pb.js"
-    },
-    "./typescript/v1/infrastructure/auth/api_key": {
-      "types": "./typescript/v1/infrastructure/auth/api_key_pb.d.ts",
-      "import": "./typescript/v1/infrastructure/auth/api_key_pb.js",
-      "default": "./typescript/v1/infrastructure/auth/api_key_pb.js"
+      "types": "./dist/schema/v1/index.d.ts",
+      "import": "./dist/schema/v1/index.js",
+      "default": "./dist/schema/v1/index.js"
+    },
+    "./dist/schema/v1/domain/entity/admin": {
+      "types": "./dist/schema/v1/domain/entity/admin/admin_pb.d.ts",
+      "import": "./dist/schema/v1/domain/entity/admin/admin_pb.js",
+      "default": "./dist/schema/v1/domain/entity/admin/admin_pb.js"
+    },
+    "./dist/schema/v1/domain/entity/client": {
+      "types": "./dist/schema/v1/domain/entity/client/client_pb.d.ts",
+      "import": "./dist/schema/v1/domain/entity/client/client_pb.js",
+      "default": "./dist/schema/v1/domain/entity/client/client_pb.js"
+    },
+    "./dist/schema/v1/domain/entity/client_attribute": {
+      "types": "./dist/schema/v1/domain/entity/client_attribute/client_attribute_pb.d.ts",
+      "import": "./dist/schema/v1/domain/entity/client_attribute/client_attribute_pb.js",
+      "default": "./dist/schema/v1/domain/entity/client_attribute/client_attribute_pb.js"
+    },
+    "./dist/schema/v1/domain/entity/client_category": {
+      "types": "./dist/schema/v1/domain/entity/client_category/client_category_pb.d.ts",
+      "import": "./dist/schema/v1/domain/entity/client_category/client_category_pb.js",
+      "default": "./dist/schema/v1/domain/entity/client_category/client_category_pb.js"
+    },
+    "./dist/schema/v1/domain/entity/delegate": {
+      "types": "./dist/schema/v1/domain/entity/delegate/delegate_pb.d.ts",
+      "import": "./dist/schema/v1/domain/entity/delegate/delegate_pb.js",
+      "default": "./dist/schema/v1/domain/entity/delegate/delegate_pb.js"
+    },
+    "./dist/schema/v1/domain/entity/delegate_client": {
+      "types": "./dist/schema/v1/domain/entity/delegate_client/delegate_client_pb.d.ts",
+      "import": "./dist/schema/v1/domain/entity/delegate_client/delegate_client_pb.js",
+      "default": "./dist/schema/v1/domain/entity/delegate_client/delegate_client_pb.js"
+    },
+    "./dist/schema/v1/domain/entity/group": {
+      "types": "./dist/schema/v1/domain/entity/group/group_pb.d.ts",
+      "import": "./dist/schema/v1/domain/entity/group/group_pb.js",
+      "default": "./dist/schema/v1/domain/entity/group/group_pb.js"
+    },
+    "./dist/schema/v1/domain/entity/location": {
+      "types": "./dist/schema/v1/domain/entity/location/location_pb.d.ts",
+      "import": "./dist/schema/v1/domain/entity/location/location_pb.js",
+      "default": "./dist/schema/v1/domain/entity/location/location_pb.js"
+    },
+    "./dist/schema/v1/domain/entity/manager": {
+      "types": "./dist/schema/v1/domain/entity/manager/manager_pb.d.ts",
+      "import": "./dist/schema/v1/domain/entity/manager/manager_pb.js",
+      "default": "./dist/schema/v1/domain/entity/manager/manager_pb.js"
+    },
+    "./dist/schema/v1/domain/entity/permission": {
+      "types": "./dist/schema/v1/domain/entity/permission/permission_pb.d.ts",
+      "import": "./dist/schema/v1/domain/entity/permission/permission_pb.js",
+      "default": "./dist/schema/v1/domain/entity/permission/permission_pb.js"
+    },
+    "./dist/schema/v1/domain/entity/role": {
+      "types": "./dist/schema/v1/domain/entity/role/role_pb.d.ts",
+      "import": "./dist/schema/v1/domain/entity/role/role_pb.js",
+      "default": "./dist/schema/v1/domain/entity/role/role_pb.js"
+    },
+    "./dist/schema/v1/domain/entity/role_permission": {
+      "types": "./dist/schema/v1/domain/entity/role_permission/role_permission_pb.d.ts",
+      "import": "./dist/schema/v1/domain/entity/role_permission/role_permission_pb.js",
+      "default": "./dist/schema/v1/domain/entity/role_permission/role_permission_pb.js"
+    },
+    "./dist/schema/v1/domain/entity/staff": {
+      "types": "./dist/schema/v1/domain/entity/staff/staff_pb.d.ts",
+      "import": "./dist/schema/v1/domain/entity/staff/staff_pb.js",
+      "default": "./dist/schema/v1/domain/entity/staff/staff_pb.js"
+    },
+    "./dist/schema/v1/domain/entity/user": {
+      "types": "./dist/schema/v1/domain/entity/user/user_pb.d.ts",
+      "import": "./dist/schema/v1/domain/entity/user/user_pb.js",
+      "default": "./dist/schema/v1/domain/entity/user/user_pb.js"
+    },
+    "./dist/schema/v1/domain/entity/workspace": {
+      "types": "./dist/schema/v1/domain/entity/workspace/workspace_pb.d.ts",
+      "import": "./dist/schema/v1/domain/entity/workspace/workspace_pb.js",
+      "default": "./dist/schema/v1/domain/entity/workspace/workspace_pb.js"
+    },
+    "./dist/schema/v1/domain/entity/workspace_user": {
+      "types": "./dist/schema/v1/domain/entity/workspace_user/workspace_user_pb.d.ts",
+      "import": "./dist/schema/v1/domain/entity/workspace_user/workspace_user_pb.js",
+      "default": "./dist/schema/v1/domain/entity/workspace_user/workspace_user_pb.js"
+    },
+    "./dist/schema/v1/domain/entity/workspace_user_role": {
+      "types": "./dist/schema/v1/domain/entity/workspace_user_role/workspace_user_role_pb.d.ts",
+      "import": "./dist/schema/v1/domain/entity/workspace_user_role/workspace_user_role_pb.js",
+      "default": "./dist/schema/v1/domain/entity/workspace_user_role/workspace_user_role_pb.js"
+    },
+    "./dist/schema/v1/domain/error/error": {
+      "types": "./dist/schema/v1/domain/error/error/error_pb.d.ts",
+      "import": "./dist/schema/v1/domain/error/error/error_pb.js",
+      "default": "./dist/schema/v1/domain/error/error/error_pb.js"
+    },
+    "./dist/schema/v1/domain/event/event": {
+      "types": "./dist/schema/v1/domain/event/event/event_pb.d.ts",
+      "import": "./dist/schema/v1/domain/event/event/event_pb.js",
+      "default": "./dist/schema/v1/domain/event/event/event_pb.js"
+    },
+    "./dist/schema/v1/domain/event/event_client": {
+      "types": "./dist/schema/v1/domain/event/event_client/event_client_pb.d.ts",
+      "import": "./dist/schema/v1/domain/event/event_client/event_client_pb.js",
+      "default": "./dist/schema/v1/domain/event/event_client/event_client_pb.js"
+    },
+    "./dist/schema/v1/domain/event/event_settings": {
+      "types": "./dist/schema/v1/domain/event/event_settings/event_settings_pb.d.ts",
+      "import": "./dist/schema/v1/domain/event/event_settings/event_settings_pb.js",
+      "default": "./dist/schema/v1/domain/event/event_settings/event_settings_pb.js"
+    },
+    "./dist/schema/v1/domain/event/event_recurrence": {
+      "types": "./dist/schema/v1/domain/event/event_recurrence/event_recurrence_pb.d.ts",
+      "import": "./dist/schema/v1/domain/event/event_recurrence/event_recurrence_pb.js",
+      "default": "./dist/schema/v1/domain/event/event_recurrence/event_recurrence_pb.js"
+    },
+    "./dist/schema/v1/domain/payment/payment": {
+      "types": "./dist/schema/v1/domain/payment/payment/payment_pb.d.ts",
+      "import": "./dist/schema/v1/domain/payment/payment/payment_pb.js",
+      "default": "./dist/schema/v1/domain/payment/payment/payment_pb.js"
+    },
+    "./dist/schema/v1/domain/payment/payment_method": {
+      "types": "./dist/schema/v1/domain/payment/payment_method/payment_method_pb.d.ts",
+      "import": "./dist/schema/v1/domain/payment/payment_method/payment_method_pb.js",
+      "default": "./dist/schema/v1/domain/payment/payment_method/payment_method_pb.js"
+    },
+    "./dist/schema/v1/domain/payment/payment_profile": {
+      "types": "./dist/schema/v1/domain/payment/payment_profile/payment_profile_pb.d.ts",
+      "import": "./dist/schema/v1/domain/payment/payment_profile/payment_profile_pb.js",
+      "default": "./dist/schema/v1/domain/payment/payment_profile/payment_profile_pb.js"
+    },
+    "./dist/schema/v1/domain/ping/ping": {
+      "types": "./dist/schema/v1/domain/ping/ping/ping_pb.d.ts",
+      "import": "./dist/schema/v1/domain/ping/ping/ping_pb.js",
+      "default": "./dist/schema/v1/domain/ping/ping/ping_pb.js"
+    },
+    "./dist/schema/v1/domain/product/collection": {
+      "types": "./dist/schema/v1/domain/product/collection/collection_pb.d.ts",
+      "import": "./dist/schema/v1/domain/product/collection/collection_pb.js",
+      "default": "./dist/schema/v1/domain/product/collection/collection_pb.js"
+    },
+    "./dist/schema/v1/domain/product/product_collection": {
+      "types": "./dist/schema/v1/domain/product/product_collection/product_collection_pb.d.ts",
+      "import": "./dist/schema/v1/domain/product/product_collection/product_collection_pb.js",
+      "default": "./dist/schema/v1/domain/product/product_collection/product_collection_pb.js"
+    },
+    "./dist/schema/v1/domain/product/collection_parent": {
+      "types": "./dist/schema/v1/domain/product/collection/collection_parent_pb.d.ts",
+      "import": "./dist/schema/v1/domain/product/collection/collection_parent_pb.js",
+      "default": "./dist/schema/v1/domain/product/collection/collection_parent_pb.js"
+    },
+    "./dist/schema/v1/domain/product/price_product": {
+      "types": "./dist/schema/v1/domain/product/price_product/price_product_pb.d.ts",
+      "import": "./dist/schema/v1/domain/product/price_product/price_product_pb.js",
+      "default": "./dist/schema/v1/domain/product/price_product/price_product_pb.js"
+    },
+    "./dist/schema/v1/domain/product/product": {
+      "types": "./dist/schema/v1/domain/product/product/product_pb.d.ts",
+      "import": "./dist/schema/v1/domain/product/product/product_pb.js",
+      "default": "./dist/schema/v1/domain/product/product/product_pb.js"
+    },
+    "./dist/schema/v1/domain/product/product_attribute": {
+      "types": "./dist/schema/v1/domain/product/product_attribute/product_attribute_pb.d.ts",
+      "import": "./dist/schema/v1/domain/product/product_attribute/product_attribute_pb.js",
+      "default": "./dist/schema/v1/domain/product/product_attribute/product_attribute_pb.js"
+    },
+    "./dist/schema/v1/domain/product/product_plan": {
+      "types": "./dist/schema/v1/domain/product/product_plan/product_plan_pb.d.ts",
+      "import": "./dist/schema/v1/domain/product/product_plan/product_plan_pb.js",
+      "default": "./dist/schema/v1/domain/product/product_plan/product_plan_pb.js"
+    },
+    "./dist/schema/v1/domain/product/resource": {
+      "types": "./dist/schema/v1/domain/product/resource/resource_pb.d.ts",
+      "import": "./dist/schema/v1/domain/product/resource/resource_pb.js",
+      "default": "./dist/schema/v1/domain/product/resource/resource_pb.js"
+    },
+    "./dist/schema/v1/domain/product/collection_attribute": {
+      "types": "./dist/schema/v1/domain/product/collection_attribute/collection_attribute_pb.d.ts",
+      "import": "./dist/schema/v1/domain/product/collection_attribute/collection_attribute_pb.js",
+      "default": "./dist/schema/v1/domain/product/collection_attribute/collection_attribute_pb.js"
+    },
+    "./dist/schema/v1/domain/workflow/workflow": {
+      "types": "./dist/schema/v1/domain/workflow/workflow/workflow_pb.d.ts",
+      "import": "./dist/schema/v1/domain/workflow/workflow/workflow_pb.js",
+      "default": "./dist/schema/v1/domain/workflow/workflow/workflow_pb.js"
+    },
+    "./dist/schema/v1/domain/workflow/workflow_template": {
+      "types": "./dist/schema/v1/domain/workflow/workflow_template/workflow_template_pb.d.ts",
+      "import": "./dist/schema/v1/domain/workflow/workflow_template/workflow_template_pb.js",
+      "default": "./dist/schema/v1/domain/workflow/workflow_template/workflow_template_pb.js"
+    },
+    "./dist/schema/v1/domain/workflow/stage_template": {
+      "types": "./dist/schema/v1/domain/workflow/stage_template/stage_template_pb.d.ts",
+      "import": "./dist/schema/v1/domain/workflow/stage_template/stage_template_pb.js",
+      "default": "./dist/schema/v1/domain/workflow/stage_template/stage_template_pb.js"
+    },
+    "./dist/schema/v1/domain/workflow/activity_template": {
+      "types": "./dist/schema/v1/domain/workflow/activity_template.d.ts",
+      "import": "./dist/schema/v1/domain/workflow/activity_template.js",
+      "default": "./dist/schema/v1/domain/workflow/activity_template.js"
+    },
+    "./dist/schema/v1/domain/workflow/stage": {
+      "types": "./dist/schema/v1/domain/workflow/stage/stage_pb.d.ts",
+      "import": "./dist/schema/v1/domain/workflow/stage/stage_pb.js",
+      "default": "./dist/schema/v1/domain/workflow/stage/stage_pb.js"
+    },
+    "./dist/schema/v1/domain/workflow/activity": {
+      "types": "./dist/schema/v1/domain/workflow/activity/activity_pb.d.ts",
+      "import": "./dist/schema/v1/domain/workflow/activity/activity_pb.js",
+      "default": "./dist/schema/v1/domain/workflow/activity/activity_pb.js"
+    },
+    "./dist/schema/v1/domain/subscription/balance": {
+      "types": "./dist/schema/v1/domain/subscription/balance/balance_pb.d.ts",
+      "import": "./dist/schema/v1/domain/subscription/balance/balance_pb.js",
+      "default": "./dist/schema/v1/domain/subscription/balance/balance_pb.js"
+    },
+    "./dist/schema/v1/domain/subscription/invoice": {
+      "types": "./dist/schema/v1/domain/subscription/invoice/invoice_pb.d.ts",
+      "import": "./dist/schema/v1/domain/subscription/invoice/invoice_pb.js",
+      "default": "./dist/schema/v1/domain/subscription/invoice/invoice_pb.js"
+    },
+    "./dist/schema/v1/domain/subscription/plan": {
+      "types": "./dist/schema/v1/domain/subscription/plan/plan_pb.d.ts",
+      "import": "./dist/schema/v1/domain/subscription/plan/plan_pb.js",
+      "default": "./dist/schema/v1/domain/subscription/plan/plan_pb.js"
+    },
+    "./dist/schema/v1/domain/subscription/price_plan": {
+      "types": "./dist/schema/v1/domain/subscription/price_plan/price_plan_pb.d.ts",
+      "import": "./dist/schema/v1/domain/subscription/price_plan/price_plan_pb.js",
+      "default": "./dist/schema/v1/domain/subscription/price_plan/price_plan_pb.js"
+    },
+    "./dist/schema/v1/domain/subscription/plan_location": {
+      "types": "./dist/schema/v1/domain/subscription/plan_location/plan_location_pb.d.ts",
+      "import": "./dist/schema/v1/domain/subscription/plan_location/plan_location_pb.js",
+      "default": "./dist/schema/v1/domain/subscription/plan_location/plan_location_pb.js"
+    },
+    "./dist/schema/v1/domain/subscription/subscription": {
+      "types": "./dist/schema/v1/domain/subscription/subscription/subscription_pb.d.ts",
+      "import": "./dist/schema/v1/domain/subscription/subscription/subscription_pb.js",
+      "default": "./dist/schema/v1/domain/subscription/subscription/subscription_pb.js"
+    },
+    "./dist/schema/v1/domain/product/collection_plan": {
+      "types": "./dist/schema/v1/domain/product/collection_plan/collection_plan_pb.d.ts",
+      "import": "./dist/schema/v1/domain/product/collection_plan/collection_plan_pb.js",
+      "default": "./dist/schema/v1/domain/product/collection_plan/collection_plan_pb.js"
+    },
+    "./dist/schema/v1/domain/common/pagination": {
+      "types": "./dist/schema/v1/domain/common/pagination_pb.d.ts",
+      "import": "./dist/schema/v1/domain/common/pagination_pb.js",
+      "default": "./dist/schema/v1/domain/common/pagination_pb.js"
+    },
+    "./dist/schema/v1/domain/common/filter": {
+      "types": "./dist/schema/v1/domain/common/filter_pb.d.ts",
+      "import": "./dist/schema/v1/domain/common/filter_pb.js",
+      "default": "./dist/schema/v1/domain/common/filter_pb.js"
+    },
+    "./dist/schema/v1/domain/common/sort": {
+      "types": "./dist/schema/v1/domain/common/sort_pb.d.ts",
+      "import": "./dist/schema/v1/domain/common/sort_pb.js",
+      "default": "./dist/schema/v1/domain/common/sort_pb.js"
+    },
+    "./dist/schema/v1/domain/common/search": {
+      "types": "./dist/schema/v1/domain/common/search_pb.d.ts",
+      "import": "./dist/schema/v1/domain/common/search_pb.js",
+      "default": "./dist/schema/v1/domain/common/search_pb.js"
+    },
+    "./dist/schema/v1/domain/common/error": {
+      "types": "./dist/schema/v1/domain/common/error_pb.d.ts",
+      "import": "./dist/schema/v1/domain/common/error_pb.js",
+      "default": "./dist/schema/v1/domain/common/error_pb.js"
+    },
+    "./dist/schema/v1/domain/common/attribute": {
+      "types": "./dist/schema/v1/domain/common/attribute_pb.d.ts",
+      "import": "./dist/schema/v1/domain/common/attribute_pb.js",
+      "default": "./dist/schema/v1/domain/common/attribute_pb.js"
+    },
+    "./dist/schema/v1/domain/common/action": {
+      "types": "./dist/schema/v1/domain/common/action_pb.d.ts",
+      "import": "./dist/schema/v1/domain/common/action_pb.js",
+      "default": "./dist/schema/v1/domain/common/action_pb.js"
+    },
+    "./dist/schema/v1/domain/entity/location_attribute": {
+      "types": "./dist/schema/v1/domain/entity/location_attribute/location_attribute_pb.d.ts",
+      "import": "./dist/schema/v1/domain/entity/location_attribute/location_attribute_pb.js",
+      "default": "./dist/schema/v1/domain/entity/location_attribute/location_attribute_pb.js"
+    },
+    "./dist/schema/v1/domain/entity/delegate_attribute": {
+      "types": "./dist/schema/v1/domain/entity/delegate_attribute/delegate_attribute_pb.d.ts",
+      "import": "./dist/schema/v1/domain/entity/delegate_attribute/delegate_attribute_pb.js",
+      "default": "./dist/schema/v1/domain/entity/delegate_attribute/delegate_attribute_pb.js"
+    },
+    "./dist/schema/v1/domain/entity/group_attribute": {
+      "types": "./dist/schema/v1/domain/entity/group_attribute/group_attribute_pb.d.ts",
+      "import": "./dist/schema/v1/domain/entity/group_attribute/group_attribute_pb.js",
+      "default": "./dist/schema/v1/domain/entity/group_attribute/group_attribute_pb.js"
+    },
+    "./dist/schema/v1/domain/entity/staff_attribute": {
+      "types": "./dist/schema/v1/domain/entity/staff_attribute/staff_attribute_pb.d.ts",
+      "import": "./dist/schema/v1/domain/entity/staff_attribute/staff_attribute_pb.js",
+      "default": "./dist/schema/v1/domain/entity/staff_attribute/staff_attribute_pb.js"
+    },
+    "./dist/schema/v1/domain/event/event_product": {
+      "types": "./dist/schema/v1/domain/event/event_product/event_product_pb.d.ts",
+      "import": "./dist/schema/v1/domain/event/event_product/event_product_pb.js",
+      "default": "./dist/schema/v1/domain/event/event_product/event_product_pb.js"
+    },
+    "./dist/schema/v1/domain/event/event_attribute": {
+      "types": "./dist/schema/v1/domain/event/event_attribute/event_attribute_pb.d.ts",
+      "import": "./dist/schema/v1/domain/event/event_attribute/event_attribute_pb.js",
+      "default": "./dist/schema/v1/domain/event/event_attribute/event_attribute_pb.js"
+    },
+    "./dist/schema/v1/domain/payment/payment_profile_payment_method": {
+      "types": "./dist/schema/v1/domain/payment/payment_profile_payment_method/payment_profile_payment_method_pb.d.ts",
+      "import": "./dist/schema/v1/domain/payment/payment_profile_payment_method/payment_profile_payment_method_pb.js",
+      "default": "./dist/schema/v1/domain/payment/payment_profile_payment_method/payment_profile_payment_method_pb.js"
+    },
+    "./dist/schema/v1/domain/payment/payment_attribute": {
+      "types": "./dist/schema/v1/domain/payment/payment_attribute/payment_attribute_pb.d.ts",
+      "import": "./dist/schema/v1/domain/payment/payment_attribute/payment_attribute_pb.js",
+      "default": "./dist/schema/v1/domain/payment/payment_attribute/payment_attribute_pb.js"
+    },
+    "./dist/schema/v1/domain/subscription/plan_settings": {
+      "types": "./dist/schema/v1/domain/subscription/plan_settings/plan_settings_pb.d.ts",
+      "import": "./dist/schema/v1/domain/subscription/plan_settings/plan_settings_pb.js",
+      "default": "./dist/schema/v1/domain/subscription/plan_settings/plan_settings_pb.js"
+    },
+    "./dist/schema/v1/domain/subscription/subscription_attribute": {
+      "types": "./dist/schema/v1/domain/subscription/subscription_attribute/subscription_attribute_pb.d.ts",
+      "import": "./dist/schema/v1/domain/subscription/subscription_attribute/subscription_attribute_pb.js",
+      "default": "./dist/schema/v1/domain/subscription/subscription_attribute/subscription_attribute_pb.js"
+    },
+    "./dist/schema/v1/domain/subscription/plan_attribute": {
+      "types": "./dist/schema/v1/domain/subscription/plan_attribute/plan_attribute_pb.d.ts",
+      "import": "./dist/schema/v1/domain/subscription/plan_attribute/plan_attribute_pb.js",
+      "default": "./dist/schema/v1/domain/subscription/plan_attribute/plan_attribute_pb.js"
+    },
+    "./dist/schema/v1/domain/subscription/invoice_attribute": {
+      "types": "./dist/schema/v1/domain/subscription/invoice_attribute/invoice_attribute_pb.d.ts",
+      "import": "./dist/schema/v1/domain/subscription/invoice_attribute/invoice_attribute_pb.js",
+      "default": "./dist/schema/v1/domain/subscription/invoice_attribute/invoice_attribute_pb.js"
+    },
+    "./dist/schema/v1/domain/subscription/balance_attribute": {
+      "types": "./dist/schema/v1/domain/subscription/balance_attribute/balance_attribute_pb.d.ts",
+      "import": "./dist/schema/v1/domain/subscription/balance_attribute/balance_attribute_pb.js",
+      "default": "./dist/schema/v1/domain/subscription/balance_attribute/balance_attribute_pb.js"
+    },
+    "./dist/schema/v1/infrastructure/auth/identity": {
+      "types": "./dist/schema/v1/infrastructure/auth/identity_pb.d.ts",
+      "import": "./dist/schema/v1/infrastructure/auth/identity_pb.js",
+      "default": "./dist/schema/v1/infrastructure/auth/identity_pb.js"
+    },
+    "./dist/schema/v1/infrastructure/auth/provider": {
+      "types": "./dist/schema/v1/infrastructure/auth/provider_pb.d.ts",
+      "import": "./dist/schema/v1/infrastructure/auth/provider_pb.js",
+      "default": "./dist/schema/v1/infrastructure/auth/provider_pb.js"
+    },
+    "./dist/schema/v1/infrastructure/auth/authentication": {
+      "types": "./dist/schema/v1/infrastructure/auth/authentication_pb.d.ts",
+      "import": "./dist/schema/v1/infrastructure/auth/authentication_pb.js",
+      "default": "./dist/schema/v1/infrastructure/auth/authentication_pb.js"
+    },
+    "./dist/schema/v1/infrastructure/auth/jwt": {
+      "types": "./dist/schema/v1/infrastructure/auth/jwt_pb.d.ts",
+      "import": "./dist/schema/v1/infrastructure/auth/jwt_pb.js",
+      "default": "./dist/schema/v1/infrastructure/auth/jwt_pb.js"
+    },
+    "./dist/schema/v1/infrastructure/auth/api_key": {
+      "types": "./dist/schema/v1/infrastructure/auth/api_key_pb.d.ts",
+      "import": "./dist/schema/v1/infrastructure/auth/api_key_pb.js",
+      "default": "./dist/schema/v1/infrastructure/auth/api_key_pb.js"
     }
   },
   "sideEffects": false,
   "private": true,
   "scripts": {
-    "generate": "buf generate --template ./buf.gen.yaml ./schema/v1",
+    "generate": "buf generate --template ./buf.gen.yaml ./proto/v1",
+    "generate:ddl": "buf build ./proto/v1 -o ./proto/v1/descriptors.bin && go run ./cmd/generate-ddl",
     "build": "pnpm generate && tsc",
     "build:fe-manager": "pnpm build",
-    "clean": "rm -rf typescript golang",
+    "clean": "rm -rf dist pkg/schema",
     "postinstall": "pnpm build"
   },
   "devDependencies": {

@@ -1,0 +1,34 @@
+syntax = "proto3";
+
+package domain.common.v1;
+
+option go_package = "github.com/erniealice/esqyma/golang/v1/domain/common";
+
+// Search request configuration
+message SearchRequest {
+  string query = 1; // Search query string
+  SearchOptions options = 2;
+}
+
+// Search configuration options
+message SearchOptions {
+  repeated string search_fields = 1; // Fields to search in
+  map<string, double> field_weights = 2; // Weight per field
+  bool enable_fuzzy = 3; // Enable fuzzy matching
+  bool enable_highlighting = 4; // Enable result highlighting
+  int32 max_results = 5; // Maximum number of results
+}
+
+// Search result metadata
+message SearchResult {
+  double score = 1; // Relevance score
+  map<string, string> highlights = 2; // Highlighted text per field
+}
+
+// Search metrics for analytics
+message SearchMetrics {
+  int32 total_results = 1;
+  double query_time_ms = 2;
+  repeated string top_terms = 3;
+  map<string, int32> field_match_counts = 4;
+}

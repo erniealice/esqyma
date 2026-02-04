@@ -1,0 +1,119 @@
+syntax = "proto3";
+
+package domain.product.v1;
+
+option go_package = "github.com/erniealice/esqyma/golang/v1/domain/product/product_plan";
+
+import "domain/common/error.proto";
+import "domain/common/pagination.proto";
+import "domain/common/filter.proto";
+import "domain/common/sort.proto";
+import "domain/common/search.proto";
+
+import "domain/product/product/product.proto";
+import "options/db.proto";
+
+message ProductPlan {
+  option (options.v1.table).table = true;
+  string id = 1;
+  optional int64 date_created = 2;
+  optional string date_created_string = 3;
+  optional int64 date_modified = 4;
+  optional string date_modified_string = 5;
+  bool active = 6 [(options.v1.db).default = "true"];
+  string name = 7;
+  optional string description = 8;
+  double price = 9;
+  string currency = 10;
+  optional Product product = 11;
+  string product_id = 12 [(options.v1.db).references = "product", (options.v1.db).index = true];
+}
+
+service ProductPlanDomainService {
+  rpc CreateProductPlan(CreateProductPlanRequest) returns (CreateProductPlanResponse);
+  rpc ReadProductPlan(ReadProductPlanRequest) returns (ReadProductPlanResponse);
+  rpc UpdateProductPlan(UpdateProductPlanRequest) returns (UpdateProductPlanResponse);
+  rpc DeleteProductPlan(DeleteProductPlanRequest) returns (DeleteProductPlanResponse);
+  rpc ListProductPlans(ListProductPlansRequest) returns (ListProductPlansResponse);
+  rpc GetProductPlanListPageData(GetProductPlanListPageDataRequest)
+    returns (GetProductPlanListPageDataResponse);
+  rpc GetProductPlanItemPageData(GetProductPlanItemPageDataRequest)
+    returns (GetProductPlanItemPageDataResponse);
+}
+
+message CreateProductPlanRequest {
+  ProductPlan data = 1;
+}
+
+message CreateProductPlanResponse {
+  repeated ProductPlan data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message ReadProductPlanRequest {
+  ProductPlan data = 1;
+}
+
+message ReadProductPlanResponse {
+  repeated ProductPlan data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message UpdateProductPlanRequest {
+  ProductPlan data = 1;
+}
+
+message UpdateProductPlanResponse {
+  repeated ProductPlan data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message DeleteProductPlanRequest {
+  ProductPlan data = 1;
+}
+
+message DeleteProductPlanResponse {
+  bool success = 1;
+  optional domain.common.v1.Error error = 2;
+}
+
+message ListProductPlansRequest {
+  optional domain.common.v1.SearchRequest search = 1;
+  optional domain.common.v1.FilterRequest filters = 2;
+  optional domain.common.v1.SortRequest sort = 3;
+  optional domain.common.v1.PaginationRequest pagination = 4;
+}
+
+message ListProductPlansResponse {
+  repeated ProductPlan data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message GetProductPlanListPageDataRequest {
+  optional domain.common.v1.SearchRequest search = 1;
+  optional domain.common.v1.FilterRequest filters = 2;
+  optional domain.common.v1.SortRequest sort = 3;
+  optional domain.common.v1.PaginationRequest pagination = 4;
+}
+
+message GetProductPlanListPageDataResponse {
+  repeated ProductPlan product_plan_list = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+  optional domain.common.v1.PaginationResponse pagination = 4;
+  repeated domain.common.v1.SearchResult search_results = 5;
+}
+
+message GetProductPlanItemPageDataRequest {
+  string product_plan_id = 1;
+}
+
+message GetProductPlanItemPageDataResponse {
+  ProductPlan product_plan = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}

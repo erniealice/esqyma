@@ -1,0 +1,261 @@
+syntax = "proto3";
+
+package domain.workflow.v1;
+
+import "domain/common/error.proto";
+import "domain/common/pagination.proto";
+import "domain/common/filter.proto";
+import "domain/common/sort.proto";
+import "domain/common/search.proto";
+import "options/db.proto";
+
+option go_package = "github.com/erniealice/esqyma/golang/v1/domain/workflow/activity";
+
+
+// Activity represents a specific instance of a workflow activity
+message Activity {
+  option (options.v1.table).table = true;
+
+  string id = 1;
+  string stage_id = 2 [(options.v1.db).references = "stage", (options.v1.db).index = true];
+  string activity_template_id = 3 [(options.v1.db).references = "activity_template", (options.v1.db).index = true];
+  string name = 4;
+  optional string description = 5;
+  string status = 6;
+  string priority = 7;
+  optional string assigned_to = 8;
+  optional string completed_by = 9;
+  optional int64 date_assigned = 10;
+  optional string date_assigned_string = 11;
+  optional int64 date_started = 12;
+  optional string date_started_string = 13;
+  optional int64 date_completed = 14;
+  optional string date_completed_string = 15;
+  optional int64 date_due = 16;
+  optional string date_due_string = 17;
+  optional string input_data_json = 18;
+  optional string output_data_json = 19;
+  optional string result_json = 20;
+  optional string error_message = 21;
+  optional string approval_comments = 22;
+  optional string rejection_reason = 23;
+  optional int32 estimated_duration_minutes = 24;
+  optional int32 actual_duration_minutes = 25;
+  optional string created_by = 26;
+  optional int64 date_created = 27;
+  optional string date_created_string = 28;
+  optional int64 date_modified = 29;
+  optional string date_modified_string = 30;
+  bool active = 31 [(options.v1.db).default = "true"];
+  optional int32 completion_percentage = 32;
+  repeated string attachment_ids = 33;
+  optional int32 order_index = 34;       // Activity position within its stage (from ActivityTemplate.order_index)
+  optional int32 stage_order_index = 35; // Parent stage position within workflow (from StageTemplate.order_index)
+}
+
+// CreateActivityRequest is the request message for creating an activity
+message CreateActivityRequest {
+  Activity data = 1;
+}
+
+// CreateActivityResponse is the response message for creating an activity
+message CreateActivityResponse {
+  repeated Activity data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+// ReadActivityRequest is the request message for reading an activity
+message ReadActivityRequest {
+  Activity data = 1;
+}
+
+// ReadActivityResponse is the response message for reading an activity
+message ReadActivityResponse {
+  repeated Activity data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+// UpdateActivityRequest is the request message for updating an activity
+message UpdateActivityRequest {
+  Activity data = 1;
+}
+
+// UpdateActivityResponse is the response message for updating an activity
+message UpdateActivityResponse {
+  repeated Activity data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+// DeleteActivityRequest is the request message for deleting an activity
+message DeleteActivityRequest {
+  Activity data = 1;
+}
+
+// DeleteActivityResponse is the response message for deleting an activity
+message DeleteActivityResponse {
+  bool success = 1;
+  optional domain.common.v1.Error error = 2;
+}
+
+// ListActivitiesRequest is the request message for listing activities
+message ListActivitiesRequest {
+  optional domain.common.v1.SearchRequest search = 1;
+  optional domain.common.v1.FilterRequest filters = 2;
+  optional domain.common.v1.SortRequest sort = 3;
+  optional domain.common.v1.PaginationRequest pagination = 4;
+}
+
+// ListActivitiesResponse is the response message for listing activities
+message ListActivitiesResponse {
+  repeated Activity data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+  optional string next_page_token = 4;
+}
+
+// GetActivityListPageDataRequest is the request message for getting activity list page data
+message GetActivityListPageDataRequest {
+  optional domain.common.v1.PaginationRequest pagination = 1;
+  optional domain.common.v1.FilterRequest filters = 2;
+  optional domain.common.v1.SortRequest sort = 3;
+  optional domain.common.v1.SearchRequest search = 4;
+}
+
+// GetActivityListPageDataResponse is the response message for getting activity list page data
+message GetActivityListPageDataResponse {
+  repeated Activity activity_list = 1;
+  optional domain.common.v1.PaginationResponse pagination = 2;
+  repeated domain.common.v1.SearchResult search_results = 3;
+  bool success = 4;
+  optional domain.common.v1.Error error = 5;
+}
+
+// GetActivityItemPageDataRequest is the request message for getting activity item page data
+message GetActivityItemPageDataRequest {
+  string activity_id = 1;
+}
+
+// GetActivityItemPageDataResponse is the response message for getting activity item page data
+message GetActivityItemPageDataResponse {
+  optional Activity activity = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+// GetActivitiesByStageRequest is the request message for getting activities by stage
+message GetActivitiesByStageRequest {
+  string stage_id = 1;
+}
+
+// GetActivitiesByStageResponse is the response message for getting activities by stage
+message GetActivitiesByStageResponse {
+  repeated Activity activities = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+// AssignActivityRequest is the request message for assigning an activity
+message AssignActivityRequest {
+  string activity_id = 1;
+  string assigned_to = 2;
+  optional string assigned_by = 3;
+}
+
+// AssignActivityResponse is the response message for assigning an activity
+message AssignActivityResponse {
+  optional Activity activity = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+// StartActivityRequest is the request message for starting an activity
+message StartActivityRequest {
+  string activity_id = 1;
+  optional string started_by = 2;
+}
+
+// StartActivityResponse is the response message for starting an activity
+message StartActivityResponse {
+  optional Activity activity = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+// CompleteActivityRequest is the request message for completing an activity
+message CompleteActivityRequest {
+  string activity_id = 1;
+  optional string completed_by = 2;
+  optional string output_data_json = 3;
+  optional string result_json = 4;
+}
+
+// CompleteActivityResponse is the response message for completing an activity
+message CompleteActivityResponse {
+  optional Activity activity = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+// CancelActivityRequest is the request message for cancelling an activity
+message CancelActivityRequest {
+  string activity_id = 1;
+  optional string cancelled_by = 2;
+  optional string cancellation_reason = 3;
+}
+
+// CancelActivityResponse is the response message for cancelling an activity
+message CancelActivityResponse {
+  optional Activity activity = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+// ApproveActivityRequest is the request message for approving an activity
+message ApproveActivityRequest {
+  string activity_id = 1;
+  string approved_by = 2;
+  optional string approval_comments = 3;
+}
+
+// ApproveActivityResponse is the response message for approving an activity
+message ApproveActivityResponse {
+  optional Activity activity = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+// RejectActivityRequest is the request message for rejecting an activity
+message RejectActivityRequest {
+  string activity_id = 1;
+  string rejected_by = 2;
+  string rejection_reason = 3;
+  optional string rejection_comments = 4;
+}
+
+// RejectActivityResponse is the response message for rejecting an activity
+message RejectActivityResponse {
+  optional Activity activity = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+// ActivityDomainService defines the gRPC service for activity operations
+service ActivityDomainService {
+  rpc CreateActivity(CreateActivityRequest) returns (CreateActivityResponse);
+  rpc ReadActivity(ReadActivityRequest) returns (ReadActivityResponse);
+  rpc UpdateActivity(UpdateActivityRequest) returns (UpdateActivityResponse);
+  rpc DeleteActivity(DeleteActivityRequest) returns (DeleteActivityResponse);
+  rpc ListActivities(ListActivitiesRequest) returns (ListActivitiesResponse);
+  rpc GetActivityListPageData(GetActivityListPageDataRequest) returns (GetActivityListPageDataResponse);
+  rpc GetActivityItemPageData(GetActivityItemPageDataRequest) returns (GetActivityItemPageDataResponse);
+  rpc GetActivitiesByStage(GetActivitiesByStageRequest) returns (GetActivitiesByStageResponse);
+  rpc AssignActivity(AssignActivityRequest) returns (AssignActivityResponse);
+  rpc StartActivity(StartActivityRequest) returns (StartActivityResponse);
+  rpc CompleteActivity(CompleteActivityRequest) returns (CompleteActivityResponse);
+  rpc CancelActivity(CancelActivityRequest) returns (CancelActivityResponse);
+  rpc ApproveActivity(ApproveActivityRequest) returns (ApproveActivityResponse);
+  rpc RejectActivity(RejectActivityRequest) returns (RejectActivityResponse);
+}

@@ -1,0 +1,197 @@
+syntax = "proto3";
+
+package integration.email.v1;
+
+option go_package = "github.com/erniealice/esqyma/golang/v1/integration/email";
+
+import "google/protobuf/any.proto";
+import "google/protobuf/timestamp.proto";
+import "integration/email/email.proto";
+
+// EmailProviderConfig represents generic email provider configuration
+// The hexagonal architecture adapters will handle provider-specific implementation details
+message EmailProviderConfig {
+  // Unique provider identifier (e.g., "sendgrid", "gmail", "office365", "custom-smtp")
+  string provider_id = 1;
+
+  // Provider type category
+  EmailProviderType provider_type = 2;
+
+  // Whether this provider is enabled
+  bool enabled = 3;
+
+  // Display name for the provider
+  string display_name = 4;
+
+  // Capabilities supported by this provider
+  repeated EmailCapability capabilities = 5;
+
+  // Default from address
+  string default_from_address = 6;
+
+  // Default from name
+  string default_from_name = 7;
+
+  // Default reply-to address
+  string default_reply_to = 8;
+
+  // Authentication configuration
+  oneof auth {
+    ApiKeyAuth api_key_auth = 10;
+    OAuth2Auth oauth2_auth = 11;
+    SmtpAuth smtp_auth = 12;
+    CustomAuth custom_auth = 13;
+  }
+
+  // API endpoint (for API-based providers)
+  string api_endpoint = 20;
+
+  // Request timeout in seconds
+  int32 timeout_seconds = 21;
+
+  // Maximum retry attempts for failed requests
+  int32 max_retries = 22;
+
+  // Provider-specific settings as key-value pairs
+  // Examples: "enable_tracking": "true", "ip_pool": "marketing", "sandbox": "false"
+  map<string, string> settings = 30;
+
+  // Provider-specific complex configuration data
+  // Use this for nested structures that don't fit in simple key-value pairs
+  map<string, google.protobuf.Any> extended_config = 31;
+}
+
+// ApiKeyAuth represents API key based authentication
+message ApiKeyAuth {
+  // API key for authentication
+  string api_key = 1;
+
+  // Optional: Key name/identifier (if provider uses named keys)
+  string key_name = 2;
+
+  // Optional: Key in header or query parameter
+  AuthLocation location = 3;
+
+  // Header name or query parameter name (e.g., "Authorization", "X-API-Key")
+  string parameter_name = 4;
+
+  // Optional prefix (e.g., "Bearer ", "ApiKey ")
+  string prefix = 5;
+}
+
+// OAuth2Auth represents OAuth 2.0 based authentication
+message OAuth2Auth {
+  // OAuth 2.0 access token
+  string access_token = 1;
+
+  // OAuth 2.0 refresh token
+  string refresh_token = 2;
+
+  // Client ID
+  string client_id = 3;
+
+  // Client secret
+  string client_secret = 4;
+
+  // Token endpoint for refreshing tokens
+  string token_endpoint = 5;
+
+  // Authorization endpoint (for initial OAuth flow)
+  string authorization_endpoint = 6;
+
+  // Redirect URL for OAuth callback
+  string redirect_url = 7;
+
+  // Scopes requested/granted
+  repeated string scopes = 8;
+
+  // Tenant/domain identifier (e.g., for Azure AD, Google Workspace)
+  string tenant_id = 9;
+
+  // Delegated user email (for domain-wide delegation scenarios)
+  string delegated_email = 10;
+
+  // Service account key (for service account authentication)
+  string service_account_key = 11;
+
+  // Additional OAuth parameters
+  map<string, string> additional_params = 20;
+}
+
+// SmtpAuth represents SMTP authentication
+message SmtpAuth {
+  // SMTP server host
+  string host = 1;
+
+  // SMTP server port (typically 25, 587, or 465)
+  int32 port = 2;
+
+  // Username for authentication
+  string username = 3;
+
+  // Password for authentication
+  string password = 4;
+
+  // Whether to use TLS
+  bool use_tls = 5;
+
+  // Whether to use STARTTLS
+  bool use_starttls = 6;
+
+  // Skip certificate verification (for testing only)
+  bool skip_verify = 7;
+
+  // From email address
+  string from_email = 8;
+
+  // From name
+  string from_name = 9;
+}
+
+// CustomAuth represents custom authentication methods
+// Use this for providers with non-standard authentication
+message CustomAuth {
+  // Authentication type identifier
+  string auth_type = 1;
+
+  // Credentials as key-value pairs
+  map<string, string> credentials = 2;
+
+  // Complex credential data
+  map<string, google.protobuf.Any> extended_credentials = 3;
+}
+
+// AuthLocation specifies where to place authentication credentials
+enum AuthLocation {
+  AUTH_LOCATION_UNSPECIFIED = 0;
+  AUTH_LOCATION_HEADER = 1;      // In HTTP header
+  AUTH_LOCATION_QUERY = 2;       // In query parameter
+  AUTH_LOCATION_BODY = 3;        // In request body
+}
+
+// ProviderHealthStatus represents the health status of a provider
+message ProviderHealthStatus {
+  // Provider identifier
+  string provider_id = 1;
+
+  // Whether the provider is healthy and operational
+  bool is_healthy = 2;
+
+  // Health status message
+  string status_message = 3;
+
+  // Last successful connection timestamp
+  google.protobuf.Timestamp last_success = 4;
+
+  // Last failed connection timestamp
+  google.protobuf.Timestamp last_failure = 5;
+
+  // Failure count since last success
+  int32 failure_count = 6;
+
+  // Additional health details
+  map<string, string> details = 7;
+
+  // Response time in milliseconds (for health check)
+  int64 response_time_ms = 8;
+}

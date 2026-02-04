@@ -1,0 +1,51 @@
+syntax = "proto3";
+
+package options.v1;
+
+option go_package = "github.com/erniealice/esqyma/golang/v1/options";
+
+import "google/protobuf/descriptor.proto";
+
+// Field-level database options
+message FieldOptions {
+  // Foreign key reference: "table_name.column_name" or just "table_name" (assumes .id)
+  string references = 1;
+
+  // Mark field as unique
+  bool unique = 2;
+
+  // Create an index on this field
+  bool index = 3;
+
+  // Default value (as string, will be used as-is in SQL)
+  string default = 4;
+
+  // Check constraint expression
+  string check = 5;
+
+  // Override the SQL type (e.g., "VARCHAR(255)" instead of "TEXT")
+  string sql_type = 6;
+}
+
+// Message-level database options
+message MessageOptions {
+  // Mark this message as a database table
+  bool table = 1;
+
+  // Override table name
+  string table_name = 2;
+
+  // Composite unique constraints: ["field1,field2", "field3,field4"]
+  repeated string unique_together = 3;
+
+  // Composite indexes: ["field1,field2"]
+  repeated string index_together = 4;
+}
+
+extend google.protobuf.FieldOptions {
+  FieldOptions db = 50000;
+}
+
+extend google.protobuf.MessageOptions {
+  MessageOptions table = 50001;
+}

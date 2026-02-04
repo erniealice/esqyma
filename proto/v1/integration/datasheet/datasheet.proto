@@ -1,0 +1,404 @@
+syntax = "proto3";
+
+package integration.datasheet.v1;
+
+option go_package = "github.com/erniealice/esqyma/golang/v1/integration/datasheet";
+
+import "google/protobuf/timestamp.proto";
+import "google/protobuf/any.proto";
+
+// DatasheetProviderType represents the category of datasheet provider
+enum DatasheetProviderType {
+  DATASHEET_PROVIDER_TYPE_UNSPECIFIED = 0;
+  DATASHEET_PROVIDER_TYPE_GOOGLE_SHEETS = 1;  // Google Sheets API
+  DATASHEET_PROVIDER_TYPE_EXCEL_ONLINE = 2;   // Microsoft Excel Online / Graph API
+  DATASHEET_PROVIDER_TYPE_AIRTABLE = 3;       // Airtable API
+  DATASHEET_PROVIDER_TYPE_MOCK = 4;           // Mock/test provider
+}
+
+// DatasheetCapability represents features supported by a provider
+enum DatasheetCapability {
+  DATASHEET_CAPABILITY_UNSPECIFIED = 0;
+  DATASHEET_CAPABILITY_READ = 1;                    // Read data from sheets
+  DATASHEET_CAPABILITY_WRITE = 2;                   // Write/append data to sheets
+  DATASHEET_CAPABILITY_BATCH_UPDATE = 3;            // Batch update operations
+  DATASHEET_CAPABILITY_FORMULAS = 4;                // Formula support
+  DATASHEET_CAPABILITY_FORMATTING = 5;              // Cell/row/column formatting
+  DATASHEET_CAPABILITY_CONDITIONAL_FORMATTING = 6;  // Conditional formatting rules
+  DATASHEET_CAPABILITY_CHARTS = 7;                  // Chart creation and management
+  DATASHEET_CAPABILITY_PIVOT_TABLES = 8;            // Pivot table support
+  DATASHEET_CAPABILITY_FILTERING = 9;               // Data filtering
+  DATASHEET_CAPABILITY_SORTING = 10;                // Data sorting
+  DATASHEET_CAPABILITY_VALIDATION = 11;             // Data validation rules
+  DATASHEET_CAPABILITY_COMMENTS = 12;               // Cell comments/notes
+  DATASHEET_CAPABILITY_PROTECTION = 13;             // Sheet/range protection
+  DATASHEET_CAPABILITY_NAMED_RANGES = 14;           // Named range support
+  DATASHEET_CAPABILITY_MULTIPLE_SHEETS = 15;        // Multiple sheets in spreadsheet
+}
+
+// CellValueType represents the data type of a cell value
+enum CellValueType {
+  CELL_VALUE_TYPE_UNSPECIFIED = 0;
+  CELL_VALUE_TYPE_STRING = 1;     // Text/string value
+  CELL_VALUE_TYPE_NUMBER = 2;     // Numeric value (integer or float)
+  CELL_VALUE_TYPE_BOOLEAN = 3;    // Boolean true/false
+  CELL_VALUE_TYPE_DATE = 4;       // Date only (no time component)
+  CELL_VALUE_TYPE_DATETIME = 5;   // Date and time
+  CELL_VALUE_TYPE_FORMULA = 6;    // Formula expression
+  CELL_VALUE_TYPE_ERROR = 7;      // Error value (e.g., #REF!, #DIV/0!)
+  CELL_VALUE_TYPE_EMPTY = 8;      // Empty/null cell
+  CELL_VALUE_TYPE_CURRENCY = 9;   // Currency value
+  CELL_VALUE_TYPE_PERCENT = 10;   // Percentage value
+}
+
+// ConditionOperator represents comparison operators for conditions
+enum ConditionOperator {
+  CONDITION_OPERATOR_UNSPECIFIED = 0;
+  CONDITION_OPERATOR_EQ = 1;           // Equal to
+  CONDITION_OPERATOR_NEQ = 2;          // Not equal to
+  CONDITION_OPERATOR_GT = 3;           // Greater than
+  CONDITION_OPERATOR_LT = 4;           // Less than
+  CONDITION_OPERATOR_GTE = 5;          // Greater than or equal to
+  CONDITION_OPERATOR_LTE = 6;          // Less than or equal to
+  CONDITION_OPERATOR_CONTAINS = 7;     // Contains substring
+  CONDITION_OPERATOR_STARTS_WITH = 8;  // Starts with prefix
+  CONDITION_OPERATOR_ENDS_WITH = 9;    // Ends with suffix
+  CONDITION_OPERATOR_REGEX = 10;       // Regular expression match
+  CONDITION_OPERATOR_IS_EMPTY = 11;    // Cell is empty
+  CONDITION_OPERATOR_IS_NOT_EMPTY = 12;// Cell is not empty
+  CONDITION_OPERATOR_IN = 13;          // Value is in list
+  CONDITION_OPERATOR_NOT_IN = 14;      // Value is not in list
+}
+
+// CellValue represents the value of a cell with type information
+message CellValue {
+  // The type of the value
+  CellValueType value_type = 1;
+
+  // The actual value (one of the following)
+  oneof value {
+    string string_value = 2;      // String/text value
+    double number_value = 3;      // Numeric value
+    bool bool_value = 4;          // Boolean value
+    string date_value = 5;        // ISO 8601 date string (YYYY-MM-DD)
+    string datetime_value = 6;    // ISO 8601 datetime string
+    string formula_value = 7;     // Formula expression (e.g., "=SUM(A1:A10)")
+    string error_value = 8;       // Error string (e.g., "#REF!", "#DIV/0!")
+  }
+
+  // Original raw value as string (for display purposes)
+  string raw_value = 9;
+}
+
+// Cell represents a single cell in a spreadsheet
+message Cell {
+  // Row index (0-based)
+  int32 row_index = 1;
+
+  // Column index (0-based)
+  int32 column_index = 2;
+
+  // Cell value
+  CellValue value = 3;
+
+  // Formatted/displayed value (after formatting applied)
+  string formatted_value = 4;
+
+  // Cell note/comment
+  string note = 5;
+
+  // Hyperlink URL (if cell contains a link)
+  string hyperlink = 6;
+
+  // Cell formatting information
+  CellFormat format = 7;
+
+  // Cell address in A1 notation (e.g., "A1", "B2")
+  string address = 8;
+
+  // Additional cell metadata
+  map<string, string> metadata = 9;
+}
+
+// CellFormat represents formatting options for a cell
+message CellFormat {
+  // Background color (hex format, e.g., "#FFFFFF")
+  string background_color = 1;
+
+  // Text color (hex format)
+  string text_color = 2;
+
+  // Font family
+  string font_family = 3;
+
+  // Font size in points
+  int32 font_size = 4;
+
+  // Bold text
+  bool bold = 5;
+
+  // Italic text
+  bool italic = 6;
+
+  // Strikethrough text
+  bool strikethrough = 7;
+
+  // Underline text
+  bool underline = 8;
+
+  // Horizontal alignment
+  HorizontalAlignment horizontal_alignment = 9;
+
+  // Vertical alignment
+  VerticalAlignment vertical_alignment = 10;
+
+  // Text wrapping
+  WrapStrategy wrap_strategy = 11;
+
+  // Number format pattern (e.g., "#,##0.00", "0%")
+  string number_format = 12;
+}
+
+// HorizontalAlignment represents horizontal text alignment
+enum HorizontalAlignment {
+  HORIZONTAL_ALIGNMENT_UNSPECIFIED = 0;
+  HORIZONTAL_ALIGNMENT_LEFT = 1;
+  HORIZONTAL_ALIGNMENT_CENTER = 2;
+  HORIZONTAL_ALIGNMENT_RIGHT = 3;
+}
+
+// VerticalAlignment represents vertical text alignment
+enum VerticalAlignment {
+  VERTICAL_ALIGNMENT_UNSPECIFIED = 0;
+  VERTICAL_ALIGNMENT_TOP = 1;
+  VERTICAL_ALIGNMENT_MIDDLE = 2;
+  VERTICAL_ALIGNMENT_BOTTOM = 3;
+}
+
+// WrapStrategy represents text wrapping behavior
+enum WrapStrategy {
+  WRAP_STRATEGY_UNSPECIFIED = 0;
+  WRAP_STRATEGY_OVERFLOW = 1;  // Text overflows to adjacent cells
+  WRAP_STRATEGY_WRAP = 2;      // Text wraps within the cell
+  WRAP_STRATEGY_CLIP = 3;      // Text is clipped at cell boundary
+}
+
+// Row represents a row of cells in a spreadsheet
+message Row {
+  // Row index (0-based)
+  int32 row_index = 1;
+
+  // Cells in this row
+  repeated Cell cells = 2;
+
+  // Row height in pixels (if customized)
+  int32 height = 3;
+
+  // Whether the row is hidden
+  bool hidden = 4;
+
+  // Row-level metadata
+  map<string, string> metadata = 5;
+}
+
+// Column represents a column definition in a spreadsheet
+message Column {
+  // Column index (0-based)
+  int32 column_index = 1;
+
+  // Column header name/label
+  string header_name = 2;
+
+  // Expected data type for this column
+  CellValueType data_type = 3;
+
+  // Column width in pixels
+  int32 width = 4;
+
+  // Whether the column is hidden
+  bool hidden = 5;
+
+  // Column letter (e.g., "A", "B", "AA")
+  string column_letter = 6;
+
+  // Column-level metadata
+  map<string, string> metadata = 7;
+}
+
+// Range represents a rectangular range of cells
+message Range {
+  // Sheet name (required)
+  string sheet_name = 1;
+
+  // Start row index (0-based, inclusive)
+  int32 start_row = 2;
+
+  // Start column index (0-based, inclusive)
+  int32 start_column = 3;
+
+  // End row index (0-based, inclusive)
+  int32 end_row = 4;
+
+  // End column index (0-based, inclusive)
+  int32 end_column = 5;
+
+  // A1 notation representation (e.g., "Sheet1!A1:B10")
+  string a1_notation = 6;
+}
+
+// Sheet represents a single sheet/tab within a spreadsheet
+message Sheet {
+  // Unique identifier for the sheet (provider-specific)
+  string id = 1;
+
+  // Sheet name/title
+  string name = 2;
+
+  // Sheet index/position within the spreadsheet
+  int32 index = 3;
+
+  // Column definitions (header row)
+  repeated Column columns = 4;
+
+  // Total number of rows with data
+  int32 row_count = 5;
+
+  // Total number of columns with data
+  int32 column_count = 6;
+
+  // Number of frozen rows (header rows)
+  int32 frozen_rows = 7;
+
+  // Number of frozen columns
+  int32 frozen_columns = 8;
+
+  // Whether the sheet is hidden
+  bool hidden = 9;
+
+  // Sheet tab color (hex format)
+  string tab_color = 10;
+
+  // Sheet-level metadata
+  map<string, string> metadata = 11;
+
+  // Provider-specific sheet data
+  map<string, google.protobuf.Any> provider_data = 12;
+}
+
+// Spreadsheet represents a complete spreadsheet document
+message Spreadsheet {
+  // Unique identifier for the spreadsheet (provider-specific)
+  string id = 1;
+
+  // Spreadsheet name/title
+  string name = 2;
+
+  // URL to access the spreadsheet
+  string url = 3;
+
+  // Sheets within this spreadsheet
+  repeated Sheet sheets = 4;
+
+  // Default locale (e.g., "en_US")
+  string locale = 5;
+
+  // Time zone (e.g., "America/New_York")
+  string time_zone = 6;
+
+  // Spreadsheet owner email
+  string owner_email = 7;
+
+  // Creation timestamp
+  google.protobuf.Timestamp created_at = 8;
+
+  // Last modification timestamp
+  google.protobuf.Timestamp updated_at = 9;
+
+  // Spreadsheet-level metadata
+  map<string, string> metadata = 10;
+
+  // Provider-specific spreadsheet data
+  map<string, google.protobuf.Any> provider_data = 11;
+}
+
+// Condition represents a filter/search condition
+message Condition {
+  // Column index to apply condition (0-based)
+  int32 column_index = 1;
+
+  // Column name (alternative to column_index)
+  string column_name = 2;
+
+  // Comparison operator
+  ConditionOperator operator = 3;
+
+  // Value to compare against
+  CellValue value = 4;
+
+  // Multiple values for IN/NOT_IN operators
+  repeated CellValue values = 5;
+
+  // Case-sensitive comparison (for string operations)
+  bool case_sensitive = 6;
+}
+
+// ConditionGroup represents a group of conditions with logical operators
+message ConditionGroup {
+  // Individual conditions
+  repeated Condition conditions = 1;
+
+  // Logical operator to combine conditions
+  LogicalOperator logical_operator = 2;
+
+  // Nested condition groups
+  repeated ConditionGroup nested_groups = 3;
+}
+
+// LogicalOperator represents logical operators for combining conditions
+enum LogicalOperator {
+  LOGICAL_OPERATOR_UNSPECIFIED = 0;
+  LOGICAL_OPERATOR_AND = 1;  // All conditions must match
+  LOGICAL_OPERATOR_OR = 2;   // Any condition must match
+}
+
+// SortSpec represents sorting specification
+message SortSpec {
+  // Column index to sort by (0-based)
+  int32 column_index = 1;
+
+  // Column name (alternative to column_index)
+  string column_name = 2;
+
+  // Sort order
+  SortOrder sort_order = 3;
+}
+
+// SortOrder represents the sort direction
+enum SortOrder {
+  SORT_ORDER_UNSPECIFIED = 0;
+  SORT_ORDER_ASCENDING = 1;
+  SORT_ORDER_DESCENDING = 2;
+}
+
+// UpdateMode represents how to handle existing data during updates
+enum UpdateMode {
+  UPDATE_MODE_UNSPECIFIED = 0;
+  UPDATE_MODE_OVERWRITE = 1;  // Replace existing values
+  UPDATE_MODE_APPEND = 2;     // Add after existing data
+  UPDATE_MODE_INSERT = 3;     // Insert at specific position, shifting existing
+}
+
+// ValueInputOption represents how input values should be interpreted
+enum ValueInputOption {
+  VALUE_INPUT_OPTION_UNSPECIFIED = 0;
+  VALUE_INPUT_OPTION_RAW = 1;            // Values are stored as-is
+  VALUE_INPUT_OPTION_USER_ENTERED = 2;   // Values are parsed as if user typed them
+}
+
+// ValueRenderOption represents how values should be rendered in output
+enum ValueRenderOption {
+  VALUE_RENDER_OPTION_UNSPECIFIED = 0;
+  VALUE_RENDER_OPTION_FORMATTED = 1;     // Return formatted display values
+  VALUE_RENDER_OPTION_UNFORMATTED = 2;   // Return raw values without formatting
+  VALUE_RENDER_OPTION_FORMULA = 3;       // Return formulas instead of calculated values
+}

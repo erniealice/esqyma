@@ -1,0 +1,143 @@
+syntax = "proto3";
+
+package domain.entity.v1;
+
+option go_package = "github.com/erniealice/esqyma/golang/v1/domain/entity/permission";
+
+import "domain/common/error.proto";
+import "domain/common/pagination.proto";
+import "domain/common/filter.proto";
+import "domain/common/sort.proto";
+import "domain/common/search.proto";
+import "options/db.proto";
+
+enum PermissionType {
+  PERMISSION_TYPE_UNSPECIFIED = 0;
+  PERMISSION_TYPE_ALLOW = 1;
+  PERMISSION_TYPE_DENY = 2;
+}
+
+message Permission {
+  option (options.v1.table).table = true;
+
+  string id = 1;
+  string workspace_id = 2 [(options.v1.db).references = "workspace", (options.v1.db).index = true];
+  string user_id = 3 [(options.v1.db).references = "user", (options.v1.db).index = true];
+  string granted_by_user_id = 4 [(options.v1.db).references = "user", (options.v1.db).index = true];
+  string permission_code = 5;
+  PermissionType permission_type = 6;
+  optional int64 date_created = 7;
+  optional string date_created_string = 8;
+  optional int64 date_modified = 9;
+  optional string date_modified_string = 10;
+  bool active = 11 [(options.v1.db).default = "true"];
+}
+
+service PermissionDomainService {
+  rpc CreatePermission(CreatePermissionRequest) returns (CreatePermissionResponse);
+  rpc ReadPermission(ReadPermissionRequest) returns (ReadPermissionResponse);
+  rpc UpdatePermission(UpdatePermissionRequest) returns (UpdatePermissionResponse);
+  rpc DeletePermission(DeletePermissionRequest) returns (DeletePermissionResponse);
+  rpc ListPermissions(ListPermissionsRequest) returns (ListPermissionsResponse);
+  rpc GetPermissionListPageData(GetPermissionListPageDataRequest) returns (GetPermissionListPageDataResponse);
+  rpc GetPermissionItemPageData(GetPermissionItemPageDataRequest) returns (GetPermissionItemPageDataResponse);
+}
+
+message CreatePermissionRequest {
+  Permission data = 1;
+}
+
+message CreatePermissionResponse {
+  repeated Permission data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message ReadPermissionRequest {
+  Permission data = 1;
+}
+
+message ReadPermissionResponse {
+  repeated Permission data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message UpdatePermissionRequest {
+  Permission data = 1;
+}
+
+message UpdatePermissionResponse {
+  repeated Permission data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message DeletePermissionRequest {
+  Permission data = 1;
+}
+
+message DeletePermissionResponse {
+  bool success = 1;
+  optional domain.common.v1.Error error = 2;
+}
+
+message ListPermissionsRequest {
+  optional domain.common.v1.SearchRequest search = 1;
+  optional domain.common.v1.FilterRequest filters = 2;
+  optional domain.common.v1.SortRequest sort = 3;
+  optional domain.common.v1.PaginationRequest pagination = 4;
+}
+
+message ListPermissionsResponse {
+  repeated Permission data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+// NEW: Enhanced list request with core features
+message GetPermissionListPageDataRequest {
+  // Pagination settings
+  domain.common.v1.PaginationRequest pagination = 1;
+
+  // Filter conditions
+  domain.common.v1.FilterRequest filters = 2;
+
+  // Sort settings
+  domain.common.v1.SortRequest sort = 3;
+
+  // Search settings
+  domain.common.v1.SearchRequest search = 4;
+}
+
+// NEW: Enhanced list response with metadata
+message GetPermissionListPageDataResponse {
+  // The permission data
+  repeated Permission permission_list = 1;
+
+  // Pagination metadata
+  domain.common.v1.PaginationResponse pagination = 2;
+
+  // Search results metadata (when search is used)
+  repeated domain.common.v1.SearchResult search_results = 3;
+
+  // Response status
+  bool success = 4;
+  optional domain.common.v1.Error error = 5;
+}
+
+// NEW: Simple item request
+message GetPermissionItemPageDataRequest {
+  // The permission ID to retrieve
+  string permission_id = 1;
+}
+
+// NEW: Simple item response
+message GetPermissionItemPageDataResponse {
+  // The permission data
+  Permission permission = 1;
+
+  // Response status
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}

@@ -1,0 +1,147 @@
+syntax = "proto3";
+
+package integration.email.v1;
+
+option go_package = "github.com/erniealice/esqyma/golang/v1/integration/email";
+
+import "google/protobuf/timestamp.proto";
+import "google/protobuf/any.proto";
+
+// EmailProviderType represents the category of email provider
+enum EmailProviderType {
+  EMAIL_PROVIDER_TYPE_UNSPECIFIED = 0;
+  EMAIL_PROVIDER_TYPE_API = 1;        // REST API based providers
+  EMAIL_PROVIDER_TYPE_OAUTH = 2;      // OAuth-based providers (requires user delegation)
+  EMAIL_PROVIDER_TYPE_SMTP = 3;       // Standard SMTP protocol
+  EMAIL_PROVIDER_TYPE_MOCK = 4;       // Mock/test provider
+}
+
+// EmailCapability represents features supported by a provider
+enum EmailCapability {
+  EMAIL_CAPABILITY_UNSPECIFIED = 0;
+  EMAIL_CAPABILITY_SEND = 1;              // Basic email sending
+  EMAIL_CAPABILITY_TEMPLATING = 2;        // Template-based emails
+  EMAIL_CAPABILITY_SCHEDULING = 3;        // Schedule emails for later
+  EMAIL_CAPABILITY_TRACKING = 4;          // Open/click tracking
+  EMAIL_CAPABILITY_ATTACHMENTS = 5;       // File attachments
+  EMAIL_CAPABILITY_INLINE_IMAGES = 6;     // Inline embedded images
+  EMAIL_CAPABILITY_BATCH_SEND = 7;        // Batch/bulk sending
+  EMAIL_CAPABILITY_READ_INBOX = 8;        // Read incoming emails
+  EMAIL_CAPABILITY_THREADING = 9;         // Email threading/conversations
+  EMAIL_CAPABILITY_LABELS = 10;           // Label/folder management
+  EMAIL_CAPABILITY_SEARCH = 11;           // Advanced search
+  EMAIL_CAPABILITY_WEBHOOKS = 12;         // Event webhooks/callbacks
+}
+
+// EmailMessage represents a unified email message across all providers
+message EmailMessage {
+  // Unique identifier for the message
+  string id = 1;
+
+  // Provider identifier (e.g., "sendgrid", "gmail", "custom-smtp")
+  string provider_id = 2;
+
+  // Provider type category
+  EmailProviderType provider_type = 3;
+
+  // From address
+  EmailAddress from = 4;
+
+  // To recipients
+  repeated EmailAddress to = 5;
+
+  // CC recipients
+  repeated EmailAddress cc = 6;
+
+  // BCC recipients
+  repeated EmailAddress bcc = 7;
+
+  // Reply-to address
+  EmailAddress reply_to = 8;
+
+  // Subject line
+  string subject = 9;
+
+  // Plain text body
+  string text_body = 10;
+
+  // HTML body
+  string html_body = 11;
+
+  // Email attachments
+  repeated EmailAttachment attachments = 12;
+
+  // Custom headers
+  map<string, string> headers = 13;
+
+  // When the email was sent/received
+  google.protobuf.Timestamp timestamp = 14;
+
+  // Thread/conversation ID (for threading support)
+  string thread_id = 15;
+
+  // Tags for categorization and tracking
+  repeated string tags = 16;
+
+  // Custom metadata (key-value pairs)
+  map<string, string> metadata = 17;
+
+  // Whether this is a draft
+  bool is_draft = 18;
+
+  // Read/unread status
+  bool is_read = 19;
+
+  // Provider-specific string metadata
+  // Use this for simple provider-specific fields (IDs, labels, etc.)
+  map<string, string> provider_metadata = 20;
+
+  // Provider-specific complex data
+  // Use this for complex provider-specific structures
+  map<string, google.protobuf.Any> provider_data = 21;
+}
+
+// EmailAddress represents an email address with optional display name
+message EmailAddress {
+  // Email address (e.g., "user@example.com")
+  string address = 1;
+
+  // Display name (e.g., "John Doe")
+  string name = 2;
+}
+
+// EmailAttachment represents an email attachment
+message EmailAttachment {
+  // Attachment ID (provider-specific or generated)
+  string id = 1;
+
+  // Filename
+  string name = 2;
+
+  // MIME content type
+  string content_type = 3;
+
+  // File size in bytes
+  int64 size = 4;
+
+  // Base64-encoded file content
+  bytes data = 5;
+
+  // Inline content ID (for embedded images in HTML)
+  string content_id = 6;
+
+  // Whether this is an inline attachment
+  bool is_inline = 7;
+
+  // Additional attachment metadata
+  map<string, string> metadata = 8;
+}
+
+// MessagePriority represents the importance/priority level of an email
+enum MessagePriority {
+  MESSAGE_PRIORITY_UNSPECIFIED = 0;
+  MESSAGE_PRIORITY_LOW = 1;
+  MESSAGE_PRIORITY_NORMAL = 2;
+  MESSAGE_PRIORITY_HIGH = 3;
+  MESSAGE_PRIORITY_URGENT = 4;
+}

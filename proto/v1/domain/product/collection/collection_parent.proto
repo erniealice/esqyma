@@ -1,0 +1,85 @@
+syntax = "proto3";
+
+package domain.product.v1;
+
+option go_package = "github.com/erniealice/esqyma/golang/v1/domain/product/collection";
+
+import "domain/common/error.proto";
+import "domain/common/search.proto";
+import "domain/common/filter.proto";
+import "domain/common/sort.proto";
+import "domain/common/pagination.proto";
+import "options/db.proto";
+
+message CollectionParent {
+  option (options.v1.table).table = true;
+  option (options.v1.table).unique_together = "collection_parent_id,collection_id";
+  string id = 1;
+  string collection_parent_id = 2 [(options.v1.db).references = "collection", (options.v1.db).index = true];
+  string collection_id = 3 [(options.v1.db).references = "collection", (options.v1.db).index = true];
+  optional int64 date_created = 4;
+  optional string date_created_string = 5;
+  optional int64 date_modified = 6;
+  optional string date_modified_string = 7;
+  bool active = 8 [(options.v1.db).default = "true"];
+}
+
+service CollectionParentDomainService {
+  rpc CreateCollectionParent(CreateCollectionParentRequest) returns (CreateCollectionParentResponse);
+  rpc ReadCollectionParent(ReadCollectionParentRequest) returns (ReadCollectionParentResponse);
+  rpc UpdateCollectionParent(UpdateCollectionParentRequest) returns (UpdateCollectionParentResponse);
+  rpc DeleteCollectionParent(DeleteCollectionParentRequest) returns (DeleteCollectionParentResponse);
+  rpc ListCollectionParents(ListCollectionParentsRequest) returns (ListCollectionParentsResponse);
+}
+
+message CreateCollectionParentRequest {
+  CollectionParent data = 1;
+}
+
+message CreateCollectionParentResponse {
+  repeated CollectionParent data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message ReadCollectionParentRequest {
+  CollectionParent data = 1;
+}
+
+message ReadCollectionParentResponse {
+  repeated CollectionParent data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message UpdateCollectionParentRequest {
+  CollectionParent data = 1;
+}
+
+message UpdateCollectionParentResponse {
+  repeated CollectionParent data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message DeleteCollectionParentRequest {
+  CollectionParent data = 1;
+}
+
+message DeleteCollectionParentResponse {
+  bool success = 1;
+  optional domain.common.v1.Error error = 2;
+}
+
+message ListCollectionParentsRequest {
+  optional domain.common.v1.SearchRequest search = 1;
+  optional domain.common.v1.FilterRequest filters = 2;
+  optional domain.common.v1.SortRequest sort = 3;
+  optional domain.common.v1.PaginationRequest pagination = 4;
+}
+
+message ListCollectionParentsResponse {
+  repeated CollectionParent data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}

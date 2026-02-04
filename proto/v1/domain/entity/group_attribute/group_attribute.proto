@@ -1,0 +1,147 @@
+syntax = "proto3";
+
+package domain.entity.v1;
+
+option go_package = "github.com/erniealice/esqyma/golang/v1/domain/entity/group_attribute";
+
+import "domain/common/error.proto";
+import "domain/common/pagination.proto";
+import "domain/common/filter.proto";
+import "domain/common/sort.proto";
+import "domain/common/search.proto";
+
+import "domain/entity/group/group.proto";
+import "domain/common/attribute.proto";
+import "options/db.proto";
+
+message GroupAttribute {
+  option (options.v1.table).table = true;
+  option (options.v1.table).unique_together = "group_id,attribute_id";
+
+  string id = 1;
+  string group_id = 2 [(options.v1.db).references = "group", (options.v1.db).index = true];
+  string attribute_id = 3 [(options.v1.db).references = "attribute", (options.v1.db).index = true];
+  string value = 4;
+  Group group = 5;
+  domain.common.v1.Attribute attribute = 6;
+  optional int64 date_created = 7;
+  optional string date_created_string = 8;
+  optional int64 date_modified = 9;
+  optional string date_modified_string = 10;
+  bool active = 11 [(options.v1.db).default = "true"];
+}
+
+service GroupAttributeDomainService {
+  rpc CreateGroupAttribute(CreateGroupAttributeRequest) returns (CreateGroupAttributeResponse);
+  rpc ReadGroupAttribute(ReadGroupAttributeRequest) returns (ReadGroupAttributeResponse);
+  rpc UpdateGroupAttribute(UpdateGroupAttributeRequest) returns (UpdateGroupAttributeResponse);
+  rpc DeleteGroupAttribute(DeleteGroupAttributeRequest) returns (DeleteGroupAttributeResponse);
+  rpc ListGroupAttributes(ListGroupAttributesRequest) returns (ListGroupAttributesResponse);
+
+  // NEW: Enhanced list with pagination, filtering, sorting, search
+  rpc GetGroupAttributeListPageData(GetGroupAttributeListPageDataRequest)
+    returns (GetGroupAttributeListPageDataResponse);
+
+  // NEW: Enhanced item view with related data
+  rpc GetGroupAttributeItemPageData(GetGroupAttributeItemPageDataRequest)
+    returns (GetGroupAttributeItemPageDataResponse);
+}
+
+message CreateGroupAttributeRequest {
+  GroupAttribute data = 1;
+}
+
+message CreateGroupAttributeResponse {
+  repeated GroupAttribute data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message ReadGroupAttributeRequest {
+  GroupAttribute data = 1;
+}
+
+message ReadGroupAttributeResponse {
+  repeated GroupAttribute data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message UpdateGroupAttributeRequest {
+  GroupAttribute data = 1;
+}
+
+message UpdateGroupAttributeResponse {
+  repeated GroupAttribute data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message DeleteGroupAttributeRequest {
+  GroupAttribute data = 1;
+}
+
+message DeleteGroupAttributeResponse {
+  bool success = 1;
+  optional domain.common.v1.Error error = 2;
+}
+
+message ListGroupAttributesRequest {
+  optional domain.common.v1.SearchRequest search = 1;
+  optional domain.common.v1.FilterRequest filters = 2;
+  optional domain.common.v1.SortRequest sort = 3;
+  optional domain.common.v1.PaginationRequest pagination = 4;
+}
+
+message ListGroupAttributesResponse {
+  repeated GroupAttribute data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+// NEW: Enhanced list request with core features
+message GetGroupAttributeListPageDataRequest {
+  // Pagination settings
+  domain.common.v1.PaginationRequest pagination = 1;
+
+  // Filter conditions
+  domain.common.v1.FilterRequest filters = 2;
+
+  // Sort settings
+  domain.common.v1.SortRequest sort = 3;
+
+  // Search settings
+  domain.common.v1.SearchRequest search = 4;
+}
+
+// NEW: Enhanced list response with metadata
+message GetGroupAttributeListPageDataResponse {
+  // The group attribute data
+  repeated GroupAttribute group_attribute_list = 1;
+
+  // Pagination metadata
+  domain.common.v1.PaginationResponse pagination = 2;
+
+  // Search results metadata (when search is used)
+  repeated domain.common.v1.SearchResult search_results = 3;
+
+  // Response status
+  bool success = 4;
+  optional domain.common.v1.Error error = 5;
+}
+
+// NEW: Simple item request
+message GetGroupAttributeItemPageDataRequest {
+  // The group attribute ID to retrieve
+  string group_attribute_id = 1;
+}
+
+// NEW: Simple item response
+message GetGroupAttributeItemPageDataResponse {
+  // The group attribute data
+  GroupAttribute group_attribute = 1;
+
+  // Response status
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}

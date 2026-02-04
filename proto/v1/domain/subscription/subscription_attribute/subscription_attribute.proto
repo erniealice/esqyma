@@ -1,0 +1,173 @@
+syntax = "proto3";
+
+package domain.subscription.v1;
+
+option go_package = "github.com/erniealice/esqyma/golang/v1/domain/subscription/subscription_attribute";
+
+import "domain/common/error.proto";
+import "domain/common/pagination.proto";
+import "domain/common/filter.proto";
+import "domain/common/sort.proto";
+import "domain/common/search.proto";
+
+import "domain/subscription/subscription/subscription.proto";
+import "domain/common/attribute.proto";
+import "options/db.proto";
+
+message SubscriptionAttribute {
+  option (options.v1.table).table = true;
+  option (options.v1.table).unique_together = "subscription_id,attribute_id";
+  string id = 1;
+  string subscription_id = 2 [(options.v1.db).references = "subscription", (options.v1.db).index = true];
+  string attribute_id = 3 [(options.v1.db).references = "attribute", (options.v1.db).index = true];
+  string value = 4;
+  Subscription subscription = 5;
+  domain.common.v1.Attribute attribute = 6;
+  optional int64 date_created = 7;
+  optional string date_created_string = 8;
+  optional int64 date_modified = 9;
+  optional string date_modified_string = 10;
+  bool active = 11 [(options.v1.db).default = "true"];
+}
+
+service SubscriptionAttributeDomainService {
+  rpc CreateSubscriptionAttribute(CreateSubscriptionAttributeRequest) returns (CreateSubscriptionAttributeResponse);
+  rpc ReadSubscriptionAttribute(ReadSubscriptionAttributeRequest) returns (ReadSubscriptionAttributeResponse);
+  rpc UpdateSubscriptionAttribute(UpdateSubscriptionAttributeRequest) returns (UpdateSubscriptionAttributeResponse);
+  rpc DeleteSubscriptionAttribute(DeleteSubscriptionAttributeRequest) returns (DeleteSubscriptionAttributeResponse);
+  rpc ListSubscriptionAttributes(ListSubscriptionAttributesRequest) returns (ListSubscriptionAttributesResponse);
+
+  // NEW: Enhanced list with pagination, filtering, sorting, search
+  rpc GetSubscriptionAttributeListPageData(GetSubscriptionAttributeListPageDataRequest)
+    returns (GetSubscriptionAttributeListPageDataResponse);
+
+  // NEW: Enhanced item view with related data
+  rpc GetSubscriptionAttributeItemPageData(GetSubscriptionAttributeItemPageDataRequest)
+    returns (GetSubscriptionAttributeItemPageDataResponse);
+}
+
+message CreateSubscriptionAttributeRequest {
+  SubscriptionAttribute data = 1;
+}
+
+message CreateSubscriptionAttributeResponse {
+  repeated SubscriptionAttribute data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message CreateSubscriptionAttributeBatchRequest {
+  repeated SubscriptionAttribute data = 1;
+}
+
+message CreateSubscriptionAttributeBatchResponse {
+  repeated SubscriptionAttribute data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+// CreateSubscriptionAttributesByCode creates subscription attributes using attribute codes.
+// Internally resolves each code to an attribute ID before creating.
+message SubscriptionAttributesByCodeData {
+  string subscription_id = 1;
+  map<string, string> attributes_map = 2;  // {"attribute_code": "value", ...}
+}
+
+message CreateSubscriptionAttributesByCodeRequest {
+  SubscriptionAttributesByCodeData data = 1;
+}
+
+message CreateSubscriptionAttributesByCodeResponse {
+  repeated SubscriptionAttribute data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message ReadSubscriptionAttributeRequest {
+  SubscriptionAttribute data = 1;
+}
+
+message ReadSubscriptionAttributeResponse {
+  repeated SubscriptionAttribute data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message UpdateSubscriptionAttributeRequest {
+  SubscriptionAttribute data = 1;
+}
+
+message UpdateSubscriptionAttributeResponse {
+  repeated SubscriptionAttribute data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message DeleteSubscriptionAttributeRequest {
+  SubscriptionAttribute data = 1;
+}
+
+message DeleteSubscriptionAttributeResponse {
+  bool success = 1;
+  optional domain.common.v1.Error error = 2;
+}
+
+message ListSubscriptionAttributesRequest {
+  optional domain.common.v1.SearchRequest search = 1;
+  optional domain.common.v1.FilterRequest filters = 2;
+  optional domain.common.v1.SortRequest sort = 3;
+  optional domain.common.v1.PaginationRequest pagination = 4;
+}
+
+message ListSubscriptionAttributesResponse {
+  repeated SubscriptionAttribute data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+// NEW: Enhanced list request with core features
+message GetSubscriptionAttributeListPageDataRequest {
+  // Pagination settings
+  domain.common.v1.PaginationRequest pagination = 1;
+
+  // Filter conditions
+  domain.common.v1.FilterRequest filters = 2;
+
+  // Sort settings
+  domain.common.v1.SortRequest sort = 3;
+
+  // Search settings
+  domain.common.v1.SearchRequest search = 4;
+}
+
+// NEW: Enhanced list response with metadata
+message GetSubscriptionAttributeListPageDataResponse {
+  // The subscription attribute data
+  repeated SubscriptionAttribute subscription_attribute_list = 1;
+
+  // Pagination metadata
+  domain.common.v1.PaginationResponse pagination = 2;
+
+  // Search results metadata (when search is used)
+  repeated domain.common.v1.SearchResult search_results = 3;
+
+  // Response status
+  bool success = 4;
+  optional domain.common.v1.Error error = 5;
+}
+
+// NEW: Simple item request
+message GetSubscriptionAttributeItemPageDataRequest {
+  // The subscription attribute ID to retrieve
+  string subscription_attribute_id = 1;
+}
+
+// NEW: Simple item response
+message GetSubscriptionAttributeItemPageDataResponse {
+  // The subscription attribute data
+  SubscriptionAttribute subscription_attribute = 1;
+
+  // Response status
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}

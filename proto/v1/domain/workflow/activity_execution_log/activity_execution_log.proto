@@ -1,0 +1,133 @@
+syntax = "proto3";
+
+package domain.workflow.v1;
+
+import "domain/common/error.proto";
+import "domain/common/pagination.proto";
+import "domain/common/filter.proto";
+import "domain/common/sort.proto";
+import "domain/common/search.proto";
+import "options/db.proto";
+
+option go_package = "github.com/erniealice/esqyma/golang/v1/domain/workflow/activity_execution_log";
+
+// ActivityExecutionLog records the execution details of a workflow activity
+message ActivityExecutionLog {
+  option (options.v1.table).table = true;
+
+  string id = 1;
+  string workflow_id = 2 [(options.v1.db).references = "workflow", (options.v1.db).index = true];
+  string activity_id = 3 [(options.v1.db).references = "activity", (options.v1.db).index = true];
+  string activity_template_id = 4 [(options.v1.db).references = "activity_template", (options.v1.db).index = true];
+  string status = 5; // "success", "failed", "in_progress"
+  string start_time = 6;
+  string end_time = 7;
+  string input_snapshot_json = 8;
+  string output_snapshot_json = 9;
+  string error_message = 10;
+
+  // Standard audit fields
+  string created_by = 11;
+  int64 date_created = 12;
+  string date_created_string = 13;
+  int64 date_modified = 14;
+  string date_modified_string = 15;
+  bool active = 16 [(options.v1.db).default = "true"];
+  string workspace_id = 17 [(options.v1.db).references = "workspace", (options.v1.db).index = true];
+}
+
+// CreateActivityExecutionLogRequest
+message CreateActivityExecutionLogRequest {
+  ActivityExecutionLog data = 1;
+}
+
+message CreateActivityExecutionLogResponse {
+  repeated ActivityExecutionLog data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+// ReadActivityExecutionLogRequest
+message ReadActivityExecutionLogRequest {
+  ActivityExecutionLog data = 1;
+}
+
+message ReadActivityExecutionLogResponse {
+  repeated ActivityExecutionLog data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+// UpdateActivityExecutionLogRequest
+message UpdateActivityExecutionLogRequest {
+  ActivityExecutionLog data = 1;
+}
+
+message UpdateActivityExecutionLogResponse {
+  repeated ActivityExecutionLog data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+// DeleteActivityExecutionLogRequest
+message DeleteActivityExecutionLogRequest {
+  ActivityExecutionLog data = 1;
+}
+
+message DeleteActivityExecutionLogResponse {
+  bool success = 1;
+  optional domain.common.v1.Error error = 2;
+}
+
+// ListActivityExecutionLogsRequest
+message ListActivityExecutionLogsRequest {
+  optional domain.common.v1.SearchRequest search = 1;
+  optional domain.common.v1.FilterRequest filters = 2;
+  optional domain.common.v1.SortRequest sort = 3;
+  optional domain.common.v1.PaginationRequest pagination = 4;
+}
+
+message ListActivityExecutionLogsResponse {
+  repeated ActivityExecutionLog data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+  optional string next_page_token = 4;
+}
+
+// GetActivityExecutionLogListPageDataRequest
+message GetActivityExecutionLogListPageDataRequest {
+  optional domain.common.v1.PaginationRequest pagination = 1;
+  optional domain.common.v1.FilterRequest filters = 2;
+  optional domain.common.v1.SortRequest sort = 3;
+  optional domain.common.v1.SearchRequest search = 4;
+}
+
+message GetActivityExecutionLogListPageDataResponse {
+  repeated ActivityExecutionLog activity_execution_log_list = 1;
+  optional domain.common.v1.PaginationResponse pagination = 2;
+  repeated domain.common.v1.SearchResult search_results = 3;
+  bool success = 4;
+  optional domain.common.v1.Error error = 5;
+}
+
+// GetActivityExecutionLogItemPageDataRequest
+message GetActivityExecutionLogItemPageDataRequest {
+  string activity_execution_log_id = 1;
+}
+
+message GetActivityExecutionLogItemPageDataResponse {
+  optional ActivityExecutionLog activity_execution_log = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+// Service Definition
+service ActivityExecutionLogDomainService {
+  rpc CreateActivityExecutionLog(CreateActivityExecutionLogRequest) returns (CreateActivityExecutionLogResponse);
+  rpc ReadActivityExecutionLog(ReadActivityExecutionLogRequest) returns (ReadActivityExecutionLogResponse);
+  rpc UpdateActivityExecutionLog(UpdateActivityExecutionLogRequest) returns (UpdateActivityExecutionLogResponse);
+  rpc DeleteActivityExecutionLog(DeleteActivityExecutionLogRequest) returns (DeleteActivityExecutionLogResponse);
+  rpc ListActivityExecutionLogs(ListActivityExecutionLogsRequest) returns (ListActivityExecutionLogsResponse);
+  rpc GetActivityExecutionLogListPageData(GetActivityExecutionLogListPageDataRequest) returns (GetActivityExecutionLogListPageDataResponse);
+  rpc GetActivityExecutionLogItemPageData(GetActivityExecutionLogItemPageDataRequest) returns (GetActivityExecutionLogItemPageDataResponse);
+}

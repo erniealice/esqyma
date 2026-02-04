@@ -1,0 +1,145 @@
+syntax = "proto3";
+
+package domain.subscription.v1;
+
+option go_package = "github.com/erniealice/esqyma/golang/v1/domain/subscription/balance";
+
+import "domain/common/error.proto";
+import "domain/common/pagination.proto";
+import "domain/common/filter.proto";
+import "domain/common/sort.proto";
+import "domain/common/search.proto";
+
+import "domain/subscription/subscription/subscription.proto";
+import "options/db.proto";
+
+message Balance {
+  option (options.v1.table).table = true;
+  string id = 1;
+  double amount = 2;
+  optional int64 date_created = 3;
+  optional string date_created_string = 4;
+  optional int64 date_modified = 5;
+  optional string date_modified_string = 6;
+  bool active = 7 [(options.v1.db).default = "true"];
+  string client_id = 8 [(options.v1.db).references = "client", (options.v1.db).index = true];
+  optional Subscription subscription = 9;
+  string subscription_id = 10 [(options.v1.db).references = "subscription", (options.v1.db).index = true];
+  string currency = 11;
+  string balance_type = 12; // e.g., "credit", "debit", "pending"
+}
+
+service BalanceDomainService {
+  rpc CreateBalance(CreateBalanceRequest) returns (CreateBalanceResponse);
+  rpc ReadBalance(ReadBalanceRequest) returns (ReadBalanceResponse);
+  rpc UpdateBalance(UpdateBalanceRequest) returns (UpdateBalanceResponse);
+  rpc DeleteBalance(DeleteBalanceRequest) returns (DeleteBalanceResponse);
+  rpc ListBalances(ListBalancesRequest) returns (ListBalancesResponse);
+
+  // NEW: Enhanced list with pagination, filtering, sorting, search
+  rpc GetBalanceListPageData(GetBalanceListPageDataRequest)
+    returns (GetBalanceListPageDataResponse);
+
+  // NEW: Enhanced item view with related data
+  rpc GetBalanceItemPageData(GetBalanceItemPageDataRequest)
+    returns (GetBalanceItemPageDataResponse);
+}
+
+message CreateBalanceRequest {
+  Balance data = 1;
+}
+
+message CreateBalanceResponse {
+  repeated Balance data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message ReadBalanceRequest {
+  Balance data = 1;
+}
+
+message ReadBalanceResponse {
+  repeated Balance data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message UpdateBalanceRequest {
+  Balance data = 1;
+}
+
+message UpdateBalanceResponse {
+  repeated Balance data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message DeleteBalanceRequest {
+  Balance data = 1;
+}
+
+message DeleteBalanceResponse {
+  bool success = 1;
+  optional domain.common.v1.Error error = 2;
+}
+
+message ListBalancesRequest {
+  optional domain.common.v1.SearchRequest search = 1;
+  optional domain.common.v1.FilterRequest filters = 2;
+  optional domain.common.v1.SortRequest sort = 3;
+  optional domain.common.v1.PaginationRequest pagination = 4;
+}
+
+message ListBalancesResponse {
+  repeated Balance data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+// NEW: Enhanced list request with core features
+message GetBalanceListPageDataRequest {
+  // Pagination settings
+  domain.common.v1.PaginationRequest pagination = 1;
+
+  // Filter conditions
+  domain.common.v1.FilterRequest filters = 2;
+
+  // Sort settings
+  domain.common.v1.SortRequest sort = 3;
+
+  // Search settings
+  domain.common.v1.SearchRequest search = 4;
+}
+
+// NEW: Enhanced list response with metadata
+message GetBalanceListPageDataResponse {
+  // The balance data
+  repeated Balance balance_list = 1;
+
+  // Pagination metadata
+  domain.common.v1.PaginationResponse pagination = 2;
+
+  // Search results metadata (when search is used)
+  repeated domain.common.v1.SearchResult search_results = 3;
+
+  // Response status
+  bool success = 4;
+  optional domain.common.v1.Error error = 5;
+}
+
+// NEW: Simple item request
+message GetBalanceItemPageDataRequest {
+  // The balance ID to retrieve
+  string balance_id = 1;
+}
+
+// NEW: Simple item response
+message GetBalanceItemPageDataResponse {
+  // The balance data
+  Balance balance = 1;
+
+  // Response status
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}

@@ -1,0 +1,122 @@
+syntax = "proto3";
+
+package domain.subscription.v1;
+
+option go_package = "github.com/erniealice/esqyma/golang/v1/domain/subscription/price_plan";
+
+import "domain/common/error.proto";
+import "domain/common/pagination.proto";
+import "domain/common/search.proto";
+import "domain/common/filter.proto";
+import "domain/common/sort.proto";
+
+import "domain/subscription/plan/plan.proto";
+import "options/db.proto";
+
+message PricePlan {
+  option (options.v1.table).table = true;
+  string id = 1;
+  optional Plan plan = 2;
+  string plan_id = 3 [(options.v1.db).references = "plan", (options.v1.db).index = true];
+  string name = 4;
+  string description = 5;
+  optional int64 date_created = 6;
+  optional string date_created_string = 7;
+  optional int64 date_modified = 8;
+  optional string date_modified_string = 9;
+  bool active = 10 [(options.v1.db).default = "true"];
+  double amount = 11;
+  string currency = 12;
+  int32 duration_value = 13;
+  string duration_unit = 14;
+  // Email template paths/URLs for dynamic email rendering
+  optional string confirmation_template = 15;  // Template for welcome/confirmation emails (first payment)
+  optional string receipt_template = 16;       // Template for receipt emails (recurring payments)
+}
+
+service PricePlanDomainService {
+  rpc CreatePricePlan(CreatePricePlanRequest) returns (CreatePricePlanResponse);
+  rpc ReadPricePlan(ReadPricePlanRequest) returns (ReadPricePlanResponse);
+  rpc UpdatePricePlan(UpdatePricePlanRequest) returns (UpdatePricePlanResponse);
+  rpc DeletePricePlan(DeletePricePlanRequest) returns (DeletePricePlanResponse);
+  rpc ListPricePlans(ListPricePlansRequest) returns (ListPricePlansResponse);
+  rpc GetPricePlanListPageData(GetPricePlanListPageDataRequest) returns (GetPricePlanListPageDataResponse);
+  rpc GetPricePlanItemPageData(GetPricePlanItemPageDataRequest) returns (GetPricePlanItemPageDataResponse);
+}
+
+message CreatePricePlanRequest {
+  PricePlan data = 1;
+}
+
+message CreatePricePlanResponse {
+  repeated PricePlan data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message ReadPricePlanRequest {
+  PricePlan data = 1;
+}
+
+message ReadPricePlanResponse {
+  repeated PricePlan data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message UpdatePricePlanRequest {
+  PricePlan data = 1;
+}
+
+message UpdatePricePlanResponse {
+  repeated PricePlan data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message DeletePricePlanRequest {
+  PricePlan data = 1;
+}
+
+message DeletePricePlanResponse {
+  bool success = 1;
+  optional domain.common.v1.Error error = 2;
+}
+
+message ListPricePlansRequest {
+  optional domain.common.v1.PaginationRequest pagination = 1;
+  optional domain.common.v1.FilterRequest filters = 2;
+  optional domain.common.v1.SortRequest sort = 3;
+  optional domain.common.v1.SearchRequest search = 4;
+}
+
+message ListPricePlansResponse {
+  repeated PricePlan data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message GetPricePlanListPageDataRequest {
+  optional domain.common.v1.PaginationRequest pagination = 1;
+  optional domain.common.v1.FilterRequest filters = 2;
+  optional domain.common.v1.SortRequest sort = 3;
+  optional domain.common.v1.SearchRequest search = 4;
+}
+
+message GetPricePlanListPageDataResponse {
+  repeated PricePlan price_plan_list = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+  optional domain.common.v1.PaginationResponse pagination = 4;
+  repeated domain.common.v1.SearchResult search_results = 5;
+}
+
+message GetPricePlanItemPageDataRequest {
+  string price_plan_id = 1;
+}
+
+message GetPricePlanItemPageDataResponse {
+  optional PricePlan price_plan = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
