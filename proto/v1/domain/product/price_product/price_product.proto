@@ -31,6 +31,7 @@ message PriceProduct {
   string date_start_string = 14;
   optional int64 date_end = 15;
   optional string date_end_string = 16;
+  optional string price_list_id = 17 [(options.v1.db).references = "price_list", (options.v1.db).index = true];
 }
 
 service PriceProductDomainService {

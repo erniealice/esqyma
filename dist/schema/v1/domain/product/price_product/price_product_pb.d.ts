@@ -78,6 +78,10 @@ export type PriceProduct = Message<"domain.product.v1.PriceProduct"> & {
      * @generated from field: optional string date_end_string = 16;
      */
     dateEndString?: string;
+    /**
+     * @generated from field: optional string price_list_id = 17;
+     */
+    priceListId?: string;
 };
 /**
  * Describes the message domain.product.v1.PriceProduct.

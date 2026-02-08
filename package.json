@@ -155,6 +155,11 @@
       "import": "./dist/schema/v1/domain/product/collection/collection_parent_pb.js",
       "default": "./dist/schema/v1/domain/product/collection/collection_parent_pb.js"
     },
+    "./dist/schema/v1/domain/product/price_list": {
+      "types": "./dist/schema/v1/domain/product/price_list/price_list_pb.d.ts",
+      "import": "./dist/schema/v1/domain/product/price_list/price_list_pb.js",
+      "default": "./dist/schema/v1/domain/product/price_list/price_list_pb.js"
+    },
     "./dist/schema/v1/domain/product/price_product": {
       "types": "./dist/schema/v1/domain/product/price_product/price_product_pb.d.ts",
       "import": "./dist/schema/v1/domain/product/price_product/price_product_pb.js",

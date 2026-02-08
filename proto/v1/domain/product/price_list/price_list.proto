@@ -1,0 +1,120 @@
+syntax = "proto3";
+
+package domain.product.v1;
+
+option go_package = "github.com/erniealice/esqyma/golang/v1/domain/product/price_list";
+
+import "domain/common/error.proto";
+import "domain/common/pagination.proto";
+import "domain/common/filter.proto";
+import "domain/common/sort.proto";
+import "domain/common/search.proto";
+import "domain/product/price_product/price_product.proto";
+import "options/db.proto";
+
+message PriceList {
+  option (options.v1.table).table = true;
+  string id = 1;
+  optional int64 date_created = 2;
+  optional string date_created_string = 3;
+  optional int64 date_modified = 4;
+  optional string date_modified_string = 5;
+  bool active = 6 [(options.v1.db).default = "true"];
+  string name = 7;
+  optional string description = 8;
+  int64 date_start = 9;
+  string date_start_string = 10;
+  optional int64 date_end = 11;
+  optional string date_end_string = 12;
+  optional string location_id = 13 [(options.v1.db).references = "location", (options.v1.db).index = true];
+}
+
+service PriceListDomainService {
+  rpc CreatePriceList(CreatePriceListRequest) returns (CreatePriceListResponse);
+  rpc ReadPriceList(ReadPriceListRequest) returns (ReadPriceListResponse);
+  rpc UpdatePriceList(UpdatePriceListRequest) returns (UpdatePriceListResponse);
+  rpc DeletePriceList(DeletePriceListRequest) returns (DeletePriceListResponse);
+  rpc ListPriceLists(ListPriceListsRequest) returns (ListPriceListsResponse);
+  rpc GetPriceListListPageData(GetPriceListListPageDataRequest)
+    returns (GetPriceListListPageDataResponse);
+  rpc GetPriceListItemPageData(GetPriceListItemPageDataRequest)
+    returns (GetPriceListItemPageDataResponse);
+}
+
+message CreatePriceListRequest {
+  PriceList data = 1;
+}
+
+message CreatePriceListResponse {
+  repeated PriceList data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message ReadPriceListRequest {
+  PriceList data = 1;
+}
+
+message ReadPriceListResponse {
+  repeated PriceList data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message UpdatePriceListRequest {
+  PriceList data = 1;
+}
+
+message UpdatePriceListResponse {
+  repeated PriceList data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message DeletePriceListRequest {
+  PriceList data = 1;
+}
+
+message DeletePriceListResponse {
+  bool success = 1;
+  optional domain.common.v1.Error error = 2;
+}
+
+message ListPriceListsRequest {
+  optional domain.common.v1.SearchRequest search = 1;
+  optional domain.common.v1.FilterRequest filters = 2;
+  optional domain.common.v1.SortRequest sort = 3;
+  optional domain.common.v1.PaginationRequest pagination = 4;
+}
+
+message ListPriceListsResponse {
+  repeated PriceList data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message GetPriceListListPageDataRequest {
+  optional domain.common.v1.SearchRequest search = 1;
+  optional domain.common.v1.FilterRequest filters = 2;
+  optional domain.common.v1.SortRequest sort = 3;
+  optional domain.common.v1.PaginationRequest pagination = 4;
+}
+
+message GetPriceListListPageDataResponse {
+  repeated PriceList price_list_list = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+  optional domain.common.v1.PaginationResponse pagination = 4;
+  repeated domain.common.v1.SearchResult search_results = 5;
+}
+
+message GetPriceListItemPageDataRequest {
+  string price_list_id = 1;
+}
+
+message GetPriceListItemPageDataResponse {
+  PriceList price_list = 1;
+  repeated PriceProduct price_products = 2;
+  bool success = 3;
+  optional domain.common.v1.Error error = 4;
+}
