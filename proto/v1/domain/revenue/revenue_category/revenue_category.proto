@@ -1,0 +1,111 @@
+syntax = "proto3";
+
+package domain.revenue.v1;
+
+option go_package = "leapfor.xyz/esqyma/golang/v1/domain/revenue/revenue_category";
+
+import "domain/common/error.proto";
+import "domain/common/pagination.proto";
+import "domain/common/search.proto";
+import "domain/common/filter.proto";
+import "domain/common/sort.proto";
+
+message RevenueCategory {
+  string id = 1;
+  optional int64 date_created = 2;
+  optional string date_created_string = 3;
+  optional int64 date_modified = 4;
+  optional string date_modified_string = 5;
+  bool active = 6;
+  string name = 7;
+  string code = 8;
+  optional string description = 9;
+  optional string parent_category_id = 10;
+}
+
+service RevenueCategoryDomainService {
+  rpc CreateRevenueCategory(CreateRevenueCategoryRequest) returns (CreateRevenueCategoryResponse);
+  rpc ReadRevenueCategory(ReadRevenueCategoryRequest) returns (ReadRevenueCategoryResponse);
+  rpc UpdateRevenueCategory(UpdateRevenueCategoryRequest) returns (UpdateRevenueCategoryResponse);
+  rpc DeleteRevenueCategory(DeleteRevenueCategoryRequest) returns (DeleteRevenueCategoryResponse);
+  rpc ListRevenueCategories(ListRevenueCategoriesRequest) returns (ListRevenueCategoriesResponse);
+  rpc GetRevenueCategoryListPageData(GetRevenueCategoryListPageDataRequest) returns (GetRevenueCategoryListPageDataResponse);
+  rpc GetRevenueCategoryItemPageData(GetRevenueCategoryItemPageDataRequest) returns (GetRevenueCategoryItemPageDataResponse);
+}
+
+message CreateRevenueCategoryRequest {
+  RevenueCategory data = 1;
+}
+
+message CreateRevenueCategoryResponse {
+  repeated RevenueCategory data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message ReadRevenueCategoryRequest {
+  RevenueCategory data = 1;
+}
+
+message ReadRevenueCategoryResponse {
+  repeated RevenueCategory data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message UpdateRevenueCategoryRequest {
+  RevenueCategory data = 1;
+}
+
+message UpdateRevenueCategoryResponse {
+  repeated RevenueCategory data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message DeleteRevenueCategoryRequest {
+  RevenueCategory data = 1;
+}
+
+message DeleteRevenueCategoryResponse {
+  bool success = 1;
+  optional domain.common.v1.Error error = 2;
+}
+
+message ListRevenueCategoriesRequest {
+  optional domain.common.v1.SearchRequest search = 1;
+  optional domain.common.v1.FilterRequest filters = 2;
+  optional domain.common.v1.SortRequest sort = 3;
+  optional domain.common.v1.PaginationRequest pagination = 4;
+}
+
+message ListRevenueCategoriesResponse {
+  repeated RevenueCategory data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message GetRevenueCategoryListPageDataRequest {
+  optional domain.common.v1.PaginationRequest pagination = 1;
+  optional domain.common.v1.FilterRequest filters = 2;
+  optional domain.common.v1.SortRequest sort = 3;
+  optional domain.common.v1.SearchRequest search = 4;
+}
+
+message GetRevenueCategoryListPageDataResponse {
+  repeated RevenueCategory revenue_category_list = 1;
+  optional domain.common.v1.PaginationResponse pagination = 2;
+  repeated domain.common.v1.SearchResult search_results = 3;
+  bool success = 4;
+  optional domain.common.v1.Error error = 5;
+}
+
+message GetRevenueCategoryItemPageDataRequest {
+  string revenue_category_id = 1;
+}
+
+message GetRevenueCategoryItemPageDataResponse {
+  optional RevenueCategory revenue_category = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}

@@ -1,0 +1,152 @@
+syntax = "proto3";
+
+package domain.inventory.v1;
+
+option go_package = "leapfor.xyz/esqyma/golang/v1/domain/inventory/inventory_item";
+
+import "domain/common/error.proto";
+import "domain/common/pagination.proto";
+import "domain/common/filter.proto";
+import "domain/common/sort.proto";
+import "domain/common/search.proto";
+
+import "domain/product/product/product.proto";
+import "domain/entity/location/location.proto";
+
+message InventoryItem {
+  string id = 1;
+  optional int64 date_created = 2;
+  optional string date_created_string = 3;
+  optional int64 date_modified = 4;
+  optional string date_modified_string = 5;
+  bool active = 6;
+  string name = 7;
+  optional domain.product.v1.Product product = 8;
+  optional string product_id = 9;
+  optional domain.entity.v1.Location location = 10;
+  optional string location_id = 11;
+  optional string sku = 12;
+  double quantity_on_hand = 13;
+  double quantity_reserved = 14;
+  double quantity_available = 15;
+  optional double reorder_level = 16;
+  string unit_of_measure = 17;
+  optional string notes = 18;
+}
+
+service InventoryItemDomainService {
+  rpc CreateInventoryItem(CreateInventoryItemRequest) returns (CreateInventoryItemResponse);
+  rpc ReadInventoryItem(ReadInventoryItemRequest) returns (ReadInventoryItemResponse);
+  rpc UpdateInventoryItem(UpdateInventoryItemRequest) returns (UpdateInventoryItemResponse);
+  rpc DeleteInventoryItem(DeleteInventoryItemRequest) returns (DeleteInventoryItemResponse);
+  rpc ListInventoryItems(ListInventoryItemsRequest) returns (ListInventoryItemsResponse);
+
+  // NEW: Enhanced list with pagination, filtering, sorting, search
+  rpc GetInventoryItemListPageData(GetInventoryItemListPageDataRequest)
+    returns (GetInventoryItemListPageDataResponse);
+
+  // NEW: Enhanced item view with related data
+  rpc GetInventoryItemItemPageData(GetInventoryItemItemPageDataRequest)
+    returns (GetInventoryItemItemPageDataResponse);
+}
+
+message CreateInventoryItemRequest {
+  InventoryItem data = 1;
+}
+
+message CreateInventoryItemResponse {
+  repeated InventoryItem data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message ReadInventoryItemRequest {
+  InventoryItem data = 1;
+}
+
+message ReadInventoryItemResponse {
+  repeated InventoryItem data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message UpdateInventoryItemRequest {
+  InventoryItem data = 1;
+}
+
+message UpdateInventoryItemResponse {
+  repeated InventoryItem data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message DeleteInventoryItemRequest {
+  InventoryItem data = 1;
+}
+
+message DeleteInventoryItemResponse {
+  bool success = 1;
+  optional domain.common.v1.Error error = 2;
+}
+
+message ListInventoryItemsRequest {
+  optional string location_id = 1;
+  optional string product_id = 2;
+  optional domain.common.v1.SearchRequest search = 3;
+  optional domain.common.v1.FilterRequest filters = 4;
+  optional domain.common.v1.SortRequest sort = 5;
+  optional domain.common.v1.PaginationRequest pagination = 6;
+}
+
+message ListInventoryItemsResponse {
+  repeated InventoryItem data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+// NEW: Enhanced list request with core features
+message GetInventoryItemListPageDataRequest {
+  // Pagination settings
+  domain.common.v1.PaginationRequest pagination = 1;
+
+  // Filter conditions
+  domain.common.v1.FilterRequest filters = 2;
+
+  // Sort settings
+  domain.common.v1.SortRequest sort = 3;
+
+  // Search settings
+  domain.common.v1.SearchRequest search = 4;
+}
+
+// NEW: Enhanced list response with metadata
+message GetInventoryItemListPageDataResponse {
+  // The inventory item data
+  repeated InventoryItem inventory_item_list = 1;
+
+  // Pagination metadata
+  optional domain.common.v1.PaginationResponse pagination = 2;
+
+  // Search results metadata (when search is used)
+  repeated domain.common.v1.SearchResult search_results = 3;
+
+  // Response status
+  bool success = 4;
+  optional domain.common.v1.Error error = 5;
+}
+
+// NEW: Simple item request
+message GetInventoryItemItemPageDataRequest {
+  // The inventory item ID to retrieve
+  string inventory_item_id = 1;
+}
+
+// NEW: Simple item response
+message GetInventoryItemItemPageDataResponse {
+  // The inventory item data
+  InventoryItem inventory_item = 1;
+
+  // Response status
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}

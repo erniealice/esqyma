@@ -22,7 +22,7 @@ const (
 	_ = protoimpl.EnforceVersion(protoimpl.MaxVersion - 20)
 )
 
-// *
+//*
 // Error severity levels
 type ErrorSeverity int32
 
@@ -79,7 +79,7 @@ func (ErrorSeverity) EnumDescriptor() ([]byte, []int) {
 	return file_domain_common_error_proto_rawDescGZIP(), []int{0}
 }
 
-// *
+//*
 // Error categories for better classification
 type ErrorCategory int32
 
@@ -154,7 +154,7 @@ func (ErrorCategory) EnumDescriptor() ([]byte, []int) {
 	return file_domain_common_error_proto_rawDescGZIP(), []int{1}
 }
 
-// *
+//*
 // Individual error detail for field-specific errors
 type ErrorDetail struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
@@ -224,7 +224,7 @@ func (x *ErrorDetail) GetMetadata() map[string]string {
 	return nil
 }
 
-// *
+//*
 // Main error message structure
 type Error struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
@@ -358,7 +358,7 @@ func (x *Error) GetMetadata() map[string]string {
 	return nil
 }
 
-// *
+//*
 // Result wrapper for service responses
 type ServiceResult struct {
 	state protoimpl.MessageState `protogen:"open.v1"`
@@ -466,7 +466,7 @@ func (*ServiceResult_Data) isServiceResult_Result() {}
 
 func (*ServiceResult_Error) isServiceResult_Result() {}
 
-// *
+//*
 // Generic success response
 type SuccessResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
@@ -536,7 +536,7 @@ func (x *SuccessResponse) GetMetadata() map[string]string {
 	return nil
 }
 
-// *
+//*
 // Generic error response
 type ErrorResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`

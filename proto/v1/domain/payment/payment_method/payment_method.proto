@@ -2,23 +2,21 @@ syntax = "proto3";
 
 package domain.payment.v1;
 
-option go_package = "github.com/erniealice/esqyma/golang/v1/domain/payment/payment_method";
+option go_package = "leapfor.xyz/esqyma/golang/v1/domain/payment/payment_method";
 
 import "domain/common/error.proto";
 import "domain/common/pagination.proto";
 import "domain/common/filter.proto";
 import "domain/common/sort.proto";
 import "domain/common/search.proto";
-import "options/db.proto";
 
 message PaymentMethod {
-  option (options.v1.table).table = true;
   string id = 1;
   optional int64 date_created = 2;
   optional string date_created_string = 3;
   optional int64 date_modified = 4;
   optional string date_modified_string = 5;
-  bool active = 6 [(options.v1.db).default = "true"];
+  bool active = 6;
   string name = 7;
   oneof method_details {
     CardDetails card = 8;

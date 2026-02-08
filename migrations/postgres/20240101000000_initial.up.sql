@@ -13,8 +13,8 @@ CREATE TABLE "user" (
   "last_name" TEXT NOT NULL,
   "email_address" TEXT NOT NULL UNIQUE,
   "mobile_number" TEXT NOT NULL,
-  "date_created" BIGINT NULL,
-  "date_modified" BIGINT NULL,
+  "date_created" TIMESTAMPTZ NULL,
+  "date_modified" TIMESTAMPTZ NULL,
   "active" BOOLEAN NOT NULL DEFAULT true
 );
 CREATE INDEX "idx_user_mobile_number" ON "user" ("mobile_number");
@@ -27,8 +27,8 @@ CREATE TABLE "attribute" (
   "code" TEXT NOT NULL,
   "data_type" TEXT NOT NULL,
   "module" TEXT NOT NULL,
-  "date_created" BIGINT NULL,
-  "date_modified" BIGINT NULL,
+  "date_created" TIMESTAMPTZ NULL,
+  "date_modified" TIMESTAMPTZ NULL,
   "active" BOOLEAN NOT NULL DEFAULT true
 );
 
@@ -37,16 +37,16 @@ CREATE TABLE "group" (
   "id" TEXT PRIMARY KEY,
   "name" TEXT NOT NULL,
   "description" TEXT NOT NULL,
-  "date_created" BIGINT NULL,
-  "date_modified" BIGINT NULL,
+  "date_created" TIMESTAMPTZ NULL,
+  "date_modified" TIMESTAMPTZ NULL,
   "active" BOOLEAN NOT NULL DEFAULT true
 );
 
 -- Table: plan
 CREATE TABLE "plan" (
   "id" TEXT PRIMARY KEY,
-  "date_created" BIGINT NULL,
-  "date_modified" BIGINT NULL,
+  "date_created" TIMESTAMPTZ NULL,
+  "date_modified" TIMESTAMPTZ NULL,
   "active" BOOLEAN NOT NULL DEFAULT true,
   "name" TEXT NOT NULL,
   "description" TEXT NULL,
@@ -57,8 +57,8 @@ CREATE TABLE "plan" (
 -- Table: product
 CREATE TABLE "product" (
   "id" TEXT PRIMARY KEY,
-  "date_created" BIGINT NULL,
-  "date_modified" BIGINT NULL,
+  "date_created" TIMESTAMPTZ NULL,
+  "date_modified" TIMESTAMPTZ NULL,
   "active" BOOLEAN NOT NULL DEFAULT true,
   "name" TEXT NOT NULL,
   "description" TEXT NULL,
@@ -71,8 +71,8 @@ CREATE TABLE "event" (
   "id" TEXT PRIMARY KEY,
   "name" TEXT NOT NULL,
   "description" TEXT NULL,
-  "date_created" BIGINT NULL,
-  "date_modified" BIGINT NULL,
+  "date_created" TIMESTAMPTZ NULL,
+  "date_modified" TIMESTAMPTZ NULL,
   "active" BOOLEAN NOT NULL DEFAULT true,
   "start_date_time_utc" BIGINT NOT NULL,
   "end_date_time_utc" BIGINT NOT NULL,
@@ -84,8 +84,8 @@ CREATE TABLE "collection" (
   "id" TEXT PRIMARY KEY,
   "name" TEXT NOT NULL,
   "description" TEXT NOT NULL,
-  "date_created" BIGINT NULL,
-  "date_modified" BIGINT NULL,
+  "date_created" TIMESTAMPTZ NULL,
+  "date_modified" TIMESTAMPTZ NULL,
   "active" BOOLEAN NOT NULL DEFAULT true
 );
 
@@ -94,8 +94,8 @@ CREATE TABLE "location" (
   "id" TEXT PRIMARY KEY,
   "name" TEXT NOT NULL,
   "address" TEXT NOT NULL,
-  "date_created" BIGINT NULL,
-  "date_modified" BIGINT NULL,
+  "date_created" TIMESTAMPTZ NULL,
+  "date_modified" TIMESTAMPTZ NULL,
   "active" BOOLEAN NOT NULL DEFAULT true,
   "description" TEXT NULL
 );
@@ -103,8 +103,8 @@ CREATE TABLE "location" (
 -- Table: payment_method
 CREATE TABLE "payment_method" (
   "id" TEXT PRIMARY KEY,
-  "date_created" BIGINT NULL,
-  "date_modified" BIGINT NULL,
+  "date_created" TIMESTAMPTZ NULL,
+  "date_modified" TIMESTAMPTZ NULL,
   "active" BOOLEAN NOT NULL DEFAULT true,
   "name" TEXT NOT NULL,
   "provider_name" TEXT NULL
@@ -118,8 +118,8 @@ CREATE TABLE "category" (
   "code" TEXT NOT NULL,
   "module" TEXT NOT NULL,
   "parent_id" TEXT NULL,
-  "date_created" BIGINT NULL,
-  "date_modified" BIGINT NULL,
+  "date_created" TIMESTAMPTZ NULL,
+  "date_modified" TIMESTAMPTZ NULL,
   "active" BOOLEAN NOT NULL DEFAULT true,
   "display_order" INTEGER NULL,
   CONSTRAINT "fk_category_parent_id" FOREIGN KEY ("parent_id") REFERENCES "category"("id")
@@ -132,8 +132,8 @@ CREATE TABLE "event_recurrence" (
   "name" TEXT NOT NULL,
   "description" TEXT NULL,
   "recurrence_pattern" TEXT NOT NULL,
-  "date_created" BIGINT NULL,
-  "date_modified" BIGINT NULL,
+  "date_created" TIMESTAMPTZ NULL,
+  "date_modified" TIMESTAMPTZ NULL,
   "active" BOOLEAN NOT NULL DEFAULT true
 );
 
@@ -141,12 +141,25 @@ CREATE TABLE "event_recurrence" (
 -- LEVEL 1: Tables depending only on Level 0
 -- ============================================
 
+-- Table: session
+CREATE TABLE "session" (
+  "id" TEXT PRIMARY KEY,
+  "user_id" TEXT NOT NULL,
+  "token" TEXT NOT NULL UNIQUE,
+  "created_at" TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+  "expires_at" TIMESTAMPTZ NOT NULL,
+  "active" BOOLEAN NOT NULL DEFAULT true,
+  CONSTRAINT "fk_session_user_id" FOREIGN KEY ("user_id") REFERENCES "user"("id")
+);
+CREATE INDEX "idx_session_token" ON "session" ("token");
+CREATE INDEX "idx_session_user_id" ON "session" ("user_id");
+
 -- Table: admin
 CREATE TABLE "admin" (
   "id" TEXT PRIMARY KEY,
   "user_id" TEXT NOT NULL,
-  "date_created" BIGINT NULL,
-  "date_modified" BIGINT NULL,
+  "date_created" TIMESTAMPTZ NULL,
+  "date_modified" TIMESTAMPTZ NULL,
   "active" BOOLEAN NOT NULL DEFAULT true,
   CONSTRAINT "fk_admin_user_id" FOREIGN KEY ("user_id") REFERENCES "user"("id")
 );
@@ -156,8 +169,8 @@ CREATE INDEX "idx_admin_user_id" ON "admin" ("user_id");
 CREATE TABLE "delegate" (
   "id" TEXT PRIMARY KEY,
   "user_id" TEXT NOT NULL,
-  "date_created" BIGINT NULL,
-  "date_modified" BIGINT NULL,
+  "date_created" TIMESTAMPTZ NULL,
+  "date_modified" TIMESTAMPTZ NULL,
   "active" BOOLEAN NOT NULL DEFAULT true,
   CONSTRAINT "fk_delegate_user_id" FOREIGN KEY ("user_id") REFERENCES "user"("id")
 );
@@ -167,8 +180,8 @@ CREATE INDEX "idx_delegate_user_id" ON "delegate" ("user_id");
 CREATE TABLE "staff" (
   "id" TEXT PRIMARY KEY,
   "user_id" TEXT NOT NULL,
-  "date_created" BIGINT NULL,
-  "date_modified" BIGINT NULL,
+  "date_created" TIMESTAMPTZ NULL,
+  "date_modified" TIMESTAMPTZ NULL,
   "active" BOOLEAN NOT NULL DEFAULT true,
   CONSTRAINT "fk_staff_user_id" FOREIGN KEY ("user_id") REFERENCES "user"("id")
 );
@@ -180,8 +193,8 @@ CREATE TABLE "event_attribute" (
   "event_id" TEXT NOT NULL,
   "attribute_id" TEXT NOT NULL,
   "value" TEXT NOT NULL,
-  "date_created" BIGINT NULL,
-  "date_modified" BIGINT NULL,
+  "date_created" TIMESTAMPTZ NULL,
+  "date_modified" TIMESTAMPTZ NULL,
   "active" BOOLEAN NOT NULL DEFAULT true,
   CONSTRAINT "fk_event_attribute_event_id" FOREIGN KEY ("event_id") REFERENCES "event"("id"),
   CONSTRAINT "fk_event_attribute_attribute_id" FOREIGN KEY ("attribute_id") REFERENCES "attribute"("id")
@@ -192,8 +205,8 @@ CREATE INDEX "idx_event_attribute_attribute_id" ON "event_attribute" ("attribute
 -- Table: event_settings
 CREATE TABLE "event_settings" (
   "id" TEXT PRIMARY KEY,
-  "date_created" BIGINT NULL,
-  "date_modified" BIGINT NULL,
+  "date_created" TIMESTAMPTZ NULL,
+  "date_modified" TIMESTAMPTZ NULL,
   "active" BOOLEAN NOT NULL DEFAULT true,
   "event_id" TEXT NOT NULL,
   "start_date_time_utc" BIGINT NOT NULL,
@@ -212,8 +225,8 @@ CREATE TABLE "product_attribute" (
   "product_id" TEXT NOT NULL,
   "attribute_id" TEXT NOT NULL,
   "value" TEXT NOT NULL,
-  "date_created" BIGINT NULL,
-  "date_modified" BIGINT NULL,
+  "date_created" TIMESTAMPTZ NULL,
+  "date_modified" TIMESTAMPTZ NULL,
   CONSTRAINT "fk_product_attribute_product_id" FOREIGN KEY ("product_id") REFERENCES "product"("id"),
   CONSTRAINT "fk_product_attribute_attribute_id" FOREIGN KEY ("attribute_id") REFERENCES "attribute"("id"),
   CONSTRAINT "uq_product_attribute_1" UNIQUE ("product_id", "attribute_id")
@@ -224,8 +237,8 @@ CREATE INDEX "idx_product_attribute_attribute_id" ON "product_attribute" ("attri
 -- Table: price_product
 CREATE TABLE "price_product" (
   "id" TEXT PRIMARY KEY,
-  "date_created" BIGINT NULL,
-  "date_modified" BIGINT NULL,
+  "date_created" TIMESTAMPTZ NULL,
+  "date_modified" TIMESTAMPTZ NULL,
   "active" BOOLEAN NOT NULL DEFAULT true,
   "product_id" TEXT NOT NULL,
   "name" TEXT NOT NULL,
@@ -241,8 +254,8 @@ CREATE INDEX "idx_price_product_product_id" ON "price_product" ("product_id");
 -- Table: product_plan
 CREATE TABLE "product_plan" (
   "id" TEXT PRIMARY KEY,
-  "date_created" BIGINT NULL,
-  "date_modified" BIGINT NULL,
+  "date_created" TIMESTAMPTZ NULL,
+  "date_modified" TIMESTAMPTZ NULL,
   "active" BOOLEAN NOT NULL DEFAULT true,
   "name" TEXT NOT NULL,
   "description" TEXT NULL,
@@ -256,8 +269,8 @@ CREATE INDEX "idx_product_plan_product_id" ON "product_plan" ("product_id");
 -- Table: resource
 CREATE TABLE "resource" (
   "id" TEXT PRIMARY KEY,
-  "date_created" BIGINT NULL,
-  "date_modified" BIGINT NULL,
+  "date_created" TIMESTAMPTZ NULL,
+  "date_modified" TIMESTAMPTZ NULL,
   "active" BOOLEAN NOT NULL DEFAULT true,
   "name" TEXT NOT NULL,
   "description" TEXT NULL,
@@ -269,8 +282,8 @@ CREATE INDEX "idx_resource_product_id" ON "resource" ("product_id");
 -- Table: product_collection
 CREATE TABLE "product_collection" (
   "id" TEXT PRIMARY KEY,
-  "date_created" BIGINT NULL,
-  "date_modified" BIGINT NULL,
+  "date_created" TIMESTAMPTZ NULL,
+  "date_modified" TIMESTAMPTZ NULL,
   "active" BOOLEAN NOT NULL DEFAULT true,
   "product_id" TEXT NOT NULL,
   "collection_id" TEXT NOT NULL,
@@ -288,8 +301,8 @@ CREATE TABLE "plan_attribute" (
   "plan_id" TEXT NOT NULL,
   "attribute_id" TEXT NOT NULL,
   "value" TEXT NOT NULL,
-  "date_created" BIGINT NULL,
-  "date_modified" BIGINT NULL,
+  "date_created" TIMESTAMPTZ NULL,
+  "date_modified" TIMESTAMPTZ NULL,
   "active" BOOLEAN NOT NULL DEFAULT true,
   CONSTRAINT "fk_plan_attribute_plan_id" FOREIGN KEY ("plan_id") REFERENCES "plan"("id"),
   CONSTRAINT "fk_plan_attribute_attribute_id" FOREIGN KEY ("attribute_id") REFERENCES "attribute"("id"),
@@ -304,8 +317,8 @@ CREATE TABLE "plan_settings" (
   "plan_id" TEXT NOT NULL,
   "name" TEXT NOT NULL,
   "description" TEXT NOT NULL,
-  "date_created" BIGINT NULL,
-  "date_modified" BIGINT NULL,
+  "date_created" TIMESTAMPTZ NULL,
+  "date_modified" TIMESTAMPTZ NULL,
   "active" BOOLEAN NOT NULL DEFAULT true,
   CONSTRAINT "fk_plan_settings_plan_id" FOREIGN KEY ("plan_id") REFERENCES "plan"("id")
 );
@@ -316,8 +329,8 @@ CREATE TABLE "plan_location" (
   "id" TEXT PRIMARY KEY,
   "plan_id" TEXT NOT NULL,
   "location_id" TEXT NOT NULL,
-  "date_created" BIGINT NULL,
-  "date_modified" BIGINT NULL,
+  "date_created" TIMESTAMPTZ NULL,
+  "date_modified" TIMESTAMPTZ NULL,
   "active" BOOLEAN NOT NULL DEFAULT true,
   CONSTRAINT "fk_plan_location_plan_id" FOREIGN KEY ("plan_id") REFERENCES "plan"("id"),
   CONSTRAINT "fk_plan_location_location_id" FOREIGN KEY ("location_id") REFERENCES "location"("id"),
@@ -332,8 +345,8 @@ CREATE TABLE "price_plan" (
   "plan_id" TEXT NOT NULL,
   "name" TEXT NOT NULL,
   "description" TEXT NOT NULL,
-  "date_created" BIGINT NULL,
-  "date_modified" BIGINT NULL,
+  "date_created" TIMESTAMPTZ NULL,
+  "date_modified" TIMESTAMPTZ NULL,
   "active" BOOLEAN NOT NULL DEFAULT true,
   "amount" DOUBLE PRECISION NOT NULL,
   "currency" TEXT NOT NULL,
@@ -351,8 +364,8 @@ CREATE TABLE "collection_attribute" (
   "collection_id" TEXT NOT NULL,
   "attribute_id" TEXT NOT NULL,
   "value" TEXT NOT NULL,
-  "date_created" BIGINT NULL,
-  "date_modified" BIGINT NULL,
+  "date_created" TIMESTAMPTZ NULL,
+  "date_modified" TIMESTAMPTZ NULL,
   "active" BOOLEAN NOT NULL DEFAULT true,
   CONSTRAINT "fk_collection_attribute_collection_id" FOREIGN KEY ("collection_id") REFERENCES "collection"("id"),
   CONSTRAINT "fk_collection_attribute_attribute_id" FOREIGN KEY ("attribute_id") REFERENCES "attribute"("id"),
@@ -366,8 +379,8 @@ CREATE TABLE "collection_parent" (
   "id" TEXT PRIMARY KEY,
   "collection_parent_id" TEXT NOT NULL,
   "collection_id" TEXT NOT NULL,
-  "date_created" BIGINT NULL,
-  "date_modified" BIGINT NULL,
+  "date_created" TIMESTAMPTZ NULL,
+  "date_modified" TIMESTAMPTZ NULL,
   "active" BOOLEAN NOT NULL DEFAULT true,
   CONSTRAINT "fk_collection_parent_collection_parent_id" FOREIGN KEY ("collection_parent_id") REFERENCES "collection"("id"),
   CONSTRAINT "fk_collection_parent_collection_id" FOREIGN KEY ("collection_id") REFERENCES "collection"("id"),
@@ -381,8 +394,8 @@ CREATE TABLE "collection_plan" (
   "id" TEXT PRIMARY KEY,
   "collection_id" TEXT NOT NULL,
   "plan_id" TEXT NOT NULL,
-  "date_created" BIGINT NULL,
-  "date_modified" BIGINT NULL,
+  "date_created" TIMESTAMPTZ NULL,
+  "date_modified" TIMESTAMPTZ NULL,
   "active" BOOLEAN NOT NULL DEFAULT true,
   CONSTRAINT "fk_collection_plan_collection_id" FOREIGN KEY ("collection_id") REFERENCES "collection"("id"),
   CONSTRAINT "fk_collection_plan_plan_id" FOREIGN KEY ("plan_id") REFERENCES "plan"("id"),
@@ -397,8 +410,8 @@ CREATE TABLE "location_attribute" (
   "location_id" TEXT NOT NULL,
   "attribute_id" TEXT NOT NULL,
   "value" TEXT NOT NULL,
-  "date_created" BIGINT NULL,
-  "date_modified" BIGINT NULL,
+  "date_created" TIMESTAMPTZ NULL,
+  "date_modified" TIMESTAMPTZ NULL,
   CONSTRAINT "fk_location_attribute_location_id" FOREIGN KEY ("location_id") REFERENCES "location"("id"),
   CONSTRAINT "fk_location_attribute_attribute_id" FOREIGN KEY ("attribute_id") REFERENCES "attribute"("id"),
   CONSTRAINT "uq_location_attribute_1" UNIQUE ("location_id", "attribute_id")
@@ -412,8 +425,8 @@ CREATE TABLE "group_attribute" (
   "group_id" TEXT NOT NULL,
   "attribute_id" TEXT NOT NULL,
   "value" TEXT NOT NULL,
-  "date_created" BIGINT NULL,
-  "date_modified" BIGINT NULL,
+  "date_created" TIMESTAMPTZ NULL,
+  "date_modified" TIMESTAMPTZ NULL,
   "active" BOOLEAN NOT NULL DEFAULT true,
   CONSTRAINT "fk_group_attribute_group_id" FOREIGN KEY ("group_id") REFERENCES "group"("id"),
   CONSTRAINT "fk_group_attribute_attribute_id" FOREIGN KEY ("attribute_id") REFERENCES "attribute"("id"),
@@ -428,8 +441,8 @@ CREATE TABLE "delegate_attribute" (
   "delegate_id" TEXT NOT NULL,
   "attribute_id" TEXT NOT NULL,
   "value" TEXT NOT NULL,
-  "date_created" BIGINT NULL,
-  "date_modified" BIGINT NULL,
+  "date_created" TIMESTAMPTZ NULL,
+  "date_modified" TIMESTAMPTZ NULL,
   "active" BOOLEAN NOT NULL DEFAULT true,
   CONSTRAINT "fk_delegate_attribute_delegate_id" FOREIGN KEY ("delegate_id") REFERENCES "delegate"("id"),
   CONSTRAINT "fk_delegate_attribute_attribute_id" FOREIGN KEY ("attribute_id") REFERENCES "attribute"("id"),
@@ -444,8 +457,8 @@ CREATE TABLE "staff_attribute" (
   "staff_id" TEXT NOT NULL,
   "attribute_id" TEXT NOT NULL,
   "value" TEXT NOT NULL,
-  "date_created" BIGINT NULL,
-  "date_modified" BIGINT NULL,
+  "date_created" TIMESTAMPTZ NULL,
+  "date_modified" TIMESTAMPTZ NULL,
   "active" BOOLEAN NOT NULL DEFAULT true,
   CONSTRAINT "fk_staff_attribute_staff_id" FOREIGN KEY ("staff_id") REFERENCES "staff"("id"),
   CONSTRAINT "fk_staff_attribute_attribute_id" FOREIGN KEY ("attribute_id") REFERENCES "attribute"("id"),
@@ -465,8 +478,8 @@ CREATE TABLE "workspace" (
   "description" TEXT NOT NULL,
   "private" BOOLEAN NOT NULL,
   "workflow_template_id" TEXT NULL,
-  "date_created" BIGINT NULL,
-  "date_modified" BIGINT NULL,
+  "date_created" TIMESTAMPTZ NULL,
+  "date_modified" TIMESTAMPTZ NULL,
   "active" BOOLEAN NOT NULL DEFAULT true
 );
 
@@ -481,8 +494,8 @@ CREATE TABLE "workflow_template" (
   "configuration_json" TEXT NULL,
   "version" INTEGER NULL,
   "created_by" TEXT NULL,
-  "date_created" BIGINT NULL,
-  "date_modified" BIGINT NULL,
+  "date_created" TIMESTAMPTZ NULL,
+  "date_modified" TIMESTAMPTZ NULL,
   "active" BOOLEAN NOT NULL DEFAULT true,
   "input_schema_json" TEXT NULL,
   "system_id" TEXT NULL,
@@ -503,8 +516,8 @@ CREATE TABLE "workflow" (
   "status" TEXT NOT NULL,
   "workspace_id" TEXT NULL,
   "created_by" TEXT NULL,
-  "date_created" BIGINT NULL,
-  "date_modified" BIGINT NULL,
+  "date_created" TIMESTAMPTZ NULL,
+  "date_modified" TIMESTAMPTZ NULL,
   "active" BOOLEAN NOT NULL DEFAULT true,
   "version" INTEGER NULL,
   "workflow_template_id" TEXT NULL,
@@ -523,8 +536,8 @@ CREATE TABLE "role" (
   "name" TEXT NOT NULL,
   "description" TEXT NOT NULL,
   "color" TEXT NOT NULL,
-  "date_created" BIGINT NULL,
-  "date_modified" BIGINT NULL,
+  "date_created" TIMESTAMPTZ NULL,
+  "date_modified" TIMESTAMPTZ NULL,
   "active" BOOLEAN NOT NULL DEFAULT true,
   CONSTRAINT "fk_role_workspace_id" FOREIGN KEY ("workspace_id") REFERENCES "workspace"("id")
 );
@@ -538,8 +551,8 @@ CREATE TABLE "permission" (
   "granted_by_user_id" TEXT NOT NULL,
   "permission_code" TEXT NOT NULL,
   "permission_type" TEXT NOT NULL,
-  "date_created" BIGINT NULL,
-  "date_modified" BIGINT NULL,
+  "date_created" TIMESTAMPTZ NULL,
+  "date_modified" TIMESTAMPTZ NULL,
   "active" BOOLEAN NOT NULL DEFAULT true,
   CONSTRAINT "fk_permission_workspace_id" FOREIGN KEY ("workspace_id") REFERENCES "workspace"("id"),
   CONSTRAINT "fk_permission_user_id" FOREIGN KEY ("user_id") REFERENCES "user"("id"),
@@ -554,8 +567,8 @@ CREATE TABLE "workspace_user" (
   "id" TEXT PRIMARY KEY,
   "workspace_id" TEXT NOT NULL,
   "user_id" TEXT NOT NULL,
-  "date_created" BIGINT NULL,
-  "date_modified" BIGINT NULL,
+  "date_created" TIMESTAMPTZ NULL,
+  "date_modified" TIMESTAMPTZ NULL,
   "active" BOOLEAN NOT NULL DEFAULT true,
   CONSTRAINT "fk_workspace_user_workspace_id" FOREIGN KEY ("workspace_id") REFERENCES "workspace"("id"),
   CONSTRAINT "fk_workspace_user_user_id" FOREIGN KEY ("user_id") REFERENCES "user"("id"),
@@ -574,8 +587,8 @@ CREATE TABLE "role_permission" (
   "role_id" TEXT NOT NULL,
   "permission_id" TEXT NOT NULL,
   "permission_type" TEXT NOT NULL,
-  "date_created" BIGINT NULL,
-  "date_modified" BIGINT NULL,
+  "date_created" TIMESTAMPTZ NULL,
+  "date_modified" TIMESTAMPTZ NULL,
   "active" BOOLEAN NOT NULL DEFAULT true,
   CONSTRAINT "fk_role_permission_role_id" FOREIGN KEY ("role_id") REFERENCES "role"("id"),
   CONSTRAINT "fk_role_permission_permission_id" FOREIGN KEY ("permission_id") REFERENCES "permission"("id"),
@@ -589,8 +602,8 @@ CREATE TABLE "workspace_user_role" (
   "id" TEXT PRIMARY KEY,
   "workspace_user_id" TEXT NOT NULL,
   "role_id" TEXT NOT NULL,
-  "date_created" BIGINT NULL,
-  "date_modified" BIGINT NULL,
+  "date_created" TIMESTAMPTZ NULL,
+  "date_modified" TIMESTAMPTZ NULL,
   "active" BOOLEAN NOT NULL DEFAULT true,
   CONSTRAINT "fk_workspace_user_role_workspace_user_id" FOREIGN KEY ("workspace_user_id") REFERENCES "workspace_user"("id"),
   CONSTRAINT "fk_workspace_user_role_role_id" FOREIGN KEY ("role_id") REFERENCES "role"("id"),
@@ -611,8 +624,8 @@ CREATE TABLE "stage_template" (
   "is_required" BOOLEAN NULL,
   "condition_expression" TEXT NULL,
   "created_by" TEXT NULL,
-  "date_created" BIGINT NULL,
-  "date_modified" BIGINT NULL,
+  "date_created" TIMESTAMPTZ NULL,
+  "date_modified" TIMESTAMPTZ NULL,
   "active" BOOLEAN NOT NULL DEFAULT true,
   CONSTRAINT "fk_stage_template_workflow_template_id" FOREIGN KEY ("workflow_template_id") REFERENCES "workflow_template"("id")
 );
@@ -640,8 +653,8 @@ CREATE TABLE "stage" (
   "result_json" TEXT NULL,
   "error_message" TEXT NULL,
   "created_by" TEXT NULL,
-  "date_created" BIGINT NULL,
-  "date_modified" BIGINT NULL,
+  "date_created" TIMESTAMPTZ NULL,
+  "date_modified" TIMESTAMPTZ NULL,
   "active" BOOLEAN NOT NULL DEFAULT true,
   "completion_percentage" INTEGER NULL,
   CONSTRAINT "fk_stage_workflow_id" FOREIGN KEY ("workflow_id") REFERENCES "workflow"("id"),
@@ -667,8 +680,8 @@ CREATE TABLE "activity_template" (
   "configuration_json" TEXT NULL,
   "validation_rules_json" TEXT NULL,
   "created_by" TEXT NULL,
-  "date_created" BIGINT NULL,
-  "date_modified" BIGINT NULL,
+  "date_created" TIMESTAMPTZ NULL,
+  "date_modified" TIMESTAMPTZ NULL,
   "active" BOOLEAN NOT NULL DEFAULT true,
   "input_schema_json" TEXT NULL,
   "output_schema_json" TEXT NULL,
@@ -706,8 +719,8 @@ CREATE TABLE "activity" (
   "estimated_duration_minutes" INTEGER NULL,
   "actual_duration_minutes" INTEGER NULL,
   "created_by" TEXT NULL,
-  "date_created" BIGINT NULL,
-  "date_modified" BIGINT NULL,
+  "date_created" TIMESTAMPTZ NULL,
+  "date_modified" TIMESTAMPTZ NULL,
   "active" BOOLEAN NOT NULL DEFAULT true,
   "completion_percentage" INTEGER NULL,
   "attachment_ids" TEXT NOT NULL,
@@ -732,8 +745,8 @@ CREATE TABLE "activity_execution_log" (
   "output_snapshot_json" TEXT NOT NULL,
   "error_message" TEXT NOT NULL,
   "created_by" TEXT NOT NULL,
-  "date_created" BIGINT NOT NULL,
-  "date_modified" BIGINT NOT NULL,
+  "date_created" TIMESTAMPTZ NOT NULL,
+  "date_modified" TIMESTAMPTZ NOT NULL,
   "active" BOOLEAN NOT NULL DEFAULT true,
   "workspace_id" TEXT NOT NULL,
   CONSTRAINT "fk_activity_execution_log_workflow_id" FOREIGN KEY ("workflow_id") REFERENCES "workflow"("id"),
@@ -755,8 +768,8 @@ CREATE INDEX "idx_activity_execution_log_workspace_id" ON "activity_execution_lo
 CREATE TABLE "client" (
   "id" TEXT PRIMARY KEY,
   "user_id" TEXT NOT NULL,
-  "date_created" BIGINT NULL,
-  "date_modified" BIGINT NULL,
+  "date_created" TIMESTAMPTZ NULL,
+  "date_modified" TIMESTAMPTZ NULL,
   "active" BOOLEAN NOT NULL DEFAULT true,
   "internal_id" TEXT NOT NULL UNIQUE,
   "category_id" TEXT NULL,
@@ -769,8 +782,8 @@ CREATE TABLE "client_category" (
   "id" TEXT PRIMARY KEY,
   "client_id" TEXT NOT NULL,
   "category_id" TEXT NOT NULL,
-  "date_created" BIGINT NULL,
-  "date_modified" BIGINT NULL,
+  "date_created" TIMESTAMPTZ NULL,
+  "date_modified" TIMESTAMPTZ NULL,
   "active" BOOLEAN NOT NULL DEFAULT true,
   CONSTRAINT "fk_client_category_client_id" FOREIGN KEY ("client_id") REFERENCES "client"("id"),
   CONSTRAINT "fk_client_category_category_id" FOREIGN KEY ("category_id") REFERENCES "category"("id"),
@@ -788,8 +801,8 @@ CREATE TABLE "client_attribute" (
   "client_id" TEXT NOT NULL,
   "attribute_id" TEXT NOT NULL,
   "value" TEXT NOT NULL,
-  "date_created" BIGINT NULL,
-  "date_modified" BIGINT NULL,
+  "date_created" TIMESTAMPTZ NULL,
+  "date_modified" TIMESTAMPTZ NULL,
   "active" BOOLEAN NOT NULL DEFAULT true,
   CONSTRAINT "fk_client_attribute_client_id" FOREIGN KEY ("client_id") REFERENCES "client"("id"),
   CONSTRAINT "fk_client_attribute_attribute_id" FOREIGN KEY ("attribute_id") REFERENCES "attribute"("id"),
@@ -803,8 +816,8 @@ CREATE TABLE "delegate_client" (
   "id" TEXT PRIMARY KEY,
   "delegate_id" TEXT NOT NULL,
   "client_id" TEXT NOT NULL,
-  "date_created" BIGINT NULL,
-  "date_modified" BIGINT NULL,
+  "date_created" TIMESTAMPTZ NULL,
+  "date_modified" TIMESTAMPTZ NULL,
   "active" BOOLEAN NOT NULL DEFAULT true,
   CONSTRAINT "fk_delegate_client_delegate_id" FOREIGN KEY ("delegate_id") REFERENCES "delegate"("id"),
   CONSTRAINT "fk_delegate_client_client_id" FOREIGN KEY ("client_id") REFERENCES "client"("id"),
@@ -818,8 +831,8 @@ CREATE TABLE "event_client" (
   "id" TEXT PRIMARY KEY,
   "event_id" TEXT NOT NULL,
   "client_id" TEXT NOT NULL,
-  "date_created" BIGINT NULL,
-  "date_modified" BIGINT NULL,
+  "date_created" TIMESTAMPTZ NULL,
+  "date_modified" TIMESTAMPTZ NULL,
   "active" BOOLEAN NOT NULL DEFAULT true,
   CONSTRAINT "fk_event_client_event_id" FOREIGN KEY ("event_id") REFERENCES "event"("id"),
   CONSTRAINT "fk_event_client_client_id" FOREIGN KEY ("client_id") REFERENCES "client"("id"),
@@ -833,8 +846,8 @@ CREATE TABLE "event_product" (
   "id" TEXT PRIMARY KEY,
   "event_id" TEXT NOT NULL,
   "product_id" TEXT NOT NULL,
-  "date_created" BIGINT NULL,
-  "date_modified" BIGINT NULL,
+  "date_created" TIMESTAMPTZ NULL,
+  "date_modified" TIMESTAMPTZ NULL,
   "active" BOOLEAN NOT NULL DEFAULT true,
   "quantity" INTEGER NULL,
   "unit_price" DOUBLE PRECISION NULL,
@@ -851,8 +864,8 @@ CREATE INDEX "idx_event_product_product_id" ON "event_product" ("product_id");
 -- Table: payment_profile
 CREATE TABLE "payment_profile" (
   "id" TEXT PRIMARY KEY,
-  "date_created" BIGINT NULL,
-  "date_modified" BIGINT NULL,
+  "date_created" TIMESTAMPTZ NULL,
+  "date_modified" TIMESTAMPTZ NULL,
   "active" BOOLEAN NOT NULL DEFAULT true,
   "client_id" TEXT NOT NULL,
   "payment_method_id" TEXT NOT NULL,
@@ -865,8 +878,8 @@ CREATE INDEX "idx_payment_profile_payment_method_id" ON "payment_profile" ("paym
 -- Table: payment_profile_payment_method
 CREATE TABLE "payment_profile_payment_method" (
   "id" TEXT PRIMARY KEY,
-  "date_created" BIGINT NULL,
-  "date_modified" BIGINT NULL,
+  "date_created" TIMESTAMPTZ NULL,
+  "date_modified" TIMESTAMPTZ NULL,
   "active" BOOLEAN NOT NULL DEFAULT true,
   "payment_profile_id" TEXT NOT NULL,
   "payment_method_id" TEXT NOT NULL,
@@ -887,8 +900,8 @@ CREATE INDEX "idx_payment_profile_payment_method_payment_method_id" ON "payment_
 -- Table: subscription
 CREATE TABLE "subscription" (
   "id" TEXT PRIMARY KEY,
-  "date_created" BIGINT NULL,
-  "date_modified" BIGINT NULL,
+  "date_created" TIMESTAMPTZ NULL,
+  "date_modified" TIMESTAMPTZ NULL,
   "active" BOOLEAN NOT NULL DEFAULT true,
   "name" TEXT NOT NULL,
   "price_plan_id" TEXT NOT NULL,
@@ -912,8 +925,8 @@ CREATE TABLE "subscription_attribute" (
   "subscription_id" TEXT NOT NULL,
   "attribute_id" TEXT NOT NULL,
   "value" TEXT NOT NULL,
-  "date_created" BIGINT NULL,
-  "date_modified" BIGINT NULL,
+  "date_created" TIMESTAMPTZ NULL,
+  "date_modified" TIMESTAMPTZ NULL,
   "active" BOOLEAN NOT NULL DEFAULT true,
   CONSTRAINT "fk_subscription_attribute_subscription_id" FOREIGN KEY ("subscription_id") REFERENCES "subscription"("id"),
   CONSTRAINT "fk_subscription_attribute_attribute_id" FOREIGN KEY ("attribute_id") REFERENCES "attribute"("id"),
@@ -939,8 +952,8 @@ CREATE TABLE "license" (
   "assigned_by" TEXT NULL,
   "date_assigned" BIGINT NULL,
   "sequence_number" INTEGER NULL,
-  "date_created" BIGINT NULL,
-  "date_modified" BIGINT NULL,
+  "date_created" TIMESTAMPTZ NULL,
+  "date_modified" TIMESTAMPTZ NULL,
   "active" BOOLEAN NOT NULL DEFAULT true,
   CONSTRAINT "fk_license_subscription_id" FOREIGN KEY ("subscription_id") REFERENCES "subscription"("id"),
   CONSTRAINT "fk_license_plan_id" FOREIGN KEY ("plan_id") REFERENCES "plan"("id")
@@ -964,7 +977,7 @@ CREATE TABLE "license_history" (
   "notes" TEXT NULL,
   "license_status_before" TEXT NOT NULL,
   "license_status_after" TEXT NOT NULL,
-  "date_created" BIGINT NOT NULL,
+  "date_created" TIMESTAMPTZ NOT NULL,
   "active" BOOLEAN NOT NULL DEFAULT true,
   CONSTRAINT "fk_license_history_license_id" FOREIGN KEY ("license_id") REFERENCES "license"("id")
 );
@@ -974,8 +987,8 @@ CREATE INDEX "idx_license_history_license_id" ON "license_history" ("license_id"
 CREATE TABLE "balance" (
   "id" TEXT PRIMARY KEY,
   "amount" DOUBLE PRECISION NOT NULL,
-  "date_created" BIGINT NULL,
-  "date_modified" BIGINT NULL,
+  "date_created" TIMESTAMPTZ NULL,
+  "date_modified" TIMESTAMPTZ NULL,
   "active" BOOLEAN NOT NULL DEFAULT true,
   "client_id" TEXT NOT NULL,
   "subscription_id" TEXT NOT NULL,
@@ -993,8 +1006,8 @@ CREATE TABLE "balance_attribute" (
   "balance_id" TEXT NOT NULL,
   "attribute_id" TEXT NOT NULL,
   "value" TEXT NOT NULL,
-  "date_created" BIGINT NULL,
-  "date_modified" BIGINT NULL,
+  "date_created" TIMESTAMPTZ NULL,
+  "date_modified" TIMESTAMPTZ NULL,
   "active" BOOLEAN NOT NULL DEFAULT true,
   CONSTRAINT "fk_balance_attribute_balance_id" FOREIGN KEY ("balance_id") REFERENCES "balance"("id"),
   CONSTRAINT "fk_balance_attribute_attribute_id" FOREIGN KEY ("attribute_id") REFERENCES "attribute"("id"),
@@ -1006,8 +1019,8 @@ CREATE INDEX "idx_balance_attribute_attribute_id" ON "balance_attribute" ("attri
 -- Table: payment
 CREATE TABLE "payment" (
   "id" TEXT PRIMARY KEY,
-  "date_created" BIGINT NULL,
-  "date_modified" BIGINT NULL,
+  "date_created" TIMESTAMPTZ NULL,
+  "date_modified" TIMESTAMPTZ NULL,
   "active" BOOLEAN NOT NULL DEFAULT true,
   "name" TEXT NOT NULL,
   "subscription_id" TEXT NOT NULL,
@@ -1023,8 +1036,8 @@ CREATE TABLE "payment_attribute" (
   "payment_id" TEXT NOT NULL,
   "attribute_id" TEXT NOT NULL,
   "value" TEXT NOT NULL,
-  "date_created" BIGINT NULL,
-  "date_modified" BIGINT NULL,
+  "date_created" TIMESTAMPTZ NULL,
+  "date_modified" TIMESTAMPTZ NULL,
   "active" BOOLEAN NOT NULL DEFAULT true,
   CONSTRAINT "fk_payment_attribute_payment_id" FOREIGN KEY ("payment_id") REFERENCES "payment"("id"),
   CONSTRAINT "fk_payment_attribute_attribute_id" FOREIGN KEY ("attribute_id") REFERENCES "attribute"("id"),
@@ -1038,8 +1051,8 @@ CREATE TABLE "invoice" (
   "id" TEXT PRIMARY KEY,
   "invoice_number" TEXT NOT NULL,
   "amount" DOUBLE PRECISION NOT NULL,
-  "date_created" BIGINT NULL,
-  "date_modified" BIGINT NULL,
+  "date_created" TIMESTAMPTZ NULL,
+  "date_modified" TIMESTAMPTZ NULL,
   "active" BOOLEAN NOT NULL DEFAULT true,
   "subscription_id" TEXT NOT NULL,
   CONSTRAINT "fk_invoice_subscription_id" FOREIGN KEY ("subscription_id") REFERENCES "subscription"("id")
@@ -1052,8 +1065,8 @@ CREATE TABLE "invoice_attribute" (
   "invoice_id" TEXT NOT NULL,
   "attribute_id" TEXT NOT NULL,
   "value" TEXT NOT NULL,
-  "date_created" BIGINT NULL,
-  "date_modified" BIGINT NULL,
+  "date_created" TIMESTAMPTZ NULL,
+  "date_modified" TIMESTAMPTZ NULL,
   "active" BOOLEAN NOT NULL DEFAULT true,
   CONSTRAINT "fk_invoice_attribute_invoice_id" FOREIGN KEY ("invoice_id") REFERENCES "invoice"("id"),
   CONSTRAINT "fk_invoice_attribute_attribute_id" FOREIGN KEY ("attribute_id") REFERENCES "attribute"("id"),

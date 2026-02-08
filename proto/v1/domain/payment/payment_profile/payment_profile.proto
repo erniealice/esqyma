@@ -2,7 +2,7 @@ syntax = "proto3";
 
 package domain.payment.v1;
 
-option go_package = "github.com/erniealice/esqyma/golang/v1/domain/payment/payment_profile";
+option go_package = "leapfor.xyz/esqyma/golang/v1/domain/payment/payment_profile";
 
 import "domain/common/error.proto";
 import "domain/common/pagination.proto";
@@ -12,20 +12,18 @@ import "domain/common/search.proto";
 
 import "domain/entity/client/client.proto";
 import "domain/payment/payment_method/payment_method.proto";
-import "options/db.proto";
 
 message PaymentProfile {
-  option (options.v1.table).table = true;
   string id = 1;
   optional int64 date_created = 2;
   optional string date_created_string = 3;
   optional int64 date_modified = 4;
   optional string date_modified_string = 5;
-  bool active = 6 [(options.v1.db).default = "true"];
+  bool active = 6;
   optional domain.entity.v1.Client client = 7;
-  string client_id = 8 [(options.v1.db).references = "client", (options.v1.db).index = true];
+  string client_id = 8;
   optional PaymentMethod payment_method = 9;
-  string payment_method_id = 10 [(options.v1.db).references = "payment_method", (options.v1.db).index = true];
+  string payment_method_id = 10;
 }
 
 service PaymentProfileDomainService {

@@ -2,7 +2,7 @@ syntax = "proto3";
 
 package domain.payment.v1;
 
-option go_package = "github.com/erniealice/esqyma/golang/v1/domain/payment/payment_attribute";
+option go_package = "leapfor.xyz/esqyma/golang/v1/domain/payment/payment_attribute";
 
 import "domain/common/error.proto";
 import "domain/common/pagination.proto";
@@ -12,14 +12,11 @@ import "domain/common/search.proto";
 
 import "domain/payment/payment/payment.proto";
 import "domain/common/attribute.proto";
-import "options/db.proto";
 
 message PaymentAttribute {
-  option (options.v1.table).table = true;
-  option (options.v1.table).unique_together = "payment_id,attribute_id";
   string id = 1;
-  string payment_id = 2 [(options.v1.db).references = "payment", (options.v1.db).index = true];
-  string attribute_id = 3 [(options.v1.db).references = "attribute", (options.v1.db).index = true];
+  string payment_id = 2;
+  string attribute_id = 3;
   string value = 4;
   Payment payment = 5;
   domain.common.v1.Attribute attribute = 6;
@@ -27,7 +24,7 @@ message PaymentAttribute {
   optional string date_created_string = 8;
   optional int64 date_modified = 9;
   optional string date_modified_string = 10;
-  bool active = 11 [(options.v1.db).default = "true"];
+  bool active = 11;
 }
 
 service PaymentAttributeDomainService {

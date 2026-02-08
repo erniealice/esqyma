@@ -10,7 +10,6 @@ import (
 	common "github.com/erniealice/esqyma/pkg/schema/v1/domain/common"
 	payment_method "github.com/erniealice/esqyma/pkg/schema/v1/domain/payment/payment_method"
 	payment_profile "github.com/erniealice/esqyma/pkg/schema/v1/domain/payment/payment_profile"
-	_ "github.com/erniealice/esqyma/pkg/schema/v1/options"
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
 	reflect "reflect"
@@ -1009,29 +1008,26 @@ var File_domain_payment_payment_profile_payment_method_payment_profile_payment_m
 
 const file_domain_payment_payment_profile_payment_method_payment_profile_payment_method_proto_rawDesc = "" +
 	"\n" +
-	"Rdomain/payment/payment_profile_payment_method/payment_profile_payment_method.proto\x12\x11domain.payment.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1adomain/common/search.proto\x1a4domain/payment/payment_profile/payment_profile.proto\x1a2domain/payment/payment_method/payment_method.proto\x1a\x10options/db.proto\"\x86\b\n" +
+	"Rdomain/payment/payment_profile_payment_method/payment_profile_payment_method.proto\x12\x11domain.payment.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1adomain/common/search.proto\x1a4domain/payment/payment_profile/payment_profile.proto\x1a2domain/payment/payment_method/payment_method.proto\"\x9b\a\n" +
 	"\x1bPaymentProfilePaymentMethod\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12&\n" +
 	"\fdate_created\x18\x02 \x01(\x03H\x00R\vdateCreated\x88\x01\x01\x123\n" +
 	"\x13date_created_string\x18\x03 \x01(\tH\x01R\x11dateCreatedString\x88\x01\x01\x12(\n" +
 	"\rdate_modified\x18\x04 \x01(\x03H\x02R\fdateModified\x88\x01\x01\x125\n" +
-	"\x14date_modified_string\x18\x05 \x01(\tH\x03R\x12dateModifiedString\x88\x01\x01\x12\"\n" +
-	"\x06active\x18\x06 \x01(\bB\n" +
-	"\x82\xb5\x18\x06\"\x04trueR\x06active\x12O\n" +
-	"\x0fpayment_profile\x18\a \x01(\v2!.domain.payment.v1.PaymentProfileH\x04R\x0epaymentProfile\x88\x01\x01\x12E\n" +
-	"\x12payment_profile_id\x18\b \x01(\tB\x17\x82\xb5\x18\x13\n" +
-	"\x0fpayment_profile\x18\x01R\x10paymentProfileId\x12L\n" +
-	"\x0epayment_method\x18\t \x01(\v2 .domain.payment.v1.PaymentMethodH\x05R\rpaymentMethod\x88\x01\x01\x12B\n" +
+	"\x14date_modified_string\x18\x05 \x01(\tH\x03R\x12dateModifiedString\x88\x01\x01\x12\x16\n" +
+	"\x06active\x18\x06 \x01(\bR\x06active\x12O\n" +
+	"\x0fpayment_profile\x18\a \x01(\v2!.domain.payment.v1.PaymentProfileH\x04R\x0epaymentProfile\x88\x01\x01\x12,\n" +
+	"\x12payment_profile_id\x18\b \x01(\tR\x10paymentProfileId\x12L\n" +
+	"\x0epayment_method\x18\t \x01(\v2 .domain.payment.v1.PaymentMethodH\x05R\rpaymentMethod\x88\x01\x01\x12*\n" +
 	"\x11payment_method_id\x18\n" +
-	" \x01(\tB\x16\x82\xb5\x18\x12\n" +
-	"\x0epayment_method\x18\x01R\x0fpaymentMethodId\x12\x18\n" +
+	" \x01(\tR\x0fpaymentMethodId\x12\x18\n" +
 	"\aprimary\x18\v \x01(\bR\aprimary\x12\x19\n" +
 	"\x05notes\x18\f \x01(\tH\x06R\x05notes\x88\x01\x01\x12(\n" +
 	"\rdisplay_order\x18\r \x01(\x05H\aR\fdisplayOrder\x88\x01\x01\x12-\n" +
 	"\x12payment_identifier\x18\x0e \x01(\tR\x11paymentIdentifier\x12'\n" +
 	"\x0fidentifier_type\x18\x0f \x01(\tR\x0eidentifierType\x12&\n" +
 	"\fdisplay_name\x18\x10 \x01(\tH\bR\vdisplayName\x88\x01\x01\x12\x16\n" +
-	"\x06masked\x18\x11 \x01(\bR\x06masked:,\x8a\xb5\x18(\b\x01\x1a$payment_profile_id,payment_method_idB\x0f\n" +
+	"\x06masked\x18\x11 \x01(\bR\x06maskedB\x0f\n" +
 	"\r_date_createdB\x16\n" +
 	"\x14_date_created_stringB\x10\n" +
 	"\x0e_date_modifiedB\x17\n" +

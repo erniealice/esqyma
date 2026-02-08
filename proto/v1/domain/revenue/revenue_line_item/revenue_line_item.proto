@@ -1,0 +1,121 @@
+syntax = "proto3";
+
+package domain.revenue.v1;
+
+option go_package = "leapfor.xyz/esqyma/golang/v1/domain/revenue/revenue_line_item";
+
+import "domain/common/error.proto";
+import "domain/common/pagination.proto";
+import "domain/common/search.proto";
+import "domain/common/filter.proto";
+import "domain/common/sort.proto";
+
+import "domain/revenue/revenue/revenue.proto";
+import "domain/product/product/product.proto";
+
+message RevenueLineItem {
+  string id = 1;
+  optional int64 date_created = 2;
+  optional string date_created_string = 3;
+  optional int64 date_modified = 4;
+  optional string date_modified_string = 5;
+  bool active = 6;
+  optional Revenue revenue = 7;
+  string revenue_id = 8;
+  optional domain.product.v1.Product product = 9;
+  optional string product_id = 10;
+  string description = 11;
+  double quantity = 12;
+  double unit_price = 13;
+  double total_price = 14;
+  optional double discount_amount = 15;
+  optional string notes = 16;
+}
+
+service RevenueLineItemDomainService {
+  rpc CreateRevenueLineItem(CreateRevenueLineItemRequest) returns (CreateRevenueLineItemResponse);
+  rpc ReadRevenueLineItem(ReadRevenueLineItemRequest) returns (ReadRevenueLineItemResponse);
+  rpc UpdateRevenueLineItem(UpdateRevenueLineItemRequest) returns (UpdateRevenueLineItemResponse);
+  rpc DeleteRevenueLineItem(DeleteRevenueLineItemRequest) returns (DeleteRevenueLineItemResponse);
+  rpc ListRevenueLineItems(ListRevenueLineItemsRequest) returns (ListRevenueLineItemsResponse);
+  rpc GetRevenueLineItemListPageData(GetRevenueLineItemListPageDataRequest) returns (GetRevenueLineItemListPageDataResponse);
+  rpc GetRevenueLineItemItemPageData(GetRevenueLineItemItemPageDataRequest) returns (GetRevenueLineItemItemPageDataResponse);
+}
+
+message CreateRevenueLineItemRequest {
+  RevenueLineItem data = 1;
+}
+
+message CreateRevenueLineItemResponse {
+  repeated RevenueLineItem data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message ReadRevenueLineItemRequest {
+  RevenueLineItem data = 1;
+}
+
+message ReadRevenueLineItemResponse {
+  repeated RevenueLineItem data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message UpdateRevenueLineItemRequest {
+  RevenueLineItem data = 1;
+}
+
+message UpdateRevenueLineItemResponse {
+  repeated RevenueLineItem data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message DeleteRevenueLineItemRequest {
+  RevenueLineItem data = 1;
+}
+
+message DeleteRevenueLineItemResponse {
+  bool success = 1;
+  optional domain.common.v1.Error error = 2;
+}
+
+message ListRevenueLineItemsRequest {
+  optional string revenue_id = 1;
+  optional domain.common.v1.SearchRequest search = 2;
+  optional domain.common.v1.FilterRequest filters = 3;
+  optional domain.common.v1.SortRequest sort = 4;
+  optional domain.common.v1.PaginationRequest pagination = 5;
+}
+
+message ListRevenueLineItemsResponse {
+  repeated RevenueLineItem data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message GetRevenueLineItemListPageDataRequest {
+  optional domain.common.v1.PaginationRequest pagination = 1;
+  optional domain.common.v1.FilterRequest filters = 2;
+  optional domain.common.v1.SortRequest sort = 3;
+  optional domain.common.v1.SearchRequest search = 4;
+}
+
+message GetRevenueLineItemListPageDataResponse {
+  repeated RevenueLineItem revenue_line_item_list = 1;
+  optional domain.common.v1.PaginationResponse pagination = 2;
+  repeated domain.common.v1.SearchResult search_results = 3;
+  bool success = 4;
+  optional domain.common.v1.Error error = 5;
+}
+
+message GetRevenueLineItemItemPageDataRequest {
+  string revenue_line_item_id = 1;
+}
+
+message GetRevenueLineItemItemPageDataResponse {
+  optional RevenueLineItem revenue_line_item = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}

@@ -61,6 +61,9 @@ DROP TABLE IF EXISTS "workflow";
 DROP TABLE IF EXISTS "workflow_template";
 DROP TABLE IF EXISTS "workspace";
 
+-- Drop session table
+DROP TABLE IF EXISTS "session";
+
 -- Drop Level 1 attribute tables
 DROP TABLE IF EXISTS "staff_attribute";
 DROP TABLE IF EXISTS "delegate_attribute";

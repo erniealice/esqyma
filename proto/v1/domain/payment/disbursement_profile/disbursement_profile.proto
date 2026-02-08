@@ -1,0 +1,117 @@
+syntax = "proto3";
+
+package domain.payment.v1;
+
+option go_package = "leapfor.xyz/esqyma/golang/v1/domain/payment/disbursement_profile";
+
+import "domain/common/error.proto";
+import "domain/common/pagination.proto";
+import "domain/common/filter.proto";
+import "domain/common/sort.proto";
+import "domain/common/search.proto";
+
+import "domain/entity/client/client.proto";
+import "domain/payment/disbursement_method/disbursement_method.proto";
+
+message DisbursementProfile {
+  string id = 1;
+  optional int64 date_created = 2;
+  optional string date_created_string = 3;
+  optional int64 date_modified = 4;
+  optional string date_modified_string = 5;
+  bool active = 6;
+  optional domain.entity.v1.Client client = 7;
+  string client_id = 8;
+  optional DisbursementMethod disbursement_method = 9;
+  string disbursement_method_id = 10;
+}
+
+service DisbursementProfileDomainService {
+  rpc CreateDisbursementProfile(CreateDisbursementProfileRequest) returns (CreateDisbursementProfileResponse);
+  rpc ReadDisbursementProfile(ReadDisbursementProfileRequest) returns (ReadDisbursementProfileResponse);
+  rpc UpdateDisbursementProfile(UpdateDisbursementProfileRequest) returns (UpdateDisbursementProfileResponse);
+  rpc DeleteDisbursementProfile(DeleteDisbursementProfileRequest) returns (DeleteDisbursementProfileResponse);
+  rpc ListDisbursementProfiles(ListDisbursementProfilesRequest) returns (ListDisbursementProfilesResponse);
+  rpc GetDisbursementProfileListPageData(GetDisbursementProfileListPageDataRequest)
+    returns (GetDisbursementProfileListPageDataResponse);
+  rpc GetDisbursementProfileItemPageData(GetDisbursementProfileItemPageDataRequest)
+    returns (GetDisbursementProfileItemPageDataResponse);
+}
+
+message CreateDisbursementProfileRequest {
+  DisbursementProfile data = 1;
+}
+
+message CreateDisbursementProfileResponse {
+  repeated DisbursementProfile data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message ReadDisbursementProfileRequest {
+  DisbursementProfile data = 1;
+}
+
+message ReadDisbursementProfileResponse {
+  repeated DisbursementProfile data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message UpdateDisbursementProfileRequest {
+  DisbursementProfile data = 1;
+}
+
+message UpdateDisbursementProfileResponse {
+  repeated DisbursementProfile data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message DeleteDisbursementProfileRequest {
+  DisbursementProfile data = 1;
+}
+
+message DeleteDisbursementProfileResponse {
+  bool success = 1;
+  optional domain.common.v1.Error error = 2;
+}
+
+message ListDisbursementProfilesRequest {
+  string client_id = 1;
+  optional domain.common.v1.SearchRequest search = 2;
+  optional domain.common.v1.FilterRequest filters = 3;
+  optional domain.common.v1.SortRequest sort = 4;
+  optional domain.common.v1.PaginationRequest pagination = 5;
+}
+
+message ListDisbursementProfilesResponse {
+  repeated DisbursementProfile data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message GetDisbursementProfileListPageDataRequest {
+  optional domain.common.v1.SearchRequest search = 1;
+  optional domain.common.v1.FilterRequest filters = 2;
+  optional domain.common.v1.SortRequest sort = 3;
+  optional domain.common.v1.PaginationRequest pagination = 4;
+}
+
+message GetDisbursementProfileListPageDataResponse {
+  repeated DisbursementProfile disbursement_profile_list = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+  optional domain.common.v1.PaginationResponse pagination = 4;
+  repeated domain.common.v1.SearchResult search_results = 5;
+}
+
+message GetDisbursementProfileItemPageDataRequest {
+  string disbursement_profile_id = 1;
+}
+
+message GetDisbursementProfileItemPageDataResponse {
+  DisbursementProfile disbursement_profile = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}

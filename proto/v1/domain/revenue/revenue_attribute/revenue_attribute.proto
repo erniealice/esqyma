@@ -1,0 +1,170 @@
+syntax = "proto3";
+
+package domain.revenue.v1;
+
+option go_package = "leapfor.xyz/esqyma/golang/v1/domain/revenue/revenue_attribute";
+
+import "domain/common/error.proto";
+import "domain/common/pagination.proto";
+import "domain/common/filter.proto";
+import "domain/common/sort.proto";
+import "domain/common/search.proto";
+
+import "domain/revenue/revenue/revenue.proto";
+import "domain/common/attribute.proto";
+
+message RevenueAttribute {
+  string id = 1;
+  string revenue_id = 2;
+  string attribute_id = 3;
+  string value = 4;
+  Revenue revenue = 5;
+  domain.common.v1.Attribute attribute = 6;
+  optional int64 date_created = 7;
+  optional string date_created_string = 8;
+  optional int64 date_modified = 9;
+  optional string date_modified_string = 10;
+  bool active = 11;
+}
+
+service RevenueAttributeDomainService {
+  rpc CreateRevenueAttribute(CreateRevenueAttributeRequest) returns (CreateRevenueAttributeResponse);
+  rpc ReadRevenueAttribute(ReadRevenueAttributeRequest) returns (ReadRevenueAttributeResponse);
+  rpc UpdateRevenueAttribute(UpdateRevenueAttributeRequest) returns (UpdateRevenueAttributeResponse);
+  rpc DeleteRevenueAttribute(DeleteRevenueAttributeRequest) returns (DeleteRevenueAttributeResponse);
+  rpc ListRevenueAttributes(ListRevenueAttributesRequest) returns (ListRevenueAttributesResponse);
+
+  // Enhanced list with pagination, filtering, sorting, search
+  rpc GetRevenueAttributeListPageData(GetRevenueAttributeListPageDataRequest)
+    returns (GetRevenueAttributeListPageDataResponse);
+
+  // Enhanced item view with related data
+  rpc GetRevenueAttributeItemPageData(GetRevenueAttributeItemPageDataRequest)
+    returns (GetRevenueAttributeItemPageDataResponse);
+}
+
+message CreateRevenueAttributeRequest {
+  RevenueAttribute data = 1;
+}
+
+message CreateRevenueAttributeResponse {
+  repeated RevenueAttribute data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message CreateRevenueAttributeBatchRequest {
+  repeated RevenueAttribute data = 1;
+}
+
+message CreateRevenueAttributeBatchResponse {
+  repeated RevenueAttribute data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+// CreateRevenueAttributesByCode creates revenue attributes using attribute codes.
+// Internally resolves each code to an attribute ID before creating.
+message RevenueAttributesByCodeData {
+  string revenue_id = 1;
+  map<string, string> attributes_map = 2;  // {"attribute_code": "value", ...}
+}
+
+message CreateRevenueAttributesByCodeRequest {
+  RevenueAttributesByCodeData data = 1;
+}
+
+message CreateRevenueAttributesByCodeResponse {
+  repeated RevenueAttribute data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message ReadRevenueAttributeRequest {
+  RevenueAttribute data = 1;
+}
+
+message ReadRevenueAttributeResponse {
+  repeated RevenueAttribute data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message UpdateRevenueAttributeRequest {
+  RevenueAttribute data = 1;
+}
+
+message UpdateRevenueAttributeResponse {
+  repeated RevenueAttribute data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message DeleteRevenueAttributeRequest {
+  RevenueAttribute data = 1;
+}
+
+message DeleteRevenueAttributeResponse {
+  bool success = 1;
+  optional domain.common.v1.Error error = 2;
+}
+
+message ListRevenueAttributesRequest {
+  optional domain.common.v1.SearchRequest search = 1;
+  optional domain.common.v1.FilterRequest filters = 2;
+  optional domain.common.v1.SortRequest sort = 3;
+  optional domain.common.v1.PaginationRequest pagination = 4;
+}
+
+message ListRevenueAttributesResponse {
+  repeated RevenueAttribute data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+// Enhanced list request with core features
+message GetRevenueAttributeListPageDataRequest {
+  // Pagination settings
+  optional domain.common.v1.PaginationRequest pagination = 1;
+
+  // Filter conditions
+  optional domain.common.v1.FilterRequest filters = 2;
+
+  // Sort settings
+  optional domain.common.v1.SortRequest sort = 3;
+
+  // Search settings
+  optional domain.common.v1.SearchRequest search = 4;
+}
+
+// Enhanced list response with metadata
+message GetRevenueAttributeListPageDataResponse {
+  // The revenue attribute data
+  repeated RevenueAttribute revenue_attribute_list = 1;
+
+  // Pagination metadata
+  optional domain.common.v1.PaginationResponse pagination = 2;
+
+  // Search results metadata (when search is used)
+  repeated domain.common.v1.SearchResult search_results = 3;
+
+  // Response status
+  bool success = 4;
+  optional domain.common.v1.Error error = 5;
+}
+
+// Simple item request
+message GetRevenueAttributeItemPageDataRequest {
+  // The revenue attribute ID to retrieve
+  string revenue_attribute_id = 1;
+}
+
+// Simple item response
+message GetRevenueAttributeItemPageDataResponse {
+  // The revenue attribute data
+  optional RevenueAttribute revenue_attribute = 1;
+
+  // Response status
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
