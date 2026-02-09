@@ -1,0 +1,64 @@
+syntax = "proto3";
+
+package domain.ledger.v1;
+
+option go_package = "github.com/erniealice/esqyma/pkg/schema/v1/domain/ledger/reporting/gross_profit";
+
+import "domain/common/error.proto";
+import "domain/common/pagination.proto";
+
+// GrossProfitReportRequest defines parameters for generating a gross profit report.
+message GrossProfitReportRequest {
+  optional int64 start_date = 1;           // Unix timestamp — report period start
+  optional int64 end_date = 2;             // Unix timestamp — report period end
+  optional string group_by = 3;            // "product", "location", "category", "period"
+  optional string period_granularity = 4;  // "daily", "weekly", "monthly", "yearly" (when group_by=period)
+  optional string product_id = 5;          // Filter by specific product
+  optional string location_id = 6;         // Filter by specific location
+  optional string revenue_category_id = 7; // Filter by revenue category
+  optional string currency = 8;            // Filter by currency (default: all)
+  optional domain.common.v1.PaginationRequest pagination = 9;
+}
+
+// GrossProfitLineItem represents one row in the gross profit report.
+message GrossProfitLineItem {
+  string group_key = 1;              // The grouping key value (product name, location, date, etc.)
+  optional string group_id = 2;      // The grouping entity ID (product_id, location_id, etc.)
+  double total_revenue = 3;          // Sum of revenue line item totals
+  double total_discount = 4;         // Sum of discounts applied
+  double net_revenue = 5;            // total_revenue - total_discount
+  double cost_of_goods_sold = 6;     // Sum of COGS from inventory transactions
+  double gross_profit = 7;           // net_revenue - cost_of_goods_sold
+  double gross_profit_margin = 8;    // (gross_profit / net_revenue) * 100
+  int64 units_sold = 9;             // Total units sold in this group
+  int64 transaction_count = 10;      // Number of revenue transactions
+}
+
+// GrossProfitSummary provides report-level totals.
+message GrossProfitSummary {
+  double total_revenue = 1;
+  double total_discount = 2;
+  double net_revenue = 3;
+  double total_cogs = 4;
+  double total_gross_profit = 5;
+  double overall_margin = 6;         // (total_gross_profit / net_revenue) * 100
+  int64 total_units_sold = 7;
+  int64 total_transactions = 8;
+  string currency = 9;
+  optional int64 start_date = 10;
+  optional int64 end_date = 11;
+}
+
+// GrossProfitReportResponse returns the generated report.
+message GrossProfitReportResponse {
+  repeated GrossProfitLineItem line_items = 1;
+  optional GrossProfitSummary summary = 2;
+  optional domain.common.v1.PaginationResponse pagination = 3;
+  bool success = 4;
+  optional domain.common.v1.Error error = 5;
+}
+
+// LedgerReportingDomainService defines ledger reporting operations.
+service LedgerReportingDomainService {
+  rpc GetGrossProfitReport(GrossProfitReportRequest) returns (GrossProfitReportResponse);
+}

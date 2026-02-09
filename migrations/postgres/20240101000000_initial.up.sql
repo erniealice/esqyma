@@ -554,6 +554,8 @@ CREATE TABLE "permission" (
   "date_created" TIMESTAMPTZ NULL,
   "date_modified" TIMESTAMPTZ NULL,
   "active" BOOLEAN NOT NULL DEFAULT true,
+  "name" TEXT NOT NULL DEFAULT '',
+  "description" TEXT NOT NULL DEFAULT '',
   CONSTRAINT "fk_permission_workspace_id" FOREIGN KEY ("workspace_id") REFERENCES "workspace"("id"),
   CONSTRAINT "fk_permission_user_id" FOREIGN KEY ("user_id") REFERENCES "user"("id"),
   CONSTRAINT "fk_permission_granted_by_user_id" FOREIGN KEY ("granted_by_user_id") REFERENCES "user"("id")

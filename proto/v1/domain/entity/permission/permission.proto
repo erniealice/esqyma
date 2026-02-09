@@ -31,6 +31,8 @@ message Permission {
   optional int64 date_modified = 9;
   optional string date_modified_string = 10;
   bool active = 11 [(options.v1.db).default = "true"];
+  string name = 12;
+  string description = 13;
 }
 
 service PermissionDomainService {
