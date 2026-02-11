@@ -32,6 +32,8 @@ message InventoryItem {
   optional double reorder_level = 16;
   string unit_of_measure = 17;
   optional string notes = 18;
+  string item_type = 19; // "serialized", "non_serialized", "consumable"
+  optional string product_variant_id = 20; // FK to product_variant
 }
 
 service InventoryItemDomainService {

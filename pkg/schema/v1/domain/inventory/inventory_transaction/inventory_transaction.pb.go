@@ -43,6 +43,8 @@ type InventoryTransaction struct {
 	ToLocationId          *string                       `protobuf:"bytes,16,opt,name=to_location_id,json=toLocationId,proto3,oneof" json:"to_location_id,omitempty"`
 	Notes                 *string                       `protobuf:"bytes,17,opt,name=notes,proto3,oneof" json:"notes,omitempty"`
 	Status                string                        `protobuf:"bytes,18,opt,name=status,proto3" json:"status,omitempty"`
+	SerialNumber          *string                       `protobuf:"bytes,19,opt,name=serial_number,json=serialNumber,proto3,oneof" json:"serial_number,omitempty"`
+	PerformedBy           *string                       `protobuf:"bytes,20,opt,name=performed_by,json=performedBy,proto3,oneof" json:"performed_by,omitempty"`
 	unknownFields         protoimpl.UnknownFields
 	sizeCache             protoimpl.SizeCache
 }
@@ -199,6 +201,20 @@ func (x *InventoryTransaction) GetNotes() string {
 func (x *InventoryTransaction) GetStatus() string {
 	if x != nil {
 		return x.Status
+	}
+	return ""
+}
+
+func (x *InventoryTransaction) GetSerialNumber() string {
+	if x != nil && x.SerialNumber != nil {
+		return *x.SerialNumber
+	}
+	return ""
+}
+
+func (x *InventoryTransaction) GetPerformedBy() string {
+	if x != nil && x.PerformedBy != nil {
+		return *x.PerformedBy
 	}
 	return ""
 }
@@ -1022,7 +1038,7 @@ var File_domain_inventory_inventory_transaction_inventory_transaction_proto prot
 
 const file_domain_inventory_inventory_transaction_inventory_transaction_proto_rawDesc = "" +
 	"\n" +
-	"Bdomain/inventory/inventory_transaction/inventory_transaction.proto\x12\x13domain.inventory.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1adomain/common/search.proto\x1a4domain/inventory/inventory_item/inventory_item.proto\"\xfb\a\n" +
+	"Bdomain/inventory/inventory_transaction/inventory_transaction.proto\x12\x13domain.inventory.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1adomain/common/search.proto\x1a4domain/inventory/inventory_item/inventory_item.proto\"\xf0\b\n" +
 	"\x14InventoryTransaction\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12&\n" +
 	"\fdate_created\x18\x02 \x01(\x03H\x00R\vdateCreated\x88\x01\x01\x123\n" +
@@ -1043,7 +1059,9 @@ const file_domain_inventory_inventory_transaction_inventory_transaction_proto_ra
 	"\x0eto_location_id\x18\x10 \x01(\tH\n" +
 	"R\ftoLocationId\x88\x01\x01\x12\x19\n" +
 	"\x05notes\x18\x11 \x01(\tH\vR\x05notes\x88\x01\x01\x12\x16\n" +
-	"\x06status\x18\x12 \x01(\tR\x06statusB\x0f\n" +
+	"\x06status\x18\x12 \x01(\tR\x06status\x12(\n" +
+	"\rserial_number\x18\x13 \x01(\tH\fR\fserialNumber\x88\x01\x01\x12&\n" +
+	"\fperformed_by\x18\x14 \x01(\tH\rR\vperformedBy\x88\x01\x01B\x0f\n" +
 	"\r_date_createdB\x16\n" +
 	"\x14_date_created_stringB\x10\n" +
 	"\x0e_date_modifiedB\x17\n" +
@@ -1055,7 +1073,9 @@ const file_domain_inventory_inventory_transaction_inventory_transaction_proto_ra
 	"\r_reference_idB\x13\n" +
 	"\x11_from_location_idB\x11\n" +
 	"\x0f_to_location_idB\b\n" +
-	"\x06_notes\"b\n" +
+	"\x06_notesB\x10\n" +
+	"\x0e_serial_numberB\x0f\n" +
+	"\r_performed_by\"b\n" +
 	"!CreateInventoryTransactionRequest\x12=\n" +
 	"\x04data\x18\x01 \x01(\v2).domain.inventory.v1.InventoryTransactionR\x04data\"\xbb\x01\n" +
 	"\"CreateInventoryTransactionResponse\x12=\n" +

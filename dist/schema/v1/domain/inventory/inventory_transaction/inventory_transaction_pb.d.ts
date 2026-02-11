@@ -86,6 +86,14 @@ export type InventoryTransaction = Message<"domain.inventory.v1.InventoryTransac
      * @generated from field: string status = 18;
      */
     status: string;
+    /**
+     * @generated from field: optional string serial_number = 19;
+     */
+    serialNumber?: string;
+    /**
+     * @generated from field: optional string performed_by = 20;
+     */
+    performedBy?: string;
 };
 /**
  * Describes the message domain.inventory.v1.InventoryTransaction.

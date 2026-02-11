@@ -44,6 +44,8 @@ type InventoryItem struct {
 	ReorderLevel       *float64               `protobuf:"fixed64,16,opt,name=reorder_level,json=reorderLevel,proto3,oneof" json:"reorder_level,omitempty"`
 	UnitOfMeasure      string                 `protobuf:"bytes,17,opt,name=unit_of_measure,json=unitOfMeasure,proto3" json:"unit_of_measure,omitempty"`
 	Notes              *string                `protobuf:"bytes,18,opt,name=notes,proto3,oneof" json:"notes,omitempty"`
+	ItemType           string                 `protobuf:"bytes,19,opt,name=item_type,json=itemType,proto3" json:"item_type,omitempty"`                                 // "serialized", "non_serialized", "consumable"
+	ProductVariantId   *string                `protobuf:"bytes,20,opt,name=product_variant_id,json=productVariantId,proto3,oneof" json:"product_variant_id,omitempty"` // FK to product_variant
 	unknownFields      protoimpl.UnknownFields
 	sizeCache          protoimpl.SizeCache
 }
@@ -200,6 +202,20 @@ func (x *InventoryItem) GetUnitOfMeasure() string {
 func (x *InventoryItem) GetNotes() string {
 	if x != nil && x.Notes != nil {
 		return *x.Notes
+	}
+	return ""
+}
+
+func (x *InventoryItem) GetItemType() string {
+	if x != nil {
+		return x.ItemType
+	}
+	return ""
+}
+
+func (x *InventoryItem) GetProductVariantId() string {
+	if x != nil && x.ProductVariantId != nil {
+		return *x.ProductVariantId
 	}
 	return ""
 }
@@ -1023,7 +1039,7 @@ var File_domain_inventory_inventory_item_inventory_item_proto protoreflect.FileD
 
 const file_domain_inventory_inventory_item_inventory_item_proto_rawDesc = "" +
 	"\n" +
-	"4domain/inventory/inventory_item/inventory_item.proto\x12\x13domain.inventory.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1adomain/common/search.proto\x1a$domain/product/product/product.proto\x1a%domain/entity/location/location.proto\"\x85\a\n" +
+	"4domain/inventory/inventory_item/inventory_item.proto\x12\x13domain.inventory.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1adomain/common/search.proto\x1a$domain/product/product/product.proto\x1a%domain/entity/location/location.proto\"\xec\a\n" +
 	"\rInventoryItem\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12&\n" +
 	"\fdate_created\x18\x02 \x01(\x03H\x00R\vdateCreated\x88\x01\x01\x123\n" +
@@ -1046,7 +1062,9 @@ const file_domain_inventory_inventory_item_inventory_item_proto_rawDesc = "" +
 	"\rreorder_level\x18\x10 \x01(\x01H\tR\freorderLevel\x88\x01\x01\x12&\n" +
 	"\x0funit_of_measure\x18\x11 \x01(\tR\runitOfMeasure\x12\x19\n" +
 	"\x05notes\x18\x12 \x01(\tH\n" +
-	"R\x05notes\x88\x01\x01B\x0f\n" +
+	"R\x05notes\x88\x01\x01\x12\x1b\n" +
+	"\titem_type\x18\x13 \x01(\tR\bitemType\x121\n" +
+	"\x12product_variant_id\x18\x14 \x01(\tH\vR\x10productVariantId\x88\x01\x01B\x0f\n" +
 	"\r_date_createdB\x16\n" +
 	"\x14_date_created_stringB\x10\n" +
 	"\x0e_date_modifiedB\x17\n" +
@@ -1058,7 +1076,8 @@ const file_domain_inventory_inventory_item_inventory_item_proto_rawDesc = "" +
 	"\f_location_idB\x06\n" +
 	"\x04_skuB\x10\n" +
 	"\x0e_reorder_levelB\b\n" +
-	"\x06_notes\"T\n" +
+	"\x06_notesB\x15\n" +
+	"\x13_product_variant_id\"T\n" +
 	"\x1aCreateInventoryItemRequest\x126\n" +
 	"\x04data\x18\x01 \x01(\v2\".domain.inventory.v1.InventoryItemR\x04data\"\xad\x01\n" +
 	"\x1bCreateInventoryItemResponse\x126\n" +

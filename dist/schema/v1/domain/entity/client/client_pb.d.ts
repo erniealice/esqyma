@@ -59,6 +59,46 @@ export type Client = Message<"domain.entity.v1.Client"> & {
      * @generated from field: optional domain.entity.v1.ClientCategory category = 11;
      */
     category?: ClientCategory;
+    /**
+     * @generated from field: optional string company_name = 12;
+     */
+    companyName?: string;
+    /**
+     * "retail", "wholesale", "vip"
+     *
+     * @generated from field: optional string customer_type = 13;
+     */
+    customerType?: string;
+    /**
+     * ISO date string "YYYY-MM-DD"
+     *
+     * @generated from field: optional string date_of_birth = 14;
+     */
+    dateOfBirth?: string;
+    /**
+     * @generated from field: optional string street_address = 15;
+     */
+    streetAddress?: string;
+    /**
+     * @generated from field: optional string city = 16;
+     */
+    city?: string;
+    /**
+     * @generated from field: optional string province = 17;
+     */
+    province?: string;
+    /**
+     * @generated from field: optional string postal_code = 18;
+     */
+    postalCode?: string;
+    /**
+     * @generated from field: optional string notes = 19;
+     */
+    notes?: string;
+    /**
+     * @generated from field: repeated domain.entity.v1.ClientCategory categories = 20;
+     */
+    categories: ClientCategory[];
 };
 /**
  * Describes the message domain.entity.v1.Client.

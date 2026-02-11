@@ -57,6 +57,14 @@ export type Permission = Message<"domain.entity.v1.Permission"> & {
      * @generated from field: bool active = 11;
      */
     active: boolean;
+    /**
+     * @generated from field: string name = 12;
+     */
+    name: string;
+    /**
+     * @generated from field: string description = 13;
+     */
+    description: string;
 };
 /**
  * Describes the message domain.entity.v1.Permission.

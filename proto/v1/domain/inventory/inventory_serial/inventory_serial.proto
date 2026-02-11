@@ -1,0 +1,160 @@
+syntax = "proto3";
+
+package domain.inventory.v1;
+
+option go_package = "leapfor.xyz/esqyma/golang/v1/domain/inventory/inventory_serial";
+
+import "domain/common/error.proto";
+import "domain/common/pagination.proto";
+import "domain/common/filter.proto";
+import "domain/common/sort.proto";
+import "domain/common/search.proto";
+
+import "domain/inventory/inventory_item/inventory_item.proto";
+import "options/db.proto";
+
+message InventorySerial {
+  option (options.v1.table).table = true;
+  string id = 1;
+  string inventory_item_id = 2 [(options.v1.db).references = "inventory_item", (options.v1.db).index = true];
+  string serial_number = 3 [(options.v1.db).unique = true];
+  optional string imei = 4;
+  string status = 5;
+  optional string warranty_start = 6;
+  optional string warranty_end = 7;
+  optional string purchase_order = 8;
+  optional string sold_reference = 9;
+  optional string notes = 10;
+  bool active = 11 [(options.v1.db).default = "true"];
+  optional int64 date_created = 12;
+  optional string date_created_string = 13;
+  optional int64 date_modified = 14;
+  optional string date_modified_string = 15;
+  InventoryItem inventory_item = 16;
+}
+
+service InventorySerialDomainService {
+  rpc CreateInventorySerial(CreateInventorySerialRequest) returns (CreateInventorySerialResponse);
+  rpc ReadInventorySerial(ReadInventorySerialRequest) returns (ReadInventorySerialResponse);
+  rpc UpdateInventorySerial(UpdateInventorySerialRequest) returns (UpdateInventorySerialResponse);
+  rpc DeleteInventorySerial(DeleteInventorySerialRequest) returns (DeleteInventorySerialResponse);
+  rpc ListInventorySerials(ListInventorySerialsRequest) returns (ListInventorySerialsResponse);
+
+  // NEW: Enhanced list with pagination, filtering, sorting, search
+  rpc GetInventorySerialListPageData(GetInventorySerialListPageDataRequest)
+    returns (GetInventorySerialListPageDataResponse);
+
+  // NEW: Enhanced item view with related data
+  rpc GetInventorySerialItemPageData(GetInventorySerialItemPageDataRequest)
+    returns (GetInventorySerialItemPageDataResponse);
+}
+
+message CreateInventorySerialRequest {
+  InventorySerial data = 1;
+}
+
+message CreateInventorySerialResponse {
+  repeated InventorySerial data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message CreateInventorySerialBatchRequest {
+  repeated InventorySerial data = 1;
+}
+
+message CreateInventorySerialBatchResponse {
+  repeated InventorySerial data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message ReadInventorySerialRequest {
+  InventorySerial data = 1;
+}
+
+message ReadInventorySerialResponse {
+  repeated InventorySerial data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message UpdateInventorySerialRequest {
+  InventorySerial data = 1;
+}
+
+message UpdateInventorySerialResponse {
+  repeated InventorySerial data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message DeleteInventorySerialRequest {
+  InventorySerial data = 1;
+}
+
+message DeleteInventorySerialResponse {
+  bool success = 1;
+  optional domain.common.v1.Error error = 2;
+}
+
+message ListInventorySerialsRequest {
+  optional string inventory_item_id = 1;
+  optional domain.common.v1.SearchRequest search = 2;
+  optional domain.common.v1.FilterRequest filters = 3;
+  optional domain.common.v1.SortRequest sort = 4;
+  optional domain.common.v1.PaginationRequest pagination = 5;
+}
+
+message ListInventorySerialsResponse {
+  repeated InventorySerial data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+// NEW: Enhanced list request with core features
+message GetInventorySerialListPageDataRequest {
+  // Pagination settings
+  domain.common.v1.PaginationRequest pagination = 1;
+
+  // Filter conditions
+  domain.common.v1.FilterRequest filters = 2;
+
+  // Sort settings
+  domain.common.v1.SortRequest sort = 3;
+
+  // Search settings
+  domain.common.v1.SearchRequest search = 4;
+}
+
+// NEW: Enhanced list response with metadata
+message GetInventorySerialListPageDataResponse {
+  // The inventory serial data
+  repeated InventorySerial inventory_serial_list = 1;
+
+  // Pagination metadata
+  optional domain.common.v1.PaginationResponse pagination = 2;
+
+  // Search results metadata (when search is used)
+  repeated domain.common.v1.SearchResult search_results = 3;
+
+  // Response status
+  bool success = 4;
+  optional domain.common.v1.Error error = 5;
+}
+
+// NEW: Simple item request
+message GetInventorySerialItemPageDataRequest {
+  // The inventory serial ID to retrieve
+  string inventory_serial_id = 1;
+}
+
+// NEW: Simple item response
+message GetInventorySerialItemPageDataResponse {
+  // The inventory serial data
+  InventorySerial inventory_serial = 1;
+
+  // Response status
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}

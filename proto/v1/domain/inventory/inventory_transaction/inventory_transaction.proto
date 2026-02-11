@@ -31,6 +31,8 @@ message InventoryTransaction {
   optional string to_location_id = 16;
   optional string notes = 17;
   string status = 18;
+  optional string serial_number = 19;
+  optional string performed_by = 20;
 }
 
 service InventoryTransactionDomainService {

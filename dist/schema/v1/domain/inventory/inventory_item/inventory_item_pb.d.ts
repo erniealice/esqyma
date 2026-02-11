@@ -87,6 +87,18 @@ export type InventoryItem = Message<"domain.inventory.v1.InventoryItem"> & {
      * @generated from field: optional string notes = 18;
      */
     notes?: string;
+    /**
+     * "serialized", "non_serialized", "consumable"
+     *
+     * @generated from field: string item_type = 19;
+     */
+    itemType: string;
+    /**
+     * FK to product_variant
+     *
+     * @generated from field: optional string product_variant_id = 20;
+     */
+    productVariantId?: string;
 };
 /**
  * Describes the message domain.inventory.v1.InventoryItem.

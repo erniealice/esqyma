@@ -27,6 +27,7 @@ message ProductAttribute {
   optional string date_created_string = 8;
   optional int64 date_modified = 9;
   optional string date_modified_string = 10;
+  optional string default_value = 11;
 }
 
 service ProductAttributeDomainService {

@@ -1,0 +1,159 @@
+syntax = "proto3";
+
+package domain.inventory.v1;
+
+option go_package = "leapfor.xyz/esqyma/golang/v1/domain/inventory/inventory_depreciation";
+
+import "domain/common/error.proto";
+import "domain/common/pagination.proto";
+import "domain/common/filter.proto";
+import "domain/common/sort.proto";
+import "domain/common/search.proto";
+
+import "domain/inventory/inventory_item/inventory_item.proto";
+import "options/db.proto";
+
+message InventoryDepreciation {
+  option (options.v1.table).table = true;
+  string id = 1;
+  string inventory_item_id = 2 [(options.v1.db).references = "inventory_item", (options.v1.db).index = true];
+  string method = 3;
+  double cost_basis = 4;
+  double salvage_value = 5;
+  int32 useful_life_months = 6;
+  string start_date = 7;
+  double accumulated_depreciation = 8;
+  double book_value = 9;
+  bool active = 10 [(options.v1.db).default = "true"];
+  optional int64 date_created = 11;
+  optional string date_created_string = 12;
+  optional int64 date_modified = 13;
+  optional string date_modified_string = 14;
+  InventoryItem inventory_item = 15;
+}
+
+service InventoryDepreciationDomainService {
+  rpc CreateInventoryDepreciation(CreateInventoryDepreciationRequest) returns (CreateInventoryDepreciationResponse);
+  rpc ReadInventoryDepreciation(ReadInventoryDepreciationRequest) returns (ReadInventoryDepreciationResponse);
+  rpc UpdateInventoryDepreciation(UpdateInventoryDepreciationRequest) returns (UpdateInventoryDepreciationResponse);
+  rpc DeleteInventoryDepreciation(DeleteInventoryDepreciationRequest) returns (DeleteInventoryDepreciationResponse);
+  rpc ListInventoryDepreciations(ListInventoryDepreciationsRequest) returns (ListInventoryDepreciationsResponse);
+
+  // NEW: Enhanced list with pagination, filtering, sorting, search
+  rpc GetInventoryDepreciationListPageData(GetInventoryDepreciationListPageDataRequest)
+    returns (GetInventoryDepreciationListPageDataResponse);
+
+  // NEW: Enhanced item view with related data
+  rpc GetInventoryDepreciationItemPageData(GetInventoryDepreciationItemPageDataRequest)
+    returns (GetInventoryDepreciationItemPageDataResponse);
+}
+
+message CreateInventoryDepreciationRequest {
+  InventoryDepreciation data = 1;
+}
+
+message CreateInventoryDepreciationResponse {
+  repeated InventoryDepreciation data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message CreateInventoryDepreciationBatchRequest {
+  repeated InventoryDepreciation data = 1;
+}
+
+message CreateInventoryDepreciationBatchResponse {
+  repeated InventoryDepreciation data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message ReadInventoryDepreciationRequest {
+  InventoryDepreciation data = 1;
+}
+
+message ReadInventoryDepreciationResponse {
+  repeated InventoryDepreciation data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message UpdateInventoryDepreciationRequest {
+  InventoryDepreciation data = 1;
+}
+
+message UpdateInventoryDepreciationResponse {
+  repeated InventoryDepreciation data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message DeleteInventoryDepreciationRequest {
+  InventoryDepreciation data = 1;
+}
+
+message DeleteInventoryDepreciationResponse {
+  bool success = 1;
+  optional domain.common.v1.Error error = 2;
+}
+
+message ListInventoryDepreciationsRequest {
+  optional string inventory_item_id = 1;
+  optional domain.common.v1.SearchRequest search = 2;
+  optional domain.common.v1.FilterRequest filters = 3;
+  optional domain.common.v1.SortRequest sort = 4;
+  optional domain.common.v1.PaginationRequest pagination = 5;
+}
+
+message ListInventoryDepreciationsResponse {
+  repeated InventoryDepreciation data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+// NEW: Enhanced list request with core features
+message GetInventoryDepreciationListPageDataRequest {
+  // Pagination settings
+  domain.common.v1.PaginationRequest pagination = 1;
+
+  // Filter conditions
+  domain.common.v1.FilterRequest filters = 2;
+
+  // Sort settings
+  domain.common.v1.SortRequest sort = 3;
+
+  // Search settings
+  domain.common.v1.SearchRequest search = 4;
+}
+
+// NEW: Enhanced list response with metadata
+message GetInventoryDepreciationListPageDataResponse {
+  // The inventory depreciation data
+  repeated InventoryDepreciation inventory_depreciation_list = 1;
+
+  // Pagination metadata
+  optional domain.common.v1.PaginationResponse pagination = 2;
+
+  // Search results metadata (when search is used)
+  repeated domain.common.v1.SearchResult search_results = 3;
+
+  // Response status
+  bool success = 4;
+  optional domain.common.v1.Error error = 5;
+}
+
+// NEW: Simple item request
+message GetInventoryDepreciationItemPageDataRequest {
+  // The inventory depreciation ID to retrieve
+  string inventory_depreciation_id = 1;
+}
+
+// NEW: Simple item response
+message GetInventoryDepreciationItemPageDataResponse {
+  // The inventory depreciation data
+  InventoryDepreciation inventory_depreciation = 1;
+
+  // Response status
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}

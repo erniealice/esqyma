@@ -36,6 +36,7 @@ type ProductAttribute struct {
 	DateCreatedString  *string                `protobuf:"bytes,8,opt,name=date_created_string,json=dateCreatedString,proto3,oneof" json:"date_created_string,omitempty"`
 	DateModified       *int64                 `protobuf:"varint,9,opt,name=date_modified,json=dateModified,proto3,oneof" json:"date_modified,omitempty"`
 	DateModifiedString *string                `protobuf:"bytes,10,opt,name=date_modified_string,json=dateModifiedString,proto3,oneof" json:"date_modified_string,omitempty"`
+	DefaultValue       *string                `protobuf:"bytes,11,opt,name=default_value,json=defaultValue,proto3,oneof" json:"default_value,omitempty"`
 	unknownFields      protoimpl.UnknownFields
 	sizeCache          protoimpl.SizeCache
 }
@@ -136,6 +137,13 @@ func (x *ProductAttribute) GetDateModified() int64 {
 func (x *ProductAttribute) GetDateModifiedString() string {
 	if x != nil && x.DateModifiedString != nil {
 		return *x.DateModifiedString
+	}
+	return ""
+}
+
+func (x *ProductAttribute) GetDefaultValue() string {
+	if x != nil && x.DefaultValue != nil {
+		return *x.DefaultValue
 	}
 	return ""
 }
@@ -928,7 +936,7 @@ var File_domain_product_product_attribute_product_attribute_proto protoreflect.F
 
 const file_domain_product_product_attribute_product_attribute_proto_rawDesc = "" +
 	"\n" +
-	"8domain/product/product_attribute/product_attribute.proto\x12\x11domain.product.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1adomain/common/search.proto\x1a$domain/product/product/product.proto\x1a\x1ddomain/common/attribute.proto\x1a\x10options/db.proto\"\xc2\x04\n" +
+	"8domain/product/product_attribute/product_attribute.proto\x12\x11domain.product.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1adomain/common/search.proto\x1a$domain/product/product/product.proto\x1a\x1ddomain/common/attribute.proto\x1a\x10options/db.proto\"\xfe\x04\n" +
 	"\x10ProductAttribute\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12.\n" +
 	"\n" +
@@ -943,11 +951,13 @@ const file_domain_product_product_attribute_product_attribute_proto_rawDesc = ""
 	"\x13date_created_string\x18\b \x01(\tH\x01R\x11dateCreatedString\x88\x01\x01\x12(\n" +
 	"\rdate_modified\x18\t \x01(\x03H\x02R\fdateModified\x88\x01\x01\x125\n" +
 	"\x14date_modified_string\x18\n" +
-	" \x01(\tH\x03R\x12dateModifiedString\x88\x01\x01:\x1f\x8a\xb5\x18\x1b\b\x01\x1a\x17product_id,attribute_idB\x0f\n" +
+	" \x01(\tH\x03R\x12dateModifiedString\x88\x01\x01\x12(\n" +
+	"\rdefault_value\x18\v \x01(\tH\x04R\fdefaultValue\x88\x01\x01:\x1f\x8a\xb5\x18\x1b\b\x01\x1a\x17product_id,attribute_idB\x0f\n" +
 	"\r_date_createdB\x16\n" +
 	"\x14_date_created_stringB\x10\n" +
 	"\x0e_date_modifiedB\x17\n" +
-	"\x15_date_modified_string\"X\n" +
+	"\x15_date_modified_stringB\x10\n" +
+	"\x0e_default_value\"X\n" +
 	"\x1dCreateProductAttributeRequest\x127\n" +
 	"\x04data\x18\x01 \x01(\v2#.domain.product.v1.ProductAttributeR\x04data\"\xb1\x01\n" +
 	"\x1eCreateProductAttributeResponse\x127\n" +

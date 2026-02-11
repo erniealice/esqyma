@@ -1,0 +1,127 @@
+syntax = "proto3";
+
+package domain.common.v1;
+
+option go_package = "github.com/erniealice/esqyma/golang/v1/domain/common";
+
+import "domain/common/error.proto";
+import "domain/common/pagination.proto";
+import "domain/common/filter.proto";
+import "domain/common/sort.proto";
+import "domain/common/search.proto";
+
+import "domain/common/attribute.proto";
+import "options/db.proto";
+
+message AttributeValue {
+  option (options.v1.table).table = true;
+  string id = 1;
+  string attribute_id = 2 [(options.v1.db).references = "attribute", (options.v1.db).index = true];
+  string value = 3;
+  int32 sort_order = 4;
+  bool active = 5 [(options.v1.db).default = "true"];
+  optional int64 date_created = 6;
+  optional string date_created_string = 7;
+  optional int64 date_modified = 8;
+  optional string date_modified_string = 9;
+  Attribute attribute = 10;
+}
+
+service AttributeValueDomainService {
+  rpc CreateAttributeValue(CreateAttributeValueRequest) returns (CreateAttributeValueResponse);
+  rpc ReadAttributeValue(ReadAttributeValueRequest) returns (ReadAttributeValueResponse);
+  rpc UpdateAttributeValue(UpdateAttributeValueRequest) returns (UpdateAttributeValueResponse);
+  rpc DeleteAttributeValue(DeleteAttributeValueRequest) returns (DeleteAttributeValueResponse);
+  rpc ListAttributeValues(ListAttributeValuesRequest) returns (ListAttributeValuesResponse);
+  rpc GetAttributeValueListPageData(GetAttributeValueListPageDataRequest)
+    returns (GetAttributeValueListPageDataResponse);
+  rpc GetAttributeValueItemPageData(GetAttributeValueItemPageDataRequest)
+    returns (GetAttributeValueItemPageDataResponse);
+}
+
+message CreateAttributeValueRequest {
+  AttributeValue data = 1;
+}
+
+message CreateAttributeValueResponse {
+  repeated AttributeValue data = 1;
+  bool success = 2;
+  optional Error error = 3;
+}
+
+message CreateAttributeValueBatchRequest {
+  repeated AttributeValue data = 1;
+}
+
+message CreateAttributeValueBatchResponse {
+  repeated AttributeValue data = 1;
+  bool success = 2;
+  optional Error error = 3;
+}
+
+message ReadAttributeValueRequest {
+  AttributeValue data = 1;
+}
+
+message ReadAttributeValueResponse {
+  repeated AttributeValue data = 1;
+  bool success = 2;
+  optional Error error = 3;
+}
+
+message UpdateAttributeValueRequest {
+  AttributeValue data = 1;
+}
+
+message UpdateAttributeValueResponse {
+  repeated AttributeValue data = 1;
+  bool success = 2;
+  optional Error error = 3;
+}
+
+message DeleteAttributeValueRequest {
+  AttributeValue data = 1;
+}
+
+message DeleteAttributeValueResponse {
+  bool success = 1;
+  optional Error error = 2;
+}
+
+message ListAttributeValuesRequest {
+  optional SearchRequest search = 1;
+  optional FilterRequest filters = 2;
+  optional SortRequest sort = 3;
+  optional PaginationRequest pagination = 4;
+}
+
+message ListAttributeValuesResponse {
+  repeated AttributeValue data = 1;
+  bool success = 2;
+  optional Error error = 3;
+}
+
+message GetAttributeValueListPageDataRequest {
+  optional SearchRequest search = 1;
+  optional FilterRequest filters = 2;
+  optional SortRequest sort = 3;
+  optional PaginationRequest pagination = 4;
+}
+
+message GetAttributeValueListPageDataResponse {
+  repeated AttributeValue attribute_value_list = 1;
+  bool success = 2;
+  optional Error error = 3;
+  optional PaginationResponse pagination = 4;
+  repeated SearchResult search_results = 5;
+}
+
+message GetAttributeValueItemPageDataRequest {
+  string attribute_value_id = 1;
+}
+
+message GetAttributeValueItemPageDataResponse {
+  AttributeValue attribute_value = 1;
+  bool success = 2;
+  optional Error error = 3;
+}

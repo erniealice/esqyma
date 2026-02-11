@@ -55,6 +55,10 @@ export type ProductAttribute = Message<"domain.product.v1.ProductAttribute"> & {
      * @generated from field: optional string date_modified_string = 10;
      */
     dateModifiedString?: string;
+    /**
+     * @generated from field: optional string default_value = 11;
+     */
+    defaultValue?: string;
 };
 /**
  * Describes the message domain.product.v1.ProductAttribute.

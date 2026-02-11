@@ -26,18 +26,27 @@ const (
 )
 
 type Client struct {
-	state              protoimpl.MessageState          `protogen:"open.v1"`
-	Id                 string                          `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
-	User               *user.User                      `protobuf:"bytes,2,opt,name=user,proto3,oneof" json:"user,omitempty"`
-	UserId             string                          `protobuf:"bytes,3,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty"`
-	DateCreated        *int64                          `protobuf:"varint,4,opt,name=date_created,json=dateCreated,proto3,oneof" json:"date_created,omitempty"`
-	DateCreatedString  *string                         `protobuf:"bytes,5,opt,name=date_created_string,json=dateCreatedString,proto3,oneof" json:"date_created_string,omitempty"`
-	DateModified       *int64                          `protobuf:"varint,6,opt,name=date_modified,json=dateModified,proto3,oneof" json:"date_modified,omitempty"`
-	DateModifiedString *string                         `protobuf:"bytes,7,opt,name=date_modified_string,json=dateModifiedString,proto3,oneof" json:"date_modified_string,omitempty"`
-	Active             bool                            `protobuf:"varint,8,opt,name=active,proto3" json:"active,omitempty"`
-	InternalId         string                          `protobuf:"bytes,9,opt,name=internal_id,json=internalId,proto3" json:"internal_id,omitempty"`
-	CategoryId         *string                         `protobuf:"bytes,10,opt,name=category_id,json=categoryId,proto3,oneof" json:"category_id,omitempty"`
-	Category           *client_category.ClientCategory `protobuf:"bytes,11,opt,name=category,proto3,oneof" json:"category,omitempty"`
+	state              protoimpl.MessageState            `protogen:"open.v1"`
+	Id                 string                            `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
+	User               *user.User                        `protobuf:"bytes,2,opt,name=user,proto3,oneof" json:"user,omitempty"`
+	UserId             string                            `protobuf:"bytes,3,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty"`
+	DateCreated        *int64                            `protobuf:"varint,4,opt,name=date_created,json=dateCreated,proto3,oneof" json:"date_created,omitempty"`
+	DateCreatedString  *string                           `protobuf:"bytes,5,opt,name=date_created_string,json=dateCreatedString,proto3,oneof" json:"date_created_string,omitempty"`
+	DateModified       *int64                            `protobuf:"varint,6,opt,name=date_modified,json=dateModified,proto3,oneof" json:"date_modified,omitempty"`
+	DateModifiedString *string                           `protobuf:"bytes,7,opt,name=date_modified_string,json=dateModifiedString,proto3,oneof" json:"date_modified_string,omitempty"`
+	Active             bool                              `protobuf:"varint,8,opt,name=active,proto3" json:"active,omitempty"`
+	InternalId         string                            `protobuf:"bytes,9,opt,name=internal_id,json=internalId,proto3" json:"internal_id,omitempty"`
+	CategoryId         *string                           `protobuf:"bytes,10,opt,name=category_id,json=categoryId,proto3,oneof" json:"category_id,omitempty"`
+	Category           *client_category.ClientCategory   `protobuf:"bytes,11,opt,name=category,proto3,oneof" json:"category,omitempty"`
+	CompanyName        *string                           `protobuf:"bytes,12,opt,name=company_name,json=companyName,proto3,oneof" json:"company_name,omitempty"`
+	CustomerType       *string                           `protobuf:"bytes,13,opt,name=customer_type,json=customerType,proto3,oneof" json:"customer_type,omitempty"` // "retail", "wholesale", "vip"
+	DateOfBirth        *string                           `protobuf:"bytes,14,opt,name=date_of_birth,json=dateOfBirth,proto3,oneof" json:"date_of_birth,omitempty"`  // ISO date string "YYYY-MM-DD"
+	StreetAddress      *string                           `protobuf:"bytes,15,opt,name=street_address,json=streetAddress,proto3,oneof" json:"street_address,omitempty"`
+	City               *string                           `protobuf:"bytes,16,opt,name=city,proto3,oneof" json:"city,omitempty"`
+	Province           *string                           `protobuf:"bytes,17,opt,name=province,proto3,oneof" json:"province,omitempty"`
+	PostalCode         *string                           `protobuf:"bytes,18,opt,name=postal_code,json=postalCode,proto3,oneof" json:"postal_code,omitempty"`
+	Notes              *string                           `protobuf:"bytes,19,opt,name=notes,proto3,oneof" json:"notes,omitempty"`
+	Categories         []*client_category.ClientCategory `protobuf:"bytes,20,rep,name=categories,proto3" json:"categories,omitempty"`
 	unknownFields      protoimpl.UnknownFields
 	sizeCache          protoimpl.SizeCache
 }
@@ -145,6 +154,69 @@ func (x *Client) GetCategoryId() string {
 func (x *Client) GetCategory() *client_category.ClientCategory {
 	if x != nil {
 		return x.Category
+	}
+	return nil
+}
+
+func (x *Client) GetCompanyName() string {
+	if x != nil && x.CompanyName != nil {
+		return *x.CompanyName
+	}
+	return ""
+}
+
+func (x *Client) GetCustomerType() string {
+	if x != nil && x.CustomerType != nil {
+		return *x.CustomerType
+	}
+	return ""
+}
+
+func (x *Client) GetDateOfBirth() string {
+	if x != nil && x.DateOfBirth != nil {
+		return *x.DateOfBirth
+	}
+	return ""
+}
+
+func (x *Client) GetStreetAddress() string {
+	if x != nil && x.StreetAddress != nil {
+		return *x.StreetAddress
+	}
+	return ""
+}
+
+func (x *Client) GetCity() string {
+	if x != nil && x.City != nil {
+		return *x.City
+	}
+	return ""
+}
+
+func (x *Client) GetProvince() string {
+	if x != nil && x.Province != nil {
+		return *x.Province
+	}
+	return ""
+}
+
+func (x *Client) GetPostalCode() string {
+	if x != nil && x.PostalCode != nil {
+		return *x.PostalCode
+	}
+	return ""
+}
+
+func (x *Client) GetNotes() string {
+	if x != nil && x.Notes != nil {
+		return *x.Notes
+	}
+	return ""
+}
+
+func (x *Client) GetCategories() []*client_category.ClientCategory {
+	if x != nil {
+		return x.Categories
 	}
 	return nil
 }
@@ -937,7 +1009,7 @@ var File_domain_entity_client_client_proto protoreflect.FileDescriptor
 
 const file_domain_entity_client_client_proto_rawDesc = "" +
 	"\n" +
-	"!domain/entity/client/client.proto\x12\x10domain.entity.v1\x1a\x19domain/common/error.proto\x1a\x1adomain/common/search.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1edomain/common/pagination.proto\x1a\x10options/db.proto\x1a\x1ddomain/entity/user/user.proto\x1a3domain/entity/client_category/client_category.proto\"\xfd\x04\n" +
+	"!domain/entity/client/client.proto\x12\x10domain.entity.v1\x1a\x19domain/common/error.proto\x1a\x1adomain/common/search.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1edomain/common/pagination.proto\x1a\x10options/db.proto\x1a\x1ddomain/entity/user/user.proto\x1a3domain/entity/client_category/client_category.proto\"\xd9\b\n" +
 	"\x06Client\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12/\n" +
 	"\x04user\x18\x02 \x01(\v2\x16.domain.entity.v1.UserH\x00R\x04user\x88\x01\x01\x12%\n" +
@@ -955,14 +1027,35 @@ const file_domain_entity_client_client_proto_rawDesc = "" +
 	" \x01(\tB\x15\x82\xb5\x18\x11\n" +
 	"\x0fclient_categoryH\x05R\n" +
 	"categoryId\x88\x01\x01\x12A\n" +
-	"\bcategory\x18\v \x01(\v2 .domain.entity.v1.ClientCategoryH\x06R\bcategory\x88\x01\x01:\x06\x8a\xb5\x18\x02\b\x01B\a\n" +
+	"\bcategory\x18\v \x01(\v2 .domain.entity.v1.ClientCategoryH\x06R\bcategory\x88\x01\x01\x12&\n" +
+	"\fcompany_name\x18\f \x01(\tH\aR\vcompanyName\x88\x01\x01\x12(\n" +
+	"\rcustomer_type\x18\r \x01(\tH\bR\fcustomerType\x88\x01\x01\x12'\n" +
+	"\rdate_of_birth\x18\x0e \x01(\tH\tR\vdateOfBirth\x88\x01\x01\x12*\n" +
+	"\x0estreet_address\x18\x0f \x01(\tH\n" +
+	"R\rstreetAddress\x88\x01\x01\x12\x17\n" +
+	"\x04city\x18\x10 \x01(\tH\vR\x04city\x88\x01\x01\x12\x1f\n" +
+	"\bprovince\x18\x11 \x01(\tH\fR\bprovince\x88\x01\x01\x12$\n" +
+	"\vpostal_code\x18\x12 \x01(\tH\rR\n" +
+	"postalCode\x88\x01\x01\x12\x19\n" +
+	"\x05notes\x18\x13 \x01(\tH\x0eR\x05notes\x88\x01\x01\x12@\n" +
+	"\n" +
+	"categories\x18\x14 \x03(\v2 .domain.entity.v1.ClientCategoryR\n" +
+	"categories:\x06\x8a\xb5\x18\x02\b\x01B\a\n" +
 	"\x05_userB\x0f\n" +
 	"\r_date_createdB\x16\n" +
 	"\x14_date_created_stringB\x10\n" +
 	"\x0e_date_modifiedB\x17\n" +
 	"\x15_date_modified_stringB\x0e\n" +
 	"\f_category_idB\v\n" +
-	"\t_category\"C\n" +
+	"\t_categoryB\x0f\n" +
+	"\r_company_nameB\x10\n" +
+	"\x0e_customer_typeB\x10\n" +
+	"\x0e_date_of_birthB\x11\n" +
+	"\x0f_street_addressB\a\n" +
+	"\x05_cityB\v\n" +
+	"\t_provinceB\x0e\n" +
+	"\f_postal_codeB\b\n" +
+	"\x06_notes\"C\n" +
 	"\x13CreateClientRequest\x12,\n" +
 	"\x04data\x18\x01 \x01(\v2\x18.domain.entity.v1.ClientR\x04data\"\x9c\x01\n" +
 	"\x14CreateClientResponse\x12,\n" +
@@ -1091,52 +1184,53 @@ var file_domain_entity_client_client_proto_goTypes = []any{
 var file_domain_entity_client_client_proto_depIdxs = []int32{
 	15, // 0: domain.entity.v1.Client.user:type_name -> domain.entity.v1.User
 	16, // 1: domain.entity.v1.Client.category:type_name -> domain.entity.v1.ClientCategory
-	0,  // 2: domain.entity.v1.CreateClientRequest.data:type_name -> domain.entity.v1.Client
-	0,  // 3: domain.entity.v1.CreateClientResponse.data:type_name -> domain.entity.v1.Client
-	17, // 4: domain.entity.v1.CreateClientResponse.error:type_name -> domain.common.v1.Error
-	0,  // 5: domain.entity.v1.ReadClientRequest.data:type_name -> domain.entity.v1.Client
-	0,  // 6: domain.entity.v1.ReadClientResponse.data:type_name -> domain.entity.v1.Client
-	17, // 7: domain.entity.v1.ReadClientResponse.error:type_name -> domain.common.v1.Error
-	0,  // 8: domain.entity.v1.UpdateClientRequest.data:type_name -> domain.entity.v1.Client
-	0,  // 9: domain.entity.v1.UpdateClientResponse.data:type_name -> domain.entity.v1.Client
-	17, // 10: domain.entity.v1.UpdateClientResponse.error:type_name -> domain.common.v1.Error
-	0,  // 11: domain.entity.v1.DeleteClientRequest.data:type_name -> domain.entity.v1.Client
-	17, // 12: domain.entity.v1.DeleteClientResponse.error:type_name -> domain.common.v1.Error
-	18, // 13: domain.entity.v1.ListClientsRequest.search:type_name -> domain.common.v1.SearchRequest
-	19, // 14: domain.entity.v1.ListClientsRequest.filters:type_name -> domain.common.v1.FilterRequest
-	20, // 15: domain.entity.v1.ListClientsRequest.sort:type_name -> domain.common.v1.SortRequest
-	21, // 16: domain.entity.v1.ListClientsRequest.pagination:type_name -> domain.common.v1.PaginationRequest
-	0,  // 17: domain.entity.v1.ListClientsResponse.data:type_name -> domain.entity.v1.Client
-	17, // 18: domain.entity.v1.ListClientsResponse.error:type_name -> domain.common.v1.Error
-	18, // 19: domain.entity.v1.GetClientListPageDataRequest.search:type_name -> domain.common.v1.SearchRequest
-	19, // 20: domain.entity.v1.GetClientListPageDataRequest.filters:type_name -> domain.common.v1.FilterRequest
-	20, // 21: domain.entity.v1.GetClientListPageDataRequest.sort:type_name -> domain.common.v1.SortRequest
-	21, // 22: domain.entity.v1.GetClientListPageDataRequest.pagination:type_name -> domain.common.v1.PaginationRequest
-	0,  // 23: domain.entity.v1.GetClientListPageDataResponse.client_list:type_name -> domain.entity.v1.Client
-	22, // 24: domain.entity.v1.GetClientListPageDataResponse.pagination:type_name -> domain.common.v1.PaginationResponse
-	23, // 25: domain.entity.v1.GetClientListPageDataResponse.search_results:type_name -> domain.common.v1.SearchResult
-	17, // 26: domain.entity.v1.GetClientListPageDataResponse.error:type_name -> domain.common.v1.Error
-	0,  // 27: domain.entity.v1.GetClientItemPageDataResponse.client:type_name -> domain.entity.v1.Client
-	17, // 28: domain.entity.v1.GetClientItemPageDataResponse.error:type_name -> domain.common.v1.Error
-	1,  // 29: domain.entity.v1.ClientDomainService.CreateClient:input_type -> domain.entity.v1.CreateClientRequest
-	3,  // 30: domain.entity.v1.ClientDomainService.ReadClient:input_type -> domain.entity.v1.ReadClientRequest
-	5,  // 31: domain.entity.v1.ClientDomainService.UpdateClient:input_type -> domain.entity.v1.UpdateClientRequest
-	7,  // 32: domain.entity.v1.ClientDomainService.DeleteClient:input_type -> domain.entity.v1.DeleteClientRequest
-	9,  // 33: domain.entity.v1.ClientDomainService.ListClients:input_type -> domain.entity.v1.ListClientsRequest
-	11, // 34: domain.entity.v1.ClientDomainService.GetClientListPageData:input_type -> domain.entity.v1.GetClientListPageDataRequest
-	13, // 35: domain.entity.v1.ClientDomainService.GetClientItemPageData:input_type -> domain.entity.v1.GetClientItemPageDataRequest
-	2,  // 36: domain.entity.v1.ClientDomainService.CreateClient:output_type -> domain.entity.v1.CreateClientResponse
-	4,  // 37: domain.entity.v1.ClientDomainService.ReadClient:output_type -> domain.entity.v1.ReadClientResponse
-	6,  // 38: domain.entity.v1.ClientDomainService.UpdateClient:output_type -> domain.entity.v1.UpdateClientResponse
-	8,  // 39: domain.entity.v1.ClientDomainService.DeleteClient:output_type -> domain.entity.v1.DeleteClientResponse
-	10, // 40: domain.entity.v1.ClientDomainService.ListClients:output_type -> domain.entity.v1.ListClientsResponse
-	12, // 41: domain.entity.v1.ClientDomainService.GetClientListPageData:output_type -> domain.entity.v1.GetClientListPageDataResponse
-	14, // 42: domain.entity.v1.ClientDomainService.GetClientItemPageData:output_type -> domain.entity.v1.GetClientItemPageDataResponse
-	36, // [36:43] is the sub-list for method output_type
-	29, // [29:36] is the sub-list for method input_type
-	29, // [29:29] is the sub-list for extension type_name
-	29, // [29:29] is the sub-list for extension extendee
-	0,  // [0:29] is the sub-list for field type_name
+	16, // 2: domain.entity.v1.Client.categories:type_name -> domain.entity.v1.ClientCategory
+	0,  // 3: domain.entity.v1.CreateClientRequest.data:type_name -> domain.entity.v1.Client
+	0,  // 4: domain.entity.v1.CreateClientResponse.data:type_name -> domain.entity.v1.Client
+	17, // 5: domain.entity.v1.CreateClientResponse.error:type_name -> domain.common.v1.Error
+	0,  // 6: domain.entity.v1.ReadClientRequest.data:type_name -> domain.entity.v1.Client
+	0,  // 7: domain.entity.v1.ReadClientResponse.data:type_name -> domain.entity.v1.Client
+	17, // 8: domain.entity.v1.ReadClientResponse.error:type_name -> domain.common.v1.Error
+	0,  // 9: domain.entity.v1.UpdateClientRequest.data:type_name -> domain.entity.v1.Client
+	0,  // 10: domain.entity.v1.UpdateClientResponse.data:type_name -> domain.entity.v1.Client
+	17, // 11: domain.entity.v1.UpdateClientResponse.error:type_name -> domain.common.v1.Error
+	0,  // 12: domain.entity.v1.DeleteClientRequest.data:type_name -> domain.entity.v1.Client
+	17, // 13: domain.entity.v1.DeleteClientResponse.error:type_name -> domain.common.v1.Error
+	18, // 14: domain.entity.v1.ListClientsRequest.search:type_name -> domain.common.v1.SearchRequest
+	19, // 15: domain.entity.v1.ListClientsRequest.filters:type_name -> domain.common.v1.FilterRequest
+	20, // 16: domain.entity.v1.ListClientsRequest.sort:type_name -> domain.common.v1.SortRequest
+	21, // 17: domain.entity.v1.ListClientsRequest.pagination:type_name -> domain.common.v1.PaginationRequest
+	0,  // 18: domain.entity.v1.ListClientsResponse.data:type_name -> domain.entity.v1.Client
+	17, // 19: domain.entity.v1.ListClientsResponse.error:type_name -> domain.common.v1.Error
+	18, // 20: domain.entity.v1.GetClientListPageDataRequest.search:type_name -> domain.common.v1.SearchRequest
+	19, // 21: domain.entity.v1.GetClientListPageDataRequest.filters:type_name -> domain.common.v1.FilterRequest
+	20, // 22: domain.entity.v1.GetClientListPageDataRequest.sort:type_name -> domain.common.v1.SortRequest
+	21, // 23: domain.entity.v1.GetClientListPageDataRequest.pagination:type_name -> domain.common.v1.PaginationRequest
+	0,  // 24: domain.entity.v1.GetClientListPageDataResponse.client_list:type_name -> domain.entity.v1.Client
+	22, // 25: domain.entity.v1.GetClientListPageDataResponse.pagination:type_name -> domain.common.v1.PaginationResponse
+	23, // 26: domain.entity.v1.GetClientListPageDataResponse.search_results:type_name -> domain.common.v1.SearchResult
+	17, // 27: domain.entity.v1.GetClientListPageDataResponse.error:type_name -> domain.common.v1.Error
+	0,  // 28: domain.entity.v1.GetClientItemPageDataResponse.client:type_name -> domain.entity.v1.Client
+	17, // 29: domain.entity.v1.GetClientItemPageDataResponse.error:type_name -> domain.common.v1.Error
+	1,  // 30: domain.entity.v1.ClientDomainService.CreateClient:input_type -> domain.entity.v1.CreateClientRequest
+	3,  // 31: domain.entity.v1.ClientDomainService.ReadClient:input_type -> domain.entity.v1.ReadClientRequest
+	5,  // 32: domain.entity.v1.ClientDomainService.UpdateClient:input_type -> domain.entity.v1.UpdateClientRequest
+	7,  // 33: domain.entity.v1.ClientDomainService.DeleteClient:input_type -> domain.entity.v1.DeleteClientRequest
+	9,  // 34: domain.entity.v1.ClientDomainService.ListClients:input_type -> domain.entity.v1.ListClientsRequest
+	11, // 35: domain.entity.v1.ClientDomainService.GetClientListPageData:input_type -> domain.entity.v1.GetClientListPageDataRequest
+	13, // 36: domain.entity.v1.ClientDomainService.GetClientItemPageData:input_type -> domain.entity.v1.GetClientItemPageDataRequest
+	2,  // 37: domain.entity.v1.ClientDomainService.CreateClient:output_type -> domain.entity.v1.CreateClientResponse
+	4,  // 38: domain.entity.v1.ClientDomainService.ReadClient:output_type -> domain.entity.v1.ReadClientResponse
+	6,  // 39: domain.entity.v1.ClientDomainService.UpdateClient:output_type -> domain.entity.v1.UpdateClientResponse
+	8,  // 40: domain.entity.v1.ClientDomainService.DeleteClient:output_type -> domain.entity.v1.DeleteClientResponse
+	10, // 41: domain.entity.v1.ClientDomainService.ListClients:output_type -> domain.entity.v1.ListClientsResponse
+	12, // 42: domain.entity.v1.ClientDomainService.GetClientListPageData:output_type -> domain.entity.v1.GetClientListPageDataResponse
+	14, // 43: domain.entity.v1.ClientDomainService.GetClientItemPageData:output_type -> domain.entity.v1.GetClientItemPageDataResponse
+	37, // [37:44] is the sub-list for method output_type
+	30, // [30:37] is the sub-list for method input_type
+	30, // [30:30] is the sub-list for extension type_name
+	30, // [30:30] is the sub-list for extension extendee
+	0,  // [0:30] is the sub-list for field type_name
 }
 
 func init() { file_domain_entity_client_client_proto_init() }
