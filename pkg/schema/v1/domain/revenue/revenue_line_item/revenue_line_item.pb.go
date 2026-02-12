@@ -40,8 +40,10 @@ type RevenueLineItem struct {
 	Quantity           float64                `protobuf:"fixed64,12,opt,name=quantity,proto3" json:"quantity,omitempty"`
 	UnitPrice          float64                `protobuf:"fixed64,13,opt,name=unit_price,json=unitPrice,proto3" json:"unit_price,omitempty"`
 	TotalPrice         float64                `protobuf:"fixed64,14,opt,name=total_price,json=totalPrice,proto3" json:"total_price,omitempty"`
-	DiscountAmount     *float64               `protobuf:"fixed64,15,opt,name=discount_amount,json=discountAmount,proto3,oneof" json:"discount_amount,omitempty"`
 	Notes              *string                `protobuf:"bytes,16,opt,name=notes,proto3,oneof" json:"notes,omitempty"`
+	LineItemType       string                 `protobuf:"bytes,17,opt,name=line_item_type,json=lineItemType,proto3" json:"line_item_type,omitempty"`                // "item" or "discount"
+	InventoryItemId    string                 `protobuf:"bytes,18,opt,name=inventory_item_id,json=inventoryItemId,proto3" json:"inventory_item_id,omitempty"`       // FK to inventory_item table
+	InventorySerialId  string                 `protobuf:"bytes,19,opt,name=inventory_serial_id,json=inventorySerialId,proto3" json:"inventory_serial_id,omitempty"` // FK to inventory_serial table (for serialized items)
 	unknownFields      protoimpl.UnknownFields
 	sizeCache          protoimpl.SizeCache
 }
@@ -174,16 +176,30 @@ func (x *RevenueLineItem) GetTotalPrice() float64 {
 	return 0
 }
 
-func (x *RevenueLineItem) GetDiscountAmount() float64 {
-	if x != nil && x.DiscountAmount != nil {
-		return *x.DiscountAmount
-	}
-	return 0
-}
-
 func (x *RevenueLineItem) GetNotes() string {
 	if x != nil && x.Notes != nil {
 		return *x.Notes
+	}
+	return ""
+}
+
+func (x *RevenueLineItem) GetLineItemType() string {
+	if x != nil {
+		return x.LineItemType
+	}
+	return ""
+}
+
+func (x *RevenueLineItem) GetInventoryItemId() string {
+	if x != nil {
+		return x.InventoryItemId
+	}
+	return ""
+}
+
+func (x *RevenueLineItem) GetInventorySerialId() string {
+	if x != nil {
+		return x.InventorySerialId
 	}
 	return ""
 }
@@ -984,7 +1000,7 @@ var File_domain_revenue_revenue_line_item_revenue_line_item_proto protoreflect.F
 
 const file_domain_revenue_revenue_line_item_revenue_line_item_proto_rawDesc = "" +
 	"\n" +
-	"8domain/revenue/revenue_line_item/revenue_line_item.proto\x12\x11domain.revenue.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/search.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a$domain/revenue/revenue/revenue.proto\x1a$domain/product/product/product.proto\"\x90\x06\n" +
+	"8domain/revenue/revenue_line_item/revenue_line_item.proto\x12\x11domain.revenue.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/search.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a$domain/revenue/revenue/revenue.proto\x1a$domain/product/product/product.proto\"\xd0\x06\n" +
 	"\x0fRevenueLineItem\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12&\n" +
 	"\fdate_created\x18\x02 \x01(\x03H\x00R\vdateCreated\x88\x01\x01\x123\n" +
@@ -1004,9 +1020,11 @@ const file_domain_revenue_revenue_line_item_revenue_line_item_proto_rawDesc = ""
 	"\n" +
 	"unit_price\x18\r \x01(\x01R\tunitPrice\x12\x1f\n" +
 	"\vtotal_price\x18\x0e \x01(\x01R\n" +
-	"totalPrice\x12,\n" +
-	"\x0fdiscount_amount\x18\x0f \x01(\x01H\aR\x0ediscountAmount\x88\x01\x01\x12\x19\n" +
-	"\x05notes\x18\x10 \x01(\tH\bR\x05notes\x88\x01\x01B\x0f\n" +
+	"totalPrice\x12\x19\n" +
+	"\x05notes\x18\x10 \x01(\tH\aR\x05notes\x88\x01\x01\x12$\n" +
+	"\x0eline_item_type\x18\x11 \x01(\tR\flineItemType\x12*\n" +
+	"\x11inventory_item_id\x18\x12 \x01(\tR\x0finventoryItemId\x12.\n" +
+	"\x13inventory_serial_id\x18\x13 \x01(\tR\x11inventorySerialIdB\x0f\n" +
 	"\r_date_createdB\x16\n" +
 	"\x14_date_created_stringB\x10\n" +
 	"\x0e_date_modifiedB\x17\n" +
@@ -1015,8 +1033,7 @@ const file_domain_revenue_revenue_line_item_revenue_line_item_proto_rawDesc = ""
 	"\b_revenueB\n" +
 	"\n" +
 	"\b_productB\r\n" +
-	"\v_product_idB\x12\n" +
-	"\x10_discount_amountB\b\n" +
+	"\v_product_idB\b\n" +
 	"\x06_notes\"V\n" +
 	"\x1cCreateRevenueLineItemRequest\x126\n" +
 	"\x04data\x18\x01 \x01(\v2\".domain.revenue.v1.RevenueLineItemR\x04data\"\xaf\x01\n" +

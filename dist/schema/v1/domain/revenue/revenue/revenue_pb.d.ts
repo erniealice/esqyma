@@ -5,6 +5,7 @@ import type { SearchRequest, SearchResult } from "../../common/search_pb";
 import type { FilterRequest } from "../../common/filter_pb";
 import type { SortRequest } from "../../common/sort_pb";
 import type { Client } from "../../entity/client/client_pb";
+import type { Location } from "../../entity/location/location_pb";
 import type { Message } from "@bufbuild/protobuf";
 /**
  * Describes the file domain/revenue/revenue/revenue.proto.
@@ -79,9 +80,19 @@ export type Revenue = Message<"domain.revenue.v1.Revenue"> & {
      */
     notes?: string;
     /**
+     * field 17 reserved for future use
+     *
      * @generated from field: optional string revenue_category_id = 18;
      */
     revenueCategoryId?: string;
+    /**
+     * @generated from field: optional domain.entity.v1.Location location = 19;
+     */
+    location?: Location;
+    /**
+     * @generated from field: string location_id = 20;
+     */
+    locationId: string;
 };
 /**
  * Describes the message domain.revenue.v1.Revenue.

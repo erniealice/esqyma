@@ -23,8 +23,7 @@ message InventorySerial {
   optional string warranty_start = 6;
   optional string warranty_end = 7;
   optional string purchase_order = 8;
-  optional string sold_reference = 9;
-  optional string notes = 10;
+  optional string notes = 9; // NOTE: field 10 (sold_reference) removed 2026-02-12 - migrated to inventory_serial_history.reference_display
   bool active = 11 [(options.v1.db).default = "true"];
   optional int64 date_created = 12;
   optional string date_created_string = 13;

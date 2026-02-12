@@ -5,6 +5,7 @@ import type { FilterRequest } from "../../common/filter_pb";
 import type { SortRequest } from "../../common/sort_pb";
 import type { SearchRequest, SearchResult } from "../../common/search_pb";
 import type { Subscription } from "../../subscription/subscription/subscription_pb";
+import type { CollectionProfileCollectionMethod } from "../collection_profile_collection_method/collection_profile_collection_method_pb";
 import type { Message } from "@bufbuild/protobuf";
 /**
  * Describes the file domain/payment/collection/collection.proto.
@@ -58,6 +59,72 @@ export type Collection = Message<"domain.payment.v1.Collection"> & {
      * @generated from field: string status = 11;
      */
     status: string;
+    /**
+     * Revenue association (sales payments)
+     *
+     * FK to revenue table (for sales payments)
+     *
+     * @generated from field: string revenue_id = 20;
+     */
+    revenueId: string;
+    /**
+     * Payment method details
+     *
+     * Nested collection method object (for display)
+     *
+     * @generated from field: optional domain.payment.v1.CollectionProfileCollectionMethod collection_method = 21;
+     */
+    collectionMethod?: CollectionProfileCollectionMethod;
+    /**
+     * FK to collection_method table
+     *
+     * @generated from field: string collection_method_id = 22;
+     */
+    collectionMethodId: string;
+    /**
+     * Payment metadata
+     *
+     * Payment currency (e.g., "PHP")
+     *
+     * @generated from field: string currency = 23;
+     */
+    currency: string;
+    /**
+     * Payment reference (e.g., OR number, transaction ID)
+     *
+     * @generated from field: string reference_number = 24;
+     */
+    referenceNumber: string;
+    /**
+     * Payment timing
+     *
+     * Unix timestamp of payment date
+     *
+     * @generated from field: int64 payment_date = 25;
+     */
+    paymentDate: bigint;
+    /**
+     * Audit fields
+     *
+     * User ID of person who received payment
+     *
+     * @generated from field: string received_by = 26;
+     */
+    receivedBy: string;
+    /**
+     * Role ID of person who received payment
+     *
+     * @generated from field: string received_role = 27;
+     */
+    receivedRole: string;
+    /**
+     * Collection categorization
+     *
+     * e.g., "subscription", "sale", "refund"
+     *
+     * @generated from field: string collection_type = 28;
+     */
+    collectionType: string;
 };
 /**
  * Describes the message domain.payment.v1.Collection.

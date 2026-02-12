@@ -47,11 +47,9 @@ export type InventorySerial = Message<"domain.inventory.v1.InventorySerial"> & {
      */
     purchaseOrder?: string;
     /**
-     * @generated from field: optional string sold_reference = 9;
-     */
-    soldReference?: string;
-    /**
-     * @generated from field: optional string notes = 10;
+     * NOTE: field 10 (sold_reference) removed 2026-02-12 - migrated to inventory_serial_history.reference_display
+     *
+     * @generated from field: optional string notes = 9;
      */
     notes?: string;
     /**

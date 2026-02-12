@@ -28,8 +28,10 @@ message RevenueLineItem {
   double quantity = 12;
   double unit_price = 13;
   double total_price = 14;
-  optional double discount_amount = 15;
   optional string notes = 16;
+  string line_item_type = 17;           // "item" or "discount"
+  string inventory_item_id = 18;         // FK to inventory_item table
+  string inventory_serial_id = 19;       // FK to inventory_serial table (for serialized items)
 }
 
 service RevenueLineItemDomainService {

@@ -72,13 +72,27 @@ export type RevenueLineItem = Message<"domain.revenue.v1.RevenueLineItem"> & {
      */
     totalPrice: number;
     /**
-     * @generated from field: optional double discount_amount = 15;
-     */
-    discountAmount?: number;
-    /**
      * @generated from field: optional string notes = 16;
      */
     notes?: string;
+    /**
+     * "item" or "discount"
+     *
+     * @generated from field: string line_item_type = 17;
+     */
+    lineItemType: string;
+    /**
+     * FK to inventory_item table
+     *
+     * @generated from field: string inventory_item_id = 18;
+     */
+    inventoryItemId: string;
+    /**
+     * FK to inventory_serial table (for serialized items)
+     *
+     * @generated from field: string inventory_serial_id = 19;
+     */
+    inventorySerialId: string;
 };
 /**
  * Describes the message domain.revenue.v1.RevenueLineItem.

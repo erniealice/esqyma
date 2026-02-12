@@ -11,6 +11,7 @@ import "domain/common/filter.proto";
 import "domain/common/sort.proto";
 
 import "domain/entity/client/client.proto";
+import "domain/entity/location/location.proto";
 
 message Revenue {
   string id = 1;
@@ -29,7 +30,10 @@ message Revenue {
   string status = 14;
   optional string reference_number = 15;
   optional string notes = 16;
+  // field 17 reserved for future use
   optional string revenue_category_id = 18;
+  optional domain.entity.v1.Location location = 19;
+  string location_id = 20;
 }
 
 service RevenueDomainService {

@@ -1,0 +1,150 @@
+syntax = "proto3";
+
+package domain.inventory.v1;
+
+option go_package = "github.com/erniealice/esqyma/pkg/schema/v1/domain/inventory/serial_history";
+
+import "domain/common/error.proto";
+import "domain/common/pagination.proto";
+import "domain/common/filter.proto";
+import "domain/common/sort.proto";
+import "domain/common/search.proto";
+
+import "domain/inventory/inventory_item/inventory_item.proto";
+import "domain/inventory/inventory_serial/inventory_serial.proto";
+import "options/db.proto";
+
+// InventorySerialHistory tracks all status transitions for serialized inventory items.
+// This is an immutable audit trail — records are never updated, only appended.
+message InventorySerialHistory {
+  option (options.v1.table).table = true;
+  string id = 1;
+  optional int64 date_created = 2;
+  optional string date_created_string = 3;
+
+  // The serial whose history this is
+  optional domain.inventory.v1.InventorySerial serial = 4;
+  string inventory_serial_id = 5 [(options.v1.db).references = "inventory_serial", (options.v1.db).index = true];
+
+  // The inventory item this serial belongs to
+  optional domain.inventory.v1.InventoryItem inventory_item = 6;
+  string inventory_item_id = 7 [(options.v1.db).references = "inventory_item", (options.v1.db).index = true];
+
+  // Status transition: from_status -> to_status
+  string from_status = 8;   // "available", "reserved", "sold", "damaged", etc.
+  string to_status = 9;      // New status after transition
+
+  // Context for the transition
+  string reference_type = 10;  // "sale", "manual", "return", "damage", etc.
+  string reference_id = 11;    // ID of the reference (e.g., revenue_id for sales)
+  string notes = 12;           // Optional notes
+
+  // Who made the change
+  string changed_by = 13;      // User ID who made this change
+  string changed_by_role = 14; // Role of user who made this change
+}
+
+service InventorySerialHistoryDomainService {
+  rpc CreateInventorySerialHistory(CreateInventorySerialHistoryRequest) returns (CreateInventorySerialHistoryResponse);
+  rpc ReadInventorySerialHistory(ReadInventorySerialHistoryRequest) returns (ReadInventorySerialHistoryResponse);
+  rpc DeleteInventorySerialHistory(DeleteInventorySerialHistoryRequest) returns (DeleteInventorySerialHistoryResponse);
+  rpc ListInventorySerialHistory(ListInventorySerialHistoryRequest) returns (ListInventorySerialHistoryResponse);
+
+  // NEW: Enhanced list with pagination, filtering, sorting, search
+  rpc GetInventorySerialHistoryListPageData(GetInventorySerialHistoryListPageDataRequest)
+    returns (GetInventorySerialHistoryListPageDataResponse);
+
+  // NEW: Enhanced item view with related data
+  rpc GetInventorySerialHistoryItemPageData(GetInventorySerialHistoryItemPageDataRequest)
+    returns (GetInventorySerialHistoryItemPageDataResponse);
+}
+
+message CreateInventorySerialHistoryRequest {
+  InventorySerialHistory data = 1;
+}
+
+message CreateInventorySerialHistoryResponse {
+  repeated InventorySerialHistory data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message ReadInventorySerialHistoryRequest {
+  InventorySerialHistory data = 1;
+}
+
+message ReadInventorySerialHistoryResponse {
+  repeated InventorySerialHistory data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message DeleteInventorySerialHistoryRequest {
+  InventorySerialHistory data = 1;
+}
+
+message DeleteInventorySerialHistoryResponse {
+  bool success = 1;
+  optional domain.common.v1.Error error = 2;
+}
+
+message ListInventorySerialHistoryRequest {
+  optional string inventory_serial_id = 1;
+  optional domain.common.v1.SearchRequest search = 2;
+  optional domain.common.v1.FilterRequest filters = 3;
+  optional domain.common.v1.SortRequest sort = 4;
+  optional domain.common.v1.PaginationRequest pagination = 5;
+}
+
+message ListInventorySerialHistoryResponse {
+  repeated InventorySerialHistory data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+// NEW: Enhanced list request with core features
+message GetInventorySerialHistoryListPageDataRequest {
+  // Pagination settings
+  domain.common.v1.PaginationRequest pagination = 1;
+
+  // Filter conditions
+  domain.common.v1.FilterRequest filters = 2;
+
+  // Sort settings
+  domain.common.v1.SortRequest sort = 3;
+
+  // Search settings
+  domain.common.v1.SearchRequest search = 4;
+}
+
+// NEW: Enhanced list response with metadata
+message GetInventorySerialHistoryListPageDataResponse {
+  // The inventory serial history data
+  repeated InventorySerialHistory inventory_serial_history_list = 1;
+
+  // Pagination metadata
+  optional domain.common.v1.PaginationResponse pagination = 2;
+
+  // Search results metadata (when search is used)
+  repeated domain.common.v1.SearchResult search_results = 3;
+
+  // Response status
+  bool success = 4;
+  optional domain.common.v1.Error error = 5;
+}
+
+// NEW: Simple item request
+message GetInventorySerialHistoryItemPageDataRequest {
+  // The inventory serial history ID to retrieve
+  string inventory_serial_history_id = 1;
+}
+
+// NEW: Simple item response
+message GetInventorySerialHistoryItemPageDataResponse {
+  // The inventory serial history data
+  InventorySerialHistory inventory_serial_history = 1;
+
+  // Response status
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}

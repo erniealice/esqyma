@@ -11,6 +11,7 @@ import "domain/common/sort.proto";
 import "domain/common/search.proto";
 
 import "domain/subscription/subscription/subscription.proto";
+import "domain/payment/collection_profile_collection_method/collection_profile_collection_method.proto";
 
 message Collection {
   string id = 1;
@@ -24,6 +25,27 @@ message Collection {
   string subscription_id = 9;
   double amount = 10;
   string status = 11;
+
+  // Revenue association (sales payments)
+  string revenue_id = 20;                   // FK to revenue table (for sales payments)
+
+  // Payment method details
+  optional CollectionProfileCollectionMethod collection_method = 21;  // Nested collection method object (for display)
+  string collection_method_id = 22;        // FK to collection_method table
+
+  // Payment metadata
+  string currency = 23;                     // Payment currency (e.g., "PHP")
+  string reference_number = 24;            // Payment reference (e.g., OR number, transaction ID)
+
+  // Payment timing
+  int64 payment_date = 25;                 // Unix timestamp of payment date
+
+  // Audit fields
+  string received_by = 26;                  // User ID of person who received payment
+  string received_role = 27;                // Role ID of person who received payment
+
+  // Collection categorization
+  string collection_type = 28;              // e.g., "subscription", "sale", "refund"
 }
 
 service CollectionDomainService {

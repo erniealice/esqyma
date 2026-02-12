@@ -34,8 +34,7 @@ type InventorySerial struct {
 	WarrantyStart      *string                       `protobuf:"bytes,6,opt,name=warranty_start,json=warrantyStart,proto3,oneof" json:"warranty_start,omitempty"`
 	WarrantyEnd        *string                       `protobuf:"bytes,7,opt,name=warranty_end,json=warrantyEnd,proto3,oneof" json:"warranty_end,omitempty"`
 	PurchaseOrder      *string                       `protobuf:"bytes,8,opt,name=purchase_order,json=purchaseOrder,proto3,oneof" json:"purchase_order,omitempty"`
-	SoldReference      *string                       `protobuf:"bytes,9,opt,name=sold_reference,json=soldReference,proto3,oneof" json:"sold_reference,omitempty"`
-	Notes              *string                       `protobuf:"bytes,10,opt,name=notes,proto3,oneof" json:"notes,omitempty"`
+	Notes              *string                       `protobuf:"bytes,9,opt,name=notes,proto3,oneof" json:"notes,omitempty"` // NOTE: field 10 (sold_reference) removed 2026-02-12 - migrated to inventory_serial_history.reference_display
 	Active             bool                          `protobuf:"varint,11,opt,name=active,proto3" json:"active,omitempty"`
 	DateCreated        *int64                        `protobuf:"varint,12,opt,name=date_created,json=dateCreated,proto3,oneof" json:"date_created,omitempty"`
 	DateCreatedString  *string                       `protobuf:"bytes,13,opt,name=date_created_string,json=dateCreatedString,proto3,oneof" json:"date_created_string,omitempty"`
@@ -128,13 +127,6 @@ func (x *InventorySerial) GetWarrantyEnd() string {
 func (x *InventorySerial) GetPurchaseOrder() string {
 	if x != nil && x.PurchaseOrder != nil {
 		return *x.PurchaseOrder
-	}
-	return ""
-}
-
-func (x *InventorySerial) GetSoldReference() string {
-	if x != nil && x.SoldReference != nil {
-		return *x.SoldReference
 	}
 	return ""
 }
@@ -1103,7 +1095,7 @@ var File_domain_inventory_inventory_serial_inventory_serial_proto protoreflect.F
 
 const file_domain_inventory_inventory_serial_inventory_serial_proto_rawDesc = "" +
 	"\n" +
-	"8domain/inventory/inventory_serial/inventory_serial.proto\x12\x13domain.inventory.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1adomain/common/search.proto\x1a4domain/inventory/inventory_item/inventory_item.proto\x1a\x10options/db.proto\"\xf0\x06\n" +
+	"8domain/inventory/inventory_serial/inventory_serial.proto\x12\x13domain.inventory.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1adomain/common/search.proto\x1a4domain/inventory/inventory_item/inventory_item.proto\x1a\x10options/db.proto\"\xb1\x06\n" +
 	"\x0fInventorySerial\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12B\n" +
 	"\x11inventory_item_id\x18\x02 \x01(\tB\x16\x82\xb5\x18\x12\n" +
@@ -1113,22 +1105,19 @@ const file_domain_inventory_inventory_serial_inventory_serial_proto_rawDesc = ""
 	"\x06status\x18\x05 \x01(\tR\x06status\x12*\n" +
 	"\x0ewarranty_start\x18\x06 \x01(\tH\x01R\rwarrantyStart\x88\x01\x01\x12&\n" +
 	"\fwarranty_end\x18\a \x01(\tH\x02R\vwarrantyEnd\x88\x01\x01\x12*\n" +
-	"\x0epurchase_order\x18\b \x01(\tH\x03R\rpurchaseOrder\x88\x01\x01\x12*\n" +
-	"\x0esold_reference\x18\t \x01(\tH\x04R\rsoldReference\x88\x01\x01\x12\x19\n" +
-	"\x05notes\x18\n" +
-	" \x01(\tH\x05R\x05notes\x88\x01\x01\x12\"\n" +
+	"\x0epurchase_order\x18\b \x01(\tH\x03R\rpurchaseOrder\x88\x01\x01\x12\x19\n" +
+	"\x05notes\x18\t \x01(\tH\x04R\x05notes\x88\x01\x01\x12\"\n" +
 	"\x06active\x18\v \x01(\bB\n" +
 	"\x82\xb5\x18\x06\"\x04trueR\x06active\x12&\n" +
-	"\fdate_created\x18\f \x01(\x03H\x06R\vdateCreated\x88\x01\x01\x123\n" +
-	"\x13date_created_string\x18\r \x01(\tH\aR\x11dateCreatedString\x88\x01\x01\x12(\n" +
-	"\rdate_modified\x18\x0e \x01(\x03H\bR\fdateModified\x88\x01\x01\x125\n" +
-	"\x14date_modified_string\x18\x0f \x01(\tH\tR\x12dateModifiedString\x88\x01\x01\x12I\n" +
+	"\fdate_created\x18\f \x01(\x03H\x05R\vdateCreated\x88\x01\x01\x123\n" +
+	"\x13date_created_string\x18\r \x01(\tH\x06R\x11dateCreatedString\x88\x01\x01\x12(\n" +
+	"\rdate_modified\x18\x0e \x01(\x03H\aR\fdateModified\x88\x01\x01\x125\n" +
+	"\x14date_modified_string\x18\x0f \x01(\tH\bR\x12dateModifiedString\x88\x01\x01\x12I\n" +
 	"\x0einventory_item\x18\x10 \x01(\v2\".domain.inventory.v1.InventoryItemR\rinventoryItem:\x06\x8a\xb5\x18\x02\b\x01B\a\n" +
 	"\x05_imeiB\x11\n" +
 	"\x0f_warranty_startB\x0f\n" +
 	"\r_warranty_endB\x11\n" +
-	"\x0f_purchase_orderB\x11\n" +
-	"\x0f_sold_referenceB\b\n" +
+	"\x0f_purchase_orderB\b\n" +
 	"\x06_notesB\x0f\n" +
 	"\r_date_createdB\x16\n" +
 	"\x14_date_created_stringB\x10\n" +
