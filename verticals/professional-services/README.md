@@ -406,6 +406,213 @@ Hours submitted via `InventoryTransaction` are the source of truth that drives:
 
 ---
 
+## Status-Driven Flow: InventoryTransaction → RevenueLineItem
+
+In professional services, the inventory transaction (time entry) **always** precedes revenue recognition. Staff submit hours, those hours go through a lifecycle, and only approved billable hours generate `RevenueLineItems`. The `InventoryTransaction.status` field drives this lifecycle.
+
+### Proto Fields That Enable This
+
+```
+InventoryTransaction                         RevenueLineItem
+├── status           ← lifecycle state       ├── inventory_item_id  ← which resource
+├── transaction_type ← "billable","internal" ├── inventory_serial_id← specific person
+├── reference_type   ← "subscription"        ├── quantity           ← hours
+├── reference_id     ← FK to engagement      ├── unit_price         ← rate from PriceList
+├── quantity         ← hours submitted       ├── total_price        ← hrs × rate
+├── performed_by     ← staff who worked      └── line_item_type     ← "item"/"discount"
+└── serial_number    ← employee ID
+```
+
+### InventoryTransaction.status Values for Professional Services
+
+| Status | Meaning | Revenue Impact |
+|---|---|---|
+| `"draft"` | Staff logging hours, not yet submitted | No revenue |
+| `"submitted"` | Hours sent for approval | No revenue yet |
+| `"approved"` | Manager approved for billing | Revenue eligible |
+| `"billed"` | RevenueLineItem created, on an invoice | Revenue recognized |
+| `"rejected"` | Manager rejected, needs correction | No revenue, resubmit |
+| `"non_billable"` | Approved but intentionally not billed | → `inventory_depreciation` |
+| `"disputed"` | Client disputes billed hours | Revenue on hold |
+| `"adjusted"` | Hours corrected after billing | RevenueLineItem adjusted |
+| `"written_off"` | Approved hours that will never be billed | → `inventory_depreciation` |
+
+### Scenario A: Normal Billable Time Entry
+
+```
+Consultant works         ┌──────────┐
+on engagement ─────────▶ │  draft   │ InventoryTransaction created
+                         └────┬─────┘   performed_by: "EMP-2847"
+                              │         reference_type: "subscription"
+                              │         reference_id: "SUB-ACME-001"
+                              ▼         quantity: 40 (hours)
+                         ┌──────────┐
+Staff submits ─────────▶ │submitted │ End of week submission
+timesheet                └────┬─────┘
+                              │
+                              ▼
+                         ┌──────────┐
+Manager reviews ───────▶ │ approved │ ◀── REVENUE ELIGIBLE
+                         └────┬─────┘     (not yet on an invoice)
+                              │
+                              ▼
+                         ┌──────────┐
+Billing cycle runs ────▶ │  billed  │ ◀── REVENUE RECOGNIZED
+                         └────┬─────┘     RevenueLineItem created:
+                              │           ├── quantity: 40
+                              │           ├── unit_price: $225 (PriceList)
+                              │           └── total_price: $9,000
+                              ▼
+                    Revenue record updated
+                    Invoice generated at month-end
+```
+
+**Revenue recognition point**: At `"approved"` → `"billed"` transition. The billing cycle (monthly, bi-weekly, etc.) picks up all `"approved"` transactions, creates `RevenueLineItems` priced from the applicable `PriceList`, and flips status to `"billed"`.
+
+**Key difference from retail**: There are always at least **two human checkpoints** (submit + approve) before revenue. In retail POS, it's zero.
+
+### Scenario B: Non-Billable Time (Training, PTO, Internal)
+
+```
+Consultant attends       ┌──────────┐
+internal training ─────▶ │  draft   │ InventoryTransaction created
+                         └────┬─────┘   transaction_type: "internal"
+                              │
+                              ▼
+                         ┌──────────┐
+Staff submits ─────────▶ │submitted │
+                         └────┬─────┘
+                              │
+                              ▼
+                         ┌─────────────┐
+Manager confirms ──────▶ │non_billable │ ◀── NO REVENUE
+                         └──────┬──────┘     Hours are real, but
+                                │            not charged to client
+                                ▼
+                    inventory_depreciation
+                    (utilization write-down recorded)
+                    └── Tracks bench time, training cost
+```
+
+**Revenue recognition point**: Never. The transaction terminates at `"non_billable"`. The hours still matter for utilization reporting — they flow to `inventory_depreciation` to track the cost of unbillable time.
+
+### Scenario C: Disputed Hours
+
+```
+Normal flow completes    ┌──────────┐
+through billing ───────▶ │  billed  │ RevenueLineItem exists
+                         └────┬─────┘   on Invoice INV-2025-003
+                              │
+                              ▼
+                         ┌──────────┐
+Client disputes ───────▶ │ disputed │ Revenue on hold
+"We didn't authorize     └────┬─────┘   Revenue.status → "disputed"
+ 40 hrs last week"            │
+                    ┌─────────┴─────────┐
+                    ▼                   ▼
+              ┌──────────┐        ┌───────────┐
+Resolved:     │  billed  │        │ adjusted  │  Agreed to reduce
+no change     └──────────┘        └─────┬─────┘
+                                        │
+                                        ▼
+                               RevenueLineItem adjusted
+                               ├── Original: 40 hrs × $225
+                               └── Adjusted: 32 hrs × $225
+                                   (credit note for 8 hrs)
+```
+
+### Scenario D: Rejected Timesheet (Resubmission Loop)
+
+```
+Staff submits            ┌──────────┐
+incorrect hours ───────▶ │submitted │
+                         └────┬─────┘
+                              │
+                              ▼
+                         ┌──────────┐
+Manager rejects ───────▶ │ rejected │ "Wrong engagement code,
+                         └────┬─────┘  resubmit against SUB-ACME-002"
+                              │
+                              ▼
+                         ┌──────────┐
+Staff corrects &         │submitted │ reference_id updated
+resubmits ─────────────▶ └────┬─────┘
+                              │
+                              ▼
+                         ┌──────────┐
+Manager approves ──────▶ │ approved │ → normal billing flow continues
+                         └──────────┘
+```
+
+### Full Lifecycle State Machine
+
+```
+                            ┌──────────────────────────────────────┐
+                            │                                      │
+                            ▼                                      │
+    ┌───────┐         ┌───────────┐         ┌──────────┐          │
+    │ draft │────────▶│ submitted │────────▶│ approved │──┐       │
+    └───────┘         └─────┬─────┘         └────┬─────┘  │       │
+                            │                    │        │       │
+                            ▼                    │        ▼       │
+                      ┌──────────┐               │  ┌───────────┐ │
+                      │ rejected │───────────────┘  │non_billable│ │
+                      └──────────┘  (resubmit)      └─────┬─────┘ │
+                                                          │       │
+                            ┌────────────────────────┐    ▼       │
+                            │                        │  inventory │
+                            ▼                        │  _deprec.  │
+                      ┌──────────┐                   │            │
+        approved ───▶ │  billed  │◀──────────────────┘            │
+                      └────┬─────┘  (billing cycle)               │
+                           │                                      │
+                           ▼                                      │
+                      ┌──────────┐         ┌──────────┐           │
+                      │ disputed │────────▶│ adjusted │───────────┘
+                      └────┬─────┘         └──────────┘
+                           │                    ▲
+                           └────────────────────┘
+                             (resolved, no change → back to billed)
+```
+
+### Comparison with Retail
+
+| Aspect | Retail (POS) | Retail (E-commerce) | Professional Services |
+|---|---|---|---|
+| **Lifecycle length** | Instant | Hours to days | Days to weeks |
+| **Statuses before revenue** | 0 (direct to `completed`) | 3-4 (`pending` → `picked` → `packed` → `shipped`) | 2-3 (`draft` → `submitted` → `approved`) |
+| **Human checkpoints** | 0 | 0-1 (pack verification) | 2 (submit + approve) |
+| **Revenue trigger** | Sale scan | Shipment confirmed | Manager approval + billing cycle |
+| **Non-revenue path** | Adjustment, shrinkage | Cancellation, return | Non-billable, training, PTO |
+| **Dispute path** | Return → inspect → restock | Return → inspect → restock | Disputed → adjusted/resolved |
+
+### Cross-Vertical Pattern
+
+The status-driven `InventoryTransaction` → `RevenueLineItem` flow is universal. What changes per vertical is:
+
+1. **How many statuses** exist between creation and revenue recognition
+2. **Who triggers** the status transitions (automated vs human)
+3. **What percentage** of transactions result in revenue (retail: ~95%, services: ~70-80%)
+4. **How long** the gap is between inventory event and revenue event
+
+```
+                              InventoryTransaction Lifecycle
+Vertical / Scenario          ◀─────────────────────────────────────▶
+─────────────────────────────────────────────────────────────────────
+Retail (POS sale)             ■ instant
+Retail (e-commerce)           ■■■■■■■ hours to days
+Retail (return)               ■■■■■■■■■■ days
+Professional Services         ■■■■■■■■■■■■■■ days to weeks
+Healthcare                    ■■■■■■■■■■■■■■■■■■■■ days to months
+Construction                  ■■■■■■■■■■■■■■■■■■■■■■■■ weeks to months
+─────────────────────────────────────────────────────────────────────
+                              ▲                              ▲
+                        Transaction                    Revenue
+                         created                      recognized
+```
+
+---
+
 ## Design Decisions
 
 - **Client = Company**: `Client` is always the organization (Acme Corp). Individual people at the client are `Delegate` records, linked via `delegate_client`. This matches how professional services firms track relationships — you bill the company, not the person.
