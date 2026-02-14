@@ -10,9 +10,9 @@ The core insight: **people are the product, hours are the inventory, and rate ca
 
 | Schema Term | Professional Services Term | Notes |
 |---|---|---|
-| `client` | **Client / Client Company** | The organization or contact being served |
+| `client` | **Client Company** | The organization being served (Acme Corp, not a person) |
 | `staff` | **Internal Team / Project Manager** | Firm employees managing engagements |
-| `delegate` | **Client Sponsor / Client POC** | Client-side stakeholder or decision-maker |
+| `delegate` | **Client Representative** | The person at the client company (VP Engineering, CTO, project sponsor) |
 | `admin` | **Practice Director / Firm Admin** | Back-office and firm management |
 | `location` | **Office / Practice Location** | Physical office where resources are based |
 | `group` | **Team / Resource Pool** | Grouping of resources by skill or department |
@@ -20,17 +20,17 @@ The core insight: **people are the product, hours are the inventory, and rate ca
 | `product_variant` | **Resource Specialization** | E.g., Senior Consultant - Cloud, Senior Consultant - Data |
 | `collection` | **Practice Area / Service Line** | E.g., "Tax Advisory", "Cloud Migration", "Litigation" |
 | `resource` | **Deliverable Template / Work Product** | SOW templates, report templates attached to a role |
-| `inventory_item` | **Resource (Person)** | A specific consultant/professional at a specific office |
+| `inventory_item` | **Resource (Person)** | A specific consultant/professional registered at an office |
 | `inventory_serial` | **Named Resource** | Individual person tracked by employee ID |
-| `inventory_transaction` | **Time Allocation / Booking** | Hours booked, transferred, or adjusted |
+| `inventory_transaction` | **Hours Submitted / Time Entry** | Staff submits hours worked → flows to billing |
 | `inventory_depreciation` | **Utilization Write-Down** | Unbillable time, bench time |
 | `plan` | **Engagement Type** | Type of service offering (e.g., "IT Consulting", "Tax Advisory", "Audit") |
 | `plan_location` | **Engagement Availability** | Which offices can deliver this engagement type |
 | `price_plan` | **Engagement Pricing / Fee Structure** | Fixed fee, T&M, or retainer pricing for an engagement type |
-| `subscription` | **Active Engagement / Retainer** | A client's ongoing engagement or retainer contract |
-| `license` | **Hour Block / Credit** | Individual hour allocations within a retainer |
-| `price_list` | **Rate Card** | Billing rates per office/region, effective for a date range |
-| `price_product` | **Rate** | Specific hourly/daily rate for a resource type on a rate card |
+| `subscription` | **Active Engagement / Retainer** | A client company's ongoing engagement or retainer contract |
+| `license` | **Entitlement / Credit** | Optional: individual entitlements within an engagement |
+| `price_list` | **Rate Card** | Blended billing rates per office/region, effective for a date range |
+| `price_product` | **Rate** | Blended or per-resource-type rate on a rate card |
 | `invoice` | **Client Invoice / Fee Note** | Billing document sent to the client |
 | `balance` | **Client Account / Outstanding Balance** | What the client owes or has as credit |
 | `payment` | **Client Payment** | Payment received against invoices |
@@ -58,10 +58,11 @@ The core insight: **people are the product, hours are the inventory, and rate ca
 │  admin           → Practice Director, COO                 │
 │  workspace       → The Firm / Practice Entity             │
 │                                                           │
-│  THE CLIENT                                               │
+│  THE CLIENT (Company + Representatives)                   │
 │                                                           │
-│  client          → Acme Corp (the client company)         │
-│  delegate        → VP of Engineering at Acme (sponsor)    │
+│  client          → Acme Corp (the company, not a person)  │
+│  delegate        → VP of Engineering at Acme (the person) │
+│  delegate_client → Links representative(s) to company     │
 │                                                           │
 │  OFFICES                                                  │
 │                                                           │
@@ -107,28 +108,34 @@ This is the key conceptual shift: **the "product" being sold is a person's exper
 │  product              → "Executive Partner"               │
 │    └── product.price  → Base rate: $500/hr                │
 │                                                           │
-│  PRICING                                                  │
+│  PRICING (blended rates on the rate card)                 │
 │                                                           │
 │  price_list           → "2025 Rate Card - NYC Office"     │
 │    ├── price_product  → Sr. Consultant @ $275/hr          │
 │    ├── price_product  → Jr. Analyst @ $150/hr             │
-│    └── price_product  → Executive Partner @ $550/hr       │
+│    ├── price_product  → Executive Partner @ $550/hr       │
+│    └── price_product  → Blended Consulting @ $225/hr      │
 │                                                           │
 │  price_list           → "2025 Rate Card - Remote"         │
 │    ├── price_product  → Sr. Consultant @ $225/hr          │
-│    └── price_product  → Jr. Analyst @ $110/hr             │
+│    ├── price_product  → Jr. Analyst @ $110/hr             │
+│    └── price_product  → Blended Consulting @ $185/hr      │
 └──────────────────────────────────────────────────────────┘
 ```
 
 The `price_list.location_id` field is critical here — it ties a rate card to a specific office, enabling location-based pricing. The `date_start` / `date_end` fields on both `PriceList` and `PriceProduct` support annual rate card renewals.
 
-### Inventory Domain → Resource (People) Management
+### Inventory Domain → Resource Registry & Time Submission
 
-This is where "inventory" gets reinterpreted: **the inventory is your bench of consultants.**
+The inventory model serves two purposes in professional services:
+1. **Resource registry** — `InventoryItem` registers who is available and where
+2. **Time entry** — `InventoryTransaction` records hours submitted by staff, which flow to billing
+
+Hours are **not** tracked as a constraint (no decrementing pool). Instead, staff submit hours worked, and those hours become `RevenueLineItems` priced from the applicable `PriceList` and `Plan`.
 
 ```
 ┌──────────────────────────────────────────────────────────┐
-│  RESOURCE TRACKING                                        │
+│  RESOURCE REGISTRY (who is where, doing what)             │
 │                                                           │
 │  inventory_item                                           │
 │    ├── name              → "Jane Smith"                   │
@@ -136,25 +143,35 @@ This is where "inventory" gets reinterpreted: **the inventory is your bench of c
 │    ├── product_variant_id→ FK to "Sr. Consultant - AWS"   │
 │    ├── location_id       → FK to "NYC Office"             │
 │    ├── sku               → "EMP-2847" (employee ID)       │
-│    ├── quantity_on_hand  → 160 (total hrs/month)          │
-│    ├── quantity_reserved → 120 (booked on engagements)    │
-│    ├── quantity_available→ 40  (available for new work)   │
-│    ├── reorder_level     → 20  (flag if under-utilized)   │
 │    ├── unit_of_measure   → "hours"                        │
 │    └── item_type         → "serialized" (named person)    │
 │                                                           │
 │  inventory_serial   → Individual person identity          │
 │    └── serial_number → "EMP-2847-NYC"                     │
 │                                                           │
-│  inventory_transaction                                    │
-│    ├── Booking     → 40 hrs allocated to Acme engagement  │
-│    ├── Transfer    → Resource moved from NYC to London    │
-│    ├── Adjustment  → PTO, training, bench time            │
-│    └── Release     → Engagement ended, hours freed        │
+│  HOURS SUBMISSION (record-then-bill flow)                 │
+│                                                           │
+│  inventory_transaction (staff submits hours)              │
+│    ├── "40 hrs on Acme engagement, week of Jan 6"         │
+│    ├── "8 hrs internal training (non-billable)"           │
+│    └── "16 hrs PTO (non-billable)"                        │
+│         │                                                 │
+│         ▼                                                 │
+│  revenue_line_item (derived from time entry)              │
+│    ├── 40 hrs × rate from PriceList → billable            │
+│    └── rate determined by: plan + price_list + location   │
 │                                                           │
 │  inventory_depreciation                                   │
-│    └── Bench time / unbillable hours write-down           │
+│    └── Non-billable hours write-down (bench, training)    │
 └──────────────────────────────────────────────────────────┘
+```
+
+**The billing flow:**
+
+```
+Staff submits     InventoryTransaction     RevenueLineItem        Invoice
+  hours       →   (time entry record)  →   (hrs × rate from  →   (client
+                                            PriceList/Plan)       billing)
 ```
 
 **Key reinterpretation of `item_type`:**
@@ -190,17 +207,11 @@ This is where "inventory" gets reinterpreted: **the inventory is your bench of c
 │    └── duration_value→ 6                                  │
 │                                                           │
 │  subscription        → Acme Corp's active engagement      │
-│    ├── client_id     → FK to Acme Corp                    │
+│    ├── client_id     → FK to Acme Corp (the company)      │
 │    ├── price_plan_id → FK to chosen fee structure         │
 │    ├── date_start    → Engagement start date              │
 │    ├── date_end      → Engagement end date                │
-│    ├── quantity      → 500 (contracted hours)             │
-│    ├── assigned_count→ 320 (hours allocated)              │
-│    ├── available_count→ 180 (hours remaining)             │
 │    └── metadata      → {"sow_ref": "SOW-2025-042"}       │
-│                                                           │
-│  license             → Individual hour block              │
-│    └── 40 hrs of Sr. Consultant time, week of Jan 6      │
 └──────────────────────────────────────────────────────────┘
 ```
 
@@ -275,27 +286,33 @@ The `activity.estimated_duration_minutes` and `activity.actual_duration_minutes`
 
 ## Rate Card Model (Detailed)
 
-The rate card is the pricing backbone of any professional services firm. Here's how the proto model supports it:
+The rate card is the pricing backbone of any professional services firm. **Blended rates live on the PriceList** — this means the rate card itself can carry either granular per-resource rates or a single blended engagement rate, depending on how the firm prices.
+
+### Blended Rate Card (typical for professional services)
 
 ```
-                    ┌─────────────────┐
-                    │   PriceList     │
-                    │   "2025 Rates"  │
-                    │   location: NYC │
-                    │   start: Jan 1  │
-                    │   end: Dec 31   │
-                    └────────┬────────┘
+                    ┌─────────────────────┐
+                    │   PriceList          │
+                    │   "2025 Rate Card"   │
+                    │   location: NYC      │
+                    │   start: Jan 1       │
+                    │   end: Dec 31        │
+                    └────────┬────────────┘
                              │
               ┌──────────────┼──────────────┐
               │              │              │
-     ┌────────▼────┐  ┌─────▼──────┐  ┌───▼──────────┐
-     │ PriceProduct │  │PriceProduct│  │ PriceProduct  │
-     │ Sr. Consult. │  │ Jr. Analyst│  │ Exec Partner  │
-     │ $275/hr      │  │ $150/hr    │  │ $550/hr       │
-     └──────────────┘  └────────────┘  └───────────────┘
+     ┌────────▼────┐  ┌─────▼──────┐  ┌───▼──────────────┐
+     │ PriceProduct │  │PriceProduct│  │ PriceProduct      │
+     │ Sr. Consult. │  │ Jr. Analyst│  │ Blended Consult.  │
+     │ $275/hr      │  │ $150/hr    │  │ $225/hr           │
+     └──────────────┘  └────────────┘  └──────────────────┘
 ```
 
-**Per-plan rate cards** use `PricePlan` to set engagement-level pricing:
+The same `PriceList` can hold both granular rates (for detailed billing) and a blended rate (for engagements quoted at a single price per hour). The blended `PriceProduct` references a "Blended Consulting" `Product` that represents the team mix.
+
+### Engagement Fee Structure (how it's billed)
+
+`PricePlan` defines the billing structure — not the rate, but the cadence and commitment:
 
 ```
      ┌──────────────────────┐
@@ -311,15 +328,17 @@ The rate card is the pricing backbone of any professional services firm. Here's 
      └──────────────────────┘       └───────────────────────┘
 ```
 
-The combination of **PriceList** (rate card per location) and **PricePlan** (fee structure per engagement type) gives full pricing flexibility:
-- Rate card sets _what each resource type costs per hour_ at a given office
-- Price plan sets _how the engagement is billed_ (retainer, T&M, fixed)
+### How they work together
+
+- **PriceList** (rate card) → _what it costs_ — blended or granular rates per location
+- **PricePlan** (fee structure) → _how it's billed_ — retainer, T&M, fixed fee
+- When staff submit hours via `InventoryTransaction`, the applicable `PriceList` rate determines the `RevenueLineItem` amount
 
 ---
 
 ## Key Field Mappings
 
-### InventoryItem Fields for Resource Tracking
+### InventoryItem Fields for Resource Registry
 
 | Field | Professional Services Meaning |
 |---|---|
@@ -328,24 +347,33 @@ The combination of **PriceList** (rate card per location) and **PricePlan** (fee
 | `product_variant_id` | Links to specialization ("Sr. Consultant - AWS") |
 | `location_id` | Home office ("NYC Office") |
 | `sku` | Employee ID ("EMP-2847") |
-| `quantity_on_hand` | Total available hours (e.g., 160 hrs/month) |
-| `quantity_reserved` | Hours booked on engagements |
-| `quantity_available` | Hours available for new work |
-| `reorder_level` | Utilization alert threshold (flag if too much bench time) |
 | `unit_of_measure` | `"hours"` |
 | `item_type` | `"serialized"` for named resources, `"non_serialized"` for pooled |
+| `quantity_on_hand` | Not used as a constraint (future: could track cumulative hours submitted) |
+| `notes` | Resource bio, certifications, availability notes |
+
+### InventoryTransaction Fields for Time Entry
+
+| Field | Professional Services Meaning |
+|---|---|
+| Transaction record | Staff submitting hours worked on an engagement |
+| Links to `inventory_item` | Which resource (person) submitted the hours |
+| Quantity / amount | Number of hours rendered |
+| Metadata / attributes | Engagement reference, billable vs non-billable flag, week/period |
+
+Hours submitted via `InventoryTransaction` are the source of truth that drives:
+- `RevenueLineItem` creation (hours × rate from applicable `PriceList`)
+- `Invoice` generation (aggregated line items for a billing period)
 
 ### Subscription Fields for Engagement Tracking
 
 | Field | Professional Services Meaning |
 |---|---|
 | `name` | Engagement name ("Acme Corp - Cloud Migration") |
-| `client_id` | The client company |
+| `client_id` | The client company (Acme Corp) |
 | `price_plan_id` | Chosen fee structure (T&M, fixed, retainer) |
 | `date_start` / `date_end` | Engagement period |
-| `quantity` | Total contracted hours |
-| `assigned_count` | Hours allocated to resources |
-| `available_count` | Hours remaining in the contract |
+| `quantity` | Optional: contracted hours (if engagement is capped) |
 | `metadata` | SOW reference, project codes, cost center |
 
 ---
@@ -355,18 +383,19 @@ The combination of **PriceList** (rate card per location) and **PricePlan** (fee
 ### Scenario: New consulting engagement with Acme Corp
 
 1. **Delegate** (Acme's VP Engineering) reaches out to the firm
-2. **Workflow** kicks off the "Standard Consulting Engagement" lifecycle
-3. **Stage 1** (Discovery): **Activities** include stakeholder interviews
-4. A **Plan** ("IT Consulting") is selected as the engagement type
-5. **PricePlan** ("T&M Monthly @ $25,000/month") is chosen
-6. **PriceList** ("2025 Rate Card - NYC Office") sets the rates
-7. **Subscription** is created: Acme Corp engagement, 500 contracted hours
-8. **InventoryItems** (Jane Smith - Sr. Consultant, Tom Lee - Jr. Analyst) are booked
-9. **InventoryTransactions** record 120 hrs allocated to Acme
-10. Monthly **Events** (status meetings) are scheduled with **EventClient** (Acme's CTO)
-11. At month-end, **Invoice** is generated: `40 hrs × $275 + 20 hrs × $150 = $14,000`
-12. **Revenue** and **RevenueLineItems** are recorded
-13. **Payment** received, **Balance** updated
+2. **Client** (Acme Corp) record is created — the company, not the person
+3. **Workflow** kicks off the "Standard Consulting Engagement" lifecycle
+4. **Stage 1** (Discovery): **Activities** include stakeholder interviews
+5. A **Plan** ("IT Consulting") is selected as the engagement type
+6. **PricePlan** ("T&M Monthly @ $25,000/month") is chosen as the fee structure
+7. **PriceList** ("2025 Rate Card - NYC Office") sets the blended rate ($225/hr)
+8. **Subscription** is created: Acme Corp engagement linked to plan + price plan
+9. **InventoryItems** (Jane Smith, Tom Lee) are the assigned resources
+10. Weekly: staff submit hours via **InventoryTransaction** ("40 hrs on Acme, week of Jan 6")
+11. Each time entry creates a **RevenueLineItem** (40 hrs × $225/hr blended rate from PriceList)
+12. Monthly **Events** (status meetings) are scheduled with **EventClient** (Acme's CTO via Delegate)
+13. At month-end, **Invoice** is generated from aggregated **RevenueLineItems**
+14. **Payment** received, **Balance** updated
 
 ### Scenario: Rate card renewal
 
@@ -377,9 +406,15 @@ The combination of **PriceList** (rate card per location) and **PricePlan** (fee
 
 ---
 
+## Design Decisions
+
+- **Client = Company**: `Client` is always the organization (Acme Corp). Individual people at the client are `Delegate` records, linked via `delegate_client`. This matches how professional services firms track relationships — you bill the company, not the person.
+- **Hours are not a constraint**: `InventoryItem` quantity fields are not used to cap or decrement available hours. Hours flow in one direction: staff submit → `InventoryTransaction` → `RevenueLineItem` → billing. This is a **record-then-bill** model, not a budget-and-decrement model.
+- **Blended rates via PriceList**: The `PriceList` (rate card) carries blended rates as `PriceProduct` entries. A single rate card can hold both granular per-role rates and a blended engagement rate. The `PricePlan` defines the billing cadence (monthly retainer, fixed fee), not the rate itself.
+
 ## Open Questions & Considerations
 
-- **Utilization tracking**: `quantity_on_hand` works for monthly capacity, but should this reset monthly? Could use `inventory_transaction` adjustments at period boundaries.
-- **Blended rates**: When a retainer uses a mix of resource types, the blended rate calculation lives in the application layer, not the schema. The `PricePlan.amount` captures the blended monthly fee, while individual `RevenueLineItems` break it down.
-- **Multi-resource engagements**: A single `Subscription` (engagement) may need multiple `InventoryItems` (resources). The link between them goes through `InventoryTransaction` bookings referencing the subscription via metadata or attributes.
-- **Non-billable time**: Training, internal meetings, PTO — tracked as `InventoryTransactions` with a non-billable flag (via `inventory_attribute`), contributing to the `inventory_depreciation` (utilization write-down).
+- **InventoryTransaction schema**: The current `inventory_transaction` proto may need additional fields or attributes to capture time entry specifics — billable vs non-billable flag, engagement/subscription reference, period/week, and approval status.
+- **Multi-resource engagements**: A single `Subscription` (engagement) may have multiple `InventoryItems` (resources) submitting hours. The link is implicit through `InventoryTransaction` records referencing the subscription via metadata or `inventory_attribute`.
+- **Non-billable time**: Training, internal meetings, PTO — tracked as `InventoryTransactions` with a non-billable flag (via `inventory_attribute`), contributing to `inventory_depreciation` (utilization write-down).
+- **Approval workflow**: Staff-submitted hours may need approval before flowing to billing. The `workflow` / `activity` system could model this: an `Activity` for "approve timesheet" with `ApproveActivity` / `RejectActivity` RPCs.
