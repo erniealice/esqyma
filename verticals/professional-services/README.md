@@ -378,31 +378,18 @@ Hours submitted via `InventoryTransaction` are the source of truth that drives:
 
 ---
 
-## Example Scenarios
+## Scenarios by Domain
 
-### Scenario: New consulting engagement with Acme Corp
+Detailed scenarios are organized by domain category in separate files:
 
-1. **Delegate** (Acme's VP Engineering) reaches out to the firm
-2. **Client** (Acme Corp) record is created — the company, not the person
-3. **Workflow** kicks off the "Standard Consulting Engagement" lifecycle
-4. **Stage 1** (Discovery): **Activities** include stakeholder interviews
-5. A **Plan** ("IT Consulting") is selected as the engagement type
-6. **PricePlan** ("T&M Monthly @ $25,000/month") is chosen as the fee structure
-7. **PriceList** ("2025 Rate Card - NYC Office") sets the blended rate ($225/hr)
-8. **Subscription** is created: Acme Corp engagement linked to plan + price plan
-9. **InventoryItems** (Jane Smith, Tom Lee) are the assigned resources
-10. Weekly: staff submit hours via **InventoryTransaction** ("40 hrs on Acme, week of Jan 6")
-11. Each time entry creates a **RevenueLineItem** (40 hrs × $225/hr blended rate from PriceList)
-12. Monthly **Events** (status meetings) are scheduled with **EventClient** (Acme's CTO via Delegate)
-13. At month-end, **Invoice** is generated from aggregated **RevenueLineItems**
-14. **Payment** received, **Balance** updated
-
-### Scenario: Rate card renewal
-
-1. Current **PriceList** ("2024 Rate Card - NYC") has `date_end: Dec 31`
-2. New **PriceList** ("2025 Rate Card - NYC") created with `date_start: Jan 1`
-3. **PriceProducts** updated: Sr. Consultant $250 → $275, Jr. Analyst $140 → $150
-4. Active **Subscriptions** continue — billing picks up new rates at renewal
+| Domain | File | Scenarios |
+|---|---|---|
+| **Sales** | [scenarios/sales.md](scenarios/sales.md) | Monthly T&M billing cycle, fixed-fee milestone billing, credit note for over-billing |
+| **Inventory** | [scenarios/inventory.md](scenarios/inventory.md) | Staff submits weekly timesheet, non-billable time (training/PTO), resource transfer between offices, contractor hours |
+| **Plan** | [scenarios/plan.md](scenarios/plan.md) | New T&M engagement type, advisory engagement (deliverable-based), staff augmentation engagement |
+| **Subscription** | [scenarios/subscription.md](scenarios/subscription.md) | New T&M engagement setup, retainer contract with hour credits, engagement renewal and extension |
+| **Client** | [scenarios/client.md](scenarios/client.md) | New client company onboarding, adding a new representative, strategic account upgrade, multi-entity client structure |
+| **Product** | [scenarios/product.md](scenarios/product.md) | New resource type with specializations, rate card renewal, service line restructuring, discontinuing a resource type |
 
 ---
 
