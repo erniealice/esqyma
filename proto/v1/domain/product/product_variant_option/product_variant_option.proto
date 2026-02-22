@@ -1,0 +1,119 @@
+syntax = "proto3";
+
+package domain.product.v1;
+
+option go_package = "github.com/erniealice/esqyma/golang/v1/domain/product/product_variant_option";
+
+import "domain/common/error.proto";
+import "domain/common/pagination.proto";
+import "domain/common/filter.proto";
+import "domain/common/sort.proto";
+import "domain/common/search.proto";
+
+import "domain/product/product_variant/product_variant.proto";
+import "domain/product/product_option_value/product_option_value.proto";
+import "options/db.proto";
+
+message ProductVariantOption {
+  option (options.v1.table).table = true;
+  option (options.v1.table).unique_together = "product_variant_id,product_option_value_id";
+  string id = 1;
+  string product_variant_id = 2 [(options.v1.db).references = "product_variant", (options.v1.db).index = true];
+  string product_option_value_id = 3 [(options.v1.db).references = "product_option_value", (options.v1.db).index = true];
+  bool active = 4 [(options.v1.db).default = "true"];
+  optional int64 date_created = 5;
+  optional string date_created_string = 6;
+  optional int64 date_modified = 7;
+  optional string date_modified_string = 8;
+  ProductVariant product_variant = 9;
+  ProductOptionValue product_option_value = 10;
+}
+
+service ProductVariantOptionDomainService {
+  rpc CreateProductVariantOption(CreateProductVariantOptionRequest) returns (CreateProductVariantOptionResponse);
+  rpc ReadProductVariantOption(ReadProductVariantOptionRequest) returns (ReadProductVariantOptionResponse);
+  rpc UpdateProductVariantOption(UpdateProductVariantOptionRequest) returns (UpdateProductVariantOptionResponse);
+  rpc DeleteProductVariantOption(DeleteProductVariantOptionRequest) returns (DeleteProductVariantOptionResponse);
+  rpc ListProductVariantOptions(ListProductVariantOptionsRequest) returns (ListProductVariantOptionsResponse);
+  rpc GetProductVariantOptionListPageData(GetProductVariantOptionListPageDataRequest)
+    returns (GetProductVariantOptionListPageDataResponse);
+  rpc GetProductVariantOptionItemPageData(GetProductVariantOptionItemPageDataRequest)
+    returns (GetProductVariantOptionItemPageDataResponse);
+}
+
+message CreateProductVariantOptionRequest {
+  ProductVariantOption data = 1;
+}
+
+message CreateProductVariantOptionResponse {
+  repeated ProductVariantOption data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message ReadProductVariantOptionRequest {
+  ProductVariantOption data = 1;
+}
+
+message ReadProductVariantOptionResponse {
+  repeated ProductVariantOption data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message UpdateProductVariantOptionRequest {
+  ProductVariantOption data = 1;
+}
+
+message UpdateProductVariantOptionResponse {
+  repeated ProductVariantOption data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message DeleteProductVariantOptionRequest {
+  ProductVariantOption data = 1;
+}
+
+message DeleteProductVariantOptionResponse {
+  bool success = 1;
+  optional domain.common.v1.Error error = 2;
+}
+
+message ListProductVariantOptionsRequest {
+  optional domain.common.v1.SearchRequest search = 1;
+  optional domain.common.v1.FilterRequest filters = 2;
+  optional domain.common.v1.SortRequest sort = 3;
+  optional domain.common.v1.PaginationRequest pagination = 4;
+}
+
+message ListProductVariantOptionsResponse {
+  repeated ProductVariantOption data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message GetProductVariantOptionListPageDataRequest {
+  optional domain.common.v1.SearchRequest search = 1;
+  optional domain.common.v1.FilterRequest filters = 2;
+  optional domain.common.v1.SortRequest sort = 3;
+  optional domain.common.v1.PaginationRequest pagination = 4;
+}
+
+message GetProductVariantOptionListPageDataResponse {
+  repeated ProductVariantOption product_variant_option_list = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+  optional domain.common.v1.PaginationResponse pagination = 4;
+  repeated domain.common.v1.SearchResult search_results = 5;
+}
+
+message GetProductVariantOptionItemPageDataRequest {
+  string product_variant_option_id = 1;
+}
+
+message GetProductVariantOptionItemPageDataResponse {
+  ProductVariantOption product_variant_option = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}

@@ -31,7 +31,6 @@ type ProductVariant struct {
 	Sku                string                 `protobuf:"bytes,3,opt,name=sku,proto3" json:"sku,omitempty"`
 	PriceOverride      float64                `protobuf:"fixed64,4,opt,name=price_override,json=priceOverride,proto3" json:"price_override,omitempty"`
 	Active             bool                   `protobuf:"varint,5,opt,name=active,proto3" json:"active,omitempty"`
-	VariantAttributes  map[string]string      `protobuf:"bytes,6,rep,name=variant_attributes,json=variantAttributes,proto3" json:"variant_attributes,omitempty" protobuf_key:"bytes,1,opt,name=key" protobuf_val:"bytes,2,opt,name=value"`
 	DateCreated        *int64                 `protobuf:"varint,7,opt,name=date_created,json=dateCreated,proto3,oneof" json:"date_created,omitempty"`
 	DateCreatedString  *string                `protobuf:"bytes,8,opt,name=date_created_string,json=dateCreatedString,proto3,oneof" json:"date_created_string,omitempty"`
 	DateModified       *int64                 `protobuf:"varint,9,opt,name=date_modified,json=dateModified,proto3,oneof" json:"date_modified,omitempty"`
@@ -104,13 +103,6 @@ func (x *ProductVariant) GetActive() bool {
 		return x.Active
 	}
 	return false
-}
-
-func (x *ProductVariant) GetVariantAttributes() map[string]string {
-	if x != nil {
-		return x.VariantAttributes
-	}
-	return nil
 }
 
 func (x *ProductVariant) GetDateCreated() int64 {
@@ -1040,7 +1032,7 @@ var File_domain_product_product_variant_product_variant_proto protoreflect.FileD
 
 const file_domain_product_product_variant_product_variant_proto_rawDesc = "" +
 	"\n" +
-	"4domain/product/product_variant/product_variant.proto\x12\x11domain.product.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1adomain/common/search.proto\x1a$domain/product/product/product.proto\x1a\x10options/db.proto\"\xac\x05\n" +
+	"4domain/product/product_variant/product_variant.proto\x12\x11domain.product.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1adomain/common/search.proto\x1a$domain/product/product/product.proto\x1a\x10options/db.proto\"\x97\x04\n" +
 	"\x0eProductVariant\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12.\n" +
 	"\n" +
@@ -1049,21 +1041,17 @@ const file_domain_product_product_variant_product_variant_proto_rawDesc = "" +
 	"\x03sku\x18\x03 \x01(\tR\x03sku\x12%\n" +
 	"\x0eprice_override\x18\x04 \x01(\x01R\rpriceOverride\x12\"\n" +
 	"\x06active\x18\x05 \x01(\bB\n" +
-	"\x82\xb5\x18\x06\"\x04trueR\x06active\x12g\n" +
-	"\x12variant_attributes\x18\x06 \x03(\v28.domain.product.v1.ProductVariant.VariantAttributesEntryR\x11variantAttributes\x12&\n" +
+	"\x82\xb5\x18\x06\"\x04trueR\x06active\x12&\n" +
 	"\fdate_created\x18\a \x01(\x03H\x00R\vdateCreated\x88\x01\x01\x123\n" +
 	"\x13date_created_string\x18\b \x01(\tH\x01R\x11dateCreatedString\x88\x01\x01\x12(\n" +
 	"\rdate_modified\x18\t \x01(\x03H\x02R\fdateModified\x88\x01\x01\x125\n" +
 	"\x14date_modified_string\x18\n" +
 	" \x01(\tH\x03R\x12dateModifiedString\x88\x01\x01\x124\n" +
-	"\aproduct\x18\v \x01(\v2\x1a.domain.product.v1.ProductR\aproduct\x1aD\n" +
-	"\x16VariantAttributesEntry\x12\x10\n" +
-	"\x03key\x18\x01 \x01(\tR\x03key\x12\x14\n" +
-	"\x05value\x18\x02 \x01(\tR\x05value:\x028\x01:\x06\x8a\xb5\x18\x02\b\x01B\x0f\n" +
+	"\aproduct\x18\v \x01(\v2\x1a.domain.product.v1.ProductR\aproduct:\x06\x8a\xb5\x18\x02\b\x01B\x0f\n" +
 	"\r_date_createdB\x16\n" +
 	"\x14_date_created_stringB\x10\n" +
 	"\x0e_date_modifiedB\x17\n" +
-	"\x15_date_modified_string\"T\n" +
+	"\x15_date_modified_stringJ\x04\b\x06\x10\aR\x12variant_attributes\"T\n" +
 	"\x1bCreateProductVariantRequest\x125\n" +
 	"\x04data\x18\x01 \x01(\v2!.domain.product.v1.ProductVariantR\x04data\"\xad\x01\n" +
 	"\x1cCreateProductVariantResponse\x125\n" +
@@ -1166,7 +1154,7 @@ func file_domain_product_product_variant_product_variant_proto_rawDescGZIP() []b
 	return file_domain_product_product_variant_product_variant_proto_rawDescData
 }
 
-var file_domain_product_product_variant_product_variant_proto_msgTypes = make([]protoimpl.MessageInfo, 18)
+var file_domain_product_product_variant_product_variant_proto_msgTypes = make([]protoimpl.MessageInfo, 17)
 var file_domain_product_product_variant_product_variant_proto_goTypes = []any{
 	(*ProductVariant)(nil),                        // 0: domain.product.v1.ProductVariant
 	(*CreateProductVariantRequest)(nil),           // 1: domain.product.v1.CreateProductVariantRequest
@@ -1185,68 +1173,66 @@ var file_domain_product_product_variant_product_variant_proto_goTypes = []any{
 	(*GetProductVariantListPageDataResponse)(nil), // 14: domain.product.v1.GetProductVariantListPageDataResponse
 	(*GetProductVariantItemPageDataRequest)(nil),  // 15: domain.product.v1.GetProductVariantItemPageDataRequest
 	(*GetProductVariantItemPageDataResponse)(nil), // 16: domain.product.v1.GetProductVariantItemPageDataResponse
-	nil,                               // 17: domain.product.v1.ProductVariant.VariantAttributesEntry
-	(*product.Product)(nil),           // 18: domain.product.v1.Product
-	(*common.Error)(nil),              // 19: domain.common.v1.Error
-	(*common.SearchRequest)(nil),      // 20: domain.common.v1.SearchRequest
-	(*common.FilterRequest)(nil),      // 21: domain.common.v1.FilterRequest
-	(*common.SortRequest)(nil),        // 22: domain.common.v1.SortRequest
-	(*common.PaginationRequest)(nil),  // 23: domain.common.v1.PaginationRequest
-	(*common.PaginationResponse)(nil), // 24: domain.common.v1.PaginationResponse
-	(*common.SearchResult)(nil),       // 25: domain.common.v1.SearchResult
+	(*product.Product)(nil),                       // 17: domain.product.v1.Product
+	(*common.Error)(nil),                          // 18: domain.common.v1.Error
+	(*common.SearchRequest)(nil),                  // 19: domain.common.v1.SearchRequest
+	(*common.FilterRequest)(nil),                  // 20: domain.common.v1.FilterRequest
+	(*common.SortRequest)(nil),                    // 21: domain.common.v1.SortRequest
+	(*common.PaginationRequest)(nil),              // 22: domain.common.v1.PaginationRequest
+	(*common.PaginationResponse)(nil),             // 23: domain.common.v1.PaginationResponse
+	(*common.SearchResult)(nil),                   // 24: domain.common.v1.SearchResult
 }
 var file_domain_product_product_variant_product_variant_proto_depIdxs = []int32{
-	17, // 0: domain.product.v1.ProductVariant.variant_attributes:type_name -> domain.product.v1.ProductVariant.VariantAttributesEntry
-	18, // 1: domain.product.v1.ProductVariant.product:type_name -> domain.product.v1.Product
-	0,  // 2: domain.product.v1.CreateProductVariantRequest.data:type_name -> domain.product.v1.ProductVariant
-	0,  // 3: domain.product.v1.CreateProductVariantResponse.data:type_name -> domain.product.v1.ProductVariant
-	19, // 4: domain.product.v1.CreateProductVariantResponse.error:type_name -> domain.common.v1.Error
-	0,  // 5: domain.product.v1.CreateProductVariantBatchRequest.data:type_name -> domain.product.v1.ProductVariant
-	0,  // 6: domain.product.v1.CreateProductVariantBatchResponse.data:type_name -> domain.product.v1.ProductVariant
-	19, // 7: domain.product.v1.CreateProductVariantBatchResponse.error:type_name -> domain.common.v1.Error
-	0,  // 8: domain.product.v1.ReadProductVariantRequest.data:type_name -> domain.product.v1.ProductVariant
-	0,  // 9: domain.product.v1.ReadProductVariantResponse.data:type_name -> domain.product.v1.ProductVariant
-	19, // 10: domain.product.v1.ReadProductVariantResponse.error:type_name -> domain.common.v1.Error
-	0,  // 11: domain.product.v1.UpdateProductVariantRequest.data:type_name -> domain.product.v1.ProductVariant
-	0,  // 12: domain.product.v1.UpdateProductVariantResponse.data:type_name -> domain.product.v1.ProductVariant
-	19, // 13: domain.product.v1.UpdateProductVariantResponse.error:type_name -> domain.common.v1.Error
-	0,  // 14: domain.product.v1.DeleteProductVariantRequest.data:type_name -> domain.product.v1.ProductVariant
-	19, // 15: domain.product.v1.DeleteProductVariantResponse.error:type_name -> domain.common.v1.Error
-	20, // 16: domain.product.v1.ListProductVariantsRequest.search:type_name -> domain.common.v1.SearchRequest
-	21, // 17: domain.product.v1.ListProductVariantsRequest.filters:type_name -> domain.common.v1.FilterRequest
-	22, // 18: domain.product.v1.ListProductVariantsRequest.sort:type_name -> domain.common.v1.SortRequest
-	23, // 19: domain.product.v1.ListProductVariantsRequest.pagination:type_name -> domain.common.v1.PaginationRequest
-	0,  // 20: domain.product.v1.ListProductVariantsResponse.data:type_name -> domain.product.v1.ProductVariant
-	19, // 21: domain.product.v1.ListProductVariantsResponse.error:type_name -> domain.common.v1.Error
-	20, // 22: domain.product.v1.GetProductVariantListPageDataRequest.search:type_name -> domain.common.v1.SearchRequest
-	21, // 23: domain.product.v1.GetProductVariantListPageDataRequest.filters:type_name -> domain.common.v1.FilterRequest
-	22, // 24: domain.product.v1.GetProductVariantListPageDataRequest.sort:type_name -> domain.common.v1.SortRequest
-	23, // 25: domain.product.v1.GetProductVariantListPageDataRequest.pagination:type_name -> domain.common.v1.PaginationRequest
-	0,  // 26: domain.product.v1.GetProductVariantListPageDataResponse.product_variant_list:type_name -> domain.product.v1.ProductVariant
-	19, // 27: domain.product.v1.GetProductVariantListPageDataResponse.error:type_name -> domain.common.v1.Error
-	24, // 28: domain.product.v1.GetProductVariantListPageDataResponse.pagination:type_name -> domain.common.v1.PaginationResponse
-	25, // 29: domain.product.v1.GetProductVariantListPageDataResponse.search_results:type_name -> domain.common.v1.SearchResult
-	0,  // 30: domain.product.v1.GetProductVariantItemPageDataResponse.product_variant:type_name -> domain.product.v1.ProductVariant
-	19, // 31: domain.product.v1.GetProductVariantItemPageDataResponse.error:type_name -> domain.common.v1.Error
-	1,  // 32: domain.product.v1.ProductVariantDomainService.CreateProductVariant:input_type -> domain.product.v1.CreateProductVariantRequest
-	5,  // 33: domain.product.v1.ProductVariantDomainService.ReadProductVariant:input_type -> domain.product.v1.ReadProductVariantRequest
-	7,  // 34: domain.product.v1.ProductVariantDomainService.UpdateProductVariant:input_type -> domain.product.v1.UpdateProductVariantRequest
-	9,  // 35: domain.product.v1.ProductVariantDomainService.DeleteProductVariant:input_type -> domain.product.v1.DeleteProductVariantRequest
-	11, // 36: domain.product.v1.ProductVariantDomainService.ListProductVariants:input_type -> domain.product.v1.ListProductVariantsRequest
-	13, // 37: domain.product.v1.ProductVariantDomainService.GetProductVariantListPageData:input_type -> domain.product.v1.GetProductVariantListPageDataRequest
-	15, // 38: domain.product.v1.ProductVariantDomainService.GetProductVariantItemPageData:input_type -> domain.product.v1.GetProductVariantItemPageDataRequest
-	2,  // 39: domain.product.v1.ProductVariantDomainService.CreateProductVariant:output_type -> domain.product.v1.CreateProductVariantResponse
-	6,  // 40: domain.product.v1.ProductVariantDomainService.ReadProductVariant:output_type -> domain.product.v1.ReadProductVariantResponse
-	8,  // 41: domain.product.v1.ProductVariantDomainService.UpdateProductVariant:output_type -> domain.product.v1.UpdateProductVariantResponse
-	10, // 42: domain.product.v1.ProductVariantDomainService.DeleteProductVariant:output_type -> domain.product.v1.DeleteProductVariantResponse
-	12, // 43: domain.product.v1.ProductVariantDomainService.ListProductVariants:output_type -> domain.product.v1.ListProductVariantsResponse
-	14, // 44: domain.product.v1.ProductVariantDomainService.GetProductVariantListPageData:output_type -> domain.product.v1.GetProductVariantListPageDataResponse
-	16, // 45: domain.product.v1.ProductVariantDomainService.GetProductVariantItemPageData:output_type -> domain.product.v1.GetProductVariantItemPageDataResponse
-	39, // [39:46] is the sub-list for method output_type
-	32, // [32:39] is the sub-list for method input_type
-	32, // [32:32] is the sub-list for extension type_name
-	32, // [32:32] is the sub-list for extension extendee
-	0,  // [0:32] is the sub-list for field type_name
+	17, // 0: domain.product.v1.ProductVariant.product:type_name -> domain.product.v1.Product
+	0,  // 1: domain.product.v1.CreateProductVariantRequest.data:type_name -> domain.product.v1.ProductVariant
+	0,  // 2: domain.product.v1.CreateProductVariantResponse.data:type_name -> domain.product.v1.ProductVariant
+	18, // 3: domain.product.v1.CreateProductVariantResponse.error:type_name -> domain.common.v1.Error
+	0,  // 4: domain.product.v1.CreateProductVariantBatchRequest.data:type_name -> domain.product.v1.ProductVariant
+	0,  // 5: domain.product.v1.CreateProductVariantBatchResponse.data:type_name -> domain.product.v1.ProductVariant
+	18, // 6: domain.product.v1.CreateProductVariantBatchResponse.error:type_name -> domain.common.v1.Error
+	0,  // 7: domain.product.v1.ReadProductVariantRequest.data:type_name -> domain.product.v1.ProductVariant
+	0,  // 8: domain.product.v1.ReadProductVariantResponse.data:type_name -> domain.product.v1.ProductVariant
+	18, // 9: domain.product.v1.ReadProductVariantResponse.error:type_name -> domain.common.v1.Error
+	0,  // 10: domain.product.v1.UpdateProductVariantRequest.data:type_name -> domain.product.v1.ProductVariant
+	0,  // 11: domain.product.v1.UpdateProductVariantResponse.data:type_name -> domain.product.v1.ProductVariant
+	18, // 12: domain.product.v1.UpdateProductVariantResponse.error:type_name -> domain.common.v1.Error
+	0,  // 13: domain.product.v1.DeleteProductVariantRequest.data:type_name -> domain.product.v1.ProductVariant
+	18, // 14: domain.product.v1.DeleteProductVariantResponse.error:type_name -> domain.common.v1.Error
+	19, // 15: domain.product.v1.ListProductVariantsRequest.search:type_name -> domain.common.v1.SearchRequest
+	20, // 16: domain.product.v1.ListProductVariantsRequest.filters:type_name -> domain.common.v1.FilterRequest
+	21, // 17: domain.product.v1.ListProductVariantsRequest.sort:type_name -> domain.common.v1.SortRequest
+	22, // 18: domain.product.v1.ListProductVariantsRequest.pagination:type_name -> domain.common.v1.PaginationRequest
+	0,  // 19: domain.product.v1.ListProductVariantsResponse.data:type_name -> domain.product.v1.ProductVariant
+	18, // 20: domain.product.v1.ListProductVariantsResponse.error:type_name -> domain.common.v1.Error
+	19, // 21: domain.product.v1.GetProductVariantListPageDataRequest.search:type_name -> domain.common.v1.SearchRequest
+	20, // 22: domain.product.v1.GetProductVariantListPageDataRequest.filters:type_name -> domain.common.v1.FilterRequest
+	21, // 23: domain.product.v1.GetProductVariantListPageDataRequest.sort:type_name -> domain.common.v1.SortRequest
+	22, // 24: domain.product.v1.GetProductVariantListPageDataRequest.pagination:type_name -> domain.common.v1.PaginationRequest
+	0,  // 25: domain.product.v1.GetProductVariantListPageDataResponse.product_variant_list:type_name -> domain.product.v1.ProductVariant
+	18, // 26: domain.product.v1.GetProductVariantListPageDataResponse.error:type_name -> domain.common.v1.Error
+	23, // 27: domain.product.v1.GetProductVariantListPageDataResponse.pagination:type_name -> domain.common.v1.PaginationResponse
+	24, // 28: domain.product.v1.GetProductVariantListPageDataResponse.search_results:type_name -> domain.common.v1.SearchResult
+	0,  // 29: domain.product.v1.GetProductVariantItemPageDataResponse.product_variant:type_name -> domain.product.v1.ProductVariant
+	18, // 30: domain.product.v1.GetProductVariantItemPageDataResponse.error:type_name -> domain.common.v1.Error
+	1,  // 31: domain.product.v1.ProductVariantDomainService.CreateProductVariant:input_type -> domain.product.v1.CreateProductVariantRequest
+	5,  // 32: domain.product.v1.ProductVariantDomainService.ReadProductVariant:input_type -> domain.product.v1.ReadProductVariantRequest
+	7,  // 33: domain.product.v1.ProductVariantDomainService.UpdateProductVariant:input_type -> domain.product.v1.UpdateProductVariantRequest
+	9,  // 34: domain.product.v1.ProductVariantDomainService.DeleteProductVariant:input_type -> domain.product.v1.DeleteProductVariantRequest
+	11, // 35: domain.product.v1.ProductVariantDomainService.ListProductVariants:input_type -> domain.product.v1.ListProductVariantsRequest
+	13, // 36: domain.product.v1.ProductVariantDomainService.GetProductVariantListPageData:input_type -> domain.product.v1.GetProductVariantListPageDataRequest
+	15, // 37: domain.product.v1.ProductVariantDomainService.GetProductVariantItemPageData:input_type -> domain.product.v1.GetProductVariantItemPageDataRequest
+	2,  // 38: domain.product.v1.ProductVariantDomainService.CreateProductVariant:output_type -> domain.product.v1.CreateProductVariantResponse
+	6,  // 39: domain.product.v1.ProductVariantDomainService.ReadProductVariant:output_type -> domain.product.v1.ReadProductVariantResponse
+	8,  // 40: domain.product.v1.ProductVariantDomainService.UpdateProductVariant:output_type -> domain.product.v1.UpdateProductVariantResponse
+	10, // 41: domain.product.v1.ProductVariantDomainService.DeleteProductVariant:output_type -> domain.product.v1.DeleteProductVariantResponse
+	12, // 42: domain.product.v1.ProductVariantDomainService.ListProductVariants:output_type -> domain.product.v1.ListProductVariantsResponse
+	14, // 43: domain.product.v1.ProductVariantDomainService.GetProductVariantListPageData:output_type -> domain.product.v1.GetProductVariantListPageDataResponse
+	16, // 44: domain.product.v1.ProductVariantDomainService.GetProductVariantItemPageData:output_type -> domain.product.v1.GetProductVariantItemPageDataResponse
+	38, // [38:45] is the sub-list for method output_type
+	31, // [31:38] is the sub-list for method input_type
+	31, // [31:31] is the sub-list for extension type_name
+	31, // [31:31] is the sub-list for extension extendee
+	0,  // [0:31] is the sub-list for field type_name
 }
 
 func init() { file_domain_product_product_variant_product_variant_proto_init() }
@@ -1271,7 +1257,7 @@ func file_domain_product_product_variant_product_variant_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_domain_product_product_variant_product_variant_proto_rawDesc), len(file_domain_product_product_variant_product_variant_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   18,
+			NumMessages:   17,
 			NumExtensions: 0,
 			NumServices:   1,
 		},

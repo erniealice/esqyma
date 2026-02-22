@@ -20,7 +20,8 @@ message ProductVariant {
   string sku = 3;
   double price_override = 4;
   bool active = 5 [(options.v1.db).default = "true"];
-  map<string, string> variant_attributes = 6;
+  reserved 6;
+  reserved "variant_attributes";
   optional int64 date_created = 7;
   optional string date_created_string = 8;
   optional int64 date_modified = 9;
