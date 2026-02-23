@@ -25,6 +25,7 @@ message Product {
   double price = 9;
   string currency = 10;
   repeated ProductCollection product_collections = 11;
+  string item_type = 12; // "serialized", "non_serialized", "consumable"
 }
 
 service ProductDomainService {
