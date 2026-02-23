@@ -32,6 +32,11 @@ message RevenueLineItem {
   string line_item_type = 17;           // "item" or "discount"
   string inventory_item_id = 18;         // FK to inventory_item table
   string inventory_serial_id = 19;       // FK to inventory_serial table (for serialized items)
+  optional string price_list_id = 20;    // FK to price_list
+  optional string variant_id = 21;       // FK to product_variant
+  optional string variant_label = 22;    // display label ("256GB Black")
+  optional string location_id = 23;      // FK to location (where stock was pulled)
+  optional double cost_price = 24;       // purchase cost for margin tracking
 }
 
 service RevenueLineItemDomainService {

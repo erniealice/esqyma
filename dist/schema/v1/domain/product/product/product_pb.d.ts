@@ -58,6 +58,12 @@ export type Product = Message<"domain.product.v1.Product"> & {
      * @generated from field: repeated domain.product.v1.ProductCollection product_collections = 11;
      */
     productCollections: ProductCollection[];
+    /**
+     * "serialized", "non_serialized", "consumable"
+     *
+     * @generated from field: string item_type = 12;
+     */
+    itemType: string;
 };
 /**
  * Describes the message domain.product.v1.Product.

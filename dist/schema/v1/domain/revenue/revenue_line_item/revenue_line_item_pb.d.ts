@@ -93,6 +93,36 @@ export type RevenueLineItem = Message<"domain.revenue.v1.RevenueLineItem"> & {
      * @generated from field: string inventory_serial_id = 19;
      */
     inventorySerialId: string;
+    /**
+     * FK to price_list
+     *
+     * @generated from field: optional string price_list_id = 20;
+     */
+    priceListId?: string;
+    /**
+     * FK to product_variant
+     *
+     * @generated from field: optional string variant_id = 21;
+     */
+    variantId?: string;
+    /**
+     * display label ("256GB Black")
+     *
+     * @generated from field: optional string variant_label = 22;
+     */
+    variantLabel?: string;
+    /**
+     * FK to location (where stock was pulled)
+     *
+     * @generated from field: optional string location_id = 23;
+     */
+    locationId?: string;
+    /**
+     * purchase cost for margin tracking
+     *
+     * @generated from field: optional double cost_price = 24;
+     */
+    costPrice?: number;
 };
 /**
  * Describes the message domain.revenue.v1.RevenueLineItem.

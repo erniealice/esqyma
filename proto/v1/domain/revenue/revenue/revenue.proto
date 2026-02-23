@@ -34,6 +34,10 @@ message Revenue {
   optional string revenue_category_id = 18;
   optional domain.entity.v1.Location location = 19;
   string location_id = 20;
+  optional string checkout_session_id = 21;   // Maya session reference
+  optional string payment_provider = 22;      // "maya", "cash", etc.
+  optional string fulfillment_type = 23;      // "store_pickup" or "home_delivery"
+  optional string delivery_address = 24;      // JSON or flat address string
 }
 
 service RevenueDomainService {

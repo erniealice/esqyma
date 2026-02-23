@@ -35,12 +35,6 @@ export type ProductVariant = Message<"domain.product.v1.ProductVariant"> & {
      */
     active: boolean;
     /**
-     * @generated from field: map<string, string> variant_attributes = 6;
-     */
-    variantAttributes: {
-        [key: string]: string;
-    };
-    /**
      * @generated from field: optional int64 date_created = 7;
      */
     dateCreated?: bigint;

@@ -44,6 +44,11 @@ type RevenueLineItem struct {
 	LineItemType       string                 `protobuf:"bytes,17,opt,name=line_item_type,json=lineItemType,proto3" json:"line_item_type,omitempty"`                // "item" or "discount"
 	InventoryItemId    string                 `protobuf:"bytes,18,opt,name=inventory_item_id,json=inventoryItemId,proto3" json:"inventory_item_id,omitempty"`       // FK to inventory_item table
 	InventorySerialId  string                 `protobuf:"bytes,19,opt,name=inventory_serial_id,json=inventorySerialId,proto3" json:"inventory_serial_id,omitempty"` // FK to inventory_serial table (for serialized items)
+	PriceListId        *string                `protobuf:"bytes,20,opt,name=price_list_id,json=priceListId,proto3,oneof" json:"price_list_id,omitempty"`             // FK to price_list
+	VariantId          *string                `protobuf:"bytes,21,opt,name=variant_id,json=variantId,proto3,oneof" json:"variant_id,omitempty"`                     // FK to product_variant
+	VariantLabel       *string                `protobuf:"bytes,22,opt,name=variant_label,json=variantLabel,proto3,oneof" json:"variant_label,omitempty"`            // display label ("256GB Black")
+	LocationId         *string                `protobuf:"bytes,23,opt,name=location_id,json=locationId,proto3,oneof" json:"location_id,omitempty"`                  // FK to location (where stock was pulled)
+	CostPrice          *float64               `protobuf:"fixed64,24,opt,name=cost_price,json=costPrice,proto3,oneof" json:"cost_price,omitempty"`                   // purchase cost for margin tracking
 	unknownFields      protoimpl.UnknownFields
 	sizeCache          protoimpl.SizeCache
 }
@@ -202,6 +207,41 @@ func (x *RevenueLineItem) GetInventorySerialId() string {
 		return x.InventorySerialId
 	}
 	return ""
+}
+
+func (x *RevenueLineItem) GetPriceListId() string {
+	if x != nil && x.PriceListId != nil {
+		return *x.PriceListId
+	}
+	return ""
+}
+
+func (x *RevenueLineItem) GetVariantId() string {
+	if x != nil && x.VariantId != nil {
+		return *x.VariantId
+	}
+	return ""
+}
+
+func (x *RevenueLineItem) GetVariantLabel() string {
+	if x != nil && x.VariantLabel != nil {
+		return *x.VariantLabel
+	}
+	return ""
+}
+
+func (x *RevenueLineItem) GetLocationId() string {
+	if x != nil && x.LocationId != nil {
+		return *x.LocationId
+	}
+	return ""
+}
+
+func (x *RevenueLineItem) GetCostPrice() float64 {
+	if x != nil && x.CostPrice != nil {
+		return *x.CostPrice
+	}
+	return 0
 }
 
 type CreateRevenueLineItemRequest struct {
@@ -1000,7 +1040,7 @@ var File_domain_revenue_revenue_line_item_revenue_line_item_proto protoreflect.F
 
 const file_domain_revenue_revenue_line_item_revenue_line_item_proto_rawDesc = "" +
 	"\n" +
-	"8domain/revenue/revenue_line_item/revenue_line_item.proto\x12\x11domain.revenue.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/search.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a$domain/revenue/revenue/revenue.proto\x1a$domain/product/product/product.proto\"\xd0\x06\n" +
+	"8domain/revenue/revenue_line_item/revenue_line_item.proto\x12\x11domain.revenue.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/search.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a$domain/revenue/revenue/revenue.proto\x1a$domain/product/product/product.proto\"\xe3\b\n" +
 	"\x0fRevenueLineItem\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12&\n" +
 	"\fdate_created\x18\x02 \x01(\x03H\x00R\vdateCreated\x88\x01\x01\x123\n" +
@@ -1024,7 +1064,16 @@ const file_domain_revenue_revenue_line_item_revenue_line_item_proto_rawDesc = ""
 	"\x05notes\x18\x10 \x01(\tH\aR\x05notes\x88\x01\x01\x12$\n" +
 	"\x0eline_item_type\x18\x11 \x01(\tR\flineItemType\x12*\n" +
 	"\x11inventory_item_id\x18\x12 \x01(\tR\x0finventoryItemId\x12.\n" +
-	"\x13inventory_serial_id\x18\x13 \x01(\tR\x11inventorySerialIdB\x0f\n" +
+	"\x13inventory_serial_id\x18\x13 \x01(\tR\x11inventorySerialId\x12'\n" +
+	"\rprice_list_id\x18\x14 \x01(\tH\bR\vpriceListId\x88\x01\x01\x12\"\n" +
+	"\n" +
+	"variant_id\x18\x15 \x01(\tH\tR\tvariantId\x88\x01\x01\x12(\n" +
+	"\rvariant_label\x18\x16 \x01(\tH\n" +
+	"R\fvariantLabel\x88\x01\x01\x12$\n" +
+	"\vlocation_id\x18\x17 \x01(\tH\vR\n" +
+	"locationId\x88\x01\x01\x12\"\n" +
+	"\n" +
+	"cost_price\x18\x18 \x01(\x01H\fR\tcostPrice\x88\x01\x01B\x0f\n" +
 	"\r_date_createdB\x16\n" +
 	"\x14_date_created_stringB\x10\n" +
 	"\x0e_date_modifiedB\x17\n" +
@@ -1034,7 +1083,12 @@ const file_domain_revenue_revenue_line_item_revenue_line_item_proto_rawDesc = ""
 	"\n" +
 	"\b_productB\r\n" +
 	"\v_product_idB\b\n" +
-	"\x06_notes\"V\n" +
+	"\x06_notesB\x10\n" +
+	"\x0e_price_list_idB\r\n" +
+	"\v_variant_idB\x10\n" +
+	"\x0e_variant_labelB\x0e\n" +
+	"\f_location_idB\r\n" +
+	"\v_cost_price\"V\n" +
 	"\x1cCreateRevenueLineItemRequest\x126\n" +
 	"\x04data\x18\x01 \x01(\v2\".domain.revenue.v1.RevenueLineItemR\x04data\"\xaf\x01\n" +
 	"\x1dCreateRevenueLineItemResponse\x126\n" +

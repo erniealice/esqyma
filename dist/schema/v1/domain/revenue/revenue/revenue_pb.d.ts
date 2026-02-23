@@ -93,6 +93,30 @@ export type Revenue = Message<"domain.revenue.v1.Revenue"> & {
      * @generated from field: string location_id = 20;
      */
     locationId: string;
+    /**
+     * Maya session reference
+     *
+     * @generated from field: optional string checkout_session_id = 21;
+     */
+    checkoutSessionId?: string;
+    /**
+     * "maya", "cash", etc.
+     *
+     * @generated from field: optional string payment_provider = 22;
+     */
+    paymentProvider?: string;
+    /**
+     * "store_pickup" or "home_delivery"
+     *
+     * @generated from field: optional string fulfillment_type = 23;
+     */
+    fulfillmentType?: string;
+    /**
+     * JSON or flat address string
+     *
+     * @generated from field: optional string delivery_address = 24;
+     */
+    deliveryAddress?: string;
 };
 /**
  * Describes the message domain.revenue.v1.Revenue.

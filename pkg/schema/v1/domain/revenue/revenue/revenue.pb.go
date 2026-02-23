@@ -46,6 +46,10 @@ type Revenue struct {
 	RevenueCategoryId *string            `protobuf:"bytes,18,opt,name=revenue_category_id,json=revenueCategoryId,proto3,oneof" json:"revenue_category_id,omitempty"`
 	Location          *location.Location `protobuf:"bytes,19,opt,name=location,proto3,oneof" json:"location,omitempty"`
 	LocationId        string             `protobuf:"bytes,20,opt,name=location_id,json=locationId,proto3" json:"location_id,omitempty"`
+	CheckoutSessionId *string            `protobuf:"bytes,21,opt,name=checkout_session_id,json=checkoutSessionId,proto3,oneof" json:"checkout_session_id,omitempty"` // Maya session reference
+	PaymentProvider   *string            `protobuf:"bytes,22,opt,name=payment_provider,json=paymentProvider,proto3,oneof" json:"payment_provider,omitempty"`         // "maya", "cash", etc.
+	FulfillmentType   *string            `protobuf:"bytes,23,opt,name=fulfillment_type,json=fulfillmentType,proto3,oneof" json:"fulfillment_type,omitempty"`         // "store_pickup" or "home_delivery"
+	DeliveryAddress   *string            `protobuf:"bytes,24,opt,name=delivery_address,json=deliveryAddress,proto3,oneof" json:"delivery_address,omitempty"`         // JSON or flat address string
 	unknownFields     protoimpl.UnknownFields
 	sizeCache         protoimpl.SizeCache
 }
@@ -209,6 +213,34 @@ func (x *Revenue) GetLocation() *location.Location {
 func (x *Revenue) GetLocationId() string {
 	if x != nil {
 		return x.LocationId
+	}
+	return ""
+}
+
+func (x *Revenue) GetCheckoutSessionId() string {
+	if x != nil && x.CheckoutSessionId != nil {
+		return *x.CheckoutSessionId
+	}
+	return ""
+}
+
+func (x *Revenue) GetPaymentProvider() string {
+	if x != nil && x.PaymentProvider != nil {
+		return *x.PaymentProvider
+	}
+	return ""
+}
+
+func (x *Revenue) GetFulfillmentType() string {
+	if x != nil && x.FulfillmentType != nil {
+		return *x.FulfillmentType
+	}
+	return ""
+}
+
+func (x *Revenue) GetDeliveryAddress() string {
+	if x != nil && x.DeliveryAddress != nil {
+		return *x.DeliveryAddress
 	}
 	return ""
 }
@@ -1001,7 +1033,7 @@ var File_domain_revenue_revenue_revenue_proto protoreflect.FileDescriptor
 
 const file_domain_revenue_revenue_revenue_proto_rawDesc = "" +
 	"\n" +
-	"$domain/revenue/revenue/revenue.proto\x12\x11domain.revenue.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/search.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a!domain/entity/client/client.proto\x1a%domain/entity/location/location.proto\"\xb5\a\n" +
+	"$domain/revenue/revenue/revenue.proto\x12\x11domain.revenue.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/search.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a!domain/entity/client/client.proto\x1a%domain/entity/location/location.proto\"\xd1\t\n" +
 	"\aRevenue\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12&\n" +
 	"\fdate_created\x18\x02 \x01(\x03H\x00R\vdateCreated\x88\x01\x01\x123\n" +
@@ -1024,7 +1056,11 @@ const file_domain_revenue_revenue_revenue_proto_rawDesc = "" +
 	"\blocation\x18\x13 \x01(\v2\x1a.domain.entity.v1.LocationH\n" +
 	"R\blocation\x88\x01\x01\x12\x1f\n" +
 	"\vlocation_id\x18\x14 \x01(\tR\n" +
-	"locationIdB\x0f\n" +
+	"locationId\x123\n" +
+	"\x13checkout_session_id\x18\x15 \x01(\tH\vR\x11checkoutSessionId\x88\x01\x01\x12.\n" +
+	"\x10payment_provider\x18\x16 \x01(\tH\fR\x0fpaymentProvider\x88\x01\x01\x12.\n" +
+	"\x10fulfillment_type\x18\x17 \x01(\tH\rR\x0ffulfillmentType\x88\x01\x01\x12.\n" +
+	"\x10delivery_address\x18\x18 \x01(\tH\x0eR\x0fdeliveryAddress\x88\x01\x01B\x0f\n" +
 	"\r_date_createdB\x16\n" +
 	"\x14_date_created_stringB\x10\n" +
 	"\x0e_date_modifiedB\x17\n" +
@@ -1035,7 +1071,11 @@ const file_domain_revenue_revenue_revenue_proto_rawDesc = "" +
 	"\x11_reference_numberB\b\n" +
 	"\x06_notesB\x16\n" +
 	"\x14_revenue_category_idB\v\n" +
-	"\t_location\"F\n" +
+	"\t_locationB\x16\n" +
+	"\x14_checkout_session_idB\x13\n" +
+	"\x11_payment_providerB\x13\n" +
+	"\x11_fulfillment_typeB\x13\n" +
+	"\x11_delivery_address\"F\n" +
 	"\x14CreateRevenueRequest\x12.\n" +
 	"\x04data\x18\x01 \x01(\v2\x1a.domain.revenue.v1.RevenueR\x04data\"\x9f\x01\n" +
 	"\x15CreateRevenueResponse\x12.\n" +

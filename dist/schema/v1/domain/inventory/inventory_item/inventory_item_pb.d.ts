@@ -88,12 +88,6 @@ export type InventoryItem = Message<"domain.inventory.v1.InventoryItem"> & {
      */
     notes?: string;
     /**
-     * "serialized", "non_serialized", "consumable"
-     *
-     * @generated from field: string item_type = 19;
-     */
-    itemType: string;
-    /**
      * FK to product_variant
      *
      * @generated from field: optional string product_variant_id = 20;
