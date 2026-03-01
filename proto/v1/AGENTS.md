@@ -47,7 +47,7 @@ schema/v1/
 
 ## Domain Layer Structure
 
-The `domain/` directory contains **7 subdomains**:
+The `domain/` directory contains **8 subdomains**:
 
 ### common/
 Shared types used across all domains.
@@ -108,6 +108,17 @@ Subscription and billing (~11 protos).
 | `price_plan/` | Plan pricing tiers |
 | `invoice/` | Billing invoices |
 | `balance/` | Account balances |
+
+### expenditure/
+Expenditure tracking for outflows — purchases, expenses, refunds, payroll (~4 protos).
+Mirrors the `revenue/` subdomain structure for the outflow side of the ledger.
+
+| Entity | Purpose |
+|--------|---------|
+| `expenditure/` | Core expenditure records (purchases, expenses, refunds, payroll) |
+| `expenditure_line_item/` | Individual line items within an expenditure |
+| `expenditure_category/` | Categorization of expenditures (e.g., utilities, supplies, COGS) |
+| `expenditure_attribute/` | Extensible key-value metadata for expenditures |
 
 ### payment/
 Payment processing (~5 protos).

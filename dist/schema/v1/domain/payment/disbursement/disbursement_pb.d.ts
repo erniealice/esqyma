@@ -58,6 +58,46 @@ export type Disbursement = Message<"domain.payment.v1.Disbursement"> & {
      * @generated from field: string status = 11;
      */
     status: string;
+    /**
+     * --- expenditure-related fields ---
+     *
+     * FK to expenditure table
+     *
+     * @generated from field: string expenditure_id = 20;
+     */
+    expenditureId: string;
+    /**
+     * "purchase", "expense", "subscription_refund"
+     *
+     * @generated from field: string disbursement_type = 21;
+     */
+    disbursementType: string;
+    /**
+     * FK to disbursement_method
+     *
+     * @generated from field: string disbursement_method_id = 22;
+     */
+    disbursementMethodId: string;
+    /**
+     * @generated from field: string currency = 23;
+     */
+    currency: string;
+    /**
+     * @generated from field: string reference_number = 24;
+     */
+    referenceNumber: string;
+    /**
+     * Unix timestamp
+     *
+     * @generated from field: int64 payment_date = 25;
+     */
+    paymentDate: bigint;
+    /**
+     * who authorized the outflow
+     *
+     * @generated from field: string approved_by = 26;
+     */
+    approvedBy: string;
 };
 /**
  * Describes the message domain.payment.v1.Disbursement.

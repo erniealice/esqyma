@@ -24,6 +24,14 @@ message Disbursement {
   string subscription_id = 9;
   double amount = 10;
   string status = 11;
+  // --- expenditure-related fields ---
+  string expenditure_id = 20;               // FK to expenditure table
+  string disbursement_type = 21;            // "purchase", "expense", "subscription_refund"
+  string disbursement_method_id = 22;       // FK to disbursement_method
+  string currency = 23;
+  string reference_number = 24;
+  int64 payment_date = 25;                  // Unix timestamp
+  string approved_by = 26;                  // who authorized the outflow
 }
 
 service DisbursementDomainService {

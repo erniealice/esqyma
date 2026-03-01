@@ -36,8 +36,16 @@ type Disbursement struct {
 	SubscriptionId     string                     `protobuf:"bytes,9,opt,name=subscription_id,json=subscriptionId,proto3" json:"subscription_id,omitempty"`
 	Amount             float64                    `protobuf:"fixed64,10,opt,name=amount,proto3" json:"amount,omitempty"`
 	Status             string                     `protobuf:"bytes,11,opt,name=status,proto3" json:"status,omitempty"`
-	unknownFields      protoimpl.UnknownFields
-	sizeCache          protoimpl.SizeCache
+	// --- expenditure-related fields ---
+	ExpenditureId        string `protobuf:"bytes,20,opt,name=expenditure_id,json=expenditureId,proto3" json:"expenditure_id,omitempty"`                        // FK to expenditure table
+	DisbursementType     string `protobuf:"bytes,21,opt,name=disbursement_type,json=disbursementType,proto3" json:"disbursement_type,omitempty"`               // "purchase", "expense", "subscription_refund"
+	DisbursementMethodId string `protobuf:"bytes,22,opt,name=disbursement_method_id,json=disbursementMethodId,proto3" json:"disbursement_method_id,omitempty"` // FK to disbursement_method
+	Currency             string `protobuf:"bytes,23,opt,name=currency,proto3" json:"currency,omitempty"`
+	ReferenceNumber      string `protobuf:"bytes,24,opt,name=reference_number,json=referenceNumber,proto3" json:"reference_number,omitempty"`
+	PaymentDate          int64  `protobuf:"varint,25,opt,name=payment_date,json=paymentDate,proto3" json:"payment_date,omitempty"` // Unix timestamp
+	ApprovedBy           string `protobuf:"bytes,26,opt,name=approved_by,json=approvedBy,proto3" json:"approved_by,omitempty"`     // who authorized the outflow
+	unknownFields        protoimpl.UnknownFields
+	sizeCache            protoimpl.SizeCache
 }
 
 func (x *Disbursement) Reset() {
@@ -143,6 +151,55 @@ func (x *Disbursement) GetAmount() float64 {
 func (x *Disbursement) GetStatus() string {
 	if x != nil {
 		return x.Status
+	}
+	return ""
+}
+
+func (x *Disbursement) GetExpenditureId() string {
+	if x != nil {
+		return x.ExpenditureId
+	}
+	return ""
+}
+
+func (x *Disbursement) GetDisbursementType() string {
+	if x != nil {
+		return x.DisbursementType
+	}
+	return ""
+}
+
+func (x *Disbursement) GetDisbursementMethodId() string {
+	if x != nil {
+		return x.DisbursementMethodId
+	}
+	return ""
+}
+
+func (x *Disbursement) GetCurrency() string {
+	if x != nil {
+		return x.Currency
+	}
+	return ""
+}
+
+func (x *Disbursement) GetReferenceNumber() string {
+	if x != nil {
+		return x.ReferenceNumber
+	}
+	return ""
+}
+
+func (x *Disbursement) GetPaymentDate() int64 {
+	if x != nil {
+		return x.PaymentDate
+	}
+	return 0
+}
+
+func (x *Disbursement) GetApprovedBy() string {
+	if x != nil {
+		return x.ApprovedBy
 	}
 	return ""
 }
@@ -935,7 +992,7 @@ var File_domain_payment_disbursement_disbursement_proto protoreflect.FileDescrip
 
 const file_domain_payment_disbursement_disbursement_proto_rawDesc = "" +
 	"\n" +
-	".domain/payment/disbursement/disbursement.proto\x12\x11domain.payment.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1adomain/common/search.proto\x1a3domain/subscription/subscription/subscription.proto\"\x95\x04\n" +
+	".domain/payment/disbursement/disbursement.proto\x12\x11domain.payment.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1adomain/common/search.proto\x1a3domain/subscription/subscription/subscription.proto\"\xaa\x06\n" +
 	"\fDisbursement\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12&\n" +
 	"\fdate_created\x18\x02 \x01(\x03H\x00R\vdateCreated\x88\x01\x01\x123\n" +
@@ -948,7 +1005,15 @@ const file_domain_payment_disbursement_disbursement_proto_rawDesc = "" +
 	"\x0fsubscription_id\x18\t \x01(\tR\x0esubscriptionId\x12\x16\n" +
 	"\x06amount\x18\n" +
 	" \x01(\x01R\x06amount\x12\x16\n" +
-	"\x06status\x18\v \x01(\tR\x06statusB\x0f\n" +
+	"\x06status\x18\v \x01(\tR\x06status\x12%\n" +
+	"\x0eexpenditure_id\x18\x14 \x01(\tR\rexpenditureId\x12+\n" +
+	"\x11disbursement_type\x18\x15 \x01(\tR\x10disbursementType\x124\n" +
+	"\x16disbursement_method_id\x18\x16 \x01(\tR\x14disbursementMethodId\x12\x1a\n" +
+	"\bcurrency\x18\x17 \x01(\tR\bcurrency\x12)\n" +
+	"\x10reference_number\x18\x18 \x01(\tR\x0freferenceNumber\x12!\n" +
+	"\fpayment_date\x18\x19 \x01(\x03R\vpaymentDate\x12\x1f\n" +
+	"\vapproved_by\x18\x1a \x01(\tR\n" +
+	"approvedByB\x0f\n" +
 	"\r_date_createdB\x16\n" +
 	"\x14_date_created_stringB\x10\n" +
 	"\x0e_date_modifiedB\x17\n" +

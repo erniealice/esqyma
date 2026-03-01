@@ -1,0 +1,127 @@
+syntax = "proto3";
+
+package domain.expenditure.v1;
+
+option go_package = "leapfor.xyz/esqyma/golang/v1/domain/expenditure/expenditure";
+
+import "domain/common/error.proto";
+import "domain/common/pagination.proto";
+import "domain/common/search.proto";
+import "domain/common/filter.proto";
+import "domain/common/sort.proto";
+
+import "domain/entity/client/client.proto";
+import "domain/entity/location/location.proto";
+
+message Expenditure {
+  string id = 1;
+  optional int64 date_created = 2;
+  optional string date_created_string = 3;
+  optional int64 date_modified = 4;
+  optional string date_modified_string = 5;
+  bool active = 6;
+  string name = 7;
+  string expenditure_type = 8;                    // "purchase", "expense", "refund", "payroll"
+  optional domain.entity.v1.Client vendor = 9;    // counterparty (vendor/supplier)
+  string vendor_id = 10;                          // FK to entity/client (vendors are clients you buy from)
+  optional int64 expenditure_date = 11;
+  optional string expenditure_date_string = 12;
+  double total_amount = 13;
+  string currency = 14;
+  string status = 15;
+  optional string reference_number = 16;
+  optional string notes = 17;
+  optional string expenditure_category_id = 18;   // FK to expenditure_category
+  optional domain.entity.v1.Location location = 19;
+  string location_id = 20;                        // FK to location
+  optional string payment_terms = 21;             // "cash", "net_30", "net_60"
+  optional int64 due_date = 22;                   // for AP tracking
+  optional string approved_by = 23;               // who authorized
+}
+
+service ExpenditureDomainService {
+  rpc CreateExpenditure(CreateExpenditureRequest) returns (CreateExpenditureResponse);
+  rpc ReadExpenditure(ReadExpenditureRequest) returns (ReadExpenditureResponse);
+  rpc UpdateExpenditure(UpdateExpenditureRequest) returns (UpdateExpenditureResponse);
+  rpc DeleteExpenditure(DeleteExpenditureRequest) returns (DeleteExpenditureResponse);
+  rpc ListExpenditures(ListExpendituresRequest) returns (ListExpendituresResponse);
+  rpc GetExpenditureListPageData(GetExpenditureListPageDataRequest) returns (GetExpenditureListPageDataResponse);
+  rpc GetExpenditureItemPageData(GetExpenditureItemPageDataRequest) returns (GetExpenditureItemPageDataResponse);
+}
+
+message CreateExpenditureRequest {
+  Expenditure data = 1;
+}
+
+message CreateExpenditureResponse {
+  repeated Expenditure data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message ReadExpenditureRequest {
+  Expenditure data = 1;
+}
+
+message ReadExpenditureResponse {
+  repeated Expenditure data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message UpdateExpenditureRequest {
+  Expenditure data = 1;
+}
+
+message UpdateExpenditureResponse {
+  repeated Expenditure data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message DeleteExpenditureRequest {
+  Expenditure data = 1;
+}
+
+message DeleteExpenditureResponse {
+  bool success = 1;
+  optional domain.common.v1.Error error = 2;
+}
+
+message ListExpendituresRequest {
+  optional domain.common.v1.SearchRequest search = 1;
+  optional domain.common.v1.FilterRequest filters = 2;
+  optional domain.common.v1.SortRequest sort = 3;
+  optional domain.common.v1.PaginationRequest pagination = 4;
+}
+
+message ListExpendituresResponse {
+  repeated Expenditure data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message GetExpenditureListPageDataRequest {
+  optional domain.common.v1.PaginationRequest pagination = 1;
+  optional domain.common.v1.FilterRequest filters = 2;
+  optional domain.common.v1.SortRequest sort = 3;
+  optional domain.common.v1.SearchRequest search = 4;
+}
+
+message GetExpenditureListPageDataResponse {
+  repeated Expenditure expenditure_list = 1;
+  optional domain.common.v1.PaginationResponse pagination = 2;
+  repeated domain.common.v1.SearchResult search_results = 3;
+  bool success = 4;
+  optional domain.common.v1.Error error = 5;
+}
+
+message GetExpenditureItemPageDataRequest {
+  string expenditure_id = 1;
+}
+
+message GetExpenditureItemPageDataResponse {
+  optional Expenditure expenditure = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}

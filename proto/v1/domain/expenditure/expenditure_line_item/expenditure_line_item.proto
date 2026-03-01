@@ -1,0 +1,123 @@
+syntax = "proto3";
+
+package domain.expenditure.v1;
+
+option go_package = "leapfor.xyz/esqyma/golang/v1/domain/expenditure/expenditure_line_item";
+
+import "domain/common/error.proto";
+import "domain/common/pagination.proto";
+import "domain/common/search.proto";
+import "domain/common/filter.proto";
+import "domain/common/sort.proto";
+
+import "domain/expenditure/expenditure/expenditure.proto";
+import "domain/product/product/product.proto";
+
+message ExpenditureLineItem {
+  string id = 1;
+  optional int64 date_created = 2;
+  optional string date_created_string = 3;
+  optional int64 date_modified = 4;
+  optional string date_modified_string = 5;
+  bool active = 6;
+  optional Expenditure expenditure = 7;
+  string expenditure_id = 8;
+  optional domain.product.v1.Product product = 9;
+  optional string product_id = 10;
+  string description = 11;
+  double quantity = 12;
+  double unit_price = 13;
+  double total_price = 14;
+  optional string notes = 16;
+  string line_item_type = 17;                   // "item", "tax", "shipping", "discount"
+  optional string inventory_item_id = 18;       // FK to inventory_item (for purchase items going into stock)
+  optional string location_id = 19;             // FK to location (where received)
+}
+
+service ExpenditureLineItemDomainService {
+  rpc CreateExpenditureLineItem(CreateExpenditureLineItemRequest) returns (CreateExpenditureLineItemResponse);
+  rpc ReadExpenditureLineItem(ReadExpenditureLineItemRequest) returns (ReadExpenditureLineItemResponse);
+  rpc UpdateExpenditureLineItem(UpdateExpenditureLineItemRequest) returns (UpdateExpenditureLineItemResponse);
+  rpc DeleteExpenditureLineItem(DeleteExpenditureLineItemRequest) returns (DeleteExpenditureLineItemResponse);
+  rpc ListExpenditureLineItems(ListExpenditureLineItemsRequest) returns (ListExpenditureLineItemsResponse);
+  rpc GetExpenditureLineItemListPageData(GetExpenditureLineItemListPageDataRequest) returns (GetExpenditureLineItemListPageDataResponse);
+  rpc GetExpenditureLineItemItemPageData(GetExpenditureLineItemItemPageDataRequest) returns (GetExpenditureLineItemItemPageDataResponse);
+}
+
+message CreateExpenditureLineItemRequest {
+  ExpenditureLineItem data = 1;
+}
+
+message CreateExpenditureLineItemResponse {
+  repeated ExpenditureLineItem data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message ReadExpenditureLineItemRequest {
+  ExpenditureLineItem data = 1;
+}
+
+message ReadExpenditureLineItemResponse {
+  repeated ExpenditureLineItem data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message UpdateExpenditureLineItemRequest {
+  ExpenditureLineItem data = 1;
+}
+
+message UpdateExpenditureLineItemResponse {
+  repeated ExpenditureLineItem data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message DeleteExpenditureLineItemRequest {
+  ExpenditureLineItem data = 1;
+}
+
+message DeleteExpenditureLineItemResponse {
+  bool success = 1;
+  optional domain.common.v1.Error error = 2;
+}
+
+message ListExpenditureLineItemsRequest {
+  optional string expenditure_id = 1;
+  optional domain.common.v1.SearchRequest search = 2;
+  optional domain.common.v1.FilterRequest filters = 3;
+  optional domain.common.v1.SortRequest sort = 4;
+  optional domain.common.v1.PaginationRequest pagination = 5;
+}
+
+message ListExpenditureLineItemsResponse {
+  repeated ExpenditureLineItem data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message GetExpenditureLineItemListPageDataRequest {
+  optional domain.common.v1.PaginationRequest pagination = 1;
+  optional domain.common.v1.FilterRequest filters = 2;
+  optional domain.common.v1.SortRequest sort = 3;
+  optional domain.common.v1.SearchRequest search = 4;
+}
+
+message GetExpenditureLineItemListPageDataResponse {
+  repeated ExpenditureLineItem expenditure_line_item_list = 1;
+  optional domain.common.v1.PaginationResponse pagination = 2;
+  repeated domain.common.v1.SearchResult search_results = 3;
+  bool success = 4;
+  optional domain.common.v1.Error error = 5;
+}
+
+message GetExpenditureLineItemItemPageDataRequest {
+  string expenditure_line_item_id = 1;
+}
+
+message GetExpenditureLineItemItemPageDataResponse {
+  optional ExpenditureLineItem expenditure_line_item = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}

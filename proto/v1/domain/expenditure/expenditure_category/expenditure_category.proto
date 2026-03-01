@@ -1,0 +1,111 @@
+syntax = "proto3";
+
+package domain.expenditure.v1;
+
+option go_package = "leapfor.xyz/esqyma/golang/v1/domain/expenditure/expenditure_category";
+
+import "domain/common/error.proto";
+import "domain/common/pagination.proto";
+import "domain/common/search.proto";
+import "domain/common/filter.proto";
+import "domain/common/sort.proto";
+
+message ExpenditureCategory {
+  string id = 1;
+  optional int64 date_created = 2;
+  optional string date_created_string = 3;
+  optional int64 date_modified = 4;
+  optional string date_modified_string = 5;
+  bool active = 6;
+  string name = 7;
+  string code = 8;
+  optional string description = 9;
+  optional string parent_category_id = 10;
+}
+
+service ExpenditureCategoryDomainService {
+  rpc CreateExpenditureCategory(CreateExpenditureCategoryRequest) returns (CreateExpenditureCategoryResponse);
+  rpc ReadExpenditureCategory(ReadExpenditureCategoryRequest) returns (ReadExpenditureCategoryResponse);
+  rpc UpdateExpenditureCategory(UpdateExpenditureCategoryRequest) returns (UpdateExpenditureCategoryResponse);
+  rpc DeleteExpenditureCategory(DeleteExpenditureCategoryRequest) returns (DeleteExpenditureCategoryResponse);
+  rpc ListExpenditureCategories(ListExpenditureCategoriesRequest) returns (ListExpenditureCategoriesResponse);
+  rpc GetExpenditureCategoryListPageData(GetExpenditureCategoryListPageDataRequest) returns (GetExpenditureCategoryListPageDataResponse);
+  rpc GetExpenditureCategoryItemPageData(GetExpenditureCategoryItemPageDataRequest) returns (GetExpenditureCategoryItemPageDataResponse);
+}
+
+message CreateExpenditureCategoryRequest {
+  ExpenditureCategory data = 1;
+}
+
+message CreateExpenditureCategoryResponse {
+  repeated ExpenditureCategory data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message ReadExpenditureCategoryRequest {
+  ExpenditureCategory data = 1;
+}
+
+message ReadExpenditureCategoryResponse {
+  repeated ExpenditureCategory data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message UpdateExpenditureCategoryRequest {
+  ExpenditureCategory data = 1;
+}
+
+message UpdateExpenditureCategoryResponse {
+  repeated ExpenditureCategory data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message DeleteExpenditureCategoryRequest {
+  ExpenditureCategory data = 1;
+}
+
+message DeleteExpenditureCategoryResponse {
+  bool success = 1;
+  optional domain.common.v1.Error error = 2;
+}
+
+message ListExpenditureCategoriesRequest {
+  optional domain.common.v1.SearchRequest search = 1;
+  optional domain.common.v1.FilterRequest filters = 2;
+  optional domain.common.v1.SortRequest sort = 3;
+  optional domain.common.v1.PaginationRequest pagination = 4;
+}
+
+message ListExpenditureCategoriesResponse {
+  repeated ExpenditureCategory data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message GetExpenditureCategoryListPageDataRequest {
+  optional domain.common.v1.PaginationRequest pagination = 1;
+  optional domain.common.v1.FilterRequest filters = 2;
+  optional domain.common.v1.SortRequest sort = 3;
+  optional domain.common.v1.SearchRequest search = 4;
+}
+
+message GetExpenditureCategoryListPageDataResponse {
+  repeated ExpenditureCategory expenditure_category_list = 1;
+  optional domain.common.v1.PaginationResponse pagination = 2;
+  repeated domain.common.v1.SearchResult search_results = 3;
+  bool success = 4;
+  optional domain.common.v1.Error error = 5;
+}
+
+message GetExpenditureCategoryItemPageDataRequest {
+  string expenditure_category_id = 1;
+}
+
+message GetExpenditureCategoryItemPageDataResponse {
+  optional ExpenditureCategory expenditure_category = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
