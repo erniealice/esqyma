@@ -34,6 +34,10 @@ export type User = Message<"domain.entity.v1.User"> & {
      */
     mobileNumber: string;
     /**
+     * @generated from field: string password_hash = 11;
+     */
+    passwordHash: string;
+    /**
      * @generated from field: optional int64 date_created = 5;
      */
     dateCreated?: bigint;

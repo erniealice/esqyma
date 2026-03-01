@@ -19,6 +19,7 @@ message User {
   string last_name = 3;
   string email_address = 4 [(options.v1.db).unique = true];
   string mobile_number = 10 [(options.v1.db).index = true];
+  string password_hash = 11;
   optional int64 date_created = 5;
   optional string date_created_string = 6;
   optional int64 date_modified = 7;

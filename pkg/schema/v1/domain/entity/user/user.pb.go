@@ -30,6 +30,7 @@ type User struct {
 	LastName           string                 `protobuf:"bytes,3,opt,name=last_name,json=lastName,proto3" json:"last_name,omitempty"`
 	EmailAddress       string                 `protobuf:"bytes,4,opt,name=email_address,json=emailAddress,proto3" json:"email_address,omitempty"`
 	MobileNumber       string                 `protobuf:"bytes,10,opt,name=mobile_number,json=mobileNumber,proto3" json:"mobile_number,omitempty"`
+	PasswordHash       string                 `protobuf:"bytes,11,opt,name=password_hash,json=passwordHash,proto3" json:"password_hash,omitempty"`
 	DateCreated        *int64                 `protobuf:"varint,5,opt,name=date_created,json=dateCreated,proto3,oneof" json:"date_created,omitempty"`
 	DateCreatedString  *string                `protobuf:"bytes,6,opt,name=date_created_string,json=dateCreatedString,proto3,oneof" json:"date_created_string,omitempty"`
 	DateModified       *int64                 `protobuf:"varint,7,opt,name=date_modified,json=dateModified,proto3,oneof" json:"date_modified,omitempty"`
@@ -100,6 +101,13 @@ func (x *User) GetEmailAddress() string {
 func (x *User) GetMobileNumber() string {
 	if x != nil {
 		return x.MobileNumber
+	}
+	return ""
+}
+
+func (x *User) GetPasswordHash() string {
+	if x != nil {
+		return x.PasswordHash
 	}
 	return ""
 }
@@ -935,7 +943,7 @@ var File_domain_entity_user_user_proto protoreflect.FileDescriptor
 
 const file_domain_entity_user_user_proto_rawDesc = "" +
 	"\n" +
-	"\x1ddomain/entity/user/user.proto\x12\x10domain.entity.v1\x1a\x19domain/common/error.proto\x1a\x1adomain/common/search.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1edomain/common/pagination.proto\x1a\x10options/db.proto\"\xea\x03\n" +
+	"\x1ddomain/entity/user/user.proto\x12\x10domain.entity.v1\x1a\x19domain/common/error.proto\x1a\x1adomain/common/search.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1edomain/common/pagination.proto\x1a\x10options/db.proto\"\x8f\x04\n" +
 	"\x04User\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12\x1d\n" +
 	"\n" +
@@ -943,7 +951,8 @@ const file_domain_entity_user_user_proto_rawDesc = "" +
 	"\tlast_name\x18\x03 \x01(\tR\blastName\x12+\n" +
 	"\remail_address\x18\x04 \x01(\tB\x06\x82\xb5\x18\x02\x10\x01R\femailAddress\x12+\n" +
 	"\rmobile_number\x18\n" +
-	" \x01(\tB\x06\x82\xb5\x18\x02\x18\x01R\fmobileNumber\x12&\n" +
+	" \x01(\tB\x06\x82\xb5\x18\x02\x18\x01R\fmobileNumber\x12#\n" +
+	"\rpassword_hash\x18\v \x01(\tR\fpasswordHash\x12&\n" +
 	"\fdate_created\x18\x05 \x01(\x03H\x00R\vdateCreated\x88\x01\x01\x123\n" +
 	"\x13date_created_string\x18\x06 \x01(\tH\x01R\x11dateCreatedString\x88\x01\x01\x12(\n" +
 	"\rdate_modified\x18\a \x01(\x03H\x02R\fdateModified\x88\x01\x01\x125\n" +
