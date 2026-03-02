@@ -11,6 +11,8 @@ import type { Message } from "@bufbuild/protobuf";
  */
 export declare const file_domain_product_price_list_price_list: GenFile;
 /**
+ * FK References: price_product.price_list_id, revenue_line_item.price_list_id
+ *
  * @generated from message domain.product.v1.PriceList
  */
 export type PriceList = Message<"domain.product.v1.PriceList"> & {

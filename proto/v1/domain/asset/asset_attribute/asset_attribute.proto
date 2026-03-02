@@ -1,0 +1,170 @@
+syntax = "proto3";
+
+package domain.asset.v1;
+
+option go_package = "github.com/erniealice/esqyma/golang/v1/domain/asset/asset_attribute";
+
+import "domain/common/error.proto";
+import "domain/common/pagination.proto";
+import "domain/common/filter.proto";
+import "domain/common/sort.proto";
+import "domain/common/search.proto";
+
+import "domain/asset/asset/asset.proto";
+import "domain/common/attribute.proto";
+
+message AssetAttribute {
+  string id = 1;
+  string asset_id = 2;
+  string attribute_id = 3;
+  string value = 4;
+  Asset asset = 5;
+  domain.common.v1.Attribute attribute = 6;
+  optional int64 date_created = 7;
+  optional string date_created_string = 8;
+  optional int64 date_modified = 9;
+  optional string date_modified_string = 10;
+  bool active = 11;
+}
+
+service AssetAttributeDomainService {
+  rpc CreateAssetAttribute(CreateAssetAttributeRequest) returns (CreateAssetAttributeResponse);
+  rpc ReadAssetAttribute(ReadAssetAttributeRequest) returns (ReadAssetAttributeResponse);
+  rpc UpdateAssetAttribute(UpdateAssetAttributeRequest) returns (UpdateAssetAttributeResponse);
+  rpc DeleteAssetAttribute(DeleteAssetAttributeRequest) returns (DeleteAssetAttributeResponse);
+  rpc ListAssetAttributes(ListAssetAttributesRequest) returns (ListAssetAttributesResponse);
+
+  // Enhanced list with pagination, filtering, sorting, search
+  rpc GetAssetAttributeListPageData(GetAssetAttributeListPageDataRequest)
+    returns (GetAssetAttributeListPageDataResponse);
+
+  // Enhanced item view with related data
+  rpc GetAssetAttributeItemPageData(GetAssetAttributeItemPageDataRequest)
+    returns (GetAssetAttributeItemPageDataResponse);
+}
+
+message CreateAssetAttributeRequest {
+  AssetAttribute data = 1;
+}
+
+message CreateAssetAttributeResponse {
+  repeated AssetAttribute data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message CreateAssetAttributeBatchRequest {
+  repeated AssetAttribute data = 1;
+}
+
+message CreateAssetAttributeBatchResponse {
+  repeated AssetAttribute data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+// CreateAssetAttributesByCode creates asset attributes using attribute codes.
+// Internally resolves each code to an attribute ID before creating.
+message AssetAttributesByCodeData {
+  string asset_id = 1;
+  map<string, string> attributes_map = 2;  // {"attribute_code": "value", ...}
+}
+
+message CreateAssetAttributesByCodeRequest {
+  AssetAttributesByCodeData data = 1;
+}
+
+message CreateAssetAttributesByCodeResponse {
+  repeated AssetAttribute data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message ReadAssetAttributeRequest {
+  AssetAttribute data = 1;
+}
+
+message ReadAssetAttributeResponse {
+  repeated AssetAttribute data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message UpdateAssetAttributeRequest {
+  AssetAttribute data = 1;
+}
+
+message UpdateAssetAttributeResponse {
+  repeated AssetAttribute data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message DeleteAssetAttributeRequest {
+  AssetAttribute data = 1;
+}
+
+message DeleteAssetAttributeResponse {
+  bool success = 1;
+  optional domain.common.v1.Error error = 2;
+}
+
+message ListAssetAttributesRequest {
+  optional domain.common.v1.SearchRequest search = 1;
+  optional domain.common.v1.FilterRequest filters = 2;
+  optional domain.common.v1.SortRequest sort = 3;
+  optional domain.common.v1.PaginationRequest pagination = 4;
+}
+
+message ListAssetAttributesResponse {
+  repeated AssetAttribute data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+// Enhanced list request with core features
+message GetAssetAttributeListPageDataRequest {
+  // Pagination settings
+  optional domain.common.v1.PaginationRequest pagination = 1;
+
+  // Filter conditions
+  optional domain.common.v1.FilterRequest filters = 2;
+
+  // Sort settings
+  optional domain.common.v1.SortRequest sort = 3;
+
+  // Search settings
+  optional domain.common.v1.SearchRequest search = 4;
+}
+
+// Enhanced list response with metadata
+message GetAssetAttributeListPageDataResponse {
+  // The asset attribute data
+  repeated AssetAttribute asset_attribute_list = 1;
+
+  // Pagination metadata
+  optional domain.common.v1.PaginationResponse pagination = 2;
+
+  // Search results metadata (when search is used)
+  repeated domain.common.v1.SearchResult search_results = 3;
+
+  // Response status
+  bool success = 4;
+  optional domain.common.v1.Error error = 5;
+}
+
+// Simple item request
+message GetAssetAttributeItemPageDataRequest {
+  // The asset attribute ID to retrieve
+  string asset_attribute_id = 1;
+}
+
+// Simple item response
+message GetAssetAttributeItemPageDataResponse {
+  // The asset attribute data
+  optional AssetAttribute asset_attribute = 1;
+
+  // Response status
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}

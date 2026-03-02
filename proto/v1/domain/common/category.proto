@@ -13,6 +13,7 @@ import "options/db.proto";
 // This provides a base structure for categorizing various entities like clients,
 // products, locations, etc. Domain-specific categories can reference this common
 // Category entity.
+// FK References (module="client"): client_category.category_id, client.category_id
 message Category {
   option (options.v1.table).table = true;
 

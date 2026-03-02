@@ -25,6 +25,9 @@ const (
 	_ = protoimpl.EnforceVersion(protoimpl.MaxVersion - 20)
 )
 
+// FK References: revenue.client_id, expenditure.vendor_id,
+// event_client.client_id, subscription.client_id,
+// delegate_client.client_id, client_category.client_id
 type Client struct {
 	state              protoimpl.MessageState            `protogen:"open.v1"`
 	Id                 string                            `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`

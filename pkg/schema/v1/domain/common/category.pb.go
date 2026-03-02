@@ -26,6 +26,7 @@ const (
 // This provides a base structure for categorizing various entities like clients,
 // products, locations, etc. Domain-specific categories can reference this common
 // Category entity.
+// FK References (module="client"): client_category.category_id, client.category_id
 type Category struct {
 	state protoimpl.MessageState `protogen:"open.v1"`
 	// Unique identifier for the category

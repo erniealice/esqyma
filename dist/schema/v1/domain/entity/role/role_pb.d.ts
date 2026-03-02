@@ -12,6 +12,8 @@ import type { Message } from "@bufbuild/protobuf";
  */
 export declare const file_domain_entity_role_role: GenFile;
 /**
+ * FK References: workspace_user_role.role_id, role_permission.role_id
+ *
  * @generated from message domain.entity.v1.Role
  */
 export type Role = Message<"domain.entity.v1.Role"> & {

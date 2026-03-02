@@ -12,6 +12,9 @@ import "domain/common/search.proto";
 import "domain/product/product_collection/product_collection.proto";
 import "options/db.proto";
 
+// FK References: revenue_line_item.product_id, price_product.product_id,
+// inventory_item.product_id, product_option.product_id,
+// product_variant.product_id, resource.product_id
 message Product {
   option (options.v1.table).table = true;
   string id = 1;

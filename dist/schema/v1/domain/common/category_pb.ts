@@ -24,6 +24,7 @@ export const file_domain_common_category: GenFile = /*@__PURE__*/
  * This provides a base structure for categorizing various entities like clients,
  * products, locations, etc. Domain-specific categories can reference this common
  * Category entity.
+ * FK References (module="client"): client_category.category_id, client.category_id
  *
  * @generated from message domain.common.v1.Category
  */

@@ -23,6 +23,9 @@ const (
 	_ = protoimpl.EnforceVersion(protoimpl.MaxVersion - 20)
 )
 
+// FK References: revenue.location_id, expenditure.location_id,
+// inventory_item.location_id, price_list.location_id,
+// plan_location.location_id, location_attribute.location_id
 type Location struct {
 	state              protoimpl.MessageState `protogen:"open.v1"`
 	Id                 string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`

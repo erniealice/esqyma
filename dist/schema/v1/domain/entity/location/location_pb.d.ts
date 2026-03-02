@@ -10,6 +10,10 @@ import type { Message } from "@bufbuild/protobuf";
  */
 export declare const file_domain_entity_location_location: GenFile;
 /**
+ * FK References: revenue.location_id, expenditure.location_id,
+ * inventory_item.location_id, price_list.location_id,
+ * plan_location.location_id, location_attribute.location_id
+ *
  * @generated from message domain.entity.v1.Location
  */
 export type Location = Message<"domain.entity.v1.Location"> & {

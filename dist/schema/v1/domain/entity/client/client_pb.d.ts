@@ -12,6 +12,10 @@ import type { Message } from "@bufbuild/protobuf";
  */
 export declare const file_domain_entity_client_client: GenFile;
 /**
+ * FK References: revenue.client_id, expenditure.vendor_id,
+ * event_client.client_id, subscription.client_id,
+ * delegate_client.client_id, client_category.client_id
+ *
  * @generated from message domain.entity.v1.Client
  */
 export type Client = Message<"domain.entity.v1.Client"> & {

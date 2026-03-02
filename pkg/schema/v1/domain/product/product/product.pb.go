@@ -24,6 +24,9 @@ const (
 	_ = protoimpl.EnforceVersion(protoimpl.MaxVersion - 20)
 )
 
+// FK References: revenue_line_item.product_id, price_product.product_id,
+// inventory_item.product_id, product_option.product_id,
+// product_variant.product_id, resource.product_id
 type Product struct {
 	state              protoimpl.MessageState                  `protogen:"open.v1"`
 	Id                 string                                  `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`

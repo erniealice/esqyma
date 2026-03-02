@@ -1,0 +1,132 @@
+syntax = "proto3";
+
+package domain.asset.v1;
+
+option go_package = "github.com/erniealice/esqyma/golang/v1/domain/asset/asset_revaluation";
+
+import "domain/common/error.proto";
+import "domain/common/pagination.proto";
+import "domain/common/filter.proto";
+import "domain/common/sort.proto";
+import "domain/common/search.proto";
+
+import "options/db.proto";
+
+message AssetRevaluation {
+  option (options.v1.table).table = true;
+  string id = 1;
+  string asset_id = 2 [(options.v1.db).references = "asset", (options.v1.db).index = true];
+  int64 revaluation_date = 3;
+  string revaluation_date_string = 4;
+  double previous_carrying_amount = 5;
+  double new_fair_value = 6;
+  double revaluation_amount = 7;
+  bool is_increase = 8;
+  double recognized_in_pnl = 9;
+  double recognized_in_oci = 10;
+  double revaluation_surplus_balance = 11;
+  optional string appraiser_name = 12;
+  optional string valuation_method = 13;  // Market comparison, income approach, replacement cost
+  optional string journal_entry_id = 14;  // FK to ledger.Journal (future)
+  optional string notes = 15;
+
+  // Audit fields
+  optional int64 date_created = 16;
+  optional string date_created_string = 17;
+  optional int64 date_modified = 18;
+  optional string date_modified_string = 19;
+  bool active = 20 [(options.v1.db).default = "true"];
+}
+
+service AssetRevaluationDomainService {
+  rpc CreateAssetRevaluation(CreateAssetRevaluationRequest) returns (CreateAssetRevaluationResponse);
+  rpc ReadAssetRevaluation(ReadAssetRevaluationRequest) returns (ReadAssetRevaluationResponse);
+  rpc UpdateAssetRevaluation(UpdateAssetRevaluationRequest) returns (UpdateAssetRevaluationResponse);
+  rpc DeleteAssetRevaluation(DeleteAssetRevaluationRequest) returns (DeleteAssetRevaluationResponse);
+  rpc ListAssetRevaluations(ListAssetRevaluationsRequest) returns (ListAssetRevaluationsResponse);
+
+  // Enhanced page data (for UI views)
+  rpc GetAssetRevaluationListPageData(GetAssetRevaluationListPageDataRequest)
+    returns (GetAssetRevaluationListPageDataResponse);
+
+  rpc GetAssetRevaluationItemPageData(GetAssetRevaluationItemPageDataRequest)
+    returns (GetAssetRevaluationItemPageDataResponse);
+}
+
+message CreateAssetRevaluationRequest {
+  AssetRevaluation data = 1;
+}
+
+message CreateAssetRevaluationResponse {
+  repeated AssetRevaluation data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message ReadAssetRevaluationRequest {
+  AssetRevaluation data = 1;
+}
+
+message ReadAssetRevaluationResponse {
+  repeated AssetRevaluation data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message UpdateAssetRevaluationRequest {
+  AssetRevaluation data = 1;
+}
+
+message UpdateAssetRevaluationResponse {
+  repeated AssetRevaluation data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message DeleteAssetRevaluationRequest {
+  AssetRevaluation data = 1;
+}
+
+message DeleteAssetRevaluationResponse {
+  bool success = 1;
+  optional domain.common.v1.Error error = 2;
+}
+
+message ListAssetRevaluationsRequest {
+  optional string asset_id = 1;
+  optional domain.common.v1.SearchRequest search = 2;
+  optional domain.common.v1.FilterRequest filters = 3;
+  optional domain.common.v1.SortRequest sort = 4;
+  optional domain.common.v1.PaginationRequest pagination = 5;
+}
+
+message ListAssetRevaluationsResponse {
+  repeated AssetRevaluation data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message GetAssetRevaluationListPageDataRequest {
+  optional domain.common.v1.PaginationRequest pagination = 1;
+  optional domain.common.v1.FilterRequest filters = 2;
+  optional domain.common.v1.SortRequest sort = 3;
+  optional domain.common.v1.SearchRequest search = 4;
+}
+
+message GetAssetRevaluationListPageDataResponse {
+  repeated AssetRevaluation asset_revaluation_list = 1;
+  optional domain.common.v1.PaginationResponse pagination = 2;
+  repeated domain.common.v1.SearchResult search_results = 3;
+  bool success = 4;
+  optional domain.common.v1.Error error = 5;
+}
+
+message GetAssetRevaluationItemPageDataRequest {
+  string asset_revaluation_id = 1;
+}
+
+message GetAssetRevaluationItemPageDataResponse {
+  optional AssetRevaluation asset_revaluation = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}

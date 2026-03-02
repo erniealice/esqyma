@@ -25,6 +25,7 @@ const (
 	_ = protoimpl.EnforceVersion(protoimpl.MaxVersion - 20)
 )
 
+// FK References: workspace_user_role.role_id, role_permission.role_id
 type Role struct {
 	state              protoimpl.MessageState            `protogen:"open.v1"`
 	Id                 string                            `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`

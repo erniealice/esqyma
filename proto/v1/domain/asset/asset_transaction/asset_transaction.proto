@@ -1,0 +1,132 @@
+syntax = "proto3";
+
+package domain.asset.v1;
+
+option go_package = "github.com/erniealice/esqyma/golang/v1/domain/asset/asset_transaction";
+
+import "domain/common/error.proto";
+import "domain/common/pagination.proto";
+import "domain/common/filter.proto";
+import "domain/common/sort.proto";
+import "domain/common/search.proto";
+
+import "options/db.proto";
+
+// AssetTransactionType enumerates all lifecycle events for an asset.
+enum AssetTransactionType {
+  ASSET_TRANSACTION_TYPE_UNSPECIFIED = 0;
+  ASSET_TRANSACTION_TYPE_ACQUISITION = 1;
+  ASSET_TRANSACTION_TYPE_ADDITION = 2;
+  ASSET_TRANSACTION_TYPE_DEPRECIATION = 3;
+  ASSET_TRANSACTION_TYPE_REVALUATION_UP = 4;
+  ASSET_TRANSACTION_TYPE_REVALUATION_DOWN = 5;
+  ASSET_TRANSACTION_TYPE_IMPAIRMENT = 6;
+  ASSET_TRANSACTION_TYPE_IMPAIRMENT_REVERSAL = 7;
+  ASSET_TRANSACTION_TYPE_TRANSFER = 8;
+  ASSET_TRANSACTION_TYPE_ADJUSTMENT = 9;
+  ASSET_TRANSACTION_TYPE_DISPOSAL_SALE = 10;
+  ASSET_TRANSACTION_TYPE_DISPOSAL_SCRAP = 11;
+  ASSET_TRANSACTION_TYPE_DISPOSAL_DONATION = 12;
+  ASSET_TRANSACTION_TYPE_DISPOSAL_TRADE_IN = 13;
+  ASSET_TRANSACTION_TYPE_RETIREMENT = 14;
+  ASSET_TRANSACTION_TYPE_REINSTATEMENT = 15;
+  ASSET_TRANSACTION_TYPE_MAINTENANCE = 16;
+  ASSET_TRANSACTION_TYPE_WRITE_OFF = 17;
+}
+
+message AssetTransaction {
+  option (options.v1.table).table = true;
+  string id = 1;
+  string asset_id = 2 [(options.v1.db).references = "asset", (options.v1.db).index = true];
+  AssetTransactionType transaction_type = 3;
+  int64 transaction_date = 4;
+  string transaction_date_string = 5;
+  double amount = 6;
+  optional string description = 7;
+  optional string reference_number = 8;
+  optional string from_location_id = 9;   // FK to entity.Location (for transfers)
+  optional string to_location_id = 10;    // FK to entity.Location (for transfers)
+  optional string journal_entry_id = 11;  // FK to ledger.Journal (future)
+  optional string performed_by = 12;      // FK to entity.User
+
+  // Audit fields
+  optional int64 date_created = 13;
+  optional string date_created_string = 14;
+  optional int64 date_modified = 15;
+  optional string date_modified_string = 16;
+  bool active = 17 [(options.v1.db).default = "true"];
+}
+
+// AssetTransactionDomainService — append-only audit trail.
+// NO Update or Delete RPCs — transactions are immutable.
+service AssetTransactionDomainService {
+  rpc CreateAssetTransaction(CreateAssetTransactionRequest) returns (CreateAssetTransactionResponse);
+  rpc ReadAssetTransaction(ReadAssetTransactionRequest) returns (ReadAssetTransactionResponse);
+  rpc ListAssetTransactions(ListAssetTransactionsRequest) returns (ListAssetTransactionsResponse);
+
+  // Enhanced page data (for UI views)
+  rpc GetAssetTransactionListPageData(GetAssetTransactionListPageDataRequest)
+    returns (GetAssetTransactionListPageDataResponse);
+
+  rpc GetAssetTransactionItemPageData(GetAssetTransactionItemPageDataRequest)
+    returns (GetAssetTransactionItemPageDataResponse);
+}
+
+message CreateAssetTransactionRequest {
+  AssetTransaction data = 1;
+}
+
+message CreateAssetTransactionResponse {
+  repeated AssetTransaction data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message ReadAssetTransactionRequest {
+  AssetTransaction data = 1;
+}
+
+message ReadAssetTransactionResponse {
+  repeated AssetTransaction data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message ListAssetTransactionsRequest {
+  optional string asset_id = 1;
+  optional domain.common.v1.SearchRequest search = 2;
+  optional domain.common.v1.FilterRequest filters = 3;
+  optional domain.common.v1.SortRequest sort = 4;
+  optional domain.common.v1.PaginationRequest pagination = 5;
+}
+
+message ListAssetTransactionsResponse {
+  repeated AssetTransaction data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message GetAssetTransactionListPageDataRequest {
+  optional domain.common.v1.PaginationRequest pagination = 1;
+  optional domain.common.v1.FilterRequest filters = 2;
+  optional domain.common.v1.SortRequest sort = 3;
+  optional domain.common.v1.SearchRequest search = 4;
+}
+
+message GetAssetTransactionListPageDataResponse {
+  repeated AssetTransaction asset_transaction_list = 1;
+  optional domain.common.v1.PaginationResponse pagination = 2;
+  repeated domain.common.v1.SearchResult search_results = 3;
+  bool success = 4;
+  optional domain.common.v1.Error error = 5;
+}
+
+message GetAssetTransactionItemPageDataRequest {
+  string asset_transaction_id = 1;
+}
+
+message GetAssetTransactionItemPageDataResponse {
+  optional AssetTransaction asset_transaction = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}

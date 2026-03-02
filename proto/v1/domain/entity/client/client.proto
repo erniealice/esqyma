@@ -14,6 +14,9 @@ import "options/db.proto";
 import "domain/entity/user/user.proto";
 import "domain/entity/client_category/client_category.proto";
 
+// FK References: revenue.client_id, expenditure.vendor_id,
+// event_client.client_id, subscription.client_id,
+// delegate_client.client_id, client_category.client_id
 message Client {
   option (options.v1.table).table = true;
 

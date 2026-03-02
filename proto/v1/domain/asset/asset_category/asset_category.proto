@@ -1,0 +1,135 @@
+syntax = "proto3";
+
+package domain.asset.v1;
+
+option go_package = "github.com/erniealice/esqyma/golang/v1/domain/asset/asset_category";
+
+import "domain/common/error.proto";
+import "domain/common/pagination.proto";
+import "domain/common/filter.proto";
+import "domain/common/sort.proto";
+import "domain/common/search.proto";
+
+import "options/db.proto";
+
+message AssetCategory {
+  option (options.v1.table).table = true;
+  string id = 1;
+  string code = 2 [(options.v1.db).unique = true];
+  string name = 3;
+  optional string description = 4;
+  optional string parent_category_id = 5 [(options.v1.db).references = "asset_category", (options.v1.db).index = true];
+
+  // Default depreciation settings for new assets in this category
+  string default_depreciation_method = 6;
+  int32 default_useful_life_months = 7;
+  double default_salvage_value_percent = 8;
+
+  // GL account mappings
+  optional string asset_cost_account = 9;
+  optional string accumulated_depreciation_account = 10;
+  optional string depreciation_expense_account = 11;
+  optional string gain_on_disposal_account = 12;
+  optional string loss_on_disposal_account = 13;
+  optional string impairment_loss_account = 14;
+  optional string revaluation_surplus_account = 15;
+
+  // Audit fields
+  optional int64 date_created = 16;
+  optional string date_created_string = 17;
+  optional int64 date_modified = 18;
+  optional string date_modified_string = 19;
+  bool active = 20 [(options.v1.db).default = "true"];
+}
+
+service AssetCategoryDomainService {
+  rpc CreateAssetCategory(CreateAssetCategoryRequest) returns (CreateAssetCategoryResponse);
+  rpc ReadAssetCategory(ReadAssetCategoryRequest) returns (ReadAssetCategoryResponse);
+  rpc UpdateAssetCategory(UpdateAssetCategoryRequest) returns (UpdateAssetCategoryResponse);
+  rpc DeleteAssetCategory(DeleteAssetCategoryRequest) returns (DeleteAssetCategoryResponse);
+  rpc ListAssetCategories(ListAssetCategoriesRequest) returns (ListAssetCategoriesResponse);
+
+  // Enhanced page data (for UI views)
+  rpc GetAssetCategoryListPageData(GetAssetCategoryListPageDataRequest)
+    returns (GetAssetCategoryListPageDataResponse);
+
+  rpc GetAssetCategoryItemPageData(GetAssetCategoryItemPageDataRequest)
+    returns (GetAssetCategoryItemPageDataResponse);
+}
+
+message CreateAssetCategoryRequest {
+  AssetCategory data = 1;
+}
+
+message CreateAssetCategoryResponse {
+  repeated AssetCategory data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message ReadAssetCategoryRequest {
+  AssetCategory data = 1;
+}
+
+message ReadAssetCategoryResponse {
+  repeated AssetCategory data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message UpdateAssetCategoryRequest {
+  AssetCategory data = 1;
+}
+
+message UpdateAssetCategoryResponse {
+  repeated AssetCategory data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message DeleteAssetCategoryRequest {
+  AssetCategory data = 1;
+}
+
+message DeleteAssetCategoryResponse {
+  bool success = 1;
+  optional domain.common.v1.Error error = 2;
+}
+
+message ListAssetCategoriesRequest {
+  optional domain.common.v1.SearchRequest search = 1;
+  optional domain.common.v1.FilterRequest filters = 2;
+  optional domain.common.v1.SortRequest sort = 3;
+  optional domain.common.v1.PaginationRequest pagination = 4;
+}
+
+message ListAssetCategoriesResponse {
+  repeated AssetCategory data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message GetAssetCategoryListPageDataRequest {
+  optional domain.common.v1.PaginationRequest pagination = 1;
+  optional domain.common.v1.FilterRequest filters = 2;
+  optional domain.common.v1.SortRequest sort = 3;
+  optional domain.common.v1.SearchRequest search = 4;
+}
+
+message GetAssetCategoryListPageDataResponse {
+  repeated AssetCategory asset_category_list = 1;
+  optional domain.common.v1.PaginationResponse pagination = 2;
+  repeated domain.common.v1.SearchResult search_results = 3;
+  bool success = 4;
+  optional domain.common.v1.Error error = 5;
+}
+
+message GetAssetCategoryItemPageDataRequest {
+  string asset_category_id = 1;
+}
+
+message GetAssetCategoryItemPageDataResponse {
+  optional AssetCategory asset_category = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}

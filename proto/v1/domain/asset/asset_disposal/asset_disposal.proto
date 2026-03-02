@@ -1,0 +1,143 @@
+syntax = "proto3";
+
+package domain.asset.v1;
+
+option go_package = "github.com/erniealice/esqyma/golang/v1/domain/asset/asset_disposal";
+
+import "domain/common/error.proto";
+import "domain/common/pagination.proto";
+import "domain/common/filter.proto";
+import "domain/common/sort.proto";
+import "domain/common/search.proto";
+
+import "options/db.proto";
+
+// DisposalType describes how the asset was removed from the books.
+enum DisposalType {
+  DISPOSAL_TYPE_UNSPECIFIED = 0;
+  DISPOSAL_TYPE_SALE = 1;
+  DISPOSAL_TYPE_SCRAP = 2;
+  DISPOSAL_TYPE_DONATION = 3;
+  DISPOSAL_TYPE_TRADE_IN = 4;
+  DISPOSAL_TYPE_ABANDONMENT = 5;
+  DISPOSAL_TYPE_WRITE_OFF = 6;
+}
+
+message AssetDisposal {
+  option (options.v1.table).table = true;
+  string id = 1;
+  string asset_id = 2 [(options.v1.db).references = "asset", (options.v1.db).index = true];
+  int64 disposal_date = 3;
+  string disposal_date_string = 4;
+  DisposalType disposal_type = 5;
+  double proceeds = 6;
+  double cost_at_disposal = 7;
+  double accumulated_depreciation_at_disposal = 8;
+  double book_value_at_disposal = 9;
+  double gain_or_loss = 10;
+  optional string buyer_name = 11;
+  optional string reason = 12;
+  optional string approval_status = 13;  // PENDING, APPROVED, REJECTED
+  optional string approved_by = 14;      // FK to entity.User
+  optional string journal_entry_id = 15; // FK to ledger.Journal (future)
+
+  // Audit fields
+  optional int64 date_created = 16;
+  optional string date_created_string = 17;
+  optional int64 date_modified = 18;
+  optional string date_modified_string = 19;
+  bool active = 20 [(options.v1.db).default = "true"];
+}
+
+service AssetDisposalDomainService {
+  rpc CreateAssetDisposal(CreateAssetDisposalRequest) returns (CreateAssetDisposalResponse);
+  rpc ReadAssetDisposal(ReadAssetDisposalRequest) returns (ReadAssetDisposalResponse);
+  rpc UpdateAssetDisposal(UpdateAssetDisposalRequest) returns (UpdateAssetDisposalResponse);
+  rpc DeleteAssetDisposal(DeleteAssetDisposalRequest) returns (DeleteAssetDisposalResponse);
+  rpc ListAssetDisposals(ListAssetDisposalsRequest) returns (ListAssetDisposalsResponse);
+
+  // Enhanced page data (for UI views)
+  rpc GetAssetDisposalListPageData(GetAssetDisposalListPageDataRequest)
+    returns (GetAssetDisposalListPageDataResponse);
+
+  rpc GetAssetDisposalItemPageData(GetAssetDisposalItemPageDataRequest)
+    returns (GetAssetDisposalItemPageDataResponse);
+}
+
+message CreateAssetDisposalRequest {
+  AssetDisposal data = 1;
+}
+
+message CreateAssetDisposalResponse {
+  repeated AssetDisposal data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message ReadAssetDisposalRequest {
+  AssetDisposal data = 1;
+}
+
+message ReadAssetDisposalResponse {
+  repeated AssetDisposal data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message UpdateAssetDisposalRequest {
+  AssetDisposal data = 1;
+}
+
+message UpdateAssetDisposalResponse {
+  repeated AssetDisposal data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message DeleteAssetDisposalRequest {
+  AssetDisposal data = 1;
+}
+
+message DeleteAssetDisposalResponse {
+  bool success = 1;
+  optional domain.common.v1.Error error = 2;
+}
+
+message ListAssetDisposalsRequest {
+  optional string asset_id = 1;
+  optional domain.common.v1.SearchRequest search = 2;
+  optional domain.common.v1.FilterRequest filters = 3;
+  optional domain.common.v1.SortRequest sort = 4;
+  optional domain.common.v1.PaginationRequest pagination = 5;
+}
+
+message ListAssetDisposalsResponse {
+  repeated AssetDisposal data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message GetAssetDisposalListPageDataRequest {
+  optional domain.common.v1.PaginationRequest pagination = 1;
+  optional domain.common.v1.FilterRequest filters = 2;
+  optional domain.common.v1.SortRequest sort = 3;
+  optional domain.common.v1.SearchRequest search = 4;
+}
+
+message GetAssetDisposalListPageDataResponse {
+  repeated AssetDisposal asset_disposal_list = 1;
+  optional domain.common.v1.PaginationResponse pagination = 2;
+  repeated domain.common.v1.SearchResult search_results = 3;
+  bool success = 4;
+  optional domain.common.v1.Error error = 5;
+}
+
+message GetAssetDisposalItemPageDataRequest {
+  string asset_disposal_id = 1;
+}
+
+message GetAssetDisposalItemPageDataResponse {
+  optional AssetDisposal asset_disposal = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}

@@ -1,0 +1,305 @@
+syntax = "proto3";
+
+package domain.asset.v1;
+
+option go_package = "github.com/erniealice/esqyma/golang/v1/domain/asset/asset";
+
+import "domain/common/error.proto";
+import "domain/common/pagination.proto";
+import "domain/common/filter.proto";
+import "domain/common/sort.proto";
+import "domain/common/search.proto";
+
+import "domain/asset/asset_category/asset_category.proto";
+import "domain/entity/location/location.proto";
+import "options/db.proto";
+
+// AssetType distinguishes the accounting standard governing the asset.
+enum AssetType {
+  ASSET_TYPE_UNSPECIFIED = 0;
+  ASSET_TYPE_PROPERTY_PLANT_EQUIPMENT = 1;  // IAS 16 — tangible fixed assets
+  ASSET_TYPE_INTANGIBLE = 2;                // IAS 38 — software, patents, trademarks
+  ASSET_TYPE_RIGHT_OF_USE = 3;              // IFRS 16 — leased assets
+  ASSET_TYPE_INVESTMENT_PROPERTY = 4;       // IAS 40 — land/buildings held for rental
+}
+
+// AssetStatus represents the current lifecycle state of an asset.
+enum AssetStatus {
+  ASSET_STATUS_UNSPECIFIED = 0;
+  ASSET_STATUS_DRAFT = 1;
+  ASSET_STATUS_NOT_YET_ACQUIRED = 2;
+  ASSET_STATUS_IN_SERVICE = 3;
+  ASSET_STATUS_SUSPENDED = 4;
+  ASSET_STATUS_IMPAIRED = 5;
+  ASSET_STATUS_FULLY_DEPRECIATED = 6;
+  ASSET_STATUS_RETIRED = 7;
+  ASSET_STATUS_DISPOSED_SOLD = 8;
+  ASSET_STATUS_DISPOSED_SCRAPPED = 9;
+  ASSET_STATUS_HELD_FOR_SALE = 10;
+  ASSET_STATUS_WRITTEN_OFF = 11;
+}
+
+// DepreciationMethod determines how periodic depreciation is calculated.
+enum DepreciationMethod {
+  DEPRECIATION_METHOD_UNSPECIFIED = 0;
+  DEPRECIATION_METHOD_STRAIGHT_LINE = 1;           // IAS 16.62a — even distribution
+  DEPRECIATION_METHOD_DECLINING_BALANCE = 2;        // IAS 16.62b — accelerated
+  DEPRECIATION_METHOD_DOUBLE_DECLINING_BALANCE = 3; // 2x straight-line rate
+  DEPRECIATION_METHOD_SUM_OF_YEARS_DIGITS = 4;      // Declining fraction method
+  DEPRECIATION_METHOD_UNITS_OF_PRODUCTION = 5;      // IAS 16.62c — activity-based
+}
+
+// MeasurementModel determines how the asset is measured after initial recognition.
+enum MeasurementModel {
+  MEASUREMENT_MODEL_UNSPECIFIED = 0;
+  MEASUREMENT_MODEL_COST = 1;         // IAS 16.30 — cost minus depreciation minus impairment
+  MEASUREMENT_MODEL_REVALUATION = 2;  // IAS 16.31 — fair value minus subsequent depreciation
+}
+
+message Asset {
+  option (options.v1.table).table = true;
+  // Core identity
+  string id = 1;
+  string asset_number = 2 [(options.v1.db).unique = true];
+  string name = 3;
+  optional string description = 4;
+  AssetType asset_type = 5;
+  string asset_category_id = 6 [(options.v1.db).references = "asset_category", (options.v1.db).index = true];
+  optional AssetCategory asset_category = 7;
+
+  // Physical identification
+  optional string serial_number = 8;
+  optional string tag_number = 9;
+  optional string manufacturer = 10;
+  optional string model = 11;
+
+  // Location and custody
+  optional string location_id = 12 [(options.v1.db).references = "location", (options.v1.db).index = true];
+  optional domain.entity.v1.Location location = 13;
+  optional string custodian_id = 14;   // FK to entity.User
+  optional string vendor_id = 15;      // FK to entity.Client
+  optional string product_id = 16;     // FK to product.Product (optional)
+
+  // Acquisition
+  optional string purchase_order_number = 17;
+  optional string invoice_number = 18;
+  optional int64 acquisition_date = 19;
+  optional string acquisition_date_string = 20;
+  optional int64 date_placed_in_service = 21;
+  optional string date_placed_in_service_string = 22;
+
+  // Cost and value
+  double acquisition_cost = 23;
+  string currency = 24;
+  double salvage_value = 25;
+  double book_value = 26;
+  optional double fair_value = 27;
+
+  // Depreciation configuration
+  int32 useful_life_months = 28;
+  optional int64 useful_life_units = 29;
+  DepreciationMethod depreciation_method = 30;
+  optional double depreciation_rate = 31;
+  optional int64 depreciation_start_date = 32;
+  optional string depreciation_start_date_string = 33;
+  double accumulated_depreciation = 34;
+
+  // Measurement model
+  MeasurementModel measurement_model = 35;
+
+  // Status and lifecycle
+  AssetStatus status = 36;
+  optional int64 warranty_expiry_date = 37;
+  optional string warranty_expiry_date_string = 38;
+  optional string notes = 39;
+
+  // Audit fields
+  optional int64 date_created = 40;
+  optional string date_created_string = 41;
+  optional int64 date_modified = 42;
+  optional string date_modified_string = 43;
+  bool active = 44 [(options.v1.db).default = "true"];
+}
+
+service AssetDomainService {
+  // Standard CRUD
+  rpc CreateAsset(CreateAssetRequest) returns (CreateAssetResponse);
+  rpc ReadAsset(ReadAssetRequest) returns (ReadAssetResponse);
+  rpc UpdateAsset(UpdateAssetRequest) returns (UpdateAssetResponse);
+  rpc DeleteAsset(DeleteAssetRequest) returns (DeleteAssetResponse);
+  rpc ListAssets(ListAssetsRequest) returns (ListAssetsResponse);
+
+  // Enhanced page data (for UI views)
+  rpc GetAssetListPageData(GetAssetListPageDataRequest) returns (GetAssetListPageDataResponse);
+  rpc GetAssetItemPageData(GetAssetItemPageDataRequest) returns (GetAssetItemPageDataResponse);
+
+  // Lifecycle operations
+  rpc AcquireAsset(AcquireAssetRequest) returns (AcquireAssetResponse);
+  rpc DisposeAsset(DisposeAssetRequest) returns (DisposeAssetResponse);
+  rpc TransferAsset(TransferAssetRequest) returns (TransferAssetResponse);
+
+  // Depreciation engine
+  rpc RunDepreciation(RunDepreciationRequest) returns (RunDepreciationResponse);
+  rpc GetDepreciationSchedule(GetDepreciationScheduleRequest) returns (GetDepreciationScheduleResponse);
+
+  // Revaluation (IFRS only)
+  rpc RevalueAsset(RevalueAssetRequest) returns (RevalueAssetResponse);
+}
+
+message CreateAssetRequest {
+  Asset data = 1;
+}
+
+message CreateAssetResponse {
+  repeated Asset data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message ReadAssetRequest {
+  Asset data = 1;
+}
+
+message ReadAssetResponse {
+  repeated Asset data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message UpdateAssetRequest {
+  Asset data = 1;
+}
+
+message UpdateAssetResponse {
+  repeated Asset data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message DeleteAssetRequest {
+  Asset data = 1;
+}
+
+message DeleteAssetResponse {
+  bool success = 1;
+  optional domain.common.v1.Error error = 2;
+}
+
+message ListAssetsRequest {
+  optional domain.common.v1.SearchRequest search = 1;
+  optional domain.common.v1.FilterRequest filters = 2;
+  optional domain.common.v1.SortRequest sort = 3;
+  optional domain.common.v1.PaginationRequest pagination = 4;
+}
+
+message ListAssetsResponse {
+  repeated Asset data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message GetAssetListPageDataRequest {
+  optional domain.common.v1.PaginationRequest pagination = 1;
+  optional domain.common.v1.FilterRequest filters = 2;
+  optional domain.common.v1.SortRequest sort = 3;
+  optional domain.common.v1.SearchRequest search = 4;
+}
+
+message GetAssetListPageDataResponse {
+  repeated Asset asset_list = 1;
+  optional domain.common.v1.PaginationResponse pagination = 2;
+  repeated domain.common.v1.SearchResult search_results = 3;
+  bool success = 4;
+  optional domain.common.v1.Error error = 5;
+}
+
+message GetAssetItemPageDataRequest {
+  string asset_id = 1;
+}
+
+message GetAssetItemPageDataResponse {
+  optional Asset asset = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+// Lifecycle: Acquire an asset (transition to IN_SERVICE)
+message AcquireAssetRequest {
+  Asset data = 1;
+}
+
+message AcquireAssetResponse {
+  repeated Asset data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+// Lifecycle: Dispose of an asset
+message DisposeAssetRequest {
+  Asset data = 1;
+  optional string disposal_type = 2;
+  optional double proceeds = 3;
+  optional string reason = 4;
+}
+
+message DisposeAssetResponse {
+  repeated Asset data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+// Lifecycle: Transfer an asset between locations
+message TransferAssetRequest {
+  Asset data = 1;
+  string from_location_id = 2;
+  string to_location_id = 3;
+  optional string notes = 4;
+}
+
+message TransferAssetResponse {
+  repeated Asset data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+// Depreciation: Run depreciation calculation for a period
+message RunDepreciationRequest {
+  optional string asset_id = 1;            // Specific asset, or all if empty
+  optional string asset_category_id = 2;   // Run for a category
+  int32 fiscal_year = 3;
+  int32 fiscal_period = 4;
+  int64 period_start_date = 5;
+  int64 period_end_date = 6;
+}
+
+message RunDepreciationResponse {
+  int32 assets_processed = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+// Depreciation: Get the full depreciation schedule for an asset
+message GetDepreciationScheduleRequest {
+  string asset_id = 1;
+}
+
+message GetDepreciationScheduleResponse {
+  repeated Asset data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+// Revaluation: Revalue an asset to fair value (IAS 16.31-42)
+message RevalueAssetRequest {
+  Asset data = 1;
+  double new_fair_value = 2;
+  optional string appraiser_name = 3;
+  optional string valuation_method = 4;
+  optional string notes = 5;
+}
+
+message RevalueAssetResponse {
+  repeated Asset data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}

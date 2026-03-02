@@ -14,6 +14,7 @@ import "domain/entity/workspace/workspace.proto";
 import "domain/entity/role_permission/role_permission.proto";
 import "options/db.proto";
 
+// FK References: workspace_user_role.role_id, role_permission.role_id
 message Role {
   option (options.v1.table).table = true;
 

@@ -12,6 +12,7 @@ import "domain/common/search.proto";
 import "domain/product/price_product/price_product.proto";
 import "options/db.proto";
 
+// FK References: price_product.price_list_id, revenue_line_item.price_list_id
 message PriceList {
   option (options.v1.table).table = true;
   string id = 1;

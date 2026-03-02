@@ -1,0 +1,117 @@
+syntax = "proto3";
+
+package domain.entity.v1;
+
+option go_package = "github.com/erniealice/esqyma/golang/v1/domain/entity/supplier_category";
+
+import "domain/common/error.proto";
+import "domain/common/search.proto";
+import "domain/common/filter.proto";
+import "domain/common/sort.proto";
+import "domain/common/pagination.proto";
+import "domain/common/category.proto";
+import "options/db.proto";
+
+// SupplierCategory represents a category for organizing suppliers.
+// It references the common Category entity for reusability.
+message SupplierCategory {
+  option (options.v1.table).table = true;
+  option (options.v1.table).unique_together = "supplier_id,category_id";
+
+  string id = 1;
+  string supplier_id = 2 [(options.v1.db).references = "supplier", (options.v1.db).index = true];
+  string category_id = 3 [(options.v1.db).references = "category", (options.v1.db).index = true];
+  domain.common.v1.Category category = 4;
+  optional int64 date_created = 5;
+  optional string date_created_string = 6;
+  optional int64 date_modified = 7;
+  optional string date_modified_string = 8;
+  bool active = 9 [(options.v1.db).default = "true"];
+}
+
+service SupplierCategoryDomainService {
+  rpc CreateSupplierCategory(CreateSupplierCategoryRequest) returns (CreateSupplierCategoryResponse);
+  rpc ReadSupplierCategory(ReadSupplierCategoryRequest) returns (ReadSupplierCategoryResponse);
+  rpc UpdateSupplierCategory(UpdateSupplierCategoryRequest) returns (UpdateSupplierCategoryResponse);
+  rpc DeleteSupplierCategory(DeleteSupplierCategoryRequest) returns (DeleteSupplierCategoryResponse);
+  rpc ListSupplierCategories(ListSupplierCategoriesRequest) returns (ListSupplierCategoriesResponse);
+  rpc GetSupplierCategoryListPageData(GetSupplierCategoryListPageDataRequest) returns (GetSupplierCategoryListPageDataResponse);
+  rpc GetSupplierCategoryItemPageData(GetSupplierCategoryItemPageDataRequest) returns (GetSupplierCategoryItemPageDataResponse);
+}
+
+message CreateSupplierCategoryRequest {
+  SupplierCategory data = 1;
+}
+
+message CreateSupplierCategoryResponse {
+  repeated SupplierCategory data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message ReadSupplierCategoryRequest {
+  SupplierCategory data = 1;
+}
+
+message ReadSupplierCategoryResponse {
+  repeated SupplierCategory data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message UpdateSupplierCategoryRequest {
+  SupplierCategory data = 1;
+}
+
+message UpdateSupplierCategoryResponse {
+  repeated SupplierCategory data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message DeleteSupplierCategoryRequest {
+  SupplierCategory data = 1;
+}
+
+message DeleteSupplierCategoryResponse {
+  bool success = 1;
+  optional domain.common.v1.Error error = 2;
+}
+
+message ListSupplierCategoriesRequest {
+  optional domain.common.v1.SearchRequest search = 1;
+  optional domain.common.v1.FilterRequest filters = 2;
+  optional domain.common.v1.SortRequest sort = 3;
+  optional domain.common.v1.PaginationRequest pagination = 4;
+}
+
+message ListSupplierCategoriesResponse {
+  repeated SupplierCategory data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message GetSupplierCategoryListPageDataRequest {
+  domain.common.v1.PaginationRequest pagination = 1;
+  domain.common.v1.FilterRequest filters = 2;
+  domain.common.v1.SortRequest sort = 3;
+  domain.common.v1.SearchRequest search = 4;
+}
+
+message GetSupplierCategoryListPageDataResponse {
+  repeated SupplierCategory supplier_category_list = 1;
+  domain.common.v1.PaginationResponse pagination = 2;
+  repeated domain.common.v1.SearchResult search_results = 3;
+  bool success = 4;
+  optional domain.common.v1.Error error = 5;
+}
+
+message GetSupplierCategoryItemPageDataRequest {
+  string supplier_category_id = 1;
+}
+
+message GetSupplierCategoryItemPageDataResponse {
+  SupplierCategory supplier_category = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}

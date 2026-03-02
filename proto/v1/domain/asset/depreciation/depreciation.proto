@@ -1,0 +1,141 @@
+syntax = "proto3";
+
+package domain.asset.v1;
+
+option go_package = "github.com/erniealice/esqyma/golang/v1/domain/asset/depreciation";
+
+import "domain/common/error.proto";
+import "domain/common/pagination.proto";
+import "domain/common/filter.proto";
+import "domain/common/sort.proto";
+import "domain/common/search.proto";
+
+import "options/db.proto";
+
+message DepreciationSchedule {
+  option (options.v1.table).table = true;
+  string id = 1;
+  string asset_id = 2 [(options.v1.db).references = "asset", (options.v1.db).index = true];
+
+  // Period tracking
+  int32 period_number = 3;
+  int32 fiscal_year = 4;
+  int32 fiscal_period = 5;
+  int64 period_start_date = 6;
+  string period_start_date_string = 7;
+  int64 period_end_date = 8;
+  string period_end_date_string = 9;
+
+  // Value tracking
+  double opening_book_value = 10;
+  double depreciation_amount = 11;
+  double accumulated_depreciation = 12;
+  double closing_book_value = 13;
+
+  // Units of production (optional)
+  optional int64 units_produced = 14;
+
+  // GL posting
+  bool is_posted = 15;
+  optional string journal_entry_id = 16;  // FK to ledger.Journal (future)
+
+  // Audit fields
+  optional int64 date_created = 17;
+  optional string date_created_string = 18;
+  optional int64 date_modified = 19;
+  optional string date_modified_string = 20;
+  bool active = 21 [(options.v1.db).default = "true"];
+}
+
+service DepreciationDomainService {
+  rpc CreateDepreciationSchedule(CreateDepreciationScheduleRequest) returns (CreateDepreciationScheduleResponse);
+  rpc ReadDepreciationSchedule(ReadDepreciationScheduleRequest) returns (ReadDepreciationScheduleResponse);
+  rpc UpdateDepreciationSchedule(UpdateDepreciationScheduleRequest) returns (UpdateDepreciationScheduleResponse);
+  rpc DeleteDepreciationSchedule(DeleteDepreciationScheduleRequest) returns (DeleteDepreciationScheduleResponse);
+  rpc ListDepreciationSchedules(ListDepreciationSchedulesRequest) returns (ListDepreciationSchedulesResponse);
+
+  // Enhanced page data (for UI views)
+  rpc GetDepreciationScheduleListPageData(GetDepreciationScheduleListPageDataRequest)
+    returns (GetDepreciationScheduleListPageDataResponse);
+
+  rpc GetDepreciationScheduleItemPageData(GetDepreciationScheduleItemPageDataRequest)
+    returns (GetDepreciationScheduleItemPageDataResponse);
+}
+
+message CreateDepreciationScheduleRequest {
+  DepreciationSchedule data = 1;
+}
+
+message CreateDepreciationScheduleResponse {
+  repeated DepreciationSchedule data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message ReadDepreciationScheduleRequest {
+  DepreciationSchedule data = 1;
+}
+
+message ReadDepreciationScheduleResponse {
+  repeated DepreciationSchedule data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message UpdateDepreciationScheduleRequest {
+  DepreciationSchedule data = 1;
+}
+
+message UpdateDepreciationScheduleResponse {
+  repeated DepreciationSchedule data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message DeleteDepreciationScheduleRequest {
+  DepreciationSchedule data = 1;
+}
+
+message DeleteDepreciationScheduleResponse {
+  bool success = 1;
+  optional domain.common.v1.Error error = 2;
+}
+
+message ListDepreciationSchedulesRequest {
+  optional string asset_id = 1;
+  optional domain.common.v1.SearchRequest search = 2;
+  optional domain.common.v1.FilterRequest filters = 3;
+  optional domain.common.v1.SortRequest sort = 4;
+  optional domain.common.v1.PaginationRequest pagination = 5;
+}
+
+message ListDepreciationSchedulesResponse {
+  repeated DepreciationSchedule data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message GetDepreciationScheduleListPageDataRequest {
+  optional domain.common.v1.PaginationRequest pagination = 1;
+  optional domain.common.v1.FilterRequest filters = 2;
+  optional domain.common.v1.SortRequest sort = 3;
+  optional domain.common.v1.SearchRequest search = 4;
+}
+
+message GetDepreciationScheduleListPageDataResponse {
+  repeated DepreciationSchedule depreciation_schedule_list = 1;
+  optional domain.common.v1.PaginationResponse pagination = 2;
+  repeated domain.common.v1.SearchResult search_results = 3;
+  bool success = 4;
+  optional domain.common.v1.Error error = 5;
+}
+
+message GetDepreciationScheduleItemPageDataRequest {
+  string depreciation_schedule_id = 1;
+}
+
+message GetDepreciationScheduleItemPageDataResponse {
+  optional DepreciationSchedule depreciation_schedule = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}

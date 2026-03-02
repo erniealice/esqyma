@@ -1,0 +1,138 @@
+syntax = "proto3";
+
+package domain.asset.v1;
+
+option go_package = "github.com/erniealice/esqyma/golang/v1/domain/asset/asset_location";
+
+import "domain/common/error.proto";
+import "domain/common/pagination.proto";
+import "domain/common/filter.proto";
+import "domain/common/sort.proto";
+import "domain/common/search.proto";
+
+import "domain/entity/location/location.proto";
+import "options/db.proto";
+
+// AssetAssignmentType describes how an asset relates to a location.
+enum AssetAssignmentType {
+  ASSET_ASSIGNMENT_TYPE_UNSPECIFIED = 0;
+  ASSET_ASSIGNMENT_TYPE_PERMANENT = 1;   // Asset belongs to this location (home base)
+  ASSET_ASSIGNMENT_TYPE_SHARED = 2;      // Asset is shared across locations (bookable)
+  ASSET_ASSIGNMENT_TYPE_TEMPORARY = 3;   // Temporarily assigned (e.g., loaned, on rotation)
+  ASSET_ASSIGNMENT_TYPE_MOBILE = 4;      // Asset travels between locations (e.g., mobile van)
+}
+
+message AssetLocation {
+  option (options.v1.table).table = true;
+  option (options.v1.table).unique_together = "asset_id,location_id";
+  string id = 1;
+  string asset_id = 2 [(options.v1.db).references = "asset", (options.v1.db).index = true];
+  string location_id = 3 [(options.v1.db).references = "location", (options.v1.db).index = true];
+  optional domain.entity.v1.Location location = 4;
+  bool is_primary = 5;
+  AssetAssignmentType assignment_type = 6;
+  optional int64 date_assigned = 7;
+  optional string date_assigned_string = 8;
+  optional int64 date_unassigned = 9;
+  optional string date_unassigned_string = 10;
+  optional string notes = 11;
+
+  // Audit fields
+  optional int64 date_created = 12;
+  optional string date_created_string = 13;
+  optional int64 date_modified = 14;
+  optional string date_modified_string = 15;
+  bool active = 16 [(options.v1.db).default = "true"];
+}
+
+service AssetLocationDomainService {
+  rpc CreateAssetLocation(CreateAssetLocationRequest) returns (CreateAssetLocationResponse);
+  rpc ReadAssetLocation(ReadAssetLocationRequest) returns (ReadAssetLocationResponse);
+  rpc UpdateAssetLocation(UpdateAssetLocationRequest) returns (UpdateAssetLocationResponse);
+  rpc DeleteAssetLocation(DeleteAssetLocationRequest) returns (DeleteAssetLocationResponse);
+  rpc ListAssetLocations(ListAssetLocationsRequest) returns (ListAssetLocationsResponse);
+
+  // Enhanced page data (for UI views)
+  rpc GetAssetLocationListPageData(GetAssetLocationListPageDataRequest)
+    returns (GetAssetLocationListPageDataResponse);
+
+  rpc GetAssetLocationItemPageData(GetAssetLocationItemPageDataRequest)
+    returns (GetAssetLocationItemPageDataResponse);
+}
+
+message CreateAssetLocationRequest {
+  AssetLocation data = 1;
+}
+
+message CreateAssetLocationResponse {
+  repeated AssetLocation data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message ReadAssetLocationRequest {
+  AssetLocation data = 1;
+}
+
+message ReadAssetLocationResponse {
+  repeated AssetLocation data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message UpdateAssetLocationRequest {
+  AssetLocation data = 1;
+}
+
+message UpdateAssetLocationResponse {
+  repeated AssetLocation data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message DeleteAssetLocationRequest {
+  AssetLocation data = 1;
+}
+
+message DeleteAssetLocationResponse {
+  bool success = 1;
+  optional domain.common.v1.Error error = 2;
+}
+
+message ListAssetLocationsRequest {
+  optional domain.common.v1.SearchRequest search = 1;
+  optional domain.common.v1.FilterRequest filters = 2;
+  optional domain.common.v1.SortRequest sort = 3;
+  optional domain.common.v1.PaginationRequest pagination = 4;
+}
+
+message ListAssetLocationsResponse {
+  repeated AssetLocation data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message GetAssetLocationListPageDataRequest {
+  optional domain.common.v1.PaginationRequest pagination = 1;
+  optional domain.common.v1.FilterRequest filters = 2;
+  optional domain.common.v1.SortRequest sort = 3;
+  optional domain.common.v1.SearchRequest search = 4;
+}
+
+message GetAssetLocationListPageDataResponse {
+  repeated AssetLocation asset_location_list = 1;
+  optional domain.common.v1.PaginationResponse pagination = 2;
+  repeated domain.common.v1.SearchResult search_results = 3;
+  bool success = 4;
+  optional domain.common.v1.Error error = 5;
+}
+
+message GetAssetLocationItemPageDataRequest {
+  string asset_location_id = 1;
+}
+
+message GetAssetLocationItemPageDataResponse {
+  optional AssetLocation asset_location = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}

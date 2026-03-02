@@ -1,0 +1,132 @@
+syntax = "proto3";
+
+package domain.asset.v1;
+
+option go_package = "github.com/erniealice/esqyma/golang/v1/domain/asset/asset_component";
+
+import "domain/common/error.proto";
+import "domain/common/pagination.proto";
+import "domain/common/filter.proto";
+import "domain/common/sort.proto";
+import "domain/common/search.proto";
+
+import "domain/asset/asset/asset.proto";
+import "options/db.proto";
+
+// AssetComponent implements IAS 16.43-47 component depreciation.
+// Each significant part of an asset with a different useful life is
+// depreciated separately.
+message AssetComponent {
+  option (options.v1.table).table = true;
+  string id = 1;
+  string asset_id = 2 [(options.v1.db).references = "asset", (options.v1.db).index = true];
+  optional Asset asset = 3;
+  string name = 4;
+  optional string description = 5;
+  double cost = 6;
+  double salvage_value = 7;
+  int32 useful_life_months = 8;
+  DepreciationMethod depreciation_method = 9;
+  double accumulated_depreciation = 10;
+  double book_value = 11;
+
+  // Audit fields
+  optional int64 date_created = 12;
+  optional string date_created_string = 13;
+  optional int64 date_modified = 14;
+  optional string date_modified_string = 15;
+  bool active = 16 [(options.v1.db).default = "true"];
+}
+
+service AssetComponentDomainService {
+  rpc CreateAssetComponent(CreateAssetComponentRequest) returns (CreateAssetComponentResponse);
+  rpc ReadAssetComponent(ReadAssetComponentRequest) returns (ReadAssetComponentResponse);
+  rpc UpdateAssetComponent(UpdateAssetComponentRequest) returns (UpdateAssetComponentResponse);
+  rpc DeleteAssetComponent(DeleteAssetComponentRequest) returns (DeleteAssetComponentResponse);
+  rpc ListAssetComponents(ListAssetComponentsRequest) returns (ListAssetComponentsResponse);
+
+  // Enhanced page data (for UI views)
+  rpc GetAssetComponentListPageData(GetAssetComponentListPageDataRequest)
+    returns (GetAssetComponentListPageDataResponse);
+
+  rpc GetAssetComponentItemPageData(GetAssetComponentItemPageDataRequest)
+    returns (GetAssetComponentItemPageDataResponse);
+}
+
+message CreateAssetComponentRequest {
+  AssetComponent data = 1;
+}
+
+message CreateAssetComponentResponse {
+  repeated AssetComponent data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message ReadAssetComponentRequest {
+  AssetComponent data = 1;
+}
+
+message ReadAssetComponentResponse {
+  repeated AssetComponent data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message UpdateAssetComponentRequest {
+  AssetComponent data = 1;
+}
+
+message UpdateAssetComponentResponse {
+  repeated AssetComponent data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message DeleteAssetComponentRequest {
+  AssetComponent data = 1;
+}
+
+message DeleteAssetComponentResponse {
+  bool success = 1;
+  optional domain.common.v1.Error error = 2;
+}
+
+message ListAssetComponentsRequest {
+  optional string asset_id = 1;
+  optional domain.common.v1.SearchRequest search = 2;
+  optional domain.common.v1.FilterRequest filters = 3;
+  optional domain.common.v1.SortRequest sort = 4;
+  optional domain.common.v1.PaginationRequest pagination = 5;
+}
+
+message ListAssetComponentsResponse {
+  repeated AssetComponent data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message GetAssetComponentListPageDataRequest {
+  optional domain.common.v1.PaginationRequest pagination = 1;
+  optional domain.common.v1.FilterRequest filters = 2;
+  optional domain.common.v1.SortRequest sort = 3;
+  optional domain.common.v1.SearchRequest search = 4;
+}
+
+message GetAssetComponentListPageDataResponse {
+  repeated AssetComponent asset_component_list = 1;
+  optional domain.common.v1.PaginationResponse pagination = 2;
+  repeated domain.common.v1.SearchResult search_results = 3;
+  bool success = 4;
+  optional domain.common.v1.Error error = 5;
+}
+
+message GetAssetComponentItemPageDataRequest {
+  string asset_component_id = 1;
+}
+
+message GetAssetComponentItemPageDataResponse {
+  optional AssetComponent asset_component = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
