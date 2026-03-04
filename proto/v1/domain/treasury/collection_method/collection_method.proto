@@ -1,0 +1,127 @@
+syntax = "proto3";
+
+package domain.payment.v1;
+
+option go_package = "leapfor.xyz/esqyma/golang/v1/domain/treasury/collection_method";
+
+import "domain/common/error.proto";
+import "domain/common/pagination.proto";
+import "domain/common/filter.proto";
+import "domain/common/sort.proto";
+import "domain/common/search.proto";
+
+message CollectionMethod {
+  string id = 1;
+  optional int64 date_created = 2;
+  optional string date_created_string = 3;
+  optional int64 date_modified = 4;
+  optional string date_modified_string = 5;
+  bool active = 6;
+  string name = 7;
+  oneof method_details {
+    CollectionCardDetails card = 8;
+    CollectionBankAccountDetails bank_account = 9;
+  }
+  optional string provider_name = 10;
+}
+
+message CollectionCardDetails {
+  string card_type = 1;
+  string last_four_digits = 2;
+  int32 expiry_month = 3;
+  int32 expiry_year = 4;
+}
+
+message CollectionBankAccountDetails {
+  string bank_name = 1;
+  string last_four_digits = 2;
+}
+
+service CollectionMethodDomainService {
+  rpc CreateCollectionMethod(CreateCollectionMethodRequest) returns (CreateCollectionMethodResponse);
+  rpc ReadCollectionMethod(ReadCollectionMethodRequest) returns (ReadCollectionMethodResponse);
+  rpc UpdateCollectionMethod(UpdateCollectionMethodRequest) returns (UpdateCollectionMethodResponse);
+  rpc DeleteCollectionMethod(DeleteCollectionMethodRequest) returns (DeleteCollectionMethodResponse);
+  rpc ListCollectionMethods(ListCollectionMethodsRequest) returns (ListCollectionMethodsResponse);
+  rpc GetCollectionMethodListPageData(GetCollectionMethodListPageDataRequest)
+    returns (GetCollectionMethodListPageDataResponse);
+  rpc GetCollectionMethodItemPageData(GetCollectionMethodItemPageDataRequest)
+    returns (GetCollectionMethodItemPageDataResponse);
+}
+
+message CreateCollectionMethodRequest {
+  CollectionMethod data = 1;
+}
+
+message CreateCollectionMethodResponse {
+  repeated CollectionMethod data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message ReadCollectionMethodRequest {
+  CollectionMethod data = 1;
+}
+
+message ReadCollectionMethodResponse {
+  repeated CollectionMethod data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message UpdateCollectionMethodRequest {
+  CollectionMethod data = 1;
+}
+
+message UpdateCollectionMethodResponse {
+  repeated CollectionMethod data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message DeleteCollectionMethodRequest {
+  CollectionMethod data = 1;
+}
+
+message DeleteCollectionMethodResponse {
+  bool success = 1;
+  optional domain.common.v1.Error error = 2;
+}
+
+message ListCollectionMethodsRequest {
+  optional domain.common.v1.SearchRequest search = 1;
+  optional domain.common.v1.FilterRequest filters = 2;
+  optional domain.common.v1.SortRequest sort = 3;
+  optional domain.common.v1.PaginationRequest pagination = 4;
+}
+
+message ListCollectionMethodsResponse {
+  repeated CollectionMethod data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message GetCollectionMethodListPageDataRequest {
+  optional domain.common.v1.PaginationRequest pagination = 1;
+  optional domain.common.v1.FilterRequest filters = 2;
+  optional domain.common.v1.SortRequest sort = 3;
+  optional domain.common.v1.SearchRequest search = 4;
+}
+
+message GetCollectionMethodListPageDataResponse {
+  repeated CollectionMethod collection_method_list = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+  optional domain.common.v1.PaginationResponse pagination = 4;
+  repeated domain.common.v1.SearchResult search_results = 5;
+}
+
+message GetCollectionMethodItemPageDataRequest {
+  string collection_method_id = 1;
+}
+
+message GetCollectionMethodItemPageDataResponse {
+  optional CollectionMethod collection_method = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}

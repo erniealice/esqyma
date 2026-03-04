@@ -1,0 +1,126 @@
+syntax = "proto3";
+
+package domain.payment.v1;
+
+option go_package = "leapfor.xyz/esqyma/golang/v1/domain/treasury/disbursement";
+
+import "domain/common/error.proto";
+import "domain/common/pagination.proto";
+import "domain/common/filter.proto";
+import "domain/common/sort.proto";
+import "domain/common/search.proto";
+
+import "domain/subscription/subscription/subscription.proto";
+
+message Disbursement {
+  string id = 1;
+  optional int64 date_created = 2;
+  optional string date_created_string = 3;
+  optional int64 date_modified = 4;
+  optional string date_modified_string = 5;
+  bool active = 6;
+  string name = 7;
+  optional domain.subscription.v1.Subscription subscription = 8;
+  string subscription_id = 9;
+  double amount = 10;
+  string status = 11;
+  // --- expenditure-related fields ---
+  string expenditure_id = 20;               // FK to expenditure table
+  string disbursement_type = 21;            // "purchase", "expense", "subscription_refund"
+  string disbursement_method_id = 22;       // FK to disbursement_method
+  string currency = 23;
+  string reference_number = 24;
+  int64 payment_date = 25;                  // Unix timestamp
+  string approved_by = 26;                  // who authorized the outflow
+}
+
+service DisbursementDomainService {
+  rpc CreateDisbursement(CreateDisbursementRequest) returns (CreateDisbursementResponse);
+  rpc ReadDisbursement(ReadDisbursementRequest) returns (ReadDisbursementResponse);
+  rpc UpdateDisbursement(UpdateDisbursementRequest) returns (UpdateDisbursementResponse);
+  rpc DeleteDisbursement(DeleteDisbursementRequest) returns (DeleteDisbursementResponse);
+  rpc ListDisbursements(ListDisbursementsRequest) returns (ListDisbursementsResponse);
+
+  rpc GetDisbursementListPageData(GetDisbursementListPageDataRequest)
+    returns (GetDisbursementListPageDataResponse);
+
+  rpc GetDisbursementItemPageData(GetDisbursementItemPageDataRequest)
+    returns (GetDisbursementItemPageDataResponse);
+}
+
+message CreateDisbursementRequest {
+  Disbursement data = 1;
+}
+
+message CreateDisbursementResponse {
+  repeated Disbursement data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message ReadDisbursementRequest {
+  Disbursement data = 1;
+}
+
+message ReadDisbursementResponse {
+  repeated Disbursement data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message UpdateDisbursementRequest {
+  Disbursement data = 1;
+}
+
+message UpdateDisbursementResponse {
+  repeated Disbursement data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message DeleteDisbursementRequest {
+  Disbursement data = 1;
+}
+
+message DeleteDisbursementResponse {
+  bool success = 1;
+  optional domain.common.v1.Error error = 2;
+}
+
+message ListDisbursementsRequest {
+  optional domain.common.v1.SearchRequest search = 1;
+  optional domain.common.v1.FilterRequest filters = 2;
+  optional domain.common.v1.SortRequest sort = 3;
+  optional domain.common.v1.PaginationRequest pagination = 4;
+}
+
+message ListDisbursementsResponse {
+  repeated Disbursement data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message GetDisbursementListPageDataRequest {
+  optional domain.common.v1.PaginationRequest pagination = 1;
+  optional domain.common.v1.FilterRequest filters = 2;
+  optional domain.common.v1.SortRequest sort = 3;
+  optional domain.common.v1.SearchRequest search = 4;
+}
+
+message GetDisbursementListPageDataResponse {
+  repeated Disbursement disbursement_list = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+  optional domain.common.v1.PaginationResponse pagination = 4;
+  repeated domain.common.v1.SearchResult search_results = 5;
+}
+
+message GetDisbursementItemPageDataRequest {
+  string disbursement_id = 1;
+}
+
+message GetDisbursementItemPageDataResponse {
+  optional Disbursement disbursement = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}

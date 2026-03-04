@@ -1,0 +1,144 @@
+syntax = "proto3";
+
+package domain.payment.v1;
+
+option go_package = "leapfor.xyz/esqyma/golang/v1/domain/treasury/collection_attribute";
+
+import "domain/common/error.proto";
+import "domain/common/pagination.proto";
+import "domain/common/filter.proto";
+import "domain/common/sort.proto";
+import "domain/common/search.proto";
+
+import "domain/treasury/collection/collection.proto";
+import "domain/common/attribute.proto";
+
+message CollectionAttribute {
+  string id = 1;
+  string collection_id = 2;
+  string attribute_id = 3;
+  string value = 4;
+  Collection collection = 5;
+  domain.common.v1.Attribute attribute = 6;
+  optional int64 date_created = 7;
+  optional string date_created_string = 8;
+  optional int64 date_modified = 9;
+  optional string date_modified_string = 10;
+  bool active = 11;
+}
+
+service CollectionAttributeDomainService {
+  rpc CreateCollectionAttribute(CreateCollectionAttributeRequest) returns (CreateCollectionAttributeResponse);
+  rpc ReadCollectionAttribute(ReadCollectionAttributeRequest) returns (ReadCollectionAttributeResponse);
+  rpc UpdateCollectionAttribute(UpdateCollectionAttributeRequest) returns (UpdateCollectionAttributeResponse);
+  rpc DeleteCollectionAttribute(DeleteCollectionAttributeRequest) returns (DeleteCollectionAttributeResponse);
+  rpc ListCollectionAttributes(ListCollectionAttributesRequest) returns (ListCollectionAttributesResponse);
+  rpc GetCollectionAttributeListPageData(GetCollectionAttributeListPageDataRequest)
+    returns (GetCollectionAttributeListPageDataResponse);
+  rpc GetCollectionAttributeItemPageData(GetCollectionAttributeItemPageDataRequest)
+    returns (GetCollectionAttributeItemPageDataResponse);
+}
+
+message CreateCollectionAttributeRequest {
+  CollectionAttribute data = 1;
+}
+
+message CreateCollectionAttributeResponse {
+  repeated CollectionAttribute data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message CreateCollectionAttributeBatchRequest {
+  repeated CollectionAttribute data = 1;
+}
+
+message CreateCollectionAttributeBatchResponse {
+  repeated CollectionAttribute data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+// CreateCollectionAttributesByCode creates collection attributes using attribute codes.
+// Internally resolves each code to an attribute ID before creating.
+message CollectionAttributesByCodeData {
+  string collection_id = 1;
+  map<string, string> attributes_map = 2;  // {"attribute_code": "value", ...}
+}
+
+message CreateCollectionAttributesByCodeRequest {
+  CollectionAttributesByCodeData data = 1;
+}
+
+message CreateCollectionAttributesByCodeResponse {
+  repeated CollectionAttribute data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message ReadCollectionAttributeRequest {
+  CollectionAttribute data = 1;
+}
+
+message ReadCollectionAttributeResponse {
+  repeated CollectionAttribute data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message UpdateCollectionAttributeRequest {
+  CollectionAttribute data = 1;
+}
+
+message UpdateCollectionAttributeResponse {
+  repeated CollectionAttribute data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message DeleteCollectionAttributeRequest {
+  CollectionAttribute data = 1;
+}
+
+message DeleteCollectionAttributeResponse {
+  bool success = 1;
+  optional domain.common.v1.Error error = 2;
+}
+
+message ListCollectionAttributesRequest {
+  optional domain.common.v1.SearchRequest search = 1;
+  optional domain.common.v1.FilterRequest filters = 2;
+  optional domain.common.v1.SortRequest sort = 3;
+  optional domain.common.v1.PaginationRequest pagination = 4;
+}
+
+message ListCollectionAttributesResponse {
+  repeated CollectionAttribute data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message GetCollectionAttributeListPageDataRequest {
+  optional domain.common.v1.PaginationRequest pagination = 1;
+  optional domain.common.v1.FilterRequest filters = 2;
+  optional domain.common.v1.SortRequest sort = 3;
+  optional domain.common.v1.SearchRequest search = 4;
+}
+
+message GetCollectionAttributeListPageDataResponse {
+  repeated CollectionAttribute collection_attribute_list = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+  optional domain.common.v1.PaginationResponse pagination = 4;
+  repeated domain.common.v1.SearchResult search_results = 5;
+}
+
+message GetCollectionAttributeItemPageDataRequest {
+  string collection_attribute_id = 1;
+}
+
+message GetCollectionAttributeItemPageDataResponse {
+  optional CollectionAttribute collection_attribute = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
