@@ -42,7 +42,7 @@ type DisbursementAttribute struct {
 
 func (x *DisbursementAttribute) Reset() {
 	*x = DisbursementAttribute{}
-	mi := &file_domain_payment_disbursement_attribute_disbursement_attribute_proto_msgTypes[0]
+	mi := &file_domain_treasury_disbursement_attribute_disbursement_attribute_proto_msgTypes[0]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -54,7 +54,7 @@ func (x *DisbursementAttribute) String() string {
 func (*DisbursementAttribute) ProtoMessage() {}
 
 func (x *DisbursementAttribute) ProtoReflect() protoreflect.Message {
-	mi := &file_domain_payment_disbursement_attribute_disbursement_attribute_proto_msgTypes[0]
+	mi := &file_domain_treasury_disbursement_attribute_disbursement_attribute_proto_msgTypes[0]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -67,7 +67,7 @@ func (x *DisbursementAttribute) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use DisbursementAttribute.ProtoReflect.Descriptor instead.
 func (*DisbursementAttribute) Descriptor() ([]byte, []int) {
-	return file_domain_payment_disbursement_attribute_disbursement_attribute_proto_rawDescGZIP(), []int{0}
+	return file_domain_treasury_disbursement_attribute_disbursement_attribute_proto_rawDescGZIP(), []int{0}
 }
 
 func (x *DisbursementAttribute) GetId() string {
@@ -156,7 +156,7 @@ type CreateDisbursementAttributeRequest struct {
 
 func (x *CreateDisbursementAttributeRequest) Reset() {
 	*x = CreateDisbursementAttributeRequest{}
-	mi := &file_domain_payment_disbursement_attribute_disbursement_attribute_proto_msgTypes[1]
+	mi := &file_domain_treasury_disbursement_attribute_disbursement_attribute_proto_msgTypes[1]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -168,7 +168,7 @@ func (x *CreateDisbursementAttributeRequest) String() string {
 func (*CreateDisbursementAttributeRequest) ProtoMessage() {}
 
 func (x *CreateDisbursementAttributeRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_domain_payment_disbursement_attribute_disbursement_attribute_proto_msgTypes[1]
+	mi := &file_domain_treasury_disbursement_attribute_disbursement_attribute_proto_msgTypes[1]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -181,7 +181,7 @@ func (x *CreateDisbursementAttributeRequest) ProtoReflect() protoreflect.Message
 
 // Deprecated: Use CreateDisbursementAttributeRequest.ProtoReflect.Descriptor instead.
 func (*CreateDisbursementAttributeRequest) Descriptor() ([]byte, []int) {
-	return file_domain_payment_disbursement_attribute_disbursement_attribute_proto_rawDescGZIP(), []int{1}
+	return file_domain_treasury_disbursement_attribute_disbursement_attribute_proto_rawDescGZIP(), []int{1}
 }
 
 func (x *CreateDisbursementAttributeRequest) GetData() *DisbursementAttribute {
@@ -202,7 +202,7 @@ type CreateDisbursementAttributeResponse struct {
 
 func (x *CreateDisbursementAttributeResponse) Reset() {
 	*x = CreateDisbursementAttributeResponse{}
-	mi := &file_domain_payment_disbursement_attribute_disbursement_attribute_proto_msgTypes[2]
+	mi := &file_domain_treasury_disbursement_attribute_disbursement_attribute_proto_msgTypes[2]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -214,7 +214,7 @@ func (x *CreateDisbursementAttributeResponse) String() string {
 func (*CreateDisbursementAttributeResponse) ProtoMessage() {}
 
 func (x *CreateDisbursementAttributeResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_domain_payment_disbursement_attribute_disbursement_attribute_proto_msgTypes[2]
+	mi := &file_domain_treasury_disbursement_attribute_disbursement_attribute_proto_msgTypes[2]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -227,7 +227,7 @@ func (x *CreateDisbursementAttributeResponse) ProtoReflect() protoreflect.Messag
 
 // Deprecated: Use CreateDisbursementAttributeResponse.ProtoReflect.Descriptor instead.
 func (*CreateDisbursementAttributeResponse) Descriptor() ([]byte, []int) {
-	return file_domain_payment_disbursement_attribute_disbursement_attribute_proto_rawDescGZIP(), []int{2}
+	return file_domain_treasury_disbursement_attribute_disbursement_attribute_proto_rawDescGZIP(), []int{2}
 }
 
 func (x *CreateDisbursementAttributeResponse) GetData() []*DisbursementAttribute {
@@ -260,7 +260,7 @@ type CreateDisbursementAttributeBatchRequest struct {
 
 func (x *CreateDisbursementAttributeBatchRequest) Reset() {
 	*x = CreateDisbursementAttributeBatchRequest{}
-	mi := &file_domain_payment_disbursement_attribute_disbursement_attribute_proto_msgTypes[3]
+	mi := &file_domain_treasury_disbursement_attribute_disbursement_attribute_proto_msgTypes[3]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -272,7 +272,7 @@ func (x *CreateDisbursementAttributeBatchRequest) String() string {
 func (*CreateDisbursementAttributeBatchRequest) ProtoMessage() {}
 
 func (x *CreateDisbursementAttributeBatchRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_domain_payment_disbursement_attribute_disbursement_attribute_proto_msgTypes[3]
+	mi := &file_domain_treasury_disbursement_attribute_disbursement_attribute_proto_msgTypes[3]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -285,7 +285,7 @@ func (x *CreateDisbursementAttributeBatchRequest) ProtoReflect() protoreflect.Me
 
 // Deprecated: Use CreateDisbursementAttributeBatchRequest.ProtoReflect.Descriptor instead.
 func (*CreateDisbursementAttributeBatchRequest) Descriptor() ([]byte, []int) {
-	return file_domain_payment_disbursement_attribute_disbursement_attribute_proto_rawDescGZIP(), []int{3}
+	return file_domain_treasury_disbursement_attribute_disbursement_attribute_proto_rawDescGZIP(), []int{3}
 }
 
 func (x *CreateDisbursementAttributeBatchRequest) GetData() []*DisbursementAttribute {
@@ -306,7 +306,7 @@ type CreateDisbursementAttributeBatchResponse struct {
 
 func (x *CreateDisbursementAttributeBatchResponse) Reset() {
 	*x = CreateDisbursementAttributeBatchResponse{}
-	mi := &file_domain_payment_disbursement_attribute_disbursement_attribute_proto_msgTypes[4]
+	mi := &file_domain_treasury_disbursement_attribute_disbursement_attribute_proto_msgTypes[4]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -318,7 +318,7 @@ func (x *CreateDisbursementAttributeBatchResponse) String() string {
 func (*CreateDisbursementAttributeBatchResponse) ProtoMessage() {}
 
 func (x *CreateDisbursementAttributeBatchResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_domain_payment_disbursement_attribute_disbursement_attribute_proto_msgTypes[4]
+	mi := &file_domain_treasury_disbursement_attribute_disbursement_attribute_proto_msgTypes[4]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -331,7 +331,7 @@ func (x *CreateDisbursementAttributeBatchResponse) ProtoReflect() protoreflect.M
 
 // Deprecated: Use CreateDisbursementAttributeBatchResponse.ProtoReflect.Descriptor instead.
 func (*CreateDisbursementAttributeBatchResponse) Descriptor() ([]byte, []int) {
-	return file_domain_payment_disbursement_attribute_disbursement_attribute_proto_rawDescGZIP(), []int{4}
+	return file_domain_treasury_disbursement_attribute_disbursement_attribute_proto_rawDescGZIP(), []int{4}
 }
 
 func (x *CreateDisbursementAttributeBatchResponse) GetData() []*DisbursementAttribute {
@@ -367,7 +367,7 @@ type DisbursementAttributesByCodeData struct {
 
 func (x *DisbursementAttributesByCodeData) Reset() {
 	*x = DisbursementAttributesByCodeData{}
-	mi := &file_domain_payment_disbursement_attribute_disbursement_attribute_proto_msgTypes[5]
+	mi := &file_domain_treasury_disbursement_attribute_disbursement_attribute_proto_msgTypes[5]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -379,7 +379,7 @@ func (x *DisbursementAttributesByCodeData) String() string {
 func (*DisbursementAttributesByCodeData) ProtoMessage() {}
 
 func (x *DisbursementAttributesByCodeData) ProtoReflect() protoreflect.Message {
-	mi := &file_domain_payment_disbursement_attribute_disbursement_attribute_proto_msgTypes[5]
+	mi := &file_domain_treasury_disbursement_attribute_disbursement_attribute_proto_msgTypes[5]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -392,7 +392,7 @@ func (x *DisbursementAttributesByCodeData) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use DisbursementAttributesByCodeData.ProtoReflect.Descriptor instead.
 func (*DisbursementAttributesByCodeData) Descriptor() ([]byte, []int) {
-	return file_domain_payment_disbursement_attribute_disbursement_attribute_proto_rawDescGZIP(), []int{5}
+	return file_domain_treasury_disbursement_attribute_disbursement_attribute_proto_rawDescGZIP(), []int{5}
 }
 
 func (x *DisbursementAttributesByCodeData) GetDisbursementId() string {
@@ -418,7 +418,7 @@ type CreateDisbursementAttributesByCodeRequest struct {
 
 func (x *CreateDisbursementAttributesByCodeRequest) Reset() {
 	*x = CreateDisbursementAttributesByCodeRequest{}
-	mi := &file_domain_payment_disbursement_attribute_disbursement_attribute_proto_msgTypes[6]
+	mi := &file_domain_treasury_disbursement_attribute_disbursement_attribute_proto_msgTypes[6]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -430,7 +430,7 @@ func (x *CreateDisbursementAttributesByCodeRequest) String() string {
 func (*CreateDisbursementAttributesByCodeRequest) ProtoMessage() {}
 
 func (x *CreateDisbursementAttributesByCodeRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_domain_payment_disbursement_attribute_disbursement_attribute_proto_msgTypes[6]
+	mi := &file_domain_treasury_disbursement_attribute_disbursement_attribute_proto_msgTypes[6]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -443,7 +443,7 @@ func (x *CreateDisbursementAttributesByCodeRequest) ProtoReflect() protoreflect.
 
 // Deprecated: Use CreateDisbursementAttributesByCodeRequest.ProtoReflect.Descriptor instead.
 func (*CreateDisbursementAttributesByCodeRequest) Descriptor() ([]byte, []int) {
-	return file_domain_payment_disbursement_attribute_disbursement_attribute_proto_rawDescGZIP(), []int{6}
+	return file_domain_treasury_disbursement_attribute_disbursement_attribute_proto_rawDescGZIP(), []int{6}
 }
 
 func (x *CreateDisbursementAttributesByCodeRequest) GetData() *DisbursementAttributesByCodeData {
@@ -464,7 +464,7 @@ type CreateDisbursementAttributesByCodeResponse struct {
 
 func (x *CreateDisbursementAttributesByCodeResponse) Reset() {
 	*x = CreateDisbursementAttributesByCodeResponse{}
-	mi := &file_domain_payment_disbursement_attribute_disbursement_attribute_proto_msgTypes[7]
+	mi := &file_domain_treasury_disbursement_attribute_disbursement_attribute_proto_msgTypes[7]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -476,7 +476,7 @@ func (x *CreateDisbursementAttributesByCodeResponse) String() string {
 func (*CreateDisbursementAttributesByCodeResponse) ProtoMessage() {}
 
 func (x *CreateDisbursementAttributesByCodeResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_domain_payment_disbursement_attribute_disbursement_attribute_proto_msgTypes[7]
+	mi := &file_domain_treasury_disbursement_attribute_disbursement_attribute_proto_msgTypes[7]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -489,7 +489,7 @@ func (x *CreateDisbursementAttributesByCodeResponse) ProtoReflect() protoreflect
 
 // Deprecated: Use CreateDisbursementAttributesByCodeResponse.ProtoReflect.Descriptor instead.
 func (*CreateDisbursementAttributesByCodeResponse) Descriptor() ([]byte, []int) {
-	return file_domain_payment_disbursement_attribute_disbursement_attribute_proto_rawDescGZIP(), []int{7}
+	return file_domain_treasury_disbursement_attribute_disbursement_attribute_proto_rawDescGZIP(), []int{7}
 }
 
 func (x *CreateDisbursementAttributesByCodeResponse) GetData() []*DisbursementAttribute {
@@ -522,7 +522,7 @@ type ReadDisbursementAttributeRequest struct {
 
 func (x *ReadDisbursementAttributeRequest) Reset() {
 	*x = ReadDisbursementAttributeRequest{}
-	mi := &file_domain_payment_disbursement_attribute_disbursement_attribute_proto_msgTypes[8]
+	mi := &file_domain_treasury_disbursement_attribute_disbursement_attribute_proto_msgTypes[8]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -534,7 +534,7 @@ func (x *ReadDisbursementAttributeRequest) String() string {
 func (*ReadDisbursementAttributeRequest) ProtoMessage() {}
 
 func (x *ReadDisbursementAttributeRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_domain_payment_disbursement_attribute_disbursement_attribute_proto_msgTypes[8]
+	mi := &file_domain_treasury_disbursement_attribute_disbursement_attribute_proto_msgTypes[8]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -547,7 +547,7 @@ func (x *ReadDisbursementAttributeRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ReadDisbursementAttributeRequest.ProtoReflect.Descriptor instead.
 func (*ReadDisbursementAttributeRequest) Descriptor() ([]byte, []int) {
-	return file_domain_payment_disbursement_attribute_disbursement_attribute_proto_rawDescGZIP(), []int{8}
+	return file_domain_treasury_disbursement_attribute_disbursement_attribute_proto_rawDescGZIP(), []int{8}
 }
 
 func (x *ReadDisbursementAttributeRequest) GetData() *DisbursementAttribute {
@@ -568,7 +568,7 @@ type ReadDisbursementAttributeResponse struct {
 
 func (x *ReadDisbursementAttributeResponse) Reset() {
 	*x = ReadDisbursementAttributeResponse{}
-	mi := &file_domain_payment_disbursement_attribute_disbursement_attribute_proto_msgTypes[9]
+	mi := &file_domain_treasury_disbursement_attribute_disbursement_attribute_proto_msgTypes[9]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -580,7 +580,7 @@ func (x *ReadDisbursementAttributeResponse) String() string {
 func (*ReadDisbursementAttributeResponse) ProtoMessage() {}
 
 func (x *ReadDisbursementAttributeResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_domain_payment_disbursement_attribute_disbursement_attribute_proto_msgTypes[9]
+	mi := &file_domain_treasury_disbursement_attribute_disbursement_attribute_proto_msgTypes[9]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -593,7 +593,7 @@ func (x *ReadDisbursementAttributeResponse) ProtoReflect() protoreflect.Message 
 
 // Deprecated: Use ReadDisbursementAttributeResponse.ProtoReflect.Descriptor instead.
 func (*ReadDisbursementAttributeResponse) Descriptor() ([]byte, []int) {
-	return file_domain_payment_disbursement_attribute_disbursement_attribute_proto_rawDescGZIP(), []int{9}
+	return file_domain_treasury_disbursement_attribute_disbursement_attribute_proto_rawDescGZIP(), []int{9}
 }
 
 func (x *ReadDisbursementAttributeResponse) GetData() []*DisbursementAttribute {
@@ -626,7 +626,7 @@ type UpdateDisbursementAttributeRequest struct {
 
 func (x *UpdateDisbursementAttributeRequest) Reset() {
 	*x = UpdateDisbursementAttributeRequest{}
-	mi := &file_domain_payment_disbursement_attribute_disbursement_attribute_proto_msgTypes[10]
+	mi := &file_domain_treasury_disbursement_attribute_disbursement_attribute_proto_msgTypes[10]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -638,7 +638,7 @@ func (x *UpdateDisbursementAttributeRequest) String() string {
 func (*UpdateDisbursementAttributeRequest) ProtoMessage() {}
 
 func (x *UpdateDisbursementAttributeRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_domain_payment_disbursement_attribute_disbursement_attribute_proto_msgTypes[10]
+	mi := &file_domain_treasury_disbursement_attribute_disbursement_attribute_proto_msgTypes[10]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -651,7 +651,7 @@ func (x *UpdateDisbursementAttributeRequest) ProtoReflect() protoreflect.Message
 
 // Deprecated: Use UpdateDisbursementAttributeRequest.ProtoReflect.Descriptor instead.
 func (*UpdateDisbursementAttributeRequest) Descriptor() ([]byte, []int) {
-	return file_domain_payment_disbursement_attribute_disbursement_attribute_proto_rawDescGZIP(), []int{10}
+	return file_domain_treasury_disbursement_attribute_disbursement_attribute_proto_rawDescGZIP(), []int{10}
 }
 
 func (x *UpdateDisbursementAttributeRequest) GetData() *DisbursementAttribute {
@@ -672,7 +672,7 @@ type UpdateDisbursementAttributeResponse struct {
 
 func (x *UpdateDisbursementAttributeResponse) Reset() {
 	*x = UpdateDisbursementAttributeResponse{}
-	mi := &file_domain_payment_disbursement_attribute_disbursement_attribute_proto_msgTypes[11]
+	mi := &file_domain_treasury_disbursement_attribute_disbursement_attribute_proto_msgTypes[11]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -684,7 +684,7 @@ func (x *UpdateDisbursementAttributeResponse) String() string {
 func (*UpdateDisbursementAttributeResponse) ProtoMessage() {}
 
 func (x *UpdateDisbursementAttributeResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_domain_payment_disbursement_attribute_disbursement_attribute_proto_msgTypes[11]
+	mi := &file_domain_treasury_disbursement_attribute_disbursement_attribute_proto_msgTypes[11]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -697,7 +697,7 @@ func (x *UpdateDisbursementAttributeResponse) ProtoReflect() protoreflect.Messag
 
 // Deprecated: Use UpdateDisbursementAttributeResponse.ProtoReflect.Descriptor instead.
 func (*UpdateDisbursementAttributeResponse) Descriptor() ([]byte, []int) {
-	return file_domain_payment_disbursement_attribute_disbursement_attribute_proto_rawDescGZIP(), []int{11}
+	return file_domain_treasury_disbursement_attribute_disbursement_attribute_proto_rawDescGZIP(), []int{11}
 }
 
 func (x *UpdateDisbursementAttributeResponse) GetData() []*DisbursementAttribute {
@@ -730,7 +730,7 @@ type DeleteDisbursementAttributeRequest struct {
 
 func (x *DeleteDisbursementAttributeRequest) Reset() {
 	*x = DeleteDisbursementAttributeRequest{}
-	mi := &file_domain_payment_disbursement_attribute_disbursement_attribute_proto_msgTypes[12]
+	mi := &file_domain_treasury_disbursement_attribute_disbursement_attribute_proto_msgTypes[12]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -742,7 +742,7 @@ func (x *DeleteDisbursementAttributeRequest) String() string {
 func (*DeleteDisbursementAttributeRequest) ProtoMessage() {}
 
 func (x *DeleteDisbursementAttributeRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_domain_payment_disbursement_attribute_disbursement_attribute_proto_msgTypes[12]
+	mi := &file_domain_treasury_disbursement_attribute_disbursement_attribute_proto_msgTypes[12]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -755,7 +755,7 @@ func (x *DeleteDisbursementAttributeRequest) ProtoReflect() protoreflect.Message
 
 // Deprecated: Use DeleteDisbursementAttributeRequest.ProtoReflect.Descriptor instead.
 func (*DeleteDisbursementAttributeRequest) Descriptor() ([]byte, []int) {
-	return file_domain_payment_disbursement_attribute_disbursement_attribute_proto_rawDescGZIP(), []int{12}
+	return file_domain_treasury_disbursement_attribute_disbursement_attribute_proto_rawDescGZIP(), []int{12}
 }
 
 func (x *DeleteDisbursementAttributeRequest) GetData() *DisbursementAttribute {
@@ -775,7 +775,7 @@ type DeleteDisbursementAttributeResponse struct {
 
 func (x *DeleteDisbursementAttributeResponse) Reset() {
 	*x = DeleteDisbursementAttributeResponse{}
-	mi := &file_domain_payment_disbursement_attribute_disbursement_attribute_proto_msgTypes[13]
+	mi := &file_domain_treasury_disbursement_attribute_disbursement_attribute_proto_msgTypes[13]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -787,7 +787,7 @@ func (x *DeleteDisbursementAttributeResponse) String() string {
 func (*DeleteDisbursementAttributeResponse) ProtoMessage() {}
 
 func (x *DeleteDisbursementAttributeResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_domain_payment_disbursement_attribute_disbursement_attribute_proto_msgTypes[13]
+	mi := &file_domain_treasury_disbursement_attribute_disbursement_attribute_proto_msgTypes[13]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -800,7 +800,7 @@ func (x *DeleteDisbursementAttributeResponse) ProtoReflect() protoreflect.Messag
 
 // Deprecated: Use DeleteDisbursementAttributeResponse.ProtoReflect.Descriptor instead.
 func (*DeleteDisbursementAttributeResponse) Descriptor() ([]byte, []int) {
-	return file_domain_payment_disbursement_attribute_disbursement_attribute_proto_rawDescGZIP(), []int{13}
+	return file_domain_treasury_disbursement_attribute_disbursement_attribute_proto_rawDescGZIP(), []int{13}
 }
 
 func (x *DeleteDisbursementAttributeResponse) GetSuccess() bool {
@@ -829,7 +829,7 @@ type ListDisbursementAttributesRequest struct {
 
 func (x *ListDisbursementAttributesRequest) Reset() {
 	*x = ListDisbursementAttributesRequest{}
-	mi := &file_domain_payment_disbursement_attribute_disbursement_attribute_proto_msgTypes[14]
+	mi := &file_domain_treasury_disbursement_attribute_disbursement_attribute_proto_msgTypes[14]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -841,7 +841,7 @@ func (x *ListDisbursementAttributesRequest) String() string {
 func (*ListDisbursementAttributesRequest) ProtoMessage() {}
 
 func (x *ListDisbursementAttributesRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_domain_payment_disbursement_attribute_disbursement_attribute_proto_msgTypes[14]
+	mi := &file_domain_treasury_disbursement_attribute_disbursement_attribute_proto_msgTypes[14]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -854,7 +854,7 @@ func (x *ListDisbursementAttributesRequest) ProtoReflect() protoreflect.Message 
 
 // Deprecated: Use ListDisbursementAttributesRequest.ProtoReflect.Descriptor instead.
 func (*ListDisbursementAttributesRequest) Descriptor() ([]byte, []int) {
-	return file_domain_payment_disbursement_attribute_disbursement_attribute_proto_rawDescGZIP(), []int{14}
+	return file_domain_treasury_disbursement_attribute_disbursement_attribute_proto_rawDescGZIP(), []int{14}
 }
 
 func (x *ListDisbursementAttributesRequest) GetSearch() *common.SearchRequest {
@@ -896,7 +896,7 @@ type ListDisbursementAttributesResponse struct {
 
 func (x *ListDisbursementAttributesResponse) Reset() {
 	*x = ListDisbursementAttributesResponse{}
-	mi := &file_domain_payment_disbursement_attribute_disbursement_attribute_proto_msgTypes[15]
+	mi := &file_domain_treasury_disbursement_attribute_disbursement_attribute_proto_msgTypes[15]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -908,7 +908,7 @@ func (x *ListDisbursementAttributesResponse) String() string {
 func (*ListDisbursementAttributesResponse) ProtoMessage() {}
 
 func (x *ListDisbursementAttributesResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_domain_payment_disbursement_attribute_disbursement_attribute_proto_msgTypes[15]
+	mi := &file_domain_treasury_disbursement_attribute_disbursement_attribute_proto_msgTypes[15]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -921,7 +921,7 @@ func (x *ListDisbursementAttributesResponse) ProtoReflect() protoreflect.Message
 
 // Deprecated: Use ListDisbursementAttributesResponse.ProtoReflect.Descriptor instead.
 func (*ListDisbursementAttributesResponse) Descriptor() ([]byte, []int) {
-	return file_domain_payment_disbursement_attribute_disbursement_attribute_proto_rawDescGZIP(), []int{15}
+	return file_domain_treasury_disbursement_attribute_disbursement_attribute_proto_rawDescGZIP(), []int{15}
 }
 
 func (x *ListDisbursementAttributesResponse) GetData() []*DisbursementAttribute {
@@ -957,7 +957,7 @@ type GetDisbursementAttributeListPageDataRequest struct {
 
 func (x *GetDisbursementAttributeListPageDataRequest) Reset() {
 	*x = GetDisbursementAttributeListPageDataRequest{}
-	mi := &file_domain_payment_disbursement_attribute_disbursement_attribute_proto_msgTypes[16]
+	mi := &file_domain_treasury_disbursement_attribute_disbursement_attribute_proto_msgTypes[16]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -969,7 +969,7 @@ func (x *GetDisbursementAttributeListPageDataRequest) String() string {
 func (*GetDisbursementAttributeListPageDataRequest) ProtoMessage() {}
 
 func (x *GetDisbursementAttributeListPageDataRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_domain_payment_disbursement_attribute_disbursement_attribute_proto_msgTypes[16]
+	mi := &file_domain_treasury_disbursement_attribute_disbursement_attribute_proto_msgTypes[16]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -982,7 +982,7 @@ func (x *GetDisbursementAttributeListPageDataRequest) ProtoReflect() protoreflec
 
 // Deprecated: Use GetDisbursementAttributeListPageDataRequest.ProtoReflect.Descriptor instead.
 func (*GetDisbursementAttributeListPageDataRequest) Descriptor() ([]byte, []int) {
-	return file_domain_payment_disbursement_attribute_disbursement_attribute_proto_rawDescGZIP(), []int{16}
+	return file_domain_treasury_disbursement_attribute_disbursement_attribute_proto_rawDescGZIP(), []int{16}
 }
 
 func (x *GetDisbursementAttributeListPageDataRequest) GetPagination() *common.PaginationRequest {
@@ -1026,7 +1026,7 @@ type GetDisbursementAttributeListPageDataResponse struct {
 
 func (x *GetDisbursementAttributeListPageDataResponse) Reset() {
 	*x = GetDisbursementAttributeListPageDataResponse{}
-	mi := &file_domain_payment_disbursement_attribute_disbursement_attribute_proto_msgTypes[17]
+	mi := &file_domain_treasury_disbursement_attribute_disbursement_attribute_proto_msgTypes[17]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1038,7 +1038,7 @@ func (x *GetDisbursementAttributeListPageDataResponse) String() string {
 func (*GetDisbursementAttributeListPageDataResponse) ProtoMessage() {}
 
 func (x *GetDisbursementAttributeListPageDataResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_domain_payment_disbursement_attribute_disbursement_attribute_proto_msgTypes[17]
+	mi := &file_domain_treasury_disbursement_attribute_disbursement_attribute_proto_msgTypes[17]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1051,7 +1051,7 @@ func (x *GetDisbursementAttributeListPageDataResponse) ProtoReflect() protorefle
 
 // Deprecated: Use GetDisbursementAttributeListPageDataResponse.ProtoReflect.Descriptor instead.
 func (*GetDisbursementAttributeListPageDataResponse) Descriptor() ([]byte, []int) {
-	return file_domain_payment_disbursement_attribute_disbursement_attribute_proto_rawDescGZIP(), []int{17}
+	return file_domain_treasury_disbursement_attribute_disbursement_attribute_proto_rawDescGZIP(), []int{17}
 }
 
 func (x *GetDisbursementAttributeListPageDataResponse) GetDisbursementAttributeList() []*DisbursementAttribute {
@@ -1098,7 +1098,7 @@ type GetDisbursementAttributeItemPageDataRequest struct {
 
 func (x *GetDisbursementAttributeItemPageDataRequest) Reset() {
 	*x = GetDisbursementAttributeItemPageDataRequest{}
-	mi := &file_domain_payment_disbursement_attribute_disbursement_attribute_proto_msgTypes[18]
+	mi := &file_domain_treasury_disbursement_attribute_disbursement_attribute_proto_msgTypes[18]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1110,7 +1110,7 @@ func (x *GetDisbursementAttributeItemPageDataRequest) String() string {
 func (*GetDisbursementAttributeItemPageDataRequest) ProtoMessage() {}
 
 func (x *GetDisbursementAttributeItemPageDataRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_domain_payment_disbursement_attribute_disbursement_attribute_proto_msgTypes[18]
+	mi := &file_domain_treasury_disbursement_attribute_disbursement_attribute_proto_msgTypes[18]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1123,7 +1123,7 @@ func (x *GetDisbursementAttributeItemPageDataRequest) ProtoReflect() protoreflec
 
 // Deprecated: Use GetDisbursementAttributeItemPageDataRequest.ProtoReflect.Descriptor instead.
 func (*GetDisbursementAttributeItemPageDataRequest) Descriptor() ([]byte, []int) {
-	return file_domain_payment_disbursement_attribute_disbursement_attribute_proto_rawDescGZIP(), []int{18}
+	return file_domain_treasury_disbursement_attribute_disbursement_attribute_proto_rawDescGZIP(), []int{18}
 }
 
 func (x *GetDisbursementAttributeItemPageDataRequest) GetDisbursementAttributeId() string {
@@ -1144,7 +1144,7 @@ type GetDisbursementAttributeItemPageDataResponse struct {
 
 func (x *GetDisbursementAttributeItemPageDataResponse) Reset() {
 	*x = GetDisbursementAttributeItemPageDataResponse{}
-	mi := &file_domain_payment_disbursement_attribute_disbursement_attribute_proto_msgTypes[19]
+	mi := &file_domain_treasury_disbursement_attribute_disbursement_attribute_proto_msgTypes[19]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1156,7 +1156,7 @@ func (x *GetDisbursementAttributeItemPageDataResponse) String() string {
 func (*GetDisbursementAttributeItemPageDataResponse) ProtoMessage() {}
 
 func (x *GetDisbursementAttributeItemPageDataResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_domain_payment_disbursement_attribute_disbursement_attribute_proto_msgTypes[19]
+	mi := &file_domain_treasury_disbursement_attribute_disbursement_attribute_proto_msgTypes[19]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1169,7 +1169,7 @@ func (x *GetDisbursementAttributeItemPageDataResponse) ProtoReflect() protorefle
 
 // Deprecated: Use GetDisbursementAttributeItemPageDataResponse.ProtoReflect.Descriptor instead.
 func (*GetDisbursementAttributeItemPageDataResponse) Descriptor() ([]byte, []int) {
-	return file_domain_payment_disbursement_attribute_disbursement_attribute_proto_rawDescGZIP(), []int{19}
+	return file_domain_treasury_disbursement_attribute_disbursement_attribute_proto_rawDescGZIP(), []int{19}
 }
 
 func (x *GetDisbursementAttributeItemPageDataResponse) GetDisbursementAttribute() *DisbursementAttribute {
@@ -1193,11 +1193,11 @@ func (x *GetDisbursementAttributeItemPageDataResponse) GetError() *common.Error 
 	return nil
 }
 
-var File_domain_payment_disbursement_attribute_disbursement_attribute_proto protoreflect.FileDescriptor
+var File_domain_treasury_disbursement_attribute_disbursement_attribute_proto protoreflect.FileDescriptor
 
-const file_domain_payment_disbursement_attribute_disbursement_attribute_proto_rawDesc = "" +
+const file_domain_treasury_disbursement_attribute_disbursement_attribute_proto_rawDesc = "" +
 	"\n" +
-	"Bdomain/treasury/disbursement_attribute/disbursement_attribute.proto\x12\x11domain.payment.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1adomain/common/search.proto\x1a.domain/treasury/disbursement/disbursement.proto\x1a\x1ddomain/common/attribute.proto\"\xb3\x04\n" +
+	"Cdomain/treasury/disbursement_attribute/disbursement_attribute.proto\x12\x11domain.payment.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1adomain/common/search.proto\x1a/domain/treasury/disbursement/disbursement.proto\x1a\x1ddomain/common/attribute.proto\"\xb3\x04\n" +
 	"\x15DisbursementAttribute\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12'\n" +
 	"\x0fdisbursement_id\x18\x02 \x01(\tR\x0edisbursementId\x12!\n" +
@@ -1309,23 +1309,23 @@ const file_domain_payment_disbursement_attribute_disbursement_attribute_proto_ra
 	"\x1bDeleteDisbursementAttribute\x125.domain.payment.v1.DeleteDisbursementAttributeRequest\x1a6.domain.payment.v1.DeleteDisbursementAttributeResponse\x12\x89\x01\n" +
 	"\x1aListDisbursementAttributes\x124.domain.payment.v1.ListDisbursementAttributesRequest\x1a5.domain.payment.v1.ListDisbursementAttributesResponse\x12\xa7\x01\n" +
 	"$GetDisbursementAttributeListPageData\x12>.domain.payment.v1.GetDisbursementAttributeListPageDataRequest\x1a?.domain.payment.v1.GetDisbursementAttributeListPageDataResponse\x12\xa7\x01\n" +
-	"$GetDisbursementAttributeItemPageData\x12>.domain.payment.v1.GetDisbursementAttributeItemPageDataRequest\x1a?.domain.payment.v1.GetDisbursementAttributeItemPageDataResponseB\xf5\x01\n" +
-	"\x15com.domain.payment.v1B\x1aDisbursementAttributeProtoP\x01ZZgithub.com/erniealice/esqyma/pkg/schema/v1/domain/treasury/disbursement_attribute;paymentv1\xa2\x02\x03DPX\xaa\x02\x11Domain.Payment.V1\xca\x02\x11Domain\\Payment\\V1\xe2\x02\x1dDomain\\Payment\\V1\\GPBMetadata\xea\x02\x13Domain::Payment::V1b\x06proto3"
+	"$GetDisbursementAttributeItemPageData\x12>.domain.payment.v1.GetDisbursementAttributeItemPageDataRequest\x1a?.domain.payment.v1.GetDisbursementAttributeItemPageDataResponseB\xf6\x01\n" +
+	"\x15com.domain.payment.v1B\x1aDisbursementAttributeProtoP\x01Z[github.com/erniealice/esqyma/pkg/schema/v1/domain/treasury/disbursement_attribute;paymentv1\xa2\x02\x03DPX\xaa\x02\x11Domain.Payment.V1\xca\x02\x11Domain\\Payment\\V1\xe2\x02\x1dDomain\\Payment\\V1\\GPBMetadata\xea\x02\x13Domain::Payment::V1b\x06proto3"
 
 var (
-	file_domain_payment_disbursement_attribute_disbursement_attribute_proto_rawDescOnce sync.Once
-	file_domain_payment_disbursement_attribute_disbursement_attribute_proto_rawDescData []byte
+	file_domain_treasury_disbursement_attribute_disbursement_attribute_proto_rawDescOnce sync.Once
+	file_domain_treasury_disbursement_attribute_disbursement_attribute_proto_rawDescData []byte
 )
 
-func file_domain_payment_disbursement_attribute_disbursement_attribute_proto_rawDescGZIP() []byte {
-	file_domain_payment_disbursement_attribute_disbursement_attribute_proto_rawDescOnce.Do(func() {
-		file_domain_payment_disbursement_attribute_disbursement_attribute_proto_rawDescData = protoimpl.X.CompressGZIP(unsafe.Slice(unsafe.StringData(file_domain_payment_disbursement_attribute_disbursement_attribute_proto_rawDesc), len(file_domain_payment_disbursement_attribute_disbursement_attribute_proto_rawDesc)))
+func file_domain_treasury_disbursement_attribute_disbursement_attribute_proto_rawDescGZIP() []byte {
+	file_domain_treasury_disbursement_attribute_disbursement_attribute_proto_rawDescOnce.Do(func() {
+		file_domain_treasury_disbursement_attribute_disbursement_attribute_proto_rawDescData = protoimpl.X.CompressGZIP(unsafe.Slice(unsafe.StringData(file_domain_treasury_disbursement_attribute_disbursement_attribute_proto_rawDesc), len(file_domain_treasury_disbursement_attribute_disbursement_attribute_proto_rawDesc)))
 	})
-	return file_domain_payment_disbursement_attribute_disbursement_attribute_proto_rawDescData
+	return file_domain_treasury_disbursement_attribute_disbursement_attribute_proto_rawDescData
 }
 
-var file_domain_payment_disbursement_attribute_disbursement_attribute_proto_msgTypes = make([]protoimpl.MessageInfo, 21)
-var file_domain_payment_disbursement_attribute_disbursement_attribute_proto_goTypes = []any{
+var file_domain_treasury_disbursement_attribute_disbursement_attribute_proto_msgTypes = make([]protoimpl.MessageInfo, 21)
+var file_domain_treasury_disbursement_attribute_disbursement_attribute_proto_goTypes = []any{
 	(*DisbursementAttribute)(nil),                        // 0: domain.payment.v1.DisbursementAttribute
 	(*CreateDisbursementAttributeRequest)(nil),           // 1: domain.payment.v1.CreateDisbursementAttributeRequest
 	(*CreateDisbursementAttributeResponse)(nil),          // 2: domain.payment.v1.CreateDisbursementAttributeResponse
@@ -1357,7 +1357,7 @@ var file_domain_payment_disbursement_attribute_disbursement_attribute_proto_goTy
 	(*common.PaginationResponse)(nil), // 28: domain.common.v1.PaginationResponse
 	(*common.SearchResult)(nil),       // 29: domain.common.v1.SearchResult
 }
-var file_domain_payment_disbursement_attribute_disbursement_attribute_proto_depIdxs = []int32{
+var file_domain_treasury_disbursement_attribute_disbursement_attribute_proto_depIdxs = []int32{
 	21, // 0: domain.payment.v1.DisbursementAttribute.disbursement:type_name -> domain.payment.v1.Disbursement
 	22, // 1: domain.payment.v1.DisbursementAttribute.attribute:type_name -> domain.common.v1.Attribute
 	0,  // 2: domain.payment.v1.CreateDisbursementAttributeRequest.data:type_name -> domain.payment.v1.DisbursementAttribute
@@ -1415,37 +1415,37 @@ var file_domain_payment_disbursement_attribute_disbursement_attribute_proto_depI
 	0,  // [0:36] is the sub-list for field type_name
 }
 
-func init() { file_domain_payment_disbursement_attribute_disbursement_attribute_proto_init() }
-func file_domain_payment_disbursement_attribute_disbursement_attribute_proto_init() {
-	if File_domain_payment_disbursement_attribute_disbursement_attribute_proto != nil {
+func init() { file_domain_treasury_disbursement_attribute_disbursement_attribute_proto_init() }
+func file_domain_treasury_disbursement_attribute_disbursement_attribute_proto_init() {
+	if File_domain_treasury_disbursement_attribute_disbursement_attribute_proto != nil {
 		return
 	}
-	file_domain_payment_disbursement_attribute_disbursement_attribute_proto_msgTypes[0].OneofWrappers = []any{}
-	file_domain_payment_disbursement_attribute_disbursement_attribute_proto_msgTypes[2].OneofWrappers = []any{}
-	file_domain_payment_disbursement_attribute_disbursement_attribute_proto_msgTypes[4].OneofWrappers = []any{}
-	file_domain_payment_disbursement_attribute_disbursement_attribute_proto_msgTypes[7].OneofWrappers = []any{}
-	file_domain_payment_disbursement_attribute_disbursement_attribute_proto_msgTypes[9].OneofWrappers = []any{}
-	file_domain_payment_disbursement_attribute_disbursement_attribute_proto_msgTypes[11].OneofWrappers = []any{}
-	file_domain_payment_disbursement_attribute_disbursement_attribute_proto_msgTypes[13].OneofWrappers = []any{}
-	file_domain_payment_disbursement_attribute_disbursement_attribute_proto_msgTypes[14].OneofWrappers = []any{}
-	file_domain_payment_disbursement_attribute_disbursement_attribute_proto_msgTypes[15].OneofWrappers = []any{}
-	file_domain_payment_disbursement_attribute_disbursement_attribute_proto_msgTypes[17].OneofWrappers = []any{}
-	file_domain_payment_disbursement_attribute_disbursement_attribute_proto_msgTypes[19].OneofWrappers = []any{}
+	file_domain_treasury_disbursement_attribute_disbursement_attribute_proto_msgTypes[0].OneofWrappers = []any{}
+	file_domain_treasury_disbursement_attribute_disbursement_attribute_proto_msgTypes[2].OneofWrappers = []any{}
+	file_domain_treasury_disbursement_attribute_disbursement_attribute_proto_msgTypes[4].OneofWrappers = []any{}
+	file_domain_treasury_disbursement_attribute_disbursement_attribute_proto_msgTypes[7].OneofWrappers = []any{}
+	file_domain_treasury_disbursement_attribute_disbursement_attribute_proto_msgTypes[9].OneofWrappers = []any{}
+	file_domain_treasury_disbursement_attribute_disbursement_attribute_proto_msgTypes[11].OneofWrappers = []any{}
+	file_domain_treasury_disbursement_attribute_disbursement_attribute_proto_msgTypes[13].OneofWrappers = []any{}
+	file_domain_treasury_disbursement_attribute_disbursement_attribute_proto_msgTypes[14].OneofWrappers = []any{}
+	file_domain_treasury_disbursement_attribute_disbursement_attribute_proto_msgTypes[15].OneofWrappers = []any{}
+	file_domain_treasury_disbursement_attribute_disbursement_attribute_proto_msgTypes[17].OneofWrappers = []any{}
+	file_domain_treasury_disbursement_attribute_disbursement_attribute_proto_msgTypes[19].OneofWrappers = []any{}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
 		File: protoimpl.DescBuilder{
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
-			RawDescriptor: unsafe.Slice(unsafe.StringData(file_domain_payment_disbursement_attribute_disbursement_attribute_proto_rawDesc), len(file_domain_payment_disbursement_attribute_disbursement_attribute_proto_rawDesc)),
+			RawDescriptor: unsafe.Slice(unsafe.StringData(file_domain_treasury_disbursement_attribute_disbursement_attribute_proto_rawDesc), len(file_domain_treasury_disbursement_attribute_disbursement_attribute_proto_rawDesc)),
 			NumEnums:      0,
 			NumMessages:   21,
 			NumExtensions: 0,
 			NumServices:   1,
 		},
-		GoTypes:           file_domain_payment_disbursement_attribute_disbursement_attribute_proto_goTypes,
-		DependencyIndexes: file_domain_payment_disbursement_attribute_disbursement_attribute_proto_depIdxs,
-		MessageInfos:      file_domain_payment_disbursement_attribute_disbursement_attribute_proto_msgTypes,
+		GoTypes:           file_domain_treasury_disbursement_attribute_disbursement_attribute_proto_goTypes,
+		DependencyIndexes: file_domain_treasury_disbursement_attribute_disbursement_attribute_proto_depIdxs,
+		MessageInfos:      file_domain_treasury_disbursement_attribute_disbursement_attribute_proto_msgTypes,
 	}.Build()
-	File_domain_payment_disbursement_attribute_disbursement_attribute_proto = out.File
-	file_domain_payment_disbursement_attribute_disbursement_attribute_proto_goTypes = nil
-	file_domain_payment_disbursement_attribute_disbursement_attribute_proto_depIdxs = nil
+	File_domain_treasury_disbursement_attribute_disbursement_attribute_proto = out.File
+	file_domain_treasury_disbursement_attribute_disbursement_attribute_proto_goTypes = nil
+	file_domain_treasury_disbursement_attribute_disbursement_attribute_proto_depIdxs = nil
 }

@@ -43,7 +43,7 @@ type CollectionMethod struct {
 
 func (x *CollectionMethod) Reset() {
 	*x = CollectionMethod{}
-	mi := &file_domain_payment_collection_method_collection_method_proto_msgTypes[0]
+	mi := &file_domain_treasury_collection_method_collection_method_proto_msgTypes[0]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -55,7 +55,7 @@ func (x *CollectionMethod) String() string {
 func (*CollectionMethod) ProtoMessage() {}
 
 func (x *CollectionMethod) ProtoReflect() protoreflect.Message {
-	mi := &file_domain_payment_collection_method_collection_method_proto_msgTypes[0]
+	mi := &file_domain_treasury_collection_method_collection_method_proto_msgTypes[0]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -68,7 +68,7 @@ func (x *CollectionMethod) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use CollectionMethod.ProtoReflect.Descriptor instead.
 func (*CollectionMethod) Descriptor() ([]byte, []int) {
-	return file_domain_payment_collection_method_collection_method_proto_rawDescGZIP(), []int{0}
+	return file_domain_treasury_collection_method_collection_method_proto_rawDescGZIP(), []int{0}
 }
 
 func (x *CollectionMethod) GetId() string {
@@ -180,7 +180,7 @@ type CollectionCardDetails struct {
 
 func (x *CollectionCardDetails) Reset() {
 	*x = CollectionCardDetails{}
-	mi := &file_domain_payment_collection_method_collection_method_proto_msgTypes[1]
+	mi := &file_domain_treasury_collection_method_collection_method_proto_msgTypes[1]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -192,7 +192,7 @@ func (x *CollectionCardDetails) String() string {
 func (*CollectionCardDetails) ProtoMessage() {}
 
 func (x *CollectionCardDetails) ProtoReflect() protoreflect.Message {
-	mi := &file_domain_payment_collection_method_collection_method_proto_msgTypes[1]
+	mi := &file_domain_treasury_collection_method_collection_method_proto_msgTypes[1]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -205,7 +205,7 @@ func (x *CollectionCardDetails) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use CollectionCardDetails.ProtoReflect.Descriptor instead.
 func (*CollectionCardDetails) Descriptor() ([]byte, []int) {
-	return file_domain_payment_collection_method_collection_method_proto_rawDescGZIP(), []int{1}
+	return file_domain_treasury_collection_method_collection_method_proto_rawDescGZIP(), []int{1}
 }
 
 func (x *CollectionCardDetails) GetCardType() string {
@@ -246,7 +246,7 @@ type CollectionBankAccountDetails struct {
 
 func (x *CollectionBankAccountDetails) Reset() {
 	*x = CollectionBankAccountDetails{}
-	mi := &file_domain_payment_collection_method_collection_method_proto_msgTypes[2]
+	mi := &file_domain_treasury_collection_method_collection_method_proto_msgTypes[2]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -258,7 +258,7 @@ func (x *CollectionBankAccountDetails) String() string {
 func (*CollectionBankAccountDetails) ProtoMessage() {}
 
 func (x *CollectionBankAccountDetails) ProtoReflect() protoreflect.Message {
-	mi := &file_domain_payment_collection_method_collection_method_proto_msgTypes[2]
+	mi := &file_domain_treasury_collection_method_collection_method_proto_msgTypes[2]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -271,7 +271,7 @@ func (x *CollectionBankAccountDetails) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use CollectionBankAccountDetails.ProtoReflect.Descriptor instead.
 func (*CollectionBankAccountDetails) Descriptor() ([]byte, []int) {
-	return file_domain_payment_collection_method_collection_method_proto_rawDescGZIP(), []int{2}
+	return file_domain_treasury_collection_method_collection_method_proto_rawDescGZIP(), []int{2}
 }
 
 func (x *CollectionBankAccountDetails) GetBankName() string {
@@ -297,7 +297,7 @@ type CreateCollectionMethodRequest struct {
 
 func (x *CreateCollectionMethodRequest) Reset() {
 	*x = CreateCollectionMethodRequest{}
-	mi := &file_domain_payment_collection_method_collection_method_proto_msgTypes[3]
+	mi := &file_domain_treasury_collection_method_collection_method_proto_msgTypes[3]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -309,7 +309,7 @@ func (x *CreateCollectionMethodRequest) String() string {
 func (*CreateCollectionMethodRequest) ProtoMessage() {}
 
 func (x *CreateCollectionMethodRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_domain_payment_collection_method_collection_method_proto_msgTypes[3]
+	mi := &file_domain_treasury_collection_method_collection_method_proto_msgTypes[3]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -322,7 +322,7 @@ func (x *CreateCollectionMethodRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use CreateCollectionMethodRequest.ProtoReflect.Descriptor instead.
 func (*CreateCollectionMethodRequest) Descriptor() ([]byte, []int) {
-	return file_domain_payment_collection_method_collection_method_proto_rawDescGZIP(), []int{3}
+	return file_domain_treasury_collection_method_collection_method_proto_rawDescGZIP(), []int{3}
 }
 
 func (x *CreateCollectionMethodRequest) GetData() *CollectionMethod {
@@ -343,7 +343,7 @@ type CreateCollectionMethodResponse struct {
 
 func (x *CreateCollectionMethodResponse) Reset() {
 	*x = CreateCollectionMethodResponse{}
-	mi := &file_domain_payment_collection_method_collection_method_proto_msgTypes[4]
+	mi := &file_domain_treasury_collection_method_collection_method_proto_msgTypes[4]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -355,7 +355,7 @@ func (x *CreateCollectionMethodResponse) String() string {
 func (*CreateCollectionMethodResponse) ProtoMessage() {}
 
 func (x *CreateCollectionMethodResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_domain_payment_collection_method_collection_method_proto_msgTypes[4]
+	mi := &file_domain_treasury_collection_method_collection_method_proto_msgTypes[4]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -368,7 +368,7 @@ func (x *CreateCollectionMethodResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use CreateCollectionMethodResponse.ProtoReflect.Descriptor instead.
 func (*CreateCollectionMethodResponse) Descriptor() ([]byte, []int) {
-	return file_domain_payment_collection_method_collection_method_proto_rawDescGZIP(), []int{4}
+	return file_domain_treasury_collection_method_collection_method_proto_rawDescGZIP(), []int{4}
 }
 
 func (x *CreateCollectionMethodResponse) GetData() []*CollectionMethod {
@@ -401,7 +401,7 @@ type ReadCollectionMethodRequest struct {
 
 func (x *ReadCollectionMethodRequest) Reset() {
 	*x = ReadCollectionMethodRequest{}
-	mi := &file_domain_payment_collection_method_collection_method_proto_msgTypes[5]
+	mi := &file_domain_treasury_collection_method_collection_method_proto_msgTypes[5]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -413,7 +413,7 @@ func (x *ReadCollectionMethodRequest) String() string {
 func (*ReadCollectionMethodRequest) ProtoMessage() {}
 
 func (x *ReadCollectionMethodRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_domain_payment_collection_method_collection_method_proto_msgTypes[5]
+	mi := &file_domain_treasury_collection_method_collection_method_proto_msgTypes[5]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -426,7 +426,7 @@ func (x *ReadCollectionMethodRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ReadCollectionMethodRequest.ProtoReflect.Descriptor instead.
 func (*ReadCollectionMethodRequest) Descriptor() ([]byte, []int) {
-	return file_domain_payment_collection_method_collection_method_proto_rawDescGZIP(), []int{5}
+	return file_domain_treasury_collection_method_collection_method_proto_rawDescGZIP(), []int{5}
 }
 
 func (x *ReadCollectionMethodRequest) GetData() *CollectionMethod {
@@ -447,7 +447,7 @@ type ReadCollectionMethodResponse struct {
 
 func (x *ReadCollectionMethodResponse) Reset() {
 	*x = ReadCollectionMethodResponse{}
-	mi := &file_domain_payment_collection_method_collection_method_proto_msgTypes[6]
+	mi := &file_domain_treasury_collection_method_collection_method_proto_msgTypes[6]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -459,7 +459,7 @@ func (x *ReadCollectionMethodResponse) String() string {
 func (*ReadCollectionMethodResponse) ProtoMessage() {}
 
 func (x *ReadCollectionMethodResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_domain_payment_collection_method_collection_method_proto_msgTypes[6]
+	mi := &file_domain_treasury_collection_method_collection_method_proto_msgTypes[6]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -472,7 +472,7 @@ func (x *ReadCollectionMethodResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ReadCollectionMethodResponse.ProtoReflect.Descriptor instead.
 func (*ReadCollectionMethodResponse) Descriptor() ([]byte, []int) {
-	return file_domain_payment_collection_method_collection_method_proto_rawDescGZIP(), []int{6}
+	return file_domain_treasury_collection_method_collection_method_proto_rawDescGZIP(), []int{6}
 }
 
 func (x *ReadCollectionMethodResponse) GetData() []*CollectionMethod {
@@ -505,7 +505,7 @@ type UpdateCollectionMethodRequest struct {
 
 func (x *UpdateCollectionMethodRequest) Reset() {
 	*x = UpdateCollectionMethodRequest{}
-	mi := &file_domain_payment_collection_method_collection_method_proto_msgTypes[7]
+	mi := &file_domain_treasury_collection_method_collection_method_proto_msgTypes[7]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -517,7 +517,7 @@ func (x *UpdateCollectionMethodRequest) String() string {
 func (*UpdateCollectionMethodRequest) ProtoMessage() {}
 
 func (x *UpdateCollectionMethodRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_domain_payment_collection_method_collection_method_proto_msgTypes[7]
+	mi := &file_domain_treasury_collection_method_collection_method_proto_msgTypes[7]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -530,7 +530,7 @@ func (x *UpdateCollectionMethodRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use UpdateCollectionMethodRequest.ProtoReflect.Descriptor instead.
 func (*UpdateCollectionMethodRequest) Descriptor() ([]byte, []int) {
-	return file_domain_payment_collection_method_collection_method_proto_rawDescGZIP(), []int{7}
+	return file_domain_treasury_collection_method_collection_method_proto_rawDescGZIP(), []int{7}
 }
 
 func (x *UpdateCollectionMethodRequest) GetData() *CollectionMethod {
@@ -551,7 +551,7 @@ type UpdateCollectionMethodResponse struct {
 
 func (x *UpdateCollectionMethodResponse) Reset() {
 	*x = UpdateCollectionMethodResponse{}
-	mi := &file_domain_payment_collection_method_collection_method_proto_msgTypes[8]
+	mi := &file_domain_treasury_collection_method_collection_method_proto_msgTypes[8]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -563,7 +563,7 @@ func (x *UpdateCollectionMethodResponse) String() string {
 func (*UpdateCollectionMethodResponse) ProtoMessage() {}
 
 func (x *UpdateCollectionMethodResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_domain_payment_collection_method_collection_method_proto_msgTypes[8]
+	mi := &file_domain_treasury_collection_method_collection_method_proto_msgTypes[8]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -576,7 +576,7 @@ func (x *UpdateCollectionMethodResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use UpdateCollectionMethodResponse.ProtoReflect.Descriptor instead.
 func (*UpdateCollectionMethodResponse) Descriptor() ([]byte, []int) {
-	return file_domain_payment_collection_method_collection_method_proto_rawDescGZIP(), []int{8}
+	return file_domain_treasury_collection_method_collection_method_proto_rawDescGZIP(), []int{8}
 }
 
 func (x *UpdateCollectionMethodResponse) GetData() []*CollectionMethod {
@@ -609,7 +609,7 @@ type DeleteCollectionMethodRequest struct {
 
 func (x *DeleteCollectionMethodRequest) Reset() {
 	*x = DeleteCollectionMethodRequest{}
-	mi := &file_domain_payment_collection_method_collection_method_proto_msgTypes[9]
+	mi := &file_domain_treasury_collection_method_collection_method_proto_msgTypes[9]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -621,7 +621,7 @@ func (x *DeleteCollectionMethodRequest) String() string {
 func (*DeleteCollectionMethodRequest) ProtoMessage() {}
 
 func (x *DeleteCollectionMethodRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_domain_payment_collection_method_collection_method_proto_msgTypes[9]
+	mi := &file_domain_treasury_collection_method_collection_method_proto_msgTypes[9]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -634,7 +634,7 @@ func (x *DeleteCollectionMethodRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use DeleteCollectionMethodRequest.ProtoReflect.Descriptor instead.
 func (*DeleteCollectionMethodRequest) Descriptor() ([]byte, []int) {
-	return file_domain_payment_collection_method_collection_method_proto_rawDescGZIP(), []int{9}
+	return file_domain_treasury_collection_method_collection_method_proto_rawDescGZIP(), []int{9}
 }
 
 func (x *DeleteCollectionMethodRequest) GetData() *CollectionMethod {
@@ -654,7 +654,7 @@ type DeleteCollectionMethodResponse struct {
 
 func (x *DeleteCollectionMethodResponse) Reset() {
 	*x = DeleteCollectionMethodResponse{}
-	mi := &file_domain_payment_collection_method_collection_method_proto_msgTypes[10]
+	mi := &file_domain_treasury_collection_method_collection_method_proto_msgTypes[10]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -666,7 +666,7 @@ func (x *DeleteCollectionMethodResponse) String() string {
 func (*DeleteCollectionMethodResponse) ProtoMessage() {}
 
 func (x *DeleteCollectionMethodResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_domain_payment_collection_method_collection_method_proto_msgTypes[10]
+	mi := &file_domain_treasury_collection_method_collection_method_proto_msgTypes[10]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -679,7 +679,7 @@ func (x *DeleteCollectionMethodResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use DeleteCollectionMethodResponse.ProtoReflect.Descriptor instead.
 func (*DeleteCollectionMethodResponse) Descriptor() ([]byte, []int) {
-	return file_domain_payment_collection_method_collection_method_proto_rawDescGZIP(), []int{10}
+	return file_domain_treasury_collection_method_collection_method_proto_rawDescGZIP(), []int{10}
 }
 
 func (x *DeleteCollectionMethodResponse) GetSuccess() bool {
@@ -708,7 +708,7 @@ type ListCollectionMethodsRequest struct {
 
 func (x *ListCollectionMethodsRequest) Reset() {
 	*x = ListCollectionMethodsRequest{}
-	mi := &file_domain_payment_collection_method_collection_method_proto_msgTypes[11]
+	mi := &file_domain_treasury_collection_method_collection_method_proto_msgTypes[11]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -720,7 +720,7 @@ func (x *ListCollectionMethodsRequest) String() string {
 func (*ListCollectionMethodsRequest) ProtoMessage() {}
 
 func (x *ListCollectionMethodsRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_domain_payment_collection_method_collection_method_proto_msgTypes[11]
+	mi := &file_domain_treasury_collection_method_collection_method_proto_msgTypes[11]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -733,7 +733,7 @@ func (x *ListCollectionMethodsRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ListCollectionMethodsRequest.ProtoReflect.Descriptor instead.
 func (*ListCollectionMethodsRequest) Descriptor() ([]byte, []int) {
-	return file_domain_payment_collection_method_collection_method_proto_rawDescGZIP(), []int{11}
+	return file_domain_treasury_collection_method_collection_method_proto_rawDescGZIP(), []int{11}
 }
 
 func (x *ListCollectionMethodsRequest) GetSearch() *common.SearchRequest {
@@ -775,7 +775,7 @@ type ListCollectionMethodsResponse struct {
 
 func (x *ListCollectionMethodsResponse) Reset() {
 	*x = ListCollectionMethodsResponse{}
-	mi := &file_domain_payment_collection_method_collection_method_proto_msgTypes[12]
+	mi := &file_domain_treasury_collection_method_collection_method_proto_msgTypes[12]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -787,7 +787,7 @@ func (x *ListCollectionMethodsResponse) String() string {
 func (*ListCollectionMethodsResponse) ProtoMessage() {}
 
 func (x *ListCollectionMethodsResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_domain_payment_collection_method_collection_method_proto_msgTypes[12]
+	mi := &file_domain_treasury_collection_method_collection_method_proto_msgTypes[12]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -800,7 +800,7 @@ func (x *ListCollectionMethodsResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ListCollectionMethodsResponse.ProtoReflect.Descriptor instead.
 func (*ListCollectionMethodsResponse) Descriptor() ([]byte, []int) {
-	return file_domain_payment_collection_method_collection_method_proto_rawDescGZIP(), []int{12}
+	return file_domain_treasury_collection_method_collection_method_proto_rawDescGZIP(), []int{12}
 }
 
 func (x *ListCollectionMethodsResponse) GetData() []*CollectionMethod {
@@ -836,7 +836,7 @@ type GetCollectionMethodListPageDataRequest struct {
 
 func (x *GetCollectionMethodListPageDataRequest) Reset() {
 	*x = GetCollectionMethodListPageDataRequest{}
-	mi := &file_domain_payment_collection_method_collection_method_proto_msgTypes[13]
+	mi := &file_domain_treasury_collection_method_collection_method_proto_msgTypes[13]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -848,7 +848,7 @@ func (x *GetCollectionMethodListPageDataRequest) String() string {
 func (*GetCollectionMethodListPageDataRequest) ProtoMessage() {}
 
 func (x *GetCollectionMethodListPageDataRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_domain_payment_collection_method_collection_method_proto_msgTypes[13]
+	mi := &file_domain_treasury_collection_method_collection_method_proto_msgTypes[13]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -861,7 +861,7 @@ func (x *GetCollectionMethodListPageDataRequest) ProtoReflect() protoreflect.Mes
 
 // Deprecated: Use GetCollectionMethodListPageDataRequest.ProtoReflect.Descriptor instead.
 func (*GetCollectionMethodListPageDataRequest) Descriptor() ([]byte, []int) {
-	return file_domain_payment_collection_method_collection_method_proto_rawDescGZIP(), []int{13}
+	return file_domain_treasury_collection_method_collection_method_proto_rawDescGZIP(), []int{13}
 }
 
 func (x *GetCollectionMethodListPageDataRequest) GetPagination() *common.PaginationRequest {
@@ -905,7 +905,7 @@ type GetCollectionMethodListPageDataResponse struct {
 
 func (x *GetCollectionMethodListPageDataResponse) Reset() {
 	*x = GetCollectionMethodListPageDataResponse{}
-	mi := &file_domain_payment_collection_method_collection_method_proto_msgTypes[14]
+	mi := &file_domain_treasury_collection_method_collection_method_proto_msgTypes[14]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -917,7 +917,7 @@ func (x *GetCollectionMethodListPageDataResponse) String() string {
 func (*GetCollectionMethodListPageDataResponse) ProtoMessage() {}
 
 func (x *GetCollectionMethodListPageDataResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_domain_payment_collection_method_collection_method_proto_msgTypes[14]
+	mi := &file_domain_treasury_collection_method_collection_method_proto_msgTypes[14]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -930,7 +930,7 @@ func (x *GetCollectionMethodListPageDataResponse) ProtoReflect() protoreflect.Me
 
 // Deprecated: Use GetCollectionMethodListPageDataResponse.ProtoReflect.Descriptor instead.
 func (*GetCollectionMethodListPageDataResponse) Descriptor() ([]byte, []int) {
-	return file_domain_payment_collection_method_collection_method_proto_rawDescGZIP(), []int{14}
+	return file_domain_treasury_collection_method_collection_method_proto_rawDescGZIP(), []int{14}
 }
 
 func (x *GetCollectionMethodListPageDataResponse) GetCollectionMethodList() []*CollectionMethod {
@@ -977,7 +977,7 @@ type GetCollectionMethodItemPageDataRequest struct {
 
 func (x *GetCollectionMethodItemPageDataRequest) Reset() {
 	*x = GetCollectionMethodItemPageDataRequest{}
-	mi := &file_domain_payment_collection_method_collection_method_proto_msgTypes[15]
+	mi := &file_domain_treasury_collection_method_collection_method_proto_msgTypes[15]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -989,7 +989,7 @@ func (x *GetCollectionMethodItemPageDataRequest) String() string {
 func (*GetCollectionMethodItemPageDataRequest) ProtoMessage() {}
 
 func (x *GetCollectionMethodItemPageDataRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_domain_payment_collection_method_collection_method_proto_msgTypes[15]
+	mi := &file_domain_treasury_collection_method_collection_method_proto_msgTypes[15]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1002,7 +1002,7 @@ func (x *GetCollectionMethodItemPageDataRequest) ProtoReflect() protoreflect.Mes
 
 // Deprecated: Use GetCollectionMethodItemPageDataRequest.ProtoReflect.Descriptor instead.
 func (*GetCollectionMethodItemPageDataRequest) Descriptor() ([]byte, []int) {
-	return file_domain_payment_collection_method_collection_method_proto_rawDescGZIP(), []int{15}
+	return file_domain_treasury_collection_method_collection_method_proto_rawDescGZIP(), []int{15}
 }
 
 func (x *GetCollectionMethodItemPageDataRequest) GetCollectionMethodId() string {
@@ -1023,7 +1023,7 @@ type GetCollectionMethodItemPageDataResponse struct {
 
 func (x *GetCollectionMethodItemPageDataResponse) Reset() {
 	*x = GetCollectionMethodItemPageDataResponse{}
-	mi := &file_domain_payment_collection_method_collection_method_proto_msgTypes[16]
+	mi := &file_domain_treasury_collection_method_collection_method_proto_msgTypes[16]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1035,7 +1035,7 @@ func (x *GetCollectionMethodItemPageDataResponse) String() string {
 func (*GetCollectionMethodItemPageDataResponse) ProtoMessage() {}
 
 func (x *GetCollectionMethodItemPageDataResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_domain_payment_collection_method_collection_method_proto_msgTypes[16]
+	mi := &file_domain_treasury_collection_method_collection_method_proto_msgTypes[16]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1048,7 +1048,7 @@ func (x *GetCollectionMethodItemPageDataResponse) ProtoReflect() protoreflect.Me
 
 // Deprecated: Use GetCollectionMethodItemPageDataResponse.ProtoReflect.Descriptor instead.
 func (*GetCollectionMethodItemPageDataResponse) Descriptor() ([]byte, []int) {
-	return file_domain_payment_collection_method_collection_method_proto_rawDescGZIP(), []int{16}
+	return file_domain_treasury_collection_method_collection_method_proto_rawDescGZIP(), []int{16}
 }
 
 func (x *GetCollectionMethodItemPageDataResponse) GetCollectionMethod() *CollectionMethod {
@@ -1072,11 +1072,11 @@ func (x *GetCollectionMethodItemPageDataResponse) GetError() *common.Error {
 	return nil
 }
 
-var File_domain_payment_collection_method_collection_method_proto protoreflect.FileDescriptor
+var File_domain_treasury_collection_method_collection_method_proto protoreflect.FileDescriptor
 
-const file_domain_payment_collection_method_collection_method_proto_rawDesc = "" +
+const file_domain_treasury_collection_method_collection_method_proto_rawDesc = "" +
 	"\n" +
-	"8domain/treasury/collection_method/collection_method.proto\x12\x11domain.payment.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1adomain/common/search.proto\"\xc4\x04\n" +
+	"9domain/treasury/collection_method/collection_method.proto\x12\x11domain.payment.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1adomain/common/search.proto\"\xc4\x04\n" +
 	"\x10CollectionMethod\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12&\n" +
 	"\fdate_created\x18\x02 \x01(\x03H\x01R\vdateCreated\x88\x01\x01\x123\n" +
@@ -1185,23 +1185,23 @@ const file_domain_payment_collection_method_collection_method_proto_rawDesc = ""
 	"\x16DeleteCollectionMethod\x120.domain.payment.v1.DeleteCollectionMethodRequest\x1a1.domain.payment.v1.DeleteCollectionMethodResponse\x12z\n" +
 	"\x15ListCollectionMethods\x12/.domain.payment.v1.ListCollectionMethodsRequest\x1a0.domain.payment.v1.ListCollectionMethodsResponse\x12\x98\x01\n" +
 	"\x1fGetCollectionMethodListPageData\x129.domain.payment.v1.GetCollectionMethodListPageDataRequest\x1a:.domain.payment.v1.GetCollectionMethodListPageDataResponse\x12\x98\x01\n" +
-	"\x1fGetCollectionMethodItemPageData\x129.domain.payment.v1.GetCollectionMethodItemPageDataRequest\x1a:.domain.payment.v1.GetCollectionMethodItemPageDataResponseB\xeb\x01\n" +
-	"\x15com.domain.payment.v1B\x15CollectionMethodProtoP\x01ZUgithub.com/erniealice/esqyma/pkg/schema/v1/domain/treasury/collection_method;paymentv1\xa2\x02\x03DPX\xaa\x02\x11Domain.Payment.V1\xca\x02\x11Domain\\Payment\\V1\xe2\x02\x1dDomain\\Payment\\V1\\GPBMetadata\xea\x02\x13Domain::Payment::V1b\x06proto3"
+	"\x1fGetCollectionMethodItemPageData\x129.domain.payment.v1.GetCollectionMethodItemPageDataRequest\x1a:.domain.payment.v1.GetCollectionMethodItemPageDataResponseB\xec\x01\n" +
+	"\x15com.domain.payment.v1B\x15CollectionMethodProtoP\x01ZVgithub.com/erniealice/esqyma/pkg/schema/v1/domain/treasury/collection_method;paymentv1\xa2\x02\x03DPX\xaa\x02\x11Domain.Payment.V1\xca\x02\x11Domain\\Payment\\V1\xe2\x02\x1dDomain\\Payment\\V1\\GPBMetadata\xea\x02\x13Domain::Payment::V1b\x06proto3"
 
 var (
-	file_domain_payment_collection_method_collection_method_proto_rawDescOnce sync.Once
-	file_domain_payment_collection_method_collection_method_proto_rawDescData []byte
+	file_domain_treasury_collection_method_collection_method_proto_rawDescOnce sync.Once
+	file_domain_treasury_collection_method_collection_method_proto_rawDescData []byte
 )
 
-func file_domain_payment_collection_method_collection_method_proto_rawDescGZIP() []byte {
-	file_domain_payment_collection_method_collection_method_proto_rawDescOnce.Do(func() {
-		file_domain_payment_collection_method_collection_method_proto_rawDescData = protoimpl.X.CompressGZIP(unsafe.Slice(unsafe.StringData(file_domain_payment_collection_method_collection_method_proto_rawDesc), len(file_domain_payment_collection_method_collection_method_proto_rawDesc)))
+func file_domain_treasury_collection_method_collection_method_proto_rawDescGZIP() []byte {
+	file_domain_treasury_collection_method_collection_method_proto_rawDescOnce.Do(func() {
+		file_domain_treasury_collection_method_collection_method_proto_rawDescData = protoimpl.X.CompressGZIP(unsafe.Slice(unsafe.StringData(file_domain_treasury_collection_method_collection_method_proto_rawDesc), len(file_domain_treasury_collection_method_collection_method_proto_rawDesc)))
 	})
-	return file_domain_payment_collection_method_collection_method_proto_rawDescData
+	return file_domain_treasury_collection_method_collection_method_proto_rawDescData
 }
 
-var file_domain_payment_collection_method_collection_method_proto_msgTypes = make([]protoimpl.MessageInfo, 17)
-var file_domain_payment_collection_method_collection_method_proto_goTypes = []any{
+var file_domain_treasury_collection_method_collection_method_proto_msgTypes = make([]protoimpl.MessageInfo, 17)
+var file_domain_treasury_collection_method_collection_method_proto_goTypes = []any{
 	(*CollectionMethod)(nil),                        // 0: domain.payment.v1.CollectionMethod
 	(*CollectionCardDetails)(nil),                   // 1: domain.payment.v1.CollectionCardDetails
 	(*CollectionBankAccountDetails)(nil),            // 2: domain.payment.v1.CollectionBankAccountDetails
@@ -1227,7 +1227,7 @@ var file_domain_payment_collection_method_collection_method_proto_goTypes = []an
 	(*common.PaginationResponse)(nil),               // 22: domain.common.v1.PaginationResponse
 	(*common.SearchResult)(nil),                     // 23: domain.common.v1.SearchResult
 }
-var file_domain_payment_collection_method_collection_method_proto_depIdxs = []int32{
+var file_domain_treasury_collection_method_collection_method_proto_depIdxs = []int32{
 	1,  // 0: domain.payment.v1.CollectionMethod.card:type_name -> domain.payment.v1.CollectionCardDetails
 	2,  // 1: domain.payment.v1.CollectionMethod.bank_account:type_name -> domain.payment.v1.CollectionBankAccountDetails
 	0,  // 2: domain.payment.v1.CreateCollectionMethodRequest.data:type_name -> domain.payment.v1.CollectionMethod
@@ -1278,39 +1278,39 @@ var file_domain_payment_collection_method_collection_method_proto_depIdxs = []in
 	0,  // [0:29] is the sub-list for field type_name
 }
 
-func init() { file_domain_payment_collection_method_collection_method_proto_init() }
-func file_domain_payment_collection_method_collection_method_proto_init() {
-	if File_domain_payment_collection_method_collection_method_proto != nil {
+func init() { file_domain_treasury_collection_method_collection_method_proto_init() }
+func file_domain_treasury_collection_method_collection_method_proto_init() {
+	if File_domain_treasury_collection_method_collection_method_proto != nil {
 		return
 	}
-	file_domain_payment_collection_method_collection_method_proto_msgTypes[0].OneofWrappers = []any{
+	file_domain_treasury_collection_method_collection_method_proto_msgTypes[0].OneofWrappers = []any{
 		(*CollectionMethod_Card)(nil),
 		(*CollectionMethod_BankAccount)(nil),
 	}
-	file_domain_payment_collection_method_collection_method_proto_msgTypes[4].OneofWrappers = []any{}
-	file_domain_payment_collection_method_collection_method_proto_msgTypes[6].OneofWrappers = []any{}
-	file_domain_payment_collection_method_collection_method_proto_msgTypes[8].OneofWrappers = []any{}
-	file_domain_payment_collection_method_collection_method_proto_msgTypes[10].OneofWrappers = []any{}
-	file_domain_payment_collection_method_collection_method_proto_msgTypes[11].OneofWrappers = []any{}
-	file_domain_payment_collection_method_collection_method_proto_msgTypes[12].OneofWrappers = []any{}
-	file_domain_payment_collection_method_collection_method_proto_msgTypes[13].OneofWrappers = []any{}
-	file_domain_payment_collection_method_collection_method_proto_msgTypes[14].OneofWrappers = []any{}
-	file_domain_payment_collection_method_collection_method_proto_msgTypes[16].OneofWrappers = []any{}
+	file_domain_treasury_collection_method_collection_method_proto_msgTypes[4].OneofWrappers = []any{}
+	file_domain_treasury_collection_method_collection_method_proto_msgTypes[6].OneofWrappers = []any{}
+	file_domain_treasury_collection_method_collection_method_proto_msgTypes[8].OneofWrappers = []any{}
+	file_domain_treasury_collection_method_collection_method_proto_msgTypes[10].OneofWrappers = []any{}
+	file_domain_treasury_collection_method_collection_method_proto_msgTypes[11].OneofWrappers = []any{}
+	file_domain_treasury_collection_method_collection_method_proto_msgTypes[12].OneofWrappers = []any{}
+	file_domain_treasury_collection_method_collection_method_proto_msgTypes[13].OneofWrappers = []any{}
+	file_domain_treasury_collection_method_collection_method_proto_msgTypes[14].OneofWrappers = []any{}
+	file_domain_treasury_collection_method_collection_method_proto_msgTypes[16].OneofWrappers = []any{}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
 		File: protoimpl.DescBuilder{
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
-			RawDescriptor: unsafe.Slice(unsafe.StringData(file_domain_payment_collection_method_collection_method_proto_rawDesc), len(file_domain_payment_collection_method_collection_method_proto_rawDesc)),
+			RawDescriptor: unsafe.Slice(unsafe.StringData(file_domain_treasury_collection_method_collection_method_proto_rawDesc), len(file_domain_treasury_collection_method_collection_method_proto_rawDesc)),
 			NumEnums:      0,
 			NumMessages:   17,
 			NumExtensions: 0,
 			NumServices:   1,
 		},
-		GoTypes:           file_domain_payment_collection_method_collection_method_proto_goTypes,
-		DependencyIndexes: file_domain_payment_collection_method_collection_method_proto_depIdxs,
-		MessageInfos:      file_domain_payment_collection_method_collection_method_proto_msgTypes,
+		GoTypes:           file_domain_treasury_collection_method_collection_method_proto_goTypes,
+		DependencyIndexes: file_domain_treasury_collection_method_collection_method_proto_depIdxs,
+		MessageInfos:      file_domain_treasury_collection_method_collection_method_proto_msgTypes,
 	}.Build()
-	File_domain_payment_collection_method_collection_method_proto = out.File
-	file_domain_payment_collection_method_collection_method_proto_goTypes = nil
-	file_domain_payment_collection_method_collection_method_proto_depIdxs = nil
+	File_domain_treasury_collection_method_collection_method_proto = out.File
+	file_domain_treasury_collection_method_collection_method_proto_goTypes = nil
+	file_domain_treasury_collection_method_collection_method_proto_depIdxs = nil
 }

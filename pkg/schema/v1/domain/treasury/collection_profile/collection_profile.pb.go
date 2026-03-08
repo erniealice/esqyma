@@ -42,7 +42,7 @@ type CollectionProfile struct {
 
 func (x *CollectionProfile) Reset() {
 	*x = CollectionProfile{}
-	mi := &file_domain_payment_collection_profile_collection_profile_proto_msgTypes[0]
+	mi := &file_domain_treasury_collection_profile_collection_profile_proto_msgTypes[0]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -54,7 +54,7 @@ func (x *CollectionProfile) String() string {
 func (*CollectionProfile) ProtoMessage() {}
 
 func (x *CollectionProfile) ProtoReflect() protoreflect.Message {
-	mi := &file_domain_payment_collection_profile_collection_profile_proto_msgTypes[0]
+	mi := &file_domain_treasury_collection_profile_collection_profile_proto_msgTypes[0]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -67,7 +67,7 @@ func (x *CollectionProfile) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use CollectionProfile.ProtoReflect.Descriptor instead.
 func (*CollectionProfile) Descriptor() ([]byte, []int) {
-	return file_domain_payment_collection_profile_collection_profile_proto_rawDescGZIP(), []int{0}
+	return file_domain_treasury_collection_profile_collection_profile_proto_rawDescGZIP(), []int{0}
 }
 
 func (x *CollectionProfile) GetId() string {
@@ -149,7 +149,7 @@ type CreateCollectionProfileRequest struct {
 
 func (x *CreateCollectionProfileRequest) Reset() {
 	*x = CreateCollectionProfileRequest{}
-	mi := &file_domain_payment_collection_profile_collection_profile_proto_msgTypes[1]
+	mi := &file_domain_treasury_collection_profile_collection_profile_proto_msgTypes[1]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -161,7 +161,7 @@ func (x *CreateCollectionProfileRequest) String() string {
 func (*CreateCollectionProfileRequest) ProtoMessage() {}
 
 func (x *CreateCollectionProfileRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_domain_payment_collection_profile_collection_profile_proto_msgTypes[1]
+	mi := &file_domain_treasury_collection_profile_collection_profile_proto_msgTypes[1]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -174,7 +174,7 @@ func (x *CreateCollectionProfileRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use CreateCollectionProfileRequest.ProtoReflect.Descriptor instead.
 func (*CreateCollectionProfileRequest) Descriptor() ([]byte, []int) {
-	return file_domain_payment_collection_profile_collection_profile_proto_rawDescGZIP(), []int{1}
+	return file_domain_treasury_collection_profile_collection_profile_proto_rawDescGZIP(), []int{1}
 }
 
 func (x *CreateCollectionProfileRequest) GetData() *CollectionProfile {
@@ -195,7 +195,7 @@ type CreateCollectionProfileResponse struct {
 
 func (x *CreateCollectionProfileResponse) Reset() {
 	*x = CreateCollectionProfileResponse{}
-	mi := &file_domain_payment_collection_profile_collection_profile_proto_msgTypes[2]
+	mi := &file_domain_treasury_collection_profile_collection_profile_proto_msgTypes[2]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -207,7 +207,7 @@ func (x *CreateCollectionProfileResponse) String() string {
 func (*CreateCollectionProfileResponse) ProtoMessage() {}
 
 func (x *CreateCollectionProfileResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_domain_payment_collection_profile_collection_profile_proto_msgTypes[2]
+	mi := &file_domain_treasury_collection_profile_collection_profile_proto_msgTypes[2]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -220,7 +220,7 @@ func (x *CreateCollectionProfileResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use CreateCollectionProfileResponse.ProtoReflect.Descriptor instead.
 func (*CreateCollectionProfileResponse) Descriptor() ([]byte, []int) {
-	return file_domain_payment_collection_profile_collection_profile_proto_rawDescGZIP(), []int{2}
+	return file_domain_treasury_collection_profile_collection_profile_proto_rawDescGZIP(), []int{2}
 }
 
 func (x *CreateCollectionProfileResponse) GetData() []*CollectionProfile {
@@ -253,7 +253,7 @@ type ReadCollectionProfileRequest struct {
 
 func (x *ReadCollectionProfileRequest) Reset() {
 	*x = ReadCollectionProfileRequest{}
-	mi := &file_domain_payment_collection_profile_collection_profile_proto_msgTypes[3]
+	mi := &file_domain_treasury_collection_profile_collection_profile_proto_msgTypes[3]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -265,7 +265,7 @@ func (x *ReadCollectionProfileRequest) String() string {
 func (*ReadCollectionProfileRequest) ProtoMessage() {}
 
 func (x *ReadCollectionProfileRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_domain_payment_collection_profile_collection_profile_proto_msgTypes[3]
+	mi := &file_domain_treasury_collection_profile_collection_profile_proto_msgTypes[3]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -278,7 +278,7 @@ func (x *ReadCollectionProfileRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ReadCollectionProfileRequest.ProtoReflect.Descriptor instead.
 func (*ReadCollectionProfileRequest) Descriptor() ([]byte, []int) {
-	return file_domain_payment_collection_profile_collection_profile_proto_rawDescGZIP(), []int{3}
+	return file_domain_treasury_collection_profile_collection_profile_proto_rawDescGZIP(), []int{3}
 }
 
 func (x *ReadCollectionProfileRequest) GetData() *CollectionProfile {
@@ -299,7 +299,7 @@ type ReadCollectionProfileResponse struct {
 
 func (x *ReadCollectionProfileResponse) Reset() {
 	*x = ReadCollectionProfileResponse{}
-	mi := &file_domain_payment_collection_profile_collection_profile_proto_msgTypes[4]
+	mi := &file_domain_treasury_collection_profile_collection_profile_proto_msgTypes[4]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -311,7 +311,7 @@ func (x *ReadCollectionProfileResponse) String() string {
 func (*ReadCollectionProfileResponse) ProtoMessage() {}
 
 func (x *ReadCollectionProfileResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_domain_payment_collection_profile_collection_profile_proto_msgTypes[4]
+	mi := &file_domain_treasury_collection_profile_collection_profile_proto_msgTypes[4]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -324,7 +324,7 @@ func (x *ReadCollectionProfileResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ReadCollectionProfileResponse.ProtoReflect.Descriptor instead.
 func (*ReadCollectionProfileResponse) Descriptor() ([]byte, []int) {
-	return file_domain_payment_collection_profile_collection_profile_proto_rawDescGZIP(), []int{4}
+	return file_domain_treasury_collection_profile_collection_profile_proto_rawDescGZIP(), []int{4}
 }
 
 func (x *ReadCollectionProfileResponse) GetData() []*CollectionProfile {
@@ -357,7 +357,7 @@ type UpdateCollectionProfileRequest struct {
 
 func (x *UpdateCollectionProfileRequest) Reset() {
 	*x = UpdateCollectionProfileRequest{}
-	mi := &file_domain_payment_collection_profile_collection_profile_proto_msgTypes[5]
+	mi := &file_domain_treasury_collection_profile_collection_profile_proto_msgTypes[5]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -369,7 +369,7 @@ func (x *UpdateCollectionProfileRequest) String() string {
 func (*UpdateCollectionProfileRequest) ProtoMessage() {}
 
 func (x *UpdateCollectionProfileRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_domain_payment_collection_profile_collection_profile_proto_msgTypes[5]
+	mi := &file_domain_treasury_collection_profile_collection_profile_proto_msgTypes[5]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -382,7 +382,7 @@ func (x *UpdateCollectionProfileRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use UpdateCollectionProfileRequest.ProtoReflect.Descriptor instead.
 func (*UpdateCollectionProfileRequest) Descriptor() ([]byte, []int) {
-	return file_domain_payment_collection_profile_collection_profile_proto_rawDescGZIP(), []int{5}
+	return file_domain_treasury_collection_profile_collection_profile_proto_rawDescGZIP(), []int{5}
 }
 
 func (x *UpdateCollectionProfileRequest) GetData() *CollectionProfile {
@@ -403,7 +403,7 @@ type UpdateCollectionProfileResponse struct {
 
 func (x *UpdateCollectionProfileResponse) Reset() {
 	*x = UpdateCollectionProfileResponse{}
-	mi := &file_domain_payment_collection_profile_collection_profile_proto_msgTypes[6]
+	mi := &file_domain_treasury_collection_profile_collection_profile_proto_msgTypes[6]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -415,7 +415,7 @@ func (x *UpdateCollectionProfileResponse) String() string {
 func (*UpdateCollectionProfileResponse) ProtoMessage() {}
 
 func (x *UpdateCollectionProfileResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_domain_payment_collection_profile_collection_profile_proto_msgTypes[6]
+	mi := &file_domain_treasury_collection_profile_collection_profile_proto_msgTypes[6]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -428,7 +428,7 @@ func (x *UpdateCollectionProfileResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use UpdateCollectionProfileResponse.ProtoReflect.Descriptor instead.
 func (*UpdateCollectionProfileResponse) Descriptor() ([]byte, []int) {
-	return file_domain_payment_collection_profile_collection_profile_proto_rawDescGZIP(), []int{6}
+	return file_domain_treasury_collection_profile_collection_profile_proto_rawDescGZIP(), []int{6}
 }
 
 func (x *UpdateCollectionProfileResponse) GetData() []*CollectionProfile {
@@ -461,7 +461,7 @@ type DeleteCollectionProfileRequest struct {
 
 func (x *DeleteCollectionProfileRequest) Reset() {
 	*x = DeleteCollectionProfileRequest{}
-	mi := &file_domain_payment_collection_profile_collection_profile_proto_msgTypes[7]
+	mi := &file_domain_treasury_collection_profile_collection_profile_proto_msgTypes[7]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -473,7 +473,7 @@ func (x *DeleteCollectionProfileRequest) String() string {
 func (*DeleteCollectionProfileRequest) ProtoMessage() {}
 
 func (x *DeleteCollectionProfileRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_domain_payment_collection_profile_collection_profile_proto_msgTypes[7]
+	mi := &file_domain_treasury_collection_profile_collection_profile_proto_msgTypes[7]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -486,7 +486,7 @@ func (x *DeleteCollectionProfileRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use DeleteCollectionProfileRequest.ProtoReflect.Descriptor instead.
 func (*DeleteCollectionProfileRequest) Descriptor() ([]byte, []int) {
-	return file_domain_payment_collection_profile_collection_profile_proto_rawDescGZIP(), []int{7}
+	return file_domain_treasury_collection_profile_collection_profile_proto_rawDescGZIP(), []int{7}
 }
 
 func (x *DeleteCollectionProfileRequest) GetData() *CollectionProfile {
@@ -506,7 +506,7 @@ type DeleteCollectionProfileResponse struct {
 
 func (x *DeleteCollectionProfileResponse) Reset() {
 	*x = DeleteCollectionProfileResponse{}
-	mi := &file_domain_payment_collection_profile_collection_profile_proto_msgTypes[8]
+	mi := &file_domain_treasury_collection_profile_collection_profile_proto_msgTypes[8]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -518,7 +518,7 @@ func (x *DeleteCollectionProfileResponse) String() string {
 func (*DeleteCollectionProfileResponse) ProtoMessage() {}
 
 func (x *DeleteCollectionProfileResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_domain_payment_collection_profile_collection_profile_proto_msgTypes[8]
+	mi := &file_domain_treasury_collection_profile_collection_profile_proto_msgTypes[8]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -531,7 +531,7 @@ func (x *DeleteCollectionProfileResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use DeleteCollectionProfileResponse.ProtoReflect.Descriptor instead.
 func (*DeleteCollectionProfileResponse) Descriptor() ([]byte, []int) {
-	return file_domain_payment_collection_profile_collection_profile_proto_rawDescGZIP(), []int{8}
+	return file_domain_treasury_collection_profile_collection_profile_proto_rawDescGZIP(), []int{8}
 }
 
 func (x *DeleteCollectionProfileResponse) GetSuccess() bool {
@@ -561,7 +561,7 @@ type ListCollectionProfilesRequest struct {
 
 func (x *ListCollectionProfilesRequest) Reset() {
 	*x = ListCollectionProfilesRequest{}
-	mi := &file_domain_payment_collection_profile_collection_profile_proto_msgTypes[9]
+	mi := &file_domain_treasury_collection_profile_collection_profile_proto_msgTypes[9]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -573,7 +573,7 @@ func (x *ListCollectionProfilesRequest) String() string {
 func (*ListCollectionProfilesRequest) ProtoMessage() {}
 
 func (x *ListCollectionProfilesRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_domain_payment_collection_profile_collection_profile_proto_msgTypes[9]
+	mi := &file_domain_treasury_collection_profile_collection_profile_proto_msgTypes[9]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -586,7 +586,7 @@ func (x *ListCollectionProfilesRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ListCollectionProfilesRequest.ProtoReflect.Descriptor instead.
 func (*ListCollectionProfilesRequest) Descriptor() ([]byte, []int) {
-	return file_domain_payment_collection_profile_collection_profile_proto_rawDescGZIP(), []int{9}
+	return file_domain_treasury_collection_profile_collection_profile_proto_rawDescGZIP(), []int{9}
 }
 
 func (x *ListCollectionProfilesRequest) GetClientId() string {
@@ -635,7 +635,7 @@ type ListCollectionProfilesResponse struct {
 
 func (x *ListCollectionProfilesResponse) Reset() {
 	*x = ListCollectionProfilesResponse{}
-	mi := &file_domain_payment_collection_profile_collection_profile_proto_msgTypes[10]
+	mi := &file_domain_treasury_collection_profile_collection_profile_proto_msgTypes[10]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -647,7 +647,7 @@ func (x *ListCollectionProfilesResponse) String() string {
 func (*ListCollectionProfilesResponse) ProtoMessage() {}
 
 func (x *ListCollectionProfilesResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_domain_payment_collection_profile_collection_profile_proto_msgTypes[10]
+	mi := &file_domain_treasury_collection_profile_collection_profile_proto_msgTypes[10]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -660,7 +660,7 @@ func (x *ListCollectionProfilesResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ListCollectionProfilesResponse.ProtoReflect.Descriptor instead.
 func (*ListCollectionProfilesResponse) Descriptor() ([]byte, []int) {
-	return file_domain_payment_collection_profile_collection_profile_proto_rawDescGZIP(), []int{10}
+	return file_domain_treasury_collection_profile_collection_profile_proto_rawDescGZIP(), []int{10}
 }
 
 func (x *ListCollectionProfilesResponse) GetData() []*CollectionProfile {
@@ -696,7 +696,7 @@ type GetCollectionProfileListPageDataRequest struct {
 
 func (x *GetCollectionProfileListPageDataRequest) Reset() {
 	*x = GetCollectionProfileListPageDataRequest{}
-	mi := &file_domain_payment_collection_profile_collection_profile_proto_msgTypes[11]
+	mi := &file_domain_treasury_collection_profile_collection_profile_proto_msgTypes[11]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -708,7 +708,7 @@ func (x *GetCollectionProfileListPageDataRequest) String() string {
 func (*GetCollectionProfileListPageDataRequest) ProtoMessage() {}
 
 func (x *GetCollectionProfileListPageDataRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_domain_payment_collection_profile_collection_profile_proto_msgTypes[11]
+	mi := &file_domain_treasury_collection_profile_collection_profile_proto_msgTypes[11]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -721,7 +721,7 @@ func (x *GetCollectionProfileListPageDataRequest) ProtoReflect() protoreflect.Me
 
 // Deprecated: Use GetCollectionProfileListPageDataRequest.ProtoReflect.Descriptor instead.
 func (*GetCollectionProfileListPageDataRequest) Descriptor() ([]byte, []int) {
-	return file_domain_payment_collection_profile_collection_profile_proto_rawDescGZIP(), []int{11}
+	return file_domain_treasury_collection_profile_collection_profile_proto_rawDescGZIP(), []int{11}
 }
 
 func (x *GetCollectionProfileListPageDataRequest) GetPagination() *common.PaginationRequest {
@@ -765,7 +765,7 @@ type GetCollectionProfileListPageDataResponse struct {
 
 func (x *GetCollectionProfileListPageDataResponse) Reset() {
 	*x = GetCollectionProfileListPageDataResponse{}
-	mi := &file_domain_payment_collection_profile_collection_profile_proto_msgTypes[12]
+	mi := &file_domain_treasury_collection_profile_collection_profile_proto_msgTypes[12]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -777,7 +777,7 @@ func (x *GetCollectionProfileListPageDataResponse) String() string {
 func (*GetCollectionProfileListPageDataResponse) ProtoMessage() {}
 
 func (x *GetCollectionProfileListPageDataResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_domain_payment_collection_profile_collection_profile_proto_msgTypes[12]
+	mi := &file_domain_treasury_collection_profile_collection_profile_proto_msgTypes[12]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -790,7 +790,7 @@ func (x *GetCollectionProfileListPageDataResponse) ProtoReflect() protoreflect.M
 
 // Deprecated: Use GetCollectionProfileListPageDataResponse.ProtoReflect.Descriptor instead.
 func (*GetCollectionProfileListPageDataResponse) Descriptor() ([]byte, []int) {
-	return file_domain_payment_collection_profile_collection_profile_proto_rawDescGZIP(), []int{12}
+	return file_domain_treasury_collection_profile_collection_profile_proto_rawDescGZIP(), []int{12}
 }
 
 func (x *GetCollectionProfileListPageDataResponse) GetCollectionProfileList() []*CollectionProfile {
@@ -837,7 +837,7 @@ type GetCollectionProfileItemPageDataRequest struct {
 
 func (x *GetCollectionProfileItemPageDataRequest) Reset() {
 	*x = GetCollectionProfileItemPageDataRequest{}
-	mi := &file_domain_payment_collection_profile_collection_profile_proto_msgTypes[13]
+	mi := &file_domain_treasury_collection_profile_collection_profile_proto_msgTypes[13]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -849,7 +849,7 @@ func (x *GetCollectionProfileItemPageDataRequest) String() string {
 func (*GetCollectionProfileItemPageDataRequest) ProtoMessage() {}
 
 func (x *GetCollectionProfileItemPageDataRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_domain_payment_collection_profile_collection_profile_proto_msgTypes[13]
+	mi := &file_domain_treasury_collection_profile_collection_profile_proto_msgTypes[13]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -862,7 +862,7 @@ func (x *GetCollectionProfileItemPageDataRequest) ProtoReflect() protoreflect.Me
 
 // Deprecated: Use GetCollectionProfileItemPageDataRequest.ProtoReflect.Descriptor instead.
 func (*GetCollectionProfileItemPageDataRequest) Descriptor() ([]byte, []int) {
-	return file_domain_payment_collection_profile_collection_profile_proto_rawDescGZIP(), []int{13}
+	return file_domain_treasury_collection_profile_collection_profile_proto_rawDescGZIP(), []int{13}
 }
 
 func (x *GetCollectionProfileItemPageDataRequest) GetCollectionProfileId() string {
@@ -883,7 +883,7 @@ type GetCollectionProfileItemPageDataResponse struct {
 
 func (x *GetCollectionProfileItemPageDataResponse) Reset() {
 	*x = GetCollectionProfileItemPageDataResponse{}
-	mi := &file_domain_payment_collection_profile_collection_profile_proto_msgTypes[14]
+	mi := &file_domain_treasury_collection_profile_collection_profile_proto_msgTypes[14]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -895,7 +895,7 @@ func (x *GetCollectionProfileItemPageDataResponse) String() string {
 func (*GetCollectionProfileItemPageDataResponse) ProtoMessage() {}
 
 func (x *GetCollectionProfileItemPageDataResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_domain_payment_collection_profile_collection_profile_proto_msgTypes[14]
+	mi := &file_domain_treasury_collection_profile_collection_profile_proto_msgTypes[14]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -908,7 +908,7 @@ func (x *GetCollectionProfileItemPageDataResponse) ProtoReflect() protoreflect.M
 
 // Deprecated: Use GetCollectionProfileItemPageDataResponse.ProtoReflect.Descriptor instead.
 func (*GetCollectionProfileItemPageDataResponse) Descriptor() ([]byte, []int) {
-	return file_domain_payment_collection_profile_collection_profile_proto_rawDescGZIP(), []int{14}
+	return file_domain_treasury_collection_profile_collection_profile_proto_rawDescGZIP(), []int{14}
 }
 
 func (x *GetCollectionProfileItemPageDataResponse) GetCollectionProfile() *CollectionProfile {
@@ -932,11 +932,11 @@ func (x *GetCollectionProfileItemPageDataResponse) GetError() *common.Error {
 	return nil
 }
 
-var File_domain_payment_collection_profile_collection_profile_proto protoreflect.FileDescriptor
+var File_domain_treasury_collection_profile_collection_profile_proto protoreflect.FileDescriptor
 
-const file_domain_payment_collection_profile_collection_profile_proto_rawDesc = "" +
+const file_domain_treasury_collection_profile_collection_profile_proto_rawDesc = "" +
 	"\n" +
-	":domain/treasury/collection_profile/collection_profile.proto\x12\x11domain.payment.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1adomain/common/search.proto\x1a!domain/entity/client/client.proto\x1a8domain/treasury/collection_method/collection_method.proto\"\xcb\x04\n" +
+	";domain/treasury/collection_profile/collection_profile.proto\x12\x11domain.payment.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1adomain/common/search.proto\x1a!domain/entity/client/client.proto\x1a9domain/treasury/collection_method/collection_method.proto\"\xcb\x04\n" +
 	"\x11CollectionProfile\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12&\n" +
 	"\fdate_created\x18\x02 \x01(\x03H\x00R\vdateCreated\x88\x01\x01\x123\n" +
@@ -1037,23 +1037,23 @@ const file_domain_payment_collection_profile_collection_profile_proto_rawDesc = 
 	"\x17DeleteCollectionProfile\x121.domain.payment.v1.DeleteCollectionProfileRequest\x1a2.domain.payment.v1.DeleteCollectionProfileResponse\x12}\n" +
 	"\x16ListCollectionProfiles\x120.domain.payment.v1.ListCollectionProfilesRequest\x1a1.domain.payment.v1.ListCollectionProfilesResponse\x12\x9b\x01\n" +
 	" GetCollectionProfileListPageData\x12:.domain.payment.v1.GetCollectionProfileListPageDataRequest\x1a;.domain.payment.v1.GetCollectionProfileListPageDataResponse\x12\x9b\x01\n" +
-	" GetCollectionProfileItemPageData\x12:.domain.payment.v1.GetCollectionProfileItemPageDataRequest\x1a;.domain.payment.v1.GetCollectionProfileItemPageDataResponseB\xed\x01\n" +
-	"\x15com.domain.payment.v1B\x16CollectionProfileProtoP\x01ZVgithub.com/erniealice/esqyma/pkg/schema/v1/domain/treasury/collection_profile;paymentv1\xa2\x02\x03DPX\xaa\x02\x11Domain.Payment.V1\xca\x02\x11Domain\\Payment\\V1\xe2\x02\x1dDomain\\Payment\\V1\\GPBMetadata\xea\x02\x13Domain::Payment::V1b\x06proto3"
+	" GetCollectionProfileItemPageData\x12:.domain.payment.v1.GetCollectionProfileItemPageDataRequest\x1a;.domain.payment.v1.GetCollectionProfileItemPageDataResponseB\xee\x01\n" +
+	"\x15com.domain.payment.v1B\x16CollectionProfileProtoP\x01ZWgithub.com/erniealice/esqyma/pkg/schema/v1/domain/treasury/collection_profile;paymentv1\xa2\x02\x03DPX\xaa\x02\x11Domain.Payment.V1\xca\x02\x11Domain\\Payment\\V1\xe2\x02\x1dDomain\\Payment\\V1\\GPBMetadata\xea\x02\x13Domain::Payment::V1b\x06proto3"
 
 var (
-	file_domain_payment_collection_profile_collection_profile_proto_rawDescOnce sync.Once
-	file_domain_payment_collection_profile_collection_profile_proto_rawDescData []byte
+	file_domain_treasury_collection_profile_collection_profile_proto_rawDescOnce sync.Once
+	file_domain_treasury_collection_profile_collection_profile_proto_rawDescData []byte
 )
 
-func file_domain_payment_collection_profile_collection_profile_proto_rawDescGZIP() []byte {
-	file_domain_payment_collection_profile_collection_profile_proto_rawDescOnce.Do(func() {
-		file_domain_payment_collection_profile_collection_profile_proto_rawDescData = protoimpl.X.CompressGZIP(unsafe.Slice(unsafe.StringData(file_domain_payment_collection_profile_collection_profile_proto_rawDesc), len(file_domain_payment_collection_profile_collection_profile_proto_rawDesc)))
+func file_domain_treasury_collection_profile_collection_profile_proto_rawDescGZIP() []byte {
+	file_domain_treasury_collection_profile_collection_profile_proto_rawDescOnce.Do(func() {
+		file_domain_treasury_collection_profile_collection_profile_proto_rawDescData = protoimpl.X.CompressGZIP(unsafe.Slice(unsafe.StringData(file_domain_treasury_collection_profile_collection_profile_proto_rawDesc), len(file_domain_treasury_collection_profile_collection_profile_proto_rawDesc)))
 	})
-	return file_domain_payment_collection_profile_collection_profile_proto_rawDescData
+	return file_domain_treasury_collection_profile_collection_profile_proto_rawDescData
 }
 
-var file_domain_payment_collection_profile_collection_profile_proto_msgTypes = make([]protoimpl.MessageInfo, 15)
-var file_domain_payment_collection_profile_collection_profile_proto_goTypes = []any{
+var file_domain_treasury_collection_profile_collection_profile_proto_msgTypes = make([]protoimpl.MessageInfo, 15)
+var file_domain_treasury_collection_profile_collection_profile_proto_goTypes = []any{
 	(*CollectionProfile)(nil),                        // 0: domain.payment.v1.CollectionProfile
 	(*CreateCollectionProfileRequest)(nil),           // 1: domain.payment.v1.CreateCollectionProfileRequest
 	(*CreateCollectionProfileResponse)(nil),          // 2: domain.payment.v1.CreateCollectionProfileResponse
@@ -1079,7 +1079,7 @@ var file_domain_payment_collection_profile_collection_profile_proto_goTypes = []
 	(*common.PaginationResponse)(nil),                // 22: domain.common.v1.PaginationResponse
 	(*common.SearchResult)(nil),                      // 23: domain.common.v1.SearchResult
 }
-var file_domain_payment_collection_profile_collection_profile_proto_depIdxs = []int32{
+var file_domain_treasury_collection_profile_collection_profile_proto_depIdxs = []int32{
 	15, // 0: domain.payment.v1.CollectionProfile.client:type_name -> domain.entity.v1.Client
 	16, // 1: domain.payment.v1.CollectionProfile.collection_method:type_name -> domain.payment.v1.CollectionMethod
 	0,  // 2: domain.payment.v1.CreateCollectionProfileRequest.data:type_name -> domain.payment.v1.CollectionProfile
@@ -1130,36 +1130,36 @@ var file_domain_payment_collection_profile_collection_profile_proto_depIdxs = []
 	0,  // [0:29] is the sub-list for field type_name
 }
 
-func init() { file_domain_payment_collection_profile_collection_profile_proto_init() }
-func file_domain_payment_collection_profile_collection_profile_proto_init() {
-	if File_domain_payment_collection_profile_collection_profile_proto != nil {
+func init() { file_domain_treasury_collection_profile_collection_profile_proto_init() }
+func file_domain_treasury_collection_profile_collection_profile_proto_init() {
+	if File_domain_treasury_collection_profile_collection_profile_proto != nil {
 		return
 	}
-	file_domain_payment_collection_profile_collection_profile_proto_msgTypes[0].OneofWrappers = []any{}
-	file_domain_payment_collection_profile_collection_profile_proto_msgTypes[2].OneofWrappers = []any{}
-	file_domain_payment_collection_profile_collection_profile_proto_msgTypes[4].OneofWrappers = []any{}
-	file_domain_payment_collection_profile_collection_profile_proto_msgTypes[6].OneofWrappers = []any{}
-	file_domain_payment_collection_profile_collection_profile_proto_msgTypes[8].OneofWrappers = []any{}
-	file_domain_payment_collection_profile_collection_profile_proto_msgTypes[9].OneofWrappers = []any{}
-	file_domain_payment_collection_profile_collection_profile_proto_msgTypes[10].OneofWrappers = []any{}
-	file_domain_payment_collection_profile_collection_profile_proto_msgTypes[11].OneofWrappers = []any{}
-	file_domain_payment_collection_profile_collection_profile_proto_msgTypes[12].OneofWrappers = []any{}
-	file_domain_payment_collection_profile_collection_profile_proto_msgTypes[14].OneofWrappers = []any{}
+	file_domain_treasury_collection_profile_collection_profile_proto_msgTypes[0].OneofWrappers = []any{}
+	file_domain_treasury_collection_profile_collection_profile_proto_msgTypes[2].OneofWrappers = []any{}
+	file_domain_treasury_collection_profile_collection_profile_proto_msgTypes[4].OneofWrappers = []any{}
+	file_domain_treasury_collection_profile_collection_profile_proto_msgTypes[6].OneofWrappers = []any{}
+	file_domain_treasury_collection_profile_collection_profile_proto_msgTypes[8].OneofWrappers = []any{}
+	file_domain_treasury_collection_profile_collection_profile_proto_msgTypes[9].OneofWrappers = []any{}
+	file_domain_treasury_collection_profile_collection_profile_proto_msgTypes[10].OneofWrappers = []any{}
+	file_domain_treasury_collection_profile_collection_profile_proto_msgTypes[11].OneofWrappers = []any{}
+	file_domain_treasury_collection_profile_collection_profile_proto_msgTypes[12].OneofWrappers = []any{}
+	file_domain_treasury_collection_profile_collection_profile_proto_msgTypes[14].OneofWrappers = []any{}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
 		File: protoimpl.DescBuilder{
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
-			RawDescriptor: unsafe.Slice(unsafe.StringData(file_domain_payment_collection_profile_collection_profile_proto_rawDesc), len(file_domain_payment_collection_profile_collection_profile_proto_rawDesc)),
+			RawDescriptor: unsafe.Slice(unsafe.StringData(file_domain_treasury_collection_profile_collection_profile_proto_rawDesc), len(file_domain_treasury_collection_profile_collection_profile_proto_rawDesc)),
 			NumEnums:      0,
 			NumMessages:   15,
 			NumExtensions: 0,
 			NumServices:   1,
 		},
-		GoTypes:           file_domain_payment_collection_profile_collection_profile_proto_goTypes,
-		DependencyIndexes: file_domain_payment_collection_profile_collection_profile_proto_depIdxs,
-		MessageInfos:      file_domain_payment_collection_profile_collection_profile_proto_msgTypes,
+		GoTypes:           file_domain_treasury_collection_profile_collection_profile_proto_goTypes,
+		DependencyIndexes: file_domain_treasury_collection_profile_collection_profile_proto_depIdxs,
+		MessageInfos:      file_domain_treasury_collection_profile_collection_profile_proto_msgTypes,
 	}.Build()
-	File_domain_payment_collection_profile_collection_profile_proto = out.File
-	file_domain_payment_collection_profile_collection_profile_proto_goTypes = nil
-	file_domain_payment_collection_profile_collection_profile_proto_depIdxs = nil
+	File_domain_treasury_collection_profile_collection_profile_proto = out.File
+	file_domain_treasury_collection_profile_collection_profile_proto_goTypes = nil
+	file_domain_treasury_collection_profile_collection_profile_proto_depIdxs = nil
 }
