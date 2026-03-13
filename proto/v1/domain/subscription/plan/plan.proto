@@ -41,6 +41,7 @@ service PlanDomainService {
   // NEW: Enhanced item view with related data
   rpc GetPlanItemPageData(GetPlanItemPageDataRequest)
     returns (GetPlanItemPageDataResponse);
+  rpc SearchPlansByName(SearchPlansByNameRequest) returns (SearchPlansByNameResponse);
 }
 
 message CreatePlanRequest {
@@ -120,4 +121,20 @@ message GetPlanItemPageDataResponse {
   optional Plan plan = 1;
   bool success = 2;
   optional domain.common.v1.Error error = 3;
+}
+
+message SearchPlansByNameRequest {
+  string query = 1;
+  optional int32 limit = 2;
+}
+
+message SearchPlansByNameResponse {
+  repeated SearchPlanResult results = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message SearchPlanResult {
+  string id = 1;
+  string label = 2;
 }

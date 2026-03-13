@@ -934,6 +934,170 @@ func (x *GetPlanItemPageDataResponse) GetError() *common.Error {
 	return nil
 }
 
+type SearchPlansByNameRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Query         string                 `protobuf:"bytes,1,opt,name=query,proto3" json:"query,omitempty"`
+	Limit         *int32                 `protobuf:"varint,2,opt,name=limit,proto3,oneof" json:"limit,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *SearchPlansByNameRequest) Reset() {
+	*x = SearchPlansByNameRequest{}
+	mi := &file_domain_subscription_plan_plan_proto_msgTypes[15]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *SearchPlansByNameRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*SearchPlansByNameRequest) ProtoMessage() {}
+
+func (x *SearchPlansByNameRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_domain_subscription_plan_plan_proto_msgTypes[15]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use SearchPlansByNameRequest.ProtoReflect.Descriptor instead.
+func (*SearchPlansByNameRequest) Descriptor() ([]byte, []int) {
+	return file_domain_subscription_plan_plan_proto_rawDescGZIP(), []int{15}
+}
+
+func (x *SearchPlansByNameRequest) GetQuery() string {
+	if x != nil {
+		return x.Query
+	}
+	return ""
+}
+
+func (x *SearchPlansByNameRequest) GetLimit() int32 {
+	if x != nil && x.Limit != nil {
+		return *x.Limit
+	}
+	return 0
+}
+
+type SearchPlansByNameResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Results       []*SearchPlanResult    `protobuf:"bytes,1,rep,name=results,proto3" json:"results,omitempty"`
+	Success       bool                   `protobuf:"varint,2,opt,name=success,proto3" json:"success,omitempty"`
+	Error         *common.Error          `protobuf:"bytes,3,opt,name=error,proto3,oneof" json:"error,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *SearchPlansByNameResponse) Reset() {
+	*x = SearchPlansByNameResponse{}
+	mi := &file_domain_subscription_plan_plan_proto_msgTypes[16]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *SearchPlansByNameResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*SearchPlansByNameResponse) ProtoMessage() {}
+
+func (x *SearchPlansByNameResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_domain_subscription_plan_plan_proto_msgTypes[16]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use SearchPlansByNameResponse.ProtoReflect.Descriptor instead.
+func (*SearchPlansByNameResponse) Descriptor() ([]byte, []int) {
+	return file_domain_subscription_plan_plan_proto_rawDescGZIP(), []int{16}
+}
+
+func (x *SearchPlansByNameResponse) GetResults() []*SearchPlanResult {
+	if x != nil {
+		return x.Results
+	}
+	return nil
+}
+
+func (x *SearchPlansByNameResponse) GetSuccess() bool {
+	if x != nil {
+		return x.Success
+	}
+	return false
+}
+
+func (x *SearchPlansByNameResponse) GetError() *common.Error {
+	if x != nil {
+		return x.Error
+	}
+	return nil
+}
+
+type SearchPlanResult struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Id            string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
+	Label         string                 `protobuf:"bytes,2,opt,name=label,proto3" json:"label,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *SearchPlanResult) Reset() {
+	*x = SearchPlanResult{}
+	mi := &file_domain_subscription_plan_plan_proto_msgTypes[17]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *SearchPlanResult) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*SearchPlanResult) ProtoMessage() {}
+
+func (x *SearchPlanResult) ProtoReflect() protoreflect.Message {
+	mi := &file_domain_subscription_plan_plan_proto_msgTypes[17]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use SearchPlanResult.ProtoReflect.Descriptor instead.
+func (*SearchPlanResult) Descriptor() ([]byte, []int) {
+	return file_domain_subscription_plan_plan_proto_rawDescGZIP(), []int{17}
+}
+
+func (x *SearchPlanResult) GetId() string {
+	if x != nil {
+		return x.Id
+	}
+	return ""
+}
+
+func (x *SearchPlanResult) GetLabel() string {
+	if x != nil {
+		return x.Label
+	}
+	return ""
+}
+
 var File_domain_subscription_plan_plan_proto protoreflect.FileDescriptor
 
 const file_domain_subscription_plan_plan_proto_rawDesc = "" +
@@ -1034,7 +1198,19 @@ const file_domain_subscription_plan_plan_proto_rawDesc = "" +
 	"\asuccess\x18\x02 \x01(\bR\asuccess\x122\n" +
 	"\x05error\x18\x03 \x01(\v2\x17.domain.common.v1.ErrorH\x01R\x05error\x88\x01\x01B\a\n" +
 	"\x05_planB\b\n" +
-	"\x06_error2\x83\x06\n" +
+	"\x06_error\"U\n" +
+	"\x18SearchPlansByNameRequest\x12\x14\n" +
+	"\x05query\x18\x01 \x01(\tR\x05query\x12\x19\n" +
+	"\x05limit\x18\x02 \x01(\x05H\x00R\x05limit\x88\x01\x01B\b\n" +
+	"\x06_limit\"\xb7\x01\n" +
+	"\x19SearchPlansByNameResponse\x12B\n" +
+	"\aresults\x18\x01 \x03(\v2(.domain.subscription.v1.SearchPlanResultR\aresults\x12\x18\n" +
+	"\asuccess\x18\x02 \x01(\bR\asuccess\x122\n" +
+	"\x05error\x18\x03 \x01(\v2\x17.domain.common.v1.ErrorH\x00R\x05error\x88\x01\x01B\b\n" +
+	"\x06_error\"8\n" +
+	"\x10SearchPlanResult\x12\x0e\n" +
+	"\x02id\x18\x01 \x01(\tR\x02id\x12\x14\n" +
+	"\x05label\x18\x02 \x01(\tR\x05label2\xfd\x06\n" +
 	"\x11PlanDomainService\x12c\n" +
 	"\n" +
 	"CreatePlan\x12).domain.subscription.v1.CreatePlanRequest\x1a*.domain.subscription.v1.CreatePlanResponse\x12]\n" +
@@ -1045,7 +1221,8 @@ const file_domain_subscription_plan_plan_proto_rawDesc = "" +
 	"DeletePlan\x12).domain.subscription.v1.DeletePlanRequest\x1a*.domain.subscription.v1.DeletePlanResponse\x12`\n" +
 	"\tListPlans\x12(.domain.subscription.v1.ListPlansRequest\x1a).domain.subscription.v1.ListPlansResponse\x12~\n" +
 	"\x13GetPlanListPageData\x122.domain.subscription.v1.GetPlanListPageDataRequest\x1a3.domain.subscription.v1.GetPlanListPageDataResponse\x12~\n" +
-	"\x13GetPlanItemPageData\x122.domain.subscription.v1.GetPlanItemPageDataRequest\x1a3.domain.subscription.v1.GetPlanItemPageDataResponseB\xf5\x01\n" +
+	"\x13GetPlanItemPageData\x122.domain.subscription.v1.GetPlanItemPageDataRequest\x1a3.domain.subscription.v1.GetPlanItemPageDataResponse\x12x\n" +
+	"\x11SearchPlansByName\x120.domain.subscription.v1.SearchPlansByNameRequest\x1a1.domain.subscription.v1.SearchPlansByNameResponseB\xf5\x01\n" +
 	"\x1acom.domain.subscription.v1B\tPlanProtoP\x01ZRgithub.com/erniealice/esqyma/pkg/schema/v1/domain/subscription/plan;subscriptionv1\xa2\x02\x03DSX\xaa\x02\x16Domain.Subscription.V1\xca\x02\x16Domain\\Subscription\\V1\xe2\x02\"Domain\\Subscription\\V1\\GPBMetadata\xea\x02\x18Domain::Subscription::V1b\x06proto3"
 
 var (
@@ -1060,7 +1237,7 @@ func file_domain_subscription_plan_plan_proto_rawDescGZIP() []byte {
 	return file_domain_subscription_plan_plan_proto_rawDescData
 }
 
-var file_domain_subscription_plan_plan_proto_msgTypes = make([]protoimpl.MessageInfo, 15)
+var file_domain_subscription_plan_plan_proto_msgTypes = make([]protoimpl.MessageInfo, 18)
 var file_domain_subscription_plan_plan_proto_goTypes = []any{
 	(*Plan)(nil),                        // 0: domain.subscription.v1.Plan
 	(*CreatePlanRequest)(nil),           // 1: domain.subscription.v1.CreatePlanRequest
@@ -1077,63 +1254,70 @@ var file_domain_subscription_plan_plan_proto_goTypes = []any{
 	(*GetPlanListPageDataResponse)(nil), // 12: domain.subscription.v1.GetPlanListPageDataResponse
 	(*GetPlanItemPageDataRequest)(nil),  // 13: domain.subscription.v1.GetPlanItemPageDataRequest
 	(*GetPlanItemPageDataResponse)(nil), // 14: domain.subscription.v1.GetPlanItemPageDataResponse
-	(*plan_location.PlanLocation)(nil),  // 15: domain.subscription.v1.PlanLocation
-	(*common.Error)(nil),                // 16: domain.common.v1.Error
-	(*common.SearchRequest)(nil),        // 17: domain.common.v1.SearchRequest
-	(*common.FilterRequest)(nil),        // 18: domain.common.v1.FilterRequest
-	(*common.SortRequest)(nil),          // 19: domain.common.v1.SortRequest
-	(*common.PaginationRequest)(nil),    // 20: domain.common.v1.PaginationRequest
-	(*common.PaginationResponse)(nil),   // 21: domain.common.v1.PaginationResponse
-	(*common.SearchResult)(nil),         // 22: domain.common.v1.SearchResult
+	(*SearchPlansByNameRequest)(nil),    // 15: domain.subscription.v1.SearchPlansByNameRequest
+	(*SearchPlansByNameResponse)(nil),   // 16: domain.subscription.v1.SearchPlansByNameResponse
+	(*SearchPlanResult)(nil),            // 17: domain.subscription.v1.SearchPlanResult
+	(*plan_location.PlanLocation)(nil),  // 18: domain.subscription.v1.PlanLocation
+	(*common.Error)(nil),                // 19: domain.common.v1.Error
+	(*common.SearchRequest)(nil),        // 20: domain.common.v1.SearchRequest
+	(*common.FilterRequest)(nil),        // 21: domain.common.v1.FilterRequest
+	(*common.SortRequest)(nil),          // 22: domain.common.v1.SortRequest
+	(*common.PaginationRequest)(nil),    // 23: domain.common.v1.PaginationRequest
+	(*common.PaginationResponse)(nil),   // 24: domain.common.v1.PaginationResponse
+	(*common.SearchResult)(nil),         // 25: domain.common.v1.SearchResult
 }
 var file_domain_subscription_plan_plan_proto_depIdxs = []int32{
-	15, // 0: domain.subscription.v1.Plan.plan_locations:type_name -> domain.subscription.v1.PlanLocation
+	18, // 0: domain.subscription.v1.Plan.plan_locations:type_name -> domain.subscription.v1.PlanLocation
 	0,  // 1: domain.subscription.v1.CreatePlanRequest.data:type_name -> domain.subscription.v1.Plan
 	0,  // 2: domain.subscription.v1.CreatePlanResponse.data:type_name -> domain.subscription.v1.Plan
-	16, // 3: domain.subscription.v1.CreatePlanResponse.error:type_name -> domain.common.v1.Error
+	19, // 3: domain.subscription.v1.CreatePlanResponse.error:type_name -> domain.common.v1.Error
 	0,  // 4: domain.subscription.v1.ReadPlanRequest.data:type_name -> domain.subscription.v1.Plan
 	0,  // 5: domain.subscription.v1.ReadPlanResponse.data:type_name -> domain.subscription.v1.Plan
-	16, // 6: domain.subscription.v1.ReadPlanResponse.error:type_name -> domain.common.v1.Error
+	19, // 6: domain.subscription.v1.ReadPlanResponse.error:type_name -> domain.common.v1.Error
 	0,  // 7: domain.subscription.v1.UpdatePlanRequest.data:type_name -> domain.subscription.v1.Plan
 	0,  // 8: domain.subscription.v1.UpdatePlanResponse.data:type_name -> domain.subscription.v1.Plan
-	16, // 9: domain.subscription.v1.UpdatePlanResponse.error:type_name -> domain.common.v1.Error
+	19, // 9: domain.subscription.v1.UpdatePlanResponse.error:type_name -> domain.common.v1.Error
 	0,  // 10: domain.subscription.v1.DeletePlanRequest.data:type_name -> domain.subscription.v1.Plan
-	16, // 11: domain.subscription.v1.DeletePlanResponse.error:type_name -> domain.common.v1.Error
-	17, // 12: domain.subscription.v1.ListPlansRequest.search:type_name -> domain.common.v1.SearchRequest
-	18, // 13: domain.subscription.v1.ListPlansRequest.filters:type_name -> domain.common.v1.FilterRequest
-	19, // 14: domain.subscription.v1.ListPlansRequest.sort:type_name -> domain.common.v1.SortRequest
-	20, // 15: domain.subscription.v1.ListPlansRequest.pagination:type_name -> domain.common.v1.PaginationRequest
+	19, // 11: domain.subscription.v1.DeletePlanResponse.error:type_name -> domain.common.v1.Error
+	20, // 12: domain.subscription.v1.ListPlansRequest.search:type_name -> domain.common.v1.SearchRequest
+	21, // 13: domain.subscription.v1.ListPlansRequest.filters:type_name -> domain.common.v1.FilterRequest
+	22, // 14: domain.subscription.v1.ListPlansRequest.sort:type_name -> domain.common.v1.SortRequest
+	23, // 15: domain.subscription.v1.ListPlansRequest.pagination:type_name -> domain.common.v1.PaginationRequest
 	0,  // 16: domain.subscription.v1.ListPlansResponse.data:type_name -> domain.subscription.v1.Plan
-	16, // 17: domain.subscription.v1.ListPlansResponse.error:type_name -> domain.common.v1.Error
-	20, // 18: domain.subscription.v1.GetPlanListPageDataRequest.pagination:type_name -> domain.common.v1.PaginationRequest
-	18, // 19: domain.subscription.v1.GetPlanListPageDataRequest.filters:type_name -> domain.common.v1.FilterRequest
-	19, // 20: domain.subscription.v1.GetPlanListPageDataRequest.sort:type_name -> domain.common.v1.SortRequest
-	17, // 21: domain.subscription.v1.GetPlanListPageDataRequest.search:type_name -> domain.common.v1.SearchRequest
+	19, // 17: domain.subscription.v1.ListPlansResponse.error:type_name -> domain.common.v1.Error
+	23, // 18: domain.subscription.v1.GetPlanListPageDataRequest.pagination:type_name -> domain.common.v1.PaginationRequest
+	21, // 19: domain.subscription.v1.GetPlanListPageDataRequest.filters:type_name -> domain.common.v1.FilterRequest
+	22, // 20: domain.subscription.v1.GetPlanListPageDataRequest.sort:type_name -> domain.common.v1.SortRequest
+	20, // 21: domain.subscription.v1.GetPlanListPageDataRequest.search:type_name -> domain.common.v1.SearchRequest
 	0,  // 22: domain.subscription.v1.GetPlanListPageDataResponse.plan_list:type_name -> domain.subscription.v1.Plan
-	16, // 23: domain.subscription.v1.GetPlanListPageDataResponse.error:type_name -> domain.common.v1.Error
-	21, // 24: domain.subscription.v1.GetPlanListPageDataResponse.pagination:type_name -> domain.common.v1.PaginationResponse
-	22, // 25: domain.subscription.v1.GetPlanListPageDataResponse.search_results:type_name -> domain.common.v1.SearchResult
+	19, // 23: domain.subscription.v1.GetPlanListPageDataResponse.error:type_name -> domain.common.v1.Error
+	24, // 24: domain.subscription.v1.GetPlanListPageDataResponse.pagination:type_name -> domain.common.v1.PaginationResponse
+	25, // 25: domain.subscription.v1.GetPlanListPageDataResponse.search_results:type_name -> domain.common.v1.SearchResult
 	0,  // 26: domain.subscription.v1.GetPlanItemPageDataResponse.plan:type_name -> domain.subscription.v1.Plan
-	16, // 27: domain.subscription.v1.GetPlanItemPageDataResponse.error:type_name -> domain.common.v1.Error
-	1,  // 28: domain.subscription.v1.PlanDomainService.CreatePlan:input_type -> domain.subscription.v1.CreatePlanRequest
-	3,  // 29: domain.subscription.v1.PlanDomainService.ReadPlan:input_type -> domain.subscription.v1.ReadPlanRequest
-	5,  // 30: domain.subscription.v1.PlanDomainService.UpdatePlan:input_type -> domain.subscription.v1.UpdatePlanRequest
-	7,  // 31: domain.subscription.v1.PlanDomainService.DeletePlan:input_type -> domain.subscription.v1.DeletePlanRequest
-	9,  // 32: domain.subscription.v1.PlanDomainService.ListPlans:input_type -> domain.subscription.v1.ListPlansRequest
-	11, // 33: domain.subscription.v1.PlanDomainService.GetPlanListPageData:input_type -> domain.subscription.v1.GetPlanListPageDataRequest
-	13, // 34: domain.subscription.v1.PlanDomainService.GetPlanItemPageData:input_type -> domain.subscription.v1.GetPlanItemPageDataRequest
-	2,  // 35: domain.subscription.v1.PlanDomainService.CreatePlan:output_type -> domain.subscription.v1.CreatePlanResponse
-	4,  // 36: domain.subscription.v1.PlanDomainService.ReadPlan:output_type -> domain.subscription.v1.ReadPlanResponse
-	6,  // 37: domain.subscription.v1.PlanDomainService.UpdatePlan:output_type -> domain.subscription.v1.UpdatePlanResponse
-	8,  // 38: domain.subscription.v1.PlanDomainService.DeletePlan:output_type -> domain.subscription.v1.DeletePlanResponse
-	10, // 39: domain.subscription.v1.PlanDomainService.ListPlans:output_type -> domain.subscription.v1.ListPlansResponse
-	12, // 40: domain.subscription.v1.PlanDomainService.GetPlanListPageData:output_type -> domain.subscription.v1.GetPlanListPageDataResponse
-	14, // 41: domain.subscription.v1.PlanDomainService.GetPlanItemPageData:output_type -> domain.subscription.v1.GetPlanItemPageDataResponse
-	35, // [35:42] is the sub-list for method output_type
-	28, // [28:35] is the sub-list for method input_type
-	28, // [28:28] is the sub-list for extension type_name
-	28, // [28:28] is the sub-list for extension extendee
-	0,  // [0:28] is the sub-list for field type_name
+	19, // 27: domain.subscription.v1.GetPlanItemPageDataResponse.error:type_name -> domain.common.v1.Error
+	17, // 28: domain.subscription.v1.SearchPlansByNameResponse.results:type_name -> domain.subscription.v1.SearchPlanResult
+	19, // 29: domain.subscription.v1.SearchPlansByNameResponse.error:type_name -> domain.common.v1.Error
+	1,  // 30: domain.subscription.v1.PlanDomainService.CreatePlan:input_type -> domain.subscription.v1.CreatePlanRequest
+	3,  // 31: domain.subscription.v1.PlanDomainService.ReadPlan:input_type -> domain.subscription.v1.ReadPlanRequest
+	5,  // 32: domain.subscription.v1.PlanDomainService.UpdatePlan:input_type -> domain.subscription.v1.UpdatePlanRequest
+	7,  // 33: domain.subscription.v1.PlanDomainService.DeletePlan:input_type -> domain.subscription.v1.DeletePlanRequest
+	9,  // 34: domain.subscription.v1.PlanDomainService.ListPlans:input_type -> domain.subscription.v1.ListPlansRequest
+	11, // 35: domain.subscription.v1.PlanDomainService.GetPlanListPageData:input_type -> domain.subscription.v1.GetPlanListPageDataRequest
+	13, // 36: domain.subscription.v1.PlanDomainService.GetPlanItemPageData:input_type -> domain.subscription.v1.GetPlanItemPageDataRequest
+	15, // 37: domain.subscription.v1.PlanDomainService.SearchPlansByName:input_type -> domain.subscription.v1.SearchPlansByNameRequest
+	2,  // 38: domain.subscription.v1.PlanDomainService.CreatePlan:output_type -> domain.subscription.v1.CreatePlanResponse
+	4,  // 39: domain.subscription.v1.PlanDomainService.ReadPlan:output_type -> domain.subscription.v1.ReadPlanResponse
+	6,  // 40: domain.subscription.v1.PlanDomainService.UpdatePlan:output_type -> domain.subscription.v1.UpdatePlanResponse
+	8,  // 41: domain.subscription.v1.PlanDomainService.DeletePlan:output_type -> domain.subscription.v1.DeletePlanResponse
+	10, // 42: domain.subscription.v1.PlanDomainService.ListPlans:output_type -> domain.subscription.v1.ListPlansResponse
+	12, // 43: domain.subscription.v1.PlanDomainService.GetPlanListPageData:output_type -> domain.subscription.v1.GetPlanListPageDataResponse
+	14, // 44: domain.subscription.v1.PlanDomainService.GetPlanItemPageData:output_type -> domain.subscription.v1.GetPlanItemPageDataResponse
+	16, // 45: domain.subscription.v1.PlanDomainService.SearchPlansByName:output_type -> domain.subscription.v1.SearchPlansByNameResponse
+	38, // [38:46] is the sub-list for method output_type
+	30, // [30:38] is the sub-list for method input_type
+	30, // [30:30] is the sub-list for extension type_name
+	30, // [30:30] is the sub-list for extension extendee
+	0,  // [0:30] is the sub-list for field type_name
 }
 
 func init() { file_domain_subscription_plan_plan_proto_init() }
@@ -1151,13 +1335,15 @@ func file_domain_subscription_plan_plan_proto_init() {
 	file_domain_subscription_plan_plan_proto_msgTypes[11].OneofWrappers = []any{}
 	file_domain_subscription_plan_plan_proto_msgTypes[12].OneofWrappers = []any{}
 	file_domain_subscription_plan_plan_proto_msgTypes[14].OneofWrappers = []any{}
+	file_domain_subscription_plan_plan_proto_msgTypes[15].OneofWrappers = []any{}
+	file_domain_subscription_plan_plan_proto_msgTypes[16].OneofWrappers = []any{}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
 		File: protoimpl.DescBuilder{
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_domain_subscription_plan_plan_proto_rawDesc), len(file_domain_subscription_plan_plan_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   15,
+			NumMessages:   18,
 			NumExtensions: 0,
 			NumServices:   1,
 		},

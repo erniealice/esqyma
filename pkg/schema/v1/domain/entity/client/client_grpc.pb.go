@@ -26,6 +26,7 @@ const (
 	ClientDomainService_ListClients_FullMethodName           = "/domain.entity.v1.ClientDomainService/ListClients"
 	ClientDomainService_GetClientListPageData_FullMethodName = "/domain.entity.v1.ClientDomainService/GetClientListPageData"
 	ClientDomainService_GetClientItemPageData_FullMethodName = "/domain.entity.v1.ClientDomainService/GetClientItemPageData"
+	ClientDomainService_SearchClientsByName_FullMethodName   = "/domain.entity.v1.ClientDomainService/SearchClientsByName"
 )
 
 // ClientDomainServiceClient is the client API for ClientDomainService service.
@@ -39,6 +40,7 @@ type ClientDomainServiceClient interface {
 	ListClients(ctx context.Context, in *ListClientsRequest, opts ...grpc.CallOption) (*ListClientsResponse, error)
 	GetClientListPageData(ctx context.Context, in *GetClientListPageDataRequest, opts ...grpc.CallOption) (*GetClientListPageDataResponse, error)
 	GetClientItemPageData(ctx context.Context, in *GetClientItemPageDataRequest, opts ...grpc.CallOption) (*GetClientItemPageDataResponse, error)
+	SearchClientsByName(ctx context.Context, in *SearchClientsByNameRequest, opts ...grpc.CallOption) (*SearchClientsByNameResponse, error)
 }
 
 type clientDomainServiceClient struct {
@@ -119,6 +121,16 @@ func (c *clientDomainServiceClient) GetClientItemPageData(ctx context.Context, i
 	return out, nil
 }
 
+func (c *clientDomainServiceClient) SearchClientsByName(ctx context.Context, in *SearchClientsByNameRequest, opts ...grpc.CallOption) (*SearchClientsByNameResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(SearchClientsByNameResponse)
+	err := c.cc.Invoke(ctx, ClientDomainService_SearchClientsByName_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // ClientDomainServiceServer is the server API for ClientDomainService service.
 // All implementations must embed UnimplementedClientDomainServiceServer
 // for forward compatibility.
@@ -130,6 +142,7 @@ type ClientDomainServiceServer interface {
 	ListClients(context.Context, *ListClientsRequest) (*ListClientsResponse, error)
 	GetClientListPageData(context.Context, *GetClientListPageDataRequest) (*GetClientListPageDataResponse, error)
 	GetClientItemPageData(context.Context, *GetClientItemPageDataRequest) (*GetClientItemPageDataResponse, error)
+	SearchClientsByName(context.Context, *SearchClientsByNameRequest) (*SearchClientsByNameResponse, error)
 	mustEmbedUnimplementedClientDomainServiceServer()
 }
 
@@ -160,6 +173,9 @@ func (UnimplementedClientDomainServiceServer) GetClientListPageData(context.Cont
 }
 func (UnimplementedClientDomainServiceServer) GetClientItemPageData(context.Context, *GetClientItemPageDataRequest) (*GetClientItemPageDataResponse, error) {
 	return nil, status.Error(codes.Unimplemented, "method GetClientItemPageData not implemented")
+}
+func (UnimplementedClientDomainServiceServer) SearchClientsByName(context.Context, *SearchClientsByNameRequest) (*SearchClientsByNameResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method SearchClientsByName not implemented")
 }
 func (UnimplementedClientDomainServiceServer) mustEmbedUnimplementedClientDomainServiceServer() {}
 func (UnimplementedClientDomainServiceServer) testEmbeddedByValue()                             {}
@@ -308,6 +324,24 @@ func _ClientDomainService_GetClientItemPageData_Handler(srv interface{}, ctx con
 	return interceptor(ctx, in, info, handler)
 }
 
+func _ClientDomainService_SearchClientsByName_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(SearchClientsByNameRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ClientDomainServiceServer).SearchClientsByName(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: ClientDomainService_SearchClientsByName_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ClientDomainServiceServer).SearchClientsByName(ctx, req.(*SearchClientsByNameRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // ClientDomainService_ServiceDesc is the grpc.ServiceDesc for ClientDomainService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -342,6 +376,10 @@ var ClientDomainService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "GetClientItemPageData",
 			Handler:    _ClientDomainService_GetClientItemPageData_Handler,
+		},
+		{
+			MethodName: "SearchClientsByName",
+			Handler:    _ClientDomainService_SearchClientsByName_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

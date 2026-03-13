@@ -26,6 +26,7 @@ const (
 	PlanDomainService_ListPlans_FullMethodName           = "/domain.subscription.v1.PlanDomainService/ListPlans"
 	PlanDomainService_GetPlanListPageData_FullMethodName = "/domain.subscription.v1.PlanDomainService/GetPlanListPageData"
 	PlanDomainService_GetPlanItemPageData_FullMethodName = "/domain.subscription.v1.PlanDomainService/GetPlanItemPageData"
+	PlanDomainService_SearchPlansByName_FullMethodName   = "/domain.subscription.v1.PlanDomainService/SearchPlansByName"
 )
 
 // PlanDomainServiceClient is the client API for PlanDomainService service.
@@ -41,6 +42,7 @@ type PlanDomainServiceClient interface {
 	GetPlanListPageData(ctx context.Context, in *GetPlanListPageDataRequest, opts ...grpc.CallOption) (*GetPlanListPageDataResponse, error)
 	// NEW: Enhanced item view with related data
 	GetPlanItemPageData(ctx context.Context, in *GetPlanItemPageDataRequest, opts ...grpc.CallOption) (*GetPlanItemPageDataResponse, error)
+	SearchPlansByName(ctx context.Context, in *SearchPlansByNameRequest, opts ...grpc.CallOption) (*SearchPlansByNameResponse, error)
 }
 
 type planDomainServiceClient struct {
@@ -121,6 +123,16 @@ func (c *planDomainServiceClient) GetPlanItemPageData(ctx context.Context, in *G
 	return out, nil
 }
 
+func (c *planDomainServiceClient) SearchPlansByName(ctx context.Context, in *SearchPlansByNameRequest, opts ...grpc.CallOption) (*SearchPlansByNameResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(SearchPlansByNameResponse)
+	err := c.cc.Invoke(ctx, PlanDomainService_SearchPlansByName_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // PlanDomainServiceServer is the server API for PlanDomainService service.
 // All implementations must embed UnimplementedPlanDomainServiceServer
 // for forward compatibility.
@@ -134,6 +146,7 @@ type PlanDomainServiceServer interface {
 	GetPlanListPageData(context.Context, *GetPlanListPageDataRequest) (*GetPlanListPageDataResponse, error)
 	// NEW: Enhanced item view with related data
 	GetPlanItemPageData(context.Context, *GetPlanItemPageDataRequest) (*GetPlanItemPageDataResponse, error)
+	SearchPlansByName(context.Context, *SearchPlansByNameRequest) (*SearchPlansByNameResponse, error)
 	mustEmbedUnimplementedPlanDomainServiceServer()
 }
 
@@ -164,6 +177,9 @@ func (UnimplementedPlanDomainServiceServer) GetPlanListPageData(context.Context,
 }
 func (UnimplementedPlanDomainServiceServer) GetPlanItemPageData(context.Context, *GetPlanItemPageDataRequest) (*GetPlanItemPageDataResponse, error) {
 	return nil, status.Error(codes.Unimplemented, "method GetPlanItemPageData not implemented")
+}
+func (UnimplementedPlanDomainServiceServer) SearchPlansByName(context.Context, *SearchPlansByNameRequest) (*SearchPlansByNameResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method SearchPlansByName not implemented")
 }
 func (UnimplementedPlanDomainServiceServer) mustEmbedUnimplementedPlanDomainServiceServer() {}
 func (UnimplementedPlanDomainServiceServer) testEmbeddedByValue()                           {}
@@ -312,6 +328,24 @@ func _PlanDomainService_GetPlanItemPageData_Handler(srv interface{}, ctx context
 	return interceptor(ctx, in, info, handler)
 }
 
+func _PlanDomainService_SearchPlansByName_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(SearchPlansByNameRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(PlanDomainServiceServer).SearchPlansByName(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: PlanDomainService_SearchPlansByName_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(PlanDomainServiceServer).SearchPlansByName(ctx, req.(*SearchPlansByNameRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // PlanDomainService_ServiceDesc is the grpc.ServiceDesc for PlanDomainService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -346,6 +380,10 @@ var PlanDomainService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "GetPlanItemPageData",
 			Handler:    _PlanDomainService_GetPlanItemPageData_Handler,
+		},
+		{
+			MethodName: "SearchPlansByName",
+			Handler:    _PlanDomainService_SearchPlansByName_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

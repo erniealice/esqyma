@@ -50,6 +50,7 @@ service ClientDomainService {
   rpc ListClients(ListClientsRequest) returns (ListClientsResponse);
   rpc GetClientListPageData(GetClientListPageDataRequest) returns (GetClientListPageDataResponse);
   rpc GetClientItemPageData(GetClientItemPageDataRequest) returns (GetClientItemPageDataResponse);
+  rpc SearchClientsByName(SearchClientsByNameRequest) returns (SearchClientsByNameResponse);
 }
 
 message CreateClientRequest {
@@ -127,4 +128,20 @@ message GetClientItemPageDataResponse {
   optional Client client = 1;
   bool success = 2;
   optional domain.common.v1.Error error = 3;
+}
+
+message SearchClientsByNameRequest {
+  string query = 1;
+  optional int32 limit = 2;
+}
+
+message SearchClientsByNameResponse {
+  repeated SearchClientResult results = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message SearchClientResult {
+  string id = 1;
+  string label = 2;
 }
