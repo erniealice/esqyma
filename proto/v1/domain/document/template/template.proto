@@ -1,0 +1,98 @@
+syntax = "proto3";
+
+package domain.document.v1;
+
+option go_package = "github.com/erniealice/esqyma/pkg/schema/v1/domain/document/template";
+
+import "domain/common/error.proto";
+import "domain/common/pagination.proto";
+import "domain/common/search.proto";
+import "domain/common/filter.proto";
+import "domain/common/sort.proto";
+import "options/db.proto";
+
+message DocumentTemplate {
+  string id = 1;
+  optional int64 date_created = 2;
+  optional string date_created_string = 3;
+  optional int64 date_modified = 4;
+  optional string date_modified_string = 5;
+  bool active = 6;
+
+  string name = 7;
+  optional string description = 8;
+  optional string workspace_id = 9;
+  string template_type = 10;
+  string document_purpose = 11;
+  optional string storage_container = 12;
+  optional string storage_key = 13;
+  optional string original_filename = 14;
+  optional int64 file_size_bytes = 15;
+  optional bool is_default = 16;
+  optional string created_by = 17;
+  string status = 18;
+
+  // Domain module discriminator — scopes template to a business module
+  // e.g. "revenue", "expenditure", "subscription"
+  optional string module_key = 19 [(options.v1.db).index = true];
+}
+
+service DocumentTemplateDomainService {
+  rpc CreateDocumentTemplate(CreateDocumentTemplateRequest) returns (CreateDocumentTemplateResponse);
+  rpc ReadDocumentTemplate(ReadDocumentTemplateRequest) returns (ReadDocumentTemplateResponse);
+  rpc UpdateDocumentTemplate(UpdateDocumentTemplateRequest) returns (UpdateDocumentTemplateResponse);
+  rpc DeleteDocumentTemplate(DeleteDocumentTemplateRequest) returns (DeleteDocumentTemplateResponse);
+  rpc ListDocumentTemplates(ListDocumentTemplatesRequest) returns (ListDocumentTemplatesResponse);
+}
+
+message CreateDocumentTemplateRequest {
+  DocumentTemplate data = 1;
+}
+
+message CreateDocumentTemplateResponse {
+  repeated DocumentTemplate data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message ReadDocumentTemplateRequest {
+  DocumentTemplate data = 1;
+}
+
+message ReadDocumentTemplateResponse {
+  repeated DocumentTemplate data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message UpdateDocumentTemplateRequest {
+  DocumentTemplate data = 1;
+}
+
+message UpdateDocumentTemplateResponse {
+  repeated DocumentTemplate data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message DeleteDocumentTemplateRequest {
+  DocumentTemplate data = 1;
+}
+
+message DeleteDocumentTemplateResponse {
+  bool success = 1;
+  optional domain.common.v1.Error error = 2;
+}
+
+message ListDocumentTemplatesRequest {
+  optional domain.common.v1.SearchRequest search = 1;
+  optional domain.common.v1.FilterRequest filters = 2;
+  optional domain.common.v1.SortRequest sort = 3;
+  optional domain.common.v1.PaginationRequest pagination = 4;
+}
+
+message ListDocumentTemplatesResponse {
+  repeated DocumentTemplate data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}

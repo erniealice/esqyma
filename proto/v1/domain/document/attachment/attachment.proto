@@ -1,0 +1,101 @@
+syntax = "proto3";
+
+package domain.document.v1;
+
+option go_package = "github.com/erniealice/esqyma/pkg/schema/v1/domain/document/attachment";
+
+import "domain/common/error.proto";
+import "domain/common/pagination.proto";
+import "domain/common/search.proto";
+import "domain/common/filter.proto";
+import "domain/common/sort.proto";
+import "options/db.proto";
+
+message Attachment {
+  option (options.v1.table).table = true;
+
+  string id = 1;
+  optional int64 date_created = 2;
+  optional string date_created_string = 3;
+  optional int64 date_modified = 4;
+  optional string date_modified_string = 5;
+  bool active = 6 [(options.v1.db).default = "true"];
+
+  // Polymorphic reference — module_key identifies the source table
+  // e.g. "product", "client", "subscription", "asset"
+  string module_key = 7 [(options.v1.db).index = true];
+
+  // Foreign key — the entity ID this attachment belongs to
+  string foreign_key = 8 [(options.v1.db).index = true];
+
+  // File metadata
+  string name = 9;                        // original filename
+  optional string description = 10;       // user-provided description
+  optional string workspace_id = 11;
+  optional string storage_container = 12; // bucket/container name
+  optional string storage_key = 13;       // full object path in storage
+  optional string content_type = 14;      // MIME type (e.g. "application/pdf")
+  optional int64 file_size_bytes = 15;
+  optional string created_by = 16;
+  string status = 17 [(options.v1.db).default = "'active'"];
+}
+
+service AttachmentDomainService {
+  rpc CreateAttachment(CreateAttachmentRequest) returns (CreateAttachmentResponse);
+  rpc ReadAttachment(ReadAttachmentRequest) returns (ReadAttachmentResponse);
+  rpc UpdateAttachment(UpdateAttachmentRequest) returns (UpdateAttachmentResponse);
+  rpc DeleteAttachment(DeleteAttachmentRequest) returns (DeleteAttachmentResponse);
+  rpc ListAttachments(ListAttachmentsRequest) returns (ListAttachmentsResponse);
+}
+
+message CreateAttachmentRequest {
+  Attachment data = 1;
+}
+
+message CreateAttachmentResponse {
+  repeated Attachment data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message ReadAttachmentRequest {
+  Attachment data = 1;
+}
+
+message ReadAttachmentResponse {
+  repeated Attachment data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message UpdateAttachmentRequest {
+  Attachment data = 1;
+}
+
+message UpdateAttachmentResponse {
+  repeated Attachment data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message DeleteAttachmentRequest {
+  Attachment data = 1;
+}
+
+message DeleteAttachmentResponse {
+  bool success = 1;
+  optional domain.common.v1.Error error = 2;
+}
+
+message ListAttachmentsRequest {
+  optional domain.common.v1.SearchRequest search = 1;
+  optional domain.common.v1.FilterRequest filters = 2;
+  optional domain.common.v1.SortRequest sort = 3;
+  optional domain.common.v1.PaginationRequest pagination = 4;
+}
+
+message ListAttachmentsResponse {
+  repeated Attachment data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
