@@ -1,0 +1,124 @@
+syntax = "proto3";
+
+package domain.operation.v1;
+
+option go_package = "github.com/erniealice/esqyma/golang/v1/domain/operation/activity_material";
+
+import "domain/common/error.proto";
+import "domain/common/pagination.proto";
+import "domain/common/filter.proto";
+import "domain/common/sort.proto";
+import "domain/common/search.proto";
+
+import "domain/operation/job_activity/job_activity.proto";
+import "domain/product/product/product.proto";
+import "domain/entity/location/location.proto";
+import "options/db.proto";
+
+// --- Message ---
+
+message ActivityMaterial {
+  option (options.v1.table).table = true;
+
+  string activity_id = 1 [(options.v1.db).references = "job_activity"];
+  optional JobActivity job_activity = 2;
+  string product_id = 3 [(options.v1.db).references = "product", (options.v1.db).index = true];
+  optional domain.product.v1.Product product = 4;
+  string unit_of_measure = 5;
+  optional string lot_number = 6;
+  optional string location_id = 7 [(options.v1.db).references = "location", (options.v1.db).index = true];
+  optional domain.entity.v1.Location location = 8;
+}
+
+// --- Service ---
+
+service ActivityMaterialDomainService {
+  rpc CreateActivityMaterial(CreateActivityMaterialRequest) returns (CreateActivityMaterialResponse);
+  rpc ReadActivityMaterial(ReadActivityMaterialRequest) returns (ReadActivityMaterialResponse);
+  rpc UpdateActivityMaterial(UpdateActivityMaterialRequest) returns (UpdateActivityMaterialResponse);
+  rpc DeleteActivityMaterial(DeleteActivityMaterialRequest) returns (DeleteActivityMaterialResponse);
+  rpc ListActivityMaterials(ListActivityMaterialsRequest) returns (ListActivityMaterialsResponse);
+  rpc GetActivityMaterialListPageData(GetActivityMaterialListPageDataRequest) returns (GetActivityMaterialListPageDataResponse);
+  rpc GetActivityMaterialItemPageData(GetActivityMaterialItemPageDataRequest) returns (GetActivityMaterialItemPageDataResponse);
+}
+
+// --- Standard CRUD messages ---
+
+message CreateActivityMaterialRequest {
+  ActivityMaterial data = 1;
+}
+
+message CreateActivityMaterialResponse {
+  repeated ActivityMaterial data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message ReadActivityMaterialRequest {
+  ActivityMaterial data = 1;
+}
+
+message ReadActivityMaterialResponse {
+  repeated ActivityMaterial data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message UpdateActivityMaterialRequest {
+  ActivityMaterial data = 1;
+}
+
+message UpdateActivityMaterialResponse {
+  repeated ActivityMaterial data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message DeleteActivityMaterialRequest {
+  ActivityMaterial data = 1;
+}
+
+message DeleteActivityMaterialResponse {
+  bool success = 1;
+  optional domain.common.v1.Error error = 2;
+}
+
+message ListActivityMaterialsRequest {
+  optional domain.common.v1.SearchRequest search = 1;
+  optional domain.common.v1.FilterRequest filters = 2;
+  optional domain.common.v1.SortRequest sort = 3;
+  optional domain.common.v1.PaginationRequest pagination = 4;
+}
+
+message ListActivityMaterialsResponse {
+  repeated ActivityMaterial data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+// --- PageData messages ---
+
+message GetActivityMaterialListPageDataRequest {
+  optional domain.common.v1.PaginationRequest pagination = 1;
+  optional domain.common.v1.FilterRequest filters = 2;
+  optional domain.common.v1.SortRequest sort = 3;
+  optional domain.common.v1.SearchRequest search = 4;
+}
+
+message GetActivityMaterialListPageDataResponse {
+  repeated ActivityMaterial activity_material_list = 1;
+  optional domain.common.v1.PaginationResponse pagination = 2;
+  repeated domain.common.v1.SearchResult search_results = 3;
+  bool success = 4;
+  optional domain.common.v1.Error error = 5;
+}
+
+message GetActivityMaterialItemPageDataRequest {
+  string activity_id = 1;
+}
+
+message GetActivityMaterialItemPageDataResponse {
+  optional ActivityMaterial activity_material = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}

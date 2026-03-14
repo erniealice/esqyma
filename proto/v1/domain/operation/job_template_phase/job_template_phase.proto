@@ -1,0 +1,130 @@
+syntax = "proto3";
+
+package domain.operation.v1;
+
+option go_package = "github.com/erniealice/esqyma/golang/v1/domain/operation/job_template_phase";
+
+import "domain/common/error.proto";
+import "domain/common/pagination.proto";
+import "domain/common/filter.proto";
+import "domain/common/sort.proto";
+import "domain/common/search.proto";
+
+import "domain/operation/job_template/job_template.proto";
+import "options/db.proto";
+
+message JobTemplatePhase {
+  option (options.v1.table).table = true;
+
+  string id = 1;
+  optional int64 date_created = 2;
+  optional string date_created_string = 3;
+  optional int64 date_modified = 4;
+  optional string date_modified_string = 5;
+  bool active = 6 [(options.v1.db).default = "true"];
+  string job_template_id = 7 [(options.v1.db).references = "job_template", (options.v1.db).index = true];
+  optional JobTemplate job_template = 8;
+  string name = 9;
+  int32 phase_order = 10;
+}
+
+service JobTemplatePhaseDomainService {
+  rpc CreateJobTemplatePhase(CreateJobTemplatePhaseRequest) returns (CreateJobTemplatePhaseResponse);
+  rpc ReadJobTemplatePhase(ReadJobTemplatePhaseRequest) returns (ReadJobTemplatePhaseResponse);
+  rpc UpdateJobTemplatePhase(UpdateJobTemplatePhaseRequest) returns (UpdateJobTemplatePhaseResponse);
+  rpc DeleteJobTemplatePhase(DeleteJobTemplatePhaseRequest) returns (DeleteJobTemplatePhaseResponse);
+  rpc ListJobTemplatePhases(ListJobTemplatePhasesRequest) returns (ListJobTemplatePhasesResponse);
+  rpc GetJobTemplatePhaseListPageData(GetJobTemplatePhaseListPageDataRequest) returns (GetJobTemplatePhaseListPageDataResponse);
+  rpc GetJobTemplatePhaseItemPageData(GetJobTemplatePhaseItemPageDataRequest) returns (GetJobTemplatePhaseItemPageDataResponse);
+
+  // Extra: filter by job template
+  rpc ListByJobTemplate(ListByJobTemplateRequest) returns (ListByJobTemplateResponse);
+}
+
+message CreateJobTemplatePhaseRequest {
+  JobTemplatePhase data = 1;
+}
+
+message CreateJobTemplatePhaseResponse {
+  repeated JobTemplatePhase data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message ReadJobTemplatePhaseRequest {
+  JobTemplatePhase data = 1;
+}
+
+message ReadJobTemplatePhaseResponse {
+  repeated JobTemplatePhase data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message UpdateJobTemplatePhaseRequest {
+  JobTemplatePhase data = 1;
+}
+
+message UpdateJobTemplatePhaseResponse {
+  repeated JobTemplatePhase data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message DeleteJobTemplatePhaseRequest {
+  JobTemplatePhase data = 1;
+}
+
+message DeleteJobTemplatePhaseResponse {
+  bool success = 1;
+  optional domain.common.v1.Error error = 2;
+}
+
+message ListJobTemplatePhasesRequest {
+  optional domain.common.v1.SearchRequest search = 1;
+  optional domain.common.v1.FilterRequest filters = 2;
+  optional domain.common.v1.SortRequest sort = 3;
+  optional domain.common.v1.PaginationRequest pagination = 4;
+}
+
+message ListJobTemplatePhasesResponse {
+  repeated JobTemplatePhase data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message GetJobTemplatePhaseListPageDataRequest {
+  optional domain.common.v1.PaginationRequest pagination = 1;
+  optional domain.common.v1.FilterRequest filters = 2;
+  optional domain.common.v1.SortRequest sort = 3;
+  optional domain.common.v1.SearchRequest search = 4;
+}
+
+message GetJobTemplatePhaseListPageDataResponse {
+  repeated JobTemplatePhase job_template_phase_list = 1;
+  optional domain.common.v1.PaginationResponse pagination = 2;
+  repeated domain.common.v1.SearchResult search_results = 3;
+  bool success = 4;
+  optional domain.common.v1.Error error = 5;
+}
+
+message GetJobTemplatePhaseItemPageDataRequest {
+  string job_template_phase_id = 1;
+}
+
+message GetJobTemplatePhaseItemPageDataResponse {
+  optional JobTemplatePhase job_template_phase = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+// Extra RPC messages
+message ListByJobTemplateRequest {
+  string job_template_id = 1;
+}
+
+message ListByJobTemplateResponse {
+  repeated JobTemplatePhase job_template_phases = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}

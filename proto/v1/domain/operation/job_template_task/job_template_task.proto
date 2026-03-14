@@ -1,0 +1,131 @@
+syntax = "proto3";
+
+package domain.operation.v1;
+
+option go_package = "github.com/erniealice/esqyma/golang/v1/domain/operation/job_template_task";
+
+import "domain/common/error.proto";
+import "domain/common/pagination.proto";
+import "domain/common/filter.proto";
+import "domain/common/sort.proto";
+import "domain/common/search.proto";
+
+import "domain/operation/job_template_phase/job_template_phase.proto";
+import "options/db.proto";
+
+message JobTemplateTask {
+  option (options.v1.table).table = true;
+
+  string id = 1;
+  optional int64 date_created = 2;
+  optional string date_created_string = 3;
+  optional int64 date_modified = 4;
+  optional string date_modified_string = 5;
+  bool active = 6 [(options.v1.db).default = "true"];
+  string job_template_phase_id = 7 [(options.v1.db).references = "job_template_phase", (options.v1.db).index = true];
+  optional JobTemplatePhase job_template_phase = 8;
+  string name = 9;
+  int32 step_order = 10;
+  optional int32 estimated_duration_minutes = 11;
+}
+
+service JobTemplateTaskDomainService {
+  rpc CreateJobTemplateTask(CreateJobTemplateTaskRequest) returns (CreateJobTemplateTaskResponse);
+  rpc ReadJobTemplateTask(ReadJobTemplateTaskRequest) returns (ReadJobTemplateTaskResponse);
+  rpc UpdateJobTemplateTask(UpdateJobTemplateTaskRequest) returns (UpdateJobTemplateTaskResponse);
+  rpc DeleteJobTemplateTask(DeleteJobTemplateTaskRequest) returns (DeleteJobTemplateTaskResponse);
+  rpc ListJobTemplateTasks(ListJobTemplateTasksRequest) returns (ListJobTemplateTasksResponse);
+  rpc GetJobTemplateTaskListPageData(GetJobTemplateTaskListPageDataRequest) returns (GetJobTemplateTaskListPageDataResponse);
+  rpc GetJobTemplateTaskItemPageData(GetJobTemplateTaskItemPageDataRequest) returns (GetJobTemplateTaskItemPageDataResponse);
+
+  // Extra: filter by phase
+  rpc ListByPhase(ListJobTemplateTasksByPhaseRequest) returns (ListJobTemplateTasksByPhaseResponse);
+}
+
+message CreateJobTemplateTaskRequest {
+  JobTemplateTask data = 1;
+}
+
+message CreateJobTemplateTaskResponse {
+  repeated JobTemplateTask data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message ReadJobTemplateTaskRequest {
+  JobTemplateTask data = 1;
+}
+
+message ReadJobTemplateTaskResponse {
+  repeated JobTemplateTask data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message UpdateJobTemplateTaskRequest {
+  JobTemplateTask data = 1;
+}
+
+message UpdateJobTemplateTaskResponse {
+  repeated JobTemplateTask data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message DeleteJobTemplateTaskRequest {
+  JobTemplateTask data = 1;
+}
+
+message DeleteJobTemplateTaskResponse {
+  bool success = 1;
+  optional domain.common.v1.Error error = 2;
+}
+
+message ListJobTemplateTasksRequest {
+  optional domain.common.v1.SearchRequest search = 1;
+  optional domain.common.v1.FilterRequest filters = 2;
+  optional domain.common.v1.SortRequest sort = 3;
+  optional domain.common.v1.PaginationRequest pagination = 4;
+}
+
+message ListJobTemplateTasksResponse {
+  repeated JobTemplateTask data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message GetJobTemplateTaskListPageDataRequest {
+  optional domain.common.v1.PaginationRequest pagination = 1;
+  optional domain.common.v1.FilterRequest filters = 2;
+  optional domain.common.v1.SortRequest sort = 3;
+  optional domain.common.v1.SearchRequest search = 4;
+}
+
+message GetJobTemplateTaskListPageDataResponse {
+  repeated JobTemplateTask job_template_task_list = 1;
+  optional domain.common.v1.PaginationResponse pagination = 2;
+  repeated domain.common.v1.SearchResult search_results = 3;
+  bool success = 4;
+  optional domain.common.v1.Error error = 5;
+}
+
+message GetJobTemplateTaskItemPageDataRequest {
+  string job_template_task_id = 1;
+}
+
+message GetJobTemplateTaskItemPageDataResponse {
+  optional JobTemplateTask job_template_task = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+// Extra RPC messages
+message ListJobTemplateTasksByPhaseRequest {
+  string job_template_phase_id = 1;
+}
+
+message ListJobTemplateTasksByPhaseResponse {
+  repeated JobTemplateTask job_template_tasks = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}

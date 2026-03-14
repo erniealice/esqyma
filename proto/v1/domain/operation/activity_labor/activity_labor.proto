@@ -1,0 +1,160 @@
+syntax = "proto3";
+
+package domain.operation.v1;
+
+option go_package = "github.com/erniealice/esqyma/golang/v1/domain/operation/activity_labor";
+
+import "domain/common/error.proto";
+import "domain/common/pagination.proto";
+import "domain/common/filter.proto";
+import "domain/common/sort.proto";
+import "domain/common/search.proto";
+
+import "domain/operation/job_activity/job_activity.proto";
+import "domain/entity/staff/staff.proto";
+import "options/db.proto";
+
+// --- Enum ---
+
+enum RateType {
+  RATE_TYPE_UNSPECIFIED = 0;
+  RATE_TYPE_STANDARD = 1;
+  RATE_TYPE_OVERTIME = 2;
+  RATE_TYPE_PREMIUM = 3;
+}
+
+// --- Message ---
+
+message ActivityLabor {
+  option (options.v1.table).table = true;
+
+  string activity_id = 1 [(options.v1.db).references = "job_activity"];
+  optional JobActivity job_activity = 2;
+  string staff_id = 3 [(options.v1.db).references = "staff", (options.v1.db).index = true];
+  optional domain.entity.v1.Staff staff = 4;
+  double hours = 5;
+  RateType rate_type = 6;
+  optional int64 time_start = 7;
+  optional string time_start_string = 8;
+  optional int64 time_end = 9;
+  optional string time_end_string = 10;
+}
+
+// --- Service ---
+
+service ActivityLaborDomainService {
+  rpc CreateActivityLabor(CreateActivityLaborRequest) returns (CreateActivityLaborResponse);
+  rpc ReadActivityLabor(ReadActivityLaborRequest) returns (ReadActivityLaborResponse);
+  rpc UpdateActivityLabor(UpdateActivityLaborRequest) returns (UpdateActivityLaborResponse);
+  rpc DeleteActivityLabor(DeleteActivityLaborRequest) returns (DeleteActivityLaborResponse);
+  rpc ListActivityLabors(ListActivityLaborsRequest) returns (ListActivityLaborsResponse);
+  rpc GetActivityLaborListPageData(GetActivityLaborListPageDataRequest) returns (GetActivityLaborListPageDataResponse);
+  rpc GetActivityLaborItemPageData(GetActivityLaborItemPageDataRequest) returns (GetActivityLaborItemPageDataResponse);
+
+  // Extra: filter by staff and by job
+  rpc ListByStaff(ListActivityLaborsByStaffRequest) returns (ListActivityLaborsByStaffResponse);
+  rpc ListByJob(ListActivityLaborsByJobRequest) returns (ListActivityLaborsByJobResponse);
+}
+
+// --- Standard CRUD messages ---
+
+message CreateActivityLaborRequest {
+  ActivityLabor data = 1;
+}
+
+message CreateActivityLaborResponse {
+  repeated ActivityLabor data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message ReadActivityLaborRequest {
+  ActivityLabor data = 1;
+}
+
+message ReadActivityLaborResponse {
+  repeated ActivityLabor data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message UpdateActivityLaborRequest {
+  ActivityLabor data = 1;
+}
+
+message UpdateActivityLaborResponse {
+  repeated ActivityLabor data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message DeleteActivityLaborRequest {
+  ActivityLabor data = 1;
+}
+
+message DeleteActivityLaborResponse {
+  bool success = 1;
+  optional domain.common.v1.Error error = 2;
+}
+
+message ListActivityLaborsRequest {
+  optional domain.common.v1.SearchRequest search = 1;
+  optional domain.common.v1.FilterRequest filters = 2;
+  optional domain.common.v1.SortRequest sort = 3;
+  optional domain.common.v1.PaginationRequest pagination = 4;
+}
+
+message ListActivityLaborsResponse {
+  repeated ActivityLabor data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+// --- PageData messages ---
+
+message GetActivityLaborListPageDataRequest {
+  optional domain.common.v1.PaginationRequest pagination = 1;
+  optional domain.common.v1.FilterRequest filters = 2;
+  optional domain.common.v1.SortRequest sort = 3;
+  optional domain.common.v1.SearchRequest search = 4;
+}
+
+message GetActivityLaborListPageDataResponse {
+  repeated ActivityLabor activity_labor_list = 1;
+  optional domain.common.v1.PaginationResponse pagination = 2;
+  repeated domain.common.v1.SearchResult search_results = 3;
+  bool success = 4;
+  optional domain.common.v1.Error error = 5;
+}
+
+message GetActivityLaborItemPageDataRequest {
+  string activity_id = 1;
+}
+
+message GetActivityLaborItemPageDataResponse {
+  optional ActivityLabor activity_labor = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+// --- Extra RPC messages ---
+
+message ListActivityLaborsByStaffRequest {
+  string staff_id = 1;
+}
+
+message ListActivityLaborsByStaffResponse {
+  repeated ActivityLabor activity_labors = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message ListActivityLaborsByJobRequest {
+  string job_id = 1;
+}
+
+message ListActivityLaborsByJobResponse {
+  repeated ActivityLabor activity_labors = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}

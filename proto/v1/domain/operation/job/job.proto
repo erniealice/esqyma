@@ -1,0 +1,192 @@
+syntax = "proto3";
+
+package domain.operation.v1;
+
+option go_package = "github.com/erniealice/esqyma/golang/v1/domain/operation/job";
+
+import "domain/common/error.proto";
+import "domain/common/pagination.proto";
+import "domain/common/filter.proto";
+import "domain/common/sort.proto";
+import "domain/common/search.proto";
+
+import "domain/entity/client/client.proto";
+import "domain/entity/location/location.proto";
+import "domain/operation/enums/enums.proto";
+import "options/db.proto";
+
+// --- Job message ---
+
+message Job {
+  option (options.v1.table).table = true;
+
+  // Identity
+  string id = 1;
+  optional int64 date_created = 2;
+  optional string date_created_string = 3;
+  optional int64 date_modified = 4;
+  optional string date_modified_string = 5;
+  bool active = 6 [(options.v1.db).default = "true"];
+  string name = 7;
+  optional string job_template_id = 8 [(options.v1.db).references = "job_template", (options.v1.db).index = true];
+
+  // Origin
+  OriginType origin_type = 10;
+  optional string origin_id = 11;
+  optional string client_id = 12 [(options.v1.db).references = "client", (options.v1.db).index = true];
+  optional domain.entity.v1.Client client = 13;
+
+  // Target
+  DemandType demand_type = 14;
+  FulfillmentType fulfillment_type = 15;
+  CostFlowType cost_flow_type = 16;
+  BillingRuleType billing_rule_type = 17;
+
+  // Lifecycle
+  JobStatus status = 18;
+  ApprovalStatus approval_status = 19;
+  PostingStatus posting_status = 20;
+  BillingStatus billing_status = 21;
+
+  // Location
+  optional string location_id = 22 [(options.v1.db).references = "location", (options.v1.db).index = true];
+  optional domain.entity.v1.Location location = 23;
+
+  // Audit
+  optional string created_by = 24;
+
+  // Tenant isolation
+  optional string workspace_id = 25 [(options.v1.db).references = "workspace", (options.v1.db).index = true];
+}
+
+// --- Service ---
+
+service JobDomainService {
+  rpc CreateJob(CreateJobRequest) returns (CreateJobResponse);
+  rpc ReadJob(ReadJobRequest) returns (ReadJobResponse);
+  rpc UpdateJob(UpdateJobRequest) returns (UpdateJobResponse);
+  rpc DeleteJob(DeleteJobRequest) returns (DeleteJobResponse);
+  rpc ListJobs(ListJobsRequest) returns (ListJobsResponse);
+  rpc GetJobListPageData(GetJobListPageDataRequest) returns (GetJobListPageDataResponse);
+  rpc GetJobItemPageData(GetJobItemPageDataRequest) returns (GetJobItemPageDataResponse);
+
+  // Extra RPCs
+  rpc GetJobsByClient(GetJobsByClientRequest) returns (GetJobsByClientResponse);
+  rpc GetJobsByOrigin(GetJobsByOriginRequest) returns (GetJobsByOriginResponse);
+  rpc UpdateJobStatus(UpdateJobStatusRequest) returns (UpdateJobStatusResponse);
+}
+
+// --- Standard CRUD messages ---
+
+message CreateJobRequest {
+  Job data = 1;
+}
+
+message CreateJobResponse {
+  repeated Job data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message ReadJobRequest {
+  Job data = 1;
+}
+
+message ReadJobResponse {
+  repeated Job data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message UpdateJobRequest {
+  Job data = 1;
+}
+
+message UpdateJobResponse {
+  repeated Job data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message DeleteJobRequest {
+  Job data = 1;
+}
+
+message DeleteJobResponse {
+  bool success = 1;
+  optional domain.common.v1.Error error = 2;
+}
+
+message ListJobsRequest {
+  optional domain.common.v1.SearchRequest search = 1;
+  optional domain.common.v1.FilterRequest filters = 2;
+  optional domain.common.v1.SortRequest sort = 3;
+  optional domain.common.v1.PaginationRequest pagination = 4;
+}
+
+message ListJobsResponse {
+  repeated Job data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+// --- PageData messages ---
+
+message GetJobListPageDataRequest {
+  optional domain.common.v1.PaginationRequest pagination = 1;
+  optional domain.common.v1.FilterRequest filters = 2;
+  optional domain.common.v1.SortRequest sort = 3;
+  optional domain.common.v1.SearchRequest search = 4;
+}
+
+message GetJobListPageDataResponse {
+  repeated Job job_list = 1;
+  optional domain.common.v1.PaginationResponse pagination = 2;
+  repeated domain.common.v1.SearchResult search_results = 3;
+  bool success = 4;
+  optional domain.common.v1.Error error = 5;
+}
+
+message GetJobItemPageDataRequest {
+  string job_id = 1;
+}
+
+message GetJobItemPageDataResponse {
+  optional Job job = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+// --- Extra RPC messages ---
+
+message GetJobsByClientRequest {
+  string client_id = 1;
+}
+
+message GetJobsByClientResponse {
+  repeated Job jobs = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message GetJobsByOriginRequest {
+  OriginType origin_type = 1;
+  string origin_id = 2;
+}
+
+message GetJobsByOriginResponse {
+  repeated Job jobs = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message UpdateJobStatusRequest {
+  string job_id = 1;
+  JobStatus status = 2;
+}
+
+message UpdateJobStatusResponse {
+  optional Job job = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}

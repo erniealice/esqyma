@@ -1,0 +1,193 @@
+syntax = "proto3";
+
+package domain.operation.v1;
+
+option go_package = "github.com/erniealice/esqyma/golang/v1/domain/operation/job_settlement";
+
+import "domain/common/error.proto";
+import "domain/common/pagination.proto";
+import "domain/common/filter.proto";
+import "domain/common/sort.proto";
+import "domain/common/search.proto";
+
+import "domain/operation/job_activity/job_activity.proto";
+import "options/db.proto";
+
+// --- Enums ---
+
+enum SettlementTargetType {
+  SETTLEMENT_TARGET_TYPE_UNSPECIFIED = 0;
+  SETTLEMENT_TARGET_TYPE_INVOICE_LINE = 1;
+  SETTLEMENT_TARGET_TYPE_INVENTORY_ASSET = 2;
+  SETTLEMENT_TARGET_TYPE_WIP_ACCOUNT = 3;
+  SETTLEMENT_TARGET_TYPE_OVERHEAD_POOL = 4;
+  SETTLEMENT_TARGET_TYPE_WRITE_OFF = 5;
+}
+
+enum SettlementStatus {
+  SETTLEMENT_STATUS_UNSPECIFIED = 0;
+  SETTLEMENT_STATUS_PENDING = 1;
+  SETTLEMENT_STATUS_SETTLED = 2;
+  SETTLEMENT_STATUS_REVERSED = 3;
+}
+
+// --- Message ---
+
+message JobSettlement {
+  option (options.v1.table).table = true;
+
+  string id = 1;
+  string job_activity_id = 2 [(options.v1.db).references = "job_activity", (options.v1.db).index = true];
+  optional JobActivity job_activity = 3;
+  SettlementTargetType target_type = 4;
+  string target_id = 5;
+  double allocated_amount = 6;
+  optional double allocation_pct = 7;
+  optional int64 settlement_date = 8;
+  optional string settlement_date_string = 9;
+  SettlementStatus status = 10;
+  optional string reversal_of_id = 11 [(options.v1.db).references = "job_settlement"];
+  optional string created_by = 12;
+  optional int64 date_created = 13;
+  optional string date_created_string = 14;
+  bool active = 15;
+  optional string workspace_id = 16 [(options.v1.db).references = "workspace", (options.v1.db).index = true];
+}
+
+// --- Service ---
+
+service JobSettlementDomainService {
+  rpc CreateJobSettlement(CreateJobSettlementRequest) returns (CreateJobSettlementResponse);
+  rpc ReadJobSettlement(ReadJobSettlementRequest) returns (ReadJobSettlementResponse);
+  rpc UpdateJobSettlement(UpdateJobSettlementRequest) returns (UpdateJobSettlementResponse);
+  rpc DeleteJobSettlement(DeleteJobSettlementRequest) returns (DeleteJobSettlementResponse);
+  rpc ListJobSettlements(ListJobSettlementsRequest) returns (ListJobSettlementsResponse);
+  rpc GetJobSettlementListPageData(GetJobSettlementListPageDataRequest) returns (GetJobSettlementListPageDataResponse);
+  rpc GetJobSettlementItemPageData(GetJobSettlementItemPageDataRequest) returns (GetJobSettlementItemPageDataResponse);
+
+  // Extra RPCs
+  rpc ListByActivity(ListJobSettlementsByActivityRequest) returns (ListJobSettlementsByActivityResponse);
+  rpc ListByTarget(ListJobSettlementsByTargetRequest) returns (ListJobSettlementsByTargetResponse);
+  rpc GetSettlementSummary(GetSettlementSummaryRequest) returns (GetSettlementSummaryResponse);
+}
+
+// --- Standard CRUD messages ---
+
+message CreateJobSettlementRequest {
+  JobSettlement data = 1;
+}
+
+message CreateJobSettlementResponse {
+  repeated JobSettlement data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message ReadJobSettlementRequest {
+  JobSettlement data = 1;
+}
+
+message ReadJobSettlementResponse {
+  repeated JobSettlement data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message UpdateJobSettlementRequest {
+  JobSettlement data = 1;
+}
+
+message UpdateJobSettlementResponse {
+  repeated JobSettlement data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message DeleteJobSettlementRequest {
+  JobSettlement data = 1;
+}
+
+message DeleteJobSettlementResponse {
+  bool success = 1;
+  optional domain.common.v1.Error error = 2;
+}
+
+message ListJobSettlementsRequest {
+  optional domain.common.v1.SearchRequest search = 1;
+  optional domain.common.v1.FilterRequest filters = 2;
+  optional domain.common.v1.SortRequest sort = 3;
+  optional domain.common.v1.PaginationRequest pagination = 4;
+}
+
+message ListJobSettlementsResponse {
+  repeated JobSettlement data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+// --- PageData messages ---
+
+message GetJobSettlementListPageDataRequest {
+  optional domain.common.v1.PaginationRequest pagination = 1;
+  optional domain.common.v1.FilterRequest filters = 2;
+  optional domain.common.v1.SortRequest sort = 3;
+  optional domain.common.v1.SearchRequest search = 4;
+}
+
+message GetJobSettlementListPageDataResponse {
+  repeated JobSettlement job_settlement_list = 1;
+  optional domain.common.v1.PaginationResponse pagination = 2;
+  repeated domain.common.v1.SearchResult search_results = 3;
+  bool success = 4;
+  optional domain.common.v1.Error error = 5;
+}
+
+message GetJobSettlementItemPageDataRequest {
+  string job_settlement_id = 1;
+}
+
+message GetJobSettlementItemPageDataResponse {
+  optional JobSettlement job_settlement = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+// --- Extra RPC messages ---
+
+message ListJobSettlementsByActivityRequest {
+  string job_activity_id = 1;
+}
+
+message ListJobSettlementsByActivityResponse {
+  repeated JobSettlement job_settlements = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message ListJobSettlementsByTargetRequest {
+  SettlementTargetType target_type = 1;
+  string target_id = 2;
+}
+
+message ListJobSettlementsByTargetResponse {
+  repeated JobSettlement job_settlements = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message GetSettlementSummaryRequest {
+  string job_id = 1;
+}
+
+message SettlementByTargetType {
+  SettlementTargetType target_type = 1;
+  double total_amount = 2;
+  int32 count = 3;
+}
+
+message GetSettlementSummaryResponse {
+  repeated SettlementByTargetType summary = 1;
+  double grand_total = 2;
+  bool success = 3;
+  optional domain.common.v1.Error error = 4;
+}

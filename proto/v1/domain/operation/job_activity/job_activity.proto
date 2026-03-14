@@ -1,0 +1,265 @@
+syntax = "proto3";
+
+package domain.operation.v1;
+
+option go_package = "github.com/erniealice/esqyma/golang/v1/domain/operation/job_activity";
+
+import "domain/common/error.proto";
+import "domain/common/pagination.proto";
+import "domain/common/filter.proto";
+import "domain/common/sort.proto";
+import "domain/common/search.proto";
+
+import "domain/operation/job/job.proto";
+import "domain/operation/job_task/job_task.proto";
+import "options/db.proto";
+
+// --- Enums ---
+
+enum EntryType {
+  ENTRY_TYPE_UNSPECIFIED = 0;
+  ENTRY_TYPE_LABOR = 1;
+  ENTRY_TYPE_MATERIAL = 2;
+  ENTRY_TYPE_EXPENSE = 3;
+}
+
+enum BillableStatus {
+  BILLABLE_STATUS_UNSPECIFIED = 0;
+  BILLABLE_STATUS_BILLABLE = 1;
+  BILLABLE_STATUS_NON_BILLABLE = 2;
+  BILLABLE_STATUS_INCLUDED = 3;
+  BILLABLE_STATUS_WRITE_OFF = 4;
+}
+
+enum ActivityApprovalStatus {
+  ACTIVITY_APPROVAL_STATUS_UNSPECIFIED = 0;
+  ACTIVITY_APPROVAL_STATUS_DRAFT = 1;
+  ACTIVITY_APPROVAL_STATUS_SUBMITTED = 2;
+  ACTIVITY_APPROVAL_STATUS_APPROVED = 3;
+  ACTIVITY_APPROVAL_STATUS_REJECTED = 4;
+}
+
+enum ActivityPostingStatus {
+  ACTIVITY_POSTING_STATUS_UNSPECIFIED = 0;
+  ACTIVITY_POSTING_STATUS_UNPOSTED = 1;
+  ACTIVITY_POSTING_STATUS_POSTED = 2;
+  ACTIVITY_POSTING_STATUS_REVERSED = 3;
+}
+
+// --- Message ---
+
+message JobActivity {
+  option (options.v1.table).table = true;
+
+  string id = 1;
+  string job_id = 2 [(options.v1.db).references = "job", (options.v1.db).index = true];
+  optional Job job = 3;
+  optional string job_task_id = 4 [(options.v1.db).references = "job_task", (options.v1.db).index = true];
+  EntryType entry_type = 5;
+  double quantity = 6;
+  double unit_cost = 7;
+  double total_cost = 8;
+  string currency = 9;
+  optional int64 entry_date = 10;
+  optional string entry_date_string = 11;
+  optional string description = 12;
+  BillableStatus billable_status = 13;
+  ActivityApprovalStatus approval_status = 14;
+  ActivityPostingStatus posting_status = 15;
+  optional string posted_by = 16;
+  optional int64 date_posted = 17;
+  optional string date_posted_string = 18;
+  optional string reversal_of_id = 19 [(options.v1.db).references = "job_activity"];
+  optional string created_by = 20;
+  optional int64 date_created = 21;
+  optional string date_created_string = 22;
+  bool active = 23;
+  optional string workspace_id = 24 [(options.v1.db).references = "workspace", (options.v1.db).index = true];
+}
+
+// --- Service ---
+
+service JobActivityDomainService {
+  rpc CreateJobActivity(CreateJobActivityRequest) returns (CreateJobActivityResponse);
+  rpc ReadJobActivity(ReadJobActivityRequest) returns (ReadJobActivityResponse);
+  rpc UpdateJobActivity(UpdateJobActivityRequest) returns (UpdateJobActivityResponse);
+  rpc DeleteJobActivity(DeleteJobActivityRequest) returns (DeleteJobActivityResponse);
+  rpc ListJobActivities(ListJobActivitiesRequest) returns (ListJobActivitiesResponse);
+  rpc GetJobActivityListPageData(GetJobActivityListPageDataRequest) returns (GetJobActivityListPageDataResponse);
+  rpc GetJobActivityItemPageData(GetJobActivityItemPageDataRequest) returns (GetJobActivityItemPageDataResponse);
+
+  // Extra RPCs
+  rpc ListByJob(ListJobActivitiesByJobRequest) returns (ListJobActivitiesByJobResponse);
+  rpc GetJobActivityRollup(GetJobActivityRollupRequest) returns (GetJobActivityRollupResponse);
+  rpc SubmitForApproval(SubmitForApprovalRequest) returns (SubmitForApprovalResponse);
+  rpc ApproveActivity(ApproveJobActivityRequest) returns (ApproveJobActivityResponse);
+  rpc RejectActivity(RejectJobActivityRequest) returns (RejectJobActivityResponse);
+  rpc PostActivity(PostJobActivityRequest) returns (PostJobActivityResponse);
+  rpc ReverseActivity(ReverseJobActivityRequest) returns (ReverseJobActivityResponse);
+}
+
+// --- Standard CRUD messages ---
+
+message CreateJobActivityRequest {
+  JobActivity data = 1;
+}
+
+message CreateJobActivityResponse {
+  repeated JobActivity data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message ReadJobActivityRequest {
+  JobActivity data = 1;
+}
+
+message ReadJobActivityResponse {
+  repeated JobActivity data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message UpdateJobActivityRequest {
+  JobActivity data = 1;
+}
+
+message UpdateJobActivityResponse {
+  repeated JobActivity data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message DeleteJobActivityRequest {
+  JobActivity data = 1;
+}
+
+message DeleteJobActivityResponse {
+  bool success = 1;
+  optional domain.common.v1.Error error = 2;
+}
+
+message ListJobActivitiesRequest {
+  optional domain.common.v1.SearchRequest search = 1;
+  optional domain.common.v1.FilterRequest filters = 2;
+  optional domain.common.v1.SortRequest sort = 3;
+  optional domain.common.v1.PaginationRequest pagination = 4;
+}
+
+message ListJobActivitiesResponse {
+  repeated JobActivity data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+// --- PageData messages ---
+
+message GetJobActivityListPageDataRequest {
+  optional domain.common.v1.PaginationRequest pagination = 1;
+  optional domain.common.v1.FilterRequest filters = 2;
+  optional domain.common.v1.SortRequest sort = 3;
+  optional domain.common.v1.SearchRequest search = 4;
+}
+
+message GetJobActivityListPageDataResponse {
+  repeated JobActivity job_activity_list = 1;
+  optional domain.common.v1.PaginationResponse pagination = 2;
+  repeated domain.common.v1.SearchResult search_results = 3;
+  bool success = 4;
+  optional domain.common.v1.Error error = 5;
+}
+
+message GetJobActivityItemPageDataRequest {
+  string job_activity_id = 1;
+}
+
+message GetJobActivityItemPageDataResponse {
+  optional JobActivity job_activity = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+// --- Extra RPC messages ---
+
+message ListJobActivitiesByJobRequest {
+  string job_id = 1;
+}
+
+message ListJobActivitiesByJobResponse {
+  repeated JobActivity job_activities = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message GetJobActivityRollupRequest {
+  string job_id = 1;
+}
+
+message CostByEntryType {
+  EntryType entry_type = 1;
+  double total_cost = 2;
+  int32 count = 3;
+}
+
+message GetJobActivityRollupResponse {
+  repeated CostByEntryType rollup = 1;
+  double grand_total = 2;
+  bool success = 3;
+  optional domain.common.v1.Error error = 4;
+}
+
+message SubmitForApprovalRequest {
+  string activity_id = 1;
+}
+
+message SubmitForApprovalResponse {
+  optional JobActivity job_activity = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message ApproveJobActivityRequest {
+  string activity_id = 1;
+  string approved_by = 2;
+}
+
+message ApproveJobActivityResponse {
+  optional JobActivity job_activity = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message RejectJobActivityRequest {
+  string activity_id = 1;
+  string rejected_by = 2;
+  string reason = 3;
+}
+
+message RejectJobActivityResponse {
+  optional JobActivity job_activity = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message PostJobActivityRequest {
+  string activity_id = 1;
+  string posted_by = 2;
+}
+
+message PostJobActivityResponse {
+  optional JobActivity job_activity = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message ReverseJobActivityRequest {
+  string activity_id = 1;
+  string reversed_by = 2;
+  string reason = 3;
+}
+
+message ReverseJobActivityResponse {
+  optional JobActivity job_activity = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}

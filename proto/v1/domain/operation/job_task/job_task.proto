@@ -1,0 +1,163 @@
+syntax = "proto3";
+
+package domain.operation.v1;
+
+option go_package = "github.com/erniealice/esqyma/golang/v1/domain/operation/job_task";
+
+import "domain/common/error.proto";
+import "domain/common/pagination.proto";
+import "domain/common/filter.proto";
+import "domain/common/sort.proto";
+import "domain/common/search.proto";
+
+import "domain/operation/job_phase/job_phase.proto";
+import "options/db.proto";
+
+// --- Enum ---
+
+enum TaskStatus {
+  TASK_STATUS_UNSPECIFIED = 0;
+  TASK_STATUS_PENDING = 1;
+  TASK_STATUS_IN_PROGRESS = 2;
+  TASK_STATUS_COMPLETED = 3;
+  TASK_STATUS_SKIPPED = 4;
+}
+
+// --- Message ---
+
+message JobTask {
+  option (options.v1.table).table = true;
+
+  string id = 1;
+  optional int64 date_created = 2;
+  optional string date_created_string = 3;
+  optional int64 date_modified = 4;
+  optional string date_modified_string = 5;
+  bool active = 6;
+  string job_phase_id = 7 [(options.v1.db).references = "job_phase", (options.v1.db).index = true];
+  optional JobPhase job_phase = 8;
+  string name = 9;
+  int32 step_order = 10;
+  TaskStatus status = 11;
+  bool is_ad_hoc = 12;
+  optional string assigned_to = 13 [(options.v1.db).references = "staff", (options.v1.db).index = true];
+}
+
+// --- Service ---
+
+service JobTaskDomainService {
+  rpc CreateJobTask(CreateJobTaskRequest) returns (CreateJobTaskResponse);
+  rpc ReadJobTask(ReadJobTaskRequest) returns (ReadJobTaskResponse);
+  rpc UpdateJobTask(UpdateJobTaskRequest) returns (UpdateJobTaskResponse);
+  rpc DeleteJobTask(DeleteJobTaskRequest) returns (DeleteJobTaskResponse);
+  rpc ListJobTasks(ListJobTasksRequest) returns (ListJobTasksResponse);
+  rpc GetJobTaskListPageData(GetJobTaskListPageDataRequest) returns (GetJobTaskListPageDataResponse);
+  rpc GetJobTaskItemPageData(GetJobTaskItemPageDataRequest) returns (GetJobTaskItemPageDataResponse);
+
+  // Extra: filter by phase and by assignee
+  rpc ListByPhase(ListJobTasksByPhaseRequest) returns (ListJobTasksByPhaseResponse);
+  rpc ListByAssignee(ListJobTasksByAssigneeRequest) returns (ListJobTasksByAssigneeResponse);
+}
+
+// --- Standard CRUD messages ---
+
+message CreateJobTaskRequest {
+  JobTask data = 1;
+}
+
+message CreateJobTaskResponse {
+  repeated JobTask data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message ReadJobTaskRequest {
+  JobTask data = 1;
+}
+
+message ReadJobTaskResponse {
+  repeated JobTask data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message UpdateJobTaskRequest {
+  JobTask data = 1;
+}
+
+message UpdateJobTaskResponse {
+  repeated JobTask data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message DeleteJobTaskRequest {
+  JobTask data = 1;
+}
+
+message DeleteJobTaskResponse {
+  bool success = 1;
+  optional domain.common.v1.Error error = 2;
+}
+
+message ListJobTasksRequest {
+  optional domain.common.v1.SearchRequest search = 1;
+  optional domain.common.v1.FilterRequest filters = 2;
+  optional domain.common.v1.SortRequest sort = 3;
+  optional domain.common.v1.PaginationRequest pagination = 4;
+}
+
+message ListJobTasksResponse {
+  repeated JobTask data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+// --- PageData messages ---
+
+message GetJobTaskListPageDataRequest {
+  optional domain.common.v1.PaginationRequest pagination = 1;
+  optional domain.common.v1.FilterRequest filters = 2;
+  optional domain.common.v1.SortRequest sort = 3;
+  optional domain.common.v1.SearchRequest search = 4;
+}
+
+message GetJobTaskListPageDataResponse {
+  repeated JobTask job_task_list = 1;
+  optional domain.common.v1.PaginationResponse pagination = 2;
+  repeated domain.common.v1.SearchResult search_results = 3;
+  bool success = 4;
+  optional domain.common.v1.Error error = 5;
+}
+
+message GetJobTaskItemPageDataRequest {
+  string job_task_id = 1;
+}
+
+message GetJobTaskItemPageDataResponse {
+  optional JobTask job_task = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+// --- Extra RPC messages ---
+
+message ListJobTasksByPhaseRequest {
+  string job_phase_id = 1;
+}
+
+message ListJobTasksByPhaseResponse {
+  repeated JobTask job_tasks = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message ListJobTasksByAssigneeRequest {
+  string assigned_to = 1;
+}
+
+message ListJobTasksByAssigneeResponse {
+  repeated JobTask job_tasks = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}

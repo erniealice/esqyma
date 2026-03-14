@@ -1,0 +1,120 @@
+syntax = "proto3";
+
+package domain.operation.v1;
+
+option go_package = "github.com/erniealice/esqyma/golang/v1/domain/operation/activity_expense";
+
+import "domain/common/error.proto";
+import "domain/common/pagination.proto";
+import "domain/common/filter.proto";
+import "domain/common/sort.proto";
+import "domain/common/search.proto";
+
+import "domain/operation/job_activity/job_activity.proto";
+import "options/db.proto";
+
+// --- Message ---
+
+message ActivityExpense {
+  option (options.v1.table).table = true;
+
+  string activity_id = 1 [(options.v1.db).references = "job_activity"];
+  optional JobActivity job_activity = 2;
+  string expense_category = 3;
+  optional string vendor_ref = 4;
+  optional string receipt_url = 5;
+  bool reimbursable = 6;
+}
+
+// --- Service ---
+
+service ActivityExpenseDomainService {
+  rpc CreateActivityExpense(CreateActivityExpenseRequest) returns (CreateActivityExpenseResponse);
+  rpc ReadActivityExpense(ReadActivityExpenseRequest) returns (ReadActivityExpenseResponse);
+  rpc UpdateActivityExpense(UpdateActivityExpenseRequest) returns (UpdateActivityExpenseResponse);
+  rpc DeleteActivityExpense(DeleteActivityExpenseRequest) returns (DeleteActivityExpenseResponse);
+  rpc ListActivityExpenses(ListActivityExpensesRequest) returns (ListActivityExpensesResponse);
+  rpc GetActivityExpenseListPageData(GetActivityExpenseListPageDataRequest) returns (GetActivityExpenseListPageDataResponse);
+  rpc GetActivityExpenseItemPageData(GetActivityExpenseItemPageDataRequest) returns (GetActivityExpenseItemPageDataResponse);
+}
+
+// --- Standard CRUD messages ---
+
+message CreateActivityExpenseRequest {
+  ActivityExpense data = 1;
+}
+
+message CreateActivityExpenseResponse {
+  repeated ActivityExpense data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message ReadActivityExpenseRequest {
+  ActivityExpense data = 1;
+}
+
+message ReadActivityExpenseResponse {
+  repeated ActivityExpense data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message UpdateActivityExpenseRequest {
+  ActivityExpense data = 1;
+}
+
+message UpdateActivityExpenseResponse {
+  repeated ActivityExpense data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message DeleteActivityExpenseRequest {
+  ActivityExpense data = 1;
+}
+
+message DeleteActivityExpenseResponse {
+  bool success = 1;
+  optional domain.common.v1.Error error = 2;
+}
+
+message ListActivityExpensesRequest {
+  optional domain.common.v1.SearchRequest search = 1;
+  optional domain.common.v1.FilterRequest filters = 2;
+  optional domain.common.v1.SortRequest sort = 3;
+  optional domain.common.v1.PaginationRequest pagination = 4;
+}
+
+message ListActivityExpensesResponse {
+  repeated ActivityExpense data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+// --- PageData messages ---
+
+message GetActivityExpenseListPageDataRequest {
+  optional domain.common.v1.PaginationRequest pagination = 1;
+  optional domain.common.v1.FilterRequest filters = 2;
+  optional domain.common.v1.SortRequest sort = 3;
+  optional domain.common.v1.SearchRequest search = 4;
+}
+
+message GetActivityExpenseListPageDataResponse {
+  repeated ActivityExpense activity_expense_list = 1;
+  optional domain.common.v1.PaginationResponse pagination = 2;
+  repeated domain.common.v1.SearchResult search_results = 3;
+  bool success = 4;
+  optional domain.common.v1.Error error = 5;
+}
+
+message GetActivityExpenseItemPageDataRequest {
+  string activity_id = 1;
+}
+
+message GetActivityExpenseItemPageDataResponse {
+  optional ActivityExpense activity_expense = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
