@@ -1,0 +1,156 @@
+syntax = "proto3";
+
+package domain.operation.v1;
+
+option go_package = "github.com/erniealice/esqyma/golang/v1/domain/operation/template_task_criteria";
+
+import "domain/common/error.proto";
+import "domain/common/pagination.proto";
+import "domain/common/filter.proto";
+import "domain/common/sort.proto";
+import "domain/common/search.proto";
+
+import "domain/operation/enums/enums.proto";
+import "domain/operation/outcome_criteria/outcome_criteria.proto";
+import "domain/operation/job_template_task/job_template_task.proto";
+import "options/db.proto";
+
+// --- Message ---
+
+message TemplateTaskCriteria {
+  option (options.v1.table).table = true;
+
+  string id = 1;
+  string job_template_task_id = 2 [(options.v1.db).references = "job_template_task", (options.v1.db).index = true];
+  optional JobTemplateTask job_template_task = 3;
+  string outcome_criteria_id = 4 [(options.v1.db).references = "outcome_criteria", (options.v1.db).index = true];
+  optional OutcomeCriteria outcome_criteria = 5;
+  int32 sequence_order = 6;
+  optional bool required_override = 7;
+  optional double weight_override = 8;
+  optional domain.operation.v1.AggregationMethod aggregation_method_override = 9;
+  bool active = 10 [(options.v1.db).default = "true"];
+  optional int64 date_created = 11;
+  optional string date_created_string = 12;
+}
+
+// --- Service ---
+
+service TemplateTaskCriteriaDomainService {
+  rpc CreateTemplateTaskCriteria(CreateTemplateTaskCriteriaRequest) returns (CreateTemplateTaskCriteriaResponse);
+  rpc ReadTemplateTaskCriteria(ReadTemplateTaskCriteriaRequest) returns (ReadTemplateTaskCriteriaResponse);
+  rpc UpdateTemplateTaskCriteria(UpdateTemplateTaskCriteriaRequest) returns (UpdateTemplateTaskCriteriaResponse);
+  rpc DeleteTemplateTaskCriteria(DeleteTemplateTaskCriteriaRequest) returns (DeleteTemplateTaskCriteriaResponse);
+  rpc ListTemplateTaskCriterias(ListTemplateTaskCriteriasRequest) returns (ListTemplateTaskCriteriasResponse);
+  rpc GetTemplateTaskCriteriaListPageData(GetTemplateTaskCriteriaListPageDataRequest) returns (GetTemplateTaskCriteriaListPageDataResponse);
+  rpc GetTemplateTaskCriteriaItemPageData(GetTemplateTaskCriteriaItemPageDataRequest) returns (GetTemplateTaskCriteriaItemPageDataResponse);
+
+  // Extra: filter by template task
+  rpc ListByTemplateTask(ListTemplateTaskCriteriasByTemplateTaskRequest) returns (ListTemplateTaskCriteriasByTemplateTaskResponse);
+
+  // Extra: filter by criteria
+  rpc ListByCriteria(ListTemplateTaskCriteriasByCriteriaRequest) returns (ListTemplateTaskCriteriasByCriteriaResponse);
+}
+
+// --- Standard CRUD messages ---
+
+message CreateTemplateTaskCriteriaRequest {
+  TemplateTaskCriteria data = 1;
+}
+
+message CreateTemplateTaskCriteriaResponse {
+  repeated TemplateTaskCriteria data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message ReadTemplateTaskCriteriaRequest {
+  TemplateTaskCriteria data = 1;
+}
+
+message ReadTemplateTaskCriteriaResponse {
+  repeated TemplateTaskCriteria data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message UpdateTemplateTaskCriteriaRequest {
+  TemplateTaskCriteria data = 1;
+}
+
+message UpdateTemplateTaskCriteriaResponse {
+  repeated TemplateTaskCriteria data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message DeleteTemplateTaskCriteriaRequest {
+  TemplateTaskCriteria data = 1;
+}
+
+message DeleteTemplateTaskCriteriaResponse {
+  bool success = 1;
+  optional domain.common.v1.Error error = 2;
+}
+
+message ListTemplateTaskCriteriasRequest {
+  optional domain.common.v1.SearchRequest search = 1;
+  optional domain.common.v1.FilterRequest filters = 2;
+  optional domain.common.v1.SortRequest sort = 3;
+  optional domain.common.v1.PaginationRequest pagination = 4;
+}
+
+message ListTemplateTaskCriteriasResponse {
+  repeated TemplateTaskCriteria data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+// --- PageData messages ---
+
+message GetTemplateTaskCriteriaListPageDataRequest {
+  optional domain.common.v1.PaginationRequest pagination = 1;
+  optional domain.common.v1.FilterRequest filters = 2;
+  optional domain.common.v1.SortRequest sort = 3;
+  optional domain.common.v1.SearchRequest search = 4;
+}
+
+message GetTemplateTaskCriteriaListPageDataResponse {
+  repeated TemplateTaskCriteria template_task_criteria_list = 1;
+  optional domain.common.v1.PaginationResponse pagination = 2;
+  repeated domain.common.v1.SearchResult search_results = 3;
+  bool success = 4;
+  optional domain.common.v1.Error error = 5;
+}
+
+message GetTemplateTaskCriteriaItemPageDataRequest {
+  string template_task_criteria_id = 1;
+}
+
+message GetTemplateTaskCriteriaItemPageDataResponse {
+  optional TemplateTaskCriteria template_task_criteria = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+// --- Extra RPC messages ---
+
+message ListTemplateTaskCriteriasByTemplateTaskRequest {
+  string job_template_task_id = 1;
+}
+
+message ListTemplateTaskCriteriasByTemplateTaskResponse {
+  repeated TemplateTaskCriteria template_task_criterias = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message ListTemplateTaskCriteriasByCriteriaRequest {
+  string outcome_criteria_id = 1;
+}
+
+message ListTemplateTaskCriteriasByCriteriaResponse {
+  repeated TemplateTaskCriteria template_task_criterias = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}

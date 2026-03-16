@@ -1,0 +1,135 @@
+syntax = "proto3";
+
+package domain.operation.v1;
+
+option go_package = "github.com/erniealice/esqyma/golang/v1/domain/operation/criteria_option";
+
+import "domain/common/error.proto";
+import "domain/common/pagination.proto";
+import "domain/common/filter.proto";
+import "domain/common/sort.proto";
+import "domain/common/search.proto";
+
+import "domain/operation/outcome_criteria/outcome_criteria.proto";
+import "options/db.proto";
+
+message CriteriaOption {
+  option (options.v1.table).table = true;
+
+  string id = 1;
+  string outcome_criteria_id = 2 [(options.v1.db).references = "outcome_criteria", (options.v1.db).index = true];
+  optional OutcomeCriteria outcome_criteria = 3;
+  string option_key = 4;
+  string option_label = 5;
+  int32 display_order = 6;
+  optional int32 severity = 7;
+  optional string maps_to_determination = 8;
+  bool required = 9;
+  bool active = 10 [(options.v1.db).default = "true"];
+  optional int64 date_created = 11;
+  optional string date_created_string = 12;
+  optional int64 date_modified = 13;
+  optional string date_modified_string = 14;
+}
+
+service CriteriaOptionDomainService {
+  rpc CreateCriteriaOption(CreateCriteriaOptionRequest) returns (CreateCriteriaOptionResponse);
+  rpc ReadCriteriaOption(ReadCriteriaOptionRequest) returns (ReadCriteriaOptionResponse);
+  rpc UpdateCriteriaOption(UpdateCriteriaOptionRequest) returns (UpdateCriteriaOptionResponse);
+  rpc DeleteCriteriaOption(DeleteCriteriaOptionRequest) returns (DeleteCriteriaOptionResponse);
+  rpc ListCriteriaOptions(ListCriteriaOptionsRequest) returns (ListCriteriaOptionsResponse);
+  rpc GetCriteriaOptionListPageData(GetCriteriaOptionListPageDataRequest) returns (GetCriteriaOptionListPageDataResponse);
+  rpc GetCriteriaOptionItemPageData(GetCriteriaOptionItemPageDataRequest) returns (GetCriteriaOptionItemPageDataResponse);
+
+  // Extra: filter by criteria
+  rpc ListByCriteria(ListCriteriaOptionsByCriteriaRequest) returns (ListCriteriaOptionsByCriteriaResponse);
+}
+
+message CreateCriteriaOptionRequest {
+  CriteriaOption data = 1;
+}
+
+message CreateCriteriaOptionResponse {
+  repeated CriteriaOption data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message ReadCriteriaOptionRequest {
+  CriteriaOption data = 1;
+}
+
+message ReadCriteriaOptionResponse {
+  repeated CriteriaOption data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message UpdateCriteriaOptionRequest {
+  CriteriaOption data = 1;
+}
+
+message UpdateCriteriaOptionResponse {
+  repeated CriteriaOption data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message DeleteCriteriaOptionRequest {
+  CriteriaOption data = 1;
+}
+
+message DeleteCriteriaOptionResponse {
+  bool success = 1;
+  optional domain.common.v1.Error error = 2;
+}
+
+message ListCriteriaOptionsRequest {
+  optional domain.common.v1.SearchRequest search = 1;
+  optional domain.common.v1.FilterRequest filters = 2;
+  optional domain.common.v1.SortRequest sort = 3;
+  optional domain.common.v1.PaginationRequest pagination = 4;
+}
+
+message ListCriteriaOptionsResponse {
+  repeated CriteriaOption data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message GetCriteriaOptionListPageDataRequest {
+  optional domain.common.v1.PaginationRequest pagination = 1;
+  optional domain.common.v1.FilterRequest filters = 2;
+  optional domain.common.v1.SortRequest sort = 3;
+  optional domain.common.v1.SearchRequest search = 4;
+}
+
+message GetCriteriaOptionListPageDataResponse {
+  repeated CriteriaOption criteria_option_list = 1;
+  optional domain.common.v1.PaginationResponse pagination = 2;
+  repeated domain.common.v1.SearchResult search_results = 3;
+  bool success = 4;
+  optional domain.common.v1.Error error = 5;
+}
+
+message GetCriteriaOptionItemPageDataRequest {
+  string criteria_option_id = 1;
+}
+
+message GetCriteriaOptionItemPageDataResponse {
+  optional CriteriaOption criteria_option = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+// Extra RPC messages
+
+message ListCriteriaOptionsByCriteriaRequest {
+  string outcome_criteria_id = 1;
+}
+
+message ListCriteriaOptionsByCriteriaResponse {
+  repeated CriteriaOption criteria_options = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}

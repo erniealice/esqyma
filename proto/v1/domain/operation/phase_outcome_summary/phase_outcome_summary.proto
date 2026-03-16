@@ -1,0 +1,166 @@
+syntax = "proto3";
+
+package domain.operation.v1;
+
+option go_package = "github.com/erniealice/esqyma/golang/v1/domain/operation/phase_outcome_summary";
+
+import "domain/common/error.proto";
+import "domain/common/pagination.proto";
+import "domain/common/filter.proto";
+import "domain/common/sort.proto";
+import "domain/common/search.proto";
+
+import "domain/operation/enums/enums.proto";
+import "domain/operation/job_phase/job_phase.proto";
+import "options/db.proto";
+
+// --- Message ---
+
+message PhaseOutcomeSummary {
+  option (options.v1.table).table = true;
+
+  string id = 1;
+  string job_phase_id = 2 [(options.v1.db).references = "job_phase", (options.v1.db).index = true];
+  optional JobPhase job_phase = 3;
+  string job_id = 4 [(options.v1.db).references = "job", (options.v1.db).index = true];
+  domain.operation.v1.SummaryType summary_type = 5;
+  domain.operation.v1.OverallDetermination phase_determination = 6;
+  domain.operation.v1.ScoringMethod scoring_method = 7;
+  optional double summary_score = 8;
+  int32 total_criteria_count = 9;
+  int32 pass_count = 10;
+  int32 fail_count = 11;
+  int32 conditional_count = 12;
+  int32 deferred_count = 13;
+  int32 na_count = 14;
+  optional string narrative = 15;
+  string issued_by = 16 [(options.v1.db).references = "staff"];
+  optional int64 issued_date = 17;
+  optional string supersedes_id = 18 [(options.v1.db).references = "phase_outcome_summary"];
+  bool active = 19 [(options.v1.db).default = "true"];
+  optional int64 date_created = 20;
+  optional string date_created_string = 21;
+  optional int64 date_modified = 22;
+  optional string date_modified_string = 23;
+}
+
+// --- Service ---
+
+service PhaseOutcomeSummaryDomainService {
+  rpc CreatePhaseOutcomeSummary(CreatePhaseOutcomeSummaryRequest) returns (CreatePhaseOutcomeSummaryResponse);
+  rpc ReadPhaseOutcomeSummary(ReadPhaseOutcomeSummaryRequest) returns (ReadPhaseOutcomeSummaryResponse);
+  rpc UpdatePhaseOutcomeSummary(UpdatePhaseOutcomeSummaryRequest) returns (UpdatePhaseOutcomeSummaryResponse);
+  rpc DeletePhaseOutcomeSummary(DeletePhaseOutcomeSummaryRequest) returns (DeletePhaseOutcomeSummaryResponse);
+  rpc ListPhaseOutcomeSummarys(ListPhaseOutcomeSummarysRequest) returns (ListPhaseOutcomeSummarysResponse);
+  rpc GetPhaseOutcomeSummaryListPageData(GetPhaseOutcomeSummaryListPageDataRequest) returns (GetPhaseOutcomeSummaryListPageDataResponse);
+  rpc GetPhaseOutcomeSummaryItemPageData(GetPhaseOutcomeSummaryItemPageDataRequest) returns (GetPhaseOutcomeSummaryItemPageDataResponse);
+
+  // Extra: get latest summary for a phase
+  rpc GetByJobPhase(GetPhaseOutcomeSummaryByJobPhaseRequest) returns (GetPhaseOutcomeSummaryByJobPhaseResponse);
+
+  // Extra: list all phase summaries for a job
+  rpc ListByJob(ListPhaseOutcomeSummarysByJobRequest) returns (ListPhaseOutcomeSummarysByJobResponse);
+}
+
+// --- Standard CRUD messages ---
+
+message CreatePhaseOutcomeSummaryRequest {
+  PhaseOutcomeSummary data = 1;
+}
+
+message CreatePhaseOutcomeSummaryResponse {
+  repeated PhaseOutcomeSummary data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message ReadPhaseOutcomeSummaryRequest {
+  PhaseOutcomeSummary data = 1;
+}
+
+message ReadPhaseOutcomeSummaryResponse {
+  repeated PhaseOutcomeSummary data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message UpdatePhaseOutcomeSummaryRequest {
+  PhaseOutcomeSummary data = 1;
+}
+
+message UpdatePhaseOutcomeSummaryResponse {
+  repeated PhaseOutcomeSummary data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message DeletePhaseOutcomeSummaryRequest {
+  PhaseOutcomeSummary data = 1;
+}
+
+message DeletePhaseOutcomeSummaryResponse {
+  bool success = 1;
+  optional domain.common.v1.Error error = 2;
+}
+
+message ListPhaseOutcomeSummarysRequest {
+  optional domain.common.v1.SearchRequest search = 1;
+  optional domain.common.v1.FilterRequest filters = 2;
+  optional domain.common.v1.SortRequest sort = 3;
+  optional domain.common.v1.PaginationRequest pagination = 4;
+}
+
+message ListPhaseOutcomeSummarysResponse {
+  repeated PhaseOutcomeSummary data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+// --- PageData messages ---
+
+message GetPhaseOutcomeSummaryListPageDataRequest {
+  optional domain.common.v1.PaginationRequest pagination = 1;
+  optional domain.common.v1.FilterRequest filters = 2;
+  optional domain.common.v1.SortRequest sort = 3;
+  optional domain.common.v1.SearchRequest search = 4;
+}
+
+message GetPhaseOutcomeSummaryListPageDataResponse {
+  repeated PhaseOutcomeSummary phase_outcome_summary_list = 1;
+  optional domain.common.v1.PaginationResponse pagination = 2;
+  repeated domain.common.v1.SearchResult search_results = 3;
+  bool success = 4;
+  optional domain.common.v1.Error error = 5;
+}
+
+message GetPhaseOutcomeSummaryItemPageDataRequest {
+  string phase_outcome_summary_id = 1;
+}
+
+message GetPhaseOutcomeSummaryItemPageDataResponse {
+  optional PhaseOutcomeSummary phase_outcome_summary = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+// --- Extra RPC messages ---
+
+message GetPhaseOutcomeSummaryByJobPhaseRequest {
+  string job_phase_id = 1;
+}
+
+message GetPhaseOutcomeSummaryByJobPhaseResponse {
+  optional PhaseOutcomeSummary phase_outcome_summary = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message ListPhaseOutcomeSummarysByJobRequest {
+  string job_id = 1;
+}
+
+message ListPhaseOutcomeSummarysByJobResponse {
+  repeated PhaseOutcomeSummary phase_outcome_summarys = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}

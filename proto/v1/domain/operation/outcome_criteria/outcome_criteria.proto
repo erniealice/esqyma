@@ -1,0 +1,185 @@
+syntax = "proto3";
+
+package domain.operation.v1;
+
+option go_package = "github.com/erniealice/esqyma/golang/v1/domain/operation/outcome_criteria";
+
+import "domain/common/error.proto";
+import "domain/common/pagination.proto";
+import "domain/common/filter.proto";
+import "domain/common/sort.proto";
+import "domain/common/search.proto";
+
+import "domain/operation/enums/enums.proto";
+import "options/db.proto";
+
+message OutcomeCriteria {
+  option (options.v1.table).table = true;
+
+  string id = 1;
+  string criteria_group_id = 2;
+  int32 version = 3;
+  domain.operation.v1.VersionStatus version_status = 4;
+  optional string supersedes_id = 5 [(options.v1.db).references = "outcome_criteria"];
+  domain.operation.v1.CriteriaScope scope = 6;
+  optional string industry_code = 7;
+  optional string workspace_id = 8 [(options.v1.db).references = "workspace"];
+  optional string overrides_id = 9 [(options.v1.db).references = "outcome_criteria"];
+  string name = 10;
+  optional string description = 11;
+  domain.operation.v1.CriteriaType criteria_type = 12;
+  optional string unit = 13;
+  optional int32 decimal_places = 14;
+  optional int32 min_score = 15;
+  optional int32 max_score = 16;
+  optional double score_increment = 17;
+  optional string pass_label = 18;
+  optional string fail_label = 19;
+  optional int32 max_text_length = 20;
+  optional string text_prompt = 21;
+  optional domain.operation.v1.PassRule pass_rule = 22;
+  optional int32 min_pass_count = 23;
+  domain.operation.v1.DeterminationMode determination_mode = 24;
+  repeated string allowed_determinations = 25;
+  domain.operation.v1.AggregationMethod aggregation_method = 26;
+  optional double aggregation_pass_pct = 27;
+  double weight = 28 [(options.v1.db).default = "1.0"];
+  repeated string tags = 29;
+  bool required = 30;
+  bool active = 31 [(options.v1.db).default = "true"];
+  string created_by = 32;
+  optional int64 date_created = 33;
+  optional string date_created_string = 34;
+  optional int64 date_modified = 35;
+  optional string date_modified_string = 36;
+}
+
+service OutcomeCriteriaDomainService {
+  rpc CreateOutcomeCriteria(CreateOutcomeCriteriaRequest) returns (CreateOutcomeCriteriaResponse);
+  rpc ReadOutcomeCriteria(ReadOutcomeCriteriaRequest) returns (ReadOutcomeCriteriaResponse);
+  rpc UpdateOutcomeCriteria(UpdateOutcomeCriteriaRequest) returns (UpdateOutcomeCriteriaResponse);
+  rpc DeleteOutcomeCriteria(DeleteOutcomeCriteriaRequest) returns (DeleteOutcomeCriteriaResponse);
+  rpc ListOutcomeCriterias(ListOutcomeCriteriasRequest) returns (ListOutcomeCriteriasResponse);
+  rpc GetOutcomeCriteriaListPageData(GetOutcomeCriteriaListPageDataRequest) returns (GetOutcomeCriteriaListPageDataResponse);
+  rpc GetOutcomeCriteriaItemPageData(GetOutcomeCriteriaItemPageDataRequest) returns (GetOutcomeCriteriaItemPageDataResponse);
+
+  // Extra: filter by group
+  rpc ListByGroup(ListOutcomeCriteriasByGroupRequest) returns (ListOutcomeCriteriasByGroupResponse);
+
+  // Extra: get current published version for a group
+  rpc GetCurrentPublished(GetCurrentPublishedOutcomeCriteriaRequest) returns (GetCurrentPublishedOutcomeCriteriaResponse);
+
+  // Extra: filter by scope
+  rpc ListByScope(ListOutcomeCriteriasByScopeRequest) returns (ListOutcomeCriteriasByScopeResponse);
+}
+
+message CreateOutcomeCriteriaRequest {
+  OutcomeCriteria data = 1;
+}
+
+message CreateOutcomeCriteriaResponse {
+  repeated OutcomeCriteria data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message ReadOutcomeCriteriaRequest {
+  OutcomeCriteria data = 1;
+}
+
+message ReadOutcomeCriteriaResponse {
+  repeated OutcomeCriteria data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message UpdateOutcomeCriteriaRequest {
+  OutcomeCriteria data = 1;
+}
+
+message UpdateOutcomeCriteriaResponse {
+  repeated OutcomeCriteria data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message DeleteOutcomeCriteriaRequest {
+  OutcomeCriteria data = 1;
+}
+
+message DeleteOutcomeCriteriaResponse {
+  bool success = 1;
+  optional domain.common.v1.Error error = 2;
+}
+
+message ListOutcomeCriteriasRequest {
+  optional domain.common.v1.SearchRequest search = 1;
+  optional domain.common.v1.FilterRequest filters = 2;
+  optional domain.common.v1.SortRequest sort = 3;
+  optional domain.common.v1.PaginationRequest pagination = 4;
+}
+
+message ListOutcomeCriteriasResponse {
+  repeated OutcomeCriteria data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message GetOutcomeCriteriaListPageDataRequest {
+  optional domain.common.v1.PaginationRequest pagination = 1;
+  optional domain.common.v1.FilterRequest filters = 2;
+  optional domain.common.v1.SortRequest sort = 3;
+  optional domain.common.v1.SearchRequest search = 4;
+}
+
+message GetOutcomeCriteriaListPageDataResponse {
+  repeated OutcomeCriteria outcome_criteria_list = 1;
+  optional domain.common.v1.PaginationResponse pagination = 2;
+  repeated domain.common.v1.SearchResult search_results = 3;
+  bool success = 4;
+  optional domain.common.v1.Error error = 5;
+}
+
+message GetOutcomeCriteriaItemPageDataRequest {
+  string outcome_criteria_id = 1;
+}
+
+message GetOutcomeCriteriaItemPageDataResponse {
+  optional OutcomeCriteria outcome_criteria = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+// Extra RPC messages
+
+message ListOutcomeCriteriasByGroupRequest {
+  string criteria_group_id = 1;
+}
+
+message ListOutcomeCriteriasByGroupResponse {
+  repeated OutcomeCriteria outcome_criterias = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message GetCurrentPublishedOutcomeCriteriaRequest {
+  string criteria_group_id = 1;
+}
+
+message GetCurrentPublishedOutcomeCriteriaResponse {
+  optional OutcomeCriteria outcome_criteria = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message ListOutcomeCriteriasByScopeRequest {
+  domain.operation.v1.CriteriaScope scope = 1;
+  optional string industry_code = 2;
+  optional string workspace_id = 3;
+}
+
+message ListOutcomeCriteriasByScopeResponse {
+  repeated OutcomeCriteria outcome_criterias = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}

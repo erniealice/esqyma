@@ -1,0 +1,154 @@
+syntax = "proto3";
+
+package domain.operation.v1;
+
+option go_package = "github.com/erniealice/esqyma/golang/v1/domain/operation/job_outcome_summary";
+
+import "domain/common/error.proto";
+import "domain/common/pagination.proto";
+import "domain/common/filter.proto";
+import "domain/common/sort.proto";
+import "domain/common/search.proto";
+
+import "domain/operation/enums/enums.proto";
+import "domain/operation/job/job.proto";
+import "options/db.proto";
+
+// --- Message ---
+
+message JobOutcomeSummary {
+  option (options.v1.table).table = true;
+
+  string id = 1;
+  string job_id = 2 [(options.v1.db).references = "job", (options.v1.db).index = true];
+  optional Job job = 3;
+  domain.operation.v1.SummaryType summary_type = 4;
+  domain.operation.v1.OverallDetermination overall_determination = 5;
+  domain.operation.v1.ScoringMethod scoring_method = 6;
+  optional double summary_score = 7;
+  int32 total_criteria_count = 8;
+  int32 pass_count = 9;
+  int32 fail_count = 10;
+  int32 conditional_count = 11;
+  int32 deferred_count = 12;
+  int32 na_count = 13;
+  optional string narrative = 14;
+  string issued_by = 15 [(options.v1.db).references = "staff"];
+  optional int64 issued_date = 16;
+  optional string valid_until_date = 17;
+  optional string supersedes_id = 18 [(options.v1.db).references = "job_outcome_summary"];
+  repeated string attachment_ids = 19;
+  bool active = 20 [(options.v1.db).default = "true"];
+  optional int64 date_created = 21;
+  optional string date_created_string = 22;
+  optional int64 date_modified = 23;
+  optional string date_modified_string = 24;
+}
+
+// --- Service ---
+
+service JobOutcomeSummaryDomainService {
+  rpc CreateJobOutcomeSummary(CreateJobOutcomeSummaryRequest) returns (CreateJobOutcomeSummaryResponse);
+  rpc ReadJobOutcomeSummary(ReadJobOutcomeSummaryRequest) returns (ReadJobOutcomeSummaryResponse);
+  rpc UpdateJobOutcomeSummary(UpdateJobOutcomeSummaryRequest) returns (UpdateJobOutcomeSummaryResponse);
+  rpc DeleteJobOutcomeSummary(DeleteJobOutcomeSummaryRequest) returns (DeleteJobOutcomeSummaryResponse);
+  rpc ListJobOutcomeSummarys(ListJobOutcomeSummarysRequest) returns (ListJobOutcomeSummarysResponse);
+  rpc GetJobOutcomeSummaryListPageData(GetJobOutcomeSummaryListPageDataRequest) returns (GetJobOutcomeSummaryListPageDataResponse);
+  rpc GetJobOutcomeSummaryItemPageData(GetJobOutcomeSummaryItemPageDataRequest) returns (GetJobOutcomeSummaryItemPageDataResponse);
+
+  // Extra: get latest summary for a job
+  rpc GetByJob(GetJobOutcomeSummaryByJobRequest) returns (GetJobOutcomeSummaryByJobResponse);
+}
+
+// --- Standard CRUD messages ---
+
+message CreateJobOutcomeSummaryRequest {
+  JobOutcomeSummary data = 1;
+}
+
+message CreateJobOutcomeSummaryResponse {
+  repeated JobOutcomeSummary data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message ReadJobOutcomeSummaryRequest {
+  JobOutcomeSummary data = 1;
+}
+
+message ReadJobOutcomeSummaryResponse {
+  repeated JobOutcomeSummary data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message UpdateJobOutcomeSummaryRequest {
+  JobOutcomeSummary data = 1;
+}
+
+message UpdateJobOutcomeSummaryResponse {
+  repeated JobOutcomeSummary data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message DeleteJobOutcomeSummaryRequest {
+  JobOutcomeSummary data = 1;
+}
+
+message DeleteJobOutcomeSummaryResponse {
+  bool success = 1;
+  optional domain.common.v1.Error error = 2;
+}
+
+message ListJobOutcomeSummarysRequest {
+  optional domain.common.v1.SearchRequest search = 1;
+  optional domain.common.v1.FilterRequest filters = 2;
+  optional domain.common.v1.SortRequest sort = 3;
+  optional domain.common.v1.PaginationRequest pagination = 4;
+}
+
+message ListJobOutcomeSummarysResponse {
+  repeated JobOutcomeSummary data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+// --- PageData messages ---
+
+message GetJobOutcomeSummaryListPageDataRequest {
+  optional domain.common.v1.PaginationRequest pagination = 1;
+  optional domain.common.v1.FilterRequest filters = 2;
+  optional domain.common.v1.SortRequest sort = 3;
+  optional domain.common.v1.SearchRequest search = 4;
+}
+
+message GetJobOutcomeSummaryListPageDataResponse {
+  repeated JobOutcomeSummary job_outcome_summary_list = 1;
+  optional domain.common.v1.PaginationResponse pagination = 2;
+  repeated domain.common.v1.SearchResult search_results = 3;
+  bool success = 4;
+  optional domain.common.v1.Error error = 5;
+}
+
+message GetJobOutcomeSummaryItemPageDataRequest {
+  string job_outcome_summary_id = 1;
+}
+
+message GetJobOutcomeSummaryItemPageDataResponse {
+  optional JobOutcomeSummary job_outcome_summary = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+// --- Extra RPC messages ---
+
+message GetJobOutcomeSummaryByJobRequest {
+  string job_id = 1;
+}
+
+message GetJobOutcomeSummaryByJobResponse {
+  optional JobOutcomeSummary job_outcome_summary = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}

@@ -1,0 +1,185 @@
+syntax = "proto3";
+
+package domain.operation.v1;
+
+option go_package = "github.com/erniealice/esqyma/golang/v1/domain/operation/task_outcome";
+
+import "domain/common/error.proto";
+import "domain/common/pagination.proto";
+import "domain/common/filter.proto";
+import "domain/common/sort.proto";
+import "domain/common/search.proto";
+
+import "domain/operation/enums/enums.proto";
+import "domain/operation/outcome_criteria/outcome_criteria.proto";
+import "domain/operation/job_task/job_task.proto";
+import "options/db.proto";
+
+// --- Message ---
+
+message TaskOutcome {
+  option (options.v1.table).table = true;
+
+  string id = 1;
+  string job_task_id = 2 [(options.v1.db).references = "job_task", (options.v1.db).index = true];
+  optional JobTask job_task = 3;
+  string criteria_version_id = 4 [(options.v1.db).references = "outcome_criteria", (options.v1.db).index = true];
+  optional OutcomeCriteria criteria_version = 5;
+  domain.operation.v1.CriteriaType criteria_type = 6;
+  bool is_ad_hoc = 7;
+  optional double numeric_value = 8;
+  optional string text_value = 9;
+  optional string categorical_value = 10;
+  optional bool pass_fail_value = 11;
+  domain.operation.v1.Determination determination = 12;
+  domain.operation.v1.DeterminationSource determination_source = 13;
+  optional string determination_note = 14;
+  optional domain.operation.v1.Determination auto_proposed_determination = 15;
+  string recorded_by = 16 [(options.v1.db).references = "staff"];
+  optional int64 recorded_date = 17;
+  optional string recorded_by_name = 18;
+  optional string reviewed_by = 19 [(options.v1.db).references = "staff"];
+  optional int64 reviewed_date = 20;
+  repeated string attachment_ids = 21;
+  optional string revision_of_id = 22 [(options.v1.db).references = "task_outcome"];
+  int32 revision_number = 23 [(options.v1.db).default = "1"];
+  bool active = 24 [(options.v1.db).default = "true"];
+  optional int64 date_created = 25;
+  optional string date_created_string = 26;
+  optional int64 date_modified = 27;
+  optional string date_modified_string = 28;
+}
+
+// --- Service ---
+
+service TaskOutcomeDomainService {
+  rpc CreateTaskOutcome(CreateTaskOutcomeRequest) returns (CreateTaskOutcomeResponse);
+  rpc ReadTaskOutcome(ReadTaskOutcomeRequest) returns (ReadTaskOutcomeResponse);
+  rpc UpdateTaskOutcome(UpdateTaskOutcomeRequest) returns (UpdateTaskOutcomeResponse);
+  rpc DeleteTaskOutcome(DeleteTaskOutcomeRequest) returns (DeleteTaskOutcomeResponse);
+  rpc ListTaskOutcomes(ListTaskOutcomesRequest) returns (ListTaskOutcomesResponse);
+  rpc GetTaskOutcomeListPageData(GetTaskOutcomeListPageDataRequest) returns (GetTaskOutcomeListPageDataResponse);
+  rpc GetTaskOutcomeItemPageData(GetTaskOutcomeItemPageDataRequest) returns (GetTaskOutcomeItemPageDataResponse);
+
+  // Extra: filter by job task
+  rpc ListByJobTask(ListTaskOutcomesByJobTaskRequest) returns (ListTaskOutcomesByJobTaskResponse);
+
+  // Extra: filter by job phase (cross-table via job_task → job_phase)
+  rpc ListByJobPhase(ListTaskOutcomesByJobPhaseRequest) returns (ListTaskOutcomesByJobPhaseResponse);
+
+  // Extra: filter by job (multi-join via job_task → job_phase → job)
+  rpc ListByJob(ListTaskOutcomesByJobRequest) returns (ListTaskOutcomesByJobResponse);
+}
+
+// --- Standard CRUD messages ---
+
+message CreateTaskOutcomeRequest {
+  TaskOutcome data = 1;
+}
+
+message CreateTaskOutcomeResponse {
+  repeated TaskOutcome data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message ReadTaskOutcomeRequest {
+  TaskOutcome data = 1;
+}
+
+message ReadTaskOutcomeResponse {
+  repeated TaskOutcome data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message UpdateTaskOutcomeRequest {
+  TaskOutcome data = 1;
+}
+
+message UpdateTaskOutcomeResponse {
+  repeated TaskOutcome data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message DeleteTaskOutcomeRequest {
+  TaskOutcome data = 1;
+}
+
+message DeleteTaskOutcomeResponse {
+  bool success = 1;
+  optional domain.common.v1.Error error = 2;
+}
+
+message ListTaskOutcomesRequest {
+  optional domain.common.v1.SearchRequest search = 1;
+  optional domain.common.v1.FilterRequest filters = 2;
+  optional domain.common.v1.SortRequest sort = 3;
+  optional domain.common.v1.PaginationRequest pagination = 4;
+}
+
+message ListTaskOutcomesResponse {
+  repeated TaskOutcome data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+// --- PageData messages ---
+
+message GetTaskOutcomeListPageDataRequest {
+  optional domain.common.v1.PaginationRequest pagination = 1;
+  optional domain.common.v1.FilterRequest filters = 2;
+  optional domain.common.v1.SortRequest sort = 3;
+  optional domain.common.v1.SearchRequest search = 4;
+}
+
+message GetTaskOutcomeListPageDataResponse {
+  repeated TaskOutcome task_outcome_list = 1;
+  optional domain.common.v1.PaginationResponse pagination = 2;
+  repeated domain.common.v1.SearchResult search_results = 3;
+  bool success = 4;
+  optional domain.common.v1.Error error = 5;
+}
+
+message GetTaskOutcomeItemPageDataRequest {
+  string task_outcome_id = 1;
+}
+
+message GetTaskOutcomeItemPageDataResponse {
+  optional TaskOutcome task_outcome = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+// --- Extra RPC messages ---
+
+message ListTaskOutcomesByJobTaskRequest {
+  string job_task_id = 1;
+}
+
+message ListTaskOutcomesByJobTaskResponse {
+  repeated TaskOutcome task_outcomes = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message ListTaskOutcomesByJobPhaseRequest {
+  string job_phase_id = 1;
+}
+
+message ListTaskOutcomesByJobPhaseResponse {
+  repeated TaskOutcome task_outcomes = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message ListTaskOutcomesByJobRequest {
+  string job_id = 1;
+}
+
+message ListTaskOutcomesByJobResponse {
+  repeated TaskOutcome task_outcomes = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}

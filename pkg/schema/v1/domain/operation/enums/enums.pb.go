@@ -607,6 +607,720 @@ func (MovementType) EnumDescriptor() ([]byte, []int) {
 	return file_domain_operation_enums_enums_proto_rawDescGZIP(), []int{9}
 }
 
+type CriteriaType int32
+
+const (
+	CriteriaType_CRITERIA_TYPE_UNSPECIFIED   CriteriaType = 0
+	CriteriaType_CRITERIA_TYPE_NUMERIC_RANGE CriteriaType = 1
+	CriteriaType_CRITERIA_TYPE_NUMERIC_SCORE CriteriaType = 2
+	CriteriaType_CRITERIA_TYPE_PASS_FAIL     CriteriaType = 3
+	CriteriaType_CRITERIA_TYPE_CATEGORICAL   CriteriaType = 4
+	CriteriaType_CRITERIA_TYPE_TEXT          CriteriaType = 5
+	CriteriaType_CRITERIA_TYPE_MULTI_CHECK   CriteriaType = 6
+)
+
+// Enum value maps for CriteriaType.
+var (
+	CriteriaType_name = map[int32]string{
+		0: "CRITERIA_TYPE_UNSPECIFIED",
+		1: "CRITERIA_TYPE_NUMERIC_RANGE",
+		2: "CRITERIA_TYPE_NUMERIC_SCORE",
+		3: "CRITERIA_TYPE_PASS_FAIL",
+		4: "CRITERIA_TYPE_CATEGORICAL",
+		5: "CRITERIA_TYPE_TEXT",
+		6: "CRITERIA_TYPE_MULTI_CHECK",
+	}
+	CriteriaType_value = map[string]int32{
+		"CRITERIA_TYPE_UNSPECIFIED":   0,
+		"CRITERIA_TYPE_NUMERIC_RANGE": 1,
+		"CRITERIA_TYPE_NUMERIC_SCORE": 2,
+		"CRITERIA_TYPE_PASS_FAIL":     3,
+		"CRITERIA_TYPE_CATEGORICAL":   4,
+		"CRITERIA_TYPE_TEXT":          5,
+		"CRITERIA_TYPE_MULTI_CHECK":   6,
+	}
+)
+
+func (x CriteriaType) Enum() *CriteriaType {
+	p := new(CriteriaType)
+	*p = x
+	return p
+}
+
+func (x CriteriaType) String() string {
+	return protoimpl.X.EnumStringOf(x.Descriptor(), protoreflect.EnumNumber(x))
+}
+
+func (CriteriaType) Descriptor() protoreflect.EnumDescriptor {
+	return file_domain_operation_enums_enums_proto_enumTypes[10].Descriptor()
+}
+
+func (CriteriaType) Type() protoreflect.EnumType {
+	return &file_domain_operation_enums_enums_proto_enumTypes[10]
+}
+
+func (x CriteriaType) Number() protoreflect.EnumNumber {
+	return protoreflect.EnumNumber(x)
+}
+
+// Deprecated: Use CriteriaType.Descriptor instead.
+func (CriteriaType) EnumDescriptor() ([]byte, []int) {
+	return file_domain_operation_enums_enums_proto_rawDescGZIP(), []int{10}
+}
+
+type DeterminationMode int32
+
+const (
+	DeterminationMode_DETERMINATION_MODE_UNSPECIFIED      DeterminationMode = 0
+	DeterminationMode_DETERMINATION_MODE_AUTO             DeterminationMode = 1
+	DeterminationMode_DETERMINATION_MODE_MANUAL           DeterminationMode = 2
+	DeterminationMode_DETERMINATION_MODE_AUTO_WITH_REVIEW DeterminationMode = 3
+)
+
+// Enum value maps for DeterminationMode.
+var (
+	DeterminationMode_name = map[int32]string{
+		0: "DETERMINATION_MODE_UNSPECIFIED",
+		1: "DETERMINATION_MODE_AUTO",
+		2: "DETERMINATION_MODE_MANUAL",
+		3: "DETERMINATION_MODE_AUTO_WITH_REVIEW",
+	}
+	DeterminationMode_value = map[string]int32{
+		"DETERMINATION_MODE_UNSPECIFIED":      0,
+		"DETERMINATION_MODE_AUTO":             1,
+		"DETERMINATION_MODE_MANUAL":           2,
+		"DETERMINATION_MODE_AUTO_WITH_REVIEW": 3,
+	}
+)
+
+func (x DeterminationMode) Enum() *DeterminationMode {
+	p := new(DeterminationMode)
+	*p = x
+	return p
+}
+
+func (x DeterminationMode) String() string {
+	return protoimpl.X.EnumStringOf(x.Descriptor(), protoreflect.EnumNumber(x))
+}
+
+func (DeterminationMode) Descriptor() protoreflect.EnumDescriptor {
+	return file_domain_operation_enums_enums_proto_enumTypes[11].Descriptor()
+}
+
+func (DeterminationMode) Type() protoreflect.EnumType {
+	return &file_domain_operation_enums_enums_proto_enumTypes[11]
+}
+
+func (x DeterminationMode) Number() protoreflect.EnumNumber {
+	return protoreflect.EnumNumber(x)
+}
+
+// Deprecated: Use DeterminationMode.Descriptor instead.
+func (DeterminationMode) EnumDescriptor() ([]byte, []int) {
+	return file_domain_operation_enums_enums_proto_rawDescGZIP(), []int{11}
+}
+
+type Determination int32
+
+const (
+	Determination_DETERMINATION_UNSPECIFIED         Determination = 0
+	Determination_DETERMINATION_PASS                Determination = 1
+	Determination_DETERMINATION_FAIL                Determination = 2
+	Determination_DETERMINATION_PASS_WITH_CONDITION Determination = 3
+	Determination_DETERMINATION_NOT_EVALUATED       Determination = 4
+	Determination_DETERMINATION_NOT_APPLICABLE      Determination = 5
+	Determination_DETERMINATION_DEFERRED            Determination = 6
+)
+
+// Enum value maps for Determination.
+var (
+	Determination_name = map[int32]string{
+		0: "DETERMINATION_UNSPECIFIED",
+		1: "DETERMINATION_PASS",
+		2: "DETERMINATION_FAIL",
+		3: "DETERMINATION_PASS_WITH_CONDITION",
+		4: "DETERMINATION_NOT_EVALUATED",
+		5: "DETERMINATION_NOT_APPLICABLE",
+		6: "DETERMINATION_DEFERRED",
+	}
+	Determination_value = map[string]int32{
+		"DETERMINATION_UNSPECIFIED":         0,
+		"DETERMINATION_PASS":                1,
+		"DETERMINATION_FAIL":                2,
+		"DETERMINATION_PASS_WITH_CONDITION": 3,
+		"DETERMINATION_NOT_EVALUATED":       4,
+		"DETERMINATION_NOT_APPLICABLE":      5,
+		"DETERMINATION_DEFERRED":            6,
+	}
+)
+
+func (x Determination) Enum() *Determination {
+	p := new(Determination)
+	*p = x
+	return p
+}
+
+func (x Determination) String() string {
+	return protoimpl.X.EnumStringOf(x.Descriptor(), protoreflect.EnumNumber(x))
+}
+
+func (Determination) Descriptor() protoreflect.EnumDescriptor {
+	return file_domain_operation_enums_enums_proto_enumTypes[12].Descriptor()
+}
+
+func (Determination) Type() protoreflect.EnumType {
+	return &file_domain_operation_enums_enums_proto_enumTypes[12]
+}
+
+func (x Determination) Number() protoreflect.EnumNumber {
+	return protoreflect.EnumNumber(x)
+}
+
+// Deprecated: Use Determination.Descriptor instead.
+func (Determination) EnumDescriptor() ([]byte, []int) {
+	return file_domain_operation_enums_enums_proto_rawDescGZIP(), []int{12}
+}
+
+type DeterminationSource int32
+
+const (
+	DeterminationSource_DETERMINATION_SOURCE_UNSPECIFIED     DeterminationSource = 0
+	DeterminationSource_DETERMINATION_SOURCE_AUTO_COMPUTED   DeterminationSource = 1
+	DeterminationSource_DETERMINATION_SOURCE_HUMAN_ASSIGNED  DeterminationSource = 2
+	DeterminationSource_DETERMINATION_SOURCE_AUTO_PROPOSED   DeterminationSource = 3
+	DeterminationSource_DETERMINATION_SOURCE_HUMAN_CONFIRMED DeterminationSource = 4
+	DeterminationSource_DETERMINATION_SOURCE_HUMAN_OVERRIDE  DeterminationSource = 5
+)
+
+// Enum value maps for DeterminationSource.
+var (
+	DeterminationSource_name = map[int32]string{
+		0: "DETERMINATION_SOURCE_UNSPECIFIED",
+		1: "DETERMINATION_SOURCE_AUTO_COMPUTED",
+		2: "DETERMINATION_SOURCE_HUMAN_ASSIGNED",
+		3: "DETERMINATION_SOURCE_AUTO_PROPOSED",
+		4: "DETERMINATION_SOURCE_HUMAN_CONFIRMED",
+		5: "DETERMINATION_SOURCE_HUMAN_OVERRIDE",
+	}
+	DeterminationSource_value = map[string]int32{
+		"DETERMINATION_SOURCE_UNSPECIFIED":     0,
+		"DETERMINATION_SOURCE_AUTO_COMPUTED":   1,
+		"DETERMINATION_SOURCE_HUMAN_ASSIGNED":  2,
+		"DETERMINATION_SOURCE_AUTO_PROPOSED":   3,
+		"DETERMINATION_SOURCE_HUMAN_CONFIRMED": 4,
+		"DETERMINATION_SOURCE_HUMAN_OVERRIDE":  5,
+	}
+)
+
+func (x DeterminationSource) Enum() *DeterminationSource {
+	p := new(DeterminationSource)
+	*p = x
+	return p
+}
+
+func (x DeterminationSource) String() string {
+	return protoimpl.X.EnumStringOf(x.Descriptor(), protoreflect.EnumNumber(x))
+}
+
+func (DeterminationSource) Descriptor() protoreflect.EnumDescriptor {
+	return file_domain_operation_enums_enums_proto_enumTypes[13].Descriptor()
+}
+
+func (DeterminationSource) Type() protoreflect.EnumType {
+	return &file_domain_operation_enums_enums_proto_enumTypes[13]
+}
+
+func (x DeterminationSource) Number() protoreflect.EnumNumber {
+	return protoreflect.EnumNumber(x)
+}
+
+// Deprecated: Use DeterminationSource.Descriptor instead.
+func (DeterminationSource) EnumDescriptor() ([]byte, []int) {
+	return file_domain_operation_enums_enums_proto_rawDescGZIP(), []int{13}
+}
+
+type AggregationMethod int32
+
+const (
+	AggregationMethod_AGGREGATION_METHOD_UNSPECIFIED   AggregationMethod = 0
+	AggregationMethod_AGGREGATION_METHOD_INDIVIDUAL    AggregationMethod = 1
+	AggregationMethod_AGGREGATION_METHOD_AVERAGE       AggregationMethod = 2
+	AggregationMethod_AGGREGATION_METHOD_WORST         AggregationMethod = 3
+	AggregationMethod_AGGREGATION_METHOD_LATEST        AggregationMethod = 4
+	AggregationMethod_AGGREGATION_METHOD_ALL_MUST_PASS AggregationMethod = 5
+	AggregationMethod_AGGREGATION_METHOD_PERCENTAGE    AggregationMethod = 6
+)
+
+// Enum value maps for AggregationMethod.
+var (
+	AggregationMethod_name = map[int32]string{
+		0: "AGGREGATION_METHOD_UNSPECIFIED",
+		1: "AGGREGATION_METHOD_INDIVIDUAL",
+		2: "AGGREGATION_METHOD_AVERAGE",
+		3: "AGGREGATION_METHOD_WORST",
+		4: "AGGREGATION_METHOD_LATEST",
+		5: "AGGREGATION_METHOD_ALL_MUST_PASS",
+		6: "AGGREGATION_METHOD_PERCENTAGE",
+	}
+	AggregationMethod_value = map[string]int32{
+		"AGGREGATION_METHOD_UNSPECIFIED":   0,
+		"AGGREGATION_METHOD_INDIVIDUAL":    1,
+		"AGGREGATION_METHOD_AVERAGE":       2,
+		"AGGREGATION_METHOD_WORST":         3,
+		"AGGREGATION_METHOD_LATEST":        4,
+		"AGGREGATION_METHOD_ALL_MUST_PASS": 5,
+		"AGGREGATION_METHOD_PERCENTAGE":    6,
+	}
+)
+
+func (x AggregationMethod) Enum() *AggregationMethod {
+	p := new(AggregationMethod)
+	*p = x
+	return p
+}
+
+func (x AggregationMethod) String() string {
+	return protoimpl.X.EnumStringOf(x.Descriptor(), protoreflect.EnumNumber(x))
+}
+
+func (AggregationMethod) Descriptor() protoreflect.EnumDescriptor {
+	return file_domain_operation_enums_enums_proto_enumTypes[14].Descriptor()
+}
+
+func (AggregationMethod) Type() protoreflect.EnumType {
+	return &file_domain_operation_enums_enums_proto_enumTypes[14]
+}
+
+func (x AggregationMethod) Number() protoreflect.EnumNumber {
+	return protoreflect.EnumNumber(x)
+}
+
+// Deprecated: Use AggregationMethod.Descriptor instead.
+func (AggregationMethod) EnumDescriptor() ([]byte, []int) {
+	return file_domain_operation_enums_enums_proto_rawDescGZIP(), []int{14}
+}
+
+type ScoringMethod int32
+
+const (
+	ScoringMethod_SCORING_METHOD_UNSPECIFIED           ScoringMethod = 0
+	ScoringMethod_SCORING_METHOD_EQUAL_WEIGHT          ScoringMethod = 1
+	ScoringMethod_SCORING_METHOD_WEIGHTED_AVERAGE      ScoringMethod = 2
+	ScoringMethod_SCORING_METHOD_MINIMUM_DETERMINATION ScoringMethod = 3
+	ScoringMethod_SCORING_METHOD_PERCENTAGE_PASS       ScoringMethod = 4
+)
+
+// Enum value maps for ScoringMethod.
+var (
+	ScoringMethod_name = map[int32]string{
+		0: "SCORING_METHOD_UNSPECIFIED",
+		1: "SCORING_METHOD_EQUAL_WEIGHT",
+		2: "SCORING_METHOD_WEIGHTED_AVERAGE",
+		3: "SCORING_METHOD_MINIMUM_DETERMINATION",
+		4: "SCORING_METHOD_PERCENTAGE_PASS",
+	}
+	ScoringMethod_value = map[string]int32{
+		"SCORING_METHOD_UNSPECIFIED":           0,
+		"SCORING_METHOD_EQUAL_WEIGHT":          1,
+		"SCORING_METHOD_WEIGHTED_AVERAGE":      2,
+		"SCORING_METHOD_MINIMUM_DETERMINATION": 3,
+		"SCORING_METHOD_PERCENTAGE_PASS":       4,
+	}
+)
+
+func (x ScoringMethod) Enum() *ScoringMethod {
+	p := new(ScoringMethod)
+	*p = x
+	return p
+}
+
+func (x ScoringMethod) String() string {
+	return protoimpl.X.EnumStringOf(x.Descriptor(), protoreflect.EnumNumber(x))
+}
+
+func (ScoringMethod) Descriptor() protoreflect.EnumDescriptor {
+	return file_domain_operation_enums_enums_proto_enumTypes[15].Descriptor()
+}
+
+func (ScoringMethod) Type() protoreflect.EnumType {
+	return &file_domain_operation_enums_enums_proto_enumTypes[15]
+}
+
+func (x ScoringMethod) Number() protoreflect.EnumNumber {
+	return protoreflect.EnumNumber(x)
+}
+
+// Deprecated: Use ScoringMethod.Descriptor instead.
+func (ScoringMethod) EnumDescriptor() ([]byte, []int) {
+	return file_domain_operation_enums_enums_proto_rawDescGZIP(), []int{15}
+}
+
+type SummaryType int32
+
+const (
+	SummaryType_SUMMARY_TYPE_UNSPECIFIED         SummaryType = 0
+	SummaryType_SUMMARY_TYPE_DIAGNOSTIC_REPORT   SummaryType = 1
+	SummaryType_SUMMARY_TYPE_ACADEMIC_RECORD     SummaryType = 2
+	SummaryType_SUMMARY_TYPE_QC_CERTIFICATE      SummaryType = 3
+	SummaryType_SUMMARY_TYPE_DELIVERY_ACCEPTANCE SummaryType = 4
+	SummaryType_SUMMARY_TYPE_INSPECTION_REPORT   SummaryType = 5
+	SummaryType_SUMMARY_TYPE_COMPLIANCE_REPORT   SummaryType = 6
+	SummaryType_SUMMARY_TYPE_GENERAL             SummaryType = 7
+)
+
+// Enum value maps for SummaryType.
+var (
+	SummaryType_name = map[int32]string{
+		0: "SUMMARY_TYPE_UNSPECIFIED",
+		1: "SUMMARY_TYPE_DIAGNOSTIC_REPORT",
+		2: "SUMMARY_TYPE_ACADEMIC_RECORD",
+		3: "SUMMARY_TYPE_QC_CERTIFICATE",
+		4: "SUMMARY_TYPE_DELIVERY_ACCEPTANCE",
+		5: "SUMMARY_TYPE_INSPECTION_REPORT",
+		6: "SUMMARY_TYPE_COMPLIANCE_REPORT",
+		7: "SUMMARY_TYPE_GENERAL",
+	}
+	SummaryType_value = map[string]int32{
+		"SUMMARY_TYPE_UNSPECIFIED":         0,
+		"SUMMARY_TYPE_DIAGNOSTIC_REPORT":   1,
+		"SUMMARY_TYPE_ACADEMIC_RECORD":     2,
+		"SUMMARY_TYPE_QC_CERTIFICATE":      3,
+		"SUMMARY_TYPE_DELIVERY_ACCEPTANCE": 4,
+		"SUMMARY_TYPE_INSPECTION_REPORT":   5,
+		"SUMMARY_TYPE_COMPLIANCE_REPORT":   6,
+		"SUMMARY_TYPE_GENERAL":             7,
+	}
+)
+
+func (x SummaryType) Enum() *SummaryType {
+	p := new(SummaryType)
+	*p = x
+	return p
+}
+
+func (x SummaryType) String() string {
+	return protoimpl.X.EnumStringOf(x.Descriptor(), protoreflect.EnumNumber(x))
+}
+
+func (SummaryType) Descriptor() protoreflect.EnumDescriptor {
+	return file_domain_operation_enums_enums_proto_enumTypes[16].Descriptor()
+}
+
+func (SummaryType) Type() protoreflect.EnumType {
+	return &file_domain_operation_enums_enums_proto_enumTypes[16]
+}
+
+func (x SummaryType) Number() protoreflect.EnumNumber {
+	return protoreflect.EnumNumber(x)
+}
+
+// Deprecated: Use SummaryType.Descriptor instead.
+func (SummaryType) EnumDescriptor() ([]byte, []int) {
+	return file_domain_operation_enums_enums_proto_rawDescGZIP(), []int{16}
+}
+
+type OverallDetermination int32
+
+const (
+	OverallDetermination_OVERALL_DETERMINATION_UNSPECIFIED            OverallDetermination = 0
+	OverallDetermination_OVERALL_DETERMINATION_ACCEPTED               OverallDetermination = 1
+	OverallDetermination_OVERALL_DETERMINATION_CONDITIONALLY_ACCEPTED OverallDetermination = 2
+	OverallDetermination_OVERALL_DETERMINATION_REJECTED               OverallDetermination = 3
+	OverallDetermination_OVERALL_DETERMINATION_IN_PROGRESS            OverallDetermination = 4
+	OverallDetermination_OVERALL_DETERMINATION_DEFERRED               OverallDetermination = 5
+)
+
+// Enum value maps for OverallDetermination.
+var (
+	OverallDetermination_name = map[int32]string{
+		0: "OVERALL_DETERMINATION_UNSPECIFIED",
+		1: "OVERALL_DETERMINATION_ACCEPTED",
+		2: "OVERALL_DETERMINATION_CONDITIONALLY_ACCEPTED",
+		3: "OVERALL_DETERMINATION_REJECTED",
+		4: "OVERALL_DETERMINATION_IN_PROGRESS",
+		5: "OVERALL_DETERMINATION_DEFERRED",
+	}
+	OverallDetermination_value = map[string]int32{
+		"OVERALL_DETERMINATION_UNSPECIFIED":            0,
+		"OVERALL_DETERMINATION_ACCEPTED":               1,
+		"OVERALL_DETERMINATION_CONDITIONALLY_ACCEPTED": 2,
+		"OVERALL_DETERMINATION_REJECTED":               3,
+		"OVERALL_DETERMINATION_IN_PROGRESS":            4,
+		"OVERALL_DETERMINATION_DEFERRED":               5,
+	}
+)
+
+func (x OverallDetermination) Enum() *OverallDetermination {
+	p := new(OverallDetermination)
+	*p = x
+	return p
+}
+
+func (x OverallDetermination) String() string {
+	return protoimpl.X.EnumStringOf(x.Descriptor(), protoreflect.EnumNumber(x))
+}
+
+func (OverallDetermination) Descriptor() protoreflect.EnumDescriptor {
+	return file_domain_operation_enums_enums_proto_enumTypes[17].Descriptor()
+}
+
+func (OverallDetermination) Type() protoreflect.EnumType {
+	return &file_domain_operation_enums_enums_proto_enumTypes[17]
+}
+
+func (x OverallDetermination) Number() protoreflect.EnumNumber {
+	return protoreflect.EnumNumber(x)
+}
+
+// Deprecated: Use OverallDetermination.Descriptor instead.
+func (OverallDetermination) EnumDescriptor() ([]byte, []int) {
+	return file_domain_operation_enums_enums_proto_rawDescGZIP(), []int{17}
+}
+
+type VersionStatus int32
+
+const (
+	VersionStatus_VERSION_STATUS_UNSPECIFIED VersionStatus = 0
+	VersionStatus_VERSION_STATUS_DRAFT       VersionStatus = 1
+	VersionStatus_VERSION_STATUS_PUBLISHED   VersionStatus = 2
+	VersionStatus_VERSION_STATUS_DEPRECATED  VersionStatus = 3
+)
+
+// Enum value maps for VersionStatus.
+var (
+	VersionStatus_name = map[int32]string{
+		0: "VERSION_STATUS_UNSPECIFIED",
+		1: "VERSION_STATUS_DRAFT",
+		2: "VERSION_STATUS_PUBLISHED",
+		3: "VERSION_STATUS_DEPRECATED",
+	}
+	VersionStatus_value = map[string]int32{
+		"VERSION_STATUS_UNSPECIFIED": 0,
+		"VERSION_STATUS_DRAFT":       1,
+		"VERSION_STATUS_PUBLISHED":   2,
+		"VERSION_STATUS_DEPRECATED":  3,
+	}
+)
+
+func (x VersionStatus) Enum() *VersionStatus {
+	p := new(VersionStatus)
+	*p = x
+	return p
+}
+
+func (x VersionStatus) String() string {
+	return protoimpl.X.EnumStringOf(x.Descriptor(), protoreflect.EnumNumber(x))
+}
+
+func (VersionStatus) Descriptor() protoreflect.EnumDescriptor {
+	return file_domain_operation_enums_enums_proto_enumTypes[18].Descriptor()
+}
+
+func (VersionStatus) Type() protoreflect.EnumType {
+	return &file_domain_operation_enums_enums_proto_enumTypes[18]
+}
+
+func (x VersionStatus) Number() protoreflect.EnumNumber {
+	return protoreflect.EnumNumber(x)
+}
+
+// Deprecated: Use VersionStatus.Descriptor instead.
+func (VersionStatus) EnumDescriptor() ([]byte, []int) {
+	return file_domain_operation_enums_enums_proto_rawDescGZIP(), []int{18}
+}
+
+type CriteriaScope int32
+
+const (
+	CriteriaScope_CRITERIA_SCOPE_UNSPECIFIED CriteriaScope = 0
+	CriteriaScope_CRITERIA_SCOPE_SYSTEM      CriteriaScope = 1
+	CriteriaScope_CRITERIA_SCOPE_INDUSTRY    CriteriaScope = 2
+	CriteriaScope_CRITERIA_SCOPE_WORKSPACE   CriteriaScope = 3
+)
+
+// Enum value maps for CriteriaScope.
+var (
+	CriteriaScope_name = map[int32]string{
+		0: "CRITERIA_SCOPE_UNSPECIFIED",
+		1: "CRITERIA_SCOPE_SYSTEM",
+		2: "CRITERIA_SCOPE_INDUSTRY",
+		3: "CRITERIA_SCOPE_WORKSPACE",
+	}
+	CriteriaScope_value = map[string]int32{
+		"CRITERIA_SCOPE_UNSPECIFIED": 0,
+		"CRITERIA_SCOPE_SYSTEM":      1,
+		"CRITERIA_SCOPE_INDUSTRY":    2,
+		"CRITERIA_SCOPE_WORKSPACE":   3,
+	}
+)
+
+func (x CriteriaScope) Enum() *CriteriaScope {
+	p := new(CriteriaScope)
+	*p = x
+	return p
+}
+
+func (x CriteriaScope) String() string {
+	return protoimpl.X.EnumStringOf(x.Descriptor(), protoreflect.EnumNumber(x))
+}
+
+func (CriteriaScope) Descriptor() protoreflect.EnumDescriptor {
+	return file_domain_operation_enums_enums_proto_enumTypes[19].Descriptor()
+}
+
+func (CriteriaScope) Type() protoreflect.EnumType {
+	return &file_domain_operation_enums_enums_proto_enumTypes[19]
+}
+
+func (x CriteriaScope) Number() protoreflect.EnumNumber {
+	return protoreflect.EnumNumber(x)
+}
+
+// Deprecated: Use CriteriaScope.Descriptor instead.
+func (CriteriaScope) EnumDescriptor() ([]byte, []int) {
+	return file_domain_operation_enums_enums_proto_rawDescGZIP(), []int{19}
+}
+
+type PassRule int32
+
+const (
+	PassRule_PASS_RULE_UNSPECIFIED  PassRule = 0
+	PassRule_PASS_RULE_ALL_REQUIRED PassRule = 1
+	PassRule_PASS_RULE_ALL_ITEMS    PassRule = 2
+	PassRule_PASS_RULE_MIN_COUNT    PassRule = 3
+)
+
+// Enum value maps for PassRule.
+var (
+	PassRule_name = map[int32]string{
+		0: "PASS_RULE_UNSPECIFIED",
+		1: "PASS_RULE_ALL_REQUIRED",
+		2: "PASS_RULE_ALL_ITEMS",
+		3: "PASS_RULE_MIN_COUNT",
+	}
+	PassRule_value = map[string]int32{
+		"PASS_RULE_UNSPECIFIED":  0,
+		"PASS_RULE_ALL_REQUIRED": 1,
+		"PASS_RULE_ALL_ITEMS":    2,
+		"PASS_RULE_MIN_COUNT":    3,
+	}
+)
+
+func (x PassRule) Enum() *PassRule {
+	p := new(PassRule)
+	*p = x
+	return p
+}
+
+func (x PassRule) String() string {
+	return protoimpl.X.EnumStringOf(x.Descriptor(), protoreflect.EnumNumber(x))
+}
+
+func (PassRule) Descriptor() protoreflect.EnumDescriptor {
+	return file_domain_operation_enums_enums_proto_enumTypes[20].Descriptor()
+}
+
+func (PassRule) Type() protoreflect.EnumType {
+	return &file_domain_operation_enums_enums_proto_enumTypes[20]
+}
+
+func (x PassRule) Number() protoreflect.EnumNumber {
+	return protoreflect.EnumNumber(x)
+}
+
+// Deprecated: Use PassRule.Descriptor instead.
+func (PassRule) EnumDescriptor() ([]byte, []int) {
+	return file_domain_operation_enums_enums_proto_rawDescGZIP(), []int{20}
+}
+
+type ThresholdRole int32
+
+const (
+	ThresholdRole_THRESHOLD_ROLE_UNSPECIFIED           ThresholdRole = 0
+	ThresholdRole_THRESHOLD_ROLE_RECORDABLE_MIN        ThresholdRole = 1
+	ThresholdRole_THRESHOLD_ROLE_RECORDABLE_MAX        ThresholdRole = 2
+	ThresholdRole_THRESHOLD_ROLE_PASS_MIN              ThresholdRole = 3
+	ThresholdRole_THRESHOLD_ROLE_PASS_MAX              ThresholdRole = 4
+	ThresholdRole_THRESHOLD_ROLE_WARN_MIN              ThresholdRole = 5
+	ThresholdRole_THRESHOLD_ROLE_WARN_MAX              ThresholdRole = 6
+	ThresholdRole_THRESHOLD_ROLE_CRITICAL_MIN          ThresholdRole = 7
+	ThresholdRole_THRESHOLD_ROLE_CRITICAL_MAX          ThresholdRole = 8
+	ThresholdRole_THRESHOLD_ROLE_NOMINAL               ThresholdRole = 9
+	ThresholdRole_THRESHOLD_ROLE_TOLERANCE_PLUS        ThresholdRole = 10
+	ThresholdRole_THRESHOLD_ROLE_TOLERANCE_MINUS       ThresholdRole = 11
+	ThresholdRole_THRESHOLD_ROLE_WARN_TOLERANCE_PLUS   ThresholdRole = 12
+	ThresholdRole_THRESHOLD_ROLE_WARN_TOLERANCE_MINUS  ThresholdRole = 13
+	ThresholdRole_THRESHOLD_ROLE_PASS_THRESHOLD        ThresholdRole = 14
+	ThresholdRole_THRESHOLD_ROLE_DISTINCTION_THRESHOLD ThresholdRole = 15
+)
+
+// Enum value maps for ThresholdRole.
+var (
+	ThresholdRole_name = map[int32]string{
+		0:  "THRESHOLD_ROLE_UNSPECIFIED",
+		1:  "THRESHOLD_ROLE_RECORDABLE_MIN",
+		2:  "THRESHOLD_ROLE_RECORDABLE_MAX",
+		3:  "THRESHOLD_ROLE_PASS_MIN",
+		4:  "THRESHOLD_ROLE_PASS_MAX",
+		5:  "THRESHOLD_ROLE_WARN_MIN",
+		6:  "THRESHOLD_ROLE_WARN_MAX",
+		7:  "THRESHOLD_ROLE_CRITICAL_MIN",
+		8:  "THRESHOLD_ROLE_CRITICAL_MAX",
+		9:  "THRESHOLD_ROLE_NOMINAL",
+		10: "THRESHOLD_ROLE_TOLERANCE_PLUS",
+		11: "THRESHOLD_ROLE_TOLERANCE_MINUS",
+		12: "THRESHOLD_ROLE_WARN_TOLERANCE_PLUS",
+		13: "THRESHOLD_ROLE_WARN_TOLERANCE_MINUS",
+		14: "THRESHOLD_ROLE_PASS_THRESHOLD",
+		15: "THRESHOLD_ROLE_DISTINCTION_THRESHOLD",
+	}
+	ThresholdRole_value = map[string]int32{
+		"THRESHOLD_ROLE_UNSPECIFIED":           0,
+		"THRESHOLD_ROLE_RECORDABLE_MIN":        1,
+		"THRESHOLD_ROLE_RECORDABLE_MAX":        2,
+		"THRESHOLD_ROLE_PASS_MIN":              3,
+		"THRESHOLD_ROLE_PASS_MAX":              4,
+		"THRESHOLD_ROLE_WARN_MIN":              5,
+		"THRESHOLD_ROLE_WARN_MAX":              6,
+		"THRESHOLD_ROLE_CRITICAL_MIN":          7,
+		"THRESHOLD_ROLE_CRITICAL_MAX":          8,
+		"THRESHOLD_ROLE_NOMINAL":               9,
+		"THRESHOLD_ROLE_TOLERANCE_PLUS":        10,
+		"THRESHOLD_ROLE_TOLERANCE_MINUS":       11,
+		"THRESHOLD_ROLE_WARN_TOLERANCE_PLUS":   12,
+		"THRESHOLD_ROLE_WARN_TOLERANCE_MINUS":  13,
+		"THRESHOLD_ROLE_PASS_THRESHOLD":        14,
+		"THRESHOLD_ROLE_DISTINCTION_THRESHOLD": 15,
+	}
+)
+
+func (x ThresholdRole) Enum() *ThresholdRole {
+	p := new(ThresholdRole)
+	*p = x
+	return p
+}
+
+func (x ThresholdRole) String() string {
+	return protoimpl.X.EnumStringOf(x.Descriptor(), protoreflect.EnumNumber(x))
+}
+
+func (ThresholdRole) Descriptor() protoreflect.EnumDescriptor {
+	return file_domain_operation_enums_enums_proto_enumTypes[21].Descriptor()
+}
+
+func (ThresholdRole) Type() protoreflect.EnumType {
+	return &file_domain_operation_enums_enums_proto_enumTypes[21]
+}
+
+func (x ThresholdRole) Number() protoreflect.EnumNumber {
+	return protoreflect.EnumNumber(x)
+}
+
+// Deprecated: Use ThresholdRole.Descriptor instead.
+func (ThresholdRole) EnumDescriptor() ([]byte, []int) {
+	return file_domain_operation_enums_enums_proto_rawDescGZIP(), []int{21}
+}
+
 var File_domain_operation_enums_enums_proto protoreflect.FileDescriptor
 
 const file_domain_operation_enums_enums_proto_rawDesc = "" +
@@ -685,7 +1399,98 @@ const file_domain_operation_enums_enums_proto_rawDesc = "" +
 	"\x15MOVEMENT_TYPE_RECEIPT\x10\x06\x12\x18\n" +
 	"\x14MOVEMENT_TYPE_RETURN\x10\a\x12\x16\n" +
 	"\x12MOVEMENT_TYPE_SELL\x10\b\x12\x18\n" +
-	"\x14MOVEMENT_TYPE_EXPIRE\x10\tB\xe2\x01\n" +
+	"\x14MOVEMENT_TYPE_EXPIRE\x10\t*\xe2\x01\n" +
+	"\fCriteriaType\x12\x1d\n" +
+	"\x19CRITERIA_TYPE_UNSPECIFIED\x10\x00\x12\x1f\n" +
+	"\x1bCRITERIA_TYPE_NUMERIC_RANGE\x10\x01\x12\x1f\n" +
+	"\x1bCRITERIA_TYPE_NUMERIC_SCORE\x10\x02\x12\x1b\n" +
+	"\x17CRITERIA_TYPE_PASS_FAIL\x10\x03\x12\x1d\n" +
+	"\x19CRITERIA_TYPE_CATEGORICAL\x10\x04\x12\x16\n" +
+	"\x12CRITERIA_TYPE_TEXT\x10\x05\x12\x1d\n" +
+	"\x19CRITERIA_TYPE_MULTI_CHECK\x10\x06*\x9c\x01\n" +
+	"\x11DeterminationMode\x12\"\n" +
+	"\x1eDETERMINATION_MODE_UNSPECIFIED\x10\x00\x12\x1b\n" +
+	"\x17DETERMINATION_MODE_AUTO\x10\x01\x12\x1d\n" +
+	"\x19DETERMINATION_MODE_MANUAL\x10\x02\x12'\n" +
+	"#DETERMINATION_MODE_AUTO_WITH_REVIEW\x10\x03*\xe4\x01\n" +
+	"\rDetermination\x12\x1d\n" +
+	"\x19DETERMINATION_UNSPECIFIED\x10\x00\x12\x16\n" +
+	"\x12DETERMINATION_PASS\x10\x01\x12\x16\n" +
+	"\x12DETERMINATION_FAIL\x10\x02\x12%\n" +
+	"!DETERMINATION_PASS_WITH_CONDITION\x10\x03\x12\x1f\n" +
+	"\x1bDETERMINATION_NOT_EVALUATED\x10\x04\x12 \n" +
+	"\x1cDETERMINATION_NOT_APPLICABLE\x10\x05\x12\x1a\n" +
+	"\x16DETERMINATION_DEFERRED\x10\x06*\x87\x02\n" +
+	"\x13DeterminationSource\x12$\n" +
+	" DETERMINATION_SOURCE_UNSPECIFIED\x10\x00\x12&\n" +
+	"\"DETERMINATION_SOURCE_AUTO_COMPUTED\x10\x01\x12'\n" +
+	"#DETERMINATION_SOURCE_HUMAN_ASSIGNED\x10\x02\x12&\n" +
+	"\"DETERMINATION_SOURCE_AUTO_PROPOSED\x10\x03\x12(\n" +
+	"$DETERMINATION_SOURCE_HUMAN_CONFIRMED\x10\x04\x12'\n" +
+	"#DETERMINATION_SOURCE_HUMAN_OVERRIDE\x10\x05*\x80\x02\n" +
+	"\x11AggregationMethod\x12\"\n" +
+	"\x1eAGGREGATION_METHOD_UNSPECIFIED\x10\x00\x12!\n" +
+	"\x1dAGGREGATION_METHOD_INDIVIDUAL\x10\x01\x12\x1e\n" +
+	"\x1aAGGREGATION_METHOD_AVERAGE\x10\x02\x12\x1c\n" +
+	"\x18AGGREGATION_METHOD_WORST\x10\x03\x12\x1d\n" +
+	"\x19AGGREGATION_METHOD_LATEST\x10\x04\x12$\n" +
+	" AGGREGATION_METHOD_ALL_MUST_PASS\x10\x05\x12!\n" +
+	"\x1dAGGREGATION_METHOD_PERCENTAGE\x10\x06*\xc3\x01\n" +
+	"\rScoringMethod\x12\x1e\n" +
+	"\x1aSCORING_METHOD_UNSPECIFIED\x10\x00\x12\x1f\n" +
+	"\x1bSCORING_METHOD_EQUAL_WEIGHT\x10\x01\x12#\n" +
+	"\x1fSCORING_METHOD_WEIGHTED_AVERAGE\x10\x02\x12(\n" +
+	"$SCORING_METHOD_MINIMUM_DETERMINATION\x10\x03\x12\"\n" +
+	"\x1eSCORING_METHOD_PERCENTAGE_PASS\x10\x04*\x9a\x02\n" +
+	"\vSummaryType\x12\x1c\n" +
+	"\x18SUMMARY_TYPE_UNSPECIFIED\x10\x00\x12\"\n" +
+	"\x1eSUMMARY_TYPE_DIAGNOSTIC_REPORT\x10\x01\x12 \n" +
+	"\x1cSUMMARY_TYPE_ACADEMIC_RECORD\x10\x02\x12\x1f\n" +
+	"\x1bSUMMARY_TYPE_QC_CERTIFICATE\x10\x03\x12$\n" +
+	" SUMMARY_TYPE_DELIVERY_ACCEPTANCE\x10\x04\x12\"\n" +
+	"\x1eSUMMARY_TYPE_INSPECTION_REPORT\x10\x05\x12\"\n" +
+	"\x1eSUMMARY_TYPE_COMPLIANCE_REPORT\x10\x06\x12\x18\n" +
+	"\x14SUMMARY_TYPE_GENERAL\x10\a*\x82\x02\n" +
+	"\x14OverallDetermination\x12%\n" +
+	"!OVERALL_DETERMINATION_UNSPECIFIED\x10\x00\x12\"\n" +
+	"\x1eOVERALL_DETERMINATION_ACCEPTED\x10\x01\x120\n" +
+	",OVERALL_DETERMINATION_CONDITIONALLY_ACCEPTED\x10\x02\x12\"\n" +
+	"\x1eOVERALL_DETERMINATION_REJECTED\x10\x03\x12%\n" +
+	"!OVERALL_DETERMINATION_IN_PROGRESS\x10\x04\x12\"\n" +
+	"\x1eOVERALL_DETERMINATION_DEFERRED\x10\x05*\x86\x01\n" +
+	"\rVersionStatus\x12\x1e\n" +
+	"\x1aVERSION_STATUS_UNSPECIFIED\x10\x00\x12\x18\n" +
+	"\x14VERSION_STATUS_DRAFT\x10\x01\x12\x1c\n" +
+	"\x18VERSION_STATUS_PUBLISHED\x10\x02\x12\x1d\n" +
+	"\x19VERSION_STATUS_DEPRECATED\x10\x03*\x85\x01\n" +
+	"\rCriteriaScope\x12\x1e\n" +
+	"\x1aCRITERIA_SCOPE_UNSPECIFIED\x10\x00\x12\x19\n" +
+	"\x15CRITERIA_SCOPE_SYSTEM\x10\x01\x12\x1b\n" +
+	"\x17CRITERIA_SCOPE_INDUSTRY\x10\x02\x12\x1c\n" +
+	"\x18CRITERIA_SCOPE_WORKSPACE\x10\x03*s\n" +
+	"\bPassRule\x12\x19\n" +
+	"\x15PASS_RULE_UNSPECIFIED\x10\x00\x12\x1a\n" +
+	"\x16PASS_RULE_ALL_REQUIRED\x10\x01\x12\x17\n" +
+	"\x13PASS_RULE_ALL_ITEMS\x10\x02\x12\x17\n" +
+	"\x13PASS_RULE_MIN_COUNT\x10\x03*\xac\x04\n" +
+	"\rThresholdRole\x12\x1e\n" +
+	"\x1aTHRESHOLD_ROLE_UNSPECIFIED\x10\x00\x12!\n" +
+	"\x1dTHRESHOLD_ROLE_RECORDABLE_MIN\x10\x01\x12!\n" +
+	"\x1dTHRESHOLD_ROLE_RECORDABLE_MAX\x10\x02\x12\x1b\n" +
+	"\x17THRESHOLD_ROLE_PASS_MIN\x10\x03\x12\x1b\n" +
+	"\x17THRESHOLD_ROLE_PASS_MAX\x10\x04\x12\x1b\n" +
+	"\x17THRESHOLD_ROLE_WARN_MIN\x10\x05\x12\x1b\n" +
+	"\x17THRESHOLD_ROLE_WARN_MAX\x10\x06\x12\x1f\n" +
+	"\x1bTHRESHOLD_ROLE_CRITICAL_MIN\x10\a\x12\x1f\n" +
+	"\x1bTHRESHOLD_ROLE_CRITICAL_MAX\x10\b\x12\x1a\n" +
+	"\x16THRESHOLD_ROLE_NOMINAL\x10\t\x12!\n" +
+	"\x1dTHRESHOLD_ROLE_TOLERANCE_PLUS\x10\n" +
+	"\x12\"\n" +
+	"\x1eTHRESHOLD_ROLE_TOLERANCE_MINUS\x10\v\x12&\n" +
+	"\"THRESHOLD_ROLE_WARN_TOLERANCE_PLUS\x10\f\x12'\n" +
+	"#THRESHOLD_ROLE_WARN_TOLERANCE_MINUS\x10\r\x12!\n" +
+	"\x1dTHRESHOLD_ROLE_PASS_THRESHOLD\x10\x0e\x12(\n" +
+	"$THRESHOLD_ROLE_DISTINCTION_THRESHOLD\x10\x0fB\xe2\x01\n" +
 	"\x17com.domain.operation.v1B\n" +
 	"EnumsProtoP\x01ZMgithub.com/erniealice/esqyma/pkg/schema/v1/domain/operation/enums;operationv1\xa2\x02\x03DOX\xaa\x02\x13Domain.Operation.V1\xca\x02\x13Domain\\Operation\\V1\xe2\x02\x1fDomain\\Operation\\V1\\GPBMetadata\xea\x02\x15Domain::Operation::V1b\x06proto3"
 
@@ -701,18 +1506,30 @@ func file_domain_operation_enums_enums_proto_rawDescGZIP() []byte {
 	return file_domain_operation_enums_enums_proto_rawDescData
 }
 
-var file_domain_operation_enums_enums_proto_enumTypes = make([]protoimpl.EnumInfo, 10)
+var file_domain_operation_enums_enums_proto_enumTypes = make([]protoimpl.EnumInfo, 22)
 var file_domain_operation_enums_enums_proto_goTypes = []any{
-	(OriginType)(0),      // 0: domain.operation.v1.OriginType
-	(DemandType)(0),      // 1: domain.operation.v1.DemandType
-	(FulfillmentType)(0), // 2: domain.operation.v1.FulfillmentType
-	(CostFlowType)(0),    // 3: domain.operation.v1.CostFlowType
-	(BillingRuleType)(0), // 4: domain.operation.v1.BillingRuleType
-	(JobStatus)(0),       // 5: domain.operation.v1.JobStatus
-	(ApprovalStatus)(0),  // 6: domain.operation.v1.ApprovalStatus
-	(PostingStatus)(0),   // 7: domain.operation.v1.PostingStatus
-	(BillingStatus)(0),   // 8: domain.operation.v1.BillingStatus
-	(MovementType)(0),    // 9: domain.operation.v1.MovementType
+	(OriginType)(0),           // 0: domain.operation.v1.OriginType
+	(DemandType)(0),           // 1: domain.operation.v1.DemandType
+	(FulfillmentType)(0),      // 2: domain.operation.v1.FulfillmentType
+	(CostFlowType)(0),         // 3: domain.operation.v1.CostFlowType
+	(BillingRuleType)(0),      // 4: domain.operation.v1.BillingRuleType
+	(JobStatus)(0),            // 5: domain.operation.v1.JobStatus
+	(ApprovalStatus)(0),       // 6: domain.operation.v1.ApprovalStatus
+	(PostingStatus)(0),        // 7: domain.operation.v1.PostingStatus
+	(BillingStatus)(0),        // 8: domain.operation.v1.BillingStatus
+	(MovementType)(0),         // 9: domain.operation.v1.MovementType
+	(CriteriaType)(0),         // 10: domain.operation.v1.CriteriaType
+	(DeterminationMode)(0),    // 11: domain.operation.v1.DeterminationMode
+	(Determination)(0),        // 12: domain.operation.v1.Determination
+	(DeterminationSource)(0),  // 13: domain.operation.v1.DeterminationSource
+	(AggregationMethod)(0),    // 14: domain.operation.v1.AggregationMethod
+	(ScoringMethod)(0),        // 15: domain.operation.v1.ScoringMethod
+	(SummaryType)(0),          // 16: domain.operation.v1.SummaryType
+	(OverallDetermination)(0), // 17: domain.operation.v1.OverallDetermination
+	(VersionStatus)(0),        // 18: domain.operation.v1.VersionStatus
+	(CriteriaScope)(0),        // 19: domain.operation.v1.CriteriaScope
+	(PassRule)(0),             // 20: domain.operation.v1.PassRule
+	(ThresholdRole)(0),        // 21: domain.operation.v1.ThresholdRole
 }
 var file_domain_operation_enums_enums_proto_depIdxs = []int32{
 	0, // [0:0] is the sub-list for method output_type
@@ -732,7 +1549,7 @@ func file_domain_operation_enums_enums_proto_init() {
 		File: protoimpl.DescBuilder{
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_domain_operation_enums_enums_proto_rawDesc), len(file_domain_operation_enums_enums_proto_rawDesc)),
-			NumEnums:      10,
+			NumEnums:      22,
 			NumMessages:   0,
 			NumExtensions: 0,
 			NumServices:   0,
