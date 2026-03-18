@@ -2,7 +2,7 @@ syntax = "proto3";
 
 package domain.revenue.v1;
 
-option go_package = "leapfor.xyz/esqyma/golang/v1/domain/revenue/revenue";
+option go_package = "github.com/erniealice/esqyma/golang/v1/domain/revenue/revenue";
 
 import "domain/common/error.proto";
 import "domain/common/pagination.proto";
@@ -38,6 +38,10 @@ message Revenue {
   optional string payment_provider = 22;      // "maya", "cash", etc.
   optional string fulfillment_type = 23;      // "store_pickup" or "home_delivery"
   optional string delivery_address = 24;      // JSON or flat address string
+
+  // GL integration
+  optional string revenue_account_id = 25;    // Target GL revenue account for this transaction
+  optional string journal_entry_id = 26;      // FK to journal_entry — set when ledger entry is posted
 }
 
 service RevenueDomainService {

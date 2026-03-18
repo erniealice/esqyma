@@ -4,7 +4,7 @@
 // - protoc             (unknown)
 // source: domain/treasury/disbursement_method/disbursement_method.proto
 
-package paymentv1
+package treasuryv1
 
 import (
 	context "context"
@@ -19,13 +19,13 @@ import (
 const _ = grpc.SupportPackageIsVersion9
 
 const (
-	DisbursementMethodDomainService_CreateDisbursementMethod_FullMethodName          = "/domain.payment.v1.DisbursementMethodDomainService/CreateDisbursementMethod"
-	DisbursementMethodDomainService_ReadDisbursementMethod_FullMethodName            = "/domain.payment.v1.DisbursementMethodDomainService/ReadDisbursementMethod"
-	DisbursementMethodDomainService_UpdateDisbursementMethod_FullMethodName          = "/domain.payment.v1.DisbursementMethodDomainService/UpdateDisbursementMethod"
-	DisbursementMethodDomainService_DeleteDisbursementMethod_FullMethodName          = "/domain.payment.v1.DisbursementMethodDomainService/DeleteDisbursementMethod"
-	DisbursementMethodDomainService_ListDisbursementMethods_FullMethodName           = "/domain.payment.v1.DisbursementMethodDomainService/ListDisbursementMethods"
-	DisbursementMethodDomainService_GetDisbursementMethodListPageData_FullMethodName = "/domain.payment.v1.DisbursementMethodDomainService/GetDisbursementMethodListPageData"
-	DisbursementMethodDomainService_GetDisbursementMethodItemPageData_FullMethodName = "/domain.payment.v1.DisbursementMethodDomainService/GetDisbursementMethodItemPageData"
+	DisbursementMethodDomainService_CreateDisbursementMethod_FullMethodName          = "/domain.treasury.v1.DisbursementMethodDomainService/CreateDisbursementMethod"
+	DisbursementMethodDomainService_ReadDisbursementMethod_FullMethodName            = "/domain.treasury.v1.DisbursementMethodDomainService/ReadDisbursementMethod"
+	DisbursementMethodDomainService_UpdateDisbursementMethod_FullMethodName          = "/domain.treasury.v1.DisbursementMethodDomainService/UpdateDisbursementMethod"
+	DisbursementMethodDomainService_DeleteDisbursementMethod_FullMethodName          = "/domain.treasury.v1.DisbursementMethodDomainService/DeleteDisbursementMethod"
+	DisbursementMethodDomainService_ListDisbursementMethods_FullMethodName           = "/domain.treasury.v1.DisbursementMethodDomainService/ListDisbursementMethods"
+	DisbursementMethodDomainService_GetDisbursementMethodListPageData_FullMethodName = "/domain.treasury.v1.DisbursementMethodDomainService/GetDisbursementMethodListPageData"
+	DisbursementMethodDomainService_GetDisbursementMethodItemPageData_FullMethodName = "/domain.treasury.v1.DisbursementMethodDomainService/GetDisbursementMethodItemPageData"
 )
 
 // DisbursementMethodDomainServiceClient is the client API for DisbursementMethodDomainService service.
@@ -313,7 +313,7 @@ func _DisbursementMethodDomainService_GetDisbursementMethodItemPageData_Handler(
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
 var DisbursementMethodDomainService_ServiceDesc = grpc.ServiceDesc{
-	ServiceName: "domain.payment.v1.DisbursementMethodDomainService",
+	ServiceName: "domain.treasury.v1.DisbursementMethodDomainService",
 	HandlerType: (*DisbursementMethodDomainServiceServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{

@@ -1,0 +1,137 @@
+syntax = "proto3";
+
+package domain.treasury.v1;
+
+option go_package = "github.com/erniealice/esqyma/golang/v1/domain/treasury/petty_cash_voucher";
+
+import "domain/common/error.proto";
+import "domain/common/pagination.proto";
+import "domain/common/filter.proto";
+import "domain/common/sort.proto";
+import "domain/common/search.proto";
+
+import "options/db.proto";
+
+// VoucherStatus tracks the approval and replenishment lifecycle of a petty cash voucher.
+enum VoucherStatus {
+  VOUCHER_STATUS_UNSPECIFIED = 0;
+  VOUCHER_STATUS_DRAFT = 1;
+  VOUCHER_STATUS_APPROVED = 2;
+  VOUCHER_STATUS_REPLENISHED = 3;
+}
+
+// PettyCashVoucher is an individual expense voucher issued against a PettyCashFund.
+// Multiple vouchers are grouped into a PettyCashReplenishment to restore the fund balance.
+message PettyCashVoucher {
+  option (options.v1.table).table = true;
+
+  string id = 1;
+
+  // Parent fund
+  string fund_id = 2 [(options.v1.db).references = "petty_cash_fund", (options.v1.db).index = true];
+
+  string voucher_number = 3 [(options.v1.db).unique = true, (options.v1.db).index = true];
+  optional string payee = 4;
+  string description = 5;
+  double total_amount = 6;
+  VoucherStatus status = 7;
+
+  // Approval
+  optional string approved_by = 8;   // FK to entity.User
+  optional int64 approved_at = 9;
+  optional string approved_at_string = 10;
+
+  // Audit fields
+  optional int64 date_created = 11;
+  optional string date_created_string = 12;
+}
+
+service PettyCashVoucherDomainService {
+  // Standard CRUD
+  rpc CreatePettyCashVoucher(CreatePettyCashVoucherRequest) returns (CreatePettyCashVoucherResponse);
+  rpc ReadPettyCashVoucher(ReadPettyCashVoucherRequest) returns (ReadPettyCashVoucherResponse);
+  rpc UpdatePettyCashVoucher(UpdatePettyCashVoucherRequest) returns (UpdatePettyCashVoucherResponse);
+  rpc DeletePettyCashVoucher(DeletePettyCashVoucherRequest) returns (DeletePettyCashVoucherResponse);
+  rpc ListPettyCashVouchers(ListPettyCashVouchersRequest) returns (ListPettyCashVouchersResponse);
+
+  // Enhanced page data (for UI views)
+  rpc GetPettyCashVoucherListPageData(GetPettyCashVoucherListPageDataRequest) returns (GetPettyCashVoucherListPageDataResponse);
+  rpc GetPettyCashVoucherItemPageData(GetPettyCashVoucherItemPageDataRequest) returns (GetPettyCashVoucherItemPageDataResponse);
+}
+
+message CreatePettyCashVoucherRequest {
+  PettyCashVoucher data = 1;
+}
+
+message CreatePettyCashVoucherResponse {
+  repeated PettyCashVoucher data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message ReadPettyCashVoucherRequest {
+  PettyCashVoucher data = 1;
+}
+
+message ReadPettyCashVoucherResponse {
+  repeated PettyCashVoucher data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message UpdatePettyCashVoucherRequest {
+  PettyCashVoucher data = 1;
+}
+
+message UpdatePettyCashVoucherResponse {
+  repeated PettyCashVoucher data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message DeletePettyCashVoucherRequest {
+  PettyCashVoucher data = 1;
+}
+
+message DeletePettyCashVoucherResponse {
+  bool success = 1;
+  optional domain.common.v1.Error error = 2;
+}
+
+message ListPettyCashVouchersRequest {
+  optional domain.common.v1.SearchRequest search = 1;
+  optional domain.common.v1.FilterRequest filters = 2;
+  optional domain.common.v1.SortRequest sort = 3;
+  optional domain.common.v1.PaginationRequest pagination = 4;
+}
+
+message ListPettyCashVouchersResponse {
+  repeated PettyCashVoucher data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message GetPettyCashVoucherListPageDataRequest {
+  optional domain.common.v1.PaginationRequest pagination = 1;
+  optional domain.common.v1.FilterRequest filters = 2;
+  optional domain.common.v1.SortRequest sort = 3;
+  optional domain.common.v1.SearchRequest search = 4;
+}
+
+message GetPettyCashVoucherListPageDataResponse {
+  repeated PettyCashVoucher petty_cash_voucher_list = 1;
+  optional domain.common.v1.PaginationResponse pagination = 2;
+  repeated domain.common.v1.SearchResult search_results = 3;
+  bool success = 4;
+  optional domain.common.v1.Error error = 5;
+}
+
+message GetPettyCashVoucherItemPageDataRequest {
+  string petty_cash_voucher_id = 1;
+}
+
+message GetPettyCashVoucherItemPageDataResponse {
+  optional PettyCashVoucher petty_cash_voucher = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}

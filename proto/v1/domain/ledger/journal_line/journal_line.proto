@@ -1,0 +1,133 @@
+syntax = "proto3";
+
+package domain.ledger.v1;
+
+option go_package = "github.com/erniealice/esqyma/golang/v1/domain/ledger/journal_line";
+
+import "domain/common/error.proto";
+import "domain/common/pagination.proto";
+import "domain/common/filter.proto";
+import "domain/common/sort.proto";
+import "domain/common/search.proto";
+
+import "options/db.proto";
+
+// JournalLine is an individual debit or credit line within a JournalEntry.
+// Exactly one of debit_amount or credit_amount is non-zero per line.
+// The sum of all debit_amount values must equal the sum of all credit_amount values
+// within the parent JournalEntry.
+message JournalLine {
+  option (options.v1.table).table = true;
+
+  string id = 1;
+
+  // Parent journal entry
+  string journal_entry_id = 2 [(options.v1.db).references = "journal_entry", (options.v1.db).index = true];
+
+  // Account posted to
+  string account_id = 3 [(options.v1.db).references = "account", (options.v1.db).index = true];
+
+  optional string description = 4;
+
+  // Debit/credit amounts — exactly one should be non-zero per line
+  double debit_amount = 5 [(options.v1.db).default = "0"];
+  double credit_amount = 6 [(options.v1.db).default = "0"];
+
+  // Presentation order within the journal entry
+  int32 line_order = 7 [(options.v1.db).default = "0"];
+
+  // Audit fields
+  bool active = 8 [(options.v1.db).default = "true"];
+  optional int64 date_created = 9;
+  optional string date_created_string = 10;
+}
+
+service JournalLineDomainService {
+  // Standard CRUD — primarily used as child of JournalEntry
+  rpc CreateJournalLine(CreateJournalLineRequest) returns (CreateJournalLineResponse);
+  rpc ReadJournalLine(ReadJournalLineRequest) returns (ReadJournalLineResponse);
+  rpc UpdateJournalLine(UpdateJournalLineRequest) returns (UpdateJournalLineResponse);
+  rpc DeleteJournalLine(DeleteJournalLineRequest) returns (DeleteJournalLineResponse);
+  rpc ListJournalLines(ListJournalLinesRequest) returns (ListJournalLinesResponse);
+
+  // Enhanced page data (for UI views)
+  rpc GetJournalLineListPageData(GetJournalLineListPageDataRequest) returns (GetJournalLineListPageDataResponse);
+  rpc GetJournalLineItemPageData(GetJournalLineItemPageDataRequest) returns (GetJournalLineItemPageDataResponse);
+}
+
+message CreateJournalLineRequest {
+  JournalLine data = 1;
+}
+
+message CreateJournalLineResponse {
+  repeated JournalLine data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message ReadJournalLineRequest {
+  JournalLine data = 1;
+}
+
+message ReadJournalLineResponse {
+  repeated JournalLine data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message UpdateJournalLineRequest {
+  JournalLine data = 1;
+}
+
+message UpdateJournalLineResponse {
+  repeated JournalLine data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message DeleteJournalLineRequest {
+  JournalLine data = 1;
+}
+
+message DeleteJournalLineResponse {
+  bool success = 1;
+  optional domain.common.v1.Error error = 2;
+}
+
+message ListJournalLinesRequest {
+  optional domain.common.v1.SearchRequest search = 1;
+  optional domain.common.v1.FilterRequest filters = 2;
+  optional domain.common.v1.SortRequest sort = 3;
+  optional domain.common.v1.PaginationRequest pagination = 4;
+}
+
+message ListJournalLinesResponse {
+  repeated JournalLine data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message GetJournalLineListPageDataRequest {
+  optional domain.common.v1.PaginationRequest pagination = 1;
+  optional domain.common.v1.FilterRequest filters = 2;
+  optional domain.common.v1.SortRequest sort = 3;
+  optional domain.common.v1.SearchRequest search = 4;
+}
+
+message GetJournalLineListPageDataResponse {
+  repeated JournalLine journal_line_list = 1;
+  optional domain.common.v1.PaginationResponse pagination = 2;
+  repeated domain.common.v1.SearchResult search_results = 3;
+  bool success = 4;
+  optional domain.common.v1.Error error = 5;
+}
+
+message GetJournalLineItemPageDataRequest {
+  string journal_line_id = 1;
+}
+
+message GetJournalLineItemPageDataResponse {
+  optional JournalLine journal_line = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}

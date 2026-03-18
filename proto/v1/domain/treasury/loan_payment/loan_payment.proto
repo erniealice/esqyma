@@ -1,0 +1,137 @@
+syntax = "proto3";
+
+package domain.treasury.v1;
+
+option go_package = "github.com/erniealice/esqyma/golang/v1/domain/treasury/loan_payment";
+
+import "domain/common/error.proto";
+import "domain/common/pagination.proto";
+import "domain/common/filter.proto";
+import "domain/common/sort.proto";
+import "domain/common/search.proto";
+
+import "options/db.proto";
+
+// LoanPayment records an actual payment made against a Loan.
+// Distinct from LoanScheduleLine (which is the theoretical amortization schedule).
+// Posting a payment creates two JournalEntry records:
+//   1. LOAN_PAYMENT — principal + interest
+//   2. LOAN_FEE_AMORTIZATION — debt issuance cost amortization (PFRS 9)
+message LoanPayment {
+  option (options.v1.table).table = true;
+
+  string id = 1;
+
+  // Parent loan
+  string loan_id = 2 [(options.v1.db).references = "loan", (options.v1.db).index = true];
+
+  string payment_number = 3 [(options.v1.db).unique = true, (options.v1.db).index = true];
+
+  int64 payment_date = 4;
+  optional string payment_date_string = 5;
+
+  // Payment breakdown
+  double principal_amount = 6;
+  double interest_amount = 7;
+  double fee_amount = 8 [(options.v1.db).default = "0"];  // Debt issuance cost (PFRS 9)
+  double total_amount = 9;
+
+  // Running balance after this payment
+  double remaining_balance = 10;
+
+  optional string notes = 11;
+
+  // Audit fields
+  optional int64 date_created = 12;
+  optional string date_created_string = 13;
+}
+
+service LoanPaymentDomainService {
+  // Standard CRUD
+  rpc CreateLoanPayment(CreateLoanPaymentRequest) returns (CreateLoanPaymentResponse);
+  rpc ReadLoanPayment(ReadLoanPaymentRequest) returns (ReadLoanPaymentResponse);
+  rpc UpdateLoanPayment(UpdateLoanPaymentRequest) returns (UpdateLoanPaymentResponse);
+  rpc DeleteLoanPayment(DeleteLoanPaymentRequest) returns (DeleteLoanPaymentResponse);
+  rpc ListLoanPayments(ListLoanPaymentsRequest) returns (ListLoanPaymentsResponse);
+
+  // Enhanced page data (for UI views)
+  rpc GetLoanPaymentListPageData(GetLoanPaymentListPageDataRequest) returns (GetLoanPaymentListPageDataResponse);
+  rpc GetLoanPaymentItemPageData(GetLoanPaymentItemPageDataRequest) returns (GetLoanPaymentItemPageDataResponse);
+}
+
+message CreateLoanPaymentRequest {
+  LoanPayment data = 1;
+}
+
+message CreateLoanPaymentResponse {
+  repeated LoanPayment data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message ReadLoanPaymentRequest {
+  LoanPayment data = 1;
+}
+
+message ReadLoanPaymentResponse {
+  repeated LoanPayment data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message UpdateLoanPaymentRequest {
+  LoanPayment data = 1;
+}
+
+message UpdateLoanPaymentResponse {
+  repeated LoanPayment data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message DeleteLoanPaymentRequest {
+  LoanPayment data = 1;
+}
+
+message DeleteLoanPaymentResponse {
+  bool success = 1;
+  optional domain.common.v1.Error error = 2;
+}
+
+message ListLoanPaymentsRequest {
+  optional domain.common.v1.SearchRequest search = 1;
+  optional domain.common.v1.FilterRequest filters = 2;
+  optional domain.common.v1.SortRequest sort = 3;
+  optional domain.common.v1.PaginationRequest pagination = 4;
+}
+
+message ListLoanPaymentsResponse {
+  repeated LoanPayment data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message GetLoanPaymentListPageDataRequest {
+  optional domain.common.v1.PaginationRequest pagination = 1;
+  optional domain.common.v1.FilterRequest filters = 2;
+  optional domain.common.v1.SortRequest sort = 3;
+  optional domain.common.v1.SearchRequest search = 4;
+}
+
+message GetLoanPaymentListPageDataResponse {
+  repeated LoanPayment loan_payment_list = 1;
+  optional domain.common.v1.PaginationResponse pagination = 2;
+  repeated domain.common.v1.SearchResult search_results = 3;
+  bool success = 4;
+  optional domain.common.v1.Error error = 5;
+}
+
+message GetLoanPaymentItemPageDataRequest {
+  string loan_payment_id = 1;
+}
+
+message GetLoanPaymentItemPageDataResponse {
+  optional LoanPayment loan_payment = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}

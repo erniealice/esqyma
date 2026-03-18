@@ -1,0 +1,169 @@
+syntax = "proto3";
+
+package domain.ledger.v1;
+
+option go_package = "github.com/erniealice/esqyma/golang/v1/domain/ledger/recurring_journal_template";
+
+import "domain/common/error.proto";
+import "domain/common/pagination.proto";
+import "domain/common/filter.proto";
+import "domain/common/sort.proto";
+import "domain/common/search.proto";
+
+import "options/db.proto";
+
+// RecurrenceFrequency defines how often a recurring journal entry is generated.
+enum RecurrenceFrequency {
+  RECURRENCE_FREQUENCY_UNSPECIFIED = 0;
+  RECURRENCE_FREQUENCY_DAILY = 1;
+  RECURRENCE_FREQUENCY_WEEKLY = 2;
+  RECURRENCE_FREQUENCY_MONTHLY = 3;
+  RECURRENCE_FREQUENCY_QUARTERLY = 4;
+  RECURRENCE_FREQUENCY_YEARLY = 5;
+}
+
+// RecurringJournalTemplateLine defines one debit or credit line in the template.
+// Mirrors the structure of JournalLine but belongs to a template, not a live entry.
+message RecurringJournalTemplateLine {
+  string account_id = 1;                  // FK to account
+  optional string description = 2;
+  double debit_amount = 3;
+  double credit_amount = 4;
+  int32 line_order = 5;
+}
+
+// RecurringJournalTemplate is a system-scheduled template that generates JournalEntry
+// records automatically on each recurrence date (e.g. monthly depreciation, rent).
+message RecurringJournalTemplate {
+  option (options.v1.table).table = true;
+
+  string id = 1;
+  string name = 2;
+  optional string description = 3;
+  RecurrenceFrequency frequency = 4;
+
+  // Schedule — next_run_date is updated after each successful generation
+  int64 next_run_date = 5;
+  optional string next_run_date_string = 6;
+  optional int64 end_date = 7;             // Null = runs indefinitely
+  optional string end_date_string = 8;
+
+  // Template description copied to each generated JournalEntry
+  string template_description = 9;
+
+  // Template lines — embedded for reads; stored separately in DB
+  repeated RecurringJournalTemplateLine lines = 10;
+
+  // Audit fields
+  bool active = 11 [(options.v1.db).default = "true"];
+  optional int64 date_created = 12;
+  optional string date_created_string = 13;
+  optional int64 date_modified = 14;
+  optional string date_modified_string = 15;
+}
+
+service RecurringJournalTemplateDomainService {
+  // Standard CRUD
+  rpc CreateRecurringJournalTemplate(CreateRecurringJournalTemplateRequest) returns (CreateRecurringJournalTemplateResponse);
+  rpc ReadRecurringJournalTemplate(ReadRecurringJournalTemplateRequest) returns (ReadRecurringJournalTemplateResponse);
+  rpc UpdateRecurringJournalTemplate(UpdateRecurringJournalTemplateRequest) returns (UpdateRecurringJournalTemplateResponse);
+  rpc DeleteRecurringJournalTemplate(DeleteRecurringJournalTemplateRequest) returns (DeleteRecurringJournalTemplateResponse);
+  rpc ListRecurringJournalTemplates(ListRecurringJournalTemplatesRequest) returns (ListRecurringJournalTemplatesResponse);
+
+  // Enhanced page data (for UI views)
+  rpc GetRecurringJournalTemplateListPageData(GetRecurringJournalTemplateListPageDataRequest) returns (GetRecurringJournalTemplateListPageDataResponse);
+  rpc GetRecurringJournalTemplateItemPageData(GetRecurringJournalTemplateItemPageDataRequest) returns (GetRecurringJournalTemplateItemPageDataResponse);
+
+  // Generate a JournalEntry from this template (called by scheduler or manually)
+  rpc GenerateFromTemplate(GenerateFromTemplateRequest) returns (GenerateFromTemplateResponse);
+}
+
+message CreateRecurringJournalTemplateRequest {
+  RecurringJournalTemplate data = 1;
+}
+
+message CreateRecurringJournalTemplateResponse {
+  repeated RecurringJournalTemplate data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message ReadRecurringJournalTemplateRequest {
+  RecurringJournalTemplate data = 1;
+}
+
+message ReadRecurringJournalTemplateResponse {
+  repeated RecurringJournalTemplate data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message UpdateRecurringJournalTemplateRequest {
+  RecurringJournalTemplate data = 1;
+}
+
+message UpdateRecurringJournalTemplateResponse {
+  repeated RecurringJournalTemplate data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message DeleteRecurringJournalTemplateRequest {
+  RecurringJournalTemplate data = 1;
+}
+
+message DeleteRecurringJournalTemplateResponse {
+  bool success = 1;
+  optional domain.common.v1.Error error = 2;
+}
+
+message ListRecurringJournalTemplatesRequest {
+  optional domain.common.v1.SearchRequest search = 1;
+  optional domain.common.v1.FilterRequest filters = 2;
+  optional domain.common.v1.SortRequest sort = 3;
+  optional domain.common.v1.PaginationRequest pagination = 4;
+}
+
+message ListRecurringJournalTemplatesResponse {
+  repeated RecurringJournalTemplate data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message GetRecurringJournalTemplateListPageDataRequest {
+  optional domain.common.v1.PaginationRequest pagination = 1;
+  optional domain.common.v1.FilterRequest filters = 2;
+  optional domain.common.v1.SortRequest sort = 3;
+  optional domain.common.v1.SearchRequest search = 4;
+}
+
+message GetRecurringJournalTemplateListPageDataResponse {
+  repeated RecurringJournalTemplate recurring_journal_template_list = 1;
+  optional domain.common.v1.PaginationResponse pagination = 2;
+  repeated domain.common.v1.SearchResult search_results = 3;
+  bool success = 4;
+  optional domain.common.v1.Error error = 5;
+}
+
+message GetRecurringJournalTemplateItemPageDataRequest {
+  string recurring_journal_template_id = 1;
+}
+
+message GetRecurringJournalTemplateItemPageDataResponse {
+  optional RecurringJournalTemplate recurring_journal_template = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+// Generate a JournalEntry from this template and advance next_run_date
+message GenerateFromTemplateRequest {
+  string recurring_journal_template_id = 1;
+  int64 entry_date = 2;        // Effective date for the generated entry
+  optional string fiscal_period_id = 3;
+}
+
+message GenerateFromTemplateResponse {
+  string journal_entry_id = 1;  // ID of the created JournalEntry
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}

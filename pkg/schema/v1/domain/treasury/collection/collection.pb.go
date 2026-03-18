@@ -4,7 +4,7 @@
 // 	protoc        (unknown)
 // source: domain/treasury/collection/collection.proto
 
-package paymentv1
+package treasuryv1
 
 import (
 	common "github.com/erniealice/esqyma/pkg/schema/v1/domain/common"
@@ -52,6 +52,10 @@ type Collection struct {
 	ReceivedRole string `protobuf:"bytes,27,opt,name=received_role,json=receivedRole,proto3" json:"received_role,omitempty"` // Role ID of person who received payment
 	// Collection categorization
 	CollectionType string `protobuf:"bytes,28,opt,name=collection_type,json=collectionType,proto3" json:"collection_type,omitempty"` // e.g., "subscription", "sale", "refund"
+	// Date display companion
+	PaymentDateString *string `protobuf:"bytes,29,opt,name=payment_date_string,json=paymentDateString,proto3,oneof" json:"payment_date_string,omitempty"` // Display string for payment_date
+	// GL traceability
+	JournalEntryId *string `protobuf:"bytes,30,opt,name=journal_entry_id,json=journalEntryId,proto3,oneof" json:"journal_entry_id,omitempty"` // FK to journal_entry — set when collection is posted to ledger
 	unknownFields  protoimpl.UnknownFields
 	sizeCache      protoimpl.SizeCache
 }
@@ -222,6 +226,20 @@ func (x *Collection) GetReceivedRole() string {
 func (x *Collection) GetCollectionType() string {
 	if x != nil {
 		return x.CollectionType
+	}
+	return ""
+}
+
+func (x *Collection) GetPaymentDateString() string {
+	if x != nil && x.PaymentDateString != nil {
+		return *x.PaymentDateString
+	}
+	return ""
+}
+
+func (x *Collection) GetJournalEntryId() string {
+	if x != nil && x.JournalEntryId != nil {
+		return *x.JournalEntryId
 	}
 	return ""
 }
@@ -1014,7 +1032,7 @@ var File_domain_treasury_collection_collection_proto protoreflect.FileDescriptor
 
 const file_domain_treasury_collection_collection_proto_rawDesc = "" +
 	"\n" +
-	"+domain/treasury/collection/collection.proto\x12\x11domain.payment.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1adomain/common/search.proto\x1a3domain/subscription/subscription/subscription.proto\x1a_domain/treasury/collection_profile_collection_method/collection_profile_collection_method.proto\"\xbb\a\n" +
+	"+domain/treasury/collection/collection.proto\x12\x12domain.treasury.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1adomain/common/search.proto\x1a3domain/subscription/subscription/subscription.proto\x1a_domain/treasury/collection_profile_collection_method/collection_profile_collection_method.proto\"\xcd\b\n" +
 	"\n" +
 	"Collection\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12&\n" +
@@ -1030,8 +1048,8 @@ const file_domain_treasury_collection_collection_proto_rawDesc = "" +
 	" \x01(\x01R\x06amount\x12\x16\n" +
 	"\x06status\x18\v \x01(\tR\x06status\x12\x1d\n" +
 	"\n" +
-	"revenue_id\x18\x14 \x01(\tR\trevenueId\x12f\n" +
-	"\x11collection_method\x18\x15 \x01(\v24.domain.payment.v1.CollectionProfileCollectionMethodH\x05R\x10collectionMethod\x88\x01\x01\x120\n" +
+	"revenue_id\x18\x14 \x01(\tR\trevenueId\x12g\n" +
+	"\x11collection_method\x18\x15 \x01(\v25.domain.treasury.v1.CollectionProfileCollectionMethodH\x05R\x10collectionMethod\x88\x01\x01\x120\n" +
 	"\x14collection_method_id\x18\x16 \x01(\tR\x12collectionMethodId\x12\x1a\n" +
 	"\bcurrency\x18\x17 \x01(\tR\bcurrency\x12)\n" +
 	"\x10reference_number\x18\x18 \x01(\tR\x0freferenceNumber\x12!\n" +
@@ -1039,36 +1057,40 @@ const file_domain_treasury_collection_collection_proto_rawDesc = "" +
 	"\vreceived_by\x18\x1a \x01(\tR\n" +
 	"receivedBy\x12#\n" +
 	"\rreceived_role\x18\x1b \x01(\tR\freceivedRole\x12'\n" +
-	"\x0fcollection_type\x18\x1c \x01(\tR\x0ecollectionTypeB\x0f\n" +
+	"\x0fcollection_type\x18\x1c \x01(\tR\x0ecollectionType\x123\n" +
+	"\x13payment_date_string\x18\x1d \x01(\tH\x06R\x11paymentDateString\x88\x01\x01\x12-\n" +
+	"\x10journal_entry_id\x18\x1e \x01(\tH\aR\x0ejournalEntryId\x88\x01\x01B\x0f\n" +
 	"\r_date_createdB\x16\n" +
 	"\x14_date_created_stringB\x10\n" +
 	"\x0e_date_modifiedB\x17\n" +
 	"\x15_date_modified_stringB\x0f\n" +
 	"\r_subscriptionB\x14\n" +
-	"\x12_collection_method\"L\n" +
-	"\x17CreateCollectionRequest\x121\n" +
-	"\x04data\x18\x01 \x01(\v2\x1d.domain.payment.v1.CollectionR\x04data\"\xa5\x01\n" +
-	"\x18CreateCollectionResponse\x121\n" +
-	"\x04data\x18\x01 \x03(\v2\x1d.domain.payment.v1.CollectionR\x04data\x12\x18\n" +
+	"\x12_collection_methodB\x16\n" +
+	"\x14_payment_date_stringB\x13\n" +
+	"\x11_journal_entry_id\"M\n" +
+	"\x17CreateCollectionRequest\x122\n" +
+	"\x04data\x18\x01 \x01(\v2\x1e.domain.treasury.v1.CollectionR\x04data\"\xa6\x01\n" +
+	"\x18CreateCollectionResponse\x122\n" +
+	"\x04data\x18\x01 \x03(\v2\x1e.domain.treasury.v1.CollectionR\x04data\x12\x18\n" +
 	"\asuccess\x18\x02 \x01(\bR\asuccess\x122\n" +
 	"\x05error\x18\x03 \x01(\v2\x17.domain.common.v1.ErrorH\x00R\x05error\x88\x01\x01B\b\n" +
-	"\x06_error\"J\n" +
-	"\x15ReadCollectionRequest\x121\n" +
-	"\x04data\x18\x01 \x01(\v2\x1d.domain.payment.v1.CollectionR\x04data\"\xa3\x01\n" +
-	"\x16ReadCollectionResponse\x121\n" +
-	"\x04data\x18\x01 \x03(\v2\x1d.domain.payment.v1.CollectionR\x04data\x12\x18\n" +
+	"\x06_error\"K\n" +
+	"\x15ReadCollectionRequest\x122\n" +
+	"\x04data\x18\x01 \x01(\v2\x1e.domain.treasury.v1.CollectionR\x04data\"\xa4\x01\n" +
+	"\x16ReadCollectionResponse\x122\n" +
+	"\x04data\x18\x01 \x03(\v2\x1e.domain.treasury.v1.CollectionR\x04data\x12\x18\n" +
 	"\asuccess\x18\x02 \x01(\bR\asuccess\x122\n" +
 	"\x05error\x18\x03 \x01(\v2\x17.domain.common.v1.ErrorH\x00R\x05error\x88\x01\x01B\b\n" +
-	"\x06_error\"L\n" +
-	"\x17UpdateCollectionRequest\x121\n" +
-	"\x04data\x18\x01 \x01(\v2\x1d.domain.payment.v1.CollectionR\x04data\"\xa5\x01\n" +
-	"\x18UpdateCollectionResponse\x121\n" +
-	"\x04data\x18\x01 \x03(\v2\x1d.domain.payment.v1.CollectionR\x04data\x12\x18\n" +
+	"\x06_error\"M\n" +
+	"\x17UpdateCollectionRequest\x122\n" +
+	"\x04data\x18\x01 \x01(\v2\x1e.domain.treasury.v1.CollectionR\x04data\"\xa6\x01\n" +
+	"\x18UpdateCollectionResponse\x122\n" +
+	"\x04data\x18\x01 \x03(\v2\x1e.domain.treasury.v1.CollectionR\x04data\x12\x18\n" +
 	"\asuccess\x18\x02 \x01(\bR\asuccess\x122\n" +
 	"\x05error\x18\x03 \x01(\v2\x17.domain.common.v1.ErrorH\x00R\x05error\x88\x01\x01B\b\n" +
-	"\x06_error\"L\n" +
-	"\x17DeleteCollectionRequest\x121\n" +
-	"\x04data\x18\x01 \x01(\v2\x1d.domain.payment.v1.CollectionR\x04data\"r\n" +
+	"\x06_error\"M\n" +
+	"\x17DeleteCollectionRequest\x122\n" +
+	"\x04data\x18\x01 \x01(\v2\x1e.domain.treasury.v1.CollectionR\x04data\"r\n" +
 	"\x18DeleteCollectionResponse\x12\x18\n" +
 	"\asuccess\x18\x01 \x01(\bR\asuccess\x122\n" +
 	"\x05error\x18\x02 \x01(\v2\x17.domain.common.v1.ErrorH\x00R\x05error\x88\x01\x01B\b\n" +
@@ -1084,9 +1106,9 @@ const file_domain_treasury_collection_collection_proto_rawDesc = "" +
 	"\n" +
 	"\b_filtersB\a\n" +
 	"\x05_sortB\r\n" +
-	"\v_pagination\"\xa4\x01\n" +
-	"\x17ListCollectionsResponse\x121\n" +
-	"\x04data\x18\x01 \x03(\v2\x1d.domain.payment.v1.CollectionR\x04data\x12\x18\n" +
+	"\v_pagination\"\xa5\x01\n" +
+	"\x17ListCollectionsResponse\x122\n" +
+	"\x04data\x18\x01 \x03(\v2\x1e.domain.treasury.v1.CollectionR\x04data\x12\x18\n" +
 	"\asuccess\x18\x02 \x01(\bR\asuccess\x122\n" +
 	"\x05error\x18\x03 \x01(\v2\x17.domain.common.v1.ErrorH\x00R\x05error\x88\x01\x01B\b\n" +
 	"\x06_error\"\xd1\x02\n" +
@@ -1101,9 +1123,9 @@ const file_domain_treasury_collection_collection_proto_rawDesc = "" +
 	"\n" +
 	"\b_filtersB\a\n" +
 	"\x05_sortB\t\n" +
-	"\a_search\"\xe4\x02\n" +
-	"!GetCollectionListPageDataResponse\x12F\n" +
-	"\x0fcollection_list\x18\x01 \x03(\v2\x1d.domain.payment.v1.CollectionR\x0ecollectionList\x12\x18\n" +
+	"\a_search\"\xe5\x02\n" +
+	"!GetCollectionListPageDataResponse\x12G\n" +
+	"\x0fcollection_list\x18\x01 \x03(\v2\x1e.domain.treasury.v1.CollectionR\x0ecollectionList\x12\x18\n" +
 	"\asuccess\x18\x02 \x01(\bR\asuccess\x122\n" +
 	"\x05error\x18\x03 \x01(\v2\x17.domain.common.v1.ErrorH\x00R\x05error\x88\x01\x01\x12I\n" +
 	"\n" +
@@ -1113,24 +1135,24 @@ const file_domain_treasury_collection_collection_proto_rawDesc = "" +
 	"\x06_errorB\r\n" +
 	"\v_pagination\"G\n" +
 	" GetCollectionItemPageDataRequest\x12#\n" +
-	"\rcollection_id\x18\x01 \x01(\tR\fcollectionId\"\xce\x01\n" +
-	"!GetCollectionItemPageDataResponse\x12B\n" +
+	"\rcollection_id\x18\x01 \x01(\tR\fcollectionId\"\xcf\x01\n" +
+	"!GetCollectionItemPageDataResponse\x12C\n" +
 	"\n" +
-	"collection\x18\x01 \x01(\v2\x1d.domain.payment.v1.CollectionH\x00R\n" +
+	"collection\x18\x01 \x01(\v2\x1e.domain.treasury.v1.CollectionH\x00R\n" +
 	"collection\x88\x01\x01\x12\x18\n" +
 	"\asuccess\x18\x02 \x01(\bR\asuccess\x122\n" +
 	"\x05error\x18\x03 \x01(\v2\x17.domain.common.v1.ErrorH\x01R\x05error\x88\x01\x01B\r\n" +
 	"\v_collectionB\b\n" +
-	"\x06_error2\xc3\x06\n" +
-	"\x17CollectionDomainService\x12k\n" +
-	"\x10CreateCollection\x12*.domain.payment.v1.CreateCollectionRequest\x1a+.domain.payment.v1.CreateCollectionResponse\x12e\n" +
-	"\x0eReadCollection\x12(.domain.payment.v1.ReadCollectionRequest\x1a).domain.payment.v1.ReadCollectionResponse\x12k\n" +
-	"\x10UpdateCollection\x12*.domain.payment.v1.UpdateCollectionRequest\x1a+.domain.payment.v1.UpdateCollectionResponse\x12k\n" +
-	"\x10DeleteCollection\x12*.domain.payment.v1.DeleteCollectionRequest\x1a+.domain.payment.v1.DeleteCollectionResponse\x12h\n" +
-	"\x0fListCollections\x12).domain.payment.v1.ListCollectionsRequest\x1a*.domain.payment.v1.ListCollectionsResponse\x12\x86\x01\n" +
-	"\x19GetCollectionListPageData\x123.domain.payment.v1.GetCollectionListPageDataRequest\x1a4.domain.payment.v1.GetCollectionListPageDataResponse\x12\x86\x01\n" +
-	"\x19GetCollectionItemPageData\x123.domain.payment.v1.GetCollectionItemPageDataRequest\x1a4.domain.payment.v1.GetCollectionItemPageDataResponseB\xdf\x01\n" +
-	"\x15com.domain.payment.v1B\x0fCollectionProtoP\x01ZOgithub.com/erniealice/esqyma/pkg/schema/v1/domain/treasury/collection;paymentv1\xa2\x02\x03DPX\xaa\x02\x11Domain.Payment.V1\xca\x02\x11Domain\\Payment\\V1\xe2\x02\x1dDomain\\Payment\\V1\\GPBMetadata\xea\x02\x13Domain::Payment::V1b\x06proto3"
+	"\x06_error2\xd1\x06\n" +
+	"\x17CollectionDomainService\x12m\n" +
+	"\x10CreateCollection\x12+.domain.treasury.v1.CreateCollectionRequest\x1a,.domain.treasury.v1.CreateCollectionResponse\x12g\n" +
+	"\x0eReadCollection\x12).domain.treasury.v1.ReadCollectionRequest\x1a*.domain.treasury.v1.ReadCollectionResponse\x12m\n" +
+	"\x10UpdateCollection\x12+.domain.treasury.v1.UpdateCollectionRequest\x1a,.domain.treasury.v1.UpdateCollectionResponse\x12m\n" +
+	"\x10DeleteCollection\x12+.domain.treasury.v1.DeleteCollectionRequest\x1a,.domain.treasury.v1.DeleteCollectionResponse\x12j\n" +
+	"\x0fListCollections\x12*.domain.treasury.v1.ListCollectionsRequest\x1a+.domain.treasury.v1.ListCollectionsResponse\x12\x88\x01\n" +
+	"\x19GetCollectionListPageData\x124.domain.treasury.v1.GetCollectionListPageDataRequest\x1a5.domain.treasury.v1.GetCollectionListPageDataResponse\x12\x88\x01\n" +
+	"\x19GetCollectionItemPageData\x124.domain.treasury.v1.GetCollectionItemPageDataRequest\x1a5.domain.treasury.v1.GetCollectionItemPageDataResponseB\xe5\x01\n" +
+	"\x16com.domain.treasury.v1B\x0fCollectionProtoP\x01ZPgithub.com/erniealice/esqyma/pkg/schema/v1/domain/treasury/collection;treasuryv1\xa2\x02\x03DTX\xaa\x02\x12Domain.Treasury.V1\xca\x02\x12Domain\\Treasury\\V1\xe2\x02\x1eDomain\\Treasury\\V1\\GPBMetadata\xea\x02\x14Domain::Treasury::V1b\x06proto3"
 
 var (
 	file_domain_treasury_collection_collection_proto_rawDescOnce sync.Once
@@ -1146,23 +1168,23 @@ func file_domain_treasury_collection_collection_proto_rawDescGZIP() []byte {
 
 var file_domain_treasury_collection_collection_proto_msgTypes = make([]protoimpl.MessageInfo, 15)
 var file_domain_treasury_collection_collection_proto_goTypes = []any{
-	(*Collection)(nil),                                                             // 0: domain.payment.v1.Collection
-	(*CreateCollectionRequest)(nil),                                                // 1: domain.payment.v1.CreateCollectionRequest
-	(*CreateCollectionResponse)(nil),                                               // 2: domain.payment.v1.CreateCollectionResponse
-	(*ReadCollectionRequest)(nil),                                                  // 3: domain.payment.v1.ReadCollectionRequest
-	(*ReadCollectionResponse)(nil),                                                 // 4: domain.payment.v1.ReadCollectionResponse
-	(*UpdateCollectionRequest)(nil),                                                // 5: domain.payment.v1.UpdateCollectionRequest
-	(*UpdateCollectionResponse)(nil),                                               // 6: domain.payment.v1.UpdateCollectionResponse
-	(*DeleteCollectionRequest)(nil),                                                // 7: domain.payment.v1.DeleteCollectionRequest
-	(*DeleteCollectionResponse)(nil),                                               // 8: domain.payment.v1.DeleteCollectionResponse
-	(*ListCollectionsRequest)(nil),                                                 // 9: domain.payment.v1.ListCollectionsRequest
-	(*ListCollectionsResponse)(nil),                                                // 10: domain.payment.v1.ListCollectionsResponse
-	(*GetCollectionListPageDataRequest)(nil),                                       // 11: domain.payment.v1.GetCollectionListPageDataRequest
-	(*GetCollectionListPageDataResponse)(nil),                                      // 12: domain.payment.v1.GetCollectionListPageDataResponse
-	(*GetCollectionItemPageDataRequest)(nil),                                       // 13: domain.payment.v1.GetCollectionItemPageDataRequest
-	(*GetCollectionItemPageDataResponse)(nil),                                      // 14: domain.payment.v1.GetCollectionItemPageDataResponse
+	(*Collection)(nil),                                                             // 0: domain.treasury.v1.Collection
+	(*CreateCollectionRequest)(nil),                                                // 1: domain.treasury.v1.CreateCollectionRequest
+	(*CreateCollectionResponse)(nil),                                               // 2: domain.treasury.v1.CreateCollectionResponse
+	(*ReadCollectionRequest)(nil),                                                  // 3: domain.treasury.v1.ReadCollectionRequest
+	(*ReadCollectionResponse)(nil),                                                 // 4: domain.treasury.v1.ReadCollectionResponse
+	(*UpdateCollectionRequest)(nil),                                                // 5: domain.treasury.v1.UpdateCollectionRequest
+	(*UpdateCollectionResponse)(nil),                                               // 6: domain.treasury.v1.UpdateCollectionResponse
+	(*DeleteCollectionRequest)(nil),                                                // 7: domain.treasury.v1.DeleteCollectionRequest
+	(*DeleteCollectionResponse)(nil),                                               // 8: domain.treasury.v1.DeleteCollectionResponse
+	(*ListCollectionsRequest)(nil),                                                 // 9: domain.treasury.v1.ListCollectionsRequest
+	(*ListCollectionsResponse)(nil),                                                // 10: domain.treasury.v1.ListCollectionsResponse
+	(*GetCollectionListPageDataRequest)(nil),                                       // 11: domain.treasury.v1.GetCollectionListPageDataRequest
+	(*GetCollectionListPageDataResponse)(nil),                                      // 12: domain.treasury.v1.GetCollectionListPageDataResponse
+	(*GetCollectionItemPageDataRequest)(nil),                                       // 13: domain.treasury.v1.GetCollectionItemPageDataRequest
+	(*GetCollectionItemPageDataResponse)(nil),                                      // 14: domain.treasury.v1.GetCollectionItemPageDataResponse
 	(*subscription.Subscription)(nil),                                              // 15: domain.subscription.v1.Subscription
-	(*collection_profile_collection_method.CollectionProfileCollectionMethod)(nil), // 16: domain.payment.v1.CollectionProfileCollectionMethod
+	(*collection_profile_collection_method.CollectionProfileCollectionMethod)(nil), // 16: domain.treasury.v1.CollectionProfileCollectionMethod
 	(*common.Error)(nil),                                                           // 17: domain.common.v1.Error
 	(*common.SearchRequest)(nil),                                                   // 18: domain.common.v1.SearchRequest
 	(*common.FilterRequest)(nil),                                                   // 19: domain.common.v1.FilterRequest
@@ -1172,49 +1194,49 @@ var file_domain_treasury_collection_collection_proto_goTypes = []any{
 	(*common.SearchResult)(nil),                                                    // 23: domain.common.v1.SearchResult
 }
 var file_domain_treasury_collection_collection_proto_depIdxs = []int32{
-	15, // 0: domain.payment.v1.Collection.subscription:type_name -> domain.subscription.v1.Subscription
-	16, // 1: domain.payment.v1.Collection.collection_method:type_name -> domain.payment.v1.CollectionProfileCollectionMethod
-	0,  // 2: domain.payment.v1.CreateCollectionRequest.data:type_name -> domain.payment.v1.Collection
-	0,  // 3: domain.payment.v1.CreateCollectionResponse.data:type_name -> domain.payment.v1.Collection
-	17, // 4: domain.payment.v1.CreateCollectionResponse.error:type_name -> domain.common.v1.Error
-	0,  // 5: domain.payment.v1.ReadCollectionRequest.data:type_name -> domain.payment.v1.Collection
-	0,  // 6: domain.payment.v1.ReadCollectionResponse.data:type_name -> domain.payment.v1.Collection
-	17, // 7: domain.payment.v1.ReadCollectionResponse.error:type_name -> domain.common.v1.Error
-	0,  // 8: domain.payment.v1.UpdateCollectionRequest.data:type_name -> domain.payment.v1.Collection
-	0,  // 9: domain.payment.v1.UpdateCollectionResponse.data:type_name -> domain.payment.v1.Collection
-	17, // 10: domain.payment.v1.UpdateCollectionResponse.error:type_name -> domain.common.v1.Error
-	0,  // 11: domain.payment.v1.DeleteCollectionRequest.data:type_name -> domain.payment.v1.Collection
-	17, // 12: domain.payment.v1.DeleteCollectionResponse.error:type_name -> domain.common.v1.Error
-	18, // 13: domain.payment.v1.ListCollectionsRequest.search:type_name -> domain.common.v1.SearchRequest
-	19, // 14: domain.payment.v1.ListCollectionsRequest.filters:type_name -> domain.common.v1.FilterRequest
-	20, // 15: domain.payment.v1.ListCollectionsRequest.sort:type_name -> domain.common.v1.SortRequest
-	21, // 16: domain.payment.v1.ListCollectionsRequest.pagination:type_name -> domain.common.v1.PaginationRequest
-	0,  // 17: domain.payment.v1.ListCollectionsResponse.data:type_name -> domain.payment.v1.Collection
-	17, // 18: domain.payment.v1.ListCollectionsResponse.error:type_name -> domain.common.v1.Error
-	21, // 19: domain.payment.v1.GetCollectionListPageDataRequest.pagination:type_name -> domain.common.v1.PaginationRequest
-	19, // 20: domain.payment.v1.GetCollectionListPageDataRequest.filters:type_name -> domain.common.v1.FilterRequest
-	20, // 21: domain.payment.v1.GetCollectionListPageDataRequest.sort:type_name -> domain.common.v1.SortRequest
-	18, // 22: domain.payment.v1.GetCollectionListPageDataRequest.search:type_name -> domain.common.v1.SearchRequest
-	0,  // 23: domain.payment.v1.GetCollectionListPageDataResponse.collection_list:type_name -> domain.payment.v1.Collection
-	17, // 24: domain.payment.v1.GetCollectionListPageDataResponse.error:type_name -> domain.common.v1.Error
-	22, // 25: domain.payment.v1.GetCollectionListPageDataResponse.pagination:type_name -> domain.common.v1.PaginationResponse
-	23, // 26: domain.payment.v1.GetCollectionListPageDataResponse.search_results:type_name -> domain.common.v1.SearchResult
-	0,  // 27: domain.payment.v1.GetCollectionItemPageDataResponse.collection:type_name -> domain.payment.v1.Collection
-	17, // 28: domain.payment.v1.GetCollectionItemPageDataResponse.error:type_name -> domain.common.v1.Error
-	1,  // 29: domain.payment.v1.CollectionDomainService.CreateCollection:input_type -> domain.payment.v1.CreateCollectionRequest
-	3,  // 30: domain.payment.v1.CollectionDomainService.ReadCollection:input_type -> domain.payment.v1.ReadCollectionRequest
-	5,  // 31: domain.payment.v1.CollectionDomainService.UpdateCollection:input_type -> domain.payment.v1.UpdateCollectionRequest
-	7,  // 32: domain.payment.v1.CollectionDomainService.DeleteCollection:input_type -> domain.payment.v1.DeleteCollectionRequest
-	9,  // 33: domain.payment.v1.CollectionDomainService.ListCollections:input_type -> domain.payment.v1.ListCollectionsRequest
-	11, // 34: domain.payment.v1.CollectionDomainService.GetCollectionListPageData:input_type -> domain.payment.v1.GetCollectionListPageDataRequest
-	13, // 35: domain.payment.v1.CollectionDomainService.GetCollectionItemPageData:input_type -> domain.payment.v1.GetCollectionItemPageDataRequest
-	2,  // 36: domain.payment.v1.CollectionDomainService.CreateCollection:output_type -> domain.payment.v1.CreateCollectionResponse
-	4,  // 37: domain.payment.v1.CollectionDomainService.ReadCollection:output_type -> domain.payment.v1.ReadCollectionResponse
-	6,  // 38: domain.payment.v1.CollectionDomainService.UpdateCollection:output_type -> domain.payment.v1.UpdateCollectionResponse
-	8,  // 39: domain.payment.v1.CollectionDomainService.DeleteCollection:output_type -> domain.payment.v1.DeleteCollectionResponse
-	10, // 40: domain.payment.v1.CollectionDomainService.ListCollections:output_type -> domain.payment.v1.ListCollectionsResponse
-	12, // 41: domain.payment.v1.CollectionDomainService.GetCollectionListPageData:output_type -> domain.payment.v1.GetCollectionListPageDataResponse
-	14, // 42: domain.payment.v1.CollectionDomainService.GetCollectionItemPageData:output_type -> domain.payment.v1.GetCollectionItemPageDataResponse
+	15, // 0: domain.treasury.v1.Collection.subscription:type_name -> domain.subscription.v1.Subscription
+	16, // 1: domain.treasury.v1.Collection.collection_method:type_name -> domain.treasury.v1.CollectionProfileCollectionMethod
+	0,  // 2: domain.treasury.v1.CreateCollectionRequest.data:type_name -> domain.treasury.v1.Collection
+	0,  // 3: domain.treasury.v1.CreateCollectionResponse.data:type_name -> domain.treasury.v1.Collection
+	17, // 4: domain.treasury.v1.CreateCollectionResponse.error:type_name -> domain.common.v1.Error
+	0,  // 5: domain.treasury.v1.ReadCollectionRequest.data:type_name -> domain.treasury.v1.Collection
+	0,  // 6: domain.treasury.v1.ReadCollectionResponse.data:type_name -> domain.treasury.v1.Collection
+	17, // 7: domain.treasury.v1.ReadCollectionResponse.error:type_name -> domain.common.v1.Error
+	0,  // 8: domain.treasury.v1.UpdateCollectionRequest.data:type_name -> domain.treasury.v1.Collection
+	0,  // 9: domain.treasury.v1.UpdateCollectionResponse.data:type_name -> domain.treasury.v1.Collection
+	17, // 10: domain.treasury.v1.UpdateCollectionResponse.error:type_name -> domain.common.v1.Error
+	0,  // 11: domain.treasury.v1.DeleteCollectionRequest.data:type_name -> domain.treasury.v1.Collection
+	17, // 12: domain.treasury.v1.DeleteCollectionResponse.error:type_name -> domain.common.v1.Error
+	18, // 13: domain.treasury.v1.ListCollectionsRequest.search:type_name -> domain.common.v1.SearchRequest
+	19, // 14: domain.treasury.v1.ListCollectionsRequest.filters:type_name -> domain.common.v1.FilterRequest
+	20, // 15: domain.treasury.v1.ListCollectionsRequest.sort:type_name -> domain.common.v1.SortRequest
+	21, // 16: domain.treasury.v1.ListCollectionsRequest.pagination:type_name -> domain.common.v1.PaginationRequest
+	0,  // 17: domain.treasury.v1.ListCollectionsResponse.data:type_name -> domain.treasury.v1.Collection
+	17, // 18: domain.treasury.v1.ListCollectionsResponse.error:type_name -> domain.common.v1.Error
+	21, // 19: domain.treasury.v1.GetCollectionListPageDataRequest.pagination:type_name -> domain.common.v1.PaginationRequest
+	19, // 20: domain.treasury.v1.GetCollectionListPageDataRequest.filters:type_name -> domain.common.v1.FilterRequest
+	20, // 21: domain.treasury.v1.GetCollectionListPageDataRequest.sort:type_name -> domain.common.v1.SortRequest
+	18, // 22: domain.treasury.v1.GetCollectionListPageDataRequest.search:type_name -> domain.common.v1.SearchRequest
+	0,  // 23: domain.treasury.v1.GetCollectionListPageDataResponse.collection_list:type_name -> domain.treasury.v1.Collection
+	17, // 24: domain.treasury.v1.GetCollectionListPageDataResponse.error:type_name -> domain.common.v1.Error
+	22, // 25: domain.treasury.v1.GetCollectionListPageDataResponse.pagination:type_name -> domain.common.v1.PaginationResponse
+	23, // 26: domain.treasury.v1.GetCollectionListPageDataResponse.search_results:type_name -> domain.common.v1.SearchResult
+	0,  // 27: domain.treasury.v1.GetCollectionItemPageDataResponse.collection:type_name -> domain.treasury.v1.Collection
+	17, // 28: domain.treasury.v1.GetCollectionItemPageDataResponse.error:type_name -> domain.common.v1.Error
+	1,  // 29: domain.treasury.v1.CollectionDomainService.CreateCollection:input_type -> domain.treasury.v1.CreateCollectionRequest
+	3,  // 30: domain.treasury.v1.CollectionDomainService.ReadCollection:input_type -> domain.treasury.v1.ReadCollectionRequest
+	5,  // 31: domain.treasury.v1.CollectionDomainService.UpdateCollection:input_type -> domain.treasury.v1.UpdateCollectionRequest
+	7,  // 32: domain.treasury.v1.CollectionDomainService.DeleteCollection:input_type -> domain.treasury.v1.DeleteCollectionRequest
+	9,  // 33: domain.treasury.v1.CollectionDomainService.ListCollections:input_type -> domain.treasury.v1.ListCollectionsRequest
+	11, // 34: domain.treasury.v1.CollectionDomainService.GetCollectionListPageData:input_type -> domain.treasury.v1.GetCollectionListPageDataRequest
+	13, // 35: domain.treasury.v1.CollectionDomainService.GetCollectionItemPageData:input_type -> domain.treasury.v1.GetCollectionItemPageDataRequest
+	2,  // 36: domain.treasury.v1.CollectionDomainService.CreateCollection:output_type -> domain.treasury.v1.CreateCollectionResponse
+	4,  // 37: domain.treasury.v1.CollectionDomainService.ReadCollection:output_type -> domain.treasury.v1.ReadCollectionResponse
+	6,  // 38: domain.treasury.v1.CollectionDomainService.UpdateCollection:output_type -> domain.treasury.v1.UpdateCollectionResponse
+	8,  // 39: domain.treasury.v1.CollectionDomainService.DeleteCollection:output_type -> domain.treasury.v1.DeleteCollectionResponse
+	10, // 40: domain.treasury.v1.CollectionDomainService.ListCollections:output_type -> domain.treasury.v1.ListCollectionsResponse
+	12, // 41: domain.treasury.v1.CollectionDomainService.GetCollectionListPageData:output_type -> domain.treasury.v1.GetCollectionListPageDataResponse
+	14, // 42: domain.treasury.v1.CollectionDomainService.GetCollectionItemPageData:output_type -> domain.treasury.v1.GetCollectionItemPageDataResponse
 	36, // [36:43] is the sub-list for method output_type
 	29, // [29:36] is the sub-list for method input_type
 	29, // [29:29] is the sub-list for extension type_name

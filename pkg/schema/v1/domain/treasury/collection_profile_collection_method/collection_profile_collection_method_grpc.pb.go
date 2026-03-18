@@ -4,7 +4,7 @@
 // - protoc             (unknown)
 // source: domain/treasury/collection_profile_collection_method/collection_profile_collection_method.proto
 
-package paymentv1
+package treasuryv1
 
 import (
 	context "context"
@@ -19,13 +19,13 @@ import (
 const _ = grpc.SupportPackageIsVersion9
 
 const (
-	CollectionProfileCollectionMethodDomainService_CreateCollectionProfileCollectionMethod_FullMethodName          = "/domain.payment.v1.CollectionProfileCollectionMethodDomainService/CreateCollectionProfileCollectionMethod"
-	CollectionProfileCollectionMethodDomainService_ReadCollectionProfileCollectionMethod_FullMethodName            = "/domain.payment.v1.CollectionProfileCollectionMethodDomainService/ReadCollectionProfileCollectionMethod"
-	CollectionProfileCollectionMethodDomainService_UpdateCollectionProfileCollectionMethod_FullMethodName          = "/domain.payment.v1.CollectionProfileCollectionMethodDomainService/UpdateCollectionProfileCollectionMethod"
-	CollectionProfileCollectionMethodDomainService_DeleteCollectionProfileCollectionMethod_FullMethodName          = "/domain.payment.v1.CollectionProfileCollectionMethodDomainService/DeleteCollectionProfileCollectionMethod"
-	CollectionProfileCollectionMethodDomainService_ListCollectionProfileCollectionMethods_FullMethodName           = "/domain.payment.v1.CollectionProfileCollectionMethodDomainService/ListCollectionProfileCollectionMethods"
-	CollectionProfileCollectionMethodDomainService_GetCollectionProfileCollectionMethodListPageData_FullMethodName = "/domain.payment.v1.CollectionProfileCollectionMethodDomainService/GetCollectionProfileCollectionMethodListPageData"
-	CollectionProfileCollectionMethodDomainService_GetCollectionProfileCollectionMethodItemPageData_FullMethodName = "/domain.payment.v1.CollectionProfileCollectionMethodDomainService/GetCollectionProfileCollectionMethodItemPageData"
+	CollectionProfileCollectionMethodDomainService_CreateCollectionProfileCollectionMethod_FullMethodName          = "/domain.treasury.v1.CollectionProfileCollectionMethodDomainService/CreateCollectionProfileCollectionMethod"
+	CollectionProfileCollectionMethodDomainService_ReadCollectionProfileCollectionMethod_FullMethodName            = "/domain.treasury.v1.CollectionProfileCollectionMethodDomainService/ReadCollectionProfileCollectionMethod"
+	CollectionProfileCollectionMethodDomainService_UpdateCollectionProfileCollectionMethod_FullMethodName          = "/domain.treasury.v1.CollectionProfileCollectionMethodDomainService/UpdateCollectionProfileCollectionMethod"
+	CollectionProfileCollectionMethodDomainService_DeleteCollectionProfileCollectionMethod_FullMethodName          = "/domain.treasury.v1.CollectionProfileCollectionMethodDomainService/DeleteCollectionProfileCollectionMethod"
+	CollectionProfileCollectionMethodDomainService_ListCollectionProfileCollectionMethods_FullMethodName           = "/domain.treasury.v1.CollectionProfileCollectionMethodDomainService/ListCollectionProfileCollectionMethods"
+	CollectionProfileCollectionMethodDomainService_GetCollectionProfileCollectionMethodListPageData_FullMethodName = "/domain.treasury.v1.CollectionProfileCollectionMethodDomainService/GetCollectionProfileCollectionMethodListPageData"
+	CollectionProfileCollectionMethodDomainService_GetCollectionProfileCollectionMethodItemPageData_FullMethodName = "/domain.treasury.v1.CollectionProfileCollectionMethodDomainService/GetCollectionProfileCollectionMethodItemPageData"
 )
 
 // CollectionProfileCollectionMethodDomainServiceClient is the client API for CollectionProfileCollectionMethodDomainService service.
@@ -313,7 +313,7 @@ func _CollectionProfileCollectionMethodDomainService_GetCollectionProfileCollect
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
 var CollectionProfileCollectionMethodDomainService_ServiceDesc = grpc.ServiceDesc{
-	ServiceName: "domain.payment.v1.CollectionProfileCollectionMethodDomainService",
+	ServiceName: "domain.treasury.v1.CollectionProfileCollectionMethodDomainService",
 	HandlerType: (*CollectionProfileCollectionMethodDomainServiceServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{

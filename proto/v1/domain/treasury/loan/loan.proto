@@ -1,0 +1,157 @@
+syntax = "proto3";
+
+package domain.treasury.v1;
+
+option go_package = "github.com/erniealice/esqyma/golang/v1/domain/treasury/loan";
+
+import "domain/common/error.proto";
+import "domain/common/pagination.proto";
+import "domain/common/filter.proto";
+import "domain/common/sort.proto";
+import "domain/common/search.proto";
+
+import "options/db.proto";
+
+// LoanType distinguishes whether the business is the borrower or the lender.
+enum LoanType {
+  LOAN_TYPE_UNSPECIFIED = 0;
+  LOAN_TYPE_PAYABLE = 1;     // Business borrowed money (liability — e.g. bank loan)
+  LOAN_TYPE_RECEIVABLE = 2;  // Business lent money (asset — e.g. employee advance)
+}
+
+// LoanStatus represents the lifecycle state of the loan.
+enum LoanStatus {
+  LOAN_STATUS_UNSPECIFIED = 0;
+  LOAN_STATUS_DRAFT = 1;
+  LOAN_STATUS_ACTIVE = 2;
+  LOAN_STATUS_COMPLETED = 3;
+  LOAN_STATUS_DEFAULTED = 4;
+}
+
+// Loan is the header record for a financing arrangement.
+// The amortization schedule lives in LoanScheduleLine (child entity).
+// Actual payments are in LoanPayment (child entity).
+message Loan {
+  option (options.v1.table).table = true;
+
+  string id = 1;
+  string loan_number = 2 [(options.v1.db).unique = true, (options.v1.db).index = true];
+  optional string description = 3;
+  LoanType loan_type = 4;
+  string lender_name = 5;                // Counter-party name (bank, individual, etc.)
+
+  // Loan terms
+  double principal_amount = 6;
+  double interest_rate = 7;              // Annual rate as a percentage (e.g. 12.5 = 12.5%)
+  int32 term_months = 8;
+
+  // Dates
+  int64 start_date = 9;
+  optional string start_date_string = 10;
+  int64 maturity_date = 11;
+  optional string maturity_date_string = 12;
+
+  // Status and running balance
+  LoanStatus status = 13;
+  double remaining_balance = 14;          // Updated on each payment
+
+  // GL integration — FK to the Chart of Accounts
+  optional string account_id = 15 [(options.v1.db).references = "account", (options.v1.db).index = true];
+
+  // Audit fields
+  bool active = 16 [(options.v1.db).default = "true"];
+  optional int64 date_created = 17;
+  optional string date_created_string = 18;
+  optional int64 date_modified = 19;
+  optional string date_modified_string = 20;
+}
+
+service LoanDomainService {
+  // Standard CRUD
+  rpc CreateLoan(CreateLoanRequest) returns (CreateLoanResponse);
+  rpc ReadLoan(ReadLoanRequest) returns (ReadLoanResponse);
+  rpc UpdateLoan(UpdateLoanRequest) returns (UpdateLoanResponse);
+  rpc DeleteLoan(DeleteLoanRequest) returns (DeleteLoanResponse);
+  rpc ListLoans(ListLoansRequest) returns (ListLoansResponse);
+
+  // Enhanced page data (for UI views)
+  rpc GetLoanListPageData(GetLoanListPageDataRequest) returns (GetLoanListPageDataResponse);
+  rpc GetLoanItemPageData(GetLoanItemPageDataRequest) returns (GetLoanItemPageDataResponse);
+}
+
+message CreateLoanRequest {
+  Loan data = 1;
+}
+
+message CreateLoanResponse {
+  repeated Loan data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message ReadLoanRequest {
+  Loan data = 1;
+}
+
+message ReadLoanResponse {
+  repeated Loan data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message UpdateLoanRequest {
+  Loan data = 1;
+}
+
+message UpdateLoanResponse {
+  repeated Loan data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message DeleteLoanRequest {
+  Loan data = 1;
+}
+
+message DeleteLoanResponse {
+  bool success = 1;
+  optional domain.common.v1.Error error = 2;
+}
+
+message ListLoansRequest {
+  optional domain.common.v1.SearchRequest search = 1;
+  optional domain.common.v1.FilterRequest filters = 2;
+  optional domain.common.v1.SortRequest sort = 3;
+  optional domain.common.v1.PaginationRequest pagination = 4;
+}
+
+message ListLoansResponse {
+  repeated Loan data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message GetLoanListPageDataRequest {
+  optional domain.common.v1.PaginationRequest pagination = 1;
+  optional domain.common.v1.FilterRequest filters = 2;
+  optional domain.common.v1.SortRequest sort = 3;
+  optional domain.common.v1.SearchRequest search = 4;
+}
+
+message GetLoanListPageDataResponse {
+  repeated Loan loan_list = 1;
+  optional domain.common.v1.PaginationResponse pagination = 2;
+  repeated domain.common.v1.SearchResult search_results = 3;
+  bool success = 4;
+  optional domain.common.v1.Error error = 5;
+}
+
+message GetLoanItemPageDataRequest {
+  string loan_id = 1;
+}
+
+message GetLoanItemPageDataResponse {
+  optional Loan loan = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}

@@ -4,7 +4,7 @@
 // - protoc             (unknown)
 // source: domain/treasury/collection_attribute/collection_attribute.proto
 
-package paymentv1
+package treasuryv1
 
 import (
 	context "context"
@@ -19,13 +19,13 @@ import (
 const _ = grpc.SupportPackageIsVersion9
 
 const (
-	CollectionAttributeDomainService_CreateCollectionAttribute_FullMethodName          = "/domain.payment.v1.CollectionAttributeDomainService/CreateCollectionAttribute"
-	CollectionAttributeDomainService_ReadCollectionAttribute_FullMethodName            = "/domain.payment.v1.CollectionAttributeDomainService/ReadCollectionAttribute"
-	CollectionAttributeDomainService_UpdateCollectionAttribute_FullMethodName          = "/domain.payment.v1.CollectionAttributeDomainService/UpdateCollectionAttribute"
-	CollectionAttributeDomainService_DeleteCollectionAttribute_FullMethodName          = "/domain.payment.v1.CollectionAttributeDomainService/DeleteCollectionAttribute"
-	CollectionAttributeDomainService_ListCollectionAttributes_FullMethodName           = "/domain.payment.v1.CollectionAttributeDomainService/ListCollectionAttributes"
-	CollectionAttributeDomainService_GetCollectionAttributeListPageData_FullMethodName = "/domain.payment.v1.CollectionAttributeDomainService/GetCollectionAttributeListPageData"
-	CollectionAttributeDomainService_GetCollectionAttributeItemPageData_FullMethodName = "/domain.payment.v1.CollectionAttributeDomainService/GetCollectionAttributeItemPageData"
+	CollectionAttributeDomainService_CreateCollectionAttribute_FullMethodName          = "/domain.treasury.v1.CollectionAttributeDomainService/CreateCollectionAttribute"
+	CollectionAttributeDomainService_ReadCollectionAttribute_FullMethodName            = "/domain.treasury.v1.CollectionAttributeDomainService/ReadCollectionAttribute"
+	CollectionAttributeDomainService_UpdateCollectionAttribute_FullMethodName          = "/domain.treasury.v1.CollectionAttributeDomainService/UpdateCollectionAttribute"
+	CollectionAttributeDomainService_DeleteCollectionAttribute_FullMethodName          = "/domain.treasury.v1.CollectionAttributeDomainService/DeleteCollectionAttribute"
+	CollectionAttributeDomainService_ListCollectionAttributes_FullMethodName           = "/domain.treasury.v1.CollectionAttributeDomainService/ListCollectionAttributes"
+	CollectionAttributeDomainService_GetCollectionAttributeListPageData_FullMethodName = "/domain.treasury.v1.CollectionAttributeDomainService/GetCollectionAttributeListPageData"
+	CollectionAttributeDomainService_GetCollectionAttributeItemPageData_FullMethodName = "/domain.treasury.v1.CollectionAttributeDomainService/GetCollectionAttributeItemPageData"
 )
 
 // CollectionAttributeDomainServiceClient is the client API for CollectionAttributeDomainService service.
@@ -313,7 +313,7 @@ func _CollectionAttributeDomainService_GetCollectionAttributeItemPageData_Handle
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
 var CollectionAttributeDomainService_ServiceDesc = grpc.ServiceDesc{
-	ServiceName: "domain.payment.v1.CollectionAttributeDomainService",
+	ServiceName: "domain.treasury.v1.CollectionAttributeDomainService",
 	HandlerType: (*CollectionAttributeDomainServiceServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{

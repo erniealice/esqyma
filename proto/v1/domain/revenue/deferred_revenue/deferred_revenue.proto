@@ -1,0 +1,148 @@
+syntax = "proto3";
+
+package domain.revenue.v1;
+
+option go_package = "github.com/erniealice/esqyma/golang/v1/domain/revenue/deferred_revenue";
+
+import "domain/common/error.proto";
+import "domain/common/pagination.proto";
+import "domain/common/filter.proto";
+import "domain/common/sort.proto";
+import "domain/common/search.proto";
+
+import "options/db.proto";
+
+// DeferredRevenueStatus tracks the recognition lifecycle of a contract liability.
+enum DeferredRevenueStatus {
+  DEFERRED_REVENUE_STATUS_UNSPECIFIED = 0;
+  DEFERRED_REVENUE_STATUS_ACTIVE = 1;              // Recognition in progress
+  DEFERRED_REVENUE_STATUS_FULLY_RECOGNIZED = 2;   // All revenue has been recognized
+  DEFERRED_REVENUE_STATUS_CANCELLED = 3;           // Cancelled; any unrecognized amount is reversed
+}
+
+// DeferredRevenue is a contract liability (IFRS 15) for consideration received before
+// performance obligations are satisfied.
+// Examples: advance booking payment, annual subscription collected upfront.
+// Each period a DEFERRED_REVENUE_RECOGNITION JournalEntry transfers liability to revenue.
+message DeferredRevenue {
+  option (options.v1.table).table = true;
+
+  string id = 1;
+  string description = 2;
+  optional string customer_name = 3;
+
+  // Amounts
+  double total_amount = 4;
+  double recognized_amount = 5 [(options.v1.db).default = "0"];   // Increases with each recognition entry
+  double remaining_amount = 6;                                     // total - recognized
+
+  // Recognition schedule
+  int64 start_date = 7;
+  optional string start_date_string = 8;
+  int64 end_date = 9;
+  optional string end_date_string = 10;
+  int32 recognition_months = 11;    // Derived from start/end, stored for convenience
+
+  DeferredRevenueStatus status = 12;
+
+  // GL integration
+  optional string liability_account_id = 13 [(options.v1.db).references = "account", (options.v1.db).index = true];  // Deferred revenue liability account
+  optional string revenue_account_id = 14 [(options.v1.db).references = "account", (options.v1.db).index = true];    // Target revenue account on recognition
+
+  // Audit fields
+  bool active = 15 [(options.v1.db).default = "true"];
+  optional int64 date_created = 16;
+  optional string date_created_string = 17;
+  optional int64 date_modified = 18;
+  optional string date_modified_string = 19;
+}
+
+service DeferredRevenueDomainService {
+  // Standard CRUD
+  rpc CreateDeferredRevenue(CreateDeferredRevenueRequest) returns (CreateDeferredRevenueResponse);
+  rpc ReadDeferredRevenue(ReadDeferredRevenueRequest) returns (ReadDeferredRevenueResponse);
+  rpc UpdateDeferredRevenue(UpdateDeferredRevenueRequest) returns (UpdateDeferredRevenueResponse);
+  rpc DeleteDeferredRevenue(DeleteDeferredRevenueRequest) returns (DeleteDeferredRevenueResponse);
+  rpc ListDeferredRevenues(ListDeferredRevenuesRequest) returns (ListDeferredRevenuesResponse);
+
+  // Enhanced page data (for UI views)
+  rpc GetDeferredRevenueListPageData(GetDeferredRevenueListPageDataRequest) returns (GetDeferredRevenueListPageDataResponse);
+  rpc GetDeferredRevenueItemPageData(GetDeferredRevenueItemPageDataRequest) returns (GetDeferredRevenueItemPageDataResponse);
+}
+
+message CreateDeferredRevenueRequest {
+  DeferredRevenue data = 1;
+}
+
+message CreateDeferredRevenueResponse {
+  repeated DeferredRevenue data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message ReadDeferredRevenueRequest {
+  DeferredRevenue data = 1;
+}
+
+message ReadDeferredRevenueResponse {
+  repeated DeferredRevenue data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message UpdateDeferredRevenueRequest {
+  DeferredRevenue data = 1;
+}
+
+message UpdateDeferredRevenueResponse {
+  repeated DeferredRevenue data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message DeleteDeferredRevenueRequest {
+  DeferredRevenue data = 1;
+}
+
+message DeleteDeferredRevenueResponse {
+  bool success = 1;
+  optional domain.common.v1.Error error = 2;
+}
+
+message ListDeferredRevenuesRequest {
+  optional domain.common.v1.SearchRequest search = 1;
+  optional domain.common.v1.FilterRequest filters = 2;
+  optional domain.common.v1.SortRequest sort = 3;
+  optional domain.common.v1.PaginationRequest pagination = 4;
+}
+
+message ListDeferredRevenuesResponse {
+  repeated DeferredRevenue data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message GetDeferredRevenueListPageDataRequest {
+  optional domain.common.v1.PaginationRequest pagination = 1;
+  optional domain.common.v1.FilterRequest filters = 2;
+  optional domain.common.v1.SortRequest sort = 3;
+  optional domain.common.v1.SearchRequest search = 4;
+}
+
+message GetDeferredRevenueListPageDataResponse {
+  repeated DeferredRevenue deferred_revenue_list = 1;
+  optional domain.common.v1.PaginationResponse pagination = 2;
+  repeated domain.common.v1.SearchResult search_results = 3;
+  bool success = 4;
+  optional domain.common.v1.Error error = 5;
+}
+
+message GetDeferredRevenueItemPageDataRequest {
+  string deferred_revenue_id = 1;
+}
+
+message GetDeferredRevenueItemPageDataResponse {
+  optional DeferredRevenue deferred_revenue = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}

@@ -1,8 +1,8 @@
 syntax = "proto3";
 
-package domain.payment.v1;
+package domain.treasury.v1;
 
-option go_package = "leapfor.xyz/esqyma/golang/v1/domain/treasury/disbursement_method";
+option go_package = "github.com/erniealice/esqyma/golang/v1/domain/treasury/disbursement_method";
 
 import "domain/common/error.proto";
 import "domain/common/pagination.proto";

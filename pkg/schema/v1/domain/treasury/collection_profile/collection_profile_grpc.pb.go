@@ -4,7 +4,7 @@
 // - protoc             (unknown)
 // source: domain/treasury/collection_profile/collection_profile.proto
 
-package paymentv1
+package treasuryv1
 
 import (
 	context "context"
@@ -19,13 +19,13 @@ import (
 const _ = grpc.SupportPackageIsVersion9
 
 const (
-	CollectionProfileDomainService_CreateCollectionProfile_FullMethodName          = "/domain.payment.v1.CollectionProfileDomainService/CreateCollectionProfile"
-	CollectionProfileDomainService_ReadCollectionProfile_FullMethodName            = "/domain.payment.v1.CollectionProfileDomainService/ReadCollectionProfile"
-	CollectionProfileDomainService_UpdateCollectionProfile_FullMethodName          = "/domain.payment.v1.CollectionProfileDomainService/UpdateCollectionProfile"
-	CollectionProfileDomainService_DeleteCollectionProfile_FullMethodName          = "/domain.payment.v1.CollectionProfileDomainService/DeleteCollectionProfile"
-	CollectionProfileDomainService_ListCollectionProfiles_FullMethodName           = "/domain.payment.v1.CollectionProfileDomainService/ListCollectionProfiles"
-	CollectionProfileDomainService_GetCollectionProfileListPageData_FullMethodName = "/domain.payment.v1.CollectionProfileDomainService/GetCollectionProfileListPageData"
-	CollectionProfileDomainService_GetCollectionProfileItemPageData_FullMethodName = "/domain.payment.v1.CollectionProfileDomainService/GetCollectionProfileItemPageData"
+	CollectionProfileDomainService_CreateCollectionProfile_FullMethodName          = "/domain.treasury.v1.CollectionProfileDomainService/CreateCollectionProfile"
+	CollectionProfileDomainService_ReadCollectionProfile_FullMethodName            = "/domain.treasury.v1.CollectionProfileDomainService/ReadCollectionProfile"
+	CollectionProfileDomainService_UpdateCollectionProfile_FullMethodName          = "/domain.treasury.v1.CollectionProfileDomainService/UpdateCollectionProfile"
+	CollectionProfileDomainService_DeleteCollectionProfile_FullMethodName          = "/domain.treasury.v1.CollectionProfileDomainService/DeleteCollectionProfile"
+	CollectionProfileDomainService_ListCollectionProfiles_FullMethodName           = "/domain.treasury.v1.CollectionProfileDomainService/ListCollectionProfiles"
+	CollectionProfileDomainService_GetCollectionProfileListPageData_FullMethodName = "/domain.treasury.v1.CollectionProfileDomainService/GetCollectionProfileListPageData"
+	CollectionProfileDomainService_GetCollectionProfileItemPageData_FullMethodName = "/domain.treasury.v1.CollectionProfileDomainService/GetCollectionProfileItemPageData"
 )
 
 // CollectionProfileDomainServiceClient is the client API for CollectionProfileDomainService service.
@@ -313,7 +313,7 @@ func _CollectionProfileDomainService_GetCollectionProfileItemPageData_Handler(sr
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
 var CollectionProfileDomainService_ServiceDesc = grpc.ServiceDesc{
-	ServiceName: "domain.payment.v1.CollectionProfileDomainService",
+	ServiceName: "domain.treasury.v1.CollectionProfileDomainService",
 	HandlerType: (*CollectionProfileDomainServiceServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{

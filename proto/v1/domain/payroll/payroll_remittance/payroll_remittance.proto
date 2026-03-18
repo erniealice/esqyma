@@ -1,0 +1,151 @@
+syntax = "proto3";
+
+package domain.payroll.v1;
+
+option go_package = "github.com/erniealice/esqyma/golang/v1/domain/payroll/payroll_remittance";
+
+import "domain/common/error.proto";
+import "domain/common/pagination.proto";
+import "domain/common/filter.proto";
+import "domain/common/sort.proto";
+import "domain/common/search.proto";
+
+import "options/db.proto";
+
+// RemittanceType identifies which government agency the remittance is for.
+// Philippine mandatory contributions: SSS, PhilHealth, Pag-IBIG, BIR withholding tax.
+enum RemittanceType {
+  REMITTANCE_TYPE_UNSPECIFIED = 0;
+  REMITTANCE_TYPE_SSS = 1;               // Social Security System
+  REMITTANCE_TYPE_PHILHEALTH = 2;        // Philippine Health Insurance Corporation
+  REMITTANCE_TYPE_PAGIBIG = 3;           // Home Development Mutual Fund
+  REMITTANCE_TYPE_BIR_WITHHOLDING = 4;  // Bureau of Internal Revenue — income tax withholding
+}
+
+// RemittanceStatus tracks the filing and payment lifecycle.
+enum RemittanceStatus {
+  REMITTANCE_STATUS_UNSPECIFIED = 0;
+  REMITTANCE_STATUS_PENDING = 1;  // Not yet filed
+  REMITTANCE_STATUS_FILED = 2;    // Form submitted but payment not yet confirmed
+  REMITTANCE_STATUS_PAID = 3;     // Payment confirmed
+}
+
+// PayrollRemittance records the obligation to remit government contributions from a payroll run.
+// One remittance record per agency per payroll run.
+message PayrollRemittance {
+  option (options.v1.table).table = true;
+
+  string id = 1;
+
+  // Parent payroll run
+  string payroll_run_id = 2 [(options.v1.db).references = "payroll_run", (options.v1.db).index = true];
+
+  RemittanceType remittance_type = 3;
+  double amount = 4;
+
+  int64 due_date = 5;
+  optional string due_date_string = 6;
+
+  RemittanceStatus status = 7;
+
+  optional int64 filed_at = 8;
+  optional string filed_at_string = 9;
+  optional int64 paid_at = 10;
+  optional string paid_at_string = 11;
+
+  optional string reference_number = 12;  // Government filing reference (e.g. SBR number for SSS)
+
+  // Audit fields
+  optional int64 date_created = 13;
+  optional string date_created_string = 14;
+}
+
+service PayrollRemittanceDomainService {
+  // Standard CRUD
+  rpc CreatePayrollRemittance(CreatePayrollRemittanceRequest) returns (CreatePayrollRemittanceResponse);
+  rpc ReadPayrollRemittance(ReadPayrollRemittanceRequest) returns (ReadPayrollRemittanceResponse);
+  rpc UpdatePayrollRemittance(UpdatePayrollRemittanceRequest) returns (UpdatePayrollRemittanceResponse);
+  rpc DeletePayrollRemittance(DeletePayrollRemittanceRequest) returns (DeletePayrollRemittanceResponse);
+  rpc ListPayrollRemittances(ListPayrollRemittancesRequest) returns (ListPayrollRemittancesResponse);
+
+  // Enhanced page data (for UI views)
+  rpc GetPayrollRemittanceListPageData(GetPayrollRemittanceListPageDataRequest) returns (GetPayrollRemittanceListPageDataResponse);
+  rpc GetPayrollRemittanceItemPageData(GetPayrollRemittanceItemPageDataRequest) returns (GetPayrollRemittanceItemPageDataResponse);
+}
+
+message CreatePayrollRemittanceRequest {
+  PayrollRemittance data = 1;
+}
+
+message CreatePayrollRemittanceResponse {
+  repeated PayrollRemittance data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message ReadPayrollRemittanceRequest {
+  PayrollRemittance data = 1;
+}
+
+message ReadPayrollRemittanceResponse {
+  repeated PayrollRemittance data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message UpdatePayrollRemittanceRequest {
+  PayrollRemittance data = 1;
+}
+
+message UpdatePayrollRemittanceResponse {
+  repeated PayrollRemittance data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message DeletePayrollRemittanceRequest {
+  PayrollRemittance data = 1;
+}
+
+message DeletePayrollRemittanceResponse {
+  bool success = 1;
+  optional domain.common.v1.Error error = 2;
+}
+
+message ListPayrollRemittancesRequest {
+  optional domain.common.v1.SearchRequest search = 1;
+  optional domain.common.v1.FilterRequest filters = 2;
+  optional domain.common.v1.SortRequest sort = 3;
+  optional domain.common.v1.PaginationRequest pagination = 4;
+}
+
+message ListPayrollRemittancesResponse {
+  repeated PayrollRemittance data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message GetPayrollRemittanceListPageDataRequest {
+  optional domain.common.v1.PaginationRequest pagination = 1;
+  optional domain.common.v1.FilterRequest filters = 2;
+  optional domain.common.v1.SortRequest sort = 3;
+  optional domain.common.v1.SearchRequest search = 4;
+}
+
+message GetPayrollRemittanceListPageDataResponse {
+  repeated PayrollRemittance payroll_remittance_list = 1;
+  optional domain.common.v1.PaginationResponse pagination = 2;
+  repeated domain.common.v1.SearchResult search_results = 3;
+  bool success = 4;
+  optional domain.common.v1.Error error = 5;
+}
+
+message GetPayrollRemittanceItemPageDataRequest {
+  string payroll_remittance_id = 1;
+}
+
+message GetPayrollRemittanceItemPageDataResponse {
+  optional PayrollRemittance payroll_remittance = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}

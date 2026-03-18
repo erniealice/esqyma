@@ -2,7 +2,7 @@ syntax = "proto3";
 
 package domain.revenue.v1;
 
-option go_package = "leapfor.xyz/esqyma/golang/v1/domain/revenue/revenue_line_item";
+option go_package = "github.com/erniealice/esqyma/golang/v1/domain/revenue/revenue_line_item";
 
 import "domain/common/error.proto";
 import "domain/common/pagination.proto";

@@ -1,0 +1,128 @@
+syntax = "proto3";
+
+package domain.treasury.v1;
+
+option go_package = "github.com/erniealice/esqyma/golang/v1/domain/treasury/petty_cash_fund";
+
+import "domain/common/error.proto";
+import "domain/common/pagination.proto";
+import "domain/common/filter.proto";
+import "domain/common/sort.proto";
+import "domain/common/search.proto";
+
+import "options/db.proto";
+
+// PettyCashFund is the imprest fund header.
+// The authorized_amount is the float ceiling; current_balance decreases as vouchers are issued
+// and is replenished back to authorized_amount on each replenishment event.
+message PettyCashFund {
+  option (options.v1.table).table = true;
+
+  string id = 1;
+  string name = 2;                                  // e.g. "Front Desk Petty Cash"
+
+  // Fund limits
+  double authorized_amount = 3;                     // Maximum float
+  double current_balance = 4 [(options.v1.db).default = "0"];  // Running balance
+
+  // Custodian and location
+  optional string custodian_id = 5 [(options.v1.db).index = true];  // FK to entity.User
+  optional string location_id = 6 [(options.v1.db).references = "location", (options.v1.db).index = true];
+
+  // Audit fields
+  bool active = 7 [(options.v1.db).default = "true"];
+  optional int64 date_created = 8;
+  optional string date_created_string = 9;
+  optional int64 date_modified = 10;
+  optional string date_modified_string = 11;
+}
+
+service PettyCashFundDomainService {
+  // Standard CRUD
+  rpc CreatePettyCashFund(CreatePettyCashFundRequest) returns (CreatePettyCashFundResponse);
+  rpc ReadPettyCashFund(ReadPettyCashFundRequest) returns (ReadPettyCashFundResponse);
+  rpc UpdatePettyCashFund(UpdatePettyCashFundRequest) returns (UpdatePettyCashFundResponse);
+  rpc DeletePettyCashFund(DeletePettyCashFundRequest) returns (DeletePettyCashFundResponse);
+  rpc ListPettyCashFunds(ListPettyCashFundsRequest) returns (ListPettyCashFundsResponse);
+
+  // Enhanced page data (for UI views)
+  rpc GetPettyCashFundListPageData(GetPettyCashFundListPageDataRequest) returns (GetPettyCashFundListPageDataResponse);
+  rpc GetPettyCashFundItemPageData(GetPettyCashFundItemPageDataRequest) returns (GetPettyCashFundItemPageDataResponse);
+}
+
+message CreatePettyCashFundRequest {
+  PettyCashFund data = 1;
+}
+
+message CreatePettyCashFundResponse {
+  repeated PettyCashFund data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message ReadPettyCashFundRequest {
+  PettyCashFund data = 1;
+}
+
+message ReadPettyCashFundResponse {
+  repeated PettyCashFund data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message UpdatePettyCashFundRequest {
+  PettyCashFund data = 1;
+}
+
+message UpdatePettyCashFundResponse {
+  repeated PettyCashFund data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message DeletePettyCashFundRequest {
+  PettyCashFund data = 1;
+}
+
+message DeletePettyCashFundResponse {
+  bool success = 1;
+  optional domain.common.v1.Error error = 2;
+}
+
+message ListPettyCashFundsRequest {
+  optional domain.common.v1.SearchRequest search = 1;
+  optional domain.common.v1.FilterRequest filters = 2;
+  optional domain.common.v1.SortRequest sort = 3;
+  optional domain.common.v1.PaginationRequest pagination = 4;
+}
+
+message ListPettyCashFundsResponse {
+  repeated PettyCashFund data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message GetPettyCashFundListPageDataRequest {
+  optional domain.common.v1.PaginationRequest pagination = 1;
+  optional domain.common.v1.FilterRequest filters = 2;
+  optional domain.common.v1.SortRequest sort = 3;
+  optional domain.common.v1.SearchRequest search = 4;
+}
+
+message GetPettyCashFundListPageDataResponse {
+  repeated PettyCashFund petty_cash_fund_list = 1;
+  optional domain.common.v1.PaginationResponse pagination = 2;
+  repeated domain.common.v1.SearchResult search_results = 3;
+  bool success = 4;
+  optional domain.common.v1.Error error = 5;
+}
+
+message GetPettyCashFundItemPageDataRequest {
+  string petty_cash_fund_id = 1;
+}
+
+message GetPettyCashFundItemPageDataResponse {
+  optional PettyCashFund petty_cash_fund = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}

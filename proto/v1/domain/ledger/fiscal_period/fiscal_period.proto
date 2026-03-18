@@ -1,0 +1,158 @@
+syntax = "proto3";
+
+package domain.ledger.v1;
+
+option go_package = "github.com/erniealice/esqyma/golang/v1/domain/ledger/fiscal_period";
+
+import "domain/common/error.proto";
+import "domain/common/pagination.proto";
+import "domain/common/filter.proto";
+import "domain/common/sort.proto";
+import "domain/common/search.proto";
+
+import "options/db.proto";
+
+// FiscalPeriodStatus controls whether journal entries can be posted to this period.
+enum FiscalPeriodStatus {
+  FISCAL_PERIOD_STATUS_UNSPECIFIED = 0;
+  FISCAL_PERIOD_STATUS_OPEN = 1;    // Posting allowed
+  FISCAL_PERIOD_STATUS_CLOSED = 2;  // Posting blocked; financial statements can be generated
+  FISCAL_PERIOD_STATUS_LOCKED = 3;  // Immutable; typically after audit sign-off
+}
+
+// FiscalPeriod represents a discrete accounting period (typically one month).
+// Journal entries must be assigned to an open period at posting time.
+message FiscalPeriod {
+  option (options.v1.table).table = true;
+
+  string id = 1;
+  string name = 2;                             // e.g. "March 2026"
+  int32 period_number = 3;                     // 1–12 (month number within the fiscal year)
+  int32 fiscal_year = 4 [(options.v1.db).index = true];  // e.g. 2026
+
+  // Date range — unix timestamps
+  int64 start_date = 5;
+  int64 end_date = 6;
+  optional string start_date_string = 7;
+  optional string end_date_string = 8;
+
+  // Status
+  FiscalPeriodStatus status = 9;
+
+  // Close audit
+  optional string closed_by = 10;  // FK to entity.User
+  optional int64 closed_at = 11;
+  optional string closed_at_string = 12;
+
+  // Audit fields
+  bool active = 13 [(options.v1.db).default = "true"];
+  optional int64 date_created = 14;
+  optional string date_created_string = 15;
+  optional int64 date_modified = 16;
+  optional string date_modified_string = 17;
+}
+
+service FiscalPeriodDomainService {
+  // Standard CRUD
+  rpc CreateFiscalPeriod(CreateFiscalPeriodRequest) returns (CreateFiscalPeriodResponse);
+  rpc ReadFiscalPeriod(ReadFiscalPeriodRequest) returns (ReadFiscalPeriodResponse);
+  rpc UpdateFiscalPeriod(UpdateFiscalPeriodRequest) returns (UpdateFiscalPeriodResponse);
+  rpc DeleteFiscalPeriod(DeleteFiscalPeriodRequest) returns (DeleteFiscalPeriodResponse);
+  rpc ListFiscalPeriods(ListFiscalPeriodsRequest) returns (ListFiscalPeriodsResponse);
+
+  // Enhanced page data (for UI views)
+  rpc GetFiscalPeriodListPageData(GetFiscalPeriodListPageDataRequest) returns (GetFiscalPeriodListPageDataResponse);
+  rpc GetFiscalPeriodItemPageData(GetFiscalPeriodItemPageDataRequest) returns (GetFiscalPeriodItemPageDataResponse);
+
+  // Lifecycle: Close an open period (validates all JEs are posted, no pending drafts)
+  rpc CloseFiscalPeriod(CloseFiscalPeriodRequest) returns (CloseFiscalPeriodResponse);
+}
+
+message CreateFiscalPeriodRequest {
+  FiscalPeriod data = 1;
+}
+
+message CreateFiscalPeriodResponse {
+  repeated FiscalPeriod data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message ReadFiscalPeriodRequest {
+  FiscalPeriod data = 1;
+}
+
+message ReadFiscalPeriodResponse {
+  repeated FiscalPeriod data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message UpdateFiscalPeriodRequest {
+  FiscalPeriod data = 1;
+}
+
+message UpdateFiscalPeriodResponse {
+  repeated FiscalPeriod data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message DeleteFiscalPeriodRequest {
+  FiscalPeriod data = 1;
+}
+
+message DeleteFiscalPeriodResponse {
+  bool success = 1;
+  optional domain.common.v1.Error error = 2;
+}
+
+message ListFiscalPeriodsRequest {
+  optional domain.common.v1.SearchRequest search = 1;
+  optional domain.common.v1.FilterRequest filters = 2;
+  optional domain.common.v1.SortRequest sort = 3;
+  optional domain.common.v1.PaginationRequest pagination = 4;
+}
+
+message ListFiscalPeriodsResponse {
+  repeated FiscalPeriod data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message GetFiscalPeriodListPageDataRequest {
+  optional domain.common.v1.PaginationRequest pagination = 1;
+  optional domain.common.v1.FilterRequest filters = 2;
+  optional domain.common.v1.SortRequest sort = 3;
+  optional domain.common.v1.SearchRequest search = 4;
+}
+
+message GetFiscalPeriodListPageDataResponse {
+  repeated FiscalPeriod fiscal_period_list = 1;
+  optional domain.common.v1.PaginationResponse pagination = 2;
+  repeated domain.common.v1.SearchResult search_results = 3;
+  bool success = 4;
+  optional domain.common.v1.Error error = 5;
+}
+
+message GetFiscalPeriodItemPageDataRequest {
+  string fiscal_period_id = 1;
+}
+
+message GetFiscalPeriodItemPageDataResponse {
+  optional FiscalPeriod fiscal_period = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+// Lifecycle: Close a fiscal period (transitions OPEN -> CLOSED, prevents further posting)
+message CloseFiscalPeriodRequest {
+  string fiscal_period_id = 1;
+  string closed_by = 2;  // FK to entity.User
+}
+
+message CloseFiscalPeriodResponse {
+  repeated FiscalPeriod data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}

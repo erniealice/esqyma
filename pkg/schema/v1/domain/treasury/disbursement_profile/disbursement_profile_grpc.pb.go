@@ -4,7 +4,7 @@
 // - protoc             (unknown)
 // source: domain/treasury/disbursement_profile/disbursement_profile.proto
 
-package paymentv1
+package treasuryv1
 
 import (
 	context "context"
@@ -19,13 +19,13 @@ import (
 const _ = grpc.SupportPackageIsVersion9
 
 const (
-	DisbursementProfileDomainService_CreateDisbursementProfile_FullMethodName          = "/domain.payment.v1.DisbursementProfileDomainService/CreateDisbursementProfile"
-	DisbursementProfileDomainService_ReadDisbursementProfile_FullMethodName            = "/domain.payment.v1.DisbursementProfileDomainService/ReadDisbursementProfile"
-	DisbursementProfileDomainService_UpdateDisbursementProfile_FullMethodName          = "/domain.payment.v1.DisbursementProfileDomainService/UpdateDisbursementProfile"
-	DisbursementProfileDomainService_DeleteDisbursementProfile_FullMethodName          = "/domain.payment.v1.DisbursementProfileDomainService/DeleteDisbursementProfile"
-	DisbursementProfileDomainService_ListDisbursementProfiles_FullMethodName           = "/domain.payment.v1.DisbursementProfileDomainService/ListDisbursementProfiles"
-	DisbursementProfileDomainService_GetDisbursementProfileListPageData_FullMethodName = "/domain.payment.v1.DisbursementProfileDomainService/GetDisbursementProfileListPageData"
-	DisbursementProfileDomainService_GetDisbursementProfileItemPageData_FullMethodName = "/domain.payment.v1.DisbursementProfileDomainService/GetDisbursementProfileItemPageData"
+	DisbursementProfileDomainService_CreateDisbursementProfile_FullMethodName          = "/domain.treasury.v1.DisbursementProfileDomainService/CreateDisbursementProfile"
+	DisbursementProfileDomainService_ReadDisbursementProfile_FullMethodName            = "/domain.treasury.v1.DisbursementProfileDomainService/ReadDisbursementProfile"
+	DisbursementProfileDomainService_UpdateDisbursementProfile_FullMethodName          = "/domain.treasury.v1.DisbursementProfileDomainService/UpdateDisbursementProfile"
+	DisbursementProfileDomainService_DeleteDisbursementProfile_FullMethodName          = "/domain.treasury.v1.DisbursementProfileDomainService/DeleteDisbursementProfile"
+	DisbursementProfileDomainService_ListDisbursementProfiles_FullMethodName           = "/domain.treasury.v1.DisbursementProfileDomainService/ListDisbursementProfiles"
+	DisbursementProfileDomainService_GetDisbursementProfileListPageData_FullMethodName = "/domain.treasury.v1.DisbursementProfileDomainService/GetDisbursementProfileListPageData"
+	DisbursementProfileDomainService_GetDisbursementProfileItemPageData_FullMethodName = "/domain.treasury.v1.DisbursementProfileDomainService/GetDisbursementProfileItemPageData"
 )
 
 // DisbursementProfileDomainServiceClient is the client API for DisbursementProfileDomainService service.
@@ -313,7 +313,7 @@ func _DisbursementProfileDomainService_GetDisbursementProfileItemPageData_Handle
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
 var DisbursementProfileDomainService_ServiceDesc = grpc.ServiceDesc{
-	ServiceName: "domain.payment.v1.DisbursementProfileDomainService",
+	ServiceName: "domain.treasury.v1.DisbursementProfileDomainService",
 	HandlerType: (*DisbursementProfileDomainServiceServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{

@@ -1,0 +1,123 @@
+syntax = "proto3";
+
+package domain.ledger.v1;
+
+option go_package = "github.com/erniealice/esqyma/golang/v1/domain/ledger/account_template";
+
+import "domain/common/error.proto";
+import "domain/common/pagination.proto";
+import "domain/common/filter.proto";
+import "domain/common/sort.proto";
+import "domain/common/search.proto";
+
+import "domain/ledger/account/account.proto";
+import "options/db.proto";
+
+// AccountTemplate bundles a pre-configured Chart of Accounts for a specific industry.
+// Applied via a one-time setup wizard to seed the Account table.
+message AccountTemplate {
+  option (options.v1.table).table = true;
+
+  string id = 1;
+  string name = 2;                  // e.g. "Philippine Service Business (Salon/Spa)"
+  optional string description = 3;
+  string industry_type = 4;         // e.g. "service", "retail", "restaurant", "construction"
+
+  // Pre-configured accounts included in this template (embedded for read; stored as seed data)
+  repeated Account accounts = 5;
+
+  // Audit fields
+  bool active = 6 [(options.v1.db).default = "true"];
+  optional int64 date_created = 7;
+  optional string date_created_string = 8;
+}
+
+service AccountTemplateDomainService {
+  // Standard CRUD
+  rpc CreateAccountTemplate(CreateAccountTemplateRequest) returns (CreateAccountTemplateResponse);
+  rpc ReadAccountTemplate(ReadAccountTemplateRequest) returns (ReadAccountTemplateResponse);
+  rpc UpdateAccountTemplate(UpdateAccountTemplateRequest) returns (UpdateAccountTemplateResponse);
+  rpc DeleteAccountTemplate(DeleteAccountTemplateRequest) returns (DeleteAccountTemplateResponse);
+  rpc ListAccountTemplates(ListAccountTemplatesRequest) returns (ListAccountTemplatesResponse);
+
+  // Enhanced page data (for UI views)
+  rpc GetAccountTemplateListPageData(GetAccountTemplateListPageDataRequest) returns (GetAccountTemplateListPageDataResponse);
+  rpc GetAccountTemplateItemPageData(GetAccountTemplateItemPageDataRequest) returns (GetAccountTemplateItemPageDataResponse);
+}
+
+message CreateAccountTemplateRequest {
+  AccountTemplate data = 1;
+}
+
+message CreateAccountTemplateResponse {
+  repeated AccountTemplate data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message ReadAccountTemplateRequest {
+  AccountTemplate data = 1;
+}
+
+message ReadAccountTemplateResponse {
+  repeated AccountTemplate data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message UpdateAccountTemplateRequest {
+  AccountTemplate data = 1;
+}
+
+message UpdateAccountTemplateResponse {
+  repeated AccountTemplate data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message DeleteAccountTemplateRequest {
+  AccountTemplate data = 1;
+}
+
+message DeleteAccountTemplateResponse {
+  bool success = 1;
+  optional domain.common.v1.Error error = 2;
+}
+
+message ListAccountTemplatesRequest {
+  optional domain.common.v1.SearchRequest search = 1;
+  optional domain.common.v1.FilterRequest filters = 2;
+  optional domain.common.v1.SortRequest sort = 3;
+  optional domain.common.v1.PaginationRequest pagination = 4;
+}
+
+message ListAccountTemplatesResponse {
+  repeated AccountTemplate data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message GetAccountTemplateListPageDataRequest {
+  optional domain.common.v1.PaginationRequest pagination = 1;
+  optional domain.common.v1.FilterRequest filters = 2;
+  optional domain.common.v1.SortRequest sort = 3;
+  optional domain.common.v1.SearchRequest search = 4;
+}
+
+message GetAccountTemplateListPageDataResponse {
+  repeated AccountTemplate account_template_list = 1;
+  optional domain.common.v1.PaginationResponse pagination = 2;
+  repeated domain.common.v1.SearchResult search_results = 3;
+  bool success = 4;
+  optional domain.common.v1.Error error = 5;
+}
+
+message GetAccountTemplateItemPageDataRequest {
+  string account_template_id = 1;
+}
+
+message GetAccountTemplateItemPageDataResponse {
+  optional AccountTemplate account_template = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}

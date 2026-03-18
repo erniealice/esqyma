@@ -1,0 +1,146 @@
+syntax = "proto3";
+
+package domain.treasury.v1;
+
+option go_package = "github.com/erniealice/esqyma/golang/v1/domain/treasury/security_deposit";
+
+import "domain/common/error.proto";
+import "domain/common/pagination.proto";
+import "domain/common/filter.proto";
+import "domain/common/sort.proto";
+import "domain/common/search.proto";
+
+import "options/db.proto";
+
+// DepositDirection indicates whether the business paid a deposit or received one.
+enum DepositDirection {
+  DEPOSIT_DIRECTION_UNSPECIFIED = 0;
+  DEPOSIT_DIRECTION_PAID = 1;      // Asset — deposit paid to a landlord/vendor
+  DEPOSIT_DIRECTION_RECEIVED = 2;  // Liability — deposit received from a customer/tenant
+}
+
+// DepositStatus tracks the lifecycle of the deposit.
+enum DepositStatus {
+  DEPOSIT_STATUS_UNSPECIFIED = 0;
+  DEPOSIT_STATUS_ACTIVE = 1;
+  DEPOSIT_STATUS_SETTLED = 2;    // Returned (or fully applied)
+  DEPOSIT_STATUS_FORFEITED = 3;  // Not returned (e.g. lease break penalty)
+}
+
+// SecurityDeposit records deposits paid to or received from counter-parties.
+// Settlement events (refund, forfeiture, partial deductions) are child entities.
+message SecurityDeposit {
+  option (options.v1.table).table = true;
+
+  string id = 1;
+  DepositDirection direction = 2;
+  string counterparty_name = 3;    // Landlord name (PAID) or tenant/customer name (RECEIVED)
+  double amount = 4;
+
+  int64 deposit_date = 5;
+  optional string deposit_date_string = 6;
+
+  DepositStatus status = 7;
+
+  // GL integration — FK to the Chart of Accounts
+  optional string account_id = 8 [(options.v1.db).references = "account", (options.v1.db).index = true];
+
+  optional string notes = 9;
+
+  // Audit fields
+  bool active = 10 [(options.v1.db).default = "true"];
+  optional int64 date_created = 11;
+  optional string date_created_string = 12;
+  optional int64 date_modified = 13;
+  optional string date_modified_string = 14;
+}
+
+service SecurityDepositDomainService {
+  // Standard CRUD
+  rpc CreateSecurityDeposit(CreateSecurityDepositRequest) returns (CreateSecurityDepositResponse);
+  rpc ReadSecurityDeposit(ReadSecurityDepositRequest) returns (ReadSecurityDepositResponse);
+  rpc UpdateSecurityDeposit(UpdateSecurityDepositRequest) returns (UpdateSecurityDepositResponse);
+  rpc DeleteSecurityDeposit(DeleteSecurityDepositRequest) returns (DeleteSecurityDepositResponse);
+  rpc ListSecurityDeposits(ListSecurityDepositsRequest) returns (ListSecurityDepositsResponse);
+
+  // Enhanced page data (for UI views)
+  rpc GetSecurityDepositListPageData(GetSecurityDepositListPageDataRequest) returns (GetSecurityDepositListPageDataResponse);
+  rpc GetSecurityDepositItemPageData(GetSecurityDepositItemPageDataRequest) returns (GetSecurityDepositItemPageDataResponse);
+}
+
+message CreateSecurityDepositRequest {
+  SecurityDeposit data = 1;
+}
+
+message CreateSecurityDepositResponse {
+  repeated SecurityDeposit data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message ReadSecurityDepositRequest {
+  SecurityDeposit data = 1;
+}
+
+message ReadSecurityDepositResponse {
+  repeated SecurityDeposit data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message UpdateSecurityDepositRequest {
+  SecurityDeposit data = 1;
+}
+
+message UpdateSecurityDepositResponse {
+  repeated SecurityDeposit data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message DeleteSecurityDepositRequest {
+  SecurityDeposit data = 1;
+}
+
+message DeleteSecurityDepositResponse {
+  bool success = 1;
+  optional domain.common.v1.Error error = 2;
+}
+
+message ListSecurityDepositsRequest {
+  optional domain.common.v1.SearchRequest search = 1;
+  optional domain.common.v1.FilterRequest filters = 2;
+  optional domain.common.v1.SortRequest sort = 3;
+  optional domain.common.v1.PaginationRequest pagination = 4;
+}
+
+message ListSecurityDepositsResponse {
+  repeated SecurityDeposit data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message GetSecurityDepositListPageDataRequest {
+  optional domain.common.v1.PaginationRequest pagination = 1;
+  optional domain.common.v1.FilterRequest filters = 2;
+  optional domain.common.v1.SortRequest sort = 3;
+  optional domain.common.v1.SearchRequest search = 4;
+}
+
+message GetSecurityDepositListPageDataResponse {
+  repeated SecurityDeposit security_deposit_list = 1;
+  optional domain.common.v1.PaginationResponse pagination = 2;
+  repeated domain.common.v1.SearchResult search_results = 3;
+  bool success = 4;
+  optional domain.common.v1.Error error = 5;
+}
+
+message GetSecurityDepositItemPageDataRequest {
+  string security_deposit_id = 1;
+}
+
+message GetSecurityDepositItemPageDataResponse {
+  optional SecurityDeposit security_deposit = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}

@@ -4,7 +4,7 @@
 // - protoc             (unknown)
 // source: domain/treasury/collection_method/collection_method.proto
 
-package paymentv1
+package treasuryv1
 
 import (
 	context "context"
@@ -19,13 +19,13 @@ import (
 const _ = grpc.SupportPackageIsVersion9
 
 const (
-	CollectionMethodDomainService_CreateCollectionMethod_FullMethodName          = "/domain.payment.v1.CollectionMethodDomainService/CreateCollectionMethod"
-	CollectionMethodDomainService_ReadCollectionMethod_FullMethodName            = "/domain.payment.v1.CollectionMethodDomainService/ReadCollectionMethod"
-	CollectionMethodDomainService_UpdateCollectionMethod_FullMethodName          = "/domain.payment.v1.CollectionMethodDomainService/UpdateCollectionMethod"
-	CollectionMethodDomainService_DeleteCollectionMethod_FullMethodName          = "/domain.payment.v1.CollectionMethodDomainService/DeleteCollectionMethod"
-	CollectionMethodDomainService_ListCollectionMethods_FullMethodName           = "/domain.payment.v1.CollectionMethodDomainService/ListCollectionMethods"
-	CollectionMethodDomainService_GetCollectionMethodListPageData_FullMethodName = "/domain.payment.v1.CollectionMethodDomainService/GetCollectionMethodListPageData"
-	CollectionMethodDomainService_GetCollectionMethodItemPageData_FullMethodName = "/domain.payment.v1.CollectionMethodDomainService/GetCollectionMethodItemPageData"
+	CollectionMethodDomainService_CreateCollectionMethod_FullMethodName          = "/domain.treasury.v1.CollectionMethodDomainService/CreateCollectionMethod"
+	CollectionMethodDomainService_ReadCollectionMethod_FullMethodName            = "/domain.treasury.v1.CollectionMethodDomainService/ReadCollectionMethod"
+	CollectionMethodDomainService_UpdateCollectionMethod_FullMethodName          = "/domain.treasury.v1.CollectionMethodDomainService/UpdateCollectionMethod"
+	CollectionMethodDomainService_DeleteCollectionMethod_FullMethodName          = "/domain.treasury.v1.CollectionMethodDomainService/DeleteCollectionMethod"
+	CollectionMethodDomainService_ListCollectionMethods_FullMethodName           = "/domain.treasury.v1.CollectionMethodDomainService/ListCollectionMethods"
+	CollectionMethodDomainService_GetCollectionMethodListPageData_FullMethodName = "/domain.treasury.v1.CollectionMethodDomainService/GetCollectionMethodListPageData"
+	CollectionMethodDomainService_GetCollectionMethodItemPageData_FullMethodName = "/domain.treasury.v1.CollectionMethodDomainService/GetCollectionMethodItemPageData"
 )
 
 // CollectionMethodDomainServiceClient is the client API for CollectionMethodDomainService service.
@@ -313,7 +313,7 @@ func _CollectionMethodDomainService_GetCollectionMethodItemPageData_Handler(srv 
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
 var CollectionMethodDomainService_ServiceDesc = grpc.ServiceDesc{
-	ServiceName: "domain.payment.v1.CollectionMethodDomainService",
+	ServiceName: "domain.treasury.v1.CollectionMethodDomainService",
 	HandlerType: (*CollectionMethodDomainServiceServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{

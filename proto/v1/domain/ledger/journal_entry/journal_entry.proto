@@ -1,0 +1,219 @@
+syntax = "proto3";
+
+package domain.ledger.v1;
+
+option go_package = "github.com/erniealice/esqyma/golang/v1/domain/ledger/journal_entry";
+
+import "domain/common/error.proto";
+import "domain/common/pagination.proto";
+import "domain/common/filter.proto";
+import "domain/common/sort.proto";
+import "domain/common/search.proto";
+
+import "options/db.proto";
+
+// JournalEntryStatus represents the lifecycle state of a journal entry.
+enum JournalEntryStatus {
+  JOURNAL_ENTRY_STATUS_UNSPECIFIED = 0;
+  JOURNAL_ENTRY_STATUS_DRAFT = 1;
+  JOURNAL_ENTRY_STATUS_POSTED = 2;
+  JOURNAL_ENTRY_STATUS_REVERSED = 3;
+}
+
+// JournalSourceType identifies the business event that originated this journal entry.
+// Used for bidirectional traceability between operational transactions and the ledger.
+enum JournalSourceType {
+  JOURNAL_SOURCE_TYPE_UNSPECIFIED = 0;
+  JOURNAL_SOURCE_TYPE_MANUAL = 1;
+  JOURNAL_SOURCE_TYPE_REVENUE = 2;
+  JOURNAL_SOURCE_TYPE_EXPENDITURE = 3;
+  JOURNAL_SOURCE_TYPE_COLLECTION = 4;
+  JOURNAL_SOURCE_TYPE_DISBURSEMENT = 5;
+  JOURNAL_SOURCE_TYPE_DEPRECIATION = 6;
+  JOURNAL_SOURCE_TYPE_ASSET_ACQUISITION = 7;
+  JOURNAL_SOURCE_TYPE_ASSET_DISPOSAL = 8;
+  JOURNAL_SOURCE_TYPE_PREPAYMENT = 9;
+  JOURNAL_SOURCE_TYPE_PREPAYMENT_AMORTIZATION = 10;
+  JOURNAL_SOURCE_TYPE_LOAN_RECEIPT = 11;
+  JOURNAL_SOURCE_TYPE_LOAN_PAYMENT = 12;
+  JOURNAL_SOURCE_TYPE_LOAN_FEE_AMORTIZATION = 13;
+  JOURNAL_SOURCE_TYPE_PETTY_CASH_REPLENISHMENT = 14;
+  JOURNAL_SOURCE_TYPE_BAD_DEBT_PROVISION = 15;
+  JOURNAL_SOURCE_TYPE_DEFERRED_REVENUE = 16;
+  JOURNAL_SOURCE_TYPE_DEFERRED_REVENUE_RECOGNITION = 17;
+  JOURNAL_SOURCE_TYPE_COLLECTION_APPLICATION = 18;
+  JOURNAL_SOURCE_TYPE_DEBT_RECLASSIFICATION = 19;
+  JOURNAL_SOURCE_TYPE_EQUITY_CONTRIBUTION = 20;
+  JOURNAL_SOURCE_TYPE_EQUITY_WITHDRAWAL = 21;
+  JOURNAL_SOURCE_TYPE_EQUITY_DISTRIBUTION = 22;
+  JOURNAL_SOURCE_TYPE_YEAR_END_CLOSE = 23;
+  JOURNAL_SOURCE_TYPE_RECURRING = 24;
+  JOURNAL_SOURCE_TYPE_PAYROLL = 25;
+}
+
+// JournalEntry is the double-entry bookkeeping record. Each entry must have
+// equal total debits and total credits across its journal lines.
+message JournalEntry {
+  option (options.v1.table).table = true;
+
+  // Core identity
+  string id = 1;
+  string entry_number = 2 [(options.v1.db).unique = true, (options.v1.db).index = true];
+  string description = 3;
+
+  // Date — unix timestamp + display string
+  int64 entry_date = 4;
+  optional string entry_date_string = 5;
+
+  // Status and source traceability
+  JournalEntryStatus status = 6;
+  JournalSourceType source_type = 7;
+  optional string source_id = 8 [(options.v1.db).index = true];  // FK to originating entity
+
+  // Fiscal period association
+  optional string fiscal_period_id = 9 [(options.v1.db).references = "fiscal_period", (options.v1.db).index = true];
+
+  // Totals — must balance (total_debit == total_credit)
+  double total_debit = 10;
+  double total_credit = 11;
+
+  // Posting audit
+  optional string posted_by = 12;   // FK to entity.User
+  optional int64 posted_at = 13;
+  optional string posted_at_string = 14;
+
+  // Reversal
+  optional string reversed_by = 15;  // FK to entity.User
+  optional int64 reversed_at = 16;
+  optional string reversed_at_string = 17;
+  optional string reversal_entry_id = 18 [(options.v1.db).references = "journal_entry", (options.v1.db).index = true];
+
+  optional string notes = 19;
+
+  // Audit fields
+  bool active = 20 [(options.v1.db).default = "true"];
+  optional int64 date_created = 21;
+  optional string date_created_string = 22;
+  optional int64 date_modified = 23;
+  optional string date_modified_string = 24;
+}
+
+service JournalEntryDomainService {
+  // Standard CRUD
+  rpc CreateJournalEntry(CreateJournalEntryRequest) returns (CreateJournalEntryResponse);
+  rpc ReadJournalEntry(ReadJournalEntryRequest) returns (ReadJournalEntryResponse);
+  rpc UpdateJournalEntry(UpdateJournalEntryRequest) returns (UpdateJournalEntryResponse);
+  rpc DeleteJournalEntry(DeleteJournalEntryRequest) returns (DeleteJournalEntryResponse);
+  rpc ListJournalEntries(ListJournalEntriesRequest) returns (ListJournalEntriesResponse);
+
+  // Enhanced page data (for UI views)
+  rpc GetJournalEntryListPageData(GetJournalEntryListPageDataRequest) returns (GetJournalEntryListPageDataResponse);
+  rpc GetJournalEntryItemPageData(GetJournalEntryItemPageDataRequest) returns (GetJournalEntryItemPageDataResponse);
+
+  // Lifecycle operations
+  rpc PostJournalEntry(PostJournalEntryRequest) returns (PostJournalEntryResponse);
+  rpc ReverseJournalEntry(ReverseJournalEntryRequest) returns (ReverseJournalEntryResponse);
+}
+
+message CreateJournalEntryRequest {
+  JournalEntry data = 1;
+}
+
+message CreateJournalEntryResponse {
+  repeated JournalEntry data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message ReadJournalEntryRequest {
+  JournalEntry data = 1;
+}
+
+message ReadJournalEntryResponse {
+  repeated JournalEntry data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message UpdateJournalEntryRequest {
+  JournalEntry data = 1;
+}
+
+message UpdateJournalEntryResponse {
+  repeated JournalEntry data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message DeleteJournalEntryRequest {
+  JournalEntry data = 1;
+}
+
+message DeleteJournalEntryResponse {
+  bool success = 1;
+  optional domain.common.v1.Error error = 2;
+}
+
+message ListJournalEntriesRequest {
+  optional domain.common.v1.SearchRequest search = 1;
+  optional domain.common.v1.FilterRequest filters = 2;
+  optional domain.common.v1.SortRequest sort = 3;
+  optional domain.common.v1.PaginationRequest pagination = 4;
+}
+
+message ListJournalEntriesResponse {
+  repeated JournalEntry data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message GetJournalEntryListPageDataRequest {
+  optional domain.common.v1.PaginationRequest pagination = 1;
+  optional domain.common.v1.FilterRequest filters = 2;
+  optional domain.common.v1.SortRequest sort = 3;
+  optional domain.common.v1.SearchRequest search = 4;
+}
+
+message GetJournalEntryListPageDataResponse {
+  repeated JournalEntry journal_entry_list = 1;
+  optional domain.common.v1.PaginationResponse pagination = 2;
+  repeated domain.common.v1.SearchResult search_results = 3;
+  bool success = 4;
+  optional domain.common.v1.Error error = 5;
+}
+
+message GetJournalEntryItemPageDataRequest {
+  string journal_entry_id = 1;
+}
+
+message GetJournalEntryItemPageDataResponse {
+  optional JournalEntry journal_entry = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+// Lifecycle: Post a draft journal entry (validates debit == credit, transitions to POSTED)
+message PostJournalEntryRequest {
+  string journal_entry_id = 1;
+  string posted_by = 2;       // FK to entity.User (maker-checker: second authorizer for manual JEs)
+}
+
+message PostJournalEntryResponse {
+  repeated JournalEntry data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+// Lifecycle: Reverse a posted journal entry (creates mirror entry with opposite debits/credits)
+message ReverseJournalEntryRequest {
+  string journal_entry_id = 1;
+  string reversed_by = 2;     // FK to entity.User
+  int64 reversal_date = 3;    // Effective date for the reversal entry
+  optional string reason = 4;
+}
+
+message ReverseJournalEntryResponse {
+  repeated JournalEntry data = 1;   // Includes the new reversal entry
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}

@@ -4,7 +4,7 @@
 // 	protoc        (unknown)
 // source: domain/treasury/disbursement_attribute/disbursement_attribute.proto
 
-package paymentv1
+package treasuryv1
 
 import (
 	common "github.com/erniealice/esqyma/pkg/schema/v1/domain/common"
@@ -1197,13 +1197,13 @@ var File_domain_treasury_disbursement_attribute_disbursement_attribute_proto pro
 
 const file_domain_treasury_disbursement_attribute_disbursement_attribute_proto_rawDesc = "" +
 	"\n" +
-	"Cdomain/treasury/disbursement_attribute/disbursement_attribute.proto\x12\x11domain.payment.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1adomain/common/search.proto\x1a/domain/treasury/disbursement/disbursement.proto\x1a\x1ddomain/common/attribute.proto\"\xb3\x04\n" +
+	"Cdomain/treasury/disbursement_attribute/disbursement_attribute.proto\x12\x12domain.treasury.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1adomain/common/search.proto\x1a/domain/treasury/disbursement/disbursement.proto\x1a\x1ddomain/common/attribute.proto\"\xb4\x04\n" +
 	"\x15DisbursementAttribute\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12'\n" +
 	"\x0fdisbursement_id\x18\x02 \x01(\tR\x0edisbursementId\x12!\n" +
 	"\fattribute_id\x18\x03 \x01(\tR\vattributeId\x12\x14\n" +
-	"\x05value\x18\x04 \x01(\tR\x05value\x12C\n" +
-	"\fdisbursement\x18\x05 \x01(\v2\x1f.domain.payment.v1.DisbursementR\fdisbursement\x129\n" +
+	"\x05value\x18\x04 \x01(\tR\x05value\x12D\n" +
+	"\fdisbursement\x18\x05 \x01(\v2 .domain.treasury.v1.DisbursementR\fdisbursement\x129\n" +
 	"\tattribute\x18\x06 \x01(\v2\x1b.domain.common.v1.AttributeR\tattribute\x12&\n" +
 	"\fdate_created\x18\a \x01(\x03H\x00R\vdateCreated\x88\x01\x01\x123\n" +
 	"\x13date_created_string\x18\b \x01(\tH\x01R\x11dateCreatedString\x88\x01\x01\x12(\n" +
@@ -1214,50 +1214,50 @@ const file_domain_treasury_disbursement_attribute_disbursement_attribute_proto_r
 	"\r_date_createdB\x16\n" +
 	"\x14_date_created_stringB\x10\n" +
 	"\x0e_date_modifiedB\x17\n" +
-	"\x15_date_modified_string\"b\n" +
-	"\"CreateDisbursementAttributeRequest\x12<\n" +
-	"\x04data\x18\x01 \x01(\v2(.domain.payment.v1.DisbursementAttributeR\x04data\"\xbb\x01\n" +
-	"#CreateDisbursementAttributeResponse\x12<\n" +
-	"\x04data\x18\x01 \x03(\v2(.domain.payment.v1.DisbursementAttributeR\x04data\x12\x18\n" +
+	"\x15_date_modified_string\"c\n" +
+	"\"CreateDisbursementAttributeRequest\x12=\n" +
+	"\x04data\x18\x01 \x01(\v2).domain.treasury.v1.DisbursementAttributeR\x04data\"\xbc\x01\n" +
+	"#CreateDisbursementAttributeResponse\x12=\n" +
+	"\x04data\x18\x01 \x03(\v2).domain.treasury.v1.DisbursementAttributeR\x04data\x12\x18\n" +
 	"\asuccess\x18\x02 \x01(\bR\asuccess\x122\n" +
 	"\x05error\x18\x03 \x01(\v2\x17.domain.common.v1.ErrorH\x00R\x05error\x88\x01\x01B\b\n" +
-	"\x06_error\"g\n" +
-	"'CreateDisbursementAttributeBatchRequest\x12<\n" +
-	"\x04data\x18\x01 \x03(\v2(.domain.payment.v1.DisbursementAttributeR\x04data\"\xc0\x01\n" +
-	"(CreateDisbursementAttributeBatchResponse\x12<\n" +
-	"\x04data\x18\x01 \x03(\v2(.domain.payment.v1.DisbursementAttributeR\x04data\x12\x18\n" +
+	"\x06_error\"h\n" +
+	"'CreateDisbursementAttributeBatchRequest\x12=\n" +
+	"\x04data\x18\x01 \x03(\v2).domain.treasury.v1.DisbursementAttributeR\x04data\"\xc1\x01\n" +
+	"(CreateDisbursementAttributeBatchResponse\x12=\n" +
+	"\x04data\x18\x01 \x03(\v2).domain.treasury.v1.DisbursementAttributeR\x04data\x12\x18\n" +
 	"\asuccess\x18\x02 \x01(\bR\asuccess\x122\n" +
 	"\x05error\x18\x03 \x01(\v2\x17.domain.common.v1.ErrorH\x00R\x05error\x88\x01\x01B\b\n" +
-	"\x06_error\"\xfc\x01\n" +
+	"\x06_error\"\xfd\x01\n" +
 	" DisbursementAttributesByCodeData\x12'\n" +
-	"\x0fdisbursement_id\x18\x01 \x01(\tR\x0edisbursementId\x12m\n" +
-	"\x0eattributes_map\x18\x02 \x03(\v2F.domain.payment.v1.DisbursementAttributesByCodeData.AttributesMapEntryR\rattributesMap\x1a@\n" +
+	"\x0fdisbursement_id\x18\x01 \x01(\tR\x0edisbursementId\x12n\n" +
+	"\x0eattributes_map\x18\x02 \x03(\v2G.domain.treasury.v1.DisbursementAttributesByCodeData.AttributesMapEntryR\rattributesMap\x1a@\n" +
 	"\x12AttributesMapEntry\x12\x10\n" +
 	"\x03key\x18\x01 \x01(\tR\x03key\x12\x14\n" +
-	"\x05value\x18\x02 \x01(\tR\x05value:\x028\x01\"t\n" +
-	")CreateDisbursementAttributesByCodeRequest\x12G\n" +
-	"\x04data\x18\x01 \x01(\v23.domain.payment.v1.DisbursementAttributesByCodeDataR\x04data\"\xc2\x01\n" +
-	"*CreateDisbursementAttributesByCodeResponse\x12<\n" +
-	"\x04data\x18\x01 \x03(\v2(.domain.payment.v1.DisbursementAttributeR\x04data\x12\x18\n" +
+	"\x05value\x18\x02 \x01(\tR\x05value:\x028\x01\"u\n" +
+	")CreateDisbursementAttributesByCodeRequest\x12H\n" +
+	"\x04data\x18\x01 \x01(\v24.domain.treasury.v1.DisbursementAttributesByCodeDataR\x04data\"\xc3\x01\n" +
+	"*CreateDisbursementAttributesByCodeResponse\x12=\n" +
+	"\x04data\x18\x01 \x03(\v2).domain.treasury.v1.DisbursementAttributeR\x04data\x12\x18\n" +
 	"\asuccess\x18\x02 \x01(\bR\asuccess\x122\n" +
 	"\x05error\x18\x03 \x01(\v2\x17.domain.common.v1.ErrorH\x00R\x05error\x88\x01\x01B\b\n" +
-	"\x06_error\"`\n" +
-	" ReadDisbursementAttributeRequest\x12<\n" +
-	"\x04data\x18\x01 \x01(\v2(.domain.payment.v1.DisbursementAttributeR\x04data\"\xb9\x01\n" +
-	"!ReadDisbursementAttributeResponse\x12<\n" +
-	"\x04data\x18\x01 \x03(\v2(.domain.payment.v1.DisbursementAttributeR\x04data\x12\x18\n" +
+	"\x06_error\"a\n" +
+	" ReadDisbursementAttributeRequest\x12=\n" +
+	"\x04data\x18\x01 \x01(\v2).domain.treasury.v1.DisbursementAttributeR\x04data\"\xba\x01\n" +
+	"!ReadDisbursementAttributeResponse\x12=\n" +
+	"\x04data\x18\x01 \x03(\v2).domain.treasury.v1.DisbursementAttributeR\x04data\x12\x18\n" +
 	"\asuccess\x18\x02 \x01(\bR\asuccess\x122\n" +
 	"\x05error\x18\x03 \x01(\v2\x17.domain.common.v1.ErrorH\x00R\x05error\x88\x01\x01B\b\n" +
-	"\x06_error\"b\n" +
-	"\"UpdateDisbursementAttributeRequest\x12<\n" +
-	"\x04data\x18\x01 \x01(\v2(.domain.payment.v1.DisbursementAttributeR\x04data\"\xbb\x01\n" +
-	"#UpdateDisbursementAttributeResponse\x12<\n" +
-	"\x04data\x18\x01 \x03(\v2(.domain.payment.v1.DisbursementAttributeR\x04data\x12\x18\n" +
+	"\x06_error\"c\n" +
+	"\"UpdateDisbursementAttributeRequest\x12=\n" +
+	"\x04data\x18\x01 \x01(\v2).domain.treasury.v1.DisbursementAttributeR\x04data\"\xbc\x01\n" +
+	"#UpdateDisbursementAttributeResponse\x12=\n" +
+	"\x04data\x18\x01 \x03(\v2).domain.treasury.v1.DisbursementAttributeR\x04data\x12\x18\n" +
 	"\asuccess\x18\x02 \x01(\bR\asuccess\x122\n" +
 	"\x05error\x18\x03 \x01(\v2\x17.domain.common.v1.ErrorH\x00R\x05error\x88\x01\x01B\b\n" +
-	"\x06_error\"b\n" +
-	"\"DeleteDisbursementAttributeRequest\x12<\n" +
-	"\x04data\x18\x01 \x01(\v2(.domain.payment.v1.DisbursementAttributeR\x04data\"}\n" +
+	"\x06_error\"c\n" +
+	"\"DeleteDisbursementAttributeRequest\x12=\n" +
+	"\x04data\x18\x01 \x01(\v2).domain.treasury.v1.DisbursementAttributeR\x04data\"}\n" +
 	"#DeleteDisbursementAttributeResponse\x12\x18\n" +
 	"\asuccess\x18\x01 \x01(\bR\asuccess\x122\n" +
 	"\x05error\x18\x02 \x01(\v2\x17.domain.common.v1.ErrorH\x00R\x05error\x88\x01\x01B\b\n" +
@@ -1273,9 +1273,9 @@ const file_domain_treasury_disbursement_attribute_disbursement_attribute_proto_r
 	"\n" +
 	"\b_filtersB\a\n" +
 	"\x05_sortB\r\n" +
-	"\v_pagination\"\xba\x01\n" +
-	"\"ListDisbursementAttributesResponse\x12<\n" +
-	"\x04data\x18\x01 \x03(\v2(.domain.payment.v1.DisbursementAttributeR\x04data\x12\x18\n" +
+	"\v_pagination\"\xbb\x01\n" +
+	"\"ListDisbursementAttributesResponse\x12=\n" +
+	"\x04data\x18\x01 \x03(\v2).domain.treasury.v1.DisbursementAttributeR\x04data\x12\x18\n" +
 	"\asuccess\x18\x02 \x01(\bR\asuccess\x122\n" +
 	"\x05error\x18\x03 \x01(\v2\x17.domain.common.v1.ErrorH\x00R\x05error\x88\x01\x01B\b\n" +
 	"\x06_error\"\x99\x02\n" +
@@ -1285,9 +1285,9 @@ const file_domain_treasury_disbursement_attribute_disbursement_attribute_proto_r
 	"pagination\x129\n" +
 	"\afilters\x18\x02 \x01(\v2\x1f.domain.common.v1.FilterRequestR\afilters\x121\n" +
 	"\x04sort\x18\x03 \x01(\v2\x1d.domain.common.v1.SortRequestR\x04sort\x127\n" +
-	"\x06search\x18\x04 \x01(\v2\x1f.domain.common.v1.SearchRequestR\x06search\"\xfd\x02\n" +
-	",GetDisbursementAttributeListPageDataResponse\x12h\n" +
-	"\x1bdisbursement_attribute_list\x18\x01 \x03(\v2(.domain.payment.v1.DisbursementAttributeR\x19disbursementAttributeList\x12D\n" +
+	"\x06search\x18\x04 \x01(\v2\x1f.domain.common.v1.SearchRequestR\x06search\"\xfe\x02\n" +
+	",GetDisbursementAttributeListPageDataResponse\x12i\n" +
+	"\x1bdisbursement_attribute_list\x18\x01 \x03(\v2).domain.treasury.v1.DisbursementAttributeR\x19disbursementAttributeList\x12D\n" +
 	"\n" +
 	"pagination\x18\x02 \x01(\v2$.domain.common.v1.PaginationResponseR\n" +
 	"pagination\x12E\n" +
@@ -1296,21 +1296,21 @@ const file_domain_treasury_disbursement_attribute_disbursement_attribute_proto_r
 	"\x05error\x18\x05 \x01(\v2\x17.domain.common.v1.ErrorH\x00R\x05error\x88\x01\x01B\b\n" +
 	"\x06_error\"i\n" +
 	"+GetDisbursementAttributeItemPageDataRequest\x12:\n" +
-	"\x19disbursement_attribute_id\x18\x01 \x01(\tR\x17disbursementAttributeId\"\xe7\x01\n" +
-	",GetDisbursementAttributeItemPageDataResponse\x12_\n" +
-	"\x16disbursement_attribute\x18\x01 \x01(\v2(.domain.payment.v1.DisbursementAttributeR\x15disbursementAttribute\x12\x18\n" +
+	"\x19disbursement_attribute_id\x18\x01 \x01(\tR\x17disbursementAttributeId\"\xe8\x01\n" +
+	",GetDisbursementAttributeItemPageDataResponse\x12`\n" +
+	"\x16disbursement_attribute\x18\x01 \x01(\v2).domain.treasury.v1.DisbursementAttributeR\x15disbursementAttribute\x12\x18\n" +
 	"\asuccess\x18\x02 \x01(\bR\asuccess\x122\n" +
 	"\x05error\x18\x03 \x01(\v2\x17.domain.common.v1.ErrorH\x00R\x05error\x88\x01\x01B\b\n" +
-	"\x06_error2\xba\b\n" +
-	"\"DisbursementAttributeDomainService\x12\x8c\x01\n" +
-	"\x1bCreateDisbursementAttribute\x125.domain.payment.v1.CreateDisbursementAttributeRequest\x1a6.domain.payment.v1.CreateDisbursementAttributeResponse\x12\x86\x01\n" +
-	"\x19ReadDisbursementAttribute\x123.domain.payment.v1.ReadDisbursementAttributeRequest\x1a4.domain.payment.v1.ReadDisbursementAttributeResponse\x12\x8c\x01\n" +
-	"\x1bUpdateDisbursementAttribute\x125.domain.payment.v1.UpdateDisbursementAttributeRequest\x1a6.domain.payment.v1.UpdateDisbursementAttributeResponse\x12\x8c\x01\n" +
-	"\x1bDeleteDisbursementAttribute\x125.domain.payment.v1.DeleteDisbursementAttributeRequest\x1a6.domain.payment.v1.DeleteDisbursementAttributeResponse\x12\x89\x01\n" +
-	"\x1aListDisbursementAttributes\x124.domain.payment.v1.ListDisbursementAttributesRequest\x1a5.domain.payment.v1.ListDisbursementAttributesResponse\x12\xa7\x01\n" +
-	"$GetDisbursementAttributeListPageData\x12>.domain.payment.v1.GetDisbursementAttributeListPageDataRequest\x1a?.domain.payment.v1.GetDisbursementAttributeListPageDataResponse\x12\xa7\x01\n" +
-	"$GetDisbursementAttributeItemPageData\x12>.domain.payment.v1.GetDisbursementAttributeItemPageDataRequest\x1a?.domain.payment.v1.GetDisbursementAttributeItemPageDataResponseB\xf6\x01\n" +
-	"\x15com.domain.payment.v1B\x1aDisbursementAttributeProtoP\x01Z[github.com/erniealice/esqyma/pkg/schema/v1/domain/treasury/disbursement_attribute;paymentv1\xa2\x02\x03DPX\xaa\x02\x11Domain.Payment.V1\xca\x02\x11Domain\\Payment\\V1\xe2\x02\x1dDomain\\Payment\\V1\\GPBMetadata\xea\x02\x13Domain::Payment::V1b\x06proto3"
+	"\x06_error2\xc8\b\n" +
+	"\"DisbursementAttributeDomainService\x12\x8e\x01\n" +
+	"\x1bCreateDisbursementAttribute\x126.domain.treasury.v1.CreateDisbursementAttributeRequest\x1a7.domain.treasury.v1.CreateDisbursementAttributeResponse\x12\x88\x01\n" +
+	"\x19ReadDisbursementAttribute\x124.domain.treasury.v1.ReadDisbursementAttributeRequest\x1a5.domain.treasury.v1.ReadDisbursementAttributeResponse\x12\x8e\x01\n" +
+	"\x1bUpdateDisbursementAttribute\x126.domain.treasury.v1.UpdateDisbursementAttributeRequest\x1a7.domain.treasury.v1.UpdateDisbursementAttributeResponse\x12\x8e\x01\n" +
+	"\x1bDeleteDisbursementAttribute\x126.domain.treasury.v1.DeleteDisbursementAttributeRequest\x1a7.domain.treasury.v1.DeleteDisbursementAttributeResponse\x12\x8b\x01\n" +
+	"\x1aListDisbursementAttributes\x125.domain.treasury.v1.ListDisbursementAttributesRequest\x1a6.domain.treasury.v1.ListDisbursementAttributesResponse\x12\xa9\x01\n" +
+	"$GetDisbursementAttributeListPageData\x12?.domain.treasury.v1.GetDisbursementAttributeListPageDataRequest\x1a@.domain.treasury.v1.GetDisbursementAttributeListPageDataResponse\x12\xa9\x01\n" +
+	"$GetDisbursementAttributeItemPageData\x12?.domain.treasury.v1.GetDisbursementAttributeItemPageDataRequest\x1a@.domain.treasury.v1.GetDisbursementAttributeItemPageDataResponseB\xfc\x01\n" +
+	"\x16com.domain.treasury.v1B\x1aDisbursementAttributeProtoP\x01Z\\github.com/erniealice/esqyma/pkg/schema/v1/domain/treasury/disbursement_attribute;treasuryv1\xa2\x02\x03DTX\xaa\x02\x12Domain.Treasury.V1\xca\x02\x12Domain\\Treasury\\V1\xe2\x02\x1eDomain\\Treasury\\V1\\GPBMetadata\xea\x02\x14Domain::Treasury::V1b\x06proto3"
 
 var (
 	file_domain_treasury_disbursement_attribute_disbursement_attribute_proto_rawDescOnce sync.Once
@@ -1326,28 +1326,28 @@ func file_domain_treasury_disbursement_attribute_disbursement_attribute_proto_ra
 
 var file_domain_treasury_disbursement_attribute_disbursement_attribute_proto_msgTypes = make([]protoimpl.MessageInfo, 21)
 var file_domain_treasury_disbursement_attribute_disbursement_attribute_proto_goTypes = []any{
-	(*DisbursementAttribute)(nil),                        // 0: domain.payment.v1.DisbursementAttribute
-	(*CreateDisbursementAttributeRequest)(nil),           // 1: domain.payment.v1.CreateDisbursementAttributeRequest
-	(*CreateDisbursementAttributeResponse)(nil),          // 2: domain.payment.v1.CreateDisbursementAttributeResponse
-	(*CreateDisbursementAttributeBatchRequest)(nil),      // 3: domain.payment.v1.CreateDisbursementAttributeBatchRequest
-	(*CreateDisbursementAttributeBatchResponse)(nil),     // 4: domain.payment.v1.CreateDisbursementAttributeBatchResponse
-	(*DisbursementAttributesByCodeData)(nil),             // 5: domain.payment.v1.DisbursementAttributesByCodeData
-	(*CreateDisbursementAttributesByCodeRequest)(nil),    // 6: domain.payment.v1.CreateDisbursementAttributesByCodeRequest
-	(*CreateDisbursementAttributesByCodeResponse)(nil),   // 7: domain.payment.v1.CreateDisbursementAttributesByCodeResponse
-	(*ReadDisbursementAttributeRequest)(nil),             // 8: domain.payment.v1.ReadDisbursementAttributeRequest
-	(*ReadDisbursementAttributeResponse)(nil),            // 9: domain.payment.v1.ReadDisbursementAttributeResponse
-	(*UpdateDisbursementAttributeRequest)(nil),           // 10: domain.payment.v1.UpdateDisbursementAttributeRequest
-	(*UpdateDisbursementAttributeResponse)(nil),          // 11: domain.payment.v1.UpdateDisbursementAttributeResponse
-	(*DeleteDisbursementAttributeRequest)(nil),           // 12: domain.payment.v1.DeleteDisbursementAttributeRequest
-	(*DeleteDisbursementAttributeResponse)(nil),          // 13: domain.payment.v1.DeleteDisbursementAttributeResponse
-	(*ListDisbursementAttributesRequest)(nil),            // 14: domain.payment.v1.ListDisbursementAttributesRequest
-	(*ListDisbursementAttributesResponse)(nil),           // 15: domain.payment.v1.ListDisbursementAttributesResponse
-	(*GetDisbursementAttributeListPageDataRequest)(nil),  // 16: domain.payment.v1.GetDisbursementAttributeListPageDataRequest
-	(*GetDisbursementAttributeListPageDataResponse)(nil), // 17: domain.payment.v1.GetDisbursementAttributeListPageDataResponse
-	(*GetDisbursementAttributeItemPageDataRequest)(nil),  // 18: domain.payment.v1.GetDisbursementAttributeItemPageDataRequest
-	(*GetDisbursementAttributeItemPageDataResponse)(nil), // 19: domain.payment.v1.GetDisbursementAttributeItemPageDataResponse
-	nil,                               // 20: domain.payment.v1.DisbursementAttributesByCodeData.AttributesMapEntry
-	(*disbursement.Disbursement)(nil), // 21: domain.payment.v1.Disbursement
+	(*DisbursementAttribute)(nil),                        // 0: domain.treasury.v1.DisbursementAttribute
+	(*CreateDisbursementAttributeRequest)(nil),           // 1: domain.treasury.v1.CreateDisbursementAttributeRequest
+	(*CreateDisbursementAttributeResponse)(nil),          // 2: domain.treasury.v1.CreateDisbursementAttributeResponse
+	(*CreateDisbursementAttributeBatchRequest)(nil),      // 3: domain.treasury.v1.CreateDisbursementAttributeBatchRequest
+	(*CreateDisbursementAttributeBatchResponse)(nil),     // 4: domain.treasury.v1.CreateDisbursementAttributeBatchResponse
+	(*DisbursementAttributesByCodeData)(nil),             // 5: domain.treasury.v1.DisbursementAttributesByCodeData
+	(*CreateDisbursementAttributesByCodeRequest)(nil),    // 6: domain.treasury.v1.CreateDisbursementAttributesByCodeRequest
+	(*CreateDisbursementAttributesByCodeResponse)(nil),   // 7: domain.treasury.v1.CreateDisbursementAttributesByCodeResponse
+	(*ReadDisbursementAttributeRequest)(nil),             // 8: domain.treasury.v1.ReadDisbursementAttributeRequest
+	(*ReadDisbursementAttributeResponse)(nil),            // 9: domain.treasury.v1.ReadDisbursementAttributeResponse
+	(*UpdateDisbursementAttributeRequest)(nil),           // 10: domain.treasury.v1.UpdateDisbursementAttributeRequest
+	(*UpdateDisbursementAttributeResponse)(nil),          // 11: domain.treasury.v1.UpdateDisbursementAttributeResponse
+	(*DeleteDisbursementAttributeRequest)(nil),           // 12: domain.treasury.v1.DeleteDisbursementAttributeRequest
+	(*DeleteDisbursementAttributeResponse)(nil),          // 13: domain.treasury.v1.DeleteDisbursementAttributeResponse
+	(*ListDisbursementAttributesRequest)(nil),            // 14: domain.treasury.v1.ListDisbursementAttributesRequest
+	(*ListDisbursementAttributesResponse)(nil),           // 15: domain.treasury.v1.ListDisbursementAttributesResponse
+	(*GetDisbursementAttributeListPageDataRequest)(nil),  // 16: domain.treasury.v1.GetDisbursementAttributeListPageDataRequest
+	(*GetDisbursementAttributeListPageDataResponse)(nil), // 17: domain.treasury.v1.GetDisbursementAttributeListPageDataResponse
+	(*GetDisbursementAttributeItemPageDataRequest)(nil),  // 18: domain.treasury.v1.GetDisbursementAttributeItemPageDataRequest
+	(*GetDisbursementAttributeItemPageDataResponse)(nil), // 19: domain.treasury.v1.GetDisbursementAttributeItemPageDataResponse
+	nil,                               // 20: domain.treasury.v1.DisbursementAttributesByCodeData.AttributesMapEntry
+	(*disbursement.Disbursement)(nil), // 21: domain.treasury.v1.Disbursement
 	(*common.Attribute)(nil),          // 22: domain.common.v1.Attribute
 	(*common.Error)(nil),              // 23: domain.common.v1.Error
 	(*common.SearchRequest)(nil),      // 24: domain.common.v1.SearchRequest
@@ -1358,56 +1358,56 @@ var file_domain_treasury_disbursement_attribute_disbursement_attribute_proto_goT
 	(*common.SearchResult)(nil),       // 29: domain.common.v1.SearchResult
 }
 var file_domain_treasury_disbursement_attribute_disbursement_attribute_proto_depIdxs = []int32{
-	21, // 0: domain.payment.v1.DisbursementAttribute.disbursement:type_name -> domain.payment.v1.Disbursement
-	22, // 1: domain.payment.v1.DisbursementAttribute.attribute:type_name -> domain.common.v1.Attribute
-	0,  // 2: domain.payment.v1.CreateDisbursementAttributeRequest.data:type_name -> domain.payment.v1.DisbursementAttribute
-	0,  // 3: domain.payment.v1.CreateDisbursementAttributeResponse.data:type_name -> domain.payment.v1.DisbursementAttribute
-	23, // 4: domain.payment.v1.CreateDisbursementAttributeResponse.error:type_name -> domain.common.v1.Error
-	0,  // 5: domain.payment.v1.CreateDisbursementAttributeBatchRequest.data:type_name -> domain.payment.v1.DisbursementAttribute
-	0,  // 6: domain.payment.v1.CreateDisbursementAttributeBatchResponse.data:type_name -> domain.payment.v1.DisbursementAttribute
-	23, // 7: domain.payment.v1.CreateDisbursementAttributeBatchResponse.error:type_name -> domain.common.v1.Error
-	20, // 8: domain.payment.v1.DisbursementAttributesByCodeData.attributes_map:type_name -> domain.payment.v1.DisbursementAttributesByCodeData.AttributesMapEntry
-	5,  // 9: domain.payment.v1.CreateDisbursementAttributesByCodeRequest.data:type_name -> domain.payment.v1.DisbursementAttributesByCodeData
-	0,  // 10: domain.payment.v1.CreateDisbursementAttributesByCodeResponse.data:type_name -> domain.payment.v1.DisbursementAttribute
-	23, // 11: domain.payment.v1.CreateDisbursementAttributesByCodeResponse.error:type_name -> domain.common.v1.Error
-	0,  // 12: domain.payment.v1.ReadDisbursementAttributeRequest.data:type_name -> domain.payment.v1.DisbursementAttribute
-	0,  // 13: domain.payment.v1.ReadDisbursementAttributeResponse.data:type_name -> domain.payment.v1.DisbursementAttribute
-	23, // 14: domain.payment.v1.ReadDisbursementAttributeResponse.error:type_name -> domain.common.v1.Error
-	0,  // 15: domain.payment.v1.UpdateDisbursementAttributeRequest.data:type_name -> domain.payment.v1.DisbursementAttribute
-	0,  // 16: domain.payment.v1.UpdateDisbursementAttributeResponse.data:type_name -> domain.payment.v1.DisbursementAttribute
-	23, // 17: domain.payment.v1.UpdateDisbursementAttributeResponse.error:type_name -> domain.common.v1.Error
-	0,  // 18: domain.payment.v1.DeleteDisbursementAttributeRequest.data:type_name -> domain.payment.v1.DisbursementAttribute
-	23, // 19: domain.payment.v1.DeleteDisbursementAttributeResponse.error:type_name -> domain.common.v1.Error
-	24, // 20: domain.payment.v1.ListDisbursementAttributesRequest.search:type_name -> domain.common.v1.SearchRequest
-	25, // 21: domain.payment.v1.ListDisbursementAttributesRequest.filters:type_name -> domain.common.v1.FilterRequest
-	26, // 22: domain.payment.v1.ListDisbursementAttributesRequest.sort:type_name -> domain.common.v1.SortRequest
-	27, // 23: domain.payment.v1.ListDisbursementAttributesRequest.pagination:type_name -> domain.common.v1.PaginationRequest
-	0,  // 24: domain.payment.v1.ListDisbursementAttributesResponse.data:type_name -> domain.payment.v1.DisbursementAttribute
-	23, // 25: domain.payment.v1.ListDisbursementAttributesResponse.error:type_name -> domain.common.v1.Error
-	27, // 26: domain.payment.v1.GetDisbursementAttributeListPageDataRequest.pagination:type_name -> domain.common.v1.PaginationRequest
-	25, // 27: domain.payment.v1.GetDisbursementAttributeListPageDataRequest.filters:type_name -> domain.common.v1.FilterRequest
-	26, // 28: domain.payment.v1.GetDisbursementAttributeListPageDataRequest.sort:type_name -> domain.common.v1.SortRequest
-	24, // 29: domain.payment.v1.GetDisbursementAttributeListPageDataRequest.search:type_name -> domain.common.v1.SearchRequest
-	0,  // 30: domain.payment.v1.GetDisbursementAttributeListPageDataResponse.disbursement_attribute_list:type_name -> domain.payment.v1.DisbursementAttribute
-	28, // 31: domain.payment.v1.GetDisbursementAttributeListPageDataResponse.pagination:type_name -> domain.common.v1.PaginationResponse
-	29, // 32: domain.payment.v1.GetDisbursementAttributeListPageDataResponse.search_results:type_name -> domain.common.v1.SearchResult
-	23, // 33: domain.payment.v1.GetDisbursementAttributeListPageDataResponse.error:type_name -> domain.common.v1.Error
-	0,  // 34: domain.payment.v1.GetDisbursementAttributeItemPageDataResponse.disbursement_attribute:type_name -> domain.payment.v1.DisbursementAttribute
-	23, // 35: domain.payment.v1.GetDisbursementAttributeItemPageDataResponse.error:type_name -> domain.common.v1.Error
-	1,  // 36: domain.payment.v1.DisbursementAttributeDomainService.CreateDisbursementAttribute:input_type -> domain.payment.v1.CreateDisbursementAttributeRequest
-	8,  // 37: domain.payment.v1.DisbursementAttributeDomainService.ReadDisbursementAttribute:input_type -> domain.payment.v1.ReadDisbursementAttributeRequest
-	10, // 38: domain.payment.v1.DisbursementAttributeDomainService.UpdateDisbursementAttribute:input_type -> domain.payment.v1.UpdateDisbursementAttributeRequest
-	12, // 39: domain.payment.v1.DisbursementAttributeDomainService.DeleteDisbursementAttribute:input_type -> domain.payment.v1.DeleteDisbursementAttributeRequest
-	14, // 40: domain.payment.v1.DisbursementAttributeDomainService.ListDisbursementAttributes:input_type -> domain.payment.v1.ListDisbursementAttributesRequest
-	16, // 41: domain.payment.v1.DisbursementAttributeDomainService.GetDisbursementAttributeListPageData:input_type -> domain.payment.v1.GetDisbursementAttributeListPageDataRequest
-	18, // 42: domain.payment.v1.DisbursementAttributeDomainService.GetDisbursementAttributeItemPageData:input_type -> domain.payment.v1.GetDisbursementAttributeItemPageDataRequest
-	2,  // 43: domain.payment.v1.DisbursementAttributeDomainService.CreateDisbursementAttribute:output_type -> domain.payment.v1.CreateDisbursementAttributeResponse
-	9,  // 44: domain.payment.v1.DisbursementAttributeDomainService.ReadDisbursementAttribute:output_type -> domain.payment.v1.ReadDisbursementAttributeResponse
-	11, // 45: domain.payment.v1.DisbursementAttributeDomainService.UpdateDisbursementAttribute:output_type -> domain.payment.v1.UpdateDisbursementAttributeResponse
-	13, // 46: domain.payment.v1.DisbursementAttributeDomainService.DeleteDisbursementAttribute:output_type -> domain.payment.v1.DeleteDisbursementAttributeResponse
-	15, // 47: domain.payment.v1.DisbursementAttributeDomainService.ListDisbursementAttributes:output_type -> domain.payment.v1.ListDisbursementAttributesResponse
-	17, // 48: domain.payment.v1.DisbursementAttributeDomainService.GetDisbursementAttributeListPageData:output_type -> domain.payment.v1.GetDisbursementAttributeListPageDataResponse
-	19, // 49: domain.payment.v1.DisbursementAttributeDomainService.GetDisbursementAttributeItemPageData:output_type -> domain.payment.v1.GetDisbursementAttributeItemPageDataResponse
+	21, // 0: domain.treasury.v1.DisbursementAttribute.disbursement:type_name -> domain.treasury.v1.Disbursement
+	22, // 1: domain.treasury.v1.DisbursementAttribute.attribute:type_name -> domain.common.v1.Attribute
+	0,  // 2: domain.treasury.v1.CreateDisbursementAttributeRequest.data:type_name -> domain.treasury.v1.DisbursementAttribute
+	0,  // 3: domain.treasury.v1.CreateDisbursementAttributeResponse.data:type_name -> domain.treasury.v1.DisbursementAttribute
+	23, // 4: domain.treasury.v1.CreateDisbursementAttributeResponse.error:type_name -> domain.common.v1.Error
+	0,  // 5: domain.treasury.v1.CreateDisbursementAttributeBatchRequest.data:type_name -> domain.treasury.v1.DisbursementAttribute
+	0,  // 6: domain.treasury.v1.CreateDisbursementAttributeBatchResponse.data:type_name -> domain.treasury.v1.DisbursementAttribute
+	23, // 7: domain.treasury.v1.CreateDisbursementAttributeBatchResponse.error:type_name -> domain.common.v1.Error
+	20, // 8: domain.treasury.v1.DisbursementAttributesByCodeData.attributes_map:type_name -> domain.treasury.v1.DisbursementAttributesByCodeData.AttributesMapEntry
+	5,  // 9: domain.treasury.v1.CreateDisbursementAttributesByCodeRequest.data:type_name -> domain.treasury.v1.DisbursementAttributesByCodeData
+	0,  // 10: domain.treasury.v1.CreateDisbursementAttributesByCodeResponse.data:type_name -> domain.treasury.v1.DisbursementAttribute
+	23, // 11: domain.treasury.v1.CreateDisbursementAttributesByCodeResponse.error:type_name -> domain.common.v1.Error
+	0,  // 12: domain.treasury.v1.ReadDisbursementAttributeRequest.data:type_name -> domain.treasury.v1.DisbursementAttribute
+	0,  // 13: domain.treasury.v1.ReadDisbursementAttributeResponse.data:type_name -> domain.treasury.v1.DisbursementAttribute
+	23, // 14: domain.treasury.v1.ReadDisbursementAttributeResponse.error:type_name -> domain.common.v1.Error
+	0,  // 15: domain.treasury.v1.UpdateDisbursementAttributeRequest.data:type_name -> domain.treasury.v1.DisbursementAttribute
+	0,  // 16: domain.treasury.v1.UpdateDisbursementAttributeResponse.data:type_name -> domain.treasury.v1.DisbursementAttribute
+	23, // 17: domain.treasury.v1.UpdateDisbursementAttributeResponse.error:type_name -> domain.common.v1.Error
+	0,  // 18: domain.treasury.v1.DeleteDisbursementAttributeRequest.data:type_name -> domain.treasury.v1.DisbursementAttribute
+	23, // 19: domain.treasury.v1.DeleteDisbursementAttributeResponse.error:type_name -> domain.common.v1.Error
+	24, // 20: domain.treasury.v1.ListDisbursementAttributesRequest.search:type_name -> domain.common.v1.SearchRequest
+	25, // 21: domain.treasury.v1.ListDisbursementAttributesRequest.filters:type_name -> domain.common.v1.FilterRequest
+	26, // 22: domain.treasury.v1.ListDisbursementAttributesRequest.sort:type_name -> domain.common.v1.SortRequest
+	27, // 23: domain.treasury.v1.ListDisbursementAttributesRequest.pagination:type_name -> domain.common.v1.PaginationRequest
+	0,  // 24: domain.treasury.v1.ListDisbursementAttributesResponse.data:type_name -> domain.treasury.v1.DisbursementAttribute
+	23, // 25: domain.treasury.v1.ListDisbursementAttributesResponse.error:type_name -> domain.common.v1.Error
+	27, // 26: domain.treasury.v1.GetDisbursementAttributeListPageDataRequest.pagination:type_name -> domain.common.v1.PaginationRequest
+	25, // 27: domain.treasury.v1.GetDisbursementAttributeListPageDataRequest.filters:type_name -> domain.common.v1.FilterRequest
+	26, // 28: domain.treasury.v1.GetDisbursementAttributeListPageDataRequest.sort:type_name -> domain.common.v1.SortRequest
+	24, // 29: domain.treasury.v1.GetDisbursementAttributeListPageDataRequest.search:type_name -> domain.common.v1.SearchRequest
+	0,  // 30: domain.treasury.v1.GetDisbursementAttributeListPageDataResponse.disbursement_attribute_list:type_name -> domain.treasury.v1.DisbursementAttribute
+	28, // 31: domain.treasury.v1.GetDisbursementAttributeListPageDataResponse.pagination:type_name -> domain.common.v1.PaginationResponse
+	29, // 32: domain.treasury.v1.GetDisbursementAttributeListPageDataResponse.search_results:type_name -> domain.common.v1.SearchResult
+	23, // 33: domain.treasury.v1.GetDisbursementAttributeListPageDataResponse.error:type_name -> domain.common.v1.Error
+	0,  // 34: domain.treasury.v1.GetDisbursementAttributeItemPageDataResponse.disbursement_attribute:type_name -> domain.treasury.v1.DisbursementAttribute
+	23, // 35: domain.treasury.v1.GetDisbursementAttributeItemPageDataResponse.error:type_name -> domain.common.v1.Error
+	1,  // 36: domain.treasury.v1.DisbursementAttributeDomainService.CreateDisbursementAttribute:input_type -> domain.treasury.v1.CreateDisbursementAttributeRequest
+	8,  // 37: domain.treasury.v1.DisbursementAttributeDomainService.ReadDisbursementAttribute:input_type -> domain.treasury.v1.ReadDisbursementAttributeRequest
+	10, // 38: domain.treasury.v1.DisbursementAttributeDomainService.UpdateDisbursementAttribute:input_type -> domain.treasury.v1.UpdateDisbursementAttributeRequest
+	12, // 39: domain.treasury.v1.DisbursementAttributeDomainService.DeleteDisbursementAttribute:input_type -> domain.treasury.v1.DeleteDisbursementAttributeRequest
+	14, // 40: domain.treasury.v1.DisbursementAttributeDomainService.ListDisbursementAttributes:input_type -> domain.treasury.v1.ListDisbursementAttributesRequest
+	16, // 41: domain.treasury.v1.DisbursementAttributeDomainService.GetDisbursementAttributeListPageData:input_type -> domain.treasury.v1.GetDisbursementAttributeListPageDataRequest
+	18, // 42: domain.treasury.v1.DisbursementAttributeDomainService.GetDisbursementAttributeItemPageData:input_type -> domain.treasury.v1.GetDisbursementAttributeItemPageDataRequest
+	2,  // 43: domain.treasury.v1.DisbursementAttributeDomainService.CreateDisbursementAttribute:output_type -> domain.treasury.v1.CreateDisbursementAttributeResponse
+	9,  // 44: domain.treasury.v1.DisbursementAttributeDomainService.ReadDisbursementAttribute:output_type -> domain.treasury.v1.ReadDisbursementAttributeResponse
+	11, // 45: domain.treasury.v1.DisbursementAttributeDomainService.UpdateDisbursementAttribute:output_type -> domain.treasury.v1.UpdateDisbursementAttributeResponse
+	13, // 46: domain.treasury.v1.DisbursementAttributeDomainService.DeleteDisbursementAttribute:output_type -> domain.treasury.v1.DeleteDisbursementAttributeResponse
+	15, // 47: domain.treasury.v1.DisbursementAttributeDomainService.ListDisbursementAttributes:output_type -> domain.treasury.v1.ListDisbursementAttributesResponse
+	17, // 48: domain.treasury.v1.DisbursementAttributeDomainService.GetDisbursementAttributeListPageData:output_type -> domain.treasury.v1.GetDisbursementAttributeListPageDataResponse
+	19, // 49: domain.treasury.v1.DisbursementAttributeDomainService.GetDisbursementAttributeItemPageData:output_type -> domain.treasury.v1.GetDisbursementAttributeItemPageDataResponse
 	43, // [43:50] is the sub-list for method output_type
 	36, // [36:43] is the sub-list for method input_type
 	36, // [36:36] is the sub-list for extension type_name

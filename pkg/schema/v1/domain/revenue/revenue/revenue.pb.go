@@ -50,8 +50,11 @@ type Revenue struct {
 	PaymentProvider   *string            `protobuf:"bytes,22,opt,name=payment_provider,json=paymentProvider,proto3,oneof" json:"payment_provider,omitempty"`         // "maya", "cash", etc.
 	FulfillmentType   *string            `protobuf:"bytes,23,opt,name=fulfillment_type,json=fulfillmentType,proto3,oneof" json:"fulfillment_type,omitempty"`         // "store_pickup" or "home_delivery"
 	DeliveryAddress   *string            `protobuf:"bytes,24,opt,name=delivery_address,json=deliveryAddress,proto3,oneof" json:"delivery_address,omitempty"`         // JSON or flat address string
-	unknownFields     protoimpl.UnknownFields
-	sizeCache         protoimpl.SizeCache
+	// GL integration
+	RevenueAccountId *string `protobuf:"bytes,25,opt,name=revenue_account_id,json=revenueAccountId,proto3,oneof" json:"revenue_account_id,omitempty"` // Target GL revenue account for this transaction
+	JournalEntryId   *string `protobuf:"bytes,26,opt,name=journal_entry_id,json=journalEntryId,proto3,oneof" json:"journal_entry_id,omitempty"`       // FK to journal_entry — set when ledger entry is posted
+	unknownFields    protoimpl.UnknownFields
+	sizeCache        protoimpl.SizeCache
 }
 
 func (x *Revenue) Reset() {
@@ -241,6 +244,20 @@ func (x *Revenue) GetFulfillmentType() string {
 func (x *Revenue) GetDeliveryAddress() string {
 	if x != nil && x.DeliveryAddress != nil {
 		return *x.DeliveryAddress
+	}
+	return ""
+}
+
+func (x *Revenue) GetRevenueAccountId() string {
+	if x != nil && x.RevenueAccountId != nil {
+		return *x.RevenueAccountId
+	}
+	return ""
+}
+
+func (x *Revenue) GetJournalEntryId() string {
+	if x != nil && x.JournalEntryId != nil {
+		return *x.JournalEntryId
 	}
 	return ""
 }
@@ -1033,7 +1050,8 @@ var File_domain_revenue_revenue_revenue_proto protoreflect.FileDescriptor
 
 const file_domain_revenue_revenue_revenue_proto_rawDesc = "" +
 	"\n" +
-	"$domain/revenue/revenue/revenue.proto\x12\x11domain.revenue.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/search.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a!domain/entity/client/client.proto\x1a%domain/entity/location/location.proto\"\xd1\t\n" +
+	"$domain/revenue/revenue/revenue.proto\x12\x11domain.revenue.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/search.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a!domain/entity/client/client.proto\x1a%domain/entity/location/location.proto\"\xdf\n" +
+	"\n" +
 	"\aRevenue\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12&\n" +
 	"\fdate_created\x18\x02 \x01(\x03H\x00R\vdateCreated\x88\x01\x01\x123\n" +
@@ -1060,7 +1078,9 @@ const file_domain_revenue_revenue_revenue_proto_rawDesc = "" +
 	"\x13checkout_session_id\x18\x15 \x01(\tH\vR\x11checkoutSessionId\x88\x01\x01\x12.\n" +
 	"\x10payment_provider\x18\x16 \x01(\tH\fR\x0fpaymentProvider\x88\x01\x01\x12.\n" +
 	"\x10fulfillment_type\x18\x17 \x01(\tH\rR\x0ffulfillmentType\x88\x01\x01\x12.\n" +
-	"\x10delivery_address\x18\x18 \x01(\tH\x0eR\x0fdeliveryAddress\x88\x01\x01B\x0f\n" +
+	"\x10delivery_address\x18\x18 \x01(\tH\x0eR\x0fdeliveryAddress\x88\x01\x01\x121\n" +
+	"\x12revenue_account_id\x18\x19 \x01(\tH\x0fR\x10revenueAccountId\x88\x01\x01\x12-\n" +
+	"\x10journal_entry_id\x18\x1a \x01(\tH\x10R\x0ejournalEntryId\x88\x01\x01B\x0f\n" +
 	"\r_date_createdB\x16\n" +
 	"\x14_date_created_stringB\x10\n" +
 	"\x0e_date_modifiedB\x17\n" +
@@ -1075,7 +1095,9 @@ const file_domain_revenue_revenue_revenue_proto_rawDesc = "" +
 	"\x14_checkout_session_idB\x13\n" +
 	"\x11_payment_providerB\x13\n" +
 	"\x11_fulfillment_typeB\x13\n" +
-	"\x11_delivery_address\"F\n" +
+	"\x11_delivery_addressB\x15\n" +
+	"\x13_revenue_account_idB\x13\n" +
+	"\x11_journal_entry_id\"F\n" +
 	"\x14CreateRevenueRequest\x12.\n" +
 	"\x04data\x18\x01 \x01(\v2\x1a.domain.revenue.v1.RevenueR\x04data\"\x9f\x01\n" +
 	"\x15CreateRevenueResponse\x12.\n" +

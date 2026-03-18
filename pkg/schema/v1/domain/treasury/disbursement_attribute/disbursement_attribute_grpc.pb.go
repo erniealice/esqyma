@@ -4,7 +4,7 @@
 // - protoc             (unknown)
 // source: domain/treasury/disbursement_attribute/disbursement_attribute.proto
 
-package paymentv1
+package treasuryv1
 
 import (
 	context "context"
@@ -19,13 +19,13 @@ import (
 const _ = grpc.SupportPackageIsVersion9
 
 const (
-	DisbursementAttributeDomainService_CreateDisbursementAttribute_FullMethodName          = "/domain.payment.v1.DisbursementAttributeDomainService/CreateDisbursementAttribute"
-	DisbursementAttributeDomainService_ReadDisbursementAttribute_FullMethodName            = "/domain.payment.v1.DisbursementAttributeDomainService/ReadDisbursementAttribute"
-	DisbursementAttributeDomainService_UpdateDisbursementAttribute_FullMethodName          = "/domain.payment.v1.DisbursementAttributeDomainService/UpdateDisbursementAttribute"
-	DisbursementAttributeDomainService_DeleteDisbursementAttribute_FullMethodName          = "/domain.payment.v1.DisbursementAttributeDomainService/DeleteDisbursementAttribute"
-	DisbursementAttributeDomainService_ListDisbursementAttributes_FullMethodName           = "/domain.payment.v1.DisbursementAttributeDomainService/ListDisbursementAttributes"
-	DisbursementAttributeDomainService_GetDisbursementAttributeListPageData_FullMethodName = "/domain.payment.v1.DisbursementAttributeDomainService/GetDisbursementAttributeListPageData"
-	DisbursementAttributeDomainService_GetDisbursementAttributeItemPageData_FullMethodName = "/domain.payment.v1.DisbursementAttributeDomainService/GetDisbursementAttributeItemPageData"
+	DisbursementAttributeDomainService_CreateDisbursementAttribute_FullMethodName          = "/domain.treasury.v1.DisbursementAttributeDomainService/CreateDisbursementAttribute"
+	DisbursementAttributeDomainService_ReadDisbursementAttribute_FullMethodName            = "/domain.treasury.v1.DisbursementAttributeDomainService/ReadDisbursementAttribute"
+	DisbursementAttributeDomainService_UpdateDisbursementAttribute_FullMethodName          = "/domain.treasury.v1.DisbursementAttributeDomainService/UpdateDisbursementAttribute"
+	DisbursementAttributeDomainService_DeleteDisbursementAttribute_FullMethodName          = "/domain.treasury.v1.DisbursementAttributeDomainService/DeleteDisbursementAttribute"
+	DisbursementAttributeDomainService_ListDisbursementAttributes_FullMethodName           = "/domain.treasury.v1.DisbursementAttributeDomainService/ListDisbursementAttributes"
+	DisbursementAttributeDomainService_GetDisbursementAttributeListPageData_FullMethodName = "/domain.treasury.v1.DisbursementAttributeDomainService/GetDisbursementAttributeListPageData"
+	DisbursementAttributeDomainService_GetDisbursementAttributeItemPageData_FullMethodName = "/domain.treasury.v1.DisbursementAttributeDomainService/GetDisbursementAttributeItemPageData"
 )
 
 // DisbursementAttributeDomainServiceClient is the client API for DisbursementAttributeDomainService service.
@@ -313,7 +313,7 @@ func _DisbursementAttributeDomainService_GetDisbursementAttributeItemPageData_Ha
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
 var DisbursementAttributeDomainService_ServiceDesc = grpc.ServiceDesc{
-	ServiceName: "domain.payment.v1.DisbursementAttributeDomainService",
+	ServiceName: "domain.treasury.v1.DisbursementAttributeDomainService",
 	HandlerType: (*DisbursementAttributeDomainServiceServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{

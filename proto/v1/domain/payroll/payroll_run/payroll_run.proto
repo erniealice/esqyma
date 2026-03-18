@@ -1,0 +1,147 @@
+syntax = "proto3";
+
+package domain.payroll.v1;
+
+option go_package = "github.com/erniealice/esqyma/golang/v1/domain/payroll/payroll_run";
+
+import "domain/common/error.proto";
+import "domain/common/pagination.proto";
+import "domain/common/filter.proto";
+import "domain/common/sort.proto";
+import "domain/common/search.proto";
+
+import "options/db.proto";
+
+// PayrollRunStatus tracks the lifecycle of a payroll processing batch.
+enum PayrollRunStatus {
+  PAYROLL_RUN_STATUS_UNSPECIFIED = 0;
+  PAYROLL_RUN_STATUS_DRAFT = 1;        // In preparation — payslips not yet finalized
+  PAYROLL_RUN_STATUS_CALCULATED = 2;  // Amounts locked — pending approval
+  PAYROLL_RUN_STATUS_APPROVED = 3;    // Approved by CFO/Owner — ready for disbursement
+  PAYROLL_RUN_STATUS_POSTED = 4;      // JournalEntry created; disbursement completed
+}
+
+// PayrollRun is the header record for a payroll processing batch.
+// A single run covers one pay period for all employees.
+// Posting creates a PAYROLL JournalEntry that records gross pay, deductions, and net pay.
+message PayrollRun {
+  option (options.v1.table).table = true;
+
+  string id = 1;
+  string run_number = 2 [(options.v1.db).unique = true, (options.v1.db).index = true];
+
+  // Pay period
+  int64 pay_period_start = 3;
+  optional string pay_period_start_string = 4;
+  int64 pay_period_end = 5;
+  optional string pay_period_end_string = 6;
+
+  // Aggregated totals across all employee lines
+  double total_gross = 7 [(options.v1.db).default = "0"];
+  double total_deductions = 8 [(options.v1.db).default = "0"];
+  double total_net = 9 [(options.v1.db).default = "0"];
+  int32 employee_count = 10 [(options.v1.db).default = "0"];
+
+  PayrollRunStatus status = 11;
+
+  // Approval and posting audit
+  optional string approved_by = 12;  // FK to entity.User
+  optional int64 posted_at = 13;
+  optional string posted_at_string = 14;
+
+  // Audit fields
+  optional int64 date_created = 15;
+  optional string date_created_string = 16;
+  optional int64 date_modified = 17;
+  optional string date_modified_string = 18;
+}
+
+service PayrollRunDomainService {
+  // Standard CRUD
+  rpc CreatePayrollRun(CreatePayrollRunRequest) returns (CreatePayrollRunResponse);
+  rpc ReadPayrollRun(ReadPayrollRunRequest) returns (ReadPayrollRunResponse);
+  rpc UpdatePayrollRun(UpdatePayrollRunRequest) returns (UpdatePayrollRunResponse);
+  rpc DeletePayrollRun(DeletePayrollRunRequest) returns (DeletePayrollRunResponse);
+  rpc ListPayrollRuns(ListPayrollRunsRequest) returns (ListPayrollRunsResponse);
+
+  // Enhanced page data (for UI views)
+  rpc GetPayrollRunListPageData(GetPayrollRunListPageDataRequest) returns (GetPayrollRunListPageDataResponse);
+  rpc GetPayrollRunItemPageData(GetPayrollRunItemPageDataRequest) returns (GetPayrollRunItemPageDataResponse);
+}
+
+message CreatePayrollRunRequest {
+  PayrollRun data = 1;
+}
+
+message CreatePayrollRunResponse {
+  repeated PayrollRun data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message ReadPayrollRunRequest {
+  PayrollRun data = 1;
+}
+
+message ReadPayrollRunResponse {
+  repeated PayrollRun data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message UpdatePayrollRunRequest {
+  PayrollRun data = 1;
+}
+
+message UpdatePayrollRunResponse {
+  repeated PayrollRun data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message DeletePayrollRunRequest {
+  PayrollRun data = 1;
+}
+
+message DeletePayrollRunResponse {
+  bool success = 1;
+  optional domain.common.v1.Error error = 2;
+}
+
+message ListPayrollRunsRequest {
+  optional domain.common.v1.SearchRequest search = 1;
+  optional domain.common.v1.FilterRequest filters = 2;
+  optional domain.common.v1.SortRequest sort = 3;
+  optional domain.common.v1.PaginationRequest pagination = 4;
+}
+
+message ListPayrollRunsResponse {
+  repeated PayrollRun data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message GetPayrollRunListPageDataRequest {
+  optional domain.common.v1.PaginationRequest pagination = 1;
+  optional domain.common.v1.FilterRequest filters = 2;
+  optional domain.common.v1.SortRequest sort = 3;
+  optional domain.common.v1.SearchRequest search = 4;
+}
+
+message GetPayrollRunListPageDataResponse {
+  repeated PayrollRun payroll_run_list = 1;
+  optional domain.common.v1.PaginationResponse pagination = 2;
+  repeated domain.common.v1.SearchResult search_results = 3;
+  bool success = 4;
+  optional domain.common.v1.Error error = 5;
+}
+
+message GetPayrollRunItemPageDataRequest {
+  string payroll_run_id = 1;
+}
+
+message GetPayrollRunItemPageDataResponse {
+  optional PayrollRun payroll_run = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}

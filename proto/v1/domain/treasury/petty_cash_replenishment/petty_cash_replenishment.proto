@@ -1,0 +1,130 @@
+syntax = "proto3";
+
+package domain.treasury.v1;
+
+option go_package = "github.com/erniealice/esqyma/golang/v1/domain/treasury/petty_cash_replenishment";
+
+import "domain/common/error.proto";
+import "domain/common/pagination.proto";
+import "domain/common/filter.proto";
+import "domain/common/sort.proto";
+import "domain/common/search.proto";
+
+import "options/db.proto";
+
+// PettyCashReplenishment records a fund replenishment event that covers one or more vouchers.
+// Posting this event creates a JournalEntry (source type: PETTY_CASH_REPLENISHMENT).
+message PettyCashReplenishment {
+  option (options.v1.table).table = true;
+
+  string id = 1;
+
+  // Parent fund
+  string fund_id = 2 [(options.v1.db).references = "petty_cash_fund", (options.v1.db).index = true];
+
+  string replenishment_number = 3 [(options.v1.db).unique = true, (options.v1.db).index = true];
+  double amount = 4;                         // Total cash returned to fund (sum of vouchers)
+
+  int64 replenishment_date = 5;
+  optional string replenishment_date_string = 6;
+
+  // Vouchers covered by this replenishment
+  repeated string voucher_ids = 7;           // FK to petty_cash_voucher (repeated)
+
+  optional string posted_by = 8;             // FK to entity.User
+  optional string notes = 9;
+
+  // Audit fields
+  optional int64 date_created = 10;
+  optional string date_created_string = 11;
+}
+
+service PettyCashReplenishmentDomainService {
+  // Standard CRUD
+  rpc CreatePettyCashReplenishment(CreatePettyCashReplenishmentRequest) returns (CreatePettyCashReplenishmentResponse);
+  rpc ReadPettyCashReplenishment(ReadPettyCashReplenishmentRequest) returns (ReadPettyCashReplenishmentResponse);
+  rpc UpdatePettyCashReplenishment(UpdatePettyCashReplenishmentRequest) returns (UpdatePettyCashReplenishmentResponse);
+  rpc DeletePettyCashReplenishment(DeletePettyCashReplenishmentRequest) returns (DeletePettyCashReplenishmentResponse);
+  rpc ListPettyCashReplenishments(ListPettyCashReplenishmentsRequest) returns (ListPettyCashReplenishmentsResponse);
+
+  // Enhanced page data (for UI views)
+  rpc GetPettyCashReplenishmentListPageData(GetPettyCashReplenishmentListPageDataRequest) returns (GetPettyCashReplenishmentListPageDataResponse);
+  rpc GetPettyCashReplenishmentItemPageData(GetPettyCashReplenishmentItemPageDataRequest) returns (GetPettyCashReplenishmentItemPageDataResponse);
+}
+
+message CreatePettyCashReplenishmentRequest {
+  PettyCashReplenishment data = 1;
+}
+
+message CreatePettyCashReplenishmentResponse {
+  repeated PettyCashReplenishment data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message ReadPettyCashReplenishmentRequest {
+  PettyCashReplenishment data = 1;
+}
+
+message ReadPettyCashReplenishmentResponse {
+  repeated PettyCashReplenishment data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message UpdatePettyCashReplenishmentRequest {
+  PettyCashReplenishment data = 1;
+}
+
+message UpdatePettyCashReplenishmentResponse {
+  repeated PettyCashReplenishment data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message DeletePettyCashReplenishmentRequest {
+  PettyCashReplenishment data = 1;
+}
+
+message DeletePettyCashReplenishmentResponse {
+  bool success = 1;
+  optional domain.common.v1.Error error = 2;
+}
+
+message ListPettyCashReplenishmentsRequest {
+  optional domain.common.v1.SearchRequest search = 1;
+  optional domain.common.v1.FilterRequest filters = 2;
+  optional domain.common.v1.SortRequest sort = 3;
+  optional domain.common.v1.PaginationRequest pagination = 4;
+}
+
+message ListPettyCashReplenishmentsResponse {
+  repeated PettyCashReplenishment data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message GetPettyCashReplenishmentListPageDataRequest {
+  optional domain.common.v1.PaginationRequest pagination = 1;
+  optional domain.common.v1.FilterRequest filters = 2;
+  optional domain.common.v1.SortRequest sort = 3;
+  optional domain.common.v1.SearchRequest search = 4;
+}
+
+message GetPettyCashReplenishmentListPageDataResponse {
+  repeated PettyCashReplenishment petty_cash_replenishment_list = 1;
+  optional domain.common.v1.PaginationResponse pagination = 2;
+  repeated domain.common.v1.SearchResult search_results = 3;
+  bool success = 4;
+  optional domain.common.v1.Error error = 5;
+}
+
+message GetPettyCashReplenishmentItemPageDataRequest {
+  string petty_cash_replenishment_id = 1;
+}
+
+message GetPettyCashReplenishmentItemPageDataResponse {
+  optional PettyCashReplenishment petty_cash_replenishment = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}

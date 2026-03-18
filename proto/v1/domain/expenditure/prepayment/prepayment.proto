@@ -1,0 +1,146 @@
+syntax = "proto3";
+
+package domain.expenditure.v1;
+
+option go_package = "github.com/erniealice/esqyma/golang/v1/domain/expenditure/prepayment";
+
+import "domain/common/error.proto";
+import "domain/common/pagination.proto";
+import "domain/common/filter.proto";
+import "domain/common/sort.proto";
+import "domain/common/search.proto";
+
+import "options/db.proto";
+
+// PrepaymentStatus tracks the amortization lifecycle of a prepaid expense.
+enum PrepaymentStatus {
+  PREPAYMENT_STATUS_UNSPECIFIED = 0;
+  PREPAYMENT_STATUS_ACTIVE = 1;           // Amortization in progress
+  PREPAYMENT_STATUS_FULLY_AMORTIZED = 2;  // Remaining amount is zero
+  PREPAYMENT_STATUS_CANCELLED = 3;        // Cancelled before full amortization
+}
+
+// Prepayment records a prepaid expense (asset) that is amortized over time.
+// Examples: prepaid rent, prepaid insurance, advance staff training fees.
+// Each period generates a PREPAYMENT_AMORTIZATION JournalEntry via the amortization schedule.
+message Prepayment {
+  option (options.v1.table).table = true;
+
+  string id = 1;
+  string description = 2;
+  optional string vendor_name = 3;
+
+  // Amounts
+  double total_amount = 4;
+  double remaining_amount = 5;            // Decreases with each amortization entry
+
+  // Amortization schedule
+  int64 start_date = 6;
+  optional string start_date_string = 7;
+  int64 end_date = 8;
+  optional string end_date_string = 9;
+  int32 amortization_months = 10;         // Derived from start/end, stored for convenience
+
+  PrepaymentStatus status = 11;
+
+  // GL integration
+  optional string account_id = 12 [(options.v1.db).references = "account", (options.v1.db).index = true];         // Prepaid expense asset account
+  optional string expense_account_id = 13 [(options.v1.db).references = "account", (options.v1.db).index = true]; // Target expense account for amortization
+
+  // Audit fields
+  bool active = 14 [(options.v1.db).default = "true"];
+  optional int64 date_created = 15;
+  optional string date_created_string = 16;
+  optional int64 date_modified = 17;
+  optional string date_modified_string = 18;
+}
+
+service PrepaymentDomainService {
+  // Standard CRUD
+  rpc CreatePrepayment(CreatePrepaymentRequest) returns (CreatePrepaymentResponse);
+  rpc ReadPrepayment(ReadPrepaymentRequest) returns (ReadPrepaymentResponse);
+  rpc UpdatePrepayment(UpdatePrepaymentRequest) returns (UpdatePrepaymentResponse);
+  rpc DeletePrepayment(DeletePrepaymentRequest) returns (DeletePrepaymentResponse);
+  rpc ListPrepayments(ListPrepaymentsRequest) returns (ListPrepaymentsResponse);
+
+  // Enhanced page data (for UI views)
+  rpc GetPrepaymentListPageData(GetPrepaymentListPageDataRequest) returns (GetPrepaymentListPageDataResponse);
+  rpc GetPrepaymentItemPageData(GetPrepaymentItemPageDataRequest) returns (GetPrepaymentItemPageDataResponse);
+}
+
+message CreatePrepaymentRequest {
+  Prepayment data = 1;
+}
+
+message CreatePrepaymentResponse {
+  repeated Prepayment data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message ReadPrepaymentRequest {
+  Prepayment data = 1;
+}
+
+message ReadPrepaymentResponse {
+  repeated Prepayment data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message UpdatePrepaymentRequest {
+  Prepayment data = 1;
+}
+
+message UpdatePrepaymentResponse {
+  repeated Prepayment data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message DeletePrepaymentRequest {
+  Prepayment data = 1;
+}
+
+message DeletePrepaymentResponse {
+  bool success = 1;
+  optional domain.common.v1.Error error = 2;
+}
+
+message ListPrepaymentsRequest {
+  optional domain.common.v1.SearchRequest search = 1;
+  optional domain.common.v1.FilterRequest filters = 2;
+  optional domain.common.v1.SortRequest sort = 3;
+  optional domain.common.v1.PaginationRequest pagination = 4;
+}
+
+message ListPrepaymentsResponse {
+  repeated Prepayment data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message GetPrepaymentListPageDataRequest {
+  optional domain.common.v1.PaginationRequest pagination = 1;
+  optional domain.common.v1.FilterRequest filters = 2;
+  optional domain.common.v1.SortRequest sort = 3;
+  optional domain.common.v1.SearchRequest search = 4;
+}
+
+message GetPrepaymentListPageDataResponse {
+  repeated Prepayment prepayment_list = 1;
+  optional domain.common.v1.PaginationResponse pagination = 2;
+  repeated domain.common.v1.SearchResult search_results = 3;
+  bool success = 4;
+  optional domain.common.v1.Error error = 5;
+}
+
+message GetPrepaymentItemPageDataRequest {
+  string prepayment_id = 1;
+}
+
+message GetPrepaymentItemPageDataResponse {
+  optional Prepayment prepayment = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}

@@ -1,0 +1,138 @@
+syntax = "proto3";
+
+package domain.ledger.v1;
+
+option go_package = "github.com/erniealice/esqyma/golang/v1/domain/ledger/equity_transaction";
+
+import "domain/common/error.proto";
+import "domain/common/pagination.proto";
+import "domain/common/filter.proto";
+import "domain/common/sort.proto";
+import "domain/common/search.proto";
+
+import "options/db.proto";
+
+// EquityTransactionType classifies the nature of the equity movement.
+enum EquityTransactionType {
+  EQUITY_TRANSACTION_TYPE_UNSPECIFIED = 0;
+  EQUITY_TRANSACTION_TYPE_CONTRIBUTION = 1;  // Owner adds capital (debit Cash, credit Capital)
+  EQUITY_TRANSACTION_TYPE_WITHDRAWAL = 2;    // Owner draws (debit Draw, credit Cash)
+  EQUITY_TRANSACTION_TYPE_DISTRIBUTION = 3;  // Profit distribution (debit Retained Earnings, credit Cash)
+  EQUITY_TRANSACTION_TYPE_TRANSFER = 4;      // Between equity accounts (e.g. close Draw to Capital)
+}
+
+// EquityTransaction records a capital movement against an EquityAccount.
+// Each transaction auto-generates a double-entry JournalEntry via guided form.
+message EquityTransaction {
+  option (options.v1.table).table = true;
+
+  string id = 1;
+
+  // Parent equity account
+  string equity_account_id = 2 [(options.v1.db).references = "equity_account", (options.v1.db).index = true];
+
+  EquityTransactionType transaction_type = 3;
+  double amount = 4;
+  optional string description = 5;
+
+  // Transaction date
+  int64 transaction_date = 6;
+  optional string transaction_date_string = 7;
+
+  // GL traceability — FK to the auto-generated JournalEntry
+  optional string journal_entry_id = 8 [(options.v1.db).references = "journal_entry", (options.v1.db).index = true];
+
+  // Audit fields
+  optional int64 date_created = 9;
+  optional string date_created_string = 10;
+}
+
+service EquityTransactionDomainService {
+  // Standard CRUD
+  rpc CreateEquityTransaction(CreateEquityTransactionRequest) returns (CreateEquityTransactionResponse);
+  rpc ReadEquityTransaction(ReadEquityTransactionRequest) returns (ReadEquityTransactionResponse);
+  rpc UpdateEquityTransaction(UpdateEquityTransactionRequest) returns (UpdateEquityTransactionResponse);
+  rpc DeleteEquityTransaction(DeleteEquityTransactionRequest) returns (DeleteEquityTransactionResponse);
+  rpc ListEquityTransactions(ListEquityTransactionsRequest) returns (ListEquityTransactionsResponse);
+
+  // Enhanced page data (for UI views)
+  rpc GetEquityTransactionListPageData(GetEquityTransactionListPageDataRequest) returns (GetEquityTransactionListPageDataResponse);
+  rpc GetEquityTransactionItemPageData(GetEquityTransactionItemPageDataRequest) returns (GetEquityTransactionItemPageDataResponse);
+}
+
+message CreateEquityTransactionRequest {
+  EquityTransaction data = 1;
+}
+
+message CreateEquityTransactionResponse {
+  repeated EquityTransaction data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message ReadEquityTransactionRequest {
+  EquityTransaction data = 1;
+}
+
+message ReadEquityTransactionResponse {
+  repeated EquityTransaction data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message UpdateEquityTransactionRequest {
+  EquityTransaction data = 1;
+}
+
+message UpdateEquityTransactionResponse {
+  repeated EquityTransaction data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message DeleteEquityTransactionRequest {
+  EquityTransaction data = 1;
+}
+
+message DeleteEquityTransactionResponse {
+  bool success = 1;
+  optional domain.common.v1.Error error = 2;
+}
+
+message ListEquityTransactionsRequest {
+  optional domain.common.v1.SearchRequest search = 1;
+  optional domain.common.v1.FilterRequest filters = 2;
+  optional domain.common.v1.SortRequest sort = 3;
+  optional domain.common.v1.PaginationRequest pagination = 4;
+}
+
+message ListEquityTransactionsResponse {
+  repeated EquityTransaction data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message GetEquityTransactionListPageDataRequest {
+  optional domain.common.v1.PaginationRequest pagination = 1;
+  optional domain.common.v1.FilterRequest filters = 2;
+  optional domain.common.v1.SortRequest sort = 3;
+  optional domain.common.v1.SearchRequest search = 4;
+}
+
+message GetEquityTransactionListPageDataResponse {
+  repeated EquityTransaction equity_transaction_list = 1;
+  optional domain.common.v1.PaginationResponse pagination = 2;
+  repeated domain.common.v1.SearchResult search_results = 3;
+  bool success = 4;
+  optional domain.common.v1.Error error = 5;
+}
+
+message GetEquityTransactionItemPageDataRequest {
+  string equity_transaction_id = 1;
+}
+
+message GetEquityTransactionItemPageDataResponse {
+  optional EquityTransaction equity_transaction = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}

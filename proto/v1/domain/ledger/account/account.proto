@@ -1,0 +1,214 @@
+syntax = "proto3";
+
+package domain.ledger.v1;
+
+option go_package = "github.com/erniealice/esqyma/golang/v1/domain/ledger/account";
+
+import "domain/common/error.proto";
+import "domain/common/pagination.proto";
+import "domain/common/filter.proto";
+import "domain/common/sort.proto";
+import "domain/common/search.proto";
+
+import "options/db.proto";
+
+// AccountElement represents the five IFRS Conceptual Framework elements.
+// These are fixed — not configurable by the user.
+enum AccountElement {
+  ACCOUNT_ELEMENT_UNSPECIFIED = 0;
+  ACCOUNT_ELEMENT_ASSET = 1;
+  ACCOUNT_ELEMENT_LIABILITY = 2;
+  ACCOUNT_ELEMENT_EQUITY = 3;
+  ACCOUNT_ELEMENT_REVENUE = 4;
+  ACCOUNT_ELEMENT_EXPENSE = 5;
+}
+
+// AccountClassification represents the IAS 1 presentation categories.
+// These are fixed enums — derived from the element but more specific.
+enum AccountClassification {
+  ACCOUNT_CLASSIFICATION_UNSPECIFIED = 0;
+  ACCOUNT_CLASSIFICATION_CURRENT_ASSET = 1;
+  ACCOUNT_CLASSIFICATION_NON_CURRENT_ASSET = 2;
+  ACCOUNT_CLASSIFICATION_CURRENT_LIABILITY = 3;
+  ACCOUNT_CLASSIFICATION_NON_CURRENT_LIABILITY = 4;
+  ACCOUNT_CLASSIFICATION_EQUITY = 5;
+  ACCOUNT_CLASSIFICATION_OPERATING_REVENUE = 6;
+  ACCOUNT_CLASSIFICATION_OTHER_INCOME = 7;
+  ACCOUNT_CLASSIFICATION_COST_OF_SALES = 8;
+  ACCOUNT_CLASSIFICATION_OPERATING_EXPENSE = 9;
+  ACCOUNT_CLASSIFICATION_FINANCE_COST = 10;
+  ACCOUNT_CLASSIFICATION_INCOME_TAX = 11;
+  ACCOUNT_CLASSIFICATION_OTHER_EXPENSE = 12;
+}
+
+// AccountStatus represents the lifecycle state of an account.
+enum AccountStatus {
+  ACCOUNT_STATUS_UNSPECIFIED = 0;
+  ACCOUNT_STATUS_ACTIVE = 1;
+  ACCOUNT_STATUS_INACTIVE = 2;
+  ACCOUNT_STATUS_LOCKED = 3;
+}
+
+// CashFlowActivity tags an account for cash flow statement classification (IAS 7).
+// Cash accounts are tagged NONE — classification comes from the non-cash side.
+enum CashFlowActivity {
+  CASH_FLOW_ACTIVITY_UNSPECIFIED = 0;
+  CASH_FLOW_ACTIVITY_OPERATING = 1;
+  CASH_FLOW_ACTIVITY_INVESTING = 2;
+  CASH_FLOW_ACTIVITY_FINANCING = 3;
+  CASH_FLOW_ACTIVITY_NONE = 4;
+}
+
+// NormalBalance defines the debit/credit behavior of an account.
+enum NormalBalance {
+  NORMAL_BALANCE_UNSPECIFIED = 0;
+  NORMAL_BALANCE_DEBIT = 1;
+  NORMAL_BALANCE_CREDIT = 2;
+}
+
+// Account is the GL account entity. Supports 5-level hierarchy via adjacency list:
+// Element (enum) > Classification (enum) > Group (FK) > Account > Sub-Account (parent_id).
+// Flat queries remain efficient because element and classification are denormalized.
+message Account {
+  option (options.v1.table).table = true;
+
+  // Core identity
+  string id = 1;
+  string code = 2 [(options.v1.db).unique = true, (options.v1.db).index = true];
+  string name = 3;
+  optional string description = 4;
+
+  // Hierarchy — Level 0 and 1 are fixed enums
+  AccountElement element = 5;
+  AccountClassification classification = 6;
+
+  // Hierarchy — Level 2: configurable account group
+  optional string group_id = 7 [(options.v1.db).references = "account_group", (options.v1.db).index = true];
+
+  // Hierarchy — Level 4: self-FK for sub-accounts (adjacency list, max 5 levels)
+  optional string parent_id = 8 [(options.v1.db).references = "account", (options.v1.db).index = true];
+
+  // Accounting behavior
+  CashFlowActivity cash_flow_activity = 9;
+  NormalBalance normal_balance = 10;
+  bool is_system_account = 11 [(options.v1.db).default = "false"];  // Protected from deletion
+  bool is_contra = 12 [(options.v1.db).default = "false"];           // Reduces parent account balance
+
+  // Status and lifecycle
+  AccountStatus status = 13;
+  optional string notes = 14;
+
+  // Audit fields
+  bool active = 15 [(options.v1.db).default = "true"];
+  optional int64 date_created = 16;
+  optional string date_created_string = 17;
+  optional int64 date_modified = 18;
+  optional string date_modified_string = 19;
+}
+
+service AccountDomainService {
+  // Standard CRUD
+  rpc CreateAccount(CreateAccountRequest) returns (CreateAccountResponse);
+  rpc ReadAccount(ReadAccountRequest) returns (ReadAccountResponse);
+  rpc UpdateAccount(UpdateAccountRequest) returns (UpdateAccountResponse);
+  rpc DeleteAccount(DeleteAccountRequest) returns (DeleteAccountResponse);
+  rpc ListAccounts(ListAccountsRequest) returns (ListAccountsResponse);
+
+  // Enhanced page data (for UI views)
+  rpc GetAccountListPageData(GetAccountListPageDataRequest) returns (GetAccountListPageDataResponse);
+  rpc GetAccountItemPageData(GetAccountItemPageDataRequest) returns (GetAccountItemPageDataResponse);
+
+  // Tree view — returns accounts as hierarchical structure for CoA display
+  rpc GetAccountTreePageData(GetAccountTreePageDataRequest) returns (GetAccountTreePageDataResponse);
+}
+
+message CreateAccountRequest {
+  Account data = 1;
+}
+
+message CreateAccountResponse {
+  repeated Account data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message ReadAccountRequest {
+  Account data = 1;
+}
+
+message ReadAccountResponse {
+  repeated Account data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message UpdateAccountRequest {
+  Account data = 1;
+}
+
+message UpdateAccountResponse {
+  repeated Account data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message DeleteAccountRequest {
+  Account data = 1;
+}
+
+message DeleteAccountResponse {
+  bool success = 1;
+  optional domain.common.v1.Error error = 2;
+}
+
+message ListAccountsRequest {
+  optional domain.common.v1.SearchRequest search = 1;
+  optional domain.common.v1.FilterRequest filters = 2;
+  optional domain.common.v1.SortRequest sort = 3;
+  optional domain.common.v1.PaginationRequest pagination = 4;
+}
+
+message ListAccountsResponse {
+  repeated Account data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message GetAccountListPageDataRequest {
+  optional domain.common.v1.PaginationRequest pagination = 1;
+  optional domain.common.v1.FilterRequest filters = 2;
+  optional domain.common.v1.SortRequest sort = 3;
+  optional domain.common.v1.SearchRequest search = 4;
+}
+
+message GetAccountListPageDataResponse {
+  repeated Account account_list = 1;
+  optional domain.common.v1.PaginationResponse pagination = 2;
+  repeated domain.common.v1.SearchResult search_results = 3;
+  bool success = 4;
+  optional domain.common.v1.Error error = 5;
+}
+
+message GetAccountItemPageDataRequest {
+  string account_id = 1;
+}
+
+message GetAccountItemPageDataResponse {
+  optional Account account = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+// Tree view: returns all accounts grouped by element/classification for CoA display.
+// Uses WITH RECURSIVE CTE to resolve the adjacency list into a flat ordered list.
+message GetAccountTreePageDataRequest {
+  optional AccountElement element = 1;              // Filter by element (optional)
+  optional AccountClassification classification = 2; // Filter by classification (optional)
+  optional string group_id = 3;                     // Filter by group (optional)
+}
+
+message GetAccountTreePageDataResponse {
+  repeated Account account_list = 1;  // Ordered by code; parent always before children
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
