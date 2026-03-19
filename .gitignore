@@ -13,3 +13,7 @@ node_modules
 
 # Proto descriptors
 proto/v1/descriptors.bin
+
+# Test artifacts
+playwright-report/
+test-results/
