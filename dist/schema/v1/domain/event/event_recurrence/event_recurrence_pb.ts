@@ -2,17 +2,17 @@
 // @generated from file domain/event/event_recurrence/event_recurrence.proto (package domain.event.v1, syntax proto3)
 /* eslint-disable */
 
-import type { GenFile, GenMessage, GenService } from "@bufbuild/protobuf/codegenv2";
-import { fileDesc, messageDesc, serviceDesc } from "@bufbuild/protobuf/codegenv2";
+import type { GenEnum, GenFile, GenMessage, GenService } from "@bufbuild/protobuf/codegenv2";
+import { enumDesc, fileDesc, messageDesc, serviceDesc } from "@bufbuild/protobuf/codegenv2";
 import type { Error } from "../../common/error_pb";
 import { file_domain_common_error } from "../../common/error_pb";
-import type { SearchRequest } from "../../common/search_pb";
+import type { SearchRequest, SearchResult } from "../../common/search_pb";
 import { file_domain_common_search } from "../../common/search_pb";
 import type { FilterRequest } from "../../common/filter_pb";
 import { file_domain_common_filter } from "../../common/filter_pb";
 import type { SortRequest } from "../../common/sort_pb";
 import { file_domain_common_sort } from "../../common/sort_pb";
-import type { PaginationRequest } from "../../common/pagination_pb";
+import type { PaginationRequest, PaginationResponse } from "../../common/pagination_pb";
 import { file_domain_common_pagination } from "../../common/pagination_pb";
 import { file_options_db } from "../../../options/db_pb";
 import type { Message } from "@bufbuild/protobuf";
@@ -21,10 +21,11 @@ import type { Message } from "@bufbuild/protobuf";
  * Describes the file domain/event/event_recurrence/event_recurrence.proto.
  */
 export const file_domain_event_event_recurrence_event_recurrence: GenFile = /*@__PURE__*/
-  fileDesc("CjRkb21haW4vZXZlbnQvZXZlbnRfcmVjdXJyZW5jZS9ldmVudF9yZWN1cnJlbmNlLnByb3RvEg9kb21haW4uZXZlbnQudjEi5QIKD0V2ZW50UmVjdXJyZW5jZRIKCgJpZBgBIAEoCRIMCgRuYW1lGAIgASgJEhgKC2Rlc2NyaXB0aW9uGAMgASgJSACIAQESGgoScmVjdXJyZW5jZV9wYXR0ZXJuGAQgASgJEhkKDGRhdGVfY3JlYXRlZBgFIAEoA0gBiAEBEiAKE2RhdGVfY3JlYXRlZF9zdHJpbmcYBiABKAlIAogBARIaCg1kYXRlX21vZGlmaWVkGAcgASgDSAOIAQESIQoUZGF0ZV9tb2RpZmllZF9zdHJpbmcYCCABKAlIBIgBARIaCgZhY3RpdmUYCSABKAhCCoK1GAYiBHRydWU6Boq1GAIIAUIOCgxfZGVzY3JpcHRpb25CDwoNX2RhdGVfY3JlYXRlZEIWChRfZGF0ZV9jcmVhdGVkX3N0cmluZ0IQCg5fZGF0ZV9tb2RpZmllZEIXChVfZGF0ZV9tb2RpZmllZF9zdHJpbmciTgocQ3JlYXRlRXZlbnRSZWN1cnJlbmNlUmVxdWVzdBIuCgRkYXRhGAEgASgLMiAuZG9tYWluLmV2ZW50LnYxLkV2ZW50UmVjdXJyZW5jZSKXAQodQ3JlYXRlRXZlbnRSZWN1cnJlbmNlUmVzcG9uc2USLgoEZGF0YRgBIAMoCzIgLmRvbWFpbi5ldmVudC52MS5FdmVudFJlY3VycmVuY2USDwoHc3VjY2VzcxgCIAEoCBIrCgVlcnJvchgDIAEoCzIXLmRvbWFpbi5jb21tb24udjEuRXJyb3JIAIgBAUIICgZfZXJyb3IiTAoaUmVhZEV2ZW50UmVjdXJyZW5jZVJlcXVlc3QSLgoEZGF0YRgBIAEoCzIgLmRvbWFpbi5ldmVudC52MS5FdmVudFJlY3VycmVuY2UilQEKG1JlYWRFdmVudFJlY3VycmVuY2VSZXNwb25zZRIuCgRkYXRhGAEgAygLMiAuZG9tYWluLmV2ZW50LnYxLkV2ZW50UmVjdXJyZW5jZRIPCgdzdWNjZXNzGAIgASgIEisKBWVycm9yGAMgASgLMhcuZG9tYWluLmNvbW1vbi52MS5FcnJvckgAiAEBQggKBl9lcnJvciJOChxVcGRhdGVFdmVudFJlY3VycmVuY2VSZXF1ZXN0Ei4KBGRhdGEYASABKAsyIC5kb21haW4uZXZlbnQudjEuRXZlbnRSZWN1cnJlbmNlIpcBCh1VcGRhdGVFdmVudFJlY3VycmVuY2VSZXNwb25zZRIuCgRkYXRhGAEgAygLMiAuZG9tYWluLmV2ZW50LnYxLkV2ZW50UmVjdXJyZW5jZRIPCgdzdWNjZXNzGAIgASgIEisKBWVycm9yGAMgASgLMhcuZG9tYWluLmNvbW1vbi52MS5FcnJvckgAiAEBQggKBl9lcnJvciJOChxEZWxldGVFdmVudFJlY3VycmVuY2VSZXF1ZXN0Ei4KBGRhdGEYASABKAsyIC5kb21haW4uZXZlbnQudjEuRXZlbnRSZWN1cnJlbmNlImcKHURlbGV0ZUV2ZW50UmVjdXJyZW5jZVJlc3BvbnNlEg8KB3N1Y2Nlc3MYASABKAgSKwoFZXJyb3IYAiABKAsyFy5kb21haW4uY29tbW9uLnYxLkVycm9ySACIAQFCCAoGX2Vycm9yIqkCChtMaXN0RXZlbnRSZWN1cnJlbmNlc1JlcXVlc3QSNAoGc2VhcmNoGAEgASgLMh8uZG9tYWluLmNvbW1vbi52MS5TZWFyY2hSZXF1ZXN0SACIAQESNQoHZmlsdGVycxgCIAEoCzIfLmRvbWFpbi5jb21tb24udjEuRmlsdGVyUmVxdWVzdEgBiAEBEjAKBHNvcnQYAyABKAsyHS5kb21haW4uY29tbW9uLnYxLlNvcnRSZXF1ZXN0SAKIAQESPAoKcGFnaW5hdGlvbhgEIAEoCzIjLmRvbWFpbi5jb21tb24udjEuUGFnaW5hdGlvblJlcXVlc3RIA4gBAUIJCgdfc2VhcmNoQgoKCF9maWx0ZXJzQgcKBV9zb3J0Qg0KC19wYWdpbmF0aW9uIpYBChxMaXN0RXZlbnRSZWN1cnJlbmNlc1Jlc3BvbnNlEi4KBGRhdGEYASADKAsyIC5kb21haW4uZXZlbnQudjEuRXZlbnRSZWN1cnJlbmNlEg8KB3N1Y2Nlc3MYAiABKAgSKwoFZXJyb3IYAyABKAsyFy5kb21haW4uY29tbW9uLnYxLkVycm9ySACIAQFCCAoGX2Vycm9yMu0EChxFdmVudFJlY3VycmVuY2VEb21haW5TZXJ2aWNlEnYKFUNyZWF0ZUV2ZW50UmVjdXJyZW5jZRItLmRvbWFpbi5ldmVudC52MS5DcmVhdGVFdmVudFJlY3VycmVuY2VSZXF1ZXN0Gi4uZG9tYWluLmV2ZW50LnYxLkNyZWF0ZUV2ZW50UmVjdXJyZW5jZVJlc3BvbnNlEnAKE1JlYWRFdmVudFJlY3VycmVuY2USKy5kb21haW4uZXZlbnQudjEuUmVhZEV2ZW50UmVjdXJyZW5jZVJlcXVlc3QaLC5kb21haW4uZXZlbnQudjEuUmVhZEV2ZW50UmVjdXJyZW5jZVJlc3BvbnNlEnYKFVVwZGF0ZUV2ZW50UmVjdXJyZW5jZRItLmRvbWFpbi5ldmVudC52MS5VcGRhdGVFdmVudFJlY3VycmVuY2VSZXF1ZXN0Gi4uZG9tYWluLmV2ZW50LnYxLlVwZGF0ZUV2ZW50UmVjdXJyZW5jZVJlc3BvbnNlEnYKFURlbGV0ZUV2ZW50UmVjdXJyZW5jZRItLmRvbWFpbi5ldmVudC52MS5EZWxldGVFdmVudFJlY3VycmVuY2VSZXF1ZXN0Gi4uZG9tYWluLmV2ZW50LnYxLkRlbGV0ZUV2ZW50UmVjdXJyZW5jZVJlc3BvbnNlEnMKFExpc3RFdmVudFJlY3VycmVuY2VzEiwuZG9tYWluLmV2ZW50LnYxLkxpc3RFdmVudFJlY3VycmVuY2VzUmVxdWVzdBotLmRvbWFpbi5ldmVudC52MS5MaXN0RXZlbnRSZWN1cnJlbmNlc1Jlc3BvbnNlQtsBChNjb20uZG9tYWluLmV2ZW50LnYxQhRFdmVudFJlY3VycmVuY2VQcm90b1ABWlBnaXRodWIuY29tL2VybmllYWxpY2UvZXNxeW1hL3BrZy9zY2hlbWEvdjEvZG9tYWluL2V2ZW50L2V2ZW50X3JlY3VycmVuY2U7ZXZlbnR2MaICA0RFWKoCD0RvbWFpbi5FdmVudC5WMcoCD0RvbWFpblxFdmVudFxWMeICG0RvbWFpblxFdmVudFxWMVxHUEJNZXRhZGF0YeoCEURvbWFpbjo6RXZlbnQ6OlYxYgZwcm90bzM", [file_domain_common_error, file_domain_common_search, file_domain_common_filter, file_domain_common_sort, file_domain_common_pagination, file_options_db]);
+  fileDesc("CjRkb21haW4vZXZlbnQvZXZlbnRfcmVjdXJyZW5jZS9ldmVudF9yZWN1cnJlbmNlLnByb3RvEg9kb21haW4uZXZlbnQudjEijAUKD0V2ZW50UmVjdXJyZW5jZRIKCgJpZBgBIAEoCRIMCgRuYW1lGAIgASgJEhgKC2Rlc2NyaXB0aW9uGAMgASgJSACIAQESFAoMcnJ1bGVfc3RyaW5nGAQgASgJEhkKDGRhdGVfY3JlYXRlZBgFIAEoA0gBiAEBEiAKE2RhdGVfY3JlYXRlZF9zdHJpbmcYBiABKAlIAogBARIaCg1kYXRlX21vZGlmaWVkGAcgASgDSAOIAQESIQoUZGF0ZV9tb2RpZmllZF9zdHJpbmcYCCABKAlIBIgBARIaCgZhY3RpdmUYCSABKAhCCoK1GAYiBHRydWUSJwoMd29ya3NwYWNlX2lkGAogASgJQhGCtRgNCgl3b3Jrc3BhY2UYARIyCgRmcmVxGAsgASgOMiQuZG9tYWluLmV2ZW50LnYxLlJlY3VycmVuY2VGcmVxdWVuY3kSEAoIaW50ZXJ2YWwYDCABKAUSEgoFY291bnQYDSABKAVIBYgBARIWCgl1bnRpbF91dGMYDiABKANIBogBARITCgZieV9kYXkYDyABKAlIB4gBARIZCgxieV9tb250aF9kYXkYECABKAlICIgBARIaCg1leGRhdGVfc3RyaW5nGBEgASgJSAmIAQE6Boq1GAIIAUIOCgxfZGVzY3JpcHRpb25CDwoNX2RhdGVfY3JlYXRlZEIWChRfZGF0ZV9jcmVhdGVkX3N0cmluZ0IQCg5fZGF0ZV9tb2RpZmllZEIXChVfZGF0ZV9tb2RpZmllZF9zdHJpbmdCCAoGX2NvdW50QgwKCl91bnRpbF91dGNCCQoHX2J5X2RheUIPCg1fYnlfbW9udGhfZGF5QhAKDl9leGRhdGVfc3RyaW5nIk4KHENyZWF0ZUV2ZW50UmVjdXJyZW5jZVJlcXVlc3QSLgoEZGF0YRgBIAEoCzIgLmRvbWFpbi5ldmVudC52MS5FdmVudFJlY3VycmVuY2UilwEKHUNyZWF0ZUV2ZW50UmVjdXJyZW5jZVJlc3BvbnNlEi4KBGRhdGEYASADKAsyIC5kb21haW4uZXZlbnQudjEuRXZlbnRSZWN1cnJlbmNlEg8KB3N1Y2Nlc3MYAiABKAgSKwoFZXJyb3IYAyABKAsyFy5kb21haW4uY29tbW9uLnYxLkVycm9ySACIAQFCCAoGX2Vycm9yIkwKGlJlYWRFdmVudFJlY3VycmVuY2VSZXF1ZXN0Ei4KBGRhdGEYASABKAsyIC5kb21haW4uZXZlbnQudjEuRXZlbnRSZWN1cnJlbmNlIpUBChtSZWFkRXZlbnRSZWN1cnJlbmNlUmVzcG9uc2USLgoEZGF0YRgBIAMoCzIgLmRvbWFpbi5ldmVudC52MS5FdmVudFJlY3VycmVuY2USDwoHc3VjY2VzcxgCIAEoCBIrCgVlcnJvchgDIAEoCzIXLmRvbWFpbi5jb21tb24udjEuRXJyb3JIAIgBAUIICgZfZXJyb3IiTgocVXBkYXRlRXZlbnRSZWN1cnJlbmNlUmVxdWVzdBIuCgRkYXRhGAEgASgLMiAuZG9tYWluLmV2ZW50LnYxLkV2ZW50UmVjdXJyZW5jZSKXAQodVXBkYXRlRXZlbnRSZWN1cnJlbmNlUmVzcG9uc2USLgoEZGF0YRgBIAMoCzIgLmRvbWFpbi5ldmVudC52MS5FdmVudFJlY3VycmVuY2USDwoHc3VjY2VzcxgCIAEoCBIrCgVlcnJvchgDIAEoCzIXLmRvbWFpbi5jb21tb24udjEuRXJyb3JIAIgBAUIICgZfZXJyb3IiTgocRGVsZXRlRXZlbnRSZWN1cnJlbmNlUmVxdWVzdBIuCgRkYXRhGAEgASgLMiAuZG9tYWluLmV2ZW50LnYxLkV2ZW50UmVjdXJyZW5jZSJnCh1EZWxldGVFdmVudFJlY3VycmVuY2VSZXNwb25zZRIPCgdzdWNjZXNzGAEgASgIEisKBWVycm9yGAIgASgLMhcuZG9tYWluLmNvbW1vbi52MS5FcnJvckgAiAEBQggKBl9lcnJvciKpAgobTGlzdEV2ZW50UmVjdXJyZW5jZXNSZXF1ZXN0EjQKBnNlYXJjaBgBIAEoCzIfLmRvbWFpbi5jb21tb24udjEuU2VhcmNoUmVxdWVzdEgAiAEBEjUKB2ZpbHRlcnMYAiABKAsyHy5kb21haW4uY29tbW9uLnYxLkZpbHRlclJlcXVlc3RIAYgBARIwCgRzb3J0GAMgASgLMh0uZG9tYWluLmNvbW1vbi52MS5Tb3J0UmVxdWVzdEgCiAEBEjwKCnBhZ2luYXRpb24YBCABKAsyIy5kb21haW4uY29tbW9uLnYxLlBhZ2luYXRpb25SZXF1ZXN0SAOIAQFCCQoHX3NlYXJjaEIKCghfZmlsdGVyc0IHCgVfc29ydEINCgtfcGFnaW5hdGlvbiKWAQocTGlzdEV2ZW50UmVjdXJyZW5jZXNSZXNwb25zZRIuCgRkYXRhGAEgAygLMiAuZG9tYWluLmV2ZW50LnYxLkV2ZW50UmVjdXJyZW5jZRIPCgdzdWNjZXNzGAIgASgIEisKBWVycm9yGAMgASgLMhcuZG9tYWluLmNvbW1vbi52MS5FcnJvckgAiAEBQggKBl9lcnJvciKzAgolR2V0RXZlbnRSZWN1cnJlbmNlTGlzdFBhZ2VEYXRhUmVxdWVzdBI8CgpwYWdpbmF0aW9uGAEgASgLMiMuZG9tYWluLmNvbW1vbi52MS5QYWdpbmF0aW9uUmVxdWVzdEgAiAEBEjUKB2ZpbHRlcnMYAiABKAsyHy5kb21haW4uY29tbW9uLnYxLkZpbHRlclJlcXVlc3RIAYgBARIwCgRzb3J0GAMgASgLMh0uZG9tYWluLmNvbW1vbi52MS5Tb3J0UmVxdWVzdEgCiAEBEjQKBnNlYXJjaBgEIAEoCzIfLmRvbWFpbi5jb21tb24udjEuU2VhcmNoUmVxdWVzdEgDiAEBQg0KC19wYWdpbmF0aW9uQgoKCF9maWx0ZXJzQgcKBV9zb3J0QgkKB19zZWFyY2gitwIKJkdldEV2ZW50UmVjdXJyZW5jZUxpc3RQYWdlRGF0YVJlc3BvbnNlEj8KFWV2ZW50X3JlY3VycmVuY2VfbGlzdBgBIAMoCzIgLmRvbWFpbi5ldmVudC52MS5FdmVudFJlY3VycmVuY2USPQoKcGFnaW5hdGlvbhgCIAEoCzIkLmRvbWFpbi5jb21tb24udjEuUGFnaW5hdGlvblJlc3BvbnNlSACIAQESNgoOc2VhcmNoX3Jlc3VsdHMYAyADKAsyHi5kb21haW4uY29tbW9uLnYxLlNlYXJjaFJlc3VsdBIPCgdzdWNjZXNzGAQgASgIEisKBWVycm9yGAUgASgLMhcuZG9tYWluLmNvbW1vbi52MS5FcnJvckgBiAEBQg0KC19wYWdpbmF0aW9uQggKBl9lcnJvciJECiVHZXRFdmVudFJlY3VycmVuY2VJdGVtUGFnZURhdGFSZXF1ZXN0EhsKE2V2ZW50X3JlY3VycmVuY2VfaWQYASABKAkixgEKJkdldEV2ZW50UmVjdXJyZW5jZUl0ZW1QYWdlRGF0YVJlc3BvbnNlEj8KEGV2ZW50X3JlY3VycmVuY2UYASABKAsyIC5kb21haW4uZXZlbnQudjEuRXZlbnRSZWN1cnJlbmNlSACIAQESDwoHc3VjY2VzcxgCIAEoCBIrCgVlcnJvchgDIAEoCzIXLmRvbWFpbi5jb21tb24udjEuRXJyb3JIAYgBAUITChFfZXZlbnRfcmVjdXJyZW5jZUIICgZfZXJyb3IqvwEKE1JlY3VycmVuY2VGcmVxdWVuY3kSJAogUkVDVVJSRU5DRV9GUkVRVUVOQ1lfVU5TUEVDSUZJRUQQABIeChpSRUNVUlJFTkNFX0ZSRVFVRU5DWV9EQUlMWRABEh8KG1JFQ1VSUkVOQ0VfRlJFUVVFTkNZX1dFRUtMWRACEiAKHFJFQ1VSUkVOQ0VfRlJFUVVFTkNZX01PTlRITFkQAxIfChtSRUNVUlJFTkNFX0ZSRVFVRU5DWV9ZRUFSTFkQBDKVBwocRXZlbnRSZWN1cnJlbmNlRG9tYWluU2VydmljZRJ2ChVDcmVhdGVFdmVudFJlY3VycmVuY2USLS5kb21haW4uZXZlbnQudjEuQ3JlYXRlRXZlbnRSZWN1cnJlbmNlUmVxdWVzdBouLmRvbWFpbi5ldmVudC52MS5DcmVhdGVFdmVudFJlY3VycmVuY2VSZXNwb25zZRJwChNSZWFkRXZlbnRSZWN1cnJlbmNlEisuZG9tYWluLmV2ZW50LnYxLlJlYWRFdmVudFJlY3VycmVuY2VSZXF1ZXN0GiwuZG9tYWluLmV2ZW50LnYxLlJlYWRFdmVudFJlY3VycmVuY2VSZXNwb25zZRJ2ChVVcGRhdGVFdmVudFJlY3VycmVuY2USLS5kb21haW4uZXZlbnQudjEuVXBkYXRlRXZlbnRSZWN1cnJlbmNlUmVxdWVzdBouLmRvbWFpbi5ldmVudC52MS5VcGRhdGVFdmVudFJlY3VycmVuY2VSZXNwb25zZRJ2ChVEZWxldGVFdmVudFJlY3VycmVuY2USLS5kb21haW4uZXZlbnQudjEuRGVsZXRlRXZlbnRSZWN1cnJlbmNlUmVxdWVzdBouLmRvbWFpbi5ldmVudC52MS5EZWxldGVFdmVudFJlY3VycmVuY2VSZXNwb25zZRJzChRMaXN0RXZlbnRSZWN1cnJlbmNlcxIsLmRvbWFpbi5ldmVudC52MS5MaXN0RXZlbnRSZWN1cnJlbmNlc1JlcXVlc3QaLS5kb21haW4uZXZlbnQudjEuTGlzdEV2ZW50UmVjdXJyZW5jZXNSZXNwb25zZRKRAQoeR2V0RXZlbnRSZWN1cnJlbmNlTGlzdFBhZ2VEYXRhEjYuZG9tYWluLmV2ZW50LnYxLkdldEV2ZW50UmVjdXJyZW5jZUxpc3RQYWdlRGF0YVJlcXVlc3QaNy5kb21haW4uZXZlbnQudjEuR2V0RXZlbnRSZWN1cnJlbmNlTGlzdFBhZ2VEYXRhUmVzcG9uc2USkQEKHkdldEV2ZW50UmVjdXJyZW5jZUl0ZW1QYWdlRGF0YRI2LmRvbWFpbi5ldmVudC52MS5HZXRFdmVudFJlY3VycmVuY2VJdGVtUGFnZURhdGFSZXF1ZXN0GjcuZG9tYWluLmV2ZW50LnYxLkdldEV2ZW50UmVjdXJyZW5jZUl0ZW1QYWdlRGF0YVJlc3BvbnNlQtsBChNjb20uZG9tYWluLmV2ZW50LnYxQhRFdmVudFJlY3VycmVuY2VQcm90b1ABWlBnaXRodWIuY29tL2VybmllYWxpY2UvZXNxeW1hL3BrZy9zY2hlbWEvdjEvZG9tYWluL2V2ZW50L2V2ZW50X3JlY3VycmVuY2U7ZXZlbnR2MaICA0RFWKoCD0RvbWFpbi5FdmVudC5WMcoCD0RvbWFpblxFdmVudFxWMeICG0RvbWFpblxFdmVudFxWMVxHUEJNZXRhZGF0YeoCEURvbWFpbjo6RXZlbnQ6OlYxYgZwcm90bzM", [file_domain_common_error, file_domain_common_search, file_domain_common_filter, file_domain_common_sort, file_domain_common_pagination, file_options_db]);
 
 /**
- * Defines the recurrence pattern for events.
+ * EventRecurrence defines a reusable recurrence pattern for events.
+ * Stores both the canonical RRULE string and parsed fields for query convenience.
  *
  * @generated from message domain.event.v1.EventRecurrence
  */
@@ -45,11 +46,12 @@ export type EventRecurrence = Message<"domain.event.v1.EventRecurrence"> & {
   description?: string;
 
   /**
-   * e.g., "DAILY", "WEEKLY", "MONTHLY", "YEARLY", or RRULE string
+   * Canonical RFC 5545 RRULE string (e.g., "FREQ=WEEKLY;BYDAY=MO,WE,FR;INTERVAL=1")
+   * This is the source of truth — parsed fields below are denormalized for query convenience.
    *
-   * @generated from field: string recurrence_pattern = 4;
+   * @generated from field: string rrule_string = 4;
    */
-  recurrencePattern: string;
+  rruleString: string;
 
   /**
    * @generated from field: optional int64 date_created = 5;
@@ -75,6 +77,56 @@ export type EventRecurrence = Message<"domain.event.v1.EventRecurrence"> & {
    * @generated from field: bool active = 9;
    */
   active: boolean;
+
+  /**
+   * Tenant scope
+   *
+   * @generated from field: string workspace_id = 10;
+   */
+  workspaceId: string;
+
+  /**
+   * Parsed RRULE fields (denormalized for filtering/querying without parsing RRULE)
+   *
+   * @generated from field: domain.event.v1.RecurrenceFrequency freq = 11;
+   */
+  freq: RecurrenceFrequency;
+
+  /**
+   * @generated from field: int32 interval = 12;
+   */
+  interval: number;
+
+  /**
+   * @generated from field: optional int32 count = 13;
+   */
+  count?: number;
+
+  /**
+   * @generated from field: optional int64 until_utc = 14;
+   */
+  untilUtc?: bigint;
+
+  /**
+   * Comma-separated: "MO,WE,FR"
+   *
+   * @generated from field: optional string by_day = 15;
+   */
+  byDay?: string;
+
+  /**
+   * Comma-separated: "1,15"
+   *
+   * @generated from field: optional string by_month_day = 16;
+   */
+  byMonthDay?: string;
+
+  /**
+   * Comma-separated excluded dates (RFC 5545 EXDATE)
+   *
+   * @generated from field: optional string exdate_string = 17;
+   */
+  exdateString?: string;
 };
 
 /**
@@ -315,6 +367,157 @@ export const ListEventRecurrencesResponseSchema: GenMessage<ListEventRecurrences
   messageDesc(file_domain_event_event_recurrence_event_recurrence, 10);
 
 /**
+ * @generated from message domain.event.v1.GetEventRecurrenceListPageDataRequest
+ */
+export type GetEventRecurrenceListPageDataRequest = Message<"domain.event.v1.GetEventRecurrenceListPageDataRequest"> & {
+  /**
+   * @generated from field: optional domain.common.v1.PaginationRequest pagination = 1;
+   */
+  pagination?: PaginationRequest;
+
+  /**
+   * @generated from field: optional domain.common.v1.FilterRequest filters = 2;
+   */
+  filters?: FilterRequest;
+
+  /**
+   * @generated from field: optional domain.common.v1.SortRequest sort = 3;
+   */
+  sort?: SortRequest;
+
+  /**
+   * @generated from field: optional domain.common.v1.SearchRequest search = 4;
+   */
+  search?: SearchRequest;
+};
+
+/**
+ * Describes the message domain.event.v1.GetEventRecurrenceListPageDataRequest.
+ * Use `create(GetEventRecurrenceListPageDataRequestSchema)` to create a new message.
+ */
+export const GetEventRecurrenceListPageDataRequestSchema: GenMessage<GetEventRecurrenceListPageDataRequest> = /*@__PURE__*/
+  messageDesc(file_domain_event_event_recurrence_event_recurrence, 11);
+
+/**
+ * @generated from message domain.event.v1.GetEventRecurrenceListPageDataResponse
+ */
+export type GetEventRecurrenceListPageDataResponse = Message<"domain.event.v1.GetEventRecurrenceListPageDataResponse"> & {
+  /**
+   * @generated from field: repeated domain.event.v1.EventRecurrence event_recurrence_list = 1;
+   */
+  eventRecurrenceList: EventRecurrence[];
+
+  /**
+   * @generated from field: optional domain.common.v1.PaginationResponse pagination = 2;
+   */
+  pagination?: PaginationResponse;
+
+  /**
+   * @generated from field: repeated domain.common.v1.SearchResult search_results = 3;
+   */
+  searchResults: SearchResult[];
+
+  /**
+   * @generated from field: bool success = 4;
+   */
+  success: boolean;
+
+  /**
+   * @generated from field: optional domain.common.v1.Error error = 5;
+   */
+  error?: Error;
+};
+
+/**
+ * Describes the message domain.event.v1.GetEventRecurrenceListPageDataResponse.
+ * Use `create(GetEventRecurrenceListPageDataResponseSchema)` to create a new message.
+ */
+export const GetEventRecurrenceListPageDataResponseSchema: GenMessage<GetEventRecurrenceListPageDataResponse> = /*@__PURE__*/
+  messageDesc(file_domain_event_event_recurrence_event_recurrence, 12);
+
+/**
+ * @generated from message domain.event.v1.GetEventRecurrenceItemPageDataRequest
+ */
+export type GetEventRecurrenceItemPageDataRequest = Message<"domain.event.v1.GetEventRecurrenceItemPageDataRequest"> & {
+  /**
+   * @generated from field: string event_recurrence_id = 1;
+   */
+  eventRecurrenceId: string;
+};
+
+/**
+ * Describes the message domain.event.v1.GetEventRecurrenceItemPageDataRequest.
+ * Use `create(GetEventRecurrenceItemPageDataRequestSchema)` to create a new message.
+ */
+export const GetEventRecurrenceItemPageDataRequestSchema: GenMessage<GetEventRecurrenceItemPageDataRequest> = /*@__PURE__*/
+  messageDesc(file_domain_event_event_recurrence_event_recurrence, 13);
+
+/**
+ * @generated from message domain.event.v1.GetEventRecurrenceItemPageDataResponse
+ */
+export type GetEventRecurrenceItemPageDataResponse = Message<"domain.event.v1.GetEventRecurrenceItemPageDataResponse"> & {
+  /**
+   * @generated from field: optional domain.event.v1.EventRecurrence event_recurrence = 1;
+   */
+  eventRecurrence?: EventRecurrence;
+
+  /**
+   * @generated from field: bool success = 2;
+   */
+  success: boolean;
+
+  /**
+   * @generated from field: optional domain.common.v1.Error error = 3;
+   */
+  error?: Error;
+};
+
+/**
+ * Describes the message domain.event.v1.GetEventRecurrenceItemPageDataResponse.
+ * Use `create(GetEventRecurrenceItemPageDataResponseSchema)` to create a new message.
+ */
+export const GetEventRecurrenceItemPageDataResponseSchema: GenMessage<GetEventRecurrenceItemPageDataResponse> = /*@__PURE__*/
+  messageDesc(file_domain_event_event_recurrence_event_recurrence, 14);
+
+/**
+ * RecurrenceFrequency represents the base frequency for RFC 5545 RRULE expansion.
+ *
+ * @generated from enum domain.event.v1.RecurrenceFrequency
+ */
+export enum RecurrenceFrequency {
+  /**
+   * @generated from enum value: RECURRENCE_FREQUENCY_UNSPECIFIED = 0;
+   */
+  UNSPECIFIED = 0,
+
+  /**
+   * @generated from enum value: RECURRENCE_FREQUENCY_DAILY = 1;
+   */
+  DAILY = 1,
+
+  /**
+   * @generated from enum value: RECURRENCE_FREQUENCY_WEEKLY = 2;
+   */
+  WEEKLY = 2,
+
+  /**
+   * @generated from enum value: RECURRENCE_FREQUENCY_MONTHLY = 3;
+   */
+  MONTHLY = 3,
+
+  /**
+   * @generated from enum value: RECURRENCE_FREQUENCY_YEARLY = 4;
+   */
+  YEARLY = 4,
+}
+
+/**
+ * Describes the enum domain.event.v1.RecurrenceFrequency.
+ */
+export const RecurrenceFrequencySchema: GenEnum<RecurrenceFrequency> = /*@__PURE__*/
+  enumDesc(file_domain_event_event_recurrence_event_recurrence, 0);
+
+/**
  * @generated from service domain.event.v1.EventRecurrenceDomainService
  */
 export const EventRecurrenceDomainService: GenService<{
@@ -357,6 +560,22 @@ export const EventRecurrenceDomainService: GenService<{
     methodKind: "unary";
     input: typeof ListEventRecurrencesRequestSchema;
     output: typeof ListEventRecurrencesResponseSchema;
+  },
+  /**
+   * @generated from rpc domain.event.v1.EventRecurrenceDomainService.GetEventRecurrenceListPageData
+   */
+  getEventRecurrenceListPageData: {
+    methodKind: "unary";
+    input: typeof GetEventRecurrenceListPageDataRequestSchema;
+    output: typeof GetEventRecurrenceListPageDataResponseSchema;
+  },
+  /**
+   * @generated from rpc domain.event.v1.EventRecurrenceDomainService.GetEventRecurrenceItemPageData
+   */
+  getEventRecurrenceItemPageData: {
+    methodKind: "unary";
+    input: typeof GetEventRecurrenceItemPageDataRequestSchema;
+    output: typeof GetEventRecurrenceItemPageDataResponseSchema;
   },
 }> = /*@__PURE__*/
   serviceDesc(file_domain_event_event_recurrence_event_recurrence, 0);

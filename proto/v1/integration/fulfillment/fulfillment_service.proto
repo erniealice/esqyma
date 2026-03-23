@@ -1,0 +1,176 @@
+syntax = "proto3";
+
+package integration.fulfillment.v1;
+
+option go_package = "github.com/erniealice/esqyma/golang/v1/integration/fulfillment";
+
+import "integration/fulfillment/fulfillment.proto";
+import "domain/common/error.proto";
+
+// FulfillmentIntegrationService provides unified fulfillment provider operations.
+// This service abstracts delivery providers like Lalamove, GrabExpress, etc.
+service FulfillmentIntegrationService {
+  // Get a delivery price quote
+  rpc GetQuote(GetQuoteRequest) returns (GetQuoteResponse);
+
+  // Place a delivery order (from an accepted quote)
+  rpc PlaceOrder(PlaceOrderRequest) returns (PlaceOrderResponse);
+
+  // Cancel a delivery order
+  rpc CancelOrder(CancelOrderRequest) returns (CancelOrderResponse);
+
+  // Get delivery order details and status
+  rpc GetOrder(GetOrderRequest) returns (GetOrderResponse);
+
+  // Track a delivery in real-time
+  rpc TrackDelivery(TrackDeliveryRequest) returns (TrackDeliveryResponse);
+
+  // Process incoming webhook from fulfillment provider
+  rpc ProcessWebhook(ProcessFulfillmentWebhookRequest) returns (ProcessFulfillmentWebhookResponse);
+
+  // Check provider health
+  rpc CheckHealth(CheckFulfillmentHealthRequest) returns (CheckFulfillmentHealthResponse);
+
+  // Get provider capabilities
+  rpc GetCapabilities(GetFulfillmentCapabilitiesRequest) returns (GetFulfillmentCapabilitiesResponse);
+}
+
+// ===== Get Quote =====
+
+message GetQuoteRequest { QuoteRequestData data = 1; }
+message QuoteRequestData {
+  string provider_id = 1;
+  VehicleType vehicle_type = 2;
+  DeliveryLocation pickup = 3;
+  repeated DeliveryLocation dropoffs = 4;
+  string scheduled_at = 5; // ISO 8601 (optional — omit for immediate)
+}
+message GetQuoteResponse {
+  bool success = 1;
+  repeated DeliveryQuote data = 2;
+  domain.common.v1.Error error = 3;
+}
+
+// ===== Place Order =====
+
+message PlaceOrderRequest { PlaceOrderData data = 1; }
+message PlaceOrderData {
+  string provider_id = 1;
+  string quote_id = 2;
+  VehicleType vehicle_type = 3;
+  DeliveryLocation pickup = 4;
+  repeated DeliveryLocation dropoffs = 5;
+  string remarks = 6;
+  string fulfillment_id = 7;  // FK to our domain fulfillment
+  string revenue_id = 8;
+  map<string, string> metadata = 9;
+}
+message PlaceOrderResponse {
+  bool success = 1;
+  repeated DeliveryOrder data = 2;
+  domain.common.v1.Error error = 3;
+}
+
+// ===== Cancel Order =====
+
+message CancelOrderRequest { CancelOrderData data = 1; }
+message CancelOrderData {
+  string provider_id = 1;
+  string order_id = 2;
+  string provider_order_id = 3;
+  string reason = 4;
+}
+message CancelOrderResponse {
+  bool success = 1;
+  domain.common.v1.Error error = 2;
+}
+
+// ===== Get Order =====
+
+message GetOrderRequest { OrderLookup data = 1; }
+message OrderLookup {
+  string provider_id = 1;
+  string order_id = 2;
+  string provider_order_id = 3;
+}
+message GetOrderResponse {
+  bool success = 1;
+  repeated DeliveryOrder data = 2;
+  domain.common.v1.Error error = 3;
+}
+
+// ===== Track Delivery =====
+
+message TrackDeliveryRequest { TrackingLookup data = 1; }
+message TrackingLookup {
+  string provider_id = 1;
+  string order_id = 2;
+  string provider_order_id = 3;
+}
+message TrackDeliveryResponse {
+  bool success = 1;
+  repeated TrackingUpdate data = 2;
+  domain.common.v1.Error error = 3;
+}
+message TrackingUpdate {
+  DeliveryStatus status = 1;
+  DriverInfo driver = 2;
+  string message = 3;
+  string timestamp = 4;
+}
+
+// ===== Process Webhook =====
+
+message ProcessFulfillmentWebhookRequest { FulfillmentWebhookData data = 1; }
+message FulfillmentWebhookData {
+  string provider_id = 1;
+  bytes payload = 2;
+  map<string, string> headers = 3;
+  string content_type = 4;
+  string signature = 5;
+}
+message ProcessFulfillmentWebhookResponse {
+  bool success = 1;
+  repeated FulfillmentWebhookResult data = 2;
+  domain.common.v1.Error error = 3;
+}
+message FulfillmentWebhookResult {
+  string event_type = 1;
+  DeliveryOrder order = 2;
+  string action = 3;
+  DeliveryStatus previous_status = 4;
+  DeliveryStatus new_status = 5;
+}
+
+// ===== Health & Capabilities =====
+
+message CheckFulfillmentHealthRequest { FulfillmentHealthCheckData data = 1; }
+message FulfillmentHealthCheckData {
+  string provider_id = 1;
+  bool deep_check = 2;
+}
+message CheckFulfillmentHealthResponse {
+  bool success = 1;
+  repeated FulfillmentHealthStatus data = 2;
+  domain.common.v1.Error error = 3;
+}
+message FulfillmentHealthStatus {
+  bool is_healthy = 1;
+  string message = 2;
+  int64 latency_ms = 3;
+}
+
+message GetFulfillmentCapabilitiesRequest { FulfillmentProviderLookup data = 1; }
+message FulfillmentProviderLookup { string provider_id = 1; }
+message GetFulfillmentCapabilitiesResponse {
+  bool success = 1;
+  repeated FulfillmentProviderCapabilities data = 2;
+  domain.common.v1.Error error = 3;
+}
+message FulfillmentProviderCapabilities {
+  string provider_id = 1;
+  FulfillmentProviderType provider_type = 2;
+  repeated FulfillmentCapability capabilities = 3;
+  repeated VehicleType supported_vehicles = 4;
+  map<string, string> limits = 5;
+}

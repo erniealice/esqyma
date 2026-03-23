@@ -21,12 +21,14 @@ message TypedFilter {
   string field = 1; // Field to filter on (supports dot notation)
 
   oneof filter_type {
-    StringFilter string_filter = 2;
-    NumberFilter number_filter = 3;
-    DateFilter date_filter = 4;
-    ListFilter list_filter = 5;
-    RangeFilter range_filter = 6;
+    StringFilter  string_filter  = 2;
+    NumberFilter  number_filter  = 3;
+    DateFilter    date_filter    = 4;
+    ListFilter    list_filter    = 5;
+    RangeFilter   range_filter   = 6;
     BooleanFilter boolean_filter = 7;
+    MoneyFilter   money_filter   = 8;   // NEW
+    StatusFilter  status_filter  = 9;   // NEW
   }
 }
 
@@ -97,4 +99,26 @@ message RangeFilter {
 // Boolean filter
 message BooleanFilter {
   bool value = 1;
+}
+
+// Money filter operators
+enum MoneyOperator {
+  MONEY_EQUALS = 0;
+  MONEY_LESS_THAN = 1;
+  MONEY_GREATER_THAN = 2;
+  MONEY_LESS_THAN_OR_EQUAL = 3;
+  MONEY_GREATER_THAN_OR_EQUAL = 4;
+  MONEY_BETWEEN = 5;
+}
+
+// Money filter for monetary amounts
+message MoneyFilter {
+  double amount = 1;
+  MoneyOperator operator = 2;
+  double amount_to = 3; // used when operator = MONEY_BETWEEN
+}
+
+// Status filter — IN check against selected values
+message StatusFilter {
+  repeated string values = 1;
 }

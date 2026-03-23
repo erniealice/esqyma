@@ -1,0 +1,22 @@
+syntax = "proto3";
+
+package domain.audit_trail.v1;
+
+option go_package = "github.com/erniealice/esqyma/golang/v1/domain/audit_trail/audit_snapshot";
+
+import "google/protobuf/timestamp.proto";
+
+// AuditSnapshot captures a full entity state at the time of an audit event.
+// Implementation is deferred — schema only.
+message AuditSnapshot {
+  string id = 1;
+  string audit_entry_id = 2;
+
+  string entity_type = 3;
+  string entity_id = 4;
+
+  bytes entity_data = 5;
+  string schema_version = 6;
+
+  google.protobuf.Timestamp captured_at = 7;
+}

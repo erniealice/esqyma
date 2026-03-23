@@ -10,7 +10,7 @@ import type { Message } from "@bufbuild/protobuf";
  * Describes the file domain/common/filter.proto.
  */
 export const file_domain_common_filter: GenFile = /*@__PURE__*/
-  fileDesc("Chpkb21haW4vY29tbW9uL2ZpbHRlci5wcm90bxIQZG9tYWluLmNvbW1vbi52MSJtCg1GaWx0ZXJSZXF1ZXN0Ei4KB2ZpbHRlcnMYASADKAsyHS5kb21haW4uY29tbW9uLnYxLlR5cGVkRmlsdGVyEiwKBWxvZ2ljGAIgASgOMh0uZG9tYWluLmNvbW1vbi52MS5GaWx0ZXJMb2dpYyL5AgoLVHlwZWRGaWx0ZXISDQoFZmllbGQYASABKAkSNwoNc3RyaW5nX2ZpbHRlchgCIAEoCzIeLmRvbWFpbi5jb21tb24udjEuU3RyaW5nRmlsdGVySAASNwoNbnVtYmVyX2ZpbHRlchgDIAEoCzIeLmRvbWFpbi5jb21tb24udjEuTnVtYmVyRmlsdGVySAASMwoLZGF0ZV9maWx0ZXIYBCABKAsyHC5kb21haW4uY29tbW9uLnYxLkRhdGVGaWx0ZXJIABIzCgtsaXN0X2ZpbHRlchgFIAEoCzIcLmRvbWFpbi5jb21tb24udjEuTGlzdEZpbHRlckgAEjUKDHJhbmdlX2ZpbHRlchgGIAEoCzIdLmRvbWFpbi5jb21tb24udjEuUmFuZ2VGaWx0ZXJIABI5Cg5ib29sZWFuX2ZpbHRlchgHIAEoCzIfLmRvbWFpbi5jb21tb24udjEuQm9vbGVhbkZpbHRlckgAQg0KC2ZpbHRlcl90eXBlImkKDFN0cmluZ0ZpbHRlchINCgV2YWx1ZRgBIAEoCRIyCghvcGVyYXRvchgCIAEoDjIgLmRvbWFpbi5jb21tb24udjEuU3RyaW5nT3BlcmF0b3ISFgoOY2FzZV9zZW5zaXRpdmUYAyABKAgiUQoMTnVtYmVyRmlsdGVyEg0KBXZhbHVlGAEgASgBEjIKCG9wZXJhdG9yGAIgASgOMiAuZG9tYWluLmNvbW1vbi52MS5OdW1iZXJPcGVyYXRvciJzCgpEYXRlRmlsdGVyEg0KBXZhbHVlGAEgASgJEjAKCG9wZXJhdG9yGAIgASgOMh4uZG9tYWluLmNvbW1vbi52MS5EYXRlT3BlcmF0b3ISFgoJcmFuZ2VfZW5kGAMgASgJSACIAQFCDAoKX3JhbmdlX2VuZCJOCgpMaXN0RmlsdGVyEg4KBnZhbHVlcxgBIAMoCRIwCghvcGVyYXRvchgCIAEoDjIeLmRvbWFpbi5jb21tb24udjEuTGlzdE9wZXJhdG9yIlEKC1JhbmdlRmlsdGVyEgsKA21pbhgBIAEoARILCgNtYXgYAiABKAESEwoLaW5jbHVkZV9taW4YAyABKAgSEwoLaW5jbHVkZV9tYXgYBCABKAgiHgoNQm9vbGVhbkZpbHRlchINCgV2YWx1ZRgBIAEoCCoeCgtGaWx0ZXJMb2dpYxIHCgNBTkQQABIGCgJPUhABKo8BCg5TdHJpbmdPcGVyYXRvchIRCg1TVFJJTkdfRVFVQUxTEAASFQoRU1RSSU5HX05PVF9FUVVBTFMQARITCg9TVFJJTkdfQ09OVEFJTlMQAhIWChJTVFJJTkdfU1RBUlRTX1dJVEgQAxIUChBTVFJJTkdfRU5EU19XSVRIEAQSEAoMU1RSSU5HX1JFR0VYEAUqqgEKDk51bWJlck9wZXJhdG9yEhEKDU5VTUJFUl9FUVVBTFMQABIVChFOVU1CRVJfTk9UX0VRVUFMUxABEhcKE05VTUJFUl9HUkVBVEVSX1RIQU4QAhIgChxOVU1CRVJfR1JFQVRFUl9USEFOX09SX0VRVUFMEAMSFAoQTlVNQkVSX0xFU1NfVEhBThAEEh0KGU5VTUJFUl9MRVNTX1RIQU5fT1JfRVFVQUwQBSpSCgxEYXRlT3BlcmF0b3ISDwoLREFURV9FUVVBTFMQABIPCgtEQVRFX0JFRk9SRRABEg4KCkRBVEVfQUZURVIQAhIQCgxEQVRFX0JFVFdFRU4QAyosCgxMaXN0T3BlcmF0b3ISCwoHTElTVF9JThAAEg8KC0xJU1RfTk9UX0lOEAFCyAEKFGNvbS5kb21haW4uY29tbW9uLnYxQgtGaWx0ZXJQcm90b1ABWkFnaXRodWIuY29tL2VybmllYWxpY2UvZXNxeW1hL3BrZy9zY2hlbWEvdjEvZG9tYWluL2NvbW1vbjtjb21tb252MaICA0RDWKoCEERvbWFpbi5Db21tb24uVjHKAhBEb21haW5cQ29tbW9uXFYx4gIcRG9tYWluXENvbW1vblxWMVxHUEJNZXRhZGF0YeoCEkRvbWFpbjo6Q29tbW9uOjpWMWIGcHJvdG8z");
+  fileDesc("Chpkb21haW4vY29tbW9uL2ZpbHRlci5wcm90bxIQZG9tYWluLmNvbW1vbi52MSJtCg1GaWx0ZXJSZXF1ZXN0Ei4KB2ZpbHRlcnMYASADKAsyHS5kb21haW4uY29tbW9uLnYxLlR5cGVkRmlsdGVyEiwKBWxvZ2ljGAIgASgOMh0uZG9tYWluLmNvbW1vbi52MS5GaWx0ZXJMb2dpYyLpAwoLVHlwZWRGaWx0ZXISDQoFZmllbGQYASABKAkSNwoNc3RyaW5nX2ZpbHRlchgCIAEoCzIeLmRvbWFpbi5jb21tb24udjEuU3RyaW5nRmlsdGVySAASNwoNbnVtYmVyX2ZpbHRlchgDIAEoCzIeLmRvbWFpbi5jb21tb24udjEuTnVtYmVyRmlsdGVySAASMwoLZGF0ZV9maWx0ZXIYBCABKAsyHC5kb21haW4uY29tbW9uLnYxLkRhdGVGaWx0ZXJIABIzCgtsaXN0X2ZpbHRlchgFIAEoCzIcLmRvbWFpbi5jb21tb24udjEuTGlzdEZpbHRlckgAEjUKDHJhbmdlX2ZpbHRlchgGIAEoCzIdLmRvbWFpbi5jb21tb24udjEuUmFuZ2VGaWx0ZXJIABI5Cg5ib29sZWFuX2ZpbHRlchgHIAEoCzIfLmRvbWFpbi5jb21tb24udjEuQm9vbGVhbkZpbHRlckgAEjUKDG1vbmV5X2ZpbHRlchgIIAEoCzIdLmRvbWFpbi5jb21tb24udjEuTW9uZXlGaWx0ZXJIABI3Cg1zdGF0dXNfZmlsdGVyGAkgASgLMh4uZG9tYWluLmNvbW1vbi52MS5TdGF0dXNGaWx0ZXJIAEINCgtmaWx0ZXJfdHlwZSJpCgxTdHJpbmdGaWx0ZXISDQoFdmFsdWUYASABKAkSMgoIb3BlcmF0b3IYAiABKA4yIC5kb21haW4uY29tbW9uLnYxLlN0cmluZ09wZXJhdG9yEhYKDmNhc2Vfc2Vuc2l0aXZlGAMgASgIIlEKDE51bWJlckZpbHRlchINCgV2YWx1ZRgBIAEoARIyCghvcGVyYXRvchgCIAEoDjIgLmRvbWFpbi5jb21tb24udjEuTnVtYmVyT3BlcmF0b3IicwoKRGF0ZUZpbHRlchINCgV2YWx1ZRgBIAEoCRIwCghvcGVyYXRvchgCIAEoDjIeLmRvbWFpbi5jb21tb24udjEuRGF0ZU9wZXJhdG9yEhYKCXJhbmdlX2VuZBgDIAEoCUgAiAEBQgwKCl9yYW5nZV9lbmQiTgoKTGlzdEZpbHRlchIOCgZ2YWx1ZXMYASADKAkSMAoIb3BlcmF0b3IYAiABKA4yHi5kb21haW4uY29tbW9uLnYxLkxpc3RPcGVyYXRvciJRCgtSYW5nZUZpbHRlchILCgNtaW4YASABKAESCwoDbWF4GAIgASgBEhMKC2luY2x1ZGVfbWluGAMgASgIEhMKC2luY2x1ZGVfbWF4GAQgASgIIh4KDUJvb2xlYW5GaWx0ZXISDQoFdmFsdWUYASABKAgiYwoLTW9uZXlGaWx0ZXISDgoGYW1vdW50GAEgASgBEjEKCG9wZXJhdG9yGAIgASgOMh8uZG9tYWluLmNvbW1vbi52MS5Nb25leU9wZXJhdG9yEhEKCWFtb3VudF90bxgDIAEoASIeCgxTdGF0dXNGaWx0ZXISDgoGdmFsdWVzGAEgAygJKh4KC0ZpbHRlckxvZ2ljEgcKA0FORBAAEgYKAk9SEAEqjwEKDlN0cmluZ09wZXJhdG9yEhEKDVNUUklOR19FUVVBTFMQABIVChFTVFJJTkdfTk9UX0VRVUFMUxABEhMKD1NUUklOR19DT05UQUlOUxACEhYKElNUUklOR19TVEFSVFNfV0lUSBADEhQKEFNUUklOR19FTkRTX1dJVEgQBBIQCgxTVFJJTkdfUkVHRVgQBSqqAQoOTnVtYmVyT3BlcmF0b3ISEQoNTlVNQkVSX0VRVUFMUxAAEhUKEU5VTUJFUl9OT1RfRVFVQUxTEAESFwoTTlVNQkVSX0dSRUFURVJfVEhBThACEiAKHE5VTUJFUl9HUkVBVEVSX1RIQU5fT1JfRVFVQUwQAxIUChBOVU1CRVJfTEVTU19USEFOEAQSHQoZTlVNQkVSX0xFU1NfVEhBTl9PUl9FUVVBTBAFKlIKDERhdGVPcGVyYXRvchIPCgtEQVRFX0VRVUFMUxAAEg8KC0RBVEVfQkVGT1JFEAESDgoKREFURV9BRlRFUhACEhAKDERBVEVfQkVUV0VFThADKiwKDExpc3RPcGVyYXRvchILCgdMSVNUX0lOEAASDwoLTElTVF9OT1RfSU4QASqgAQoNTW9uZXlPcGVyYXRvchIQCgxNT05FWV9FUVVBTFMQABITCg9NT05FWV9MRVNTX1RIQU4QARIWChJNT05FWV9HUkVBVEVSX1RIQU4QAhIcChhNT05FWV9MRVNTX1RIQU5fT1JfRVFVQUwQAxIfChtNT05FWV9HUkVBVEVSX1RIQU5fT1JfRVFVQUwQBBIRCg1NT05FWV9CRVRXRUVOEAVCyAEKFGNvbS5kb21haW4uY29tbW9uLnYxQgtGaWx0ZXJQcm90b1ABWkFnaXRodWIuY29tL2VybmllYWxpY2UvZXNxeW1hL3BrZy9zY2hlbWEvdjEvZG9tYWluL2NvbW1vbjtjb21tb252MaICA0RDWKoCEERvbWFpbi5Db21tb24uVjHKAhBEb21haW5cQ29tbW9uXFYx4gIcRG9tYWluXENvbW1vblxWMVxHUEJNZXRhZGF0YeoCEkRvbWFpbjo6Q29tbW9uOjpWMWIGcHJvdG8z");
 
 /**
  * Filter request with multiple typed filters
@@ -90,6 +90,22 @@ export type TypedFilter = Message<"domain.common.v1.TypedFilter"> & {
      */
     value: BooleanFilter;
     case: "booleanFilter";
+  } | {
+    /**
+     * NEW
+     *
+     * @generated from field: domain.common.v1.MoneyFilter money_filter = 8;
+     */
+    value: MoneyFilter;
+    case: "moneyFilter";
+  } | {
+    /**
+     * NEW
+     *
+     * @generated from field: domain.common.v1.StatusFilter status_filter = 9;
+     */
+    value: StatusFilter;
+    case: "statusFilter";
   } | { case: undefined; value?: undefined };
 };
 
@@ -264,6 +280,56 @@ export const BooleanFilterSchema: GenMessage<BooleanFilter> = /*@__PURE__*/
   messageDesc(file_domain_common_filter, 7);
 
 /**
+ * Money filter for monetary amounts
+ *
+ * @generated from message domain.common.v1.MoneyFilter
+ */
+export type MoneyFilter = Message<"domain.common.v1.MoneyFilter"> & {
+  /**
+   * @generated from field: double amount = 1;
+   */
+  amount: number;
+
+  /**
+   * @generated from field: domain.common.v1.MoneyOperator operator = 2;
+   */
+  operator: MoneyOperator;
+
+  /**
+   * used when operator = MONEY_BETWEEN
+   *
+   * @generated from field: double amount_to = 3;
+   */
+  amountTo: number;
+};
+
+/**
+ * Describes the message domain.common.v1.MoneyFilter.
+ * Use `create(MoneyFilterSchema)` to create a new message.
+ */
+export const MoneyFilterSchema: GenMessage<MoneyFilter> = /*@__PURE__*/
+  messageDesc(file_domain_common_filter, 8);
+
+/**
+ * Status filter — IN check against selected values
+ *
+ * @generated from message domain.common.v1.StatusFilter
+ */
+export type StatusFilter = Message<"domain.common.v1.StatusFilter"> & {
+  /**
+   * @generated from field: repeated string values = 1;
+   */
+  values: string[];
+};
+
+/**
+ * Describes the message domain.common.v1.StatusFilter.
+ * Use `create(StatusFilterSchema)` to create a new message.
+ */
+export const StatusFilterSchema: GenMessage<StatusFilter> = /*@__PURE__*/
+  messageDesc(file_domain_common_filter, 9);
+
+/**
  * Logic for combining multiple filters
  *
  * @generated from enum domain.common.v1.FilterLogic
@@ -419,4 +485,47 @@ export enum ListOperator {
  */
 export const ListOperatorSchema: GenEnum<ListOperator> = /*@__PURE__*/
   enumDesc(file_domain_common_filter, 4);
+
+/**
+ * Money filter operators
+ *
+ * @generated from enum domain.common.v1.MoneyOperator
+ */
+export enum MoneyOperator {
+  /**
+   * @generated from enum value: MONEY_EQUALS = 0;
+   */
+  MONEY_EQUALS = 0,
+
+  /**
+   * @generated from enum value: MONEY_LESS_THAN = 1;
+   */
+  MONEY_LESS_THAN = 1,
+
+  /**
+   * @generated from enum value: MONEY_GREATER_THAN = 2;
+   */
+  MONEY_GREATER_THAN = 2,
+
+  /**
+   * @generated from enum value: MONEY_LESS_THAN_OR_EQUAL = 3;
+   */
+  MONEY_LESS_THAN_OR_EQUAL = 3,
+
+  /**
+   * @generated from enum value: MONEY_GREATER_THAN_OR_EQUAL = 4;
+   */
+  MONEY_GREATER_THAN_OR_EQUAL = 4,
+
+  /**
+   * @generated from enum value: MONEY_BETWEEN = 5;
+   */
+  MONEY_BETWEEN = 5,
+}
+
+/**
+ * Describes the enum domain.common.v1.MoneyOperator.
+ */
+export const MoneyOperatorSchema: GenEnum<MoneyOperator> = /*@__PURE__*/
+  enumDesc(file_domain_common_filter, 5);
 

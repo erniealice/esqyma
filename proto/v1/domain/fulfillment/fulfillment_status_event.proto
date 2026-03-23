@@ -1,0 +1,22 @@
+syntax = "proto3";
+
+package domain.fulfillment.v1;
+
+option go_package = "github.com/erniealice/esqyma/golang/v1/domain/fulfillment/fulfillment_status_event";
+
+import "google/protobuf/timestamp.proto";
+import "options/db.proto";
+
+// Append-only event log — no UPDATE, no DELETE
+message FulfillmentStatusEvent {
+  option (options.v1.table).table = true;
+  int64 id = 1; // BIGSERIAL — append-only, integer sequence
+  string fulfillment_id = 2 [(options.v1.db).references = "fulfillment", (options.v1.db).index = true];
+  optional string from_status = 3; // nullable for initial nil→PENDING
+  string to_status = 4;
+  string provider_status = 5;
+  string provider_reference = 6;
+  optional string triggered_by_id = 7;
+  string reason = 8;
+  google.protobuf.Timestamp occurred_at = 9;
+}

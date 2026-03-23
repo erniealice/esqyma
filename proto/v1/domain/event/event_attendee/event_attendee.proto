@@ -1,0 +1,161 @@
+syntax = "proto3";
+
+package domain.event.v1;
+
+option go_package = "github.com/erniealice/esqyma/golang/v1/domain/event/event_attendee";
+
+import "domain/common/error.proto";
+import "domain/common/search.proto";
+import "domain/common/filter.proto";
+import "domain/common/sort.proto";
+import "domain/common/pagination.proto";
+import "options/db.proto";
+
+// AttendeeRole defines the participation role (RFC 5545 ROLE alignment).
+enum AttendeeRole {
+  ATTENDEE_ROLE_UNSPECIFIED = 0;
+  ATTENDEE_ROLE_REQUIRED = 1;    // REQ-PARTICIPANT
+  ATTENDEE_ROLE_OPTIONAL = 2;    // OPT-PARTICIPANT
+  ATTENDEE_ROLE_CHAIR = 3;       // CHAIR (meeting organizer/leader)
+  ATTENDEE_ROLE_RESOURCE = 4;    // NON-PARTICIPANT (informational)
+}
+
+// AttendeeStatus defines the response status (RFC 5545 PARTSTAT alignment).
+enum AttendeeStatus {
+  ATTENDEE_STATUS_UNSPECIFIED = 0;
+  ATTENDEE_STATUS_NEEDS_ACTION = 1;  // No response yet
+  ATTENDEE_STATUS_ACCEPTED = 2;      // Confirmed attendance
+  ATTENDEE_STATUS_DECLINED = 3;      // Declined
+  ATTENDEE_STATUS_TENTATIVE = 4;     // Tentatively accepted
+}
+
+// EventAttendee represents a participant in an event.
+// Evolves from EventClient with richer role/status model aligned to RFC 5545.
+// Supports both client attendees (client_id) and staff attendees (workspace_user_id).
+message EventAttendee {
+  option (options.v1.table).table = true;
+  option (options.v1.table).unique_together = "event_id,client_id";
+  string id = 1;
+
+  // Event FK (required)
+  string event_id = 2 [(options.v1.db).references = "event", (options.v1.db).index = true];
+
+  // Client FK (optional — for customer/external attendees)
+  optional string client_id = 3 [(options.v1.db).references = "client", (options.v1.db).index = true];
+
+  // Workspace user FK (optional — for staff/internal attendees)
+  optional string workspace_user_id = 4 [(options.v1.db).references = "workspace_user", (options.v1.db).index = true];
+
+  // Participation role
+  AttendeeRole role = 5;
+
+  // Response status
+  AttendeeStatus status = 6;
+
+  // Whether this attendee is the event organizer
+  bool is_organizer = 7;
+
+  // Display name snapshot (for external attendees without client/user record)
+  optional string display_name = 8;
+
+  // Tenant scope
+  string workspace_id = 9 [(options.v1.db).references = "workspace", (options.v1.db).index = true];
+
+  // Audit fields
+  optional int64 date_created = 10;
+  optional string date_created_string = 11;
+  optional int64 date_modified = 12;
+  optional string date_modified_string = 13;
+  bool active = 14 [(options.v1.db).default = "true"];
+}
+
+service EventAttendeeDomainService {
+  rpc CreateEventAttendee(CreateEventAttendeeRequest) returns (CreateEventAttendeeResponse);
+  rpc ReadEventAttendee(ReadEventAttendeeRequest) returns (ReadEventAttendeeResponse);
+  rpc UpdateEventAttendee(UpdateEventAttendeeRequest) returns (UpdateEventAttendeeResponse);
+  rpc DeleteEventAttendee(DeleteEventAttendeeRequest) returns (DeleteEventAttendeeResponse);
+  rpc ListEventAttendees(ListEventAttendeesRequest) returns (ListEventAttendeesResponse);
+
+  rpc GetEventAttendeeListPageData(GetEventAttendeeListPageDataRequest)
+    returns (GetEventAttendeeListPageDataResponse);
+
+  rpc GetEventAttendeeItemPageData(GetEventAttendeeItemPageDataRequest)
+    returns (GetEventAttendeeItemPageDataResponse);
+}
+
+message CreateEventAttendeeRequest {
+  EventAttendee data = 1;
+}
+
+message CreateEventAttendeeResponse {
+  repeated EventAttendee data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message ReadEventAttendeeRequest {
+  EventAttendee data = 1;
+}
+
+message ReadEventAttendeeResponse {
+  repeated EventAttendee data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message UpdateEventAttendeeRequest {
+  EventAttendee data = 1;
+}
+
+message UpdateEventAttendeeResponse {
+  repeated EventAttendee data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message DeleteEventAttendeeRequest {
+  EventAttendee data = 1;
+}
+
+message DeleteEventAttendeeResponse {
+  bool success = 1;
+  optional domain.common.v1.Error error = 2;
+}
+
+message ListEventAttendeesRequest {
+  optional domain.common.v1.SearchRequest search = 1;
+  optional domain.common.v1.FilterRequest filters = 2;
+  optional domain.common.v1.SortRequest sort = 3;
+  optional domain.common.v1.PaginationRequest pagination = 4;
+}
+
+message ListEventAttendeesResponse {
+  repeated EventAttendee data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message GetEventAttendeeListPageDataRequest {
+  optional domain.common.v1.PaginationRequest pagination = 1;
+  optional domain.common.v1.FilterRequest filters = 2;
+  optional domain.common.v1.SortRequest sort = 3;
+  optional domain.common.v1.SearchRequest search = 4;
+}
+
+message GetEventAttendeeListPageDataResponse {
+  repeated EventAttendee event_attendee_list = 1;
+  optional domain.common.v1.PaginationResponse pagination = 2;
+  repeated domain.common.v1.SearchResult search_results = 3;
+  bool success = 4;
+  optional domain.common.v1.Error error = 5;
+}
+
+message GetEventAttendeeItemPageDataRequest {
+  string event_attendee_id = 1;
+}
+
+message GetEventAttendeeItemPageDataResponse {
+  optional EventAttendee event_attendee = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}

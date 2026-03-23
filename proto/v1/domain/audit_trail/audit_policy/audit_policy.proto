@@ -1,0 +1,19 @@
+syntax = "proto3";
+
+package domain.audit_trail.v1;
+
+option go_package = "github.com/erniealice/esqyma/golang/v1/domain/audit_trail/audit_policy";
+
+// AuditPolicy configures audit behaviour per entity type within a workspace.
+// Implementation is deferred — schema only.
+message AuditPolicy {
+  string id = 1;
+  string workspace_id = 2;
+  string entity_type = 3;
+
+  bool enabled = 4;
+  bool capture_snapshots = 5;
+  int32 retention_days = 6;
+
+  repeated string excluded_fields = 7;
+}

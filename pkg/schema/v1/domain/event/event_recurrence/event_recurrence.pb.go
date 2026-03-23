@@ -23,20 +23,90 @@ const (
 	_ = protoimpl.EnforceVersion(protoimpl.MaxVersion - 20)
 )
 
-// Defines the recurrence pattern for events.
+// RecurrenceFrequency represents the base frequency for RFC 5545 RRULE expansion.
+type RecurrenceFrequency int32
+
+const (
+	RecurrenceFrequency_RECURRENCE_FREQUENCY_UNSPECIFIED RecurrenceFrequency = 0
+	RecurrenceFrequency_RECURRENCE_FREQUENCY_DAILY       RecurrenceFrequency = 1
+	RecurrenceFrequency_RECURRENCE_FREQUENCY_WEEKLY      RecurrenceFrequency = 2
+	RecurrenceFrequency_RECURRENCE_FREQUENCY_MONTHLY     RecurrenceFrequency = 3
+	RecurrenceFrequency_RECURRENCE_FREQUENCY_YEARLY      RecurrenceFrequency = 4
+)
+
+// Enum value maps for RecurrenceFrequency.
+var (
+	RecurrenceFrequency_name = map[int32]string{
+		0: "RECURRENCE_FREQUENCY_UNSPECIFIED",
+		1: "RECURRENCE_FREQUENCY_DAILY",
+		2: "RECURRENCE_FREQUENCY_WEEKLY",
+		3: "RECURRENCE_FREQUENCY_MONTHLY",
+		4: "RECURRENCE_FREQUENCY_YEARLY",
+	}
+	RecurrenceFrequency_value = map[string]int32{
+		"RECURRENCE_FREQUENCY_UNSPECIFIED": 0,
+		"RECURRENCE_FREQUENCY_DAILY":       1,
+		"RECURRENCE_FREQUENCY_WEEKLY":      2,
+		"RECURRENCE_FREQUENCY_MONTHLY":     3,
+		"RECURRENCE_FREQUENCY_YEARLY":      4,
+	}
+)
+
+func (x RecurrenceFrequency) Enum() *RecurrenceFrequency {
+	p := new(RecurrenceFrequency)
+	*p = x
+	return p
+}
+
+func (x RecurrenceFrequency) String() string {
+	return protoimpl.X.EnumStringOf(x.Descriptor(), protoreflect.EnumNumber(x))
+}
+
+func (RecurrenceFrequency) Descriptor() protoreflect.EnumDescriptor {
+	return file_domain_event_event_recurrence_event_recurrence_proto_enumTypes[0].Descriptor()
+}
+
+func (RecurrenceFrequency) Type() protoreflect.EnumType {
+	return &file_domain_event_event_recurrence_event_recurrence_proto_enumTypes[0]
+}
+
+func (x RecurrenceFrequency) Number() protoreflect.EnumNumber {
+	return protoreflect.EnumNumber(x)
+}
+
+// Deprecated: Use RecurrenceFrequency.Descriptor instead.
+func (RecurrenceFrequency) EnumDescriptor() ([]byte, []int) {
+	return file_domain_event_event_recurrence_event_recurrence_proto_rawDescGZIP(), []int{0}
+}
+
+// EventRecurrence defines a reusable recurrence pattern for events.
+// Stores both the canonical RRULE string and parsed fields for query convenience.
 type EventRecurrence struct {
-	state              protoimpl.MessageState `protogen:"open.v1"`
-	Id                 string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
-	Name               string                 `protobuf:"bytes,2,opt,name=name,proto3" json:"name,omitempty"`
-	Description        *string                `protobuf:"bytes,3,opt,name=description,proto3,oneof" json:"description,omitempty"`
-	RecurrencePattern  string                 `protobuf:"bytes,4,opt,name=recurrence_pattern,json=recurrencePattern,proto3" json:"recurrence_pattern,omitempty"` // e.g., "DAILY", "WEEKLY", "MONTHLY", "YEARLY", or RRULE string
-	DateCreated        *int64                 `protobuf:"varint,5,opt,name=date_created,json=dateCreated,proto3,oneof" json:"date_created,omitempty"`
-	DateCreatedString  *string                `protobuf:"bytes,6,opt,name=date_created_string,json=dateCreatedString,proto3,oneof" json:"date_created_string,omitempty"`
-	DateModified       *int64                 `protobuf:"varint,7,opt,name=date_modified,json=dateModified,proto3,oneof" json:"date_modified,omitempty"`
-	DateModifiedString *string                `protobuf:"bytes,8,opt,name=date_modified_string,json=dateModifiedString,proto3,oneof" json:"date_modified_string,omitempty"`
-	Active             bool                   `protobuf:"varint,9,opt,name=active,proto3" json:"active,omitempty"`
-	unknownFields      protoimpl.UnknownFields
-	sizeCache          protoimpl.SizeCache
+	state       protoimpl.MessageState `protogen:"open.v1"`
+	Id          string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
+	Name        string                 `protobuf:"bytes,2,opt,name=name,proto3" json:"name,omitempty"`
+	Description *string                `protobuf:"bytes,3,opt,name=description,proto3,oneof" json:"description,omitempty"`
+	// Canonical RFC 5545 RRULE string (e.g., "FREQ=WEEKLY;BYDAY=MO,WE,FR;INTERVAL=1")
+	// This is the source of truth — parsed fields below are denormalized for query convenience.
+	RruleString        string  `protobuf:"bytes,4,opt,name=rrule_string,json=rruleString,proto3" json:"rrule_string,omitempty"`
+	DateCreated        *int64  `protobuf:"varint,5,opt,name=date_created,json=dateCreated,proto3,oneof" json:"date_created,omitempty"`
+	DateCreatedString  *string `protobuf:"bytes,6,opt,name=date_created_string,json=dateCreatedString,proto3,oneof" json:"date_created_string,omitempty"`
+	DateModified       *int64  `protobuf:"varint,7,opt,name=date_modified,json=dateModified,proto3,oneof" json:"date_modified,omitempty"`
+	DateModifiedString *string `protobuf:"bytes,8,opt,name=date_modified_string,json=dateModifiedString,proto3,oneof" json:"date_modified_string,omitempty"`
+	Active             bool    `protobuf:"varint,9,opt,name=active,proto3" json:"active,omitempty"`
+	// Tenant scope
+	WorkspaceId string `protobuf:"bytes,10,opt,name=workspace_id,json=workspaceId,proto3" json:"workspace_id,omitempty"`
+	// Parsed RRULE fields (denormalized for filtering/querying without parsing RRULE)
+	Freq       RecurrenceFrequency `protobuf:"varint,11,opt,name=freq,proto3,enum=domain.event.v1.RecurrenceFrequency" json:"freq,omitempty"`
+	Interval   int32               `protobuf:"varint,12,opt,name=interval,proto3" json:"interval,omitempty"`
+	Count      *int32              `protobuf:"varint,13,opt,name=count,proto3,oneof" json:"count,omitempty"`
+	UntilUtc   *int64              `protobuf:"varint,14,opt,name=until_utc,json=untilUtc,proto3,oneof" json:"until_utc,omitempty"`
+	ByDay      *string             `protobuf:"bytes,15,opt,name=by_day,json=byDay,proto3,oneof" json:"by_day,omitempty"`                  // Comma-separated: "MO,WE,FR"
+	ByMonthDay *string             `protobuf:"bytes,16,opt,name=by_month_day,json=byMonthDay,proto3,oneof" json:"by_month_day,omitempty"` // Comma-separated: "1,15"
+	// Comma-separated excluded dates (RFC 5545 EXDATE)
+	ExdateString  *string `protobuf:"bytes,17,opt,name=exdate_string,json=exdateString,proto3,oneof" json:"exdate_string,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
 }
 
 func (x *EventRecurrence) Reset() {
@@ -90,9 +160,9 @@ func (x *EventRecurrence) GetDescription() string {
 	return ""
 }
 
-func (x *EventRecurrence) GetRecurrencePattern() string {
+func (x *EventRecurrence) GetRruleString() string {
 	if x != nil {
-		return x.RecurrencePattern
+		return x.RruleString
 	}
 	return ""
 }
@@ -130,6 +200,62 @@ func (x *EventRecurrence) GetActive() bool {
 		return x.Active
 	}
 	return false
+}
+
+func (x *EventRecurrence) GetWorkspaceId() string {
+	if x != nil {
+		return x.WorkspaceId
+	}
+	return ""
+}
+
+func (x *EventRecurrence) GetFreq() RecurrenceFrequency {
+	if x != nil {
+		return x.Freq
+	}
+	return RecurrenceFrequency_RECURRENCE_FREQUENCY_UNSPECIFIED
+}
+
+func (x *EventRecurrence) GetInterval() int32 {
+	if x != nil {
+		return x.Interval
+	}
+	return 0
+}
+
+func (x *EventRecurrence) GetCount() int32 {
+	if x != nil && x.Count != nil {
+		return *x.Count
+	}
+	return 0
+}
+
+func (x *EventRecurrence) GetUntilUtc() int64 {
+	if x != nil && x.UntilUtc != nil {
+		return *x.UntilUtc
+	}
+	return 0
+}
+
+func (x *EventRecurrence) GetByDay() string {
+	if x != nil && x.ByDay != nil {
+		return *x.ByDay
+	}
+	return ""
+}
+
+func (x *EventRecurrence) GetByMonthDay() string {
+	if x != nil && x.ByMonthDay != nil {
+		return *x.ByMonthDay
+	}
+	return ""
+}
+
+func (x *EventRecurrence) GetExdateString() string {
+	if x != nil && x.ExdateString != nil {
+		return *x.ExdateString
+	}
+	return ""
 }
 
 type CreateEventRecurrenceRequest struct {
@@ -668,27 +794,292 @@ func (x *ListEventRecurrencesResponse) GetError() *common.Error {
 	return nil
 }
 
+type GetEventRecurrenceListPageDataRequest struct {
+	state         protoimpl.MessageState    `protogen:"open.v1"`
+	Pagination    *common.PaginationRequest `protobuf:"bytes,1,opt,name=pagination,proto3,oneof" json:"pagination,omitempty"`
+	Filters       *common.FilterRequest     `protobuf:"bytes,2,opt,name=filters,proto3,oneof" json:"filters,omitempty"`
+	Sort          *common.SortRequest       `protobuf:"bytes,3,opt,name=sort,proto3,oneof" json:"sort,omitempty"`
+	Search        *common.SearchRequest     `protobuf:"bytes,4,opt,name=search,proto3,oneof" json:"search,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *GetEventRecurrenceListPageDataRequest) Reset() {
+	*x = GetEventRecurrenceListPageDataRequest{}
+	mi := &file_domain_event_event_recurrence_event_recurrence_proto_msgTypes[11]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *GetEventRecurrenceListPageDataRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*GetEventRecurrenceListPageDataRequest) ProtoMessage() {}
+
+func (x *GetEventRecurrenceListPageDataRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_domain_event_event_recurrence_event_recurrence_proto_msgTypes[11]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use GetEventRecurrenceListPageDataRequest.ProtoReflect.Descriptor instead.
+func (*GetEventRecurrenceListPageDataRequest) Descriptor() ([]byte, []int) {
+	return file_domain_event_event_recurrence_event_recurrence_proto_rawDescGZIP(), []int{11}
+}
+
+func (x *GetEventRecurrenceListPageDataRequest) GetPagination() *common.PaginationRequest {
+	if x != nil {
+		return x.Pagination
+	}
+	return nil
+}
+
+func (x *GetEventRecurrenceListPageDataRequest) GetFilters() *common.FilterRequest {
+	if x != nil {
+		return x.Filters
+	}
+	return nil
+}
+
+func (x *GetEventRecurrenceListPageDataRequest) GetSort() *common.SortRequest {
+	if x != nil {
+		return x.Sort
+	}
+	return nil
+}
+
+func (x *GetEventRecurrenceListPageDataRequest) GetSearch() *common.SearchRequest {
+	if x != nil {
+		return x.Search
+	}
+	return nil
+}
+
+type GetEventRecurrenceListPageDataResponse struct {
+	state               protoimpl.MessageState     `protogen:"open.v1"`
+	EventRecurrenceList []*EventRecurrence         `protobuf:"bytes,1,rep,name=event_recurrence_list,json=eventRecurrenceList,proto3" json:"event_recurrence_list,omitempty"`
+	Pagination          *common.PaginationResponse `protobuf:"bytes,2,opt,name=pagination,proto3,oneof" json:"pagination,omitempty"`
+	SearchResults       []*common.SearchResult     `protobuf:"bytes,3,rep,name=search_results,json=searchResults,proto3" json:"search_results,omitempty"`
+	Success             bool                       `protobuf:"varint,4,opt,name=success,proto3" json:"success,omitempty"`
+	Error               *common.Error              `protobuf:"bytes,5,opt,name=error,proto3,oneof" json:"error,omitempty"`
+	unknownFields       protoimpl.UnknownFields
+	sizeCache           protoimpl.SizeCache
+}
+
+func (x *GetEventRecurrenceListPageDataResponse) Reset() {
+	*x = GetEventRecurrenceListPageDataResponse{}
+	mi := &file_domain_event_event_recurrence_event_recurrence_proto_msgTypes[12]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *GetEventRecurrenceListPageDataResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*GetEventRecurrenceListPageDataResponse) ProtoMessage() {}
+
+func (x *GetEventRecurrenceListPageDataResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_domain_event_event_recurrence_event_recurrence_proto_msgTypes[12]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use GetEventRecurrenceListPageDataResponse.ProtoReflect.Descriptor instead.
+func (*GetEventRecurrenceListPageDataResponse) Descriptor() ([]byte, []int) {
+	return file_domain_event_event_recurrence_event_recurrence_proto_rawDescGZIP(), []int{12}
+}
+
+func (x *GetEventRecurrenceListPageDataResponse) GetEventRecurrenceList() []*EventRecurrence {
+	if x != nil {
+		return x.EventRecurrenceList
+	}
+	return nil
+}
+
+func (x *GetEventRecurrenceListPageDataResponse) GetPagination() *common.PaginationResponse {
+	if x != nil {
+		return x.Pagination
+	}
+	return nil
+}
+
+func (x *GetEventRecurrenceListPageDataResponse) GetSearchResults() []*common.SearchResult {
+	if x != nil {
+		return x.SearchResults
+	}
+	return nil
+}
+
+func (x *GetEventRecurrenceListPageDataResponse) GetSuccess() bool {
+	if x != nil {
+		return x.Success
+	}
+	return false
+}
+
+func (x *GetEventRecurrenceListPageDataResponse) GetError() *common.Error {
+	if x != nil {
+		return x.Error
+	}
+	return nil
+}
+
+type GetEventRecurrenceItemPageDataRequest struct {
+	state             protoimpl.MessageState `protogen:"open.v1"`
+	EventRecurrenceId string                 `protobuf:"bytes,1,opt,name=event_recurrence_id,json=eventRecurrenceId,proto3" json:"event_recurrence_id,omitempty"`
+	unknownFields     protoimpl.UnknownFields
+	sizeCache         protoimpl.SizeCache
+}
+
+func (x *GetEventRecurrenceItemPageDataRequest) Reset() {
+	*x = GetEventRecurrenceItemPageDataRequest{}
+	mi := &file_domain_event_event_recurrence_event_recurrence_proto_msgTypes[13]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *GetEventRecurrenceItemPageDataRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*GetEventRecurrenceItemPageDataRequest) ProtoMessage() {}
+
+func (x *GetEventRecurrenceItemPageDataRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_domain_event_event_recurrence_event_recurrence_proto_msgTypes[13]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use GetEventRecurrenceItemPageDataRequest.ProtoReflect.Descriptor instead.
+func (*GetEventRecurrenceItemPageDataRequest) Descriptor() ([]byte, []int) {
+	return file_domain_event_event_recurrence_event_recurrence_proto_rawDescGZIP(), []int{13}
+}
+
+func (x *GetEventRecurrenceItemPageDataRequest) GetEventRecurrenceId() string {
+	if x != nil {
+		return x.EventRecurrenceId
+	}
+	return ""
+}
+
+type GetEventRecurrenceItemPageDataResponse struct {
+	state           protoimpl.MessageState `protogen:"open.v1"`
+	EventRecurrence *EventRecurrence       `protobuf:"bytes,1,opt,name=event_recurrence,json=eventRecurrence,proto3,oneof" json:"event_recurrence,omitempty"`
+	Success         bool                   `protobuf:"varint,2,opt,name=success,proto3" json:"success,omitempty"`
+	Error           *common.Error          `protobuf:"bytes,3,opt,name=error,proto3,oneof" json:"error,omitempty"`
+	unknownFields   protoimpl.UnknownFields
+	sizeCache       protoimpl.SizeCache
+}
+
+func (x *GetEventRecurrenceItemPageDataResponse) Reset() {
+	*x = GetEventRecurrenceItemPageDataResponse{}
+	mi := &file_domain_event_event_recurrence_event_recurrence_proto_msgTypes[14]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *GetEventRecurrenceItemPageDataResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*GetEventRecurrenceItemPageDataResponse) ProtoMessage() {}
+
+func (x *GetEventRecurrenceItemPageDataResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_domain_event_event_recurrence_event_recurrence_proto_msgTypes[14]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use GetEventRecurrenceItemPageDataResponse.ProtoReflect.Descriptor instead.
+func (*GetEventRecurrenceItemPageDataResponse) Descriptor() ([]byte, []int) {
+	return file_domain_event_event_recurrence_event_recurrence_proto_rawDescGZIP(), []int{14}
+}
+
+func (x *GetEventRecurrenceItemPageDataResponse) GetEventRecurrence() *EventRecurrence {
+	if x != nil {
+		return x.EventRecurrence
+	}
+	return nil
+}
+
+func (x *GetEventRecurrenceItemPageDataResponse) GetSuccess() bool {
+	if x != nil {
+		return x.Success
+	}
+	return false
+}
+
+func (x *GetEventRecurrenceItemPageDataResponse) GetError() *common.Error {
+	if x != nil {
+		return x.Error
+	}
+	return nil
+}
+
 var File_domain_event_event_recurrence_event_recurrence_proto protoreflect.FileDescriptor
 
 const file_domain_event_event_recurrence_event_recurrence_proto_rawDesc = "" +
 	"\n" +
-	"4domain/event/event_recurrence/event_recurrence.proto\x12\x0fdomain.event.v1\x1a\x19domain/common/error.proto\x1a\x1adomain/common/search.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1edomain/common/pagination.proto\x1a\x10options/db.proto\"\xd9\x03\n" +
+	"4domain/event/event_recurrence/event_recurrence.proto\x12\x0fdomain.event.v1\x1a\x19domain/common/error.proto\x1a\x1adomain/common/search.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1edomain/common/pagination.proto\x1a\x10options/db.proto\"\xc9\x06\n" +
 	"\x0fEventRecurrence\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12\x12\n" +
 	"\x04name\x18\x02 \x01(\tR\x04name\x12%\n" +
-	"\vdescription\x18\x03 \x01(\tH\x00R\vdescription\x88\x01\x01\x12-\n" +
-	"\x12recurrence_pattern\x18\x04 \x01(\tR\x11recurrencePattern\x12&\n" +
+	"\vdescription\x18\x03 \x01(\tH\x00R\vdescription\x88\x01\x01\x12!\n" +
+	"\frrule_string\x18\x04 \x01(\tR\vrruleString\x12&\n" +
 	"\fdate_created\x18\x05 \x01(\x03H\x01R\vdateCreated\x88\x01\x01\x123\n" +
 	"\x13date_created_string\x18\x06 \x01(\tH\x02R\x11dateCreatedString\x88\x01\x01\x12(\n" +
 	"\rdate_modified\x18\a \x01(\x03H\x03R\fdateModified\x88\x01\x01\x125\n" +
 	"\x14date_modified_string\x18\b \x01(\tH\x04R\x12dateModifiedString\x88\x01\x01\x12\"\n" +
 	"\x06active\x18\t \x01(\bB\n" +
-	"\x82\xb5\x18\x06\"\x04trueR\x06active:\x06\x8a\xb5\x18\x02\b\x01B\x0e\n" +
+	"\x82\xb5\x18\x06\"\x04trueR\x06active\x124\n" +
+	"\fworkspace_id\x18\n" +
+	" \x01(\tB\x11\x82\xb5\x18\r\n" +
+	"\tworkspace\x18\x01R\vworkspaceId\x128\n" +
+	"\x04freq\x18\v \x01(\x0e2$.domain.event.v1.RecurrenceFrequencyR\x04freq\x12\x1a\n" +
+	"\binterval\x18\f \x01(\x05R\binterval\x12\x19\n" +
+	"\x05count\x18\r \x01(\x05H\x05R\x05count\x88\x01\x01\x12 \n" +
+	"\tuntil_utc\x18\x0e \x01(\x03H\x06R\buntilUtc\x88\x01\x01\x12\x1a\n" +
+	"\x06by_day\x18\x0f \x01(\tH\aR\x05byDay\x88\x01\x01\x12%\n" +
+	"\fby_month_day\x18\x10 \x01(\tH\bR\n" +
+	"byMonthDay\x88\x01\x01\x12(\n" +
+	"\rexdate_string\x18\x11 \x01(\tH\tR\fexdateString\x88\x01\x01:\x06\x8a\xb5\x18\x02\b\x01B\x0e\n" +
 	"\f_descriptionB\x0f\n" +
 	"\r_date_createdB\x16\n" +
 	"\x14_date_created_stringB\x10\n" +
 	"\x0e_date_modifiedB\x17\n" +
-	"\x15_date_modified_string\"T\n" +
+	"\x15_date_modified_stringB\b\n" +
+	"\x06_countB\f\n" +
+	"\n" +
+	"_until_utcB\t\n" +
+	"\a_by_dayB\x0f\n" +
+	"\r_by_month_dayB\x10\n" +
+	"\x0e_exdate_string\"T\n" +
 	"\x1cCreateEventRecurrenceRequest\x124\n" +
 	"\x04data\x18\x01 \x01(\v2 .domain.event.v1.EventRecurrenceR\x04data\"\xad\x01\n" +
 	"\x1dCreateEventRecurrenceResponse\x124\n" +
@@ -732,13 +1123,51 @@ const file_domain_event_event_recurrence_event_recurrence_proto_rawDesc = "" +
 	"\x04data\x18\x01 \x03(\v2 .domain.event.v1.EventRecurrenceR\x04data\x12\x18\n" +
 	"\asuccess\x18\x02 \x01(\bR\asuccess\x122\n" +
 	"\x05error\x18\x03 \x01(\v2\x17.domain.common.v1.ErrorH\x00R\x05error\x88\x01\x01B\b\n" +
-	"\x06_error2\xed\x04\n" +
+	"\x06_error\"\xd6\x02\n" +
+	"%GetEventRecurrenceListPageDataRequest\x12H\n" +
+	"\n" +
+	"pagination\x18\x01 \x01(\v2#.domain.common.v1.PaginationRequestH\x00R\n" +
+	"pagination\x88\x01\x01\x12>\n" +
+	"\afilters\x18\x02 \x01(\v2\x1f.domain.common.v1.FilterRequestH\x01R\afilters\x88\x01\x01\x126\n" +
+	"\x04sort\x18\x03 \x01(\v2\x1d.domain.common.v1.SortRequestH\x02R\x04sort\x88\x01\x01\x12<\n" +
+	"\x06search\x18\x04 \x01(\v2\x1f.domain.common.v1.SearchRequestH\x03R\x06search\x88\x01\x01B\r\n" +
+	"\v_paginationB\n" +
+	"\n" +
+	"\b_filtersB\a\n" +
+	"\x05_sortB\t\n" +
+	"\a_search\"\xf7\x02\n" +
+	"&GetEventRecurrenceListPageDataResponse\x12T\n" +
+	"\x15event_recurrence_list\x18\x01 \x03(\v2 .domain.event.v1.EventRecurrenceR\x13eventRecurrenceList\x12I\n" +
+	"\n" +
+	"pagination\x18\x02 \x01(\v2$.domain.common.v1.PaginationResponseH\x00R\n" +
+	"pagination\x88\x01\x01\x12E\n" +
+	"\x0esearch_results\x18\x03 \x03(\v2\x1e.domain.common.v1.SearchResultR\rsearchResults\x12\x18\n" +
+	"\asuccess\x18\x04 \x01(\bR\asuccess\x122\n" +
+	"\x05error\x18\x05 \x01(\v2\x17.domain.common.v1.ErrorH\x01R\x05error\x88\x01\x01B\r\n" +
+	"\v_paginationB\b\n" +
+	"\x06_error\"W\n" +
+	"%GetEventRecurrenceItemPageDataRequest\x12.\n" +
+	"\x13event_recurrence_id\x18\x01 \x01(\tR\x11eventRecurrenceId\"\xe7\x01\n" +
+	"&GetEventRecurrenceItemPageDataResponse\x12P\n" +
+	"\x10event_recurrence\x18\x01 \x01(\v2 .domain.event.v1.EventRecurrenceH\x00R\x0feventRecurrence\x88\x01\x01\x12\x18\n" +
+	"\asuccess\x18\x02 \x01(\bR\asuccess\x122\n" +
+	"\x05error\x18\x03 \x01(\v2\x17.domain.common.v1.ErrorH\x01R\x05error\x88\x01\x01B\x13\n" +
+	"\x11_event_recurrenceB\b\n" +
+	"\x06_error*\xbf\x01\n" +
+	"\x13RecurrenceFrequency\x12$\n" +
+	" RECURRENCE_FREQUENCY_UNSPECIFIED\x10\x00\x12\x1e\n" +
+	"\x1aRECURRENCE_FREQUENCY_DAILY\x10\x01\x12\x1f\n" +
+	"\x1bRECURRENCE_FREQUENCY_WEEKLY\x10\x02\x12 \n" +
+	"\x1cRECURRENCE_FREQUENCY_MONTHLY\x10\x03\x12\x1f\n" +
+	"\x1bRECURRENCE_FREQUENCY_YEARLY\x10\x042\x95\a\n" +
 	"\x1cEventRecurrenceDomainService\x12v\n" +
 	"\x15CreateEventRecurrence\x12-.domain.event.v1.CreateEventRecurrenceRequest\x1a..domain.event.v1.CreateEventRecurrenceResponse\x12p\n" +
 	"\x13ReadEventRecurrence\x12+.domain.event.v1.ReadEventRecurrenceRequest\x1a,.domain.event.v1.ReadEventRecurrenceResponse\x12v\n" +
 	"\x15UpdateEventRecurrence\x12-.domain.event.v1.UpdateEventRecurrenceRequest\x1a..domain.event.v1.UpdateEventRecurrenceResponse\x12v\n" +
 	"\x15DeleteEventRecurrence\x12-.domain.event.v1.DeleteEventRecurrenceRequest\x1a..domain.event.v1.DeleteEventRecurrenceResponse\x12s\n" +
-	"\x14ListEventRecurrences\x12,.domain.event.v1.ListEventRecurrencesRequest\x1a-.domain.event.v1.ListEventRecurrencesResponseB\xdb\x01\n" +
+	"\x14ListEventRecurrences\x12,.domain.event.v1.ListEventRecurrencesRequest\x1a-.domain.event.v1.ListEventRecurrencesResponse\x12\x91\x01\n" +
+	"\x1eGetEventRecurrenceListPageData\x126.domain.event.v1.GetEventRecurrenceListPageDataRequest\x1a7.domain.event.v1.GetEventRecurrenceListPageDataResponse\x12\x91\x01\n" +
+	"\x1eGetEventRecurrenceItemPageData\x126.domain.event.v1.GetEventRecurrenceItemPageDataRequest\x1a7.domain.event.v1.GetEventRecurrenceItemPageDataResponseB\xdb\x01\n" +
 	"\x13com.domain.event.v1B\x14EventRecurrenceProtoP\x01ZPgithub.com/erniealice/esqyma/pkg/schema/v1/domain/event/event_recurrence;eventv1\xa2\x02\x03DEX\xaa\x02\x0fDomain.Event.V1\xca\x02\x0fDomain\\Event\\V1\xe2\x02\x1bDomain\\Event\\V1\\GPBMetadata\xea\x02\x11Domain::Event::V1b\x06proto3"
 
 var (
@@ -753,58 +1182,81 @@ func file_domain_event_event_recurrence_event_recurrence_proto_rawDescGZIP() []b
 	return file_domain_event_event_recurrence_event_recurrence_proto_rawDescData
 }
 
-var file_domain_event_event_recurrence_event_recurrence_proto_msgTypes = make([]protoimpl.MessageInfo, 11)
+var file_domain_event_event_recurrence_event_recurrence_proto_enumTypes = make([]protoimpl.EnumInfo, 1)
+var file_domain_event_event_recurrence_event_recurrence_proto_msgTypes = make([]protoimpl.MessageInfo, 15)
 var file_domain_event_event_recurrence_event_recurrence_proto_goTypes = []any{
-	(*EventRecurrence)(nil),               // 0: domain.event.v1.EventRecurrence
-	(*CreateEventRecurrenceRequest)(nil),  // 1: domain.event.v1.CreateEventRecurrenceRequest
-	(*CreateEventRecurrenceResponse)(nil), // 2: domain.event.v1.CreateEventRecurrenceResponse
-	(*ReadEventRecurrenceRequest)(nil),    // 3: domain.event.v1.ReadEventRecurrenceRequest
-	(*ReadEventRecurrenceResponse)(nil),   // 4: domain.event.v1.ReadEventRecurrenceResponse
-	(*UpdateEventRecurrenceRequest)(nil),  // 5: domain.event.v1.UpdateEventRecurrenceRequest
-	(*UpdateEventRecurrenceResponse)(nil), // 6: domain.event.v1.UpdateEventRecurrenceResponse
-	(*DeleteEventRecurrenceRequest)(nil),  // 7: domain.event.v1.DeleteEventRecurrenceRequest
-	(*DeleteEventRecurrenceResponse)(nil), // 8: domain.event.v1.DeleteEventRecurrenceResponse
-	(*ListEventRecurrencesRequest)(nil),   // 9: domain.event.v1.ListEventRecurrencesRequest
-	(*ListEventRecurrencesResponse)(nil),  // 10: domain.event.v1.ListEventRecurrencesResponse
-	(*common.Error)(nil),                  // 11: domain.common.v1.Error
-	(*common.SearchRequest)(nil),          // 12: domain.common.v1.SearchRequest
-	(*common.FilterRequest)(nil),          // 13: domain.common.v1.FilterRequest
-	(*common.SortRequest)(nil),            // 14: domain.common.v1.SortRequest
-	(*common.PaginationRequest)(nil),      // 15: domain.common.v1.PaginationRequest
+	(RecurrenceFrequency)(0),                       // 0: domain.event.v1.RecurrenceFrequency
+	(*EventRecurrence)(nil),                        // 1: domain.event.v1.EventRecurrence
+	(*CreateEventRecurrenceRequest)(nil),           // 2: domain.event.v1.CreateEventRecurrenceRequest
+	(*CreateEventRecurrenceResponse)(nil),          // 3: domain.event.v1.CreateEventRecurrenceResponse
+	(*ReadEventRecurrenceRequest)(nil),             // 4: domain.event.v1.ReadEventRecurrenceRequest
+	(*ReadEventRecurrenceResponse)(nil),            // 5: domain.event.v1.ReadEventRecurrenceResponse
+	(*UpdateEventRecurrenceRequest)(nil),           // 6: domain.event.v1.UpdateEventRecurrenceRequest
+	(*UpdateEventRecurrenceResponse)(nil),          // 7: domain.event.v1.UpdateEventRecurrenceResponse
+	(*DeleteEventRecurrenceRequest)(nil),           // 8: domain.event.v1.DeleteEventRecurrenceRequest
+	(*DeleteEventRecurrenceResponse)(nil),          // 9: domain.event.v1.DeleteEventRecurrenceResponse
+	(*ListEventRecurrencesRequest)(nil),            // 10: domain.event.v1.ListEventRecurrencesRequest
+	(*ListEventRecurrencesResponse)(nil),           // 11: domain.event.v1.ListEventRecurrencesResponse
+	(*GetEventRecurrenceListPageDataRequest)(nil),  // 12: domain.event.v1.GetEventRecurrenceListPageDataRequest
+	(*GetEventRecurrenceListPageDataResponse)(nil), // 13: domain.event.v1.GetEventRecurrenceListPageDataResponse
+	(*GetEventRecurrenceItemPageDataRequest)(nil),  // 14: domain.event.v1.GetEventRecurrenceItemPageDataRequest
+	(*GetEventRecurrenceItemPageDataResponse)(nil), // 15: domain.event.v1.GetEventRecurrenceItemPageDataResponse
+	(*common.Error)(nil),                           // 16: domain.common.v1.Error
+	(*common.SearchRequest)(nil),                   // 17: domain.common.v1.SearchRequest
+	(*common.FilterRequest)(nil),                   // 18: domain.common.v1.FilterRequest
+	(*common.SortRequest)(nil),                     // 19: domain.common.v1.SortRequest
+	(*common.PaginationRequest)(nil),               // 20: domain.common.v1.PaginationRequest
+	(*common.PaginationResponse)(nil),              // 21: domain.common.v1.PaginationResponse
+	(*common.SearchResult)(nil),                    // 22: domain.common.v1.SearchResult
 }
 var file_domain_event_event_recurrence_event_recurrence_proto_depIdxs = []int32{
-	0,  // 0: domain.event.v1.CreateEventRecurrenceRequest.data:type_name -> domain.event.v1.EventRecurrence
-	0,  // 1: domain.event.v1.CreateEventRecurrenceResponse.data:type_name -> domain.event.v1.EventRecurrence
-	11, // 2: domain.event.v1.CreateEventRecurrenceResponse.error:type_name -> domain.common.v1.Error
-	0,  // 3: domain.event.v1.ReadEventRecurrenceRequest.data:type_name -> domain.event.v1.EventRecurrence
-	0,  // 4: domain.event.v1.ReadEventRecurrenceResponse.data:type_name -> domain.event.v1.EventRecurrence
-	11, // 5: domain.event.v1.ReadEventRecurrenceResponse.error:type_name -> domain.common.v1.Error
-	0,  // 6: domain.event.v1.UpdateEventRecurrenceRequest.data:type_name -> domain.event.v1.EventRecurrence
-	0,  // 7: domain.event.v1.UpdateEventRecurrenceResponse.data:type_name -> domain.event.v1.EventRecurrence
-	11, // 8: domain.event.v1.UpdateEventRecurrenceResponse.error:type_name -> domain.common.v1.Error
-	0,  // 9: domain.event.v1.DeleteEventRecurrenceRequest.data:type_name -> domain.event.v1.EventRecurrence
-	11, // 10: domain.event.v1.DeleteEventRecurrenceResponse.error:type_name -> domain.common.v1.Error
-	12, // 11: domain.event.v1.ListEventRecurrencesRequest.search:type_name -> domain.common.v1.SearchRequest
-	13, // 12: domain.event.v1.ListEventRecurrencesRequest.filters:type_name -> domain.common.v1.FilterRequest
-	14, // 13: domain.event.v1.ListEventRecurrencesRequest.sort:type_name -> domain.common.v1.SortRequest
-	15, // 14: domain.event.v1.ListEventRecurrencesRequest.pagination:type_name -> domain.common.v1.PaginationRequest
-	0,  // 15: domain.event.v1.ListEventRecurrencesResponse.data:type_name -> domain.event.v1.EventRecurrence
-	11, // 16: domain.event.v1.ListEventRecurrencesResponse.error:type_name -> domain.common.v1.Error
-	1,  // 17: domain.event.v1.EventRecurrenceDomainService.CreateEventRecurrence:input_type -> domain.event.v1.CreateEventRecurrenceRequest
-	3,  // 18: domain.event.v1.EventRecurrenceDomainService.ReadEventRecurrence:input_type -> domain.event.v1.ReadEventRecurrenceRequest
-	5,  // 19: domain.event.v1.EventRecurrenceDomainService.UpdateEventRecurrence:input_type -> domain.event.v1.UpdateEventRecurrenceRequest
-	7,  // 20: domain.event.v1.EventRecurrenceDomainService.DeleteEventRecurrence:input_type -> domain.event.v1.DeleteEventRecurrenceRequest
-	9,  // 21: domain.event.v1.EventRecurrenceDomainService.ListEventRecurrences:input_type -> domain.event.v1.ListEventRecurrencesRequest
-	2,  // 22: domain.event.v1.EventRecurrenceDomainService.CreateEventRecurrence:output_type -> domain.event.v1.CreateEventRecurrenceResponse
-	4,  // 23: domain.event.v1.EventRecurrenceDomainService.ReadEventRecurrence:output_type -> domain.event.v1.ReadEventRecurrenceResponse
-	6,  // 24: domain.event.v1.EventRecurrenceDomainService.UpdateEventRecurrence:output_type -> domain.event.v1.UpdateEventRecurrenceResponse
-	8,  // 25: domain.event.v1.EventRecurrenceDomainService.DeleteEventRecurrence:output_type -> domain.event.v1.DeleteEventRecurrenceResponse
-	10, // 26: domain.event.v1.EventRecurrenceDomainService.ListEventRecurrences:output_type -> domain.event.v1.ListEventRecurrencesResponse
-	22, // [22:27] is the sub-list for method output_type
-	17, // [17:22] is the sub-list for method input_type
-	17, // [17:17] is the sub-list for extension type_name
-	17, // [17:17] is the sub-list for extension extendee
-	0,  // [0:17] is the sub-list for field type_name
+	0,  // 0: domain.event.v1.EventRecurrence.freq:type_name -> domain.event.v1.RecurrenceFrequency
+	1,  // 1: domain.event.v1.CreateEventRecurrenceRequest.data:type_name -> domain.event.v1.EventRecurrence
+	1,  // 2: domain.event.v1.CreateEventRecurrenceResponse.data:type_name -> domain.event.v1.EventRecurrence
+	16, // 3: domain.event.v1.CreateEventRecurrenceResponse.error:type_name -> domain.common.v1.Error
+	1,  // 4: domain.event.v1.ReadEventRecurrenceRequest.data:type_name -> domain.event.v1.EventRecurrence
+	1,  // 5: domain.event.v1.ReadEventRecurrenceResponse.data:type_name -> domain.event.v1.EventRecurrence
+	16, // 6: domain.event.v1.ReadEventRecurrenceResponse.error:type_name -> domain.common.v1.Error
+	1,  // 7: domain.event.v1.UpdateEventRecurrenceRequest.data:type_name -> domain.event.v1.EventRecurrence
+	1,  // 8: domain.event.v1.UpdateEventRecurrenceResponse.data:type_name -> domain.event.v1.EventRecurrence
+	16, // 9: domain.event.v1.UpdateEventRecurrenceResponse.error:type_name -> domain.common.v1.Error
+	1,  // 10: domain.event.v1.DeleteEventRecurrenceRequest.data:type_name -> domain.event.v1.EventRecurrence
+	16, // 11: domain.event.v1.DeleteEventRecurrenceResponse.error:type_name -> domain.common.v1.Error
+	17, // 12: domain.event.v1.ListEventRecurrencesRequest.search:type_name -> domain.common.v1.SearchRequest
+	18, // 13: domain.event.v1.ListEventRecurrencesRequest.filters:type_name -> domain.common.v1.FilterRequest
+	19, // 14: domain.event.v1.ListEventRecurrencesRequest.sort:type_name -> domain.common.v1.SortRequest
+	20, // 15: domain.event.v1.ListEventRecurrencesRequest.pagination:type_name -> domain.common.v1.PaginationRequest
+	1,  // 16: domain.event.v1.ListEventRecurrencesResponse.data:type_name -> domain.event.v1.EventRecurrence
+	16, // 17: domain.event.v1.ListEventRecurrencesResponse.error:type_name -> domain.common.v1.Error
+	20, // 18: domain.event.v1.GetEventRecurrenceListPageDataRequest.pagination:type_name -> domain.common.v1.PaginationRequest
+	18, // 19: domain.event.v1.GetEventRecurrenceListPageDataRequest.filters:type_name -> domain.common.v1.FilterRequest
+	19, // 20: domain.event.v1.GetEventRecurrenceListPageDataRequest.sort:type_name -> domain.common.v1.SortRequest
+	17, // 21: domain.event.v1.GetEventRecurrenceListPageDataRequest.search:type_name -> domain.common.v1.SearchRequest
+	1,  // 22: domain.event.v1.GetEventRecurrenceListPageDataResponse.event_recurrence_list:type_name -> domain.event.v1.EventRecurrence
+	21, // 23: domain.event.v1.GetEventRecurrenceListPageDataResponse.pagination:type_name -> domain.common.v1.PaginationResponse
+	22, // 24: domain.event.v1.GetEventRecurrenceListPageDataResponse.search_results:type_name -> domain.common.v1.SearchResult
+	16, // 25: domain.event.v1.GetEventRecurrenceListPageDataResponse.error:type_name -> domain.common.v1.Error
+	1,  // 26: domain.event.v1.GetEventRecurrenceItemPageDataResponse.event_recurrence:type_name -> domain.event.v1.EventRecurrence
+	16, // 27: domain.event.v1.GetEventRecurrenceItemPageDataResponse.error:type_name -> domain.common.v1.Error
+	2,  // 28: domain.event.v1.EventRecurrenceDomainService.CreateEventRecurrence:input_type -> domain.event.v1.CreateEventRecurrenceRequest
+	4,  // 29: domain.event.v1.EventRecurrenceDomainService.ReadEventRecurrence:input_type -> domain.event.v1.ReadEventRecurrenceRequest
+	6,  // 30: domain.event.v1.EventRecurrenceDomainService.UpdateEventRecurrence:input_type -> domain.event.v1.UpdateEventRecurrenceRequest
+	8,  // 31: domain.event.v1.EventRecurrenceDomainService.DeleteEventRecurrence:input_type -> domain.event.v1.DeleteEventRecurrenceRequest
+	10, // 32: domain.event.v1.EventRecurrenceDomainService.ListEventRecurrences:input_type -> domain.event.v1.ListEventRecurrencesRequest
+	12, // 33: domain.event.v1.EventRecurrenceDomainService.GetEventRecurrenceListPageData:input_type -> domain.event.v1.GetEventRecurrenceListPageDataRequest
+	14, // 34: domain.event.v1.EventRecurrenceDomainService.GetEventRecurrenceItemPageData:input_type -> domain.event.v1.GetEventRecurrenceItemPageDataRequest
+	3,  // 35: domain.event.v1.EventRecurrenceDomainService.CreateEventRecurrence:output_type -> domain.event.v1.CreateEventRecurrenceResponse
+	5,  // 36: domain.event.v1.EventRecurrenceDomainService.ReadEventRecurrence:output_type -> domain.event.v1.ReadEventRecurrenceResponse
+	7,  // 37: domain.event.v1.EventRecurrenceDomainService.UpdateEventRecurrence:output_type -> domain.event.v1.UpdateEventRecurrenceResponse
+	9,  // 38: domain.event.v1.EventRecurrenceDomainService.DeleteEventRecurrence:output_type -> domain.event.v1.DeleteEventRecurrenceResponse
+	11, // 39: domain.event.v1.EventRecurrenceDomainService.ListEventRecurrences:output_type -> domain.event.v1.ListEventRecurrencesResponse
+	13, // 40: domain.event.v1.EventRecurrenceDomainService.GetEventRecurrenceListPageData:output_type -> domain.event.v1.GetEventRecurrenceListPageDataResponse
+	15, // 41: domain.event.v1.EventRecurrenceDomainService.GetEventRecurrenceItemPageData:output_type -> domain.event.v1.GetEventRecurrenceItemPageDataResponse
+	35, // [35:42] is the sub-list for method output_type
+	28, // [28:35] is the sub-list for method input_type
+	28, // [28:28] is the sub-list for extension type_name
+	28, // [28:28] is the sub-list for extension extendee
+	0,  // [0:28] is the sub-list for field type_name
 }
 
 func init() { file_domain_event_event_recurrence_event_recurrence_proto_init() }
@@ -819,18 +1271,22 @@ func file_domain_event_event_recurrence_event_recurrence_proto_init() {
 	file_domain_event_event_recurrence_event_recurrence_proto_msgTypes[8].OneofWrappers = []any{}
 	file_domain_event_event_recurrence_event_recurrence_proto_msgTypes[9].OneofWrappers = []any{}
 	file_domain_event_event_recurrence_event_recurrence_proto_msgTypes[10].OneofWrappers = []any{}
+	file_domain_event_event_recurrence_event_recurrence_proto_msgTypes[11].OneofWrappers = []any{}
+	file_domain_event_event_recurrence_event_recurrence_proto_msgTypes[12].OneofWrappers = []any{}
+	file_domain_event_event_recurrence_event_recurrence_proto_msgTypes[14].OneofWrappers = []any{}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
 		File: protoimpl.DescBuilder{
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_domain_event_event_recurrence_event_recurrence_proto_rawDesc), len(file_domain_event_event_recurrence_event_recurrence_proto_rawDesc)),
-			NumEnums:      0,
-			NumMessages:   11,
+			NumEnums:      1,
+			NumMessages:   15,
 			NumExtensions: 0,
 			NumServices:   1,
 		},
 		GoTypes:           file_domain_event_event_recurrence_event_recurrence_proto_goTypes,
 		DependencyIndexes: file_domain_event_event_recurrence_event_recurrence_proto_depIdxs,
+		EnumInfos:         file_domain_event_event_recurrence_event_recurrence_proto_enumTypes,
 		MessageInfos:      file_domain_event_event_recurrence_event_recurrence_proto_msgTypes,
 	}.Build()
 	File_domain_event_event_recurrence_event_recurrence_proto = out.File

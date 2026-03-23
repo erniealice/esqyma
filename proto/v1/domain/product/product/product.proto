@@ -29,6 +29,9 @@ message Product {
   string currency = 10;
   repeated ProductCollection product_collections = 11;
   string item_type = 12; // "serialized", "non_serialized", "consumable"
+  // Determines how this product reaches the client. Defaults to 'physical' for backward compatibility.
+  // Valid values: "physical", "service", "digital", "make_to_order"
+  string fulfillment_method = 13;
 }
 
 service ProductDomainService {

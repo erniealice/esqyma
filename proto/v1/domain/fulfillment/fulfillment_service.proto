@@ -1,0 +1,98 @@
+syntax = "proto3";
+
+package domain.fulfillment.v1;
+
+option go_package = "github.com/erniealice/esqyma/golang/v1/domain/fulfillment/fulfillment";
+
+import "domain/fulfillment/fulfillment.proto";
+import "domain/fulfillment/fulfillment_item.proto";
+import "domain/fulfillment/fulfillment_status_event.proto";
+import "domain/fulfillment/fulfillment_return.proto";
+import "domain/fulfillment/fulfillment_return_item.proto";
+import "domain/common/error.proto";
+import "domain/common/pagination.proto";
+import "domain/common/filter.proto";
+import "domain/common/sort.proto";
+import "domain/common/search.proto";
+
+service FulfillmentDomainService {
+  rpc CreateFulfillment(CreateFulfillmentRequest) returns (CreateFulfillmentResponse);
+  rpc GetFulfillment(GetFulfillmentRequest) returns (GetFulfillmentResponse);
+  rpc UpdateFulfillment(UpdateFulfillmentRequest) returns (UpdateFulfillmentResponse);
+  rpc DeleteFulfillment(DeleteFulfillmentRequest) returns (DeleteFulfillmentResponse);
+  rpc ListFulfillments(ListFulfillmentsRequest) returns (ListFulfillmentsResponse);
+  rpc GetFulfillmentListPageData(GetFulfillmentListPageDataRequest) returns (GetFulfillmentListPageDataResponse);
+  rpc GetFulfillmentItemPageData(GetFulfillmentItemPageDataRequest) returns (GetFulfillmentItemPageDataResponse);
+  rpc TransitionStatus(TransitionStatusRequest) returns (TransitionStatusResponse);
+  rpc ListStatusEvents(ListStatusEventsRequest) returns (ListStatusEventsResponse);
+}
+
+// Standard CRUD messages
+message CreateFulfillmentRequest { Fulfillment data = 1; }
+message CreateFulfillmentResponse { Fulfillment data = 1; domain.common.v1.Error error = 2; }
+message GetFulfillmentRequest { string id = 1; }
+message GetFulfillmentResponse { Fulfillment data = 1; domain.common.v1.Error error = 2; }
+message UpdateFulfillmentRequest { Fulfillment data = 1; }
+message UpdateFulfillmentResponse { Fulfillment data = 1; domain.common.v1.Error error = 2; }
+message DeleteFulfillmentRequest { string id = 1; }
+message DeleteFulfillmentResponse { bool success = 1; domain.common.v1.Error error = 2; }
+
+// List with filters
+message ListFulfillmentsRequest {
+  domain.common.v1.PaginationRequest pagination = 1;
+  domain.common.v1.FilterRequest filter = 2;
+  domain.common.v1.SortRequest sort = 3;
+  domain.common.v1.SearchRequest search = 4;
+}
+message ListFulfillmentsResponse {
+  repeated Fulfillment data = 1;
+  domain.common.v1.PaginationResponse pagination = 2;
+  domain.common.v1.Error error = 3;
+}
+
+// Page data (enriched for views)
+message GetFulfillmentListPageDataRequest {
+  domain.common.v1.PaginationRequest pagination = 1;
+  domain.common.v1.FilterRequest filter = 2;
+  domain.common.v1.SortRequest sort = 3;
+  domain.common.v1.SearchRequest search = 4;
+}
+message GetFulfillmentListPageDataResponse {
+  repeated FulfillmentListRow rows = 1;
+  domain.common.v1.PaginationResponse pagination = 2;
+  domain.common.v1.Error error = 3;
+}
+message FulfillmentListRow {
+  Fulfillment fulfillment = 1;
+  string supplier_name = 2;
+  int32 item_count = 3;
+  int32 status_event_count = 4;
+}
+
+// Item page data
+message GetFulfillmentItemPageDataRequest { string id = 1; }
+message GetFulfillmentItemPageDataResponse {
+  Fulfillment fulfillment = 1;
+  repeated FulfillmentItem items = 2;
+  repeated FulfillmentStatusEvent status_events = 3;
+  repeated FulfillmentReturn returns = 4;
+  string supplier_name = 5;
+  string revenue_reference = 6;
+  repeated string allowed_events = 7; // resolved by use case, not state machine import
+  domain.common.v1.Error error = 8;
+}
+
+// Status transition
+message TransitionStatusRequest {
+  string fulfillment_id = 1;
+  string event = 2; // "mark_ready", "dispatch", "deliver", etc.
+  string triggered_by_id = 3;
+  string reason = 4;
+  string provider_status = 5;
+  string provider_reference = 6;
+}
+message TransitionStatusResponse { Fulfillment data = 1; domain.common.v1.Error error = 2; }
+
+// Status events list
+message ListStatusEventsRequest { string fulfillment_id = 1; }
+message ListStatusEventsResponse { repeated FulfillmentStatusEvent events = 1; domain.common.v1.Error error = 2; }

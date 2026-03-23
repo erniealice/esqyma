@@ -9,8 +9,15 @@ import "domain/common/pagination.proto";
 import "domain/common/filter.proto";
 import "domain/common/sort.proto";
 import "domain/common/search.proto";
-import "domain/event/event_client/event_client.proto";
 import "options/db.proto";
+
+// EventStatus represents the lifecycle state of an event.
+enum EventStatus {
+  EVENT_STATUS_UNSPECIFIED = 0;
+  EVENT_STATUS_TENTATIVE = 1;
+  EVENT_STATUS_CONFIRMED = 2;
+  EVENT_STATUS_CANCELLED = 3;
+}
 
 message Event {
   option (options.v1.table).table = true;
@@ -27,7 +34,31 @@ message Event {
   string timezone = 11;
   optional string start_date_time_utc_string = 12;
   optional string end_date_time_utc_string = 13;
-  repeated EventClient event_clients = 14;
+
+  // Tenant scope
+  string workspace_id = 15 [(options.v1.db).references = "workspace", (options.v1.db).index = true];
+
+  // Organizer: workspace_user (tenant-scoped identity with roles, NOT auth-level user)
+  optional string organizer_id = 16 [(options.v1.db).references = "workspace_user", (options.v1.db).index = true];
+
+  // Location FK (optional — not all events have a physical location)
+  optional string location_id = 17 [(options.v1.db).references = "location", (options.v1.db).index = true];
+
+  // Recurrence FK (moved from deleted EventSettings)
+  optional string event_recurrence_id = 18 [(options.v1.db).references = "event_recurrence", (options.v1.db).index = true];
+
+  // Event lifecycle status
+  EventStatus status = 19;
+
+  // All-day event flag (ignores start/end time components)
+  bool all_day = 20;
+
+  // Recurring exception support (RFC 5545 RECURRENCE-ID pattern)
+  // parent_event_id points to the master recurring event this exception overrides
+  optional string parent_event_id = 21 [(options.v1.db).references = "event", (options.v1.db).index = true];
+
+  // Original occurrence timestamp this exception replaces (RFC 5545 RECURRENCE-ID value)
+  optional int64 original_occurrence_utc = 22;
 }
 
 service EventDomainService {
@@ -37,11 +68,11 @@ service EventDomainService {
   rpc DeleteEvent(DeleteEventRequest) returns (DeleteEventResponse);
   rpc ListEvents(ListEventsRequest) returns (ListEventsResponse);
 
-  // NEW: Enhanced list with pagination, filtering, sorting, search - optimized for time-based queries
+  // Enhanced list with pagination, filtering, sorting, search - optimized for time-based queries
   rpc GetEventListPageData(GetEventListPageDataRequest)
     returns (GetEventListPageDataResponse);
 
-  // NEW: Enhanced item view with related scheduling data
+  // Enhanced item view with related scheduling data
   rpc GetEventItemPageData(GetEventItemPageDataRequest)
     returns (GetEventItemPageDataResponse);
 }
@@ -98,7 +129,7 @@ message ListEventsResponse {
   optional domain.common.v1.Error error = 3;
 }
 
-// NEW: Enhanced list page data request with time-based filtering
+// Enhanced list page data request with time-based filtering
 message GetEventListPageDataRequest {
   optional domain.common.v1.PaginationRequest pagination = 1;
   optional domain.common.v1.FilterRequest filters = 2;
@@ -106,7 +137,7 @@ message GetEventListPageDataRequest {
   optional domain.common.v1.SearchRequest search = 4;
 }
 
-// NEW: Enhanced list page data response with time-based optimization
+// Enhanced list page data response with time-based optimization
 message GetEventListPageDataResponse {
   repeated Event event_list = 1;
   domain.common.v1.PaginationResponse pagination = 2;
@@ -115,12 +146,12 @@ message GetEventListPageDataResponse {
   optional domain.common.v1.Error error = 5;
 }
 
-// NEW: Enhanced item page data request
+// Enhanced item page data request
 message GetEventItemPageDataRequest {
   string event_id = 1;
 }
 
-// NEW: Enhanced item page data response with related scheduling data
+// Enhanced item page data response with related scheduling data
 message GetEventItemPageDataResponse {
   Event event = 1;
   bool success = 2;

@@ -37,9 +37,9 @@ type EventDomainServiceClient interface {
 	UpdateEvent(ctx context.Context, in *UpdateEventRequest, opts ...grpc.CallOption) (*UpdateEventResponse, error)
 	DeleteEvent(ctx context.Context, in *DeleteEventRequest, opts ...grpc.CallOption) (*DeleteEventResponse, error)
 	ListEvents(ctx context.Context, in *ListEventsRequest, opts ...grpc.CallOption) (*ListEventsResponse, error)
-	// NEW: Enhanced list with pagination, filtering, sorting, search - optimized for time-based queries
+	// Enhanced list with pagination, filtering, sorting, search - optimized for time-based queries
 	GetEventListPageData(ctx context.Context, in *GetEventListPageDataRequest, opts ...grpc.CallOption) (*GetEventListPageDataResponse, error)
-	// NEW: Enhanced item view with related scheduling data
+	// Enhanced item view with related scheduling data
 	GetEventItemPageData(ctx context.Context, in *GetEventItemPageDataRequest, opts ...grpc.CallOption) (*GetEventItemPageDataResponse, error)
 }
 
@@ -130,9 +130,9 @@ type EventDomainServiceServer interface {
 	UpdateEvent(context.Context, *UpdateEventRequest) (*UpdateEventResponse, error)
 	DeleteEvent(context.Context, *DeleteEventRequest) (*DeleteEventResponse, error)
 	ListEvents(context.Context, *ListEventsRequest) (*ListEventsResponse, error)
-	// NEW: Enhanced list with pagination, filtering, sorting, search - optimized for time-based queries
+	// Enhanced list with pagination, filtering, sorting, search - optimized for time-based queries
 	GetEventListPageData(context.Context, *GetEventListPageDataRequest) (*GetEventListPageDataResponse, error)
-	// NEW: Enhanced item view with related scheduling data
+	// Enhanced item view with related scheduling data
 	GetEventItemPageData(context.Context, *GetEventItemPageDataRequest) (*GetEventItemPageDataResponse, error)
 	mustEmbedUnimplementedEventDomainServiceServer()
 }

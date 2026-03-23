@@ -41,8 +41,11 @@ type Product struct {
 	Currency           string                                  `protobuf:"bytes,10,opt,name=currency,proto3" json:"currency,omitempty"`
 	ProductCollections []*product_collection.ProductCollection `protobuf:"bytes,11,rep,name=product_collections,json=productCollections,proto3" json:"product_collections,omitempty"`
 	ItemType           string                                  `protobuf:"bytes,12,opt,name=item_type,json=itemType,proto3" json:"item_type,omitempty"` // "serialized", "non_serialized", "consumable"
-	unknownFields      protoimpl.UnknownFields
-	sizeCache          protoimpl.SizeCache
+	// Determines how this product reaches the client. Defaults to 'physical' for backward compatibility.
+	// Valid values: "physical", "service", "digital", "make_to_order"
+	FulfillmentMethod string `protobuf:"bytes,13,opt,name=fulfillment_method,json=fulfillmentMethod,proto3" json:"fulfillment_method,omitempty"`
+	unknownFields     protoimpl.UnknownFields
+	sizeCache         protoimpl.SizeCache
 }
 
 func (x *Product) Reset() {
@@ -155,6 +158,13 @@ func (x *Product) GetProductCollections() []*product_collection.ProductCollectio
 func (x *Product) GetItemType() string {
 	if x != nil {
 		return x.ItemType
+	}
+	return ""
+}
+
+func (x *Product) GetFulfillmentMethod() string {
+	if x != nil {
+		return x.FulfillmentMethod
 	}
 	return ""
 }
@@ -962,7 +972,7 @@ var File_domain_product_product_product_proto protoreflect.FileDescriptor
 
 const file_domain_product_product_product_proto_rawDesc = "" +
 	"\n" +
-	"$domain/product/product/product.proto\x12\x11domain.product.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1adomain/common/search.proto\x1a:domain/product/product_collection/product_collection.proto\x1a\x10options/db.proto\"\xc8\x04\n" +
+	"$domain/product/product/product.proto\x12\x11domain.product.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1adomain/common/search.proto\x1a:domain/product/product_collection/product_collection.proto\x1a\x10options/db.proto\"\xf7\x04\n" +
 	"\aProduct\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12&\n" +
 	"\fdate_created\x18\x02 \x01(\x03H\x00R\vdateCreated\x88\x01\x01\x123\n" +
@@ -977,7 +987,8 @@ const file_domain_product_product_product_proto_rawDesc = "" +
 	"\bcurrency\x18\n" +
 	" \x01(\tR\bcurrency\x12U\n" +
 	"\x13product_collections\x18\v \x03(\v2$.domain.product.v1.ProductCollectionR\x12productCollections\x12\x1b\n" +
-	"\titem_type\x18\f \x01(\tR\bitemType:\x06\x8a\xb5\x18\x02\b\x01B\x0f\n" +
+	"\titem_type\x18\f \x01(\tR\bitemType\x12-\n" +
+	"\x12fulfillment_method\x18\r \x01(\tR\x11fulfillmentMethod:\x06\x8a\xb5\x18\x02\b\x01B\x0f\n" +
 	"\r_date_createdB\x16\n" +
 	"\x14_date_created_stringB\x10\n" +
 	"\x0e_date_modifiedB\x17\n" +

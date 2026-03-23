@@ -1,0 +1,24 @@
+syntax = "proto3";
+
+package domain.fulfillment.v1;
+
+option go_package = "github.com/erniealice/esqyma/golang/v1/domain/fulfillment/fulfillment_item";
+
+import "options/db.proto";
+
+message FulfillmentItem {
+  option (options.v1.table).table = true;
+  string id = 1;
+  string fulfillment_id = 2 [(options.v1.db).references = "fulfillment", (options.v1.db).index = true];
+  string revenue_line_item_id = 3 [(options.v1.db).references = "revenue_line_item"];
+  string product_id = 4 [(options.v1.db).references = "product"];
+  string fulfillment_method = 5; // snapshot from product at creation time — immutable
+  optional string source_type = 6; // "job", "subscription", etc.
+  optional string source_id = 7; // FK to originating record
+  double quantity_ordered = 8;
+  double quantity_delivered = 9;
+  // quantity_remaining is DB GENERATED ALWAYS AS (quantity_ordered - quantity_delivered) STORED — not in proto
+  string status = 10; // per-item canonical status
+  string notes = 11;
+  optional int64 date_created = 12;
+}

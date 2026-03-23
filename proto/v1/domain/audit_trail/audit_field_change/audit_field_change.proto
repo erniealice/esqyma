@@ -1,0 +1,28 @@
+syntax = "proto3";
+
+package domain.audit_trail.v1;
+
+option go_package = "github.com/erniealice/esqyma/golang/v1/domain/audit_trail/audit_field_change";
+
+import "domain/audit_trail/enums/enums.proto";
+
+// AuditFieldChange records the before/after state of a single field within an audit entry.
+// Note: ListFieldChangesByNameRequest is deferred to V2.
+message AuditFieldChange {
+  string id = 1;
+  string audit_entry_id = 2;
+
+  string field_name = 3;
+  FieldType field_type = 4;
+
+  string old_value = 5;
+  string new_value = 6;
+}
+
+message ListFieldChangesRequest {
+  string audit_entry_id = 1;
+}
+
+message ListFieldChangesResponse {
+  repeated AuditFieldChange changes = 1;
+}

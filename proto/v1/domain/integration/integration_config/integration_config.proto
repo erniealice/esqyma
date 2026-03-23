@@ -1,0 +1,69 @@
+syntax = "proto3";
+
+package domain.integration.v1;
+
+option go_package = "github.com/erniealice/esqyma/golang/v1/domain/integration/integration_config";
+
+import "google/protobuf/struct.proto";
+import "options/db.proto";
+
+// IntegrationType represents the category of integration
+enum IntegrationType {
+  INTEGRATION_TYPE_UNSPECIFIED = 0;
+  INTEGRATION_TYPE_SCHEDULER = 1;    // Calendly, Google Calendar, Microsoft Calendar
+  INTEGRATION_TYPE_FULFILLMENT = 2;  // Lalamove, GrabExpress
+  INTEGRATION_TYPE_PAYMENT = 3;      // AsiaPay, Stripe (future)
+  INTEGRATION_TYPE_VIDEO = 4;        // Zoom, Google Meet (future)
+}
+
+// IntegrationHealthStatus represents provider health
+enum IntegrationHealthStatus {
+  INTEGRATION_HEALTH_STATUS_UNSPECIFIED = 0;
+  INTEGRATION_HEALTH_STATUS_HEALTHY = 1;
+  INTEGRATION_HEALTH_STATUS_UNHEALTHY = 2;
+  INTEGRATION_HEALTH_STATUS_UNKNOWN = 3;
+  INTEGRATION_HEALTH_STATUS_NOT_CONFIGURED = 4;
+}
+
+// IntegrationConfig stores a workspace's connection to a third-party provider.
+// This is the internal business entity — NOT the external API contract.
+// Each record represents one connected provider for one workspace.
+message IntegrationConfig {
+  option (options.v1.table).table = true;
+
+  string id = 1;
+  string workspace_id = 2 [(options.v1.db).index = true];
+
+  // Integration category (scheduler, fulfillment, payment, video)
+  string integration_type = 3 [(options.v1.db).index = true];
+
+  // Provider identifier (calendly, lalamove, google_calendar, zoom)
+  string provider_id = 4 [(options.v1.db).index = true];
+
+  // Human-readable display name (e.g., "My Calendly Account")
+  string display_name = 5;
+
+  // Whether this integration is currently enabled
+  bool enabled = 6 [(options.v1.db).default = "false"];
+
+  // Provider-specific configuration (API keys, OAuth tokens, defaults)
+  // Stored as JSON — structure varies by provider
+  google.protobuf.Struct config_data = 7;
+
+  // Webhook URL for receiving callbacks from this provider
+  optional string webhook_url = 8;
+
+  // Webhook signing secret for verification
+  optional string webhook_secret = 9;
+
+  // Health monitoring
+  string health_status = 10; // maps to IntegrationHealthStatus
+  optional int64 last_health_check = 11;
+  optional string health_message = 12;
+
+  // Audit
+  string created_by = 13;
+  optional int64 date_created = 14;
+  optional int64 date_modified = 15;
+  bool active = 16 [(options.v1.db).default = "true"];
+}

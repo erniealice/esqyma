@@ -2,8 +2,8 @@
 // @generated from file domain/event/event/event.proto (package domain.event.v1, syntax proto3)
 /* eslint-disable */
 
-import type { GenFile, GenMessage, GenService } from "@bufbuild/protobuf/codegenv2";
-import { fileDesc, messageDesc, serviceDesc } from "@bufbuild/protobuf/codegenv2";
+import type { GenEnum, GenFile, GenMessage, GenService } from "@bufbuild/protobuf/codegenv2";
+import { enumDesc, fileDesc, messageDesc, serviceDesc } from "@bufbuild/protobuf/codegenv2";
 import type { Error } from "../../common/error_pb";
 import { file_domain_common_error } from "../../common/error_pb";
 import type { PaginationRequest, PaginationResponse } from "../../common/pagination_pb";
@@ -14,8 +14,6 @@ import type { SortRequest } from "../../common/sort_pb";
 import { file_domain_common_sort } from "../../common/sort_pb";
 import type { SearchRequest, SearchResult } from "../../common/search_pb";
 import { file_domain_common_search } from "../../common/search_pb";
-import type { EventClient } from "../event_client/event_client_pb";
-import { file_domain_event_event_client_event_client } from "../event_client/event_client_pb";
 import { file_options_db } from "../../../options/db_pb";
 import type { Message } from "@bufbuild/protobuf";
 
@@ -23,7 +21,7 @@ import type { Message } from "@bufbuild/protobuf";
  * Describes the file domain/event/event/event.proto.
  */
 export const file_domain_event_event_event: GenFile = /*@__PURE__*/
-  fileDesc("Ch5kb21haW4vZXZlbnQvZXZlbnQvZXZlbnQucHJvdG8SD2RvbWFpbi5ldmVudC52MSLKBAoFRXZlbnQSCgoCaWQYASABKAkSDAoEbmFtZRgCIAEoCRIYCgtkZXNjcmlwdGlvbhgDIAEoCUgAiAEBEhkKDGRhdGVfY3JlYXRlZBgEIAEoA0gBiAEBEiAKE2RhdGVfY3JlYXRlZF9zdHJpbmcYBSABKAlIAogBARIaCg1kYXRlX21vZGlmaWVkGAYgASgDSAOIAQESIQoUZGF0ZV9tb2RpZmllZF9zdHJpbmcYByABKAlIBIgBARIaCgZhY3RpdmUYCCABKAhCCoK1GAYiBHRydWUSGwoTc3RhcnRfZGF0ZV90aW1lX3V0YxgJIAEoAxIZChFlbmRfZGF0ZV90aW1lX3V0YxgKIAEoAxIQCgh0aW1lem9uZRgLIAEoCRInChpzdGFydF9kYXRlX3RpbWVfdXRjX3N0cmluZxgMIAEoCUgFiAEBEiUKGGVuZF9kYXRlX3RpbWVfdXRjX3N0cmluZxgNIAEoCUgGiAEBEjMKDWV2ZW50X2NsaWVudHMYDiADKAsyHC5kb21haW4uZXZlbnQudjEuRXZlbnRDbGllbnQ6Boq1GAIIAUIOCgxfZGVzY3JpcHRpb25CDwoNX2RhdGVfY3JlYXRlZEIWChRfZGF0ZV9jcmVhdGVkX3N0cmluZ0IQCg5fZGF0ZV9tb2RpZmllZEIXChVfZGF0ZV9tb2RpZmllZF9zdHJpbmdCHQobX3N0YXJ0X2RhdGVfdGltZV91dGNfc3RyaW5nQhsKGV9lbmRfZGF0ZV90aW1lX3V0Y19zdHJpbmciOgoSQ3JlYXRlRXZlbnRSZXF1ZXN0EiQKBGRhdGEYASABKAsyFi5kb21haW4uZXZlbnQudjEuRXZlbnQigwEKE0NyZWF0ZUV2ZW50UmVzcG9uc2USJAoEZGF0YRgBIAMoCzIWLmRvbWFpbi5ldmVudC52MS5FdmVudBIPCgdzdWNjZXNzGAIgASgIEisKBWVycm9yGAMgASgLMhcuZG9tYWluLmNvbW1vbi52MS5FcnJvckgAiAEBQggKBl9lcnJvciI4ChBSZWFkRXZlbnRSZXF1ZXN0EiQKBGRhdGEYASABKAsyFi5kb21haW4uZXZlbnQudjEuRXZlbnQigQEKEVJlYWRFdmVudFJlc3BvbnNlEiQKBGRhdGEYASADKAsyFi5kb21haW4uZXZlbnQudjEuRXZlbnQSDwoHc3VjY2VzcxgCIAEoCBIrCgVlcnJvchgDIAEoCzIXLmRvbWFpbi5jb21tb24udjEuRXJyb3JIAIgBAUIICgZfZXJyb3IiOgoSVXBkYXRlRXZlbnRSZXF1ZXN0EiQKBGRhdGEYASABKAsyFi5kb21haW4uZXZlbnQudjEuRXZlbnQigwEKE1VwZGF0ZUV2ZW50UmVzcG9uc2USJAoEZGF0YRgBIAMoCzIWLmRvbWFpbi5ldmVudC52MS5FdmVudBIPCgdzdWNjZXNzGAIgASgIEisKBWVycm9yGAMgASgLMhcuZG9tYWluLmNvbW1vbi52MS5FcnJvckgAiAEBQggKBl9lcnJvciI6ChJEZWxldGVFdmVudFJlcXVlc3QSJAoEZGF0YRgBIAEoCzIWLmRvbWFpbi5ldmVudC52MS5FdmVudCJdChNEZWxldGVFdmVudFJlc3BvbnNlEg8KB3N1Y2Nlc3MYASABKAgSKwoFZXJyb3IYAiABKAsyFy5kb21haW4uY29tbW9uLnYxLkVycm9ySACIAQFCCAoGX2Vycm9yIp8CChFMaXN0RXZlbnRzUmVxdWVzdBI0CgZzZWFyY2gYASABKAsyHy5kb21haW4uY29tbW9uLnYxLlNlYXJjaFJlcXVlc3RIAIgBARI1CgdmaWx0ZXJzGAIgASgLMh8uZG9tYWluLmNvbW1vbi52MS5GaWx0ZXJSZXF1ZXN0SAGIAQESMAoEc29ydBgDIAEoCzIdLmRvbWFpbi5jb21tb24udjEuU29ydFJlcXVlc3RIAogBARI8CgpwYWdpbmF0aW9uGAQgASgLMiMuZG9tYWluLmNvbW1vbi52MS5QYWdpbmF0aW9uUmVxdWVzdEgDiAEBQgkKB19zZWFyY2hCCgoIX2ZpbHRlcnNCBwoFX3NvcnRCDQoLX3BhZ2luYXRpb24iggEKEkxpc3RFdmVudHNSZXNwb25zZRIkCgRkYXRhGAEgAygLMhYuZG9tYWluLmV2ZW50LnYxLkV2ZW50Eg8KB3N1Y2Nlc3MYAiABKAgSKwoFZXJyb3IYAyABKAsyFy5kb21haW4uY29tbW9uLnYxLkVycm9ySACIAQFCCAoGX2Vycm9yIqkCChtHZXRFdmVudExpc3RQYWdlRGF0YVJlcXVlc3QSPAoKcGFnaW5hdGlvbhgBIAEoCzIjLmRvbWFpbi5jb21tb24udjEuUGFnaW5hdGlvblJlcXVlc3RIAIgBARI1CgdmaWx0ZXJzGAIgASgLMh8uZG9tYWluLmNvbW1vbi52MS5GaWx0ZXJSZXF1ZXN0SAGIAQESMAoEc29ydBgDIAEoCzIdLmRvbWFpbi5jb21tb24udjEuU29ydFJlcXVlc3RIAogBARI0CgZzZWFyY2gYBCABKAsyHy5kb21haW4uY29tbW9uLnYxLlNlYXJjaFJlcXVlc3RIA4gBAUINCgtfcGFnaW5hdGlvbkIKCghfZmlsdGVyc0IHCgVfc29ydEIJCgdfc2VhcmNoIoQCChxHZXRFdmVudExpc3RQYWdlRGF0YVJlc3BvbnNlEioKCmV2ZW50X2xpc3QYASADKAsyFi5kb21haW4uZXZlbnQudjEuRXZlbnQSOAoKcGFnaW5hdGlvbhgCIAEoCzIkLmRvbWFpbi5jb21tb24udjEuUGFnaW5hdGlvblJlc3BvbnNlEjYKDnNlYXJjaF9yZXN1bHRzGAMgAygLMh4uZG9tYWluLmNvbW1vbi52MS5TZWFyY2hSZXN1bHQSDwoHc3VjY2VzcxgEIAEoCBIrCgVlcnJvchgFIAEoCzIXLmRvbWFpbi5jb21tb24udjEuRXJyb3JIAIgBAUIICgZfZXJyb3IiLwobR2V0RXZlbnRJdGVtUGFnZURhdGFSZXF1ZXN0EhAKCGV2ZW50X2lkGAEgASgJIo0BChxHZXRFdmVudEl0ZW1QYWdlRGF0YVJlc3BvbnNlEiUKBWV2ZW50GAEgASgLMhYuZG9tYWluLmV2ZW50LnYxLkV2ZW50Eg8KB3N1Y2Nlc3MYAiABKAgSKwoFZXJyb3IYAyABKAsyFy5kb21haW4uY29tbW9uLnYxLkVycm9ySACIAQFCCAoGX2Vycm9yMrcFChJFdmVudERvbWFpblNlcnZpY2USWAoLQ3JlYXRlRXZlbnQSIy5kb21haW4uZXZlbnQudjEuQ3JlYXRlRXZlbnRSZXF1ZXN0GiQuZG9tYWluLmV2ZW50LnYxLkNyZWF0ZUV2ZW50UmVzcG9uc2USUgoJUmVhZEV2ZW50EiEuZG9tYWluLmV2ZW50LnYxLlJlYWRFdmVudFJlcXVlc3QaIi5kb21haW4uZXZlbnQudjEuUmVhZEV2ZW50UmVzcG9uc2USWAoLVXBkYXRlRXZlbnQSIy5kb21haW4uZXZlbnQudjEuVXBkYXRlRXZlbnRSZXF1ZXN0GiQuZG9tYWluLmV2ZW50LnYxLlVwZGF0ZUV2ZW50UmVzcG9uc2USWAoLRGVsZXRlRXZlbnQSIy5kb21haW4uZXZlbnQudjEuRGVsZXRlRXZlbnRSZXF1ZXN0GiQuZG9tYWluLmV2ZW50LnYxLkRlbGV0ZUV2ZW50UmVzcG9uc2USVQoKTGlzdEV2ZW50cxIiLmRvbWFpbi5ldmVudC52MS5MaXN0RXZlbnRzUmVxdWVzdBojLmRvbWFpbi5ldmVudC52MS5MaXN0RXZlbnRzUmVzcG9uc2UScwoUR2V0RXZlbnRMaXN0UGFnZURhdGESLC5kb21haW4uZXZlbnQudjEuR2V0RXZlbnRMaXN0UGFnZURhdGFSZXF1ZXN0Gi0uZG9tYWluLmV2ZW50LnYxLkdldEV2ZW50TGlzdFBhZ2VEYXRhUmVzcG9uc2UScwoUR2V0RXZlbnRJdGVtUGFnZURhdGESLC5kb21haW4uZXZlbnQudjEuR2V0RXZlbnRJdGVtUGFnZURhdGFSZXF1ZXN0Gi0uZG9tYWluLmV2ZW50LnYxLkdldEV2ZW50SXRlbVBhZ2VEYXRhUmVzcG9uc2VCxgEKE2NvbS5kb21haW4uZXZlbnQudjFCCkV2ZW50UHJvdG9QAVpFZ2l0aHViLmNvbS9lcm5pZWFsaWNlL2VzcXltYS9wa2cvc2NoZW1hL3YxL2RvbWFpbi9ldmVudC9ldmVudDtldmVudHYxogIDREVYqgIPRG9tYWluLkV2ZW50LlYxygIPRG9tYWluXEV2ZW50XFYx4gIbRG9tYWluXEV2ZW50XFYxXEdQQk1ldGFkYXRh6gIRRG9tYWluOjpFdmVudDo6VjFiBnByb3RvMw", [file_domain_common_error, file_domain_common_pagination, file_domain_common_filter, file_domain_common_sort, file_domain_common_search, file_domain_event_event_client_event_client, file_options_db]);
+  fileDesc("Ch5kb21haW4vZXZlbnQvZXZlbnQvZXZlbnQucHJvdG8SD2RvbWFpbi5ldmVudC52MSLUBwoFRXZlbnQSCgoCaWQYASABKAkSDAoEbmFtZRgCIAEoCRIYCgtkZXNjcmlwdGlvbhgDIAEoCUgAiAEBEhkKDGRhdGVfY3JlYXRlZBgEIAEoA0gBiAEBEiAKE2RhdGVfY3JlYXRlZF9zdHJpbmcYBSABKAlIAogBARIaCg1kYXRlX21vZGlmaWVkGAYgASgDSAOIAQESIQoUZGF0ZV9tb2RpZmllZF9zdHJpbmcYByABKAlIBIgBARIaCgZhY3RpdmUYCCABKAhCCoK1GAYiBHRydWUSGwoTc3RhcnRfZGF0ZV90aW1lX3V0YxgJIAEoAxIZChFlbmRfZGF0ZV90aW1lX3V0YxgKIAEoAxIQCgh0aW1lem9uZRgLIAEoCRInChpzdGFydF9kYXRlX3RpbWVfdXRjX3N0cmluZxgMIAEoCUgFiAEBEiUKGGVuZF9kYXRlX3RpbWVfdXRjX3N0cmluZxgNIAEoCUgGiAEBEicKDHdvcmtzcGFjZV9pZBgPIAEoCUIRgrUYDQoJd29ya3NwYWNlGAESMQoMb3JnYW5pemVyX2lkGBAgASgJQhaCtRgSCg53b3Jrc3BhY2VfdXNlchgBSAeIAQESKgoLbG9jYXRpb25faWQYESABKAlCEIK1GAwKCGxvY2F0aW9uGAFICIgBARI6ChNldmVudF9yZWN1cnJlbmNlX2lkGBIgASgJQhiCtRgUChBldmVudF9yZWN1cnJlbmNlGAFICYgBARIsCgZzdGF0dXMYEyABKA4yHC5kb21haW4uZXZlbnQudjEuRXZlbnRTdGF0dXMSDwoHYWxsX2RheRgUIAEoCBIrCg9wYXJlbnRfZXZlbnRfaWQYFSABKAlCDYK1GAkKBWV2ZW50GAFICogBARIkChdvcmlnaW5hbF9vY2N1cnJlbmNlX3V0YxgWIAEoA0gLiAEBOgaKtRgCCAFCDgoMX2Rlc2NyaXB0aW9uQg8KDV9kYXRlX2NyZWF0ZWRCFgoUX2RhdGVfY3JlYXRlZF9zdHJpbmdCEAoOX2RhdGVfbW9kaWZpZWRCFwoVX2RhdGVfbW9kaWZpZWRfc3RyaW5nQh0KG19zdGFydF9kYXRlX3RpbWVfdXRjX3N0cmluZ0IbChlfZW5kX2RhdGVfdGltZV91dGNfc3RyaW5nQg8KDV9vcmdhbml6ZXJfaWRCDgoMX2xvY2F0aW9uX2lkQhYKFF9ldmVudF9yZWN1cnJlbmNlX2lkQhIKEF9wYXJlbnRfZXZlbnRfaWRCGgoYX29yaWdpbmFsX29jY3VycmVuY2VfdXRjIjoKEkNyZWF0ZUV2ZW50UmVxdWVzdBIkCgRkYXRhGAEgASgLMhYuZG9tYWluLmV2ZW50LnYxLkV2ZW50IoMBChNDcmVhdGVFdmVudFJlc3BvbnNlEiQKBGRhdGEYASADKAsyFi5kb21haW4uZXZlbnQudjEuRXZlbnQSDwoHc3VjY2VzcxgCIAEoCBIrCgVlcnJvchgDIAEoCzIXLmRvbWFpbi5jb21tb24udjEuRXJyb3JIAIgBAUIICgZfZXJyb3IiOAoQUmVhZEV2ZW50UmVxdWVzdBIkCgRkYXRhGAEgASgLMhYuZG9tYWluLmV2ZW50LnYxLkV2ZW50IoEBChFSZWFkRXZlbnRSZXNwb25zZRIkCgRkYXRhGAEgAygLMhYuZG9tYWluLmV2ZW50LnYxLkV2ZW50Eg8KB3N1Y2Nlc3MYAiABKAgSKwoFZXJyb3IYAyABKAsyFy5kb21haW4uY29tbW9uLnYxLkVycm9ySACIAQFCCAoGX2Vycm9yIjoKElVwZGF0ZUV2ZW50UmVxdWVzdBIkCgRkYXRhGAEgASgLMhYuZG9tYWluLmV2ZW50LnYxLkV2ZW50IoMBChNVcGRhdGVFdmVudFJlc3BvbnNlEiQKBGRhdGEYASADKAsyFi5kb21haW4uZXZlbnQudjEuRXZlbnQSDwoHc3VjY2VzcxgCIAEoCBIrCgVlcnJvchgDIAEoCzIXLmRvbWFpbi5jb21tb24udjEuRXJyb3JIAIgBAUIICgZfZXJyb3IiOgoSRGVsZXRlRXZlbnRSZXF1ZXN0EiQKBGRhdGEYASABKAsyFi5kb21haW4uZXZlbnQudjEuRXZlbnQiXQoTRGVsZXRlRXZlbnRSZXNwb25zZRIPCgdzdWNjZXNzGAEgASgIEisKBWVycm9yGAIgASgLMhcuZG9tYWluLmNvbW1vbi52MS5FcnJvckgAiAEBQggKBl9lcnJvciKfAgoRTGlzdEV2ZW50c1JlcXVlc3QSNAoGc2VhcmNoGAEgASgLMh8uZG9tYWluLmNvbW1vbi52MS5TZWFyY2hSZXF1ZXN0SACIAQESNQoHZmlsdGVycxgCIAEoCzIfLmRvbWFpbi5jb21tb24udjEuRmlsdGVyUmVxdWVzdEgBiAEBEjAKBHNvcnQYAyABKAsyHS5kb21haW4uY29tbW9uLnYxLlNvcnRSZXF1ZXN0SAKIAQESPAoKcGFnaW5hdGlvbhgEIAEoCzIjLmRvbWFpbi5jb21tb24udjEuUGFnaW5hdGlvblJlcXVlc3RIA4gBAUIJCgdfc2VhcmNoQgoKCF9maWx0ZXJzQgcKBV9zb3J0Qg0KC19wYWdpbmF0aW9uIoIBChJMaXN0RXZlbnRzUmVzcG9uc2USJAoEZGF0YRgBIAMoCzIWLmRvbWFpbi5ldmVudC52MS5FdmVudBIPCgdzdWNjZXNzGAIgASgIEisKBWVycm9yGAMgASgLMhcuZG9tYWluLmNvbW1vbi52MS5FcnJvckgAiAEBQggKBl9lcnJvciKpAgobR2V0RXZlbnRMaXN0UGFnZURhdGFSZXF1ZXN0EjwKCnBhZ2luYXRpb24YASABKAsyIy5kb21haW4uY29tbW9uLnYxLlBhZ2luYXRpb25SZXF1ZXN0SACIAQESNQoHZmlsdGVycxgCIAEoCzIfLmRvbWFpbi5jb21tb24udjEuRmlsdGVyUmVxdWVzdEgBiAEBEjAKBHNvcnQYAyABKAsyHS5kb21haW4uY29tbW9uLnYxLlNvcnRSZXF1ZXN0SAKIAQESNAoGc2VhcmNoGAQgASgLMh8uZG9tYWluLmNvbW1vbi52MS5TZWFyY2hSZXF1ZXN0SAOIAQFCDQoLX3BhZ2luYXRpb25CCgoIX2ZpbHRlcnNCBwoFX3NvcnRCCQoHX3NlYXJjaCKEAgocR2V0RXZlbnRMaXN0UGFnZURhdGFSZXNwb25zZRIqCgpldmVudF9saXN0GAEgAygLMhYuZG9tYWluLmV2ZW50LnYxLkV2ZW50EjgKCnBhZ2luYXRpb24YAiABKAsyJC5kb21haW4uY29tbW9uLnYxLlBhZ2luYXRpb25SZXNwb25zZRI2Cg5zZWFyY2hfcmVzdWx0cxgDIAMoCzIeLmRvbWFpbi5jb21tb24udjEuU2VhcmNoUmVzdWx0Eg8KB3N1Y2Nlc3MYBCABKAgSKwoFZXJyb3IYBSABKAsyFy5kb21haW4uY29tbW9uLnYxLkVycm9ySACIAQFCCAoGX2Vycm9yIi8KG0dldEV2ZW50SXRlbVBhZ2VEYXRhUmVxdWVzdBIQCghldmVudF9pZBgBIAEoCSKNAQocR2V0RXZlbnRJdGVtUGFnZURhdGFSZXNwb25zZRIlCgVldmVudBgBIAEoCzIWLmRvbWFpbi5ldmVudC52MS5FdmVudBIPCgdzdWNjZXNzGAIgASgIEisKBWVycm9yGAMgASgLMhcuZG9tYWluLmNvbW1vbi52MS5FcnJvckgAiAEBQggKBl9lcnJvcip/CgtFdmVudFN0YXR1cxIcChhFVkVOVF9TVEFUVVNfVU5TUEVDSUZJRUQQABIaChZFVkVOVF9TVEFUVVNfVEVOVEFUSVZFEAESGgoWRVZFTlRfU1RBVFVTX0NPTkZJUk1FRBACEhoKFkVWRU5UX1NUQVRVU19DQU5DRUxMRUQQAzK3BQoSRXZlbnREb21haW5TZXJ2aWNlElgKC0NyZWF0ZUV2ZW50EiMuZG9tYWluLmV2ZW50LnYxLkNyZWF0ZUV2ZW50UmVxdWVzdBokLmRvbWFpbi5ldmVudC52MS5DcmVhdGVFdmVudFJlc3BvbnNlElIKCVJlYWRFdmVudBIhLmRvbWFpbi5ldmVudC52MS5SZWFkRXZlbnRSZXF1ZXN0GiIuZG9tYWluLmV2ZW50LnYxLlJlYWRFdmVudFJlc3BvbnNlElgKC1VwZGF0ZUV2ZW50EiMuZG9tYWluLmV2ZW50LnYxLlVwZGF0ZUV2ZW50UmVxdWVzdBokLmRvbWFpbi5ldmVudC52MS5VcGRhdGVFdmVudFJlc3BvbnNlElgKC0RlbGV0ZUV2ZW50EiMuZG9tYWluLmV2ZW50LnYxLkRlbGV0ZUV2ZW50UmVxdWVzdBokLmRvbWFpbi5ldmVudC52MS5EZWxldGVFdmVudFJlc3BvbnNlElUKCkxpc3RFdmVudHMSIi5kb21haW4uZXZlbnQudjEuTGlzdEV2ZW50c1JlcXVlc3QaIy5kb21haW4uZXZlbnQudjEuTGlzdEV2ZW50c1Jlc3BvbnNlEnMKFEdldEV2ZW50TGlzdFBhZ2VEYXRhEiwuZG9tYWluLmV2ZW50LnYxLkdldEV2ZW50TGlzdFBhZ2VEYXRhUmVxdWVzdBotLmRvbWFpbi5ldmVudC52MS5HZXRFdmVudExpc3RQYWdlRGF0YVJlc3BvbnNlEnMKFEdldEV2ZW50SXRlbVBhZ2VEYXRhEiwuZG9tYWluLmV2ZW50LnYxLkdldEV2ZW50SXRlbVBhZ2VEYXRhUmVxdWVzdBotLmRvbWFpbi5ldmVudC52MS5HZXRFdmVudEl0ZW1QYWdlRGF0YVJlc3BvbnNlQsYBChNjb20uZG9tYWluLmV2ZW50LnYxQgpFdmVudFByb3RvUAFaRWdpdGh1Yi5jb20vZXJuaWVhbGljZS9lc3F5bWEvcGtnL3NjaGVtYS92MS9kb21haW4vZXZlbnQvZXZlbnQ7ZXZlbnR2MaICA0RFWKoCD0RvbWFpbi5FdmVudC5WMcoCD0RvbWFpblxFdmVudFxWMeICG0RvbWFpblxFdmVudFxWMVxHUEJNZXRhZGF0YeoCEURvbWFpbjo6RXZlbnQ6OlYxYgZwcm90bzM", [file_domain_common_error, file_domain_common_pagination, file_domain_common_filter, file_domain_common_sort, file_domain_common_search, file_options_db]);
 
 /**
  * @generated from message domain.event.v1.Event
@@ -95,9 +93,61 @@ export type Event = Message<"domain.event.v1.Event"> & {
   endDateTimeUtcString?: string;
 
   /**
-   * @generated from field: repeated domain.event.v1.EventClient event_clients = 14;
+   * Tenant scope
+   *
+   * @generated from field: string workspace_id = 15;
    */
-  eventClients: EventClient[];
+  workspaceId: string;
+
+  /**
+   * Organizer: workspace_user (tenant-scoped identity with roles, NOT auth-level user)
+   *
+   * @generated from field: optional string organizer_id = 16;
+   */
+  organizerId?: string;
+
+  /**
+   * Location FK (optional — not all events have a physical location)
+   *
+   * @generated from field: optional string location_id = 17;
+   */
+  locationId?: string;
+
+  /**
+   * Recurrence FK (moved from deleted EventSettings)
+   *
+   * @generated from field: optional string event_recurrence_id = 18;
+   */
+  eventRecurrenceId?: string;
+
+  /**
+   * Event lifecycle status
+   *
+   * @generated from field: domain.event.v1.EventStatus status = 19;
+   */
+  status: EventStatus;
+
+  /**
+   * All-day event flag (ignores start/end time components)
+   *
+   * @generated from field: bool all_day = 20;
+   */
+  allDay: boolean;
+
+  /**
+   * Recurring exception support (RFC 5545 RECURRENCE-ID pattern)
+   * parent_event_id points to the master recurring event this exception overrides
+   *
+   * @generated from field: optional string parent_event_id = 21;
+   */
+  parentEventId?: string;
+
+  /**
+   * Original occurrence timestamp this exception replaces (RFC 5545 RECURRENCE-ID value)
+   *
+   * @generated from field: optional int64 original_occurrence_utc = 22;
+   */
+  originalOccurrenceUtc?: bigint;
 };
 
 /**
@@ -338,7 +388,7 @@ export const ListEventsResponseSchema: GenMessage<ListEventsResponse> = /*@__PUR
   messageDesc(file_domain_event_event_event, 10);
 
 /**
- * NEW: Enhanced list page data request with time-based filtering
+ * Enhanced list page data request with time-based filtering
  *
  * @generated from message domain.event.v1.GetEventListPageDataRequest
  */
@@ -372,7 +422,7 @@ export const GetEventListPageDataRequestSchema: GenMessage<GetEventListPageDataR
   messageDesc(file_domain_event_event_event, 11);
 
 /**
- * NEW: Enhanced list page data response with time-based optimization
+ * Enhanced list page data response with time-based optimization
  *
  * @generated from message domain.event.v1.GetEventListPageDataResponse
  */
@@ -411,7 +461,7 @@ export const GetEventListPageDataResponseSchema: GenMessage<GetEventListPageData
   messageDesc(file_domain_event_event_event, 12);
 
 /**
- * NEW: Enhanced item page data request
+ * Enhanced item page data request
  *
  * @generated from message domain.event.v1.GetEventItemPageDataRequest
  */
@@ -430,7 +480,7 @@ export const GetEventItemPageDataRequestSchema: GenMessage<GetEventItemPageDataR
   messageDesc(file_domain_event_event_event, 13);
 
 /**
- * NEW: Enhanced item page data response with related scheduling data
+ * Enhanced item page data response with related scheduling data
  *
  * @generated from message domain.event.v1.GetEventItemPageDataResponse
  */
@@ -457,6 +507,39 @@ export type GetEventItemPageDataResponse = Message<"domain.event.v1.GetEventItem
  */
 export const GetEventItemPageDataResponseSchema: GenMessage<GetEventItemPageDataResponse> = /*@__PURE__*/
   messageDesc(file_domain_event_event_event, 14);
+
+/**
+ * EventStatus represents the lifecycle state of an event.
+ *
+ * @generated from enum domain.event.v1.EventStatus
+ */
+export enum EventStatus {
+  /**
+   * @generated from enum value: EVENT_STATUS_UNSPECIFIED = 0;
+   */
+  UNSPECIFIED = 0,
+
+  /**
+   * @generated from enum value: EVENT_STATUS_TENTATIVE = 1;
+   */
+  TENTATIVE = 1,
+
+  /**
+   * @generated from enum value: EVENT_STATUS_CONFIRMED = 2;
+   */
+  CONFIRMED = 2,
+
+  /**
+   * @generated from enum value: EVENT_STATUS_CANCELLED = 3;
+   */
+  CANCELLED = 3,
+}
+
+/**
+ * Describes the enum domain.event.v1.EventStatus.
+ */
+export const EventStatusSchema: GenEnum<EventStatus> = /*@__PURE__*/
+  enumDesc(file_domain_event_event_event, 0);
 
 /**
  * @generated from service domain.event.v1.EventDomainService
@@ -503,7 +586,7 @@ export const EventDomainService: GenService<{
     output: typeof ListEventsResponseSchema;
   },
   /**
-   * NEW: Enhanced list with pagination, filtering, sorting, search - optimized for time-based queries
+   * Enhanced list with pagination, filtering, sorting, search - optimized for time-based queries
    *
    * @generated from rpc domain.event.v1.EventDomainService.GetEventListPageData
    */
@@ -513,7 +596,7 @@ export const EventDomainService: GenService<{
     output: typeof GetEventListPageDataResponseSchema;
   },
   /**
-   * NEW: Enhanced item view with related scheduling data
+   * Enhanced item view with related scheduling data
    *
    * @generated from rpc domain.event.v1.EventDomainService.GetEventItemPageData
    */

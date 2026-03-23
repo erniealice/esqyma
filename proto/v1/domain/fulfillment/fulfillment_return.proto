@@ -1,0 +1,25 @@
+syntax = "proto3";
+
+package domain.fulfillment.v1;
+
+option go_package = "github.com/erniealice/esqyma/golang/v1/domain/fulfillment/fulfillment_return";
+
+import "google/protobuf/timestamp.proto";
+import "google/protobuf/struct.proto";
+import "options/db.proto";
+
+message FulfillmentReturn {
+  option (options.v1.table).table = true;
+  string id = 1;
+  string fulfillment_id = 2 [(options.v1.db).references = "fulfillment", (options.v1.db).index = true];
+  string reason = 3;
+  string status = 4; // PENDING, APPROVED, REJECTED, COMPLETED
+  optional double refund_amount = 5;
+  string currency = 6;
+  optional string processed_by_id = 7;
+  string notes = 8;
+  google.protobuf.Struct metadata = 9;
+  optional int64 date_created = 10;
+  optional google.protobuf.Timestamp completed_at = 11;
+  bool active = 12 [(options.v1.db).default = "true"];
+}

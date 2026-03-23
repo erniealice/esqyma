@@ -1,0 +1,1516 @@
+// ==============================================
+// infrastructure.proto
+// Auto-generated concatenation of all .proto files
+// under proto/v1/infrastructure/
+// Service, Request, and Response blocks have been stripped.
+// Generated: 2026-03-22 00:44:10 UTC
+// ==============================================
+
+// ───── infrastructure/auth/api_key.proto ─────
+
+syntax = "proto3";
+
+package infrastructure.auth.v1;
+
+option go_package = "github.com/erniealice/esqyma/golang/v1/infrastructure/auth";
+
+import "google/protobuf/timestamp.proto";
+import "infrastructure/auth/identity.proto";
+
+// ApiKey represents an API key for service authentication
+message ApiKey {
+  // Unique identifier for the API key
+  string id = 1;
+
+  // The actual API key value (only returned on creation)
+  string key = 2;
+
+  // A prefix or hint of the key (for display purposes)
+  string key_prefix = 3;
+
+  // Human-readable name for the API key
+  string name = 4;
+
+  // Description of the API key's purpose
+  string description = 5;
+
+  // Identity that owns this API key
+  string identity_id = 6;
+
+  // Provider where this key is used
+  Provider provider = 7;
+
+  // Scopes/permissions granted by this API key
+  repeated string scopes = 8;
+
+  // Whether the API key is currently active
+  bool is_active = 9;
+
+  // When the API key was created
+  google.protobuf.Timestamp created_at = 10;
+
+  // When the API key was last used
+  google.protobuf.Timestamp last_used_at = 11;
+
+  // When the API key expires (optional)
+  google.protobuf.Timestamp expires_at = 12;
+
+  // IP addresses allowed to use this key (optional)
+  repeated string allowed_ips = 13;
+
+  // Custom metadata for the API key
+  map<string, string> metadata = 14;
+}
+
+// ApiKeyValidationError represents a specific API key validation failure
+message ApiKeyValidationError {
+  // Type of validation error
+  ApiKeyValidationErrorType type = 1;
+
+  // Human-readable error message
+  string message = 2;
+}
+
+// ApiKeyValidationErrorType enumerates possible API key validation errors
+enum ApiKeyValidationErrorType {
+  API_KEY_VALIDATION_ERROR_TYPE_UNSPECIFIED = 0;
+  API_KEY_VALIDATION_ERROR_TYPE_NOT_FOUND = 1;        // API key doesn't exist
+  API_KEY_VALIDATION_ERROR_TYPE_EXPIRED = 2;          // API key has expired
+  API_KEY_VALIDATION_ERROR_TYPE_INACTIVE = 3;         // API key is not active
+  API_KEY_VALIDATION_ERROR_TYPE_INSUFFICIENT_SCOPES = 4; // Required scopes not present
+  API_KEY_VALIDATION_ERROR_TYPE_IP_NOT_ALLOWED = 5;   // Request IP not in allowlist
+  API_KEY_VALIDATION_ERROR_TYPE_MALFORMED = 6;        // API key is malformed
+}
+
+// ───── infrastructure/auth/authentication.proto ─────
+
+syntax = "proto3";
+
+package infrastructure.auth.v1;
+
+option go_package = "github.com/erniealice/esqyma/golang/v1/infrastructure/auth";
+
+import "google/protobuf/timestamp.proto";
+import "infrastructure/auth/identity.proto";
+import "infrastructure/auth/jwt.proto";
+import "infrastructure/auth/api_key.proto";
+
+// PasswordCredentials for username/password authentication
+message PasswordCredentials {
+  // Username or email
+  string username = 1;
+
+  // Password
+  string password = 2;
+
+  // Optional: MFA code
+  string mfa_code = 3;
+}
+
+// EmailLinkCredentials for passwordless email link authentication
+message EmailLinkCredentials {
+  // Email address
+  string email = 1;
+
+  // Email link/magic link received
+  string email_link = 2;
+}
+
+// OAuthCredentials for OAuth authentication
+message OAuthCredentials {
+  // OAuth provider (google, facebook, github, etc.)
+  string oauth_provider = 1;
+
+  // Authorization code from OAuth flow
+  string authorization_code = 2;
+
+  // Redirect URI used in OAuth flow
+  string redirect_uri = 3;
+}
+
+// SamlCredentials for SAML authentication
+message SamlCredentials {
+  // SAML response
+  string saml_response = 1;
+
+  // Relay state
+  string relay_state = 2;
+}
+
+// DeviceInfo contains information about the device making the request
+message DeviceInfo {
+  // Device identifier
+  string device_id = 1;
+
+  // Device type (web, mobile, desktop, etc.)
+  string device_type = 2;
+
+  // User agent string
+  string user_agent = 3;
+
+  // IP address
+  string ip_address = 4;
+
+  // Location information (optional)
+  string location = 5;
+}
+
+// MfaChallenge represents a multi-factor authentication challenge
+// TODO: Expand MFA support in future phase
+message MfaChallenge {
+  // Type of MFA challenge
+  string challenge_type = 1;
+
+  // Challenge identifier
+  string challenge_id = 2;
+
+  // Instructions for completing the challenge
+  string instructions = 3;
+}
+
+// ============================================================================
+// Registration
+// ============================================================================
+
+// ============================================================================
+// Password Reset
+// ============================================================================
+
+// ============================================================================
+// Email Verification
+// ============================================================================
+
+// ============================================================================
+// Magic Link / Passwordless Authentication
+// ============================================================================
+
+// ============================================================================
+// Session Management
+// ============================================================================
+
+// TODO: Service-to-service authentication messages for future implementation
+// message AuthenticateServiceRequest {
+//   string service_id = 1;
+//   string service_secret = 2;
+//   Provider provider = 3;
+//   repeated string scopes = 4;
+// }
+
+// message AuthenticateServiceResponse {
+//   bool success = 1;
+//   Identity service_identity = 2;
+//   JwtToken access_token = 3;
+//   string error_message = 4;
+// }
+
+// message GetServiceCredentialsRequest {
+//   string service_id = 1;
+//   Provider provider = 2;
+// }
+
+// message GetServiceCredentialsResponse {
+//   oneof credentials {
+//     string service_account_key = 1;
+//     string managed_identity_token = 2;
+//     string iam_role_credentials = 3;
+//   }
+//   google.protobuf.Timestamp expires_at = 4;
+// }
+
+// ───── infrastructure/auth/identity.proto ─────
+
+syntax = "proto3";
+
+package infrastructure.auth.v1;
+
+option go_package = "github.com/erniealice/esqyma/golang/v1/infrastructure/auth";
+
+import "google/protobuf/timestamp.proto";
+
+// Provider represents the authentication provider type
+enum Provider {
+  PROVIDER_UNSPECIFIED = 0;
+  PROVIDER_AZURE = 1;       // Microsoft Azure / Entra ID
+  PROVIDER_GCP = 2;         // Google Cloud Platform
+  PROVIDER_AWS = 3;         // Amazon Web Services
+  PROVIDER_CUSTOM = 4;      // Custom authentication provider
+}
+
+// IdentityType represents the type of identity
+enum IdentityType {
+  IDENTITY_TYPE_UNSPECIFIED = 0;
+  IDENTITY_TYPE_USER = 1;           // Human user
+  IDENTITY_TYPE_SERVICE = 2;        // Service account / machine identity
+  IDENTITY_TYPE_ANONYMOUS = 3;      // Anonymous / guest user
+}
+
+// Identity represents a user or service identity across providers
+message Identity {
+  // Unique identifier for the identity
+  string id = 1;
+
+  // Type of identity (user, service, anonymous)
+  IdentityType type = 2;
+
+  // Authentication provider
+  Provider provider = 3;
+
+  // Email address (for user identities)
+  string email = 4;
+
+  // Display name or username
+  string display_name = 5;
+
+  // Whether the identity is active
+  bool is_active = 6;
+
+  // When the identity was created
+  google.protobuf.Timestamp created_at = 7;
+
+  // When the identity was last updated
+  google.protobuf.Timestamp updated_at = 8;
+
+  // Whether the email has been verified
+  bool email_verified = 9;
+
+  // Profile photo URL
+  string photo_url = 10;
+
+  // Phone number
+  string phone_number = 11;
+
+  // Whether this is an anonymous identity
+  bool is_anonymous = 12;
+
+  // When the identity last signed in
+  google.protobuf.Timestamp last_sign_in_at = 13;
+
+  // Provider-specific identity information
+  oneof provider_identity {
+    AzureIdentity azure_identity = 100;
+    GcpIdentity gcp_identity = 101;
+    AwsIdentity aws_identity = 102;
+  }
+
+  // Custom metadata for the identity
+  map<string, string> metadata = 200;
+}
+
+// AzureIdentity contains Azure/Entra ID specific fields
+message AzureIdentity {
+  // Azure tenant ID
+  string tenant_id = 1;
+
+  // Object ID in Azure AD
+  string object_id = 2;
+
+  // User principal name (UPN)
+  string user_principal_name = 3;
+
+  // Managed identity client ID (for service identities)
+  string managed_identity_id = 4;
+
+  // Service principal ID (for application identities)
+  string service_principal_id = 5;
+}
+
+// GcpIdentity contains Google Cloud Platform specific fields
+message GcpIdentity {
+  // GCP project ID
+  string project_id = 1;
+
+  // Service account email (for service identities)
+  string service_account_email = 2;
+
+  // Unique ID from Google Identity
+  string google_id = 3;
+
+  // Workload identity pool (for federated identities)
+  string workload_identity_pool = 4;
+}
+
+// AwsIdentity contains AWS specific fields
+message AwsIdentity {
+  // AWS account ID
+  string account_id = 1;
+
+  // Cognito user pool ID (for user identities)
+  string user_pool_id = 2;
+
+  // Cognito username
+  string cognito_username = 3;
+
+  // IAM role ARN (for service identities)
+  string iam_role_arn = 4;
+
+  // Identity pool ID (for federated identities)
+  string identity_pool_id = 5;
+}
+
+// ───── infrastructure/auth/jwt.proto ─────
+
+syntax = "proto3";
+
+package infrastructure.auth.v1;
+
+option go_package = "github.com/erniealice/esqyma/golang/v1/infrastructure/auth";
+
+import "google/protobuf/timestamp.proto";
+import "google/protobuf/struct.proto";
+import "infrastructure/auth/identity.proto";
+
+// JwtToken represents a JSON Web Token with its claims
+message JwtToken {
+  // The encoded JWT token string
+  string token = 1;
+
+  // Token type (typically "Bearer")
+  string token_type = 2;
+
+  // When the token expires
+  google.protobuf.Timestamp expires_at = 3;
+
+  // When the token was issued
+  google.protobuf.Timestamp issued_at = 4;
+
+  // Issuer of the token
+  string issuer = 5;
+
+  // Audience for the token
+  repeated string audience = 6;
+
+  // Subject (user/service identifier)
+  string subject = 7;
+
+  // Scopes/permissions granted by this token
+  repeated string scopes = 8;
+
+  // Custom claims in the JWT
+  map<string, string> custom_claims = 9;
+
+  // Provider that issued this token
+  Provider provider = 10;
+}
+
+// ValidationError represents a specific validation failure
+message ValidationError {
+  // Type of validation error
+  ValidationErrorType type = 1;
+
+  // Human-readable error message
+  string message = 2;
+}
+
+// ValidationErrorType enumerates possible validation errors
+enum ValidationErrorType {
+  VALIDATION_ERROR_TYPE_UNSPECIFIED = 0;
+  VALIDATION_ERROR_TYPE_EXPIRED = 1;          // Token has expired
+  VALIDATION_ERROR_TYPE_INVALID_SIGNATURE = 2; // Signature verification failed
+  VALIDATION_ERROR_TYPE_INVALID_ISSUER = 3;    // Issuer doesn't match expected
+  VALIDATION_ERROR_TYPE_INVALID_AUDIENCE = 4;  // Audience doesn't match expected
+  VALIDATION_ERROR_TYPE_MISSING_CLAIMS = 5;    // Required claims are missing
+  VALIDATION_ERROR_TYPE_INSUFFICIENT_SCOPES = 6; // Required scopes not present
+  VALIDATION_ERROR_TYPE_MALFORMED = 7;         // Token is malformed
+  VALIDATION_ERROR_TYPE_NOT_YET_VALID = 8;     // Token not yet valid (nbf claim)
+}
+
+// ───── infrastructure/auth/provider.proto ─────
+
+syntax = "proto3";
+
+package infrastructure.auth.v1;
+
+option go_package = "github.com/erniealice/esqyma/golang/v1/infrastructure/auth";
+
+import "infrastructure/auth/identity.proto";
+
+// ProviderConfig represents authentication provider configuration
+message ProviderConfig {
+  // The provider type
+  Provider provider = 1;
+
+  // Whether this provider is enabled
+  bool enabled = 2;
+
+  // Display name for the provider
+  string display_name = 3;
+
+  // Provider-specific configuration
+  oneof config {
+    AzureProviderConfig azure_config = 100;
+    GcpProviderConfig gcp_config = 101;
+    AwsProviderConfig aws_config = 102;
+    CustomProviderConfig custom_config = 103;
+  }
+}
+
+// AzureProviderConfig contains Azure/Entra ID specific configuration
+message AzureProviderConfig {
+  // Azure tenant ID
+  string tenant_id = 1;
+
+  // Azure client ID (application ID)
+  string client_id = 2;
+
+  // Azure AD authority URL
+  string authority = 3;
+
+  // Whether to use managed identity
+  bool use_managed_identity = 4;
+
+  // Managed identity client ID (if using managed identity)
+  string managed_identity_client_id = 5;
+
+  // Token endpoint URL
+  string token_endpoint = 6;
+
+  // Authorization endpoint URL
+  string authorization_endpoint = 7;
+
+  // Allowed redirect URIs for OAuth flows
+  repeated string redirect_uris = 8;
+
+  // Scopes to request by default
+  repeated string default_scopes = 9;
+}
+
+// GcpProviderConfig contains Google Cloud Platform specific configuration
+message GcpProviderConfig {
+  // GCP project ID
+  string project_id = 1;
+
+  // OAuth 2.0 client ID
+  string client_id = 2;
+
+  // Service account email (for service authentication)
+  string service_account_email = 3;
+
+  // Workload identity pool (for federated authentication)
+  string workload_identity_pool = 4;
+
+  // Workload identity provider
+  string workload_identity_provider = 5;
+
+  // Token endpoint URL
+  string token_endpoint = 6;
+
+  // Authorization endpoint URL
+  string authorization_endpoint = 7;
+
+  // Allowed redirect URIs for OAuth flows
+  repeated string redirect_uris = 8;
+
+  // Scopes to request by default
+  repeated string default_scopes = 9;
+
+  // Whether to use Application Default Credentials
+  bool use_adc = 10;
+}
+
+// AwsProviderConfig contains AWS specific configuration
+message AwsProviderConfig {
+  // AWS region
+  string region = 1;
+
+  // Cognito user pool ID (for user authentication)
+  string user_pool_id = 2;
+
+  // Cognito app client ID
+  string app_client_id = 3;
+
+  // Cognito identity pool ID (for federated authentication)
+  string identity_pool_id = 4;
+
+  // IAM role ARN (for service authentication)
+  string iam_role_arn = 5;
+
+  // Cognito domain for hosted UI
+  string cognito_domain = 6;
+
+  // Allowed redirect URIs for OAuth flows
+  repeated string redirect_uris = 7;
+
+  // OAuth scopes to request by default
+  repeated string default_scopes = 8;
+
+  // Whether to use IAM credentials
+  bool use_iam_credentials = 9;
+}
+
+// CustomProviderConfig contains custom provider configuration
+message CustomProviderConfig {
+  // Provider name/identifier
+  string provider_name = 1;
+
+  // Provider base URL
+  string base_url = 2;
+
+  // Token endpoint URL
+  string token_endpoint = 3;
+
+  // Authorization endpoint URL
+  string authorization_endpoint = 4;
+
+  // User info endpoint URL
+  string user_info_endpoint = 5;
+
+  // JWKS (JSON Web Key Set) endpoint URL
+  string jwks_endpoint = 6;
+
+  // Issuer identifier
+  string issuer = 7;
+
+  // Client ID
+  string client_id = 8;
+
+  // Allowed redirect URIs
+  repeated string redirect_uris = 9;
+
+  // Scopes to request by default
+  repeated string default_scopes = 10;
+
+  // Custom configuration parameters
+  map<string, string> custom_params = 11;
+}
+
+// ───── infrastructure/database/provider.proto ─────
+
+syntax = "proto3";
+
+package infrastructure.database.v1;
+
+option go_package = "github.com/erniealice/esqyma/golang/v1/infrastructure/database";
+
+// DatabaseProvider enum identifies database types
+enum DatabaseProvider {
+  DATABASE_PROVIDER_UNSPECIFIED = 0;
+  DATABASE_PROVIDER_POSTGRESQL = 1;
+  DATABASE_PROVIDER_FIRESTORE = 2;
+  DATABASE_PROVIDER_MONGODB = 3;
+  DATABASE_PROVIDER_MYSQL = 4;
+  DATABASE_PROVIDER_SQLITE = 5;
+  DATABASE_PROVIDER_MOCK = 99;
+}
+
+// DatabaseProviderConfig is the top-level config for database providers
+message DatabaseProviderConfig {
+  // Which provider to use
+  DatabaseProvider provider = 1;
+
+  // Whether this provider is enabled
+  bool enabled = 2;
+
+  // Provider-specific configuration (oneof ensures only one is set)
+  oneof config {
+    PostgreSQLConfig postgresql = 100;
+    FirestoreConfig firestore = 101;
+    MongoDBConfig mongodb = 102;
+    MySQLConfig mysql = 103;
+    SQLiteConfig sqlite = 104;
+    MockConfig mock = 199;
+  }
+}
+
+// PostgreSQL-specific configuration
+message PostgreSQLConfig {
+  // Database connection parameters
+  string host = 1;                        // Default: "localhost"
+  string port = 2;                        // Default: "5432"
+  string database = 3;                    // Required
+  string username = 4;                    // Required
+  string password = 5;                    // Required (can be empty for trust auth)
+
+  // SSL/TLS configuration
+  string ssl_mode = 6;                    // disable, require, verify-ca, verify-full
+  string ssl_cert_path = 7;               // Path to SSL certificate
+  string ssl_key_path = 8;                // Path to SSL key
+  string ssl_root_cert_path = 9;          // Path to root certificate
+
+  // Connection pool settings
+  int32 max_connections = 10;             // Default: 25
+  int32 max_idle_connections = 11;        // Default: 5
+  int32 connection_max_lifetime_seconds = 12;  // Default: 3600 (1 hour)
+  int32 connection_max_idle_time_seconds = 13; // Default: 600 (10 minutes)
+
+  // Schema and migrations
+  string migrations_path = 14;            // Path to migration files
+  string schema = 15;                     // Default: "public"
+  bool auto_migrate = 16;                 // Whether to run migrations on startup
+
+  // Query configuration
+  int32 statement_timeout_seconds = 17;   // Default: 30
+  string timezone = 18;                   // Default: "UTC"
+
+  // Logging and debugging
+  bool log_queries = 19;                  // Whether to log SQL queries
+  bool log_slow_queries = 20;             // Whether to log slow queries
+  int32 slow_query_threshold_ms = 21;     // Threshold for slow query logging
+}
+
+// Firestore-specific configuration
+message FirestoreConfig {
+  // GCP project configuration
+  string project_id = 1;                  // Required: GCP project ID
+  string database_id = 2;                 // Default: "(default)"
+
+  // Authentication
+  string credentials_path = 3;            // Path to service account JSON
+  bool use_service_account_json = 4;      // Whether to use service account from env
+
+  // Emulator support (for local development)
+  bool use_emulator = 5;                  // Whether to use Firestore emulator
+  string emulator_host = 6;               // Emulator host (e.g., "localhost:8080")
+
+  // Performance tuning
+  int32 max_pool_size = 7;                // Maximum concurrent connections
+  int32 max_idle_connections = 8;         // Maximum idle connections
+
+  // Timeouts
+  int32 connection_timeout_seconds = 9;   // Connection timeout
+  int32 request_timeout_seconds = 10;     // Request timeout
+
+  // Logging
+  bool log_requests = 11;                 // Whether to log Firestore requests
+}
+
+// MongoDB-specific configuration
+message MongoDBConfig {
+  // Connection
+  string connection_string = 1;           // Required: MongoDB connection string
+  string database = 2;                    // Required: Database name
+
+  // Connection pool
+  int32 max_pool_size = 3;                // Default: 100
+  int32 min_pool_size = 4;                // Default: 10
+
+  // Timeouts
+  int32 connection_timeout_seconds = 5;   // Default: 30
+  int32 socket_timeout_seconds = 6;       // Default: 30
+  int32 server_selection_timeout_seconds = 7;  // Default: 30
+
+  // Read/Write concern
+  string read_preference = 8;             // primary, secondary, nearest, etc.
+  string write_concern = 9;               // majority, w1, w2, w3, etc.
+
+  // Logging
+  bool log_commands = 10;                 // Whether to log MongoDB commands
+}
+
+// MySQL-specific configuration
+message MySQLConfig {
+  // Database connection parameters
+  string host = 1;                        // Default: "localhost"
+  string port = 2;                        // Default: "3306"
+  string database = 3;                    // Required
+  string username = 4;                    // Required
+  string password = 5;                    // Required
+
+  // SSL/TLS configuration
+  bool enable_tls = 6;                    // Whether to enable TLS
+  string tls_cert_path = 7;               // Path to TLS certificate
+  string tls_key_path = 8;                // Path to TLS key
+  string tls_ca_path = 9;                 // Path to CA certificate
+
+  // Connection pool
+  int32 max_connections = 10;             // Default: 25
+  int32 max_idle_connections = 11;        // Default: 5
+  int32 connection_max_lifetime_seconds = 12;  // Default: 3600
+
+  // Query configuration
+  string charset = 13;                    // Default: "utf8mb4"
+  string collation = 14;                  // Default: "utf8mb4_unicode_ci"
+  string timezone = 15;                   // Default: "UTC"
+
+  // Logging
+  bool log_queries = 16;                  // Whether to log queries
+}
+
+// SQLite-specific configuration
+message SQLiteConfig {
+  // File configuration
+  string file_path = 1;                   // Required: Path to SQLite database file
+  bool in_memory = 2;                     // Use in-memory database (for testing)
+
+  // Performance tuning
+  string journal_mode = 3;                // DELETE, TRUNCATE, PERSIST, MEMORY, WAL
+  string synchronous = 4;                 // OFF, NORMAL, FULL, EXTRA
+  int32 cache_size_kb = 5;                // Cache size in KB (default: 2000)
+  int32 page_size_bytes = 6;              // Page size in bytes (default: 4096)
+
+  // Connection pool (for SQLite, usually 1)
+  int32 max_open_connections = 7;         // Default: 1
+
+  // Pragmas
+  bool enable_foreign_keys = 8;           // Default: true
+  bool enable_triggers = 9;               // Default: true
+
+  // Migrations
+  string migrations_path = 10;            // Path to migration files
+  bool auto_migrate = 11;                 // Whether to run migrations on startup
+
+  // Logging
+  bool log_queries = 12;                  // Whether to log queries
+}
+
+// Mock database configuration (for testing)
+message MockConfig {
+  // Mock behavior
+  string name = 1;                        // Mock provider name
+  bool simulate_failures = 2;             // Whether to simulate random failures
+  int32 failure_rate_percent = 3;         // Percentage of operations that fail (0-100)
+
+  // Initial data
+  map<string, string> initial_data = 4;   // Initial data to load
+  string initial_data_path = 5;           // Path to JSON file with initial data
+
+  // Performance simulation
+  int32 latency_ms = 6;                   // Simulated latency in milliseconds
+  int32 latency_variance_ms = 7;          // Variance in latency
+
+  // Logging
+  bool log_operations = 8;                // Whether to log operations
+  bool verbose = 9;                       // Verbose logging
+}
+
+// ───── infrastructure/storage/access_tier.proto ─────
+
+syntax = "proto3";
+
+package infrastructure.storage.v1;
+
+option go_package = "github.com/erniealice/esqyma/golang/v1/infrastructure/storage";
+
+import "infrastructure/storage/object.proto";
+
+// AccessTier represents the storage class/access tier across providers
+// This enum provides a common abstraction that maps to provider-specific storage classes
+enum AccessTier {
+  ACCESS_TIER_UNSPECIFIED = 0;
+
+  // HOT tier - Frequently accessed data, optimized for access speed
+  // Maps to:
+  // - Azure: Hot tier
+  // - GCP: Standard storage
+  // - AWS: S3 Standard
+  ACCESS_TIER_HOT = 1;
+
+  // COOL tier - Infrequently accessed data (accessed ~once per month)
+  // Lower storage cost than HOT, higher access cost
+  // Maps to:
+  // - Azure: Cool tier
+  // - GCP: Nearline storage
+  // - AWS: S3 Standard-IA (Infrequent Access)
+  ACCESS_TIER_COOL = 2;
+
+  // COLD tier - Rarely accessed data (accessed ~once per quarter)
+  // Lower storage cost than COOL, higher access cost
+  // Maps to:
+  // - Azure: Cold tier
+  // - GCP: Coldline storage
+  // - AWS: S3 Glacier Instant Retrieval
+  ACCESS_TIER_COLD = 3;
+
+  // ARCHIVE tier - Long-term archival data (accessed ~once per year or less)
+  // Lowest storage cost, highest access cost, retrieval may take hours
+  // Maps to:
+  // - Azure: Archive tier
+  // - GCP: Archive storage
+  // - AWS: S3 Glacier Deep Archive
+  ACCESS_TIER_ARCHIVE = 4;
+
+  // INTELLIGENT tier - Automatic tier optimization based on access patterns
+  // Only available on some providers
+  // Maps to:
+  // - Azure: Not directly supported (use lifecycle policies)
+  // - GCP: Not directly supported (use lifecycle policies)
+  // - AWS: S3 Intelligent-Tiering
+  ACCESS_TIER_INTELLIGENT = 5;
+}
+
+// ProviderStorageClass represents provider-specific storage class information
+message ProviderStorageClass {
+  // The common access tier
+  AccessTier access_tier = 1;
+
+  // Provider-specific storage class name
+  string provider_class_name = 2;
+
+  // Provider-specific minimum storage duration (in days)
+  int32 minimum_storage_days = 3;
+
+  // Estimated retrieval time description
+  string retrieval_time = 4;
+
+  // Whether retrieval incurs a cost
+  bool has_retrieval_cost = 5;
+
+  // Additional notes about this storage class
+  string notes = 6;
+}
+
+// StorageClassMapping provides the mapping between common tiers and provider classes
+message StorageClassMapping {
+  // Azure Blob Storage classes
+  message AzureClasses {
+    // HOT -> Hot tier
+    string hot = 1;  // "Hot"
+
+    // COOL -> Cool tier (30-day minimum)
+    string cool = 2;  // "Cool"
+
+    // COLD -> Cold tier (90-day minimum)
+    string cold = 3;  // "Cold"
+
+    // ARCHIVE -> Archive tier (180-day minimum, hours to rehydrate)
+    string archive = 4;  // "Archive"
+  }
+
+  // Google Cloud Storage classes
+  message GcsClasses {
+    // HOT -> Standard storage
+    string standard = 1;  // "STANDARD"
+
+    // COOL -> Nearline storage (30-day minimum)
+    string nearline = 2;  // "NEARLINE"
+
+    // COLD -> Coldline storage (90-day minimum)
+    string coldline = 3;  // "COLDLINE"
+
+    // ARCHIVE -> Archive storage (365-day minimum)
+    string archive = 4;  // "ARCHIVE"
+  }
+
+  // Amazon S3 storage classes
+  message S3Classes {
+    // HOT -> S3 Standard
+    string standard = 1;  // "STANDARD"
+
+    // COOL -> S3 Standard-IA (30-day minimum)
+    string standard_ia = 2;  // "STANDARD_IA"
+
+    // COOL (single AZ) -> S3 One Zone-IA (30-day minimum, lower cost)
+    string one_zone_ia = 3;  // "ONEZONE_IA"
+
+    // COLD -> S3 Glacier Instant Retrieval (90-day minimum)
+    string glacier_instant = 4;  // "GLACIER_IR"
+
+    // ARCHIVE (flexible) -> S3 Glacier Flexible Retrieval (90-day minimum)
+    string glacier_flexible = 5;  // "GLACIER"
+
+    // ARCHIVE (deep) -> S3 Glacier Deep Archive (180-day minimum, 12-hour retrieval)
+    string glacier_deep = 6;  // "DEEP_ARCHIVE"
+
+    // INTELLIGENT -> S3 Intelligent-Tiering (automatic optimization)
+    string intelligent_tiering = 7;  // "INTELLIGENT_TIERING"
+
+    // Express One Zone (low latency, single AZ)
+    string express_one_zone = 8;  // "EXPRESS_ONEZONE"
+  }
+}
+
+// ───── infrastructure/storage/container.proto ─────
+
+syntax = "proto3";
+
+package infrastructure.storage.v1;
+
+option go_package = "github.com/erniealice/esqyma/golang/v1/infrastructure/storage";
+
+import "google/protobuf/timestamp.proto";
+import "infrastructure/storage/object.proto";
+
+// StorageContainer represents a bucket/container in cloud storage
+message StorageContainer {
+  // Unique identifier for the container
+  string id = 1;
+
+  // Storage provider
+  StorageProvider provider = 2;
+
+  // Container/bucket name (must be globally unique for some providers)
+  string name = 3;
+
+  // Display name or description
+  string description = 4;
+
+  // Region/location where the container is stored
+  string location = 5;
+
+  // When the container was created
+  google.protobuf.Timestamp created_at = 6;
+
+  // Whether the container is public or private
+  bool is_public = 7;
+
+  // Whether versioning is enabled
+  bool versioning_enabled = 8;
+
+  // Default storage class for objects in this container
+  string default_storage_class = 9;
+
+  // Whether encryption is enabled
+  bool encryption_enabled = 10;
+
+  // Custom metadata for the container
+  map<string, string> metadata = 11;
+
+  // Provider-specific container information
+  oneof provider_container {
+    AzureContainer azure_container = 100;
+    GcsContainer gcs_container = 101;
+    S3Container s3_container = 102;
+  }
+}
+
+// AzureContainer contains Azure Blob Storage specific fields
+message AzureContainer {
+  // Storage account name
+  string storage_account = 1;
+
+  // Public access level (None, Blob, Container)
+  string public_access = 2;
+
+  // Lease status
+  string lease_status = 3;
+
+  // Whether the container has an immutability policy
+  bool has_immutability_policy = 4;
+
+  // Whether legal hold is enabled
+  bool has_legal_hold = 5;
+
+  // Default encryption scope
+  string default_encryption_scope = 6;
+}
+
+// GcsContainer contains Google Cloud Storage specific fields
+message GcsContainer {
+  // GCP project ID
+  string project_id = 1;
+
+  // Bucket location type (Region, Dual-region, Multi-region)
+  string location_type = 2;
+
+  // Storage class (Standard, Nearline, Coldline, Archive)
+  string storage_class = 3;
+
+  // Whether hierarchical namespace is enabled
+  bool hierarchical_namespace_enabled = 4;
+
+  // Whether uniform bucket-level access is enabled
+  bool uniform_bucket_level_access = 5;
+
+  // Retention policy duration (in seconds)
+  int64 retention_period_seconds = 6;
+
+  // Whether the retention policy is locked
+  bool retention_policy_locked = 7;
+
+  // Customer-managed encryption key
+  string kms_key_name = 8;
+}
+
+// S3Container contains Amazon S3 specific fields
+message S3Container {
+  // AWS region
+  string region = 1;
+
+  // Bucket type (general purpose or directory)
+  string bucket_type = 2;
+
+  // Whether bucket is configured for static website hosting
+  bool website_enabled = 3;
+
+  // Whether transfer acceleration is enabled
+  bool transfer_acceleration_enabled = 4;
+
+  // Whether object lock is enabled
+  bool object_lock_enabled = 5;
+
+  // Object lock configuration mode
+  string object_lock_mode = 6;
+
+  // Replication configuration status
+  string replication_status = 7;
+
+  // Server-side encryption configuration
+  string sse_algorithm = 8;
+
+  // KMS key ID for encryption
+  string kms_key_id = 9;
+
+  // Whether requester pays is enabled
+  bool requester_pays_enabled = 10;
+}
+
+// Azure-specific container creation config
+message AzureContainerConfig {
+  string storage_account = 1;
+  string public_access = 2;
+  string default_encryption_scope = 3;
+}
+
+// GCS-specific container creation config
+message GcsContainerConfig {
+  string project_id = 1;
+  string location_type = 2;
+  string storage_class = 3;
+  bool hierarchical_namespace_enabled = 4;
+  bool uniform_bucket_level_access = 5;
+  string kms_key_name = 6;
+}
+
+// S3-specific container creation config
+message S3ContainerConfig {
+  string region = 1;
+  string bucket_type = 2;
+  bool object_lock_enabled = 3;
+  string sse_algorithm = 4;
+  string kms_key_id = 5;
+}
+
+// ───── infrastructure/storage/download.proto ─────
+
+syntax = "proto3";
+
+package infrastructure.storage.v1;
+
+option go_package = "github.com/erniealice/esqyma/golang/v1/infrastructure/storage";
+
+import "google/protobuf/timestamp.proto";
+import "infrastructure/storage/object.proto";
+
+// PresignedUrlOperation represents the operation the presigned URL will allow
+enum PresignedUrlOperation {
+  PRESIGNED_URL_OPERATION_UNSPECIFIED = 0;
+  PRESIGNED_URL_OPERATION_DOWNLOAD = 1;  // GET operation
+  PRESIGNED_URL_OPERATION_UPLOAD = 2;    // PUT operation
+  PRESIGNED_URL_OPERATION_DELETE = 3;    // DELETE operation
+}
+
+// ───── infrastructure/storage/object.proto ─────
+
+syntax = "proto3";
+
+package infrastructure.storage.v1;
+
+option go_package = "github.com/erniealice/esqyma/golang/v1/infrastructure/storage";
+
+import "google/protobuf/timestamp.proto";
+
+// StorageProvider represents the cloud storage provider
+enum StorageProvider {
+  STORAGE_PROVIDER_UNSPECIFIED = 0;
+  STORAGE_PROVIDER_AZURE = 1;    // Azure Blob Storage
+  STORAGE_PROVIDER_GCP = 2;      // Google Cloud Storage
+  STORAGE_PROVIDER_AWS = 3;      // Amazon S3
+  STORAGE_PROVIDER_LOCAL = 4;    // Local file system
+}
+
+// StorageObject represents a file/blob in cloud storage
+message StorageObject {
+  // Unique identifier for the object (provider-specific)
+  string id = 1;
+
+  // Storage provider
+  StorageProvider provider = 2;
+
+  // Container/bucket name
+  string container_name = 3;
+
+  // Object key/name (path within the container)
+  string object_key = 4;
+
+  // File size in bytes
+  int64 size = 5;
+
+  // Content type (MIME type)
+  string content_type = 6;
+
+  // ETag or checksum for integrity verification
+  string etag = 7;
+
+  // When the object was last modified
+  google.protobuf.Timestamp last_modified = 8;
+
+  // When the object was created
+  google.protobuf.Timestamp created_at = 9;
+
+  // Storage class/access tier (see access_tier.proto)
+  string storage_class = 10;
+
+  // Whether the object is encrypted
+  bool is_encrypted = 11;
+
+  // Encryption algorithm used (if encrypted)
+  string encryption_algorithm = 12;
+
+  // Whether versioning is enabled for this object
+  bool versioning_enabled = 13;
+
+  // Version ID (if versioning is enabled)
+  string version_id = 14;
+
+  // Custom metadata key-value pairs
+  map<string, string> metadata = 15;
+
+  // URL to access the object (if public or presigned)
+  string url = 16;
+
+  // Provider-specific object information
+  oneof provider_object {
+    AzureBlobObject azure_blob = 100;
+    GcsObject gcs_object = 101;
+    S3Object s3_object = 102;
+  }
+}
+
+// AzureBlobObject contains Azure Blob Storage specific fields
+message AzureBlobObject {
+  // Storage account name
+  string storage_account = 1;
+
+  // Blob type (BlockBlob, AppendBlob, PageBlob)
+  AzureBlobType blob_type = 2;
+
+  // Lease status
+  string lease_status = 3;
+
+  // Lease state
+  string lease_state = 4;
+
+  // Access tier (Hot, Cool, Cold, Archive)
+  string access_tier = 5;
+
+  // Archive status (if in archive tier)
+  string archive_status = 6;
+
+  // Snapshot timestamp (if this is a snapshot)
+  google.protobuf.Timestamp snapshot_time = 7;
+}
+
+// AzureBlobType enum for blob types
+enum AzureBlobType {
+  AZURE_BLOB_TYPE_UNSPECIFIED = 0;
+  AZURE_BLOB_TYPE_BLOCK = 1;    // Block blob (default, for most files)
+  AZURE_BLOB_TYPE_APPEND = 2;   // Append blob (for logging)
+  AZURE_BLOB_TYPE_PAGE = 3;     // Page blob (for VHDs)
+}
+
+// GcsObject contains Google Cloud Storage specific fields
+message GcsObject {
+  // GCP project ID
+  string project_id = 1;
+
+  // Storage class (Standard, Nearline, Coldline, Archive)
+  string storage_class = 2;
+
+  // Object generation number
+  int64 generation = 3;
+
+  // Object metageneration number
+  int64 metageneration = 4;
+
+  // Customer-managed encryption key (CMEK) name
+  string kms_key_name = 5;
+
+  // Whether customer-supplied encryption is used
+  bool customer_encryption = 6;
+
+  // Time the object was deleted (for soft-deleted objects)
+  google.protobuf.Timestamp time_deleted = 7;
+
+  // Whether the object is in a hierarchical namespace bucket
+  bool is_hierarchical = 8;
+}
+
+// S3Object contains Amazon S3 specific fields
+message S3Object {
+  // AWS region
+  string region = 1;
+
+  // Storage class (Standard, Standard-IA, Intelligent-Tiering, etc.)
+  string storage_class = 2;
+
+  // Version ID (if versioning is enabled)
+  string version_id = 3;
+
+  // Whether the object has object lock enabled
+  bool object_lock_enabled = 4;
+
+  // Object lock mode (Governance, Compliance)
+  string object_lock_mode = 5;
+
+  // Object lock retain until date
+  google.protobuf.Timestamp object_lock_retain_until = 6;
+
+  // Whether legal hold is on
+  bool legal_hold = 7;
+
+  // Replication status
+  string replication_status = 8;
+
+  // Server-side encryption method
+  string sse_algorithm = 9;
+
+  // KMS key ID (if using SSE-KMS)
+  string kms_key_id = 10;
+}
+
+// ObjectMetadata is a simplified representation for listing operations
+message ObjectMetadata {
+  // Object key/name
+  string object_key = 1;
+
+  // File size in bytes
+  int64 size = 2;
+
+  // When the object was last modified
+  google.protobuf.Timestamp last_modified = 3;
+
+  // Content type
+  string content_type = 4;
+
+  // ETag
+  string etag = 5;
+
+  // Storage class
+  string storage_class = 6;
+}
+
+// ───── infrastructure/storage/provider.proto ─────
+
+syntax = "proto3";
+
+package infrastructure.storage.v1;
+
+option go_package = "github.com/erniealice/esqyma/golang/v1/infrastructure/storage";
+
+import "infrastructure/storage/object.proto";
+
+// StorageProviderConfig represents storage provider configuration
+message StorageProviderConfig {
+  // The provider type
+  StorageProvider provider = 1;
+
+  // Whether this provider is enabled
+  bool enabled = 2;
+
+  // Display name for the provider
+  string display_name = 3;
+
+  // Provider-specific configuration
+  oneof config {
+    AzureStorageConfig azure_config = 100;
+    GcsStorageConfig gcs_config = 101;
+    S3StorageConfig s3_config = 102;
+    LocalStorageConfig local_config = 103;
+  }
+}
+
+// AzureStorageConfig contains Azure Blob Storage specific configuration
+message AzureStorageConfig {
+  // Azure storage account name
+  string storage_account = 1;
+
+  // Storage account key (for key-based auth)
+  string account_key = 2;
+
+  // Connection string (alternative to account key)
+  string connection_string = 3;
+
+  // Whether to use managed identity for authentication
+  bool use_managed_identity = 4;
+
+  // Managed identity client ID
+  string managed_identity_client_id = 5;
+
+  // Azure AD tenant ID
+  string tenant_id = 6;
+
+  // Default container for operations
+  string default_container = 7;
+
+  // Blob service endpoint URL
+  string endpoint_url = 8;
+
+  // Default encryption scope
+  string default_encryption_scope = 9;
+}
+
+// GcsStorageConfig contains Google Cloud Storage specific configuration
+message GcsStorageConfig {
+  // GCP project ID
+  string project_id = 1;
+
+  // Service account JSON key (for key-based auth)
+  string service_account_key = 2;
+
+  // Service account email
+  string service_account_email = 3;
+
+  // Whether to use Application Default Credentials
+  bool use_adc = 4;
+
+  // Workload identity configuration (for GKE)
+  string workload_identity_provider = 5;
+
+  // Default bucket for operations
+  string default_bucket = 6;
+
+  // Storage API endpoint URL (optional)
+  string endpoint_url = 7;
+
+  // Default KMS key name for encryption
+  string default_kms_key_name = 8;
+
+  // Whether to use uniform bucket-level access by default
+  bool uniform_bucket_level_access = 9;
+}
+
+// S3StorageConfig contains Amazon S3 specific configuration
+message S3StorageConfig {
+  // AWS region
+  string region = 1;
+
+  // AWS access key ID (for key-based auth)
+  string access_key_id = 2;
+
+  // AWS secret access key (for key-based auth)
+  string secret_access_key = 3;
+
+  // Session token (for temporary credentials)
+  string session_token = 4;
+
+  // Whether to use IAM role credentials
+  bool use_iam_role = 5;
+
+  // IAM role ARN to assume
+  string iam_role_arn = 6;
+
+  // Default bucket for operations
+  string default_bucket = 7;
+
+  // S3 endpoint URL (for S3-compatible services)
+  string endpoint_url = 8;
+
+  // Whether to use path-style addressing
+  bool use_path_style = 9;
+
+  // Default KMS key ID for encryption
+  string default_kms_key_id = 10;
+
+  // Default SSE algorithm
+  string default_sse_algorithm = 11;
+
+  // Whether to enable transfer acceleration
+  bool enable_transfer_acceleration = 12;
+
+  // Whether to use dual-stack endpoints (IPv4 and IPv6)
+  bool use_dual_stack = 13;
+}
+
+// LocalStorageConfig contains local filesystem storage configuration
+message LocalStorageConfig {
+  // Base directory for local storage
+  string base_directory = 1;
+
+  // Whether to create directories automatically
+  bool auto_create_directories = 2;
+
+  // File permissions (Unix-style, e.g., "0755")
+  string file_permissions = 3;
+
+  // Directory permissions (Unix-style, e.g., "0755")
+  string directory_permissions = 4;
+}
+
+// ───── infrastructure/storage/storage.proto ─────
+
+syntax = "proto3";
+
+package infrastructure.storage.v1;
+
+option go_package = "github.com/erniealice/esqyma/golang/v1/infrastructure/storage";
+
+import "infrastructure/storage/object.proto";
+import "infrastructure/storage/container.proto";
+import "infrastructure/storage/upload.proto";
+import "infrastructure/storage/download.proto";
+
+// ───── infrastructure/storage/upload.proto ─────
+
+syntax = "proto3";
+
+package infrastructure.storage.v1;
+
+option go_package = "github.com/erniealice/esqyma/golang/v1/infrastructure/storage";
+
+import "google/protobuf/timestamp.proto";
+import "infrastructure/storage/object.proto";
+import "infrastructure/storage/access_tier.proto";
+
+// AzureUploadOptions contains Azure-specific upload configuration
+message AzureUploadOptions {
+  // Blob type (block, append, page)
+  string blob_type = 1;
+
+  // Access tier (Hot, Cool, Cold, Archive)
+  string access_tier = 2;
+
+  // Encryption scope
+  string encryption_scope = 3;
+
+  // Whether to use server-side encryption
+  bool use_server_side_encryption = 4;
+}
+
+// GcsUploadOptions contains GCS-specific upload configuration
+message GcsUploadOptions {
+  // Storage class
+  string storage_class = 1;
+
+  // KMS key name for customer-managed encryption
+  string kms_key_name = 2;
+
+  // Predefined ACL (private, public-read, etc.)
+  string predefined_acl = 3;
+
+  // Whether to use customer-supplied encryption
+  bool use_customer_encryption = 4;
+}
+
+// S3UploadOptions contains S3-specific upload configuration
+message S3UploadOptions {
+  // Storage class
+  string storage_class = 1;
+
+  // Server-side encryption algorithm
+  string sse_algorithm = 2;
+
+  // KMS key ID for encryption
+  string kms_key_id = 3;
+
+  // ACL (private, public-read, etc.)
+  string acl = 4;
+
+  // Whether to enable object lock
+  bool enable_object_lock = 5;
+
+  // Object lock mode
+  string object_lock_mode = 6;
+
+  // Object lock retain until date
+  google.protobuf.Timestamp object_lock_retain_until = 7;
+}
+
+// UploadedPart represents a completed part
+// TODO: Implement multipart upload in future phase
+message UploadedPart {
+  // Part number
+  int32 part_number = 1;
+
+  // ETag for this part
+  string etag = 2;
+}
+

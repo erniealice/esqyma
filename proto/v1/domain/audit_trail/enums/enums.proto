@@ -1,0 +1,41 @@
+syntax = "proto3";
+
+package domain.audit_trail.v1;
+
+option go_package = "github.com/erniealice/esqyma/golang/v1/domain/audit_trail/enums";
+
+// Shared enums for the audit_trail domain.
+
+// AuditAction represents the type of change recorded in an audit entry.
+// Note: monetary values use INT64 (cent-level storage) — no DECIMAL type.
+enum AuditAction {
+  AUDIT_ACTION_UNSPECIFIED = 0;
+  AUDIT_ACTION_INSERT = 1;
+  AUDIT_ACTION_UPDATE = 2;
+  AUDIT_ACTION_DELETE = 3;
+  AUDIT_ACTION_RESTORE = 4;
+  AUDIT_ACTION_ARCHIVE = 5;
+}
+
+// ActorType identifies what kind of actor performed the audited action.
+enum ActorType {
+  ACTOR_TYPE_UNSPECIFIED = 0;
+  ACTOR_TYPE_USER = 1;
+  ACTOR_TYPE_SYSTEM = 2;
+  ACTOR_TYPE_API_KEY = 3;
+  ACTOR_TYPE_SCHEDULER = 4;
+  ACTOR_TYPE_MIGRATION = 5;
+}
+
+// FieldType describes the data type of a changed field.
+// Note: no DECIMAL type — monetary values use FIELD_TYPE_INT64 (cent-level storage).
+enum FieldType {
+  FIELD_TYPE_UNSPECIFIED = 0;
+  FIELD_TYPE_STRING = 1;
+  FIELD_TYPE_INT64 = 2;
+  FIELD_TYPE_BOOL = 3;
+  FIELD_TYPE_TIMESTAMP = 4;
+  FIELD_TYPE_UUID = 5;
+  FIELD_TYPE_ENUM = 6;
+  FIELD_TYPE_TEXT = 7;
+}

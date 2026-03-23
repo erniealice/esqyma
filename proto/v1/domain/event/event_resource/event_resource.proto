@@ -1,0 +1,152 @@
+syntax = "proto3";
+
+package domain.event.v1;
+
+option go_package = "github.com/erniealice/esqyma/golang/v1/domain/event/event_resource";
+
+import "domain/common/error.proto";
+import "domain/common/search.proto";
+import "domain/common/filter.proto";
+import "domain/common/sort.proto";
+import "domain/common/pagination.proto";
+import "options/db.proto";
+
+// ResourceType classifies what kind of resource is assigned to an event.
+enum ResourceType {
+  RESOURCE_TYPE_UNSPECIFIED = 0;
+  RESOURCE_TYPE_STAFF = 1;      // Staff member (workspace_user)
+  RESOURCE_TYPE_ROOM = 2;       // Physical room/location
+  RESOURCE_TYPE_EQUIPMENT = 3;  // Equipment/tool
+}
+
+// ResourceStatus tracks the assignment lifecycle.
+enum ResourceStatus {
+  RESOURCE_STATUS_UNSPECIFIED = 0;
+  RESOURCE_STATUS_ASSIGNED = 1;    // Initially assigned
+  RESOURCE_STATUS_CONFIRMED = 2;   // Resource confirmed availability
+  RESOURCE_STATUS_RELEASED = 3;    // Unassigned / freed
+}
+
+// EventResource represents a resource (staff, room, equipment) assigned to an event.
+// Enables FHIR-style Schedule/Slot availability computation in cyta's availability engine.
+message EventResource {
+  option (options.v1.table).table = true;
+  option (options.v1.table).unique_together = "event_id,resource_id";
+  string id = 1;
+
+  // Event FK (required)
+  string event_id = 2 [(options.v1.db).references = "event", (options.v1.db).index = true];
+
+  // Generic resource identifier (workspace_user.id, location.id, or equipment ID)
+  string resource_id = 3 [(options.v1.db).index = true];
+
+  // What kind of resource this is
+  ResourceType resource_type = 4;
+
+  // Assignment status
+  ResourceStatus status = 5;
+
+  // Snapshot of resource name at assignment time (denormalized for display)
+  optional string name = 6;
+
+  // Tenant scope
+  string workspace_id = 7 [(options.v1.db).references = "workspace", (options.v1.db).index = true];
+
+  // Audit fields
+  optional int64 date_created = 8;
+  optional string date_created_string = 9;
+  optional int64 date_modified = 10;
+  optional string date_modified_string = 11;
+  bool active = 12 [(options.v1.db).default = "true"];
+}
+
+service EventResourceDomainService {
+  rpc CreateEventResource(CreateEventResourceRequest) returns (CreateEventResourceResponse);
+  rpc ReadEventResource(ReadEventResourceRequest) returns (ReadEventResourceResponse);
+  rpc UpdateEventResource(UpdateEventResourceRequest) returns (UpdateEventResourceResponse);
+  rpc DeleteEventResource(DeleteEventResourceRequest) returns (DeleteEventResourceResponse);
+  rpc ListEventResources(ListEventResourcesRequest) returns (ListEventResourcesResponse);
+
+  rpc GetEventResourceListPageData(GetEventResourceListPageDataRequest)
+    returns (GetEventResourceListPageDataResponse);
+
+  rpc GetEventResourceItemPageData(GetEventResourceItemPageDataRequest)
+    returns (GetEventResourceItemPageDataResponse);
+}
+
+message CreateEventResourceRequest {
+  EventResource data = 1;
+}
+
+message CreateEventResourceResponse {
+  repeated EventResource data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message ReadEventResourceRequest {
+  EventResource data = 1;
+}
+
+message ReadEventResourceResponse {
+  repeated EventResource data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message UpdateEventResourceRequest {
+  EventResource data = 1;
+}
+
+message UpdateEventResourceResponse {
+  repeated EventResource data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message DeleteEventResourceRequest {
+  EventResource data = 1;
+}
+
+message DeleteEventResourceResponse {
+  bool success = 1;
+  optional domain.common.v1.Error error = 2;
+}
+
+message ListEventResourcesRequest {
+  optional domain.common.v1.SearchRequest search = 1;
+  optional domain.common.v1.FilterRequest filters = 2;
+  optional domain.common.v1.SortRequest sort = 3;
+  optional domain.common.v1.PaginationRequest pagination = 4;
+}
+
+message ListEventResourcesResponse {
+  repeated EventResource data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message GetEventResourceListPageDataRequest {
+  optional domain.common.v1.PaginationRequest pagination = 1;
+  optional domain.common.v1.FilterRequest filters = 2;
+  optional domain.common.v1.SortRequest sort = 3;
+  optional domain.common.v1.SearchRequest search = 4;
+}
+
+message GetEventResourceListPageDataResponse {
+  repeated EventResource event_resource_list = 1;
+  optional domain.common.v1.PaginationResponse pagination = 2;
+  repeated domain.common.v1.SearchResult search_results = 3;
+  bool success = 4;
+  optional domain.common.v1.Error error = 5;
+}
+
+message GetEventResourceItemPageDataRequest {
+  string event_resource_id = 1;
+}
+
+message GetEventResourceItemPageDataResponse {
+  optional EventResource event_resource = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}

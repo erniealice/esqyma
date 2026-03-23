@@ -1,0 +1,104 @@
+syntax = "proto3";
+
+package domain.event.v1;
+
+option go_package = "github.com/erniealice/esqyma/golang/v1/domain/event/event_occurrence";
+
+import "domain/common/error.proto";
+import "domain/common/search.proto";
+import "domain/common/filter.proto";
+import "domain/common/sort.proto";
+import "domain/common/pagination.proto";
+import "options/db.proto";
+
+// EventOccurrence is a pre-computed materialized row for calendar UI performance.
+// Populated by cyta's recurrence expander background job, NOT by user CRUD.
+// One-time events get exactly one occurrence row; recurring events get one per expansion.
+//
+// Calendar queries use: SELECT * FROM event_occurrence
+//   WHERE workspace_id = ? AND start_date_time_utc >= ? AND end_date_time_utc <= ?
+//
+// Exception handling:
+//   - "Edit this occurrence" → new Event with parent_event_id → update occurrence row (is_exception=true, exception_event_id=new)
+//   - "Cancel this occurrence" → mark is_cancelled=true
+//   - "Cancel all future" → add UNTIL to RRULE → delete future occurrence rows
+message EventOccurrence {
+  option (options.v1.table).table = true;
+  string id = 1;
+
+  // Parent event FK (required)
+  string event_id = 2 [(options.v1.db).references = "event", (options.v1.db).index = true];
+
+  // Occurrence time window (UTC timestamps for fast range queries)
+  int64 start_date_time_utc = 3;
+  int64 end_date_time_utc = 4;
+
+  // Whether this occurrence has been individually modified (exception to recurrence pattern)
+  bool is_exception = 5;
+
+  // Whether this occurrence has been individually cancelled
+  bool is_cancelled = 6;
+
+  // If is_exception=true, points to the override Event that replaces this occurrence
+  optional string exception_event_id = 7 [(options.v1.db).references = "event", (options.v1.db).index = true];
+
+  // Tenant scope — indexed together with start_date_time_utc for calendar range queries
+  string workspace_id = 8 [(options.v1.db).references = "workspace", (options.v1.db).index = true];
+
+  // Audit fields
+  optional int64 date_created = 9;
+  optional string date_created_string = 10;
+  optional int64 date_modified = 11;
+  optional string date_modified_string = 12;
+  bool active = 13 [(options.v1.db).default = "true"];
+}
+
+// EventOccurrence is read-only from the API perspective.
+// No Create/Update/Delete — populated by background recurrence expansion job.
+service EventOccurrenceDomainService {
+  rpc ListEventOccurrences(ListEventOccurrencesRequest) returns (ListEventOccurrencesResponse);
+
+  rpc GetEventOccurrenceListPageData(GetEventOccurrenceListPageDataRequest)
+    returns (GetEventOccurrenceListPageDataResponse);
+
+  rpc GetEventOccurrenceItemPageData(GetEventOccurrenceItemPageDataRequest)
+    returns (GetEventOccurrenceItemPageDataResponse);
+}
+
+message ListEventOccurrencesRequest {
+  optional domain.common.v1.SearchRequest search = 1;
+  optional domain.common.v1.FilterRequest filters = 2;
+  optional domain.common.v1.SortRequest sort = 3;
+  optional domain.common.v1.PaginationRequest pagination = 4;
+}
+
+message ListEventOccurrencesResponse {
+  repeated EventOccurrence data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message GetEventOccurrenceListPageDataRequest {
+  optional domain.common.v1.PaginationRequest pagination = 1;
+  optional domain.common.v1.FilterRequest filters = 2;
+  optional domain.common.v1.SortRequest sort = 3;
+  optional domain.common.v1.SearchRequest search = 4;
+}
+
+message GetEventOccurrenceListPageDataResponse {
+  repeated EventOccurrence event_occurrence_list = 1;
+  optional domain.common.v1.PaginationResponse pagination = 2;
+  repeated domain.common.v1.SearchResult search_results = 3;
+  bool success = 4;
+  optional domain.common.v1.Error error = 5;
+}
+
+message GetEventOccurrenceItemPageDataRequest {
+  string event_occurrence_id = 1;
+}
+
+message GetEventOccurrenceItemPageDataResponse {
+  optional EventOccurrence event_occurrence = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}

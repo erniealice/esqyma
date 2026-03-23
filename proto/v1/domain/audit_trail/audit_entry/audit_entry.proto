@@ -1,0 +1,65 @@
+syntax = "proto3";
+
+package domain.audit_trail.v1;
+
+option go_package = "github.com/erniealice/esqyma/golang/v1/domain/audit_trail/audit_entry";
+
+import "google/protobuf/timestamp.proto";
+import "domain/audit_trail/enums/enums.proto";
+import "domain/common/pagination.proto";
+
+// AuditEntry records a single audited operation against an entity.
+message AuditEntry {
+  string id = 1;
+  string workspace_id = 2;
+
+  // Actor information
+  string actor_id = 3;
+  ActorType actor_type = 4;
+  string actor_ip = 5;
+  string actor_user_agent = 6;
+
+  // Target entity
+  string entity_type = 7;
+  string entity_id = 8;
+  string domain = 9;
+  AuditAction action = 10;
+
+  // Operation context
+  string permission_code = 11;
+  string use_case = 12;
+  string reason = 13;
+  string method_name = 14;
+
+  // Request tracing
+  string request_id = 15;
+  int64 transaction_id = 16;
+  int32 field_count = 17;
+
+  google.protobuf.Timestamp occurred_at = 18;
+}
+
+message ListAuditEntriesRequest {
+  string workspace_id = 1;
+  string entity_type = 2;
+  string entity_id = 3;
+
+  // Filters
+  string actor_id = 4;
+  string domain_filter = 5;
+  AuditAction action = 6;
+  string permission_code = 7;
+  string use_case = 8;
+  string field_name = 9;
+
+  // Date range
+  google.protobuf.Timestamp from = 10;
+  google.protobuf.Timestamp to = 11;
+
+  domain.common.v1.PaginationRequest pagination = 12;
+}
+
+message ListAuditEntriesResponse {
+  repeated AuditEntry entries = 1;
+  domain.common.v1.PaginationResponse pagination = 2;
+}

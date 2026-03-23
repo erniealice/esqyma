@@ -1,0 +1,68 @@
+syntax = "proto3";
+
+package domain.integration.v1;
+
+option go_package = "github.com/erniealice/esqyma/golang/v1/domain/integration/integration_config";
+
+import "domain/integration/integration_config/integration_config.proto";
+import "domain/common/error.proto";
+import "domain/common/pagination.proto";
+import "domain/common/filter.proto";
+import "domain/common/sort.proto";
+import "domain/common/search.proto";
+
+service IntegrationConfigDomainService {
+  rpc CreateIntegrationConfig(CreateIntegrationConfigRequest) returns (CreateIntegrationConfigResponse);
+  rpc GetIntegrationConfig(GetIntegrationConfigRequest) returns (GetIntegrationConfigResponse);
+  rpc UpdateIntegrationConfig(UpdateIntegrationConfigRequest) returns (UpdateIntegrationConfigResponse);
+  rpc DeleteIntegrationConfig(DeleteIntegrationConfigRequest) returns (DeleteIntegrationConfigResponse);
+  rpc ListIntegrationConfigs(ListIntegrationConfigsRequest) returns (ListIntegrationConfigsResponse);
+  rpc GetIntegrationConfigListPageData(GetIntegrationConfigListPageDataRequest) returns (GetIntegrationConfigListPageDataResponse);
+  rpc GetIntegrationConfigItemPageData(GetIntegrationConfigItemPageDataRequest) returns (GetIntegrationConfigItemPageDataResponse);
+}
+
+// Standard CRUD messages
+message CreateIntegrationConfigRequest { IntegrationConfig data = 1; }
+message CreateIntegrationConfigResponse { IntegrationConfig data = 1; domain.common.v1.Error error = 2; }
+message GetIntegrationConfigRequest { string id = 1; }
+message GetIntegrationConfigResponse { IntegrationConfig data = 1; domain.common.v1.Error error = 2; }
+message UpdateIntegrationConfigRequest { IntegrationConfig data = 1; }
+message UpdateIntegrationConfigResponse { IntegrationConfig data = 1; domain.common.v1.Error error = 2; }
+message DeleteIntegrationConfigRequest { string id = 1; }
+message DeleteIntegrationConfigResponse { bool success = 1; domain.common.v1.Error error = 2; }
+
+// List with filters
+message ListIntegrationConfigsRequest {
+  domain.common.v1.PaginationRequest pagination = 1;
+  domain.common.v1.FilterRequest filter = 2;
+  domain.common.v1.SortRequest sort = 3;
+  domain.common.v1.SearchRequest search = 4;
+}
+message ListIntegrationConfigsResponse {
+  repeated IntegrationConfig data = 1;
+  domain.common.v1.PaginationResponse pagination = 2;
+  domain.common.v1.Error error = 3;
+}
+
+// Page data (enriched for views)
+message GetIntegrationConfigListPageDataRequest {
+  domain.common.v1.PaginationRequest pagination = 1;
+  domain.common.v1.FilterRequest filter = 2;
+  domain.common.v1.SortRequest sort = 3;
+  domain.common.v1.SearchRequest search = 4;
+}
+message GetIntegrationConfigListPageDataResponse {
+  repeated IntegrationConfigListRow rows = 1;
+  domain.common.v1.PaginationResponse pagination = 2;
+  domain.common.v1.Error error = 3;
+}
+message IntegrationConfigListRow {
+  IntegrationConfig integration_config = 1;
+}
+
+// Item page data
+message GetIntegrationConfigItemPageDataRequest { string id = 1; }
+message GetIntegrationConfigItemPageDataResponse {
+  IntegrationConfig integration_config = 1;
+  domain.common.v1.Error error = 2;
+}

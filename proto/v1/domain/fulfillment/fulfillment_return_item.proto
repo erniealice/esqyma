@@ -1,0 +1,17 @@
+syntax = "proto3";
+
+package domain.fulfillment.v1;
+
+option go_package = "github.com/erniealice/esqyma/golang/v1/domain/fulfillment/fulfillment_return_item";
+
+import "options/db.proto";
+
+message FulfillmentReturnItem {
+  option (options.v1.table).table = true;
+  string id = 1;
+  string fulfillment_return_id = 2 [(options.v1.db).references = "fulfillment_return", (options.v1.db).index = true];
+  string fulfillment_item_id = 3 [(options.v1.db).references = "fulfillment_item"];
+  double quantity_returned = 4;
+  string reason = 5; // per-item reason: "damaged", "wrong_item", etc.
+  optional int64 date_created = 6;
+}

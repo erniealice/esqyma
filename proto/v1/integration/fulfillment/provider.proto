@@ -1,0 +1,106 @@
+syntax = "proto3";
+
+package integration.fulfillment.v1;
+
+option go_package = "github.com/erniealice/esqyma/golang/v1/integration/fulfillment";
+
+import "integration/fulfillment/fulfillment.proto";
+
+// FulfillmentProviderConfig represents fulfillment provider configuration.
+// This defines how to connect to a specific provider (API keys, endpoints, defaults).
+message FulfillmentProviderConfig {
+  // Unique provider identifier (e.g., "lalamove", "grabexpress")
+  string provider_id = 1;
+
+  // Provider type
+  FulfillmentProviderType provider_type = 2;
+
+  // Whether provider is enabled
+  bool enabled = 3;
+
+  // Display name
+  string display_name = 4;
+
+  // Supported capabilities
+  repeated FulfillmentCapability capabilities = 5;
+
+  // Supported vehicle types
+  repeated VehicleType supported_vehicles = 6;
+
+  // API endpoint (production)
+  string api_endpoint = 7;
+
+  // API endpoint (sandbox/test)
+  string sandbox_endpoint = 8;
+
+  // Whether to use sandbox mode
+  bool sandbox_mode = 9;
+
+  // Authentication
+  oneof auth {
+    ApiKeyAuth api_key_auth = 20;
+    OAuth2Auth oauth2_auth = 21;
+    HmacAuth hmac_auth = 22;
+  }
+
+  // Webhook configuration
+  WebhookConfig webhook_config = 30;
+
+  // Default pickup location (for this workspace)
+  DeliveryLocation default_pickup = 31;
+
+  // Default vehicle type
+  VehicleType default_vehicle = 32;
+
+  // Service area (coverage zone)
+  string service_area = 33;
+
+  // Request timeout in seconds
+  int32 timeout_seconds = 40;
+
+  // Max retry attempts
+  int32 max_retries = 41;
+
+  // Provider-specific settings
+  map<string, string> settings = 50;
+}
+
+// ApiKeyAuth for Lalamove-style HMAC API key authentication
+message ApiKeyAuth {
+  string api_key = 1;
+  string api_secret = 2;
+}
+
+// OAuth2Auth for OAuth-based providers
+message OAuth2Auth {
+  string client_id = 1;
+  string client_secret = 2;
+  string access_token = 3;
+  string refresh_token = 4;
+  string token_endpoint = 5;
+  repeated string scopes = 6;
+}
+
+// HmacAuth for HMAC-based providers (Lalamove uses this)
+message HmacAuth {
+  string api_key = 1;
+  string api_secret = 2;
+  string hmac_algorithm = 3; // e.g., "SHA256"
+}
+
+// WebhookConfig for webhook settings
+message WebhookConfig {
+  string endpoint_path = 1;
+  string signing_secret = 2;
+  string verification_method = 3;
+  repeated string subscribed_events = 4;
+}
+
+// ProviderHealthStatus for health monitoring
+message ProviderHealthStatus {
+  string provider_id = 1;
+  bool is_healthy = 2;
+  string status_message = 3;
+  int64 response_time_ms = 4;
+  map<string, string> details = 5;
+}

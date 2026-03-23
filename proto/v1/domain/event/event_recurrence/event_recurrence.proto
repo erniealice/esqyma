@@ -11,18 +11,46 @@ import "domain/common/sort.proto";
 import "domain/common/pagination.proto";
 import "options/db.proto";
 
-// Defines the recurrence pattern for events.
+// RecurrenceFrequency represents the base frequency for RFC 5545 RRULE expansion.
+enum RecurrenceFrequency {
+  RECURRENCE_FREQUENCY_UNSPECIFIED = 0;
+  RECURRENCE_FREQUENCY_DAILY = 1;
+  RECURRENCE_FREQUENCY_WEEKLY = 2;
+  RECURRENCE_FREQUENCY_MONTHLY = 3;
+  RECURRENCE_FREQUENCY_YEARLY = 4;
+}
+
+// EventRecurrence defines a reusable recurrence pattern for events.
+// Stores both the canonical RRULE string and parsed fields for query convenience.
 message EventRecurrence {
   option (options.v1.table).table = true;
   string id = 1;
   string name = 2;
   optional string description = 3;
-  string recurrence_pattern = 4; // e.g., "DAILY", "WEEKLY", "MONTHLY", "YEARLY", or RRULE string
+
+  // Canonical RFC 5545 RRULE string (e.g., "FREQ=WEEKLY;BYDAY=MO,WE,FR;INTERVAL=1")
+  // This is the source of truth — parsed fields below are denormalized for query convenience.
+  string rrule_string = 4;
+
   optional int64 date_created = 5;
   optional string date_created_string = 6;
   optional int64 date_modified = 7;
   optional string date_modified_string = 8;
   bool active = 9 [(options.v1.db).default = "true"];
+
+  // Tenant scope
+  string workspace_id = 10 [(options.v1.db).references = "workspace", (options.v1.db).index = true];
+
+  // Parsed RRULE fields (denormalized for filtering/querying without parsing RRULE)
+  RecurrenceFrequency freq = 11;
+  int32 interval = 12;
+  optional int32 count = 13;
+  optional int64 until_utc = 14;
+  optional string by_day = 15;       // Comma-separated: "MO,WE,FR"
+  optional string by_month_day = 16; // Comma-separated: "1,15"
+
+  // Comma-separated excluded dates (RFC 5545 EXDATE)
+  optional string exdate_string = 17;
 }
 
 service EventRecurrenceDomainService {
@@ -31,6 +59,12 @@ service EventRecurrenceDomainService {
   rpc UpdateEventRecurrence(UpdateEventRecurrenceRequest) returns (UpdateEventRecurrenceResponse);
   rpc DeleteEventRecurrence(DeleteEventRecurrenceRequest) returns (DeleteEventRecurrenceResponse);
   rpc ListEventRecurrences(ListEventRecurrencesRequest) returns (ListEventRecurrencesResponse);
+
+  rpc GetEventRecurrenceListPageData(GetEventRecurrenceListPageDataRequest)
+    returns (GetEventRecurrenceListPageDataResponse);
+
+  rpc GetEventRecurrenceItemPageData(GetEventRecurrenceItemPageDataRequest)
+    returns (GetEventRecurrenceItemPageDataResponse);
 }
 
 message CreateEventRecurrenceRequest {
@@ -81,6 +115,31 @@ message ListEventRecurrencesRequest {
 
 message ListEventRecurrencesResponse {
   repeated EventRecurrence data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message GetEventRecurrenceListPageDataRequest {
+  optional domain.common.v1.PaginationRequest pagination = 1;
+  optional domain.common.v1.FilterRequest filters = 2;
+  optional domain.common.v1.SortRequest sort = 3;
+  optional domain.common.v1.SearchRequest search = 4;
+}
+
+message GetEventRecurrenceListPageDataResponse {
+  repeated EventRecurrence event_recurrence_list = 1;
+  optional domain.common.v1.PaginationResponse pagination = 2;
+  repeated domain.common.v1.SearchResult search_results = 3;
+  bool success = 4;
+  optional domain.common.v1.Error error = 5;
+}
+
+message GetEventRecurrenceItemPageDataRequest {
+  string event_recurrence_id = 1;
+}
+
+message GetEventRecurrenceItemPageDataResponse {
+  optional EventRecurrence event_recurrence = 1;
   bool success = 2;
   optional domain.common.v1.Error error = 3;
 }

@@ -1,0 +1,4768 @@
+// ==============================================
+// integration.proto
+// Auto-generated concatenation of all .proto files
+// under proto/v1/integration/
+// Service, Request, and Response blocks have been stripped.
+// Generated: 2026-03-22 00:44:11 UTC
+// ==============================================
+
+// ───── integration/datasheet/datasheet.proto ─────
+
+syntax = "proto3";
+
+package integration.datasheet.v1;
+
+option go_package = "github.com/erniealice/esqyma/golang/v1/integration/datasheet";
+
+import "google/protobuf/timestamp.proto";
+import "google/protobuf/any.proto";
+
+// DatasheetProviderType represents the category of datasheet provider
+enum DatasheetProviderType {
+  DATASHEET_PROVIDER_TYPE_UNSPECIFIED = 0;
+  DATASHEET_PROVIDER_TYPE_GOOGLE_SHEETS = 1;  // Google Sheets API
+  DATASHEET_PROVIDER_TYPE_EXCEL_ONLINE = 2;   // Microsoft Excel Online / Graph API
+  DATASHEET_PROVIDER_TYPE_AIRTABLE = 3;       // Airtable API
+  DATASHEET_PROVIDER_TYPE_MOCK = 4;           // Mock/test provider
+}
+
+// DatasheetCapability represents features supported by a provider
+enum DatasheetCapability {
+  DATASHEET_CAPABILITY_UNSPECIFIED = 0;
+  DATASHEET_CAPABILITY_READ = 1;                    // Read data from sheets
+  DATASHEET_CAPABILITY_WRITE = 2;                   // Write/append data to sheets
+  DATASHEET_CAPABILITY_BATCH_UPDATE = 3;            // Batch update operations
+  DATASHEET_CAPABILITY_FORMULAS = 4;                // Formula support
+  DATASHEET_CAPABILITY_FORMATTING = 5;              // Cell/row/column formatting
+  DATASHEET_CAPABILITY_CONDITIONAL_FORMATTING = 6;  // Conditional formatting rules
+  DATASHEET_CAPABILITY_CHARTS = 7;                  // Chart creation and management
+  DATASHEET_CAPABILITY_PIVOT_TABLES = 8;            // Pivot table support
+  DATASHEET_CAPABILITY_FILTERING = 9;               // Data filtering
+  DATASHEET_CAPABILITY_SORTING = 10;                // Data sorting
+  DATASHEET_CAPABILITY_VALIDATION = 11;             // Data validation rules
+  DATASHEET_CAPABILITY_COMMENTS = 12;               // Cell comments/notes
+  DATASHEET_CAPABILITY_PROTECTION = 13;             // Sheet/range protection
+  DATASHEET_CAPABILITY_NAMED_RANGES = 14;           // Named range support
+  DATASHEET_CAPABILITY_MULTIPLE_SHEETS = 15;        // Multiple sheets in spreadsheet
+}
+
+// CellValueType represents the data type of a cell value
+enum CellValueType {
+  CELL_VALUE_TYPE_UNSPECIFIED = 0;
+  CELL_VALUE_TYPE_STRING = 1;     // Text/string value
+  CELL_VALUE_TYPE_NUMBER = 2;     // Numeric value (integer or float)
+  CELL_VALUE_TYPE_BOOLEAN = 3;    // Boolean true/false
+  CELL_VALUE_TYPE_DATE = 4;       // Date only (no time component)
+  CELL_VALUE_TYPE_DATETIME = 5;   // Date and time
+  CELL_VALUE_TYPE_FORMULA = 6;    // Formula expression
+  CELL_VALUE_TYPE_ERROR = 7;      // Error value (e.g., #REF!, #DIV/0!)
+  CELL_VALUE_TYPE_EMPTY = 8;      // Empty/null cell
+  CELL_VALUE_TYPE_CURRENCY = 9;   // Currency value
+  CELL_VALUE_TYPE_PERCENT = 10;   // Percentage value
+}
+
+// ConditionOperator represents comparison operators for conditions
+enum ConditionOperator {
+  CONDITION_OPERATOR_UNSPECIFIED = 0;
+  CONDITION_OPERATOR_EQ = 1;           // Equal to
+  CONDITION_OPERATOR_NEQ = 2;          // Not equal to
+  CONDITION_OPERATOR_GT = 3;           // Greater than
+  CONDITION_OPERATOR_LT = 4;           // Less than
+  CONDITION_OPERATOR_GTE = 5;          // Greater than or equal to
+  CONDITION_OPERATOR_LTE = 6;          // Less than or equal to
+  CONDITION_OPERATOR_CONTAINS = 7;     // Contains substring
+  CONDITION_OPERATOR_STARTS_WITH = 8;  // Starts with prefix
+  CONDITION_OPERATOR_ENDS_WITH = 9;    // Ends with suffix
+  CONDITION_OPERATOR_REGEX = 10;       // Regular expression match
+  CONDITION_OPERATOR_IS_EMPTY = 11;    // Cell is empty
+  CONDITION_OPERATOR_IS_NOT_EMPTY = 12;// Cell is not empty
+  CONDITION_OPERATOR_IN = 13;          // Value is in list
+  CONDITION_OPERATOR_NOT_IN = 14;      // Value is not in list
+}
+
+// CellValue represents the value of a cell with type information
+message CellValue {
+  // The type of the value
+  CellValueType value_type = 1;
+
+  // The actual value (one of the following)
+  oneof value {
+    string string_value = 2;      // String/text value
+    double number_value = 3;      // Numeric value
+    bool bool_value = 4;          // Boolean value
+    string date_value = 5;        // ISO 8601 date string (YYYY-MM-DD)
+    string datetime_value = 6;    // ISO 8601 datetime string
+    string formula_value = 7;     // Formula expression (e.g., "=SUM(A1:A10)")
+    string error_value = 8;       // Error string (e.g., "#REF!", "#DIV/0!")
+  }
+
+  // Original raw value as string (for display purposes)
+  string raw_value = 9;
+}
+
+// Cell represents a single cell in a spreadsheet
+message Cell {
+  // Row index (0-based)
+  int32 row_index = 1;
+
+  // Column index (0-based)
+  int32 column_index = 2;
+
+  // Cell value
+  CellValue value = 3;
+
+  // Formatted/displayed value (after formatting applied)
+  string formatted_value = 4;
+
+  // Cell note/comment
+  string note = 5;
+
+  // Hyperlink URL (if cell contains a link)
+  string hyperlink = 6;
+
+  // Cell formatting information
+  CellFormat format = 7;
+
+  // Cell address in A1 notation (e.g., "A1", "B2")
+  string address = 8;
+
+  // Additional cell metadata
+  map<string, string> metadata = 9;
+}
+
+// CellFormat represents formatting options for a cell
+message CellFormat {
+  // Background color (hex format, e.g., "#FFFFFF")
+  string background_color = 1;
+
+  // Text color (hex format)
+  string text_color = 2;
+
+  // Font family
+  string font_family = 3;
+
+  // Font size in points
+  int32 font_size = 4;
+
+  // Bold text
+  bool bold = 5;
+
+  // Italic text
+  bool italic = 6;
+
+  // Strikethrough text
+  bool strikethrough = 7;
+
+  // Underline text
+  bool underline = 8;
+
+  // Horizontal alignment
+  HorizontalAlignment horizontal_alignment = 9;
+
+  // Vertical alignment
+  VerticalAlignment vertical_alignment = 10;
+
+  // Text wrapping
+  WrapStrategy wrap_strategy = 11;
+
+  // Number format pattern (e.g., "#,##0.00", "0%")
+  string number_format = 12;
+}
+
+// HorizontalAlignment represents horizontal text alignment
+enum HorizontalAlignment {
+  HORIZONTAL_ALIGNMENT_UNSPECIFIED = 0;
+  HORIZONTAL_ALIGNMENT_LEFT = 1;
+  HORIZONTAL_ALIGNMENT_CENTER = 2;
+  HORIZONTAL_ALIGNMENT_RIGHT = 3;
+}
+
+// VerticalAlignment represents vertical text alignment
+enum VerticalAlignment {
+  VERTICAL_ALIGNMENT_UNSPECIFIED = 0;
+  VERTICAL_ALIGNMENT_TOP = 1;
+  VERTICAL_ALIGNMENT_MIDDLE = 2;
+  VERTICAL_ALIGNMENT_BOTTOM = 3;
+}
+
+// WrapStrategy represents text wrapping behavior
+enum WrapStrategy {
+  WRAP_STRATEGY_UNSPECIFIED = 0;
+  WRAP_STRATEGY_OVERFLOW = 1;  // Text overflows to adjacent cells
+  WRAP_STRATEGY_WRAP = 2;      // Text wraps within the cell
+  WRAP_STRATEGY_CLIP = 3;      // Text is clipped at cell boundary
+}
+
+// Row represents a row of cells in a spreadsheet
+message Row {
+  // Row index (0-based)
+  int32 row_index = 1;
+
+  // Cells in this row
+  repeated Cell cells = 2;
+
+  // Row height in pixels (if customized)
+  int32 height = 3;
+
+  // Whether the row is hidden
+  bool hidden = 4;
+
+  // Row-level metadata
+  map<string, string> metadata = 5;
+}
+
+// Column represents a column definition in a spreadsheet
+message Column {
+  // Column index (0-based)
+  int32 column_index = 1;
+
+  // Column header name/label
+  string header_name = 2;
+
+  // Expected data type for this column
+  CellValueType data_type = 3;
+
+  // Column width in pixels
+  int32 width = 4;
+
+  // Whether the column is hidden
+  bool hidden = 5;
+
+  // Column letter (e.g., "A", "B", "AA")
+  string column_letter = 6;
+
+  // Column-level metadata
+  map<string, string> metadata = 7;
+}
+
+// Range represents a rectangular range of cells
+message Range {
+  // Sheet name (required)
+  string sheet_name = 1;
+
+  // Start row index (0-based, inclusive)
+  int32 start_row = 2;
+
+  // Start column index (0-based, inclusive)
+  int32 start_column = 3;
+
+  // End row index (0-based, inclusive)
+  int32 end_row = 4;
+
+  // End column index (0-based, inclusive)
+  int32 end_column = 5;
+
+  // A1 notation representation (e.g., "Sheet1!A1:B10")
+  string a1_notation = 6;
+}
+
+// Sheet represents a single sheet/tab within a spreadsheet
+message Sheet {
+  // Unique identifier for the sheet (provider-specific)
+  string id = 1;
+
+  // Sheet name/title
+  string name = 2;
+
+  // Sheet index/position within the spreadsheet
+  int32 index = 3;
+
+  // Column definitions (header row)
+  repeated Column columns = 4;
+
+  // Total number of rows with data
+  int32 row_count = 5;
+
+  // Total number of columns with data
+  int32 column_count = 6;
+
+  // Number of frozen rows (header rows)
+  int32 frozen_rows = 7;
+
+  // Number of frozen columns
+  int32 frozen_columns = 8;
+
+  // Whether the sheet is hidden
+  bool hidden = 9;
+
+  // Sheet tab color (hex format)
+  string tab_color = 10;
+
+  // Sheet-level metadata
+  map<string, string> metadata = 11;
+
+  // Provider-specific sheet data
+  map<string, google.protobuf.Any> provider_data = 12;
+}
+
+// Spreadsheet represents a complete spreadsheet document
+message Spreadsheet {
+  // Unique identifier for the spreadsheet (provider-specific)
+  string id = 1;
+
+  // Spreadsheet name/title
+  string name = 2;
+
+  // URL to access the spreadsheet
+  string url = 3;
+
+  // Sheets within this spreadsheet
+  repeated Sheet sheets = 4;
+
+  // Default locale (e.g., "en_US")
+  string locale = 5;
+
+  // Time zone (e.g., "America/New_York")
+  string time_zone = 6;
+
+  // Spreadsheet owner email
+  string owner_email = 7;
+
+  // Creation timestamp
+  google.protobuf.Timestamp created_at = 8;
+
+  // Last modification timestamp
+  google.protobuf.Timestamp updated_at = 9;
+
+  // Spreadsheet-level metadata
+  map<string, string> metadata = 10;
+
+  // Provider-specific spreadsheet data
+  map<string, google.protobuf.Any> provider_data = 11;
+}
+
+// Condition represents a filter/search condition
+message Condition {
+  // Column index to apply condition (0-based)
+  int32 column_index = 1;
+
+  // Column name (alternative to column_index)
+  string column_name = 2;
+
+  // Comparison operator
+  ConditionOperator operator = 3;
+
+  // Value to compare against
+  CellValue value = 4;
+
+  // Multiple values for IN/NOT_IN operators
+  repeated CellValue values = 5;
+
+  // Case-sensitive comparison (for string operations)
+  bool case_sensitive = 6;
+}
+
+// ConditionGroup represents a group of conditions with logical operators
+message ConditionGroup {
+  // Individual conditions
+  repeated Condition conditions = 1;
+
+  // Logical operator to combine conditions
+  LogicalOperator logical_operator = 2;
+
+  // Nested condition groups
+  repeated ConditionGroup nested_groups = 3;
+}
+
+// LogicalOperator represents logical operators for combining conditions
+enum LogicalOperator {
+  LOGICAL_OPERATOR_UNSPECIFIED = 0;
+  LOGICAL_OPERATOR_AND = 1;  // All conditions must match
+  LOGICAL_OPERATOR_OR = 2;   // Any condition must match
+}
+
+// SortSpec represents sorting specification
+message SortSpec {
+  // Column index to sort by (0-based)
+  int32 column_index = 1;
+
+  // Column name (alternative to column_index)
+  string column_name = 2;
+
+  // Sort order
+  SortOrder sort_order = 3;
+}
+
+// SortOrder represents the sort direction
+enum SortOrder {
+  SORT_ORDER_UNSPECIFIED = 0;
+  SORT_ORDER_ASCENDING = 1;
+  SORT_ORDER_DESCENDING = 2;
+}
+
+// UpdateMode represents how to handle existing data during updates
+enum UpdateMode {
+  UPDATE_MODE_UNSPECIFIED = 0;
+  UPDATE_MODE_OVERWRITE = 1;  // Replace existing values
+  UPDATE_MODE_APPEND = 2;     // Add after existing data
+  UPDATE_MODE_INSERT = 3;     // Insert at specific position, shifting existing
+}
+
+// ValueInputOption represents how input values should be interpreted
+enum ValueInputOption {
+  VALUE_INPUT_OPTION_UNSPECIFIED = 0;
+  VALUE_INPUT_OPTION_RAW = 1;            // Values are stored as-is
+  VALUE_INPUT_OPTION_USER_ENTERED = 2;   // Values are parsed as if user typed them
+}
+
+// ValueRenderOption represents how values should be rendered in output
+enum ValueRenderOption {
+  VALUE_RENDER_OPTION_UNSPECIFIED = 0;
+  VALUE_RENDER_OPTION_FORMATTED = 1;     // Return formatted display values
+  VALUE_RENDER_OPTION_UNFORMATTED = 2;   // Return raw values without formatting
+  VALUE_RENDER_OPTION_FORMULA = 3;       // Return formulas instead of calculated values
+}
+
+// ───── integration/datasheet/datasheet_service.proto ─────
+
+syntax = "proto3";
+
+package integration.datasheet.v1;
+
+option go_package = "github.com/erniealice/esqyma/golang/v1/integration/datasheet";
+
+import "google/protobuf/timestamp.proto";
+import "integration/datasheet/datasheet.proto";
+import "integration/datasheet/provider.proto";
+import "domain/common/error.proto";
+
+// ============================================================================
+// Row Operations
+// ============================================================================
+
+message AddRowsData {
+  // Provider identifier
+  string provider_id = 1;
+
+  // Spreadsheet identifier
+  string spreadsheet_id = 2;
+
+  // Target sheet name
+  string sheet_name = 3;
+
+  // Rows to add
+  repeated Row rows = 4;
+
+  // Insert position (0 = beginning, -1 or omit = end/append)
+  int32 insert_at_index = 5;
+
+  // How input values should be interpreted
+  ValueInputOption value_input_option = 6;
+
+  // Whether to insert empty rows before adding data
+  bool insert_data_option = 7;
+}
+
+message AddRowsResult {
+  // Range where data was added (in A1 notation)
+  string updated_range = 1;
+
+  // Number of rows added
+  int32 rows_added = 2;
+
+  // Number of cells updated
+  int32 cells_updated = 3;
+
+  // The rows that were added (with any server-assigned values)
+  repeated Row added_rows = 4;
+}
+
+message UpdateRowsData {
+  // Provider identifier
+  string provider_id = 1;
+
+  // Spreadsheet identifier
+  string spreadsheet_id = 2;
+
+  // Target range to update
+  Range range = 3;
+
+  // Rows with updated values
+  repeated Row rows = 4;
+
+  // Optional conditions to filter which rows to update (update where)
+  ConditionGroup conditions = 5;
+
+  // How input values should be interpreted
+  ValueInputOption value_input_option = 6;
+
+  // Update mode
+  UpdateMode update_mode = 7;
+}
+
+message UpdateRowsResult {
+  // Range that was updated (in A1 notation)
+  string updated_range = 1;
+
+  // Number of rows updated
+  int32 rows_updated = 2;
+
+  // Number of cells updated
+  int32 cells_updated = 3;
+
+  // Number of rows matched by conditions
+  int32 rows_matched = 4;
+}
+
+message DeleteRowsData {
+  // Provider identifier
+  string provider_id = 1;
+
+  // Spreadsheet identifier
+  string spreadsheet_id = 2;
+
+  // Target sheet name
+  string sheet_name = 3;
+
+  // Specific row indices to delete (0-based)
+  repeated int32 row_indices = 4;
+
+  // Alternative: conditions to match rows for deletion (delete where)
+  ConditionGroup conditions = 5;
+
+  // Whether to shift remaining rows up after deletion
+  bool shift_rows = 6;
+}
+
+message DeleteRowsResult {
+  // Number of rows deleted
+  int32 rows_deleted = 1;
+
+  // Indices of rows that were deleted
+  repeated int32 deleted_indices = 2;
+}
+
+message SearchRowsData {
+  // Provider identifier
+  string provider_id = 1;
+
+  // Spreadsheet identifier
+  string spreadsheet_id = 2;
+
+  // Target sheet name
+  string sheet_name = 3;
+
+  // Search conditions
+  ConditionGroup conditions = 4;
+
+  // Maximum number of rows to return
+  int32 limit = 5;
+
+  // Number of rows to skip (for pagination)
+  int32 offset = 6;
+
+  // Sort specifications
+  repeated SortSpec sort_by = 7;
+
+  // Columns to return (empty = all columns)
+  repeated int32 column_indices = 8;
+
+  // Whether to include formatting information
+  bool include_formatting = 9;
+
+  // How values should be rendered
+  ValueRenderOption value_render_option = 10;
+}
+
+message SearchRowsResult {
+  // Matching rows
+  repeated Row rows = 1;
+
+  // Total count of matching rows (before limit/offset)
+  int32 total_count = 2;
+
+  // Whether there are more results available
+  bool has_more = 3;
+}
+
+// ============================================================================
+// Range Operations
+// ============================================================================
+
+message ReadRangeData {
+  // Provider identifier
+  string provider_id = 1;
+
+  // Spreadsheet identifier
+  string spreadsheet_id = 2;
+
+  // Range to read
+  Range range = 3;
+
+  // Whether to include formatting information
+  bool include_formatting = 4;
+
+  // Whether to include notes/comments
+  bool include_notes = 5;
+
+  // How values should be rendered
+  ValueRenderOption value_render_option = 6;
+
+  // Date/time render option
+  string date_time_render_option = 7;
+}
+
+message ReadRangeResult {
+  // Range that was read (in A1 notation)
+  string range = 1;
+
+  // Rows of data from the range
+  repeated Row rows = 2;
+
+  // Major dimension of the data (ROWS or COLUMNS)
+  string major_dimension = 3;
+}
+
+message WriteRangeData {
+  // Provider identifier
+  string provider_id = 1;
+
+  // Spreadsheet identifier
+  string spreadsheet_id = 2;
+
+  // Target range
+  Range range = 3;
+
+  // Rows to write
+  repeated Row rows = 4;
+
+  // How input values should be interpreted
+  ValueInputOption value_input_option = 5;
+}
+
+message WriteRangeResult {
+  // Range that was written (in A1 notation)
+  string updated_range = 1;
+
+  // Number of rows written
+  int32 rows_updated = 2;
+
+  // Number of columns written
+  int32 columns_updated = 3;
+
+  // Number of cells written
+  int32 cells_updated = 4;
+}
+
+message ClearRangeData {
+  // Provider identifier
+  string provider_id = 1;
+
+  // Spreadsheet identifier
+  string spreadsheet_id = 2;
+
+  // Range to clear
+  Range range = 3;
+
+  // Clear values only (preserve formatting)
+  bool values_only = 4;
+
+  // Clear formatting only (preserve values)
+  bool formatting_only = 5;
+}
+
+message ClearRangeResult {
+  // Range that was cleared (in A1 notation)
+  string cleared_range = 1;
+}
+
+// ============================================================================
+// Sheet Operations
+// ============================================================================
+
+message GetSheetMetadataData {
+  // Provider identifier
+  string provider_id = 1;
+
+  // Spreadsheet identifier
+  string spreadsheet_id = 2;
+
+  // Specific sheet name (optional - if omitted, returns all sheets)
+  string sheet_name = 3;
+
+  // Whether to include column headers
+  bool include_columns = 4;
+}
+
+message GetSheetMetadataResult {
+  // Spreadsheet information
+  Spreadsheet spreadsheet = 1;
+
+  // Specific sheet (if sheet_name was provided)
+  Sheet sheet = 2;
+}
+
+message CreateSheetData {
+  // Provider identifier
+  string provider_id = 1;
+
+  // Spreadsheet identifier
+  string spreadsheet_id = 2;
+
+  // Name for the new sheet
+  string sheet_name = 3;
+
+  // Column definitions (optional)
+  repeated Column columns = 4;
+
+  // Initial number of rows
+  int32 row_count = 5;
+
+  // Initial number of columns
+  int32 column_count = 6;
+
+  // Position index for the new sheet
+  int32 index = 7;
+
+  // Tab color (hex format)
+  string tab_color = 8;
+}
+
+message CreateSheetResult {
+  // The created sheet
+  Sheet sheet = 1;
+}
+
+message DeleteSheetData {
+  // Provider identifier
+  string provider_id = 1;
+
+  // Spreadsheet identifier
+  string spreadsheet_id = 2;
+
+  // Sheet name to delete
+  string sheet_name = 3;
+
+  // Sheet ID to delete (alternative to sheet_name)
+  string sheet_id = 4;
+}
+
+message DeleteSheetResult {
+  // Confirmation message
+  string message = 1;
+}
+
+message RenameSheetData {
+  // Provider identifier
+  string provider_id = 1;
+
+  // Spreadsheet identifier
+  string spreadsheet_id = 2;
+
+  // Current sheet name
+  string current_name = 3;
+
+  // New sheet name
+  string new_name = 4;
+}
+
+message RenameSheetResult {
+  // The updated sheet
+  Sheet sheet = 1;
+}
+
+message CopySheetData {
+  // Provider identifier
+  string provider_id = 1;
+
+  // Source spreadsheet identifier
+  string source_spreadsheet_id = 2;
+
+  // Source sheet name
+  string source_sheet_name = 3;
+
+  // Destination spreadsheet identifier (optional - same spreadsheet if omitted)
+  string destination_spreadsheet_id = 4;
+
+  // Name for the copied sheet (optional - auto-generated if omitted)
+  string new_sheet_name = 5;
+}
+
+message CopySheetResult {
+  // The copied sheet
+  Sheet sheet = 1;
+}
+
+// ============================================================================
+// Spreadsheet Operations
+// ============================================================================
+
+message GetSpreadsheetData {
+  // Provider identifier
+  string provider_id = 1;
+
+  // Spreadsheet identifier
+  string spreadsheet_id = 2;
+
+  // Whether to include sheet details
+  bool include_sheets = 3;
+
+  // Whether to include sheet data
+  bool include_data = 4;
+}
+
+message CreateSpreadsheetData {
+  // Provider identifier
+  string provider_id = 1;
+
+  // Title for the new spreadsheet
+  string title = 2;
+
+  // Initial sheets to create
+  repeated CreateSheetData sheets = 3;
+
+  // Locale (e.g., "en_US")
+  string locale = 4;
+
+  // Time zone (e.g., "America/New_York")
+  string time_zone = 5;
+
+  // Folder ID to create spreadsheet in (provider-specific)
+  string folder_id = 6;
+}
+
+// ============================================================================
+// Batch Operations
+// ============================================================================
+
+message BatchUpdateData {
+  // Provider identifier
+  string provider_id = 1;
+
+  // Spreadsheet identifier
+  string spreadsheet_id = 2;
+
+  // Operations to perform
+  repeated BatchOperation operations = 3;
+
+  // Whether to stop on first error
+  bool fail_fast = 4;
+
+  // Batch ID for tracking
+  string batch_id = 5;
+}
+
+// BatchOperation represents a single operation in a batch
+message BatchOperation {
+  // Operation identifier
+  string operation_id = 1;
+
+  // The operation to perform
+  oneof operation {
+    AddRowsData add_rows = 2;
+    UpdateRowsData update_rows = 3;
+    DeleteRowsData delete_rows = 4;
+    WriteRangeData write_range = 5;
+    ClearRangeData clear_range = 6;
+    CreateSheetData create_sheet = 7;
+    DeleteSheetData delete_sheet = 8;
+  }
+}
+
+message BatchUpdateResult {
+  // Batch ID
+  string batch_id = 1;
+
+  // Results for each operation
+  repeated BatchOperationResult operation_results = 2;
+
+  // Number of successful operations
+  int32 success_count = 3;
+
+  // Number of failed operations
+  int32 failure_count = 4;
+}
+
+message BatchOperationResult {
+  // Operation identifier
+  string operation_id = 1;
+
+  // Whether this operation succeeded
+  bool success = 2;
+
+  // Error if operation failed
+  domain.common.v1.Error error = 3;
+
+  // Result data (type depends on operation)
+  oneof result {
+    AddRowsResult add_rows_result = 4;
+    UpdateRowsResult update_rows_result = 5;
+    DeleteRowsResult delete_rows_result = 6;
+    WriteRangeResult write_range_result = 7;
+    ClearRangeResult clear_range_result = 8;
+    CreateSheetResult create_sheet_result = 9;
+    DeleteSheetResult delete_sheet_result = 10;
+  }
+}
+
+// ============================================================================
+// Health and Capabilities
+// ============================================================================
+
+message DatasheetHealthCheckData {
+  // Provider identifier to check
+  string provider_id = 1;
+
+  // Whether to perform deep health check
+  bool deep_check = 2;
+
+  // Test spreadsheet ID for deep check (optional)
+  string test_spreadsheet_id = 3;
+}
+
+message DatasheetHealthStatus {
+  // Whether the provider is healthy
+  bool is_healthy = 1;
+
+  // Health status message
+  string status_message = 2;
+
+  // Provider health status details
+  ProviderHealthStatus health_status = 3;
+
+  // Additional health details
+  map<string, string> details = 4;
+}
+
+message DatasheetProviderLookup {
+  // Provider identifier
+  string provider_id = 1;
+}
+
+message DatasheetProviderCapabilities {
+  // Provider identifier
+  string provider_id = 1;
+
+  // Provider type
+  DatasheetProviderType provider_type = 2;
+
+  // Supported capabilities
+  repeated DatasheetCapability capabilities = 3;
+
+  // Maximum cells per request
+  int32 max_cells_per_request = 4;
+
+  // Maximum rows per request
+  int32 max_rows_per_request = 5;
+
+  // Maximum concurrent requests
+  int32 max_concurrent_requests = 6;
+
+  // Rate limits
+  DatasheetRateLimits rate_limits = 7;
+
+  // Capability-specific details
+  map<string, string> capability_details = 8;
+}
+
+// DatasheetRateLimits represents API rate limiting information
+message DatasheetRateLimits {
+  // Requests per minute (read)
+  int32 read_requests_per_minute = 1;
+
+  // Requests per minute (write)
+  int32 write_requests_per_minute = 2;
+
+  // Requests per day
+  int32 requests_per_day = 3;
+
+  // Cells per read request
+  int32 cells_per_read = 4;
+
+  // Cells per write request
+  int32 cells_per_write = 5;
+}
+
+// ───── integration/datasheet/provider.proto ─────
+
+syntax = "proto3";
+
+package integration.datasheet.v1;
+
+option go_package = "github.com/erniealice/esqyma/golang/v1/integration/datasheet";
+
+import "google/protobuf/any.proto";
+import "google/protobuf/timestamp.proto";
+import "integration/datasheet/datasheet.proto";
+
+// DatasheetProviderConfig represents generic datasheet provider configuration
+// The hexagonal architecture adapters will handle provider-specific implementation details
+message DatasheetProviderConfig {
+  // Unique provider identifier (e.g., "google-sheets", "excel-online", "airtable")
+  string provider_id = 1;
+
+  // Provider type category
+  DatasheetProviderType provider_type = 2;
+
+  // Whether this provider is enabled
+  bool enabled = 3;
+
+  // Display name for the provider
+  string display_name = 4;
+
+  // Capabilities supported by this provider
+  repeated DatasheetCapability capabilities = 5;
+
+  // Authentication configuration
+  oneof auth {
+    GoogleSheetsAuth google_sheets_auth = 10;
+    OAuth2Auth oauth2_auth = 11;
+    ApiKeyAuth api_key_auth = 12;
+    AirtableAuth airtable_auth = 13;
+    CustomAuth custom_auth = 14;
+  }
+
+  // API endpoint (for providers with configurable endpoints)
+  string api_endpoint = 20;
+
+  // Request timeout in seconds
+  int32 timeout_seconds = 21;
+
+  // Maximum retry attempts for failed requests
+  int32 max_retries = 22;
+
+  // Retry backoff multiplier (in milliseconds)
+  int32 retry_backoff_ms = 23;
+
+  // Default spreadsheet ID (for operations that don't specify one)
+  string default_spreadsheet_id = 24;
+
+  // Default sheet name
+  string default_sheet_name = 25;
+
+  // Provider-specific settings as key-value pairs
+  // Examples: "batch_size": "100", "include_formulas": "true"
+  map<string, string> settings = 30;
+
+  // Provider-specific complex configuration data
+  // Use this for nested structures that don't fit in simple key-value pairs
+  map<string, google.protobuf.Any> extended_config = 31;
+}
+
+// GoogleSheetsAuth represents Google Sheets API authentication
+message GoogleSheetsAuth {
+  // Service account JSON key content (base64 encoded or JSON string)
+  string service_account_key = 1;
+
+  // Path to service account JSON key file (alternative to key content)
+  string service_account_key_path = 2;
+
+  // Delegated email for domain-wide delegation
+  string delegated_email = 3;
+
+  // OAuth2 scopes to request
+  repeated string scopes = 4;
+
+  // Google Cloud project ID
+  string project_id = 5;
+
+  // API key (for public sheets, read-only access)
+  string api_key = 6;
+
+  // OAuth2 credentials (alternative to service account)
+  GoogleOAuth2Credentials oauth2_credentials = 7;
+}
+
+// GoogleOAuth2Credentials represents OAuth2 credentials for Google Sheets
+message GoogleOAuth2Credentials {
+  // OAuth2 access token
+  string access_token = 1;
+
+  // OAuth2 refresh token
+  string refresh_token = 2;
+
+  // Client ID
+  string client_id = 3;
+
+  // Client secret
+  string client_secret = 4;
+
+  // Token expiry timestamp
+  google.protobuf.Timestamp token_expiry = 5;
+}
+
+// OAuth2Auth represents generic OAuth 2.0 based authentication
+// Used for Microsoft Excel Online / Graph API and similar providers
+message OAuth2Auth {
+  // OAuth 2.0 access token
+  string access_token = 1;
+
+  // OAuth 2.0 refresh token
+  string refresh_token = 2;
+
+  // Client ID
+  string client_id = 3;
+
+  // Client secret
+  string client_secret = 4;
+
+  // Token endpoint for refreshing tokens
+  string token_endpoint = 5;
+
+  // Authorization endpoint (for initial OAuth flow)
+  string authorization_endpoint = 6;
+
+  // Redirect URL for OAuth callback
+  string redirect_url = 7;
+
+  // Scopes requested/granted
+  repeated string scopes = 8;
+
+  // Tenant/domain identifier (e.g., for Azure AD)
+  string tenant_id = 9;
+
+  // Token expiry timestamp
+  google.protobuf.Timestamp token_expiry = 10;
+
+  // Resource URL (for Microsoft Graph API)
+  string resource = 11;
+
+  // Additional OAuth parameters
+  map<string, string> additional_params = 20;
+}
+
+// ApiKeyAuth represents API key based authentication
+message ApiKeyAuth {
+  // API key for authentication
+  string api_key = 1;
+
+  // API endpoint/base URL
+  string api_endpoint = 2;
+
+  // Header name for API key (e.g., "Authorization", "X-API-Key")
+  string header_name = 3;
+
+  // Header value prefix (e.g., "Bearer ", "ApiKey ")
+  string header_prefix = 4;
+
+  // Additional headers to include
+  map<string, string> additional_headers = 5;
+}
+
+// AirtableAuth represents Airtable-specific authentication
+message AirtableAuth {
+  // Airtable API key (legacy) or Personal Access Token
+  string api_key = 1;
+
+  // Airtable base ID
+  string base_id = 2;
+
+  // OAuth2 access token (for OAuth apps)
+  string access_token = 3;
+
+  // OAuth2 refresh token
+  string refresh_token = 4;
+
+  // Token expiry timestamp
+  google.protobuf.Timestamp token_expiry = 5;
+
+  // Scopes for OAuth access
+  repeated string scopes = 6;
+}
+
+// CustomAuth represents custom authentication methods
+// Use this for providers with non-standard authentication
+message CustomAuth {
+  // Authentication type identifier
+  string auth_type = 1;
+
+  // Credentials as key-value pairs
+  map<string, string> credentials = 2;
+
+  // Complex credential data
+  map<string, google.protobuf.Any> extended_credentials = 3;
+}
+
+// ProviderHealthStatus represents the health status of a datasheet provider
+message ProviderHealthStatus {
+  // Provider identifier
+  string provider_id = 1;
+
+  // Whether the provider is healthy and operational
+  bool is_healthy = 2;
+
+  // Health status message
+  string status_message = 3;
+
+  // Last successful connection timestamp
+  google.protobuf.Timestamp last_success = 4;
+
+  // Last failed connection timestamp
+  google.protobuf.Timestamp last_failure = 5;
+
+  // Failure count since last success
+  int32 failure_count = 6;
+
+  // Response time in milliseconds (for health check)
+  int64 response_time_ms = 7;
+
+  // Current rate limit status
+  RateLimitStatus rate_limit_status = 8;
+
+  // Additional health details
+  map<string, string> details = 9;
+}
+
+// RateLimitStatus represents current rate limit information
+message RateLimitStatus {
+  // Remaining requests in current window
+  int32 remaining_requests = 1;
+
+  // Total requests allowed in window
+  int32 limit = 2;
+
+  // Window reset timestamp
+  google.protobuf.Timestamp reset_at = 3;
+
+  // Current usage percentage
+  double usage_percentage = 4;
+}
+
+// ConnectionTestResult represents the result of a connection test
+message ConnectionTestResult {
+  // Whether the connection test succeeded
+  bool success = 1;
+
+  // Test result message
+  string message = 2;
+
+  // Connection latency in milliseconds
+  int64 latency_ms = 3;
+
+  // Test spreadsheet ID (if test spreadsheet was used)
+  string test_spreadsheet_id = 4;
+
+  // Provider version/API version
+  string provider_version = 5;
+
+  // Detected capabilities during test
+  repeated DatasheetCapability detected_capabilities = 6;
+
+  // Test timestamp
+  google.protobuf.Timestamp tested_at = 7;
+
+  // Error details if test failed
+  string error_details = 8;
+}
+
+// ProviderMetadata represents metadata about a datasheet provider
+message ProviderMetadata {
+  // Provider identifier
+  string provider_id = 1;
+
+  // Provider type
+  DatasheetProviderType provider_type = 2;
+
+  // Provider display name
+  string display_name = 3;
+
+  // Provider description
+  string description = 4;
+
+  // Provider documentation URL
+  string documentation_url = 5;
+
+  // Provider icon URL
+  string icon_url = 6;
+
+  // Supported authentication methods
+  repeated string supported_auth_methods = 7;
+
+  // Maximum file size supported (in bytes)
+  int64 max_file_size = 8;
+
+  // Maximum cells per spreadsheet
+  int64 max_cells = 9;
+
+  // Maximum sheets per spreadsheet
+  int32 max_sheets = 10;
+
+  // Supported export formats
+  repeated string export_formats = 11;
+
+  // Provider-specific limitations
+  map<string, string> limitations = 12;
+}
+
+// ───── integration/email/email.proto ─────
+
+syntax = "proto3";
+
+package integration.email.v1;
+
+option go_package = "github.com/erniealice/esqyma/golang/v1/integration/email";
+
+import "google/protobuf/timestamp.proto";
+import "google/protobuf/any.proto";
+
+// EmailProviderType represents the category of email provider
+enum EmailProviderType {
+  EMAIL_PROVIDER_TYPE_UNSPECIFIED = 0;
+  EMAIL_PROVIDER_TYPE_API = 1;        // REST API based providers
+  EMAIL_PROVIDER_TYPE_OAUTH = 2;      // OAuth-based providers (requires user delegation)
+  EMAIL_PROVIDER_TYPE_SMTP = 3;       // Standard SMTP protocol
+  EMAIL_PROVIDER_TYPE_MOCK = 4;       // Mock/test provider
+}
+
+// EmailCapability represents features supported by a provider
+enum EmailCapability {
+  EMAIL_CAPABILITY_UNSPECIFIED = 0;
+  EMAIL_CAPABILITY_SEND = 1;              // Basic email sending
+  EMAIL_CAPABILITY_TEMPLATING = 2;        // Template-based emails
+  EMAIL_CAPABILITY_SCHEDULING = 3;        // Schedule emails for later
+  EMAIL_CAPABILITY_TRACKING = 4;          // Open/click tracking
+  EMAIL_CAPABILITY_ATTACHMENTS = 5;       // File attachments
+  EMAIL_CAPABILITY_INLINE_IMAGES = 6;     // Inline embedded images
+  EMAIL_CAPABILITY_BATCH_SEND = 7;        // Batch/bulk sending
+  EMAIL_CAPABILITY_READ_INBOX = 8;        // Read incoming emails
+  EMAIL_CAPABILITY_THREADING = 9;         // Email threading/conversations
+  EMAIL_CAPABILITY_LABELS = 10;           // Label/folder management
+  EMAIL_CAPABILITY_SEARCH = 11;           // Advanced search
+  EMAIL_CAPABILITY_WEBHOOKS = 12;         // Event webhooks/callbacks
+}
+
+// EmailMessage represents a unified email message across all providers
+message EmailMessage {
+  // Unique identifier for the message
+  string id = 1;
+
+  // Provider identifier (e.g., "sendgrid", "gmail", "custom-smtp")
+  string provider_id = 2;
+
+  // Provider type category
+  EmailProviderType provider_type = 3;
+
+  // From address
+  EmailAddress from = 4;
+
+  // To recipients
+  repeated EmailAddress to = 5;
+
+  // CC recipients
+  repeated EmailAddress cc = 6;
+
+  // BCC recipients
+  repeated EmailAddress bcc = 7;
+
+  // Reply-to address
+  EmailAddress reply_to = 8;
+
+  // Subject line
+  string subject = 9;
+
+  // Plain text body
+  string text_body = 10;
+
+  // HTML body
+  string html_body = 11;
+
+  // Email attachments
+  repeated EmailAttachment attachments = 12;
+
+  // Custom headers
+  map<string, string> headers = 13;
+
+  // When the email was sent/received
+  google.protobuf.Timestamp timestamp = 14;
+
+  // Thread/conversation ID (for threading support)
+  string thread_id = 15;
+
+  // Tags for categorization and tracking
+  repeated string tags = 16;
+
+  // Custom metadata (key-value pairs)
+  map<string, string> metadata = 17;
+
+  // Whether this is a draft
+  bool is_draft = 18;
+
+  // Read/unread status
+  bool is_read = 19;
+
+  // Provider-specific string metadata
+  // Use this for simple provider-specific fields (IDs, labels, etc.)
+  map<string, string> provider_metadata = 20;
+
+  // Provider-specific complex data
+  // Use this for complex provider-specific structures
+  map<string, google.protobuf.Any> provider_data = 21;
+}
+
+// EmailAddress represents an email address with optional display name
+message EmailAddress {
+  // Email address (e.g., "user@example.com")
+  string address = 1;
+
+  // Display name (e.g., "John Doe")
+  string name = 2;
+}
+
+// EmailAttachment represents an email attachment
+message EmailAttachment {
+  // Attachment ID (provider-specific or generated)
+  string id = 1;
+
+  // Filename
+  string name = 2;
+
+  // MIME content type
+  string content_type = 3;
+
+  // File size in bytes
+  int64 size = 4;
+
+  // Base64-encoded file content
+  bytes data = 5;
+
+  // Inline content ID (for embedded images in HTML)
+  string content_id = 6;
+
+  // Whether this is an inline attachment
+  bool is_inline = 7;
+
+  // Additional attachment metadata
+  map<string, string> metadata = 8;
+}
+
+// MessagePriority represents the importance/priority level of an email
+enum MessagePriority {
+  MESSAGE_PRIORITY_UNSPECIFIED = 0;
+  MESSAGE_PRIORITY_LOW = 1;
+  MESSAGE_PRIORITY_NORMAL = 2;
+  MESSAGE_PRIORITY_HIGH = 3;
+  MESSAGE_PRIORITY_URGENT = 4;
+}
+
+// ───── integration/email/email_service.proto ─────
+
+syntax = "proto3";
+
+package integration.email.v1;
+
+option go_package = "github.com/erniealice/esqyma/golang/v1/integration/email";
+
+import "google/protobuf/timestamp.proto";
+import "integration/email/email.proto";
+import "integration/email/provider.proto";
+import "integration/email/template.proto";
+import "domain/common/error.proto";
+
+message EmailData {
+  // Email provider identifier
+  string provider_id = 1;
+
+  // From address
+  EmailAddress from = 2;
+
+  // To recipients
+  repeated EmailAddress to = 3;
+
+  // CC recipients
+  repeated EmailAddress cc = 4;
+
+  // BCC recipients
+  repeated EmailAddress bcc = 5;
+
+  // Reply-to address
+  EmailAddress reply_to = 6;
+
+  // Subject line
+  string subject = 7;
+
+  // Plain text body
+  string text_body = 8;
+
+  // HTML body
+  string html_body = 9;
+
+  // Attachments
+  repeated EmailAttachment attachments = 10;
+
+  // Custom headers
+  map<string, string> headers = 11;
+
+  // Tags for tracking
+  repeated string tags = 12;
+
+  // Custom metadata
+  map<string, string> metadata = 13;
+
+  // Send options
+  SendOptions options = 14;
+
+  // Inline template HTML content (alternative to html_body)
+  // When provided, template_values will be applied using {{key}} → value replacement
+  // This takes precedence over html_body if both are provided
+  string template_html = 15;
+
+  // Template variable values for replacement
+  // Keys should match {{key}} placeholders in template_html, subject, or text_body
+  // Example: {"client_name": "John Doe", "plan_name": "Premium Plan"}
+  map<string, string> template_values = 16;
+}
+
+message EmailResult {
+  // Message ID from provider
+  string message_id = 1;
+
+  // The complete email message that was sent
+  EmailMessage message = 2;
+
+  // Provider-specific response data
+  map<string, string> provider_response = 3;
+
+  // Timestamp when sent
+  google.protobuf.Timestamp sent_at = 4;
+}
+
+message BatchEmailData {
+  // Provider identifier
+  string provider_id = 1;
+
+  // Emails to send
+  repeated EmailData emails = 2;
+
+  // Batch ID for tracking
+  string batch_id = 3;
+
+  // Whether to fail entire batch on first error
+  bool fail_fast = 4;
+
+  // Maximum concurrent sends
+  int32 max_concurrent = 5;
+}
+
+message BatchEmailResult {
+  // Results for each email
+  repeated EmailResult results = 1;
+
+  // Number of successful sends
+  int32 success_count = 2;
+
+  // Number of failed sends
+  int32 failure_count = 3;
+
+  // Batch ID
+  string batch_id = 4;
+}
+
+message InboxQueryData {
+  // Email provider identifier
+  string provider_id = 1;
+
+  // Maximum number of messages to return
+  int32 max_results = 2;
+
+  // Page token for pagination
+  string page_token = 3;
+
+  // Search query (provider-specific syntax)
+  string query = 4;
+
+  // Filter by labels/folders (provider-specific)
+  repeated string label_ids = 5;
+
+  // Only return unread messages
+  bool unread_only = 6;
+
+  // Only return messages after this timestamp
+  google.protobuf.Timestamp after = 7;
+
+  // Only return messages before this timestamp
+  google.protobuf.Timestamp before = 8;
+
+  // Filter by sender email
+  string from_email = 9;
+
+  // Include message bodies (can be expensive)
+  bool include_body = 10;
+
+  // Include attachments (can be expensive)
+  bool include_attachments = 11;
+}
+
+message MessageLookupData {
+  // Email provider identifier
+  string provider_id = 1;
+
+  // Message ID
+  string message_id = 2;
+
+  // Whether to include full message body
+  bool include_body = 3;
+
+  // Whether to include attachments
+  bool include_attachments = 4;
+
+  // Format for message retrieval
+  MessageFormat format = 5;
+}
+
+// MessageFormat represents the format for retrieving messages
+enum MessageFormat {
+  MESSAGE_FORMAT_UNSPECIFIED = 0;
+  MESSAGE_FORMAT_FULL = 1;        // Full message with all fields
+  MESSAGE_FORMAT_METADATA = 2;    // Metadata only (no body)
+  MESSAGE_FORMAT_MINIMAL = 3;     // Minimal fields (id, from, subject)
+  MESSAGE_FORMAT_RAW = 4;         // Raw MIME message
+}
+
+message SearchQueryData {
+  // Provider identifier
+  string provider_id = 1;
+
+  // Search query
+  string query = 2;
+
+  // Search filters
+  SearchFilters filters = 3;
+
+  // Maximum results
+  int32 max_results = 4;
+
+  // Page token for pagination
+  string page_token = 5;
+
+  // Sort options
+  SortOptions sort_options = 6;
+}
+
+// SearchFilters represents search filter criteria
+message SearchFilters {
+  // Filter by sender email
+  string from = 1;
+
+  // Filter by recipient email
+  string to = 2;
+
+  // Filter by subject (contains)
+  string subject = 3;
+
+  // Filter by date range
+  google.protobuf.Timestamp after = 4;
+  google.protobuf.Timestamp before = 5;
+
+  // Filter by labels/folders
+  repeated string labels = 6;
+
+  // Filter by read status
+  optional bool is_read = 7;
+
+  // Filter by has attachments
+  optional bool has_attachments = 8;
+
+  // Filter by tags
+  repeated string tags = 9;
+}
+
+// SortOptions represents sorting configuration
+message SortOptions {
+  // Field to sort by
+  SortField field = 1;
+
+  // Sort order
+  SortOrder order = 2;
+}
+
+// SortField represents fields that can be sorted
+enum SortField {
+  SORT_FIELD_UNSPECIFIED = 0;
+  SORT_FIELD_DATE = 1;
+  SORT_FIELD_FROM = 2;
+  SORT_FIELD_SUBJECT = 3;
+  SORT_FIELD_SIZE = 4;
+}
+
+message MessageDeleteData {
+  // Provider identifier
+  string provider_id = 1;
+
+  // Message ID
+  string message_id = 2;
+
+  // Whether to permanently delete (vs move to trash)
+  bool permanent = 3;
+}
+
+message MessageDeleteResult {
+  // Confirmation message
+  string message = 1;
+}
+
+message MarkReadData {
+  // Provider identifier
+  string provider_id = 1;
+
+  // Message IDs to mark
+  repeated string message_ids = 2;
+
+  // Whether to mark as read (true) or unread (false)
+  bool is_read = 3;
+}
+
+message MarkReadResult {
+  // Number of messages updated
+  int32 updated_count = 1;
+}
+
+message MoveMessageData {
+  // Provider identifier
+  string provider_id = 1;
+
+  // Message ID to move
+  string message_id = 2;
+
+  // Target folder/label ID
+  string target_folder = 3;
+
+  // Source folder/label ID (optional, for providers that need it)
+  string source_folder = 4;
+}
+
+message MoveMessageResult {
+  // Confirmation message
+  string message = 1;
+}
+
+message HealthCheckData {
+  // Email provider identifier to check
+  string provider_id = 1;
+
+  // Whether to perform deep health check
+  bool deep_check = 2;
+}
+
+message EmailHealthStatus {
+  // Whether the provider is healthy
+  bool is_healthy = 1;
+
+  // Health status message
+  string status_message = 2;
+
+  // Provider health status
+  ProviderHealthStatus health_status = 3;
+
+  // Additional health details
+  map<string, string> details = 4;
+}
+
+message ProviderLookup {
+  // Provider identifier
+  string provider_id = 1;
+}
+
+message EmailProviderCapabilities {
+  // Provider identifier
+  string provider_id = 1;
+
+  // Provider type
+  EmailProviderType provider_type = 2;
+
+  // Supported capabilities
+  repeated EmailCapability capabilities = 3;
+
+  // Capability-specific limits and features
+  map<string, CapabilityDetails> capability_details = 4;
+
+  // Rate limits
+  RateLimits rate_limits = 5;
+
+  // Maximum attachment size in bytes
+  int64 max_attachment_size = 6;
+
+  // Maximum total message size in bytes
+  int64 max_message_size = 7;
+
+  // Maximum recipients per message
+  int32 max_recipients = 8;
+}
+
+// CapabilityDetails provides details about a specific capability
+message CapabilityDetails {
+  // Whether this capability is enabled
+  bool enabled = 1;
+
+  // Capability-specific configuration
+  map<string, string> config = 2;
+
+  // Usage limits for this capability
+  map<string, int32> limits = 3;
+}
+
+// RateLimits represents API rate limiting information
+message RateLimits {
+  // Requests per second
+  int32 requests_per_second = 1;
+
+  // Requests per minute
+  int32 requests_per_minute = 2;
+
+  // Requests per hour
+  int32 requests_per_hour = 3;
+
+  // Requests per day
+  int32 requests_per_day = 4;
+
+  // Emails per second
+  int32 emails_per_second = 5;
+
+  // Emails per day
+  int32 emails_per_day = 6;
+}
+
+// ───── integration/email/provider.proto ─────
+
+syntax = "proto3";
+
+package integration.email.v1;
+
+option go_package = "github.com/erniealice/esqyma/golang/v1/integration/email";
+
+import "google/protobuf/any.proto";
+import "google/protobuf/timestamp.proto";
+import "integration/email/email.proto";
+
+// EmailProviderConfig represents generic email provider configuration
+// The hexagonal architecture adapters will handle provider-specific implementation details
+message EmailProviderConfig {
+  // Unique provider identifier (e.g., "sendgrid", "gmail", "office365", "custom-smtp")
+  string provider_id = 1;
+
+  // Provider type category
+  EmailProviderType provider_type = 2;
+
+  // Whether this provider is enabled
+  bool enabled = 3;
+
+  // Display name for the provider
+  string display_name = 4;
+
+  // Capabilities supported by this provider
+  repeated EmailCapability capabilities = 5;
+
+  // Default from address
+  string default_from_address = 6;
+
+  // Default from name
+  string default_from_name = 7;
+
+  // Default reply-to address
+  string default_reply_to = 8;
+
+  // Authentication configuration
+  oneof auth {
+    ApiKeyAuth api_key_auth = 10;
+    OAuth2Auth oauth2_auth = 11;
+    SmtpAuth smtp_auth = 12;
+    CustomAuth custom_auth = 13;
+  }
+
+  // API endpoint (for API-based providers)
+  string api_endpoint = 20;
+
+  // Request timeout in seconds
+  int32 timeout_seconds = 21;
+
+  // Maximum retry attempts for failed requests
+  int32 max_retries = 22;
+
+  // Provider-specific settings as key-value pairs
+  // Examples: "enable_tracking": "true", "ip_pool": "marketing", "sandbox": "false"
+  map<string, string> settings = 30;
+
+  // Provider-specific complex configuration data
+  // Use this for nested structures that don't fit in simple key-value pairs
+  map<string, google.protobuf.Any> extended_config = 31;
+}
+
+// ApiKeyAuth represents API key based authentication
+message ApiKeyAuth {
+  // API key for authentication
+  string api_key = 1;
+
+  // Optional: Key name/identifier (if provider uses named keys)
+  string key_name = 2;
+
+  // Optional: Key in header or query parameter
+  AuthLocation location = 3;
+
+  // Header name or query parameter name (e.g., "Authorization", "X-API-Key")
+  string parameter_name = 4;
+
+  // Optional prefix (e.g., "Bearer ", "ApiKey ")
+  string prefix = 5;
+}
+
+// OAuth2Auth represents OAuth 2.0 based authentication
+message OAuth2Auth {
+  // OAuth 2.0 access token
+  string access_token = 1;
+
+  // OAuth 2.0 refresh token
+  string refresh_token = 2;
+
+  // Client ID
+  string client_id = 3;
+
+  // Client secret
+  string client_secret = 4;
+
+  // Token endpoint for refreshing tokens
+  string token_endpoint = 5;
+
+  // Authorization endpoint (for initial OAuth flow)
+  string authorization_endpoint = 6;
+
+  // Redirect URL for OAuth callback
+  string redirect_url = 7;
+
+  // Scopes requested/granted
+  repeated string scopes = 8;
+
+  // Tenant/domain identifier (e.g., for Azure AD, Google Workspace)
+  string tenant_id = 9;
+
+  // Delegated user email (for domain-wide delegation scenarios)
+  string delegated_email = 10;
+
+  // Service account key (for service account authentication)
+  string service_account_key = 11;
+
+  // Additional OAuth parameters
+  map<string, string> additional_params = 20;
+}
+
+// SmtpAuth represents SMTP authentication
+message SmtpAuth {
+  // SMTP server host
+  string host = 1;
+
+  // SMTP server port (typically 25, 587, or 465)
+  int32 port = 2;
+
+  // Username for authentication
+  string username = 3;
+
+  // Password for authentication
+  string password = 4;
+
+  // Whether to use TLS
+  bool use_tls = 5;
+
+  // Whether to use STARTTLS
+  bool use_starttls = 6;
+
+  // Skip certificate verification (for testing only)
+  bool skip_verify = 7;
+
+  // From email address
+  string from_email = 8;
+
+  // From name
+  string from_name = 9;
+}
+
+// CustomAuth represents custom authentication methods
+// Use this for providers with non-standard authentication
+message CustomAuth {
+  // Authentication type identifier
+  string auth_type = 1;
+
+  // Credentials as key-value pairs
+  map<string, string> credentials = 2;
+
+  // Complex credential data
+  map<string, google.protobuf.Any> extended_credentials = 3;
+}
+
+// AuthLocation specifies where to place authentication credentials
+enum AuthLocation {
+  AUTH_LOCATION_UNSPECIFIED = 0;
+  AUTH_LOCATION_HEADER = 1;      // In HTTP header
+  AUTH_LOCATION_QUERY = 2;       // In query parameter
+  AUTH_LOCATION_BODY = 3;        // In request body
+}
+
+// ProviderHealthStatus represents the health status of a provider
+message ProviderHealthStatus {
+  // Provider identifier
+  string provider_id = 1;
+
+  // Whether the provider is healthy and operational
+  bool is_healthy = 2;
+
+  // Health status message
+  string status_message = 3;
+
+  // Last successful connection timestamp
+  google.protobuf.Timestamp last_success = 4;
+
+  // Last failed connection timestamp
+  google.protobuf.Timestamp last_failure = 5;
+
+  // Failure count since last success
+  int32 failure_count = 6;
+
+  // Additional health details
+  map<string, string> details = 7;
+
+  // Response time in milliseconds (for health check)
+  int64 response_time_ms = 8;
+}
+
+// ───── integration/email/template.proto ─────
+
+syntax = "proto3";
+
+package integration.email.v1;
+
+option go_package = "github.com/erniealice/esqyma/golang/v1/integration/email";
+
+import "google/protobuf/timestamp.proto";
+import "google/protobuf/any.proto";
+import "integration/email/email.proto";
+import "domain/common/error.proto";
+
+// EmailTemplate represents a reusable email template
+// Templates can be stored locally or reference provider-hosted templates
+message EmailTemplate {
+  // Unique identifier for the template (internal ID)
+  string id = 1;
+
+  // Template name
+  string name = 2;
+
+  // Template description
+  string description = 3;
+
+  // Provider identifier this template is for
+  string provider_id = 4;
+
+  // Provider-specific template ID (if template is hosted by the provider)
+  string provider_template_id = 5;
+
+  // Template type
+  TemplateType type = 6;
+
+  // Template subject line (with variable placeholders like {{user_name}})
+  string subject = 7;
+
+  // Plain text body (with variable placeholders)
+  string text_body = 8;
+
+  // HTML body (with variable placeholders)
+  string html_body = 9;
+
+  // From address override (if different from provider default)
+  EmailAddress from = 10;
+
+  // Reply-to address override
+  EmailAddress reply_to = 11;
+
+  // Template variables/placeholders definitions
+  repeated TemplateVariable variables = 12;
+
+  // Default values for variables
+  map<string, string> default_values = 13;
+
+  // Template category/folder for organization
+  string category = 14;
+
+  // Tags for organization and filtering
+  repeated string tags = 15;
+
+  // Whether this template is active and can be used
+  bool is_active = 16;
+
+  // Template version (for version control)
+  string version = 17;
+
+  // When the template was created
+  google.protobuf.Timestamp created_at = 18;
+
+  // When the template was last updated
+  google.protobuf.Timestamp updated_at = 19;
+
+  // Created by user ID
+  string created_by = 20;
+
+  // Last updated by user ID
+  string updated_by = 21;
+
+  // Custom metadata
+  map<string, string> metadata = 22;
+
+  // Provider-specific template configuration
+  map<string, string> provider_settings = 23;
+
+  // Complex provider-specific template data
+  map<string, google.protobuf.Any> provider_data = 24;
+}
+
+// TemplateType represents the type of template
+enum TemplateType {
+  TEMPLATE_TYPE_UNSPECIFIED = 0;
+  TEMPLATE_TYPE_LOCAL = 1;          // Template stored and rendered locally
+  TEMPLATE_TYPE_PROVIDER = 2;       // Template hosted by email provider
+  TEMPLATE_TYPE_HYBRID = 3;         // Local template with provider-specific features
+}
+
+// TemplateVariable represents a placeholder variable in a template
+message TemplateVariable {
+  // Variable name (e.g., "user_name", "order_number", "verification_code")
+  string name = 1;
+
+  // Variable data type
+  VariableType type = 2;
+
+  // Human-readable description of this variable
+  string description = 3;
+
+  // Whether this variable is required
+  bool is_required = 4;
+
+  // Default value if not provided
+  string default_value = 5;
+
+  // Example value for documentation/testing
+  string example_value = 6;
+
+  // Validation rules (e.g., regex pattern, min/max length)
+  repeated ValidationRule validation_rules = 7;
+
+  // Variable format hint (e.g., "email", "phone", "currency", "date")
+  string format = 8;
+}
+
+// VariableType represents the data type of a template variable
+enum VariableType {
+  VARIABLE_TYPE_UNSPECIFIED = 0;
+  VARIABLE_TYPE_STRING = 1;
+  VARIABLE_TYPE_NUMBER = 2;
+  VARIABLE_TYPE_BOOLEAN = 3;
+  VARIABLE_TYPE_DATE = 4;
+  VARIABLE_TYPE_DATETIME = 5;
+  VARIABLE_TYPE_URL = 6;
+  VARIABLE_TYPE_EMAIL = 7;
+  VARIABLE_TYPE_ARRAY = 8;          // Array of values
+  VARIABLE_TYPE_OBJECT = 9;         // Nested object
+}
+
+// ValidationRule represents a validation rule for template variables
+message ValidationRule {
+  // Rule type
+  ValidationType type = 1;
+
+  // Rule parameter (e.g., regex pattern, min value, max value)
+  string parameter = 2;
+
+  // Error message if validation fails
+  string error_message = 3;
+}
+
+// ValidationType represents types of variable validation
+enum ValidationType {
+  VALIDATION_TYPE_UNSPECIFIED = 0;
+  VALIDATION_TYPE_REGEX = 1;        // Regular expression pattern
+  VALIDATION_TYPE_MIN_LENGTH = 2;   // Minimum string length
+  VALIDATION_TYPE_MAX_LENGTH = 3;   // Maximum string length
+  VALIDATION_TYPE_MIN_VALUE = 4;    // Minimum numeric value
+  VALIDATION_TYPE_MAX_VALUE = 5;    // Maximum numeric value
+  VALIDATION_TYPE_EMAIL = 6;        // Valid email format
+  VALIDATION_TYPE_URL = 7;          // Valid URL format
+  VALIDATION_TYPE_ENUM = 8;         // Value must be in allowed list
+}
+
+message TemplatedEmailData {
+  // Provider identifier
+  string provider_id = 1;
+
+  // Template ID (local template ID or provider template ID)
+  string template_id = 2;
+
+  // To recipients
+  repeated EmailAddress to = 3;
+
+  // CC recipients
+  repeated EmailAddress cc = 4;
+
+  // BCC recipients
+  repeated EmailAddress bcc = 5;
+
+  // Template variable values (keys must match template variable names)
+  map<string, string> variables = 6;
+
+  // Override from address
+  EmailAddress from = 7;
+
+  // Override reply-to address
+  EmailAddress reply_to = 8;
+
+  // Override subject (if template allows)
+  string subject_override = 9;
+
+  // Attachments to include
+  repeated EmailAttachment attachments = 10;
+
+  // Custom headers
+  map<string, string> headers = 11;
+
+  // Tags for tracking and categorization
+  repeated string tags = 12;
+
+  // Schedule sending for later
+  google.protobuf.Timestamp send_at = 13;
+
+  // Custom metadata
+  map<string, string> metadata = 14;
+
+  // Send options
+  SendOptions options = 15;
+}
+
+// SendOptions represents generic send options applicable across providers
+message SendOptions {
+  // Priority/importance level
+  MessagePriority priority = 1;
+
+  // Enable/disable tracking
+  bool enable_tracking = 2;
+
+  // Enable sandbox/test mode (don't actually send)
+  bool sandbox_mode = 3;
+
+  // Batch ID for grouping related emails
+  string batch_id = 4;
+
+  // Request delivery receipt
+  bool request_delivery_receipt = 5;
+
+  // Request read receipt
+  bool request_read_receipt = 6;
+
+  // Provider-specific send options as key-value pairs
+  // Examples: "ip_pool": "marketing", "category": "transactional"
+  map<string, string> provider_options = 10;
+
+  // Complex provider-specific send options
+  map<string, google.protobuf.Any> extended_options = 11;
+}
+
+message TemplatedEmailResult {
+  // Message ID from provider
+  string message_id = 1;
+
+  // The complete email message that was sent
+  EmailMessage message = 2;
+
+  // Provider-specific response data
+  map<string, string> provider_response = 3;
+
+  // Timestamp when sent
+  google.protobuf.Timestamp sent_at = 4;
+}
+
+message TemplateCreateData {
+  // Provider identifier
+  string provider_id = 1;
+
+  // Template name
+  string name = 2;
+
+  // Template description
+  string description = 3;
+
+  // Template type
+  TemplateType type = 4;
+
+  // Subject line template
+  string subject = 5;
+
+  // HTML body template
+  string html_body = 6;
+
+  // Plain text body template
+  string text_body = 7;
+
+  // Variable definitions
+  repeated TemplateVariable variables = 8;
+
+  // Category for organization
+  string category = 9;
+
+  // Tags
+  repeated string tags = 10;
+
+  // Custom metadata
+  map<string, string> metadata = 11;
+
+  // Provider-specific settings
+  map<string, string> provider_settings = 12;
+}
+
+message TemplateUpdateData {
+  // Template ID to update
+  string template_id = 1;
+
+  // Provider identifier
+  string provider_id = 2;
+
+  // Updated name (optional)
+  string name = 3;
+
+  // Updated description (optional)
+  string description = 4;
+
+  // Updated subject (optional)
+  string subject = 5;
+
+  // Updated HTML body (optional)
+  string html_body = 6;
+
+  // Updated text body (optional)
+  string text_body = 7;
+
+  // Updated variables (optional)
+  repeated TemplateVariable variables = 8;
+
+  // Updated metadata (optional)
+  map<string, string> metadata = 9;
+
+  // Whether to create a new version
+  bool create_version = 10;
+}
+
+message TemplateLookup {
+  // Template ID
+  string template_id = 1;
+
+  // Provider identifier (optional, for provider-hosted templates)
+  string provider_id = 2;
+
+  // Include template history/versions
+  bool include_versions = 3;
+}
+
+message TemplateWithVersions {
+  // The requested template
+  EmailTemplate template = 1;
+
+  // Template versions (if requested)
+  repeated EmailTemplate versions = 2;
+}
+
+message TemplateListFilter {
+  // Filter by provider ID
+  string provider_id = 1;
+
+  // Filter by category
+  string category = 2;
+
+  // Filter by tags (templates must have all listed tags)
+  repeated string tags = 3;
+
+  // Only return active templates
+  bool active_only = 4;
+
+  // Template type filter
+  TemplateType type = 5;
+
+  // Search query (searches name, description)
+  string search_query = 6;
+
+  // Pagination offset
+  int32 offset = 7;
+
+  // Pagination limit
+  int32 limit = 8;
+
+  // Sort field
+  string sort_by = 9;
+
+  // Sort order
+  SortOrder sort_order = 10;
+}
+
+// SortOrder represents sort direction
+enum SortOrder {
+  SORT_ORDER_UNSPECIFIED = 0;
+  SORT_ORDER_ASC = 1;
+  SORT_ORDER_DESC = 2;
+}
+
+message TemplateDeleteData {
+  // Template ID to delete
+  string template_id = 1;
+
+  // Provider identifier
+  string provider_id = 2;
+
+  // Whether to permanently delete (vs soft delete)
+  bool permanent = 3;
+}
+
+message TemplateDeleteResult {
+  // Confirmation message
+  string message = 1;
+}
+
+// ───── integration/payment/payment.proto ─────
+
+syntax = "proto3";
+
+package integration.payment.v1;
+
+option go_package = "github.com/erniealice/esqyma/golang/v1/integration/payment";
+
+import "google/protobuf/timestamp.proto";
+
+// PaymentProviderType represents the category of payment provider
+enum PaymentProviderType {
+  PAYMENT_PROVIDER_TYPE_UNSPECIFIED = 0;
+  PAYMENT_PROVIDER_TYPE_GATEWAY = 1;        // Payment gateway (AsiaPay, Stripe)
+  PAYMENT_PROVIDER_TYPE_WALLET = 2;         // Digital wallet (GCash, PayMaya)
+  PAYMENT_PROVIDER_TYPE_BANK_TRANSFER = 3;  // Direct bank transfer
+  PAYMENT_PROVIDER_TYPE_MOCK = 4;           // Mock/test provider
+}
+
+// PaymentCapability represents features supported by a provider
+enum PaymentCapability {
+  PAYMENT_CAPABILITY_UNSPECIFIED = 0;
+  PAYMENT_CAPABILITY_ONE_TIME = 1;            // One-time payments
+  PAYMENT_CAPABILITY_RECURRING = 2;           // Recurring/subscription payments
+  PAYMENT_CAPABILITY_REFUND = 3;              // Refund capability
+  PAYMENT_CAPABILITY_PARTIAL_REFUND = 4;      // Partial refund
+  PAYMENT_CAPABILITY_VOID = 5;                // Void/cancel transaction
+  PAYMENT_CAPABILITY_CAPTURE = 6;             // Capture authorized payment
+  PAYMENT_CAPABILITY_PRE_AUTH = 7;            // Pre-authorization
+  PAYMENT_CAPABILITY_WEBHOOKS = 8;            // Webhook notifications
+  PAYMENT_CAPABILITY_3DS = 9;                 // 3D Secure authentication
+  PAYMENT_CAPABILITY_TOKENIZATION = 10;       // Card tokenization
+  PAYMENT_CAPABILITY_MULTI_CURRENCY = 11;     // Multi-currency support
+}
+
+// PaymentStatus represents the status of a payment
+enum PaymentStatus {
+  PAYMENT_STATUS_UNSPECIFIED = 0;
+  PAYMENT_STATUS_PENDING = 1;         // Awaiting payment
+  PAYMENT_STATUS_PROCESSING = 2;      // Being processed
+  PAYMENT_STATUS_SUCCESS = 3;         // Payment successful
+  PAYMENT_STATUS_FAILED = 4;          // Payment failed
+  PAYMENT_STATUS_CANCELLED = 5;       // Payment cancelled
+  PAYMENT_STATUS_REFUNDED = 6;        // Full refund
+  PAYMENT_STATUS_PARTIAL_REFUND = 7;  // Partial refund
+  PAYMENT_STATUS_EXPIRED = 8;         // Payment link expired
+  PAYMENT_STATUS_AUTHORIZED = 9;      // Pre-authorized (not captured)
+}
+
+// CheckoutSession represents a payment checkout session
+message CheckoutSession {
+  // Internal session ID
+  string id = 1;
+
+  // Provider session/transaction ID
+  string provider_session_id = 2;
+
+  // Provider identifier
+  string provider_id = 3;
+
+  // Provider type
+  PaymentProviderType provider_type = 4;
+
+  // Payment amount in base currency units (e.g., dollars, not cents)
+  double amount = 5;
+
+  // Currency code (ISO 4217: USD, PHP, HKD)
+  string currency = 6;
+
+  // Payment status
+  PaymentStatus status = 7;
+
+  // Redirect URL for payment
+  string checkout_url = 8;
+
+  // Success redirect URL
+  string success_url = 9;
+
+  // Failure redirect URL
+  string failure_url = 10;
+
+  // Cancel redirect URL
+  string cancel_url = 11;
+
+  // Reference to internal payment document
+  string payment_id = 12;
+
+  // Reference to subscription (if applicable)
+  string subscription_id = 13;
+
+  // Reference to client
+  string client_id = 14;
+
+  // Order reference (merchant reference)
+  string order_ref = 15;
+
+  // Description of payment
+  string description = 16;
+
+  // Session metadata
+  map<string, string> metadata = 17;
+
+  // Session expiration time
+  google.protobuf.Timestamp expires_at = 18;
+
+  // Session creation time
+  google.protobuf.Timestamp created_at = 19;
+
+  // Session update time
+  google.protobuf.Timestamp updated_at = 20;
+
+  // Provider-specific data
+  map<string, string> provider_data = 21;
+}
+
+// PaymentTransaction represents a completed payment transaction
+message PaymentTransaction {
+  // Internal transaction ID
+  string id = 1;
+
+  // Provider transaction reference
+  string provider_ref = 2;
+
+  // Provider payment reference (PayRef for AsiaPay)
+  string provider_payment_ref = 3;
+
+  // Checkout session ID (if created via checkout)
+  string session_id = 4;
+
+  // Provider identifier
+  string provider_id = 5;
+
+  // Payment status
+  PaymentStatus status = 6;
+
+  // Amount in smallest currency unit
+  int64 amount = 7;
+
+  // Currency code
+  string currency = 8;
+
+  // Payment method used
+  string payment_method = 9;
+
+  // Card/payment details (masked)
+  PaymentMethodDetails method_details = 10;
+
+  // Success/error codes
+  string response_code = 11;
+  string error_code = 12;
+  string error_message = 13;
+
+  // Reference to internal payment document
+  string payment_id = 14;
+
+  // Order reference
+  string order_ref = 15;
+
+  // Transaction timestamp
+  google.protobuf.Timestamp processed_at = 16;
+
+  // Raw webhook data for audit
+  map<string, string> raw_data = 17;
+
+  // Provider-specific metadata
+  map<string, string> provider_metadata = 18;
+}
+
+// PaymentMethodDetails contains masked payment method info
+message PaymentMethodDetails {
+  // Payment method type (VISA, MASTERCARD, GCASH, etc.)
+  string type = 1;
+
+  // Last 4 digits of card (if applicable)
+  string last_four = 2;
+
+  // Card holder name (masked)
+  string holder_name = 3;
+
+  // Expiry date (if applicable)
+  string expiry = 4;
+
+  // Card issuing country
+  string issuing_country = 5;
+
+  // Authorization ID
+  string auth_id = 6;
+
+  // ECI (E-commerce indicator)
+  string eci = 7;
+
+  // 3DS authentication result
+  string payer_auth = 8;
+}
+
+// WebhookPayload represents incoming webhook data
+message WebhookPayload {
+  // Webhook event type
+  string event_type = 1;
+
+  // Provider identifier
+  string provider_id = 2;
+
+  // Raw payload data
+  bytes raw_payload = 3;
+
+  // Parsed headers
+  map<string, string> headers = 4;
+
+  // Signature for verification
+  string signature = 5;
+
+  // Timestamp
+  google.protobuf.Timestamp received_at = 6;
+}
+
+// ───── integration/payment/payment_service.proto ─────
+
+syntax = "proto3";
+
+package integration.payment.v1;
+
+option go_package = "github.com/erniealice/esqyma/golang/v1/integration/payment";
+
+import "google/protobuf/timestamp.proto";
+import "integration/payment/payment.proto";
+import "integration/payment/provider.proto";
+import "domain/common/error.proto";
+
+// ===== Checkout Session =====
+
+message CheckoutSessionData {
+  // Provider to use (optional, uses default if not specified)
+  string provider_id = 1;
+
+  // Amount in base currency units (e.g., dollars, not cents)
+  // Payment providers typically convert to cents internally
+  double amount = 2;
+
+  // Currency code (ISO 4217)
+  string currency = 3;
+
+  // Payment description
+  string description = 4;
+
+  // Internal payment document ID
+  string payment_id = 5;
+
+  // Subscription ID (for recurring payments)
+  string subscription_id = 6;
+
+  // Client ID
+  string client_id = 7;
+
+  // Order reference
+  string order_ref = 8;
+
+  // Custom success URL (overrides provider default)
+  string success_url = 9;
+
+  // Custom failure URL
+  string failure_url = 10;
+
+  // Custom cancel URL
+  string cancel_url = 11;
+
+  // Session metadata
+  map<string, string> metadata = 12;
+
+  // Session expiry duration in minutes
+  int32 expires_in_minutes = 13;
+
+  // Customer information
+  CustomerInfo customer = 14;
+}
+
+message CustomerInfo {
+  string email = 1;
+  string name = 2;
+  string phone = 3;
+}
+
+// ===== Webhook Processing =====
+
+message WebhookData {
+  // Provider identifier
+  string provider_id = 1;
+
+  // Raw webhook payload
+  bytes payload = 2;
+
+  // Webhook headers
+  map<string, string> headers = 3;
+
+  // Content type
+  string content_type = 4;
+
+  // Signature for verification
+  string signature = 5;
+
+  // URL query parameters (e.g., ?status=success&ref=123)
+  map<string, string> query = 6;
+
+  // URL path parameters (e.g., from /webhooks/:provider/:action)
+  map<string, string> params = 7;
+
+  // Request method (POST, GET, etc.)
+  string method = 8;
+
+  // Full request URL
+  string url = 9;
+}
+
+message WebhookResult {
+  // Processed transaction
+  PaymentTransaction transaction = 1;
+
+  // Payment status after processing
+  PaymentStatus status = 2;
+
+  // Action taken (none, success, failure, etc.)
+  string action = 3;
+
+  // Internal payment ID that was updated
+  string payment_id = 4;
+}
+
+// ===== Webhook Logging =====
+
+message LogWebhookData {
+  // Execution ID for tracing (optional, auto-generated if not provided)
+  string execution_id = 1;
+
+  // Payment ID from the parsed webhook
+  string payment_id = 2;
+
+  // Provider ID (e.g., asiapay, maya, paypal)
+  string provider_id = 3;
+
+  // Provider's reference ID
+  string provider_ref = 4;
+
+  // Provider's payment reference
+  string provider_payment_ref = 5;
+
+  // Payment status string (success, failed, cancelled, pending)
+  string payment_status = 6;
+
+  // Amount in cents
+  int64 amount = 7;
+
+  // Currency code (e.g., PHP, USD)
+  string currency = 8;
+
+  // Payment method used (e.g., VISA, MASTERCARD)
+  string payment_method = 9;
+
+  // Provider response code
+  string response_code = 10;
+
+  // Order reference
+  string order_ref = 11;
+
+  // Raw data from provider (for debugging/audit)
+  map<string, string> raw_data = 12;
+
+  // Content type of original webhook request
+  string content_type = 13;
+
+  // Action taken (success, failure, etc.)
+  string action = 14;
+}
+
+// ===== Payment Status =====
+
+message PaymentStatusLookup {
+  string provider_id = 1;
+
+  // Either payment_id or provider_ref required
+  string payment_id = 2;
+  string provider_ref = 3;
+}
+
+message PaymentStatusData {
+  PaymentStatus status = 1;
+  PaymentTransaction transaction = 2;
+}
+
+// ===== Transaction =====
+
+message TransactionLookup {
+  string provider_id = 1;
+  string transaction_id = 2;
+}
+
+message TransactionListFilter {
+  string provider_id = 1;
+  string payment_id = 2;
+  string order_ref = 3;
+  google.protobuf.Timestamp from_date = 4;
+  google.protobuf.Timestamp to_date = 5;
+  int32 limit = 6;
+  string page_token = 7;
+}
+
+// ===== Refund =====
+
+message RefundData {
+  string provider_id = 1;
+  string transaction_id = 2;
+  string provider_ref = 3;
+  int64 amount = 4;  // 0 for full refund
+  string reason = 5;
+  map<string, string> metadata = 6;
+}
+
+// ===== Void =====
+
+message VoidData {
+  string provider_id = 1;
+  string transaction_id = 2;
+  string provider_ref = 3;
+  string reason = 4;
+}
+
+// ===== Health & Capabilities =====
+
+message HealthCheckData {
+  string provider_id = 1;
+  bool deep_check = 2;
+}
+
+message HealthStatus {
+  bool is_healthy = 1;
+  ProviderHealthStatus health_status = 2;
+}
+
+message ProviderLookup {
+  string provider_id = 1;
+}
+
+message ProviderCapabilities {
+  string provider_id = 1;
+  PaymentProviderType provider_type = 2;
+  repeated PaymentCapability capabilities = 3;
+  repeated string supported_currencies = 4;
+  map<string, string> limits = 5;
+}
+
+// ───── integration/payment/provider.proto ─────
+
+syntax = "proto3";
+
+package integration.payment.v1;
+
+option go_package = "github.com/erniealice/esqyma/golang/v1/integration/payment";
+
+import "integration/payment/payment.proto";
+
+// PaymentProviderConfig represents payment provider configuration
+message PaymentProviderConfig {
+  // Unique provider identifier
+  string provider_id = 1;
+
+  // Provider type
+  PaymentProviderType provider_type = 2;
+
+  // Whether provider is enabled
+  bool enabled = 3;
+
+  // Display name
+  string display_name = 4;
+
+  // Supported capabilities
+  repeated PaymentCapability capabilities = 5;
+
+  // Supported currencies
+  repeated string supported_currencies = 6;
+
+  // Default currency
+  string default_currency = 7;
+
+  // API endpoint (production)
+  string api_endpoint = 8;
+
+  // API endpoint (sandbox/test)
+  string sandbox_endpoint = 9;
+
+  // Whether to use sandbox mode
+  bool sandbox_mode = 10;
+
+  // Authentication configuration
+  oneof auth {
+    ApiKeyAuth api_key_auth = 20;
+    AsiaPayAuth asiapay_auth = 21;
+    OAuth2Auth oauth2_auth = 22;
+    CustomAuth custom_auth = 23;
+  }
+
+  // Webhook configuration
+  WebhookConfig webhook_config = 30;
+
+  // Redirect URL templates
+  RedirectUrls redirect_urls = 31;
+
+  // Request timeout in seconds
+  int32 timeout_seconds = 40;
+
+  // Max retry attempts
+  int32 max_retries = 41;
+
+  // Provider-specific settings
+  map<string, string> settings = 50;
+}
+
+// ApiKeyAuth for simple API key authentication
+message ApiKeyAuth {
+  string api_key = 1;
+  string api_secret = 2;
+}
+
+// AsiaPayAuth for AsiaPay-specific authentication
+message AsiaPayAuth {
+  // Merchant ID
+  string merchant_id = 1;
+
+  // Secure hash secret
+  string secure_secret = 2;
+
+  // Currency code (numeric: 608=PHP, 344=HKD, 840=USD)
+  string currency_code = 3;
+
+  // Payment type (N=Normal, H=Hold)
+  string payment_type = 4;
+
+  // Language (E=English)
+  string language = 5;
+
+  // Payment method filter
+  string payment_method = 6;
+}
+
+// OAuth2Auth for OAuth-based providers
+message OAuth2Auth {
+  string client_id = 1;
+  string client_secret = 2;
+  string access_token = 3;
+  string refresh_token = 4;
+  string token_endpoint = 5;
+  repeated string scopes = 6;
+}
+
+// CustomAuth for non-standard authentication
+message CustomAuth {
+  string auth_type = 1;
+  map<string, string> credentials = 2;
+}
+
+// WebhookConfig for webhook settings
+message WebhookConfig {
+  // Webhook endpoint path
+  string endpoint_path = 1;
+
+  // Secret for signature verification
+  string signing_secret = 2;
+
+  // Verification method (hmac_sha256, etc.)
+  string verification_method = 3;
+
+  // Events to subscribe
+  repeated string subscribed_events = 4;
+}
+
+// RedirectUrls for payment flow redirects
+message RedirectUrls {
+  // Base URL for redirects
+  string base_url = 1;
+
+  // Success page path
+  string success_path = 2;
+
+  // Failure page path
+  string failure_path = 3;
+
+  // Cancel page path
+  string cancel_path = 4;
+
+  // Webhook/datafeed path
+  string webhook_path = 5;
+}
+
+// ProviderHealthStatus for health monitoring
+message ProviderHealthStatus {
+  string provider_id = 1;
+  bool is_healthy = 2;
+  string status_message = 3;
+  int64 response_time_ms = 4;
+  map<string, string> details = 5;
+}
+
+// ───── integration/scheduler/scheduler.proto ─────
+
+syntax = "proto3";
+
+package integration.scheduler.v1;
+
+option go_package = "github.com/erniealice/esqyma/golang/v1/integration/scheduler";
+
+import "google/protobuf/timestamp.proto";
+
+// SchedulerProviderType represents the type of scheduler provider
+enum SchedulerProviderType {
+  SCHEDULER_PROVIDER_TYPE_UNSPECIFIED = 0;
+  SCHEDULER_PROVIDER_TYPE_CALENDLY = 1;
+  SCHEDULER_PROVIDER_TYPE_GOOGLE_CALENDAR = 2;
+  SCHEDULER_PROVIDER_TYPE_MOCK = 3;
+}
+
+// ScheduleStatus represents the status of a scheduled event
+enum ScheduleStatus {
+  SCHEDULE_STATUS_UNSPECIFIED = 0;
+  SCHEDULE_STATUS_ACTIVE = 1;        // Event is scheduled and confirmed
+  SCHEDULE_STATUS_CANCELLED = 2;     // Event was cancelled
+  SCHEDULE_STATUS_COMPLETED = 3;     // Event has occurred
+  SCHEDULE_STATUS_RESCHEDULED = 4;   // Event was rescheduled
+  SCHEDULE_STATUS_PENDING = 5;       // Event is pending confirmation
+  SCHEDULE_STATUS_NO_SHOW = 6;       // Invitee did not show up
+}
+
+// SchedulerCapability represents features supported by a provider
+enum SchedulerCapability {
+  SCHEDULER_CAPABILITY_UNSPECIFIED = 0;
+  SCHEDULER_CAPABILITY_CREATE_EVENT = 1;
+  SCHEDULER_CAPABILITY_CANCEL_EVENT = 2;
+  SCHEDULER_CAPABILITY_RESCHEDULE = 3;
+  SCHEDULER_CAPABILITY_CHECK_AVAILABILITY = 4;
+  SCHEDULER_CAPABILITY_WEBHOOKS = 5;
+  SCHEDULER_CAPABILITY_INVITEE_MANAGEMENT = 6;
+  SCHEDULER_CAPABILITY_CUSTOM_QUESTIONS = 7;
+}
+
+// Schedule represents a generic scheduled event
+// This is the core domain object for all scheduler integrations
+message Schedule {
+  // Internal schedule ID (generated by our system)
+  string id = 1;
+
+  // Provider schedule/event ID (from Calendly, Google Calendar, etc.)
+  string provider_schedule_id = 2;
+
+  // Provider identifier (e.g., "calendly", "google_calendar")
+  string provider_id = 3;
+
+  // Provider type
+  SchedulerProviderType provider_type = 4;
+
+  // Event type ID (from provider)
+  string event_type_id = 5;
+
+  // Event type name
+  string event_type_name = 6;
+
+  // Schedule status
+  ScheduleStatus status = 7;
+
+  // Schedule name/title
+  string name = 8;
+
+  // Schedule description
+  string description = 9;
+
+  // Start date (format: YYYY-MM-DD)
+  string start_date = 10;
+
+  // Start time (format: HH:mm, 24-hour)
+  string start_time = 11;
+
+  // End date (format: YYYY-MM-DD)
+  string end_date = 12;
+
+  // End time (format: HH:mm, 24-hour)
+  string end_time = 13;
+
+  // Timezone (IANA format, e.g., "Asia/Singapore", "America/New_York")
+  string timezone = 14;
+
+  // Duration in minutes
+  int32 duration_minutes = 15;
+
+  // Invitee information
+  InviteeInfo invitee = 16;
+
+  // Location information
+  ScheduleLocation location = 17;
+
+  // Cancellation URL (if available from provider)
+  string cancel_url = 18;
+
+  // Reschedule URL (if available from provider)
+  string reschedule_url = 19;
+
+  // Scheduling URL (for booking new events)
+  string scheduling_url = 20;
+
+  // Join URL (for video conferences)
+  string join_url = 21;
+
+  // Associated entity references (for linking to our domain entities)
+  string client_id = 22;
+  string subscription_id = 23;
+  string payment_id = 24;
+
+  // Custom metadata for additional data
+  map<string, string> metadata = 25;
+
+  // Timestamps (from provider)
+  google.protobuf.Timestamp created_at = 26;
+  google.protobuf.Timestamp updated_at = 27;
+
+  // Provider-specific raw data (for debugging/audit)
+  map<string, string> provider_data = 28;
+}
+
+// InviteeInfo represents the person who scheduled the event
+message InviteeInfo {
+  // Invitee full name
+  string name = 1;
+
+  // Invitee email address
+  string email = 2;
+
+  // Invitee phone number
+  string phone = 3;
+
+  // Invitee timezone
+  string timezone = 4;
+
+  // Provider URI for the invitee (e.g., Calendly invitee URI)
+  string uri = 5;
+
+  // Custom question responses (from scheduling form)
+  map<string, string> custom_answers = 6;
+}
+
+// ScheduleLocation represents where the event takes place
+message ScheduleLocation {
+  // Location type: "physical", "phone_call", "video_conference", "outbound_call"
+  string type = 1;
+
+  // Physical location (address) if type is "physical"
+  string location = 2;
+
+  // Join URL for video conferences (Zoom, Google Meet, etc.)
+  string join_url = 3;
+
+  // Phone number for phone calls
+  string phone_number = 4;
+
+  // Additional location data (provider-specific)
+  map<string, string> data = 5;
+}
+
+// TimeSlot represents an available time slot for scheduling
+message TimeSlot {
+  // Start date (format: YYYY-MM-DD)
+  string start_date = 1;
+
+  // Start time (format: HH:mm, 24-hour)
+  string start_time = 2;
+
+  // End date (format: YYYY-MM-DD)
+  string end_date = 3;
+
+  // End time (format: HH:mm, 24-hour)
+  string end_time = 4;
+
+  // Whether this slot is currently available
+  bool is_available = 5;
+
+  // Scheduling link for this specific slot (if available)
+  string scheduling_link = 6;
+
+  // Invitees remaining (for group events with limited capacity)
+  int32 invitees_remaining = 7;
+
+  // ISO 8601 timestamps (for providers that use this format)
+  string start_time_iso = 8;
+  string end_time_iso = 9;
+}
+
+// EventType represents a type of schedulable event (e.g., "30 Min Meeting")
+message EventType {
+  // Provider event type URI/ID
+  string uri = 1;
+
+  // Event type name
+  string name = 2;
+
+  // Whether this event type is active
+  bool active = 3;
+
+  // URL slug (used in scheduling URLs)
+  string slug = 4;
+
+  // Duration in minutes
+  int32 duration_minutes = 5;
+
+  // Scheduling URL for this event type
+  string scheduling_url = 6;
+
+  // Description of the event type
+  string description = 7;
+
+  // Color (for UI display)
+  string color = 8;
+
+  // Whether this is a secret event type (not listed publicly)
+  bool secret = 9;
+
+  // Pool members count (for round-robin events)
+  int32 pool_members_count = 10;
+
+  // Type: "solo" or "group"
+  string type = 11;
+}
+
+// SchedulerProviderConfig contains provider configuration
+message SchedulerProviderConfig {
+  // Provider name (e.g., "calendly")
+  string provider_name = 1;
+
+  // API key or access token
+  string access_token = 2;
+
+  // API base URL (if different from default)
+  string api_base_url = 3;
+
+  // Default event type ID for creating schedules
+  string default_event_type_id = 4;
+
+  // Webhook URL for receiving callbacks
+  string webhook_url = 5;
+
+  // Webhook signing key for verification
+  string webhook_secret = 6;
+
+  // Organization URI (provider-specific, e.g., Calendly organization)
+  string organization_uri = 7;
+
+  // User URI (provider-specific, e.g., Calendly user)
+  string user_uri = 8;
+
+  // Additional configuration key-value pairs
+  map<string, string> config = 9;
+}
+
+// SchedulerProviderHealthStatus contains provider health information
+message SchedulerProviderHealthStatus {
+  // Whether the provider is healthy
+  bool is_healthy = 1;
+
+  // Health check message
+  string message = 2;
+
+  // API latency in milliseconds
+  int64 latency_ms = 3;
+
+  // Last health check timestamp
+  google.protobuf.Timestamp last_check = 4;
+}
+
+// ───── integration/scheduler/scheduler_service.proto ─────
+
+syntax = "proto3";
+
+package integration.scheduler.v1;
+
+option go_package = "github.com/erniealice/esqyma/golang/v1/integration/scheduler";
+
+import "google/protobuf/timestamp.proto";
+import "integration/scheduler/scheduler.proto";
+import "domain/common/error.proto";
+
+// ===== Create Schedule =====
+
+message ScheduleCreateData {
+  // Provider to use (optional, uses default if not specified)
+  string provider_id = 1;
+
+  // Event type URI/ID (required)
+  string event_type_id = 2;
+
+  // Start date (format: YYYY-MM-DD)
+  string start_date = 3;
+
+  // Start time (format: HH:mm, 24-hour)
+  string start_time = 4;
+
+  // End date (optional, defaults to start_date)
+  string end_date = 5;
+
+  // End time (optional, calculated from duration if not provided)
+  string end_time = 6;
+
+  // Invitee information (required)
+  InviteeInfo invitee = 7;
+
+  // Location preference (optional)
+  ScheduleLocation location = 8;
+
+  // Associated entity references (for linking to our domain)
+  string client_id = 9;
+  string subscription_id = 10;
+  string payment_id = 11;
+
+  // Custom metadata
+  map<string, string> metadata = 12;
+}
+
+// ===== Cancel Schedule =====
+
+message ScheduleCancelData {
+  // Provider to use
+  string provider_id = 1;
+
+  // Internal schedule ID
+  string schedule_id = 2;
+
+  // Provider schedule reference (alternative to schedule_id)
+  string provider_schedule_id = 3;
+
+  // Cancellation reason
+  string reason = 4;
+
+  // Whether to notify invitee about cancellation
+  bool notify_invitee = 5;
+}
+
+message ScheduleCancelResult {
+  // Updated status (should be CANCELLED)
+  ScheduleStatus status = 1;
+
+  // Success message
+  string message = 2;
+}
+
+// ===== Get Schedule =====
+
+message ScheduleLookup {
+  // Provider to use
+  string provider_id = 1;
+
+  // Internal schedule ID
+  string schedule_id = 2;
+
+  // Provider schedule reference (alternative to schedule_id)
+  string provider_schedule_id = 3;
+}
+
+// ===== List Schedules =====
+
+message ScheduleListFilter {
+  // Provider to use
+  string provider_id = 1;
+
+  // Filter by event type
+  string event_type_id = 2;
+
+  // Filter by status (active, cancelled, etc.)
+  string status = 3;
+
+  // Filter by client ID
+  string client_id = 4;
+
+  // Date range filter - start (format: YYYY-MM-DD)
+  string from_date = 5;
+
+  // Date range filter - end (format: YYYY-MM-DD)
+  string to_date = 6;
+
+  // Pagination limit
+  int32 limit = 7;
+
+  // Pagination token
+  string page_token = 8;
+
+  // Filter by invitee email
+  string invitee_email = 9;
+
+  // Sort order: "asc" or "desc"
+  string sort_order = 10;
+}
+
+// ===== Check Availability =====
+
+message AvailabilityCheckData {
+  // Provider to use
+  string provider_id = 1;
+
+  // Event type to check availability for (required)
+  string event_type_id = 2;
+
+  // Start date (format: YYYY-MM-DD)
+  string start_date = 3;
+
+  // Start time (format: HH:mm, 24-hour) - optional, defaults to day start
+  string start_time = 4;
+
+  // End date (format: YYYY-MM-DD)
+  string end_date = 5;
+
+  // End time (format: HH:mm, 24-hour) - optional, defaults to day end
+  string end_time = 6;
+
+  // Timezone for the request (IANA format, e.g., "Asia/Singapore")
+  string timezone = 7;
+}
+
+// ===== Process Webhook =====
+
+message SchedulerWebhookData {
+  // Provider identifier (e.g., "calendly")
+  string provider_id = 1;
+
+  // Raw webhook payload as bytes
+  bytes payload = 2;
+
+  // HTTP headers from the webhook request
+  map<string, string> headers = 3;
+
+  // Content type of the payload
+  string content_type = 4;
+
+  // Signature for webhook verification
+  string signature = 5;
+
+  // URL query parameters
+  map<string, string> query = 6;
+
+  // HTTP method (POST, GET, etc.)
+  string method = 7;
+
+  // Full request URL
+  string url = 8;
+}
+
+message SchedulerWebhookResult {
+  // Event type from webhook (e.g., "invitee.created", "invitee.canceled")
+  string event_type = 1;
+
+  // Processed schedule (extracted from webhook)
+  Schedule schedule = 2;
+
+  // Action taken (created, cancelled, rescheduled, no_action, etc.)
+  string action = 3;
+
+  // Whether this is a reschedule (old_invitee present)
+  bool is_reschedule = 4;
+
+  // Old schedule ID (for reschedules)
+  string old_schedule_id = 5;
+}
+
+// ===== Event Types =====
+
+message EventTypeListFilter {
+  // Provider to use
+  string provider_id = 1;
+
+  // Only return active event types
+  bool active_only = 2;
+
+  // Filter by user URI (for multi-user organizations)
+  string user_uri = 3;
+}
+
+message EventTypeLookup {
+  // Provider to use
+  string provider_id = 1;
+
+  // Event type URI/ID
+  string event_type_id = 2;
+}
+
+// ===== Health & Capabilities =====
+
+message SchedulerHealthCheckData {
+  // Provider to check
+  string provider_id = 1;
+
+  // Perform deep health check (e.g., verify API connectivity)
+  bool deep_check = 2;
+}
+
+message SchedulerHealthStatus {
+  // Whether the provider is healthy
+  bool is_healthy = 1;
+
+  // Detailed health status
+  SchedulerProviderHealthStatus health_status = 2;
+}
+
+message SchedulerProviderLookup {
+  // Provider to query
+  string provider_id = 1;
+}
+
+message SchedulerProviderCapabilities {
+  // Provider identifier
+  string provider_id = 1;
+
+  // Provider type
+  SchedulerProviderType provider_type = 2;
+
+  // List of supported capabilities
+  repeated SchedulerCapability capabilities = 3;
+
+  // Provider-specific limits (e.g., max_days_ahead, max_events_per_request)
+  map<string, string> limits = 4;
+}
+
+// ───── integration/tabular/extensions/spreadsheet.proto ─────
+
+syntax = "proto3";
+package integration.tabular.extensions.spreadsheet.v1;
+option go_package = "github.com/erniealice/esqyma/golang/v1/integration/tabular/extensions/spreadsheet";
+
+import "integration/tabular/tabular.proto";
+
+// =============================================================================
+// ENUMS
+// =============================================================================
+
+// HorizontalAlignment represents horizontal text alignment in a cell
+enum HorizontalAlignment {
+  HORIZONTAL_ALIGNMENT_UNSPECIFIED = 0;
+  HORIZONTAL_ALIGNMENT_LEFT = 1;
+  HORIZONTAL_ALIGNMENT_CENTER = 2;
+  HORIZONTAL_ALIGNMENT_RIGHT = 3;
+}
+
+// VerticalAlignment represents vertical text alignment in a cell
+enum VerticalAlignment {
+  VERTICAL_ALIGNMENT_UNSPECIFIED = 0;
+  VERTICAL_ALIGNMENT_TOP = 1;
+  VERTICAL_ALIGNMENT_MIDDLE = 2;
+  VERTICAL_ALIGNMENT_BOTTOM = 3;
+}
+
+// BorderStyle represents the style of a cell border
+enum BorderStyle {
+  BORDER_STYLE_UNSPECIFIED = 0;
+  BORDER_STYLE_SOLID = 1;
+  BORDER_STYLE_DASHED = 2;
+  BORDER_STYLE_DOTTED = 3;
+  BORDER_STYLE_DOUBLE = 4;
+}
+
+// ValidationType represents the type of data validation
+enum ValidationType {
+  VALIDATION_TYPE_UNSPECIFIED = 0;
+  VALIDATION_TYPE_DROPDOWN = 1;
+  VALIDATION_TYPE_CHECKBOX = 2;
+  VALIDATION_TYPE_DATE = 3;
+  VALIDATION_TYPE_NUMBER = 4;
+  VALIDATION_TYPE_TEXT_LENGTH = 5;
+  VALIDATION_TYPE_CUSTOM_FORMULA = 6;
+}
+
+// =============================================================================
+// MESSAGES - Cell Reference and Selection
+// =============================================================================
+
+// SpreadsheetSelection extends Selection with A1 notation support
+message SpreadsheetSelection {
+  // Base selection from tabular
+  integration.tabular.v1.Selection base = 1;
+
+  // A1 notation for the selection (e.g., "Sheet1!A1:D10")
+  string a1_notation = 2;
+
+  // Named range reference
+  string named_range = 3;
+}
+
+// CellReference represents a reference to a specific cell
+message CellReference {
+  // Sheet name
+  string sheet = 1;
+
+  // Row number (1-based for spreadsheet compatibility)
+  int32 row = 2;
+
+  // Column number (1-based for spreadsheet compatibility)
+  int32 column = 3;
+
+  // Alternative A1 notation (e.g., "A1", "B2")
+  string a1 = 4;
+}
+
+// =============================================================================
+// MESSAGES - Cell Formatting
+// =============================================================================
+
+// Border represents a single border configuration
+message Border {
+  // Border color in hex format (e.g., "#000000")
+  string color = 1;
+
+  // Border style
+  BorderStyle style = 2;
+
+  // Border width in pixels
+  int32 width = 3;
+}
+
+// Borders represents all four borders of a cell
+message Borders {
+  // Top border
+  Border top = 1;
+
+  // Bottom border
+  Border bottom = 2;
+
+  // Left border
+  Border left = 3;
+
+  // Right border
+  Border right = 4;
+}
+
+// CellFormat represents the formatting of a cell
+message CellFormat {
+  // Background color in hex format (e.g., "#FFFFFF")
+  string background_color = 1;
+
+  // Text color in hex format (e.g., "#000000")
+  string text_color = 2;
+
+  // Font family (e.g., "Arial", "Times New Roman")
+  string font_family = 3;
+
+  // Font size in points
+  int32 font_size = 4;
+
+  // Whether text is bold
+  bool bold = 5;
+
+  // Whether text is italic
+  bool italic = 6;
+
+  // Whether text is underlined
+  bool underline = 7;
+
+  // Whether text has strikethrough
+  bool strikethrough = 8;
+
+  // Horizontal text alignment
+  HorizontalAlignment horizontal_alignment = 9;
+
+  // Vertical text alignment
+  VerticalAlignment vertical_alignment = 10;
+
+  // Number format pattern (e.g., "#,##0.00", "yyyy-mm-dd")
+  string number_format = 11;
+
+  // Cell borders
+  Borders borders = 12;
+}
+
+// =============================================================================
+// MESSAGES - Data Validation
+// =============================================================================
+
+// DataValidation represents validation rules for a cell
+message DataValidation {
+  // Type of validation
+  ValidationType type = 1;
+
+  // Allowed values for dropdown validation
+  repeated string values = 2;
+
+  // Custom formula for validation
+  string custom_formula = 3;
+
+  // Input message shown when cell is selected
+  string input_message = 4;
+
+  // Error message shown when validation fails
+  string error_message = 5;
+
+  // Whether validation is strict (reject invalid input)
+  bool strict = 6;
+}
+
+// =============================================================================
+// MESSAGES - Spreadsheet Cell and Record
+// =============================================================================
+
+// SpreadsheetCell represents a cell with spreadsheet-specific features
+message SpreadsheetCell {
+  // Cell value from tabular
+  integration.tabular.v1.FieldValue value = 1;
+
+  // Cell reference
+  CellReference reference = 2;
+
+  // Cell formatting
+  CellFormat format = 3;
+
+  // Cell note/comment
+  string note = 4;
+
+  // Hyperlink URL
+  string hyperlink = 5;
+
+  // Data validation rules
+  DataValidation validation = 6;
+}
+
+// SpreadsheetRecord represents a row with spreadsheet-specific features
+message SpreadsheetRecord {
+  // Base record from tabular
+  integration.tabular.v1.Record base = 1;
+
+  // Cells with formatting and validation
+  repeated SpreadsheetCell cells = 2;
+
+  // Row height in pixels
+  int32 row_height = 3;
+
+  // Whether the row is hidden
+  bool hidden = 4;
+}
+
+// =============================================================================
+// MESSAGES - Sheet Metadata
+// =============================================================================
+
+// SheetMetadata represents spreadsheet-specific sheet properties
+message SheetMetadata {
+  // Number of frozen rows at the top
+  int32 frozen_rows = 1;
+
+  // Number of frozen columns on the left
+  int32 frozen_columns = 2;
+
+  // Tab color in hex format (e.g., "#FF0000")
+  string tab_color = 3;
+
+  // Whether the sheet is right-to-left
+  bool right_to_left = 4;
+
+  // Default column width in pixels
+  int32 default_column_width = 5;
+
+  // Default row height in pixels
+  int32 default_row_height = 6;
+}
+
+// ───── integration/tabular/provider.proto ─────
+
+syntax = "proto3";
+
+package integration.tabular.v1;
+
+option go_package = "github.com/erniealice/esqyma/golang/v1/integration/tabular";
+
+import "google/protobuf/timestamp.proto";
+import "integration/tabular/tabular.proto";
+
+// TabularProviderConfig represents the main configuration for a tabular data provider
+message TabularProviderConfig {
+  // Unique provider identifier (e.g., "google-sheets", "csv-local", "excel-online")
+  string provider_id = 1;
+
+  // Provider type category
+  TabularProviderType provider_type = 2;
+
+  // Whether this provider is enabled
+  bool enabled = 3;
+
+  // Display name for the provider
+  string display_name = 4;
+
+  // Capabilities supported by this provider
+  repeated TabularCapability capabilities = 5;
+
+  // Authentication configuration
+  oneof auth {
+    GoogleSheetsAuth google_sheets_auth = 10;
+    OAuth2Auth oauth2_auth = 11;
+    ApiKeyAuth api_key_auth = 12;
+    ServiceAccountAuth service_account_auth = 13;
+    CsvAuth csv_auth = 14;
+    CustomAuth custom_auth = 15;
+  }
+
+  // Request timeout in seconds
+  int32 timeout_seconds = 20;
+
+  // Maximum retry attempts for failed requests
+  int32 max_retries = 21;
+
+  // Provider-specific settings as key-value pairs
+  map<string, string> settings = 30;
+}
+
+// GoogleSheetsAuth represents Google Sheets API authentication
+message GoogleSheetsAuth {
+  // Service account JSON key content or path to key file
+  string service_account_key = 1;
+
+  // Delegated email for domain-wide delegation
+  string delegated_email = 2;
+
+  // OAuth2 scopes to request
+  repeated string scopes = 3;
+
+  // Google Cloud project ID
+  string project_id = 4;
+
+  // Whether to use Google Secret Manager for credentials
+  bool use_secret_manager = 5;
+
+  // Path to secret in Secret Manager (e.g., "projects/my-project/secrets/my-secret/versions/latest")
+  string secret_manager_path = 6;
+}
+
+// OAuth2Auth represents generic OAuth 2.0 based authentication
+message OAuth2Auth {
+  // OAuth 2.0 client ID
+  string client_id = 1;
+
+  // OAuth 2.0 client secret
+  string client_secret = 2;
+
+  // OAuth 2.0 refresh token
+  string refresh_token = 3;
+
+  // OAuth 2.0 access token
+  string access_token = 4;
+
+  // Token endpoint for refreshing tokens
+  string token_url = 5;
+
+  // Authorization endpoint for initial OAuth flow
+  string auth_url = 6;
+
+  // OAuth2 scopes to request
+  repeated string scopes = 7;
+}
+
+// ApiKeyAuth represents API key based authentication
+message ApiKeyAuth {
+  // API key for authentication
+  string api_key = 1;
+
+  // Header name for API key (e.g., "Authorization", "X-API-Key")
+  string header_name = 2;
+}
+
+// ServiceAccountAuth represents service account based authentication
+message ServiceAccountAuth {
+  // Path to service account key file
+  string key_file_path = 1;
+
+  // Service account key JSON content (alternative to file path)
+  string key_json = 2;
+
+  // Project ID associated with the service account
+  string project_id = 3;
+}
+
+// CsvAuth represents CSV/file-based data source authentication
+message CsvAuth {
+  // Base path for CSV files
+  string base_path = 1;
+
+  // Whether access is read-only
+  bool read_only = 2;
+}
+
+// CustomAuth represents custom authentication methods
+message CustomAuth {
+  // Authentication type identifier
+  string auth_type = 1;
+
+  // Credentials as key-value pairs
+  map<string, string> credentials = 2;
+}
+
+// TabularProviderHealthStatus represents the health status of a tabular provider
+message TabularProviderHealthStatus {
+  // Provider identifier
+  string provider_id = 1;
+
+  // Provider type
+  TabularProviderType provider_type = 2;
+
+  // Whether the provider is healthy and operational
+  bool is_healthy = 3;
+
+  // Last health check timestamp
+  google.protobuf.Timestamp last_check = 4;
+
+  // Error message if provider is unhealthy
+  string error_message = 5;
+
+  // Response latency in milliseconds
+  int64 latency_ms = 6;
+}
+
+// TabularRateLimits represents rate limiting information for a provider
+message TabularRateLimits {
+  // Maximum requests allowed per minute
+  int32 requests_per_minute = 1;
+
+  // Maximum requests allowed per day
+  int32 requests_per_day = 2;
+
+  // Remaining requests in current window
+  int32 remaining_requests = 3;
+
+  // Timestamp when rate limit resets
+  google.protobuf.Timestamp reset_time = 4;
+}
+
+// ───── integration/tabular/tabular.proto ─────
+
+syntax = "proto3";
+package integration.tabular.v1;
+option go_package = "github.com/erniealice/esqyma/golang/v1/integration/tabular";
+
+import "google/protobuf/timestamp.proto";
+import "google/protobuf/struct.proto";
+
+// =============================================================================
+// ENUMS
+// =============================================================================
+
+// TabularProviderType represents the category of tabular data provider
+enum TabularProviderType {
+  TABULAR_PROVIDER_TYPE_UNSPECIFIED = 0;
+  TABULAR_PROVIDER_TYPE_GOOGLE_SHEETS = 1;   // Google Sheets API
+  TABULAR_PROVIDER_TYPE_EXCEL_ONLINE = 2;    // Microsoft Excel Online / Graph API
+  TABULAR_PROVIDER_TYPE_AIRTABLE = 3;        // Airtable API
+  TABULAR_PROVIDER_TYPE_CSV = 4;             // CSV file format
+  TABULAR_PROVIDER_TYPE_TSV = 5;             // TSV file format
+  TABULAR_PROVIDER_TYPE_PARQUET = 6;         // Apache Parquet format
+  TABULAR_PROVIDER_TYPE_POSTGRES = 7;        // PostgreSQL database
+  TABULAR_PROVIDER_TYPE_MYSQL = 8;           // MySQL database
+  TABULAR_PROVIDER_TYPE_BIGQUERY = 9;        // Google BigQuery
+  TABULAR_PROVIDER_TYPE_REST_API = 10;       // REST API data source
+  TABULAR_PROVIDER_TYPE_GRAPHQL = 11;        // GraphQL data source
+  TABULAR_PROVIDER_TYPE_MOCK = 12;           // Mock/test provider
+}
+
+// TabularCapability represents features supported by a provider
+enum TabularCapability {
+  TABULAR_CAPABILITY_UNSPECIFIED = 0;
+  TABULAR_CAPABILITY_READ = 1;                // Read data from source
+  TABULAR_CAPABILITY_WRITE = 2;               // Write/create new data
+  TABULAR_CAPABILITY_UPDATE = 3;              // Update existing data
+  TABULAR_CAPABILITY_DELETE = 4;              // Delete data
+  TABULAR_CAPABILITY_SEARCH = 5;              // Search/query data
+  TABULAR_CAPABILITY_SCHEMA = 6;              // Schema introspection
+  TABULAR_CAPABILITY_BATCH_OPERATIONS = 7;   // Batch read/write operations
+  TABULAR_CAPABILITY_TRANSACTIONS = 8;        // Transaction support
+  TABULAR_CAPABILITY_STREAMING = 9;           // Streaming read/write
+  TABULAR_CAPABILITY_FORMULAS = 10;           // Formula support
+  TABULAR_CAPABILITY_CELL_FORMATTING = 11;    // Cell formatting support
+  TABULAR_CAPABILITY_MULTIPLE_TABLES = 12;    // Multiple tables/sheets
+  TABULAR_CAPABILITY_CELL_LEVEL_ACCESS = 13;  // Individual cell access
+  TABULAR_CAPABILITY_APPEND_ONLY = 14;        // Append-only mode
+  TABULAR_CAPABILITY_ENCODING_OPTIONS = 15;   // Character encoding options
+}
+
+// FieldType represents the data type of a field value
+enum FieldType {
+  FIELD_TYPE_UNSPECIFIED = 0;
+  FIELD_TYPE_STRING = 1;      // Text/string value
+  FIELD_TYPE_INTEGER = 2;     // Integer value
+  FIELD_TYPE_FLOAT = 3;       // Floating-point value
+  FIELD_TYPE_BOOLEAN = 4;     // Boolean true/false
+  FIELD_TYPE_DATE = 5;        // Date only (no time component)
+  FIELD_TYPE_DATETIME = 6;    // Date and time
+  FIELD_TYPE_JSON = 7;        // JSON object
+  FIELD_TYPE_BINARY = 8;      // Binary data
+  FIELD_TYPE_NULL = 9;        // Null/empty value
+  FIELD_TYPE_FORMULA = 10;    // Formula expression
+  FIELD_TYPE_ERROR = 11;      // Error value
+}
+
+// FilterOperator represents comparison operators for filters
+enum FilterOperator {
+  FILTER_OPERATOR_UNSPECIFIED = 0;
+  FILTER_OPERATOR_EQUALS = 1;                   // Equal to
+  FILTER_OPERATOR_NOT_EQUALS = 2;               // Not equal to
+  FILTER_OPERATOR_GREATER_THAN = 3;             // Greater than
+  FILTER_OPERATOR_GREATER_THAN_OR_EQUALS = 4;   // Greater than or equal to
+  FILTER_OPERATOR_LESS_THAN = 5;                // Less than
+  FILTER_OPERATOR_LESS_THAN_OR_EQUALS = 6;      // Less than or equal to
+  FILTER_OPERATOR_CONTAINS = 7;                 // Contains substring
+  FILTER_OPERATOR_NOT_CONTAINS = 8;             // Does not contain substring
+  FILTER_OPERATOR_STARTS_WITH = 9;              // Starts with prefix
+  FILTER_OPERATOR_ENDS_WITH = 10;               // Ends with suffix
+  FILTER_OPERATOR_MATCHES_REGEX = 11;           // Regular expression match
+  FILTER_OPERATOR_IS_NULL = 12;                 // Value is null
+  FILTER_OPERATOR_IS_NOT_NULL = 13;             // Value is not null
+  FILTER_OPERATOR_IS_EMPTY = 14;                // Value is empty
+  FILTER_OPERATOR_IS_NOT_EMPTY = 15;            // Value is not empty
+  FILTER_OPERATOR_IN = 16;                      // Value is in list
+  FILTER_OPERATOR_NOT_IN = 17;                  // Value is not in list
+  FILTER_OPERATOR_BETWEEN = 18;                 // Value is between two values
+}
+
+// LogicalOperator represents logical operators for combining filters
+enum LogicalOperator {
+  LOGICAL_OPERATOR_UNSPECIFIED = 0;
+  LOGICAL_OPERATOR_AND = 1;  // All conditions must match
+  LOGICAL_OPERATOR_OR = 2;   // Any condition must match
+}
+
+// SortDirection represents the sort direction
+enum SortDirection {
+  SORT_DIRECTION_UNSPECIFIED = 0;
+  SORT_DIRECTION_ASCENDING = 1;   // Sort A-Z, 0-9
+  SORT_DIRECTION_DESCENDING = 2;  // Sort Z-A, 9-0
+}
+
+// =============================================================================
+// MESSAGES - Value Types
+// =============================================================================
+
+// FieldValue represents a generic value with type discriminator
+message FieldValue {
+  // The type of the value
+  FieldType field_type = 1;
+
+  // The actual value (one of the following)
+  oneof value {
+    string string_value = 2;                    // String/text value
+    int64 integer_value = 3;                    // Integer value
+    double float_value = 4;                     // Floating-point value
+    bool boolean_value = 5;                     // Boolean value
+    string date_value = 6;                      // ISO 8601 date string (YYYY-MM-DD)
+    string datetime_value = 7;                  // ISO 8601 datetime string
+    google.protobuf.Struct json_value = 8;      // JSON object value
+    bytes binary_value = 9;                     // Binary data
+    string formula_value = 10;                  // Formula expression
+    string error_value = 11;                    // Error string
+  }
+
+  // Formatted value for display purposes
+  string display_value = 20;
+
+  // Raw string representation of the value
+  string raw_value = 21;
+}
+
+// FieldConstraints represents validation rules for a field
+message FieldConstraints {
+  // Minimum length for string values
+  int32 min_length = 1;
+
+  // Maximum length for string values
+  int32 max_length = 2;
+
+  // Regular expression pattern for validation
+  string pattern = 3;
+
+  // Minimum value for numeric fields
+  double min_value = 4;
+
+  // Maximum value for numeric fields
+  double max_value = 5;
+
+  // List of allowed values
+  repeated string allowed_values = 6;
+}
+
+// =============================================================================
+// MESSAGES - Schema Definitions
+// =============================================================================
+
+// Field represents a column/field definition
+message Field {
+  // Column index (0-based)
+  int32 index = 1;
+
+  // Field name/column header
+  string name = 2;
+
+  // Data type of the field
+  FieldType field_type = 3;
+
+  // Human-readable description
+  string description = 4;
+
+  // Whether the field is required
+  bool required = 5;
+
+  // Default value for the field
+  FieldValue default_value = 6;
+
+  // Validation constraints
+  FieldConstraints constraints = 7;
+
+  // Additional field metadata
+  map<string, string> metadata = 20;
+}
+
+// TableSchema represents the structure of a table
+message TableSchema {
+  // Unique identifier for the schema
+  string id = 1;
+
+  // Schema/table name
+  string name = 2;
+
+  // Human-readable description
+  string description = 3;
+
+  // Field definitions
+  repeated Field fields = 4;
+
+  // Indices of fields that form the primary key
+  repeated int32 primary_key_indices = 5;
+
+  // Total number of records in the table
+  int64 record_count = 6;
+
+  // Additional schema metadata
+  map<string, string> metadata = 20;
+}
+
+// =============================================================================
+// MESSAGES - Data Records
+// =============================================================================
+
+// Record represents a single row/record of data
+message Record {
+  // Row index (0-based)
+  int64 index = 1;
+
+  // Unique identifier for the record
+  string id = 2;
+
+  // Values in column order
+  repeated FieldValue values = 3;
+
+  // Values by field name
+  map<string, FieldValue> named_values = 4;
+
+  // Additional record metadata
+  map<string, string> metadata = 20;
+
+  // Record creation timestamp
+  google.protobuf.Timestamp created_at = 21;
+
+  // Record last update timestamp
+  google.protobuf.Timestamp updated_at = 22;
+}
+
+// =============================================================================
+// MESSAGES - Table and Source
+// =============================================================================
+
+// Table represents a table within a source
+message Table {
+  // Unique identifier for the table
+  string id = 1;
+
+  // Table name
+  string name = 2;
+
+  // Table schema definition
+  TableSchema schema = 3;
+
+  // Position/index within the source
+  int32 position = 4;
+
+  // Whether the table is hidden
+  bool hidden = 5;
+
+  // Additional table metadata
+  map<string, string> metadata = 20;
+}
+
+// Source represents a container for tables (spreadsheet, database, etc.)
+message Source {
+  // Unique identifier for the source
+  string id = 1;
+
+  // Source name/title
+  string name = 2;
+
+  // URL to access the source
+  string url = 3;
+
+  // Provider type
+  TabularProviderType provider_type = 4;
+
+  // Tables within this source
+  repeated Table tables = 5;
+
+  // Owner identifier (email or user ID)
+  string owner = 10;
+
+  // Additional source metadata
+  map<string, string> metadata = 20;
+
+  // Source creation timestamp
+  google.protobuf.Timestamp created_at = 21;
+
+  // Source last update timestamp
+  google.protobuf.Timestamp updated_at = 22;
+}
+
+// =============================================================================
+// MESSAGES - Selection and Ranges
+// =============================================================================
+
+// IndexRange represents a range of indices
+message IndexRange {
+  // Start index (0-based, inclusive)
+  int64 start = 1;
+
+  // End index (0-based, exclusive; -1 means end of data)
+  int64 end = 2;
+}
+
+// FieldSelection specifies which fields/columns to include
+message FieldSelection {
+  // Field indices to include (0-based)
+  repeated int32 indices = 1;
+
+  // Field names to include
+  repeated string names = 2;
+
+  // If true, specified fields are excluded instead of included
+  bool exclude_mode = 3;
+}
+
+// RecordSelection specifies which records to include
+message RecordSelection {
+  // Range of record indices
+  IndexRange index_range = 1;
+
+  // Specific record IDs to include
+  repeated string record_ids = 2;
+
+  // Filter conditions
+  FilterGroup filter = 3;
+
+  // Maximum number of records to return
+  int32 limit = 4;
+
+  // Number of records to skip
+  int32 offset = 5;
+}
+
+// Selection represents a combined selection of table, records, and fields
+message Selection {
+  // Table name or ID
+  string table = 1;
+
+  // Record selection criteria
+  RecordSelection records = 2;
+
+  // Field selection criteria
+  FieldSelection fields = 3;
+}
+
+// =============================================================================
+// MESSAGES - Filtering
+// =============================================================================
+
+// Filter represents a single filter condition
+message Filter {
+  // Field to filter on (one of the following)
+  oneof field {
+    int32 field_index = 1;   // Field index (0-based)
+    string field_name = 2;   // Field name
+  }
+
+  // Comparison operator
+  FilterOperator operator = 3;
+
+  // Value to compare against
+  FieldValue value = 4;
+
+  // Multiple values for IN/NOT_IN/BETWEEN operators
+  repeated FieldValue values = 5;
+
+  // Whether comparison is case-sensitive (for string operations)
+  bool case_sensitive = 6;
+}
+
+// FilterGroup represents a group of filters with logical operators
+message FilterGroup {
+  // Logical operator to combine filters
+  LogicalOperator operator = 1;
+
+  // Individual filter conditions
+  repeated Filter filters = 2;
+
+  // Nested filter groups for complex expressions
+  repeated FilterGroup groups = 3;
+}
+
+// =============================================================================
+// MESSAGES - Sorting
+// =============================================================================
+
+// SortSpec represents a sort specification
+message SortSpec {
+  // Field to sort by (one of the following)
+  oneof field {
+    int32 field_index = 1;   // Field index (0-based)
+    string field_name = 2;   // Field name
+  }
+
+  // Sort direction
+  SortDirection direction = 3;
+
+  // Whether null values should appear first
+  bool nulls_first = 4;
+}
+
+// ───── integration/tabular/tabular_service.proto ─────
+
+syntax = "proto3";
+package integration.tabular.v1;
+option go_package = "github.com/erniealice/esqyma/golang/v1/integration/tabular";
+
+import "google/protobuf/timestamp.proto";
+import "google/protobuf/struct.proto";
+import "integration/tabular/tabular.proto";
+import "integration/tabular/provider.proto";
+import "domain/common/error.proto";
+
+// ============================================================================
+// Record Operations
+// ============================================================================
+
+message ReadRecordsData {
+  // Provider identifier
+  string provider_id = 1;
+
+  // Source identifier (e.g., spreadsheet ID, database name)
+  string source_id = 2;
+
+  // Selection criteria for which records to read
+  Selection selection = 3;
+
+  // Sort specifications
+  repeated SortSpec sort_by = 4;
+
+  // Whether to include schema information in the response
+  bool include_schema = 5;
+}
+
+message ReadRecordsResult {
+  // Records retrieved
+  repeated Record records = 1;
+
+  // Total count of matching records
+  int64 total_count = 2;
+
+  // Schema of the table (if include_schema was true)
+  TableSchema schema = 3;
+
+  // Whether there are more records available
+  bool has_more = 4;
+
+  // Offset for the next page of results
+  int32 next_offset = 5;
+}
+
+// ============================================================================
+// WriteRecordsRequest is a request to write new records to a tabular source
+// ============================================================================
+
+message WriteRecordsData {
+  // Provider identifier
+  string provider_id = 1;
+
+  // Source identifier (e.g., spreadsheet ID, database name)
+  string source_id = 2;
+
+  // Table name within the source
+  string table = 3;
+
+  // Records to write
+  repeated Record records = 4;
+
+  // Insert position (-1 = append to end)
+  int64 insert_at = 5;
+
+  // Write options
+  WriteOptions options = 6;
+}
+
+// WriteOptions represents options for write operations
+message WriteOptions {
+  // Skip validation of the data
+  bool skip_validation = 1;
+
+  // Return the written records in the response
+  bool return_records = 2;
+
+  // How input values should be interpreted (RAW, USER_ENTERED)
+  string value_input_option = 3;
+}
+
+message WriteRecordsResult {
+  // Number of records written
+  int32 records_written = 1;
+
+  // The written records (if return_records was true)
+  repeated Record written_records = 2;
+
+  // Location where records were written
+  string location = 3;
+}
+
+// ============================================================================
+// WriteRecordSimpleRequest - Workflow-friendly single record write
+// Accepts flat key-value pairs instead of complex Record structure
+// ============================================================================
+
+message WriteRecordSimpleData {
+  // Source identifier (e.g., spreadsheet ID) - REQUIRED
+  string source_id = 1;
+
+  // Table/sheet name within the source (default: "Sheet1")
+  string table = 2;
+
+  // Field values as a flexible struct (maps to map[string]interface{} in Go)
+  // All keys become column names, values become cell values
+  // Example: {"first_name": "John", "last_name": "Doe", "amount": 100}
+  google.protobuf.Struct fields = 3;
+}
+
+message WriteRecordSimpleResult {
+  // Number of records written (typically 1)
+  int32 records_written = 1;
+
+  // Location where the record was written (e.g., "Sheet1!A10:D10")
+  string location = 2;
+}
+
+// ============================================================================
+// UpdateRecordsRequest is a request to update existing records
+// ============================================================================
+
+message UpdateRecordsData {
+  // Provider identifier
+  string provider_id = 1;
+
+  // Source identifier (e.g., spreadsheet ID, database name)
+  string source_id = 2;
+
+  // Selection criteria for which records to update
+  Selection selection = 3;
+
+  // Field-level updates to apply
+  repeated FieldUpdate updates = 4;
+
+  // Complete replacement records (alternative to field updates)
+  repeated Record replacement_records = 5;
+}
+
+// FieldUpdate represents an update to a specific field
+message FieldUpdate {
+  // Field identifier (one of the following)
+  oneof field {
+    int32 field_index = 1;   // Field by index
+    string field_name = 2;   // Field by name
+  }
+
+  // New value for the field
+  FieldValue value = 3;
+}
+
+message UpdateRecordsResult {
+  // Number of records updated
+  int32 records_updated = 1;
+
+  // Number of records matched by the selection
+  int32 records_matched = 2;
+}
+
+// ============================================================================
+// DeleteRecordsRequest is a request to delete records
+// ============================================================================
+
+message DeleteRecordsData {
+  // Provider identifier
+  string provider_id = 1;
+
+  // Source identifier (e.g., spreadsheet ID, database name)
+  string source_id = 2;
+
+  // Selection criteria for which records to delete
+  Selection selection = 3;
+
+  // Whether to shift remaining records up after deletion
+  bool shift_remaining = 4;
+}
+
+message DeleteRecordsResult {
+  // Number of records deleted
+  int32 records_deleted = 1;
+}
+
+// ============================================================================
+// SearchRecordsRequest is a request to search for records
+// ============================================================================
+
+message SearchRecordsData {
+  // Provider identifier
+  string provider_id = 1;
+
+  // Source identifier (e.g., spreadsheet ID, database name)
+  string source_id = 2;
+
+  // Table name within the source
+  string table = 3;
+
+  // Filter conditions
+  FilterGroup filter = 4;
+
+  // Fields to return
+  FieldSelection fields = 5;
+
+  // Sort specifications
+  repeated SortSpec sort_by = 6;
+
+  // Maximum number of records to return
+  int32 limit = 7;
+
+  // Number of records to skip (for pagination)
+  int32 offset = 8;
+}
+
+message SearchRecordsResult {
+  // Matching records
+  repeated Record records = 1;
+
+  // Total count of matching records
+  int64 total_count = 2;
+
+  // Whether there are more results available
+  bool has_more = 3;
+}
+
+// ============================================================================
+// Schema Operations
+// ============================================================================
+
+message GetSchemaData {
+  // Provider identifier
+  string provider_id = 1;
+
+  // Source identifier (e.g., spreadsheet ID, database name)
+  string source_id = 2;
+
+  // Table name (optional - if omitted, returns source-level schema)
+  string table = 3;
+}
+
+message GetSchemaResult {
+  // Source information
+  Source source = 1;
+
+  // Table schema (if table was specified)
+  TableSchema table_schema = 2;
+}
+
+message GetSourceData {
+  // Provider identifier
+  string provider_id = 1;
+
+  // Source identifier (e.g., spreadsheet ID, database name)
+  string source_id = 2;
+
+  // Whether to include table information
+  bool include_tables = 3;
+}
+
+message ListTablesData {
+  // Provider identifier
+  string provider_id = 1;
+
+  // Source identifier (e.g., spreadsheet ID, database name)
+  string source_id = 2;
+}
+
+// ============================================================================
+// Batch Operations
+// ============================================================================
+
+message BatchExecuteData {
+  // Provider identifier
+  string provider_id = 1;
+
+  // Source identifier (e.g., spreadsheet ID, database name)
+  string source_id = 2;
+
+  // Operations to perform
+  repeated BatchOperation operations = 3;
+
+  // Whether to stop on first error
+  bool fail_fast = 4;
+
+  // Whether to execute as a single transaction
+  bool transactional = 5;
+}
+
+// BatchOperation represents a single operation in a batch
+message BatchOperation {
+  // Operation identifier for tracking
+  string operation_id = 1;
+
+  // The operation to perform
+  oneof operation {
+    WriteRecordsData write = 2;
+    UpdateRecordsData update = 3;
+    DeleteRecordsData delete = 4;
+  }
+}
+
+message BatchExecuteResult {
+  // Number of successful operations
+  int32 success_count = 1;
+
+  // Number of failed operations
+  int32 failure_count = 2;
+
+  // Results for each operation
+  repeated BatchOperationResult results = 3;
+}
+
+// BatchOperationResult represents the result of a single batch operation
+message BatchOperationResult {
+  // Operation identifier
+  string operation_id = 1;
+
+  // Whether this operation succeeded
+  bool success = 2;
+
+  // Error if operation failed
+  domain.common.v1.Error error = 3;
+}
+
+// ============================================================================
+// Health and Capabilities
+// ============================================================================
+
+message CheckHealthData {
+  // Provider identifier to check
+  string provider_id = 1;
+
+  // Whether to perform deep health check
+  bool deep_check = 2;
+}
+
+// HealthStatus represents the health status of a provider
+message HealthStatus {
+  // Whether the provider is healthy
+  bool is_healthy = 1;
+
+  // Health status message
+  string message = 2;
+
+  // Additional health details
+  map<string, string> details = 3;
+}
+
+message GetCapabilitiesData {
+  // Provider identifier
+  string provider_id = 1;
+}
+
+// ProviderCapabilities represents the capabilities of a provider
+message ProviderCapabilities {
+  // Provider identifier
+  string provider_id = 1;
+
+  // Provider type
+  TabularProviderType provider_type = 2;
+
+  // Supported capabilities
+  repeated TabularCapability capabilities = 3;
+
+  // Maximum records per request
+  int32 max_records_per_request = 4;
+
+  // Maximum fields per record
+  int32 max_fields_per_record = 5;
+
+  // Maximum source size in bytes
+  int64 max_source_size_bytes = 6;
+}
+
+// ───── integration/webhook/webhook.proto ─────
+
+syntax = "proto3";
+
+package integration.webhook.v1;
+
+option go_package = "github.com/erniealice/esqyma/golang/v1/integration/webhook";
+
+import "google/protobuf/timestamp.proto";
+import "google/protobuf/struct.proto";
+
+// WebhookLog represents a stored webhook log entry
+// Can be stored in collections like integration_payment, integration_email, etc.
+message WebhookLog {
+  // Unique log entry ID
+  string id = 1;
+
+  // Provider identifier
+  string provider_id = 2;
+
+  // Webhook type/event (e.g., "payment.success", "invitee.created")
+  string event_type = 3;
+
+  // Original request (stored for audit/replay)
+  WebhookRequest request = 4;
+
+  // Processing response
+  WebhookResponse response = 5;
+
+  // Associated entity IDs for cross-referencing
+  string payment_id = 6;
+  string subscription_id = 7;
+  string client_id = 8;
+  string order_ref = 9;
+
+  // Processing metadata
+  string execution_id = 10;
+  int32 retry_count = 11;
+  string status = 12;  // pending, processed, failed, retrying
+
+  // Timestamps
+  google.protobuf.Timestamp created_at = 13;
+  google.protobuf.Timestamp updated_at = 14;
+  google.protobuf.Timestamp processed_at = 15;
+
+  // Whether this log entry is active
+  bool active = 16;
+}
+
+// ===== Service Definition =====
+

@@ -19,11 +19,13 @@ import (
 const _ = grpc.SupportPackageIsVersion9
 
 const (
-	EventRecurrenceDomainService_CreateEventRecurrence_FullMethodName = "/domain.event.v1.EventRecurrenceDomainService/CreateEventRecurrence"
-	EventRecurrenceDomainService_ReadEventRecurrence_FullMethodName   = "/domain.event.v1.EventRecurrenceDomainService/ReadEventRecurrence"
-	EventRecurrenceDomainService_UpdateEventRecurrence_FullMethodName = "/domain.event.v1.EventRecurrenceDomainService/UpdateEventRecurrence"
-	EventRecurrenceDomainService_DeleteEventRecurrence_FullMethodName = "/domain.event.v1.EventRecurrenceDomainService/DeleteEventRecurrence"
-	EventRecurrenceDomainService_ListEventRecurrences_FullMethodName  = "/domain.event.v1.EventRecurrenceDomainService/ListEventRecurrences"
+	EventRecurrenceDomainService_CreateEventRecurrence_FullMethodName          = "/domain.event.v1.EventRecurrenceDomainService/CreateEventRecurrence"
+	EventRecurrenceDomainService_ReadEventRecurrence_FullMethodName            = "/domain.event.v1.EventRecurrenceDomainService/ReadEventRecurrence"
+	EventRecurrenceDomainService_UpdateEventRecurrence_FullMethodName          = "/domain.event.v1.EventRecurrenceDomainService/UpdateEventRecurrence"
+	EventRecurrenceDomainService_DeleteEventRecurrence_FullMethodName          = "/domain.event.v1.EventRecurrenceDomainService/DeleteEventRecurrence"
+	EventRecurrenceDomainService_ListEventRecurrences_FullMethodName           = "/domain.event.v1.EventRecurrenceDomainService/ListEventRecurrences"
+	EventRecurrenceDomainService_GetEventRecurrenceListPageData_FullMethodName = "/domain.event.v1.EventRecurrenceDomainService/GetEventRecurrenceListPageData"
+	EventRecurrenceDomainService_GetEventRecurrenceItemPageData_FullMethodName = "/domain.event.v1.EventRecurrenceDomainService/GetEventRecurrenceItemPageData"
 )
 
 // EventRecurrenceDomainServiceClient is the client API for EventRecurrenceDomainService service.
@@ -35,6 +37,8 @@ type EventRecurrenceDomainServiceClient interface {
 	UpdateEventRecurrence(ctx context.Context, in *UpdateEventRecurrenceRequest, opts ...grpc.CallOption) (*UpdateEventRecurrenceResponse, error)
 	DeleteEventRecurrence(ctx context.Context, in *DeleteEventRecurrenceRequest, opts ...grpc.CallOption) (*DeleteEventRecurrenceResponse, error)
 	ListEventRecurrences(ctx context.Context, in *ListEventRecurrencesRequest, opts ...grpc.CallOption) (*ListEventRecurrencesResponse, error)
+	GetEventRecurrenceListPageData(ctx context.Context, in *GetEventRecurrenceListPageDataRequest, opts ...grpc.CallOption) (*GetEventRecurrenceListPageDataResponse, error)
+	GetEventRecurrenceItemPageData(ctx context.Context, in *GetEventRecurrenceItemPageDataRequest, opts ...grpc.CallOption) (*GetEventRecurrenceItemPageDataResponse, error)
 }
 
 type eventRecurrenceDomainServiceClient struct {
@@ -95,6 +99,26 @@ func (c *eventRecurrenceDomainServiceClient) ListEventRecurrences(ctx context.Co
 	return out, nil
 }
 
+func (c *eventRecurrenceDomainServiceClient) GetEventRecurrenceListPageData(ctx context.Context, in *GetEventRecurrenceListPageDataRequest, opts ...grpc.CallOption) (*GetEventRecurrenceListPageDataResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(GetEventRecurrenceListPageDataResponse)
+	err := c.cc.Invoke(ctx, EventRecurrenceDomainService_GetEventRecurrenceListPageData_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *eventRecurrenceDomainServiceClient) GetEventRecurrenceItemPageData(ctx context.Context, in *GetEventRecurrenceItemPageDataRequest, opts ...grpc.CallOption) (*GetEventRecurrenceItemPageDataResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(GetEventRecurrenceItemPageDataResponse)
+	err := c.cc.Invoke(ctx, EventRecurrenceDomainService_GetEventRecurrenceItemPageData_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // EventRecurrenceDomainServiceServer is the server API for EventRecurrenceDomainService service.
 // All implementations must embed UnimplementedEventRecurrenceDomainServiceServer
 // for forward compatibility.
@@ -104,6 +128,8 @@ type EventRecurrenceDomainServiceServer interface {
 	UpdateEventRecurrence(context.Context, *UpdateEventRecurrenceRequest) (*UpdateEventRecurrenceResponse, error)
 	DeleteEventRecurrence(context.Context, *DeleteEventRecurrenceRequest) (*DeleteEventRecurrenceResponse, error)
 	ListEventRecurrences(context.Context, *ListEventRecurrencesRequest) (*ListEventRecurrencesResponse, error)
+	GetEventRecurrenceListPageData(context.Context, *GetEventRecurrenceListPageDataRequest) (*GetEventRecurrenceListPageDataResponse, error)
+	GetEventRecurrenceItemPageData(context.Context, *GetEventRecurrenceItemPageDataRequest) (*GetEventRecurrenceItemPageDataResponse, error)
 	mustEmbedUnimplementedEventRecurrenceDomainServiceServer()
 }
 
@@ -128,6 +154,12 @@ func (UnimplementedEventRecurrenceDomainServiceServer) DeleteEventRecurrence(con
 }
 func (UnimplementedEventRecurrenceDomainServiceServer) ListEventRecurrences(context.Context, *ListEventRecurrencesRequest) (*ListEventRecurrencesResponse, error) {
 	return nil, status.Error(codes.Unimplemented, "method ListEventRecurrences not implemented")
+}
+func (UnimplementedEventRecurrenceDomainServiceServer) GetEventRecurrenceListPageData(context.Context, *GetEventRecurrenceListPageDataRequest) (*GetEventRecurrenceListPageDataResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method GetEventRecurrenceListPageData not implemented")
+}
+func (UnimplementedEventRecurrenceDomainServiceServer) GetEventRecurrenceItemPageData(context.Context, *GetEventRecurrenceItemPageDataRequest) (*GetEventRecurrenceItemPageDataResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method GetEventRecurrenceItemPageData not implemented")
 }
 func (UnimplementedEventRecurrenceDomainServiceServer) mustEmbedUnimplementedEventRecurrenceDomainServiceServer() {
 }
@@ -241,6 +273,42 @@ func _EventRecurrenceDomainService_ListEventRecurrences_Handler(srv interface{},
 	return interceptor(ctx, in, info, handler)
 }
 
+func _EventRecurrenceDomainService_GetEventRecurrenceListPageData_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetEventRecurrenceListPageDataRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(EventRecurrenceDomainServiceServer).GetEventRecurrenceListPageData(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: EventRecurrenceDomainService_GetEventRecurrenceListPageData_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(EventRecurrenceDomainServiceServer).GetEventRecurrenceListPageData(ctx, req.(*GetEventRecurrenceListPageDataRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _EventRecurrenceDomainService_GetEventRecurrenceItemPageData_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetEventRecurrenceItemPageDataRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(EventRecurrenceDomainServiceServer).GetEventRecurrenceItemPageData(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: EventRecurrenceDomainService_GetEventRecurrenceItemPageData_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(EventRecurrenceDomainServiceServer).GetEventRecurrenceItemPageData(ctx, req.(*GetEventRecurrenceItemPageDataRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // EventRecurrenceDomainService_ServiceDesc is the grpc.ServiceDesc for EventRecurrenceDomainService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -267,6 +335,14 @@ var EventRecurrenceDomainService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "ListEventRecurrences",
 			Handler:    _EventRecurrenceDomainService_ListEventRecurrences_Handler,
+		},
+		{
+			MethodName: "GetEventRecurrenceListPageData",
+			Handler:    _EventRecurrenceDomainService_GetEventRecurrenceListPageData_Handler,
+		},
+		{
+			MethodName: "GetEventRecurrenceItemPageData",
+			Handler:    _EventRecurrenceDomainService_GetEventRecurrenceItemPageData_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

@@ -282,6 +282,65 @@ func (ListOperator) EnumDescriptor() ([]byte, []int) {
 	return file_domain_common_filter_proto_rawDescGZIP(), []int{4}
 }
 
+// Money filter operators
+type MoneyOperator int32
+
+const (
+	MoneyOperator_MONEY_EQUALS                MoneyOperator = 0
+	MoneyOperator_MONEY_LESS_THAN             MoneyOperator = 1
+	MoneyOperator_MONEY_GREATER_THAN          MoneyOperator = 2
+	MoneyOperator_MONEY_LESS_THAN_OR_EQUAL    MoneyOperator = 3
+	MoneyOperator_MONEY_GREATER_THAN_OR_EQUAL MoneyOperator = 4
+	MoneyOperator_MONEY_BETWEEN               MoneyOperator = 5
+)
+
+// Enum value maps for MoneyOperator.
+var (
+	MoneyOperator_name = map[int32]string{
+		0: "MONEY_EQUALS",
+		1: "MONEY_LESS_THAN",
+		2: "MONEY_GREATER_THAN",
+		3: "MONEY_LESS_THAN_OR_EQUAL",
+		4: "MONEY_GREATER_THAN_OR_EQUAL",
+		5: "MONEY_BETWEEN",
+	}
+	MoneyOperator_value = map[string]int32{
+		"MONEY_EQUALS":                0,
+		"MONEY_LESS_THAN":             1,
+		"MONEY_GREATER_THAN":          2,
+		"MONEY_LESS_THAN_OR_EQUAL":    3,
+		"MONEY_GREATER_THAN_OR_EQUAL": 4,
+		"MONEY_BETWEEN":               5,
+	}
+)
+
+func (x MoneyOperator) Enum() *MoneyOperator {
+	p := new(MoneyOperator)
+	*p = x
+	return p
+}
+
+func (x MoneyOperator) String() string {
+	return protoimpl.X.EnumStringOf(x.Descriptor(), protoreflect.EnumNumber(x))
+}
+
+func (MoneyOperator) Descriptor() protoreflect.EnumDescriptor {
+	return file_domain_common_filter_proto_enumTypes[5].Descriptor()
+}
+
+func (MoneyOperator) Type() protoreflect.EnumType {
+	return &file_domain_common_filter_proto_enumTypes[5]
+}
+
+func (x MoneyOperator) Number() protoreflect.EnumNumber {
+	return protoreflect.EnumNumber(x)
+}
+
+// Deprecated: Use MoneyOperator.Descriptor instead.
+func (MoneyOperator) EnumDescriptor() ([]byte, []int) {
+	return file_domain_common_filter_proto_rawDescGZIP(), []int{5}
+}
+
 // Filter request with multiple typed filters
 type FilterRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
@@ -347,6 +406,8 @@ type TypedFilter struct {
 	//	*TypedFilter_ListFilter
 	//	*TypedFilter_RangeFilter
 	//	*TypedFilter_BooleanFilter
+	//	*TypedFilter_MoneyFilter
+	//	*TypedFilter_StatusFilter
 	FilterType    isTypedFilter_FilterType `protobuf_oneof:"filter_type"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
@@ -450,6 +511,24 @@ func (x *TypedFilter) GetBooleanFilter() *BooleanFilter {
 	return nil
 }
 
+func (x *TypedFilter) GetMoneyFilter() *MoneyFilter {
+	if x != nil {
+		if x, ok := x.FilterType.(*TypedFilter_MoneyFilter); ok {
+			return x.MoneyFilter
+		}
+	}
+	return nil
+}
+
+func (x *TypedFilter) GetStatusFilter() *StatusFilter {
+	if x != nil {
+		if x, ok := x.FilterType.(*TypedFilter_StatusFilter); ok {
+			return x.StatusFilter
+		}
+	}
+	return nil
+}
+
 type isTypedFilter_FilterType interface {
 	isTypedFilter_FilterType()
 }
@@ -478,6 +557,14 @@ type TypedFilter_BooleanFilter struct {
 	BooleanFilter *BooleanFilter `protobuf:"bytes,7,opt,name=boolean_filter,json=booleanFilter,proto3,oneof"`
 }
 
+type TypedFilter_MoneyFilter struct {
+	MoneyFilter *MoneyFilter `protobuf:"bytes,8,opt,name=money_filter,json=moneyFilter,proto3,oneof"` // NEW
+}
+
+type TypedFilter_StatusFilter struct {
+	StatusFilter *StatusFilter `protobuf:"bytes,9,opt,name=status_filter,json=statusFilter,proto3,oneof"` // NEW
+}
+
 func (*TypedFilter_StringFilter) isTypedFilter_FilterType() {}
 
 func (*TypedFilter_NumberFilter) isTypedFilter_FilterType() {}
@@ -489,6 +576,10 @@ func (*TypedFilter_ListFilter) isTypedFilter_FilterType() {}
 func (*TypedFilter_RangeFilter) isTypedFilter_FilterType() {}
 
 func (*TypedFilter_BooleanFilter) isTypedFilter_FilterType() {}
+
+func (*TypedFilter_MoneyFilter) isTypedFilter_FilterType() {}
+
+func (*TypedFilter_StatusFilter) isTypedFilter_FilterType() {}
 
 // String filter operations
 type StringFilter struct {
@@ -832,6 +923,112 @@ func (x *BooleanFilter) GetValue() bool {
 	return false
 }
 
+// Money filter for monetary amounts
+type MoneyFilter struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Amount        float64                `protobuf:"fixed64,1,opt,name=amount,proto3" json:"amount,omitempty"`
+	Operator      MoneyOperator          `protobuf:"varint,2,opt,name=operator,proto3,enum=domain.common.v1.MoneyOperator" json:"operator,omitempty"`
+	AmountTo      float64                `protobuf:"fixed64,3,opt,name=amount_to,json=amountTo,proto3" json:"amount_to,omitempty"` // used when operator = MONEY_BETWEEN
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *MoneyFilter) Reset() {
+	*x = MoneyFilter{}
+	mi := &file_domain_common_filter_proto_msgTypes[8]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *MoneyFilter) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*MoneyFilter) ProtoMessage() {}
+
+func (x *MoneyFilter) ProtoReflect() protoreflect.Message {
+	mi := &file_domain_common_filter_proto_msgTypes[8]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use MoneyFilter.ProtoReflect.Descriptor instead.
+func (*MoneyFilter) Descriptor() ([]byte, []int) {
+	return file_domain_common_filter_proto_rawDescGZIP(), []int{8}
+}
+
+func (x *MoneyFilter) GetAmount() float64 {
+	if x != nil {
+		return x.Amount
+	}
+	return 0
+}
+
+func (x *MoneyFilter) GetOperator() MoneyOperator {
+	if x != nil {
+		return x.Operator
+	}
+	return MoneyOperator_MONEY_EQUALS
+}
+
+func (x *MoneyFilter) GetAmountTo() float64 {
+	if x != nil {
+		return x.AmountTo
+	}
+	return 0
+}
+
+// Status filter — IN check against selected values
+type StatusFilter struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Values        []string               `protobuf:"bytes,1,rep,name=values,proto3" json:"values,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *StatusFilter) Reset() {
+	*x = StatusFilter{}
+	mi := &file_domain_common_filter_proto_msgTypes[9]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *StatusFilter) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*StatusFilter) ProtoMessage() {}
+
+func (x *StatusFilter) ProtoReflect() protoreflect.Message {
+	mi := &file_domain_common_filter_proto_msgTypes[9]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use StatusFilter.ProtoReflect.Descriptor instead.
+func (*StatusFilter) Descriptor() ([]byte, []int) {
+	return file_domain_common_filter_proto_rawDescGZIP(), []int{9}
+}
+
+func (x *StatusFilter) GetValues() []string {
+	if x != nil {
+		return x.Values
+	}
+	return nil
+}
+
 var File_domain_common_filter_proto protoreflect.FileDescriptor
 
 const file_domain_common_filter_proto_rawDesc = "" +
@@ -839,7 +1036,7 @@ const file_domain_common_filter_proto_rawDesc = "" +
 	"\x1adomain/common/filter.proto\x12\x10domain.common.v1\"}\n" +
 	"\rFilterRequest\x127\n" +
 	"\afilters\x18\x01 \x03(\v2\x1d.domain.common.v1.TypedFilterR\afilters\x123\n" +
-	"\x05logic\x18\x02 \x01(\x0e2\x1d.domain.common.v1.FilterLogicR\x05logic\"\xd0\x03\n" +
+	"\x05logic\x18\x02 \x01(\x0e2\x1d.domain.common.v1.FilterLogicR\x05logic\"\xdb\x04\n" +
 	"\vTypedFilter\x12\x14\n" +
 	"\x05field\x18\x01 \x01(\tR\x05field\x12E\n" +
 	"\rstring_filter\x18\x02 \x01(\v2\x1e.domain.common.v1.StringFilterH\x00R\fstringFilter\x12E\n" +
@@ -849,7 +1046,9 @@ const file_domain_common_filter_proto_rawDesc = "" +
 	"\vlist_filter\x18\x05 \x01(\v2\x1c.domain.common.v1.ListFilterH\x00R\n" +
 	"listFilter\x12B\n" +
 	"\frange_filter\x18\x06 \x01(\v2\x1d.domain.common.v1.RangeFilterH\x00R\vrangeFilter\x12H\n" +
-	"\x0eboolean_filter\x18\a \x01(\v2\x1f.domain.common.v1.BooleanFilterH\x00R\rbooleanFilterB\r\n" +
+	"\x0eboolean_filter\x18\a \x01(\v2\x1f.domain.common.v1.BooleanFilterH\x00R\rbooleanFilter\x12B\n" +
+	"\fmoney_filter\x18\b \x01(\v2\x1d.domain.common.v1.MoneyFilterH\x00R\vmoneyFilter\x12E\n" +
+	"\rstatus_filter\x18\t \x01(\v2\x1e.domain.common.v1.StatusFilterH\x00R\fstatusFilterB\r\n" +
 	"\vfilter_type\"\x89\x01\n" +
 	"\fStringFilter\x12\x14\n" +
 	"\x05value\x18\x01 \x01(\tR\x05value\x12<\n" +
@@ -877,7 +1076,13 @@ const file_domain_common_filter_proto_rawDesc = "" +
 	"\vinclude_max\x18\x04 \x01(\bR\n" +
 	"includeMax\"%\n" +
 	"\rBooleanFilter\x12\x14\n" +
-	"\x05value\x18\x01 \x01(\bR\x05value*\x1e\n" +
+	"\x05value\x18\x01 \x01(\bR\x05value\"\x7f\n" +
+	"\vMoneyFilter\x12\x16\n" +
+	"\x06amount\x18\x01 \x01(\x01R\x06amount\x12;\n" +
+	"\boperator\x18\x02 \x01(\x0e2\x1f.domain.common.v1.MoneyOperatorR\boperator\x12\x1b\n" +
+	"\tamount_to\x18\x03 \x01(\x01R\bamountTo\"&\n" +
+	"\fStatusFilter\x12\x16\n" +
+	"\x06values\x18\x01 \x03(\tR\x06values*\x1e\n" +
 	"\vFilterLogic\x12\a\n" +
 	"\x03AND\x10\x00\x12\x06\n" +
 	"\x02OR\x10\x01*\x8f\x01\n" +
@@ -903,7 +1108,14 @@ const file_domain_common_filter_proto_rawDesc = "" +
 	"\fDATE_BETWEEN\x10\x03*,\n" +
 	"\fListOperator\x12\v\n" +
 	"\aLIST_IN\x10\x00\x12\x0f\n" +
-	"\vLIST_NOT_IN\x10\x01B\xc8\x01\n" +
+	"\vLIST_NOT_IN\x10\x01*\xa0\x01\n" +
+	"\rMoneyOperator\x12\x10\n" +
+	"\fMONEY_EQUALS\x10\x00\x12\x13\n" +
+	"\x0fMONEY_LESS_THAN\x10\x01\x12\x16\n" +
+	"\x12MONEY_GREATER_THAN\x10\x02\x12\x1c\n" +
+	"\x18MONEY_LESS_THAN_OR_EQUAL\x10\x03\x12\x1f\n" +
+	"\x1bMONEY_GREATER_THAN_OR_EQUAL\x10\x04\x12\x11\n" +
+	"\rMONEY_BETWEEN\x10\x05B\xc8\x01\n" +
 	"\x14com.domain.common.v1B\vFilterProtoP\x01ZAgithub.com/erniealice/esqyma/pkg/schema/v1/domain/common;commonv1\xa2\x02\x03DCX\xaa\x02\x10Domain.Common.V1\xca\x02\x10Domain\\Common\\V1\xe2\x02\x1cDomain\\Common\\V1\\GPBMetadata\xea\x02\x12Domain::Common::V1b\x06proto3"
 
 var (
@@ -918,41 +1130,47 @@ func file_domain_common_filter_proto_rawDescGZIP() []byte {
 	return file_domain_common_filter_proto_rawDescData
 }
 
-var file_domain_common_filter_proto_enumTypes = make([]protoimpl.EnumInfo, 5)
-var file_domain_common_filter_proto_msgTypes = make([]protoimpl.MessageInfo, 8)
+var file_domain_common_filter_proto_enumTypes = make([]protoimpl.EnumInfo, 6)
+var file_domain_common_filter_proto_msgTypes = make([]protoimpl.MessageInfo, 10)
 var file_domain_common_filter_proto_goTypes = []any{
 	(FilterLogic)(0),      // 0: domain.common.v1.FilterLogic
 	(StringOperator)(0),   // 1: domain.common.v1.StringOperator
 	(NumberOperator)(0),   // 2: domain.common.v1.NumberOperator
 	(DateOperator)(0),     // 3: domain.common.v1.DateOperator
 	(ListOperator)(0),     // 4: domain.common.v1.ListOperator
-	(*FilterRequest)(nil), // 5: domain.common.v1.FilterRequest
-	(*TypedFilter)(nil),   // 6: domain.common.v1.TypedFilter
-	(*StringFilter)(nil),  // 7: domain.common.v1.StringFilter
-	(*NumberFilter)(nil),  // 8: domain.common.v1.NumberFilter
-	(*DateFilter)(nil),    // 9: domain.common.v1.DateFilter
-	(*ListFilter)(nil),    // 10: domain.common.v1.ListFilter
-	(*RangeFilter)(nil),   // 11: domain.common.v1.RangeFilter
-	(*BooleanFilter)(nil), // 12: domain.common.v1.BooleanFilter
+	(MoneyOperator)(0),    // 5: domain.common.v1.MoneyOperator
+	(*FilterRequest)(nil), // 6: domain.common.v1.FilterRequest
+	(*TypedFilter)(nil),   // 7: domain.common.v1.TypedFilter
+	(*StringFilter)(nil),  // 8: domain.common.v1.StringFilter
+	(*NumberFilter)(nil),  // 9: domain.common.v1.NumberFilter
+	(*DateFilter)(nil),    // 10: domain.common.v1.DateFilter
+	(*ListFilter)(nil),    // 11: domain.common.v1.ListFilter
+	(*RangeFilter)(nil),   // 12: domain.common.v1.RangeFilter
+	(*BooleanFilter)(nil), // 13: domain.common.v1.BooleanFilter
+	(*MoneyFilter)(nil),   // 14: domain.common.v1.MoneyFilter
+	(*StatusFilter)(nil),  // 15: domain.common.v1.StatusFilter
 }
 var file_domain_common_filter_proto_depIdxs = []int32{
-	6,  // 0: domain.common.v1.FilterRequest.filters:type_name -> domain.common.v1.TypedFilter
+	7,  // 0: domain.common.v1.FilterRequest.filters:type_name -> domain.common.v1.TypedFilter
 	0,  // 1: domain.common.v1.FilterRequest.logic:type_name -> domain.common.v1.FilterLogic
-	7,  // 2: domain.common.v1.TypedFilter.string_filter:type_name -> domain.common.v1.StringFilter
-	8,  // 3: domain.common.v1.TypedFilter.number_filter:type_name -> domain.common.v1.NumberFilter
-	9,  // 4: domain.common.v1.TypedFilter.date_filter:type_name -> domain.common.v1.DateFilter
-	10, // 5: domain.common.v1.TypedFilter.list_filter:type_name -> domain.common.v1.ListFilter
-	11, // 6: domain.common.v1.TypedFilter.range_filter:type_name -> domain.common.v1.RangeFilter
-	12, // 7: domain.common.v1.TypedFilter.boolean_filter:type_name -> domain.common.v1.BooleanFilter
-	1,  // 8: domain.common.v1.StringFilter.operator:type_name -> domain.common.v1.StringOperator
-	2,  // 9: domain.common.v1.NumberFilter.operator:type_name -> domain.common.v1.NumberOperator
-	3,  // 10: domain.common.v1.DateFilter.operator:type_name -> domain.common.v1.DateOperator
-	4,  // 11: domain.common.v1.ListFilter.operator:type_name -> domain.common.v1.ListOperator
-	12, // [12:12] is the sub-list for method output_type
-	12, // [12:12] is the sub-list for method input_type
-	12, // [12:12] is the sub-list for extension type_name
-	12, // [12:12] is the sub-list for extension extendee
-	0,  // [0:12] is the sub-list for field type_name
+	8,  // 2: domain.common.v1.TypedFilter.string_filter:type_name -> domain.common.v1.StringFilter
+	9,  // 3: domain.common.v1.TypedFilter.number_filter:type_name -> domain.common.v1.NumberFilter
+	10, // 4: domain.common.v1.TypedFilter.date_filter:type_name -> domain.common.v1.DateFilter
+	11, // 5: domain.common.v1.TypedFilter.list_filter:type_name -> domain.common.v1.ListFilter
+	12, // 6: domain.common.v1.TypedFilter.range_filter:type_name -> domain.common.v1.RangeFilter
+	13, // 7: domain.common.v1.TypedFilter.boolean_filter:type_name -> domain.common.v1.BooleanFilter
+	14, // 8: domain.common.v1.TypedFilter.money_filter:type_name -> domain.common.v1.MoneyFilter
+	15, // 9: domain.common.v1.TypedFilter.status_filter:type_name -> domain.common.v1.StatusFilter
+	1,  // 10: domain.common.v1.StringFilter.operator:type_name -> domain.common.v1.StringOperator
+	2,  // 11: domain.common.v1.NumberFilter.operator:type_name -> domain.common.v1.NumberOperator
+	3,  // 12: domain.common.v1.DateFilter.operator:type_name -> domain.common.v1.DateOperator
+	4,  // 13: domain.common.v1.ListFilter.operator:type_name -> domain.common.v1.ListOperator
+	5,  // 14: domain.common.v1.MoneyFilter.operator:type_name -> domain.common.v1.MoneyOperator
+	15, // [15:15] is the sub-list for method output_type
+	15, // [15:15] is the sub-list for method input_type
+	15, // [15:15] is the sub-list for extension type_name
+	15, // [15:15] is the sub-list for extension extendee
+	0,  // [0:15] is the sub-list for field type_name
 }
 
 func init() { file_domain_common_filter_proto_init() }
@@ -967,6 +1185,8 @@ func file_domain_common_filter_proto_init() {
 		(*TypedFilter_ListFilter)(nil),
 		(*TypedFilter_RangeFilter)(nil),
 		(*TypedFilter_BooleanFilter)(nil),
+		(*TypedFilter_MoneyFilter)(nil),
+		(*TypedFilter_StatusFilter)(nil),
 	}
 	file_domain_common_filter_proto_msgTypes[4].OneofWrappers = []any{}
 	type x struct{}
@@ -974,8 +1194,8 @@ func file_domain_common_filter_proto_init() {
 		File: protoimpl.DescBuilder{
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_domain_common_filter_proto_rawDesc), len(file_domain_common_filter_proto_rawDesc)),
-			NumEnums:      5,
-			NumMessages:   8,
+			NumEnums:      6,
+			NumMessages:   10,
 			NumExtensions: 0,
 			NumServices:   0,
 		},

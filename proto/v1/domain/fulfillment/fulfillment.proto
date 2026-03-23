@@ -1,0 +1,32 @@
+syntax = "proto3";
+
+package domain.fulfillment.v1;
+
+option go_package = "github.com/erniealice/esqyma/golang/v1/domain/fulfillment/fulfillment";
+
+import "google/protobuf/timestamp.proto";
+import "google/protobuf/struct.proto";
+import "options/db.proto";
+
+message Fulfillment {
+  option (options.v1.table).table = true;
+  string id = 1;
+  string workspace_id = 2 [(options.v1.db).index = true];
+  string revenue_id = 3 [(options.v1.db).references = "revenue", (options.v1.db).index = true];
+  optional string supplier_id = 4 [(options.v1.db).references = "supplier"];
+  string fulfillment_method = 5; // "physical", "service", "digital", "make_to_order"
+  string status = 6 [(options.v1.db).index = true]; // canonical: PENDING, READY, IN_TRANSIT, DELIVERED, PARTIALLY_DELIVERED, FAILED, CANCELLED
+  string provider_status = 7; // free-text from fulfillment provider
+  string provider_reference = 8; // tracking ID from provider
+  double delivery_cost = 9;
+  string currency = 10;
+  optional string expenditure_id = 11 [(options.v1.db).references = "expenditure"];
+  optional google.protobuf.Timestamp scheduled_at = 12;
+  optional google.protobuf.Timestamp delivered_at = 13;
+  string notes = 14;
+  google.protobuf.Struct metadata = 15;
+  optional int64 date_created = 16;
+  optional int64 date_modified = 17;
+  bool active = 18 [(options.v1.db).default = "true"];
+  string created_by = 19;
+}
