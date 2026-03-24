@@ -6,7 +6,7 @@
 # `message ...Response { ... }` blocks, and their preceding doc-comment lines.
 #
 # Usage: bash scripts/concat-protos.sh
-#   Run from: packages/esqyma-ryta/
+#   Run from: packages/esqyma/
 
 set -euo pipefail
 

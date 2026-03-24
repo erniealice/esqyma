@@ -278,9 +278,9 @@ Create `inventory_variant.proto` to hold attribute values at the inventory level
 
 ### Phase A: Proto Definitions (esqyma)
 
-1. Create `packages/esqyma-ryta/proto/v1/domain/product/product_option/product_option.proto`
-2. Create `packages/esqyma-ryta/proto/v1/domain/product/product_option_value/product_option_value.proto`
-3. Create `packages/esqyma-ryta/proto/v1/domain/product/product_variant_option/product_variant_option.proto`
+1. Create `packages/esqyma/proto/v1/domain/product/product_option/product_option.proto`
+2. Create `packages/esqyma/proto/v1/domain/product/product_option_value/product_option_value.proto`
+3. Create `packages/esqyma/proto/v1/domain/product/product_variant_option/product_variant_option.proto`
 4. **Remove** `variant_attributes` (field 6, `map<string, string>`) from `product_variant.proto`
 5. Run protoc generation for Go structs
 6. Verify generated `.pb.go` files compile (fix any references to `VariantAttributes` in Go code)
@@ -340,9 +340,9 @@ Phase A (protos)
 | SKU issue (original) | `03-progress/20260215-issue-sku-column.md` |
 | Phase 5 progress | `03-progress/20260215-1630-phase5-store-selector.md` |
 | Epic summary | `00-summary.md` |
-| Product proto | `packages/esqyma-ryta/proto/v1/domain/product/product/product.proto` |
-| Product variant proto | `packages/esqyma-ryta/proto/v1/domain/product/product_variant/product_variant.proto` |
-| Inventory item proto | `packages/esqyma-ryta/proto/v1/domain/inventory/inventory_item/inventory_item.proto` |
+| Product proto | `packages/esqyma/proto/v1/domain/product/product/product.proto` |
+| Product variant proto | `packages/esqyma/proto/v1/domain/product/product_variant/product_variant.proto` |
+| Inventory item proto | `packages/esqyma/proto/v1/domain/inventory/inventory_item/inventory_item.proto` |
 | Storefront queries | `apps/retail-client/internal/domain/storefront_db.go` |
 | Retail-admin seed SQL | `apps/retail-admin/tests/seed/products-inventory-seed.sql` |
-| Espyna variant adapter | `packages/espyna-golang-ryta/internal/infrastructure/adapters/secondary/database/postgres/product_variant/product_variant.go` |
+| Espyna variant adapter | `packages/espyna-golang/internal/infrastructure/adapters/secondary/database/postgres/product_variant/product_variant.go` |

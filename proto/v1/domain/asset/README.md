@@ -936,7 +936,7 @@ The asset domain defines two permission entities that integrate into the espyna 
 
 ### Entity Constants (espyna)
 
-Defined in `espyna-golang-ryta/internal/application/ports/security/authorization.go`:
+Defined in `espyna-golang/internal/application/ports/security/authorization.go`:
 
 ```go
 EntityAsset                = "asset"
