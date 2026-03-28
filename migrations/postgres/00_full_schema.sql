@@ -92,6 +92,23 @@ CREATE TABLE IF NOT EXISTS "workflow_template" (
   "is_system" BOOLEAN NULL
 );
 
+-- Table: workflow
+CREATE TABLE IF NOT EXISTS "workflow" (
+  "id" TEXT PRIMARY KEY,
+  "name" TEXT NOT NULL,
+  "description" TEXT NULL,
+  "status" TEXT NOT NULL,
+  "workspace_id" TEXT NULL,
+  "created_by" TEXT NULL,
+  "date_created" TIMESTAMPTZ DEFAULT NOW(),
+  "date_modified" TIMESTAMPTZ DEFAULT NOW(),
+  "active" BOOLEAN NOT NULL DEFAULT true,
+  "version" INTEGER NULL,
+  "workflow_template_id" TEXT NULL,
+  "context_json" TEXT NULL,
+  "current_stage_index" INTEGER NULL
+);
+
 -- Table: stage_template
 CREATE TABLE IF NOT EXISTS "stage_template" (
   "id" TEXT PRIMARY KEY,
@@ -107,6 +124,30 @@ CREATE TABLE IF NOT EXISTS "stage_template" (
   "date_created" TIMESTAMPTZ DEFAULT NOW(),
   "date_modified" TIMESTAMPTZ DEFAULT NOW(),
   "active" BOOLEAN NOT NULL DEFAULT true
+);
+
+-- Table: stage
+CREATE TABLE IF NOT EXISTS "stage" (
+  "id" TEXT PRIMARY KEY,
+  "workflow_id" TEXT NOT NULL,
+  "workflow_instance_id" TEXT NOT NULL,
+  "stage_template_id" TEXT NOT NULL,
+  "name" TEXT NOT NULL,
+  "description" TEXT NULL,
+  "status" TEXT NOT NULL,
+  "priority" TEXT NOT NULL,
+  "assigned_to" TEXT NULL,
+  "completed_by" TEXT NULL,
+  "date_started" BIGINT NULL,
+  "date_completed" BIGINT NULL,
+  "date_due" BIGINT NULL,
+  "result_json" TEXT NULL,
+  "error_message" TEXT NULL,
+  "created_by" TEXT NULL,
+  "date_created" TIMESTAMPTZ DEFAULT NOW(),
+  "date_modified" TIMESTAMPTZ DEFAULT NOW(),
+  "active" BOOLEAN NOT NULL DEFAULT true,
+  "completion_percentage" INTEGER NULL
 );
 
 -- Table: activity_template
@@ -133,47 +174,6 @@ CREATE TABLE IF NOT EXISTS "activity_template" (
   "output_schema_json" TEXT NULL,
   "use_case_code" TEXT NULL,
   "rollback_use_case_code" TEXT NULL
-);
-
--- Table: workflow
-CREATE TABLE IF NOT EXISTS "workflow" (
-  "id" TEXT PRIMARY KEY,
-  "name" TEXT NOT NULL,
-  "description" TEXT NULL,
-  "status" TEXT NOT NULL,
-  "workspace_id" TEXT NULL,
-  "created_by" TEXT NULL,
-  "date_created" TIMESTAMPTZ DEFAULT NOW(),
-  "date_modified" TIMESTAMPTZ DEFAULT NOW(),
-  "active" BOOLEAN NOT NULL DEFAULT true,
-  "version" INTEGER NULL,
-  "workflow_template_id" TEXT NULL,
-  "context_json" TEXT NULL,
-  "current_stage_index" INTEGER NULL
-);
-
--- Table: stage
-CREATE TABLE IF NOT EXISTS "stage" (
-  "id" TEXT PRIMARY KEY,
-  "workflow_id" TEXT NOT NULL,
-  "workflow_instance_id" TEXT NOT NULL,
-  "stage_template_id" TEXT NOT NULL,
-  "name" TEXT NOT NULL,
-  "description" TEXT NULL,
-  "status" TEXT NOT NULL,
-  "priority" TEXT NOT NULL,
-  "assigned_to" TEXT NULL,
-  "completed_by" TEXT NULL,
-  "date_started" BIGINT NULL,
-  "date_completed" BIGINT NULL,
-  "date_due" BIGINT NULL,
-  "result_json" TEXT NULL,
-  "error_message" TEXT NULL,
-  "created_by" TEXT NULL,
-  "date_created" TIMESTAMPTZ DEFAULT NOW(),
-  "date_modified" TIMESTAMPTZ DEFAULT NOW(),
-  "active" BOOLEAN NOT NULL DEFAULT true,
-  "completion_percentage" INTEGER NULL
 );
 
 -- Table: activity
@@ -226,20 +226,6 @@ CREATE TABLE IF NOT EXISTS "activity_execution_log" (
   "date_modified" TIMESTAMPTZ DEFAULT NOW(),
   "active" BOOLEAN NOT NULL DEFAULT true,
   "workspace_id" TEXT NOT NULL
-);
-
--- Table: job_template
-CREATE TABLE IF NOT EXISTS "job_template" (
-  "id" TEXT PRIMARY KEY,
-  "date_created" TIMESTAMPTZ DEFAULT NOW(),
-  "date_modified" TIMESTAMPTZ DEFAULT NOW(),
-  "active" BOOLEAN NOT NULL DEFAULT true,
-  "name" TEXT NOT NULL,
-  "description" TEXT NULL,
-  "default_fulfillment_type" TEXT NULL,
-  "default_cost_flow_type" TEXT NULL,
-  "default_billing_rule_type" TEXT NULL,
-  "workspace_id" TEXT NULL
 );
 
 -- Table: location
@@ -315,6 +301,20 @@ CREATE TABLE IF NOT EXISTS "client" (
   "email" TEXT
 );
 
+-- Table: job_template
+CREATE TABLE IF NOT EXISTS "job_template" (
+  "id" TEXT PRIMARY KEY,
+  "date_created" TIMESTAMPTZ DEFAULT NOW(),
+  "date_modified" TIMESTAMPTZ DEFAULT NOW(),
+  "active" BOOLEAN NOT NULL DEFAULT true,
+  "name" TEXT NOT NULL,
+  "description" TEXT NULL,
+  "default_fulfillment_type" TEXT NULL,
+  "default_cost_flow_type" TEXT NULL,
+  "default_billing_rule_type" TEXT NULL,
+  "workspace_id" TEXT NULL
+);
+
 -- Table: job
 CREATE TABLE IF NOT EXISTS "job" (
   "id" TEXT PRIMARY KEY,
@@ -339,15 +339,6 @@ CREATE TABLE IF NOT EXISTS "job" (
   "workspace_id" TEXT NULL
 );
 
--- Table: staff
-CREATE TABLE IF NOT EXISTS "staff" (
-  "id" TEXT PRIMARY KEY,
-  "user_id" TEXT NOT NULL,
-  "date_created" TIMESTAMPTZ DEFAULT NOW(),
-  "date_modified" TIMESTAMPTZ DEFAULT NOW(),
-  "active" BOOLEAN NOT NULL DEFAULT true
-);
-
 -- Table: job_phase
 CREATE TABLE IF NOT EXISTS "job_phase" (
   "id" TEXT PRIMARY KEY,
@@ -358,6 +349,15 @@ CREATE TABLE IF NOT EXISTS "job_phase" (
   "name" TEXT NOT NULL,
   "phase_order" INTEGER NOT NULL,
   "status" TEXT NOT NULL
+);
+
+-- Table: staff
+CREATE TABLE IF NOT EXISTS "staff" (
+  "id" TEXT PRIMARY KEY,
+  "user_id" TEXT NOT NULL,
+  "date_created" TIMESTAMPTZ DEFAULT NOW(),
+  "date_modified" TIMESTAMPTZ DEFAULT NOW(),
+  "active" BOOLEAN NOT NULL DEFAULT true
 );
 
 -- Table: job_task
@@ -714,8 +714,8 @@ CREATE TABLE IF NOT EXISTS "subscription" (
   "name" TEXT NOT NULL,
   "price_plan_id" TEXT NOT NULL,
   "client_id" TEXT NOT NULL,
-  "date_start" BIGINT NULL,
-  "date_end" BIGINT NULL,
+  "date_start" TIMESTAMPTZ,
+  "date_end" TIMESTAMPTZ,
   "quantity" INTEGER NULL,
   "assigned_count" INTEGER NULL,
   "available_count" INTEGER NULL,
@@ -1213,34 +1213,6 @@ CREATE TABLE IF NOT EXISTS "expenditure_line_item" (
   "notes" TEXT
 );
 
--- Table: revenue
-CREATE TABLE IF NOT EXISTS "revenue" (
-  "id" TEXT PRIMARY KEY,
-  "date_created" TIMESTAMPTZ DEFAULT NOW(),
-  "date_modified" TIMESTAMPTZ DEFAULT NOW(),
-  "active" BOOLEAN NOT NULL DEFAULT true,
-  "name" TEXT NOT NULL,
-  "client_id" TEXT,
-  "revenue_date" TIMESTAMPTZ,
-  "total_amount" NUMERIC(15,2) NOT NULL DEFAULT 0,
-  "currency" TEXT NOT NULL DEFAULT 'PHP',
-  "status" TEXT NOT NULL DEFAULT 'draft',
-  "reference_number" TEXT,
-  "notes" TEXT,
-  "revenue_category_id" TEXT,
-  "location_id" TEXT,
-  "checkout_session_id" TEXT,
-  "payment_provider" TEXT,
-  "fulfillment_type" TEXT,
-  "delivery_address" TEXT,
-  "revenue_account_id" TEXT,
-  "journal_entry_id" TEXT,
-  "fulfillment_status" TEXT,
-  "revenue_date_string" TEXT,
-  "date_created_string" TEXT,
-  "date_modified_string" TEXT
-);
-
 -- Table: supplier_category
 CREATE TABLE IF NOT EXISTS "supplier_category" (
   "id" TEXT PRIMARY KEY,
@@ -1279,6 +1251,34 @@ CREATE TABLE IF NOT EXISTS "supplier" (
   "website" TEXT NULL,
   "notes" TEXT NULL,
   "currency" TEXT DEFAULT 'PHP'
+);
+
+-- Table: revenue
+CREATE TABLE IF NOT EXISTS "revenue" (
+  "id" TEXT PRIMARY KEY,
+  "date_created" TIMESTAMPTZ DEFAULT NOW(),
+  "date_modified" TIMESTAMPTZ DEFAULT NOW(),
+  "active" BOOLEAN NOT NULL DEFAULT true,
+  "name" TEXT NOT NULL,
+  "client_id" TEXT,
+  "revenue_date" TIMESTAMPTZ,
+  "total_amount" NUMERIC(15,2) NOT NULL DEFAULT 0,
+  "currency" TEXT NOT NULL DEFAULT 'PHP',
+  "status" TEXT NOT NULL DEFAULT 'draft',
+  "reference_number" TEXT,
+  "notes" TEXT,
+  "revenue_category_id" TEXT,
+  "location_id" TEXT,
+  "checkout_session_id" TEXT,
+  "payment_provider" TEXT,
+  "fulfillment_type" TEXT,
+  "delivery_address" TEXT,
+  "revenue_account_id" TEXT,
+  "journal_entry_id" TEXT,
+  "fulfillment_status" TEXT,
+  "revenue_date_string" TEXT,
+  "date_created_string" TEXT,
+  "date_modified_string" TEXT
 );
 
 -- Table: fulfillment
@@ -1948,8 +1948,8 @@ CREATE TABLE IF NOT EXISTS "price_list" (
   "active" BOOLEAN NOT NULL DEFAULT true,
   "name" TEXT NOT NULL,
   "description" TEXT NULL,
-  "date_start" BIGINT NOT NULL,
-  "date_end" BIGINT NULL,
+  "date_start" TIMESTAMPTZ,
+  "date_end" TIMESTAMPTZ,
   "location_id" TEXT NULL
 );
 
@@ -1964,8 +1964,8 @@ CREATE TABLE IF NOT EXISTS "price_product" (
   "description" TEXT NULL,
   "amount" BIGINT NOT NULL,
   "currency" TEXT NOT NULL,
-  "date_start" BIGINT NOT NULL,
-  "date_end" BIGINT NULL,
+  "date_start" TIMESTAMPTZ,
+  "date_end" TIMESTAMPTZ,
   "price_list_id" TEXT NULL
 );
 
@@ -2325,19 +2325,19 @@ ALTER TABLE "workspace" ADD CONSTRAINT "fk_workspace_workflow_template_id" FOREI
 -- FKs for: workflow_template
 ALTER TABLE "workflow_template" ADD CONSTRAINT "fk_workflow_template_workspace_id" FOREIGN KEY ("workspace_id") REFERENCES "workspace" ("id");
 
--- FKs for: stage_template
-ALTER TABLE "stage_template" ADD CONSTRAINT "fk_stage_template_workflow_template_id" FOREIGN KEY ("workflow_template_id") REFERENCES "workflow_template" ("id");
-
--- FKs for: activity_template
-ALTER TABLE "activity_template" ADD CONSTRAINT "fk_activity_template_stage_template_id" FOREIGN KEY ("stage_template_id") REFERENCES "stage_template" ("id");
-
 -- FKs for: workflow
 ALTER TABLE "workflow" ADD CONSTRAINT "fk_workflow_workspace_id" FOREIGN KEY ("workspace_id") REFERENCES "workspace" ("id");
 ALTER TABLE "workflow" ADD CONSTRAINT "fk_workflow_workflow_template_id" FOREIGN KEY ("workflow_template_id") REFERENCES "workflow_template" ("id");
 
+-- FKs for: stage_template
+ALTER TABLE "stage_template" ADD CONSTRAINT "fk_stage_template_workflow_template_id" FOREIGN KEY ("workflow_template_id") REFERENCES "workflow_template" ("id");
+
 -- FKs for: stage
 ALTER TABLE "stage" ADD CONSTRAINT "fk_stage_workflow_id" FOREIGN KEY ("workflow_id") REFERENCES "workflow" ("id");
 ALTER TABLE "stage" ADD CONSTRAINT "fk_stage_stage_template_id" FOREIGN KEY ("stage_template_id") REFERENCES "stage_template" ("id");
+
+-- FKs for: activity_template
+ALTER TABLE "activity_template" ADD CONSTRAINT "fk_activity_template_stage_template_id" FOREIGN KEY ("stage_template_id") REFERENCES "stage_template" ("id");
 
 -- FKs for: activity
 ALTER TABLE "activity" ADD CONSTRAINT "fk_activity_stage_id" FOREIGN KEY ("stage_id") REFERENCES "stage" ("id");
@@ -2348,9 +2348,6 @@ ALTER TABLE "activity_execution_log" ADD CONSTRAINT "fk_activity_execution_log_w
 ALTER TABLE "activity_execution_log" ADD CONSTRAINT "fk_activity_execution_log_activity_id" FOREIGN KEY ("activity_id") REFERENCES "activity" ("id");
 ALTER TABLE "activity_execution_log" ADD CONSTRAINT "fk_activity_execution_log_activity_template_id" FOREIGN KEY ("activity_template_id") REFERENCES "activity_template" ("id");
 ALTER TABLE "activity_execution_log" ADD CONSTRAINT "fk_activity_execution_log_workspace_id" FOREIGN KEY ("workspace_id") REFERENCES "workspace" ("id");
-
--- FKs for: job_template
-ALTER TABLE "job_template" ADD CONSTRAINT "fk_job_template_workspace_id" FOREIGN KEY ("workspace_id") REFERENCES "workspace" ("id");
 
 -- FKs for: category
 ALTER TABLE "category" ADD CONSTRAINT "fk_category_parent_id" FOREIGN KEY ("parent_id") REFERENCES "category" ("id");
@@ -2363,17 +2360,20 @@ ALTER TABLE "client_category" ADD CONSTRAINT "fk_client_category_category_id" FO
 ALTER TABLE "client" ADD CONSTRAINT "fk_client_user_id" FOREIGN KEY ("user_id") REFERENCES "user" ("id");
 ALTER TABLE "client" ADD CONSTRAINT "fk_client_category_id" FOREIGN KEY ("category_id") REFERENCES "client_category" ("id");
 
+-- FKs for: job_template
+ALTER TABLE "job_template" ADD CONSTRAINT "fk_job_template_workspace_id" FOREIGN KEY ("workspace_id") REFERENCES "workspace" ("id");
+
 -- FKs for: job
 ALTER TABLE "job" ADD CONSTRAINT "fk_job_job_template_id" FOREIGN KEY ("job_template_id") REFERENCES "job_template" ("id");
 ALTER TABLE "job" ADD CONSTRAINT "fk_job_client_id" FOREIGN KEY ("client_id") REFERENCES "client" ("id");
 ALTER TABLE "job" ADD CONSTRAINT "fk_job_location_id" FOREIGN KEY ("location_id") REFERENCES "location" ("id");
 ALTER TABLE "job" ADD CONSTRAINT "fk_job_workspace_id" FOREIGN KEY ("workspace_id") REFERENCES "workspace" ("id");
 
--- FKs for: staff
-ALTER TABLE "staff" ADD CONSTRAINT "fk_staff_user_id" FOREIGN KEY ("user_id") REFERENCES "user" ("id");
-
 -- FKs for: job_phase
 ALTER TABLE "job_phase" ADD CONSTRAINT "fk_job_phase_job_id" FOREIGN KEY ("job_id") REFERENCES "job" ("id");
+
+-- FKs for: staff
+ALTER TABLE "staff" ADD CONSTRAINT "fk_staff_user_id" FOREIGN KEY ("user_id") REFERENCES "user" ("id");
 
 -- FKs for: job_task
 ALTER TABLE "job_task" ADD CONSTRAINT "fk_job_task_job_phase_id" FOREIGN KEY ("job_phase_id") REFERENCES "job_phase" ("id");
@@ -2788,19 +2788,19 @@ CREATE INDEX IF NOT EXISTS "idx_workspace_workflow_template_id" ON "workspace" (
 CREATE INDEX IF NOT EXISTS "idx_workflow_template_workspace_id" ON "workflow_template" ("workspace_id");
 CREATE INDEX IF NOT EXISTS "idx_workspace_workflow_template_id" ON "workspace" ("workflow_template_id");
 
--- Indexes for: stage_template
-CREATE INDEX IF NOT EXISTS "idx_stage_template_workflow_template_id" ON "stage_template" ("workflow_template_id");
-
--- Indexes for: activity_template
-CREATE INDEX IF NOT EXISTS "idx_activity_template_stage_template_id" ON "activity_template" ("stage_template_id");
-
 -- Indexes for: workflow
 CREATE INDEX IF NOT EXISTS "idx_workflow_workspace_id" ON "workflow" ("workspace_id");
 CREATE INDEX IF NOT EXISTS "idx_workflow_workflow_template_id" ON "workflow" ("workflow_template_id");
 
+-- Indexes for: stage_template
+CREATE INDEX IF NOT EXISTS "idx_stage_template_workflow_template_id" ON "stage_template" ("workflow_template_id");
+
 -- Indexes for: stage
 CREATE INDEX IF NOT EXISTS "idx_stage_workflow_id" ON "stage" ("workflow_id");
 CREATE INDEX IF NOT EXISTS "idx_stage_stage_template_id" ON "stage" ("stage_template_id");
+
+-- Indexes for: activity_template
+CREATE INDEX IF NOT EXISTS "idx_activity_template_stage_template_id" ON "activity_template" ("stage_template_id");
 
 -- Indexes for: activity
 CREATE INDEX IF NOT EXISTS "idx_activity_stage_id" ON "activity" ("stage_id");
@@ -2811,9 +2811,6 @@ CREATE INDEX IF NOT EXISTS "idx_activity_execution_log_workflow_id" ON "activity
 CREATE INDEX IF NOT EXISTS "idx_activity_execution_log_activity_id" ON "activity_execution_log" ("activity_id");
 CREATE INDEX IF NOT EXISTS "idx_activity_execution_log_activity_template_id" ON "activity_execution_log" ("activity_template_id");
 CREATE INDEX IF NOT EXISTS "idx_activity_execution_log_workspace_id" ON "activity_execution_log" ("workspace_id");
-
--- Indexes for: job_template
-CREATE INDEX IF NOT EXISTS "idx_job_template_workspace_id" ON "job_template" ("workspace_id");
 
 -- Indexes for: user
 CREATE INDEX IF NOT EXISTS "idx_user_mobile_number" ON "user" ("mobile_number");
@@ -2829,17 +2826,20 @@ CREATE INDEX IF NOT EXISTS "idx_client_category_category_id" ON "client_category
 -- Indexes for: client
 CREATE INDEX IF NOT EXISTS "idx_client_user_id" ON "client" ("user_id");
 
+-- Indexes for: job_template
+CREATE INDEX IF NOT EXISTS "idx_job_template_workspace_id" ON "job_template" ("workspace_id");
+
 -- Indexes for: job
 CREATE INDEX IF NOT EXISTS "idx_job_job_template_id" ON "job" ("job_template_id");
 CREATE INDEX IF NOT EXISTS "idx_job_client_id" ON "job" ("client_id");
 CREATE INDEX IF NOT EXISTS "idx_job_location_id" ON "job" ("location_id");
 CREATE INDEX IF NOT EXISTS "idx_job_workspace_id" ON "job" ("workspace_id");
 
--- Indexes for: staff
-CREATE INDEX IF NOT EXISTS "idx_staff_user_id" ON "staff" ("user_id");
-
 -- Indexes for: job_phase
 CREATE INDEX IF NOT EXISTS "idx_job_phase_job_id" ON "job_phase" ("job_id");
+
+-- Indexes for: staff
+CREATE INDEX IF NOT EXISTS "idx_staff_user_id" ON "staff" ("user_id");
 
 -- Indexes for: job_task
 CREATE INDEX IF NOT EXISTS "idx_job_task_job_phase_id" ON "job_task" ("job_phase_id");
