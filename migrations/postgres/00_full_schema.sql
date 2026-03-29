@@ -428,7 +428,7 @@ CREATE TABLE IF NOT EXISTS "product" (
   "price" DOUBLE PRECISION NOT NULL,
   "currency" TEXT NOT NULL,
   "item_type" TEXT NOT NULL DEFAULT 'standard',
-  "fulfillment_method" TEXT NOT NULL DEFAULT 'standard'
+  "fulfillment_method" TEXT NOT NULL DEFAULT 'service'
 );
 
 -- Table: activity_material
@@ -1184,7 +1184,9 @@ CREATE TABLE IF NOT EXISTS "expenditure" (
   "approved_by" TEXT,
   "expenditure_date_string" TEXT,
   "date_created_string" TEXT,
-  "date_modified_string" TEXT
+  "date_modified_string" TEXT,
+  "purchase_order_id" TEXT,
+  "supplier_id" TEXT
 );
 
 -- Table: expenditure_category
@@ -1210,8 +1212,83 @@ CREATE TABLE IF NOT EXISTS "expenditure_line_item" (
   "quantity" NUMERIC(15,2) NOT NULL DEFAULT 1,
   "unit_price" NUMERIC(15,2) NOT NULL DEFAULT 0,
   "line_amount" NUMERIC(15,2) NOT NULL DEFAULT 0,
-  "notes" TEXT
+  "notes" TEXT,
+  "purchase_order_line_item_id" TEXT
 );
+
+-- Table: purchase_order
+CREATE TABLE IF NOT EXISTS "purchase_order" (
+  "id" TEXT PRIMARY KEY,
+  "date_created" TIMESTAMPTZ DEFAULT NOW(),
+  "date_created_string" TEXT,
+  "date_modified" TIMESTAMPTZ DEFAULT NOW(),
+  "date_modified_string" TEXT,
+  "active" BOOLEAN NOT NULL DEFAULT true,
+  "po_number" TEXT NOT NULL UNIQUE,
+  "po_type" TEXT NOT NULL DEFAULT 'standard',
+  "status" TEXT NOT NULL DEFAULT 'draft',
+  "supplier_id" TEXT NOT NULL,
+  "location_id" TEXT,
+  "order_date" TIMESTAMPTZ,
+  "order_date_string" TEXT,
+  "expected_delivery_date" TIMESTAMPTZ,
+  "expected_delivery_date_string" TEXT,
+  "currency" TEXT NOT NULL DEFAULT 'PHP',
+  "subtotal" NUMERIC(15,2) NOT NULL DEFAULT 0,
+  "tax_amount" NUMERIC(15,2) NOT NULL DEFAULT 0,
+  "total_amount" NUMERIC(15,2) NOT NULL DEFAULT 0,
+  "payment_terms" TEXT,
+  "shipping_terms" TEXT,
+  "approved_by" TEXT,
+  "approved_date" TIMESTAMPTZ,
+  "approved_date_string" TEXT,
+  "parent_po_id" TEXT,
+  "blanket_start_date" TIMESTAMPTZ,
+  "blanket_start_date_string" TEXT,
+  "blanket_end_date" TIMESTAMPTZ,
+  "blanket_end_date_string" TEXT,
+  "blanket_total_quantity" NUMERIC(15,2) NOT NULL DEFAULT 0,
+  "blanket_released_quantity" NUMERIC(15,2) NOT NULL DEFAULT 0,
+  "notes" TEXT,
+  "reference_number" TEXT,
+  CONSTRAINT "fk_purchase_order_supplier" FOREIGN KEY ("supplier_id") REFERENCES "supplier"("id"),
+  CONSTRAINT "fk_purchase_order_location" FOREIGN KEY ("location_id") REFERENCES "location"("id"),
+  CONSTRAINT "fk_purchase_order_parent" FOREIGN KEY ("parent_po_id") REFERENCES "purchase_order"("id")
+);
+CREATE INDEX IF NOT EXISTS "idx_purchase_order_supplier_id" ON "purchase_order" ("supplier_id");
+CREATE INDEX IF NOT EXISTS "idx_purchase_order_location_id" ON "purchase_order" ("location_id");
+CREATE INDEX IF NOT EXISTS "idx_purchase_order_status" ON "purchase_order" ("status");
+
+-- Table: purchase_order_line_item
+CREATE TABLE IF NOT EXISTS "purchase_order_line_item" (
+  "id" TEXT PRIMARY KEY,
+  "date_created" TIMESTAMPTZ DEFAULT NOW(),
+  "date_created_string" TEXT,
+  "date_modified" TIMESTAMPTZ DEFAULT NOW(),
+  "date_modified_string" TEXT,
+  "active" BOOLEAN NOT NULL DEFAULT true,
+  "purchase_order_id" TEXT NOT NULL,
+  "product_id" TEXT,
+  "description" TEXT NOT NULL DEFAULT '',
+  "line_type" TEXT NOT NULL DEFAULT 'goods',
+  "quantity_ordered" NUMERIC(15,2) NOT NULL DEFAULT 0,
+  "quantity_received" NUMERIC(15,2) NOT NULL DEFAULT 0,
+  "quantity_billed" NUMERIC(15,2) NOT NULL DEFAULT 0,
+  "unit_price" NUMERIC(15,2) NOT NULL DEFAULT 0,
+  "total_price" NUMERIC(15,2) NOT NULL DEFAULT 0,
+  "location_id" TEXT,
+  "inventory_item_id" TEXT,
+  "required_by_date" TIMESTAMPTZ,
+  "required_by_date_string" TEXT,
+  "notes" TEXT,
+  "line_number" INTEGER NOT NULL DEFAULT 0,
+  CONSTRAINT "fk_poli_purchase_order" FOREIGN KEY ("purchase_order_id") REFERENCES "purchase_order"("id"),
+  CONSTRAINT "fk_poli_product" FOREIGN KEY ("product_id") REFERENCES "product"("id"),
+  CONSTRAINT "fk_poli_location" FOREIGN KEY ("location_id") REFERENCES "location"("id"),
+  CONSTRAINT "fk_poli_inventory_item" FOREIGN KEY ("inventory_item_id") REFERENCES "inventory_item"("id")
+);
+CREATE INDEX IF NOT EXISTS "idx_poli_purchase_order_id" ON "purchase_order_line_item" ("purchase_order_id");
+CREATE INDEX IF NOT EXISTS "idx_poli_product_id" ON "purchase_order_line_item" ("product_id");
 
 -- Table: supplier_category
 CREATE TABLE IF NOT EXISTS "supplier_category" (

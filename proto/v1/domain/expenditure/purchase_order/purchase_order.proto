@@ -1,0 +1,165 @@
+syntax = "proto3";
+
+package domain.expenditure.v1;
+
+option go_package = "github.com/erniealice/esqyma/golang/v1/domain/expenditure/purchase_order";
+
+import "domain/common/error.proto";
+import "domain/common/pagination.proto";
+import "domain/common/search.proto";
+import "domain/common/filter.proto";
+import "domain/common/sort.proto";
+import "domain/entity/supplier/supplier.proto";
+import "domain/entity/location/location.proto";
+import "options/db.proto";
+
+message PurchaseOrder {
+  option (options.v1.table).table = true;
+
+  string id = 1;
+  string po_number = 2 [(options.v1.db).unique = true];       // Human-readable PO number
+  string po_type = 3;                                          // "standard", "blanket", "contract"
+  string status = 4;                                           // lifecycle state
+
+  // Vendor
+  optional domain.entity.v1.Supplier supplier = 5;
+  string supplier_id = 6 [(options.v1.db).references = "supplier", (options.v1.db).index = true];
+
+  // Location (receiving warehouse)
+  optional domain.entity.v1.Location location = 7;
+  optional string location_id = 8 [(options.v1.db).references = "location", (options.v1.db).index = true];
+
+  // Dates
+  int64 order_date = 9;
+  optional string order_date_string = 10;
+  optional int64 expected_delivery_date = 11;
+  optional string expected_delivery_date_string = 12;
+
+  // Amounts
+  string currency = 13;
+  double subtotal = 14;
+  double tax_amount = 15;
+  double total_amount = 16;
+
+  // Terms
+  optional string payment_terms = 17;
+  optional string shipping_terms = 18;
+
+  // Approval
+  optional string approved_by = 19;
+  optional int64 approved_date = 20;
+  optional string approved_date_string = 21;
+
+  // Blanket order fields
+  optional string parent_po_id = 22 [(options.v1.db).references = "purchase_order"];
+  optional int64 blanket_start_date = 23;
+  optional string blanket_start_date_string = 24;
+  optional int64 blanket_end_date = 25;
+  optional string blanket_end_date_string = 26;
+  double blanket_total_quantity = 27;
+  double blanket_released_quantity = 28;
+
+  // Notes
+  optional string notes = 29;
+  optional string reference_number = 30;
+
+  // Audit
+  bool active = 31 [(options.v1.db).default = "true"];
+  optional int64 date_created = 32;
+  optional string date_created_string = 33;
+  optional int64 date_modified = 34;
+  optional string date_modified_string = 35;
+}
+
+service PurchaseOrderDomainService {
+  // Standard CRUD
+  rpc CreatePurchaseOrder(CreatePurchaseOrderRequest) returns (CreatePurchaseOrderResponse);
+  rpc ReadPurchaseOrder(ReadPurchaseOrderRequest) returns (ReadPurchaseOrderResponse);
+  rpc UpdatePurchaseOrder(UpdatePurchaseOrderRequest) returns (UpdatePurchaseOrderResponse);
+  rpc DeletePurchaseOrder(DeletePurchaseOrderRequest) returns (DeletePurchaseOrderResponse);
+  rpc ListPurchaseOrders(ListPurchaseOrdersRequest) returns (ListPurchaseOrdersResponse);
+
+  // Enhanced page data (for UI views)
+  rpc GetPurchaseOrderListPageData(GetPurchaseOrderListPageDataRequest) returns (GetPurchaseOrderListPageDataResponse);
+  rpc GetPurchaseOrderItemPageData(GetPurchaseOrderItemPageDataRequest) returns (GetPurchaseOrderItemPageDataResponse);
+}
+
+message CreatePurchaseOrderRequest {
+  PurchaseOrder data = 1;
+}
+
+message CreatePurchaseOrderResponse {
+  repeated PurchaseOrder data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message ReadPurchaseOrderRequest {
+  PurchaseOrder data = 1;
+}
+
+message ReadPurchaseOrderResponse {
+  repeated PurchaseOrder data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message UpdatePurchaseOrderRequest {
+  PurchaseOrder data = 1;
+}
+
+message UpdatePurchaseOrderResponse {
+  repeated PurchaseOrder data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message DeletePurchaseOrderRequest {
+  PurchaseOrder data = 1;
+}
+
+message DeletePurchaseOrderResponse {
+  bool success = 1;
+  optional domain.common.v1.Error error = 2;
+}
+
+message ListPurchaseOrdersRequest {
+  optional domain.common.v1.SearchRequest search = 1;
+  optional domain.common.v1.FilterRequest filters = 2;
+  optional domain.common.v1.SortRequest sort = 3;
+  optional domain.common.v1.PaginationRequest pagination = 4;
+  optional string supplier_id = 5;
+  optional string status = 6;
+  optional string po_type = 7;
+}
+
+message ListPurchaseOrdersResponse {
+  repeated PurchaseOrder data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message GetPurchaseOrderListPageDataRequest {
+  optional domain.common.v1.PaginationRequest pagination = 1;
+  optional domain.common.v1.FilterRequest filters = 2;
+  optional domain.common.v1.SortRequest sort = 3;
+  optional domain.common.v1.SearchRequest search = 4;
+}
+
+message GetPurchaseOrderListPageDataResponse {
+  repeated PurchaseOrder purchase_order_list = 1;
+  optional domain.common.v1.PaginationResponse pagination = 2;
+  repeated domain.common.v1.SearchResult search_results = 3;
+  bool success = 4;
+  optional domain.common.v1.Error error = 5;
+}
+
+message GetPurchaseOrderItemPageDataRequest {
+  string purchase_order_id = 1;
+}
+
+message GetPurchaseOrderItemPageDataResponse {
+  optional PurchaseOrder purchase_order = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}

@@ -37,6 +37,8 @@ message Expenditure {
   optional string payment_terms = 21;             // "cash", "net_30", "net_60"
   optional int64 due_date = 22;                   // for AP tracking
   optional string approved_by = 23;               // who authorized
+  optional string purchase_order_id = 24;    // FK to PurchaseOrder for 3-way match
+  optional string supplier_id = 25;          // FK to supplier (new — migrate from vendor_id over time)
 }
 
 service ExpenditureDomainService {

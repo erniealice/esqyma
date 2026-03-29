@@ -32,6 +32,7 @@ message ExpenditureLineItem {
   string line_item_type = 17;                   // "item", "tax", "shipping", "discount"
   optional string inventory_item_id = 18;       // FK to inventory_item (for purchase items going into stock)
   optional string location_id = 19;             // FK to location (where received)
+  optional string purchase_order_line_item_id = 20;  // FK to PO line for line-level 3-way match
 }
 
 service ExpenditureLineItemDomainService {

@@ -45,10 +45,12 @@ type Expenditure struct {
 	Notes                 *string                `protobuf:"bytes,17,opt,name=notes,proto3,oneof" json:"notes,omitempty"`
 	ExpenditureCategoryId *string                `protobuf:"bytes,18,opt,name=expenditure_category_id,json=expenditureCategoryId,proto3,oneof" json:"expenditure_category_id,omitempty"` // FK to expenditure_category
 	Location              *location.Location     `protobuf:"bytes,19,opt,name=location,proto3,oneof" json:"location,omitempty"`
-	LocationId            string                 `protobuf:"bytes,20,opt,name=location_id,json=locationId,proto3" json:"location_id,omitempty"`             // FK to location
-	PaymentTerms          *string                `protobuf:"bytes,21,opt,name=payment_terms,json=paymentTerms,proto3,oneof" json:"payment_terms,omitempty"` // "cash", "net_30", "net_60"
-	DueDate               *int64                 `protobuf:"varint,22,opt,name=due_date,json=dueDate,proto3,oneof" json:"due_date,omitempty"`               // for AP tracking
-	ApprovedBy            *string                `protobuf:"bytes,23,opt,name=approved_by,json=approvedBy,proto3,oneof" json:"approved_by,omitempty"`       // who authorized
+	LocationId            string                 `protobuf:"bytes,20,opt,name=location_id,json=locationId,proto3" json:"location_id,omitempty"`                        // FK to location
+	PaymentTerms          *string                `protobuf:"bytes,21,opt,name=payment_terms,json=paymentTerms,proto3,oneof" json:"payment_terms,omitempty"`            // "cash", "net_30", "net_60"
+	DueDate               *int64                 `protobuf:"varint,22,opt,name=due_date,json=dueDate,proto3,oneof" json:"due_date,omitempty"`                          // for AP tracking
+	ApprovedBy            *string                `protobuf:"bytes,23,opt,name=approved_by,json=approvedBy,proto3,oneof" json:"approved_by,omitempty"`                  // who authorized
+	PurchaseOrderId       *string                `protobuf:"bytes,24,opt,name=purchase_order_id,json=purchaseOrderId,proto3,oneof" json:"purchase_order_id,omitempty"` // FK to PurchaseOrder for 3-way match
+	SupplierId            *string                `protobuf:"bytes,25,opt,name=supplier_id,json=supplierId,proto3,oneof" json:"supplier_id,omitempty"`                  // FK to supplier (new — migrate from vendor_id over time)
 	unknownFields         protoimpl.UnknownFields
 	sizeCache             protoimpl.SizeCache
 }
@@ -240,6 +242,20 @@ func (x *Expenditure) GetDueDate() int64 {
 func (x *Expenditure) GetApprovedBy() string {
 	if x != nil && x.ApprovedBy != nil {
 		return *x.ApprovedBy
+	}
+	return ""
+}
+
+func (x *Expenditure) GetPurchaseOrderId() string {
+	if x != nil && x.PurchaseOrderId != nil {
+		return *x.PurchaseOrderId
+	}
+	return ""
+}
+
+func (x *Expenditure) GetSupplierId() string {
+	if x != nil && x.SupplierId != nil {
+		return *x.SupplierId
 	}
 	return ""
 }
@@ -1032,7 +1048,8 @@ var File_domain_expenditure_expenditure_expenditure_proto protoreflect.FileDescr
 
 const file_domain_expenditure_expenditure_expenditure_proto_rawDesc = "" +
 	"\n" +
-	"0domain/expenditure/expenditure/expenditure.proto\x12\x15domain.expenditure.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/search.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a!domain/entity/client/client.proto\x1a%domain/entity/location/location.proto\"\xa7\t\n" +
+	"0domain/expenditure/expenditure/expenditure.proto\x12\x15domain.expenditure.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/search.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a!domain/entity/client/client.proto\x1a%domain/entity/location/location.proto\"\xa4\n" +
+	"\n" +
 	"\vExpenditure\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12&\n" +
 	"\fdate_created\x18\x02 \x01(\x03H\x00R\vdateCreated\x88\x01\x01\x123\n" +
@@ -1060,7 +1077,10 @@ const file_domain_expenditure_expenditure_expenditure_proto_rawDesc = "" +
 	"\rpayment_terms\x18\x15 \x01(\tH\vR\fpaymentTerms\x88\x01\x01\x12\x1e\n" +
 	"\bdue_date\x18\x16 \x01(\x03H\fR\adueDate\x88\x01\x01\x12$\n" +
 	"\vapproved_by\x18\x17 \x01(\tH\rR\n" +
-	"approvedBy\x88\x01\x01B\x0f\n" +
+	"approvedBy\x88\x01\x01\x12/\n" +
+	"\x11purchase_order_id\x18\x18 \x01(\tH\x0eR\x0fpurchaseOrderId\x88\x01\x01\x12$\n" +
+	"\vsupplier_id\x18\x19 \x01(\tH\x0fR\n" +
+	"supplierId\x88\x01\x01B\x0f\n" +
 	"\r_date_createdB\x16\n" +
 	"\x14_date_created_stringB\x10\n" +
 	"\x0e_date_modifiedB\x17\n" +
@@ -1074,7 +1094,9 @@ const file_domain_expenditure_expenditure_expenditure_proto_rawDesc = "" +
 	"\t_locationB\x10\n" +
 	"\x0e_payment_termsB\v\n" +
 	"\t_due_dateB\x0e\n" +
-	"\f_approved_by\"R\n" +
+	"\f_approved_byB\x14\n" +
+	"\x12_purchase_order_idB\x0e\n" +
+	"\f_supplier_id\"R\n" +
 	"\x18CreateExpenditureRequest\x126\n" +
 	"\x04data\x18\x01 \x01(\v2\".domain.expenditure.v1.ExpenditureR\x04data\"\xab\x01\n" +
 	"\x19CreateExpenditureResponse\x126\n" +

@@ -25,27 +25,28 @@ const (
 )
 
 type ExpenditureLineItem struct {
-	state              protoimpl.MessageState   `protogen:"open.v1"`
-	Id                 string                   `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
-	DateCreated        *int64                   `protobuf:"varint,2,opt,name=date_created,json=dateCreated,proto3,oneof" json:"date_created,omitempty"`
-	DateCreatedString  *string                  `protobuf:"bytes,3,opt,name=date_created_string,json=dateCreatedString,proto3,oneof" json:"date_created_string,omitempty"`
-	DateModified       *int64                   `protobuf:"varint,4,opt,name=date_modified,json=dateModified,proto3,oneof" json:"date_modified,omitempty"`
-	DateModifiedString *string                  `protobuf:"bytes,5,opt,name=date_modified_string,json=dateModifiedString,proto3,oneof" json:"date_modified_string,omitempty"`
-	Active             bool                     `protobuf:"varint,6,opt,name=active,proto3" json:"active,omitempty"`
-	Expenditure        *expenditure.Expenditure `protobuf:"bytes,7,opt,name=expenditure,proto3,oneof" json:"expenditure,omitempty"`
-	ExpenditureId      string                   `protobuf:"bytes,8,opt,name=expenditure_id,json=expenditureId,proto3" json:"expenditure_id,omitempty"`
-	Product            *product.Product         `protobuf:"bytes,9,opt,name=product,proto3,oneof" json:"product,omitempty"`
-	ProductId          *string                  `protobuf:"bytes,10,opt,name=product_id,json=productId,proto3,oneof" json:"product_id,omitempty"`
-	Description        string                   `protobuf:"bytes,11,opt,name=description,proto3" json:"description,omitempty"`
-	Quantity           float64                  `protobuf:"fixed64,12,opt,name=quantity,proto3" json:"quantity,omitempty"`
-	UnitPrice          float64                  `protobuf:"fixed64,13,opt,name=unit_price,json=unitPrice,proto3" json:"unit_price,omitempty"`
-	TotalPrice         float64                  `protobuf:"fixed64,14,opt,name=total_price,json=totalPrice,proto3" json:"total_price,omitempty"`
-	Notes              *string                  `protobuf:"bytes,16,opt,name=notes,proto3,oneof" json:"notes,omitempty"`
-	LineItemType       string                   `protobuf:"bytes,17,opt,name=line_item_type,json=lineItemType,proto3" json:"line_item_type,omitempty"`                // "item", "tax", "shipping", "discount"
-	InventoryItemId    *string                  `protobuf:"bytes,18,opt,name=inventory_item_id,json=inventoryItemId,proto3,oneof" json:"inventory_item_id,omitempty"` // FK to inventory_item (for purchase items going into stock)
-	LocationId         *string                  `protobuf:"bytes,19,opt,name=location_id,json=locationId,proto3,oneof" json:"location_id,omitempty"`                  // FK to location (where received)
-	unknownFields      protoimpl.UnknownFields
-	sizeCache          protoimpl.SizeCache
+	state                   protoimpl.MessageState   `protogen:"open.v1"`
+	Id                      string                   `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
+	DateCreated             *int64                   `protobuf:"varint,2,opt,name=date_created,json=dateCreated,proto3,oneof" json:"date_created,omitempty"`
+	DateCreatedString       *string                  `protobuf:"bytes,3,opt,name=date_created_string,json=dateCreatedString,proto3,oneof" json:"date_created_string,omitempty"`
+	DateModified            *int64                   `protobuf:"varint,4,opt,name=date_modified,json=dateModified,proto3,oneof" json:"date_modified,omitempty"`
+	DateModifiedString      *string                  `protobuf:"bytes,5,opt,name=date_modified_string,json=dateModifiedString,proto3,oneof" json:"date_modified_string,omitempty"`
+	Active                  bool                     `protobuf:"varint,6,opt,name=active,proto3" json:"active,omitempty"`
+	Expenditure             *expenditure.Expenditure `protobuf:"bytes,7,opt,name=expenditure,proto3,oneof" json:"expenditure,omitempty"`
+	ExpenditureId           string                   `protobuf:"bytes,8,opt,name=expenditure_id,json=expenditureId,proto3" json:"expenditure_id,omitempty"`
+	Product                 *product.Product         `protobuf:"bytes,9,opt,name=product,proto3,oneof" json:"product,omitempty"`
+	ProductId               *string                  `protobuf:"bytes,10,opt,name=product_id,json=productId,proto3,oneof" json:"product_id,omitempty"`
+	Description             string                   `protobuf:"bytes,11,opt,name=description,proto3" json:"description,omitempty"`
+	Quantity                float64                  `protobuf:"fixed64,12,opt,name=quantity,proto3" json:"quantity,omitempty"`
+	UnitPrice               float64                  `protobuf:"fixed64,13,opt,name=unit_price,json=unitPrice,proto3" json:"unit_price,omitempty"`
+	TotalPrice              float64                  `protobuf:"fixed64,14,opt,name=total_price,json=totalPrice,proto3" json:"total_price,omitempty"`
+	Notes                   *string                  `protobuf:"bytes,16,opt,name=notes,proto3,oneof" json:"notes,omitempty"`
+	LineItemType            string                   `protobuf:"bytes,17,opt,name=line_item_type,json=lineItemType,proto3" json:"line_item_type,omitempty"`                                            // "item", "tax", "shipping", "discount"
+	InventoryItemId         *string                  `protobuf:"bytes,18,opt,name=inventory_item_id,json=inventoryItemId,proto3,oneof" json:"inventory_item_id,omitempty"`                             // FK to inventory_item (for purchase items going into stock)
+	LocationId              *string                  `protobuf:"bytes,19,opt,name=location_id,json=locationId,proto3,oneof" json:"location_id,omitempty"`                                              // FK to location (where received)
+	PurchaseOrderLineItemId *string                  `protobuf:"bytes,20,opt,name=purchase_order_line_item_id,json=purchaseOrderLineItemId,proto3,oneof" json:"purchase_order_line_item_id,omitempty"` // FK to PO line for line-level 3-way match
+	unknownFields           protoimpl.UnknownFields
+	sizeCache               protoimpl.SizeCache
 }
 
 func (x *ExpenditureLineItem) Reset() {
@@ -200,6 +201,13 @@ func (x *ExpenditureLineItem) GetInventoryItemId() string {
 func (x *ExpenditureLineItem) GetLocationId() string {
 	if x != nil && x.LocationId != nil {
 		return *x.LocationId
+	}
+	return ""
+}
+
+func (x *ExpenditureLineItem) GetPurchaseOrderLineItemId() string {
+	if x != nil && x.PurchaseOrderLineItemId != nil {
+		return *x.PurchaseOrderLineItemId
 	}
 	return ""
 }
@@ -1000,7 +1008,7 @@ var File_domain_expenditure_expenditure_line_item_expenditure_line_item_proto pr
 
 const file_domain_expenditure_expenditure_line_item_expenditure_line_item_proto_rawDesc = "" +
 	"\n" +
-	"Ddomain/expenditure/expenditure_line_item/expenditure_line_item.proto\x12\x15domain.expenditure.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/search.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a0domain/expenditure/expenditure/expenditure.proto\x1a$domain/product/product/product.proto\"\x91\a\n" +
+	"Ddomain/expenditure/expenditure_line_item/expenditure_line_item.proto\x12\x15domain.expenditure.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/search.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a0domain/expenditure/expenditure/expenditure.proto\x1a$domain/product/product/product.proto\"\xf4\a\n" +
 	"\x13ExpenditureLineItem\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12&\n" +
 	"\fdate_created\x18\x02 \x01(\x03H\x00R\vdateCreated\x88\x01\x01\x123\n" +
@@ -1024,7 +1032,9 @@ const file_domain_expenditure_expenditure_line_item_expenditure_line_item_proto_
 	"\x0eline_item_type\x18\x11 \x01(\tR\flineItemType\x12/\n" +
 	"\x11inventory_item_id\x18\x12 \x01(\tH\bR\x0finventoryItemId\x88\x01\x01\x12$\n" +
 	"\vlocation_id\x18\x13 \x01(\tH\tR\n" +
-	"locationId\x88\x01\x01B\x0f\n" +
+	"locationId\x88\x01\x01\x12A\n" +
+	"\x1bpurchase_order_line_item_id\x18\x14 \x01(\tH\n" +
+	"R\x17purchaseOrderLineItemId\x88\x01\x01B\x0f\n" +
 	"\r_date_createdB\x16\n" +
 	"\x14_date_created_stringB\x10\n" +
 	"\x0e_date_modifiedB\x17\n" +
@@ -1035,7 +1045,8 @@ const file_domain_expenditure_expenditure_line_item_expenditure_line_item_proto_
 	"\v_product_idB\b\n" +
 	"\x06_notesB\x14\n" +
 	"\x12_inventory_item_idB\x0e\n" +
-	"\f_location_id\"b\n" +
+	"\f_location_idB\x1e\n" +
+	"\x1c_purchase_order_line_item_id\"b\n" +
 	" CreateExpenditureLineItemRequest\x12>\n" +
 	"\x04data\x18\x01 \x01(\v2*.domain.expenditure.v1.ExpenditureLineItemR\x04data\"\xbb\x01\n" +
 	"!CreateExpenditureLineItemResponse\x12>\n" +
