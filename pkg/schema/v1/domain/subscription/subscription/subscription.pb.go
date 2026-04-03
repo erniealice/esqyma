@@ -50,7 +50,7 @@ type Subscription struct {
 	// License configuration
 	DefaultLicenseType *string `protobuf:"bytes,20,opt,name=default_license_type,json=defaultLicenseType,proto3,oneof" json:"default_license_type,omitempty"` // Default for created licenses
 	AutoAssign         *bool   `protobuf:"varint,21,opt,name=auto_assign,json=autoAssign,proto3,oneof" json:"auto_assign,omitempty"`                          // Auto-assign to purchaser
-	Code               *string `protobuf:"bytes,22,opt,name=code,proto3,oneof" json:"code,omitempty"`                                                          // 7-char alphanumeric engagement code (e.g. "A3K7PXR")
+	Code               *string `protobuf:"bytes,22,opt,name=code,proto3,oneof" json:"code,omitempty"`                                                         // 7-char alphanumeric engagement code (e.g. "A3K7PXR")
 	unknownFields      protoimpl.UnknownFields
 	sizeCache          protoimpl.SizeCache
 }
@@ -1042,7 +1042,7 @@ var File_domain_subscription_subscription_subscription_proto protoreflect.FileDe
 
 const file_domain_subscription_subscription_subscription_proto_rawDesc = "" +
 	"\n" +
-	"3domain/subscription/subscription/subscription.proto\x12\x16domain.subscription.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1adomain/common/search.proto\x1a/domain/subscription/price_plan/price_plan.proto\x1a!domain/entity/client/client.proto\x1a\x10options/db.proto\"\x97\n" +
+	"3domain/subscription/subscription/subscription.proto\x12\x16domain.subscription.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1adomain/common/search.proto\x1a/domain/subscription/price_plan/price_plan.proto\x1a!domain/entity/client/client.proto\x1a\x10options/db.proto\"\xb9\n" +
 	"\n" +
 	"\fSubscription\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12&\n" +
@@ -1075,7 +1075,8 @@ const file_domain_subscription_subscription_subscription_proto_rawDesc = "" +
 	"\x0favailable_count\x18\x13 \x01(\x05H\fR\x0eavailableCount\x88\x01\x01\x125\n" +
 	"\x14default_license_type\x18\x14 \x01(\tH\rR\x12defaultLicenseType\x88\x01\x01\x12$\n" +
 	"\vauto_assign\x18\x15 \x01(\bH\x0eR\n" +
-	"autoAssign\x88\x01\x01\x1a;\n" +
+	"autoAssign\x88\x01\x01\x12\x17\n" +
+	"\x04code\x18\x16 \x01(\tH\x0fR\x04code\x88\x01\x01\x1a;\n" +
 	"\rMetadataEntry\x12\x10\n" +
 	"\x03key\x18\x01 \x01(\tR\x03key\x12\x14\n" +
 	"\x05value\x18\x02 \x01(\tR\x05value:\x028\x01:\x06\x8a\xb5\x18\x02\b\x01B\x0f\n" +
@@ -1093,7 +1094,8 @@ const file_domain_subscription_subscription_subscription_proto_rawDesc = "" +
 	"\x0f_assigned_countB\x12\n" +
 	"\x10_available_countB\x17\n" +
 	"\x15_default_license_typeB\x0e\n" +
-	"\f_auto_assign\"U\n" +
+	"\f_auto_assignB\a\n" +
+	"\x05_code\"U\n" +
 	"\x19CreateSubscriptionRequest\x128\n" +
 	"\x04data\x18\x01 \x01(\v2$.domain.subscription.v1.SubscriptionR\x04data\"\xae\x01\n" +
 	"\x1aCreateSubscriptionResponse\x128\n" +

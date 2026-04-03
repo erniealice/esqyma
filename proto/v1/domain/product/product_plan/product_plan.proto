@@ -27,6 +27,7 @@ message ProductPlan {
   string currency = 10;
   optional Product product = 11;
   string product_id = 12 [(options.v1.db).references = "product", (options.v1.db).index = true];
+  string plan_id = 13 [(options.v1.db).references = "plan", (options.v1.db).index = true];
 }
 
 service ProductPlanDomainService {

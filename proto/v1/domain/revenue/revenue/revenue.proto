@@ -48,6 +48,7 @@ message Revenue {
   optional int64 due_date = 29;
   optional string due_date_string = 30;
   optional domain.entity.v1.PaymentTerm payment_term = 31;
+  optional string subscription_id = 32;
 }
 
 service RevenueDomainService {

@@ -1,0 +1,119 @@
+syntax = "proto3";
+
+package domain.subscription.v1;
+
+option go_package = "github.com/erniealice/esqyma/golang/v1/domain/subscription/product_price_plan";
+
+import "domain/common/error.proto";
+import "domain/common/pagination.proto";
+import "domain/common/search.proto";
+import "domain/common/filter.proto";
+import "domain/common/sort.proto";
+import "domain/product/product/product.proto";
+import "domain/subscription/price_plan/price_plan.proto";
+import "options/db.proto";
+
+message ProductPricePlan {
+  option (options.v1.table).table = true;
+  string id = 1;
+  optional int64 date_created = 2;
+  optional string date_created_string = 3;
+  optional int64 date_modified = 4;
+  optional string date_modified_string = 5;
+  bool active = 6 [(options.v1.db).default = "true"];
+  optional PricePlan price_plan = 7;
+  string price_plan_id = 8 [(options.v1.db).references = "price_plan", (options.v1.db).index = true];
+  optional domain.product.v1.Product product = 9;
+  string product_id = 10 [(options.v1.db).references = "product", (options.v1.db).index = true];
+  double price = 11;
+  string currency = 12;
+}
+
+service ProductPricePlanDomainService {
+  rpc CreateProductPricePlan(CreateProductPricePlanRequest) returns (CreateProductPricePlanResponse);
+  rpc ReadProductPricePlan(ReadProductPricePlanRequest) returns (ReadProductPricePlanResponse);
+  rpc UpdateProductPricePlan(UpdateProductPricePlanRequest) returns (UpdateProductPricePlanResponse);
+  rpc DeleteProductPricePlan(DeleteProductPricePlanRequest) returns (DeleteProductPricePlanResponse);
+  rpc ListProductPricePlans(ListProductPricePlansRequest) returns (ListProductPricePlansResponse);
+  rpc GetProductPricePlanListPageData(GetProductPricePlanListPageDataRequest)
+    returns (GetProductPricePlanListPageDataResponse);
+  rpc GetProductPricePlanItemPageData(GetProductPricePlanItemPageDataRequest)
+    returns (GetProductPricePlanItemPageDataResponse);
+}
+
+message CreateProductPricePlanRequest {
+  ProductPricePlan data = 1;
+}
+
+message CreateProductPricePlanResponse {
+  repeated ProductPricePlan data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message ReadProductPricePlanRequest {
+  ProductPricePlan data = 1;
+}
+
+message ReadProductPricePlanResponse {
+  repeated ProductPricePlan data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message UpdateProductPricePlanRequest {
+  ProductPricePlan data = 1;
+}
+
+message UpdateProductPricePlanResponse {
+  repeated ProductPricePlan data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message DeleteProductPricePlanRequest {
+  ProductPricePlan data = 1;
+}
+
+message DeleteProductPricePlanResponse {
+  bool success = 1;
+  optional domain.common.v1.Error error = 2;
+}
+
+message ListProductPricePlansRequest {
+  optional domain.common.v1.SearchRequest search = 1;
+  optional domain.common.v1.FilterRequest filters = 2;
+  optional domain.common.v1.SortRequest sort = 3;
+  optional domain.common.v1.PaginationRequest pagination = 4;
+}
+
+message ListProductPricePlansResponse {
+  repeated ProductPricePlan data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message GetProductPricePlanListPageDataRequest {
+  optional domain.common.v1.SearchRequest search = 1;
+  optional domain.common.v1.FilterRequest filters = 2;
+  optional domain.common.v1.SortRequest sort = 3;
+  optional domain.common.v1.PaginationRequest pagination = 4;
+}
+
+message GetProductPricePlanListPageDataResponse {
+  repeated ProductPricePlan product_price_plan_list = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+  optional domain.common.v1.PaginationResponse pagination = 4;
+  repeated domain.common.v1.SearchResult search_results = 5;
+}
+
+message GetProductPricePlanItemPageDataRequest {
+  string product_price_plan_id = 1;
+}
+
+message GetProductPricePlanItemPageDataResponse {
+  ProductPricePlan product_price_plan = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}

@@ -38,6 +38,7 @@ type ProductPlan struct {
 	Currency           string                 `protobuf:"bytes,10,opt,name=currency,proto3" json:"currency,omitempty"`
 	Product            *product.Product       `protobuf:"bytes,11,opt,name=product,proto3,oneof" json:"product,omitempty"`
 	ProductId          string                 `protobuf:"bytes,12,opt,name=product_id,json=productId,proto3" json:"product_id,omitempty"`
+	PlanId             string                 `protobuf:"bytes,13,opt,name=plan_id,json=planId,proto3" json:"plan_id,omitempty"`
 	unknownFields      protoimpl.UnknownFields
 	sizeCache          protoimpl.SizeCache
 }
@@ -152,6 +153,13 @@ func (x *ProductPlan) GetProduct() *product.Product {
 func (x *ProductPlan) GetProductId() string {
 	if x != nil {
 		return x.ProductId
+	}
+	return ""
+}
+
+func (x *ProductPlan) GetPlanId() string {
+	if x != nil {
+		return x.PlanId
 	}
 	return ""
 }
@@ -944,7 +952,7 @@ var File_domain_product_product_plan_product_plan_proto protoreflect.FileDescrip
 
 const file_domain_product_product_plan_product_plan_proto_rawDesc = "" +
 	"\n" +
-	".domain/product/product_plan/product_plan.proto\x12\x11domain.product.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1adomain/common/search.proto\x1a$domain/product/product/product.proto\x1a\x10options/db.proto\"\xcf\x04\n" +
+	".domain/product/product_plan/product_plan.proto\x12\x11domain.product.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1adomain/common/search.proto\x1a$domain/product/product/product.proto\x1a\x10options/db.proto\"\xf6\x04\n" +
 	"\vProductPlan\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12&\n" +
 	"\fdate_created\x18\x02 \x01(\x03H\x00R\vdateCreated\x88\x01\x01\x123\n" +
@@ -961,7 +969,9 @@ const file_domain_product_product_plan_product_plan_proto_rawDesc = "" +
 	"\aproduct\x18\v \x01(\v2\x1a.domain.product.v1.ProductH\x05R\aproduct\x88\x01\x01\x12.\n" +
 	"\n" +
 	"product_id\x18\f \x01(\tB\x0f\x82\xb5\x18\v\n" +
-	"\aproduct\x18\x01R\tproductId:\x06\x8a\xb5\x18\x02\b\x01B\x0f\n" +
+	"\aproduct\x18\x01R\tproductId\x12%\n" +
+	"\aplan_id\x18\r \x01(\tB\f\x82\xb5\x18\b\n" +
+	"\x04plan\x18\x01R\x06planId:\x06\x8a\xb5\x18\x02\b\x01B\x0f\n" +
 	"\r_date_createdB\x16\n" +
 	"\x14_date_created_stringB\x10\n" +
 	"\x0e_date_modifiedB\x17\n" +

@@ -43,6 +43,7 @@ type PricePlan struct {
 	// Email template paths/URLs for dynamic email rendering
 	ConfirmationTemplate *string `protobuf:"bytes,15,opt,name=confirmation_template,json=confirmationTemplate,proto3,oneof" json:"confirmation_template,omitempty"` // Template for welcome/confirmation emails (first payment)
 	ReceiptTemplate      *string `protobuf:"bytes,16,opt,name=receipt_template,json=receiptTemplate,proto3,oneof" json:"receipt_template,omitempty"`                // Template for receipt emails (recurring payments)
+	LocationId           *string `protobuf:"bytes,17,opt,name=location_id,json=locationId,proto3,oneof" json:"location_id,omitempty"`
 	unknownFields        protoimpl.UnknownFields
 	sizeCache            protoimpl.SizeCache
 }
@@ -185,6 +186,13 @@ func (x *PricePlan) GetConfirmationTemplate() string {
 func (x *PricePlan) GetReceiptTemplate() string {
 	if x != nil && x.ReceiptTemplate != nil {
 		return *x.ReceiptTemplate
+	}
+	return ""
+}
+
+func (x *PricePlan) GetLocationId() string {
+	if x != nil && x.LocationId != nil {
+		return *x.LocationId
 	}
 	return ""
 }
@@ -977,7 +985,7 @@ var File_domain_subscription_price_plan_price_plan_proto protoreflect.FileDescri
 
 const file_domain_subscription_price_plan_price_plan_proto_rawDesc = "" +
 	"\n" +
-	"/domain/subscription/price_plan/price_plan.proto\x12\x16domain.subscription.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/search.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a#domain/subscription/plan/plan.proto\x1a\x10options/db.proto\"\x8f\x06\n" +
+	"/domain/subscription/price_plan/price_plan.proto\x12\x16domain.subscription.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/search.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a#domain/subscription/plan/plan.proto\x1a\x10options/db.proto\"\xd7\x06\n" +
 	"\tPricePlan\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x125\n" +
 	"\x04plan\x18\x02 \x01(\v2\x1c.domain.subscription.v1.PlanH\x00R\x04plan\x88\x01\x01\x12%\n" +
@@ -997,14 +1005,18 @@ const file_domain_subscription_price_plan_price_plan_proto_rawDesc = "" +
 	"\x0eduration_value\x18\r \x01(\x05R\rdurationValue\x12#\n" +
 	"\rduration_unit\x18\x0e \x01(\tR\fdurationUnit\x128\n" +
 	"\x15confirmation_template\x18\x0f \x01(\tH\x05R\x14confirmationTemplate\x88\x01\x01\x12.\n" +
-	"\x10receipt_template\x18\x10 \x01(\tH\x06R\x0freceiptTemplate\x88\x01\x01:\x06\x8a\xb5\x18\x02\b\x01B\a\n" +
+	"\x10receipt_template\x18\x10 \x01(\tH\x06R\x0freceiptTemplate\x88\x01\x01\x126\n" +
+	"\vlocation_id\x18\x11 \x01(\tB\x10\x82\xb5\x18\f\n" +
+	"\blocation\x18\x01H\aR\n" +
+	"locationId\x88\x01\x01:\x06\x8a\xb5\x18\x02\b\x01B\a\n" +
 	"\x05_planB\x0f\n" +
 	"\r_date_createdB\x16\n" +
 	"\x14_date_created_stringB\x10\n" +
 	"\x0e_date_modifiedB\x17\n" +
 	"\x15_date_modified_stringB\x18\n" +
 	"\x16_confirmation_templateB\x13\n" +
-	"\x11_receipt_template\"O\n" +
+	"\x11_receipt_templateB\x0e\n" +
+	"\f_location_id\"O\n" +
 	"\x16CreatePricePlanRequest\x125\n" +
 	"\x04data\x18\x01 \x01(\v2!.domain.subscription.v1.PricePlanR\x04data\"\xa8\x01\n" +
 	"\x17CreatePricePlanResponse\x125\n" +

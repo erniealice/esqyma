@@ -59,6 +59,7 @@ type Revenue struct {
 	DueDate           *int64                    `protobuf:"varint,29,opt,name=due_date,json=dueDate,proto3,oneof" json:"due_date,omitempty"`
 	DueDateString     *string                   `protobuf:"bytes,30,opt,name=due_date_string,json=dueDateString,proto3,oneof" json:"due_date_string,omitempty"`
 	PaymentTerm       *payment_term.PaymentTerm `protobuf:"bytes,31,opt,name=payment_term,json=paymentTerm,proto3,oneof" json:"payment_term,omitempty"`
+	SubscriptionId    *string                   `protobuf:"bytes,32,opt,name=subscription_id,json=subscriptionId,proto3,oneof" json:"subscription_id,omitempty"`
 	unknownFields     protoimpl.UnknownFields
 	sizeCache         protoimpl.SizeCache
 }
@@ -301,6 +302,13 @@ func (x *Revenue) GetPaymentTerm() *payment_term.PaymentTerm {
 		return x.PaymentTerm
 	}
 	return nil
+}
+
+func (x *Revenue) GetSubscriptionId() string {
+	if x != nil && x.SubscriptionId != nil {
+		return *x.SubscriptionId
+	}
+	return ""
 }
 
 type CreateRevenueRequest struct {
@@ -1091,7 +1099,7 @@ var File_domain_revenue_revenue_revenue_proto protoreflect.FileDescriptor
 
 const file_domain_revenue_revenue_revenue_proto_rawDesc = "" +
 	"\n" +
-	"$domain/revenue/revenue/revenue.proto\x12\x11domain.revenue.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/search.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a!domain/entity/client/client.proto\x1a%domain/entity/location/location.proto\x1a-domain/entity/payment_term/payment_term.proto\"\xb1\r\n" +
+	"$domain/revenue/revenue/revenue.proto\x12\x11domain.revenue.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/search.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a!domain/entity/client/client.proto\x1a%domain/entity/location/location.proto\x1a-domain/entity/payment_term/payment_term.proto\"\xf3\r\n" +
 	"\aRevenue\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12&\n" +
 	"\fdate_created\x18\x02 \x01(\x03H\x00R\vdateCreated\x88\x01\x01\x123\n" +
@@ -1125,7 +1133,8 @@ const file_domain_revenue_revenue_revenue_proto_rawDesc = "" +
 	"\x0fpayment_term_id\x18\x1c \x01(\tH\x12R\rpaymentTermId\x88\x01\x01\x12\x1e\n" +
 	"\bdue_date\x18\x1d \x01(\x03H\x13R\adueDate\x88\x01\x01\x12+\n" +
 	"\x0fdue_date_string\x18\x1e \x01(\tH\x14R\rdueDateString\x88\x01\x01\x12E\n" +
-	"\fpayment_term\x18\x1f \x01(\v2\x1d.domain.entity.v1.PaymentTermH\x15R\vpaymentTerm\x88\x01\x01B\x0f\n" +
+	"\fpayment_term\x18\x1f \x01(\v2\x1d.domain.entity.v1.PaymentTermH\x15R\vpaymentTerm\x88\x01\x01\x12,\n" +
+	"\x0fsubscription_id\x18  \x01(\tH\x16R\x0esubscriptionId\x88\x01\x01B\x0f\n" +
 	"\r_date_createdB\x16\n" +
 	"\x14_date_created_stringB\x10\n" +
 	"\x0e_date_modifiedB\x17\n" +
@@ -1147,7 +1156,8 @@ const file_domain_revenue_revenue_revenue_proto_rawDesc = "" +
 	"\x10_payment_term_idB\v\n" +
 	"\t_due_dateB\x12\n" +
 	"\x10_due_date_stringB\x0f\n" +
-	"\r_payment_term\"F\n" +
+	"\r_payment_termB\x12\n" +
+	"\x10_subscription_id\"F\n" +
 	"\x14CreateRevenueRequest\x12.\n" +
 	"\x04data\x18\x01 \x01(\v2\x1a.domain.revenue.v1.RevenueR\x04data\"\x9f\x01\n" +
 	"\x15CreateRevenueResponse\x12.\n" +
