@@ -28,18 +28,16 @@ type DepreciationSchedule struct {
 	Id      string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
 	AssetId string                 `protobuf:"bytes,2,opt,name=asset_id,json=assetId,proto3" json:"asset_id,omitempty"`
 	// Period tracking
-	PeriodNumber          int32  `protobuf:"varint,3,opt,name=period_number,json=periodNumber,proto3" json:"period_number,omitempty"`
-	FiscalYear            int32  `protobuf:"varint,4,opt,name=fiscal_year,json=fiscalYear,proto3" json:"fiscal_year,omitempty"`
-	FiscalPeriod          int32  `protobuf:"varint,5,opt,name=fiscal_period,json=fiscalPeriod,proto3" json:"fiscal_period,omitempty"`
-	PeriodStartDate       int64  `protobuf:"varint,6,opt,name=period_start_date,json=periodStartDate,proto3" json:"period_start_date,omitempty"`
-	PeriodStartDateString string `protobuf:"bytes,7,opt,name=period_start_date_string,json=periodStartDateString,proto3" json:"period_start_date_string,omitempty"`
-	PeriodEndDate         int64  `protobuf:"varint,8,opt,name=period_end_date,json=periodEndDate,proto3" json:"period_end_date,omitempty"`
-	PeriodEndDateString   string `protobuf:"bytes,9,opt,name=period_end_date_string,json=periodEndDateString,proto3" json:"period_end_date_string,omitempty"`
+	PeriodNumber    int32  `protobuf:"varint,3,opt,name=period_number,json=periodNumber,proto3" json:"period_number,omitempty"`
+	FiscalYear      int32  `protobuf:"varint,4,opt,name=fiscal_year,json=fiscalYear,proto3" json:"fiscal_year,omitempty"`
+	FiscalPeriod    int32  `protobuf:"varint,5,opt,name=fiscal_period,json=fiscalPeriod,proto3" json:"fiscal_period,omitempty"`
+	PeriodStartDate string `protobuf:"bytes,6,opt,name=period_start_date,json=periodStartDate,proto3" json:"period_start_date,omitempty"` // ISO 8601 date (YYYY-MM-DD)
+	PeriodEndDate   string `protobuf:"bytes,8,opt,name=period_end_date,json=periodEndDate,proto3" json:"period_end_date,omitempty"`       // ISO 8601 date (YYYY-MM-DD)
 	// Value tracking
-	OpeningBookValue        float64 `protobuf:"fixed64,10,opt,name=opening_book_value,json=openingBookValue,proto3" json:"opening_book_value,omitempty"`
-	DepreciationAmount      float64 `protobuf:"fixed64,11,opt,name=depreciation_amount,json=depreciationAmount,proto3" json:"depreciation_amount,omitempty"`
-	AccumulatedDepreciation float64 `protobuf:"fixed64,12,opt,name=accumulated_depreciation,json=accumulatedDepreciation,proto3" json:"accumulated_depreciation,omitempty"`
-	ClosingBookValue        float64 `protobuf:"fixed64,13,opt,name=closing_book_value,json=closingBookValue,proto3" json:"closing_book_value,omitempty"`
+	OpeningBookValue        int64 `protobuf:"varint,10,opt,name=opening_book_value,json=openingBookValue,proto3" json:"opening_book_value,omitempty"`                    // centavos
+	DepreciationAmount      int64 `protobuf:"varint,11,opt,name=depreciation_amount,json=depreciationAmount,proto3" json:"depreciation_amount,omitempty"`                // centavos
+	AccumulatedDepreciation int64 `protobuf:"varint,12,opt,name=accumulated_depreciation,json=accumulatedDepreciation,proto3" json:"accumulated_depreciation,omitempty"` // centavos
+	ClosingBookValue        int64 `protobuf:"varint,13,opt,name=closing_book_value,json=closingBookValue,proto3" json:"closing_book_value,omitempty"`                    // centavos
 	// Units of production (optional)
 	UnitsProduced *int64 `protobuf:"varint,14,opt,name=units_produced,json=unitsProduced,proto3,oneof" json:"units_produced,omitempty"`
 	// GL posting
@@ -120,56 +118,42 @@ func (x *DepreciationSchedule) GetFiscalPeriod() int32 {
 	return 0
 }
 
-func (x *DepreciationSchedule) GetPeriodStartDate() int64 {
+func (x *DepreciationSchedule) GetPeriodStartDate() string {
 	if x != nil {
 		return x.PeriodStartDate
 	}
-	return 0
-}
-
-func (x *DepreciationSchedule) GetPeriodStartDateString() string {
-	if x != nil {
-		return x.PeriodStartDateString
-	}
 	return ""
 }
 
-func (x *DepreciationSchedule) GetPeriodEndDate() int64 {
+func (x *DepreciationSchedule) GetPeriodEndDate() string {
 	if x != nil {
 		return x.PeriodEndDate
 	}
-	return 0
-}
-
-func (x *DepreciationSchedule) GetPeriodEndDateString() string {
-	if x != nil {
-		return x.PeriodEndDateString
-	}
 	return ""
 }
 
-func (x *DepreciationSchedule) GetOpeningBookValue() float64 {
+func (x *DepreciationSchedule) GetOpeningBookValue() int64 {
 	if x != nil {
 		return x.OpeningBookValue
 	}
 	return 0
 }
 
-func (x *DepreciationSchedule) GetDepreciationAmount() float64 {
+func (x *DepreciationSchedule) GetDepreciationAmount() int64 {
 	if x != nil {
 		return x.DepreciationAmount
 	}
 	return 0
 }
 
-func (x *DepreciationSchedule) GetAccumulatedDepreciation() float64 {
+func (x *DepreciationSchedule) GetAccumulatedDepreciation() int64 {
 	if x != nil {
 		return x.AccumulatedDepreciation
 	}
 	return 0
 }
 
-func (x *DepreciationSchedule) GetClosingBookValue() float64 {
+func (x *DepreciationSchedule) GetClosingBookValue() int64 {
 	if x != nil {
 		return x.ClosingBookValue
 	}
@@ -1028,7 +1012,7 @@ var File_domain_asset_depreciation_depreciation_proto protoreflect.FileDescripto
 
 const file_domain_asset_depreciation_depreciation_proto_rawDesc = "" +
 	"\n" +
-	",domain/asset/depreciation/depreciation.proto\x12\x0fdomain.asset.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1adomain/common/search.proto\x1a\x10options/db.proto\"\xa3\b\n" +
+	",domain/asset/depreciation/depreciation.proto\x12\x0fdomain.asset.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1adomain/common/search.proto\x1a\x10options/db.proto\"\xc1\a\n" +
 	"\x14DepreciationSchedule\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12(\n" +
 	"\basset_id\x18\x02 \x01(\tB\r\x82\xb5\x18\t\n" +
@@ -1037,15 +1021,13 @@ const file_domain_asset_depreciation_depreciation_proto_rawDesc = "" +
 	"\vfiscal_year\x18\x04 \x01(\x05R\n" +
 	"fiscalYear\x12#\n" +
 	"\rfiscal_period\x18\x05 \x01(\x05R\ffiscalPeriod\x12*\n" +
-	"\x11period_start_date\x18\x06 \x01(\x03R\x0fperiodStartDate\x127\n" +
-	"\x18period_start_date_string\x18\a \x01(\tR\x15periodStartDateString\x12&\n" +
-	"\x0fperiod_end_date\x18\b \x01(\x03R\rperiodEndDate\x123\n" +
-	"\x16period_end_date_string\x18\t \x01(\tR\x13periodEndDateString\x12,\n" +
+	"\x11period_start_date\x18\x06 \x01(\tR\x0fperiodStartDate\x12&\n" +
+	"\x0fperiod_end_date\x18\b \x01(\tR\rperiodEndDate\x12,\n" +
 	"\x12opening_book_value\x18\n" +
-	" \x01(\x01R\x10openingBookValue\x12/\n" +
-	"\x13depreciation_amount\x18\v \x01(\x01R\x12depreciationAmount\x129\n" +
-	"\x18accumulated_depreciation\x18\f \x01(\x01R\x17accumulatedDepreciation\x12,\n" +
-	"\x12closing_book_value\x18\r \x01(\x01R\x10closingBookValue\x12*\n" +
+	" \x01(\x03R\x10openingBookValue\x12/\n" +
+	"\x13depreciation_amount\x18\v \x01(\x03R\x12depreciationAmount\x129\n" +
+	"\x18accumulated_depreciation\x18\f \x01(\x03R\x17accumulatedDepreciation\x12,\n" +
+	"\x12closing_book_value\x18\r \x01(\x03R\x10closingBookValue\x12*\n" +
 	"\x0eunits_produced\x18\x0e \x01(\x03H\x00R\runitsProduced\x88\x01\x01\x12\x1b\n" +
 	"\tis_posted\x18\x0f \x01(\bR\bisPosted\x12-\n" +
 	"\x10journal_entry_id\x18\x10 \x01(\tH\x01R\x0ejournalEntryId\x88\x01\x01\x12&\n" +
@@ -1060,7 +1042,8 @@ const file_domain_asset_depreciation_depreciation_proto_rawDesc = "" +
 	"\r_date_createdB\x16\n" +
 	"\x14_date_created_stringB\x10\n" +
 	"\x0e_date_modifiedB\x17\n" +
-	"\x15_date_modified_string\"^\n" +
+	"\x15_date_modified_stringJ\x04\b\a\x10\bJ\x04\b\t\x10\n" +
+	"\"^\n" +
 	"!CreateDepreciationScheduleRequest\x129\n" +
 	"\x04data\x18\x01 \x01(\v2%.domain.asset.v1.DepreciationScheduleR\x04data\"\xb7\x01\n" +
 	"\"CreateDepreciationScheduleResponse\x129\n" +

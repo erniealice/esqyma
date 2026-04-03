@@ -30,11 +30,11 @@ message FiscalPeriod {
   int32 period_number = 3;                     // 1–12 (month number within the fiscal year)
   int32 fiscal_year = 4 [(options.v1.db).index = true];  // e.g. 2026
 
-  // Date range — unix timestamps
-  int64 start_date = 5;
-  int64 end_date = 6;
-  optional string start_date_string = 7;
-  optional string end_date_string = 8;
+  // Date range
+  string start_date = 5; // ISO 8601 date (YYYY-MM-DD)
+  string end_date = 6; // ISO 8601 date (YYYY-MM-DD)
+  reserved 7; // was start_date_string
+  reserved 8; // was end_date_string
 
   // Status
   FiscalPeriodStatus status = 9;

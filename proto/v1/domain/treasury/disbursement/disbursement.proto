@@ -22,7 +22,7 @@ message Disbursement {
   string name = 7;
   optional domain.subscription.v1.Subscription subscription = 8;
   string subscription_id = 9;
-  double amount = 10;
+  int64 amount = 10; // centavos
   string status = 11;
   // --- expenditure-related fields ---
   string expenditure_id = 20;               // FK to expenditure table
@@ -30,11 +30,10 @@ message Disbursement {
   string disbursement_method_id = 22;       // FK to disbursement_method
   string currency = 23;
   string reference_number = 24;
-  int64 payment_date = 25;                  // Unix timestamp
+  string payment_date = 25;                  // ISO 8601 date (YYYY-MM-DD)
   string approved_by = 26;                  // who authorized the outflow
 
-  // Date display companion
-  optional string payment_date_string = 27; // Display string for payment_date
+  reserved 27; // was payment_date_string
 
   // GL traceability
   optional string journal_entry_id = 28;    // FK to journal_entry — set when disbursement is posted to ledger

@@ -27,15 +27,14 @@ type AssetRevaluation struct {
 	state                     protoimpl.MessageState `protogen:"open.v1"`
 	Id                        string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
 	AssetId                   string                 `protobuf:"bytes,2,opt,name=asset_id,json=assetId,proto3" json:"asset_id,omitempty"`
-	RevaluationDate           int64                  `protobuf:"varint,3,opt,name=revaluation_date,json=revaluationDate,proto3" json:"revaluation_date,omitempty"`
-	RevaluationDateString     string                 `protobuf:"bytes,4,opt,name=revaluation_date_string,json=revaluationDateString,proto3" json:"revaluation_date_string,omitempty"`
-	PreviousCarryingAmount    float64                `protobuf:"fixed64,5,opt,name=previous_carrying_amount,json=previousCarryingAmount,proto3" json:"previous_carrying_amount,omitempty"`
-	NewFairValue              float64                `protobuf:"fixed64,6,opt,name=new_fair_value,json=newFairValue,proto3" json:"new_fair_value,omitempty"`
-	RevaluationAmount         float64                `protobuf:"fixed64,7,opt,name=revaluation_amount,json=revaluationAmount,proto3" json:"revaluation_amount,omitempty"`
+	RevaluationDate           string                 `protobuf:"bytes,3,opt,name=revaluation_date,json=revaluationDate,proto3" json:"revaluation_date,omitempty"`                         // ISO 8601 date (YYYY-MM-DD)
+	PreviousCarryingAmount    int64                  `protobuf:"varint,5,opt,name=previous_carrying_amount,json=previousCarryingAmount,proto3" json:"previous_carrying_amount,omitempty"` // centavos
+	NewFairValue              int64                  `protobuf:"varint,6,opt,name=new_fair_value,json=newFairValue,proto3" json:"new_fair_value,omitempty"`                               // centavos
+	RevaluationAmount         int64                  `protobuf:"varint,7,opt,name=revaluation_amount,json=revaluationAmount,proto3" json:"revaluation_amount,omitempty"`                  // centavos
 	IsIncrease                bool                   `protobuf:"varint,8,opt,name=is_increase,json=isIncrease,proto3" json:"is_increase,omitempty"`
-	RecognizedInPnl           float64                `protobuf:"fixed64,9,opt,name=recognized_in_pnl,json=recognizedInPnl,proto3" json:"recognized_in_pnl,omitempty"`
-	RecognizedInOci           float64                `protobuf:"fixed64,10,opt,name=recognized_in_oci,json=recognizedInOci,proto3" json:"recognized_in_oci,omitempty"`
-	RevaluationSurplusBalance float64                `protobuf:"fixed64,11,opt,name=revaluation_surplus_balance,json=revaluationSurplusBalance,proto3" json:"revaluation_surplus_balance,omitempty"`
+	RecognizedInPnl           int64                  `protobuf:"varint,9,opt,name=recognized_in_pnl,json=recognizedInPnl,proto3" json:"recognized_in_pnl,omitempty"`                                // centavos
+	RecognizedInOci           int64                  `protobuf:"varint,10,opt,name=recognized_in_oci,json=recognizedInOci,proto3" json:"recognized_in_oci,omitempty"`                               // centavos
+	RevaluationSurplusBalance int64                  `protobuf:"varint,11,opt,name=revaluation_surplus_balance,json=revaluationSurplusBalance,proto3" json:"revaluation_surplus_balance,omitempty"` // centavos
 	AppraiserName             *string                `protobuf:"bytes,12,opt,name=appraiser_name,json=appraiserName,proto3,oneof" json:"appraiser_name,omitempty"`
 	ValuationMethod           *string                `protobuf:"bytes,13,opt,name=valuation_method,json=valuationMethod,proto3,oneof" json:"valuation_method,omitempty"` // Market comparison, income approach, replacement cost
 	JournalEntryId            *string                `protobuf:"bytes,14,opt,name=journal_entry_id,json=journalEntryId,proto3,oneof" json:"journal_entry_id,omitempty"`  // FK to ledger.Journal (future)
@@ -94,35 +93,28 @@ func (x *AssetRevaluation) GetAssetId() string {
 	return ""
 }
 
-func (x *AssetRevaluation) GetRevaluationDate() int64 {
+func (x *AssetRevaluation) GetRevaluationDate() string {
 	if x != nil {
 		return x.RevaluationDate
-	}
-	return 0
-}
-
-func (x *AssetRevaluation) GetRevaluationDateString() string {
-	if x != nil {
-		return x.RevaluationDateString
 	}
 	return ""
 }
 
-func (x *AssetRevaluation) GetPreviousCarryingAmount() float64 {
+func (x *AssetRevaluation) GetPreviousCarryingAmount() int64 {
 	if x != nil {
 		return x.PreviousCarryingAmount
 	}
 	return 0
 }
 
-func (x *AssetRevaluation) GetNewFairValue() float64 {
+func (x *AssetRevaluation) GetNewFairValue() int64 {
 	if x != nil {
 		return x.NewFairValue
 	}
 	return 0
 }
 
-func (x *AssetRevaluation) GetRevaluationAmount() float64 {
+func (x *AssetRevaluation) GetRevaluationAmount() int64 {
 	if x != nil {
 		return x.RevaluationAmount
 	}
@@ -136,21 +128,21 @@ func (x *AssetRevaluation) GetIsIncrease() bool {
 	return false
 }
 
-func (x *AssetRevaluation) GetRecognizedInPnl() float64 {
+func (x *AssetRevaluation) GetRecognizedInPnl() int64 {
 	if x != nil {
 		return x.RecognizedInPnl
 	}
 	return 0
 }
 
-func (x *AssetRevaluation) GetRecognizedInOci() float64 {
+func (x *AssetRevaluation) GetRecognizedInOci() int64 {
 	if x != nil {
 		return x.RecognizedInOci
 	}
 	return 0
 }
 
-func (x *AssetRevaluation) GetRevaluationSurplusBalance() float64 {
+func (x *AssetRevaluation) GetRevaluationSurplusBalance() int64 {
 	if x != nil {
 		return x.RevaluationSurplusBalance
 	}
@@ -1016,22 +1008,21 @@ var File_domain_asset_asset_revaluation_asset_revaluation_proto protoreflect.Fil
 
 const file_domain_asset_asset_revaluation_asset_revaluation_proto_rawDesc = "" +
 	"\n" +
-	"6domain/asset/asset_revaluation/asset_revaluation.proto\x12\x0fdomain.asset.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1adomain/common/search.proto\x1a\x10options/db.proto\"\xa2\b\n" +
+	"6domain/asset/asset_revaluation/asset_revaluation.proto\x12\x0fdomain.asset.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1adomain/common/search.proto\x1a\x10options/db.proto\"\xf0\a\n" +
 	"\x10AssetRevaluation\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12(\n" +
 	"\basset_id\x18\x02 \x01(\tB\r\x82\xb5\x18\t\n" +
 	"\x05asset\x18\x01R\aassetId\x12)\n" +
-	"\x10revaluation_date\x18\x03 \x01(\x03R\x0frevaluationDate\x126\n" +
-	"\x17revaluation_date_string\x18\x04 \x01(\tR\x15revaluationDateString\x128\n" +
-	"\x18previous_carrying_amount\x18\x05 \x01(\x01R\x16previousCarryingAmount\x12$\n" +
-	"\x0enew_fair_value\x18\x06 \x01(\x01R\fnewFairValue\x12-\n" +
-	"\x12revaluation_amount\x18\a \x01(\x01R\x11revaluationAmount\x12\x1f\n" +
+	"\x10revaluation_date\x18\x03 \x01(\tR\x0frevaluationDate\x128\n" +
+	"\x18previous_carrying_amount\x18\x05 \x01(\x03R\x16previousCarryingAmount\x12$\n" +
+	"\x0enew_fair_value\x18\x06 \x01(\x03R\fnewFairValue\x12-\n" +
+	"\x12revaluation_amount\x18\a \x01(\x03R\x11revaluationAmount\x12\x1f\n" +
 	"\vis_increase\x18\b \x01(\bR\n" +
 	"isIncrease\x12*\n" +
-	"\x11recognized_in_pnl\x18\t \x01(\x01R\x0frecognizedInPnl\x12*\n" +
+	"\x11recognized_in_pnl\x18\t \x01(\x03R\x0frecognizedInPnl\x12*\n" +
 	"\x11recognized_in_oci\x18\n" +
-	" \x01(\x01R\x0frecognizedInOci\x12>\n" +
-	"\x1brevaluation_surplus_balance\x18\v \x01(\x01R\x19revaluationSurplusBalance\x12*\n" +
+	" \x01(\x03R\x0frecognizedInOci\x12>\n" +
+	"\x1brevaluation_surplus_balance\x18\v \x01(\x03R\x19revaluationSurplusBalance\x12*\n" +
 	"\x0eappraiser_name\x18\f \x01(\tH\x00R\rappraiserName\x88\x01\x01\x12.\n" +
 	"\x10valuation_method\x18\r \x01(\tH\x01R\x0fvaluationMethod\x88\x01\x01\x12-\n" +
 	"\x10journal_entry_id\x18\x0e \x01(\tH\x02R\x0ejournalEntryId\x88\x01\x01\x12\x19\n" +
@@ -1049,7 +1040,7 @@ const file_domain_asset_asset_revaluation_asset_revaluation_proto_rawDesc = "" +
 	"\r_date_createdB\x16\n" +
 	"\x14_date_created_stringB\x10\n" +
 	"\x0e_date_modifiedB\x17\n" +
-	"\x15_date_modified_string\"V\n" +
+	"\x15_date_modified_stringJ\x04\b\x04\x10\x05\"V\n" +
 	"\x1dCreateAssetRevaluationRequest\x125\n" +
 	"\x04data\x18\x01 \x01(\v2!.domain.asset.v1.AssetRevaluationR\x04data\"\xaf\x01\n" +
 	"\x1eCreateAssetRevaluationResponse\x125\n" +

@@ -592,7 +592,7 @@ func (x *DeliveryLocation) GetRemarks() string {
 type DeliveryQuote struct {
 	state            protoimpl.MessageState `protogen:"open.v1"`
 	QuoteId          string                 `protobuf:"bytes,1,opt,name=quote_id,json=quoteId,proto3" json:"quote_id,omitempty"`
-	Amount           float64                `protobuf:"fixed64,2,opt,name=amount,proto3" json:"amount,omitempty"`
+	Amount           int64                  `protobuf:"varint,2,opt,name=amount,proto3" json:"amount,omitempty"` // centavos
 	Currency         string                 `protobuf:"bytes,3,opt,name=currency,proto3" json:"currency,omitempty"`
 	DistanceKm       float64                `protobuf:"fixed64,4,opt,name=distance_km,json=distanceKm,proto3" json:"distance_km,omitempty"`
 	EstimatedMinutes int32                  `protobuf:"varint,5,opt,name=estimated_minutes,json=estimatedMinutes,proto3" json:"estimated_minutes,omitempty"`
@@ -638,7 +638,7 @@ func (x *DeliveryQuote) GetQuoteId() string {
 	return ""
 }
 
-func (x *DeliveryQuote) GetAmount() float64 {
+func (x *DeliveryQuote) GetAmount() int64 {
 	if x != nil {
 		return x.Amount
 	}
@@ -872,7 +872,7 @@ const file_integration_fulfillment_fulfillment_proto_rawDesc = "" +
 	"\aremarks\x18\x06 \x01(\tR\aremarks\"\xe7\x01\n" +
 	"\rDeliveryQuote\x12\x19\n" +
 	"\bquote_id\x18\x01 \x01(\tR\aquoteId\x12\x16\n" +
-	"\x06amount\x18\x02 \x01(\x01R\x06amount\x12\x1a\n" +
+	"\x06amount\x18\x02 \x01(\x03R\x06amount\x12\x1a\n" +
 	"\bcurrency\x18\x03 \x01(\tR\bcurrency\x12\x1f\n" +
 	"\vdistance_km\x18\x04 \x01(\x01R\n" +
 	"distanceKm\x12+\n" +

@@ -24,9 +24,9 @@ message Revenue {
   string name = 7;
   optional domain.entity.v1.Client client = 8;
   string client_id = 9;
-  optional int64 revenue_date = 10;
-  optional string revenue_date_string = 11;
-  double total_amount = 12;
+  optional string revenue_date = 10; // ISO 8601 date (YYYY-MM-DD)
+  reserved 11; // was revenue_date_string
+  int64 total_amount = 12; // centavos
   string currency = 13;
   string status = 14;
   optional string reference_number = 15;
@@ -45,8 +45,8 @@ message Revenue {
   optional string journal_entry_id = 26;      // FK to journal_entry — set when ledger entry is posted
   optional string fulfillment_status = 27;   // Rollup of linked fulfillment records: 'pending', 'partial', 'fulfilled', 'failed'. Computed — do not set directly.
   optional string payment_term_id = 28;
-  optional int64 due_date = 29;
-  optional string due_date_string = 30;
+  optional string due_date = 29; // ISO 8601 date (YYYY-MM-DD)
+  reserved 30; // was due_date_string
   optional domain.entity.v1.PaymentTerm payment_term = 31;
   optional string subscription_id = 32;
 }

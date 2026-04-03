@@ -33,7 +33,7 @@ type InventoryMovement struct {
 	ProductId          string                 `protobuf:"bytes,5,opt,name=product_id,json=productId,proto3" json:"product_id,omitempty"`
 	Product            *product.Product       `protobuf:"bytes,6,opt,name=product,proto3,oneof" json:"product,omitempty"`
 	Quantity           float64                `protobuf:"fixed64,7,opt,name=quantity,proto3" json:"quantity,omitempty"`
-	UnitCost           float64                `protobuf:"fixed64,8,opt,name=unit_cost,json=unitCost,proto3" json:"unit_cost,omitempty"`
+	UnitCost           int64                  `protobuf:"varint,8,opt,name=unit_cost,json=unitCost,proto3" json:"unit_cost,omitempty"` // centavos
 	FromLocationId     *string                `protobuf:"bytes,9,opt,name=from_location_id,json=fromLocationId,proto3,oneof" json:"from_location_id,omitempty"`
 	FromLocation       *location.Location     `protobuf:"bytes,10,opt,name=from_location,json=fromLocation,proto3,oneof" json:"from_location,omitempty"`
 	ToLocationId       *string                `protobuf:"bytes,11,opt,name=to_location_id,json=toLocationId,proto3,oneof" json:"to_location_id,omitempty"`
@@ -128,7 +128,7 @@ func (x *InventoryMovement) GetQuantity() float64 {
 	return 0
 }
 
-func (x *InventoryMovement) GetUnitCost() float64 {
+func (x *InventoryMovement) GetUnitCost() int64 {
 	if x != nil {
 		return x.UnitCost
 	}
@@ -1280,7 +1280,7 @@ const file_domain_operation_inventory_movement_inventory_movement_proto_rawDesc 
 	"\aproduct\x18\x01R\tproductId\x129\n" +
 	"\aproduct\x18\x06 \x01(\v2\x1a.domain.product.v1.ProductH\x00R\aproduct\x88\x01\x01\x12\x1a\n" +
 	"\bquantity\x18\a \x01(\x01R\bquantity\x12\x1b\n" +
-	"\tunit_cost\x18\b \x01(\x01R\bunitCost\x12=\n" +
+	"\tunit_cost\x18\b \x01(\x03R\bunitCost\x12=\n" +
 	"\x10from_location_id\x18\t \x01(\tB\x0e\x82\xb5\x18\n" +
 	"\n" +
 	"\blocationH\x01R\x0efromLocationId\x88\x01\x01\x12D\n" +

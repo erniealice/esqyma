@@ -86,7 +86,7 @@ type PettyCashVoucher struct {
 	VoucherNumber string        `protobuf:"bytes,3,opt,name=voucher_number,json=voucherNumber,proto3" json:"voucher_number,omitempty"`
 	Payee         *string       `protobuf:"bytes,4,opt,name=payee,proto3,oneof" json:"payee,omitempty"`
 	Description   string        `protobuf:"bytes,5,opt,name=description,proto3" json:"description,omitempty"`
-	TotalAmount   float64       `protobuf:"fixed64,6,opt,name=total_amount,json=totalAmount,proto3" json:"total_amount,omitempty"`
+	TotalAmount   int64         `protobuf:"varint,6,opt,name=total_amount,json=totalAmount,proto3" json:"total_amount,omitempty"` // centavos
 	Status        VoucherStatus `protobuf:"varint,7,opt,name=status,proto3,enum=domain.treasury.v1.VoucherStatus" json:"status,omitempty"`
 	// Approval
 	ApprovedBy       *string `protobuf:"bytes,8,opt,name=approved_by,json=approvedBy,proto3,oneof" json:"approved_by,omitempty"` // FK to entity.User
@@ -164,7 +164,7 @@ func (x *PettyCashVoucher) GetDescription() string {
 	return ""
 }
 
-func (x *PettyCashVoucher) GetTotalAmount() float64 {
+func (x *PettyCashVoucher) GetTotalAmount() int64 {
 	if x != nil {
 		return x.TotalAmount
 	}
@@ -1009,7 +1009,7 @@ const file_domain_treasury_petty_cash_voucher_petty_cash_voucher_proto_rawDesc =
 	"\x0evoucher_number\x18\x03 \x01(\tB\b\x82\xb5\x18\x04\x10\x01\x18\x01R\rvoucherNumber\x12\x19\n" +
 	"\x05payee\x18\x04 \x01(\tH\x00R\x05payee\x88\x01\x01\x12 \n" +
 	"\vdescription\x18\x05 \x01(\tR\vdescription\x12!\n" +
-	"\ftotal_amount\x18\x06 \x01(\x01R\vtotalAmount\x129\n" +
+	"\ftotal_amount\x18\x06 \x01(\x03R\vtotalAmount\x129\n" +
 	"\x06status\x18\a \x01(\x0e2!.domain.treasury.v1.VoucherStatusR\x06status\x12$\n" +
 	"\vapproved_by\x18\b \x01(\tH\x01R\n" +
 	"approvedBy\x88\x01\x01\x12$\n" +

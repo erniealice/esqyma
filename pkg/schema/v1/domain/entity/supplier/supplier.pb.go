@@ -54,7 +54,7 @@ type Supplier struct {
 	DefaultCurrency    *string                               `protobuf:"bytes,21,opt,name=default_currency,json=defaultCurrency,proto3,oneof" json:"default_currency,omitempty"` // ISO 4217 currency code
 	PaymentTerms       *string                               `protobuf:"bytes,22,opt,name=payment_terms,json=paymentTerms,proto3,oneof" json:"payment_terms,omitempty"`          // "net_30", "net_60", "2_10_net_30", "immediate"
 	LeadTimeDays       *int32                                `protobuf:"varint,23,opt,name=lead_time_days,json=leadTimeDays,proto3,oneof" json:"lead_time_days,omitempty"`       // Default delivery lead time
-	CreditLimit        *float64                              `protobuf:"fixed64,24,opt,name=credit_limit,json=creditLimit,proto3,oneof" json:"credit_limit,omitempty"`           // Maximum outstanding payable
+	CreditLimit        *int64                                `protobuf:"varint,24,opt,name=credit_limit,json=creditLimit,proto3,oneof" json:"credit_limit,omitempty"`            // centavos            // Maximum outstanding payable
 	Status             *string                               `protobuf:"bytes,25,opt,name=status,proto3,oneof" json:"status,omitempty"`                                          // "active", "blocked", "on_hold"
 	ClientId           *string                               `protobuf:"bytes,26,opt,name=client_id,json=clientId,proto3,oneof" json:"client_id,omitempty"`
 	Website            *string                               `protobuf:"bytes,27,opt,name=website,proto3,oneof" json:"website,omitempty"`
@@ -257,7 +257,7 @@ func (x *Supplier) GetLeadTimeDays() int32 {
 	return 0
 }
 
-func (x *Supplier) GetCreditLimit() float64 {
+func (x *Supplier) GetCreditLimit() int64 {
 	if x != nil && x.CreditLimit != nil {
 		return *x.CreditLimit
 	}
@@ -1134,7 +1134,7 @@ const file_domain_entity_supplier_supplier_proto_rawDesc = "" +
 	"\x10default_currency\x18\x15 \x01(\tH\x0eR\x0fdefaultCurrency\x88\x01\x01\x12(\n" +
 	"\rpayment_terms\x18\x16 \x01(\tH\x0fR\fpaymentTerms\x88\x01\x01\x12)\n" +
 	"\x0elead_time_days\x18\x17 \x01(\x05H\x10R\fleadTimeDays\x88\x01\x01\x12&\n" +
-	"\fcredit_limit\x18\x18 \x01(\x01H\x11R\vcreditLimit\x88\x01\x01\x12\x1b\n" +
+	"\fcredit_limit\x18\x18 \x01(\x03H\x11R\vcreditLimit\x88\x01\x01\x12\x1b\n" +
 	"\x06status\x18\x19 \x01(\tH\x12R\x06status\x88\x01\x01\x120\n" +
 	"\tclient_id\x18\x1a \x01(\tB\x0e\x82\xb5\x18\n" +
 	"\n" +

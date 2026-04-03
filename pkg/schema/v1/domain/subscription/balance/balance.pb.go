@@ -27,7 +27,7 @@ const (
 type Balance struct {
 	state              protoimpl.MessageState     `protogen:"open.v1"`
 	Id                 string                     `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
-	Amount             float64                    `protobuf:"fixed64,2,opt,name=amount,proto3" json:"amount,omitempty"`
+	Amount             int64                      `protobuf:"varint,2,opt,name=amount,proto3" json:"amount,omitempty"` // centavos
 	DateCreated        *int64                     `protobuf:"varint,3,opt,name=date_created,json=dateCreated,proto3,oneof" json:"date_created,omitempty"`
 	DateCreatedString  *string                    `protobuf:"bytes,4,opt,name=date_created_string,json=dateCreatedString,proto3,oneof" json:"date_created_string,omitempty"`
 	DateModified       *int64                     `protobuf:"varint,5,opt,name=date_modified,json=dateModified,proto3,oneof" json:"date_modified,omitempty"`
@@ -79,7 +79,7 @@ func (x *Balance) GetId() string {
 	return ""
 }
 
-func (x *Balance) GetAmount() float64 {
+func (x *Balance) GetAmount() int64 {
 	if x != nil {
 		return x.Amount
 	}
@@ -962,7 +962,7 @@ const file_domain_subscription_balance_balance_proto_rawDesc = "" +
 	")domain/subscription/balance/balance.proto\x12\x16domain.subscription.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1adomain/common/search.proto\x1a3domain/subscription/subscription/subscription.proto\x1a\x10options/db.proto\"\xfa\x04\n" +
 	"\aBalance\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12\x16\n" +
-	"\x06amount\x18\x02 \x01(\x01R\x06amount\x12&\n" +
+	"\x06amount\x18\x02 \x01(\x03R\x06amount\x12&\n" +
 	"\fdate_created\x18\x03 \x01(\x03H\x00R\vdateCreated\x88\x01\x01\x123\n" +
 	"\x13date_created_string\x18\x04 \x01(\tH\x01R\x11dateCreatedString\x88\x01\x01\x12(\n" +
 	"\rdate_modified\x18\x05 \x01(\x03H\x02R\fdateModified\x88\x01\x01\x125\n" +

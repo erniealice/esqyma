@@ -39,7 +39,7 @@ type Expenditure struct {
 	VendorId              string                    `protobuf:"bytes,10,opt,name=vendor_id,json=vendorId,proto3" json:"vendor_id,omitempty"`                     // FK to entity/client (vendors are clients you buy from)
 	ExpenditureDate       *int64                    `protobuf:"varint,11,opt,name=expenditure_date,json=expenditureDate,proto3,oneof" json:"expenditure_date,omitempty"`
 	ExpenditureDateString *string                   `protobuf:"bytes,12,opt,name=expenditure_date_string,json=expenditureDateString,proto3,oneof" json:"expenditure_date_string,omitempty"`
-	TotalAmount           float64                   `protobuf:"fixed64,13,opt,name=total_amount,json=totalAmount,proto3" json:"total_amount,omitempty"`
+	TotalAmount           int64                     `protobuf:"varint,13,opt,name=total_amount,json=totalAmount,proto3" json:"total_amount,omitempty"` // centavos
 	Currency              string                    `protobuf:"bytes,14,opt,name=currency,proto3" json:"currency,omitempty"`
 	Status                string                    `protobuf:"bytes,15,opt,name=status,proto3" json:"status,omitempty"`
 	ReferenceNumber       *string                   `protobuf:"bytes,16,opt,name=reference_number,json=referenceNumber,proto3,oneof" json:"reference_number,omitempty"`
@@ -48,7 +48,7 @@ type Expenditure struct {
 	Location              *location.Location        `protobuf:"bytes,19,opt,name=location,proto3,oneof" json:"location,omitempty"`
 	LocationId            string                    `protobuf:"bytes,20,opt,name=location_id,json=locationId,proto3" json:"location_id,omitempty"`                        // FK to location
 	PaymentTerms          *string                   `protobuf:"bytes,21,opt,name=payment_terms,json=paymentTerms,proto3,oneof" json:"payment_terms,omitempty"`            // "cash", "net_30", "net_60"
-	DueDate               *int64                    `protobuf:"varint,22,opt,name=due_date,json=dueDate,proto3,oneof" json:"due_date,omitempty"`                          // for AP tracking
+	DueDate               *string                   `protobuf:"bytes,22,opt,name=due_date,json=dueDate,proto3,oneof" json:"due_date,omitempty"`                           // ISO 8601 date (YYYY-MM-DD) — for AP tracking
 	ApprovedBy            *string                   `protobuf:"bytes,23,opt,name=approved_by,json=approvedBy,proto3,oneof" json:"approved_by,omitempty"`                  // who authorized
 	PurchaseOrderId       *string                   `protobuf:"bytes,24,opt,name=purchase_order_id,json=purchaseOrderId,proto3,oneof" json:"purchase_order_id,omitempty"` // FK to PurchaseOrder for 3-way match
 	SupplierId            *string                   `protobuf:"bytes,25,opt,name=supplier_id,json=supplierId,proto3,oneof" json:"supplier_id,omitempty"`                  // FK to supplier (new — migrate from vendor_id over time)
@@ -172,7 +172,7 @@ func (x *Expenditure) GetExpenditureDateString() string {
 	return ""
 }
 
-func (x *Expenditure) GetTotalAmount() float64 {
+func (x *Expenditure) GetTotalAmount() int64 {
 	if x != nil {
 		return x.TotalAmount
 	}
@@ -235,11 +235,11 @@ func (x *Expenditure) GetPaymentTerms() string {
 	return ""
 }
 
-func (x *Expenditure) GetDueDate() int64 {
+func (x *Expenditure) GetDueDate() string {
 	if x != nil && x.DueDate != nil {
 		return *x.DueDate
 	}
-	return 0
+	return ""
 }
 
 func (x *Expenditure) GetApprovedBy() string {
@@ -1080,7 +1080,7 @@ const file_domain_expenditure_expenditure_expenditure_proto_rawDesc = "" +
 	" \x01(\tR\bvendorId\x12.\n" +
 	"\x10expenditure_date\x18\v \x01(\x03H\x05R\x0fexpenditureDate\x88\x01\x01\x12;\n" +
 	"\x17expenditure_date_string\x18\f \x01(\tH\x06R\x15expenditureDateString\x88\x01\x01\x12!\n" +
-	"\ftotal_amount\x18\r \x01(\x01R\vtotalAmount\x12\x1a\n" +
+	"\ftotal_amount\x18\r \x01(\x03R\vtotalAmount\x12\x1a\n" +
 	"\bcurrency\x18\x0e \x01(\tR\bcurrency\x12\x16\n" +
 	"\x06status\x18\x0f \x01(\tR\x06status\x12.\n" +
 	"\x10reference_number\x18\x10 \x01(\tH\aR\x0freferenceNumber\x88\x01\x01\x12\x19\n" +
@@ -1091,7 +1091,7 @@ const file_domain_expenditure_expenditure_expenditure_proto_rawDesc = "" +
 	"\vlocation_id\x18\x14 \x01(\tR\n" +
 	"locationId\x12(\n" +
 	"\rpayment_terms\x18\x15 \x01(\tH\vR\fpaymentTerms\x88\x01\x01\x12\x1e\n" +
-	"\bdue_date\x18\x16 \x01(\x03H\fR\adueDate\x88\x01\x01\x12$\n" +
+	"\bdue_date\x18\x16 \x01(\tH\fR\adueDate\x88\x01\x01\x12$\n" +
 	"\vapproved_by\x18\x17 \x01(\tH\rR\n" +
 	"approvedBy\x88\x01\x01\x12/\n" +
 	"\x11purchase_order_id\x18\x18 \x01(\tH\x0eR\x0fpurchaseOrderId\x88\x01\x01\x12$\n" +

@@ -83,26 +83,26 @@ message Asset {
   // Acquisition
   optional string purchase_order_number = 17;
   optional string invoice_number = 18;
-  optional int64 acquisition_date = 19;
-  optional string acquisition_date_string = 20;
+  optional string acquisition_date = 19; // ISO 8601 date (YYYY-MM-DD)
+  reserved 20; // was acquisition_date_string
   optional int64 date_placed_in_service = 21;
   optional string date_placed_in_service_string = 22;
 
   // Cost and value
-  double acquisition_cost = 23;
+  int64 acquisition_cost = 23; // centavos
   string currency = 24;
-  double salvage_value = 25;
-  double book_value = 26;
-  optional double fair_value = 27;
+  int64 salvage_value = 25; // centavos
+  int64 book_value = 26; // centavos
+  optional int64 fair_value = 27; // centavos
 
   // Depreciation configuration
   int32 useful_life_months = 28;
   optional int64 useful_life_units = 29;
   DepreciationMethod depreciation_method = 30;
   optional double depreciation_rate = 31;
-  optional int64 depreciation_start_date = 32;
-  optional string depreciation_start_date_string = 33;
-  double accumulated_depreciation = 34;
+  optional string depreciation_start_date = 32; // ISO 8601 date (YYYY-MM-DD)
+  reserved 33; // was depreciation_start_date_string
+  int64 accumulated_depreciation = 34; // centavos
 
   // Measurement model
   MeasurementModel measurement_model = 35;
@@ -238,7 +238,7 @@ message AcquireAssetResponse {
 message DisposeAssetRequest {
   Asset data = 1;
   optional string disposal_type = 2;
-  optional double proceeds = 3;
+  optional int64 proceeds = 3; // centavos
   optional string reason = 4;
 }
 
@@ -268,8 +268,8 @@ message RunDepreciationRequest {
   optional string asset_category_id = 2;   // Run for a category
   int32 fiscal_year = 3;
   int32 fiscal_period = 4;
-  int64 period_start_date = 5;
-  int64 period_end_date = 6;
+  string period_start_date = 5; // ISO 8601 date (YYYY-MM-DD)
+  string period_end_date = 6; // ISO 8601 date (YYYY-MM-DD)
 }
 
 message RunDepreciationResponse {
@@ -292,7 +292,7 @@ message GetDepreciationScheduleResponse {
 // Revaluation: Revalue an asset to fair value (IAS 16.31-42)
 message RevalueAssetRequest {
   Asset data = 1;
-  double new_fair_value = 2;
+  int64 new_fair_value = 2; // centavos
   optional string appraiser_name = 3;
   optional string valuation_method = 4;
   optional string notes = 5;

@@ -59,8 +59,8 @@ message CheckoutSession {
   // Provider type
   PaymentProviderType provider_type = 4;
 
-  // Payment amount in base currency units (e.g., dollars, not cents)
-  double amount = 5;
+  // Payment amount in centavos (smallest currency unit)
+  int64 amount = 5; // centavos
 
   // Currency code (ISO 4217: USD, PHP, HKD)
   string currency = 6;

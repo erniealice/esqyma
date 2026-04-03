@@ -41,7 +41,7 @@ message JobSettlement {
   optional JobActivity job_activity = 3;
   SettlementTargetType target_type = 4;
   string target_id = 5;
-  double allocated_amount = 6;
+  int64 allocated_amount = 6; // centavos
   optional double allocation_pct = 7;
   optional int64 settlement_date = 8;
   optional string settlement_date_string = 9;
@@ -181,13 +181,13 @@ message GetSettlementSummaryRequest {
 
 message SettlementByTargetType {
   SettlementTargetType target_type = 1;
-  double total_amount = 2;
+  int64 total_amount = 2; // centavos
   int32 count = 3;
 }
 
 message GetSettlementSummaryResponse {
   repeated SettlementByTargetType summary = 1;
-  double grand_total = 2;
+  int64 grand_total = 2; // centavos
   bool success = 3;
   optional domain.common.v1.Error error = 4;
 }

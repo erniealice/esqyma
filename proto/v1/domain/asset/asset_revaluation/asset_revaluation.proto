@@ -16,15 +16,15 @@ message AssetRevaluation {
   option (options.v1.table).table = true;
   string id = 1;
   string asset_id = 2 [(options.v1.db).references = "asset", (options.v1.db).index = true];
-  int64 revaluation_date = 3;
-  string revaluation_date_string = 4;
-  double previous_carrying_amount = 5;
-  double new_fair_value = 6;
-  double revaluation_amount = 7;
+  string revaluation_date = 3; // ISO 8601 date (YYYY-MM-DD)
+  reserved 4; // was revaluation_date_string
+  int64 previous_carrying_amount = 5; // centavos
+  int64 new_fair_value = 6; // centavos
+  int64 revaluation_amount = 7; // centavos
   bool is_increase = 8;
-  double recognized_in_pnl = 9;
-  double recognized_in_oci = 10;
-  double revaluation_surplus_balance = 11;
+  int64 recognized_in_pnl = 9; // centavos
+  int64 recognized_in_oci = 10; // centavos
+  int64 revaluation_surplus_balance = 11; // centavos
   optional string appraiser_name = 12;
   optional string valuation_method = 13;  // Market comparison, income approach, replacement cost
   optional string journal_entry_id = 14;  // FK to ledger.Journal (future)

@@ -89,14 +89,13 @@ type AssetDisposal struct {
 	state                             protoimpl.MessageState `protogen:"open.v1"`
 	Id                                string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
 	AssetId                           string                 `protobuf:"bytes,2,opt,name=asset_id,json=assetId,proto3" json:"asset_id,omitempty"`
-	DisposalDate                      int64                  `protobuf:"varint,3,opt,name=disposal_date,json=disposalDate,proto3" json:"disposal_date,omitempty"`
-	DisposalDateString                string                 `protobuf:"bytes,4,opt,name=disposal_date_string,json=disposalDateString,proto3" json:"disposal_date_string,omitempty"`
+	DisposalDate                      string                 `protobuf:"bytes,3,opt,name=disposal_date,json=disposalDate,proto3" json:"disposal_date,omitempty"` // ISO 8601 date (YYYY-MM-DD)
 	DisposalType                      DisposalType           `protobuf:"varint,5,opt,name=disposal_type,json=disposalType,proto3,enum=domain.asset.v1.DisposalType" json:"disposal_type,omitempty"`
-	Proceeds                          float64                `protobuf:"fixed64,6,opt,name=proceeds,proto3" json:"proceeds,omitempty"`
-	CostAtDisposal                    float64                `protobuf:"fixed64,7,opt,name=cost_at_disposal,json=costAtDisposal,proto3" json:"cost_at_disposal,omitempty"`
-	AccumulatedDepreciationAtDisposal float64                `protobuf:"fixed64,8,opt,name=accumulated_depreciation_at_disposal,json=accumulatedDepreciationAtDisposal,proto3" json:"accumulated_depreciation_at_disposal,omitempty"`
-	BookValueAtDisposal               float64                `protobuf:"fixed64,9,opt,name=book_value_at_disposal,json=bookValueAtDisposal,proto3" json:"book_value_at_disposal,omitempty"`
-	GainOrLoss                        float64                `protobuf:"fixed64,10,opt,name=gain_or_loss,json=gainOrLoss,proto3" json:"gain_or_loss,omitempty"`
+	Proceeds                          int64                  `protobuf:"varint,6,opt,name=proceeds,proto3" json:"proceeds,omitempty"`                                                                                                // centavos
+	CostAtDisposal                    int64                  `protobuf:"varint,7,opt,name=cost_at_disposal,json=costAtDisposal,proto3" json:"cost_at_disposal,omitempty"`                                                            // centavos
+	AccumulatedDepreciationAtDisposal int64                  `protobuf:"varint,8,opt,name=accumulated_depreciation_at_disposal,json=accumulatedDepreciationAtDisposal,proto3" json:"accumulated_depreciation_at_disposal,omitempty"` // centavos
+	BookValueAtDisposal               int64                  `protobuf:"varint,9,opt,name=book_value_at_disposal,json=bookValueAtDisposal,proto3" json:"book_value_at_disposal,omitempty"`                                           // centavos
+	GainOrLoss                        int64                  `protobuf:"varint,10,opt,name=gain_or_loss,json=gainOrLoss,proto3" json:"gain_or_loss,omitempty"`                                                                       // centavos
 	BuyerName                         *string                `protobuf:"bytes,11,opt,name=buyer_name,json=buyerName,proto3,oneof" json:"buyer_name,omitempty"`
 	Reason                            *string                `protobuf:"bytes,12,opt,name=reason,proto3,oneof" json:"reason,omitempty"`
 	ApprovalStatus                    *string                `protobuf:"bytes,13,opt,name=approval_status,json=approvalStatus,proto3,oneof" json:"approval_status,omitempty"`   // PENDING, APPROVED, REJECTED
@@ -156,16 +155,9 @@ func (x *AssetDisposal) GetAssetId() string {
 	return ""
 }
 
-func (x *AssetDisposal) GetDisposalDate() int64 {
+func (x *AssetDisposal) GetDisposalDate() string {
 	if x != nil {
 		return x.DisposalDate
-	}
-	return 0
-}
-
-func (x *AssetDisposal) GetDisposalDateString() string {
-	if x != nil {
-		return x.DisposalDateString
 	}
 	return ""
 }
@@ -177,35 +169,35 @@ func (x *AssetDisposal) GetDisposalType() DisposalType {
 	return DisposalType_DISPOSAL_TYPE_UNSPECIFIED
 }
 
-func (x *AssetDisposal) GetProceeds() float64 {
+func (x *AssetDisposal) GetProceeds() int64 {
 	if x != nil {
 		return x.Proceeds
 	}
 	return 0
 }
 
-func (x *AssetDisposal) GetCostAtDisposal() float64 {
+func (x *AssetDisposal) GetCostAtDisposal() int64 {
 	if x != nil {
 		return x.CostAtDisposal
 	}
 	return 0
 }
 
-func (x *AssetDisposal) GetAccumulatedDepreciationAtDisposal() float64 {
+func (x *AssetDisposal) GetAccumulatedDepreciationAtDisposal() int64 {
 	if x != nil {
 		return x.AccumulatedDepreciationAtDisposal
 	}
 	return 0
 }
 
-func (x *AssetDisposal) GetBookValueAtDisposal() float64 {
+func (x *AssetDisposal) GetBookValueAtDisposal() int64 {
 	if x != nil {
 		return x.BookValueAtDisposal
 	}
 	return 0
 }
 
-func (x *AssetDisposal) GetGainOrLoss() float64 {
+func (x *AssetDisposal) GetGainOrLoss() int64 {
 	if x != nil {
 		return x.GainOrLoss
 	}
@@ -1078,20 +1070,19 @@ var File_domain_asset_asset_disposal_asset_disposal_proto protoreflect.FileDescr
 
 const file_domain_asset_asset_disposal_asset_disposal_proto_rawDesc = "" +
 	"\n" +
-	"0domain/asset/asset_disposal/asset_disposal.proto\x12\x0fdomain.asset.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1adomain/common/search.proto\x1a\x10options/db.proto\"\xa7\b\n" +
+	"0domain/asset/asset_disposal/asset_disposal.proto\x12\x0fdomain.asset.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1adomain/common/search.proto\x1a\x10options/db.proto\"\xfb\a\n" +
 	"\rAssetDisposal\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12(\n" +
 	"\basset_id\x18\x02 \x01(\tB\r\x82\xb5\x18\t\n" +
 	"\x05asset\x18\x01R\aassetId\x12#\n" +
-	"\rdisposal_date\x18\x03 \x01(\x03R\fdisposalDate\x120\n" +
-	"\x14disposal_date_string\x18\x04 \x01(\tR\x12disposalDateString\x12B\n" +
+	"\rdisposal_date\x18\x03 \x01(\tR\fdisposalDate\x12B\n" +
 	"\rdisposal_type\x18\x05 \x01(\x0e2\x1d.domain.asset.v1.DisposalTypeR\fdisposalType\x12\x1a\n" +
-	"\bproceeds\x18\x06 \x01(\x01R\bproceeds\x12(\n" +
-	"\x10cost_at_disposal\x18\a \x01(\x01R\x0ecostAtDisposal\x12O\n" +
-	"$accumulated_depreciation_at_disposal\x18\b \x01(\x01R!accumulatedDepreciationAtDisposal\x123\n" +
-	"\x16book_value_at_disposal\x18\t \x01(\x01R\x13bookValueAtDisposal\x12 \n" +
+	"\bproceeds\x18\x06 \x01(\x03R\bproceeds\x12(\n" +
+	"\x10cost_at_disposal\x18\a \x01(\x03R\x0ecostAtDisposal\x12O\n" +
+	"$accumulated_depreciation_at_disposal\x18\b \x01(\x03R!accumulatedDepreciationAtDisposal\x123\n" +
+	"\x16book_value_at_disposal\x18\t \x01(\x03R\x13bookValueAtDisposal\x12 \n" +
 	"\fgain_or_loss\x18\n" +
-	" \x01(\x01R\n" +
+	" \x01(\x03R\n" +
 	"gainOrLoss\x12\"\n" +
 	"\n" +
 	"buyer_name\x18\v \x01(\tH\x00R\tbuyerName\x88\x01\x01\x12\x1b\n" +
@@ -1114,7 +1105,7 @@ const file_domain_asset_asset_disposal_asset_disposal_proto_rawDesc = "" +
 	"\r_date_createdB\x16\n" +
 	"\x14_date_created_stringB\x10\n" +
 	"\x0e_date_modifiedB\x17\n" +
-	"\x15_date_modified_string\"P\n" +
+	"\x15_date_modified_stringJ\x04\b\x04\x10\x05\"P\n" +
 	"\x1aCreateAssetDisposalRequest\x122\n" +
 	"\x04data\x18\x01 \x01(\v2\x1e.domain.asset.v1.AssetDisposalR\x04data\"\xa9\x01\n" +
 	"\x1bCreateAssetDisposalResponse\x122\n" +

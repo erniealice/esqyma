@@ -31,8 +31,8 @@ type PettyCashFund struct {
 	Id    string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
 	Name  string                 `protobuf:"bytes,2,opt,name=name,proto3" json:"name,omitempty"` // e.g. "Front Desk Petty Cash"
 	// Fund limits
-	AuthorizedAmount float64 `protobuf:"fixed64,3,opt,name=authorized_amount,json=authorizedAmount,proto3" json:"authorized_amount,omitempty"` // Maximum float
-	CurrentBalance   float64 `protobuf:"fixed64,4,opt,name=current_balance,json=currentBalance,proto3" json:"current_balance,omitempty"`       // Running balance
+	AuthorizedAmount int64 `protobuf:"varint,3,opt,name=authorized_amount,json=authorizedAmount,proto3" json:"authorized_amount,omitempty"` // centavos                     // Maximum float
+	CurrentBalance   int64 `protobuf:"varint,4,opt,name=current_balance,json=currentBalance,proto3" json:"current_balance,omitempty"`       // centavos  // Running balance
 	// Custodian and location
 	CustodianId *string `protobuf:"bytes,5,opt,name=custodian_id,json=custodianId,proto3,oneof" json:"custodian_id,omitempty"` // FK to entity.User
 	LocationId  *string `protobuf:"bytes,6,opt,name=location_id,json=locationId,proto3,oneof" json:"location_id,omitempty"`
@@ -90,14 +90,14 @@ func (x *PettyCashFund) GetName() string {
 	return ""
 }
 
-func (x *PettyCashFund) GetAuthorizedAmount() float64 {
+func (x *PettyCashFund) GetAuthorizedAmount() int64 {
 	if x != nil {
 		return x.AuthorizedAmount
 	}
 	return 0
 }
 
-func (x *PettyCashFund) GetCurrentBalance() float64 {
+func (x *PettyCashFund) GetCurrentBalance() int64 {
 	if x != nil {
 		return x.CurrentBalance
 	}
@@ -945,8 +945,8 @@ const file_domain_treasury_petty_cash_fund_petty_cash_fund_proto_rawDesc = "" +
 	"\rPettyCashFund\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12\x12\n" +
 	"\x04name\x18\x02 \x01(\tR\x04name\x12+\n" +
-	"\x11authorized_amount\x18\x03 \x01(\x01R\x10authorizedAmount\x120\n" +
-	"\x0fcurrent_balance\x18\x04 \x01(\x01B\a\x82\xb5\x18\x03\"\x010R\x0ecurrentBalance\x12.\n" +
+	"\x11authorized_amount\x18\x03 \x01(\x03R\x10authorizedAmount\x120\n" +
+	"\x0fcurrent_balance\x18\x04 \x01(\x03B\a\x82\xb5\x18\x03\"\x010R\x0ecurrentBalance\x12.\n" +
 	"\fcustodian_id\x18\x05 \x01(\tB\x06\x82\xb5\x18\x02\x18\x01H\x00R\vcustodianId\x88\x01\x01\x126\n" +
 	"\vlocation_id\x18\x06 \x01(\tB\x10\x82\xb5\x18\f\n" +
 	"\blocation\x18\x01H\x01R\n" +

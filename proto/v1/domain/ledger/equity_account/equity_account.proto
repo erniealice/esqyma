@@ -36,7 +36,7 @@ message EquityAccount {
   string account_id = 5 [(options.v1.db).references = "account", (options.v1.db).index = true];
 
   // Running balance (updated on each equity transaction)
-  double balance = 6 [(options.v1.db).default = "0"];
+  int64 balance = 6 [(options.v1.db).default = "0"]; // centavos
 
   // Audit fields
   bool active = 7 [(options.v1.db).default = "true"];

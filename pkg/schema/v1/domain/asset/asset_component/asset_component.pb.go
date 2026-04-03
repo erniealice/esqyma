@@ -34,12 +34,12 @@ type AssetComponent struct {
 	Asset                   *asset.Asset             `protobuf:"bytes,3,opt,name=asset,proto3,oneof" json:"asset,omitempty"`
 	Name                    string                   `protobuf:"bytes,4,opt,name=name,proto3" json:"name,omitempty"`
 	Description             *string                  `protobuf:"bytes,5,opt,name=description,proto3,oneof" json:"description,omitempty"`
-	Cost                    float64                  `protobuf:"fixed64,6,opt,name=cost,proto3" json:"cost,omitempty"`
-	SalvageValue            float64                  `protobuf:"fixed64,7,opt,name=salvage_value,json=salvageValue,proto3" json:"salvage_value,omitempty"`
+	Cost                    int64                    `protobuf:"varint,6,opt,name=cost,proto3" json:"cost,omitempty"`                                     // centavos
+	SalvageValue            int64                    `protobuf:"varint,7,opt,name=salvage_value,json=salvageValue,proto3" json:"salvage_value,omitempty"` // centavos
 	UsefulLifeMonths        int32                    `protobuf:"varint,8,opt,name=useful_life_months,json=usefulLifeMonths,proto3" json:"useful_life_months,omitempty"`
 	DepreciationMethod      asset.DepreciationMethod `protobuf:"varint,9,opt,name=depreciation_method,json=depreciationMethod,proto3,enum=domain.asset.v1.DepreciationMethod" json:"depreciation_method,omitempty"`
-	AccumulatedDepreciation float64                  `protobuf:"fixed64,10,opt,name=accumulated_depreciation,json=accumulatedDepreciation,proto3" json:"accumulated_depreciation,omitempty"`
-	BookValue               float64                  `protobuf:"fixed64,11,opt,name=book_value,json=bookValue,proto3" json:"book_value,omitempty"`
+	AccumulatedDepreciation int64                    `protobuf:"varint,10,opt,name=accumulated_depreciation,json=accumulatedDepreciation,proto3" json:"accumulated_depreciation,omitempty"` // centavos
+	BookValue               int64                    `protobuf:"varint,11,opt,name=book_value,json=bookValue,proto3" json:"book_value,omitempty"`                                           // centavos
 	// Audit fields
 	DateCreated        *int64  `protobuf:"varint,12,opt,name=date_created,json=dateCreated,proto3,oneof" json:"date_created,omitempty"`
 	DateCreatedString  *string `protobuf:"bytes,13,opt,name=date_created_string,json=dateCreatedString,proto3,oneof" json:"date_created_string,omitempty"`
@@ -115,14 +115,14 @@ func (x *AssetComponent) GetDescription() string {
 	return ""
 }
 
-func (x *AssetComponent) GetCost() float64 {
+func (x *AssetComponent) GetCost() int64 {
 	if x != nil {
 		return x.Cost
 	}
 	return 0
 }
 
-func (x *AssetComponent) GetSalvageValue() float64 {
+func (x *AssetComponent) GetSalvageValue() int64 {
 	if x != nil {
 		return x.SalvageValue
 	}
@@ -143,14 +143,14 @@ func (x *AssetComponent) GetDepreciationMethod() asset.DepreciationMethod {
 	return asset.DepreciationMethod(0)
 }
 
-func (x *AssetComponent) GetAccumulatedDepreciation() float64 {
+func (x *AssetComponent) GetAccumulatedDepreciation() int64 {
 	if x != nil {
 		return x.AccumulatedDepreciation
 	}
 	return 0
 }
 
-func (x *AssetComponent) GetBookValue() float64 {
+func (x *AssetComponent) GetBookValue() int64 {
 	if x != nil {
 		return x.BookValue
 	}
@@ -996,14 +996,14 @@ const file_domain_asset_asset_component_asset_component_proto_rawDesc = "" +
 	"\x05asset\x18\x03 \x01(\v2\x16.domain.asset.v1.AssetH\x00R\x05asset\x88\x01\x01\x12\x12\n" +
 	"\x04name\x18\x04 \x01(\tR\x04name\x12%\n" +
 	"\vdescription\x18\x05 \x01(\tH\x01R\vdescription\x88\x01\x01\x12\x12\n" +
-	"\x04cost\x18\x06 \x01(\x01R\x04cost\x12#\n" +
-	"\rsalvage_value\x18\a \x01(\x01R\fsalvageValue\x12,\n" +
+	"\x04cost\x18\x06 \x01(\x03R\x04cost\x12#\n" +
+	"\rsalvage_value\x18\a \x01(\x03R\fsalvageValue\x12,\n" +
 	"\x12useful_life_months\x18\b \x01(\x05R\x10usefulLifeMonths\x12T\n" +
 	"\x13depreciation_method\x18\t \x01(\x0e2#.domain.asset.v1.DepreciationMethodR\x12depreciationMethod\x129\n" +
 	"\x18accumulated_depreciation\x18\n" +
-	" \x01(\x01R\x17accumulatedDepreciation\x12\x1d\n" +
+	" \x01(\x03R\x17accumulatedDepreciation\x12\x1d\n" +
 	"\n" +
-	"book_value\x18\v \x01(\x01R\tbookValue\x12&\n" +
+	"book_value\x18\v \x01(\x03R\tbookValue\x12&\n" +
 	"\fdate_created\x18\f \x01(\x03H\x02R\vdateCreated\x88\x01\x01\x123\n" +
 	"\x13date_created_string\x18\r \x01(\tH\x03R\x11dateCreatedString\x88\x01\x01\x12(\n" +
 	"\rdate_modified\x18\x0e \x01(\x03H\x04R\fdateModified\x88\x01\x01\x125\n" +

@@ -113,9 +113,9 @@ enum MoneyOperator {
 
 // Money filter for monetary amounts
 message MoneyFilter {
-  double amount = 1;
+  int64 amount = 1; // centavos
   MoneyOperator operator = 2;
-  double amount_to = 3; // used when operator = MONEY_BETWEEN
+  int64 amount_to = 3; // centavos // used when operator = MONEY_BETWEEN
 }
 
 // Status filter — IN check against selected values

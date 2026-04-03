@@ -23,7 +23,7 @@ message Collection {
   string name = 7;
   optional domain.subscription.v1.Subscription subscription = 8;
   string subscription_id = 9;
-  double amount = 10;
+  int64 amount = 10; // centavos
   string status = 11;
 
   // Revenue association (sales payments)
@@ -38,7 +38,7 @@ message Collection {
   string reference_number = 24;            // Payment reference (e.g., OR number, transaction ID)
 
   // Payment timing
-  int64 payment_date = 25;                 // Unix timestamp of payment date
+  string payment_date = 25;                 // ISO 8601 date (YYYY-MM-DD)
 
   // Audit fields
   string received_by = 26;                  // User ID of person who received payment
@@ -47,8 +47,7 @@ message Collection {
   // Collection categorization
   string collection_type = 28;              // e.g., "subscription", "sale", "refund"
 
-  // Date display companion
-  optional string payment_date_string = 29; // Display string for payment_date
+  reserved 29; // was payment_date_string
 
   // GL traceability
   optional string journal_entry_id = 30;    // FK to journal_entry — set when collection is posted to ledger

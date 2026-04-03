@@ -214,8 +214,8 @@ type JournalEntry struct {
 	// Fiscal period association
 	FiscalPeriodId *string `protobuf:"bytes,9,opt,name=fiscal_period_id,json=fiscalPeriodId,proto3,oneof" json:"fiscal_period_id,omitempty"`
 	// Totals — must balance (total_debit == total_credit)
-	TotalDebit  float64 `protobuf:"fixed64,10,opt,name=total_debit,json=totalDebit,proto3" json:"total_debit,omitempty"`
-	TotalCredit float64 `protobuf:"fixed64,11,opt,name=total_credit,json=totalCredit,proto3" json:"total_credit,omitempty"`
+	TotalDebit  int64 `protobuf:"varint,10,opt,name=total_debit,json=totalDebit,proto3" json:"total_debit,omitempty"`    // centavos
+	TotalCredit int64 `protobuf:"varint,11,opt,name=total_credit,json=totalCredit,proto3" json:"total_credit,omitempty"` // centavos
 	// Posting audit
 	PostedBy       *string `protobuf:"bytes,12,opt,name=posted_by,json=postedBy,proto3,oneof" json:"posted_by,omitempty"` // FK to entity.User
 	PostedAt       *int64  `protobuf:"varint,13,opt,name=posted_at,json=postedAt,proto3,oneof" json:"posted_at,omitempty"`
@@ -329,14 +329,14 @@ func (x *JournalEntry) GetFiscalPeriodId() string {
 	return ""
 }
 
-func (x *JournalEntry) GetTotalDebit() float64 {
+func (x *JournalEntry) GetTotalDebit() int64 {
 	if x != nil {
 		return x.TotalDebit
 	}
 	return 0
 }
 
-func (x *JournalEntry) GetTotalCredit() float64 {
+func (x *JournalEntry) GetTotalCredit() int64 {
 	if x != nil {
 		return x.TotalCredit
 	}
@@ -1480,9 +1480,9 @@ const file_domain_ledger_journal_entry_journal_entry_proto_rawDesc = "" +
 	"\x10fiscal_period_id\x18\t \x01(\tB\x15\x82\xb5\x18\x11\n" +
 	"\rfiscal_period\x18\x01H\x02R\x0efiscalPeriodId\x88\x01\x01\x12\x1f\n" +
 	"\vtotal_debit\x18\n" +
-	" \x01(\x01R\n" +
+	" \x01(\x03R\n" +
 	"totalDebit\x12!\n" +
-	"\ftotal_credit\x18\v \x01(\x01R\vtotalCredit\x12 \n" +
+	"\ftotal_credit\x18\v \x01(\x03R\vtotalCredit\x12 \n" +
 	"\tposted_by\x18\f \x01(\tH\x03R\bpostedBy\x88\x01\x01\x12 \n" +
 	"\tposted_at\x18\r \x01(\x03H\x04R\bpostedAt\x88\x01\x01\x12-\n" +
 	"\x10posted_at_string\x18\x0e \x01(\tH\x05R\x0epostedAtString\x88\x01\x01\x12$\n" +

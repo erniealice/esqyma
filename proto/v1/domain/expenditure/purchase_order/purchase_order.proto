@@ -38,9 +38,9 @@ message PurchaseOrder {
 
   // Amounts
   string currency = 13;
-  double subtotal = 14;
-  double tax_amount = 15;
-  double total_amount = 16;
+  int64 subtotal = 14; // centavos
+  int64 tax_amount = 15; // centavos
+  int64 total_amount = 16; // centavos
 
   // Terms
   optional string payment_terms = 17;
@@ -53,10 +53,10 @@ message PurchaseOrder {
 
   // Blanket order fields
   optional string parent_po_id = 22 [(options.v1.db).references = "purchase_order"];
-  optional int64 blanket_start_date = 23;
-  optional string blanket_start_date_string = 24;
-  optional int64 blanket_end_date = 25;
-  optional string blanket_end_date_string = 26;
+  optional string blanket_start_date = 23; // ISO 8601 date (YYYY-MM-DD)
+  reserved 24; // was blanket_start_date_string
+  optional string blanket_end_date = 25; // ISO 8601 date (YYYY-MM-DD)
+  reserved 26; // was blanket_end_date_string
   double blanket_total_quantity = 27;
   double blanket_released_quantity = 28;
 

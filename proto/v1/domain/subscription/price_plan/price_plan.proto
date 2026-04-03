@@ -25,7 +25,7 @@ message PricePlan {
   optional int64 date_modified = 8;
   optional string date_modified_string = 9;
   bool active = 10 [(options.v1.db).default = "true"];
-  double amount = 11;
+  int64 amount = 11; // centavos
   string currency = 12;
   int32 duration_value = 13;
   string duration_unit = 14;

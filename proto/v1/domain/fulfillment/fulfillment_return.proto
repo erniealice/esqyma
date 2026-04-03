@@ -14,7 +14,7 @@ message FulfillmentReturn {
   string fulfillment_id = 2 [(options.v1.db).references = "fulfillment", (options.v1.db).index = true];
   string reason = 3;
   string status = 4; // PENDING, APPROVED, REJECTED, COMPLETED
-  optional double refund_amount = 5;
+  optional int64 refund_amount = 5; // centavos
   string currency = 6;
   optional string processed_by_id = 7;
   string notes = 8;

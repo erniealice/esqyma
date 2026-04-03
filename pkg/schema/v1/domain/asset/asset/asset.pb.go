@@ -291,24 +291,22 @@ type Asset struct {
 	// Acquisition
 	PurchaseOrderNumber       *string `protobuf:"bytes,17,opt,name=purchase_order_number,json=purchaseOrderNumber,proto3,oneof" json:"purchase_order_number,omitempty"`
 	InvoiceNumber             *string `protobuf:"bytes,18,opt,name=invoice_number,json=invoiceNumber,proto3,oneof" json:"invoice_number,omitempty"`
-	AcquisitionDate           *int64  `protobuf:"varint,19,opt,name=acquisition_date,json=acquisitionDate,proto3,oneof" json:"acquisition_date,omitempty"`
-	AcquisitionDateString     *string `protobuf:"bytes,20,opt,name=acquisition_date_string,json=acquisitionDateString,proto3,oneof" json:"acquisition_date_string,omitempty"`
+	AcquisitionDate           *string `protobuf:"bytes,19,opt,name=acquisition_date,json=acquisitionDate,proto3,oneof" json:"acquisition_date,omitempty"` // ISO 8601 date (YYYY-MM-DD)
 	DatePlacedInService       *int64  `protobuf:"varint,21,opt,name=date_placed_in_service,json=datePlacedInService,proto3,oneof" json:"date_placed_in_service,omitempty"`
 	DatePlacedInServiceString *string `protobuf:"bytes,22,opt,name=date_placed_in_service_string,json=datePlacedInServiceString,proto3,oneof" json:"date_placed_in_service_string,omitempty"`
 	// Cost and value
-	AcquisitionCost float64  `protobuf:"fixed64,23,opt,name=acquisition_cost,json=acquisitionCost,proto3" json:"acquisition_cost,omitempty"`
-	Currency        string   `protobuf:"bytes,24,opt,name=currency,proto3" json:"currency,omitempty"`
-	SalvageValue    float64  `protobuf:"fixed64,25,opt,name=salvage_value,json=salvageValue,proto3" json:"salvage_value,omitempty"`
-	BookValue       float64  `protobuf:"fixed64,26,opt,name=book_value,json=bookValue,proto3" json:"book_value,omitempty"`
-	FairValue       *float64 `protobuf:"fixed64,27,opt,name=fair_value,json=fairValue,proto3,oneof" json:"fair_value,omitempty"`
+	AcquisitionCost int64  `protobuf:"varint,23,opt,name=acquisition_cost,json=acquisitionCost,proto3" json:"acquisition_cost,omitempty"` // centavos
+	Currency        string `protobuf:"bytes,24,opt,name=currency,proto3" json:"currency,omitempty"`
+	SalvageValue    int64  `protobuf:"varint,25,opt,name=salvage_value,json=salvageValue,proto3" json:"salvage_value,omitempty"` // centavos
+	BookValue       int64  `protobuf:"varint,26,opt,name=book_value,json=bookValue,proto3" json:"book_value,omitempty"`          // centavos
+	FairValue       *int64 `protobuf:"varint,27,opt,name=fair_value,json=fairValue,proto3,oneof" json:"fair_value,omitempty"`    // centavos
 	// Depreciation configuration
-	UsefulLifeMonths            int32              `protobuf:"varint,28,opt,name=useful_life_months,json=usefulLifeMonths,proto3" json:"useful_life_months,omitempty"`
-	UsefulLifeUnits             *int64             `protobuf:"varint,29,opt,name=useful_life_units,json=usefulLifeUnits,proto3,oneof" json:"useful_life_units,omitempty"`
-	DepreciationMethod          DepreciationMethod `protobuf:"varint,30,opt,name=depreciation_method,json=depreciationMethod,proto3,enum=domain.asset.v1.DepreciationMethod" json:"depreciation_method,omitempty"`
-	DepreciationRate            *float64           `protobuf:"fixed64,31,opt,name=depreciation_rate,json=depreciationRate,proto3,oneof" json:"depreciation_rate,omitempty"`
-	DepreciationStartDate       *int64             `protobuf:"varint,32,opt,name=depreciation_start_date,json=depreciationStartDate,proto3,oneof" json:"depreciation_start_date,omitempty"`
-	DepreciationStartDateString *string            `protobuf:"bytes,33,opt,name=depreciation_start_date_string,json=depreciationStartDateString,proto3,oneof" json:"depreciation_start_date_string,omitempty"`
-	AccumulatedDepreciation     float64            `protobuf:"fixed64,34,opt,name=accumulated_depreciation,json=accumulatedDepreciation,proto3" json:"accumulated_depreciation,omitempty"`
+	UsefulLifeMonths        int32              `protobuf:"varint,28,opt,name=useful_life_months,json=usefulLifeMonths,proto3" json:"useful_life_months,omitempty"`
+	UsefulLifeUnits         *int64             `protobuf:"varint,29,opt,name=useful_life_units,json=usefulLifeUnits,proto3,oneof" json:"useful_life_units,omitempty"`
+	DepreciationMethod      DepreciationMethod `protobuf:"varint,30,opt,name=depreciation_method,json=depreciationMethod,proto3,enum=domain.asset.v1.DepreciationMethod" json:"depreciation_method,omitempty"`
+	DepreciationRate        *float64           `protobuf:"fixed64,31,opt,name=depreciation_rate,json=depreciationRate,proto3,oneof" json:"depreciation_rate,omitempty"`
+	DepreciationStartDate   *string            `protobuf:"bytes,32,opt,name=depreciation_start_date,json=depreciationStartDate,proto3,oneof" json:"depreciation_start_date,omitempty"` // ISO 8601 date (YYYY-MM-DD)
+	AccumulatedDepreciation int64              `protobuf:"varint,34,opt,name=accumulated_depreciation,json=accumulatedDepreciation,proto3" json:"accumulated_depreciation,omitempty"`  // centavos
 	// Measurement model
 	MeasurementModel MeasurementModel `protobuf:"varint,35,opt,name=measurement_model,json=measurementModel,proto3,enum=domain.asset.v1.MeasurementModel" json:"measurement_model,omitempty"`
 	// Status and lifecycle
@@ -482,16 +480,9 @@ func (x *Asset) GetInvoiceNumber() string {
 	return ""
 }
 
-func (x *Asset) GetAcquisitionDate() int64 {
+func (x *Asset) GetAcquisitionDate() string {
 	if x != nil && x.AcquisitionDate != nil {
 		return *x.AcquisitionDate
-	}
-	return 0
-}
-
-func (x *Asset) GetAcquisitionDateString() string {
-	if x != nil && x.AcquisitionDateString != nil {
-		return *x.AcquisitionDateString
 	}
 	return ""
 }
@@ -510,7 +501,7 @@ func (x *Asset) GetDatePlacedInServiceString() string {
 	return ""
 }
 
-func (x *Asset) GetAcquisitionCost() float64 {
+func (x *Asset) GetAcquisitionCost() int64 {
 	if x != nil {
 		return x.AcquisitionCost
 	}
@@ -524,21 +515,21 @@ func (x *Asset) GetCurrency() string {
 	return ""
 }
 
-func (x *Asset) GetSalvageValue() float64 {
+func (x *Asset) GetSalvageValue() int64 {
 	if x != nil {
 		return x.SalvageValue
 	}
 	return 0
 }
 
-func (x *Asset) GetBookValue() float64 {
+func (x *Asset) GetBookValue() int64 {
 	if x != nil {
 		return x.BookValue
 	}
 	return 0
 }
 
-func (x *Asset) GetFairValue() float64 {
+func (x *Asset) GetFairValue() int64 {
 	if x != nil && x.FairValue != nil {
 		return *x.FairValue
 	}
@@ -573,21 +564,14 @@ func (x *Asset) GetDepreciationRate() float64 {
 	return 0
 }
 
-func (x *Asset) GetDepreciationStartDate() int64 {
+func (x *Asset) GetDepreciationStartDate() string {
 	if x != nil && x.DepreciationStartDate != nil {
 		return *x.DepreciationStartDate
-	}
-	return 0
-}
-
-func (x *Asset) GetDepreciationStartDateString() string {
-	if x != nil && x.DepreciationStartDateString != nil {
-		return *x.DepreciationStartDateString
 	}
 	return ""
 }
 
-func (x *Asset) GetAccumulatedDepreciation() float64 {
+func (x *Asset) GetAccumulatedDepreciation() int64 {
 	if x != nil {
 		return x.AccumulatedDepreciation
 	}
@@ -1558,7 +1542,7 @@ type DisposeAssetRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Data          *Asset                 `protobuf:"bytes,1,opt,name=data,proto3" json:"data,omitempty"`
 	DisposalType  *string                `protobuf:"bytes,2,opt,name=disposal_type,json=disposalType,proto3,oneof" json:"disposal_type,omitempty"`
-	Proceeds      *float64               `protobuf:"fixed64,3,opt,name=proceeds,proto3,oneof" json:"proceeds,omitempty"`
+	Proceeds      *int64                 `protobuf:"varint,3,opt,name=proceeds,proto3,oneof" json:"proceeds,omitempty"` // centavos
 	Reason        *string                `protobuf:"bytes,4,opt,name=reason,proto3,oneof" json:"reason,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
@@ -1608,7 +1592,7 @@ func (x *DisposeAssetRequest) GetDisposalType() string {
 	return ""
 }
 
-func (x *DisposeAssetRequest) GetProceeds() float64 {
+func (x *DisposeAssetRequest) GetProceeds() int64 {
 	if x != nil && x.Proceeds != nil {
 		return *x.Proceeds
 	}
@@ -1818,8 +1802,8 @@ type RunDepreciationRequest struct {
 	AssetCategoryId *string                `protobuf:"bytes,2,opt,name=asset_category_id,json=assetCategoryId,proto3,oneof" json:"asset_category_id,omitempty"` // Run for a category
 	FiscalYear      int32                  `protobuf:"varint,3,opt,name=fiscal_year,json=fiscalYear,proto3" json:"fiscal_year,omitempty"`
 	FiscalPeriod    int32                  `protobuf:"varint,4,opt,name=fiscal_period,json=fiscalPeriod,proto3" json:"fiscal_period,omitempty"`
-	PeriodStartDate int64                  `protobuf:"varint,5,opt,name=period_start_date,json=periodStartDate,proto3" json:"period_start_date,omitempty"`
-	PeriodEndDate   int64                  `protobuf:"varint,6,opt,name=period_end_date,json=periodEndDate,proto3" json:"period_end_date,omitempty"`
+	PeriodStartDate string                 `protobuf:"bytes,5,opt,name=period_start_date,json=periodStartDate,proto3" json:"period_start_date,omitempty"` // ISO 8601 date (YYYY-MM-DD)
+	PeriodEndDate   string                 `protobuf:"bytes,6,opt,name=period_end_date,json=periodEndDate,proto3" json:"period_end_date,omitempty"`       // ISO 8601 date (YYYY-MM-DD)
 	unknownFields   protoimpl.UnknownFields
 	sizeCache       protoimpl.SizeCache
 }
@@ -1882,18 +1866,18 @@ func (x *RunDepreciationRequest) GetFiscalPeriod() int32 {
 	return 0
 }
 
-func (x *RunDepreciationRequest) GetPeriodStartDate() int64 {
+func (x *RunDepreciationRequest) GetPeriodStartDate() string {
 	if x != nil {
 		return x.PeriodStartDate
 	}
-	return 0
+	return ""
 }
 
-func (x *RunDepreciationRequest) GetPeriodEndDate() int64 {
+func (x *RunDepreciationRequest) GetPeriodEndDate() string {
 	if x != nil {
 		return x.PeriodEndDate
 	}
-	return 0
+	return ""
 }
 
 type RunDepreciationResponse struct {
@@ -2065,7 +2049,7 @@ func (x *GetDepreciationScheduleResponse) GetError() *common.Error {
 type RevalueAssetRequest struct {
 	state           protoimpl.MessageState `protogen:"open.v1"`
 	Data            *Asset                 `protobuf:"bytes,1,opt,name=data,proto3" json:"data,omitempty"`
-	NewFairValue    float64                `protobuf:"fixed64,2,opt,name=new_fair_value,json=newFairValue,proto3" json:"new_fair_value,omitempty"`
+	NewFairValue    int64                  `protobuf:"varint,2,opt,name=new_fair_value,json=newFairValue,proto3" json:"new_fair_value,omitempty"` // centavos
 	AppraiserName   *string                `protobuf:"bytes,3,opt,name=appraiser_name,json=appraiserName,proto3,oneof" json:"appraiser_name,omitempty"`
 	ValuationMethod *string                `protobuf:"bytes,4,opt,name=valuation_method,json=valuationMethod,proto3,oneof" json:"valuation_method,omitempty"`
 	Notes           *string                `protobuf:"bytes,5,opt,name=notes,proto3,oneof" json:"notes,omitempty"`
@@ -2110,7 +2094,7 @@ func (x *RevalueAssetRequest) GetData() *Asset {
 	return nil
 }
 
-func (x *RevalueAssetRequest) GetNewFairValue() float64 {
+func (x *RevalueAssetRequest) GetNewFairValue() int64 {
 	if x != nil {
 		return x.NewFairValue
 	}
@@ -2202,7 +2186,7 @@ var File_domain_asset_asset_asset_proto protoreflect.FileDescriptor
 
 const file_domain_asset_asset_asset_proto_rawDesc = "" +
 	"\n" +
-	"\x1edomain/asset/asset/asset.proto\x12\x0fdomain.asset.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1adomain/common/search.proto\x1a0domain/asset/asset_category/asset_category.proto\x1a%domain/entity/location/location.proto\x1a\x10options/db.proto\"\xc4\x15\n" +
+	"\x1edomain/asset/asset/asset.proto\x12\x0fdomain.asset.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1adomain/common/search.proto\x1a0domain/asset/asset_category/asset_category.proto\x1a%domain/entity/location/location.proto\x1a\x10options/db.proto\"\x8a\x14\n" +
 	"\x05Asset\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12)\n" +
 	"\fasset_number\x18\x02 \x01(\tB\x06\x82\xb5\x18\x02\x10\x01R\vassetNumber\x12\x12\n" +
@@ -2230,33 +2214,31 @@ const file_domain_asset_asset_asset_proto_rawDesc = "" +
 	"R\tproductId\x88\x01\x01\x127\n" +
 	"\x15purchase_order_number\x18\x11 \x01(\tH\vR\x13purchaseOrderNumber\x88\x01\x01\x12*\n" +
 	"\x0einvoice_number\x18\x12 \x01(\tH\fR\rinvoiceNumber\x88\x01\x01\x12.\n" +
-	"\x10acquisition_date\x18\x13 \x01(\x03H\rR\x0facquisitionDate\x88\x01\x01\x12;\n" +
-	"\x17acquisition_date_string\x18\x14 \x01(\tH\x0eR\x15acquisitionDateString\x88\x01\x01\x128\n" +
-	"\x16date_placed_in_service\x18\x15 \x01(\x03H\x0fR\x13datePlacedInService\x88\x01\x01\x12E\n" +
-	"\x1ddate_placed_in_service_string\x18\x16 \x01(\tH\x10R\x19datePlacedInServiceString\x88\x01\x01\x12)\n" +
-	"\x10acquisition_cost\x18\x17 \x01(\x01R\x0facquisitionCost\x12\x1a\n" +
+	"\x10acquisition_date\x18\x13 \x01(\tH\rR\x0facquisitionDate\x88\x01\x01\x128\n" +
+	"\x16date_placed_in_service\x18\x15 \x01(\x03H\x0eR\x13datePlacedInService\x88\x01\x01\x12E\n" +
+	"\x1ddate_placed_in_service_string\x18\x16 \x01(\tH\x0fR\x19datePlacedInServiceString\x88\x01\x01\x12)\n" +
+	"\x10acquisition_cost\x18\x17 \x01(\x03R\x0facquisitionCost\x12\x1a\n" +
 	"\bcurrency\x18\x18 \x01(\tR\bcurrency\x12#\n" +
-	"\rsalvage_value\x18\x19 \x01(\x01R\fsalvageValue\x12\x1d\n" +
+	"\rsalvage_value\x18\x19 \x01(\x03R\fsalvageValue\x12\x1d\n" +
 	"\n" +
-	"book_value\x18\x1a \x01(\x01R\tbookValue\x12\"\n" +
+	"book_value\x18\x1a \x01(\x03R\tbookValue\x12\"\n" +
 	"\n" +
-	"fair_value\x18\x1b \x01(\x01H\x11R\tfairValue\x88\x01\x01\x12,\n" +
+	"fair_value\x18\x1b \x01(\x03H\x10R\tfairValue\x88\x01\x01\x12,\n" +
 	"\x12useful_life_months\x18\x1c \x01(\x05R\x10usefulLifeMonths\x12/\n" +
-	"\x11useful_life_units\x18\x1d \x01(\x03H\x12R\x0fusefulLifeUnits\x88\x01\x01\x12T\n" +
+	"\x11useful_life_units\x18\x1d \x01(\x03H\x11R\x0fusefulLifeUnits\x88\x01\x01\x12T\n" +
 	"\x13depreciation_method\x18\x1e \x01(\x0e2#.domain.asset.v1.DepreciationMethodR\x12depreciationMethod\x120\n" +
-	"\x11depreciation_rate\x18\x1f \x01(\x01H\x13R\x10depreciationRate\x88\x01\x01\x12;\n" +
-	"\x17depreciation_start_date\x18  \x01(\x03H\x14R\x15depreciationStartDate\x88\x01\x01\x12H\n" +
-	"\x1edepreciation_start_date_string\x18! \x01(\tH\x15R\x1bdepreciationStartDateString\x88\x01\x01\x129\n" +
-	"\x18accumulated_depreciation\x18\" \x01(\x01R\x17accumulatedDepreciation\x12N\n" +
+	"\x11depreciation_rate\x18\x1f \x01(\x01H\x12R\x10depreciationRate\x88\x01\x01\x12;\n" +
+	"\x17depreciation_start_date\x18  \x01(\tH\x13R\x15depreciationStartDate\x88\x01\x01\x129\n" +
+	"\x18accumulated_depreciation\x18\" \x01(\x03R\x17accumulatedDepreciation\x12N\n" +
 	"\x11measurement_model\x18# \x01(\x0e2!.domain.asset.v1.MeasurementModelR\x10measurementModel\x124\n" +
 	"\x06status\x18$ \x01(\x0e2\x1c.domain.asset.v1.AssetStatusR\x06status\x125\n" +
-	"\x14warranty_expiry_date\x18% \x01(\x03H\x16R\x12warrantyExpiryDate\x88\x01\x01\x12B\n" +
-	"\x1bwarranty_expiry_date_string\x18& \x01(\tH\x17R\x18warrantyExpiryDateString\x88\x01\x01\x12\x19\n" +
-	"\x05notes\x18' \x01(\tH\x18R\x05notes\x88\x01\x01\x12&\n" +
-	"\fdate_created\x18( \x01(\x03H\x19R\vdateCreated\x88\x01\x01\x123\n" +
-	"\x13date_created_string\x18) \x01(\tH\x1aR\x11dateCreatedString\x88\x01\x01\x12(\n" +
-	"\rdate_modified\x18* \x01(\x03H\x1bR\fdateModified\x88\x01\x01\x125\n" +
-	"\x14date_modified_string\x18+ \x01(\tH\x1cR\x12dateModifiedString\x88\x01\x01\x12\"\n" +
+	"\x14warranty_expiry_date\x18% \x01(\x03H\x14R\x12warrantyExpiryDate\x88\x01\x01\x12B\n" +
+	"\x1bwarranty_expiry_date_string\x18& \x01(\tH\x15R\x18warrantyExpiryDateString\x88\x01\x01\x12\x19\n" +
+	"\x05notes\x18' \x01(\tH\x16R\x05notes\x88\x01\x01\x12&\n" +
+	"\fdate_created\x18( \x01(\x03H\x17R\vdateCreated\x88\x01\x01\x123\n" +
+	"\x13date_created_string\x18) \x01(\tH\x18R\x11dateCreatedString\x88\x01\x01\x12(\n" +
+	"\rdate_modified\x18* \x01(\x03H\x19R\fdateModified\x88\x01\x01\x125\n" +
+	"\x14date_modified_string\x18+ \x01(\tH\x1aR\x12dateModifiedString\x88\x01\x01\x12\"\n" +
 	"\x06active\x18, \x01(\bB\n" +
 	"\x82\xb5\x18\x06\"\x04trueR\x06active:\x06\x8a\xb5\x18\x02\b\x01B\x0e\n" +
 	"\f_descriptionB\x11\n" +
@@ -2273,22 +2255,20 @@ const file_domain_asset_asset_asset_proto_rawDesc = "" +
 	"\v_product_idB\x18\n" +
 	"\x16_purchase_order_numberB\x11\n" +
 	"\x0f_invoice_numberB\x13\n" +
-	"\x11_acquisition_dateB\x1a\n" +
-	"\x18_acquisition_date_stringB\x19\n" +
+	"\x11_acquisition_dateB\x19\n" +
 	"\x17_date_placed_in_serviceB \n" +
 	"\x1e_date_placed_in_service_stringB\r\n" +
 	"\v_fair_valueB\x14\n" +
 	"\x12_useful_life_unitsB\x14\n" +
 	"\x12_depreciation_rateB\x1a\n" +
-	"\x18_depreciation_start_dateB!\n" +
-	"\x1f_depreciation_start_date_stringB\x17\n" +
+	"\x18_depreciation_start_dateB\x17\n" +
 	"\x15_warranty_expiry_dateB\x1e\n" +
 	"\x1c_warranty_expiry_date_stringB\b\n" +
 	"\x06_notesB\x0f\n" +
 	"\r_date_createdB\x16\n" +
 	"\x14_date_created_stringB\x10\n" +
 	"\x0e_date_modifiedB\x17\n" +
-	"\x15_date_modified_string\"@\n" +
+	"\x15_date_modified_stringJ\x04\b\x14\x10\x15J\x04\b!\x10\"\"@\n" +
 	"\x12CreateAssetRequest\x12*\n" +
 	"\x04data\x18\x01 \x01(\v2\x16.domain.asset.v1.AssetR\x04data\"\x99\x01\n" +
 	"\x13CreateAssetResponse\x12*\n" +
@@ -2374,7 +2354,7 @@ const file_domain_asset_asset_asset_proto_rawDesc = "" +
 	"\x13DisposeAssetRequest\x12*\n" +
 	"\x04data\x18\x01 \x01(\v2\x16.domain.asset.v1.AssetR\x04data\x12(\n" +
 	"\rdisposal_type\x18\x02 \x01(\tH\x00R\fdisposalType\x88\x01\x01\x12\x1f\n" +
-	"\bproceeds\x18\x03 \x01(\x01H\x01R\bproceeds\x88\x01\x01\x12\x1b\n" +
+	"\bproceeds\x18\x03 \x01(\x03H\x01R\bproceeds\x88\x01\x01\x12\x1b\n" +
 	"\x06reason\x18\x04 \x01(\tH\x02R\x06reason\x88\x01\x01B\x10\n" +
 	"\x0e_disposal_typeB\v\n" +
 	"\t_proceedsB\t\n" +
@@ -2401,8 +2381,8 @@ const file_domain_asset_asset_asset_proto_rawDesc = "" +
 	"\vfiscal_year\x18\x03 \x01(\x05R\n" +
 	"fiscalYear\x12#\n" +
 	"\rfiscal_period\x18\x04 \x01(\x05R\ffiscalPeriod\x12*\n" +
-	"\x11period_start_date\x18\x05 \x01(\x03R\x0fperiodStartDate\x12&\n" +
-	"\x0fperiod_end_date\x18\x06 \x01(\x03R\rperiodEndDateB\v\n" +
+	"\x11period_start_date\x18\x05 \x01(\tR\x0fperiodStartDate\x12&\n" +
+	"\x0fperiod_end_date\x18\x06 \x01(\tR\rperiodEndDateB\v\n" +
 	"\t_asset_idB\x14\n" +
 	"\x12_asset_category_id\"\x9c\x01\n" +
 	"\x17RunDepreciationResponse\x12)\n" +
@@ -2419,7 +2399,7 @@ const file_domain_asset_asset_asset_proto_rawDesc = "" +
 	"\x06_error\"\x90\x02\n" +
 	"\x13RevalueAssetRequest\x12*\n" +
 	"\x04data\x18\x01 \x01(\v2\x16.domain.asset.v1.AssetR\x04data\x12$\n" +
-	"\x0enew_fair_value\x18\x02 \x01(\x01R\fnewFairValue\x12*\n" +
+	"\x0enew_fair_value\x18\x02 \x01(\x03R\fnewFairValue\x12*\n" +
 	"\x0eappraiser_name\x18\x03 \x01(\tH\x00R\rappraiserName\x88\x01\x01\x12.\n" +
 	"\x10valuation_method\x18\x04 \x01(\tH\x01R\x0fvaluationMethod\x88\x01\x01\x12\x19\n" +
 	"\x05notes\x18\x05 \x01(\tH\x02R\x05notes\x88\x01\x01B\x11\n" +

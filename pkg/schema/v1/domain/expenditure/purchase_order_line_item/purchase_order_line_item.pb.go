@@ -40,8 +40,8 @@ type PurchaseOrderLineItem struct {
 	QuantityOrdered  float64 `protobuf:"fixed64,8,opt,name=quantity_ordered,json=quantityOrdered,proto3" json:"quantity_ordered,omitempty"`
 	QuantityReceived float64 `protobuf:"fixed64,9,opt,name=quantity_received,json=quantityReceived,proto3" json:"quantity_received,omitempty"` // Updated on goods receipt
 	QuantityBilled   float64 `protobuf:"fixed64,10,opt,name=quantity_billed,json=quantityBilled,proto3" json:"quantity_billed,omitempty"`      // Updated on invoice match
-	UnitPrice        float64 `protobuf:"fixed64,11,opt,name=unit_price,json=unitPrice,proto3" json:"unit_price,omitempty"`
-	TotalPrice       float64 `protobuf:"fixed64,12,opt,name=total_price,json=totalPrice,proto3" json:"total_price,omitempty"`
+	UnitPrice        int64   `protobuf:"varint,11,opt,name=unit_price,json=unitPrice,proto3" json:"unit_price,omitempty"`                      // centavos
+	TotalPrice       int64   `protobuf:"varint,12,opt,name=total_price,json=totalPrice,proto3" json:"total_price,omitempty"`                   // centavos
 	// Receiving location
 	LocationId      *string `protobuf:"bytes,13,opt,name=location_id,json=locationId,proto3,oneof" json:"location_id,omitempty"`
 	InventoryItemId *string `protobuf:"bytes,14,opt,name=inventory_item_id,json=inventoryItemId,proto3,oneof" json:"inventory_item_id,omitempty"`
@@ -161,14 +161,14 @@ func (x *PurchaseOrderLineItem) GetQuantityBilled() float64 {
 	return 0
 }
 
-func (x *PurchaseOrderLineItem) GetUnitPrice() float64 {
+func (x *PurchaseOrderLineItem) GetUnitPrice() int64 {
 	if x != nil {
 		return x.UnitPrice
 	}
 	return 0
 }
 
-func (x *PurchaseOrderLineItem) GetTotalPrice() float64 {
+func (x *PurchaseOrderLineItem) GetTotalPrice() int64 {
 	if x != nil {
 		return x.TotalPrice
 	}
@@ -1066,8 +1066,8 @@ const file_domain_expenditure_purchase_order_line_item_purchase_order_line_item_
 	"\x0fquantity_billed\x18\n" +
 	" \x01(\x01R\x0equantityBilled\x12\x1d\n" +
 	"\n" +
-	"unit_price\x18\v \x01(\x01R\tunitPrice\x12\x1f\n" +
-	"\vtotal_price\x18\f \x01(\x01R\n" +
+	"unit_price\x18\v \x01(\x03R\tunitPrice\x12\x1f\n" +
+	"\vtotal_price\x18\f \x01(\x03R\n" +
 	"totalPrice\x124\n" +
 	"\vlocation_id\x18\r \x01(\tB\x0e\x82\xb5\x18\n" +
 	"\n" +

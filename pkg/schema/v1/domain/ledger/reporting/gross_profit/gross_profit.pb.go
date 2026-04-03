@@ -25,8 +25,8 @@ const (
 // GrossProfitReportRequest defines parameters for generating a gross profit report.
 type GrossProfitReportRequest struct {
 	state             protoimpl.MessageState    `protogen:"open.v1"`
-	StartDate         *int64                    `protobuf:"varint,1,opt,name=start_date,json=startDate,proto3,oneof" json:"start_date,omitempty"`                          // Unix timestamp — report period start
-	EndDate           *int64                    `protobuf:"varint,2,opt,name=end_date,json=endDate,proto3,oneof" json:"end_date,omitempty"`                                // Unix timestamp — report period end
+	StartDate         *string                   `protobuf:"bytes,1,opt,name=start_date,json=startDate,proto3,oneof" json:"start_date,omitempty"`                           // ISO 8601 date (YYYY-MM-DD) — report period start
+	EndDate           *string                   `protobuf:"bytes,2,opt,name=end_date,json=endDate,proto3,oneof" json:"end_date,omitempty"`                                 // ISO 8601 date (YYYY-MM-DD) — report period end
 	GroupBy           *string                   `protobuf:"bytes,3,opt,name=group_by,json=groupBy,proto3,oneof" json:"group_by,omitempty"`                                 // "product", "location", "category", "period"
 	PeriodGranularity *string                   `protobuf:"bytes,4,opt,name=period_granularity,json=periodGranularity,proto3,oneof" json:"period_granularity,omitempty"`   // "daily", "weekly", "monthly", "yearly" (when group_by=period)
 	ProductId         *string                   `protobuf:"bytes,5,opt,name=product_id,json=productId,proto3,oneof" json:"product_id,omitempty"`                           // Filter by specific product
@@ -68,18 +68,18 @@ func (*GrossProfitReportRequest) Descriptor() ([]byte, []int) {
 	return file_domain_ledger_reporting_gross_profit_gross_profit_proto_rawDescGZIP(), []int{0}
 }
 
-func (x *GrossProfitReportRequest) GetStartDate() int64 {
+func (x *GrossProfitReportRequest) GetStartDate() string {
 	if x != nil && x.StartDate != nil {
 		return *x.StartDate
 	}
-	return 0
+	return ""
 }
 
-func (x *GrossProfitReportRequest) GetEndDate() int64 {
+func (x *GrossProfitReportRequest) GetEndDate() string {
 	if x != nil && x.EndDate != nil {
 		return *x.EndDate
 	}
-	return 0
+	return ""
 }
 
 func (x *GrossProfitReportRequest) GetGroupBy() string {
@@ -136,11 +136,11 @@ type GrossProfitLineItem struct {
 	state             protoimpl.MessageState `protogen:"open.v1"`
 	GroupKey          string                 `protobuf:"bytes,1,opt,name=group_key,json=groupKey,proto3" json:"group_key,omitempty"`                                // The grouping key value (product name, location, date, etc.)
 	GroupId           *string                `protobuf:"bytes,2,opt,name=group_id,json=groupId,proto3,oneof" json:"group_id,omitempty"`                             // The grouping entity ID (product_id, location_id, etc.)
-	TotalRevenue      float64                `protobuf:"fixed64,3,opt,name=total_revenue,json=totalRevenue,proto3" json:"total_revenue,omitempty"`                  // Sum of revenue line item totals
-	TotalDiscount     float64                `protobuf:"fixed64,4,opt,name=total_discount,json=totalDiscount,proto3" json:"total_discount,omitempty"`               // Sum of discounts applied
-	NetRevenue        float64                `protobuf:"fixed64,5,opt,name=net_revenue,json=netRevenue,proto3" json:"net_revenue,omitempty"`                        // total_revenue - total_discount
-	CostOfGoodsSold   float64                `protobuf:"fixed64,6,opt,name=cost_of_goods_sold,json=costOfGoodsSold,proto3" json:"cost_of_goods_sold,omitempty"`     // Sum of COGS from inventory transactions
-	GrossProfit       float64                `protobuf:"fixed64,7,opt,name=gross_profit,json=grossProfit,proto3" json:"gross_profit,omitempty"`                     // net_revenue - cost_of_goods_sold
+	TotalRevenue      int64                  `protobuf:"varint,3,opt,name=total_revenue,json=totalRevenue,proto3" json:"total_revenue,omitempty"`                   // centavos          // Sum of revenue line item totals
+	TotalDiscount     int64                  `protobuf:"varint,4,opt,name=total_discount,json=totalDiscount,proto3" json:"total_discount,omitempty"`                // centavos         // Sum of discounts applied
+	NetRevenue        int64                  `protobuf:"varint,5,opt,name=net_revenue,json=netRevenue,proto3" json:"net_revenue,omitempty"`                         // centavos            // total_revenue - total_discount
+	CostOfGoodsSold   int64                  `protobuf:"varint,6,opt,name=cost_of_goods_sold,json=costOfGoodsSold,proto3" json:"cost_of_goods_sold,omitempty"`      // centavos     // Sum of COGS from inventory transactions
+	GrossProfit       int64                  `protobuf:"varint,7,opt,name=gross_profit,json=grossProfit,proto3" json:"gross_profit,omitempty"`                      // centavos           // net_revenue - cost_of_goods_sold
 	GrossProfitMargin float64                `protobuf:"fixed64,8,opt,name=gross_profit_margin,json=grossProfitMargin,proto3" json:"gross_profit_margin,omitempty"` // (gross_profit / net_revenue) * 100
 	UnitsSold         int64                  `protobuf:"varint,9,opt,name=units_sold,json=unitsSold,proto3" json:"units_sold,omitempty"`                            // Total units sold in this group
 	TransactionCount  int64                  `protobuf:"varint,10,opt,name=transaction_count,json=transactionCount,proto3" json:"transaction_count,omitempty"`      // Number of revenue transactions
@@ -192,35 +192,35 @@ func (x *GrossProfitLineItem) GetGroupId() string {
 	return ""
 }
 
-func (x *GrossProfitLineItem) GetTotalRevenue() float64 {
+func (x *GrossProfitLineItem) GetTotalRevenue() int64 {
 	if x != nil {
 		return x.TotalRevenue
 	}
 	return 0
 }
 
-func (x *GrossProfitLineItem) GetTotalDiscount() float64 {
+func (x *GrossProfitLineItem) GetTotalDiscount() int64 {
 	if x != nil {
 		return x.TotalDiscount
 	}
 	return 0
 }
 
-func (x *GrossProfitLineItem) GetNetRevenue() float64 {
+func (x *GrossProfitLineItem) GetNetRevenue() int64 {
 	if x != nil {
 		return x.NetRevenue
 	}
 	return 0
 }
 
-func (x *GrossProfitLineItem) GetCostOfGoodsSold() float64 {
+func (x *GrossProfitLineItem) GetCostOfGoodsSold() int64 {
 	if x != nil {
 		return x.CostOfGoodsSold
 	}
 	return 0
 }
 
-func (x *GrossProfitLineItem) GetGrossProfit() float64 {
+func (x *GrossProfitLineItem) GetGrossProfit() int64 {
 	if x != nil {
 		return x.GrossProfit
 	}
@@ -251,17 +251,17 @@ func (x *GrossProfitLineItem) GetTransactionCount() int64 {
 // GrossProfitSummary provides report-level totals.
 type GrossProfitSummary struct {
 	state             protoimpl.MessageState `protogen:"open.v1"`
-	TotalRevenue      float64                `protobuf:"fixed64,1,opt,name=total_revenue,json=totalRevenue,proto3" json:"total_revenue,omitempty"`
-	TotalDiscount     float64                `protobuf:"fixed64,2,opt,name=total_discount,json=totalDiscount,proto3" json:"total_discount,omitempty"`
-	NetRevenue        float64                `protobuf:"fixed64,3,opt,name=net_revenue,json=netRevenue,proto3" json:"net_revenue,omitempty"`
-	TotalCogs         float64                `protobuf:"fixed64,4,opt,name=total_cogs,json=totalCogs,proto3" json:"total_cogs,omitempty"`
-	TotalGrossProfit  float64                `protobuf:"fixed64,5,opt,name=total_gross_profit,json=totalGrossProfit,proto3" json:"total_gross_profit,omitempty"`
-	OverallMargin     float64                `protobuf:"fixed64,6,opt,name=overall_margin,json=overallMargin,proto3" json:"overall_margin,omitempty"` // (total_gross_profit / net_revenue) * 100
+	TotalRevenue      int64                  `protobuf:"varint,1,opt,name=total_revenue,json=totalRevenue,proto3" json:"total_revenue,omitempty"`               // centavos
+	TotalDiscount     int64                  `protobuf:"varint,2,opt,name=total_discount,json=totalDiscount,proto3" json:"total_discount,omitempty"`            // centavos
+	NetRevenue        int64                  `protobuf:"varint,3,opt,name=net_revenue,json=netRevenue,proto3" json:"net_revenue,omitempty"`                     // centavos
+	TotalCogs         int64                  `protobuf:"varint,4,opt,name=total_cogs,json=totalCogs,proto3" json:"total_cogs,omitempty"`                        // centavos
+	TotalGrossProfit  int64                  `protobuf:"varint,5,opt,name=total_gross_profit,json=totalGrossProfit,proto3" json:"total_gross_profit,omitempty"` // centavos
+	OverallMargin     float64                `protobuf:"fixed64,6,opt,name=overall_margin,json=overallMargin,proto3" json:"overall_margin,omitempty"`           // (total_gross_profit / net_revenue) * 100
 	TotalUnitsSold    int64                  `protobuf:"varint,7,opt,name=total_units_sold,json=totalUnitsSold,proto3" json:"total_units_sold,omitempty"`
 	TotalTransactions int64                  `protobuf:"varint,8,opt,name=total_transactions,json=totalTransactions,proto3" json:"total_transactions,omitempty"`
 	Currency          string                 `protobuf:"bytes,9,opt,name=currency,proto3" json:"currency,omitempty"`
-	StartDate         *int64                 `protobuf:"varint,10,opt,name=start_date,json=startDate,proto3,oneof" json:"start_date,omitempty"`
-	EndDate           *int64                 `protobuf:"varint,11,opt,name=end_date,json=endDate,proto3,oneof" json:"end_date,omitempty"`
+	StartDate         *string                `protobuf:"bytes,10,opt,name=start_date,json=startDate,proto3,oneof" json:"start_date,omitempty"` // ISO 8601 date (YYYY-MM-DD)
+	EndDate           *string                `protobuf:"bytes,11,opt,name=end_date,json=endDate,proto3,oneof" json:"end_date,omitempty"`       // ISO 8601 date (YYYY-MM-DD)
 	unknownFields     protoimpl.UnknownFields
 	sizeCache         protoimpl.SizeCache
 }
@@ -296,35 +296,35 @@ func (*GrossProfitSummary) Descriptor() ([]byte, []int) {
 	return file_domain_ledger_reporting_gross_profit_gross_profit_proto_rawDescGZIP(), []int{2}
 }
 
-func (x *GrossProfitSummary) GetTotalRevenue() float64 {
+func (x *GrossProfitSummary) GetTotalRevenue() int64 {
 	if x != nil {
 		return x.TotalRevenue
 	}
 	return 0
 }
 
-func (x *GrossProfitSummary) GetTotalDiscount() float64 {
+func (x *GrossProfitSummary) GetTotalDiscount() int64 {
 	if x != nil {
 		return x.TotalDiscount
 	}
 	return 0
 }
 
-func (x *GrossProfitSummary) GetNetRevenue() float64 {
+func (x *GrossProfitSummary) GetNetRevenue() int64 {
 	if x != nil {
 		return x.NetRevenue
 	}
 	return 0
 }
 
-func (x *GrossProfitSummary) GetTotalCogs() float64 {
+func (x *GrossProfitSummary) GetTotalCogs() int64 {
 	if x != nil {
 		return x.TotalCogs
 	}
 	return 0
 }
 
-func (x *GrossProfitSummary) GetTotalGrossProfit() float64 {
+func (x *GrossProfitSummary) GetTotalGrossProfit() int64 {
 	if x != nil {
 		return x.TotalGrossProfit
 	}
@@ -359,18 +359,18 @@ func (x *GrossProfitSummary) GetCurrency() string {
 	return ""
 }
 
-func (x *GrossProfitSummary) GetStartDate() int64 {
+func (x *GrossProfitSummary) GetStartDate() string {
 	if x != nil && x.StartDate != nil {
 		return *x.StartDate
 	}
-	return 0
+	return ""
 }
 
-func (x *GrossProfitSummary) GetEndDate() int64 {
+func (x *GrossProfitSummary) GetEndDate() string {
 	if x != nil && x.EndDate != nil {
 		return *x.EndDate
 	}
-	return 0
+	return ""
 }
 
 // GrossProfitReportResponse returns the generated report.
@@ -457,8 +457,8 @@ const file_domain_ledger_reporting_gross_profit_gross_profit_proto_rawDesc = "" 
 	"7domain/ledger/reporting/gross_profit/gross_profit.proto\x12\x10domain.ledger.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\"\xaf\x04\n" +
 	"\x18GrossProfitReportRequest\x12\"\n" +
 	"\n" +
-	"start_date\x18\x01 \x01(\x03H\x00R\tstartDate\x88\x01\x01\x12\x1e\n" +
-	"\bend_date\x18\x02 \x01(\x03H\x01R\aendDate\x88\x01\x01\x12\x1e\n" +
+	"start_date\x18\x01 \x01(\tH\x00R\tstartDate\x88\x01\x01\x12\x1e\n" +
+	"\bend_date\x18\x02 \x01(\tH\x01R\aendDate\x88\x01\x01\x12\x1e\n" +
 	"\bgroup_by\x18\x03 \x01(\tH\x02R\agroupBy\x88\x01\x01\x122\n" +
 	"\x12period_granularity\x18\x04 \x01(\tH\x03R\x11periodGranularity\x88\x01\x01\x12\"\n" +
 	"\n" +
@@ -482,12 +482,12 @@ const file_domain_ledger_reporting_gross_profit_gross_profit_proto_rawDesc = "" 
 	"\x13GrossProfitLineItem\x12\x1b\n" +
 	"\tgroup_key\x18\x01 \x01(\tR\bgroupKey\x12\x1e\n" +
 	"\bgroup_id\x18\x02 \x01(\tH\x00R\agroupId\x88\x01\x01\x12#\n" +
-	"\rtotal_revenue\x18\x03 \x01(\x01R\ftotalRevenue\x12%\n" +
-	"\x0etotal_discount\x18\x04 \x01(\x01R\rtotalDiscount\x12\x1f\n" +
-	"\vnet_revenue\x18\x05 \x01(\x01R\n" +
+	"\rtotal_revenue\x18\x03 \x01(\x03R\ftotalRevenue\x12%\n" +
+	"\x0etotal_discount\x18\x04 \x01(\x03R\rtotalDiscount\x12\x1f\n" +
+	"\vnet_revenue\x18\x05 \x01(\x03R\n" +
 	"netRevenue\x12+\n" +
-	"\x12cost_of_goods_sold\x18\x06 \x01(\x01R\x0fcostOfGoodsSold\x12!\n" +
-	"\fgross_profit\x18\a \x01(\x01R\vgrossProfit\x12.\n" +
+	"\x12cost_of_goods_sold\x18\x06 \x01(\x03R\x0fcostOfGoodsSold\x12!\n" +
+	"\fgross_profit\x18\a \x01(\x03R\vgrossProfit\x12.\n" +
 	"\x13gross_profit_margin\x18\b \x01(\x01R\x11grossProfitMargin\x12\x1d\n" +
 	"\n" +
 	"units_sold\x18\t \x01(\x03R\tunitsSold\x12+\n" +
@@ -495,21 +495,21 @@ const file_domain_ledger_reporting_gross_profit_gross_profit_proto_rawDesc = "" 
 	" \x01(\x03R\x10transactionCountB\v\n" +
 	"\t_group_id\"\xca\x03\n" +
 	"\x12GrossProfitSummary\x12#\n" +
-	"\rtotal_revenue\x18\x01 \x01(\x01R\ftotalRevenue\x12%\n" +
-	"\x0etotal_discount\x18\x02 \x01(\x01R\rtotalDiscount\x12\x1f\n" +
-	"\vnet_revenue\x18\x03 \x01(\x01R\n" +
+	"\rtotal_revenue\x18\x01 \x01(\x03R\ftotalRevenue\x12%\n" +
+	"\x0etotal_discount\x18\x02 \x01(\x03R\rtotalDiscount\x12\x1f\n" +
+	"\vnet_revenue\x18\x03 \x01(\x03R\n" +
 	"netRevenue\x12\x1d\n" +
 	"\n" +
-	"total_cogs\x18\x04 \x01(\x01R\ttotalCogs\x12,\n" +
-	"\x12total_gross_profit\x18\x05 \x01(\x01R\x10totalGrossProfit\x12%\n" +
+	"total_cogs\x18\x04 \x01(\x03R\ttotalCogs\x12,\n" +
+	"\x12total_gross_profit\x18\x05 \x01(\x03R\x10totalGrossProfit\x12%\n" +
 	"\x0eoverall_margin\x18\x06 \x01(\x01R\roverallMargin\x12(\n" +
 	"\x10total_units_sold\x18\a \x01(\x03R\x0etotalUnitsSold\x12-\n" +
 	"\x12total_transactions\x18\b \x01(\x03R\x11totalTransactions\x12\x1a\n" +
 	"\bcurrency\x18\t \x01(\tR\bcurrency\x12\"\n" +
 	"\n" +
 	"start_date\x18\n" +
-	" \x01(\x03H\x00R\tstartDate\x88\x01\x01\x12\x1e\n" +
-	"\bend_date\x18\v \x01(\x03H\x01R\aendDate\x88\x01\x01B\r\n" +
+	" \x01(\tH\x00R\tstartDate\x88\x01\x01\x12\x1e\n" +
+	"\bend_date\x18\v \x01(\tH\x01R\aendDate\x88\x01\x01B\r\n" +
 	"\v_start_dateB\v\n" +
 	"\t_end_date\"\xe4\x02\n" +
 	"\x19GrossProfitReportResponse\x12D\n" +

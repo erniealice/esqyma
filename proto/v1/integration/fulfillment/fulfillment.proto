@@ -123,7 +123,7 @@ message DeliveryLocation {
 // DeliveryQuote represents a price quote from a provider
 message DeliveryQuote {
   string quote_id = 1;
-  double amount = 2;
+  int64 amount = 2; // centavos
   string currency = 3;
   double distance_km = 4;
   int32 estimated_minutes = 5;

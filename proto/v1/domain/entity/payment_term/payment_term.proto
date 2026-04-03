@@ -22,7 +22,7 @@ message PaymentTerm {
   bool active = 6 [(options.v1.db).default = "true"];
   string name = 7;                              // Display: "Net 30", "2/10 Net 30", "COD"
   string code = 8 [(options.v1.db).unique = true]; // Machine key: "net_30", "2_10_net_30", "cod"
-  string type = 9;                              // "due_on_receipt", "net", "cod"
+  string type = 9;                              // "due_on_receipt", "net", "cod", "proximate"
   int32 net_days = 10;                          // Days until due (0 = immediate)
   optional int32 discount_days = 11;            // Early payment window
   optional int32 discount_percent_bps = 12;     // Basis points (200 = 2.00%)
@@ -30,6 +30,7 @@ message PaymentTerm {
   bool is_default = 14;                         // Default for entity_scope
   optional string description = 15;
   optional int32 display_order = 16;
+  optional int32 proximate_day = 17;            // Day-of-month for proximate due date (1-28)
 }
 
 service PaymentTermDomainService {

@@ -86,14 +86,12 @@ type DeferredRevenue struct {
 	Description  string                 `protobuf:"bytes,2,opt,name=description,proto3" json:"description,omitempty"`
 	CustomerName *string                `protobuf:"bytes,3,opt,name=customer_name,json=customerName,proto3,oneof" json:"customer_name,omitempty"`
 	// Amounts
-	TotalAmount      float64 `protobuf:"fixed64,4,opt,name=total_amount,json=totalAmount,proto3" json:"total_amount,omitempty"`
-	RecognizedAmount float64 `protobuf:"fixed64,5,opt,name=recognized_amount,json=recognizedAmount,proto3" json:"recognized_amount,omitempty"` // Increases with each recognition entry
-	RemainingAmount  float64 `protobuf:"fixed64,6,opt,name=remaining_amount,json=remainingAmount,proto3" json:"remaining_amount,omitempty"`    // total - recognized
+	TotalAmount      int64 `protobuf:"varint,4,opt,name=total_amount,json=totalAmount,proto3" json:"total_amount,omitempty"`                // centavos
+	RecognizedAmount int64 `protobuf:"varint,5,opt,name=recognized_amount,json=recognizedAmount,proto3" json:"recognized_amount,omitempty"` // centavos   // Increases with each recognition entry
+	RemainingAmount  int64 `protobuf:"varint,6,opt,name=remaining_amount,json=remainingAmount,proto3" json:"remaining_amount,omitempty"`    // centavos                                     // total - recognized
 	// Recognition schedule
-	StartDate         int64                 `protobuf:"varint,7,opt,name=start_date,json=startDate,proto3" json:"start_date,omitempty"`
-	StartDateString   *string               `protobuf:"bytes,8,opt,name=start_date_string,json=startDateString,proto3,oneof" json:"start_date_string,omitempty"`
-	EndDate           int64                 `protobuf:"varint,9,opt,name=end_date,json=endDate,proto3" json:"end_date,omitempty"`
-	EndDateString     *string               `protobuf:"bytes,10,opt,name=end_date_string,json=endDateString,proto3,oneof" json:"end_date_string,omitempty"`
+	StartDate         string                `protobuf:"bytes,7,opt,name=start_date,json=startDate,proto3" json:"start_date,omitempty"`                           // ISO 8601 date (YYYY-MM-DD)
+	EndDate           string                `protobuf:"bytes,9,opt,name=end_date,json=endDate,proto3" json:"end_date,omitempty"`                                 // ISO 8601 date (YYYY-MM-DD)
 	RecognitionMonths int32                 `protobuf:"varint,11,opt,name=recognition_months,json=recognitionMonths,proto3" json:"recognition_months,omitempty"` // Derived from start/end, stored for convenience
 	Status            DeferredRevenueStatus `protobuf:"varint,12,opt,name=status,proto3,enum=domain.revenue.v1.DeferredRevenueStatus" json:"status,omitempty"`
 	// GL integration
@@ -160,51 +158,37 @@ func (x *DeferredRevenue) GetCustomerName() string {
 	return ""
 }
 
-func (x *DeferredRevenue) GetTotalAmount() float64 {
+func (x *DeferredRevenue) GetTotalAmount() int64 {
 	if x != nil {
 		return x.TotalAmount
 	}
 	return 0
 }
 
-func (x *DeferredRevenue) GetRecognizedAmount() float64 {
+func (x *DeferredRevenue) GetRecognizedAmount() int64 {
 	if x != nil {
 		return x.RecognizedAmount
 	}
 	return 0
 }
 
-func (x *DeferredRevenue) GetRemainingAmount() float64 {
+func (x *DeferredRevenue) GetRemainingAmount() int64 {
 	if x != nil {
 		return x.RemainingAmount
 	}
 	return 0
 }
 
-func (x *DeferredRevenue) GetStartDate() int64 {
+func (x *DeferredRevenue) GetStartDate() string {
 	if x != nil {
 		return x.StartDate
-	}
-	return 0
-}
-
-func (x *DeferredRevenue) GetStartDateString() string {
-	if x != nil && x.StartDateString != nil {
-		return *x.StartDateString
 	}
 	return ""
 }
 
-func (x *DeferredRevenue) GetEndDate() int64 {
+func (x *DeferredRevenue) GetEndDate() string {
 	if x != nil {
 		return x.EndDate
-	}
-	return 0
-}
-
-func (x *DeferredRevenue) GetEndDateString() string {
-	if x != nil && x.EndDateString != nil {
-		return *x.EndDateString
 	}
 	return ""
 }
@@ -1060,41 +1044,37 @@ var File_domain_revenue_deferred_revenue_deferred_revenue_proto protoreflect.Fil
 
 const file_domain_revenue_deferred_revenue_deferred_revenue_proto_rawDesc = "" +
 	"\n" +
-	"6domain/revenue/deferred_revenue/deferred_revenue.proto\x12\x11domain.revenue.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1adomain/common/search.proto\x1a\x10options/db.proto\"\xb0\b\n" +
+	"6domain/revenue/deferred_revenue/deferred_revenue.proto\x12\x11domain.revenue.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1adomain/common/search.proto\x1a\x10options/db.proto\"\xb4\a\n" +
 	"\x0fDeferredRevenue\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12 \n" +
 	"\vdescription\x18\x02 \x01(\tR\vdescription\x12(\n" +
 	"\rcustomer_name\x18\x03 \x01(\tH\x00R\fcustomerName\x88\x01\x01\x12!\n" +
-	"\ftotal_amount\x18\x04 \x01(\x01R\vtotalAmount\x124\n" +
-	"\x11recognized_amount\x18\x05 \x01(\x01B\a\x82\xb5\x18\x03\"\x010R\x10recognizedAmount\x12)\n" +
-	"\x10remaining_amount\x18\x06 \x01(\x01R\x0fremainingAmount\x12\x1d\n" +
+	"\ftotal_amount\x18\x04 \x01(\x03R\vtotalAmount\x124\n" +
+	"\x11recognized_amount\x18\x05 \x01(\x03B\a\x82\xb5\x18\x03\"\x010R\x10recognizedAmount\x12)\n" +
+	"\x10remaining_amount\x18\x06 \x01(\x03R\x0fremainingAmount\x12\x1d\n" +
 	"\n" +
-	"start_date\x18\a \x01(\x03R\tstartDate\x12/\n" +
-	"\x11start_date_string\x18\b \x01(\tH\x01R\x0fstartDateString\x88\x01\x01\x12\x19\n" +
-	"\bend_date\x18\t \x01(\x03R\aendDate\x12+\n" +
-	"\x0fend_date_string\x18\n" +
-	" \x01(\tH\x02R\rendDateString\x88\x01\x01\x12-\n" +
+	"start_date\x18\a \x01(\tR\tstartDate\x12\x19\n" +
+	"\bend_date\x18\t \x01(\tR\aendDate\x12-\n" +
 	"\x12recognition_months\x18\v \x01(\x05R\x11recognitionMonths\x12@\n" +
 	"\x06status\x18\f \x01(\x0e2(.domain.revenue.v1.DeferredRevenueStatusR\x06status\x12F\n" +
 	"\x14liability_account_id\x18\r \x01(\tB\x0f\x82\xb5\x18\v\n" +
-	"\aaccount\x18\x01H\x03R\x12liabilityAccountId\x88\x01\x01\x12B\n" +
+	"\aaccount\x18\x01H\x01R\x12liabilityAccountId\x88\x01\x01\x12B\n" +
 	"\x12revenue_account_id\x18\x0e \x01(\tB\x0f\x82\xb5\x18\v\n" +
-	"\aaccount\x18\x01H\x04R\x10revenueAccountId\x88\x01\x01\x12\"\n" +
+	"\aaccount\x18\x01H\x02R\x10revenueAccountId\x88\x01\x01\x12\"\n" +
 	"\x06active\x18\x0f \x01(\bB\n" +
 	"\x82\xb5\x18\x06\"\x04trueR\x06active\x12&\n" +
-	"\fdate_created\x18\x10 \x01(\x03H\x05R\vdateCreated\x88\x01\x01\x123\n" +
-	"\x13date_created_string\x18\x11 \x01(\tH\x06R\x11dateCreatedString\x88\x01\x01\x12(\n" +
-	"\rdate_modified\x18\x12 \x01(\x03H\aR\fdateModified\x88\x01\x01\x125\n" +
-	"\x14date_modified_string\x18\x13 \x01(\tH\bR\x12dateModifiedString\x88\x01\x01:\x06\x8a\xb5\x18\x02\b\x01B\x10\n" +
-	"\x0e_customer_nameB\x14\n" +
-	"\x12_start_date_stringB\x12\n" +
-	"\x10_end_date_stringB\x17\n" +
+	"\fdate_created\x18\x10 \x01(\x03H\x03R\vdateCreated\x88\x01\x01\x123\n" +
+	"\x13date_created_string\x18\x11 \x01(\tH\x04R\x11dateCreatedString\x88\x01\x01\x12(\n" +
+	"\rdate_modified\x18\x12 \x01(\x03H\x05R\fdateModified\x88\x01\x01\x125\n" +
+	"\x14date_modified_string\x18\x13 \x01(\tH\x06R\x12dateModifiedString\x88\x01\x01:\x06\x8a\xb5\x18\x02\b\x01B\x10\n" +
+	"\x0e_customer_nameB\x17\n" +
 	"\x15_liability_account_idB\x15\n" +
 	"\x13_revenue_account_idB\x0f\n" +
 	"\r_date_createdB\x16\n" +
 	"\x14_date_created_stringB\x10\n" +
 	"\x0e_date_modifiedB\x17\n" +
-	"\x15_date_modified_string\"V\n" +
+	"\x15_date_modified_stringJ\x04\b\b\x10\tJ\x04\b\n" +
+	"\x10\v\"V\n" +
 	"\x1cCreateDeferredRevenueRequest\x126\n" +
 	"\x04data\x18\x01 \x01(\v2\".domain.revenue.v1.DeferredRevenueR\x04data\"\xaf\x01\n" +
 	"\x1dCreateDeferredRevenueResponse\x126\n" +

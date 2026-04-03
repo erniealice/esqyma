@@ -44,7 +44,7 @@ message Supplier {
   optional string default_currency = 21;        // ISO 4217 currency code
   optional string payment_terms = 22;           // "net_30", "net_60", "2_10_net_30", "immediate"
   optional int32 lead_time_days = 23;           // Default delivery lead time
-  optional double credit_limit = 24;            // Maximum outstanding payable
+  optional int64 credit_limit = 24; // centavos            // Maximum outstanding payable
   optional string status = 25;                  // "active", "blocked", "on_hold"
   optional string client_id = 26 [(options.v1.db).references = "client", (options.v1.db).index = true];
   optional string website = 27;

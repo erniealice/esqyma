@@ -41,10 +41,10 @@ message PayrollRemittance {
   string payroll_run_id = 2 [(options.v1.db).references = "payroll_run", (options.v1.db).index = true];
 
   RemittanceType remittance_type = 3;
-  double amount = 4;
+  int64 amount = 4; // centavos
 
-  int64 due_date = 5;
-  optional string due_date_string = 6;
+  string due_date = 5; // ISO 8601 date (YYYY-MM-DD)
+  reserved 6; // was due_date_string
 
   RemittanceStatus status = 7;
 

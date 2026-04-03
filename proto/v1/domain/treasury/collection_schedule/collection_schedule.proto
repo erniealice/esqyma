@@ -20,8 +20,8 @@ message CollectionSchedule {
   string revenue_id = 7;                   // FK to revenue
   int32 sequence = 8;                      // Installment number (1, 2, 3...)
   int64 amount = 9;                        // Centavos
-  int64 due_date = 10;                     // Unix timestamp
-  optional string due_date_string = 11;
+  string due_date = 10;                     // ISO 8601 date (YYYY-MM-DD)
+  reserved 11; // was due_date_string
   string status = 12;                      // "pending", "paid", "partial", "overdue"
   optional int64 paid_amount = 13;         // Centavos collected so far
   optional int64 paid_date = 14;

@@ -38,9 +38,9 @@ type EventProduct struct {
 	DateModifiedString *string                `protobuf:"bytes,9,opt,name=date_modified_string,json=dateModifiedString,proto3,oneof" json:"date_modified_string,omitempty"`
 	Active             bool                   `protobuf:"varint,10,opt,name=active,proto3" json:"active,omitempty"`
 	Quantity           *int32                 `protobuf:"varint,11,opt,name=quantity,proto3,oneof" json:"quantity,omitempty"`
-	UnitPrice          *float64               `protobuf:"fixed64,12,opt,name=unit_price,json=unitPrice,proto3,oneof" json:"unit_price,omitempty"`
+	UnitPrice          *int64                 `protobuf:"varint,12,opt,name=unit_price,json=unitPrice,proto3,oneof" json:"unit_price,omitempty"` // centavos
 	Currency           *string                `protobuf:"bytes,13,opt,name=currency,proto3,oneof" json:"currency,omitempty"`
-	TotalPrice         *float64               `protobuf:"fixed64,14,opt,name=total_price,json=totalPrice,proto3,oneof" json:"total_price,omitempty"`
+	TotalPrice         *int64                 `protobuf:"varint,14,opt,name=total_price,json=totalPrice,proto3,oneof" json:"total_price,omitempty"` // centavos
 	Notes              *string                `protobuf:"bytes,15,opt,name=notes,proto3,oneof" json:"notes,omitempty"`
 	unknownFields      protoimpl.UnknownFields
 	sizeCache          protoimpl.SizeCache
@@ -153,7 +153,7 @@ func (x *EventProduct) GetQuantity() int32 {
 	return 0
 }
 
-func (x *EventProduct) GetUnitPrice() float64 {
+func (x *EventProduct) GetUnitPrice() int64 {
 	if x != nil && x.UnitPrice != nil {
 		return *x.UnitPrice
 	}
@@ -167,7 +167,7 @@ func (x *EventProduct) GetCurrency() string {
 	return ""
 }
 
-func (x *EventProduct) GetTotalPrice() float64 {
+func (x *EventProduct) GetTotalPrice() int64 {
 	if x != nil && x.TotalPrice != nil {
 		return *x.TotalPrice
 	}
@@ -740,9 +740,9 @@ const file_domain_event_event_product_event_product_proto_rawDesc = "" +
 	"\x82\xb5\x18\x06\"\x04trueR\x06active\x12\x1f\n" +
 	"\bquantity\x18\v \x01(\x05H\x06R\bquantity\x88\x01\x01\x12\"\n" +
 	"\n" +
-	"unit_price\x18\f \x01(\x01H\aR\tunitPrice\x88\x01\x01\x12\x1f\n" +
+	"unit_price\x18\f \x01(\x03H\aR\tunitPrice\x88\x01\x01\x12\x1f\n" +
 	"\bcurrency\x18\r \x01(\tH\bR\bcurrency\x88\x01\x01\x12$\n" +
-	"\vtotal_price\x18\x0e \x01(\x01H\tR\n" +
+	"\vtotal_price\x18\x0e \x01(\x03H\tR\n" +
 	"totalPrice\x88\x01\x01\x12\x19\n" +
 	"\x05notes\x18\x0f \x01(\tH\n" +
 	"R\x05notes\x88\x01\x01:\x1b\x8a\xb5\x18\x17\b\x01\x1a\x13event_id,product_idB\b\n" +

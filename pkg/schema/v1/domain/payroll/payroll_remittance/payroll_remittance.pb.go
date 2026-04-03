@@ -141,9 +141,8 @@ type PayrollRemittance struct {
 	// Parent payroll run
 	PayrollRunId    string           `protobuf:"bytes,2,opt,name=payroll_run_id,json=payrollRunId,proto3" json:"payroll_run_id,omitempty"`
 	RemittanceType  RemittanceType   `protobuf:"varint,3,opt,name=remittance_type,json=remittanceType,proto3,enum=domain.payroll.v1.RemittanceType" json:"remittance_type,omitempty"`
-	Amount          float64          `protobuf:"fixed64,4,opt,name=amount,proto3" json:"amount,omitempty"`
-	DueDate         int64            `protobuf:"varint,5,opt,name=due_date,json=dueDate,proto3" json:"due_date,omitempty"`
-	DueDateString   *string          `protobuf:"bytes,6,opt,name=due_date_string,json=dueDateString,proto3,oneof" json:"due_date_string,omitempty"`
+	Amount          int64            `protobuf:"varint,4,opt,name=amount,proto3" json:"amount,omitempty"`                 // centavos
+	DueDate         string           `protobuf:"bytes,5,opt,name=due_date,json=dueDate,proto3" json:"due_date,omitempty"` // ISO 8601 date (YYYY-MM-DD)
 	Status          RemittanceStatus `protobuf:"varint,7,opt,name=status,proto3,enum=domain.payroll.v1.RemittanceStatus" json:"status,omitempty"`
 	FiledAt         *int64           `protobuf:"varint,8,opt,name=filed_at,json=filedAt,proto3,oneof" json:"filed_at,omitempty"`
 	FiledAtString   *string          `protobuf:"bytes,9,opt,name=filed_at_string,json=filedAtString,proto3,oneof" json:"filed_at_string,omitempty"`
@@ -208,23 +207,16 @@ func (x *PayrollRemittance) GetRemittanceType() RemittanceType {
 	return RemittanceType_REMITTANCE_TYPE_UNSPECIFIED
 }
 
-func (x *PayrollRemittance) GetAmount() float64 {
+func (x *PayrollRemittance) GetAmount() int64 {
 	if x != nil {
 		return x.Amount
 	}
 	return 0
 }
 
-func (x *PayrollRemittance) GetDueDate() int64 {
+func (x *PayrollRemittance) GetDueDate() string {
 	if x != nil {
 		return x.DueDate
-	}
-	return 0
-}
-
-func (x *PayrollRemittance) GetDueDateString() string {
-	if x != nil && x.DueDateString != nil {
-		return *x.DueDateString
 	}
 	return ""
 }
@@ -1073,25 +1065,23 @@ var File_domain_payroll_payroll_remittance_payroll_remittance_proto protoreflect
 
 const file_domain_payroll_payroll_remittance_payroll_remittance_proto_rawDesc = "" +
 	"\n" +
-	":domain/payroll/payroll_remittance/payroll_remittance.proto\x12\x11domain.payroll.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1adomain/common/search.proto\x1a\x10options/db.proto\"\x84\x06\n" +
+	":domain/payroll/payroll_remittance/payroll_remittance.proto\x12\x11domain.payroll.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1adomain/common/search.proto\x1a\x10options/db.proto\"\xc9\x05\n" +
 	"\x11PayrollRemittance\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x129\n" +
 	"\x0epayroll_run_id\x18\x02 \x01(\tB\x13\x82\xb5\x18\x0f\n" +
 	"\vpayroll_run\x18\x01R\fpayrollRunId\x12J\n" +
 	"\x0fremittance_type\x18\x03 \x01(\x0e2!.domain.payroll.v1.RemittanceTypeR\x0eremittanceType\x12\x16\n" +
-	"\x06amount\x18\x04 \x01(\x01R\x06amount\x12\x19\n" +
-	"\bdue_date\x18\x05 \x01(\x03R\adueDate\x12+\n" +
-	"\x0fdue_date_string\x18\x06 \x01(\tH\x00R\rdueDateString\x88\x01\x01\x12;\n" +
+	"\x06amount\x18\x04 \x01(\x03R\x06amount\x12\x19\n" +
+	"\bdue_date\x18\x05 \x01(\tR\adueDate\x12;\n" +
 	"\x06status\x18\a \x01(\x0e2#.domain.payroll.v1.RemittanceStatusR\x06status\x12\x1e\n" +
-	"\bfiled_at\x18\b \x01(\x03H\x01R\afiledAt\x88\x01\x01\x12+\n" +
-	"\x0ffiled_at_string\x18\t \x01(\tH\x02R\rfiledAtString\x88\x01\x01\x12\x1c\n" +
+	"\bfiled_at\x18\b \x01(\x03H\x00R\afiledAt\x88\x01\x01\x12+\n" +
+	"\x0ffiled_at_string\x18\t \x01(\tH\x01R\rfiledAtString\x88\x01\x01\x12\x1c\n" +
 	"\apaid_at\x18\n" +
-	" \x01(\x03H\x03R\x06paidAt\x88\x01\x01\x12)\n" +
-	"\x0epaid_at_string\x18\v \x01(\tH\x04R\fpaidAtString\x88\x01\x01\x12.\n" +
-	"\x10reference_number\x18\f \x01(\tH\x05R\x0freferenceNumber\x88\x01\x01\x12&\n" +
-	"\fdate_created\x18\r \x01(\x03H\x06R\vdateCreated\x88\x01\x01\x123\n" +
-	"\x13date_created_string\x18\x0e \x01(\tH\aR\x11dateCreatedString\x88\x01\x01:\x06\x8a\xb5\x18\x02\b\x01B\x12\n" +
-	"\x10_due_date_stringB\v\n" +
+	" \x01(\x03H\x02R\x06paidAt\x88\x01\x01\x12)\n" +
+	"\x0epaid_at_string\x18\v \x01(\tH\x03R\fpaidAtString\x88\x01\x01\x12.\n" +
+	"\x10reference_number\x18\f \x01(\tH\x04R\x0freferenceNumber\x88\x01\x01\x12&\n" +
+	"\fdate_created\x18\r \x01(\x03H\x05R\vdateCreated\x88\x01\x01\x123\n" +
+	"\x13date_created_string\x18\x0e \x01(\tH\x06R\x11dateCreatedString\x88\x01\x01:\x06\x8a\xb5\x18\x02\b\x01B\v\n" +
 	"\t_filed_atB\x12\n" +
 	"\x10_filed_at_stringB\n" +
 	"\n" +
@@ -1099,7 +1089,7 @@ const file_domain_payroll_payroll_remittance_payroll_remittance_proto_rawDesc = 
 	"\x0f_paid_at_stringB\x13\n" +
 	"\x11_reference_numberB\x0f\n" +
 	"\r_date_createdB\x16\n" +
-	"\x14_date_created_string\"Z\n" +
+	"\x14_date_created_stringJ\x04\b\x06\x10\a\"Z\n" +
 	"\x1eCreatePayrollRemittanceRequest\x128\n" +
 	"\x04data\x18\x01 \x01(\v2$.domain.payroll.v1.PayrollRemittanceR\x04data\"\xb3\x01\n" +
 	"\x1fCreatePayrollRemittanceResponse\x128\n" +

@@ -32,8 +32,8 @@ message PurchaseOrderLineItem {
   double quantity_ordered = 8;
   double quantity_received = 9;            // Updated on goods receipt
   double quantity_billed = 10;             // Updated on invoice match
-  double unit_price = 11;
-  double total_price = 12;
+  int64 unit_price = 11; // centavos
+  int64 total_price = 12; // centavos
 
   // Receiving location
   optional string location_id = 13 [(options.v1.db).references = "location"];

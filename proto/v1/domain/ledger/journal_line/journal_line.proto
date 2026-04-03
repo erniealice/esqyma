@@ -30,8 +30,8 @@ message JournalLine {
   optional string description = 4;
 
   // Debit/credit amounts — exactly one should be non-zero per line
-  double debit_amount = 5 [(options.v1.db).default = "0"];
-  double credit_amount = 6 [(options.v1.db).default = "0"];
+  int64 debit_amount = 5 [(options.v1.db).default = "0"]; // centavos
+  int64 credit_amount = 6 [(options.v1.db).default = "0"]; // centavos
 
   // Presentation order within the journal entry
   int32 line_order = 7 [(options.v1.db).default = "0"];

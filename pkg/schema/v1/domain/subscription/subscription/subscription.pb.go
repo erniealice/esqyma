@@ -38,10 +38,8 @@ type Subscription struct {
 	PricePlanId        string                 `protobuf:"bytes,9,opt,name=price_plan_id,json=pricePlanId,proto3" json:"price_plan_id,omitempty"`
 	Client             *client.Client         `protobuf:"bytes,10,opt,name=client,proto3,oneof" json:"client,omitempty"`
 	ClientId           string                 `protobuf:"bytes,11,opt,name=client_id,json=clientId,proto3" json:"client_id,omitempty"`
-	DateStart          *int64                 `protobuf:"varint,12,opt,name=date_start,json=dateStart,proto3,oneof" json:"date_start,omitempty"`
-	DateStartString    *string                `protobuf:"bytes,13,opt,name=date_start_string,json=dateStartString,proto3,oneof" json:"date_start_string,omitempty"`
-	DateEnd            *int64                 `protobuf:"varint,14,opt,name=date_end,json=dateEnd,proto3,oneof" json:"date_end,omitempty"`
-	DateEndString      *string                `protobuf:"bytes,15,opt,name=date_end_string,json=dateEndString,proto3,oneof" json:"date_end_string,omitempty"`
+	DateStart          *string                `protobuf:"bytes,12,opt,name=date_start,json=dateStart,proto3,oneof" json:"date_start,omitempty"` // ISO 8601 date (YYYY-MM-DD)
+	DateEnd            *string                `protobuf:"bytes,14,opt,name=date_end,json=dateEnd,proto3,oneof" json:"date_end,omitempty"`       // ISO 8601 date (YYYY-MM-DD)
 	Metadata           map[string]string      `protobuf:"bytes,16,rep,name=metadata,proto3" json:"metadata,omitempty" protobuf_key:"bytes,1,opt,name=key" protobuf_val:"bytes,2,opt,name=value"`
 	// License pool management
 	Quantity       *int32 `protobuf:"varint,17,opt,name=quantity,proto3,oneof" json:"quantity,omitempty"`                                   // Number of licenses purchased
@@ -162,30 +160,16 @@ func (x *Subscription) GetClientId() string {
 	return ""
 }
 
-func (x *Subscription) GetDateStart() int64 {
+func (x *Subscription) GetDateStart() string {
 	if x != nil && x.DateStart != nil {
 		return *x.DateStart
-	}
-	return 0
-}
-
-func (x *Subscription) GetDateStartString() string {
-	if x != nil && x.DateStartString != nil {
-		return *x.DateStartString
 	}
 	return ""
 }
 
-func (x *Subscription) GetDateEnd() int64 {
+func (x *Subscription) GetDateEnd() string {
 	if x != nil && x.DateEnd != nil {
 		return *x.DateEnd
-	}
-	return 0
-}
-
-func (x *Subscription) GetDateEndString() string {
-	if x != nil && x.DateEndString != nil {
-		return *x.DateEndString
 	}
 	return ""
 }
@@ -1042,8 +1026,7 @@ var File_domain_subscription_subscription_subscription_proto protoreflect.FileDe
 
 const file_domain_subscription_subscription_subscription_proto_rawDesc = "" +
 	"\n" +
-	"3domain/subscription/subscription/subscription.proto\x12\x16domain.subscription.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1adomain/common/search.proto\x1a/domain/subscription/price_plan/price_plan.proto\x1a!domain/entity/client/client.proto\x1a\x10options/db.proto\"\xb9\n" +
-	"\n" +
+	"3domain/subscription/subscription/subscription.proto\x12\x16domain.subscription.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1adomain/common/search.proto\x1a/domain/subscription/price_plan/price_plan.proto\x1a!domain/entity/client/client.proto\x1a\x10options/db.proto\"\xbd\t\n" +
 	"\fSubscription\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12&\n" +
 	"\fdate_created\x18\x02 \x01(\x03H\x00R\vdateCreated\x88\x01\x01\x123\n" +
@@ -1064,19 +1047,17 @@ const file_domain_subscription_subscription_subscription_proto_rawDesc = "" +
 	"\n" +
 	"\x06client\x18\x01R\bclientId\x12\"\n" +
 	"\n" +
-	"date_start\x18\f \x01(\x03H\x06R\tdateStart\x88\x01\x01\x12/\n" +
-	"\x11date_start_string\x18\r \x01(\tH\aR\x0fdateStartString\x88\x01\x01\x12\x1e\n" +
-	"\bdate_end\x18\x0e \x01(\x03H\bR\adateEnd\x88\x01\x01\x12+\n" +
-	"\x0fdate_end_string\x18\x0f \x01(\tH\tR\rdateEndString\x88\x01\x01\x12N\n" +
+	"date_start\x18\f \x01(\tH\x06R\tdateStart\x88\x01\x01\x12\x1e\n" +
+	"\bdate_end\x18\x0e \x01(\tH\aR\adateEnd\x88\x01\x01\x12N\n" +
 	"\bmetadata\x18\x10 \x03(\v22.domain.subscription.v1.Subscription.MetadataEntryR\bmetadata\x12\x1f\n" +
-	"\bquantity\x18\x11 \x01(\x05H\n" +
-	"R\bquantity\x88\x01\x01\x12*\n" +
-	"\x0eassigned_count\x18\x12 \x01(\x05H\vR\rassignedCount\x88\x01\x01\x12,\n" +
-	"\x0favailable_count\x18\x13 \x01(\x05H\fR\x0eavailableCount\x88\x01\x01\x125\n" +
-	"\x14default_license_type\x18\x14 \x01(\tH\rR\x12defaultLicenseType\x88\x01\x01\x12$\n" +
-	"\vauto_assign\x18\x15 \x01(\bH\x0eR\n" +
+	"\bquantity\x18\x11 \x01(\x05H\bR\bquantity\x88\x01\x01\x12*\n" +
+	"\x0eassigned_count\x18\x12 \x01(\x05H\tR\rassignedCount\x88\x01\x01\x12,\n" +
+	"\x0favailable_count\x18\x13 \x01(\x05H\n" +
+	"R\x0eavailableCount\x88\x01\x01\x125\n" +
+	"\x14default_license_type\x18\x14 \x01(\tH\vR\x12defaultLicenseType\x88\x01\x01\x12$\n" +
+	"\vauto_assign\x18\x15 \x01(\bH\fR\n" +
 	"autoAssign\x88\x01\x01\x12\x17\n" +
-	"\x04code\x18\x16 \x01(\tH\x0fR\x04code\x88\x01\x01\x1a;\n" +
+	"\x04code\x18\x16 \x01(\tH\rR\x04code\x88\x01\x01\x1a;\n" +
 	"\rMetadataEntry\x12\x10\n" +
 	"\x03key\x18\x01 \x01(\tR\x03key\x12\x14\n" +
 	"\x05value\x18\x02 \x01(\tR\x05value:\x028\x01:\x06\x8a\xb5\x18\x02\b\x01B\x0f\n" +
@@ -1086,16 +1067,14 @@ const file_domain_subscription_subscription_subscription_proto_rawDesc = "" +
 	"\x15_date_modified_stringB\r\n" +
 	"\v_price_planB\t\n" +
 	"\a_clientB\r\n" +
-	"\v_date_startB\x14\n" +
-	"\x12_date_start_stringB\v\n" +
-	"\t_date_endB\x12\n" +
-	"\x10_date_end_stringB\v\n" +
+	"\v_date_startB\v\n" +
+	"\t_date_endB\v\n" +
 	"\t_quantityB\x11\n" +
 	"\x0f_assigned_countB\x12\n" +
 	"\x10_available_countB\x17\n" +
 	"\x15_default_license_typeB\x0e\n" +
 	"\f_auto_assignB\a\n" +
-	"\x05_code\"U\n" +
+	"\x05_codeJ\x04\b\r\x10\x0eJ\x04\b\x0f\x10\x10\"U\n" +
 	"\x19CreateSubscriptionRequest\x128\n" +
 	"\x04data\x18\x01 \x01(\v2$.domain.subscription.v1.SubscriptionR\x04data\"\xae\x01\n" +
 	"\x1aCreateSubscriptionResponse\x128\n" +

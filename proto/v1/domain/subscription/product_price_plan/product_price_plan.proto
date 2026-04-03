@@ -25,7 +25,7 @@ message ProductPricePlan {
   string price_plan_id = 8 [(options.v1.db).references = "price_plan", (options.v1.db).index = true];
   optional domain.product.v1.Product product = 9;
   string product_id = 10 [(options.v1.db).references = "product", (options.v1.db).index = true];
-  double price = 11;
+  int64 price = 11; // centavos
   string currency = 12;
 }
 

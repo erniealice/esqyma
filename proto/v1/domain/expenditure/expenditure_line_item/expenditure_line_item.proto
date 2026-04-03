@@ -26,8 +26,8 @@ message ExpenditureLineItem {
   optional string product_id = 10;
   string description = 11;
   double quantity = 12;
-  double unit_price = 13;
-  double total_price = 14;
+  int64 unit_price = 13; // centavos
+  int64 total_price = 14; // centavos
   optional string notes = 16;
   string line_item_type = 17;                   // "item", "tax", "shipping", "discount"
   optional string inventory_item_id = 18;       // FK to inventory_item (for purchase items going into stock)

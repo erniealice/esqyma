@@ -22,8 +22,8 @@ message PettyCashFund {
   string name = 2;                                  // e.g. "Front Desk Petty Cash"
 
   // Fund limits
-  double authorized_amount = 3;                     // Maximum float
-  double current_balance = 4 [(options.v1.db).default = "0"];  // Running balance
+  int64 authorized_amount = 3; // centavos                     // Maximum float
+  int64 current_balance = 4 [(options.v1.db).default = "0"]; // centavos  // Running balance
 
   // Custodian and location
   optional string custodian_id = 5 [(options.v1.db).index = true];  // FK to entity.User

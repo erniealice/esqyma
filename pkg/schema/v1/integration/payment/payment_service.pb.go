@@ -71,9 +71,8 @@ type CheckoutSessionData struct {
 	state protoimpl.MessageState `protogen:"open.v1"`
 	// Provider to use (optional, uses default if not specified)
 	ProviderId string `protobuf:"bytes,1,opt,name=provider_id,json=providerId,proto3" json:"provider_id,omitempty"`
-	// Amount in base currency units (e.g., dollars, not cents)
-	// Payment providers typically convert to cents internally
-	Amount float64 `protobuf:"fixed64,2,opt,name=amount,proto3" json:"amount,omitempty"`
+	// Amount in centavos (smallest currency unit)
+	Amount int64 `protobuf:"varint,2,opt,name=amount,proto3" json:"amount,omitempty"` // centavos
 	// Currency code (ISO 4217)
 	Currency string `protobuf:"bytes,3,opt,name=currency,proto3" json:"currency,omitempty"`
 	// Payment description
@@ -139,7 +138,7 @@ func (x *CheckoutSessionData) GetProviderId() string {
 	return ""
 }
 
-func (x *CheckoutSessionData) GetAmount() float64 {
+func (x *CheckoutSessionData) GetAmount() int64 {
 	if x != nil {
 		return x.Amount
 	}
@@ -2296,7 +2295,7 @@ const file_integration_payment_payment_service_proto_rawDesc = "" +
 	"\x13CheckoutSessionData\x12\x1f\n" +
 	"\vprovider_id\x18\x01 \x01(\tR\n" +
 	"providerId\x12\x16\n" +
-	"\x06amount\x18\x02 \x01(\x01R\x06amount\x12\x1a\n" +
+	"\x06amount\x18\x02 \x01(\x03R\x06amount\x12\x1a\n" +
 	"\bcurrency\x18\x03 \x01(\tR\bcurrency\x12 \n" +
 	"\vdescription\x18\x04 \x01(\tR\vdescription\x12\x1d\n" +
 	"\n" +

@@ -31,14 +31,14 @@ message Prepayment {
   optional string vendor_name = 3;
 
   // Amounts
-  double total_amount = 4;
-  double remaining_amount = 5;            // Decreases with each amortization entry
+  int64 total_amount = 4; // centavos
+  int64 remaining_amount = 5; // centavos            // Decreases with each amortization entry
 
   // Amortization schedule
-  int64 start_date = 6;
-  optional string start_date_string = 7;
-  int64 end_date = 8;
-  optional string end_date_string = 9;
+  string start_date = 6; // ISO 8601 date (YYYY-MM-DD)
+  reserved 7; // was start_date_string
+  string end_date = 8; // ISO 8601 date (YYYY-MM-DD)
+  reserved 9; // was end_date_string
   int32 amortization_months = 10;         // Derived from start/end, stored for convenience
 
   PrepaymentStatus status = 11;

@@ -27,7 +27,7 @@ message Expenditure {
   string vendor_id = 10;                          // FK to entity/client (vendors are clients you buy from)
   optional int64 expenditure_date = 11;
   optional string expenditure_date_string = 12;
-  double total_amount = 13;
+  int64 total_amount = 13; // centavos
   string currency = 14;
   string status = 15;
   optional string reference_number = 16;
@@ -36,7 +36,7 @@ message Expenditure {
   optional domain.entity.v1.Location location = 19;
   string location_id = 20;                        // FK to location
   optional string payment_terms = 21;             // "cash", "net_30", "net_60"
-  optional int64 due_date = 22;                   // for AP tracking
+  optional string due_date = 22;                   // ISO 8601 date (YYYY-MM-DD) — for AP tracking
   optional string approved_by = 23;               // who authorized
   optional string purchase_order_id = 24;    // FK to PurchaseOrder for 3-way match
   optional string supplier_id = 25;          // FK to supplier (new — migrate from vendor_id over time)

@@ -31,7 +31,7 @@ type PettyCashReplenishment struct {
 	// Parent fund
 	FundId                  string  `protobuf:"bytes,2,opt,name=fund_id,json=fundId,proto3" json:"fund_id,omitempty"`
 	ReplenishmentNumber     string  `protobuf:"bytes,3,opt,name=replenishment_number,json=replenishmentNumber,proto3" json:"replenishment_number,omitempty"`
-	Amount                  float64 `protobuf:"fixed64,4,opt,name=amount,proto3" json:"amount,omitempty"` // Total cash returned to fund (sum of vouchers)
+	Amount                  int64   `protobuf:"varint,4,opt,name=amount,proto3" json:"amount,omitempty"` // centavos                         // Total cash returned to fund (sum of vouchers)
 	ReplenishmentDate       int64   `protobuf:"varint,5,opt,name=replenishment_date,json=replenishmentDate,proto3" json:"replenishment_date,omitempty"`
 	ReplenishmentDateString *string `protobuf:"bytes,6,opt,name=replenishment_date_string,json=replenishmentDateString,proto3,oneof" json:"replenishment_date_string,omitempty"`
 	// Vouchers covered by this replenishment
@@ -96,7 +96,7 @@ func (x *PettyCashReplenishment) GetReplenishmentNumber() string {
 	return ""
 }
 
-func (x *PettyCashReplenishment) GetAmount() float64 {
+func (x *PettyCashReplenishment) GetAmount() int64 {
 	if x != nil {
 		return x.Amount
 	}
@@ -946,7 +946,7 @@ const file_domain_treasury_petty_cash_replenishment_petty_cash_replenishment_pro
 	"\afund_id\x18\x02 \x01(\tB\x17\x82\xb5\x18\x13\n" +
 	"\x0fpetty_cash_fund\x18\x01R\x06fundId\x12;\n" +
 	"\x14replenishment_number\x18\x03 \x01(\tB\b\x82\xb5\x18\x04\x10\x01\x18\x01R\x13replenishmentNumber\x12\x16\n" +
-	"\x06amount\x18\x04 \x01(\x01R\x06amount\x12-\n" +
+	"\x06amount\x18\x04 \x01(\x03R\x06amount\x12-\n" +
 	"\x12replenishment_date\x18\x05 \x01(\x03R\x11replenishmentDate\x12?\n" +
 	"\x19replenishment_date_string\x18\x06 \x01(\tH\x00R\x17replenishmentDateString\x88\x01\x01\x12\x1f\n" +
 	"\vvoucher_ids\x18\a \x03(\tR\n" +

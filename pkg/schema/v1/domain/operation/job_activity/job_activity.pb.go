@@ -247,8 +247,8 @@ type JobActivity struct {
 	JobTaskId         *string                `protobuf:"bytes,4,opt,name=job_task_id,json=jobTaskId,proto3,oneof" json:"job_task_id,omitempty"`
 	EntryType         EntryType              `protobuf:"varint,5,opt,name=entry_type,json=entryType,proto3,enum=domain.operation.v1.EntryType" json:"entry_type,omitempty"`
 	Quantity          float64                `protobuf:"fixed64,6,opt,name=quantity,proto3" json:"quantity,omitempty"`
-	UnitCost          float64                `protobuf:"fixed64,7,opt,name=unit_cost,json=unitCost,proto3" json:"unit_cost,omitempty"`
-	TotalCost         float64                `protobuf:"fixed64,8,opt,name=total_cost,json=totalCost,proto3" json:"total_cost,omitempty"`
+	UnitCost          int64                  `protobuf:"varint,7,opt,name=unit_cost,json=unitCost,proto3" json:"unit_cost,omitempty"`    // centavos
+	TotalCost         int64                  `protobuf:"varint,8,opt,name=total_cost,json=totalCost,proto3" json:"total_cost,omitempty"` // centavos
 	Currency          string                 `protobuf:"bytes,9,opt,name=currency,proto3" json:"currency,omitempty"`
 	EntryDate         *int64                 `protobuf:"varint,10,opt,name=entry_date,json=entryDate,proto3,oneof" json:"entry_date,omitempty"`
 	EntryDateString   *string                `protobuf:"bytes,11,opt,name=entry_date_string,json=entryDateString,proto3,oneof" json:"entry_date_string,omitempty"`
@@ -341,14 +341,14 @@ func (x *JobActivity) GetQuantity() float64 {
 	return 0
 }
 
-func (x *JobActivity) GetUnitCost() float64 {
+func (x *JobActivity) GetUnitCost() int64 {
 	if x != nil {
 		return x.UnitCost
 	}
 	return 0
 }
 
-func (x *JobActivity) GetTotalCost() float64 {
+func (x *JobActivity) GetTotalCost() int64 {
 	if x != nil {
 		return x.TotalCost
 	}
@@ -1402,7 +1402,7 @@ func (x *GetJobActivityRollupRequest) GetJobId() string {
 type CostByEntryType struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	EntryType     EntryType              `protobuf:"varint,1,opt,name=entry_type,json=entryType,proto3,enum=domain.operation.v1.EntryType" json:"entry_type,omitempty"`
-	TotalCost     float64                `protobuf:"fixed64,2,opt,name=total_cost,json=totalCost,proto3" json:"total_cost,omitempty"`
+	TotalCost     int64                  `protobuf:"varint,2,opt,name=total_cost,json=totalCost,proto3" json:"total_cost,omitempty"` // centavos
 	Count         int32                  `protobuf:"varint,3,opt,name=count,proto3" json:"count,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
@@ -1445,7 +1445,7 @@ func (x *CostByEntryType) GetEntryType() EntryType {
 	return EntryType_ENTRY_TYPE_UNSPECIFIED
 }
 
-func (x *CostByEntryType) GetTotalCost() float64 {
+func (x *CostByEntryType) GetTotalCost() int64 {
 	if x != nil {
 		return x.TotalCost
 	}
@@ -1462,7 +1462,7 @@ func (x *CostByEntryType) GetCount() int32 {
 type GetJobActivityRollupResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Rollup        []*CostByEntryType     `protobuf:"bytes,1,rep,name=rollup,proto3" json:"rollup,omitempty"`
-	GrandTotal    float64                `protobuf:"fixed64,2,opt,name=grand_total,json=grandTotal,proto3" json:"grand_total,omitempty"`
+	GrandTotal    int64                  `protobuf:"varint,2,opt,name=grand_total,json=grandTotal,proto3" json:"grand_total,omitempty"` // centavos
 	Success       bool                   `protobuf:"varint,3,opt,name=success,proto3" json:"success,omitempty"`
 	Error         *common.Error          `protobuf:"bytes,4,opt,name=error,proto3,oneof" json:"error,omitempty"`
 	unknownFields protoimpl.UnknownFields
@@ -1506,7 +1506,7 @@ func (x *GetJobActivityRollupResponse) GetRollup() []*CostByEntryType {
 	return nil
 }
 
-func (x *GetJobActivityRollupResponse) GetGrandTotal() float64 {
+func (x *GetJobActivityRollupResponse) GetGrandTotal() int64 {
 	if x != nil {
 		return x.GrandTotal
 	}
@@ -2111,9 +2111,9 @@ const file_domain_operation_job_activity_job_activity_proto_rawDesc = "" +
 	"\n" +
 	"entry_type\x18\x05 \x01(\x0e2\x1e.domain.operation.v1.EntryTypeR\tentryType\x12\x1a\n" +
 	"\bquantity\x18\x06 \x01(\x01R\bquantity\x12\x1b\n" +
-	"\tunit_cost\x18\a \x01(\x01R\bunitCost\x12\x1d\n" +
+	"\tunit_cost\x18\a \x01(\x03R\bunitCost\x12\x1d\n" +
 	"\n" +
-	"total_cost\x18\b \x01(\x01R\ttotalCost\x12\x1a\n" +
+	"total_cost\x18\b \x01(\x03R\ttotalCost\x12\x1a\n" +
 	"\bcurrency\x18\t \x01(\tR\bcurrency\x12\"\n" +
 	"\n" +
 	"entry_date\x18\n" +
@@ -2238,11 +2238,11 @@ const file_domain_operation_job_activity_job_activity_proto_rawDesc = "" +
 	"\n" +
 	"entry_type\x18\x01 \x01(\x0e2\x1e.domain.operation.v1.EntryTypeR\tentryType\x12\x1d\n" +
 	"\n" +
-	"total_cost\x18\x02 \x01(\x01R\ttotalCost\x12\x14\n" +
+	"total_cost\x18\x02 \x01(\x03R\ttotalCost\x12\x14\n" +
 	"\x05count\x18\x03 \x01(\x05R\x05count\"\xd5\x01\n" +
 	"\x1cGetJobActivityRollupResponse\x12<\n" +
 	"\x06rollup\x18\x01 \x03(\v2$.domain.operation.v1.CostByEntryTypeR\x06rollup\x12\x1f\n" +
-	"\vgrand_total\x18\x02 \x01(\x01R\n" +
+	"\vgrand_total\x18\x02 \x01(\x03R\n" +
 	"grandTotal\x12\x18\n" +
 	"\asuccess\x18\x03 \x01(\bR\asuccess\x122\n" +
 	"\x05error\x18\x04 \x01(\v2\x17.domain.common.v1.ErrorH\x00R\x05error\x88\x01\x01B\b\n" +

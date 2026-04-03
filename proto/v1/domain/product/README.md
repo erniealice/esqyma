@@ -1,10 +1,10 @@
 # Product Domain
 
-The product domain models what a business **sells** and how it's **organized** and **priced**. It answers:
+The product domain models what a business **sells** and how it's **priced**. It answers:
 
 1. **What do we sell?** (Product, ProductVariant)
 2. **What options does it come in?** (ProductOption, ProductOptionValue, ProductVariantOption)
-3. **How is it organized?** (Collection, ProductCollection, CollectionParent)
+3. **How is it organized?** (Line, ProductLine)
 4. **How much does it cost?** (PriceList, PriceProduct)
 5. **What else do we know about it?** (ProductAttribute, Resource, ProductVariantImage)
 
@@ -13,14 +13,11 @@ The product domain models what a business **sells** and how it's **organized** a
 ## Entity Relationship
 
 ```
-                    Collection ◄──── CollectionParent ────► Collection
-                   (category)        (hierarchy: parent    (parent category)
-                        │              → child)
-                        │
-                  ProductCollection
-                  (many-to-many)         CollectionAttribute
-                        │               (category metadata)
-                        │
+                              Line
+                              │
+                              │ ProductLine
+                              │ (many-to-many)
+                              │
                      Product ─────────── ProductAttribute
                 (catalog entry:          (brand, image URL,
                  "iPhone 16 Pro")         extensible metadata)
@@ -172,66 +169,26 @@ Unique constraint: `(product_variant_id, product_option_value_id)` prevents dupl
 
 ## The Organization Layer
 
-### Collection
+### Line
 
-`collection.proto` is a **category or grouping** for products:
-
-| Field | Purpose |
-|-------|---------|
-| `name` | Category name ("Smartphones", "Accessories") |
-| `description` | Category description |
-
-### CollectionParent
-
-`collection_parent.proto` creates a **hierarchy** between collections:
+`line.proto` is a business grouping for products:
 
 | Field | Purpose |
 |-------|---------|
-| `collection_parent_id` | Parent collection (FK) |
-| `collection_id` | Child collection (FK) |
+| `name` | Line name ("Services", "Premium Care") |
+| `description` | Line description |
 
-Unique constraint: `(collection_parent_id, collection_id)`.
+### ProductLine
 
-This is a junction table (not a `parent_id` on Collection itself) because it supports **multiple parents** — a "Wireless Earbuds" collection could appear under both "Audio" and "Accessories".
-
-### ProductCollection
-
-`product_collection.proto` is the **many-to-many** link between products and collections:
+`product_line.proto` is the **many-to-many** link between products and lines:
 
 | Field | Purpose |
 |-------|---------|
 | `product_id` | The product (FK) |
-| `collection_id` | The collection (FK) |
-| `sort_order` | Product's position within the collection |
+| `line_id` | The line (FK) |
+| `sort_order` | Product's position within the line |
 
-Unique constraint: `(product_id, collection_id)`.
-
-A product can belong to multiple collections ("iPhone 16 Pro" in both "Smartphones" and "New Arrivals"), and collections contain multiple products.
-
-### CollectionAttribute
-
-`collection_attribute.proto` provides **extensible metadata** on collections:
-
-| Field | Purpose |
-|-------|---------|
-| `collection_id` | The collection (FK) |
-| `attribute_id` | Shared attribute definition (FK to `common.Attribute`) |
-| `value` | Attribute value |
-
-Unique constraint: `(collection_id, attribute_id)`.
-
-Used for things like collection banner images, SEO descriptions, or display settings without adding columns to the Collection table.
-
-### CollectionPlan
-
-`collection_plan.proto` links collections to **subscription plans**:
-
-| Field | Purpose |
-|-------|---------|
-| `collection_id` | The collection (FK) |
-| `plan_id` | The subscription plan (FK) |
-
-This supports the educational use case where collections represent course categories and plans represent academic years/enrollment periods.
+Unique constraint: `(product_id, line_id)`.
 
 ---
 
@@ -338,10 +295,10 @@ Think of an electronics retailer's product catalog:
 | Color/storage selector | ProductOption + ProductOptionValue | Buttons: Black, Blue, White + 128GB, 256GB |
 | Add-to-cart SKU | ProductVariant | "IPH16P-BLK-256" at PHP 64,990 |
 | Product photos | ProductVariantImage | Black model front/back/side photos |
-| Category page | Collection | "Smartphones" |
-| Category tree | CollectionParent | Electronics > Mobile > Smartphones |
-| Product in category | ProductCollection | iPhone 16 Pro listed in "Smartphones" |
+| Line page | Line | "Services" |
+| Line tree | Line hierarchy | Business > Services > Premium |
+| Product in line | ProductLine | iPhone 16 Pro listed in "Services" |
 | Sale tag | PriceList + PriceProduct | "Summer Sale" at PHP 59,990 (Jun-Aug) |
 | Spec sheet | ProductAttribute | Brand: Apple, Weight: 199g |
 
-The catalog manager creates Products and Options. The merchandiser assigns them to Collections. The pricing team creates PriceLists. The warehouse receives them as InventoryItems. Each entity serves a different role in the business.
+The catalog manager creates Products and Options. The merchandiser assigns them to Lines. The pricing team creates PriceLists. The warehouse receives them as InventoryItems. Each entity serves a different role in the business.

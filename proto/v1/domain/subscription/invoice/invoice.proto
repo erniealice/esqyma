@@ -17,7 +17,7 @@ message Invoice {
   option (options.v1.table).table = true;
   string id = 1;
   string invoice_number = 2;
-  double amount = 3;
+  int64 amount = 3; // centavos
   optional int64 date_created = 4;
   optional string date_created_string = 5;
   optional int64 date_modified = 6;

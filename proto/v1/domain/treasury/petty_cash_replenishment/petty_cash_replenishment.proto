@@ -23,7 +23,7 @@ message PettyCashReplenishment {
   string fund_id = 2 [(options.v1.db).references = "petty_cash_fund", (options.v1.db).index = true];
 
   string replenishment_number = 3 [(options.v1.db).unique = true, (options.v1.db).index = true];
-  double amount = 4;                         // Total cash returned to fund (sum of vouchers)
+  int64 amount = 4; // centavos                         // Total cash returned to fund (sum of vouchers)
 
   int64 replenishment_date = 5;
   optional string replenishment_date_string = 6;

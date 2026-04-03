@@ -38,10 +38,8 @@ type PriceProduct struct {
 	Description        *string                `protobuf:"bytes,10,opt,name=description,proto3,oneof" json:"description,omitempty"`
 	Amount             int64                  `protobuf:"varint,11,opt,name=amount,proto3" json:"amount,omitempty"`
 	Currency           string                 `protobuf:"bytes,12,opt,name=currency,proto3" json:"currency,omitempty"`
-	DateStart          int64                  `protobuf:"varint,13,opt,name=date_start,json=dateStart,proto3" json:"date_start,omitempty"`
-	DateStartString    string                 `protobuf:"bytes,14,opt,name=date_start_string,json=dateStartString,proto3" json:"date_start_string,omitempty"`
-	DateEnd            *int64                 `protobuf:"varint,15,opt,name=date_end,json=dateEnd,proto3,oneof" json:"date_end,omitempty"`
-	DateEndString      *string                `protobuf:"bytes,16,opt,name=date_end_string,json=dateEndString,proto3,oneof" json:"date_end_string,omitempty"`
+	DateStart          string                 `protobuf:"bytes,13,opt,name=date_start,json=dateStart,proto3" json:"date_start,omitempty"` // ISO 8601 date (YYYY-MM-DD)
+	DateEnd            *string                `protobuf:"bytes,15,opt,name=date_end,json=dateEnd,proto3,oneof" json:"date_end,omitempty"` // ISO 8601 date (YYYY-MM-DD)
 	PriceListId        *string                `protobuf:"bytes,17,opt,name=price_list_id,json=priceListId,proto3,oneof" json:"price_list_id,omitempty"`
 	unknownFields      protoimpl.UnknownFields
 	sizeCache          protoimpl.SizeCache
@@ -161,30 +159,16 @@ func (x *PriceProduct) GetCurrency() string {
 	return ""
 }
 
-func (x *PriceProduct) GetDateStart() int64 {
+func (x *PriceProduct) GetDateStart() string {
 	if x != nil {
 		return x.DateStart
-	}
-	return 0
-}
-
-func (x *PriceProduct) GetDateStartString() string {
-	if x != nil {
-		return x.DateStartString
 	}
 	return ""
 }
 
-func (x *PriceProduct) GetDateEnd() int64 {
+func (x *PriceProduct) GetDateEnd() string {
 	if x != nil && x.DateEnd != nil {
 		return *x.DateEnd
-	}
-	return 0
-}
-
-func (x *PriceProduct) GetDateEndString() string {
-	if x != nil && x.DateEndString != nil {
-		return *x.DateEndString
 	}
 	return ""
 }
@@ -984,7 +968,7 @@ var File_domain_product_price_product_price_product_proto protoreflect.FileDescr
 
 const file_domain_product_price_product_price_product_proto_rawDesc = "" +
 	"\n" +
-	"0domain/product/price_product/price_product.proto\x12\x11domain.product.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1adomain/common/search.proto\x1a$domain/product/product/product.proto\x1a\x10options/db.proto\"\xda\x06\n" +
+	"0domain/product/price_product/price_product.proto\x12\x11domain.product.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1adomain/common/search.proto\x1a$domain/product/product/product.proto\x1a\x10options/db.proto\"\xf9\x05\n" +
 	"\fPriceProduct\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12&\n" +
 	"\fdate_created\x18\x02 \x01(\x03H\x00R\vdateCreated\x88\x01\x01\x123\n" +
@@ -1003,13 +987,11 @@ const file_domain_product_price_product_price_product_proto_rawDesc = "" +
 	"\x06amount\x18\v \x01(\x03R\x06amount\x12\x1a\n" +
 	"\bcurrency\x18\f \x01(\tR\bcurrency\x12\x1d\n" +
 	"\n" +
-	"date_start\x18\r \x01(\x03R\tdateStart\x12*\n" +
-	"\x11date_start_string\x18\x0e \x01(\tR\x0fdateStartString\x12\x1e\n" +
-	"\bdate_end\x18\x0f \x01(\x03H\x06R\adateEnd\x88\x01\x01\x12+\n" +
-	"\x0fdate_end_string\x18\x10 \x01(\tH\aR\rdateEndString\x88\x01\x01\x12;\n" +
+	"date_start\x18\r \x01(\tR\tdateStart\x12\x1e\n" +
+	"\bdate_end\x18\x0f \x01(\tH\x06R\adateEnd\x88\x01\x01\x12;\n" +
 	"\rprice_list_id\x18\x11 \x01(\tB\x12\x82\xb5\x18\x0e\n" +
 	"\n" +
-	"price_list\x18\x01H\bR\vpriceListId\x88\x01\x01:\x06\x8a\xb5\x18\x02\b\x01B\x0f\n" +
+	"price_list\x18\x01H\aR\vpriceListId\x88\x01\x01:\x06\x8a\xb5\x18\x02\b\x01B\x0f\n" +
 	"\r_date_createdB\x16\n" +
 	"\x14_date_created_stringB\x10\n" +
 	"\x0e_date_modifiedB\x17\n" +
@@ -1017,9 +999,8 @@ const file_domain_product_price_product_price_product_proto_rawDesc = "" +
 	"\n" +
 	"\b_productB\x0e\n" +
 	"\f_descriptionB\v\n" +
-	"\t_date_endB\x12\n" +
-	"\x10_date_end_stringB\x10\n" +
-	"\x0e_price_list_id\"P\n" +
+	"\t_date_endB\x10\n" +
+	"\x0e_price_list_idJ\x04\b\x0e\x10\x0fJ\x04\b\x10\x10\x11\"P\n" +
 	"\x19CreatePriceProductRequest\x123\n" +
 	"\x04data\x18\x01 \x01(\v2\x1f.domain.product.v1.PriceProductR\x04data\"\xa9\x01\n" +
 	"\x1aCreatePriceProductResponse\x123\n" +

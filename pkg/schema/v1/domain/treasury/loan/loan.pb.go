@@ -140,17 +140,15 @@ type Loan struct {
 	LoanType    LoanType               `protobuf:"varint,4,opt,name=loan_type,json=loanType,proto3,enum=domain.treasury.v1.LoanType" json:"loan_type,omitempty"`
 	LenderName  string                 `protobuf:"bytes,5,opt,name=lender_name,json=lenderName,proto3" json:"lender_name,omitempty"` // Counter-party name (bank, individual, etc.)
 	// Loan terms
-	PrincipalAmount float64 `protobuf:"fixed64,6,opt,name=principal_amount,json=principalAmount,proto3" json:"principal_amount,omitempty"`
-	InterestRate    float64 `protobuf:"fixed64,7,opt,name=interest_rate,json=interestRate,proto3" json:"interest_rate,omitempty"` // Annual rate as a percentage (e.g. 12.5 = 12.5%)
+	PrincipalAmount int64   `protobuf:"varint,6,opt,name=principal_amount,json=principalAmount,proto3" json:"principal_amount,omitempty"` // centavos
+	InterestRate    float64 `protobuf:"fixed64,7,opt,name=interest_rate,json=interestRate,proto3" json:"interest_rate,omitempty"`         // Annual rate as a percentage (e.g. 12.5 = 12.5%)
 	TermMonths      int32   `protobuf:"varint,8,opt,name=term_months,json=termMonths,proto3" json:"term_months,omitempty"`
 	// Dates
-	StartDate          int64   `protobuf:"varint,9,opt,name=start_date,json=startDate,proto3" json:"start_date,omitempty"`
-	StartDateString    *string `protobuf:"bytes,10,opt,name=start_date_string,json=startDateString,proto3,oneof" json:"start_date_string,omitempty"`
-	MaturityDate       int64   `protobuf:"varint,11,opt,name=maturity_date,json=maturityDate,proto3" json:"maturity_date,omitempty"`
-	MaturityDateString *string `protobuf:"bytes,12,opt,name=maturity_date_string,json=maturityDateString,proto3,oneof" json:"maturity_date_string,omitempty"`
+	StartDate    string `protobuf:"bytes,9,opt,name=start_date,json=startDate,proto3" json:"start_date,omitempty"`           // ISO 8601 date (YYYY-MM-DD)
+	MaturityDate string `protobuf:"bytes,11,opt,name=maturity_date,json=maturityDate,proto3" json:"maturity_date,omitempty"` // ISO 8601 date (YYYY-MM-DD)
 	// Status and running balance
 	Status           LoanStatus `protobuf:"varint,13,opt,name=status,proto3,enum=domain.treasury.v1.LoanStatus" json:"status,omitempty"`
-	RemainingBalance float64    `protobuf:"fixed64,14,opt,name=remaining_balance,json=remainingBalance,proto3" json:"remaining_balance,omitempty"` // Updated on each payment
+	RemainingBalance int64      `protobuf:"varint,14,opt,name=remaining_balance,json=remainingBalance,proto3" json:"remaining_balance,omitempty"` // centavos          // Updated on each payment
 	// GL integration — FK to the Chart of Accounts
 	AccountId *string `protobuf:"bytes,15,opt,name=account_id,json=accountId,proto3,oneof" json:"account_id,omitempty"`
 	// Audit fields
@@ -228,7 +226,7 @@ func (x *Loan) GetLenderName() string {
 	return ""
 }
 
-func (x *Loan) GetPrincipalAmount() float64 {
+func (x *Loan) GetPrincipalAmount() int64 {
 	if x != nil {
 		return x.PrincipalAmount
 	}
@@ -249,30 +247,16 @@ func (x *Loan) GetTermMonths() int32 {
 	return 0
 }
 
-func (x *Loan) GetStartDate() int64 {
+func (x *Loan) GetStartDate() string {
 	if x != nil {
 		return x.StartDate
-	}
-	return 0
-}
-
-func (x *Loan) GetStartDateString() string {
-	if x != nil && x.StartDateString != nil {
-		return *x.StartDateString
 	}
 	return ""
 }
 
-func (x *Loan) GetMaturityDate() int64 {
+func (x *Loan) GetMaturityDate() string {
 	if x != nil {
 		return x.MaturityDate
-	}
-	return 0
-}
-
-func (x *Loan) GetMaturityDateString() string {
-	if x != nil && x.MaturityDateString != nil {
-		return *x.MaturityDateString
 	}
 	return ""
 }
@@ -284,7 +268,7 @@ func (x *Loan) GetStatus() LoanStatus {
 	return LoanStatus_LOAN_STATUS_UNSPECIFIED
 }
 
-func (x *Loan) GetRemainingBalance() float64 {
+func (x *Loan) GetRemainingBalance() int64 {
 	if x != nil {
 		return x.RemainingBalance
 	}
@@ -1121,7 +1105,7 @@ var File_domain_treasury_loan_loan_proto protoreflect.FileDescriptor
 
 const file_domain_treasury_loan_loan_proto_rawDesc = "" +
 	"\n" +
-	"\x1fdomain/treasury/loan/loan.proto\x12\x12domain.treasury.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1adomain/common/search.proto\x1a\x10options/db.proto\"\x87\b\n" +
+	"\x1fdomain/treasury/loan/loan.proto\x12\x12domain.treasury.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1adomain/common/search.proto\x1a\x10options/db.proto\"\xfc\x06\n" +
 	"\x04Loan\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12)\n" +
 	"\vloan_number\x18\x02 \x01(\tB\b\x82\xb5\x18\x04\x10\x01\x18\x01R\n" +
@@ -1130,35 +1114,31 @@ const file_domain_treasury_loan_loan_proto_rawDesc = "" +
 	"\tloan_type\x18\x04 \x01(\x0e2\x1c.domain.treasury.v1.LoanTypeR\bloanType\x12\x1f\n" +
 	"\vlender_name\x18\x05 \x01(\tR\n" +
 	"lenderName\x12)\n" +
-	"\x10principal_amount\x18\x06 \x01(\x01R\x0fprincipalAmount\x12#\n" +
+	"\x10principal_amount\x18\x06 \x01(\x03R\x0fprincipalAmount\x12#\n" +
 	"\rinterest_rate\x18\a \x01(\x01R\finterestRate\x12\x1f\n" +
 	"\vterm_months\x18\b \x01(\x05R\n" +
 	"termMonths\x12\x1d\n" +
 	"\n" +
-	"start_date\x18\t \x01(\x03R\tstartDate\x12/\n" +
-	"\x11start_date_string\x18\n" +
-	" \x01(\tH\x01R\x0fstartDateString\x88\x01\x01\x12#\n" +
-	"\rmaturity_date\x18\v \x01(\x03R\fmaturityDate\x125\n" +
-	"\x14maturity_date_string\x18\f \x01(\tH\x02R\x12maturityDateString\x88\x01\x01\x126\n" +
+	"start_date\x18\t \x01(\tR\tstartDate\x12#\n" +
+	"\rmaturity_date\x18\v \x01(\tR\fmaturityDate\x126\n" +
 	"\x06status\x18\r \x01(\x0e2\x1e.domain.treasury.v1.LoanStatusR\x06status\x12+\n" +
-	"\x11remaining_balance\x18\x0e \x01(\x01R\x10remainingBalance\x123\n" +
+	"\x11remaining_balance\x18\x0e \x01(\x03R\x10remainingBalance\x123\n" +
 	"\n" +
 	"account_id\x18\x0f \x01(\tB\x0f\x82\xb5\x18\v\n" +
-	"\aaccount\x18\x01H\x03R\taccountId\x88\x01\x01\x12\"\n" +
+	"\aaccount\x18\x01H\x01R\taccountId\x88\x01\x01\x12\"\n" +
 	"\x06active\x18\x10 \x01(\bB\n" +
 	"\x82\xb5\x18\x06\"\x04trueR\x06active\x12&\n" +
-	"\fdate_created\x18\x11 \x01(\x03H\x04R\vdateCreated\x88\x01\x01\x123\n" +
-	"\x13date_created_string\x18\x12 \x01(\tH\x05R\x11dateCreatedString\x88\x01\x01\x12(\n" +
-	"\rdate_modified\x18\x13 \x01(\x03H\x06R\fdateModified\x88\x01\x01\x125\n" +
-	"\x14date_modified_string\x18\x14 \x01(\tH\aR\x12dateModifiedString\x88\x01\x01:\x06\x8a\xb5\x18\x02\b\x01B\x0e\n" +
-	"\f_descriptionB\x14\n" +
-	"\x12_start_date_stringB\x17\n" +
-	"\x15_maturity_date_stringB\r\n" +
+	"\fdate_created\x18\x11 \x01(\x03H\x02R\vdateCreated\x88\x01\x01\x123\n" +
+	"\x13date_created_string\x18\x12 \x01(\tH\x03R\x11dateCreatedString\x88\x01\x01\x12(\n" +
+	"\rdate_modified\x18\x13 \x01(\x03H\x04R\fdateModified\x88\x01\x01\x125\n" +
+	"\x14date_modified_string\x18\x14 \x01(\tH\x05R\x12dateModifiedString\x88\x01\x01:\x06\x8a\xb5\x18\x02\b\x01B\x0e\n" +
+	"\f_descriptionB\r\n" +
 	"\v_account_idB\x0f\n" +
 	"\r_date_createdB\x16\n" +
 	"\x14_date_created_stringB\x10\n" +
 	"\x0e_date_modifiedB\x17\n" +
-	"\x15_date_modified_string\"A\n" +
+	"\x15_date_modified_stringJ\x04\b\n" +
+	"\x10\vJ\x04\b\f\x10\r\"A\n" +
 	"\x11CreateLoanRequest\x12,\n" +
 	"\x04data\x18\x01 \x01(\v2\x18.domain.treasury.v1.LoanR\x04data\"\x9a\x01\n" +
 	"\x12CreateLoanResponse\x12,\n" +

@@ -27,10 +27,10 @@ message PriceProduct {
   optional string description = 10;
   int64 amount = 11;
   string currency = 12;
-  int64 date_start = 13;
-  string date_start_string = 14;
-  optional int64 date_end = 15;
-  optional string date_end_string = 16;
+  string date_start = 13; // ISO 8601 date (YYYY-MM-DD)
+  reserved 14; // was date_start_string
+  optional string date_end = 15; // ISO 8601 date (YYYY-MM-DD)
+  reserved 16; // was date_end_string
   optional string price_list_id = 17 [(options.v1.db).references = "price_list", (options.v1.db).index = true];
 }
 

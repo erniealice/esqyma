@@ -23,10 +23,10 @@ message PriceList {
   bool active = 6 [(options.v1.db).default = "true"];
   string name = 7;
   optional string description = 8;
-  int64 date_start = 9;
-  string date_start_string = 10;
-  optional int64 date_end = 11;
-  optional string date_end_string = 12;
+  string date_start = 9; // ISO 8601 date (YYYY-MM-DD)
+  reserved 10; // was date_start_string
+  optional string date_end = 11; // ISO 8601 date (YYYY-MM-DD)
+  reserved 12; // was date_end_string
   optional string location_id = 13 [(options.v1.db).references = "location", (options.v1.db).index = true];
 }
 

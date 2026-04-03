@@ -38,8 +38,8 @@ type ExpenditureLineItem struct {
 	ProductId               *string                  `protobuf:"bytes,10,opt,name=product_id,json=productId,proto3,oneof" json:"product_id,omitempty"`
 	Description             string                   `protobuf:"bytes,11,opt,name=description,proto3" json:"description,omitempty"`
 	Quantity                float64                  `protobuf:"fixed64,12,opt,name=quantity,proto3" json:"quantity,omitempty"`
-	UnitPrice               float64                  `protobuf:"fixed64,13,opt,name=unit_price,json=unitPrice,proto3" json:"unit_price,omitempty"`
-	TotalPrice              float64                  `protobuf:"fixed64,14,opt,name=total_price,json=totalPrice,proto3" json:"total_price,omitempty"`
+	UnitPrice               int64                    `protobuf:"varint,13,opt,name=unit_price,json=unitPrice,proto3" json:"unit_price,omitempty"`    // centavos
+	TotalPrice              int64                    `protobuf:"varint,14,opt,name=total_price,json=totalPrice,proto3" json:"total_price,omitempty"` // centavos
 	Notes                   *string                  `protobuf:"bytes,16,opt,name=notes,proto3,oneof" json:"notes,omitempty"`
 	LineItemType            string                   `protobuf:"bytes,17,opt,name=line_item_type,json=lineItemType,proto3" json:"line_item_type,omitempty"`                                            // "item", "tax", "shipping", "discount"
 	InventoryItemId         *string                  `protobuf:"bytes,18,opt,name=inventory_item_id,json=inventoryItemId,proto3,oneof" json:"inventory_item_id,omitempty"`                             // FK to inventory_item (for purchase items going into stock)
@@ -163,14 +163,14 @@ func (x *ExpenditureLineItem) GetQuantity() float64 {
 	return 0
 }
 
-func (x *ExpenditureLineItem) GetUnitPrice() float64 {
+func (x *ExpenditureLineItem) GetUnitPrice() int64 {
 	if x != nil {
 		return x.UnitPrice
 	}
 	return 0
 }
 
-func (x *ExpenditureLineItem) GetTotalPrice() float64 {
+func (x *ExpenditureLineItem) GetTotalPrice() int64 {
 	if x != nil {
 		return x.TotalPrice
 	}
@@ -1025,8 +1025,8 @@ const file_domain_expenditure_expenditure_line_item_expenditure_line_item_proto_
 	"\vdescription\x18\v \x01(\tR\vdescription\x12\x1a\n" +
 	"\bquantity\x18\f \x01(\x01R\bquantity\x12\x1d\n" +
 	"\n" +
-	"unit_price\x18\r \x01(\x01R\tunitPrice\x12\x1f\n" +
-	"\vtotal_price\x18\x0e \x01(\x01R\n" +
+	"unit_price\x18\r \x01(\x03R\tunitPrice\x12\x1f\n" +
+	"\vtotal_price\x18\x0e \x01(\x03R\n" +
 	"totalPrice\x12\x19\n" +
 	"\x05notes\x18\x10 \x01(\tH\aR\x05notes\x88\x01\x01\x12$\n" +
 	"\x0eline_item_type\x18\x11 \x01(\tR\flineItemType\x12/\n" +

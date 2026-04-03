@@ -29,8 +29,8 @@ type FulfillmentReturn struct {
 	Id            string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
 	FulfillmentId string                 `protobuf:"bytes,2,opt,name=fulfillment_id,json=fulfillmentId,proto3" json:"fulfillment_id,omitempty"`
 	Reason        string                 `protobuf:"bytes,3,opt,name=reason,proto3" json:"reason,omitempty"`
-	Status        string                 `protobuf:"bytes,4,opt,name=status,proto3" json:"status,omitempty"` // PENDING, APPROVED, REJECTED, COMPLETED
-	RefundAmount  *float64               `protobuf:"fixed64,5,opt,name=refund_amount,json=refundAmount,proto3,oneof" json:"refund_amount,omitempty"`
+	Status        string                 `protobuf:"bytes,4,opt,name=status,proto3" json:"status,omitempty"`                                        // PENDING, APPROVED, REJECTED, COMPLETED
+	RefundAmount  *int64                 `protobuf:"varint,5,opt,name=refund_amount,json=refundAmount,proto3,oneof" json:"refund_amount,omitempty"` // centavos
 	Currency      string                 `protobuf:"bytes,6,opt,name=currency,proto3" json:"currency,omitempty"`
 	ProcessedById *string                `protobuf:"bytes,7,opt,name=processed_by_id,json=processedById,proto3,oneof" json:"processed_by_id,omitempty"`
 	Notes         string                 `protobuf:"bytes,8,opt,name=notes,proto3" json:"notes,omitempty"`
@@ -100,7 +100,7 @@ func (x *FulfillmentReturn) GetStatus() string {
 	return ""
 }
 
-func (x *FulfillmentReturn) GetRefundAmount() float64 {
+func (x *FulfillmentReturn) GetRefundAmount() int64 {
 	if x != nil && x.RefundAmount != nil {
 		return *x.RefundAmount
 	}
@@ -167,7 +167,7 @@ const file_domain_fulfillment_fulfillment_return_proto_rawDesc = "" +
 	"\vfulfillment\x18\x01R\rfulfillmentId\x12\x16\n" +
 	"\x06reason\x18\x03 \x01(\tR\x06reason\x12\x16\n" +
 	"\x06status\x18\x04 \x01(\tR\x06status\x12(\n" +
-	"\rrefund_amount\x18\x05 \x01(\x01H\x00R\frefundAmount\x88\x01\x01\x12\x1a\n" +
+	"\rrefund_amount\x18\x05 \x01(\x03H\x00R\frefundAmount\x88\x01\x01\x12\x1a\n" +
 	"\bcurrency\x18\x06 \x01(\tR\bcurrency\x12+\n" +
 	"\x0fprocessed_by_id\x18\a \x01(\tH\x01R\rprocessedById\x88\x01\x01\x12\x14\n" +
 	"\x05notes\x18\b \x01(\tR\x05notes\x123\n" +

@@ -198,28 +198,24 @@ func (MaintenancePriority) EnumDescriptor() ([]byte, []int) {
 }
 
 type AssetMaintenance struct {
-	state                     protoimpl.MessageState `protogen:"open.v1"`
-	Id                        string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
-	AssetId                   string                 `protobuf:"bytes,2,opt,name=asset_id,json=assetId,proto3" json:"asset_id,omitempty"`
-	MaintenanceType           MaintenanceType        `protobuf:"varint,3,opt,name=maintenance_type,json=maintenanceType,proto3,enum=domain.asset.v1.MaintenanceType" json:"maintenance_type,omitempty"`
-	Priority                  MaintenancePriority    `protobuf:"varint,4,opt,name=priority,proto3,enum=domain.asset.v1.MaintenancePriority" json:"priority,omitempty"`
-	Status                    MaintenanceStatus      `protobuf:"varint,5,opt,name=status,proto3,enum=domain.asset.v1.MaintenanceStatus" json:"status,omitempty"`
-	ScheduledDate             *int64                 `protobuf:"varint,6,opt,name=scheduled_date,json=scheduledDate,proto3,oneof" json:"scheduled_date,omitempty"`
-	ScheduledDateString       *string                `protobuf:"bytes,7,opt,name=scheduled_date_string,json=scheduledDateString,proto3,oneof" json:"scheduled_date_string,omitempty"`
-	StartDate                 *int64                 `protobuf:"varint,8,opt,name=start_date,json=startDate,proto3,oneof" json:"start_date,omitempty"`
-	StartDateString           *string                `protobuf:"bytes,9,opt,name=start_date_string,json=startDateString,proto3,oneof" json:"start_date_string,omitempty"`
-	CompletionDate            *int64                 `protobuf:"varint,10,opt,name=completion_date,json=completionDate,proto3,oneof" json:"completion_date,omitempty"`
-	CompletionDateString      *string                `protobuf:"bytes,11,opt,name=completion_date_string,json=completionDateString,proto3,oneof" json:"completion_date_string,omitempty"`
-	Description               *string                `protobuf:"bytes,12,opt,name=description,proto3,oneof" json:"description,omitempty"`
-	Cost                      *float64               `protobuf:"fixed64,13,opt,name=cost,proto3,oneof" json:"cost,omitempty"`
-	IsCapitalized             bool                   `protobuf:"varint,14,opt,name=is_capitalized,json=isCapitalized,proto3" json:"is_capitalized,omitempty"`
-	PerformedBy               *string                `protobuf:"bytes,15,opt,name=performed_by,json=performedBy,proto3,oneof" json:"performed_by,omitempty"`
-	VendorId                  *string                `protobuf:"bytes,16,opt,name=vendor_id,json=vendorId,proto3,oneof" json:"vendor_id,omitempty"` // FK to entity.Client
-	WorkOrderNumber           *string                `protobuf:"bytes,17,opt,name=work_order_number,json=workOrderNumber,proto3,oneof" json:"work_order_number,omitempty"`
-	NextMaintenanceDate       *int64                 `protobuf:"varint,18,opt,name=next_maintenance_date,json=nextMaintenanceDate,proto3,oneof" json:"next_maintenance_date,omitempty"`
-	NextMaintenanceDateString *string                `protobuf:"bytes,19,opt,name=next_maintenance_date_string,json=nextMaintenanceDateString,proto3,oneof" json:"next_maintenance_date_string,omitempty"`
-	RecurrenceIntervalDays    *int32                 `protobuf:"varint,20,opt,name=recurrence_interval_days,json=recurrenceIntervalDays,proto3,oneof" json:"recurrence_interval_days,omitempty"`
-	Notes                     *string                `protobuf:"bytes,21,opt,name=notes,proto3,oneof" json:"notes,omitempty"`
+	state                  protoimpl.MessageState `protogen:"open.v1"`
+	Id                     string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
+	AssetId                string                 `protobuf:"bytes,2,opt,name=asset_id,json=assetId,proto3" json:"asset_id,omitempty"`
+	MaintenanceType        MaintenanceType        `protobuf:"varint,3,opt,name=maintenance_type,json=maintenanceType,proto3,enum=domain.asset.v1.MaintenanceType" json:"maintenance_type,omitempty"`
+	Priority               MaintenancePriority    `protobuf:"varint,4,opt,name=priority,proto3,enum=domain.asset.v1.MaintenancePriority" json:"priority,omitempty"`
+	Status                 MaintenanceStatus      `protobuf:"varint,5,opt,name=status,proto3,enum=domain.asset.v1.MaintenanceStatus" json:"status,omitempty"`
+	ScheduledDate          *string                `protobuf:"bytes,6,opt,name=scheduled_date,json=scheduledDate,proto3,oneof" json:"scheduled_date,omitempty"`     // ISO 8601 date (YYYY-MM-DD)
+	StartDate              *string                `protobuf:"bytes,8,opt,name=start_date,json=startDate,proto3,oneof" json:"start_date,omitempty"`                 // ISO 8601 date (YYYY-MM-DD)
+	CompletionDate         *string                `protobuf:"bytes,10,opt,name=completion_date,json=completionDate,proto3,oneof" json:"completion_date,omitempty"` // ISO 8601 date (YYYY-MM-DD)
+	Description            *string                `protobuf:"bytes,12,opt,name=description,proto3,oneof" json:"description,omitempty"`
+	Cost                   *int64                 `protobuf:"varint,13,opt,name=cost,proto3,oneof" json:"cost,omitempty"` // centavos
+	IsCapitalized          bool                   `protobuf:"varint,14,opt,name=is_capitalized,json=isCapitalized,proto3" json:"is_capitalized,omitempty"`
+	PerformedBy            *string                `protobuf:"bytes,15,opt,name=performed_by,json=performedBy,proto3,oneof" json:"performed_by,omitempty"`
+	VendorId               *string                `protobuf:"bytes,16,opt,name=vendor_id,json=vendorId,proto3,oneof" json:"vendor_id,omitempty"` // FK to entity.Client
+	WorkOrderNumber        *string                `protobuf:"bytes,17,opt,name=work_order_number,json=workOrderNumber,proto3,oneof" json:"work_order_number,omitempty"`
+	NextMaintenanceDate    *string                `protobuf:"bytes,18,opt,name=next_maintenance_date,json=nextMaintenanceDate,proto3,oneof" json:"next_maintenance_date,omitempty"` // ISO 8601 date (YYYY-MM-DD)
+	RecurrenceIntervalDays *int32                 `protobuf:"varint,20,opt,name=recurrence_interval_days,json=recurrenceIntervalDays,proto3,oneof" json:"recurrence_interval_days,omitempty"`
+	Notes                  *string                `protobuf:"bytes,21,opt,name=notes,proto3,oneof" json:"notes,omitempty"`
 	// Audit fields
 	DateCreated        *int64  `protobuf:"varint,22,opt,name=date_created,json=dateCreated,proto3,oneof" json:"date_created,omitempty"`
 	DateCreatedString  *string `protobuf:"bytes,23,opt,name=date_created_string,json=dateCreatedString,proto3,oneof" json:"date_created_string,omitempty"`
@@ -295,44 +291,23 @@ func (x *AssetMaintenance) GetStatus() MaintenanceStatus {
 	return MaintenanceStatus_MAINTENANCE_STATUS_UNSPECIFIED
 }
 
-func (x *AssetMaintenance) GetScheduledDate() int64 {
+func (x *AssetMaintenance) GetScheduledDate() string {
 	if x != nil && x.ScheduledDate != nil {
 		return *x.ScheduledDate
 	}
-	return 0
-}
-
-func (x *AssetMaintenance) GetScheduledDateString() string {
-	if x != nil && x.ScheduledDateString != nil {
-		return *x.ScheduledDateString
-	}
 	return ""
 }
 
-func (x *AssetMaintenance) GetStartDate() int64 {
+func (x *AssetMaintenance) GetStartDate() string {
 	if x != nil && x.StartDate != nil {
 		return *x.StartDate
 	}
-	return 0
-}
-
-func (x *AssetMaintenance) GetStartDateString() string {
-	if x != nil && x.StartDateString != nil {
-		return *x.StartDateString
-	}
 	return ""
 }
 
-func (x *AssetMaintenance) GetCompletionDate() int64 {
+func (x *AssetMaintenance) GetCompletionDate() string {
 	if x != nil && x.CompletionDate != nil {
 		return *x.CompletionDate
-	}
-	return 0
-}
-
-func (x *AssetMaintenance) GetCompletionDateString() string {
-	if x != nil && x.CompletionDateString != nil {
-		return *x.CompletionDateString
 	}
 	return ""
 }
@@ -344,7 +319,7 @@ func (x *AssetMaintenance) GetDescription() string {
 	return ""
 }
 
-func (x *AssetMaintenance) GetCost() float64 {
+func (x *AssetMaintenance) GetCost() int64 {
 	if x != nil && x.Cost != nil {
 		return *x.Cost
 	}
@@ -379,16 +354,9 @@ func (x *AssetMaintenance) GetWorkOrderNumber() string {
 	return ""
 }
 
-func (x *AssetMaintenance) GetNextMaintenanceDate() int64 {
+func (x *AssetMaintenance) GetNextMaintenanceDate() string {
 	if x != nil && x.NextMaintenanceDate != nil {
 		return *x.NextMaintenanceDate
-	}
-	return 0
-}
-
-func (x *AssetMaintenance) GetNextMaintenanceDateString() string {
-	if x != nil && x.NextMaintenanceDateString != nil {
-		return *x.NextMaintenanceDateString
 	}
 	return ""
 }
@@ -1238,7 +1206,8 @@ var File_domain_asset_asset_maintenance_asset_maintenance_proto protoreflect.Fil
 
 const file_domain_asset_asset_maintenance_asset_maintenance_proto_rawDesc = "" +
 	"\n" +
-	"6domain/asset/asset_maintenance/asset_maintenance.proto\x12\x0fdomain.asset.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1adomain/common/search.proto\x1a\x10options/db.proto\"\xe4\f\n" +
+	"6domain/asset/asset_maintenance/asset_maintenance.proto\x12\x0fdomain.asset.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1adomain/common/search.proto\x1a\x10options/db.proto\"\xa5\n" +
+	"\n" +
 	"\x10AssetMaintenance\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12(\n" +
 	"\basset_id\x18\x02 \x01(\tB\r\x82\xb5\x18\t\n" +
@@ -1246,51 +1215,44 @@ const file_domain_asset_asset_maintenance_asset_maintenance_proto_rawDesc = "" +
 	"\x10maintenance_type\x18\x03 \x01(\x0e2 .domain.asset.v1.MaintenanceTypeR\x0fmaintenanceType\x12@\n" +
 	"\bpriority\x18\x04 \x01(\x0e2$.domain.asset.v1.MaintenancePriorityR\bpriority\x12:\n" +
 	"\x06status\x18\x05 \x01(\x0e2\".domain.asset.v1.MaintenanceStatusR\x06status\x12*\n" +
-	"\x0escheduled_date\x18\x06 \x01(\x03H\x00R\rscheduledDate\x88\x01\x01\x127\n" +
-	"\x15scheduled_date_string\x18\a \x01(\tH\x01R\x13scheduledDateString\x88\x01\x01\x12\"\n" +
+	"\x0escheduled_date\x18\x06 \x01(\tH\x00R\rscheduledDate\x88\x01\x01\x12\"\n" +
 	"\n" +
-	"start_date\x18\b \x01(\x03H\x02R\tstartDate\x88\x01\x01\x12/\n" +
-	"\x11start_date_string\x18\t \x01(\tH\x03R\x0fstartDateString\x88\x01\x01\x12,\n" +
+	"start_date\x18\b \x01(\tH\x01R\tstartDate\x88\x01\x01\x12,\n" +
 	"\x0fcompletion_date\x18\n" +
-	" \x01(\x03H\x04R\x0ecompletionDate\x88\x01\x01\x129\n" +
-	"\x16completion_date_string\x18\v \x01(\tH\x05R\x14completionDateString\x88\x01\x01\x12%\n" +
-	"\vdescription\x18\f \x01(\tH\x06R\vdescription\x88\x01\x01\x12\x17\n" +
-	"\x04cost\x18\r \x01(\x01H\aR\x04cost\x88\x01\x01\x12%\n" +
+	" \x01(\tH\x02R\x0ecompletionDate\x88\x01\x01\x12%\n" +
+	"\vdescription\x18\f \x01(\tH\x03R\vdescription\x88\x01\x01\x12\x17\n" +
+	"\x04cost\x18\r \x01(\x03H\x04R\x04cost\x88\x01\x01\x12%\n" +
 	"\x0eis_capitalized\x18\x0e \x01(\bR\risCapitalized\x12&\n" +
-	"\fperformed_by\x18\x0f \x01(\tH\bR\vperformedBy\x88\x01\x01\x12 \n" +
-	"\tvendor_id\x18\x10 \x01(\tH\tR\bvendorId\x88\x01\x01\x12/\n" +
-	"\x11work_order_number\x18\x11 \x01(\tH\n" +
-	"R\x0fworkOrderNumber\x88\x01\x01\x127\n" +
-	"\x15next_maintenance_date\x18\x12 \x01(\x03H\vR\x13nextMaintenanceDate\x88\x01\x01\x12D\n" +
-	"\x1cnext_maintenance_date_string\x18\x13 \x01(\tH\fR\x19nextMaintenanceDateString\x88\x01\x01\x12=\n" +
-	"\x18recurrence_interval_days\x18\x14 \x01(\x05H\rR\x16recurrenceIntervalDays\x88\x01\x01\x12\x19\n" +
-	"\x05notes\x18\x15 \x01(\tH\x0eR\x05notes\x88\x01\x01\x12&\n" +
-	"\fdate_created\x18\x16 \x01(\x03H\x0fR\vdateCreated\x88\x01\x01\x123\n" +
-	"\x13date_created_string\x18\x17 \x01(\tH\x10R\x11dateCreatedString\x88\x01\x01\x12(\n" +
-	"\rdate_modified\x18\x18 \x01(\x03H\x11R\fdateModified\x88\x01\x01\x125\n" +
-	"\x14date_modified_string\x18\x19 \x01(\tH\x12R\x12dateModifiedString\x88\x01\x01\x12\"\n" +
+	"\fperformed_by\x18\x0f \x01(\tH\x05R\vperformedBy\x88\x01\x01\x12 \n" +
+	"\tvendor_id\x18\x10 \x01(\tH\x06R\bvendorId\x88\x01\x01\x12/\n" +
+	"\x11work_order_number\x18\x11 \x01(\tH\aR\x0fworkOrderNumber\x88\x01\x01\x127\n" +
+	"\x15next_maintenance_date\x18\x12 \x01(\tH\bR\x13nextMaintenanceDate\x88\x01\x01\x12=\n" +
+	"\x18recurrence_interval_days\x18\x14 \x01(\x05H\tR\x16recurrenceIntervalDays\x88\x01\x01\x12\x19\n" +
+	"\x05notes\x18\x15 \x01(\tH\n" +
+	"R\x05notes\x88\x01\x01\x12&\n" +
+	"\fdate_created\x18\x16 \x01(\x03H\vR\vdateCreated\x88\x01\x01\x123\n" +
+	"\x13date_created_string\x18\x17 \x01(\tH\fR\x11dateCreatedString\x88\x01\x01\x12(\n" +
+	"\rdate_modified\x18\x18 \x01(\x03H\rR\fdateModified\x88\x01\x01\x125\n" +
+	"\x14date_modified_string\x18\x19 \x01(\tH\x0eR\x12dateModifiedString\x88\x01\x01\x12\"\n" +
 	"\x06active\x18\x1a \x01(\bB\n" +
 	"\x82\xb5\x18\x06\"\x04trueR\x06active:\x06\x8a\xb5\x18\x02\b\x01B\x11\n" +
-	"\x0f_scheduled_dateB\x18\n" +
-	"\x16_scheduled_date_stringB\r\n" +
-	"\v_start_dateB\x14\n" +
-	"\x12_start_date_stringB\x12\n" +
-	"\x10_completion_dateB\x19\n" +
-	"\x17_completion_date_stringB\x0e\n" +
+	"\x0f_scheduled_dateB\r\n" +
+	"\v_start_dateB\x12\n" +
+	"\x10_completion_dateB\x0e\n" +
 	"\f_descriptionB\a\n" +
 	"\x05_costB\x0f\n" +
 	"\r_performed_byB\f\n" +
 	"\n" +
 	"_vendor_idB\x14\n" +
 	"\x12_work_order_numberB\x18\n" +
-	"\x16_next_maintenance_dateB\x1f\n" +
-	"\x1d_next_maintenance_date_stringB\x1b\n" +
+	"\x16_next_maintenance_dateB\x1b\n" +
 	"\x19_recurrence_interval_daysB\b\n" +
 	"\x06_notesB\x0f\n" +
 	"\r_date_createdB\x16\n" +
 	"\x14_date_created_stringB\x10\n" +
 	"\x0e_date_modifiedB\x17\n" +
-	"\x15_date_modified_string\"V\n" +
+	"\x15_date_modified_stringJ\x04\b\a\x10\bJ\x04\b\t\x10\n" +
+	"J\x04\b\v\x10\fJ\x04\b\x13\x10\x14\"V\n" +
 	"\x1dCreateAssetMaintenanceRequest\x125\n" +
 	"\x04data\x18\x01 \x01(\v2!.domain.asset.v1.AssetMaintenanceR\x04data\"\xaf\x01\n" +
 	"\x1eCreateAssetMaintenanceResponse\x125\n" +

@@ -32,17 +32,16 @@ type LoanPayment struct {
 	state protoimpl.MessageState `protogen:"open.v1"`
 	Id    string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
 	// Parent loan
-	LoanId            string  `protobuf:"bytes,2,opt,name=loan_id,json=loanId,proto3" json:"loan_id,omitempty"`
-	PaymentNumber     string  `protobuf:"bytes,3,opt,name=payment_number,json=paymentNumber,proto3" json:"payment_number,omitempty"`
-	PaymentDate       int64   `protobuf:"varint,4,opt,name=payment_date,json=paymentDate,proto3" json:"payment_date,omitempty"`
-	PaymentDateString *string `protobuf:"bytes,5,opt,name=payment_date_string,json=paymentDateString,proto3,oneof" json:"payment_date_string,omitempty"`
+	LoanId        string `protobuf:"bytes,2,opt,name=loan_id,json=loanId,proto3" json:"loan_id,omitempty"`
+	PaymentNumber string `protobuf:"bytes,3,opt,name=payment_number,json=paymentNumber,proto3" json:"payment_number,omitempty"`
+	PaymentDate   string `protobuf:"bytes,4,opt,name=payment_date,json=paymentDate,proto3" json:"payment_date,omitempty"` // ISO 8601 date (YYYY-MM-DD)
 	// Payment breakdown
-	PrincipalAmount float64 `protobuf:"fixed64,6,opt,name=principal_amount,json=principalAmount,proto3" json:"principal_amount,omitempty"`
-	InterestAmount  float64 `protobuf:"fixed64,7,opt,name=interest_amount,json=interestAmount,proto3" json:"interest_amount,omitempty"`
-	FeeAmount       float64 `protobuf:"fixed64,8,opt,name=fee_amount,json=feeAmount,proto3" json:"fee_amount,omitempty"` // Debt issuance cost (PFRS 9)
-	TotalAmount     float64 `protobuf:"fixed64,9,opt,name=total_amount,json=totalAmount,proto3" json:"total_amount,omitempty"`
+	PrincipalAmount int64 `protobuf:"varint,6,opt,name=principal_amount,json=principalAmount,proto3" json:"principal_amount,omitempty"` // centavos
+	InterestAmount  int64 `protobuf:"varint,7,opt,name=interest_amount,json=interestAmount,proto3" json:"interest_amount,omitempty"`    // centavos
+	FeeAmount       int64 `protobuf:"varint,8,opt,name=fee_amount,json=feeAmount,proto3" json:"fee_amount,omitempty"`                   // centavos  // Debt issuance cost (PFRS 9)
+	TotalAmount     int64 `protobuf:"varint,9,opt,name=total_amount,json=totalAmount,proto3" json:"total_amount,omitempty"`             // centavos
 	// Running balance after this payment
-	RemainingBalance float64 `protobuf:"fixed64,10,opt,name=remaining_balance,json=remainingBalance,proto3" json:"remaining_balance,omitempty"`
+	RemainingBalance int64   `protobuf:"varint,10,opt,name=remaining_balance,json=remainingBalance,proto3" json:"remaining_balance,omitempty"` // centavos
 	Notes            *string `protobuf:"bytes,11,opt,name=notes,proto3,oneof" json:"notes,omitempty"`
 	// Audit fields
 	DateCreated       *int64  `protobuf:"varint,12,opt,name=date_created,json=dateCreated,proto3,oneof" json:"date_created,omitempty"`
@@ -102,49 +101,42 @@ func (x *LoanPayment) GetPaymentNumber() string {
 	return ""
 }
 
-func (x *LoanPayment) GetPaymentDate() int64 {
+func (x *LoanPayment) GetPaymentDate() string {
 	if x != nil {
 		return x.PaymentDate
-	}
-	return 0
-}
-
-func (x *LoanPayment) GetPaymentDateString() string {
-	if x != nil && x.PaymentDateString != nil {
-		return *x.PaymentDateString
 	}
 	return ""
 }
 
-func (x *LoanPayment) GetPrincipalAmount() float64 {
+func (x *LoanPayment) GetPrincipalAmount() int64 {
 	if x != nil {
 		return x.PrincipalAmount
 	}
 	return 0
 }
 
-func (x *LoanPayment) GetInterestAmount() float64 {
+func (x *LoanPayment) GetInterestAmount() int64 {
 	if x != nil {
 		return x.InterestAmount
 	}
 	return 0
 }
 
-func (x *LoanPayment) GetFeeAmount() float64 {
+func (x *LoanPayment) GetFeeAmount() int64 {
 	if x != nil {
 		return x.FeeAmount
 	}
 	return 0
 }
 
-func (x *LoanPayment) GetTotalAmount() float64 {
+func (x *LoanPayment) GetTotalAmount() int64 {
 	if x != nil {
 		return x.TotalAmount
 	}
 	return 0
 }
 
-func (x *LoanPayment) GetRemainingBalance() float64 {
+func (x *LoanPayment) GetRemainingBalance() int64 {
 	if x != nil {
 		return x.RemainingBalance
 	}
@@ -960,28 +952,26 @@ var File_domain_treasury_loan_payment_loan_payment_proto protoreflect.FileDescri
 
 const file_domain_treasury_loan_payment_loan_payment_proto_rawDesc = "" +
 	"\n" +
-	"/domain/treasury/loan_payment/loan_payment.proto\x12\x12domain.treasury.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1adomain/common/search.proto\x1a\x10options/db.proto\"\xe4\x04\n" +
+	"/domain/treasury/loan_payment/loan_payment.proto\x12\x12domain.treasury.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1adomain/common/search.proto\x1a\x10options/db.proto\"\x9d\x04\n" +
 	"\vLoanPayment\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12%\n" +
 	"\aloan_id\x18\x02 \x01(\tB\f\x82\xb5\x18\b\n" +
 	"\x04loan\x18\x01R\x06loanId\x12/\n" +
 	"\x0epayment_number\x18\x03 \x01(\tB\b\x82\xb5\x18\x04\x10\x01\x18\x01R\rpaymentNumber\x12!\n" +
-	"\fpayment_date\x18\x04 \x01(\x03R\vpaymentDate\x123\n" +
-	"\x13payment_date_string\x18\x05 \x01(\tH\x00R\x11paymentDateString\x88\x01\x01\x12)\n" +
-	"\x10principal_amount\x18\x06 \x01(\x01R\x0fprincipalAmount\x12'\n" +
-	"\x0finterest_amount\x18\a \x01(\x01R\x0einterestAmount\x12&\n" +
+	"\fpayment_date\x18\x04 \x01(\tR\vpaymentDate\x12)\n" +
+	"\x10principal_amount\x18\x06 \x01(\x03R\x0fprincipalAmount\x12'\n" +
+	"\x0finterest_amount\x18\a \x01(\x03R\x0einterestAmount\x12&\n" +
 	"\n" +
-	"fee_amount\x18\b \x01(\x01B\a\x82\xb5\x18\x03\"\x010R\tfeeAmount\x12!\n" +
-	"\ftotal_amount\x18\t \x01(\x01R\vtotalAmount\x12+\n" +
+	"fee_amount\x18\b \x01(\x03B\a\x82\xb5\x18\x03\"\x010R\tfeeAmount\x12!\n" +
+	"\ftotal_amount\x18\t \x01(\x03R\vtotalAmount\x12+\n" +
 	"\x11remaining_balance\x18\n" +
-	" \x01(\x01R\x10remainingBalance\x12\x19\n" +
-	"\x05notes\x18\v \x01(\tH\x01R\x05notes\x88\x01\x01\x12&\n" +
-	"\fdate_created\x18\f \x01(\x03H\x02R\vdateCreated\x88\x01\x01\x123\n" +
-	"\x13date_created_string\x18\r \x01(\tH\x03R\x11dateCreatedString\x88\x01\x01:\x06\x8a\xb5\x18\x02\b\x01B\x16\n" +
-	"\x14_payment_date_stringB\b\n" +
+	" \x01(\x03R\x10remainingBalance\x12\x19\n" +
+	"\x05notes\x18\v \x01(\tH\x00R\x05notes\x88\x01\x01\x12&\n" +
+	"\fdate_created\x18\f \x01(\x03H\x01R\vdateCreated\x88\x01\x01\x123\n" +
+	"\x13date_created_string\x18\r \x01(\tH\x02R\x11dateCreatedString\x88\x01\x01:\x06\x8a\xb5\x18\x02\b\x01B\b\n" +
 	"\x06_notesB\x0f\n" +
 	"\r_date_createdB\x16\n" +
-	"\x14_date_created_string\"O\n" +
+	"\x14_date_created_stringJ\x04\b\x05\x10\x06\"O\n" +
 	"\x18CreateLoanPaymentRequest\x123\n" +
 	"\x04data\x18\x01 \x01(\v2\x1f.domain.treasury.v1.LoanPaymentR\x04data\"\xa8\x01\n" +
 	"\x19CreateLoanPaymentResponse\x123\n" +

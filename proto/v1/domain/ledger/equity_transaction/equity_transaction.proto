@@ -32,7 +32,7 @@ message EquityTransaction {
   string equity_account_id = 2 [(options.v1.db).references = "equity_account", (options.v1.db).index = true];
 
   EquityTransactionType transaction_type = 3;
-  double amount = 4;
+  int64 amount = 4; // centavos
   optional string description = 5;
 
   // Transaction date

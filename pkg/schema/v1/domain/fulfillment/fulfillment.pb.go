@@ -34,7 +34,7 @@ type Fulfillment struct {
 	Status            string                 `protobuf:"bytes,6,opt,name=status,proto3" json:"status,omitempty"`                                                // canonical: PENDING, READY, IN_TRANSIT, DELIVERED, PARTIALLY_DELIVERED, FAILED, CANCELLED
 	ProviderStatus    string                 `protobuf:"bytes,7,opt,name=provider_status,json=providerStatus,proto3" json:"provider_status,omitempty"`          // free-text from fulfillment provider
 	ProviderReference string                 `protobuf:"bytes,8,opt,name=provider_reference,json=providerReference,proto3" json:"provider_reference,omitempty"` // tracking ID from provider
-	DeliveryCost      float64                `protobuf:"fixed64,9,opt,name=delivery_cost,json=deliveryCost,proto3" json:"delivery_cost,omitempty"`
+	DeliveryCost      int64                  `protobuf:"varint,9,opt,name=delivery_cost,json=deliveryCost,proto3" json:"delivery_cost,omitempty"`               // centavos
 	Currency          string                 `protobuf:"bytes,10,opt,name=currency,proto3" json:"currency,omitempty"`
 	ExpenditureId     *string                `protobuf:"bytes,11,opt,name=expenditure_id,json=expenditureId,proto3,oneof" json:"expenditure_id,omitempty"`
 	ScheduledAt       *timestamppb.Timestamp `protobuf:"bytes,12,opt,name=scheduled_at,json=scheduledAt,proto3,oneof" json:"scheduled_at,omitempty"`
@@ -135,7 +135,7 @@ func (x *Fulfillment) GetProviderReference() string {
 	return ""
 }
 
-func (x *Fulfillment) GetDeliveryCost() float64 {
+func (x *Fulfillment) GetDeliveryCost() int64 {
 	if x != nil {
 		return x.DeliveryCost
 	}
@@ -231,7 +231,7 @@ const file_domain_fulfillment_fulfillment_proto_rawDesc = "" +
 	"\x06status\x18\x06 \x01(\tB\x06\x82\xb5\x18\x02\x18\x01R\x06status\x12'\n" +
 	"\x0fprovider_status\x18\a \x01(\tR\x0eproviderStatus\x12-\n" +
 	"\x12provider_reference\x18\b \x01(\tR\x11providerReference\x12#\n" +
-	"\rdelivery_cost\x18\t \x01(\x01R\fdeliveryCost\x12\x1a\n" +
+	"\rdelivery_cost\x18\t \x01(\x03R\fdeliveryCost\x12\x1a\n" +
 	"\bcurrency\x18\n" +
 	" \x01(\tR\bcurrency\x12=\n" +
 	"\x0eexpenditure_id\x18\v \x01(\tB\x11\x82\xb5\x18\r\n" +

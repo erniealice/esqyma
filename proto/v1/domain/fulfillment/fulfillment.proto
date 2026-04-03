@@ -18,7 +18,7 @@ message Fulfillment {
   string status = 6 [(options.v1.db).index = true]; // canonical: PENDING, READY, IN_TRANSIT, DELIVERED, PARTIALLY_DELIVERED, FAILED, CANCELLED
   string provider_status = 7; // free-text from fulfillment provider
   string provider_reference = 8; // tracking ID from provider
-  double delivery_cost = 9;
+  int64 delivery_cost = 9; // centavos
   string currency = 10;
   optional string expenditure_id = 11 [(options.v1.db).references = "expenditure"];
   optional google.protobuf.Timestamp scheduled_at = 12;

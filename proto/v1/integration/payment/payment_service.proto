@@ -52,9 +52,8 @@ message CheckoutSessionData {
   // Provider to use (optional, uses default if not specified)
   string provider_id = 1;
 
-  // Amount in base currency units (e.g., dollars, not cents)
-  // Payment providers typically convert to cents internally
-  double amount = 2;
+  // Amount in centavos (smallest currency unit)
+  int64 amount = 2; // centavos
 
   // Currency code (ISO 4217)
   string currency = 3;

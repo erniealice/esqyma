@@ -35,7 +35,7 @@ message SecurityDeposit {
   string id = 1;
   DepositDirection direction = 2;
   string counterparty_name = 3;    // Landlord name (PAID) or tenant/customer name (RECEIVED)
-  double amount = 4;
+  int64 amount = 4; // centavos
 
   int64 deposit_date = 5;
   optional string deposit_date_string = 6;

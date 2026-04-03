@@ -36,9 +36,8 @@ type Revenue struct {
 	Name               string                 `protobuf:"bytes,7,opt,name=name,proto3" json:"name,omitempty"`
 	Client             *client.Client         `protobuf:"bytes,8,opt,name=client,proto3,oneof" json:"client,omitempty"`
 	ClientId           string                 `protobuf:"bytes,9,opt,name=client_id,json=clientId,proto3" json:"client_id,omitempty"`
-	RevenueDate        *int64                 `protobuf:"varint,10,opt,name=revenue_date,json=revenueDate,proto3,oneof" json:"revenue_date,omitempty"`
-	RevenueDateString  *string                `protobuf:"bytes,11,opt,name=revenue_date_string,json=revenueDateString,proto3,oneof" json:"revenue_date_string,omitempty"`
-	TotalAmount        float64                `protobuf:"fixed64,12,opt,name=total_amount,json=totalAmount,proto3" json:"total_amount,omitempty"`
+	RevenueDate        *string                `protobuf:"bytes,10,opt,name=revenue_date,json=revenueDate,proto3,oneof" json:"revenue_date,omitempty"` // ISO 8601 date (YYYY-MM-DD)
+	TotalAmount        int64                  `protobuf:"varint,12,opt,name=total_amount,json=totalAmount,proto3" json:"total_amount,omitempty"`      // centavos
 	Currency           string                 `protobuf:"bytes,13,opt,name=currency,proto3" json:"currency,omitempty"`
 	Status             string                 `protobuf:"bytes,14,opt,name=status,proto3" json:"status,omitempty"`
 	ReferenceNumber    *string                `protobuf:"bytes,15,opt,name=reference_number,json=referenceNumber,proto3,oneof" json:"reference_number,omitempty"`
@@ -56,8 +55,7 @@ type Revenue struct {
 	JournalEntryId    *string                   `protobuf:"bytes,26,opt,name=journal_entry_id,json=journalEntryId,proto3,oneof" json:"journal_entry_id,omitempty"`        // FK to journal_entry — set when ledger entry is posted
 	FulfillmentStatus *string                   `protobuf:"bytes,27,opt,name=fulfillment_status,json=fulfillmentStatus,proto3,oneof" json:"fulfillment_status,omitempty"` // Rollup of linked fulfillment records: 'pending', 'partial', 'fulfilled', 'failed'. Computed — do not set directly.
 	PaymentTermId     *string                   `protobuf:"bytes,28,opt,name=payment_term_id,json=paymentTermId,proto3,oneof" json:"payment_term_id,omitempty"`
-	DueDate           *int64                    `protobuf:"varint,29,opt,name=due_date,json=dueDate,proto3,oneof" json:"due_date,omitempty"`
-	DueDateString     *string                   `protobuf:"bytes,30,opt,name=due_date_string,json=dueDateString,proto3,oneof" json:"due_date_string,omitempty"`
+	DueDate           *string                   `protobuf:"bytes,29,opt,name=due_date,json=dueDate,proto3,oneof" json:"due_date,omitempty"` // ISO 8601 date (YYYY-MM-DD)
 	PaymentTerm       *payment_term.PaymentTerm `protobuf:"bytes,31,opt,name=payment_term,json=paymentTerm,proto3,oneof" json:"payment_term,omitempty"`
 	SubscriptionId    *string                   `protobuf:"bytes,32,opt,name=subscription_id,json=subscriptionId,proto3,oneof" json:"subscription_id,omitempty"`
 	unknownFields     protoimpl.UnknownFields
@@ -157,21 +155,14 @@ func (x *Revenue) GetClientId() string {
 	return ""
 }
 
-func (x *Revenue) GetRevenueDate() int64 {
+func (x *Revenue) GetRevenueDate() string {
 	if x != nil && x.RevenueDate != nil {
 		return *x.RevenueDate
-	}
-	return 0
-}
-
-func (x *Revenue) GetRevenueDateString() string {
-	if x != nil && x.RevenueDateString != nil {
-		return *x.RevenueDateString
 	}
 	return ""
 }
 
-func (x *Revenue) GetTotalAmount() float64 {
+func (x *Revenue) GetTotalAmount() int64 {
 	if x != nil {
 		return x.TotalAmount
 	}
@@ -283,16 +274,9 @@ func (x *Revenue) GetPaymentTermId() string {
 	return ""
 }
 
-func (x *Revenue) GetDueDate() int64 {
+func (x *Revenue) GetDueDate() string {
 	if x != nil && x.DueDate != nil {
 		return *x.DueDate
-	}
-	return 0
-}
-
-func (x *Revenue) GetDueDateString() string {
-	if x != nil && x.DueDateString != nil {
-		return *x.DueDateString
 	}
 	return ""
 }
@@ -1099,7 +1083,7 @@ var File_domain_revenue_revenue_revenue_proto protoreflect.FileDescriptor
 
 const file_domain_revenue_revenue_revenue_proto_rawDesc = "" +
 	"\n" +
-	"$domain/revenue/revenue/revenue.proto\x12\x11domain.revenue.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/search.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a!domain/entity/client/client.proto\x1a%domain/entity/location/location.proto\x1a-domain/entity/payment_term/payment_term.proto\"\xf3\r\n" +
+	"$domain/revenue/revenue/revenue.proto\x12\x11domain.revenue.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/search.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a!domain/entity/client/client.proto\x1a%domain/entity/location/location.proto\x1a-domain/entity/payment_term/payment_term.proto\"\xf1\f\n" +
 	"\aRevenue\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12&\n" +
 	"\fdate_created\x18\x02 \x01(\x03H\x00R\vdateCreated\x88\x01\x01\x123\n" +
@@ -1111,37 +1095,34 @@ const file_domain_revenue_revenue_revenue_proto_rawDesc = "" +
 	"\x06client\x18\b \x01(\v2\x18.domain.entity.v1.ClientH\x04R\x06client\x88\x01\x01\x12\x1b\n" +
 	"\tclient_id\x18\t \x01(\tR\bclientId\x12&\n" +
 	"\frevenue_date\x18\n" +
-	" \x01(\x03H\x05R\vrevenueDate\x88\x01\x01\x123\n" +
-	"\x13revenue_date_string\x18\v \x01(\tH\x06R\x11revenueDateString\x88\x01\x01\x12!\n" +
-	"\ftotal_amount\x18\f \x01(\x01R\vtotalAmount\x12\x1a\n" +
+	" \x01(\tH\x05R\vrevenueDate\x88\x01\x01\x12!\n" +
+	"\ftotal_amount\x18\f \x01(\x03R\vtotalAmount\x12\x1a\n" +
 	"\bcurrency\x18\r \x01(\tR\bcurrency\x12\x16\n" +
 	"\x06status\x18\x0e \x01(\tR\x06status\x12.\n" +
-	"\x10reference_number\x18\x0f \x01(\tH\aR\x0freferenceNumber\x88\x01\x01\x12\x19\n" +
-	"\x05notes\x18\x10 \x01(\tH\bR\x05notes\x88\x01\x01\x123\n" +
-	"\x13revenue_category_id\x18\x12 \x01(\tH\tR\x11revenueCategoryId\x88\x01\x01\x12;\n" +
-	"\blocation\x18\x13 \x01(\v2\x1a.domain.entity.v1.LocationH\n" +
-	"R\blocation\x88\x01\x01\x12\x1f\n" +
+	"\x10reference_number\x18\x0f \x01(\tH\x06R\x0freferenceNumber\x88\x01\x01\x12\x19\n" +
+	"\x05notes\x18\x10 \x01(\tH\aR\x05notes\x88\x01\x01\x123\n" +
+	"\x13revenue_category_id\x18\x12 \x01(\tH\bR\x11revenueCategoryId\x88\x01\x01\x12;\n" +
+	"\blocation\x18\x13 \x01(\v2\x1a.domain.entity.v1.LocationH\tR\blocation\x88\x01\x01\x12\x1f\n" +
 	"\vlocation_id\x18\x14 \x01(\tR\n" +
 	"locationId\x123\n" +
-	"\x13checkout_session_id\x18\x15 \x01(\tH\vR\x11checkoutSessionId\x88\x01\x01\x12.\n" +
-	"\x10payment_provider\x18\x16 \x01(\tH\fR\x0fpaymentProvider\x88\x01\x01\x12.\n" +
-	"\x10fulfillment_type\x18\x17 \x01(\tH\rR\x0ffulfillmentType\x88\x01\x01\x12.\n" +
-	"\x10delivery_address\x18\x18 \x01(\tH\x0eR\x0fdeliveryAddress\x88\x01\x01\x121\n" +
-	"\x12revenue_account_id\x18\x19 \x01(\tH\x0fR\x10revenueAccountId\x88\x01\x01\x12-\n" +
-	"\x10journal_entry_id\x18\x1a \x01(\tH\x10R\x0ejournalEntryId\x88\x01\x01\x122\n" +
-	"\x12fulfillment_status\x18\x1b \x01(\tH\x11R\x11fulfillmentStatus\x88\x01\x01\x12+\n" +
-	"\x0fpayment_term_id\x18\x1c \x01(\tH\x12R\rpaymentTermId\x88\x01\x01\x12\x1e\n" +
-	"\bdue_date\x18\x1d \x01(\x03H\x13R\adueDate\x88\x01\x01\x12+\n" +
-	"\x0fdue_date_string\x18\x1e \x01(\tH\x14R\rdueDateString\x88\x01\x01\x12E\n" +
-	"\fpayment_term\x18\x1f \x01(\v2\x1d.domain.entity.v1.PaymentTermH\x15R\vpaymentTerm\x88\x01\x01\x12,\n" +
-	"\x0fsubscription_id\x18  \x01(\tH\x16R\x0esubscriptionId\x88\x01\x01B\x0f\n" +
+	"\x13checkout_session_id\x18\x15 \x01(\tH\n" +
+	"R\x11checkoutSessionId\x88\x01\x01\x12.\n" +
+	"\x10payment_provider\x18\x16 \x01(\tH\vR\x0fpaymentProvider\x88\x01\x01\x12.\n" +
+	"\x10fulfillment_type\x18\x17 \x01(\tH\fR\x0ffulfillmentType\x88\x01\x01\x12.\n" +
+	"\x10delivery_address\x18\x18 \x01(\tH\rR\x0fdeliveryAddress\x88\x01\x01\x121\n" +
+	"\x12revenue_account_id\x18\x19 \x01(\tH\x0eR\x10revenueAccountId\x88\x01\x01\x12-\n" +
+	"\x10journal_entry_id\x18\x1a \x01(\tH\x0fR\x0ejournalEntryId\x88\x01\x01\x122\n" +
+	"\x12fulfillment_status\x18\x1b \x01(\tH\x10R\x11fulfillmentStatus\x88\x01\x01\x12+\n" +
+	"\x0fpayment_term_id\x18\x1c \x01(\tH\x11R\rpaymentTermId\x88\x01\x01\x12\x1e\n" +
+	"\bdue_date\x18\x1d \x01(\tH\x12R\adueDate\x88\x01\x01\x12E\n" +
+	"\fpayment_term\x18\x1f \x01(\v2\x1d.domain.entity.v1.PaymentTermH\x13R\vpaymentTerm\x88\x01\x01\x12,\n" +
+	"\x0fsubscription_id\x18  \x01(\tH\x14R\x0esubscriptionId\x88\x01\x01B\x0f\n" +
 	"\r_date_createdB\x16\n" +
 	"\x14_date_created_stringB\x10\n" +
 	"\x0e_date_modifiedB\x17\n" +
 	"\x15_date_modified_stringB\t\n" +
 	"\a_clientB\x0f\n" +
-	"\r_revenue_dateB\x16\n" +
-	"\x14_revenue_date_stringB\x13\n" +
+	"\r_revenue_dateB\x13\n" +
 	"\x11_reference_numberB\b\n" +
 	"\x06_notesB\x16\n" +
 	"\x14_revenue_category_idB\v\n" +
@@ -1154,10 +1135,9 @@ const file_domain_revenue_revenue_revenue_proto_rawDesc = "" +
 	"\x11_journal_entry_idB\x15\n" +
 	"\x13_fulfillment_statusB\x12\n" +
 	"\x10_payment_term_idB\v\n" +
-	"\t_due_dateB\x12\n" +
-	"\x10_due_date_stringB\x0f\n" +
+	"\t_due_dateB\x0f\n" +
 	"\r_payment_termB\x12\n" +
-	"\x10_subscription_id\"F\n" +
+	"\x10_subscription_idJ\x04\b\v\x10\fJ\x04\b\x1e\x10\x1f\"F\n" +
 	"\x14CreateRevenueRequest\x12.\n" +
 	"\x04data\x18\x01 \x01(\v2\x1a.domain.revenue.v1.RevenueR\x04data\"\x9f\x01\n" +
 	"\x15CreateRevenueResponse\x12.\n" +

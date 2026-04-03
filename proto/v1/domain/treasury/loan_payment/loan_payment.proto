@@ -27,17 +27,17 @@ message LoanPayment {
 
   string payment_number = 3 [(options.v1.db).unique = true, (options.v1.db).index = true];
 
-  int64 payment_date = 4;
-  optional string payment_date_string = 5;
+  string payment_date = 4; // ISO 8601 date (YYYY-MM-DD)
+  reserved 5; // was payment_date_string
 
   // Payment breakdown
-  double principal_amount = 6;
-  double interest_amount = 7;
-  double fee_amount = 8 [(options.v1.db).default = "0"];  // Debt issuance cost (PFRS 9)
-  double total_amount = 9;
+  int64 principal_amount = 6; // centavos
+  int64 interest_amount = 7; // centavos
+  int64 fee_amount = 8 [(options.v1.db).default = "0"]; // centavos  // Debt issuance cost (PFRS 9)
+  int64 total_amount = 9; // centavos
 
   // Running balance after this payment
-  double remaining_balance = 10;
+  int64 remaining_balance = 10; // centavos
 
   optional string notes = 11;
 

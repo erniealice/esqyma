@@ -237,8 +237,8 @@ type CheckoutSession struct {
 	ProviderId string `protobuf:"bytes,3,opt,name=provider_id,json=providerId,proto3" json:"provider_id,omitempty"`
 	// Provider type
 	ProviderType PaymentProviderType `protobuf:"varint,4,opt,name=provider_type,json=providerType,proto3,enum=integration.payment.v1.PaymentProviderType" json:"provider_type,omitempty"`
-	// Payment amount in base currency units (e.g., dollars, not cents)
-	Amount float64 `protobuf:"fixed64,5,opt,name=amount,proto3" json:"amount,omitempty"`
+	// Payment amount in centavos (smallest currency unit)
+	Amount int64 `protobuf:"varint,5,opt,name=amount,proto3" json:"amount,omitempty"` // centavos
 	// Currency code (ISO 4217: USD, PHP, HKD)
 	Currency string `protobuf:"bytes,6,opt,name=currency,proto3" json:"currency,omitempty"`
 	// Payment status
@@ -333,7 +333,7 @@ func (x *CheckoutSession) GetProviderType() PaymentProviderType {
 	return PaymentProviderType_PAYMENT_PROVIDER_TYPE_UNSPECIFIED
 }
 
-func (x *CheckoutSession) GetAmount() float64 {
+func (x *CheckoutSession) GetAmount() int64 {
 	if x != nil {
 		return x.Amount
 	}
@@ -1033,7 +1033,7 @@ const file_integration_payment_payment_proto_rawDesc = "" +
 	"\vprovider_id\x18\x03 \x01(\tR\n" +
 	"providerId\x12P\n" +
 	"\rprovider_type\x18\x04 \x01(\x0e2+.integration.payment.v1.PaymentProviderTypeR\fproviderType\x12\x16\n" +
-	"\x06amount\x18\x05 \x01(\x01R\x06amount\x12\x1a\n" +
+	"\x06amount\x18\x05 \x01(\x03R\x06amount\x12\x1a\n" +
 	"\bcurrency\x18\x06 \x01(\tR\bcurrency\x12=\n" +
 	"\x06status\x18\a \x01(\x0e2%.integration.payment.v1.PaymentStatusR\x06status\x12!\n" +
 	"\fcheckout_url\x18\b \x01(\tR\vcheckoutUrl\x12\x1f\n" +

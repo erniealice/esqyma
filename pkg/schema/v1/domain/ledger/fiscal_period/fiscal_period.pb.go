@@ -84,11 +84,9 @@ type FiscalPeriod struct {
 	Name         string                 `protobuf:"bytes,2,opt,name=name,proto3" json:"name,omitempty"`                                      // e.g. "March 2026"
 	PeriodNumber int32                  `protobuf:"varint,3,opt,name=period_number,json=periodNumber,proto3" json:"period_number,omitempty"` // 1–12 (month number within the fiscal year)
 	FiscalYear   int32                  `protobuf:"varint,4,opt,name=fiscal_year,json=fiscalYear,proto3" json:"fiscal_year,omitempty"`       // e.g. 2026
-	// Date range — unix timestamps
-	StartDate       int64   `protobuf:"varint,5,opt,name=start_date,json=startDate,proto3" json:"start_date,omitempty"`
-	EndDate         int64   `protobuf:"varint,6,opt,name=end_date,json=endDate,proto3" json:"end_date,omitempty"`
-	StartDateString *string `protobuf:"bytes,7,opt,name=start_date_string,json=startDateString,proto3,oneof" json:"start_date_string,omitempty"`
-	EndDateString   *string `protobuf:"bytes,8,opt,name=end_date_string,json=endDateString,proto3,oneof" json:"end_date_string,omitempty"`
+	// Date range
+	StartDate string `protobuf:"bytes,5,opt,name=start_date,json=startDate,proto3" json:"start_date,omitempty"` // ISO 8601 date (YYYY-MM-DD)
+	EndDate   string `protobuf:"bytes,6,opt,name=end_date,json=endDate,proto3" json:"end_date,omitempty"`       // ISO 8601 date (YYYY-MM-DD)
 	// Status
 	Status FiscalPeriodStatus `protobuf:"varint,9,opt,name=status,proto3,enum=domain.ledger.v1.FiscalPeriodStatus" json:"status,omitempty"`
 	// Close audit
@@ -163,30 +161,16 @@ func (x *FiscalPeriod) GetFiscalYear() int32 {
 	return 0
 }
 
-func (x *FiscalPeriod) GetStartDate() int64 {
+func (x *FiscalPeriod) GetStartDate() string {
 	if x != nil {
 		return x.StartDate
-	}
-	return 0
-}
-
-func (x *FiscalPeriod) GetEndDate() int64 {
-	if x != nil {
-		return x.EndDate
-	}
-	return 0
-}
-
-func (x *FiscalPeriod) GetStartDateString() string {
-	if x != nil && x.StartDateString != nil {
-		return *x.StartDateString
 	}
 	return ""
 }
 
-func (x *FiscalPeriod) GetEndDateString() string {
-	if x != nil && x.EndDateString != nil {
-		return *x.EndDateString
+func (x *FiscalPeriod) GetEndDate() string {
+	if x != nil {
+		return x.EndDate
 	}
 	return ""
 }
@@ -1155,7 +1139,7 @@ var File_domain_ledger_fiscal_period_fiscal_period_proto protoreflect.FileDescri
 
 const file_domain_ledger_fiscal_period_fiscal_period_proto_rawDesc = "" +
 	"\n" +
-	"/domain/ledger/fiscal_period/fiscal_period.proto\x12\x10domain.ledger.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1adomain/common/search.proto\x1a\x10options/db.proto\"\xe2\x06\n" +
+	"/domain/ledger/fiscal_period/fiscal_period.proto\x12\x10domain.ledger.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1adomain/common/search.proto\x1a\x10options/db.proto\"\xe6\x05\n" +
 	"\fFiscalPeriod\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12\x12\n" +
 	"\x04name\x18\x02 \x01(\tR\x04name\x12#\n" +
@@ -1163,23 +1147,19 @@ const file_domain_ledger_fiscal_period_fiscal_period_proto_rawDesc = "" +
 	"\vfiscal_year\x18\x04 \x01(\x05B\x06\x82\xb5\x18\x02\x18\x01R\n" +
 	"fiscalYear\x12\x1d\n" +
 	"\n" +
-	"start_date\x18\x05 \x01(\x03R\tstartDate\x12\x19\n" +
-	"\bend_date\x18\x06 \x01(\x03R\aendDate\x12/\n" +
-	"\x11start_date_string\x18\a \x01(\tH\x00R\x0fstartDateString\x88\x01\x01\x12+\n" +
-	"\x0fend_date_string\x18\b \x01(\tH\x01R\rendDateString\x88\x01\x01\x12<\n" +
+	"start_date\x18\x05 \x01(\tR\tstartDate\x12\x19\n" +
+	"\bend_date\x18\x06 \x01(\tR\aendDate\x12<\n" +
 	"\x06status\x18\t \x01(\x0e2$.domain.ledger.v1.FiscalPeriodStatusR\x06status\x12 \n" +
 	"\tclosed_by\x18\n" +
-	" \x01(\tH\x02R\bclosedBy\x88\x01\x01\x12 \n" +
-	"\tclosed_at\x18\v \x01(\x03H\x03R\bclosedAt\x88\x01\x01\x12-\n" +
-	"\x10closed_at_string\x18\f \x01(\tH\x04R\x0eclosedAtString\x88\x01\x01\x12\"\n" +
+	" \x01(\tH\x00R\bclosedBy\x88\x01\x01\x12 \n" +
+	"\tclosed_at\x18\v \x01(\x03H\x01R\bclosedAt\x88\x01\x01\x12-\n" +
+	"\x10closed_at_string\x18\f \x01(\tH\x02R\x0eclosedAtString\x88\x01\x01\x12\"\n" +
 	"\x06active\x18\r \x01(\bB\n" +
 	"\x82\xb5\x18\x06\"\x04trueR\x06active\x12&\n" +
-	"\fdate_created\x18\x0e \x01(\x03H\x05R\vdateCreated\x88\x01\x01\x123\n" +
-	"\x13date_created_string\x18\x0f \x01(\tH\x06R\x11dateCreatedString\x88\x01\x01\x12(\n" +
-	"\rdate_modified\x18\x10 \x01(\x03H\aR\fdateModified\x88\x01\x01\x125\n" +
-	"\x14date_modified_string\x18\x11 \x01(\tH\bR\x12dateModifiedString\x88\x01\x01:\x06\x8a\xb5\x18\x02\b\x01B\x14\n" +
-	"\x12_start_date_stringB\x12\n" +
-	"\x10_end_date_stringB\f\n" +
+	"\fdate_created\x18\x0e \x01(\x03H\x03R\vdateCreated\x88\x01\x01\x123\n" +
+	"\x13date_created_string\x18\x0f \x01(\tH\x04R\x11dateCreatedString\x88\x01\x01\x12(\n" +
+	"\rdate_modified\x18\x10 \x01(\x03H\x05R\fdateModified\x88\x01\x01\x125\n" +
+	"\x14date_modified_string\x18\x11 \x01(\tH\x06R\x12dateModifiedString\x88\x01\x01:\x06\x8a\xb5\x18\x02\b\x01B\f\n" +
 	"\n" +
 	"_closed_byB\f\n" +
 	"\n" +
@@ -1188,7 +1168,7 @@ const file_domain_ledger_fiscal_period_fiscal_period_proto_rawDesc = "" +
 	"\r_date_createdB\x16\n" +
 	"\x14_date_created_stringB\x10\n" +
 	"\x0e_date_modifiedB\x17\n" +
-	"\x15_date_modified_string\"O\n" +
+	"\x15_date_modified_stringJ\x04\b\a\x10\bJ\x04\b\b\x10\t\"O\n" +
 	"\x19CreateFiscalPeriodRequest\x122\n" +
 	"\x04data\x18\x01 \x01(\v2\x1e.domain.ledger.v1.FiscalPeriodR\x04data\"\xa8\x01\n" +
 	"\x1aCreateFiscalPeriodResponse\x122\n" +

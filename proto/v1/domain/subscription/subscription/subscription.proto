@@ -27,10 +27,10 @@ message Subscription {
   string price_plan_id = 9 [(options.v1.db).references = "price_plan", (options.v1.db).index = true];
   optional domain.entity.v1.Client client = 10;
   string client_id = 11 [(options.v1.db).references = "client", (options.v1.db).index = true];
-  optional int64 date_start = 12;
-  optional string date_start_string = 13;
-  optional int64 date_end = 14;
-  optional string date_end_string = 15;
+  optional string date_start = 12; // ISO 8601 date (YYYY-MM-DD)
+  reserved 13; // was date_start_string
+  optional string date_end = 14; // ISO 8601 date (YYYY-MM-DD)
+  reserved 15; // was date_end_string
   map<string, string> metadata = 16;
 
   // License pool management

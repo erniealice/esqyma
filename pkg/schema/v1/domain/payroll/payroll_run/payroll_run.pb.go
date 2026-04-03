@@ -87,14 +87,12 @@ type PayrollRun struct {
 	Id        string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
 	RunNumber string                 `protobuf:"bytes,2,opt,name=run_number,json=runNumber,proto3" json:"run_number,omitempty"`
 	// Pay period
-	PayPeriodStart       int64   `protobuf:"varint,3,opt,name=pay_period_start,json=payPeriodStart,proto3" json:"pay_period_start,omitempty"`
-	PayPeriodStartString *string `protobuf:"bytes,4,opt,name=pay_period_start_string,json=payPeriodStartString,proto3,oneof" json:"pay_period_start_string,omitempty"`
-	PayPeriodEnd         int64   `protobuf:"varint,5,opt,name=pay_period_end,json=payPeriodEnd,proto3" json:"pay_period_end,omitempty"`
-	PayPeriodEndString   *string `protobuf:"bytes,6,opt,name=pay_period_end_string,json=payPeriodEndString,proto3,oneof" json:"pay_period_end_string,omitempty"`
+	PayPeriodStart string `protobuf:"bytes,3,opt,name=pay_period_start,json=payPeriodStart,proto3" json:"pay_period_start,omitempty"` // ISO 8601 date (YYYY-MM-DD)
+	PayPeriodEnd   string `protobuf:"bytes,5,opt,name=pay_period_end,json=payPeriodEnd,proto3" json:"pay_period_end,omitempty"`       // ISO 8601 date (YYYY-MM-DD)
 	// Aggregated totals across all employee lines
-	TotalGross      float64          `protobuf:"fixed64,7,opt,name=total_gross,json=totalGross,proto3" json:"total_gross,omitempty"`
-	TotalDeductions float64          `protobuf:"fixed64,8,opt,name=total_deductions,json=totalDeductions,proto3" json:"total_deductions,omitempty"`
-	TotalNet        float64          `protobuf:"fixed64,9,opt,name=total_net,json=totalNet,proto3" json:"total_net,omitempty"`
+	TotalGross      int64            `protobuf:"varint,7,opt,name=total_gross,json=totalGross,proto3" json:"total_gross,omitempty"`                // centavos
+	TotalDeductions int64            `protobuf:"varint,8,opt,name=total_deductions,json=totalDeductions,proto3" json:"total_deductions,omitempty"` // centavos
+	TotalNet        int64            `protobuf:"varint,9,opt,name=total_net,json=totalNet,proto3" json:"total_net,omitempty"`                      // centavos
 	EmployeeCount   int32            `protobuf:"varint,10,opt,name=employee_count,json=employeeCount,proto3" json:"employee_count,omitempty"`
 	Status          PayrollRunStatus `protobuf:"varint,11,opt,name=status,proto3,enum=domain.payroll.v1.PayrollRunStatus" json:"status,omitempty"`
 	// Approval and posting audit
@@ -154,49 +152,35 @@ func (x *PayrollRun) GetRunNumber() string {
 	return ""
 }
 
-func (x *PayrollRun) GetPayPeriodStart() int64 {
+func (x *PayrollRun) GetPayPeriodStart() string {
 	if x != nil {
 		return x.PayPeriodStart
 	}
-	return 0
-}
-
-func (x *PayrollRun) GetPayPeriodStartString() string {
-	if x != nil && x.PayPeriodStartString != nil {
-		return *x.PayPeriodStartString
-	}
 	return ""
 }
 
-func (x *PayrollRun) GetPayPeriodEnd() int64 {
+func (x *PayrollRun) GetPayPeriodEnd() string {
 	if x != nil {
 		return x.PayPeriodEnd
 	}
-	return 0
-}
-
-func (x *PayrollRun) GetPayPeriodEndString() string {
-	if x != nil && x.PayPeriodEndString != nil {
-		return *x.PayPeriodEndString
-	}
 	return ""
 }
 
-func (x *PayrollRun) GetTotalGross() float64 {
+func (x *PayrollRun) GetTotalGross() int64 {
 	if x != nil {
 		return x.TotalGross
 	}
 	return 0
 }
 
-func (x *PayrollRun) GetTotalDeductions() float64 {
+func (x *PayrollRun) GetTotalDeductions() int64 {
 	if x != nil {
 		return x.TotalDeductions
 	}
 	return 0
 }
 
-func (x *PayrollRun) GetTotalNet() float64 {
+func (x *PayrollRun) GetTotalNet() int64 {
 	if x != nil {
 		return x.TotalNet
 	}
@@ -1054,33 +1038,29 @@ var File_domain_payroll_payroll_run_payroll_run_proto protoreflect.FileDescripto
 
 const file_domain_payroll_payroll_run_payroll_run_proto_rawDesc = "" +
 	"\n" +
-	",domain/payroll/payroll_run/payroll_run.proto\x12\x11domain.payroll.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1adomain/common/search.proto\x1a\x10options/db.proto\"\xf4\a\n" +
+	",domain/payroll/payroll_run/payroll_run.proto\x12\x11domain.payroll.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1adomain/common/search.proto\x1a\x10options/db.proto\"\xd6\x06\n" +
 	"\n" +
 	"PayrollRun\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12'\n" +
 	"\n" +
 	"run_number\x18\x02 \x01(\tB\b\x82\xb5\x18\x04\x10\x01\x18\x01R\trunNumber\x12(\n" +
-	"\x10pay_period_start\x18\x03 \x01(\x03R\x0epayPeriodStart\x12:\n" +
-	"\x17pay_period_start_string\x18\x04 \x01(\tH\x00R\x14payPeriodStartString\x88\x01\x01\x12$\n" +
-	"\x0epay_period_end\x18\x05 \x01(\x03R\fpayPeriodEnd\x126\n" +
-	"\x15pay_period_end_string\x18\x06 \x01(\tH\x01R\x12payPeriodEndString\x88\x01\x01\x12(\n" +
-	"\vtotal_gross\x18\a \x01(\x01B\a\x82\xb5\x18\x03\"\x010R\n" +
+	"\x10pay_period_start\x18\x03 \x01(\tR\x0epayPeriodStart\x12$\n" +
+	"\x0epay_period_end\x18\x05 \x01(\tR\fpayPeriodEnd\x12(\n" +
+	"\vtotal_gross\x18\a \x01(\x03B\a\x82\xb5\x18\x03\"\x010R\n" +
 	"totalGross\x122\n" +
-	"\x10total_deductions\x18\b \x01(\x01B\a\x82\xb5\x18\x03\"\x010R\x0ftotalDeductions\x12$\n" +
-	"\ttotal_net\x18\t \x01(\x01B\a\x82\xb5\x18\x03\"\x010R\btotalNet\x12.\n" +
+	"\x10total_deductions\x18\b \x01(\x03B\a\x82\xb5\x18\x03\"\x010R\x0ftotalDeductions\x12$\n" +
+	"\ttotal_net\x18\t \x01(\x03B\a\x82\xb5\x18\x03\"\x010R\btotalNet\x12.\n" +
 	"\x0eemployee_count\x18\n" +
 	" \x01(\x05B\a\x82\xb5\x18\x03\"\x010R\remployeeCount\x12;\n" +
 	"\x06status\x18\v \x01(\x0e2#.domain.payroll.v1.PayrollRunStatusR\x06status\x12$\n" +
-	"\vapproved_by\x18\f \x01(\tH\x02R\n" +
+	"\vapproved_by\x18\f \x01(\tH\x00R\n" +
 	"approvedBy\x88\x01\x01\x12 \n" +
-	"\tposted_at\x18\r \x01(\x03H\x03R\bpostedAt\x88\x01\x01\x12-\n" +
-	"\x10posted_at_string\x18\x0e \x01(\tH\x04R\x0epostedAtString\x88\x01\x01\x12&\n" +
-	"\fdate_created\x18\x0f \x01(\x03H\x05R\vdateCreated\x88\x01\x01\x123\n" +
-	"\x13date_created_string\x18\x10 \x01(\tH\x06R\x11dateCreatedString\x88\x01\x01\x12(\n" +
-	"\rdate_modified\x18\x11 \x01(\x03H\aR\fdateModified\x88\x01\x01\x125\n" +
-	"\x14date_modified_string\x18\x12 \x01(\tH\bR\x12dateModifiedString\x88\x01\x01:\x06\x8a\xb5\x18\x02\b\x01B\x1a\n" +
-	"\x18_pay_period_start_stringB\x18\n" +
-	"\x16_pay_period_end_stringB\x0e\n" +
+	"\tposted_at\x18\r \x01(\x03H\x01R\bpostedAt\x88\x01\x01\x12-\n" +
+	"\x10posted_at_string\x18\x0e \x01(\tH\x02R\x0epostedAtString\x88\x01\x01\x12&\n" +
+	"\fdate_created\x18\x0f \x01(\x03H\x03R\vdateCreated\x88\x01\x01\x123\n" +
+	"\x13date_created_string\x18\x10 \x01(\tH\x04R\x11dateCreatedString\x88\x01\x01\x12(\n" +
+	"\rdate_modified\x18\x11 \x01(\x03H\x05R\fdateModified\x88\x01\x01\x125\n" +
+	"\x14date_modified_string\x18\x12 \x01(\tH\x06R\x12dateModifiedString\x88\x01\x01:\x06\x8a\xb5\x18\x02\b\x01B\x0e\n" +
 	"\f_approved_byB\f\n" +
 	"\n" +
 	"_posted_atB\x13\n" +
@@ -1088,7 +1068,7 @@ const file_domain_payroll_payroll_run_payroll_run_proto_rawDesc = "" +
 	"\r_date_createdB\x16\n" +
 	"\x14_date_created_stringB\x10\n" +
 	"\x0e_date_modifiedB\x17\n" +
-	"\x15_date_modified_string\"L\n" +
+	"\x15_date_modified_stringJ\x04\b\x04\x10\x05J\x04\b\x06\x10\a\"L\n" +
 	"\x17CreatePayrollRunRequest\x121\n" +
 	"\x04data\x18\x01 \x01(\v2\x1d.domain.payroll.v1.PayrollRunR\x04data\"\xa5\x01\n" +
 	"\x18CreatePayrollRunResponse\x121\n" +

@@ -13,6 +13,8 @@ import "domain/common/sort.proto";
 import "domain/revenue/revenue/revenue.proto";
 import "domain/product/product/product.proto";
 
+import "options/db.proto";
+
 message RevenueLineItem {
   string id = 1;
   optional int64 date_created = 2;
@@ -26,8 +28,8 @@ message RevenueLineItem {
   optional string product_id = 10;
   string description = 11;
   double quantity = 12;
-  double unit_price = 13;
-  double total_price = 14;
+  int64 unit_price = 13; // centavos
+  int64 total_price = 14; // centavos
   optional string notes = 16;
   string line_item_type = 17;           // "item" or "discount"
   string inventory_item_id = 18;         // FK to inventory_item table
@@ -36,7 +38,8 @@ message RevenueLineItem {
   optional string variant_id = 21;       // FK to product_variant
   optional string variant_label = 22;    // display label ("256GB Black")
   optional string location_id = 23;      // FK to location (where stock was pulled)
-  optional double cost_price = 24;       // purchase cost for margin tracking
+  optional int64 cost_price = 24; // centavos       // purchase cost for margin tracking
+  optional string product_price_plan_id = 25 [(options.v1.db).references = "product_price_plan", (options.v1.db).index = true];
 }
 
 service RevenueLineItemDomainService {

@@ -27,8 +27,8 @@ enum RecurrenceFrequency {
 message RecurringJournalTemplateLine {
   string account_id = 1;                  // FK to account
   optional string description = 2;
-  double debit_amount = 3;
-  double credit_amount = 4;
+  int64 debit_amount = 3; // centavos
+  int64 credit_amount = 4; // centavos
   int32 line_order = 5;
 }
 
@@ -45,8 +45,8 @@ message RecurringJournalTemplate {
   // Schedule — next_run_date is updated after each successful generation
   int64 next_run_date = 5;
   optional string next_run_date_string = 6;
-  optional int64 end_date = 7;             // Null = runs indefinitely
-  optional string end_date_string = 8;
+  optional string end_date = 7;             // ISO 8601 date (YYYY-MM-DD) — Null = runs indefinitely
+  reserved 8; // was end_date_string
 
   // Template description copied to each generated JournalEntry
   string template_description = 9;

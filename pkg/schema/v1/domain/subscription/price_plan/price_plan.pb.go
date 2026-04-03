@@ -36,7 +36,7 @@ type PricePlan struct {
 	DateModified       *int64                 `protobuf:"varint,8,opt,name=date_modified,json=dateModified,proto3,oneof" json:"date_modified,omitempty"`
 	DateModifiedString *string                `protobuf:"bytes,9,opt,name=date_modified_string,json=dateModifiedString,proto3,oneof" json:"date_modified_string,omitempty"`
 	Active             bool                   `protobuf:"varint,10,opt,name=active,proto3" json:"active,omitempty"`
-	Amount             float64                `protobuf:"fixed64,11,opt,name=amount,proto3" json:"amount,omitempty"`
+	Amount             int64                  `protobuf:"varint,11,opt,name=amount,proto3" json:"amount,omitempty"` // centavos
 	Currency           string                 `protobuf:"bytes,12,opt,name=currency,proto3" json:"currency,omitempty"`
 	DurationValue      int32                  `protobuf:"varint,13,opt,name=duration_value,json=durationValue,proto3" json:"duration_value,omitempty"`
 	DurationUnit       string                 `protobuf:"bytes,14,opt,name=duration_unit,json=durationUnit,proto3" json:"duration_unit,omitempty"`
@@ -148,7 +148,7 @@ func (x *PricePlan) GetActive() bool {
 	return false
 }
 
-func (x *PricePlan) GetAmount() float64 {
+func (x *PricePlan) GetAmount() int64 {
 	if x != nil {
 		return x.Amount
 	}
@@ -1000,7 +1000,7 @@ const file_domain_subscription_price_plan_price_plan_proto_rawDesc = "" +
 	"\x06active\x18\n" +
 	" \x01(\bB\n" +
 	"\x82\xb5\x18\x06\"\x04trueR\x06active\x12\x16\n" +
-	"\x06amount\x18\v \x01(\x01R\x06amount\x12\x1a\n" +
+	"\x06amount\x18\v \x01(\x03R\x06amount\x12\x1a\n" +
 	"\bcurrency\x18\f \x01(\tR\bcurrency\x12%\n" +
 	"\x0eduration_value\x18\r \x01(\x05R\rdurationValue\x12#\n" +
 	"\rduration_unit\x18\x0e \x01(\tR\fdurationUnit\x128\n" +

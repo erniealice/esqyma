@@ -125,7 +125,7 @@ type AssetTransaction struct {
 	TransactionType       AssetTransactionType   `protobuf:"varint,3,opt,name=transaction_type,json=transactionType,proto3,enum=domain.asset.v1.AssetTransactionType" json:"transaction_type,omitempty"`
 	TransactionDate       int64                  `protobuf:"varint,4,opt,name=transaction_date,json=transactionDate,proto3" json:"transaction_date,omitempty"`
 	TransactionDateString string                 `protobuf:"bytes,5,opt,name=transaction_date_string,json=transactionDateString,proto3" json:"transaction_date_string,omitempty"`
-	Amount                float64                `protobuf:"fixed64,6,opt,name=amount,proto3" json:"amount,omitempty"`
+	Amount                int64                  `protobuf:"varint,6,opt,name=amount,proto3" json:"amount,omitempty"` // centavos
 	Description           *string                `protobuf:"bytes,7,opt,name=description,proto3,oneof" json:"description,omitempty"`
 	ReferenceNumber       *string                `protobuf:"bytes,8,opt,name=reference_number,json=referenceNumber,proto3,oneof" json:"reference_number,omitempty"`
 	FromLocationId        *string                `protobuf:"bytes,9,opt,name=from_location_id,json=fromLocationId,proto3,oneof" json:"from_location_id,omitempty"`  // FK to entity.Location (for transfers)
@@ -207,7 +207,7 @@ func (x *AssetTransaction) GetTransactionDateString() string {
 	return ""
 }
 
-func (x *AssetTransaction) GetAmount() float64 {
+func (x *AssetTransaction) GetAmount() int64 {
 	if x != nil {
 		return x.Amount
 	}
@@ -895,7 +895,7 @@ const file_domain_asset_asset_transaction_asset_transaction_proto_rawDesc = "" +
 	"\x10transaction_type\x18\x03 \x01(\x0e2%.domain.asset.v1.AssetTransactionTypeR\x0ftransactionType\x12)\n" +
 	"\x10transaction_date\x18\x04 \x01(\x03R\x0ftransactionDate\x126\n" +
 	"\x17transaction_date_string\x18\x05 \x01(\tR\x15transactionDateString\x12\x16\n" +
-	"\x06amount\x18\x06 \x01(\x01R\x06amount\x12%\n" +
+	"\x06amount\x18\x06 \x01(\x03R\x06amount\x12%\n" +
 	"\vdescription\x18\a \x01(\tH\x00R\vdescription\x88\x01\x01\x12.\n" +
 	"\x10reference_number\x18\b \x01(\tH\x01R\x0freferenceNumber\x88\x01\x01\x12-\n" +
 	"\x10from_location_id\x18\t \x01(\tH\x02R\x0efromLocationId\x88\x01\x01\x12)\n" +

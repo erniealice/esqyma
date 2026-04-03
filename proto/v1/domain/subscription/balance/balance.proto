@@ -16,7 +16,7 @@ import "options/db.proto";
 message Balance {
   option (options.v1.table).table = true;
   string id = 1;
-  double amount = 2;
+  int64 amount = 2; // centavos
   optional int64 date_created = 3;
   optional string date_created_string = 4;
   optional int64 date_modified = 5;

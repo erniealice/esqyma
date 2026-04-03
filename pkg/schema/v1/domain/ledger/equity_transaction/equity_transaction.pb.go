@@ -87,7 +87,7 @@ type EquityTransaction struct {
 	// Parent equity account
 	EquityAccountId string                `protobuf:"bytes,2,opt,name=equity_account_id,json=equityAccountId,proto3" json:"equity_account_id,omitempty"`
 	TransactionType EquityTransactionType `protobuf:"varint,3,opt,name=transaction_type,json=transactionType,proto3,enum=domain.ledger.v1.EquityTransactionType" json:"transaction_type,omitempty"`
-	Amount          float64               `protobuf:"fixed64,4,opt,name=amount,proto3" json:"amount,omitempty"`
+	Amount          int64                 `protobuf:"varint,4,opt,name=amount,proto3" json:"amount,omitempty"` // centavos
 	Description     *string               `protobuf:"bytes,5,opt,name=description,proto3,oneof" json:"description,omitempty"`
 	// Transaction date
 	TransactionDate       int64   `protobuf:"varint,6,opt,name=transaction_date,json=transactionDate,proto3" json:"transaction_date,omitempty"`
@@ -152,7 +152,7 @@ func (x *EquityTransaction) GetTransactionType() EquityTransactionType {
 	return EquityTransactionType_EQUITY_TRANSACTION_TYPE_UNSPECIFIED
 }
 
-func (x *EquityTransaction) GetAmount() float64 {
+func (x *EquityTransaction) GetAmount() int64 {
 	if x != nil {
 		return x.Amount
 	}
@@ -995,7 +995,7 @@ const file_domain_ledger_equity_transaction_equity_transaction_proto_rawDesc = "
 	"\x11equity_account_id\x18\x02 \x01(\tB\x16\x82\xb5\x18\x12\n" +
 	"\x0eequity_account\x18\x01R\x0fequityAccountId\x12R\n" +
 	"\x10transaction_type\x18\x03 \x01(\x0e2'.domain.ledger.v1.EquityTransactionTypeR\x0ftransactionType\x12\x16\n" +
-	"\x06amount\x18\x04 \x01(\x01R\x06amount\x12%\n" +
+	"\x06amount\x18\x04 \x01(\x03R\x06amount\x12%\n" +
 	"\vdescription\x18\x05 \x01(\tH\x00R\vdescription\x88\x01\x01\x12)\n" +
 	"\x10transaction_date\x18\x06 \x01(\x03R\x0ftransactionDate\x12;\n" +
 	"\x17transaction_date_string\x18\a \x01(\tH\x01R\x15transactionDateString\x88\x01\x01\x12D\n" +

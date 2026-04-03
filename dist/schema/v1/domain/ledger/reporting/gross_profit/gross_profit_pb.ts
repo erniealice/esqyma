@@ -14,7 +14,7 @@ import type { Message } from "@bufbuild/protobuf";
  * Describes the file domain/ledger/reporting/gross_profit/gross_profit.proto.
  */
 export const file_domain_ledger_reporting_gross_profit_gross_profit: GenFile = /*@__PURE__*/
-  fileDesc("Cjdkb21haW4vbGVkZ2VyL3JlcG9ydGluZy9ncm9zc19wcm9maXQvZ3Jvc3NfcHJvZml0LnByb3RvEhBkb21haW4ubGVkZ2VyLnYxIr8DChhHcm9zc1Byb2ZpdFJlcG9ydFJlcXVlc3QSFwoKc3RhcnRfZGF0ZRgBIAEoA0gAiAEBEhUKCGVuZF9kYXRlGAIgASgDSAGIAQESFQoIZ3JvdXBfYnkYAyABKAlIAogBARIfChJwZXJpb2RfZ3JhbnVsYXJpdHkYBCABKAlIA4gBARIXCgpwcm9kdWN0X2lkGAUgASgJSASIAQESGAoLbG9jYXRpb25faWQYBiABKAlIBYgBARIgChNyZXZlbnVlX2NhdGVnb3J5X2lkGAcgASgJSAaIAQESFQoIY3VycmVuY3kYCCABKAlIB4gBARI8CgpwYWdpbmF0aW9uGAkgASgLMiMuZG9tYWluLmNvbW1vbi52MS5QYWdpbmF0aW9uUmVxdWVzdEgIiAEBQg0KC19zdGFydF9kYXRlQgsKCV9lbmRfZGF0ZUILCglfZ3JvdXBfYnlCFQoTX3BlcmlvZF9ncmFudWxhcml0eUINCgtfcHJvZHVjdF9pZEIOCgxfbG9jYXRpb25faWRCFgoUX3JldmVudWVfY2F0ZWdvcnlfaWRCCwoJX2N1cnJlbmN5Qg0KC19wYWdpbmF0aW9uIo4CChNHcm9zc1Byb2ZpdExpbmVJdGVtEhEKCWdyb3VwX2tleRgBIAEoCRIVCghncm91cF9pZBgCIAEoCUgAiAEBEhUKDXRvdGFsX3JldmVudWUYAyABKAESFgoOdG90YWxfZGlzY291bnQYBCABKAESEwoLbmV0X3JldmVudWUYBSABKAESGgoSY29zdF9vZl9nb29kc19zb2xkGAYgASgBEhQKDGdyb3NzX3Byb2ZpdBgHIAEoARIbChNncm9zc19wcm9maXRfbWFyZ2luGAggASgBEhIKCnVuaXRzX3NvbGQYCSABKAMSGQoRdHJhbnNhY3Rpb25fY291bnQYCiABKANCCwoJX2dyb3VwX2lkIrQCChJHcm9zc1Byb2ZpdFN1bW1hcnkSFQoNdG90YWxfcmV2ZW51ZRgBIAEoARIWCg50b3RhbF9kaXNjb3VudBgCIAEoARITCgtuZXRfcmV2ZW51ZRgDIAEoARISCgp0b3RhbF9jb2dzGAQgASgBEhoKEnRvdGFsX2dyb3NzX3Byb2ZpdBgFIAEoARIWCg5vdmVyYWxsX21hcmdpbhgGIAEoARIYChB0b3RhbF91bml0c19zb2xkGAcgASgDEhoKEnRvdGFsX3RyYW5zYWN0aW9ucxgIIAEoAxIQCghjdXJyZW5jeRgJIAEoCRIXCgpzdGFydF9kYXRlGAogASgDSACIAQESFQoIZW5kX2RhdGUYCyABKANIAYgBAUINCgtfc3RhcnRfZGF0ZUILCglfZW5kX2RhdGUitAIKGUdyb3NzUHJvZml0UmVwb3J0UmVzcG9uc2USOQoKbGluZV9pdGVtcxgBIAMoCzIlLmRvbWFpbi5sZWRnZXIudjEuR3Jvc3NQcm9maXRMaW5lSXRlbRI6CgdzdW1tYXJ5GAIgASgLMiQuZG9tYWluLmxlZGdlci52MS5Hcm9zc1Byb2ZpdFN1bW1hcnlIAIgBARI9CgpwYWdpbmF0aW9uGAMgASgLMiQuZG9tYWluLmNvbW1vbi52MS5QYWdpbmF0aW9uUmVzcG9uc2VIAYgBARIPCgdzdWNjZXNzGAQgASgIEisKBWVycm9yGAUgASgLMhcuZG9tYWluLmNvbW1vbi52MS5FcnJvckgCiAEBQgoKCF9zdW1tYXJ5Qg0KC19wYWdpbmF0aW9uQggKBl9lcnJvcjKPAQocTGVkZ2VyUmVwb3J0aW5nRG9tYWluU2VydmljZRJvChRHZXRHcm9zc1Byb2ZpdFJlcG9ydBIqLmRvbWFpbi5sZWRnZXIudjEuR3Jvc3NQcm9maXRSZXBvcnRSZXF1ZXN0GisuZG9tYWluLmxlZGdlci52MS5Hcm9zc1Byb2ZpdFJlcG9ydFJlc3BvbnNlQuQBChRjb20uZG9tYWluLmxlZGdlci52MUIQR3Jvc3NQcm9maXRQcm90b1ABWlhnaXRodWIuY29tL2VybmllYWxpY2UvZXNxeW1hL3BrZy9zY2hlbWEvdjEvZG9tYWluL2xlZGdlci9yZXBvcnRpbmcvZ3Jvc3NfcHJvZml0O2xlZGdlcnYxogIDRExYqgIQRG9tYWluLkxlZGdlci5WMcoCEERvbWFpblxMZWRnZXJcVjHiAhxEb21haW5cTGVkZ2VyXFYxXEdQQk1ldGFkYXRh6gISRG9tYWluOjpMZWRnZXI6OlYxYgZwcm90bzM", [file_domain_common_error, file_domain_common_pagination]);
+  fileDesc("Cjdkb21haW4vbGVkZ2VyL3JlcG9ydGluZy9ncm9zc19wcm9maXQvZ3Jvc3NfcHJvZml0LnByb3RvEhBkb21haW4ubGVkZ2VyLnYxIr8DChhHcm9zc1Byb2ZpdFJlcG9ydFJlcXVlc3QSFwoKc3RhcnRfZGF0ZRgBIAEoCUgAiAEBEhUKCGVuZF9kYXRlGAIgASgJSAGIAQESFQoIZ3JvdXBfYnkYAyABKAlIAogBARIfChJwZXJpb2RfZ3JhbnVsYXJpdHkYBCABKAlIA4gBARIXCgpwcm9kdWN0X2lkGAUgASgJSASIAQESGAoLbG9jYXRpb25faWQYBiABKAlIBYgBARIgChNyZXZlbnVlX2NhdGVnb3J5X2lkGAcgASgJSAaIAQESFQoIY3VycmVuY3kYCCABKAlIB4gBARI8CgpwYWdpbmF0aW9uGAkgASgLMiMuZG9tYWluLmNvbW1vbi52MS5QYWdpbmF0aW9uUmVxdWVzdEgIiAEBQg0KC19zdGFydF9kYXRlQgsKCV9lbmRfZGF0ZUILCglfZ3JvdXBfYnlCFQoTX3BlcmlvZF9ncmFudWxhcml0eUINCgtfcHJvZHVjdF9pZEIOCgxfbG9jYXRpb25faWRCFgoUX3JldmVudWVfY2F0ZWdvcnlfaWRCCwoJX2N1cnJlbmN5Qg0KC19wYWdpbmF0aW9uIo4CChNHcm9zc1Byb2ZpdExpbmVJdGVtEhEKCWdyb3VwX2tleRgBIAEoCRIVCghncm91cF9pZBgCIAEoCUgAiAEBEhUKDXRvdGFsX3JldmVudWUYAyABKAMSFgoOdG90YWxfZGlzY291bnQYBCABKAMSEwoLbmV0X3JldmVudWUYBSABKAMSGgoSY29zdF9vZl9nb29kc19zb2xkGAYgASgDEhQKDGdyb3NzX3Byb2ZpdBgHIAEoAxIbChNncm9zc19wcm9maXRfbWFyZ2luGAggASgBEhIKCnVuaXRzX3NvbGQYCSABKAMSGQoRdHJhbnNhY3Rpb25fY291bnQYCiABKANCCwoJX2dyb3VwX2lkIrQCChJHcm9zc1Byb2ZpdFN1bW1hcnkSFQoNdG90YWxfcmV2ZW51ZRgBIAEoAxIWCg50b3RhbF9kaXNjb3VudBgCIAEoAxITCgtuZXRfcmV2ZW51ZRgDIAEoAxISCgp0b3RhbF9jb2dzGAQgASgDEhoKEnRvdGFsX2dyb3NzX3Byb2ZpdBgFIAEoAxIWCg5vdmVyYWxsX21hcmdpbhgGIAEoARIYChB0b3RhbF91bml0c19zb2xkGAcgASgDEhoKEnRvdGFsX3RyYW5zYWN0aW9ucxgIIAEoAxIQCghjdXJyZW5jeRgJIAEoCRIXCgpzdGFydF9kYXRlGAogASgJSACIAQESFQoIZW5kX2RhdGUYCyABKAlIAYgBAUINCgtfc3RhcnRfZGF0ZUILCglfZW5kX2RhdGUitAIKGUdyb3NzUHJvZml0UmVwb3J0UmVzcG9uc2USOQoKbGluZV9pdGVtcxgBIAMoCzIlLmRvbWFpbi5sZWRnZXIudjEuR3Jvc3NQcm9maXRMaW5lSXRlbRI6CgdzdW1tYXJ5GAIgASgLMiQuZG9tYWluLmxlZGdlci52MS5Hcm9zc1Byb2ZpdFN1bW1hcnlIAIgBARI9CgpwYWdpbmF0aW9uGAMgASgLMiQuZG9tYWluLmNvbW1vbi52MS5QYWdpbmF0aW9uUmVzcG9uc2VIAYgBARIPCgdzdWNjZXNzGAQgASgIEisKBWVycm9yGAUgASgLMhcuZG9tYWluLmNvbW1vbi52MS5FcnJvckgCiAEBQgoKCF9zdW1tYXJ5Qg0KC19wYWdpbmF0aW9uQggKBl9lcnJvcjKPAQocTGVkZ2VyUmVwb3J0aW5nRG9tYWluU2VydmljZRJvChRHZXRHcm9zc1Byb2ZpdFJlcG9ydBIqLmRvbWFpbi5sZWRnZXIudjEuR3Jvc3NQcm9maXRSZXBvcnRSZXF1ZXN0GisuZG9tYWluLmxlZGdlci52MS5Hcm9zc1Byb2ZpdFJlcG9ydFJlc3BvbnNlQuQBChRjb20uZG9tYWluLmxlZGdlci52MUIQR3Jvc3NQcm9maXRQcm90b1ABWlhnaXRodWIuY29tL2VybmllYWxpY2UvZXNxeW1hL3BrZy9zY2hlbWEvdjEvZG9tYWluL2xlZGdlci9yZXBvcnRpbmcvZ3Jvc3NfcHJvZml0O2xlZGdlcnYxogIDRExYqgIQRG9tYWluLkxlZGdlci5WMcoCEERvbWFpblxMZWRnZXJcVjHiAhxEb21haW5cTGVkZ2VyXFYxXEdQQk1ldGFkYXRh6gISRG9tYWluOjpMZWRnZXI6OlYxYgZwcm90bzM", [file_domain_common_error, file_domain_common_pagination]);
 
 /**
  * GrossProfitReportRequest defines parameters for generating a gross profit report.
@@ -23,18 +23,18 @@ export const file_domain_ledger_reporting_gross_profit_gross_profit: GenFile = /
  */
 export type GrossProfitReportRequest = Message<"domain.ledger.v1.GrossProfitReportRequest"> & {
   /**
-   * Unix timestamp — report period start
+   * ISO 8601 date (YYYY-MM-DD) — report period start
    *
-   * @generated from field: optional int64 start_date = 1;
+   * @generated from field: optional string start_date = 1;
    */
-  startDate?: bigint;
+  startDate?: string;
 
   /**
-   * Unix timestamp — report period end
+   * ISO 8601 date (YYYY-MM-DD) — report period end
    *
-   * @generated from field: optional int64 end_date = 2;
+   * @generated from field: optional string end_date = 2;
    */
-  endDate?: bigint;
+  endDate?: string;
 
   /**
    * "product", "location", "category", "period"
@@ -112,39 +112,39 @@ export type GrossProfitLineItem = Message<"domain.ledger.v1.GrossProfitLineItem"
   groupId?: string;
 
   /**
-   * Sum of revenue line item totals
+   * centavos          // Sum of revenue line item totals
    *
-   * @generated from field: double total_revenue = 3;
+   * @generated from field: int64 total_revenue = 3;
    */
-  totalRevenue: number;
+  totalRevenue: bigint;
 
   /**
-   * Sum of discounts applied
+   * centavos         // Sum of discounts applied
    *
-   * @generated from field: double total_discount = 4;
+   * @generated from field: int64 total_discount = 4;
    */
-  totalDiscount: number;
+  totalDiscount: bigint;
 
   /**
-   * total_revenue - total_discount
+   * centavos            // total_revenue - total_discount
    *
-   * @generated from field: double net_revenue = 5;
+   * @generated from field: int64 net_revenue = 5;
    */
-  netRevenue: number;
+  netRevenue: bigint;
 
   /**
-   * Sum of COGS from inventory transactions
+   * centavos     // Sum of COGS from inventory transactions
    *
-   * @generated from field: double cost_of_goods_sold = 6;
+   * @generated from field: int64 cost_of_goods_sold = 6;
    */
-  costOfGoodsSold: number;
+  costOfGoodsSold: bigint;
 
   /**
-   * net_revenue - cost_of_goods_sold
+   * centavos           // net_revenue - cost_of_goods_sold
    *
-   * @generated from field: double gross_profit = 7;
+   * @generated from field: int64 gross_profit = 7;
    */
-  grossProfit: number;
+  grossProfit: bigint;
 
   /**
    * (gross_profit / net_revenue) * 100
@@ -182,29 +182,39 @@ export const GrossProfitLineItemSchema: GenMessage<GrossProfitLineItem> = /*@__P
  */
 export type GrossProfitSummary = Message<"domain.ledger.v1.GrossProfitSummary"> & {
   /**
-   * @generated from field: double total_revenue = 1;
+   * centavos
+   *
+   * @generated from field: int64 total_revenue = 1;
    */
-  totalRevenue: number;
+  totalRevenue: bigint;
 
   /**
-   * @generated from field: double total_discount = 2;
+   * centavos
+   *
+   * @generated from field: int64 total_discount = 2;
    */
-  totalDiscount: number;
+  totalDiscount: bigint;
 
   /**
-   * @generated from field: double net_revenue = 3;
+   * centavos
+   *
+   * @generated from field: int64 net_revenue = 3;
    */
-  netRevenue: number;
+  netRevenue: bigint;
 
   /**
-   * @generated from field: double total_cogs = 4;
+   * centavos
+   *
+   * @generated from field: int64 total_cogs = 4;
    */
-  totalCogs: number;
+  totalCogs: bigint;
 
   /**
-   * @generated from field: double total_gross_profit = 5;
+   * centavos
+   *
+   * @generated from field: int64 total_gross_profit = 5;
    */
-  totalGrossProfit: number;
+  totalGrossProfit: bigint;
 
   /**
    * (total_gross_profit / net_revenue) * 100
@@ -229,14 +239,18 @@ export type GrossProfitSummary = Message<"domain.ledger.v1.GrossProfitSummary"> 
   currency: string;
 
   /**
-   * @generated from field: optional int64 start_date = 10;
+   * ISO 8601 date (YYYY-MM-DD)
+   *
+   * @generated from field: optional string start_date = 10;
    */
-  startDate?: bigint;
+  startDate?: string;
 
   /**
-   * @generated from field: optional int64 end_date = 11;
+   * ISO 8601 date (YYYY-MM-DD)
+   *
+   * @generated from field: optional string end_date = 11;
    */
-  endDate?: bigint;
+  endDate?: string;
 };
 
 /**

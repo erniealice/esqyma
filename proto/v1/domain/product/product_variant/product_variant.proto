@@ -18,7 +18,7 @@ message ProductVariant {
   string id = 1;
   string product_id = 2 [(options.v1.db).references = "product", (options.v1.db).index = true];
   string sku = 3;
-  double price_override = 4;
+  int64 price_override = 4; // centavos
   bool active = 5 [(options.v1.db).default = "true"];
   reserved 6;
   reserved "variant_attributes";

@@ -88,8 +88,8 @@ type RecurringJournalTemplateLine struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	AccountId     string                 `protobuf:"bytes,1,opt,name=account_id,json=accountId,proto3" json:"account_id,omitempty"` // FK to account
 	Description   *string                `protobuf:"bytes,2,opt,name=description,proto3,oneof" json:"description,omitempty"`
-	DebitAmount   float64                `protobuf:"fixed64,3,opt,name=debit_amount,json=debitAmount,proto3" json:"debit_amount,omitempty"`
-	CreditAmount  float64                `protobuf:"fixed64,4,opt,name=credit_amount,json=creditAmount,proto3" json:"credit_amount,omitempty"`
+	DebitAmount   int64                  `protobuf:"varint,3,opt,name=debit_amount,json=debitAmount,proto3" json:"debit_amount,omitempty"`    // centavos
+	CreditAmount  int64                  `protobuf:"varint,4,opt,name=credit_amount,json=creditAmount,proto3" json:"credit_amount,omitempty"` // centavos
 	LineOrder     int32                  `protobuf:"varint,5,opt,name=line_order,json=lineOrder,proto3" json:"line_order,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
@@ -139,14 +139,14 @@ func (x *RecurringJournalTemplateLine) GetDescription() string {
 	return ""
 }
 
-func (x *RecurringJournalTemplateLine) GetDebitAmount() float64 {
+func (x *RecurringJournalTemplateLine) GetDebitAmount() int64 {
 	if x != nil {
 		return x.DebitAmount
 	}
 	return 0
 }
 
-func (x *RecurringJournalTemplateLine) GetCreditAmount() float64 {
+func (x *RecurringJournalTemplateLine) GetCreditAmount() int64 {
 	if x != nil {
 		return x.CreditAmount
 	}
@@ -171,8 +171,7 @@ type RecurringJournalTemplate struct {
 	// Schedule — next_run_date is updated after each successful generation
 	NextRunDate       int64   `protobuf:"varint,5,opt,name=next_run_date,json=nextRunDate,proto3" json:"next_run_date,omitempty"`
 	NextRunDateString *string `protobuf:"bytes,6,opt,name=next_run_date_string,json=nextRunDateString,proto3,oneof" json:"next_run_date_string,omitempty"`
-	EndDate           *int64  `protobuf:"varint,7,opt,name=end_date,json=endDate,proto3,oneof" json:"end_date,omitempty"` // Null = runs indefinitely
-	EndDateString     *string `protobuf:"bytes,8,opt,name=end_date_string,json=endDateString,proto3,oneof" json:"end_date_string,omitempty"`
+	EndDate           *string `protobuf:"bytes,7,opt,name=end_date,json=endDate,proto3,oneof" json:"end_date,omitempty"` // ISO 8601 date (YYYY-MM-DD) — Null = runs indefinitely
 	// Template description copied to each generated JournalEntry
 	TemplateDescription string `protobuf:"bytes,9,opt,name=template_description,json=templateDescription,proto3" json:"template_description,omitempty"`
 	// Template lines — embedded for reads; stored separately in DB
@@ -259,16 +258,9 @@ func (x *RecurringJournalTemplate) GetNextRunDateString() string {
 	return ""
 }
 
-func (x *RecurringJournalTemplate) GetEndDate() int64 {
+func (x *RecurringJournalTemplate) GetEndDate() string {
 	if x != nil && x.EndDate != nil {
 		return *x.EndDate
-	}
-	return 0
-}
-
-func (x *RecurringJournalTemplate) GetEndDateString() string {
-	if x != nil && x.EndDateString != nil {
-		return *x.EndDateString
 	}
 	return ""
 }
@@ -1236,11 +1228,11 @@ const file_domain_ledger_recurring_journal_template_recurring_journal_template_p
 	"\n" +
 	"account_id\x18\x01 \x01(\tR\taccountId\x12%\n" +
 	"\vdescription\x18\x02 \x01(\tH\x00R\vdescription\x88\x01\x01\x12!\n" +
-	"\fdebit_amount\x18\x03 \x01(\x01R\vdebitAmount\x12#\n" +
-	"\rcredit_amount\x18\x04 \x01(\x01R\fcreditAmount\x12\x1d\n" +
+	"\fdebit_amount\x18\x03 \x01(\x03R\vdebitAmount\x12#\n" +
+	"\rcredit_amount\x18\x04 \x01(\x03R\fcreditAmount\x12\x1d\n" +
 	"\n" +
 	"line_order\x18\x05 \x01(\x05R\tlineOrderB\x0e\n" +
-	"\f_description\"\xd2\x06\n" +
+	"\f_description\"\x97\x06\n" +
 	"\x18RecurringJournalTemplate\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12\x12\n" +
 	"\x04name\x18\x02 \x01(\tR\x04name\x12%\n" +
@@ -1248,25 +1240,23 @@ const file_domain_ledger_recurring_journal_template_recurring_journal_template_p
 	"\tfrequency\x18\x04 \x01(\x0e2%.domain.ledger.v1.RecurrenceFrequencyR\tfrequency\x12\"\n" +
 	"\rnext_run_date\x18\x05 \x01(\x03R\vnextRunDate\x124\n" +
 	"\x14next_run_date_string\x18\x06 \x01(\tH\x01R\x11nextRunDateString\x88\x01\x01\x12\x1e\n" +
-	"\bend_date\x18\a \x01(\x03H\x02R\aendDate\x88\x01\x01\x12+\n" +
-	"\x0fend_date_string\x18\b \x01(\tH\x03R\rendDateString\x88\x01\x01\x121\n" +
+	"\bend_date\x18\a \x01(\tH\x02R\aendDate\x88\x01\x01\x121\n" +
 	"\x14template_description\x18\t \x01(\tR\x13templateDescription\x12D\n" +
 	"\x05lines\x18\n" +
 	" \x03(\v2..domain.ledger.v1.RecurringJournalTemplateLineR\x05lines\x12\"\n" +
 	"\x06active\x18\v \x01(\bB\n" +
 	"\x82\xb5\x18\x06\"\x04trueR\x06active\x12&\n" +
-	"\fdate_created\x18\f \x01(\x03H\x04R\vdateCreated\x88\x01\x01\x123\n" +
-	"\x13date_created_string\x18\r \x01(\tH\x05R\x11dateCreatedString\x88\x01\x01\x12(\n" +
-	"\rdate_modified\x18\x0e \x01(\x03H\x06R\fdateModified\x88\x01\x01\x125\n" +
-	"\x14date_modified_string\x18\x0f \x01(\tH\aR\x12dateModifiedString\x88\x01\x01:\x06\x8a\xb5\x18\x02\b\x01B\x0e\n" +
+	"\fdate_created\x18\f \x01(\x03H\x03R\vdateCreated\x88\x01\x01\x123\n" +
+	"\x13date_created_string\x18\r \x01(\tH\x04R\x11dateCreatedString\x88\x01\x01\x12(\n" +
+	"\rdate_modified\x18\x0e \x01(\x03H\x05R\fdateModified\x88\x01\x01\x125\n" +
+	"\x14date_modified_string\x18\x0f \x01(\tH\x06R\x12dateModifiedString\x88\x01\x01:\x06\x8a\xb5\x18\x02\b\x01B\x0e\n" +
 	"\f_descriptionB\x17\n" +
 	"\x15_next_run_date_stringB\v\n" +
-	"\t_end_dateB\x12\n" +
-	"\x10_end_date_stringB\x0f\n" +
+	"\t_end_dateB\x0f\n" +
 	"\r_date_createdB\x16\n" +
 	"\x14_date_created_stringB\x10\n" +
 	"\x0e_date_modifiedB\x17\n" +
-	"\x15_date_modified_string\"g\n" +
+	"\x15_date_modified_stringJ\x04\b\b\x10\t\"g\n" +
 	"%CreateRecurringJournalTemplateRequest\x12>\n" +
 	"\x04data\x18\x01 \x01(\v2*.domain.ledger.v1.RecurringJournalTemplateR\x04data\"\xc0\x01\n" +
 	"&CreateRecurringJournalTemplateResponse\x12>\n" +

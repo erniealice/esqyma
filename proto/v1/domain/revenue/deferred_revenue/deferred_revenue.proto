@@ -32,15 +32,15 @@ message DeferredRevenue {
   optional string customer_name = 3;
 
   // Amounts
-  double total_amount = 4;
-  double recognized_amount = 5 [(options.v1.db).default = "0"];   // Increases with each recognition entry
-  double remaining_amount = 6;                                     // total - recognized
+  int64 total_amount = 4; // centavos
+  int64 recognized_amount = 5 [(options.v1.db).default = "0"]; // centavos   // Increases with each recognition entry
+  int64 remaining_amount = 6; // centavos                                     // total - recognized
 
   // Recognition schedule
-  int64 start_date = 7;
-  optional string start_date_string = 8;
-  int64 end_date = 9;
-  optional string end_date_string = 10;
+  string start_date = 7; // ISO 8601 date (YYYY-MM-DD)
+  reserved 8; // was start_date_string
+  string end_date = 9; // ISO 8601 date (YYYY-MM-DD)
+  reserved 10; // was end_date_string
   int32 recognition_months = 11;    // Derived from start/end, stored for convenience
 
   DeferredRevenueStatus status = 12;

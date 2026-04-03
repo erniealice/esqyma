@@ -29,12 +29,12 @@ type InventoryDepreciation struct {
 	Id                      string                        `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
 	InventoryItemId         string                        `protobuf:"bytes,2,opt,name=inventory_item_id,json=inventoryItemId,proto3" json:"inventory_item_id,omitempty"`
 	Method                  string                        `protobuf:"bytes,3,opt,name=method,proto3" json:"method,omitempty"`
-	CostBasis               float64                       `protobuf:"fixed64,4,opt,name=cost_basis,json=costBasis,proto3" json:"cost_basis,omitempty"`
-	SalvageValue            float64                       `protobuf:"fixed64,5,opt,name=salvage_value,json=salvageValue,proto3" json:"salvage_value,omitempty"`
+	CostBasis               int64                         `protobuf:"varint,4,opt,name=cost_basis,json=costBasis,proto3" json:"cost_basis,omitempty"`          // centavos
+	SalvageValue            int64                         `protobuf:"varint,5,opt,name=salvage_value,json=salvageValue,proto3" json:"salvage_value,omitempty"` // centavos
 	UsefulLifeMonths        int32                         `protobuf:"varint,6,opt,name=useful_life_months,json=usefulLifeMonths,proto3" json:"useful_life_months,omitempty"`
 	StartDate               string                        `protobuf:"bytes,7,opt,name=start_date,json=startDate,proto3" json:"start_date,omitempty"`
-	AccumulatedDepreciation float64                       `protobuf:"fixed64,8,opt,name=accumulated_depreciation,json=accumulatedDepreciation,proto3" json:"accumulated_depreciation,omitempty"`
-	BookValue               float64                       `protobuf:"fixed64,9,opt,name=book_value,json=bookValue,proto3" json:"book_value,omitempty"`
+	AccumulatedDepreciation int64                         `protobuf:"varint,8,opt,name=accumulated_depreciation,json=accumulatedDepreciation,proto3" json:"accumulated_depreciation,omitempty"` // centavos
+	BookValue               int64                         `protobuf:"varint,9,opt,name=book_value,json=bookValue,proto3" json:"book_value,omitempty"`                                           // centavos
 	Active                  bool                          `protobuf:"varint,10,opt,name=active,proto3" json:"active,omitempty"`
 	DateCreated             *int64                        `protobuf:"varint,11,opt,name=date_created,json=dateCreated,proto3,oneof" json:"date_created,omitempty"`
 	DateCreatedString       *string                       `protobuf:"bytes,12,opt,name=date_created_string,json=dateCreatedString,proto3,oneof" json:"date_created_string,omitempty"`
@@ -96,14 +96,14 @@ func (x *InventoryDepreciation) GetMethod() string {
 	return ""
 }
 
-func (x *InventoryDepreciation) GetCostBasis() float64 {
+func (x *InventoryDepreciation) GetCostBasis() int64 {
 	if x != nil {
 		return x.CostBasis
 	}
 	return 0
 }
 
-func (x *InventoryDepreciation) GetSalvageValue() float64 {
+func (x *InventoryDepreciation) GetSalvageValue() int64 {
 	if x != nil {
 		return x.SalvageValue
 	}
@@ -124,14 +124,14 @@ func (x *InventoryDepreciation) GetStartDate() string {
 	return ""
 }
 
-func (x *InventoryDepreciation) GetAccumulatedDepreciation() float64 {
+func (x *InventoryDepreciation) GetAccumulatedDepreciation() int64 {
 	if x != nil {
 		return x.AccumulatedDepreciation
 	}
 	return 0
 }
 
-func (x *InventoryDepreciation) GetBookValue() float64 {
+func (x *InventoryDepreciation) GetBookValue() int64 {
 	if x != nil {
 		return x.BookValue
 	}
@@ -1102,14 +1102,14 @@ const file_domain_inventory_inventory_depreciation_inventory_depreciation_proto_
 	"\x0einventory_item\x18\x01R\x0finventoryItemId\x12\x16\n" +
 	"\x06method\x18\x03 \x01(\tR\x06method\x12\x1d\n" +
 	"\n" +
-	"cost_basis\x18\x04 \x01(\x01R\tcostBasis\x12#\n" +
-	"\rsalvage_value\x18\x05 \x01(\x01R\fsalvageValue\x12,\n" +
+	"cost_basis\x18\x04 \x01(\x03R\tcostBasis\x12#\n" +
+	"\rsalvage_value\x18\x05 \x01(\x03R\fsalvageValue\x12,\n" +
 	"\x12useful_life_months\x18\x06 \x01(\x05R\x10usefulLifeMonths\x12\x1d\n" +
 	"\n" +
 	"start_date\x18\a \x01(\tR\tstartDate\x129\n" +
-	"\x18accumulated_depreciation\x18\b \x01(\x01R\x17accumulatedDepreciation\x12\x1d\n" +
+	"\x18accumulated_depreciation\x18\b \x01(\x03R\x17accumulatedDepreciation\x12\x1d\n" +
 	"\n" +
-	"book_value\x18\t \x01(\x01R\tbookValue\x12\"\n" +
+	"book_value\x18\t \x01(\x03R\tbookValue\x12\"\n" +
 	"\x06active\x18\n" +
 	" \x01(\bB\n" +
 	"\x82\xb5\x18\x06\"\x04trueR\x06active\x12&\n" +

@@ -133,7 +133,7 @@ type SecurityDeposit struct {
 	Id                string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
 	Direction         DepositDirection       `protobuf:"varint,2,opt,name=direction,proto3,enum=domain.treasury.v1.DepositDirection" json:"direction,omitempty"`
 	CounterpartyName  string                 `protobuf:"bytes,3,opt,name=counterparty_name,json=counterpartyName,proto3" json:"counterparty_name,omitempty"` // Landlord name (PAID) or tenant/customer name (RECEIVED)
-	Amount            float64                `protobuf:"fixed64,4,opt,name=amount,proto3" json:"amount,omitempty"`
+	Amount            int64                  `protobuf:"varint,4,opt,name=amount,proto3" json:"amount,omitempty"`                                            // centavos
 	DepositDate       int64                  `protobuf:"varint,5,opt,name=deposit_date,json=depositDate,proto3" json:"deposit_date,omitempty"`
 	DepositDateString *string                `protobuf:"bytes,6,opt,name=deposit_date_string,json=depositDateString,proto3,oneof" json:"deposit_date_string,omitempty"`
 	Status            DepositStatus          `protobuf:"varint,7,opt,name=status,proto3,enum=domain.treasury.v1.DepositStatus" json:"status,omitempty"`
@@ -201,7 +201,7 @@ func (x *SecurityDeposit) GetCounterpartyName() string {
 	return ""
 }
 
-func (x *SecurityDeposit) GetAmount() float64 {
+func (x *SecurityDeposit) GetAmount() int64 {
 	if x != nil {
 		return x.Amount
 	}
@@ -1071,7 +1071,7 @@ const file_domain_treasury_security_deposit_security_deposit_proto_rawDesc = "" 
 	"\x02id\x18\x01 \x01(\tR\x02id\x12B\n" +
 	"\tdirection\x18\x02 \x01(\x0e2$.domain.treasury.v1.DepositDirectionR\tdirection\x12+\n" +
 	"\x11counterparty_name\x18\x03 \x01(\tR\x10counterpartyName\x12\x16\n" +
-	"\x06amount\x18\x04 \x01(\x01R\x06amount\x12!\n" +
+	"\x06amount\x18\x04 \x01(\x03R\x06amount\x12!\n" +
 	"\fdeposit_date\x18\x05 \x01(\x03R\vdepositDate\x123\n" +
 	"\x13deposit_date_string\x18\x06 \x01(\tH\x00R\x11depositDateString\x88\x01\x01\x129\n" +
 	"\x06status\x18\a \x01(\x0e2!.domain.treasury.v1.DepositStatusR\x06status\x123\n" +

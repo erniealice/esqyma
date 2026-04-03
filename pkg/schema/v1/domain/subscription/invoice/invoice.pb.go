@@ -28,7 +28,7 @@ type Invoice struct {
 	state              protoimpl.MessageState     `protogen:"open.v1"`
 	Id                 string                     `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
 	InvoiceNumber      string                     `protobuf:"bytes,2,opt,name=invoice_number,json=invoiceNumber,proto3" json:"invoice_number,omitempty"`
-	Amount             float64                    `protobuf:"fixed64,3,opt,name=amount,proto3" json:"amount,omitempty"`
+	Amount             int64                      `protobuf:"varint,3,opt,name=amount,proto3" json:"amount,omitempty"` // centavos
 	DateCreated        *int64                     `protobuf:"varint,4,opt,name=date_created,json=dateCreated,proto3,oneof" json:"date_created,omitempty"`
 	DateCreatedString  *string                    `protobuf:"bytes,5,opt,name=date_created_string,json=dateCreatedString,proto3,oneof" json:"date_created_string,omitempty"`
 	DateModified       *int64                     `protobuf:"varint,6,opt,name=date_modified,json=dateModified,proto3,oneof" json:"date_modified,omitempty"`
@@ -84,7 +84,7 @@ func (x *Invoice) GetInvoiceNumber() string {
 	return ""
 }
 
-func (x *Invoice) GetAmount() float64 {
+func (x *Invoice) GetAmount() int64 {
 	if x != nil {
 		return x.Amount
 	}
@@ -934,7 +934,7 @@ const file_domain_subscription_invoice_invoice_proto_rawDesc = "" +
 	"\aInvoice\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12%\n" +
 	"\x0einvoice_number\x18\x02 \x01(\tR\rinvoiceNumber\x12\x16\n" +
-	"\x06amount\x18\x03 \x01(\x01R\x06amount\x12&\n" +
+	"\x06amount\x18\x03 \x01(\x03R\x06amount\x12&\n" +
 	"\fdate_created\x18\x04 \x01(\x03H\x00R\vdateCreated\x88\x01\x01\x123\n" +
 	"\x13date_created_string\x18\x05 \x01(\tH\x01R\x11dateCreatedString\x88\x01\x01\x12(\n" +
 	"\rdate_modified\x18\x06 \x01(\x03H\x02R\fdateModified\x88\x01\x01\x125\n" +

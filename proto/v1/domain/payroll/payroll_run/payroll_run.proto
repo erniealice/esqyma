@@ -31,15 +31,15 @@ message PayrollRun {
   string run_number = 2 [(options.v1.db).unique = true, (options.v1.db).index = true];
 
   // Pay period
-  int64 pay_period_start = 3;
-  optional string pay_period_start_string = 4;
-  int64 pay_period_end = 5;
-  optional string pay_period_end_string = 6;
+  string pay_period_start = 3; // ISO 8601 date (YYYY-MM-DD)
+  reserved 4; // was pay_period_start_string
+  string pay_period_end = 5; // ISO 8601 date (YYYY-MM-DD)
+  reserved 6; // was pay_period_end_string
 
   // Aggregated totals across all employee lines
-  double total_gross = 7 [(options.v1.db).default = "0"];
-  double total_deductions = 8 [(options.v1.db).default = "0"];
-  double total_net = 9 [(options.v1.db).default = "0"];
+  int64 total_gross = 7 [(options.v1.db).default = "0"]; // centavos
+  int64 total_deductions = 8 [(options.v1.db).default = "0"]; // centavos
+  int64 total_net = 9 [(options.v1.db).default = "0"]; // centavos
   int32 employee_count = 10 [(options.v1.db).default = "0"];
 
   PayrollRunStatus status = 11;

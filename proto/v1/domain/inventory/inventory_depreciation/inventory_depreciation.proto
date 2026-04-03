@@ -18,12 +18,12 @@ message InventoryDepreciation {
   string id = 1;
   string inventory_item_id = 2 [(options.v1.db).references = "inventory_item", (options.v1.db).index = true];
   string method = 3;
-  double cost_basis = 4;
-  double salvage_value = 5;
+  int64 cost_basis = 4; // centavos
+  int64 salvage_value = 5; // centavos
   int32 useful_life_months = 6;
   string start_date = 7;
-  double accumulated_depreciation = 8;
-  double book_value = 9;
+  int64 accumulated_depreciation = 8; // centavos
+  int64 book_value = 9; // centavos
   bool active = 10 [(options.v1.db).default = "true"];
   optional int64 date_created = 11;
   optional string date_created_string = 12;

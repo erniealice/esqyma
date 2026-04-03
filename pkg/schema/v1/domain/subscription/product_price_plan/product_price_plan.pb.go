@@ -37,7 +37,7 @@ type ProductPricePlan struct {
 	PricePlanId        string                 `protobuf:"bytes,8,opt,name=price_plan_id,json=pricePlanId,proto3" json:"price_plan_id,omitempty"`
 	Product            *product.Product       `protobuf:"bytes,9,opt,name=product,proto3,oneof" json:"product,omitempty"`
 	ProductId          string                 `protobuf:"bytes,10,opt,name=product_id,json=productId,proto3" json:"product_id,omitempty"`
-	Price              float64                `protobuf:"fixed64,11,opt,name=price,proto3" json:"price,omitempty"`
+	Price              int64                  `protobuf:"varint,11,opt,name=price,proto3" json:"price,omitempty"` // centavos
 	Currency           string                 `protobuf:"bytes,12,opt,name=currency,proto3" json:"currency,omitempty"`
 	unknownFields      protoimpl.UnknownFields
 	sizeCache          protoimpl.SizeCache
@@ -143,7 +143,7 @@ func (x *ProductPricePlan) GetProductId() string {
 	return ""
 }
 
-func (x *ProductPricePlan) GetPrice() float64 {
+func (x *ProductPricePlan) GetPrice() int64 {
 	if x != nil {
 		return x.Price
 	}
@@ -964,7 +964,7 @@ const file_domain_subscription_product_price_plan_product_price_plan_proto_rawDe
 	"product_id\x18\n" +
 	" \x01(\tB\x0f\x82\xb5\x18\v\n" +
 	"\aproduct\x18\x01R\tproductId\x12\x14\n" +
-	"\x05price\x18\v \x01(\x01R\x05price\x12\x1a\n" +
+	"\x05price\x18\v \x01(\x03R\x05price\x12\x1a\n" +
 	"\bcurrency\x18\f \x01(\tR\bcurrency:\x06\x8a\xb5\x18\x02\b\x01B\x0f\n" +
 	"\r_date_createdB\x16\n" +
 	"\x14_date_created_stringB\x10\n" +

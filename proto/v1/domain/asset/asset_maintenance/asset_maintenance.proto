@@ -48,20 +48,20 @@ message AssetMaintenance {
   MaintenanceType maintenance_type = 3;
   MaintenancePriority priority = 4;
   MaintenanceStatus status = 5;
-  optional int64 scheduled_date = 6;
-  optional string scheduled_date_string = 7;
-  optional int64 start_date = 8;
-  optional string start_date_string = 9;
-  optional int64 completion_date = 10;
-  optional string completion_date_string = 11;
+  optional string scheduled_date = 6; // ISO 8601 date (YYYY-MM-DD)
+  reserved 7; // was scheduled_date_string
+  optional string start_date = 8; // ISO 8601 date (YYYY-MM-DD)
+  reserved 9; // was start_date_string
+  optional string completion_date = 10; // ISO 8601 date (YYYY-MM-DD)
+  reserved 11; // was completion_date_string
   optional string description = 12;
-  optional double cost = 13;
+  optional int64 cost = 13; // centavos
   bool is_capitalized = 14;
   optional string performed_by = 15;
   optional string vendor_id = 16;        // FK to entity.Client
   optional string work_order_number = 17;
-  optional int64 next_maintenance_date = 18;
-  optional string next_maintenance_date_string = 19;
+  optional string next_maintenance_date = 18; // ISO 8601 date (YYYY-MM-DD)
+  reserved 19; // was next_maintenance_date_string
   optional int32 recurrence_interval_days = 20;
   optional string notes = 21;
 

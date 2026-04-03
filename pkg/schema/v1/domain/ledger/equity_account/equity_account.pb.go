@@ -91,7 +91,7 @@ type EquityAccount struct {
 	// GL account integration — FK to the Chart of Accounts
 	AccountId string `protobuf:"bytes,5,opt,name=account_id,json=accountId,proto3" json:"account_id,omitempty"`
 	// Running balance (updated on each equity transaction)
-	Balance float64 `protobuf:"fixed64,6,opt,name=balance,proto3" json:"balance,omitempty"`
+	Balance int64 `protobuf:"varint,6,opt,name=balance,proto3" json:"balance,omitempty"` // centavos
 	// Audit fields
 	Active             bool    `protobuf:"varint,7,opt,name=active,proto3" json:"active,omitempty"`
 	DateCreated        *int64  `protobuf:"varint,8,opt,name=date_created,json=dateCreated,proto3,oneof" json:"date_created,omitempty"`
@@ -167,7 +167,7 @@ func (x *EquityAccount) GetAccountId() string {
 	return ""
 }
 
-func (x *EquityAccount) GetBalance() float64 {
+func (x *EquityAccount) GetBalance() int64 {
 	if x != nil {
 		return x.Balance
 	}
@@ -1007,7 +1007,7 @@ const file_domain_ledger_equity_account_equity_account_proto_rawDesc = "" +
 	"\n" +
 	"account_id\x18\x05 \x01(\tB\x0f\x82\xb5\x18\v\n" +
 	"\aaccount\x18\x01R\taccountId\x12!\n" +
-	"\abalance\x18\x06 \x01(\x01B\a\x82\xb5\x18\x03\"\x010R\abalance\x12\"\n" +
+	"\abalance\x18\x06 \x01(\x03B\a\x82\xb5\x18\x03\"\x010R\abalance\x12\"\n" +
 	"\x06active\x18\a \x01(\bB\n" +
 	"\x82\xb5\x18\x06\"\x04trueR\x06active\x12&\n" +
 	"\fdate_created\x18\b \x01(\x03H\x01R\vdateCreated\x88\x01\x01\x123\n" +

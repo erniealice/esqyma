@@ -926,9 +926,9 @@ func (x *BooleanFilter) GetValue() bool {
 // Money filter for monetary amounts
 type MoneyFilter struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	Amount        float64                `protobuf:"fixed64,1,opt,name=amount,proto3" json:"amount,omitempty"`
+	Amount        int64                  `protobuf:"varint,1,opt,name=amount,proto3" json:"amount,omitempty"` // centavos
 	Operator      MoneyOperator          `protobuf:"varint,2,opt,name=operator,proto3,enum=domain.common.v1.MoneyOperator" json:"operator,omitempty"`
-	AmountTo      float64                `protobuf:"fixed64,3,opt,name=amount_to,json=amountTo,proto3" json:"amount_to,omitempty"` // used when operator = MONEY_BETWEEN
+	AmountTo      int64                  `protobuf:"varint,3,opt,name=amount_to,json=amountTo,proto3" json:"amount_to,omitempty"` // centavos // used when operator = MONEY_BETWEEN
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -963,7 +963,7 @@ func (*MoneyFilter) Descriptor() ([]byte, []int) {
 	return file_domain_common_filter_proto_rawDescGZIP(), []int{8}
 }
 
-func (x *MoneyFilter) GetAmount() float64 {
+func (x *MoneyFilter) GetAmount() int64 {
 	if x != nil {
 		return x.Amount
 	}
@@ -977,7 +977,7 @@ func (x *MoneyFilter) GetOperator() MoneyOperator {
 	return MoneyOperator_MONEY_EQUALS
 }
 
-func (x *MoneyFilter) GetAmountTo() float64 {
+func (x *MoneyFilter) GetAmountTo() int64 {
 	if x != nil {
 		return x.AmountTo
 	}
@@ -1078,9 +1078,9 @@ const file_domain_common_filter_proto_rawDesc = "" +
 	"\rBooleanFilter\x12\x14\n" +
 	"\x05value\x18\x01 \x01(\bR\x05value\"\x7f\n" +
 	"\vMoneyFilter\x12\x16\n" +
-	"\x06amount\x18\x01 \x01(\x01R\x06amount\x12;\n" +
+	"\x06amount\x18\x01 \x01(\x03R\x06amount\x12;\n" +
 	"\boperator\x18\x02 \x01(\x0e2\x1f.domain.common.v1.MoneyOperatorR\boperator\x12\x1b\n" +
-	"\tamount_to\x18\x03 \x01(\x01R\bamountTo\"&\n" +
+	"\tamount_to\x18\x03 \x01(\x03R\bamountTo\"&\n" +
 	"\fStatusFilter\x12\x16\n" +
 	"\x06values\x18\x01 \x03(\tR\x06values*\x1e\n" +
 	"\vFilterLogic\x12\a\n" +

@@ -74,8 +74,8 @@ message JournalEntry {
   optional string fiscal_period_id = 9 [(options.v1.db).references = "fiscal_period", (options.v1.db).index = true];
 
   // Totals — must balance (total_debit == total_credit)
-  double total_debit = 10;
-  double total_credit = 11;
+  int64 total_debit = 10; // centavos
+  int64 total_credit = 11; // centavos
 
   // Posting audit
   optional string posted_by = 12;   // FK to entity.User

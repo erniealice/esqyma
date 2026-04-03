@@ -57,8 +57,8 @@ message JobActivity {
   optional string job_task_id = 4 [(options.v1.db).references = "job_task", (options.v1.db).index = true];
   EntryType entry_type = 5;
   double quantity = 6;
-  double unit_cost = 7;
-  double total_cost = 8;
+  int64 unit_cost = 7; // centavos
+  int64 total_cost = 8; // centavos
   string currency = 9;
   optional int64 entry_date = 10;
   optional string entry_date_string = 11;
@@ -197,13 +197,13 @@ message GetJobActivityRollupRequest {
 
 message CostByEntryType {
   EntryType entry_type = 1;
-  double total_cost = 2;
+  int64 total_cost = 2; // centavos
   int32 count = 3;
 }
 
 message GetJobActivityRollupResponse {
   repeated CostByEntryType rollup = 1;
-  double grand_total = 2;
+  int64 grand_total = 2; // centavos
   bool success = 3;
   optional domain.common.v1.Error error = 4;
 }

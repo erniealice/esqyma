@@ -33,7 +33,7 @@ message PettyCashVoucher {
   string voucher_number = 3 [(options.v1.db).unique = true, (options.v1.db).index = true];
   optional string payee = 4;
   string description = 5;
-  double total_amount = 6;
+  int64 total_amount = 6; // centavos
   VoucherStatus status = 7;
 
   // Approval

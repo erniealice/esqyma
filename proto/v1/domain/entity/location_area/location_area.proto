@@ -1,0 +1,116 @@
+syntax = "proto3";
+
+package domain.entity.v1;
+
+option go_package = "github.com/erniealice/esqyma/golang/v1/domain/entity/location_area";
+
+import "domain/common/error.proto";
+import "domain/common/pagination.proto";
+import "domain/common/filter.proto";
+import "domain/common/sort.proto";
+import "domain/common/search.proto";
+import "options/db.proto";
+
+message LocationArea {
+  option (options.v1.table).table = true;
+
+  string id = 1;
+  string name = 2;
+  string description = 3;
+  optional int64 date_created = 4;
+  optional string date_created_string = 5;
+  optional int64 date_modified = 6;
+  optional string date_modified_string = 7;
+  bool active = 8 [(options.v1.db).default = "true"];
+}
+
+service LocationAreaDomainService {
+  rpc CreateLocationArea(CreateLocationAreaRequest) returns (CreateLocationAreaResponse);
+  rpc ReadLocationArea(ReadLocationAreaRequest) returns (ReadLocationAreaResponse);
+  rpc UpdateLocationArea(UpdateLocationAreaRequest) returns (UpdateLocationAreaResponse);
+  rpc DeleteLocationArea(DeleteLocationAreaRequest) returns (DeleteLocationAreaResponse);
+  rpc ListLocationAreas(ListLocationAreasRequest) returns (ListLocationAreasResponse);
+
+  rpc GetLocationAreaListPageData(GetLocationAreaListPageDataRequest)
+    returns (GetLocationAreaListPageDataResponse);
+
+  rpc GetLocationAreaItemPageData(GetLocationAreaItemPageDataRequest)
+    returns (GetLocationAreaItemPageDataResponse);
+}
+
+message CreateLocationAreaRequest {
+  LocationArea data = 1;
+}
+
+message CreateLocationAreaResponse {
+  repeated LocationArea data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message ReadLocationAreaRequest {
+  LocationArea data = 1;
+}
+
+message ReadLocationAreaResponse {
+  repeated LocationArea data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message UpdateLocationAreaRequest {
+  LocationArea data = 1;
+}
+
+message UpdateLocationAreaResponse {
+  repeated LocationArea data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message DeleteLocationAreaRequest {
+  LocationArea data = 1;
+}
+
+message DeleteLocationAreaResponse {
+  bool success = 1;
+  optional domain.common.v1.Error error = 2;
+}
+
+message ListLocationAreasRequest {
+  optional domain.common.v1.SearchRequest search = 1;
+  optional domain.common.v1.FilterRequest filters = 2;
+  optional domain.common.v1.SortRequest sort = 3;
+  optional domain.common.v1.PaginationRequest pagination = 4;
+}
+
+message ListLocationAreasResponse {
+  repeated LocationArea data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message GetLocationAreaListPageDataRequest {
+  optional domain.common.v1.SearchRequest search = 1;
+  optional domain.common.v1.FilterRequest filters = 2;
+  optional domain.common.v1.SortRequest sort = 3;
+  optional domain.common.v1.PaginationRequest pagination = 4;
+}
+
+message GetLocationAreaListPageDataResponse {
+  repeated LocationArea location_area_list = 1;
+  optional domain.common.v1.PaginationResponse pagination = 2;
+  repeated domain.common.v1.SearchResult search_results = 3;
+  bool success = 4;
+  optional domain.common.v1.Error error = 5;
+}
+
+message GetLocationAreaItemPageDataRequest {
+  string location_area_id = 1;
+}
+
+message GetLocationAreaItemPageDataResponse {
+  LocationArea location_area = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}

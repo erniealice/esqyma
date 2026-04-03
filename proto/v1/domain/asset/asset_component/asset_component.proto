@@ -23,12 +23,12 @@ message AssetComponent {
   optional Asset asset = 3;
   string name = 4;
   optional string description = 5;
-  double cost = 6;
-  double salvage_value = 7;
+  int64 cost = 6; // centavos
+  int64 salvage_value = 7; // centavos
   int32 useful_life_months = 8;
   DepreciationMethod depreciation_method = 9;
-  double accumulated_depreciation = 10;
-  double book_value = 11;
+  int64 accumulated_depreciation = 10; // centavos
+  int64 book_value = 11; // centavos
 
   // Audit fields
   optional int64 date_created = 12;

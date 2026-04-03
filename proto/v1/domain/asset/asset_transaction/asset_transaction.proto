@@ -41,7 +41,7 @@ message AssetTransaction {
   AssetTransactionType transaction_type = 3;
   int64 transaction_date = 4;
   string transaction_date_string = 5;
-  double amount = 6;
+  int64 amount = 6; // centavos
   optional string description = 7;
   optional string reference_number = 8;
   optional string from_location_id = 9;   // FK to entity.Location (for transfers)

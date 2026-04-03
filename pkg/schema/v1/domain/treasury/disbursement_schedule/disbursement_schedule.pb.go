@@ -32,10 +32,9 @@ type DisbursementSchedule struct {
 	Active             bool                   `protobuf:"varint,6,opt,name=active,proto3" json:"active,omitempty"`
 	ExpenditureId      string                 `protobuf:"bytes,7,opt,name=expenditure_id,json=expenditureId,proto3" json:"expenditure_id,omitempty"` // FK to expenditure
 	Sequence           int32                  `protobuf:"varint,8,opt,name=sequence,proto3" json:"sequence,omitempty"`
-	Amount             int64                  `protobuf:"varint,9,opt,name=amount,proto3" json:"amount,omitempty"` // Centavos
-	DueDate            int64                  `protobuf:"varint,10,opt,name=due_date,json=dueDate,proto3" json:"due_date,omitempty"`
-	DueDateString      *string                `protobuf:"bytes,11,opt,name=due_date_string,json=dueDateString,proto3,oneof" json:"due_date_string,omitempty"`
-	Status             string                 `protobuf:"bytes,12,opt,name=status,proto3" json:"status,omitempty"` // "pending", "paid", "partial", "overdue"
+	Amount             int64                  `protobuf:"varint,9,opt,name=amount,proto3" json:"amount,omitempty"`                  // Centavos
+	DueDate            string                 `protobuf:"bytes,10,opt,name=due_date,json=dueDate,proto3" json:"due_date,omitempty"` // ISO 8601 date (YYYY-MM-DD)
+	Status             string                 `protobuf:"bytes,12,opt,name=status,proto3" json:"status,omitempty"`                  // "pending", "paid", "partial", "overdue"
 	PaidAmount         *int64                 `protobuf:"varint,13,opt,name=paid_amount,json=paidAmount,proto3,oneof" json:"paid_amount,omitempty"`
 	PaidDate           *int64                 `protobuf:"varint,14,opt,name=paid_date,json=paidDate,proto3,oneof" json:"paid_date,omitempty"`
 	DisbursementId     *string                `protobuf:"bytes,15,opt,name=disbursement_id,json=disbursementId,proto3,oneof" json:"disbursement_id,omitempty"` // FK to disbursement (when paid)
@@ -137,16 +136,9 @@ func (x *DisbursementSchedule) GetAmount() int64 {
 	return 0
 }
 
-func (x *DisbursementSchedule) GetDueDate() int64 {
+func (x *DisbursementSchedule) GetDueDate() string {
 	if x != nil {
 		return x.DueDate
-	}
-	return 0
-}
-
-func (x *DisbursementSchedule) GetDueDateString() string {
-	if x != nil && x.DueDateString != nil {
-		return *x.DueDateString
 	}
 	return ""
 }
@@ -974,7 +966,7 @@ var File_domain_treasury_disbursement_schedule_disbursement_schedule_proto proto
 
 const file_domain_treasury_disbursement_schedule_disbursement_schedule_proto_rawDesc = "" +
 	"\n" +
-	"Adomain/treasury/disbursement_schedule/disbursement_schedule.proto\x12\x12domain.treasury.v1\x1a\x19domain/common/error.proto\x1a\x1adomain/common/search.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1edomain/common/pagination.proto\"\x88\x06\n" +
+	"Adomain/treasury/disbursement_schedule/disbursement_schedule.proto\x12\x12domain.treasury.v1\x1a\x19domain/common/error.proto\x1a\x1adomain/common/search.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1edomain/common/pagination.proto\"\xcd\x05\n" +
 	"\x14DisbursementSchedule\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12&\n" +
 	"\fdate_created\x18\x02 \x01(\x03H\x00R\vdateCreated\x88\x01\x01\x123\n" +
@@ -986,24 +978,22 @@ const file_domain_treasury_disbursement_schedule_disbursement_schedule_proto_raw
 	"\bsequence\x18\b \x01(\x05R\bsequence\x12\x16\n" +
 	"\x06amount\x18\t \x01(\x03R\x06amount\x12\x19\n" +
 	"\bdue_date\x18\n" +
-	" \x01(\x03R\adueDate\x12+\n" +
-	"\x0fdue_date_string\x18\v \x01(\tH\x04R\rdueDateString\x88\x01\x01\x12\x16\n" +
+	" \x01(\tR\adueDate\x12\x16\n" +
 	"\x06status\x18\f \x01(\tR\x06status\x12$\n" +
-	"\vpaid_amount\x18\r \x01(\x03H\x05R\n" +
+	"\vpaid_amount\x18\r \x01(\x03H\x04R\n" +
 	"paidAmount\x88\x01\x01\x12 \n" +
-	"\tpaid_date\x18\x0e \x01(\x03H\x06R\bpaidDate\x88\x01\x01\x12,\n" +
-	"\x0fdisbursement_id\x18\x0f \x01(\tH\aR\x0edisbursementId\x88\x01\x01\x12+\n" +
-	"\x0fpayment_term_id\x18\x10 \x01(\tH\bR\rpaymentTermId\x88\x01\x01B\x0f\n" +
+	"\tpaid_date\x18\x0e \x01(\x03H\x05R\bpaidDate\x88\x01\x01\x12,\n" +
+	"\x0fdisbursement_id\x18\x0f \x01(\tH\x06R\x0edisbursementId\x88\x01\x01\x12+\n" +
+	"\x0fpayment_term_id\x18\x10 \x01(\tH\aR\rpaymentTermId\x88\x01\x01B\x0f\n" +
 	"\r_date_createdB\x16\n" +
 	"\x14_date_created_stringB\x10\n" +
 	"\x0e_date_modifiedB\x17\n" +
-	"\x15_date_modified_stringB\x12\n" +
-	"\x10_due_date_stringB\x0e\n" +
+	"\x15_date_modified_stringB\x0e\n" +
 	"\f_paid_amountB\f\n" +
 	"\n" +
 	"_paid_dateB\x12\n" +
 	"\x10_disbursement_idB\x12\n" +
-	"\x10_payment_term_id\"a\n" +
+	"\x10_payment_term_idJ\x04\b\v\x10\f\"a\n" +
 	"!CreateDisbursementScheduleRequest\x12<\n" +
 	"\x04data\x18\x01 \x01(\v2(.domain.treasury.v1.DisbursementScheduleR\x04data\"\xba\x01\n" +
 	"\"CreateDisbursementScheduleResponse\x12<\n" +

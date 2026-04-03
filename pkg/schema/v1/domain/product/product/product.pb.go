@@ -8,7 +8,6 @@ package productv1
 
 import (
 	common "github.com/erniealice/esqyma/pkg/schema/v1/domain/common"
-	product_collection "github.com/erniealice/esqyma/pkg/schema/v1/domain/product/product_collection"
 	_ "github.com/erniealice/esqyma/pkg/schema/v1/options"
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
@@ -28,22 +27,21 @@ const (
 // inventory_item.product_id, product_option.product_id,
 // product_variant.product_id, resource.product_id
 type Product struct {
-	state              protoimpl.MessageState                  `protogen:"open.v1"`
-	Id                 string                                  `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
-	DateCreated        *int64                                  `protobuf:"varint,2,opt,name=date_created,json=dateCreated,proto3,oneof" json:"date_created,omitempty"`
-	DateCreatedString  *string                                 `protobuf:"bytes,3,opt,name=date_created_string,json=dateCreatedString,proto3,oneof" json:"date_created_string,omitempty"`
-	DateModified       *int64                                  `protobuf:"varint,4,opt,name=date_modified,json=dateModified,proto3,oneof" json:"date_modified,omitempty"`
-	DateModifiedString *string                                 `protobuf:"bytes,5,opt,name=date_modified_string,json=dateModifiedString,proto3,oneof" json:"date_modified_string,omitempty"`
-	Active             bool                                    `protobuf:"varint,6,opt,name=active,proto3" json:"active,omitempty"`
-	Name               string                                  `protobuf:"bytes,7,opt,name=name,proto3" json:"name,omitempty"`
-	Description        *string                                 `protobuf:"bytes,8,opt,name=description,proto3,oneof" json:"description,omitempty"`
-	Price              float64                                 `protobuf:"fixed64,9,opt,name=price,proto3" json:"price,omitempty"`
-	Currency           string                                  `protobuf:"bytes,10,opt,name=currency,proto3" json:"currency,omitempty"`
-	ProductCollections []*product_collection.ProductCollection `protobuf:"bytes,11,rep,name=product_collections,json=productCollections,proto3" json:"product_collections,omitempty"`
-	ItemType           string                                  `protobuf:"bytes,12,opt,name=item_type,json=itemType,proto3" json:"item_type,omitempty"` // "serialized", "non_serialized", "consumable"
+	state              protoimpl.MessageState `protogen:"open.v1"`
+	Id                 string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
+	DateCreated        *int64                 `protobuf:"varint,2,opt,name=date_created,json=dateCreated,proto3,oneof" json:"date_created,omitempty"`
+	DateCreatedString  *string                `protobuf:"bytes,3,opt,name=date_created_string,json=dateCreatedString,proto3,oneof" json:"date_created_string,omitempty"`
+	DateModified       *int64                 `protobuf:"varint,4,opt,name=date_modified,json=dateModified,proto3,oneof" json:"date_modified,omitempty"`
+	DateModifiedString *string                `protobuf:"bytes,5,opt,name=date_modified_string,json=dateModifiedString,proto3,oneof" json:"date_modified_string,omitempty"`
+	Active             bool                   `protobuf:"varint,6,opt,name=active,proto3" json:"active,omitempty"`
+	Name               string                 `protobuf:"bytes,7,opt,name=name,proto3" json:"name,omitempty"`
+	Description        *string                `protobuf:"bytes,8,opt,name=description,proto3,oneof" json:"description,omitempty"`
+	Price              int64                  `protobuf:"varint,9,opt,name=price,proto3" json:"price,omitempty"` // centavos
+	Currency           string                 `protobuf:"bytes,10,opt,name=currency,proto3" json:"currency,omitempty"`
+	ItemType           string                 `protobuf:"bytes,11,opt,name=item_type,json=itemType,proto3" json:"item_type,omitempty"` // "serialized", "non_serialized", "consumable"
 	// Determines how this product reaches the client. Defaults to 'physical' for backward compatibility.
 	// Valid values: "physical", "service", "digital", "make_to_order"
-	FulfillmentMethod string `protobuf:"bytes,13,opt,name=fulfillment_method,json=fulfillmentMethod,proto3" json:"fulfillment_method,omitempty"`
+	FulfillmentMethod string `protobuf:"bytes,12,opt,name=fulfillment_method,json=fulfillmentMethod,proto3" json:"fulfillment_method,omitempty"`
 	unknownFields     protoimpl.UnknownFields
 	sizeCache         protoimpl.SizeCache
 }
@@ -134,7 +132,7 @@ func (x *Product) GetDescription() string {
 	return ""
 }
 
-func (x *Product) GetPrice() float64 {
+func (x *Product) GetPrice() int64 {
 	if x != nil {
 		return x.Price
 	}
@@ -146,13 +144,6 @@ func (x *Product) GetCurrency() string {
 		return x.Currency
 	}
 	return ""
-}
-
-func (x *Product) GetProductCollections() []*product_collection.ProductCollection {
-	if x != nil {
-		return x.ProductCollections
-	}
-	return nil
 }
 
 func (x *Product) GetItemType() string {
@@ -972,7 +963,7 @@ var File_domain_product_product_product_proto protoreflect.FileDescriptor
 
 const file_domain_product_product_product_proto_rawDesc = "" +
 	"\n" +
-	"$domain/product/product/product.proto\x12\x11domain.product.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1adomain/common/search.proto\x1a:domain/product/product_collection/product_collection.proto\x1a\x10options/db.proto\"\xfd\x04\n" +
+	"$domain/product/product/product.proto\x12\x11domain.product.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1adomain/common/search.proto\x1a\x10options/db.proto\"\xa6\x04\n" +
 	"\aProduct\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12&\n" +
 	"\fdate_created\x18\x02 \x01(\x03H\x00R\vdateCreated\x88\x01\x01\x123\n" +
@@ -983,17 +974,16 @@ const file_domain_product_product_product_proto_rawDesc = "" +
 	"\x82\xb5\x18\x06\"\x04trueR\x06active\x12\x12\n" +
 	"\x04name\x18\a \x01(\tR\x04name\x12%\n" +
 	"\vdescription\x18\b \x01(\tH\x04R\vdescription\x88\x01\x01\x12\x14\n" +
-	"\x05price\x18\t \x01(\x01R\x05price\x12\x1a\n" +
+	"\x05price\x18\t \x01(\x03R\x05price\x12\x1a\n" +
 	"\bcurrency\x18\n" +
-	" \x01(\tR\bcurrency\x12U\n" +
-	"\x13product_collections\x18\v \x03(\v2$.domain.product.v1.ProductCollectionR\x12productCollections\x12\x1b\n" +
-	"\titem_type\x18\f \x01(\tR\bitemType\x12-\n" +
-	"\x12fulfillment_method\x18\r \x01(\tR\x11fulfillmentMethod:\x06\x8a\xb5\x18\x02\b\x01B\x0f\n" +
+	" \x01(\tR\bcurrency\x12\x1b\n" +
+	"\titem_type\x18\v \x01(\tR\bitemType\x12-\n" +
+	"\x12fulfillment_method\x18\f \x01(\tR\x11fulfillmentMethod:\x06\x8a\xb5\x18\x02\b\x01B\x0f\n" +
 	"\r_date_createdB\x16\n" +
 	"\x14_date_created_stringB\x10\n" +
 	"\x0e_date_modifiedB\x17\n" +
 	"\x15_date_modified_stringB\x0e\n" +
-	"\f_descriptionJ\x04\b\x0e\x10\x0f\"F\n" +
+	"\f_descriptionJ\x04\b\r\x10\x0e\"F\n" +
 	"\x14CreateProductRequest\x12.\n" +
 	"\x04data\x18\x01 \x01(\v2\x1a.domain.product.v1.ProductR\x04data\"\x9f\x01\n" +
 	"\x15CreateProductResponse\x12.\n" +
@@ -1086,78 +1076,76 @@ func file_domain_product_product_product_proto_rawDescGZIP() []byte {
 
 var file_domain_product_product_product_proto_msgTypes = make([]protoimpl.MessageInfo, 15)
 var file_domain_product_product_product_proto_goTypes = []any{
-	(*Product)(nil),                              // 0: domain.product.v1.Product
-	(*CreateProductRequest)(nil),                 // 1: domain.product.v1.CreateProductRequest
-	(*CreateProductResponse)(nil),                // 2: domain.product.v1.CreateProductResponse
-	(*ReadProductRequest)(nil),                   // 3: domain.product.v1.ReadProductRequest
-	(*ReadProductResponse)(nil),                  // 4: domain.product.v1.ReadProductResponse
-	(*UpdateProductRequest)(nil),                 // 5: domain.product.v1.UpdateProductRequest
-	(*UpdateProductResponse)(nil),                // 6: domain.product.v1.UpdateProductResponse
-	(*DeleteProductRequest)(nil),                 // 7: domain.product.v1.DeleteProductRequest
-	(*DeleteProductResponse)(nil),                // 8: domain.product.v1.DeleteProductResponse
-	(*ListProductsRequest)(nil),                  // 9: domain.product.v1.ListProductsRequest
-	(*ListProductsResponse)(nil),                 // 10: domain.product.v1.ListProductsResponse
-	(*GetProductListPageDataRequest)(nil),        // 11: domain.product.v1.GetProductListPageDataRequest
-	(*GetProductListPageDataResponse)(nil),       // 12: domain.product.v1.GetProductListPageDataResponse
-	(*GetProductItemPageDataRequest)(nil),        // 13: domain.product.v1.GetProductItemPageDataRequest
-	(*GetProductItemPageDataResponse)(nil),       // 14: domain.product.v1.GetProductItemPageDataResponse
-	(*product_collection.ProductCollection)(nil), // 15: domain.product.v1.ProductCollection
-	(*common.Error)(nil),                         // 16: domain.common.v1.Error
-	(*common.SearchRequest)(nil),                 // 17: domain.common.v1.SearchRequest
-	(*common.FilterRequest)(nil),                 // 18: domain.common.v1.FilterRequest
-	(*common.SortRequest)(nil),                   // 19: domain.common.v1.SortRequest
-	(*common.PaginationRequest)(nil),             // 20: domain.common.v1.PaginationRequest
-	(*common.PaginationResponse)(nil),            // 21: domain.common.v1.PaginationResponse
-	(*common.SearchResult)(nil),                  // 22: domain.common.v1.SearchResult
+	(*Product)(nil),                        // 0: domain.product.v1.Product
+	(*CreateProductRequest)(nil),           // 1: domain.product.v1.CreateProductRequest
+	(*CreateProductResponse)(nil),          // 2: domain.product.v1.CreateProductResponse
+	(*ReadProductRequest)(nil),             // 3: domain.product.v1.ReadProductRequest
+	(*ReadProductResponse)(nil),            // 4: domain.product.v1.ReadProductResponse
+	(*UpdateProductRequest)(nil),           // 5: domain.product.v1.UpdateProductRequest
+	(*UpdateProductResponse)(nil),          // 6: domain.product.v1.UpdateProductResponse
+	(*DeleteProductRequest)(nil),           // 7: domain.product.v1.DeleteProductRequest
+	(*DeleteProductResponse)(nil),          // 8: domain.product.v1.DeleteProductResponse
+	(*ListProductsRequest)(nil),            // 9: domain.product.v1.ListProductsRequest
+	(*ListProductsResponse)(nil),           // 10: domain.product.v1.ListProductsResponse
+	(*GetProductListPageDataRequest)(nil),  // 11: domain.product.v1.GetProductListPageDataRequest
+	(*GetProductListPageDataResponse)(nil), // 12: domain.product.v1.GetProductListPageDataResponse
+	(*GetProductItemPageDataRequest)(nil),  // 13: domain.product.v1.GetProductItemPageDataRequest
+	(*GetProductItemPageDataResponse)(nil), // 14: domain.product.v1.GetProductItemPageDataResponse
+	(*common.Error)(nil),                   // 15: domain.common.v1.Error
+	(*common.SearchRequest)(nil),           // 16: domain.common.v1.SearchRequest
+	(*common.FilterRequest)(nil),           // 17: domain.common.v1.FilterRequest
+	(*common.SortRequest)(nil),             // 18: domain.common.v1.SortRequest
+	(*common.PaginationRequest)(nil),       // 19: domain.common.v1.PaginationRequest
+	(*common.PaginationResponse)(nil),      // 20: domain.common.v1.PaginationResponse
+	(*common.SearchResult)(nil),            // 21: domain.common.v1.SearchResult
 }
 var file_domain_product_product_product_proto_depIdxs = []int32{
-	15, // 0: domain.product.v1.Product.product_collections:type_name -> domain.product.v1.ProductCollection
-	0,  // 1: domain.product.v1.CreateProductRequest.data:type_name -> domain.product.v1.Product
-	0,  // 2: domain.product.v1.CreateProductResponse.data:type_name -> domain.product.v1.Product
-	16, // 3: domain.product.v1.CreateProductResponse.error:type_name -> domain.common.v1.Error
-	0,  // 4: domain.product.v1.ReadProductRequest.data:type_name -> domain.product.v1.Product
-	0,  // 5: domain.product.v1.ReadProductResponse.data:type_name -> domain.product.v1.Product
-	16, // 6: domain.product.v1.ReadProductResponse.error:type_name -> domain.common.v1.Error
-	0,  // 7: domain.product.v1.UpdateProductRequest.data:type_name -> domain.product.v1.Product
-	0,  // 8: domain.product.v1.UpdateProductResponse.data:type_name -> domain.product.v1.Product
-	16, // 9: domain.product.v1.UpdateProductResponse.error:type_name -> domain.common.v1.Error
-	0,  // 10: domain.product.v1.DeleteProductRequest.data:type_name -> domain.product.v1.Product
-	16, // 11: domain.product.v1.DeleteProductResponse.error:type_name -> domain.common.v1.Error
-	17, // 12: domain.product.v1.ListProductsRequest.search:type_name -> domain.common.v1.SearchRequest
-	18, // 13: domain.product.v1.ListProductsRequest.filters:type_name -> domain.common.v1.FilterRequest
-	19, // 14: domain.product.v1.ListProductsRequest.sort:type_name -> domain.common.v1.SortRequest
-	20, // 15: domain.product.v1.ListProductsRequest.pagination:type_name -> domain.common.v1.PaginationRequest
-	0,  // 16: domain.product.v1.ListProductsResponse.data:type_name -> domain.product.v1.Product
-	16, // 17: domain.product.v1.ListProductsResponse.error:type_name -> domain.common.v1.Error
-	20, // 18: domain.product.v1.GetProductListPageDataRequest.pagination:type_name -> domain.common.v1.PaginationRequest
-	18, // 19: domain.product.v1.GetProductListPageDataRequest.filters:type_name -> domain.common.v1.FilterRequest
-	19, // 20: domain.product.v1.GetProductListPageDataRequest.sort:type_name -> domain.common.v1.SortRequest
-	17, // 21: domain.product.v1.GetProductListPageDataRequest.search:type_name -> domain.common.v1.SearchRequest
-	0,  // 22: domain.product.v1.GetProductListPageDataResponse.product_list:type_name -> domain.product.v1.Product
-	21, // 23: domain.product.v1.GetProductListPageDataResponse.pagination:type_name -> domain.common.v1.PaginationResponse
-	22, // 24: domain.product.v1.GetProductListPageDataResponse.search_results:type_name -> domain.common.v1.SearchResult
-	16, // 25: domain.product.v1.GetProductListPageDataResponse.error:type_name -> domain.common.v1.Error
-	0,  // 26: domain.product.v1.GetProductItemPageDataResponse.product:type_name -> domain.product.v1.Product
-	16, // 27: domain.product.v1.GetProductItemPageDataResponse.error:type_name -> domain.common.v1.Error
-	1,  // 28: domain.product.v1.ProductDomainService.CreateProduct:input_type -> domain.product.v1.CreateProductRequest
-	3,  // 29: domain.product.v1.ProductDomainService.ReadProduct:input_type -> domain.product.v1.ReadProductRequest
-	5,  // 30: domain.product.v1.ProductDomainService.UpdateProduct:input_type -> domain.product.v1.UpdateProductRequest
-	7,  // 31: domain.product.v1.ProductDomainService.DeleteProduct:input_type -> domain.product.v1.DeleteProductRequest
-	9,  // 32: domain.product.v1.ProductDomainService.ListProducts:input_type -> domain.product.v1.ListProductsRequest
-	11, // 33: domain.product.v1.ProductDomainService.GetProductListPageData:input_type -> domain.product.v1.GetProductListPageDataRequest
-	13, // 34: domain.product.v1.ProductDomainService.GetProductItemPageData:input_type -> domain.product.v1.GetProductItemPageDataRequest
-	2,  // 35: domain.product.v1.ProductDomainService.CreateProduct:output_type -> domain.product.v1.CreateProductResponse
-	4,  // 36: domain.product.v1.ProductDomainService.ReadProduct:output_type -> domain.product.v1.ReadProductResponse
-	6,  // 37: domain.product.v1.ProductDomainService.UpdateProduct:output_type -> domain.product.v1.UpdateProductResponse
-	8,  // 38: domain.product.v1.ProductDomainService.DeleteProduct:output_type -> domain.product.v1.DeleteProductResponse
-	10, // 39: domain.product.v1.ProductDomainService.ListProducts:output_type -> domain.product.v1.ListProductsResponse
-	12, // 40: domain.product.v1.ProductDomainService.GetProductListPageData:output_type -> domain.product.v1.GetProductListPageDataResponse
-	14, // 41: domain.product.v1.ProductDomainService.GetProductItemPageData:output_type -> domain.product.v1.GetProductItemPageDataResponse
-	35, // [35:42] is the sub-list for method output_type
-	28, // [28:35] is the sub-list for method input_type
-	28, // [28:28] is the sub-list for extension type_name
-	28, // [28:28] is the sub-list for extension extendee
-	0,  // [0:28] is the sub-list for field type_name
+	0,  // 0: domain.product.v1.CreateProductRequest.data:type_name -> domain.product.v1.Product
+	0,  // 1: domain.product.v1.CreateProductResponse.data:type_name -> domain.product.v1.Product
+	15, // 2: domain.product.v1.CreateProductResponse.error:type_name -> domain.common.v1.Error
+	0,  // 3: domain.product.v1.ReadProductRequest.data:type_name -> domain.product.v1.Product
+	0,  // 4: domain.product.v1.ReadProductResponse.data:type_name -> domain.product.v1.Product
+	15, // 5: domain.product.v1.ReadProductResponse.error:type_name -> domain.common.v1.Error
+	0,  // 6: domain.product.v1.UpdateProductRequest.data:type_name -> domain.product.v1.Product
+	0,  // 7: domain.product.v1.UpdateProductResponse.data:type_name -> domain.product.v1.Product
+	15, // 8: domain.product.v1.UpdateProductResponse.error:type_name -> domain.common.v1.Error
+	0,  // 9: domain.product.v1.DeleteProductRequest.data:type_name -> domain.product.v1.Product
+	15, // 10: domain.product.v1.DeleteProductResponse.error:type_name -> domain.common.v1.Error
+	16, // 11: domain.product.v1.ListProductsRequest.search:type_name -> domain.common.v1.SearchRequest
+	17, // 12: domain.product.v1.ListProductsRequest.filters:type_name -> domain.common.v1.FilterRequest
+	18, // 13: domain.product.v1.ListProductsRequest.sort:type_name -> domain.common.v1.SortRequest
+	19, // 14: domain.product.v1.ListProductsRequest.pagination:type_name -> domain.common.v1.PaginationRequest
+	0,  // 15: domain.product.v1.ListProductsResponse.data:type_name -> domain.product.v1.Product
+	15, // 16: domain.product.v1.ListProductsResponse.error:type_name -> domain.common.v1.Error
+	19, // 17: domain.product.v1.GetProductListPageDataRequest.pagination:type_name -> domain.common.v1.PaginationRequest
+	17, // 18: domain.product.v1.GetProductListPageDataRequest.filters:type_name -> domain.common.v1.FilterRequest
+	18, // 19: domain.product.v1.GetProductListPageDataRequest.sort:type_name -> domain.common.v1.SortRequest
+	16, // 20: domain.product.v1.GetProductListPageDataRequest.search:type_name -> domain.common.v1.SearchRequest
+	0,  // 21: domain.product.v1.GetProductListPageDataResponse.product_list:type_name -> domain.product.v1.Product
+	20, // 22: domain.product.v1.GetProductListPageDataResponse.pagination:type_name -> domain.common.v1.PaginationResponse
+	21, // 23: domain.product.v1.GetProductListPageDataResponse.search_results:type_name -> domain.common.v1.SearchResult
+	15, // 24: domain.product.v1.GetProductListPageDataResponse.error:type_name -> domain.common.v1.Error
+	0,  // 25: domain.product.v1.GetProductItemPageDataResponse.product:type_name -> domain.product.v1.Product
+	15, // 26: domain.product.v1.GetProductItemPageDataResponse.error:type_name -> domain.common.v1.Error
+	1,  // 27: domain.product.v1.ProductDomainService.CreateProduct:input_type -> domain.product.v1.CreateProductRequest
+	3,  // 28: domain.product.v1.ProductDomainService.ReadProduct:input_type -> domain.product.v1.ReadProductRequest
+	5,  // 29: domain.product.v1.ProductDomainService.UpdateProduct:input_type -> domain.product.v1.UpdateProductRequest
+	7,  // 30: domain.product.v1.ProductDomainService.DeleteProduct:input_type -> domain.product.v1.DeleteProductRequest
+	9,  // 31: domain.product.v1.ProductDomainService.ListProducts:input_type -> domain.product.v1.ListProductsRequest
+	11, // 32: domain.product.v1.ProductDomainService.GetProductListPageData:input_type -> domain.product.v1.GetProductListPageDataRequest
+	13, // 33: domain.product.v1.ProductDomainService.GetProductItemPageData:input_type -> domain.product.v1.GetProductItemPageDataRequest
+	2,  // 34: domain.product.v1.ProductDomainService.CreateProduct:output_type -> domain.product.v1.CreateProductResponse
+	4,  // 35: domain.product.v1.ProductDomainService.ReadProduct:output_type -> domain.product.v1.ReadProductResponse
+	6,  // 36: domain.product.v1.ProductDomainService.UpdateProduct:output_type -> domain.product.v1.UpdateProductResponse
+	8,  // 37: domain.product.v1.ProductDomainService.DeleteProduct:output_type -> domain.product.v1.DeleteProductResponse
+	10, // 38: domain.product.v1.ProductDomainService.ListProducts:output_type -> domain.product.v1.ListProductsResponse
+	12, // 39: domain.product.v1.ProductDomainService.GetProductListPageData:output_type -> domain.product.v1.GetProductListPageDataResponse
+	14, // 40: domain.product.v1.ProductDomainService.GetProductItemPageData:output_type -> domain.product.v1.GetProductItemPageDataResponse
+	34, // [34:41] is the sub-list for method output_type
+	27, // [27:34] is the sub-list for method input_type
+	27, // [27:27] is the sub-list for extension type_name
+	27, // [27:27] is the sub-list for extension extendee
+	0,  // [0:27] is the sub-list for field type_name
 }
 
 func init() { file_domain_product_product_product_proto_init() }

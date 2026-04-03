@@ -34,7 +34,7 @@ type ProductPlan struct {
 	Active             bool                   `protobuf:"varint,6,opt,name=active,proto3" json:"active,omitempty"`
 	Name               string                 `protobuf:"bytes,7,opt,name=name,proto3" json:"name,omitempty"`
 	Description        *string                `protobuf:"bytes,8,opt,name=description,proto3,oneof" json:"description,omitempty"`
-	Price              float64                `protobuf:"fixed64,9,opt,name=price,proto3" json:"price,omitempty"`
+	Price              int64                  `protobuf:"varint,9,opt,name=price,proto3" json:"price,omitempty"` // centavos
 	Currency           string                 `protobuf:"bytes,10,opt,name=currency,proto3" json:"currency,omitempty"`
 	Product            *product.Product       `protobuf:"bytes,11,opt,name=product,proto3,oneof" json:"product,omitempty"`
 	ProductId          string                 `protobuf:"bytes,12,opt,name=product_id,json=productId,proto3" json:"product_id,omitempty"`
@@ -129,7 +129,7 @@ func (x *ProductPlan) GetDescription() string {
 	return ""
 }
 
-func (x *ProductPlan) GetPrice() float64 {
+func (x *ProductPlan) GetPrice() int64 {
 	if x != nil {
 		return x.Price
 	}
@@ -963,7 +963,7 @@ const file_domain_product_product_plan_product_plan_proto_rawDesc = "" +
 	"\x82\xb5\x18\x06\"\x04trueR\x06active\x12\x12\n" +
 	"\x04name\x18\a \x01(\tR\x04name\x12%\n" +
 	"\vdescription\x18\b \x01(\tH\x04R\vdescription\x88\x01\x01\x12\x14\n" +
-	"\x05price\x18\t \x01(\x01R\x05price\x12\x1a\n" +
+	"\x05price\x18\t \x01(\x03R\x05price\x12\x1a\n" +
 	"\bcurrency\x18\n" +
 	" \x01(\tR\bcurrency\x129\n" +
 	"\aproduct\x18\v \x01(\v2\x1a.domain.product.v1.ProductH\x05R\aproduct\x88\x01\x01\x12.\n" +

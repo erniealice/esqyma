@@ -29,7 +29,7 @@ type ProductVariant struct {
 	Id                 string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
 	ProductId          string                 `protobuf:"bytes,2,opt,name=product_id,json=productId,proto3" json:"product_id,omitempty"`
 	Sku                string                 `protobuf:"bytes,3,opt,name=sku,proto3" json:"sku,omitempty"`
-	PriceOverride      float64                `protobuf:"fixed64,4,opt,name=price_override,json=priceOverride,proto3" json:"price_override,omitempty"`
+	PriceOverride      int64                  `protobuf:"varint,4,opt,name=price_override,json=priceOverride,proto3" json:"price_override,omitempty"` // centavos
 	Active             bool                   `protobuf:"varint,5,opt,name=active,proto3" json:"active,omitempty"`
 	DateCreated        *int64                 `protobuf:"varint,7,opt,name=date_created,json=dateCreated,proto3,oneof" json:"date_created,omitempty"`
 	DateCreatedString  *string                `protobuf:"bytes,8,opt,name=date_created_string,json=dateCreatedString,proto3,oneof" json:"date_created_string,omitempty"`
@@ -91,7 +91,7 @@ func (x *ProductVariant) GetSku() string {
 	return ""
 }
 
-func (x *ProductVariant) GetPriceOverride() float64 {
+func (x *ProductVariant) GetPriceOverride() int64 {
 	if x != nil {
 		return x.PriceOverride
 	}
@@ -1039,7 +1039,7 @@ const file_domain_product_product_variant_product_variant_proto_rawDesc = "" +
 	"product_id\x18\x02 \x01(\tB\x0f\x82\xb5\x18\v\n" +
 	"\aproduct\x18\x01R\tproductId\x12\x10\n" +
 	"\x03sku\x18\x03 \x01(\tR\x03sku\x12%\n" +
-	"\x0eprice_override\x18\x04 \x01(\x01R\rpriceOverride\x12\"\n" +
+	"\x0eprice_override\x18\x04 \x01(\x03R\rpriceOverride\x12\"\n" +
 	"\x06active\x18\x05 \x01(\bB\n" +
 	"\x82\xb5\x18\x06\"\x04trueR\x06active\x12&\n" +
 	"\fdate_created\x18\a \x01(\x03H\x00R\vdateCreated\x88\x01\x01\x123\n" +

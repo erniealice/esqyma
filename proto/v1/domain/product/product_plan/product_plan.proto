@@ -23,7 +23,7 @@ message ProductPlan {
   bool active = 6 [(options.v1.db).default = "true"];
   string name = 7;
   optional string description = 8;
-  double price = 9;
+  int64 price = 9; // centavos
   string currency = 10;
   optional Product product = 11;
   string product_id = 12 [(options.v1.db).references = "product", (options.v1.db).index = true];

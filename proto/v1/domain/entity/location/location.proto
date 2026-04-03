@@ -25,6 +25,10 @@ message Location {
   optional string date_modified_string = 7;
   bool active = 8 [(options.v1.db).default = "true"];
   optional string description = 9;
+  // IANA timezone e.g. "Asia/Manila"
+  optional string timezone = 10 [(options.v1.db).default = "Asia/Manila"];
+  // FK to location_area
+  optional string location_area_id = 11;
 }
 
 service LocationDomainService {

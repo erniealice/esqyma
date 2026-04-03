@@ -36,8 +36,8 @@ type JournalLine struct {
 	AccountId   string  `protobuf:"bytes,3,opt,name=account_id,json=accountId,proto3" json:"account_id,omitempty"`
 	Description *string `protobuf:"bytes,4,opt,name=description,proto3,oneof" json:"description,omitempty"`
 	// Debit/credit amounts — exactly one should be non-zero per line
-	DebitAmount  float64 `protobuf:"fixed64,5,opt,name=debit_amount,json=debitAmount,proto3" json:"debit_amount,omitempty"`
-	CreditAmount float64 `protobuf:"fixed64,6,opt,name=credit_amount,json=creditAmount,proto3" json:"credit_amount,omitempty"`
+	DebitAmount  int64 `protobuf:"varint,5,opt,name=debit_amount,json=debitAmount,proto3" json:"debit_amount,omitempty"`    // centavos
+	CreditAmount int64 `protobuf:"varint,6,opt,name=credit_amount,json=creditAmount,proto3" json:"credit_amount,omitempty"` // centavos
 	// Presentation order within the journal entry
 	LineOrder int32 `protobuf:"varint,7,opt,name=line_order,json=lineOrder,proto3" json:"line_order,omitempty"`
 	// Audit fields
@@ -106,14 +106,14 @@ func (x *JournalLine) GetDescription() string {
 	return ""
 }
 
-func (x *JournalLine) GetDebitAmount() float64 {
+func (x *JournalLine) GetDebitAmount() int64 {
 	if x != nil {
 		return x.DebitAmount
 	}
 	return 0
 }
 
-func (x *JournalLine) GetCreditAmount() float64 {
+func (x *JournalLine) GetCreditAmount() int64 {
 	if x != nil {
 		return x.CreditAmount
 	}
@@ -945,8 +945,8 @@ const file_domain_ledger_journal_line_journal_line_proto_rawDesc = "" +
 	"account_id\x18\x03 \x01(\tB\x0f\x82\xb5\x18\v\n" +
 	"\aaccount\x18\x01R\taccountId\x12%\n" +
 	"\vdescription\x18\x04 \x01(\tH\x00R\vdescription\x88\x01\x01\x12*\n" +
-	"\fdebit_amount\x18\x05 \x01(\x01B\a\x82\xb5\x18\x03\"\x010R\vdebitAmount\x12,\n" +
-	"\rcredit_amount\x18\x06 \x01(\x01B\a\x82\xb5\x18\x03\"\x010R\fcreditAmount\x12&\n" +
+	"\fdebit_amount\x18\x05 \x01(\x03B\a\x82\xb5\x18\x03\"\x010R\vdebitAmount\x12,\n" +
+	"\rcredit_amount\x18\x06 \x01(\x03B\a\x82\xb5\x18\x03\"\x010R\fcreditAmount\x12&\n" +
 	"\n" +
 	"line_order\x18\a \x01(\x05B\a\x82\xb5\x18\x03\"\x010R\tlineOrder\x12\"\n" +
 	"\x06active\x18\b \x01(\bB\n" +

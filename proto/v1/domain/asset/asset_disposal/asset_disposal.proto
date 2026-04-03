@@ -27,14 +27,14 @@ message AssetDisposal {
   option (options.v1.table).table = true;
   string id = 1;
   string asset_id = 2 [(options.v1.db).references = "asset", (options.v1.db).index = true];
-  int64 disposal_date = 3;
-  string disposal_date_string = 4;
+  string disposal_date = 3; // ISO 8601 date (YYYY-MM-DD)
+  reserved 4; // was disposal_date_string
   DisposalType disposal_type = 5;
-  double proceeds = 6;
-  double cost_at_disposal = 7;
-  double accumulated_depreciation_at_disposal = 8;
-  double book_value_at_disposal = 9;
-  double gain_or_loss = 10;
+  int64 proceeds = 6; // centavos
+  int64 cost_at_disposal = 7; // centavos
+  int64 accumulated_depreciation_at_disposal = 8; // centavos
+  int64 book_value_at_disposal = 9; // centavos
+  int64 gain_or_loss = 10; // centavos
   optional string buyer_name = 11;
   optional string reason = 12;
   optional string approval_status = 13;  // PENDING, APPROVED, REJECTED

@@ -44,10 +44,10 @@ type PurchaseOrder struct {
 	ExpectedDeliveryDate       *int64  `protobuf:"varint,11,opt,name=expected_delivery_date,json=expectedDeliveryDate,proto3,oneof" json:"expected_delivery_date,omitempty"`
 	ExpectedDeliveryDateString *string `protobuf:"bytes,12,opt,name=expected_delivery_date_string,json=expectedDeliveryDateString,proto3,oneof" json:"expected_delivery_date_string,omitempty"`
 	// Amounts
-	Currency    string  `protobuf:"bytes,13,opt,name=currency,proto3" json:"currency,omitempty"`
-	Subtotal    float64 `protobuf:"fixed64,14,opt,name=subtotal,proto3" json:"subtotal,omitempty"`
-	TaxAmount   float64 `protobuf:"fixed64,15,opt,name=tax_amount,json=taxAmount,proto3" json:"tax_amount,omitempty"`
-	TotalAmount float64 `protobuf:"fixed64,16,opt,name=total_amount,json=totalAmount,proto3" json:"total_amount,omitempty"`
+	Currency    string `protobuf:"bytes,13,opt,name=currency,proto3" json:"currency,omitempty"`
+	Subtotal    int64  `protobuf:"varint,14,opt,name=subtotal,proto3" json:"subtotal,omitempty"`                          // centavos
+	TaxAmount   int64  `protobuf:"varint,15,opt,name=tax_amount,json=taxAmount,proto3" json:"tax_amount,omitempty"`       // centavos
+	TotalAmount int64  `protobuf:"varint,16,opt,name=total_amount,json=totalAmount,proto3" json:"total_amount,omitempty"` // centavos
 	// Terms
 	PaymentTerms  *string `protobuf:"bytes,17,opt,name=payment_terms,json=paymentTerms,proto3,oneof" json:"payment_terms,omitempty"`
 	ShippingTerms *string `protobuf:"bytes,18,opt,name=shipping_terms,json=shippingTerms,proto3,oneof" json:"shipping_terms,omitempty"`
@@ -57,10 +57,8 @@ type PurchaseOrder struct {
 	ApprovedDateString *string `protobuf:"bytes,21,opt,name=approved_date_string,json=approvedDateString,proto3,oneof" json:"approved_date_string,omitempty"`
 	// Blanket order fields
 	ParentPoId              *string `protobuf:"bytes,22,opt,name=parent_po_id,json=parentPoId,proto3,oneof" json:"parent_po_id,omitempty"`
-	BlanketStartDate        *int64  `protobuf:"varint,23,opt,name=blanket_start_date,json=blanketStartDate,proto3,oneof" json:"blanket_start_date,omitempty"`
-	BlanketStartDateString  *string `protobuf:"bytes,24,opt,name=blanket_start_date_string,json=blanketStartDateString,proto3,oneof" json:"blanket_start_date_string,omitempty"`
-	BlanketEndDate          *int64  `protobuf:"varint,25,opt,name=blanket_end_date,json=blanketEndDate,proto3,oneof" json:"blanket_end_date,omitempty"`
-	BlanketEndDateString    *string `protobuf:"bytes,26,opt,name=blanket_end_date_string,json=blanketEndDateString,proto3,oneof" json:"blanket_end_date_string,omitempty"`
+	BlanketStartDate        *string `protobuf:"bytes,23,opt,name=blanket_start_date,json=blanketStartDate,proto3,oneof" json:"blanket_start_date,omitempty"` // ISO 8601 date (YYYY-MM-DD)
+	BlanketEndDate          *string `protobuf:"bytes,25,opt,name=blanket_end_date,json=blanketEndDate,proto3,oneof" json:"blanket_end_date,omitempty"`       // ISO 8601 date (YYYY-MM-DD)
 	BlanketTotalQuantity    float64 `protobuf:"fixed64,27,opt,name=blanket_total_quantity,json=blanketTotalQuantity,proto3" json:"blanket_total_quantity,omitempty"`
 	BlanketReleasedQuantity float64 `protobuf:"fixed64,28,opt,name=blanket_released_quantity,json=blanketReleasedQuantity,proto3" json:"blanket_released_quantity,omitempty"`
 	// Notes
@@ -199,21 +197,21 @@ func (x *PurchaseOrder) GetCurrency() string {
 	return ""
 }
 
-func (x *PurchaseOrder) GetSubtotal() float64 {
+func (x *PurchaseOrder) GetSubtotal() int64 {
 	if x != nil {
 		return x.Subtotal
 	}
 	return 0
 }
 
-func (x *PurchaseOrder) GetTaxAmount() float64 {
+func (x *PurchaseOrder) GetTaxAmount() int64 {
 	if x != nil {
 		return x.TaxAmount
 	}
 	return 0
 }
 
-func (x *PurchaseOrder) GetTotalAmount() float64 {
+func (x *PurchaseOrder) GetTotalAmount() int64 {
 	if x != nil {
 		return x.TotalAmount
 	}
@@ -262,30 +260,16 @@ func (x *PurchaseOrder) GetParentPoId() string {
 	return ""
 }
 
-func (x *PurchaseOrder) GetBlanketStartDate() int64 {
+func (x *PurchaseOrder) GetBlanketStartDate() string {
 	if x != nil && x.BlanketStartDate != nil {
 		return *x.BlanketStartDate
-	}
-	return 0
-}
-
-func (x *PurchaseOrder) GetBlanketStartDateString() string {
-	if x != nil && x.BlanketStartDateString != nil {
-		return *x.BlanketStartDateString
 	}
 	return ""
 }
 
-func (x *PurchaseOrder) GetBlanketEndDate() int64 {
+func (x *PurchaseOrder) GetBlanketEndDate() string {
 	if x != nil && x.BlanketEndDate != nil {
 		return *x.BlanketEndDate
-	}
-	return 0
-}
-
-func (x *PurchaseOrder) GetBlanketEndDateString() string {
-	if x != nil && x.BlanketEndDateString != nil {
-		return *x.BlanketEndDateString
 	}
 	return ""
 }
@@ -1179,7 +1163,7 @@ var File_domain_expenditure_purchase_order_purchase_order_proto protoreflect.Fil
 
 const file_domain_expenditure_purchase_order_purchase_order_proto_rawDesc = "" +
 	"\n" +
-	"6domain/expenditure/purchase_order/purchase_order.proto\x12\x15domain.expenditure.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/search.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a%domain/entity/supplier/supplier.proto\x1a%domain/entity/location/location.proto\x1a-domain/entity/payment_term/payment_term.proto\x1a\x10options/db.proto\"\xba\x11\n" +
+	"6domain/expenditure/purchase_order/purchase_order.proto\x12\x15domain.expenditure.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/search.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a%domain/entity/supplier/supplier.proto\x1a%domain/entity/location/location.proto\x1a-domain/entity/payment_term/payment_term.proto\x1a\x10options/db.proto\"\x90\x10\n" +
 	"\rPurchaseOrder\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12#\n" +
 	"\tpo_number\x18\x02 \x01(\tB\x06\x82\xb5\x18\x02\x10\x01R\bpoNumber\x12\x17\n" +
@@ -1200,10 +1184,10 @@ const file_domain_expenditure_purchase_order_purchase_order_proto_rawDesc = "" +
 	"\x16expected_delivery_date\x18\v \x01(\x03H\x04R\x14expectedDeliveryDate\x88\x01\x01\x12F\n" +
 	"\x1dexpected_delivery_date_string\x18\f \x01(\tH\x05R\x1aexpectedDeliveryDateString\x88\x01\x01\x12\x1a\n" +
 	"\bcurrency\x18\r \x01(\tR\bcurrency\x12\x1a\n" +
-	"\bsubtotal\x18\x0e \x01(\x01R\bsubtotal\x12\x1d\n" +
+	"\bsubtotal\x18\x0e \x01(\x03R\bsubtotal\x12\x1d\n" +
 	"\n" +
-	"tax_amount\x18\x0f \x01(\x01R\ttaxAmount\x12!\n" +
-	"\ftotal_amount\x18\x10 \x01(\x01R\vtotalAmount\x12(\n" +
+	"tax_amount\x18\x0f \x01(\x03R\ttaxAmount\x12!\n" +
+	"\ftotal_amount\x18\x10 \x01(\x03R\vtotalAmount\x12(\n" +
 	"\rpayment_terms\x18\x11 \x01(\tH\x06R\fpaymentTerms\x88\x01\x01\x12*\n" +
 	"\x0eshipping_terms\x18\x12 \x01(\tH\aR\rshippingTerms\x88\x01\x01\x12$\n" +
 	"\vapproved_by\x18\x13 \x01(\tH\bR\n" +
@@ -1214,23 +1198,21 @@ const file_domain_expenditure_purchase_order_purchase_order_proto_rawDesc = "" +
 	"\fparent_po_id\x18\x16 \x01(\tB\x14\x82\xb5\x18\x10\n" +
 	"\x0epurchase_orderH\vR\n" +
 	"parentPoId\x88\x01\x01\x121\n" +
-	"\x12blanket_start_date\x18\x17 \x01(\x03H\fR\x10blanketStartDate\x88\x01\x01\x12>\n" +
-	"\x19blanket_start_date_string\x18\x18 \x01(\tH\rR\x16blanketStartDateString\x88\x01\x01\x12-\n" +
-	"\x10blanket_end_date\x18\x19 \x01(\x03H\x0eR\x0eblanketEndDate\x88\x01\x01\x12:\n" +
-	"\x17blanket_end_date_string\x18\x1a \x01(\tH\x0fR\x14blanketEndDateString\x88\x01\x01\x124\n" +
+	"\x12blanket_start_date\x18\x17 \x01(\tH\fR\x10blanketStartDate\x88\x01\x01\x12-\n" +
+	"\x10blanket_end_date\x18\x19 \x01(\tH\rR\x0eblanketEndDate\x88\x01\x01\x124\n" +
 	"\x16blanket_total_quantity\x18\x1b \x01(\x01R\x14blanketTotalQuantity\x12:\n" +
 	"\x19blanket_released_quantity\x18\x1c \x01(\x01R\x17blanketReleasedQuantity\x12\x19\n" +
-	"\x05notes\x18\x1d \x01(\tH\x10R\x05notes\x88\x01\x01\x12.\n" +
-	"\x10reference_number\x18\x1e \x01(\tH\x11R\x0freferenceNumber\x88\x01\x01\x12\"\n" +
+	"\x05notes\x18\x1d \x01(\tH\x0eR\x05notes\x88\x01\x01\x12.\n" +
+	"\x10reference_number\x18\x1e \x01(\tH\x0fR\x0freferenceNumber\x88\x01\x01\x12\"\n" +
 	"\x06active\x18\x1f \x01(\bB\n" +
 	"\x82\xb5\x18\x06\"\x04trueR\x06active\x12&\n" +
-	"\fdate_created\x18  \x01(\x03H\x12R\vdateCreated\x88\x01\x01\x123\n" +
-	"\x13date_created_string\x18! \x01(\tH\x13R\x11dateCreatedString\x88\x01\x01\x12(\n" +
-	"\rdate_modified\x18\" \x01(\x03H\x14R\fdateModified\x88\x01\x01\x125\n" +
-	"\x14date_modified_string\x18# \x01(\tH\x15R\x12dateModifiedString\x88\x01\x01\x12?\n" +
+	"\fdate_created\x18  \x01(\x03H\x10R\vdateCreated\x88\x01\x01\x123\n" +
+	"\x13date_created_string\x18! \x01(\tH\x11R\x11dateCreatedString\x88\x01\x01\x12(\n" +
+	"\rdate_modified\x18\" \x01(\x03H\x12R\fdateModified\x88\x01\x01\x125\n" +
+	"\x14date_modified_string\x18# \x01(\tH\x13R\x12dateModifiedString\x88\x01\x01\x12?\n" +
 	"\x0fpayment_term_id\x18$ \x01(\tB\x12\x82\xb5\x18\x0e\n" +
-	"\fpayment_termH\x16R\rpaymentTermId\x88\x01\x01\x12E\n" +
-	"\fpayment_term\x18% \x01(\v2\x1d.domain.entity.v1.PaymentTermH\x17R\vpaymentTerm\x88\x01\x01:\x06\x8a\xb5\x18\x02\b\x01B\v\n" +
+	"\fpayment_termH\x14R\rpaymentTermId\x88\x01\x01\x12E\n" +
+	"\fpayment_term\x18% \x01(\v2\x1d.domain.entity.v1.PaymentTermH\x15R\vpaymentTerm\x88\x01\x01:\x06\x8a\xb5\x18\x02\b\x01B\v\n" +
 	"\t_supplierB\v\n" +
 	"\t_locationB\x0e\n" +
 	"\f_location_idB\x14\n" +
@@ -1243,10 +1225,8 @@ const file_domain_expenditure_purchase_order_purchase_order_proto_rawDesc = "" +
 	"\x0e_approved_dateB\x17\n" +
 	"\x15_approved_date_stringB\x0f\n" +
 	"\r_parent_po_idB\x15\n" +
-	"\x13_blanket_start_dateB\x1c\n" +
-	"\x1a_blanket_start_date_stringB\x13\n" +
-	"\x11_blanket_end_dateB\x1a\n" +
-	"\x18_blanket_end_date_stringB\b\n" +
+	"\x13_blanket_start_dateB\x13\n" +
+	"\x11_blanket_end_dateB\b\n" +
 	"\x06_notesB\x13\n" +
 	"\x11_reference_numberB\x0f\n" +
 	"\r_date_createdB\x16\n" +
@@ -1254,7 +1234,7 @@ const file_domain_expenditure_purchase_order_purchase_order_proto_rawDesc = "" +
 	"\x0e_date_modifiedB\x17\n" +
 	"\x15_date_modified_stringB\x12\n" +
 	"\x10_payment_term_idB\x0f\n" +
-	"\r_payment_term\"V\n" +
+	"\r_payment_termJ\x04\b\x18\x10\x19J\x04\b\x1a\x10\x1b\"V\n" +
 	"\x1aCreatePurchaseOrderRequest\x128\n" +
 	"\x04data\x18\x01 \x01(\v2$.domain.expenditure.v1.PurchaseOrderR\x04data\"\xaf\x01\n" +
 	"\x1bCreatePurchaseOrderResponse\x128\n" +

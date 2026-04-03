@@ -141,7 +141,7 @@ type JobSettlement struct {
 	JobActivity          *job_activity.JobActivity `protobuf:"bytes,3,opt,name=job_activity,json=jobActivity,proto3,oneof" json:"job_activity,omitempty"`
 	TargetType           SettlementTargetType      `protobuf:"varint,4,opt,name=target_type,json=targetType,proto3,enum=domain.operation.v1.SettlementTargetType" json:"target_type,omitempty"`
 	TargetId             string                    `protobuf:"bytes,5,opt,name=target_id,json=targetId,proto3" json:"target_id,omitempty"`
-	AllocatedAmount      float64                   `protobuf:"fixed64,6,opt,name=allocated_amount,json=allocatedAmount,proto3" json:"allocated_amount,omitempty"`
+	AllocatedAmount      int64                     `protobuf:"varint,6,opt,name=allocated_amount,json=allocatedAmount,proto3" json:"allocated_amount,omitempty"` // centavos
 	AllocationPct        *float64                  `protobuf:"fixed64,7,opt,name=allocation_pct,json=allocationPct,proto3,oneof" json:"allocation_pct,omitempty"`
 	SettlementDate       *int64                    `protobuf:"varint,8,opt,name=settlement_date,json=settlementDate,proto3,oneof" json:"settlement_date,omitempty"`
 	SettlementDateString *string                   `protobuf:"bytes,9,opt,name=settlement_date_string,json=settlementDateString,proto3,oneof" json:"settlement_date_string,omitempty"`
@@ -221,7 +221,7 @@ func (x *JobSettlement) GetTargetId() string {
 	return ""
 }
 
-func (x *JobSettlement) GetAllocatedAmount() float64 {
+func (x *JobSettlement) GetAllocatedAmount() int64 {
 	if x != nil {
 		return x.AllocatedAmount
 	}
@@ -1345,7 +1345,7 @@ func (x *GetSettlementSummaryRequest) GetJobId() string {
 type SettlementByTargetType struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	TargetType    SettlementTargetType   `protobuf:"varint,1,opt,name=target_type,json=targetType,proto3,enum=domain.operation.v1.SettlementTargetType" json:"target_type,omitempty"`
-	TotalAmount   float64                `protobuf:"fixed64,2,opt,name=total_amount,json=totalAmount,proto3" json:"total_amount,omitempty"`
+	TotalAmount   int64                  `protobuf:"varint,2,opt,name=total_amount,json=totalAmount,proto3" json:"total_amount,omitempty"` // centavos
 	Count         int32                  `protobuf:"varint,3,opt,name=count,proto3" json:"count,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
@@ -1388,7 +1388,7 @@ func (x *SettlementByTargetType) GetTargetType() SettlementTargetType {
 	return SettlementTargetType_SETTLEMENT_TARGET_TYPE_UNSPECIFIED
 }
 
-func (x *SettlementByTargetType) GetTotalAmount() float64 {
+func (x *SettlementByTargetType) GetTotalAmount() int64 {
 	if x != nil {
 		return x.TotalAmount
 	}
@@ -1405,7 +1405,7 @@ func (x *SettlementByTargetType) GetCount() int32 {
 type GetSettlementSummaryResponse struct {
 	state         protoimpl.MessageState    `protogen:"open.v1"`
 	Summary       []*SettlementByTargetType `protobuf:"bytes,1,rep,name=summary,proto3" json:"summary,omitempty"`
-	GrandTotal    float64                   `protobuf:"fixed64,2,opt,name=grand_total,json=grandTotal,proto3" json:"grand_total,omitempty"`
+	GrandTotal    int64                     `protobuf:"varint,2,opt,name=grand_total,json=grandTotal,proto3" json:"grand_total,omitempty"` // centavos
 	Success       bool                      `protobuf:"varint,3,opt,name=success,proto3" json:"success,omitempty"`
 	Error         *common.Error             `protobuf:"bytes,4,opt,name=error,proto3,oneof" json:"error,omitempty"`
 	unknownFields protoimpl.UnknownFields
@@ -1449,7 +1449,7 @@ func (x *GetSettlementSummaryResponse) GetSummary() []*SettlementByTargetType {
 	return nil
 }
 
-func (x *GetSettlementSummaryResponse) GetGrandTotal() float64 {
+func (x *GetSettlementSummaryResponse) GetGrandTotal() int64 {
 	if x != nil {
 		return x.GrandTotal
 	}
@@ -1483,7 +1483,7 @@ const file_domain_operation_job_settlement_job_settlement_proto_rawDesc = "" +
 	"\vtarget_type\x18\x04 \x01(\x0e2).domain.operation.v1.SettlementTargetTypeR\n" +
 	"targetType\x12\x1b\n" +
 	"\ttarget_id\x18\x05 \x01(\tR\btargetId\x12)\n" +
-	"\x10allocated_amount\x18\x06 \x01(\x01R\x0fallocatedAmount\x12*\n" +
+	"\x10allocated_amount\x18\x06 \x01(\x03R\x0fallocatedAmount\x12*\n" +
 	"\x0eallocation_pct\x18\a \x01(\x01H\x01R\rallocationPct\x88\x01\x01\x12,\n" +
 	"\x0fsettlement_date\x18\b \x01(\x03H\x02R\x0esettlementDate\x88\x01\x01\x129\n" +
 	"\x16settlement_date_string\x18\t \x01(\tH\x03R\x14settlementDateString\x88\x01\x01\x12=\n" +
@@ -1602,11 +1602,11 @@ const file_domain_operation_job_settlement_job_settlement_proto_rawDesc = "" +
 	"\x16SettlementByTargetType\x12J\n" +
 	"\vtarget_type\x18\x01 \x01(\x0e2).domain.operation.v1.SettlementTargetTypeR\n" +
 	"targetType\x12!\n" +
-	"\ftotal_amount\x18\x02 \x01(\x01R\vtotalAmount\x12\x14\n" +
+	"\ftotal_amount\x18\x02 \x01(\x03R\vtotalAmount\x12\x14\n" +
 	"\x05count\x18\x03 \x01(\x05R\x05count\"\xde\x01\n" +
 	"\x1cGetSettlementSummaryResponse\x12E\n" +
 	"\asummary\x18\x01 \x03(\v2+.domain.operation.v1.SettlementByTargetTypeR\asummary\x12\x1f\n" +
-	"\vgrand_total\x18\x02 \x01(\x01R\n" +
+	"\vgrand_total\x18\x02 \x01(\x03R\n" +
 	"grandTotal\x12\x18\n" +
 	"\asuccess\x18\x03 \x01(\bR\asuccess\x122\n" +
 	"\x05error\x18\x04 \x01(\v2\x17.domain.common.v1.ErrorH\x00R\x05error\x88\x01\x01B\b\n" +

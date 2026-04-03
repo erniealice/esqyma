@@ -9,8 +9,8 @@ import "domain/common/pagination.proto";
 
 // GrossProfitReportRequest defines parameters for generating a gross profit report.
 message GrossProfitReportRequest {
-  optional int64 start_date = 1;           // Unix timestamp — report period start
-  optional int64 end_date = 2;             // Unix timestamp — report period end
+  optional string start_date = 1;           // ISO 8601 date (YYYY-MM-DD) — report period start
+  optional string end_date = 2;             // ISO 8601 date (YYYY-MM-DD) — report period end
   optional string group_by = 3;            // "product", "location", "category", "period"
   optional string period_granularity = 4;  // "daily", "weekly", "monthly", "yearly" (when group_by=period)
   optional string product_id = 5;          // Filter by specific product
@@ -24,11 +24,11 @@ message GrossProfitReportRequest {
 message GrossProfitLineItem {
   string group_key = 1;              // The grouping key value (product name, location, date, etc.)
   optional string group_id = 2;      // The grouping entity ID (product_id, location_id, etc.)
-  double total_revenue = 3;          // Sum of revenue line item totals
-  double total_discount = 4;         // Sum of discounts applied
-  double net_revenue = 5;            // total_revenue - total_discount
-  double cost_of_goods_sold = 6;     // Sum of COGS from inventory transactions
-  double gross_profit = 7;           // net_revenue - cost_of_goods_sold
+  int64 total_revenue = 3; // centavos          // Sum of revenue line item totals
+  int64 total_discount = 4; // centavos         // Sum of discounts applied
+  int64 net_revenue = 5; // centavos            // total_revenue - total_discount
+  int64 cost_of_goods_sold = 6; // centavos     // Sum of COGS from inventory transactions
+  int64 gross_profit = 7; // centavos           // net_revenue - cost_of_goods_sold
   double gross_profit_margin = 8;    // (gross_profit / net_revenue) * 100
   int64 units_sold = 9;             // Total units sold in this group
   int64 transaction_count = 10;      // Number of revenue transactions
@@ -36,17 +36,17 @@ message GrossProfitLineItem {
 
 // GrossProfitSummary provides report-level totals.
 message GrossProfitSummary {
-  double total_revenue = 1;
-  double total_discount = 2;
-  double net_revenue = 3;
-  double total_cogs = 4;
-  double total_gross_profit = 5;
+  int64 total_revenue = 1; // centavos
+  int64 total_discount = 2; // centavos
+  int64 net_revenue = 3; // centavos
+  int64 total_cogs = 4; // centavos
+  int64 total_gross_profit = 5; // centavos
   double overall_margin = 6;         // (total_gross_profit / net_revenue) * 100
   int64 total_units_sold = 7;
   int64 total_transactions = 8;
   string currency = 9;
-  optional int64 start_date = 10;
-  optional int64 end_date = 11;
+  optional string start_date = 10; // ISO 8601 date (YYYY-MM-DD)
+  optional string end_date = 11; // ISO 8601 date (YYYY-MM-DD)
 }
 
 // GrossProfitReportResponse returns the generated report.
