@@ -8,6 +8,7 @@ package entityv1
 
 import (
 	common "github.com/erniealice/esqyma/pkg/schema/v1/domain/common"
+	payment_term "github.com/erniealice/esqyma/pkg/schema/v1/domain/entity/payment_term"
 	supplier_category "github.com/erniealice/esqyma/pkg/schema/v1/domain/entity/supplier_category"
 	user "github.com/erniealice/esqyma/pkg/schema/v1/domain/entity/user"
 	_ "github.com/erniealice/esqyma/pkg/schema/v1/options"
@@ -59,6 +60,8 @@ type Supplier struct {
 	Website            *string                               `protobuf:"bytes,27,opt,name=website,proto3,oneof" json:"website,omitempty"`
 	Notes              *string                               `protobuf:"bytes,28,opt,name=notes,proto3,oneof" json:"notes,omitempty"`
 	Categories         []*supplier_category.SupplierCategory `protobuf:"bytes,29,rep,name=categories,proto3" json:"categories,omitempty"`
+	PaymentTermId      *string                               `protobuf:"bytes,30,opt,name=payment_term_id,json=paymentTermId,proto3,oneof" json:"payment_term_id,omitempty"`
+	PaymentTerm        *payment_term.PaymentTerm             `protobuf:"bytes,31,opt,name=payment_term,json=paymentTerm,proto3,oneof" json:"payment_term,omitempty"`
 	unknownFields      protoimpl.UnknownFields
 	sizeCache          protoimpl.SizeCache
 }
@@ -292,6 +295,20 @@ func (x *Supplier) GetNotes() string {
 func (x *Supplier) GetCategories() []*supplier_category.SupplierCategory {
 	if x != nil {
 		return x.Categories
+	}
+	return nil
+}
+
+func (x *Supplier) GetPaymentTermId() string {
+	if x != nil && x.PaymentTermId != nil {
+		return *x.PaymentTermId
+	}
+	return ""
+}
+
+func (x *Supplier) GetPaymentTerm() *payment_term.PaymentTerm {
+	if x != nil {
+		return x.PaymentTerm
 	}
 	return nil
 }
@@ -1084,7 +1101,7 @@ var File_domain_entity_supplier_supplier_proto protoreflect.FileDescriptor
 
 const file_domain_entity_supplier_supplier_proto_rawDesc = "" +
 	"\n" +
-	"%domain/entity/supplier/supplier.proto\x12\x10domain.entity.v1\x1a\x19domain/common/error.proto\x1a\x1adomain/common/search.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1edomain/common/pagination.proto\x1a\x10options/db.proto\x1a\x1ddomain/entity/user/user.proto\x1a7domain/entity/supplier_category/supplier_category.proto\"\xa4\f\n" +
+	"%domain/entity/supplier/supplier.proto\x12\x10domain.entity.v1\x1a\x19domain/common/error.proto\x1a\x1adomain/common/search.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1edomain/common/pagination.proto\x1a\x10options/db.proto\x1a\x1ddomain/entity/user/user.proto\x1a7domain/entity/supplier_category/supplier_category.proto\x1a-domain/entity/payment_term/payment_term.proto\"\xd1\r\n" +
 	"\bSupplier\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12/\n" +
 	"\x04user\x18\x02 \x01(\v2\x16.domain.entity.v1.UserH\x00R\x04user\x88\x01\x01\x12%\n" +
@@ -1126,7 +1143,10 @@ const file_domain_entity_supplier_supplier_proto_rawDesc = "" +
 	"\x05notes\x18\x1c \x01(\tH\x15R\x05notes\x88\x01\x01\x12B\n" +
 	"\n" +
 	"categories\x18\x1d \x03(\v2\".domain.entity.v1.SupplierCategoryR\n" +
-	"categories:\x06\x8a\xb5\x18\x02\b\x01B\a\n" +
+	"categories\x12?\n" +
+	"\x0fpayment_term_id\x18\x1e \x01(\tB\x12\x82\xb5\x18\x0e\n" +
+	"\fpayment_termH\x16R\rpaymentTermId\x88\x01\x01\x12E\n" +
+	"\fpayment_term\x18\x1f \x01(\v2\x1d.domain.entity.v1.PaymentTermH\x17R\vpaymentTerm\x88\x01\x01:\x06\x8a\xb5\x18\x02\b\x01B\a\n" +
 	"\x05_userB\x0f\n" +
 	"\r_date_createdB\x16\n" +
 	"\x14_date_created_stringB\x10\n" +
@@ -1151,7 +1171,9 @@ const file_domain_entity_supplier_supplier_proto_rawDesc = "" +
 	"_client_idB\n" +
 	"\n" +
 	"\b_websiteB\b\n" +
-	"\x06_notes\"G\n" +
+	"\x06_notesB\x12\n" +
+	"\x10_payment_term_idB\x0f\n" +
+	"\r_payment_term\"G\n" +
 	"\x15CreateSupplierRequest\x12.\n" +
 	"\x04data\x18\x01 \x01(\v2\x1a.domain.entity.v1.SupplierR\x04data\"\xa0\x01\n" +
 	"\x16CreateSupplierResponse\x12.\n" +
@@ -1268,64 +1290,66 @@ var file_domain_entity_supplier_supplier_proto_goTypes = []any{
 	(*GetSupplierItemPageDataResponse)(nil),    // 14: domain.entity.v1.GetSupplierItemPageDataResponse
 	(*user.User)(nil),                          // 15: domain.entity.v1.User
 	(*supplier_category.SupplierCategory)(nil), // 16: domain.entity.v1.SupplierCategory
-	(*common.Error)(nil),                       // 17: domain.common.v1.Error
-	(*common.SearchRequest)(nil),               // 18: domain.common.v1.SearchRequest
-	(*common.FilterRequest)(nil),               // 19: domain.common.v1.FilterRequest
-	(*common.SortRequest)(nil),                 // 20: domain.common.v1.SortRequest
-	(*common.PaginationRequest)(nil),           // 21: domain.common.v1.PaginationRequest
-	(*common.PaginationResponse)(nil),          // 22: domain.common.v1.PaginationResponse
-	(*common.SearchResult)(nil),                // 23: domain.common.v1.SearchResult
+	(*payment_term.PaymentTerm)(nil),           // 17: domain.entity.v1.PaymentTerm
+	(*common.Error)(nil),                       // 18: domain.common.v1.Error
+	(*common.SearchRequest)(nil),               // 19: domain.common.v1.SearchRequest
+	(*common.FilterRequest)(nil),               // 20: domain.common.v1.FilterRequest
+	(*common.SortRequest)(nil),                 // 21: domain.common.v1.SortRequest
+	(*common.PaginationRequest)(nil),           // 22: domain.common.v1.PaginationRequest
+	(*common.PaginationResponse)(nil),          // 23: domain.common.v1.PaginationResponse
+	(*common.SearchResult)(nil),                // 24: domain.common.v1.SearchResult
 }
 var file_domain_entity_supplier_supplier_proto_depIdxs = []int32{
 	15, // 0: domain.entity.v1.Supplier.user:type_name -> domain.entity.v1.User
 	16, // 1: domain.entity.v1.Supplier.category:type_name -> domain.entity.v1.SupplierCategory
 	16, // 2: domain.entity.v1.Supplier.categories:type_name -> domain.entity.v1.SupplierCategory
-	0,  // 3: domain.entity.v1.CreateSupplierRequest.data:type_name -> domain.entity.v1.Supplier
-	0,  // 4: domain.entity.v1.CreateSupplierResponse.data:type_name -> domain.entity.v1.Supplier
-	17, // 5: domain.entity.v1.CreateSupplierResponse.error:type_name -> domain.common.v1.Error
-	0,  // 6: domain.entity.v1.ReadSupplierRequest.data:type_name -> domain.entity.v1.Supplier
-	0,  // 7: domain.entity.v1.ReadSupplierResponse.data:type_name -> domain.entity.v1.Supplier
-	17, // 8: domain.entity.v1.ReadSupplierResponse.error:type_name -> domain.common.v1.Error
-	0,  // 9: domain.entity.v1.UpdateSupplierRequest.data:type_name -> domain.entity.v1.Supplier
-	0,  // 10: domain.entity.v1.UpdateSupplierResponse.data:type_name -> domain.entity.v1.Supplier
-	17, // 11: domain.entity.v1.UpdateSupplierResponse.error:type_name -> domain.common.v1.Error
-	0,  // 12: domain.entity.v1.DeleteSupplierRequest.data:type_name -> domain.entity.v1.Supplier
-	17, // 13: domain.entity.v1.DeleteSupplierResponse.error:type_name -> domain.common.v1.Error
-	18, // 14: domain.entity.v1.ListSuppliersRequest.search:type_name -> domain.common.v1.SearchRequest
-	19, // 15: domain.entity.v1.ListSuppliersRequest.filters:type_name -> domain.common.v1.FilterRequest
-	20, // 16: domain.entity.v1.ListSuppliersRequest.sort:type_name -> domain.common.v1.SortRequest
-	21, // 17: domain.entity.v1.ListSuppliersRequest.pagination:type_name -> domain.common.v1.PaginationRequest
-	0,  // 18: domain.entity.v1.ListSuppliersResponse.data:type_name -> domain.entity.v1.Supplier
-	17, // 19: domain.entity.v1.ListSuppliersResponse.error:type_name -> domain.common.v1.Error
-	18, // 20: domain.entity.v1.GetSupplierListPageDataRequest.search:type_name -> domain.common.v1.SearchRequest
-	19, // 21: domain.entity.v1.GetSupplierListPageDataRequest.filters:type_name -> domain.common.v1.FilterRequest
-	20, // 22: domain.entity.v1.GetSupplierListPageDataRequest.sort:type_name -> domain.common.v1.SortRequest
-	21, // 23: domain.entity.v1.GetSupplierListPageDataRequest.pagination:type_name -> domain.common.v1.PaginationRequest
-	0,  // 24: domain.entity.v1.GetSupplierListPageDataResponse.supplier_list:type_name -> domain.entity.v1.Supplier
-	22, // 25: domain.entity.v1.GetSupplierListPageDataResponse.pagination:type_name -> domain.common.v1.PaginationResponse
-	23, // 26: domain.entity.v1.GetSupplierListPageDataResponse.search_results:type_name -> domain.common.v1.SearchResult
-	17, // 27: domain.entity.v1.GetSupplierListPageDataResponse.error:type_name -> domain.common.v1.Error
-	0,  // 28: domain.entity.v1.GetSupplierItemPageDataResponse.supplier:type_name -> domain.entity.v1.Supplier
-	17, // 29: domain.entity.v1.GetSupplierItemPageDataResponse.error:type_name -> domain.common.v1.Error
-	1,  // 30: domain.entity.v1.SupplierDomainService.CreateSupplier:input_type -> domain.entity.v1.CreateSupplierRequest
-	3,  // 31: domain.entity.v1.SupplierDomainService.ReadSupplier:input_type -> domain.entity.v1.ReadSupplierRequest
-	5,  // 32: domain.entity.v1.SupplierDomainService.UpdateSupplier:input_type -> domain.entity.v1.UpdateSupplierRequest
-	7,  // 33: domain.entity.v1.SupplierDomainService.DeleteSupplier:input_type -> domain.entity.v1.DeleteSupplierRequest
-	9,  // 34: domain.entity.v1.SupplierDomainService.ListSuppliers:input_type -> domain.entity.v1.ListSuppliersRequest
-	11, // 35: domain.entity.v1.SupplierDomainService.GetSupplierListPageData:input_type -> domain.entity.v1.GetSupplierListPageDataRequest
-	13, // 36: domain.entity.v1.SupplierDomainService.GetSupplierItemPageData:input_type -> domain.entity.v1.GetSupplierItemPageDataRequest
-	2,  // 37: domain.entity.v1.SupplierDomainService.CreateSupplier:output_type -> domain.entity.v1.CreateSupplierResponse
-	4,  // 38: domain.entity.v1.SupplierDomainService.ReadSupplier:output_type -> domain.entity.v1.ReadSupplierResponse
-	6,  // 39: domain.entity.v1.SupplierDomainService.UpdateSupplier:output_type -> domain.entity.v1.UpdateSupplierResponse
-	8,  // 40: domain.entity.v1.SupplierDomainService.DeleteSupplier:output_type -> domain.entity.v1.DeleteSupplierResponse
-	10, // 41: domain.entity.v1.SupplierDomainService.ListSuppliers:output_type -> domain.entity.v1.ListSuppliersResponse
-	12, // 42: domain.entity.v1.SupplierDomainService.GetSupplierListPageData:output_type -> domain.entity.v1.GetSupplierListPageDataResponse
-	14, // 43: domain.entity.v1.SupplierDomainService.GetSupplierItemPageData:output_type -> domain.entity.v1.GetSupplierItemPageDataResponse
-	37, // [37:44] is the sub-list for method output_type
-	30, // [30:37] is the sub-list for method input_type
-	30, // [30:30] is the sub-list for extension type_name
-	30, // [30:30] is the sub-list for extension extendee
-	0,  // [0:30] is the sub-list for field type_name
+	17, // 3: domain.entity.v1.Supplier.payment_term:type_name -> domain.entity.v1.PaymentTerm
+	0,  // 4: domain.entity.v1.CreateSupplierRequest.data:type_name -> domain.entity.v1.Supplier
+	0,  // 5: domain.entity.v1.CreateSupplierResponse.data:type_name -> domain.entity.v1.Supplier
+	18, // 6: domain.entity.v1.CreateSupplierResponse.error:type_name -> domain.common.v1.Error
+	0,  // 7: domain.entity.v1.ReadSupplierRequest.data:type_name -> domain.entity.v1.Supplier
+	0,  // 8: domain.entity.v1.ReadSupplierResponse.data:type_name -> domain.entity.v1.Supplier
+	18, // 9: domain.entity.v1.ReadSupplierResponse.error:type_name -> domain.common.v1.Error
+	0,  // 10: domain.entity.v1.UpdateSupplierRequest.data:type_name -> domain.entity.v1.Supplier
+	0,  // 11: domain.entity.v1.UpdateSupplierResponse.data:type_name -> domain.entity.v1.Supplier
+	18, // 12: domain.entity.v1.UpdateSupplierResponse.error:type_name -> domain.common.v1.Error
+	0,  // 13: domain.entity.v1.DeleteSupplierRequest.data:type_name -> domain.entity.v1.Supplier
+	18, // 14: domain.entity.v1.DeleteSupplierResponse.error:type_name -> domain.common.v1.Error
+	19, // 15: domain.entity.v1.ListSuppliersRequest.search:type_name -> domain.common.v1.SearchRequest
+	20, // 16: domain.entity.v1.ListSuppliersRequest.filters:type_name -> domain.common.v1.FilterRequest
+	21, // 17: domain.entity.v1.ListSuppliersRequest.sort:type_name -> domain.common.v1.SortRequest
+	22, // 18: domain.entity.v1.ListSuppliersRequest.pagination:type_name -> domain.common.v1.PaginationRequest
+	0,  // 19: domain.entity.v1.ListSuppliersResponse.data:type_name -> domain.entity.v1.Supplier
+	18, // 20: domain.entity.v1.ListSuppliersResponse.error:type_name -> domain.common.v1.Error
+	19, // 21: domain.entity.v1.GetSupplierListPageDataRequest.search:type_name -> domain.common.v1.SearchRequest
+	20, // 22: domain.entity.v1.GetSupplierListPageDataRequest.filters:type_name -> domain.common.v1.FilterRequest
+	21, // 23: domain.entity.v1.GetSupplierListPageDataRequest.sort:type_name -> domain.common.v1.SortRequest
+	22, // 24: domain.entity.v1.GetSupplierListPageDataRequest.pagination:type_name -> domain.common.v1.PaginationRequest
+	0,  // 25: domain.entity.v1.GetSupplierListPageDataResponse.supplier_list:type_name -> domain.entity.v1.Supplier
+	23, // 26: domain.entity.v1.GetSupplierListPageDataResponse.pagination:type_name -> domain.common.v1.PaginationResponse
+	24, // 27: domain.entity.v1.GetSupplierListPageDataResponse.search_results:type_name -> domain.common.v1.SearchResult
+	18, // 28: domain.entity.v1.GetSupplierListPageDataResponse.error:type_name -> domain.common.v1.Error
+	0,  // 29: domain.entity.v1.GetSupplierItemPageDataResponse.supplier:type_name -> domain.entity.v1.Supplier
+	18, // 30: domain.entity.v1.GetSupplierItemPageDataResponse.error:type_name -> domain.common.v1.Error
+	1,  // 31: domain.entity.v1.SupplierDomainService.CreateSupplier:input_type -> domain.entity.v1.CreateSupplierRequest
+	3,  // 32: domain.entity.v1.SupplierDomainService.ReadSupplier:input_type -> domain.entity.v1.ReadSupplierRequest
+	5,  // 33: domain.entity.v1.SupplierDomainService.UpdateSupplier:input_type -> domain.entity.v1.UpdateSupplierRequest
+	7,  // 34: domain.entity.v1.SupplierDomainService.DeleteSupplier:input_type -> domain.entity.v1.DeleteSupplierRequest
+	9,  // 35: domain.entity.v1.SupplierDomainService.ListSuppliers:input_type -> domain.entity.v1.ListSuppliersRequest
+	11, // 36: domain.entity.v1.SupplierDomainService.GetSupplierListPageData:input_type -> domain.entity.v1.GetSupplierListPageDataRequest
+	13, // 37: domain.entity.v1.SupplierDomainService.GetSupplierItemPageData:input_type -> domain.entity.v1.GetSupplierItemPageDataRequest
+	2,  // 38: domain.entity.v1.SupplierDomainService.CreateSupplier:output_type -> domain.entity.v1.CreateSupplierResponse
+	4,  // 39: domain.entity.v1.SupplierDomainService.ReadSupplier:output_type -> domain.entity.v1.ReadSupplierResponse
+	6,  // 40: domain.entity.v1.SupplierDomainService.UpdateSupplier:output_type -> domain.entity.v1.UpdateSupplierResponse
+	8,  // 41: domain.entity.v1.SupplierDomainService.DeleteSupplier:output_type -> domain.entity.v1.DeleteSupplierResponse
+	10, // 42: domain.entity.v1.SupplierDomainService.ListSuppliers:output_type -> domain.entity.v1.ListSuppliersResponse
+	12, // 43: domain.entity.v1.SupplierDomainService.GetSupplierListPageData:output_type -> domain.entity.v1.GetSupplierListPageDataResponse
+	14, // 44: domain.entity.v1.SupplierDomainService.GetSupplierItemPageData:output_type -> domain.entity.v1.GetSupplierItemPageDataResponse
+	38, // [38:45] is the sub-list for method output_type
+	31, // [31:38] is the sub-list for method input_type
+	31, // [31:31] is the sub-list for extension type_name
+	31, // [31:31] is the sub-list for extension extendee
+	0,  // [0:31] is the sub-list for field type_name
 }
 
 func init() { file_domain_entity_supplier_supplier_proto_init() }

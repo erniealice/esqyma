@@ -13,6 +13,7 @@ import "options/db.proto";
 
 import "domain/entity/user/user.proto";
 import "domain/entity/client_category/client_category.proto";
+import "domain/entity/payment_term/payment_term.proto";
 
 // FK References: revenue.client_id, expenditure.vendor_id,
 // event_client.client_id, subscription.client_id,
@@ -31,15 +32,15 @@ message Client {
   string internal_id = 9 [(options.v1.db).unique = true];
   optional string category_id = 10 [(options.v1.db).references = "client_category"];
   optional ClientCategory category = 11;
-  optional string company_name = 12;
-  optional string customer_type = 13;         // "retail", "wholesale", "vip"
-  optional string date_of_birth = 14;         // ISO date string "YYYY-MM-DD"
+  optional string name = 12;
   optional string street_address = 15;
   optional string city = 16;
   optional string province = 17;
   optional string postal_code = 18;
   optional string notes = 19;
   repeated ClientCategory categories = 20;
+  optional string payment_term_id = 21;
+  optional PaymentTerm payment_term = 22;
 }
 
 service ClientDomainService {

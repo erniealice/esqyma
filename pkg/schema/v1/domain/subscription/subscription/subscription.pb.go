@@ -50,6 +50,7 @@ type Subscription struct {
 	// License configuration
 	DefaultLicenseType *string `protobuf:"bytes,20,opt,name=default_license_type,json=defaultLicenseType,proto3,oneof" json:"default_license_type,omitempty"` // Default for created licenses
 	AutoAssign         *bool   `protobuf:"varint,21,opt,name=auto_assign,json=autoAssign,proto3,oneof" json:"auto_assign,omitempty"`                          // Auto-assign to purchaser
+	Code               *string `protobuf:"bytes,22,opt,name=code,proto3,oneof" json:"code,omitempty"`                                                          // 7-char alphanumeric engagement code (e.g. "A3K7PXR")
 	unknownFields      protoimpl.UnknownFields
 	sizeCache          protoimpl.SizeCache
 }
@@ -229,6 +230,13 @@ func (x *Subscription) GetAutoAssign() bool {
 		return *x.AutoAssign
 	}
 	return false
+}
+
+func (x *Subscription) GetCode() string {
+	if x != nil && x.Code != nil {
+		return *x.Code
+	}
+	return ""
 }
 
 type CreateSubscriptionRequest struct {

@@ -10,6 +10,7 @@ import (
 	common "github.com/erniealice/esqyma/pkg/schema/v1/domain/common"
 	client "github.com/erniealice/esqyma/pkg/schema/v1/domain/entity/client"
 	location "github.com/erniealice/esqyma/pkg/schema/v1/domain/entity/location"
+	payment_term "github.com/erniealice/esqyma/pkg/schema/v1/domain/entity/payment_term"
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
 	reflect "reflect"
@@ -25,32 +26,34 @@ const (
 )
 
 type Expenditure struct {
-	state                 protoimpl.MessageState `protogen:"open.v1"`
-	Id                    string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
-	DateCreated           *int64                 `protobuf:"varint,2,opt,name=date_created,json=dateCreated,proto3,oneof" json:"date_created,omitempty"`
-	DateCreatedString     *string                `protobuf:"bytes,3,opt,name=date_created_string,json=dateCreatedString,proto3,oneof" json:"date_created_string,omitempty"`
-	DateModified          *int64                 `protobuf:"varint,4,opt,name=date_modified,json=dateModified,proto3,oneof" json:"date_modified,omitempty"`
-	DateModifiedString    *string                `protobuf:"bytes,5,opt,name=date_modified_string,json=dateModifiedString,proto3,oneof" json:"date_modified_string,omitempty"`
-	Active                bool                   `protobuf:"varint,6,opt,name=active,proto3" json:"active,omitempty"`
-	Name                  string                 `protobuf:"bytes,7,opt,name=name,proto3" json:"name,omitempty"`
-	ExpenditureType       string                 `protobuf:"bytes,8,opt,name=expenditure_type,json=expenditureType,proto3" json:"expenditure_type,omitempty"` // "purchase", "expense", "refund", "payroll"
-	Vendor                *client.Client         `protobuf:"bytes,9,opt,name=vendor,proto3,oneof" json:"vendor,omitempty"`                                    // counterparty (vendor/supplier)
-	VendorId              string                 `protobuf:"bytes,10,opt,name=vendor_id,json=vendorId,proto3" json:"vendor_id,omitempty"`                     // FK to entity/client (vendors are clients you buy from)
-	ExpenditureDate       *int64                 `protobuf:"varint,11,opt,name=expenditure_date,json=expenditureDate,proto3,oneof" json:"expenditure_date,omitempty"`
-	ExpenditureDateString *string                `protobuf:"bytes,12,opt,name=expenditure_date_string,json=expenditureDateString,proto3,oneof" json:"expenditure_date_string,omitempty"`
-	TotalAmount           float64                `protobuf:"fixed64,13,opt,name=total_amount,json=totalAmount,proto3" json:"total_amount,omitempty"`
-	Currency              string                 `protobuf:"bytes,14,opt,name=currency,proto3" json:"currency,omitempty"`
-	Status                string                 `protobuf:"bytes,15,opt,name=status,proto3" json:"status,omitempty"`
-	ReferenceNumber       *string                `protobuf:"bytes,16,opt,name=reference_number,json=referenceNumber,proto3,oneof" json:"reference_number,omitempty"`
-	Notes                 *string                `protobuf:"bytes,17,opt,name=notes,proto3,oneof" json:"notes,omitempty"`
-	ExpenditureCategoryId *string                `protobuf:"bytes,18,opt,name=expenditure_category_id,json=expenditureCategoryId,proto3,oneof" json:"expenditure_category_id,omitempty"` // FK to expenditure_category
-	Location              *location.Location     `protobuf:"bytes,19,opt,name=location,proto3,oneof" json:"location,omitempty"`
-	LocationId            string                 `protobuf:"bytes,20,opt,name=location_id,json=locationId,proto3" json:"location_id,omitempty"`                        // FK to location
-	PaymentTerms          *string                `protobuf:"bytes,21,opt,name=payment_terms,json=paymentTerms,proto3,oneof" json:"payment_terms,omitempty"`            // "cash", "net_30", "net_60"
-	DueDate               *int64                 `protobuf:"varint,22,opt,name=due_date,json=dueDate,proto3,oneof" json:"due_date,omitempty"`                          // for AP tracking
-	ApprovedBy            *string                `protobuf:"bytes,23,opt,name=approved_by,json=approvedBy,proto3,oneof" json:"approved_by,omitempty"`                  // who authorized
-	PurchaseOrderId       *string                `protobuf:"bytes,24,opt,name=purchase_order_id,json=purchaseOrderId,proto3,oneof" json:"purchase_order_id,omitempty"` // FK to PurchaseOrder for 3-way match
-	SupplierId            *string                `protobuf:"bytes,25,opt,name=supplier_id,json=supplierId,proto3,oneof" json:"supplier_id,omitempty"`                  // FK to supplier (new — migrate from vendor_id over time)
+	state                 protoimpl.MessageState    `protogen:"open.v1"`
+	Id                    string                    `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
+	DateCreated           *int64                    `protobuf:"varint,2,opt,name=date_created,json=dateCreated,proto3,oneof" json:"date_created,omitempty"`
+	DateCreatedString     *string                   `protobuf:"bytes,3,opt,name=date_created_string,json=dateCreatedString,proto3,oneof" json:"date_created_string,omitempty"`
+	DateModified          *int64                    `protobuf:"varint,4,opt,name=date_modified,json=dateModified,proto3,oneof" json:"date_modified,omitempty"`
+	DateModifiedString    *string                   `protobuf:"bytes,5,opt,name=date_modified_string,json=dateModifiedString,proto3,oneof" json:"date_modified_string,omitempty"`
+	Active                bool                      `protobuf:"varint,6,opt,name=active,proto3" json:"active,omitempty"`
+	Name                  string                    `protobuf:"bytes,7,opt,name=name,proto3" json:"name,omitempty"`
+	ExpenditureType       string                    `protobuf:"bytes,8,opt,name=expenditure_type,json=expenditureType,proto3" json:"expenditure_type,omitempty"` // "purchase", "expense", "refund", "payroll"
+	Vendor                *client.Client            `protobuf:"bytes,9,opt,name=vendor,proto3,oneof" json:"vendor,omitempty"`                                    // counterparty (vendor/supplier)
+	VendorId              string                    `protobuf:"bytes,10,opt,name=vendor_id,json=vendorId,proto3" json:"vendor_id,omitempty"`                     // FK to entity/client (vendors are clients you buy from)
+	ExpenditureDate       *int64                    `protobuf:"varint,11,opt,name=expenditure_date,json=expenditureDate,proto3,oneof" json:"expenditure_date,omitempty"`
+	ExpenditureDateString *string                   `protobuf:"bytes,12,opt,name=expenditure_date_string,json=expenditureDateString,proto3,oneof" json:"expenditure_date_string,omitempty"`
+	TotalAmount           float64                   `protobuf:"fixed64,13,opt,name=total_amount,json=totalAmount,proto3" json:"total_amount,omitempty"`
+	Currency              string                    `protobuf:"bytes,14,opt,name=currency,proto3" json:"currency,omitempty"`
+	Status                string                    `protobuf:"bytes,15,opt,name=status,proto3" json:"status,omitempty"`
+	ReferenceNumber       *string                   `protobuf:"bytes,16,opt,name=reference_number,json=referenceNumber,proto3,oneof" json:"reference_number,omitempty"`
+	Notes                 *string                   `protobuf:"bytes,17,opt,name=notes,proto3,oneof" json:"notes,omitempty"`
+	ExpenditureCategoryId *string                   `protobuf:"bytes,18,opt,name=expenditure_category_id,json=expenditureCategoryId,proto3,oneof" json:"expenditure_category_id,omitempty"` // FK to expenditure_category
+	Location              *location.Location        `protobuf:"bytes,19,opt,name=location,proto3,oneof" json:"location,omitempty"`
+	LocationId            string                    `protobuf:"bytes,20,opt,name=location_id,json=locationId,proto3" json:"location_id,omitempty"`                        // FK to location
+	PaymentTerms          *string                   `protobuf:"bytes,21,opt,name=payment_terms,json=paymentTerms,proto3,oneof" json:"payment_terms,omitempty"`            // "cash", "net_30", "net_60"
+	DueDate               *int64                    `protobuf:"varint,22,opt,name=due_date,json=dueDate,proto3,oneof" json:"due_date,omitempty"`                          // for AP tracking
+	ApprovedBy            *string                   `protobuf:"bytes,23,opt,name=approved_by,json=approvedBy,proto3,oneof" json:"approved_by,omitempty"`                  // who authorized
+	PurchaseOrderId       *string                   `protobuf:"bytes,24,opt,name=purchase_order_id,json=purchaseOrderId,proto3,oneof" json:"purchase_order_id,omitempty"` // FK to PurchaseOrder for 3-way match
+	SupplierId            *string                   `protobuf:"bytes,25,opt,name=supplier_id,json=supplierId,proto3,oneof" json:"supplier_id,omitempty"`                  // FK to supplier (new — migrate from vendor_id over time)
+	PaymentTermId         *string                   `protobuf:"bytes,26,opt,name=payment_term_id,json=paymentTermId,proto3,oneof" json:"payment_term_id,omitempty"`
+	PaymentTerm           *payment_term.PaymentTerm `protobuf:"bytes,27,opt,name=payment_term,json=paymentTerm,proto3,oneof" json:"payment_term,omitempty"`
 	unknownFields         protoimpl.UnknownFields
 	sizeCache             protoimpl.SizeCache
 }
@@ -258,6 +261,20 @@ func (x *Expenditure) GetSupplierId() string {
 		return *x.SupplierId
 	}
 	return ""
+}
+
+func (x *Expenditure) GetPaymentTermId() string {
+	if x != nil && x.PaymentTermId != nil {
+		return *x.PaymentTermId
+	}
+	return ""
+}
+
+func (x *Expenditure) GetPaymentTerm() *payment_term.PaymentTerm {
+	if x != nil {
+		return x.PaymentTerm
+	}
+	return nil
 }
 
 type CreateExpenditureRequest struct {
@@ -1048,8 +1065,7 @@ var File_domain_expenditure_expenditure_expenditure_proto protoreflect.FileDescr
 
 const file_domain_expenditure_expenditure_expenditure_proto_rawDesc = "" +
 	"\n" +
-	"0domain/expenditure/expenditure/expenditure.proto\x12\x15domain.expenditure.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/search.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a!domain/entity/client/client.proto\x1a%domain/entity/location/location.proto\"\xa4\n" +
-	"\n" +
+	"0domain/expenditure/expenditure/expenditure.proto\x12\x15domain.expenditure.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/search.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a!domain/entity/client/client.proto\x1a%domain/entity/location/location.proto\x1a-domain/entity/payment_term/payment_term.proto\"\xbd\v\n" +
 	"\vExpenditure\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12&\n" +
 	"\fdate_created\x18\x02 \x01(\x03H\x00R\vdateCreated\x88\x01\x01\x123\n" +
@@ -1080,7 +1096,9 @@ const file_domain_expenditure_expenditure_expenditure_proto_rawDesc = "" +
 	"approvedBy\x88\x01\x01\x12/\n" +
 	"\x11purchase_order_id\x18\x18 \x01(\tH\x0eR\x0fpurchaseOrderId\x88\x01\x01\x12$\n" +
 	"\vsupplier_id\x18\x19 \x01(\tH\x0fR\n" +
-	"supplierId\x88\x01\x01B\x0f\n" +
+	"supplierId\x88\x01\x01\x12+\n" +
+	"\x0fpayment_term_id\x18\x1a \x01(\tH\x10R\rpaymentTermId\x88\x01\x01\x12E\n" +
+	"\fpayment_term\x18\x1b \x01(\v2\x1d.domain.entity.v1.PaymentTermH\x11R\vpaymentTerm\x88\x01\x01B\x0f\n" +
 	"\r_date_createdB\x16\n" +
 	"\x14_date_created_stringB\x10\n" +
 	"\x0e_date_modifiedB\x17\n" +
@@ -1096,7 +1114,9 @@ const file_domain_expenditure_expenditure_expenditure_proto_rawDesc = "" +
 	"\t_due_dateB\x0e\n" +
 	"\f_approved_byB\x14\n" +
 	"\x12_purchase_order_idB\x0e\n" +
-	"\f_supplier_id\"R\n" +
+	"\f_supplier_idB\x12\n" +
+	"\x10_payment_term_idB\x0f\n" +
+	"\r_payment_term\"R\n" +
 	"\x18CreateExpenditureRequest\x126\n" +
 	"\x04data\x18\x01 \x01(\v2\".domain.expenditure.v1.ExpenditureR\x04data\"\xab\x01\n" +
 	"\x19CreateExpenditureResponse\x126\n" +
@@ -1212,63 +1232,65 @@ var file_domain_expenditure_expenditure_expenditure_proto_goTypes = []any{
 	(*GetExpenditureItemPageDataResponse)(nil), // 14: domain.expenditure.v1.GetExpenditureItemPageDataResponse
 	(*client.Client)(nil),                      // 15: domain.entity.v1.Client
 	(*location.Location)(nil),                  // 16: domain.entity.v1.Location
-	(*common.Error)(nil),                       // 17: domain.common.v1.Error
-	(*common.SearchRequest)(nil),               // 18: domain.common.v1.SearchRequest
-	(*common.FilterRequest)(nil),               // 19: domain.common.v1.FilterRequest
-	(*common.SortRequest)(nil),                 // 20: domain.common.v1.SortRequest
-	(*common.PaginationRequest)(nil),           // 21: domain.common.v1.PaginationRequest
-	(*common.PaginationResponse)(nil),          // 22: domain.common.v1.PaginationResponse
-	(*common.SearchResult)(nil),                // 23: domain.common.v1.SearchResult
+	(*payment_term.PaymentTerm)(nil),           // 17: domain.entity.v1.PaymentTerm
+	(*common.Error)(nil),                       // 18: domain.common.v1.Error
+	(*common.SearchRequest)(nil),               // 19: domain.common.v1.SearchRequest
+	(*common.FilterRequest)(nil),               // 20: domain.common.v1.FilterRequest
+	(*common.SortRequest)(nil),                 // 21: domain.common.v1.SortRequest
+	(*common.PaginationRequest)(nil),           // 22: domain.common.v1.PaginationRequest
+	(*common.PaginationResponse)(nil),          // 23: domain.common.v1.PaginationResponse
+	(*common.SearchResult)(nil),                // 24: domain.common.v1.SearchResult
 }
 var file_domain_expenditure_expenditure_expenditure_proto_depIdxs = []int32{
 	15, // 0: domain.expenditure.v1.Expenditure.vendor:type_name -> domain.entity.v1.Client
 	16, // 1: domain.expenditure.v1.Expenditure.location:type_name -> domain.entity.v1.Location
-	0,  // 2: domain.expenditure.v1.CreateExpenditureRequest.data:type_name -> domain.expenditure.v1.Expenditure
-	0,  // 3: domain.expenditure.v1.CreateExpenditureResponse.data:type_name -> domain.expenditure.v1.Expenditure
-	17, // 4: domain.expenditure.v1.CreateExpenditureResponse.error:type_name -> domain.common.v1.Error
-	0,  // 5: domain.expenditure.v1.ReadExpenditureRequest.data:type_name -> domain.expenditure.v1.Expenditure
-	0,  // 6: domain.expenditure.v1.ReadExpenditureResponse.data:type_name -> domain.expenditure.v1.Expenditure
-	17, // 7: domain.expenditure.v1.ReadExpenditureResponse.error:type_name -> domain.common.v1.Error
-	0,  // 8: domain.expenditure.v1.UpdateExpenditureRequest.data:type_name -> domain.expenditure.v1.Expenditure
-	0,  // 9: domain.expenditure.v1.UpdateExpenditureResponse.data:type_name -> domain.expenditure.v1.Expenditure
-	17, // 10: domain.expenditure.v1.UpdateExpenditureResponse.error:type_name -> domain.common.v1.Error
-	0,  // 11: domain.expenditure.v1.DeleteExpenditureRequest.data:type_name -> domain.expenditure.v1.Expenditure
-	17, // 12: domain.expenditure.v1.DeleteExpenditureResponse.error:type_name -> domain.common.v1.Error
-	18, // 13: domain.expenditure.v1.ListExpendituresRequest.search:type_name -> domain.common.v1.SearchRequest
-	19, // 14: domain.expenditure.v1.ListExpendituresRequest.filters:type_name -> domain.common.v1.FilterRequest
-	20, // 15: domain.expenditure.v1.ListExpendituresRequest.sort:type_name -> domain.common.v1.SortRequest
-	21, // 16: domain.expenditure.v1.ListExpendituresRequest.pagination:type_name -> domain.common.v1.PaginationRequest
-	0,  // 17: domain.expenditure.v1.ListExpendituresResponse.data:type_name -> domain.expenditure.v1.Expenditure
-	17, // 18: domain.expenditure.v1.ListExpendituresResponse.error:type_name -> domain.common.v1.Error
-	21, // 19: domain.expenditure.v1.GetExpenditureListPageDataRequest.pagination:type_name -> domain.common.v1.PaginationRequest
-	19, // 20: domain.expenditure.v1.GetExpenditureListPageDataRequest.filters:type_name -> domain.common.v1.FilterRequest
-	20, // 21: domain.expenditure.v1.GetExpenditureListPageDataRequest.sort:type_name -> domain.common.v1.SortRequest
-	18, // 22: domain.expenditure.v1.GetExpenditureListPageDataRequest.search:type_name -> domain.common.v1.SearchRequest
-	0,  // 23: domain.expenditure.v1.GetExpenditureListPageDataResponse.expenditure_list:type_name -> domain.expenditure.v1.Expenditure
-	22, // 24: domain.expenditure.v1.GetExpenditureListPageDataResponse.pagination:type_name -> domain.common.v1.PaginationResponse
-	23, // 25: domain.expenditure.v1.GetExpenditureListPageDataResponse.search_results:type_name -> domain.common.v1.SearchResult
-	17, // 26: domain.expenditure.v1.GetExpenditureListPageDataResponse.error:type_name -> domain.common.v1.Error
-	0,  // 27: domain.expenditure.v1.GetExpenditureItemPageDataResponse.expenditure:type_name -> domain.expenditure.v1.Expenditure
-	17, // 28: domain.expenditure.v1.GetExpenditureItemPageDataResponse.error:type_name -> domain.common.v1.Error
-	1,  // 29: domain.expenditure.v1.ExpenditureDomainService.CreateExpenditure:input_type -> domain.expenditure.v1.CreateExpenditureRequest
-	3,  // 30: domain.expenditure.v1.ExpenditureDomainService.ReadExpenditure:input_type -> domain.expenditure.v1.ReadExpenditureRequest
-	5,  // 31: domain.expenditure.v1.ExpenditureDomainService.UpdateExpenditure:input_type -> domain.expenditure.v1.UpdateExpenditureRequest
-	7,  // 32: domain.expenditure.v1.ExpenditureDomainService.DeleteExpenditure:input_type -> domain.expenditure.v1.DeleteExpenditureRequest
-	9,  // 33: domain.expenditure.v1.ExpenditureDomainService.ListExpenditures:input_type -> domain.expenditure.v1.ListExpendituresRequest
-	11, // 34: domain.expenditure.v1.ExpenditureDomainService.GetExpenditureListPageData:input_type -> domain.expenditure.v1.GetExpenditureListPageDataRequest
-	13, // 35: domain.expenditure.v1.ExpenditureDomainService.GetExpenditureItemPageData:input_type -> domain.expenditure.v1.GetExpenditureItemPageDataRequest
-	2,  // 36: domain.expenditure.v1.ExpenditureDomainService.CreateExpenditure:output_type -> domain.expenditure.v1.CreateExpenditureResponse
-	4,  // 37: domain.expenditure.v1.ExpenditureDomainService.ReadExpenditure:output_type -> domain.expenditure.v1.ReadExpenditureResponse
-	6,  // 38: domain.expenditure.v1.ExpenditureDomainService.UpdateExpenditure:output_type -> domain.expenditure.v1.UpdateExpenditureResponse
-	8,  // 39: domain.expenditure.v1.ExpenditureDomainService.DeleteExpenditure:output_type -> domain.expenditure.v1.DeleteExpenditureResponse
-	10, // 40: domain.expenditure.v1.ExpenditureDomainService.ListExpenditures:output_type -> domain.expenditure.v1.ListExpendituresResponse
-	12, // 41: domain.expenditure.v1.ExpenditureDomainService.GetExpenditureListPageData:output_type -> domain.expenditure.v1.GetExpenditureListPageDataResponse
-	14, // 42: domain.expenditure.v1.ExpenditureDomainService.GetExpenditureItemPageData:output_type -> domain.expenditure.v1.GetExpenditureItemPageDataResponse
-	36, // [36:43] is the sub-list for method output_type
-	29, // [29:36] is the sub-list for method input_type
-	29, // [29:29] is the sub-list for extension type_name
-	29, // [29:29] is the sub-list for extension extendee
-	0,  // [0:29] is the sub-list for field type_name
+	17, // 2: domain.expenditure.v1.Expenditure.payment_term:type_name -> domain.entity.v1.PaymentTerm
+	0,  // 3: domain.expenditure.v1.CreateExpenditureRequest.data:type_name -> domain.expenditure.v1.Expenditure
+	0,  // 4: domain.expenditure.v1.CreateExpenditureResponse.data:type_name -> domain.expenditure.v1.Expenditure
+	18, // 5: domain.expenditure.v1.CreateExpenditureResponse.error:type_name -> domain.common.v1.Error
+	0,  // 6: domain.expenditure.v1.ReadExpenditureRequest.data:type_name -> domain.expenditure.v1.Expenditure
+	0,  // 7: domain.expenditure.v1.ReadExpenditureResponse.data:type_name -> domain.expenditure.v1.Expenditure
+	18, // 8: domain.expenditure.v1.ReadExpenditureResponse.error:type_name -> domain.common.v1.Error
+	0,  // 9: domain.expenditure.v1.UpdateExpenditureRequest.data:type_name -> domain.expenditure.v1.Expenditure
+	0,  // 10: domain.expenditure.v1.UpdateExpenditureResponse.data:type_name -> domain.expenditure.v1.Expenditure
+	18, // 11: domain.expenditure.v1.UpdateExpenditureResponse.error:type_name -> domain.common.v1.Error
+	0,  // 12: domain.expenditure.v1.DeleteExpenditureRequest.data:type_name -> domain.expenditure.v1.Expenditure
+	18, // 13: domain.expenditure.v1.DeleteExpenditureResponse.error:type_name -> domain.common.v1.Error
+	19, // 14: domain.expenditure.v1.ListExpendituresRequest.search:type_name -> domain.common.v1.SearchRequest
+	20, // 15: domain.expenditure.v1.ListExpendituresRequest.filters:type_name -> domain.common.v1.FilterRequest
+	21, // 16: domain.expenditure.v1.ListExpendituresRequest.sort:type_name -> domain.common.v1.SortRequest
+	22, // 17: domain.expenditure.v1.ListExpendituresRequest.pagination:type_name -> domain.common.v1.PaginationRequest
+	0,  // 18: domain.expenditure.v1.ListExpendituresResponse.data:type_name -> domain.expenditure.v1.Expenditure
+	18, // 19: domain.expenditure.v1.ListExpendituresResponse.error:type_name -> domain.common.v1.Error
+	22, // 20: domain.expenditure.v1.GetExpenditureListPageDataRequest.pagination:type_name -> domain.common.v1.PaginationRequest
+	20, // 21: domain.expenditure.v1.GetExpenditureListPageDataRequest.filters:type_name -> domain.common.v1.FilterRequest
+	21, // 22: domain.expenditure.v1.GetExpenditureListPageDataRequest.sort:type_name -> domain.common.v1.SortRequest
+	19, // 23: domain.expenditure.v1.GetExpenditureListPageDataRequest.search:type_name -> domain.common.v1.SearchRequest
+	0,  // 24: domain.expenditure.v1.GetExpenditureListPageDataResponse.expenditure_list:type_name -> domain.expenditure.v1.Expenditure
+	23, // 25: domain.expenditure.v1.GetExpenditureListPageDataResponse.pagination:type_name -> domain.common.v1.PaginationResponse
+	24, // 26: domain.expenditure.v1.GetExpenditureListPageDataResponse.search_results:type_name -> domain.common.v1.SearchResult
+	18, // 27: domain.expenditure.v1.GetExpenditureListPageDataResponse.error:type_name -> domain.common.v1.Error
+	0,  // 28: domain.expenditure.v1.GetExpenditureItemPageDataResponse.expenditure:type_name -> domain.expenditure.v1.Expenditure
+	18, // 29: domain.expenditure.v1.GetExpenditureItemPageDataResponse.error:type_name -> domain.common.v1.Error
+	1,  // 30: domain.expenditure.v1.ExpenditureDomainService.CreateExpenditure:input_type -> domain.expenditure.v1.CreateExpenditureRequest
+	3,  // 31: domain.expenditure.v1.ExpenditureDomainService.ReadExpenditure:input_type -> domain.expenditure.v1.ReadExpenditureRequest
+	5,  // 32: domain.expenditure.v1.ExpenditureDomainService.UpdateExpenditure:input_type -> domain.expenditure.v1.UpdateExpenditureRequest
+	7,  // 33: domain.expenditure.v1.ExpenditureDomainService.DeleteExpenditure:input_type -> domain.expenditure.v1.DeleteExpenditureRequest
+	9,  // 34: domain.expenditure.v1.ExpenditureDomainService.ListExpenditures:input_type -> domain.expenditure.v1.ListExpendituresRequest
+	11, // 35: domain.expenditure.v1.ExpenditureDomainService.GetExpenditureListPageData:input_type -> domain.expenditure.v1.GetExpenditureListPageDataRequest
+	13, // 36: domain.expenditure.v1.ExpenditureDomainService.GetExpenditureItemPageData:input_type -> domain.expenditure.v1.GetExpenditureItemPageDataRequest
+	2,  // 37: domain.expenditure.v1.ExpenditureDomainService.CreateExpenditure:output_type -> domain.expenditure.v1.CreateExpenditureResponse
+	4,  // 38: domain.expenditure.v1.ExpenditureDomainService.ReadExpenditure:output_type -> domain.expenditure.v1.ReadExpenditureResponse
+	6,  // 39: domain.expenditure.v1.ExpenditureDomainService.UpdateExpenditure:output_type -> domain.expenditure.v1.UpdateExpenditureResponse
+	8,  // 40: domain.expenditure.v1.ExpenditureDomainService.DeleteExpenditure:output_type -> domain.expenditure.v1.DeleteExpenditureResponse
+	10, // 41: domain.expenditure.v1.ExpenditureDomainService.ListExpenditures:output_type -> domain.expenditure.v1.ListExpendituresResponse
+	12, // 42: domain.expenditure.v1.ExpenditureDomainService.GetExpenditureListPageData:output_type -> domain.expenditure.v1.GetExpenditureListPageDataResponse
+	14, // 43: domain.expenditure.v1.ExpenditureDomainService.GetExpenditureItemPageData:output_type -> domain.expenditure.v1.GetExpenditureItemPageDataResponse
+	37, // [37:44] is the sub-list for method output_type
+	30, // [30:37] is the sub-list for method input_type
+	30, // [30:30] is the sub-list for extension type_name
+	30, // [30:30] is the sub-list for extension extendee
+	0,  // [0:30] is the sub-list for field type_name
 }
 
 func init() { file_domain_expenditure_expenditure_expenditure_proto_init() }

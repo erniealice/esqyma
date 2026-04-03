@@ -13,6 +13,7 @@ import "options/db.proto";
 
 import "domain/entity/user/user.proto";
 import "domain/entity/supplier_category/supplier_category.proto";
+import "domain/entity/payment_term/payment_term.proto";
 
 // FK References: expenditure.supplier_id, asset.supplier_id,
 // asset_maintenance.supplier_id, supplier_category.supplier_id,
@@ -49,6 +50,8 @@ message Supplier {
   optional string website = 27;
   optional string notes = 28;
   repeated SupplierCategory categories = 29;
+  optional string payment_term_id = 30 [(options.v1.db).references = "payment_term"];
+  optional PaymentTerm payment_term = 31;
 }
 
 service SupplierDomainService {

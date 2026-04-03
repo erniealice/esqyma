@@ -12,6 +12,7 @@ import "domain/common/sort.proto";
 
 import "domain/entity/client/client.proto";
 import "domain/entity/location/location.proto";
+import "domain/entity/payment_term/payment_term.proto";
 
 message Expenditure {
   string id = 1;
@@ -39,6 +40,8 @@ message Expenditure {
   optional string approved_by = 23;               // who authorized
   optional string purchase_order_id = 24;    // FK to PurchaseOrder for 3-way match
   optional string supplier_id = 25;          // FK to supplier (new — migrate from vendor_id over time)
+  optional string payment_term_id = 26;
+  optional domain.entity.v1.PaymentTerm payment_term = 27;
 }
 
 service ExpenditureDomainService {

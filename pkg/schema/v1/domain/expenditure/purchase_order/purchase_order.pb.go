@@ -9,6 +9,7 @@ package expenditurev1
 import (
 	common "github.com/erniealice/esqyma/pkg/schema/v1/domain/common"
 	location "github.com/erniealice/esqyma/pkg/schema/v1/domain/entity/location"
+	payment_term "github.com/erniealice/esqyma/pkg/schema/v1/domain/entity/payment_term"
 	supplier "github.com/erniealice/esqyma/pkg/schema/v1/domain/entity/supplier"
 	_ "github.com/erniealice/esqyma/pkg/schema/v1/options"
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
@@ -66,11 +67,13 @@ type PurchaseOrder struct {
 	Notes           *string `protobuf:"bytes,29,opt,name=notes,proto3,oneof" json:"notes,omitempty"`
 	ReferenceNumber *string `protobuf:"bytes,30,opt,name=reference_number,json=referenceNumber,proto3,oneof" json:"reference_number,omitempty"`
 	// Audit
-	Active             bool    `protobuf:"varint,31,opt,name=active,proto3" json:"active,omitempty"`
-	DateCreated        *int64  `protobuf:"varint,32,opt,name=date_created,json=dateCreated,proto3,oneof" json:"date_created,omitempty"`
-	DateCreatedString  *string `protobuf:"bytes,33,opt,name=date_created_string,json=dateCreatedString,proto3,oneof" json:"date_created_string,omitempty"`
-	DateModified       *int64  `protobuf:"varint,34,opt,name=date_modified,json=dateModified,proto3,oneof" json:"date_modified,omitempty"`
-	DateModifiedString *string `protobuf:"bytes,35,opt,name=date_modified_string,json=dateModifiedString,proto3,oneof" json:"date_modified_string,omitempty"`
+	Active             bool                      `protobuf:"varint,31,opt,name=active,proto3" json:"active,omitempty"`
+	DateCreated        *int64                    `protobuf:"varint,32,opt,name=date_created,json=dateCreated,proto3,oneof" json:"date_created,omitempty"`
+	DateCreatedString  *string                   `protobuf:"bytes,33,opt,name=date_created_string,json=dateCreatedString,proto3,oneof" json:"date_created_string,omitempty"`
+	DateModified       *int64                    `protobuf:"varint,34,opt,name=date_modified,json=dateModified,proto3,oneof" json:"date_modified,omitempty"`
+	DateModifiedString *string                   `protobuf:"bytes,35,opt,name=date_modified_string,json=dateModifiedString,proto3,oneof" json:"date_modified_string,omitempty"`
+	PaymentTermId      *string                   `protobuf:"bytes,36,opt,name=payment_term_id,json=paymentTermId,proto3,oneof" json:"payment_term_id,omitempty"`
+	PaymentTerm        *payment_term.PaymentTerm `protobuf:"bytes,37,opt,name=payment_term,json=paymentTerm,proto3,oneof" json:"payment_term,omitempty"`
 	unknownFields      protoimpl.UnknownFields
 	sizeCache          protoimpl.SizeCache
 }
@@ -348,6 +351,20 @@ func (x *PurchaseOrder) GetDateModifiedString() string {
 		return *x.DateModifiedString
 	}
 	return ""
+}
+
+func (x *PurchaseOrder) GetPaymentTermId() string {
+	if x != nil && x.PaymentTermId != nil {
+		return *x.PaymentTermId
+	}
+	return ""
+}
+
+func (x *PurchaseOrder) GetPaymentTerm() *payment_term.PaymentTerm {
+	if x != nil {
+		return x.PaymentTerm
+	}
+	return nil
 }
 
 type CreatePurchaseOrderRequest struct {
@@ -1162,7 +1179,7 @@ var File_domain_expenditure_purchase_order_purchase_order_proto protoreflect.Fil
 
 const file_domain_expenditure_purchase_order_purchase_order_proto_rawDesc = "" +
 	"\n" +
-	"6domain/expenditure/purchase_order/purchase_order.proto\x12\x15domain.expenditure.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/search.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a%domain/entity/supplier/supplier.proto\x1a%domain/entity/location/location.proto\x1a\x10options/db.proto\"\x8d\x10\n" +
+	"6domain/expenditure/purchase_order/purchase_order.proto\x12\x15domain.expenditure.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/search.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a%domain/entity/supplier/supplier.proto\x1a%domain/entity/location/location.proto\x1a-domain/entity/payment_term/payment_term.proto\x1a\x10options/db.proto\"\xba\x11\n" +
 	"\rPurchaseOrder\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12#\n" +
 	"\tpo_number\x18\x02 \x01(\tB\x06\x82\xb5\x18\x02\x10\x01R\bpoNumber\x12\x17\n" +
@@ -1210,7 +1227,10 @@ const file_domain_expenditure_purchase_order_purchase_order_proto_rawDesc = "" +
 	"\fdate_created\x18  \x01(\x03H\x12R\vdateCreated\x88\x01\x01\x123\n" +
 	"\x13date_created_string\x18! \x01(\tH\x13R\x11dateCreatedString\x88\x01\x01\x12(\n" +
 	"\rdate_modified\x18\" \x01(\x03H\x14R\fdateModified\x88\x01\x01\x125\n" +
-	"\x14date_modified_string\x18# \x01(\tH\x15R\x12dateModifiedString\x88\x01\x01:\x06\x8a\xb5\x18\x02\b\x01B\v\n" +
+	"\x14date_modified_string\x18# \x01(\tH\x15R\x12dateModifiedString\x88\x01\x01\x12?\n" +
+	"\x0fpayment_term_id\x18$ \x01(\tB\x12\x82\xb5\x18\x0e\n" +
+	"\fpayment_termH\x16R\rpaymentTermId\x88\x01\x01\x12E\n" +
+	"\fpayment_term\x18% \x01(\v2\x1d.domain.entity.v1.PaymentTermH\x17R\vpaymentTerm\x88\x01\x01:\x06\x8a\xb5\x18\x02\b\x01B\v\n" +
 	"\t_supplierB\v\n" +
 	"\t_locationB\x0e\n" +
 	"\f_location_idB\x14\n" +
@@ -1232,7 +1252,9 @@ const file_domain_expenditure_purchase_order_purchase_order_proto_rawDesc = "" +
 	"\r_date_createdB\x16\n" +
 	"\x14_date_created_stringB\x10\n" +
 	"\x0e_date_modifiedB\x17\n" +
-	"\x15_date_modified_string\"V\n" +
+	"\x15_date_modified_stringB\x12\n" +
+	"\x10_payment_term_idB\x0f\n" +
+	"\r_payment_term\"V\n" +
 	"\x1aCreatePurchaseOrderRequest\x128\n" +
 	"\x04data\x18\x01 \x01(\v2$.domain.expenditure.v1.PurchaseOrderR\x04data\"\xaf\x01\n" +
 	"\x1bCreatePurchaseOrderResponse\x128\n" +
@@ -1356,63 +1378,65 @@ var file_domain_expenditure_purchase_order_purchase_order_proto_goTypes = []any{
 	(*GetPurchaseOrderItemPageDataResponse)(nil), // 14: domain.expenditure.v1.GetPurchaseOrderItemPageDataResponse
 	(*supplier.Supplier)(nil),                    // 15: domain.entity.v1.Supplier
 	(*location.Location)(nil),                    // 16: domain.entity.v1.Location
-	(*common.Error)(nil),                         // 17: domain.common.v1.Error
-	(*common.SearchRequest)(nil),                 // 18: domain.common.v1.SearchRequest
-	(*common.FilterRequest)(nil),                 // 19: domain.common.v1.FilterRequest
-	(*common.SortRequest)(nil),                   // 20: domain.common.v1.SortRequest
-	(*common.PaginationRequest)(nil),             // 21: domain.common.v1.PaginationRequest
-	(*common.PaginationResponse)(nil),            // 22: domain.common.v1.PaginationResponse
-	(*common.SearchResult)(nil),                  // 23: domain.common.v1.SearchResult
+	(*payment_term.PaymentTerm)(nil),             // 17: domain.entity.v1.PaymentTerm
+	(*common.Error)(nil),                         // 18: domain.common.v1.Error
+	(*common.SearchRequest)(nil),                 // 19: domain.common.v1.SearchRequest
+	(*common.FilterRequest)(nil),                 // 20: domain.common.v1.FilterRequest
+	(*common.SortRequest)(nil),                   // 21: domain.common.v1.SortRequest
+	(*common.PaginationRequest)(nil),             // 22: domain.common.v1.PaginationRequest
+	(*common.PaginationResponse)(nil),            // 23: domain.common.v1.PaginationResponse
+	(*common.SearchResult)(nil),                  // 24: domain.common.v1.SearchResult
 }
 var file_domain_expenditure_purchase_order_purchase_order_proto_depIdxs = []int32{
 	15, // 0: domain.expenditure.v1.PurchaseOrder.supplier:type_name -> domain.entity.v1.Supplier
 	16, // 1: domain.expenditure.v1.PurchaseOrder.location:type_name -> domain.entity.v1.Location
-	0,  // 2: domain.expenditure.v1.CreatePurchaseOrderRequest.data:type_name -> domain.expenditure.v1.PurchaseOrder
-	0,  // 3: domain.expenditure.v1.CreatePurchaseOrderResponse.data:type_name -> domain.expenditure.v1.PurchaseOrder
-	17, // 4: domain.expenditure.v1.CreatePurchaseOrderResponse.error:type_name -> domain.common.v1.Error
-	0,  // 5: domain.expenditure.v1.ReadPurchaseOrderRequest.data:type_name -> domain.expenditure.v1.PurchaseOrder
-	0,  // 6: domain.expenditure.v1.ReadPurchaseOrderResponse.data:type_name -> domain.expenditure.v1.PurchaseOrder
-	17, // 7: domain.expenditure.v1.ReadPurchaseOrderResponse.error:type_name -> domain.common.v1.Error
-	0,  // 8: domain.expenditure.v1.UpdatePurchaseOrderRequest.data:type_name -> domain.expenditure.v1.PurchaseOrder
-	0,  // 9: domain.expenditure.v1.UpdatePurchaseOrderResponse.data:type_name -> domain.expenditure.v1.PurchaseOrder
-	17, // 10: domain.expenditure.v1.UpdatePurchaseOrderResponse.error:type_name -> domain.common.v1.Error
-	0,  // 11: domain.expenditure.v1.DeletePurchaseOrderRequest.data:type_name -> domain.expenditure.v1.PurchaseOrder
-	17, // 12: domain.expenditure.v1.DeletePurchaseOrderResponse.error:type_name -> domain.common.v1.Error
-	18, // 13: domain.expenditure.v1.ListPurchaseOrdersRequest.search:type_name -> domain.common.v1.SearchRequest
-	19, // 14: domain.expenditure.v1.ListPurchaseOrdersRequest.filters:type_name -> domain.common.v1.FilterRequest
-	20, // 15: domain.expenditure.v1.ListPurchaseOrdersRequest.sort:type_name -> domain.common.v1.SortRequest
-	21, // 16: domain.expenditure.v1.ListPurchaseOrdersRequest.pagination:type_name -> domain.common.v1.PaginationRequest
-	0,  // 17: domain.expenditure.v1.ListPurchaseOrdersResponse.data:type_name -> domain.expenditure.v1.PurchaseOrder
-	17, // 18: domain.expenditure.v1.ListPurchaseOrdersResponse.error:type_name -> domain.common.v1.Error
-	21, // 19: domain.expenditure.v1.GetPurchaseOrderListPageDataRequest.pagination:type_name -> domain.common.v1.PaginationRequest
-	19, // 20: domain.expenditure.v1.GetPurchaseOrderListPageDataRequest.filters:type_name -> domain.common.v1.FilterRequest
-	20, // 21: domain.expenditure.v1.GetPurchaseOrderListPageDataRequest.sort:type_name -> domain.common.v1.SortRequest
-	18, // 22: domain.expenditure.v1.GetPurchaseOrderListPageDataRequest.search:type_name -> domain.common.v1.SearchRequest
-	0,  // 23: domain.expenditure.v1.GetPurchaseOrderListPageDataResponse.purchase_order_list:type_name -> domain.expenditure.v1.PurchaseOrder
-	22, // 24: domain.expenditure.v1.GetPurchaseOrderListPageDataResponse.pagination:type_name -> domain.common.v1.PaginationResponse
-	23, // 25: domain.expenditure.v1.GetPurchaseOrderListPageDataResponse.search_results:type_name -> domain.common.v1.SearchResult
-	17, // 26: domain.expenditure.v1.GetPurchaseOrderListPageDataResponse.error:type_name -> domain.common.v1.Error
-	0,  // 27: domain.expenditure.v1.GetPurchaseOrderItemPageDataResponse.purchase_order:type_name -> domain.expenditure.v1.PurchaseOrder
-	17, // 28: domain.expenditure.v1.GetPurchaseOrderItemPageDataResponse.error:type_name -> domain.common.v1.Error
-	1,  // 29: domain.expenditure.v1.PurchaseOrderDomainService.CreatePurchaseOrder:input_type -> domain.expenditure.v1.CreatePurchaseOrderRequest
-	3,  // 30: domain.expenditure.v1.PurchaseOrderDomainService.ReadPurchaseOrder:input_type -> domain.expenditure.v1.ReadPurchaseOrderRequest
-	5,  // 31: domain.expenditure.v1.PurchaseOrderDomainService.UpdatePurchaseOrder:input_type -> domain.expenditure.v1.UpdatePurchaseOrderRequest
-	7,  // 32: domain.expenditure.v1.PurchaseOrderDomainService.DeletePurchaseOrder:input_type -> domain.expenditure.v1.DeletePurchaseOrderRequest
-	9,  // 33: domain.expenditure.v1.PurchaseOrderDomainService.ListPurchaseOrders:input_type -> domain.expenditure.v1.ListPurchaseOrdersRequest
-	11, // 34: domain.expenditure.v1.PurchaseOrderDomainService.GetPurchaseOrderListPageData:input_type -> domain.expenditure.v1.GetPurchaseOrderListPageDataRequest
-	13, // 35: domain.expenditure.v1.PurchaseOrderDomainService.GetPurchaseOrderItemPageData:input_type -> domain.expenditure.v1.GetPurchaseOrderItemPageDataRequest
-	2,  // 36: domain.expenditure.v1.PurchaseOrderDomainService.CreatePurchaseOrder:output_type -> domain.expenditure.v1.CreatePurchaseOrderResponse
-	4,  // 37: domain.expenditure.v1.PurchaseOrderDomainService.ReadPurchaseOrder:output_type -> domain.expenditure.v1.ReadPurchaseOrderResponse
-	6,  // 38: domain.expenditure.v1.PurchaseOrderDomainService.UpdatePurchaseOrder:output_type -> domain.expenditure.v1.UpdatePurchaseOrderResponse
-	8,  // 39: domain.expenditure.v1.PurchaseOrderDomainService.DeletePurchaseOrder:output_type -> domain.expenditure.v1.DeletePurchaseOrderResponse
-	10, // 40: domain.expenditure.v1.PurchaseOrderDomainService.ListPurchaseOrders:output_type -> domain.expenditure.v1.ListPurchaseOrdersResponse
-	12, // 41: domain.expenditure.v1.PurchaseOrderDomainService.GetPurchaseOrderListPageData:output_type -> domain.expenditure.v1.GetPurchaseOrderListPageDataResponse
-	14, // 42: domain.expenditure.v1.PurchaseOrderDomainService.GetPurchaseOrderItemPageData:output_type -> domain.expenditure.v1.GetPurchaseOrderItemPageDataResponse
-	36, // [36:43] is the sub-list for method output_type
-	29, // [29:36] is the sub-list for method input_type
-	29, // [29:29] is the sub-list for extension type_name
-	29, // [29:29] is the sub-list for extension extendee
-	0,  // [0:29] is the sub-list for field type_name
+	17, // 2: domain.expenditure.v1.PurchaseOrder.payment_term:type_name -> domain.entity.v1.PaymentTerm
+	0,  // 3: domain.expenditure.v1.CreatePurchaseOrderRequest.data:type_name -> domain.expenditure.v1.PurchaseOrder
+	0,  // 4: domain.expenditure.v1.CreatePurchaseOrderResponse.data:type_name -> domain.expenditure.v1.PurchaseOrder
+	18, // 5: domain.expenditure.v1.CreatePurchaseOrderResponse.error:type_name -> domain.common.v1.Error
+	0,  // 6: domain.expenditure.v1.ReadPurchaseOrderRequest.data:type_name -> domain.expenditure.v1.PurchaseOrder
+	0,  // 7: domain.expenditure.v1.ReadPurchaseOrderResponse.data:type_name -> domain.expenditure.v1.PurchaseOrder
+	18, // 8: domain.expenditure.v1.ReadPurchaseOrderResponse.error:type_name -> domain.common.v1.Error
+	0,  // 9: domain.expenditure.v1.UpdatePurchaseOrderRequest.data:type_name -> domain.expenditure.v1.PurchaseOrder
+	0,  // 10: domain.expenditure.v1.UpdatePurchaseOrderResponse.data:type_name -> domain.expenditure.v1.PurchaseOrder
+	18, // 11: domain.expenditure.v1.UpdatePurchaseOrderResponse.error:type_name -> domain.common.v1.Error
+	0,  // 12: domain.expenditure.v1.DeletePurchaseOrderRequest.data:type_name -> domain.expenditure.v1.PurchaseOrder
+	18, // 13: domain.expenditure.v1.DeletePurchaseOrderResponse.error:type_name -> domain.common.v1.Error
+	19, // 14: domain.expenditure.v1.ListPurchaseOrdersRequest.search:type_name -> domain.common.v1.SearchRequest
+	20, // 15: domain.expenditure.v1.ListPurchaseOrdersRequest.filters:type_name -> domain.common.v1.FilterRequest
+	21, // 16: domain.expenditure.v1.ListPurchaseOrdersRequest.sort:type_name -> domain.common.v1.SortRequest
+	22, // 17: domain.expenditure.v1.ListPurchaseOrdersRequest.pagination:type_name -> domain.common.v1.PaginationRequest
+	0,  // 18: domain.expenditure.v1.ListPurchaseOrdersResponse.data:type_name -> domain.expenditure.v1.PurchaseOrder
+	18, // 19: domain.expenditure.v1.ListPurchaseOrdersResponse.error:type_name -> domain.common.v1.Error
+	22, // 20: domain.expenditure.v1.GetPurchaseOrderListPageDataRequest.pagination:type_name -> domain.common.v1.PaginationRequest
+	20, // 21: domain.expenditure.v1.GetPurchaseOrderListPageDataRequest.filters:type_name -> domain.common.v1.FilterRequest
+	21, // 22: domain.expenditure.v1.GetPurchaseOrderListPageDataRequest.sort:type_name -> domain.common.v1.SortRequest
+	19, // 23: domain.expenditure.v1.GetPurchaseOrderListPageDataRequest.search:type_name -> domain.common.v1.SearchRequest
+	0,  // 24: domain.expenditure.v1.GetPurchaseOrderListPageDataResponse.purchase_order_list:type_name -> domain.expenditure.v1.PurchaseOrder
+	23, // 25: domain.expenditure.v1.GetPurchaseOrderListPageDataResponse.pagination:type_name -> domain.common.v1.PaginationResponse
+	24, // 26: domain.expenditure.v1.GetPurchaseOrderListPageDataResponse.search_results:type_name -> domain.common.v1.SearchResult
+	18, // 27: domain.expenditure.v1.GetPurchaseOrderListPageDataResponse.error:type_name -> domain.common.v1.Error
+	0,  // 28: domain.expenditure.v1.GetPurchaseOrderItemPageDataResponse.purchase_order:type_name -> domain.expenditure.v1.PurchaseOrder
+	18, // 29: domain.expenditure.v1.GetPurchaseOrderItemPageDataResponse.error:type_name -> domain.common.v1.Error
+	1,  // 30: domain.expenditure.v1.PurchaseOrderDomainService.CreatePurchaseOrder:input_type -> domain.expenditure.v1.CreatePurchaseOrderRequest
+	3,  // 31: domain.expenditure.v1.PurchaseOrderDomainService.ReadPurchaseOrder:input_type -> domain.expenditure.v1.ReadPurchaseOrderRequest
+	5,  // 32: domain.expenditure.v1.PurchaseOrderDomainService.UpdatePurchaseOrder:input_type -> domain.expenditure.v1.UpdatePurchaseOrderRequest
+	7,  // 33: domain.expenditure.v1.PurchaseOrderDomainService.DeletePurchaseOrder:input_type -> domain.expenditure.v1.DeletePurchaseOrderRequest
+	9,  // 34: domain.expenditure.v1.PurchaseOrderDomainService.ListPurchaseOrders:input_type -> domain.expenditure.v1.ListPurchaseOrdersRequest
+	11, // 35: domain.expenditure.v1.PurchaseOrderDomainService.GetPurchaseOrderListPageData:input_type -> domain.expenditure.v1.GetPurchaseOrderListPageDataRequest
+	13, // 36: domain.expenditure.v1.PurchaseOrderDomainService.GetPurchaseOrderItemPageData:input_type -> domain.expenditure.v1.GetPurchaseOrderItemPageDataRequest
+	2,  // 37: domain.expenditure.v1.PurchaseOrderDomainService.CreatePurchaseOrder:output_type -> domain.expenditure.v1.CreatePurchaseOrderResponse
+	4,  // 38: domain.expenditure.v1.PurchaseOrderDomainService.ReadPurchaseOrder:output_type -> domain.expenditure.v1.ReadPurchaseOrderResponse
+	6,  // 39: domain.expenditure.v1.PurchaseOrderDomainService.UpdatePurchaseOrder:output_type -> domain.expenditure.v1.UpdatePurchaseOrderResponse
+	8,  // 40: domain.expenditure.v1.PurchaseOrderDomainService.DeletePurchaseOrder:output_type -> domain.expenditure.v1.DeletePurchaseOrderResponse
+	10, // 41: domain.expenditure.v1.PurchaseOrderDomainService.ListPurchaseOrders:output_type -> domain.expenditure.v1.ListPurchaseOrdersResponse
+	12, // 42: domain.expenditure.v1.PurchaseOrderDomainService.GetPurchaseOrderListPageData:output_type -> domain.expenditure.v1.GetPurchaseOrderListPageDataResponse
+	14, // 43: domain.expenditure.v1.PurchaseOrderDomainService.GetPurchaseOrderItemPageData:output_type -> domain.expenditure.v1.GetPurchaseOrderItemPageDataResponse
+	37, // [37:44] is the sub-list for method output_type
+	30, // [30:37] is the sub-list for method input_type
+	30, // [30:30] is the sub-list for extension type_name
+	30, // [30:30] is the sub-list for extension extendee
+	0,  // [0:30] is the sub-list for field type_name
 }
 
 func init() { file_domain_expenditure_purchase_order_purchase_order_proto_init() }

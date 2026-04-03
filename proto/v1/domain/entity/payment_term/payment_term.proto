@@ -1,0 +1,120 @@
+syntax = "proto3";
+
+package domain.entity.v1;
+
+option go_package = "github.com/erniealice/esqyma/golang/v1/domain/entity/payment_term";
+
+import "domain/common/error.proto";
+import "domain/common/search.proto";
+import "domain/common/filter.proto";
+import "domain/common/sort.proto";
+import "domain/common/pagination.proto";
+import "options/db.proto";
+
+message PaymentTerm {
+  option (options.v1.table).table = true;
+
+  string id = 1;
+  optional int64 date_created = 2;
+  optional string date_created_string = 3;
+  optional int64 date_modified = 4;
+  optional string date_modified_string = 5;
+  bool active = 6 [(options.v1.db).default = "true"];
+  string name = 7;                              // Display: "Net 30", "2/10 Net 30", "COD"
+  string code = 8 [(options.v1.db).unique = true]; // Machine key: "net_30", "2_10_net_30", "cod"
+  string type = 9;                              // "due_on_receipt", "net", "cod"
+  int32 net_days = 10;                          // Days until due (0 = immediate)
+  optional int32 discount_days = 11;            // Early payment window
+  optional int32 discount_percent_bps = 12;     // Basis points (200 = 2.00%)
+  string entity_scope = 13;                     // "both", "supplier", "client"
+  bool is_default = 14;                         // Default for entity_scope
+  optional string description = 15;
+  optional int32 display_order = 16;
+}
+
+service PaymentTermDomainService {
+  rpc CreatePaymentTerm(CreatePaymentTermRequest) returns (CreatePaymentTermResponse);
+  rpc ReadPaymentTerm(ReadPaymentTermRequest) returns (ReadPaymentTermResponse);
+  rpc UpdatePaymentTerm(UpdatePaymentTermRequest) returns (UpdatePaymentTermResponse);
+  rpc DeletePaymentTerm(DeletePaymentTermRequest) returns (DeletePaymentTermResponse);
+  rpc ListPaymentTerms(ListPaymentTermsRequest) returns (ListPaymentTermsResponse);
+  rpc GetPaymentTermListPageData(GetPaymentTermListPageDataRequest) returns (GetPaymentTermListPageDataResponse);
+  rpc GetPaymentTermItemPageData(GetPaymentTermItemPageDataRequest) returns (GetPaymentTermItemPageDataResponse);
+}
+
+message CreatePaymentTermRequest {
+  PaymentTerm data = 1;
+}
+
+message CreatePaymentTermResponse {
+  repeated PaymentTerm data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message ReadPaymentTermRequest {
+  PaymentTerm data = 1;
+}
+
+message ReadPaymentTermResponse {
+  repeated PaymentTerm data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message UpdatePaymentTermRequest {
+  PaymentTerm data = 1;
+}
+
+message UpdatePaymentTermResponse {
+  repeated PaymentTerm data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message DeletePaymentTermRequest {
+  PaymentTerm data = 1;
+}
+
+message DeletePaymentTermResponse {
+  bool success = 1;
+  optional domain.common.v1.Error error = 2;
+}
+
+message ListPaymentTermsRequest {
+  optional domain.common.v1.SearchRequest search = 1;
+  optional domain.common.v1.FilterRequest filters = 2;
+  optional domain.common.v1.SortRequest sort = 3;
+  optional domain.common.v1.PaginationRequest pagination = 4;
+}
+
+message ListPaymentTermsResponse {
+  repeated PaymentTerm data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message GetPaymentTermListPageDataRequest {
+  optional domain.common.v1.SearchRequest search = 1;
+  optional domain.common.v1.FilterRequest filters = 2;
+  optional domain.common.v1.SortRequest sort = 3;
+  optional domain.common.v1.PaginationRequest pagination = 4;
+}
+
+message GetPaymentTermListPageDataResponse {
+  repeated PaymentTerm payment_term_list = 1;
+  optional domain.common.v1.PaginationResponse pagination = 2;
+  repeated domain.common.v1.SearchResult search_results = 3;
+  bool success = 4;
+  optional domain.common.v1.Error error = 5;
+}
+
+message GetPaymentTermItemPageDataRequest {
+  string payment_term_id = 1;
+}
+
+message GetPaymentTermItemPageDataResponse {
+  optional PaymentTerm payment_term = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
