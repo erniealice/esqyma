@@ -26,6 +26,7 @@ const (
 	PriceListDomainService_ListPriceLists_FullMethodName           = "/domain.product.v1.PriceListDomainService/ListPriceLists"
 	PriceListDomainService_GetPriceListListPageData_FullMethodName = "/domain.product.v1.PriceListDomainService/GetPriceListListPageData"
 	PriceListDomainService_GetPriceListItemPageData_FullMethodName = "/domain.product.v1.PriceListDomainService/GetPriceListItemPageData"
+	PriceListDomainService_FindApplicablePriceList_FullMethodName  = "/domain.product.v1.PriceListDomainService/FindApplicablePriceList"
 )
 
 // PriceListDomainServiceClient is the client API for PriceListDomainService service.
@@ -39,6 +40,7 @@ type PriceListDomainServiceClient interface {
 	ListPriceLists(ctx context.Context, in *ListPriceListsRequest, opts ...grpc.CallOption) (*ListPriceListsResponse, error)
 	GetPriceListListPageData(ctx context.Context, in *GetPriceListListPageDataRequest, opts ...grpc.CallOption) (*GetPriceListListPageDataResponse, error)
 	GetPriceListItemPageData(ctx context.Context, in *GetPriceListItemPageDataRequest, opts ...grpc.CallOption) (*GetPriceListItemPageDataResponse, error)
+	FindApplicablePriceList(ctx context.Context, in *FindApplicablePriceListRequest, opts ...grpc.CallOption) (*FindApplicablePriceListResponse, error)
 }
 
 type priceListDomainServiceClient struct {
@@ -119,6 +121,16 @@ func (c *priceListDomainServiceClient) GetPriceListItemPageData(ctx context.Cont
 	return out, nil
 }
 
+func (c *priceListDomainServiceClient) FindApplicablePriceList(ctx context.Context, in *FindApplicablePriceListRequest, opts ...grpc.CallOption) (*FindApplicablePriceListResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(FindApplicablePriceListResponse)
+	err := c.cc.Invoke(ctx, PriceListDomainService_FindApplicablePriceList_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // PriceListDomainServiceServer is the server API for PriceListDomainService service.
 // All implementations must embed UnimplementedPriceListDomainServiceServer
 // for forward compatibility.
@@ -130,6 +142,7 @@ type PriceListDomainServiceServer interface {
 	ListPriceLists(context.Context, *ListPriceListsRequest) (*ListPriceListsResponse, error)
 	GetPriceListListPageData(context.Context, *GetPriceListListPageDataRequest) (*GetPriceListListPageDataResponse, error)
 	GetPriceListItemPageData(context.Context, *GetPriceListItemPageDataRequest) (*GetPriceListItemPageDataResponse, error)
+	FindApplicablePriceList(context.Context, *FindApplicablePriceListRequest) (*FindApplicablePriceListResponse, error)
 	mustEmbedUnimplementedPriceListDomainServiceServer()
 }
 
@@ -160,6 +173,9 @@ func (UnimplementedPriceListDomainServiceServer) GetPriceListListPageData(contex
 }
 func (UnimplementedPriceListDomainServiceServer) GetPriceListItemPageData(context.Context, *GetPriceListItemPageDataRequest) (*GetPriceListItemPageDataResponse, error) {
 	return nil, status.Error(codes.Unimplemented, "method GetPriceListItemPageData not implemented")
+}
+func (UnimplementedPriceListDomainServiceServer) FindApplicablePriceList(context.Context, *FindApplicablePriceListRequest) (*FindApplicablePriceListResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method FindApplicablePriceList not implemented")
 }
 func (UnimplementedPriceListDomainServiceServer) mustEmbedUnimplementedPriceListDomainServiceServer() {
 }
@@ -309,6 +325,24 @@ func _PriceListDomainService_GetPriceListItemPageData_Handler(srv interface{}, c
 	return interceptor(ctx, in, info, handler)
 }
 
+func _PriceListDomainService_FindApplicablePriceList_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(FindApplicablePriceListRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(PriceListDomainServiceServer).FindApplicablePriceList(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: PriceListDomainService_FindApplicablePriceList_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(PriceListDomainServiceServer).FindApplicablePriceList(ctx, req.(*FindApplicablePriceListRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // PriceListDomainService_ServiceDesc is the grpc.ServiceDesc for PriceListDomainService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -343,6 +377,10 @@ var PriceListDomainService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "GetPriceListItemPageData",
 			Handler:    _PriceListDomainService_GetPriceListItemPageData_Handler,
+		},
+		{
+			MethodName: "FindApplicablePriceList",
+			Handler:    _PriceListDomainService_FindApplicablePriceList_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

@@ -16,6 +16,8 @@ import "domain/product/product/product.proto";
 import "options/db.proto";
 
 message RevenueLineItem {
+  option (options.v1.table).table = true;
+
   string id = 1;
   optional int64 date_created = 2;
   optional string date_created_string = 3;
@@ -40,6 +42,7 @@ message RevenueLineItem {
   optional string location_id = 23;      // FK to location (where stock was pulled)
   optional int64 cost_price = 24; // centavos       // purchase cost for margin tracking
   optional string product_price_plan_id = 25 [(options.v1.db).references = "product_price_plan", (options.v1.db).index = true];
+  optional string price_product_id = 26 [(options.v1.db).references = "price_product", (options.v1.db).index = true]; // FK to price_product — tracks which price_product was used for one-time revenue line items
 }
 
 service RevenueLineItemDomainService {

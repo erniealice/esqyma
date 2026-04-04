@@ -11,6 +11,7 @@ import (
 	client "github.com/erniealice/esqyma/pkg/schema/v1/domain/entity/client"
 	location "github.com/erniealice/esqyma/pkg/schema/v1/domain/entity/location"
 	payment_term "github.com/erniealice/esqyma/pkg/schema/v1/domain/entity/payment_term"
+	_ "github.com/erniealice/esqyma/pkg/schema/v1/options"
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
 	reflect "reflect"
@@ -1065,7 +1066,7 @@ var File_domain_expenditure_expenditure_expenditure_proto protoreflect.FileDescr
 
 const file_domain_expenditure_expenditure_expenditure_proto_rawDesc = "" +
 	"\n" +
-	"0domain/expenditure/expenditure/expenditure.proto\x12\x15domain.expenditure.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/search.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a!domain/entity/client/client.proto\x1a%domain/entity/location/location.proto\x1a-domain/entity/payment_term/payment_term.proto\"\xbd\v\n" +
+	"0domain/expenditure/expenditure/expenditure.proto\x12\x15domain.expenditure.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/search.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a!domain/entity/client/client.proto\x1a%domain/entity/location/location.proto\x1a-domain/entity/payment_term/payment_term.proto\x1a\x10options/db.proto\"\xe3\v\n" +
 	"\vExpenditure\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12&\n" +
 	"\fdate_created\x18\x02 \x01(\x03H\x00R\vdateCreated\x88\x01\x01\x123\n" +
@@ -1093,9 +1094,12 @@ const file_domain_expenditure_expenditure_expenditure_proto_rawDesc = "" +
 	"\rpayment_terms\x18\x15 \x01(\tH\vR\fpaymentTerms\x88\x01\x01\x12\x1e\n" +
 	"\bdue_date\x18\x16 \x01(\tH\fR\adueDate\x88\x01\x01\x12$\n" +
 	"\vapproved_by\x18\x17 \x01(\tH\rR\n" +
-	"approvedBy\x88\x01\x01\x12/\n" +
-	"\x11purchase_order_id\x18\x18 \x01(\tH\x0eR\x0fpurchaseOrderId\x88\x01\x01\x12$\n" +
-	"\vsupplier_id\x18\x19 \x01(\tH\x0fR\n" +
+	"approvedBy\x88\x01\x01\x12E\n" +
+	"\x11purchase_order_id\x18\x18 \x01(\tB\x14\x82\xb5\x18\x10\n" +
+	"\x0epurchase_orderH\x0eR\x0fpurchaseOrderId\x88\x01\x01\x124\n" +
+	"\vsupplier_id\x18\x19 \x01(\tB\x0e\x82\xb5\x18\n" +
+	"\n" +
+	"\bsupplierH\x0fR\n" +
 	"supplierId\x88\x01\x01\x12+\n" +
 	"\x0fpayment_term_id\x18\x1a \x01(\tH\x10R\rpaymentTermId\x88\x01\x01\x12E\n" +
 	"\fpayment_term\x18\x1b \x01(\v2\x1d.domain.entity.v1.PaymentTermH\x11R\vpaymentTerm\x88\x01\x01B\x0f\n" +

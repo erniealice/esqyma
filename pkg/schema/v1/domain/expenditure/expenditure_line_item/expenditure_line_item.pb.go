@@ -10,6 +10,7 @@ import (
 	common "github.com/erniealice/esqyma/pkg/schema/v1/domain/common"
 	expenditure "github.com/erniealice/esqyma/pkg/schema/v1/domain/expenditure/expenditure"
 	product "github.com/erniealice/esqyma/pkg/schema/v1/domain/product/product"
+	_ "github.com/erniealice/esqyma/pkg/schema/v1/options"
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
 	reflect "reflect"
@@ -1008,7 +1009,7 @@ var File_domain_expenditure_expenditure_line_item_expenditure_line_item_proto pr
 
 const file_domain_expenditure_expenditure_line_item_expenditure_line_item_proto_rawDesc = "" +
 	"\n" +
-	"Ddomain/expenditure/expenditure_line_item/expenditure_line_item.proto\x12\x15domain.expenditure.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/search.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a0domain/expenditure/expenditure/expenditure.proto\x1a$domain/product/product/product.proto\"\xf4\a\n" +
+	"Ddomain/expenditure/expenditure_line_item/expenditure_line_item.proto\x12\x15domain.expenditure.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/search.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a0domain/expenditure/expenditure/expenditure.proto\x1a$domain/product/product/product.proto\x1a\x10options/db.proto\"\xba\b\n" +
 	"\x13ExpenditureLineItem\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12&\n" +
 	"\fdate_created\x18\x02 \x01(\x03H\x00R\vdateCreated\x88\x01\x01\x123\n" +
@@ -1029,11 +1030,15 @@ const file_domain_expenditure_expenditure_line_item_expenditure_line_item_proto_
 	"\vtotal_price\x18\x0e \x01(\x03R\n" +
 	"totalPrice\x12\x19\n" +
 	"\x05notes\x18\x10 \x01(\tH\aR\x05notes\x88\x01\x01\x12$\n" +
-	"\x0eline_item_type\x18\x11 \x01(\tR\flineItemType\x12/\n" +
-	"\x11inventory_item_id\x18\x12 \x01(\tH\bR\x0finventoryItemId\x88\x01\x01\x12$\n" +
-	"\vlocation_id\x18\x13 \x01(\tH\tR\n" +
-	"locationId\x88\x01\x01\x12A\n" +
-	"\x1bpurchase_order_line_item_id\x18\x14 \x01(\tH\n" +
+	"\x0eline_item_type\x18\x11 \x01(\tR\flineItemType\x12E\n" +
+	"\x11inventory_item_id\x18\x12 \x01(\tB\x14\x82\xb5\x18\x10\n" +
+	"\x0einventory_itemH\bR\x0finventoryItemId\x88\x01\x01\x124\n" +
+	"\vlocation_id\x18\x13 \x01(\tB\x0e\x82\xb5\x18\n" +
+	"\n" +
+	"\blocationH\tR\n" +
+	"locationId\x88\x01\x01\x12a\n" +
+	"\x1bpurchase_order_line_item_id\x18\x14 \x01(\tB\x1e\x82\xb5\x18\x1a\n" +
+	"\x18purchase_order_line_itemH\n" +
 	"R\x17purchaseOrderLineItemId\x88\x01\x01B\x0f\n" +
 	"\r_date_createdB\x16\n" +
 	"\x14_date_created_stringB\x10\n" +

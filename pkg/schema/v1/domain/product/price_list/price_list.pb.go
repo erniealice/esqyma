@@ -941,6 +941,128 @@ func (x *GetPriceListItemPageDataResponse) GetError() *common.Error {
 	return nil
 }
 
+// FindApplicablePriceListRequest finds the active price list for a given location and date.
+type FindApplicablePriceListRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	LocationId    string                 `protobuf:"bytes,1,opt,name=location_id,json=locationId,proto3" json:"location_id,omitempty"` // FK to location
+	Date          string                 `protobuf:"bytes,2,opt,name=date,proto3" json:"date,omitempty"`                               // ISO 8601 date (YYYY-MM-DD) — the invoice/reference date
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *FindApplicablePriceListRequest) Reset() {
+	*x = FindApplicablePriceListRequest{}
+	mi := &file_domain_product_price_list_price_list_proto_msgTypes[15]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *FindApplicablePriceListRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*FindApplicablePriceListRequest) ProtoMessage() {}
+
+func (x *FindApplicablePriceListRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_domain_product_price_list_price_list_proto_msgTypes[15]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use FindApplicablePriceListRequest.ProtoReflect.Descriptor instead.
+func (*FindApplicablePriceListRequest) Descriptor() ([]byte, []int) {
+	return file_domain_product_price_list_price_list_proto_rawDescGZIP(), []int{15}
+}
+
+func (x *FindApplicablePriceListRequest) GetLocationId() string {
+	if x != nil {
+		return x.LocationId
+	}
+	return ""
+}
+
+func (x *FindApplicablePriceListRequest) GetDate() string {
+	if x != nil {
+		return x.Date
+	}
+	return ""
+}
+
+// FindApplicablePriceListResponse returns the matched price list, if any.
+type FindApplicablePriceListResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	PriceList     *PriceList             `protobuf:"bytes,1,opt,name=price_list,json=priceList,proto3,oneof" json:"price_list,omitempty"` // NULL/empty if no applicable list found
+	Found         bool                   `protobuf:"varint,2,opt,name=found,proto3" json:"found,omitempty"`
+	Success       bool                   `protobuf:"varint,3,opt,name=success,proto3" json:"success,omitempty"`
+	Error         *common.Error          `protobuf:"bytes,4,opt,name=error,proto3,oneof" json:"error,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *FindApplicablePriceListResponse) Reset() {
+	*x = FindApplicablePriceListResponse{}
+	mi := &file_domain_product_price_list_price_list_proto_msgTypes[16]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *FindApplicablePriceListResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*FindApplicablePriceListResponse) ProtoMessage() {}
+
+func (x *FindApplicablePriceListResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_domain_product_price_list_price_list_proto_msgTypes[16]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use FindApplicablePriceListResponse.ProtoReflect.Descriptor instead.
+func (*FindApplicablePriceListResponse) Descriptor() ([]byte, []int) {
+	return file_domain_product_price_list_price_list_proto_rawDescGZIP(), []int{16}
+}
+
+func (x *FindApplicablePriceListResponse) GetPriceList() *PriceList {
+	if x != nil {
+		return x.PriceList
+	}
+	return nil
+}
+
+func (x *FindApplicablePriceListResponse) GetFound() bool {
+	if x != nil {
+		return x.Found
+	}
+	return false
+}
+
+func (x *FindApplicablePriceListResponse) GetSuccess() bool {
+	if x != nil {
+		return x.Success
+	}
+	return false
+}
+
+func (x *FindApplicablePriceListResponse) GetError() *common.Error {
+	if x != nil {
+		return x.Error
+	}
+	return nil
+}
+
 var File_domain_product_price_list_price_list_proto protoreflect.FileDescriptor
 
 const file_domain_product_price_list_price_list_proto_rawDesc = "" +
@@ -1044,7 +1166,19 @@ const file_domain_product_price_list_price_list_proto_rawDesc = "" +
 	"\x0eprice_products\x18\x02 \x03(\v2\x1f.domain.product.v1.PriceProductR\rpriceProducts\x12\x18\n" +
 	"\asuccess\x18\x03 \x01(\bR\asuccess\x122\n" +
 	"\x05error\x18\x04 \x01(\v2\x17.domain.common.v1.ErrorH\x00R\x05error\x88\x01\x01B\b\n" +
-	"\x06_error2\xad\x06\n" +
+	"\x06_error\"U\n" +
+	"\x1eFindApplicablePriceListRequest\x12\x1f\n" +
+	"\vlocation_id\x18\x01 \x01(\tR\n" +
+	"locationId\x12\x12\n" +
+	"\x04date\x18\x02 \x01(\tR\x04date\"\xe0\x01\n" +
+	"\x1fFindApplicablePriceListResponse\x12@\n" +
+	"\n" +
+	"price_list\x18\x01 \x01(\v2\x1c.domain.product.v1.PriceListH\x00R\tpriceList\x88\x01\x01\x12\x14\n" +
+	"\x05found\x18\x02 \x01(\bR\x05found\x12\x18\n" +
+	"\asuccess\x18\x03 \x01(\bR\asuccess\x122\n" +
+	"\x05error\x18\x04 \x01(\v2\x17.domain.common.v1.ErrorH\x01R\x05error\x88\x01\x01B\r\n" +
+	"\v_price_listB\b\n" +
+	"\x06_error2\xb0\a\n" +
 	"\x16PriceListDomainService\x12h\n" +
 	"\x0fCreatePriceList\x12).domain.product.v1.CreatePriceListRequest\x1a*.domain.product.v1.CreatePriceListResponse\x12b\n" +
 	"\rReadPriceList\x12'.domain.product.v1.ReadPriceListRequest\x1a(.domain.product.v1.ReadPriceListResponse\x12h\n" +
@@ -1052,7 +1186,8 @@ const file_domain_product_price_list_price_list_proto_rawDesc = "" +
 	"\x0fDeletePriceList\x12).domain.product.v1.DeletePriceListRequest\x1a*.domain.product.v1.DeletePriceListResponse\x12e\n" +
 	"\x0eListPriceLists\x12(.domain.product.v1.ListPriceListsRequest\x1a).domain.product.v1.ListPriceListsResponse\x12\x83\x01\n" +
 	"\x18GetPriceListListPageData\x122.domain.product.v1.GetPriceListListPageDataRequest\x1a3.domain.product.v1.GetPriceListListPageDataResponse\x12\x83\x01\n" +
-	"\x18GetPriceListItemPageData\x122.domain.product.v1.GetPriceListItemPageDataRequest\x1a3.domain.product.v1.GetPriceListItemPageDataResponseB\xdd\x01\n" +
+	"\x18GetPriceListItemPageData\x122.domain.product.v1.GetPriceListItemPageDataRequest\x1a3.domain.product.v1.GetPriceListItemPageDataResponse\x12\x80\x01\n" +
+	"\x17FindApplicablePriceList\x121.domain.product.v1.FindApplicablePriceListRequest\x1a2.domain.product.v1.FindApplicablePriceListResponseB\xdd\x01\n" +
 	"\x15com.domain.product.v1B\x0ePriceListProtoP\x01ZNgithub.com/erniealice/esqyma/pkg/schema/v1/domain/product/price_list;productv1\xa2\x02\x03DPX\xaa\x02\x11Domain.Product.V1\xca\x02\x11Domain\\Product\\V1\xe2\x02\x1dDomain\\Product\\V1\\GPBMetadata\xea\x02\x13Domain::Product::V1b\x06proto3"
 
 var (
@@ -1067,7 +1202,7 @@ func file_domain_product_price_list_price_list_proto_rawDescGZIP() []byte {
 	return file_domain_product_price_list_price_list_proto_rawDescData
 }
 
-var file_domain_product_price_list_price_list_proto_msgTypes = make([]protoimpl.MessageInfo, 15)
+var file_domain_product_price_list_price_list_proto_msgTypes = make([]protoimpl.MessageInfo, 17)
 var file_domain_product_price_list_price_list_proto_goTypes = []any{
 	(*PriceList)(nil),                        // 0: domain.product.v1.PriceList
 	(*CreatePriceListRequest)(nil),           // 1: domain.product.v1.CreatePriceListRequest
@@ -1084,63 +1219,69 @@ var file_domain_product_price_list_price_list_proto_goTypes = []any{
 	(*GetPriceListListPageDataResponse)(nil), // 12: domain.product.v1.GetPriceListListPageDataResponse
 	(*GetPriceListItemPageDataRequest)(nil),  // 13: domain.product.v1.GetPriceListItemPageDataRequest
 	(*GetPriceListItemPageDataResponse)(nil), // 14: domain.product.v1.GetPriceListItemPageDataResponse
-	(*common.Error)(nil),                     // 15: domain.common.v1.Error
-	(*common.SearchRequest)(nil),             // 16: domain.common.v1.SearchRequest
-	(*common.FilterRequest)(nil),             // 17: domain.common.v1.FilterRequest
-	(*common.SortRequest)(nil),               // 18: domain.common.v1.SortRequest
-	(*common.PaginationRequest)(nil),         // 19: domain.common.v1.PaginationRequest
-	(*common.PaginationResponse)(nil),        // 20: domain.common.v1.PaginationResponse
-	(*common.SearchResult)(nil),              // 21: domain.common.v1.SearchResult
-	(*price_product.PriceProduct)(nil),       // 22: domain.product.v1.PriceProduct
+	(*FindApplicablePriceListRequest)(nil),   // 15: domain.product.v1.FindApplicablePriceListRequest
+	(*FindApplicablePriceListResponse)(nil),  // 16: domain.product.v1.FindApplicablePriceListResponse
+	(*common.Error)(nil),                     // 17: domain.common.v1.Error
+	(*common.SearchRequest)(nil),             // 18: domain.common.v1.SearchRequest
+	(*common.FilterRequest)(nil),             // 19: domain.common.v1.FilterRequest
+	(*common.SortRequest)(nil),               // 20: domain.common.v1.SortRequest
+	(*common.PaginationRequest)(nil),         // 21: domain.common.v1.PaginationRequest
+	(*common.PaginationResponse)(nil),        // 22: domain.common.v1.PaginationResponse
+	(*common.SearchResult)(nil),              // 23: domain.common.v1.SearchResult
+	(*price_product.PriceProduct)(nil),       // 24: domain.product.v1.PriceProduct
 }
 var file_domain_product_price_list_price_list_proto_depIdxs = []int32{
 	0,  // 0: domain.product.v1.CreatePriceListRequest.data:type_name -> domain.product.v1.PriceList
 	0,  // 1: domain.product.v1.CreatePriceListResponse.data:type_name -> domain.product.v1.PriceList
-	15, // 2: domain.product.v1.CreatePriceListResponse.error:type_name -> domain.common.v1.Error
+	17, // 2: domain.product.v1.CreatePriceListResponse.error:type_name -> domain.common.v1.Error
 	0,  // 3: domain.product.v1.ReadPriceListRequest.data:type_name -> domain.product.v1.PriceList
 	0,  // 4: domain.product.v1.ReadPriceListResponse.data:type_name -> domain.product.v1.PriceList
-	15, // 5: domain.product.v1.ReadPriceListResponse.error:type_name -> domain.common.v1.Error
+	17, // 5: domain.product.v1.ReadPriceListResponse.error:type_name -> domain.common.v1.Error
 	0,  // 6: domain.product.v1.UpdatePriceListRequest.data:type_name -> domain.product.v1.PriceList
 	0,  // 7: domain.product.v1.UpdatePriceListResponse.data:type_name -> domain.product.v1.PriceList
-	15, // 8: domain.product.v1.UpdatePriceListResponse.error:type_name -> domain.common.v1.Error
+	17, // 8: domain.product.v1.UpdatePriceListResponse.error:type_name -> domain.common.v1.Error
 	0,  // 9: domain.product.v1.DeletePriceListRequest.data:type_name -> domain.product.v1.PriceList
-	15, // 10: domain.product.v1.DeletePriceListResponse.error:type_name -> domain.common.v1.Error
-	16, // 11: domain.product.v1.ListPriceListsRequest.search:type_name -> domain.common.v1.SearchRequest
-	17, // 12: domain.product.v1.ListPriceListsRequest.filters:type_name -> domain.common.v1.FilterRequest
-	18, // 13: domain.product.v1.ListPriceListsRequest.sort:type_name -> domain.common.v1.SortRequest
-	19, // 14: domain.product.v1.ListPriceListsRequest.pagination:type_name -> domain.common.v1.PaginationRequest
+	17, // 10: domain.product.v1.DeletePriceListResponse.error:type_name -> domain.common.v1.Error
+	18, // 11: domain.product.v1.ListPriceListsRequest.search:type_name -> domain.common.v1.SearchRequest
+	19, // 12: domain.product.v1.ListPriceListsRequest.filters:type_name -> domain.common.v1.FilterRequest
+	20, // 13: domain.product.v1.ListPriceListsRequest.sort:type_name -> domain.common.v1.SortRequest
+	21, // 14: domain.product.v1.ListPriceListsRequest.pagination:type_name -> domain.common.v1.PaginationRequest
 	0,  // 15: domain.product.v1.ListPriceListsResponse.data:type_name -> domain.product.v1.PriceList
-	15, // 16: domain.product.v1.ListPriceListsResponse.error:type_name -> domain.common.v1.Error
-	16, // 17: domain.product.v1.GetPriceListListPageDataRequest.search:type_name -> domain.common.v1.SearchRequest
-	17, // 18: domain.product.v1.GetPriceListListPageDataRequest.filters:type_name -> domain.common.v1.FilterRequest
-	18, // 19: domain.product.v1.GetPriceListListPageDataRequest.sort:type_name -> domain.common.v1.SortRequest
-	19, // 20: domain.product.v1.GetPriceListListPageDataRequest.pagination:type_name -> domain.common.v1.PaginationRequest
+	17, // 16: domain.product.v1.ListPriceListsResponse.error:type_name -> domain.common.v1.Error
+	18, // 17: domain.product.v1.GetPriceListListPageDataRequest.search:type_name -> domain.common.v1.SearchRequest
+	19, // 18: domain.product.v1.GetPriceListListPageDataRequest.filters:type_name -> domain.common.v1.FilterRequest
+	20, // 19: domain.product.v1.GetPriceListListPageDataRequest.sort:type_name -> domain.common.v1.SortRequest
+	21, // 20: domain.product.v1.GetPriceListListPageDataRequest.pagination:type_name -> domain.common.v1.PaginationRequest
 	0,  // 21: domain.product.v1.GetPriceListListPageDataResponse.price_list_list:type_name -> domain.product.v1.PriceList
-	15, // 22: domain.product.v1.GetPriceListListPageDataResponse.error:type_name -> domain.common.v1.Error
-	20, // 23: domain.product.v1.GetPriceListListPageDataResponse.pagination:type_name -> domain.common.v1.PaginationResponse
-	21, // 24: domain.product.v1.GetPriceListListPageDataResponse.search_results:type_name -> domain.common.v1.SearchResult
+	17, // 22: domain.product.v1.GetPriceListListPageDataResponse.error:type_name -> domain.common.v1.Error
+	22, // 23: domain.product.v1.GetPriceListListPageDataResponse.pagination:type_name -> domain.common.v1.PaginationResponse
+	23, // 24: domain.product.v1.GetPriceListListPageDataResponse.search_results:type_name -> domain.common.v1.SearchResult
 	0,  // 25: domain.product.v1.GetPriceListItemPageDataResponse.price_list:type_name -> domain.product.v1.PriceList
-	22, // 26: domain.product.v1.GetPriceListItemPageDataResponse.price_products:type_name -> domain.product.v1.PriceProduct
-	15, // 27: domain.product.v1.GetPriceListItemPageDataResponse.error:type_name -> domain.common.v1.Error
-	1,  // 28: domain.product.v1.PriceListDomainService.CreatePriceList:input_type -> domain.product.v1.CreatePriceListRequest
-	3,  // 29: domain.product.v1.PriceListDomainService.ReadPriceList:input_type -> domain.product.v1.ReadPriceListRequest
-	5,  // 30: domain.product.v1.PriceListDomainService.UpdatePriceList:input_type -> domain.product.v1.UpdatePriceListRequest
-	7,  // 31: domain.product.v1.PriceListDomainService.DeletePriceList:input_type -> domain.product.v1.DeletePriceListRequest
-	9,  // 32: domain.product.v1.PriceListDomainService.ListPriceLists:input_type -> domain.product.v1.ListPriceListsRequest
-	11, // 33: domain.product.v1.PriceListDomainService.GetPriceListListPageData:input_type -> domain.product.v1.GetPriceListListPageDataRequest
-	13, // 34: domain.product.v1.PriceListDomainService.GetPriceListItemPageData:input_type -> domain.product.v1.GetPriceListItemPageDataRequest
-	2,  // 35: domain.product.v1.PriceListDomainService.CreatePriceList:output_type -> domain.product.v1.CreatePriceListResponse
-	4,  // 36: domain.product.v1.PriceListDomainService.ReadPriceList:output_type -> domain.product.v1.ReadPriceListResponse
-	6,  // 37: domain.product.v1.PriceListDomainService.UpdatePriceList:output_type -> domain.product.v1.UpdatePriceListResponse
-	8,  // 38: domain.product.v1.PriceListDomainService.DeletePriceList:output_type -> domain.product.v1.DeletePriceListResponse
-	10, // 39: domain.product.v1.PriceListDomainService.ListPriceLists:output_type -> domain.product.v1.ListPriceListsResponse
-	12, // 40: domain.product.v1.PriceListDomainService.GetPriceListListPageData:output_type -> domain.product.v1.GetPriceListListPageDataResponse
-	14, // 41: domain.product.v1.PriceListDomainService.GetPriceListItemPageData:output_type -> domain.product.v1.GetPriceListItemPageDataResponse
-	35, // [35:42] is the sub-list for method output_type
-	28, // [28:35] is the sub-list for method input_type
-	28, // [28:28] is the sub-list for extension type_name
-	28, // [28:28] is the sub-list for extension extendee
-	0,  // [0:28] is the sub-list for field type_name
+	24, // 26: domain.product.v1.GetPriceListItemPageDataResponse.price_products:type_name -> domain.product.v1.PriceProduct
+	17, // 27: domain.product.v1.GetPriceListItemPageDataResponse.error:type_name -> domain.common.v1.Error
+	0,  // 28: domain.product.v1.FindApplicablePriceListResponse.price_list:type_name -> domain.product.v1.PriceList
+	17, // 29: domain.product.v1.FindApplicablePriceListResponse.error:type_name -> domain.common.v1.Error
+	1,  // 30: domain.product.v1.PriceListDomainService.CreatePriceList:input_type -> domain.product.v1.CreatePriceListRequest
+	3,  // 31: domain.product.v1.PriceListDomainService.ReadPriceList:input_type -> domain.product.v1.ReadPriceListRequest
+	5,  // 32: domain.product.v1.PriceListDomainService.UpdatePriceList:input_type -> domain.product.v1.UpdatePriceListRequest
+	7,  // 33: domain.product.v1.PriceListDomainService.DeletePriceList:input_type -> domain.product.v1.DeletePriceListRequest
+	9,  // 34: domain.product.v1.PriceListDomainService.ListPriceLists:input_type -> domain.product.v1.ListPriceListsRequest
+	11, // 35: domain.product.v1.PriceListDomainService.GetPriceListListPageData:input_type -> domain.product.v1.GetPriceListListPageDataRequest
+	13, // 36: domain.product.v1.PriceListDomainService.GetPriceListItemPageData:input_type -> domain.product.v1.GetPriceListItemPageDataRequest
+	15, // 37: domain.product.v1.PriceListDomainService.FindApplicablePriceList:input_type -> domain.product.v1.FindApplicablePriceListRequest
+	2,  // 38: domain.product.v1.PriceListDomainService.CreatePriceList:output_type -> domain.product.v1.CreatePriceListResponse
+	4,  // 39: domain.product.v1.PriceListDomainService.ReadPriceList:output_type -> domain.product.v1.ReadPriceListResponse
+	6,  // 40: domain.product.v1.PriceListDomainService.UpdatePriceList:output_type -> domain.product.v1.UpdatePriceListResponse
+	8,  // 41: domain.product.v1.PriceListDomainService.DeletePriceList:output_type -> domain.product.v1.DeletePriceListResponse
+	10, // 42: domain.product.v1.PriceListDomainService.ListPriceLists:output_type -> domain.product.v1.ListPriceListsResponse
+	12, // 43: domain.product.v1.PriceListDomainService.GetPriceListListPageData:output_type -> domain.product.v1.GetPriceListListPageDataResponse
+	14, // 44: domain.product.v1.PriceListDomainService.GetPriceListItemPageData:output_type -> domain.product.v1.GetPriceListItemPageDataResponse
+	16, // 45: domain.product.v1.PriceListDomainService.FindApplicablePriceList:output_type -> domain.product.v1.FindApplicablePriceListResponse
+	38, // [38:46] is the sub-list for method output_type
+	30, // [30:38] is the sub-list for method input_type
+	30, // [30:30] is the sub-list for extension type_name
+	30, // [30:30] is the sub-list for extension extendee
+	0,  // [0:30] is the sub-list for field type_name
 }
 
 func init() { file_domain_product_price_list_price_list_proto_init() }
@@ -1158,13 +1299,14 @@ func file_domain_product_price_list_price_list_proto_init() {
 	file_domain_product_price_list_price_list_proto_msgTypes[11].OneofWrappers = []any{}
 	file_domain_product_price_list_price_list_proto_msgTypes[12].OneofWrappers = []any{}
 	file_domain_product_price_list_price_list_proto_msgTypes[14].OneofWrappers = []any{}
+	file_domain_product_price_list_price_list_proto_msgTypes[16].OneofWrappers = []any{}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
 		File: protoimpl.DescBuilder{
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_domain_product_price_list_price_list_proto_rawDesc), len(file_domain_product_price_list_price_list_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   15,
+			NumMessages:   17,
 			NumExtensions: 0,
 			NumServices:   1,
 		},

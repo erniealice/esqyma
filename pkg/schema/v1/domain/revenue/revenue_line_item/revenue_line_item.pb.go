@@ -51,6 +51,7 @@ type RevenueLineItem struct {
 	LocationId         *string                `protobuf:"bytes,23,opt,name=location_id,json=locationId,proto3,oneof" json:"location_id,omitempty"`                  // FK to location (where stock was pulled)
 	CostPrice          *int64                 `protobuf:"varint,24,opt,name=cost_price,json=costPrice,proto3,oneof" json:"cost_price,omitempty"`                    // centavos       // purchase cost for margin tracking
 	ProductPricePlanId *string                `protobuf:"bytes,25,opt,name=product_price_plan_id,json=productPricePlanId,proto3,oneof" json:"product_price_plan_id,omitempty"`
+	PriceProductId     *string                `protobuf:"bytes,26,opt,name=price_product_id,json=priceProductId,proto3,oneof" json:"price_product_id,omitempty"` // FK to price_product — tracks which price_product was used for one-time revenue line items
 	unknownFields      protoimpl.UnknownFields
 	sizeCache          protoimpl.SizeCache
 }
@@ -249,6 +250,13 @@ func (x *RevenueLineItem) GetCostPrice() int64 {
 func (x *RevenueLineItem) GetProductPricePlanId() string {
 	if x != nil && x.ProductPricePlanId != nil {
 		return *x.ProductPricePlanId
+	}
+	return ""
+}
+
+func (x *RevenueLineItem) GetPriceProductId() string {
+	if x != nil && x.PriceProductId != nil {
+		return *x.PriceProductId
 	}
 	return ""
 }
@@ -1049,7 +1057,8 @@ var File_domain_revenue_revenue_line_item_revenue_line_item_proto protoreflect.F
 
 const file_domain_revenue_revenue_line_item_revenue_line_item_proto_rawDesc = "" +
 	"\n" +
-	"8domain/revenue/revenue_line_item/revenue_line_item.proto\x12\x11domain.revenue.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/search.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a$domain/revenue/revenue/revenue.proto\x1a$domain/product/product/product.proto\x1a\x10options/db.proto\"\xd1\t\n" +
+	"8domain/revenue/revenue_line_item/revenue_line_item.proto\x12\x11domain.revenue.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/search.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a$domain/revenue/revenue/revenue.proto\x1a$domain/product/product/product.proto\x1a\x10options/db.proto\"\xb4\n" +
+	"\n" +
 	"\x0fRevenueLineItem\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12&\n" +
 	"\fdate_created\x18\x02 \x01(\x03H\x00R\vdateCreated\x88\x01\x01\x123\n" +
@@ -1084,7 +1093,9 @@ const file_domain_revenue_revenue_line_item_revenue_line_item_proto_rawDesc = ""
 	"\n" +
 	"cost_price\x18\x18 \x01(\x03H\fR\tcostPrice\x88\x01\x01\x12R\n" +
 	"\x15product_price_plan_id\x18\x19 \x01(\tB\x1a\x82\xb5\x18\x16\n" +
-	"\x12product_price_plan\x18\x01H\rR\x12productPricePlanId\x88\x01\x01B\x0f\n" +
+	"\x12product_price_plan\x18\x01H\rR\x12productPricePlanId\x88\x01\x01\x12D\n" +
+	"\x10price_product_id\x18\x1a \x01(\tB\x15\x82\xb5\x18\x11\n" +
+	"\rprice_product\x18\x01H\x0eR\x0epriceProductId\x88\x01\x01:\x06\x8a\xb5\x18\x02\b\x01B\x0f\n" +
 	"\r_date_createdB\x16\n" +
 	"\x14_date_created_stringB\x10\n" +
 	"\x0e_date_modifiedB\x17\n" +
@@ -1100,7 +1111,8 @@ const file_domain_revenue_revenue_line_item_revenue_line_item_proto_rawDesc = ""
 	"\x0e_variant_labelB\x0e\n" +
 	"\f_location_idB\r\n" +
 	"\v_cost_priceB\x18\n" +
-	"\x16_product_price_plan_id\"V\n" +
+	"\x16_product_price_plan_idB\x13\n" +
+	"\x11_price_product_id\"V\n" +
 	"\x1cCreateRevenueLineItemRequest\x126\n" +
 	"\x04data\x18\x01 \x01(\v2\".domain.revenue.v1.RevenueLineItemR\x04data\"\xaf\x01\n" +
 	"\x1dCreateRevenueLineItemResponse\x126\n" +

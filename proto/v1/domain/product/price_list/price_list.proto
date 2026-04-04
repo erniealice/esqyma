@@ -40,6 +40,8 @@ service PriceListDomainService {
     returns (GetPriceListListPageDataResponse);
   rpc GetPriceListItemPageData(GetPriceListItemPageDataRequest)
     returns (GetPriceListItemPageDataResponse);
+  rpc FindApplicablePriceList(FindApplicablePriceListRequest)
+    returns (FindApplicablePriceListResponse);
 }
 
 message CreatePriceListRequest {
@@ -116,6 +118,20 @@ message GetPriceListItemPageDataRequest {
 message GetPriceListItemPageDataResponse {
   PriceList price_list = 1;
   repeated PriceProduct price_products = 2;
+  bool success = 3;
+  optional domain.common.v1.Error error = 4;
+}
+
+// FindApplicablePriceListRequest finds the active price list for a given location and date.
+message FindApplicablePriceListRequest {
+  string location_id = 1;     // FK to location
+  string date = 2;            // ISO 8601 date (YYYY-MM-DD) — the invoice/reference date
+}
+
+// FindApplicablePriceListResponse returns the matched price list, if any.
+message FindApplicablePriceListResponse {
+  optional PriceList price_list = 1;  // NULL/empty if no applicable list found
+  bool found = 2;
   bool success = 3;
   optional domain.common.v1.Error error = 4;
 }

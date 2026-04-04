@@ -1,0 +1,68 @@
+syntax = "proto3";
+
+package domain.ledger.v1;
+
+option go_package = "github.com/erniealice/esqyma/pkg/schema/v1/domain/ledger/reporting/revenue_report";
+
+import "domain/common/error.proto";
+import "domain/common/pagination.proto";
+
+// RevenueReportRequest defines parameters for a two-axis pivot revenue report.
+message RevenueReportRequest {
+  optional string start_date = 1;           // ISO 8601 date (YYYY-MM-DD) — report period start
+  optional string end_date = 2;             // ISO 8601 date (YYYY-MM-DD) — report period end
+  string primary_dimension = 3;             // Column axis: monthly/quarterly/yearly/product/product_line/location/location_area
+  string row_dimension = 4;                 // Row axis: same options
+  optional string product_id = 5;           // Filter by specific product
+  optional string collection_id = 6;        // Filter by product line
+  optional string location_id = 7;          // Filter by specific location
+  optional string location_area_id = 8;     // Filter by location area
+  optional string revenue_category_id = 9;  // Filter by revenue category
+  optional string currency = 10;            // Filter by currency (default: all)
+  optional domain.common.v1.PaginationRequest pagination = 11;
+}
+
+// RevenueReportCell represents one cell in the pivot table.
+message RevenueReportCell {
+  string column_key = 1;                    // Human-readable column label
+  optional string column_id = 2;            // Entity ID for the column dimension
+  int64 total_revenue = 3;                  // centavos — sum of revenue for this cell
+  int64 transaction_count = 4;              // Number of revenue transactions
+  double total_quantity = 5;                // Total units sold in this cell
+}
+
+// RevenueReportRow represents one row in the pivot table.
+message RevenueReportRow {
+  string row_key = 1;                       // Human-readable row label
+  optional string row_id = 2;               // Entity ID for the row dimension
+  repeated RevenueReportCell cells = 3;     // One cell per column
+  int64 row_total = 4;                      // centavos — sum across all cells in this row
+  int64 row_transaction_count = 5;          // Total transactions across all cells in this row
+  double row_total_quantity = 6;            // Total quantity across all cells in this row
+}
+
+// RevenueReportSummary provides report-level totals.
+message RevenueReportSummary {
+  int64 grand_total = 1;                    // centavos — sum of all revenue
+  int64 total_transactions = 2;             // Total number of revenue transactions
+  double total_quantity = 3;                // Total units sold across all rows/columns
+  repeated RevenueReportCell column_totals = 4; // Per-column totals across all rows
+  optional string start_date = 5;           // ISO 8601 date (YYYY-MM-DD)
+  optional string end_date = 6;             // ISO 8601 date (YYYY-MM-DD)
+  string currency = 7;                      // Currency of all monetary values
+}
+
+// RevenueReportResponse returns the generated pivot revenue report.
+message RevenueReportResponse {
+  repeated string column_keys = 1;          // Ordered column headers
+  repeated RevenueReportRow rows = 2;       // One row per row_dimension value
+  optional RevenueReportSummary summary = 3;
+  optional domain.common.v1.PaginationResponse pagination = 4;
+  bool success = 5;
+  optional domain.common.v1.Error error = 6;
+}
+
+// LedgerRevenueReportDomainService defines revenue reporting operations.
+service LedgerRevenueReportDomainService {
+  rpc GetRevenueReport(RevenueReportRequest) returns (RevenueReportResponse);
+}

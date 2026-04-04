@@ -12,6 +12,7 @@ import "domain/common/sort.proto";
 
 import "domain/expenditure/expenditure/expenditure.proto";
 import "domain/product/product/product.proto";
+import "options/db.proto";
 
 message ExpenditureLineItem {
   string id = 1;
@@ -30,9 +31,9 @@ message ExpenditureLineItem {
   int64 total_price = 14; // centavos
   optional string notes = 16;
   string line_item_type = 17;                   // "item", "tax", "shipping", "discount"
-  optional string inventory_item_id = 18;       // FK to inventory_item (for purchase items going into stock)
-  optional string location_id = 19;             // FK to location (where received)
-  optional string purchase_order_line_item_id = 20;  // FK to PO line for line-level 3-way match
+  optional string inventory_item_id = 18 [(options.v1.db).references = "inventory_item"];       // FK to inventory_item (for purchase items going into stock)
+  optional string location_id = 19 [(options.v1.db).references = "location"];             // FK to location (where received)
+  optional string purchase_order_line_item_id = 20 [(options.v1.db).references = "purchase_order_line_item"];  // FK to PO line for line-level 3-way match
 }
 
 service ExpenditureLineItemDomainService {
