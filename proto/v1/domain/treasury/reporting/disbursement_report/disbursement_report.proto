@@ -1,0 +1,71 @@
+syntax = "proto3";
+
+package domain.treasury.v1;
+
+option go_package = "github.com/erniealice/esqyma/pkg/schema/v1/domain/treasury/reporting/disbursement_report";
+
+import "domain/common/error.proto";
+import "domain/common/pagination.proto";
+
+// DisbursementReportRequest defines parameters for a two-axis pivot disbursement report.
+message DisbursementReportRequest {
+  optional string start_date = 1;                   // ISO 8601 date (YYYY-MM-DD) — report period start
+  optional string end_date = 2;                     // ISO 8601 date (YYYY-MM-DD) — report period end
+  string primary_dimension = 3;                     // Column axis: monthly/quarterly/yearly/supplier/location/location_area
+  string row_dimension = 4;                         // Row axis: same options
+  optional string supplier_id = 5;                  // Filter by specific supplier
+  optional string supplier_category_id = 6;         // Filter by supplier category
+  optional string location_id = 7;                  // Filter by specific location
+  optional string location_area_id = 8;             // Filter by location area
+  optional string expenditure_category_id = 9;      // Filter by expenditure category
+  optional string currency = 10;                    // Filter by currency (default: all)
+  optional domain.common.v1.PaginationRequest pagination = 11;
+  optional string disbursement_type = 12;           // "purchase", "expense"
+  optional string disbursement_method_id = 13;      // FK to disbursement_method
+  optional string expenditure_id = 14;              // Filter by specific expenditure
+}
+
+// DisbursementReportCell represents one cell in the pivot table.
+message DisbursementReportCell {
+  string column_key = 1;                            // Human-readable column label
+  optional string column_id = 2;                    // Entity ID for the column dimension
+  int64 total_disbursement = 3;                     // centavos — sum of disbursements for this cell
+  int64 transaction_count = 4;                      // Number of disbursement transactions
+  double total_quantity = 5;                        // Total units in this cell
+}
+
+// DisbursementReportRow represents one row in the pivot table.
+message DisbursementReportRow {
+  string row_key = 1;                               // Human-readable row label
+  optional string row_id = 2;                       // Entity ID for the row dimension
+  repeated DisbursementReportCell cells = 3;        // One cell per column
+  int64 row_total = 4;                              // centavos — sum across all cells in this row
+  int64 row_transaction_count = 5;                  // Total transactions across all cells in this row
+  double row_total_quantity = 6;                    // Total quantity across all cells in this row
+}
+
+// DisbursementReportSummary provides report-level totals.
+message DisbursementReportSummary {
+  int64 grand_total = 1;                            // centavos — sum of all disbursements
+  int64 total_transactions = 2;                     // Total number of disbursement transactions
+  double total_quantity = 3;                        // Total units across all rows/columns
+  repeated DisbursementReportCell column_totals = 4;    // Per-column totals across all rows
+  optional string start_date = 5;                   // ISO 8601 date (YYYY-MM-DD)
+  optional string end_date = 6;                     // ISO 8601 date (YYYY-MM-DD)
+  string currency = 7;                              // Currency of all monetary values
+}
+
+// DisbursementReportResponse returns the generated pivot disbursement report.
+message DisbursementReportResponse {
+  repeated string column_keys = 1;                  // Ordered column headers
+  repeated DisbursementReportRow rows = 2;          // One row per row_dimension value
+  optional DisbursementReportSummary summary = 3;
+  optional domain.common.v1.PaginationResponse pagination = 4;
+  bool success = 5;
+  optional domain.common.v1.Error error = 6;
+}
+
+// TreasuryDisbursementReportDomainService defines disbursement reporting operations.
+service TreasuryDisbursementReportDomainService {
+  rpc GetDisbursementReport(DisbursementReportRequest) returns (DisbursementReportResponse);
+}

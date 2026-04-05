@@ -1,0 +1,57 @@
+syntax = "proto3";
+
+package domain.ledger.v1;
+
+option go_package = "github.com/erniealice/esqyma/pkg/schema/v1/domain/ledger/reporting/client_statement";
+
+import "domain/common/error.proto";
+import "domain/common/pagination.proto";
+
+// StatementEntry represents a single line item in a client statement (invoice or collection).
+message StatementEntry {
+  string date = 1;              // ISO 8601 YYYY-MM-DD (revenue_date or payment_date)
+  string type = 2;              // "invoice" or "collection"
+  string reference_number = 3;  // revenue.reference_number or collection.reference_number
+  string description = 4;       // revenue.name or collection.name
+  int64 billed = 5;            // centavos — revenue.total_amount (0 for collections)
+  int64 received = 6;          // centavos — collection.amount (0 for invoices)
+  int64 balance = 7;           // centavos — running balance (computed by window function)
+  string entity_id = 8;        // revenue.id or collection.id (for linking)
+  string status = 9;           // revenue.status or collection.status
+}
+
+// ClientStatementRequest defines parameters for generating a client statement.
+message ClientStatementRequest {
+  string client_id = 1;                                          // Required
+  optional string start_date = 2;                                // ISO 8601 date (YYYY-MM-DD)
+  optional string end_date = 3;                                  // ISO 8601 date (YYYY-MM-DD)
+  optional string currency = 4;                                  // Filter by currency
+  optional domain.common.v1.PaginationRequest pagination = 5;
+}
+
+// ClientStatementSummary provides report-level totals for the client statement.
+message ClientStatementSummary {
+  int64 total_billed = 1;      // centavos — SUM of all invoices
+  int64 total_received = 2;    // centavos — SUM of all collections
+  int64 outstanding_balance = 3; // centavos — total_billed - total_received
+  int32 invoice_count = 4;
+  int32 collection_count = 5;
+  string currency = 6;
+  optional string start_date = 7;  // ISO 8601 date (YYYY-MM-DD)
+  optional string end_date = 8;    // ISO 8601 date (YYYY-MM-DD)
+  string client_name = 9;
+}
+
+// ClientStatementResponse returns the generated client statement report.
+message ClientStatementResponse {
+  repeated StatementEntry entries = 1;
+  optional ClientStatementSummary summary = 2;
+  optional domain.common.v1.PaginationResponse pagination = 3;
+  bool success = 4;
+  optional domain.common.v1.Error error = 5;
+}
+
+// LedgerClientStatementDomainService defines client statement reporting operations.
+service LedgerClientStatementDomainService {
+  rpc GetClientStatement(ClientStatementRequest) returns (ClientStatementResponse);
+}

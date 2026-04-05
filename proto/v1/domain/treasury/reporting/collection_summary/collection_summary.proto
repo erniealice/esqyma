@@ -1,0 +1,66 @@
+syntax = "proto3";
+
+package domain.treasury.v1;
+
+option go_package = "github.com/erniealice/esqyma/pkg/schema/v1/domain/treasury/reporting/collection_summary";
+
+import "domain/common/error.proto";
+import "domain/common/pagination.proto";
+
+// CollectionSummaryRequest defines parameters for a two-axis pivot collection summary report.
+message CollectionSummaryRequest {
+  optional string start_date = 1;               // ISO 8601 date (YYYY-MM-DD) — report period start
+  optional string end_date = 2;                 // ISO 8601 date (YYYY-MM-DD) — report period end
+  string primary_dimension = 3;                 // Column axis: monthly/quarterly/yearly/client/client_category/location/location_area/collection_method
+  string row_dimension = 4;                     // Row axis: same options
+  optional string client_id = 5;                // Filter by specific client
+  optional string client_category_id = 6;       // Filter by client category
+  optional string location_id = 7;              // Filter by specific location
+  optional string location_area_id = 8;         // Filter by location area
+  optional string collection_method_id = 9;     // Filter by collection method
+  optional string currency = 10;                // Filter by currency (default: all)
+  optional string collection_type = 11;         // Filter by type: subscription/sale/refund/invoice/deposit/walk_in
+  optional domain.common.v1.PaginationRequest pagination = 12;
+}
+
+// CollectionSummaryCell represents one cell in the pivot table.
+message CollectionSummaryCell {
+  string column_key = 1;                        // Human-readable column label
+  optional string column_id = 2;                // Entity ID for the column dimension
+  int64 total_collected = 3;                    // centavos — sum of collections for this cell
+  int64 transaction_count = 4;                  // Number of collection transactions
+}
+
+// CollectionSummaryRow represents one row in the pivot table.
+message CollectionSummaryRow {
+  string row_key = 1;                           // Human-readable row label
+  optional string row_id = 2;                   // Entity ID for the row dimension
+  repeated CollectionSummaryCell cells = 3;     // One cell per column
+  int64 row_total = 4;                          // centavos — sum across all cells in this row
+  int64 row_transaction_count = 5;              // Total transactions across all cells in this row
+}
+
+// CollectionSummarySummary provides report-level totals.
+message CollectionSummarySummary {
+  int64 grand_total = 1;                        // centavos — sum of all collections
+  int64 total_transactions = 2;                 // Total number of collection transactions
+  repeated CollectionSummaryCell column_totals = 3; // Per-column totals across all rows
+  optional string start_date = 4;               // ISO 8601 date (YYYY-MM-DD)
+  optional string end_date = 5;                 // ISO 8601 date (YYYY-MM-DD)
+  string currency = 6;                          // Currency of all monetary values
+}
+
+// CollectionSummaryResponse returns the generated pivot collection summary report.
+message CollectionSummaryResponse {
+  repeated string column_keys = 1;              // Ordered column headers
+  repeated CollectionSummaryRow rows = 2;       // One row per row_dimension value
+  optional CollectionSummarySummary summary = 3;
+  optional domain.common.v1.PaginationResponse pagination = 4;
+  bool success = 5;
+  optional domain.common.v1.Error error = 6;
+}
+
+// TreasuryCollectionSummaryDomainService defines collection summary reporting operations.
+service TreasuryCollectionSummaryDomainService {
+  rpc GetCollectionSummaryReport(CollectionSummaryRequest) returns (CollectionSummaryResponse);
+}

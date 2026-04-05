@@ -1,0 +1,57 @@
+syntax = "proto3";
+
+package domain.treasury.v1;
+
+option go_package = "github.com/erniealice/esqyma/pkg/schema/v1/domain/treasury/reporting/supplier_statement";
+
+import "domain/common/error.proto";
+import "domain/common/pagination.proto";
+
+// SupplierStatementEntry represents a single line item in a supplier statement (bill or payment).
+message SupplierStatementEntry {
+  string date = 1;              // ISO 8601 YYYY-MM-DD (expenditure_date or payment_date)
+  string type = 2;              // "bill" or "payment"
+  string reference_number = 3;  // expenditure.reference_number or disbursement.reference_number
+  string description = 4;       // expenditure.name or disbursement.name
+  int64 billed = 5;            // centavos — expenditure.total_amount (0 for disbursements)
+  int64 paid = 6;              // centavos — disbursement.amount (0 for bills)
+  int64 balance = 7;           // centavos — running balance (computed by window function)
+  string entity_id = 8;        // expenditure.id or disbursement.id (for linking)
+  string status = 9;           // expenditure.status or disbursement.status
+}
+
+// SupplierStatementRequest defines parameters for generating a supplier statement.
+message SupplierStatementRequest {
+  string supplier_id = 1;                                          // Required
+  optional string start_date = 2;                                  // ISO 8601 date (YYYY-MM-DD)
+  optional string end_date = 3;                                    // ISO 8601 date (YYYY-MM-DD)
+  optional string currency = 4;                                    // Filter by currency
+  optional domain.common.v1.PaginationRequest pagination = 5;
+}
+
+// SupplierStatementSummary provides report-level totals for the supplier statement.
+message SupplierStatementSummary {
+  int64 total_billed = 1;      // centavos — SUM of all bills
+  int64 total_paid = 2;        // centavos — SUM of all payments
+  int64 outstanding_balance = 3; // centavos — total_billed - total_paid
+  int32 bill_count = 4;
+  int32 payment_count = 5;
+  string currency = 6;
+  optional string start_date = 7;  // ISO 8601 date (YYYY-MM-DD)
+  optional string end_date = 8;    // ISO 8601 date (YYYY-MM-DD)
+  string supplier_name = 9;
+}
+
+// SupplierStatementResponse returns the generated supplier statement report.
+message SupplierStatementResponse {
+  repeated SupplierStatementEntry entries = 1;
+  optional SupplierStatementSummary summary = 2;
+  optional domain.common.v1.PaginationResponse pagination = 3;
+  bool success = 4;
+  optional domain.common.v1.Error error = 5;
+}
+
+// TreasurySupplierStatementDomainService defines supplier statement reporting operations.
+service TreasurySupplierStatementDomainService {
+  rpc GetSupplierStatement(SupplierStatementRequest) returns (SupplierStatementResponse);
+}

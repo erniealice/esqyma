@@ -1,0 +1,49 @@
+syntax = "proto3";
+package domain.entity.v1;
+option go_package = "github.com/erniealice/esqyma/pkg/schema/v1/domain/entity/supplier/supplier_statement";
+
+import "domain/common/error.proto";
+
+message SupplierStatementRequest {
+  string supplier_id = 1;              // required — which supplier
+  optional string start_date = 2;      // ISO 8601 — statement period start
+  optional string end_date = 3;        // ISO 8601 — statement period end
+  optional string as_of_date = 4;      // ISO 8601 — point-in-time balance (excludes transactions after this date)
+  optional string currency = 5;
+}
+
+message SupplierStatementLine {
+  string transaction_date = 1;         // ISO 8601
+  string transaction_type = 2;         // "bill" or "payment"
+  string reference = 3;               // reference_number
+  string description = 4;             // name/description
+  int64 billed_amount = 5;            // centavos (>0 for bills, 0 for payments)
+  int64 paid_amount = 6;              // centavos (>0 for payments, 0 for bills)
+  int64 running_balance = 7;          // centavos — cumulative outstanding
+  optional string source_id = 8;      // expenditure_id or disbursement_id
+  optional string expenditure_id = 9; // always set — the linked expenditure
+}
+
+message SupplierStatementSummary {
+  int64 total_billed = 1;             // centavos
+  int64 total_paid = 2;               // centavos
+  int64 outstanding_balance = 3;      // centavos (billed - paid)
+  string supplier_name = 4;
+  optional string supplier_id = 5;
+  optional string start_date = 6;
+  optional string end_date = 7;
+  optional string as_of_date = 8;
+  string currency = 9;
+  int32 transaction_count = 10;
+}
+
+message SupplierStatementResponse {
+  repeated SupplierStatementLine lines = 1;
+  optional SupplierStatementSummary summary = 2;
+  bool success = 3;
+  optional domain.common.v1.Error error = 4;
+}
+
+service SupplierStatementDomainService {
+  rpc GetSupplierStatement(SupplierStatementRequest) returns (SupplierStatementResponse);
+}

@@ -1,0 +1,67 @@
+syntax = "proto3";
+
+package domain.ledger.v1;
+
+option go_package = "github.com/erniealice/esqyma/pkg/schema/v1/domain/ledger/reporting/receivables_aging";
+
+import "domain/common/error.proto";
+import "domain/common/pagination.proto";
+
+// ReceivablesAgingRequest defines parameters for the receivables aging report.
+message ReceivablesAgingRequest {
+  optional string as_of_date = 1;               // ISO 8601 date (YYYY-MM-DD) — date to calculate aging from (default: today)
+  optional string start_date = 2;               // ISO 8601 date (YYYY-MM-DD) — filter revenues created after
+  optional string end_date = 3;                 // ISO 8601 date (YYYY-MM-DD) — filter revenues created before
+  string row_dimension = 4;                     // Row axis: client/client_category/location/location_area
+  optional string client_id = 5;                // Filter by specific client
+  optional string client_category_id = 6;       // Filter by client category
+  optional string location_id = 7;              // Filter by specific location
+  optional string location_area_id = 8;         // Filter by location area
+  optional string revenue_category_id = 9;      // Filter by revenue category
+  optional string currency = 10;                // Filter by currency (default: all)
+  optional domain.common.v1.PaginationRequest pagination = 11;
+}
+
+// AgingBuckets represents amounts in each aging bucket (all values in centavos).
+message AgingBuckets {
+  int64 current = 1;                            // Not yet due (0 days past due)
+  int64 days_1_30 = 2;                          // 1-30 days past due
+  int64 days_31_60 = 3;                         // 31-60 days past due
+  int64 days_61_90 = 4;                         // 61-90 days past due
+  int64 days_over_90 = 5;                       // Over 90 days past due
+}
+
+// ReceivablesAgingRow represents one row in the aging report.
+message ReceivablesAgingRow {
+  string row_key = 1;                           // Human-readable row label
+  optional string row_id = 2;                   // Entity ID for the row dimension
+  AgingBuckets buckets = 3;                     // centavos — amounts in each aging bucket
+  int64 total_outstanding = 4;                  // centavos — sum of all buckets
+  int32 invoice_count = 5;                      // Number of outstanding invoices
+}
+
+// ReceivablesAgingSummary provides report-level totals.
+message ReceivablesAgingSummary {
+  AgingBuckets buckets = 1;                     // Grand total per aging bucket
+  int64 grand_total_outstanding = 2;            // centavos — sum of all outstanding
+  int32 total_invoice_count = 3;                // Total number of outstanding invoices
+  optional string as_of_date = 4;               // ISO 8601 date (YYYY-MM-DD)
+  optional string start_date = 5;               // ISO 8601 date (YYYY-MM-DD)
+  optional string end_date = 6;                 // ISO 8601 date (YYYY-MM-DD)
+  string currency = 7;                          // Currency of all monetary values
+}
+
+// ReceivablesAgingResponse returns the generated receivables aging report.
+message ReceivablesAgingResponse {
+  repeated string bucket_labels = 1;            // ["Current", "1-30 Days", "31-60 Days", "61-90 Days", "Over 90 Days"]
+  repeated ReceivablesAgingRow rows = 2;        // One row per row_dimension value
+  optional ReceivablesAgingSummary summary = 3;
+  optional domain.common.v1.PaginationResponse pagination = 4;
+  bool success = 5;
+  optional domain.common.v1.Error error = 6;
+}
+
+// LedgerReceivablesAgingDomainService defines receivables aging reporting operations.
+service LedgerReceivablesAgingDomainService {
+  rpc GetReceivablesAgingReport(ReceivablesAgingRequest) returns (ReceivablesAgingResponse);
+}
