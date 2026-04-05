@@ -34,6 +34,9 @@ service WorkspaceDomainService {
 
   rpc GetWorkspaceListPageData(GetWorkspaceListPageDataRequest) returns (GetWorkspaceListPageDataResponse);
   rpc GetWorkspaceItemPageData(GetWorkspaceItemPageDataRequest) returns (GetWorkspaceItemPageDataResponse);
+
+  rpc SwitchWorkspace(SwitchWorkspaceRequest) returns (SwitchWorkspaceResponse);
+  rpc ListUserWorkspaces(ListUserWorkspacesRequest) returns (ListUserWorkspacesResponse);
 }
 
 message CreateWorkspaceRequest {
@@ -109,6 +112,37 @@ message GetWorkspaceItemPageDataRequest {
 
 message GetWorkspaceItemPageDataResponse {
   optional Workspace workspace = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+// SwitchWorkspaceRequest — switch the active workspace for a session.
+message SwitchWorkspaceRequest {
+  string workspace_id = 1;     // Target workspace ID
+  string session_token = 2;    // Current session token (from cookie)
+}
+
+message SwitchWorkspaceResponse {
+  bool success = 1;
+  optional string workspace_user_id = 2;  // The resolved workspace_user.id
+  optional string workspace_name = 3;     // The workspace name for UI confirmation
+  optional domain.common.v1.Error error = 4;
+}
+
+// ListUserWorkspacesRequest — list workspaces accessible to the current user.
+message ListUserWorkspacesRequest {
+  string user_id = 1;
+}
+
+message UserWorkspace {
+  string workspace_id = 1;
+  string workspace_name = 2;
+  string workspace_user_id = 3;  // The workspace_user.id for this user+workspace
+  bool is_current = 4;           // Whether this is the currently active workspace
+}
+
+message ListUserWorkspacesResponse {
+  repeated UserWorkspace workspaces = 1;
   bool success = 2;
   optional domain.common.v1.Error error = 3;
 }

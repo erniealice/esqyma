@@ -21,7 +21,7 @@ import type { Message } from "@bufbuild/protobuf";
  * Describes the file domain/entity/workspace/workspace.proto.
  */
 export const file_domain_entity_workspace_workspace: GenFile = /*@__PURE__*/
-  fileDesc("Cidkb21haW4vZW50aXR5L3dvcmtzcGFjZS93b3Jrc3BhY2UucHJvdG8SEGRvbWFpbi5lbnRpdHkudjEilgMKCVdvcmtzcGFjZRIKCgJpZBgBIAEoCRIMCgRuYW1lGAIgASgJEhMKC2Rlc2NyaXB0aW9uGAMgASgJEg8KB3ByaXZhdGUYBCABKAgSPAoUd29ya2Zsb3dfdGVtcGxhdGVfaWQYBSABKAlCGYK1GBUKEXdvcmtmbG93X3RlbXBsYXRlGAFIAIgBARIZCgxkYXRlX2NyZWF0ZWQYBiABKANIAYgBARIgChNkYXRlX2NyZWF0ZWRfc3RyaW5nGAcgASgJSAKIAQESGgoNZGF0ZV9tb2RpZmllZBgIIAEoA0gDiAEBEiEKFGRhdGVfbW9kaWZpZWRfc3RyaW5nGAkgASgJSASIAQESGgoGYWN0aXZlGAogASgIQgqCtRgGIgR0cnVlOgaKtRgCCAFCFwoVX3dvcmtmbG93X3RlbXBsYXRlX2lkQg8KDV9kYXRlX2NyZWF0ZWRCFgoUX2RhdGVfY3JlYXRlZF9zdHJpbmdCEAoOX2RhdGVfbW9kaWZpZWRCFwoVX2RhdGVfbW9kaWZpZWRfc3RyaW5nIkMKFkNyZWF0ZVdvcmtzcGFjZVJlcXVlc3QSKQoEZGF0YRgBIAEoCzIbLmRvbWFpbi5lbnRpdHkudjEuV29ya3NwYWNlIowBChdDcmVhdGVXb3Jrc3BhY2VSZXNwb25zZRIpCgRkYXRhGAEgAygLMhsuZG9tYWluLmVudGl0eS52MS5Xb3Jrc3BhY2USDwoHc3VjY2VzcxgCIAEoCBIrCgVlcnJvchgDIAEoCzIXLmRvbWFpbi5jb21tb24udjEuRXJyb3JIAIgBAUIICgZfZXJyb3IiQQoUUmVhZFdvcmtzcGFjZVJlcXVlc3QSKQoEZGF0YRgBIAEoCzIbLmRvbWFpbi5lbnRpdHkudjEuV29ya3NwYWNlIooBChVSZWFkV29ya3NwYWNlUmVzcG9uc2USKQoEZGF0YRgBIAMoCzIbLmRvbWFpbi5lbnRpdHkudjEuV29ya3NwYWNlEg8KB3N1Y2Nlc3MYAiABKAgSKwoFZXJyb3IYAyABKAsyFy5kb21haW4uY29tbW9uLnYxLkVycm9ySACIAQFCCAoGX2Vycm9yIkMKFlVwZGF0ZVdvcmtzcGFjZVJlcXVlc3QSKQoEZGF0YRgBIAEoCzIbLmRvbWFpbi5lbnRpdHkudjEuV29ya3NwYWNlIowBChdVcGRhdGVXb3Jrc3BhY2VSZXNwb25zZRIpCgRkYXRhGAEgAygLMhsuZG9tYWluLmVudGl0eS52MS5Xb3Jrc3BhY2USDwoHc3VjY2VzcxgCIAEoCBIrCgVlcnJvchgDIAEoCzIXLmRvbWFpbi5jb21tb24udjEuRXJyb3JIAIgBAUIICgZfZXJyb3IiQwoWRGVsZXRlV29ya3NwYWNlUmVxdWVzdBIpCgRkYXRhGAEgASgLMhsuZG9tYWluLmVudGl0eS52MS5Xb3Jrc3BhY2UiYQoXRGVsZXRlV29ya3NwYWNlUmVzcG9uc2USDwoHc3VjY2VzcxgBIAEoCBIrCgVlcnJvchgCIAEoCzIXLmRvbWFpbi5jb21tb24udjEuRXJyb3JIAIgBAUIICgZfZXJyb3IiowIKFUxpc3RXb3Jrc3BhY2VzUmVxdWVzdBI0CgZzZWFyY2gYASABKAsyHy5kb21haW4uY29tbW9uLnYxLlNlYXJjaFJlcXVlc3RIAIgBARI1CgdmaWx0ZXJzGAIgASgLMh8uZG9tYWluLmNvbW1vbi52MS5GaWx0ZXJSZXF1ZXN0SAGIAQESMAoEc29ydBgDIAEoCzIdLmRvbWFpbi5jb21tb24udjEuU29ydFJlcXVlc3RIAogBARI8CgpwYWdpbmF0aW9uGAQgASgLMiMuZG9tYWluLmNvbW1vbi52MS5QYWdpbmF0aW9uUmVxdWVzdEgDiAEBQgkKB19zZWFyY2hCCgoIX2ZpbHRlcnNCBwoFX3NvcnRCDQoLX3BhZ2luYXRpb24iiwEKFkxpc3RXb3Jrc3BhY2VzUmVzcG9uc2USKQoEZGF0YRgBIAMoCzIbLmRvbWFpbi5lbnRpdHkudjEuV29ya3NwYWNlEg8KB3N1Y2Nlc3MYAiABKAgSKwoFZXJyb3IYAyABKAsyFy5kb21haW4uY29tbW9uLnYxLkVycm9ySACIAQFCCAoGX2Vycm9yIq0CCh9HZXRXb3Jrc3BhY2VMaXN0UGFnZURhdGFSZXF1ZXN0EjQKBnNlYXJjaBgBIAEoCzIfLmRvbWFpbi5jb21tb24udjEuU2VhcmNoUmVxdWVzdEgAiAEBEjUKB2ZpbHRlcnMYAiABKAsyHy5kb21haW4uY29tbW9uLnYxLkZpbHRlclJlcXVlc3RIAYgBARIwCgRzb3J0GAMgASgLMh0uZG9tYWluLmNvbW1vbi52MS5Tb3J0UmVxdWVzdEgCiAEBEjwKCnBhZ2luYXRpb24YBCABKAsyIy5kb21haW4uY29tbW9uLnYxLlBhZ2luYXRpb25SZXF1ZXN0SAOIAQFCCQoHX3NlYXJjaEIKCghfZmlsdGVyc0IHCgVfc29ydEINCgtfcGFnaW5hdGlvbiKlAgogR2V0V29ya3NwYWNlTGlzdFBhZ2VEYXRhUmVzcG9uc2USMwoOd29ya3NwYWNlX2xpc3QYASADKAsyGy5kb21haW4uZW50aXR5LnYxLldvcmtzcGFjZRI9CgpwYWdpbmF0aW9uGAIgASgLMiQuZG9tYWluLmNvbW1vbi52MS5QYWdpbmF0aW9uUmVzcG9uc2VIAIgBARI2Cg5zZWFyY2hfcmVzdWx0cxgDIAMoCzIeLmRvbWFpbi5jb21tb24udjEuU2VhcmNoUmVzdWx0Eg8KB3N1Y2Nlc3MYBCABKAgSKwoFZXJyb3IYBSABKAsyFy5kb21haW4uY29tbW9uLnYxLkVycm9ySAGIAQFCDQoLX3BhZ2luYXRpb25CCAoGX2Vycm9yIjcKH0dldFdvcmtzcGFjZUl0ZW1QYWdlRGF0YVJlcXVlc3QSFAoMd29ya3NwYWNlX2lkGAEgASgJIq0BCiBHZXRXb3Jrc3BhY2VJdGVtUGFnZURhdGFSZXNwb25zZRIzCgl3b3Jrc3BhY2UYASABKAsyGy5kb21haW4uZW50aXR5LnYxLldvcmtzcGFjZUgAiAEBEg8KB3N1Y2Nlc3MYAiABKAgSKwoFZXJyb3IYAyABKAsyFy5kb21haW4uY29tbW9uLnYxLkVycm9ySAGIAQFCDAoKX3dvcmtzcGFjZUIICgZfZXJyb3IynwYKFldvcmtzcGFjZURvbWFpblNlcnZpY2USZgoPQ3JlYXRlV29ya3NwYWNlEiguZG9tYWluLmVudGl0eS52MS5DcmVhdGVXb3Jrc3BhY2VSZXF1ZXN0GikuZG9tYWluLmVudGl0eS52MS5DcmVhdGVXb3Jrc3BhY2VSZXNwb25zZRJgCg1SZWFkV29ya3NwYWNlEiYuZG9tYWluLmVudGl0eS52MS5SZWFkV29ya3NwYWNlUmVxdWVzdBonLmRvbWFpbi5lbnRpdHkudjEuUmVhZFdvcmtzcGFjZVJlc3BvbnNlEmYKD1VwZGF0ZVdvcmtzcGFjZRIoLmRvbWFpbi5lbnRpdHkudjEuVXBkYXRlV29ya3NwYWNlUmVxdWVzdBopLmRvbWFpbi5lbnRpdHkudjEuVXBkYXRlV29ya3NwYWNlUmVzcG9uc2USZgoPRGVsZXRlV29ya3NwYWNlEiguZG9tYWluLmVudGl0eS52MS5EZWxldGVXb3Jrc3BhY2VSZXF1ZXN0GikuZG9tYWluLmVudGl0eS52MS5EZWxldGVXb3Jrc3BhY2VSZXNwb25zZRJjCg5MaXN0V29ya3NwYWNlcxInLmRvbWFpbi5lbnRpdHkudjEuTGlzdFdvcmtzcGFjZXNSZXF1ZXN0GiguZG9tYWluLmVudGl0eS52MS5MaXN0V29ya3NwYWNlc1Jlc3BvbnNlEoEBChhHZXRXb3Jrc3BhY2VMaXN0UGFnZURhdGESMS5kb21haW4uZW50aXR5LnYxLkdldFdvcmtzcGFjZUxpc3RQYWdlRGF0YVJlcXVlc3QaMi5kb21haW4uZW50aXR5LnYxLkdldFdvcmtzcGFjZUxpc3RQYWdlRGF0YVJlc3BvbnNlEoEBChhHZXRXb3Jrc3BhY2VJdGVtUGFnZURhdGESMS5kb21haW4uZW50aXR5LnYxLkdldFdvcmtzcGFjZUl0ZW1QYWdlRGF0YVJlcXVlc3QaMi5kb21haW4uZW50aXR5LnYxLkdldFdvcmtzcGFjZUl0ZW1QYWdlRGF0YVJlc3BvbnNlQtUBChRjb20uZG9tYWluLmVudGl0eS52MUIOV29ya3NwYWNlUHJvdG9QAVpLZ2l0aHViLmNvbS9lcm5pZWFsaWNlL2VzcXltYS9wa2cvc2NoZW1hL3YxL2RvbWFpbi9lbnRpdHkvd29ya3NwYWNlO2VudGl0eXYxogIDREVYqgIQRG9tYWluLkVudGl0eS5WMcoCEERvbWFpblxFbnRpdHlcVjHiAhxEb21haW5cRW50aXR5XFYxXEdQQk1ldGFkYXRh6gISRG9tYWluOjpFbnRpdHk6OlYxYgZwcm90bzM", [file_domain_common_error, file_domain_common_pagination, file_domain_common_filter, file_domain_common_sort, file_domain_common_search, file_options_db]);
+  fileDesc("Cidkb21haW4vZW50aXR5L3dvcmtzcGFjZS93b3Jrc3BhY2UucHJvdG8SEGRvbWFpbi5lbnRpdHkudjEilgMKCVdvcmtzcGFjZRIKCgJpZBgBIAEoCRIMCgRuYW1lGAIgASgJEhMKC2Rlc2NyaXB0aW9uGAMgASgJEg8KB3ByaXZhdGUYBCABKAgSPAoUd29ya2Zsb3dfdGVtcGxhdGVfaWQYBSABKAlCGYK1GBUKEXdvcmtmbG93X3RlbXBsYXRlGAFIAIgBARIZCgxkYXRlX2NyZWF0ZWQYBiABKANIAYgBARIgChNkYXRlX2NyZWF0ZWRfc3RyaW5nGAcgASgJSAKIAQESGgoNZGF0ZV9tb2RpZmllZBgIIAEoA0gDiAEBEiEKFGRhdGVfbW9kaWZpZWRfc3RyaW5nGAkgASgJSASIAQESGgoGYWN0aXZlGAogASgIQgqCtRgGIgR0cnVlOgaKtRgCCAFCFwoVX3dvcmtmbG93X3RlbXBsYXRlX2lkQg8KDV9kYXRlX2NyZWF0ZWRCFgoUX2RhdGVfY3JlYXRlZF9zdHJpbmdCEAoOX2RhdGVfbW9kaWZpZWRCFwoVX2RhdGVfbW9kaWZpZWRfc3RyaW5nIkMKFkNyZWF0ZVdvcmtzcGFjZVJlcXVlc3QSKQoEZGF0YRgBIAEoCzIbLmRvbWFpbi5lbnRpdHkudjEuV29ya3NwYWNlIowBChdDcmVhdGVXb3Jrc3BhY2VSZXNwb25zZRIpCgRkYXRhGAEgAygLMhsuZG9tYWluLmVudGl0eS52MS5Xb3Jrc3BhY2USDwoHc3VjY2VzcxgCIAEoCBIrCgVlcnJvchgDIAEoCzIXLmRvbWFpbi5jb21tb24udjEuRXJyb3JIAIgBAUIICgZfZXJyb3IiQQoUUmVhZFdvcmtzcGFjZVJlcXVlc3QSKQoEZGF0YRgBIAEoCzIbLmRvbWFpbi5lbnRpdHkudjEuV29ya3NwYWNlIooBChVSZWFkV29ya3NwYWNlUmVzcG9uc2USKQoEZGF0YRgBIAMoCzIbLmRvbWFpbi5lbnRpdHkudjEuV29ya3NwYWNlEg8KB3N1Y2Nlc3MYAiABKAgSKwoFZXJyb3IYAyABKAsyFy5kb21haW4uY29tbW9uLnYxLkVycm9ySACIAQFCCAoGX2Vycm9yIkMKFlVwZGF0ZVdvcmtzcGFjZVJlcXVlc3QSKQoEZGF0YRgBIAEoCzIbLmRvbWFpbi5lbnRpdHkudjEuV29ya3NwYWNlIowBChdVcGRhdGVXb3Jrc3BhY2VSZXNwb25zZRIpCgRkYXRhGAEgAygLMhsuZG9tYWluLmVudGl0eS52MS5Xb3Jrc3BhY2USDwoHc3VjY2VzcxgCIAEoCBIrCgVlcnJvchgDIAEoCzIXLmRvbWFpbi5jb21tb24udjEuRXJyb3JIAIgBAUIICgZfZXJyb3IiQwoWRGVsZXRlV29ya3NwYWNlUmVxdWVzdBIpCgRkYXRhGAEgASgLMhsuZG9tYWluLmVudGl0eS52MS5Xb3Jrc3BhY2UiYQoXRGVsZXRlV29ya3NwYWNlUmVzcG9uc2USDwoHc3VjY2VzcxgBIAEoCBIrCgVlcnJvchgCIAEoCzIXLmRvbWFpbi5jb21tb24udjEuRXJyb3JIAIgBAUIICgZfZXJyb3IiowIKFUxpc3RXb3Jrc3BhY2VzUmVxdWVzdBI0CgZzZWFyY2gYASABKAsyHy5kb21haW4uY29tbW9uLnYxLlNlYXJjaFJlcXVlc3RIAIgBARI1CgdmaWx0ZXJzGAIgASgLMh8uZG9tYWluLmNvbW1vbi52MS5GaWx0ZXJSZXF1ZXN0SAGIAQESMAoEc29ydBgDIAEoCzIdLmRvbWFpbi5jb21tb24udjEuU29ydFJlcXVlc3RIAogBARI8CgpwYWdpbmF0aW9uGAQgASgLMiMuZG9tYWluLmNvbW1vbi52MS5QYWdpbmF0aW9uUmVxdWVzdEgDiAEBQgkKB19zZWFyY2hCCgoIX2ZpbHRlcnNCBwoFX3NvcnRCDQoLX3BhZ2luYXRpb24iiwEKFkxpc3RXb3Jrc3BhY2VzUmVzcG9uc2USKQoEZGF0YRgBIAMoCzIbLmRvbWFpbi5lbnRpdHkudjEuV29ya3NwYWNlEg8KB3N1Y2Nlc3MYAiABKAgSKwoFZXJyb3IYAyABKAsyFy5kb21haW4uY29tbW9uLnYxLkVycm9ySACIAQFCCAoGX2Vycm9yIq0CCh9HZXRXb3Jrc3BhY2VMaXN0UGFnZURhdGFSZXF1ZXN0EjQKBnNlYXJjaBgBIAEoCzIfLmRvbWFpbi5jb21tb24udjEuU2VhcmNoUmVxdWVzdEgAiAEBEjUKB2ZpbHRlcnMYAiABKAsyHy5kb21haW4uY29tbW9uLnYxLkZpbHRlclJlcXVlc3RIAYgBARIwCgRzb3J0GAMgASgLMh0uZG9tYWluLmNvbW1vbi52MS5Tb3J0UmVxdWVzdEgCiAEBEjwKCnBhZ2luYXRpb24YBCABKAsyIy5kb21haW4uY29tbW9uLnYxLlBhZ2luYXRpb25SZXF1ZXN0SAOIAQFCCQoHX3NlYXJjaEIKCghfZmlsdGVyc0IHCgVfc29ydEINCgtfcGFnaW5hdGlvbiKlAgogR2V0V29ya3NwYWNlTGlzdFBhZ2VEYXRhUmVzcG9uc2USMwoOd29ya3NwYWNlX2xpc3QYASADKAsyGy5kb21haW4uZW50aXR5LnYxLldvcmtzcGFjZRI9CgpwYWdpbmF0aW9uGAIgASgLMiQuZG9tYWluLmNvbW1vbi52MS5QYWdpbmF0aW9uUmVzcG9uc2VIAIgBARI2Cg5zZWFyY2hfcmVzdWx0cxgDIAMoCzIeLmRvbWFpbi5jb21tb24udjEuU2VhcmNoUmVzdWx0Eg8KB3N1Y2Nlc3MYBCABKAgSKwoFZXJyb3IYBSABKAsyFy5kb21haW4uY29tbW9uLnYxLkVycm9ySAGIAQFCDQoLX3BhZ2luYXRpb25CCAoGX2Vycm9yIjcKH0dldFdvcmtzcGFjZUl0ZW1QYWdlRGF0YVJlcXVlc3QSFAoMd29ya3NwYWNlX2lkGAEgASgJIq0BCiBHZXRXb3Jrc3BhY2VJdGVtUGFnZURhdGFSZXNwb25zZRIzCgl3b3Jrc3BhY2UYASABKAsyGy5kb21haW4uZW50aXR5LnYxLldvcmtzcGFjZUgAiAEBEg8KB3N1Y2Nlc3MYAiABKAgSKwoFZXJyb3IYAyABKAsyFy5kb21haW4uY29tbW9uLnYxLkVycm9ySAGIAQFCDAoKX3dvcmtzcGFjZUIICgZfZXJyb3IiRQoWU3dpdGNoV29ya3NwYWNlUmVxdWVzdBIUCgx3b3Jrc3BhY2VfaWQYASABKAkSFQoNc2Vzc2lvbl90b2tlbhgCIAEoCSLHAQoXU3dpdGNoV29ya3NwYWNlUmVzcG9uc2USDwoHc3VjY2VzcxgBIAEoCBIeChF3b3Jrc3BhY2VfdXNlcl9pZBgCIAEoCUgAiAEBEhsKDndvcmtzcGFjZV9uYW1lGAMgASgJSAGIAQESKwoFZXJyb3IYBCABKAsyFy5kb21haW4uY29tbW9uLnYxLkVycm9ySAKIAQFCFAoSX3dvcmtzcGFjZV91c2VyX2lkQhEKD193b3Jrc3BhY2VfbmFtZUIICgZfZXJyb3IiLAoZTGlzdFVzZXJXb3Jrc3BhY2VzUmVxdWVzdBIPCgd1c2VyX2lkGAEgASgJImwKDVVzZXJXb3Jrc3BhY2USFAoMd29ya3NwYWNlX2lkGAEgASgJEhYKDndvcmtzcGFjZV9uYW1lGAIgASgJEhkKEXdvcmtzcGFjZV91c2VyX2lkGAMgASgJEhIKCmlzX2N1cnJlbnQYBCABKAgimQEKGkxpc3RVc2VyV29ya3NwYWNlc1Jlc3BvbnNlEjMKCndvcmtzcGFjZXMYASADKAsyHy5kb21haW4uZW50aXR5LnYxLlVzZXJXb3Jrc3BhY2USDwoHc3VjY2VzcxgCIAEoCBIrCgVlcnJvchgDIAEoCzIXLmRvbWFpbi5jb21tb24udjEuRXJyb3JIAIgBAUIICgZfZXJyb3Iy+AcKFldvcmtzcGFjZURvbWFpblNlcnZpY2USZgoPQ3JlYXRlV29ya3NwYWNlEiguZG9tYWluLmVudGl0eS52MS5DcmVhdGVXb3Jrc3BhY2VSZXF1ZXN0GikuZG9tYWluLmVudGl0eS52MS5DcmVhdGVXb3Jrc3BhY2VSZXNwb25zZRJgCg1SZWFkV29ya3NwYWNlEiYuZG9tYWluLmVudGl0eS52MS5SZWFkV29ya3NwYWNlUmVxdWVzdBonLmRvbWFpbi5lbnRpdHkudjEuUmVhZFdvcmtzcGFjZVJlc3BvbnNlEmYKD1VwZGF0ZVdvcmtzcGFjZRIoLmRvbWFpbi5lbnRpdHkudjEuVXBkYXRlV29ya3NwYWNlUmVxdWVzdBopLmRvbWFpbi5lbnRpdHkudjEuVXBkYXRlV29ya3NwYWNlUmVzcG9uc2USZgoPRGVsZXRlV29ya3NwYWNlEiguZG9tYWluLmVudGl0eS52MS5EZWxldGVXb3Jrc3BhY2VSZXF1ZXN0GikuZG9tYWluLmVudGl0eS52MS5EZWxldGVXb3Jrc3BhY2VSZXNwb25zZRJjCg5MaXN0V29ya3NwYWNlcxInLmRvbWFpbi5lbnRpdHkudjEuTGlzdFdvcmtzcGFjZXNSZXF1ZXN0GiguZG9tYWluLmVudGl0eS52MS5MaXN0V29ya3NwYWNlc1Jlc3BvbnNlEoEBChhHZXRXb3Jrc3BhY2VMaXN0UGFnZURhdGESMS5kb21haW4uZW50aXR5LnYxLkdldFdvcmtzcGFjZUxpc3RQYWdlRGF0YVJlcXVlc3QaMi5kb21haW4uZW50aXR5LnYxLkdldFdvcmtzcGFjZUxpc3RQYWdlRGF0YVJlc3BvbnNlEoEBChhHZXRXb3Jrc3BhY2VJdGVtUGFnZURhdGESMS5kb21haW4uZW50aXR5LnYxLkdldFdvcmtzcGFjZUl0ZW1QYWdlRGF0YVJlcXVlc3QaMi5kb21haW4uZW50aXR5LnYxLkdldFdvcmtzcGFjZUl0ZW1QYWdlRGF0YVJlc3BvbnNlEmYKD1N3aXRjaFdvcmtzcGFjZRIoLmRvbWFpbi5lbnRpdHkudjEuU3dpdGNoV29ya3NwYWNlUmVxdWVzdBopLmRvbWFpbi5lbnRpdHkudjEuU3dpdGNoV29ya3NwYWNlUmVzcG9uc2USbwoSTGlzdFVzZXJXb3Jrc3BhY2VzEisuZG9tYWluLmVudGl0eS52MS5MaXN0VXNlcldvcmtzcGFjZXNSZXF1ZXN0GiwuZG9tYWluLmVudGl0eS52MS5MaXN0VXNlcldvcmtzcGFjZXNSZXNwb25zZULVAQoUY29tLmRvbWFpbi5lbnRpdHkudjFCDldvcmtzcGFjZVByb3RvUAFaS2dpdGh1Yi5jb20vZXJuaWVhbGljZS9lc3F5bWEvcGtnL3NjaGVtYS92MS9kb21haW4vZW50aXR5L3dvcmtzcGFjZTtlbnRpdHl2MaICA0RFWKoCEERvbWFpbi5FbnRpdHkuVjHKAhBEb21haW5cRW50aXR5XFYx4gIcRG9tYWluXEVudGl0eVxWMVxHUEJNZXRhZGF0YeoCEkRvbWFpbjo6RW50aXR5OjpWMWIGcHJvdG8z", [file_domain_common_error, file_domain_common_pagination, file_domain_common_filter, file_domain_common_sort, file_domain_common_search, file_options_db]);
 
 /**
  * @generated from message domain.entity.v1.Workspace
@@ -429,6 +429,152 @@ export const GetWorkspaceItemPageDataResponseSchema: GenMessage<GetWorkspaceItem
   messageDesc(file_domain_entity_workspace_workspace, 14);
 
 /**
+ * SwitchWorkspaceRequest — switch the active workspace for a session.
+ *
+ * @generated from message domain.entity.v1.SwitchWorkspaceRequest
+ */
+export type SwitchWorkspaceRequest = Message<"domain.entity.v1.SwitchWorkspaceRequest"> & {
+  /**
+   * Target workspace ID
+   *
+   * @generated from field: string workspace_id = 1;
+   */
+  workspaceId: string;
+
+  /**
+   * Current session token (from cookie)
+   *
+   * @generated from field: string session_token = 2;
+   */
+  sessionToken: string;
+};
+
+/**
+ * Describes the message domain.entity.v1.SwitchWorkspaceRequest.
+ * Use `create(SwitchWorkspaceRequestSchema)` to create a new message.
+ */
+export const SwitchWorkspaceRequestSchema: GenMessage<SwitchWorkspaceRequest> = /*@__PURE__*/
+  messageDesc(file_domain_entity_workspace_workspace, 15);
+
+/**
+ * @generated from message domain.entity.v1.SwitchWorkspaceResponse
+ */
+export type SwitchWorkspaceResponse = Message<"domain.entity.v1.SwitchWorkspaceResponse"> & {
+  /**
+   * @generated from field: bool success = 1;
+   */
+  success: boolean;
+
+  /**
+   * The resolved workspace_user.id
+   *
+   * @generated from field: optional string workspace_user_id = 2;
+   */
+  workspaceUserId?: string;
+
+  /**
+   * The workspace name for UI confirmation
+   *
+   * @generated from field: optional string workspace_name = 3;
+   */
+  workspaceName?: string;
+
+  /**
+   * @generated from field: optional domain.common.v1.Error error = 4;
+   */
+  error?: Error;
+};
+
+/**
+ * Describes the message domain.entity.v1.SwitchWorkspaceResponse.
+ * Use `create(SwitchWorkspaceResponseSchema)` to create a new message.
+ */
+export const SwitchWorkspaceResponseSchema: GenMessage<SwitchWorkspaceResponse> = /*@__PURE__*/
+  messageDesc(file_domain_entity_workspace_workspace, 16);
+
+/**
+ * ListUserWorkspacesRequest — list workspaces accessible to the current user.
+ *
+ * @generated from message domain.entity.v1.ListUserWorkspacesRequest
+ */
+export type ListUserWorkspacesRequest = Message<"domain.entity.v1.ListUserWorkspacesRequest"> & {
+  /**
+   * @generated from field: string user_id = 1;
+   */
+  userId: string;
+};
+
+/**
+ * Describes the message domain.entity.v1.ListUserWorkspacesRequest.
+ * Use `create(ListUserWorkspacesRequestSchema)` to create a new message.
+ */
+export const ListUserWorkspacesRequestSchema: GenMessage<ListUserWorkspacesRequest> = /*@__PURE__*/
+  messageDesc(file_domain_entity_workspace_workspace, 17);
+
+/**
+ * @generated from message domain.entity.v1.UserWorkspace
+ */
+export type UserWorkspace = Message<"domain.entity.v1.UserWorkspace"> & {
+  /**
+   * @generated from field: string workspace_id = 1;
+   */
+  workspaceId: string;
+
+  /**
+   * @generated from field: string workspace_name = 2;
+   */
+  workspaceName: string;
+
+  /**
+   * The workspace_user.id for this user+workspace
+   *
+   * @generated from field: string workspace_user_id = 3;
+   */
+  workspaceUserId: string;
+
+  /**
+   * Whether this is the currently active workspace
+   *
+   * @generated from field: bool is_current = 4;
+   */
+  isCurrent: boolean;
+};
+
+/**
+ * Describes the message domain.entity.v1.UserWorkspace.
+ * Use `create(UserWorkspaceSchema)` to create a new message.
+ */
+export const UserWorkspaceSchema: GenMessage<UserWorkspace> = /*@__PURE__*/
+  messageDesc(file_domain_entity_workspace_workspace, 18);
+
+/**
+ * @generated from message domain.entity.v1.ListUserWorkspacesResponse
+ */
+export type ListUserWorkspacesResponse = Message<"domain.entity.v1.ListUserWorkspacesResponse"> & {
+  /**
+   * @generated from field: repeated domain.entity.v1.UserWorkspace workspaces = 1;
+   */
+  workspaces: UserWorkspace[];
+
+  /**
+   * @generated from field: bool success = 2;
+   */
+  success: boolean;
+
+  /**
+   * @generated from field: optional domain.common.v1.Error error = 3;
+   */
+  error?: Error;
+};
+
+/**
+ * Describes the message domain.entity.v1.ListUserWorkspacesResponse.
+ * Use `create(ListUserWorkspacesResponseSchema)` to create a new message.
+ */
+export const ListUserWorkspacesResponseSchema: GenMessage<ListUserWorkspacesResponse> = /*@__PURE__*/
+  messageDesc(file_domain_entity_workspace_workspace, 19);
+
+/**
  * @generated from service domain.entity.v1.WorkspaceDomainService
  */
 export const WorkspaceDomainService: GenService<{
@@ -487,6 +633,22 @@ export const WorkspaceDomainService: GenService<{
     methodKind: "unary";
     input: typeof GetWorkspaceItemPageDataRequestSchema;
     output: typeof GetWorkspaceItemPageDataResponseSchema;
+  },
+  /**
+   * @generated from rpc domain.entity.v1.WorkspaceDomainService.SwitchWorkspace
+   */
+  switchWorkspace: {
+    methodKind: "unary";
+    input: typeof SwitchWorkspaceRequestSchema;
+    output: typeof SwitchWorkspaceResponseSchema;
+  },
+  /**
+   * @generated from rpc domain.entity.v1.WorkspaceDomainService.ListUserWorkspaces
+   */
+  listUserWorkspaces: {
+    methodKind: "unary";
+    input: typeof ListUserWorkspacesRequestSchema;
+    output: typeof ListUserWorkspacesResponseSchema;
   },
 }> = /*@__PURE__*/
   serviceDesc(file_domain_entity_workspace_workspace, 0);

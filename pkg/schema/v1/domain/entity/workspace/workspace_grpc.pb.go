@@ -26,6 +26,8 @@ const (
 	WorkspaceDomainService_ListWorkspaces_FullMethodName           = "/domain.entity.v1.WorkspaceDomainService/ListWorkspaces"
 	WorkspaceDomainService_GetWorkspaceListPageData_FullMethodName = "/domain.entity.v1.WorkspaceDomainService/GetWorkspaceListPageData"
 	WorkspaceDomainService_GetWorkspaceItemPageData_FullMethodName = "/domain.entity.v1.WorkspaceDomainService/GetWorkspaceItemPageData"
+	WorkspaceDomainService_SwitchWorkspace_FullMethodName          = "/domain.entity.v1.WorkspaceDomainService/SwitchWorkspace"
+	WorkspaceDomainService_ListUserWorkspaces_FullMethodName       = "/domain.entity.v1.WorkspaceDomainService/ListUserWorkspaces"
 )
 
 // WorkspaceDomainServiceClient is the client API for WorkspaceDomainService service.
@@ -39,6 +41,8 @@ type WorkspaceDomainServiceClient interface {
 	ListWorkspaces(ctx context.Context, in *ListWorkspacesRequest, opts ...grpc.CallOption) (*ListWorkspacesResponse, error)
 	GetWorkspaceListPageData(ctx context.Context, in *GetWorkspaceListPageDataRequest, opts ...grpc.CallOption) (*GetWorkspaceListPageDataResponse, error)
 	GetWorkspaceItemPageData(ctx context.Context, in *GetWorkspaceItemPageDataRequest, opts ...grpc.CallOption) (*GetWorkspaceItemPageDataResponse, error)
+	SwitchWorkspace(ctx context.Context, in *SwitchWorkspaceRequest, opts ...grpc.CallOption) (*SwitchWorkspaceResponse, error)
+	ListUserWorkspaces(ctx context.Context, in *ListUserWorkspacesRequest, opts ...grpc.CallOption) (*ListUserWorkspacesResponse, error)
 }
 
 type workspaceDomainServiceClient struct {
@@ -119,6 +123,26 @@ func (c *workspaceDomainServiceClient) GetWorkspaceItemPageData(ctx context.Cont
 	return out, nil
 }
 
+func (c *workspaceDomainServiceClient) SwitchWorkspace(ctx context.Context, in *SwitchWorkspaceRequest, opts ...grpc.CallOption) (*SwitchWorkspaceResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(SwitchWorkspaceResponse)
+	err := c.cc.Invoke(ctx, WorkspaceDomainService_SwitchWorkspace_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *workspaceDomainServiceClient) ListUserWorkspaces(ctx context.Context, in *ListUserWorkspacesRequest, opts ...grpc.CallOption) (*ListUserWorkspacesResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(ListUserWorkspacesResponse)
+	err := c.cc.Invoke(ctx, WorkspaceDomainService_ListUserWorkspaces_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // WorkspaceDomainServiceServer is the server API for WorkspaceDomainService service.
 // All implementations must embed UnimplementedWorkspaceDomainServiceServer
 // for forward compatibility.
@@ -130,6 +154,8 @@ type WorkspaceDomainServiceServer interface {
 	ListWorkspaces(context.Context, *ListWorkspacesRequest) (*ListWorkspacesResponse, error)
 	GetWorkspaceListPageData(context.Context, *GetWorkspaceListPageDataRequest) (*GetWorkspaceListPageDataResponse, error)
 	GetWorkspaceItemPageData(context.Context, *GetWorkspaceItemPageDataRequest) (*GetWorkspaceItemPageDataResponse, error)
+	SwitchWorkspace(context.Context, *SwitchWorkspaceRequest) (*SwitchWorkspaceResponse, error)
+	ListUserWorkspaces(context.Context, *ListUserWorkspacesRequest) (*ListUserWorkspacesResponse, error)
 	mustEmbedUnimplementedWorkspaceDomainServiceServer()
 }
 
@@ -160,6 +186,12 @@ func (UnimplementedWorkspaceDomainServiceServer) GetWorkspaceListPageData(contex
 }
 func (UnimplementedWorkspaceDomainServiceServer) GetWorkspaceItemPageData(context.Context, *GetWorkspaceItemPageDataRequest) (*GetWorkspaceItemPageDataResponse, error) {
 	return nil, status.Error(codes.Unimplemented, "method GetWorkspaceItemPageData not implemented")
+}
+func (UnimplementedWorkspaceDomainServiceServer) SwitchWorkspace(context.Context, *SwitchWorkspaceRequest) (*SwitchWorkspaceResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method SwitchWorkspace not implemented")
+}
+func (UnimplementedWorkspaceDomainServiceServer) ListUserWorkspaces(context.Context, *ListUserWorkspacesRequest) (*ListUserWorkspacesResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method ListUserWorkspaces not implemented")
 }
 func (UnimplementedWorkspaceDomainServiceServer) mustEmbedUnimplementedWorkspaceDomainServiceServer() {
 }
@@ -309,6 +341,42 @@ func _WorkspaceDomainService_GetWorkspaceItemPageData_Handler(srv interface{}, c
 	return interceptor(ctx, in, info, handler)
 }
 
+func _WorkspaceDomainService_SwitchWorkspace_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(SwitchWorkspaceRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(WorkspaceDomainServiceServer).SwitchWorkspace(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: WorkspaceDomainService_SwitchWorkspace_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(WorkspaceDomainServiceServer).SwitchWorkspace(ctx, req.(*SwitchWorkspaceRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _WorkspaceDomainService_ListUserWorkspaces_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ListUserWorkspacesRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(WorkspaceDomainServiceServer).ListUserWorkspaces(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: WorkspaceDomainService_ListUserWorkspaces_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(WorkspaceDomainServiceServer).ListUserWorkspaces(ctx, req.(*ListUserWorkspacesRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // WorkspaceDomainService_ServiceDesc is the grpc.ServiceDesc for WorkspaceDomainService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -343,6 +411,14 @@ var WorkspaceDomainService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "GetWorkspaceItemPageData",
 			Handler:    _WorkspaceDomainService_GetWorkspaceItemPageData_Handler,
+		},
+		{
+			MethodName: "SwitchWorkspace",
+			Handler:    _WorkspaceDomainService_SwitchWorkspace_Handler,
+		},
+		{
+			MethodName: "ListUserWorkspaces",
+			Handler:    _WorkspaceDomainService_ListUserWorkspaces_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
