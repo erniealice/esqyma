@@ -1,1 +1,0 @@
-ALTER TABLE "product" ADD COLUMN IF NOT EXISTS "with_inventory" BOOLEAN NOT NULL DEFAULT false;

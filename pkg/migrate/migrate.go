@@ -4,6 +4,7 @@ import (
 	"context"
 	"database/sql"
 	"fmt"
+	"io/fs"
 	"os"
 	"path/filepath"
 	"regexp"
@@ -75,7 +76,9 @@ func (m *Migrator) EnsureMigrationsTable(ctx context.Context) error {
 	return err
 }
 
-// LoadMigrations reads all migration files from the migrations directory
+// LoadMigrations reads all migration files from the migrations directory.
+// When config.FS is set, files are read from the embedded FS using forward-slash
+// paths; otherwise the OS filesystem is used with config.MigrationsDir.
 func (m *Migrator) LoadMigrations() ([]*Migration, error) {
 	migrationsPath := m.config.MigrationsPath()
 
@@ -84,48 +87,82 @@ func (m *Migrator) LoadMigrations() ([]*Migration, error) {
 
 	migrationMap := make(map[int64]*Migration)
 
-	entries, err := os.ReadDir(migrationsPath)
-	if err != nil {
-		if os.IsNotExist(err) {
-			return nil, nil // No migrations directory yet
-		}
-		return nil, err
-	}
-
-	for _, entry := range entries {
-		if entry.IsDir() {
-			continue
-		}
-
-		matches := pattern.FindStringSubmatch(entry.Name())
-		if matches == nil {
-			continue
-		}
-
-		version, _ := strconv.ParseInt(matches[1], 10, 64)
-		name := matches[2]
-		direction := matches[3]
-
-		filePath := filepath.Join(migrationsPath, entry.Name())
-		content, err := os.ReadFile(filePath)
+	if m.config.FS != nil {
+		entries, err := fs.ReadDir(m.config.FS, migrationsPath)
 		if err != nil {
-			return nil, fmt.Errorf("failed to read migration file %s: %w", filePath, err)
+			return nil, nil // directory not present in FS
 		}
-
-		mig, ok := migrationMap[version]
-		if !ok {
-			mig = &Migration{
-				Version:  version,
-				Name:     name,
-				FilePath: filepath.Join(migrationsPath, fmt.Sprintf("%d_%s", version, name)),
+		for _, entry := range entries {
+			if entry.IsDir() {
+				continue
 			}
-			migrationMap[version] = mig
-		}
+			matches := pattern.FindStringSubmatch(entry.Name())
+			if matches == nil {
+				continue
+			}
+			version, _ := strconv.ParseInt(matches[1], 10, 64)
+			name := matches[2]
+			direction := matches[3]
 
-		if direction == "up" {
-			mig.UpSQL = string(content)
-		} else {
-			mig.DownSQL = string(content)
+			filePath := migrationsPath + "/" + entry.Name()
+			content, err := fs.ReadFile(m.config.FS, filePath)
+			if err != nil {
+				return nil, fmt.Errorf("failed to read migration file %s: %w", filePath, err)
+			}
+			mig, ok := migrationMap[version]
+			if !ok {
+				mig = &Migration{
+					Version:  version,
+					Name:     name,
+					FilePath: migrationsPath + "/" + fmt.Sprintf("%d_%s", version, name),
+				}
+				migrationMap[version] = mig
+			}
+			if direction == "up" {
+				mig.UpSQL = string(content)
+			} else {
+				mig.DownSQL = string(content)
+			}
+		}
+	} else {
+		entries, err := os.ReadDir(migrationsPath)
+		if err != nil {
+			if os.IsNotExist(err) {
+				return nil, nil // No migrations directory yet
+			}
+			return nil, err
+		}
+		for _, entry := range entries {
+			if entry.IsDir() {
+				continue
+			}
+			matches := pattern.FindStringSubmatch(entry.Name())
+			if matches == nil {
+				continue
+			}
+			version, _ := strconv.ParseInt(matches[1], 10, 64)
+			name := matches[2]
+			direction := matches[3]
+
+			filePath := filepath.Join(migrationsPath, entry.Name())
+			content, err := os.ReadFile(filePath)
+			if err != nil {
+				return nil, fmt.Errorf("failed to read migration file %s: %w", filePath, err)
+			}
+			mig, ok := migrationMap[version]
+			if !ok {
+				mig = &Migration{
+					Version:  version,
+					Name:     name,
+					FilePath: filepath.Join(migrationsPath, fmt.Sprintf("%d_%s", version, name)),
+				}
+				migrationMap[version] = mig
+			}
+			if direction == "up" {
+				mig.UpSQL = string(content)
+			} else {
+				mig.DownSQL = string(content)
+			}
 		}
 	}
 

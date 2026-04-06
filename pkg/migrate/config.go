@@ -1,6 +1,7 @@
 package migrate
 
 import (
+	"io/fs"
 	"os"
 	"path/filepath"
 )
@@ -13,8 +14,13 @@ type Config struct {
 	// DatabaseURL is the connection string
 	DatabaseURL string
 
-	// MigrationsDir is the base migrations directory
+	// MigrationsDir is the base migrations directory (used when FS is nil)
 	MigrationsDir string
+
+	// FS is an optional embedded filesystem. When set, MigrationsDir is used
+	// as the path prefix inside the FS instead of the OS filesystem.
+	// Use esqyma.MigrationsFS to reference the embedded migrations.
+	FS fs.FS
 }
 
 // DefaultConfig returns configuration from environment variables
