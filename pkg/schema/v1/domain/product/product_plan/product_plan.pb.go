@@ -34,8 +34,6 @@ type ProductPlan struct {
 	Active             bool                   `protobuf:"varint,6,opt,name=active,proto3" json:"active,omitempty"`
 	Name               string                 `protobuf:"bytes,7,opt,name=name,proto3" json:"name,omitempty"`
 	Description        *string                `protobuf:"bytes,8,opt,name=description,proto3,oneof" json:"description,omitempty"`
-	Price              int64                  `protobuf:"varint,9,opt,name=price,proto3" json:"price,omitempty"` // centavos
-	Currency           string                 `protobuf:"bytes,10,opt,name=currency,proto3" json:"currency,omitempty"`
 	Product            *product.Product       `protobuf:"bytes,11,opt,name=product,proto3,oneof" json:"product,omitempty"`
 	ProductId          string                 `protobuf:"bytes,12,opt,name=product_id,json=productId,proto3" json:"product_id,omitempty"`
 	PlanId             string                 `protobuf:"bytes,13,opt,name=plan_id,json=planId,proto3" json:"plan_id,omitempty"`
@@ -125,20 +123,6 @@ func (x *ProductPlan) GetName() string {
 func (x *ProductPlan) GetDescription() string {
 	if x != nil && x.Description != nil {
 		return *x.Description
-	}
-	return ""
-}
-
-func (x *ProductPlan) GetPrice() int64 {
-	if x != nil {
-		return x.Price
-	}
-	return 0
-}
-
-func (x *ProductPlan) GetCurrency() string {
-	if x != nil {
-		return x.Currency
 	}
 	return ""
 }
