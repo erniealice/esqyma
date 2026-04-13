@@ -22,41 +22,51 @@ export type AssetRevaluation = Message<"domain.asset.v1.AssetRevaluation"> & {
      */
     assetId: string;
     /**
-     * @generated from field: int64 revaluation_date = 3;
+     * ISO 8601 date (YYYY-MM-DD)
+     *
+     * @generated from field: string revaluation_date = 3;
      */
-    revaluationDate: bigint;
+    revaluationDate: string;
     /**
-     * @generated from field: string revaluation_date_string = 4;
+     * centavos
+     *
+     * @generated from field: int64 previous_carrying_amount = 5;
      */
-    revaluationDateString: string;
+    previousCarryingAmount: bigint;
     /**
-     * @generated from field: double previous_carrying_amount = 5;
+     * centavos
+     *
+     * @generated from field: int64 new_fair_value = 6;
      */
-    previousCarryingAmount: number;
+    newFairValue: bigint;
     /**
-     * @generated from field: double new_fair_value = 6;
+     * centavos
+     *
+     * @generated from field: int64 revaluation_amount = 7;
      */
-    newFairValue: number;
-    /**
-     * @generated from field: double revaluation_amount = 7;
-     */
-    revaluationAmount: number;
+    revaluationAmount: bigint;
     /**
      * @generated from field: bool is_increase = 8;
      */
     isIncrease: boolean;
     /**
-     * @generated from field: double recognized_in_pnl = 9;
+     * centavos
+     *
+     * @generated from field: int64 recognized_in_pnl = 9;
      */
-    recognizedInPnl: number;
+    recognizedInPnl: bigint;
     /**
-     * @generated from field: double recognized_in_oci = 10;
+     * centavos
+     *
+     * @generated from field: int64 recognized_in_oci = 10;
      */
-    recognizedInOci: number;
+    recognizedInOci: bigint;
     /**
-     * @generated from field: double revaluation_surplus_balance = 11;
+     * centavos
+     *
+     * @generated from field: int64 revaluation_surplus_balance = 11;
      */
-    revaluationSurplusBalance: number;
+    revaluationSurplusBalance: bigint;
     /**
      * @generated from field: optional string appraiser_name = 12;
      */

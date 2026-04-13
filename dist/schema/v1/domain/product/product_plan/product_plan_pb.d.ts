@@ -47,14 +47,6 @@ export type ProductPlan = Message<"domain.product.v1.ProductPlan"> & {
      */
     description?: string;
     /**
-     * @generated from field: double price = 9;
-     */
-    price: number;
-    /**
-     * @generated from field: string currency = 10;
-     */
-    currency: string;
-    /**
      * @generated from field: optional domain.product.v1.Product product = 11;
      */
     product?: Product;

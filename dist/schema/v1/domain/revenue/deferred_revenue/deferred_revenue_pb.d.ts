@@ -33,39 +33,37 @@ export type DeferredRevenue = Message<"domain.revenue.v1.DeferredRevenue"> & {
     /**
      * Amounts
      *
-     * @generated from field: double total_amount = 4;
-     */
-    totalAmount: number;
-    /**
-     * Increases with each recognition entry
+     * centavos
      *
-     * @generated from field: double recognized_amount = 5;
+     * @generated from field: int64 total_amount = 4;
      */
-    recognizedAmount: number;
+    totalAmount: bigint;
     /**
-     * total - recognized
+     * centavos   // Increases with each recognition entry
      *
-     * @generated from field: double remaining_amount = 6;
+     * @generated from field: int64 recognized_amount = 5;
      */
-    remainingAmount: number;
+    recognizedAmount: bigint;
+    /**
+     * centavos                                     // total - recognized
+     *
+     * @generated from field: int64 remaining_amount = 6;
+     */
+    remainingAmount: bigint;
     /**
      * Recognition schedule
      *
-     * @generated from field: int64 start_date = 7;
+     * ISO 8601 date (YYYY-MM-DD)
+     *
+     * @generated from field: string start_date = 7;
      */
-    startDate: bigint;
+    startDate: string;
     /**
-     * @generated from field: optional string start_date_string = 8;
+     * ISO 8601 date (YYYY-MM-DD)
+     *
+     * @generated from field: string end_date = 9;
      */
-    startDateString?: string;
-    /**
-     * @generated from field: int64 end_date = 9;
-     */
-    endDate: bigint;
-    /**
-     * @generated from field: optional string end_date_string = 10;
-     */
-    endDateString?: string;
+    endDate: string;
     /**
      * Derived from start/end, stored for convenience
      *

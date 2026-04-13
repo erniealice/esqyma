@@ -60,17 +60,21 @@ export type EventProduct = Message<"domain.event.v1.EventProduct"> & {
      */
     quantity?: number;
     /**
-     * @generated from field: optional double unit_price = 12;
+     * centavos
+     *
+     * @generated from field: optional int64 unit_price = 12;
      */
-    unitPrice?: number;
+    unitPrice?: bigint;
     /**
      * @generated from field: optional string currency = 13;
      */
     currency?: string;
     /**
-     * @generated from field: optional double total_price = 14;
+     * centavos
+     *
+     * @generated from field: optional int64 total_price = 14;
      */
-    totalPrice?: number;
+    totalPrice?: bigint;
     /**
      * @generated from field: optional string notes = 15;
      */

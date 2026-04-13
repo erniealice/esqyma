@@ -4,7 +4,6 @@ import type { PaginationRequest, PaginationResponse } from "../../common/paginat
 import type { FilterRequest } from "../../common/filter_pb";
 import type { SortRequest } from "../../common/sort_pb";
 import type { SearchRequest, SearchResult } from "../../common/search_pb";
-import type { ProductCollection } from "../product_collection/product_collection_pb";
 import type { Message } from "@bufbuild/protobuf";
 /**
  * Describes the file domain/product/product/product.proto.
@@ -51,30 +50,32 @@ export type Product = Message<"domain.product.v1.Product"> & {
      */
     description?: string;
     /**
-     * @generated from field: double price = 9;
+     * centavos
+     *
+     * @generated from field: int64 price = 9;
      */
-    price: number;
+    price: bigint;
     /**
      * @generated from field: string currency = 10;
      */
     currency: string;
     /**
-     * @generated from field: repeated domain.product.v1.ProductCollection product_collections = 11;
-     */
-    productCollections: ProductCollection[];
-    /**
      * "serialized", "non_serialized", "consumable"
      *
-     * @generated from field: string item_type = 12;
+     * @generated from field: string item_type = 11;
      */
     itemType: string;
     /**
      * Determines how this product reaches the client. Defaults to 'physical' for backward compatibility.
      * Valid values: "physical", "service", "digital", "make_to_order"
      *
-     * @generated from field: string fulfillment_method = 13;
+     * @generated from field: string fulfillment_method = 12;
      */
     fulfillmentMethod: string;
+    /**
+     * @generated from field: optional string line_id = 14;
+     */
+    lineId?: string;
 };
 /**
  * Describes the message domain.product.v1.Product.

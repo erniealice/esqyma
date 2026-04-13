@@ -41,13 +41,17 @@ export type JournalLine = Message<"domain.ledger.v1.JournalLine"> & {
     /**
      * Debit/credit amounts — exactly one should be non-zero per line
      *
-     * @generated from field: double debit_amount = 5;
+     * centavos
+     *
+     * @generated from field: int64 debit_amount = 5;
      */
-    debitAmount: number;
+    debitAmount: bigint;
     /**
-     * @generated from field: double credit_amount = 6;
+     * centavos
+     *
+     * @generated from field: int64 credit_amount = 6;
      */
-    creditAmount: number;
+    creditAmount: bigint;
     /**
      * Presentation order within the journal entry
      *

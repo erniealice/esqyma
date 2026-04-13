@@ -36,11 +36,13 @@ export type CheckoutSession = Message<"integration.payment.v1.CheckoutSession"> 
      */
     providerType: PaymentProviderType;
     /**
-     * Payment amount in base currency units (e.g., dollars, not cents)
+     * Payment amount in centavos (smallest currency unit)
      *
-     * @generated from field: double amount = 5;
+     * centavos
+     *
+     * @generated from field: int64 amount = 5;
      */
-    amount: number;
+    amount: bigint;
     /**
      * Currency code (ISO 4217: USD, PHP, HKD)
      *

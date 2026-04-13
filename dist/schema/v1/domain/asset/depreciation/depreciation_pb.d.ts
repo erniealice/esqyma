@@ -36,39 +36,43 @@ export type DepreciationSchedule = Message<"domain.asset.v1.DepreciationSchedule
      */
     fiscalPeriod: number;
     /**
-     * @generated from field: int64 period_start_date = 6;
+     * ISO 8601 date (YYYY-MM-DD)
+     *
+     * @generated from field: string period_start_date = 6;
      */
-    periodStartDate: bigint;
+    periodStartDate: string;
     /**
-     * @generated from field: string period_start_date_string = 7;
+     * ISO 8601 date (YYYY-MM-DD)
+     *
+     * @generated from field: string period_end_date = 8;
      */
-    periodStartDateString: string;
-    /**
-     * @generated from field: int64 period_end_date = 8;
-     */
-    periodEndDate: bigint;
-    /**
-     * @generated from field: string period_end_date_string = 9;
-     */
-    periodEndDateString: string;
+    periodEndDate: string;
     /**
      * Value tracking
      *
-     * @generated from field: double opening_book_value = 10;
+     * centavos
+     *
+     * @generated from field: int64 opening_book_value = 10;
      */
-    openingBookValue: number;
+    openingBookValue: bigint;
     /**
-     * @generated from field: double depreciation_amount = 11;
+     * centavos
+     *
+     * @generated from field: int64 depreciation_amount = 11;
      */
-    depreciationAmount: number;
+    depreciationAmount: bigint;
     /**
-     * @generated from field: double accumulated_depreciation = 12;
+     * centavos
+     *
+     * @generated from field: int64 accumulated_depreciation = 12;
      */
-    accumulatedDepreciation: number;
+    accumulatedDepreciation: bigint;
     /**
-     * @generated from field: double closing_book_value = 13;
+     * centavos
+     *
+     * @generated from field: int64 closing_book_value = 13;
      */
-    closingBookValue: number;
+    closingBookValue: bigint;
     /**
      * Units of production (optional)
      *

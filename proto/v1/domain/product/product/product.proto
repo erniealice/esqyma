@@ -31,6 +31,7 @@ message Product {
   // Valid values: "physical", "service", "digital", "make_to_order"
   string fulfillment_method = 12;
   reserved 13; // was with_inventory, removed in favor of fulfillment_method
+  optional string line_id = 14 [(options.v1.db).references = "line", (options.v1.db).index = true];
 }
 
 service ProductDomainService {

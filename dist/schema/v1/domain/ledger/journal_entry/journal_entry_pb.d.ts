@@ -65,13 +65,17 @@ export type JournalEntry = Message<"domain.ledger.v1.JournalEntry"> & {
     /**
      * Totals — must balance (total_debit == total_credit)
      *
-     * @generated from field: double total_debit = 10;
+     * centavos
+     *
+     * @generated from field: int64 total_debit = 10;
      */
-    totalDebit: number;
+    totalDebit: bigint;
     /**
-     * @generated from field: double total_credit = 11;
+     * centavos
+     *
+     * @generated from field: int64 total_credit = 11;
      */
-    totalCredit: number;
+    totalCredit: bigint;
     /**
      * Posting audit
      *

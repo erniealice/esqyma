@@ -246,19 +246,21 @@ export declare const BooleanFilterSchema: GenMessage<BooleanFilter>;
  */
 export type MoneyFilter = Message<"domain.common.v1.MoneyFilter"> & {
     /**
-     * @generated from field: double amount = 1;
+     * centavos
+     *
+     * @generated from field: int64 amount = 1;
      */
-    amount: number;
+    amount: bigint;
     /**
      * @generated from field: domain.common.v1.MoneyOperator operator = 2;
      */
     operator: MoneyOperator;
     /**
-     * used when operator = MONEY_BETWEEN
+     * centavos // used when operator = MONEY_BETWEEN
      *
-     * @generated from field: double amount_to = 3;
+     * @generated from field: int64 amount_to = 3;
      */
-    amountTo: number;
+    amountTo: bigint;
 };
 /**
  * Describes the message domain.common.v1.MoneyFilter.

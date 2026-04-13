@@ -34,37 +34,33 @@ export type AssetMaintenance = Message<"domain.asset.v1.AssetMaintenance"> & {
      */
     status: MaintenanceStatus;
     /**
-     * @generated from field: optional int64 scheduled_date = 6;
+     * ISO 8601 date (YYYY-MM-DD)
+     *
+     * @generated from field: optional string scheduled_date = 6;
      */
-    scheduledDate?: bigint;
+    scheduledDate?: string;
     /**
-     * @generated from field: optional string scheduled_date_string = 7;
+     * ISO 8601 date (YYYY-MM-DD)
+     *
+     * @generated from field: optional string start_date = 8;
      */
-    scheduledDateString?: string;
+    startDate?: string;
     /**
-     * @generated from field: optional int64 start_date = 8;
+     * ISO 8601 date (YYYY-MM-DD)
+     *
+     * @generated from field: optional string completion_date = 10;
      */
-    startDate?: bigint;
-    /**
-     * @generated from field: optional string start_date_string = 9;
-     */
-    startDateString?: string;
-    /**
-     * @generated from field: optional int64 completion_date = 10;
-     */
-    completionDate?: bigint;
-    /**
-     * @generated from field: optional string completion_date_string = 11;
-     */
-    completionDateString?: string;
+    completionDate?: string;
     /**
      * @generated from field: optional string description = 12;
      */
     description?: string;
     /**
-     * @generated from field: optional double cost = 13;
+     * centavos
+     *
+     * @generated from field: optional int64 cost = 13;
      */
-    cost?: number;
+    cost?: bigint;
     /**
      * @generated from field: bool is_capitalized = 14;
      */
@@ -84,13 +80,11 @@ export type AssetMaintenance = Message<"domain.asset.v1.AssetMaintenance"> & {
      */
     workOrderNumber?: string;
     /**
-     * @generated from field: optional int64 next_maintenance_date = 18;
+     * ISO 8601 date (YYYY-MM-DD)
+     *
+     * @generated from field: optional string next_maintenance_date = 18;
      */
-    nextMaintenanceDate?: bigint;
-    /**
-     * @generated from field: optional string next_maintenance_date_string = 19;
-     */
-    nextMaintenanceDateString?: string;
+    nextMaintenanceDate?: string;
     /**
      * @generated from field: optional int32 recurrence_interval_days = 20;
      */

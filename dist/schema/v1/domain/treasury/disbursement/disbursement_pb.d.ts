@@ -51,9 +51,11 @@ export type Disbursement = Message<"domain.treasury.v1.Disbursement"> & {
      */
     subscriptionId: string;
     /**
-     * @generated from field: double amount = 10;
+     * centavos
+     *
+     * @generated from field: int64 amount = 10;
      */
-    amount: number;
+    amount: bigint;
     /**
      * @generated from field: string status = 11;
      */
@@ -87,25 +89,17 @@ export type Disbursement = Message<"domain.treasury.v1.Disbursement"> & {
      */
     referenceNumber: string;
     /**
-     * Unix timestamp
+     * ISO 8601 date (YYYY-MM-DD)
      *
-     * @generated from field: int64 payment_date = 25;
+     * @generated from field: string payment_date = 25;
      */
-    paymentDate: bigint;
+    paymentDate: string;
     /**
      * who authorized the outflow
      *
      * @generated from field: string approved_by = 26;
      */
     approvedBy: string;
-    /**
-     * Date display companion
-     *
-     * Display string for payment_date
-     *
-     * @generated from field: optional string payment_date_string = 27;
-     */
-    paymentDateString?: string;
     /**
      * GL traceability
      *

@@ -34,9 +34,11 @@ export type AssetTransaction = Message<"domain.asset.v1.AssetTransaction"> & {
      */
     transactionDateString: string;
     /**
-     * @generated from field: double amount = 6;
+     * centavos
+     *
+     * @generated from field: int64 amount = 6;
      */
-    amount: number;
+    amount: bigint;
     /**
      * @generated from field: optional string description = 7;
      */

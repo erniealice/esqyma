@@ -35,9 +35,11 @@ export type JobSettlement = Message<"domain.operation.v1.JobSettlement"> & {
      */
     targetId: string;
     /**
-     * @generated from field: double allocated_amount = 6;
+     * centavos
+     *
+     * @generated from field: int64 allocated_amount = 6;
      */
-    allocatedAmount: number;
+    allocatedAmount: bigint;
     /**
      * @generated from field: optional double allocation_pct = 7;
      */
@@ -463,9 +465,11 @@ export type SettlementByTargetType = Message<"domain.operation.v1.SettlementByTa
      */
     targetType: SettlementTargetType;
     /**
-     * @generated from field: double total_amount = 2;
+     * centavos
+     *
+     * @generated from field: int64 total_amount = 2;
      */
-    totalAmount: number;
+    totalAmount: bigint;
     /**
      * @generated from field: int32 count = 3;
      */
@@ -485,9 +489,11 @@ export type GetSettlementSummaryResponse = Message<"domain.operation.v1.GetSettl
      */
     summary: SettlementByTargetType[];
     /**
-     * @generated from field: double grand_total = 2;
+     * centavos
+     *
+     * @generated from field: int64 grand_total = 2;
      */
-    grandTotal: number;
+    grandTotal: bigint;
     /**
      * @generated from field: bool success = 3;
      */

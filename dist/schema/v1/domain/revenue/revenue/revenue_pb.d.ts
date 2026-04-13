@@ -53,17 +53,17 @@ export type Revenue = Message<"domain.revenue.v1.Revenue"> & {
      */
     clientId: string;
     /**
-     * @generated from field: optional int64 revenue_date = 10;
+     * ISO 8601 date (YYYY-MM-DD)
+     *
+     * @generated from field: optional string revenue_date = 10;
      */
-    revenueDate?: bigint;
+    revenueDate?: string;
     /**
-     * @generated from field: optional string revenue_date_string = 11;
+     * centavos
+     *
+     * @generated from field: int64 total_amount = 12;
      */
-    revenueDateString?: string;
-    /**
-     * @generated from field: double total_amount = 12;
-     */
-    totalAmount: number;
+    totalAmount: bigint;
     /**
      * @generated from field: string currency = 13;
      */
@@ -143,13 +143,11 @@ export type Revenue = Message<"domain.revenue.v1.Revenue"> & {
      */
     paymentTermId?: string;
     /**
-     * @generated from field: optional int64 due_date = 29;
+     * ISO 8601 date (YYYY-MM-DD)
+     *
+     * @generated from field: optional string due_date = 29;
      */
-    dueDate?: bigint;
-    /**
-     * @generated from field: optional string due_date_string = 30;
-     */
-    dueDateString?: string;
+    dueDate?: string;
     /**
      * @generated from field: optional domain.entity.v1.PaymentTerm payment_term = 31;
      */

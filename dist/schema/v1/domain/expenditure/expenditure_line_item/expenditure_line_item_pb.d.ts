@@ -64,13 +64,17 @@ export type ExpenditureLineItem = Message<"domain.expenditure.v1.ExpenditureLine
      */
     quantity: number;
     /**
-     * @generated from field: double unit_price = 13;
+     * centavos
+     *
+     * @generated from field: int64 unit_price = 13;
      */
-    unitPrice: number;
+    unitPrice: bigint;
     /**
-     * @generated from field: double total_price = 14;
+     * centavos
+     *
+     * @generated from field: int64 total_price = 14;
      */
-    totalPrice: number;
+    totalPrice: bigint;
     /**
      * @generated from field: optional string notes = 16;
      */

@@ -28,9 +28,11 @@ export type FulfillmentReturn = Message<"domain.fulfillment.v1.FulfillmentReturn
      */
     status: string;
     /**
-     * @generated from field: optional double refund_amount = 5;
+     * centavos
+     *
+     * @generated from field: optional int64 refund_amount = 5;
      */
-    refundAmount?: number;
+    refundAmount?: bigint;
     /**
      * @generated from field: string currency = 6;
      */

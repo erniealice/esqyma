@@ -30,17 +30,17 @@ export type PettyCashFund = Message<"domain.treasury.v1.PettyCashFund"> & {
     /**
      * Fund limits
      *
-     * Maximum float
+     * centavos                     // Maximum float
      *
-     * @generated from field: double authorized_amount = 3;
+     * @generated from field: int64 authorized_amount = 3;
      */
-    authorizedAmount: number;
+    authorizedAmount: bigint;
     /**
-     * Running balance
+     * centavos  // Running balance
      *
-     * @generated from field: double current_balance = 4;
+     * @generated from field: int64 current_balance = 4;
      */
-    currentBalance: number;
+    currentBalance: bigint;
     /**
      * Custodian and location
      *

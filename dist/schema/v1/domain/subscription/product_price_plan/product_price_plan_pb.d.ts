@@ -56,9 +56,11 @@ export type ProductPricePlan = Message<"domain.subscription.v1.ProductPricePlan"
      */
     productId: string;
     /**
-     * @generated from field: double price = 11;
+     * centavos
+     *
+     * @generated from field: int64 price = 11;
      */
-    price: number;
+    price: bigint;
     /**
      * @generated from field: string currency = 12;
      */

@@ -63,21 +63,17 @@ export type PriceProduct = Message<"domain.product.v1.PriceProduct"> & {
      */
     currency: string;
     /**
-     * @generated from field: int64 date_start = 13;
+     * ISO 8601 date (YYYY-MM-DD)
+     *
+     * @generated from field: string date_start = 13;
      */
-    dateStart: bigint;
+    dateStart: string;
     /**
-     * @generated from field: string date_start_string = 14;
+     * ISO 8601 date (YYYY-MM-DD)
+     *
+     * @generated from field: optional string date_end = 15;
      */
-    dateStartString: string;
-    /**
-     * @generated from field: optional int64 date_end = 15;
-     */
-    dateEnd?: bigint;
-    /**
-     * @generated from field: optional string date_end_string = 16;
-     */
-    dateEndString?: string;
+    dateEnd?: string;
     /**
      * @generated from field: optional string price_list_id = 17;
      */

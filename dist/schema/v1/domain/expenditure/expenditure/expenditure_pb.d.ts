@@ -71,9 +71,11 @@ export type Expenditure = Message<"domain.expenditure.v1.Expenditure"> & {
      */
     expenditureDateString?: string;
     /**
-     * @generated from field: double total_amount = 13;
+     * centavos
+     *
+     * @generated from field: int64 total_amount = 13;
      */
-    totalAmount: number;
+    totalAmount: bigint;
     /**
      * @generated from field: string currency = 14;
      */
@@ -113,11 +115,11 @@ export type Expenditure = Message<"domain.expenditure.v1.Expenditure"> & {
      */
     paymentTerms?: string;
     /**
-     * for AP tracking
+     * ISO 8601 date (YYYY-MM-DD) — for AP tracking
      *
-     * @generated from field: optional int64 due_date = 22;
+     * @generated from field: optional string due_date = 22;
      */
-    dueDate?: bigint;
+    dueDate?: string;
     /**
      * who authorized
      *

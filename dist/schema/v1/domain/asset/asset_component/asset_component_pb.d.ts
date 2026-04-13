@@ -39,13 +39,17 @@ export type AssetComponent = Message<"domain.asset.v1.AssetComponent"> & {
      */
     description?: string;
     /**
-     * @generated from field: double cost = 6;
+     * centavos
+     *
+     * @generated from field: int64 cost = 6;
      */
-    cost: number;
+    cost: bigint;
     /**
-     * @generated from field: double salvage_value = 7;
+     * centavos
+     *
+     * @generated from field: int64 salvage_value = 7;
      */
-    salvageValue: number;
+    salvageValue: bigint;
     /**
      * @generated from field: int32 useful_life_months = 8;
      */
@@ -55,13 +59,17 @@ export type AssetComponent = Message<"domain.asset.v1.AssetComponent"> & {
      */
     depreciationMethod: DepreciationMethod;
     /**
-     * @generated from field: double accumulated_depreciation = 10;
+     * centavos
+     *
+     * @generated from field: int64 accumulated_depreciation = 10;
      */
-    accumulatedDepreciation: number;
+    accumulatedDepreciation: bigint;
     /**
-     * @generated from field: double book_value = 11;
+     * centavos
+     *
+     * @generated from field: int64 book_value = 11;
      */
-    bookValue: number;
+    bookValue: bigint;
     /**
      * Audit fields
      *

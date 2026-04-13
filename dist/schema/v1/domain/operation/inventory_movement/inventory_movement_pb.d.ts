@@ -37,9 +37,11 @@ export type InventoryMovement = Message<"domain.operation.v1.InventoryMovement">
      */
     quantity: number;
     /**
-     * @generated from field: double unit_cost = 8;
+     * centavos
+     *
+     * @generated from field: int64 unit_cost = 8;
      */
-    unitCost: number;
+    unitCost: bigint;
     /**
      * @generated from field: optional string from_location_id = 9;
      */

@@ -52,9 +52,11 @@ export type Collection = Message<"domain.treasury.v1.Collection"> & {
      */
     subscriptionId: string;
     /**
-     * @generated from field: double amount = 10;
+     * centavos
+     *
+     * @generated from field: int64 amount = 10;
      */
-    amount: number;
+    amount: bigint;
     /**
      * @generated from field: string status = 11;
      */
@@ -98,11 +100,11 @@ export type Collection = Message<"domain.treasury.v1.Collection"> & {
     /**
      * Payment timing
      *
-     * Unix timestamp of payment date
+     * ISO 8601 date (YYYY-MM-DD)
      *
-     * @generated from field: int64 payment_date = 25;
+     * @generated from field: string payment_date = 25;
      */
-    paymentDate: bigint;
+    paymentDate: string;
     /**
      * Audit fields
      *
@@ -125,14 +127,6 @@ export type Collection = Message<"domain.treasury.v1.Collection"> & {
      * @generated from field: string collection_type = 28;
      */
     collectionType: string;
-    /**
-     * Date display companion
-     *
-     * Display string for payment_date
-     *
-     * @generated from field: optional string payment_date_string = 29;
-     */
-    paymentDateString?: string;
     /**
      * GL traceability
      *

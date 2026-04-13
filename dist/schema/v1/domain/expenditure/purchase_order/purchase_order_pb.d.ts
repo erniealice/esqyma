@@ -83,17 +83,23 @@ export type PurchaseOrder = Message<"domain.expenditure.v1.PurchaseOrder"> & {
      */
     currency: string;
     /**
-     * @generated from field: double subtotal = 14;
+     * centavos
+     *
+     * @generated from field: int64 subtotal = 14;
      */
-    subtotal: number;
+    subtotal: bigint;
     /**
-     * @generated from field: double tax_amount = 15;
+     * centavos
+     *
+     * @generated from field: int64 tax_amount = 15;
      */
-    taxAmount: number;
+    taxAmount: bigint;
     /**
-     * @generated from field: double total_amount = 16;
+     * centavos
+     *
+     * @generated from field: int64 total_amount = 16;
      */
-    totalAmount: number;
+    totalAmount: bigint;
     /**
      * Terms
      *
@@ -125,21 +131,17 @@ export type PurchaseOrder = Message<"domain.expenditure.v1.PurchaseOrder"> & {
      */
     parentPoId?: string;
     /**
-     * @generated from field: optional int64 blanket_start_date = 23;
+     * ISO 8601 date (YYYY-MM-DD)
+     *
+     * @generated from field: optional string blanket_start_date = 23;
      */
-    blanketStartDate?: bigint;
+    blanketStartDate?: string;
     /**
-     * @generated from field: optional string blanket_start_date_string = 24;
+     * ISO 8601 date (YYYY-MM-DD)
+     *
+     * @generated from field: optional string blanket_end_date = 25;
      */
-    blanketStartDateString?: string;
-    /**
-     * @generated from field: optional int64 blanket_end_date = 25;
-     */
-    blanketEndDate?: bigint;
-    /**
-     * @generated from field: optional string blanket_end_date_string = 26;
-     */
-    blanketEndDateString?: string;
+    blanketEndDate?: string;
     /**
      * @generated from field: double blanket_total_quantity = 27;
      */

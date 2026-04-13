@@ -42,9 +42,11 @@ export type Loan = Message<"domain.treasury.v1.Loan"> & {
     /**
      * Loan terms
      *
-     * @generated from field: double principal_amount = 6;
+     * centavos
+     *
+     * @generated from field: int64 principal_amount = 6;
      */
-    principalAmount: number;
+    principalAmount: bigint;
     /**
      * Annual rate as a percentage (e.g. 12.5 = 12.5%)
      *
@@ -58,21 +60,17 @@ export type Loan = Message<"domain.treasury.v1.Loan"> & {
     /**
      * Dates
      *
-     * @generated from field: int64 start_date = 9;
+     * ISO 8601 date (YYYY-MM-DD)
+     *
+     * @generated from field: string start_date = 9;
      */
-    startDate: bigint;
+    startDate: string;
     /**
-     * @generated from field: optional string start_date_string = 10;
+     * ISO 8601 date (YYYY-MM-DD)
+     *
+     * @generated from field: string maturity_date = 11;
      */
-    startDateString?: string;
-    /**
-     * @generated from field: int64 maturity_date = 11;
-     */
-    maturityDate: bigint;
-    /**
-     * @generated from field: optional string maturity_date_string = 12;
-     */
-    maturityDateString?: string;
+    maturityDate: string;
     /**
      * Status and running balance
      *
@@ -80,11 +78,11 @@ export type Loan = Message<"domain.treasury.v1.Loan"> & {
      */
     status: LoanStatus;
     /**
-     * Updated on each payment
+     * centavos          // Updated on each payment
      *
-     * @generated from field: double remaining_balance = 14;
+     * @generated from field: int64 remaining_balance = 14;
      */
-    remainingBalance: number;
+    remainingBalance: bigint;
     /**
      * GL integration — FK to the Chart of Accounts
      *

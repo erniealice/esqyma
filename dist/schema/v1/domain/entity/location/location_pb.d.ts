@@ -53,6 +53,18 @@ export type Location = Message<"domain.entity.v1.Location"> & {
      * @generated from field: optional string description = 9;
      */
     description?: string;
+    /**
+     * IANA timezone e.g. "Asia/Manila"
+     *
+     * @generated from field: optional string timezone = 10;
+     */
+    timezone?: string;
+    /**
+     * FK to location_area
+     *
+     * @generated from field: optional string location_area_id = 11;
+     */
+    locationAreaId?: string;
 };
 /**
  * Describes the message domain.entity.v1.Location.

@@ -31,17 +31,17 @@ export type PayrollRemittance = Message<"domain.payroll.v1.PayrollRemittance"> &
      */
     remittanceType: RemittanceType;
     /**
-     * @generated from field: double amount = 4;
+     * centavos
+     *
+     * @generated from field: int64 amount = 4;
      */
-    amount: number;
+    amount: bigint;
     /**
-     * @generated from field: int64 due_date = 5;
+     * ISO 8601 date (YYYY-MM-DD)
+     *
+     * @generated from field: string due_date = 5;
      */
-    dueDate: bigint;
-    /**
-     * @generated from field: optional string due_date_string = 6;
-     */
-    dueDateString?: string;
+    dueDate: string;
     /**
      * @generated from field: domain.payroll.v1.RemittanceStatus status = 7;
      */

@@ -27,9 +27,11 @@ export type ProductVariant = Message<"domain.product.v1.ProductVariant"> & {
      */
     sku: string;
     /**
-     * @generated from field: double price_override = 4;
+     * centavos
+     *
+     * @generated from field: int64 price_override = 4;
      */
-    priceOverride: number;
+    priceOverride: bigint;
     /**
      * @generated from field: bool active = 5;
      */

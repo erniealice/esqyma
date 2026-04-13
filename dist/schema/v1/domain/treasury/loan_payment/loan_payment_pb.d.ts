@@ -34,39 +34,45 @@ export type LoanPayment = Message<"domain.treasury.v1.LoanPayment"> & {
      */
     paymentNumber: string;
     /**
-     * @generated from field: int64 payment_date = 4;
+     * ISO 8601 date (YYYY-MM-DD)
+     *
+     * @generated from field: string payment_date = 4;
      */
-    paymentDate: bigint;
-    /**
-     * @generated from field: optional string payment_date_string = 5;
-     */
-    paymentDateString?: string;
+    paymentDate: string;
     /**
      * Payment breakdown
      *
-     * @generated from field: double principal_amount = 6;
-     */
-    principalAmount: number;
-    /**
-     * @generated from field: double interest_amount = 7;
-     */
-    interestAmount: number;
-    /**
-     * Debt issuance cost (PFRS 9)
+     * centavos
      *
-     * @generated from field: double fee_amount = 8;
+     * @generated from field: int64 principal_amount = 6;
      */
-    feeAmount: number;
+    principalAmount: bigint;
     /**
-     * @generated from field: double total_amount = 9;
+     * centavos
+     *
+     * @generated from field: int64 interest_amount = 7;
      */
-    totalAmount: number;
+    interestAmount: bigint;
+    /**
+     * centavos  // Debt issuance cost (PFRS 9)
+     *
+     * @generated from field: int64 fee_amount = 8;
+     */
+    feeAmount: bigint;
+    /**
+     * centavos
+     *
+     * @generated from field: int64 total_amount = 9;
+     */
+    totalAmount: bigint;
     /**
      * Running balance after this payment
      *
-     * @generated from field: double remaining_balance = 10;
+     * centavos
+     *
+     * @generated from field: int64 remaining_balance = 10;
      */
-    remainingBalance: number;
+    remainingBalance: bigint;
     /**
      * @generated from field: optional string notes = 11;
      */

@@ -936,7 +936,7 @@ var File_domain_product_product_plan_product_plan_proto protoreflect.FileDescrip
 
 const file_domain_product_product_plan_product_plan_proto_rawDesc = "" +
 	"\n" +
-	".domain/product/product_plan/product_plan.proto\x12\x11domain.product.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1adomain/common/search.proto\x1a$domain/product/product/product.proto\x1a\x10options/db.proto\"\xf6\x04\n" +
+	".domain/product/product_plan/product_plan.proto\x12\x11domain.product.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1adomain/common/search.proto\x1a$domain/product/product/product.proto\x1a\x10options/db.proto\"\xe1\x04\n" +
 	"\vProductPlan\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12&\n" +
 	"\fdate_created\x18\x02 \x01(\x03H\x00R\vdateCreated\x88\x01\x01\x123\n" +
@@ -946,10 +946,7 @@ const file_domain_product_product_plan_product_plan_proto_rawDesc = "" +
 	"\x06active\x18\x06 \x01(\bB\n" +
 	"\x82\xb5\x18\x06\"\x04trueR\x06active\x12\x12\n" +
 	"\x04name\x18\a \x01(\tR\x04name\x12%\n" +
-	"\vdescription\x18\b \x01(\tH\x04R\vdescription\x88\x01\x01\x12\x14\n" +
-	"\x05price\x18\t \x01(\x03R\x05price\x12\x1a\n" +
-	"\bcurrency\x18\n" +
-	" \x01(\tR\bcurrency\x129\n" +
+	"\vdescription\x18\b \x01(\tH\x04R\vdescription\x88\x01\x01\x129\n" +
 	"\aproduct\x18\v \x01(\v2\x1a.domain.product.v1.ProductH\x05R\aproduct\x88\x01\x01\x12.\n" +
 	"\n" +
 	"product_id\x18\f \x01(\tB\x0f\x82\xb5\x18\v\n" +
@@ -962,7 +959,9 @@ const file_domain_product_product_plan_product_plan_proto_rawDesc = "" +
 	"\x15_date_modified_stringB\x0e\n" +
 	"\f_descriptionB\n" +
 	"\n" +
-	"\b_product\"N\n" +
+	"\b_productJ\x04\b\t\x10\n" +
+	"J\x04\b\n" +
+	"\x10\vR\x05priceR\bcurrency\"N\n" +
 	"\x18CreateProductPlanRequest\x122\n" +
 	"\x04data\x18\x01 \x01(\v2\x1e.domain.product.v1.ProductPlanR\x04data\"\xa7\x01\n" +
 	"\x19CreateProductPlanResponse\x122\n" +

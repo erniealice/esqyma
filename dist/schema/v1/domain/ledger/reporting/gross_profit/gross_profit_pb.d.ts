@@ -13,17 +13,17 @@ export declare const file_domain_ledger_reporting_gross_profit_gross_profit: Gen
  */
 export type GrossProfitReportRequest = Message<"domain.ledger.v1.GrossProfitReportRequest"> & {
     /**
-     * Unix timestamp — report period start
+     * ISO 8601 date (YYYY-MM-DD) — report period start
      *
-     * @generated from field: optional int64 start_date = 1;
+     * @generated from field: optional string start_date = 1;
      */
-    startDate?: bigint;
+    startDate?: string;
     /**
-     * Unix timestamp — report period end
+     * ISO 8601 date (YYYY-MM-DD) — report period end
      *
-     * @generated from field: optional int64 end_date = 2;
+     * @generated from field: optional string end_date = 2;
      */
-    endDate?: bigint;
+    endDate?: string;
     /**
      * "product", "location", "category", "period"
      *
@@ -89,35 +89,35 @@ export type GrossProfitLineItem = Message<"domain.ledger.v1.GrossProfitLineItem"
      */
     groupId?: string;
     /**
-     * Sum of revenue line item totals
+     * centavos          // Sum of revenue line item totals
      *
-     * @generated from field: double total_revenue = 3;
+     * @generated from field: int64 total_revenue = 3;
      */
-    totalRevenue: number;
+    totalRevenue: bigint;
     /**
-     * Sum of discounts applied
+     * centavos         // Sum of discounts applied
      *
-     * @generated from field: double total_discount = 4;
+     * @generated from field: int64 total_discount = 4;
      */
-    totalDiscount: number;
+    totalDiscount: bigint;
     /**
-     * total_revenue - total_discount
+     * centavos            // total_revenue - total_discount
      *
-     * @generated from field: double net_revenue = 5;
+     * @generated from field: int64 net_revenue = 5;
      */
-    netRevenue: number;
+    netRevenue: bigint;
     /**
-     * Sum of COGS from inventory transactions
+     * centavos     // Sum of COGS from inventory transactions
      *
-     * @generated from field: double cost_of_goods_sold = 6;
+     * @generated from field: int64 cost_of_goods_sold = 6;
      */
-    costOfGoodsSold: number;
+    costOfGoodsSold: bigint;
     /**
-     * net_revenue - cost_of_goods_sold
+     * centavos           // net_revenue - cost_of_goods_sold
      *
-     * @generated from field: double gross_profit = 7;
+     * @generated from field: int64 gross_profit = 7;
      */
-    grossProfit: number;
+    grossProfit: bigint;
     /**
      * (gross_profit / net_revenue) * 100
      *
@@ -149,25 +149,35 @@ export declare const GrossProfitLineItemSchema: GenMessage<GrossProfitLineItem>;
  */
 export type GrossProfitSummary = Message<"domain.ledger.v1.GrossProfitSummary"> & {
     /**
-     * @generated from field: double total_revenue = 1;
+     * centavos
+     *
+     * @generated from field: int64 total_revenue = 1;
      */
-    totalRevenue: number;
+    totalRevenue: bigint;
     /**
-     * @generated from field: double total_discount = 2;
+     * centavos
+     *
+     * @generated from field: int64 total_discount = 2;
      */
-    totalDiscount: number;
+    totalDiscount: bigint;
     /**
-     * @generated from field: double net_revenue = 3;
+     * centavos
+     *
+     * @generated from field: int64 net_revenue = 3;
      */
-    netRevenue: number;
+    netRevenue: bigint;
     /**
-     * @generated from field: double total_cogs = 4;
+     * centavos
+     *
+     * @generated from field: int64 total_cogs = 4;
      */
-    totalCogs: number;
+    totalCogs: bigint;
     /**
-     * @generated from field: double total_gross_profit = 5;
+     * centavos
+     *
+     * @generated from field: int64 total_gross_profit = 5;
      */
-    totalGrossProfit: number;
+    totalGrossProfit: bigint;
     /**
      * (total_gross_profit / net_revenue) * 100
      *
@@ -187,13 +197,17 @@ export type GrossProfitSummary = Message<"domain.ledger.v1.GrossProfitSummary"> 
      */
     currency: string;
     /**
-     * @generated from field: optional int64 start_date = 10;
+     * ISO 8601 date (YYYY-MM-DD)
+     *
+     * @generated from field: optional string start_date = 10;
      */
-    startDate?: bigint;
+    startDate?: string;
     /**
-     * @generated from field: optional int64 end_date = 11;
+     * ISO 8601 date (YYYY-MM-DD)
+     *
+     * @generated from field: optional string end_date = 11;
      */
-    endDate?: bigint;
+    endDate?: string;
 };
 /**
  * Describes the message domain.ledger.v1.GrossProfitSummary.

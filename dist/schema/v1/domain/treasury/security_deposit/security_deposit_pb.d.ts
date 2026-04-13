@@ -31,9 +31,11 @@ export type SecurityDeposit = Message<"domain.treasury.v1.SecurityDeposit"> & {
      */
     counterpartyName: string;
     /**
-     * @generated from field: double amount = 4;
+     * centavos
+     *
+     * @generated from field: int64 amount = 4;
      */
-    amount: number;
+    amount: bigint;
     /**
      * @generated from field: int64 deposit_date = 5;
      */

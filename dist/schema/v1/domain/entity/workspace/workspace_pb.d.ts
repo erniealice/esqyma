@@ -340,6 +340,128 @@ export type GetWorkspaceItemPageDataResponse = Message<"domain.entity.v1.GetWork
  */
 export declare const GetWorkspaceItemPageDataResponseSchema: GenMessage<GetWorkspaceItemPageDataResponse>;
 /**
+ * SwitchWorkspaceRequest — switch the active workspace for a session.
+ *
+ * @generated from message domain.entity.v1.SwitchWorkspaceRequest
+ */
+export type SwitchWorkspaceRequest = Message<"domain.entity.v1.SwitchWorkspaceRequest"> & {
+    /**
+     * Target workspace ID
+     *
+     * @generated from field: string workspace_id = 1;
+     */
+    workspaceId: string;
+    /**
+     * Current session token (from cookie)
+     *
+     * @generated from field: string session_token = 2;
+     */
+    sessionToken: string;
+};
+/**
+ * Describes the message domain.entity.v1.SwitchWorkspaceRequest.
+ * Use `create(SwitchWorkspaceRequestSchema)` to create a new message.
+ */
+export declare const SwitchWorkspaceRequestSchema: GenMessage<SwitchWorkspaceRequest>;
+/**
+ * @generated from message domain.entity.v1.SwitchWorkspaceResponse
+ */
+export type SwitchWorkspaceResponse = Message<"domain.entity.v1.SwitchWorkspaceResponse"> & {
+    /**
+     * @generated from field: bool success = 1;
+     */
+    success: boolean;
+    /**
+     * The resolved workspace_user.id
+     *
+     * @generated from field: optional string workspace_user_id = 2;
+     */
+    workspaceUserId?: string;
+    /**
+     * The workspace name for UI confirmation
+     *
+     * @generated from field: optional string workspace_name = 3;
+     */
+    workspaceName?: string;
+    /**
+     * @generated from field: optional domain.common.v1.Error error = 4;
+     */
+    error?: Error;
+};
+/**
+ * Describes the message domain.entity.v1.SwitchWorkspaceResponse.
+ * Use `create(SwitchWorkspaceResponseSchema)` to create a new message.
+ */
+export declare const SwitchWorkspaceResponseSchema: GenMessage<SwitchWorkspaceResponse>;
+/**
+ * ListUserWorkspacesRequest — list workspaces accessible to the current user.
+ *
+ * @generated from message domain.entity.v1.ListUserWorkspacesRequest
+ */
+export type ListUserWorkspacesRequest = Message<"domain.entity.v1.ListUserWorkspacesRequest"> & {
+    /**
+     * @generated from field: string user_id = 1;
+     */
+    userId: string;
+};
+/**
+ * Describes the message domain.entity.v1.ListUserWorkspacesRequest.
+ * Use `create(ListUserWorkspacesRequestSchema)` to create a new message.
+ */
+export declare const ListUserWorkspacesRequestSchema: GenMessage<ListUserWorkspacesRequest>;
+/**
+ * @generated from message domain.entity.v1.UserWorkspace
+ */
+export type UserWorkspace = Message<"domain.entity.v1.UserWorkspace"> & {
+    /**
+     * @generated from field: string workspace_id = 1;
+     */
+    workspaceId: string;
+    /**
+     * @generated from field: string workspace_name = 2;
+     */
+    workspaceName: string;
+    /**
+     * The workspace_user.id for this user+workspace
+     *
+     * @generated from field: string workspace_user_id = 3;
+     */
+    workspaceUserId: string;
+    /**
+     * Whether this is the currently active workspace
+     *
+     * @generated from field: bool is_current = 4;
+     */
+    isCurrent: boolean;
+};
+/**
+ * Describes the message domain.entity.v1.UserWorkspace.
+ * Use `create(UserWorkspaceSchema)` to create a new message.
+ */
+export declare const UserWorkspaceSchema: GenMessage<UserWorkspace>;
+/**
+ * @generated from message domain.entity.v1.ListUserWorkspacesResponse
+ */
+export type ListUserWorkspacesResponse = Message<"domain.entity.v1.ListUserWorkspacesResponse"> & {
+    /**
+     * @generated from field: repeated domain.entity.v1.UserWorkspace workspaces = 1;
+     */
+    workspaces: UserWorkspace[];
+    /**
+     * @generated from field: bool success = 2;
+     */
+    success: boolean;
+    /**
+     * @generated from field: optional domain.common.v1.Error error = 3;
+     */
+    error?: Error;
+};
+/**
+ * Describes the message domain.entity.v1.ListUserWorkspacesResponse.
+ * Use `create(ListUserWorkspacesResponseSchema)` to create a new message.
+ */
+export declare const ListUserWorkspacesResponseSchema: GenMessage<ListUserWorkspacesResponse>;
+/**
  * @generated from service domain.entity.v1.WorkspaceDomainService
  */
 export declare const WorkspaceDomainService: GenService<{
@@ -398,5 +520,21 @@ export declare const WorkspaceDomainService: GenService<{
         methodKind: "unary";
         input: typeof GetWorkspaceItemPageDataRequestSchema;
         output: typeof GetWorkspaceItemPageDataResponseSchema;
+    };
+    /**
+     * @generated from rpc domain.entity.v1.WorkspaceDomainService.SwitchWorkspace
+     */
+    switchWorkspace: {
+        methodKind: "unary";
+        input: typeof SwitchWorkspaceRequestSchema;
+        output: typeof SwitchWorkspaceResponseSchema;
+    };
+    /**
+     * @generated from rpc domain.entity.v1.WorkspaceDomainService.ListUserWorkspaces
+     */
+    listUserWorkspaces: {
+        methodKind: "unary";
+        input: typeof ListUserWorkspacesRequestSchema;
+        output: typeof ListUserWorkspacesResponseSchema;
     };
 }>;

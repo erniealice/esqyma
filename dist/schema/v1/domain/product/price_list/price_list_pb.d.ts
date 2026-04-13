@@ -49,21 +49,17 @@ export type PriceList = Message<"domain.product.v1.PriceList"> & {
      */
     description?: string;
     /**
-     * @generated from field: int64 date_start = 9;
+     * ISO 8601 date (YYYY-MM-DD)
+     *
+     * @generated from field: string date_start = 9;
      */
-    dateStart: bigint;
+    dateStart: string;
     /**
-     * @generated from field: string date_start_string = 10;
+     * ISO 8601 date (YYYY-MM-DD)
+     *
+     * @generated from field: optional string date_end = 11;
      */
-    dateStartString: string;
-    /**
-     * @generated from field: optional int64 date_end = 11;
-     */
-    dateEnd?: bigint;
-    /**
-     * @generated from field: optional string date_end_string = 12;
-     */
-    dateEndString?: string;
+    dateEnd?: string;
     /**
      * @generated from field: optional string location_id = 13;
      */
@@ -359,6 +355,60 @@ export type GetPriceListItemPageDataResponse = Message<"domain.product.v1.GetPri
  */
 export declare const GetPriceListItemPageDataResponseSchema: GenMessage<GetPriceListItemPageDataResponse>;
 /**
+ * FindApplicablePriceListRequest finds the active price list for a given location and date.
+ *
+ * @generated from message domain.product.v1.FindApplicablePriceListRequest
+ */
+export type FindApplicablePriceListRequest = Message<"domain.product.v1.FindApplicablePriceListRequest"> & {
+    /**
+     * FK to location
+     *
+     * @generated from field: string location_id = 1;
+     */
+    locationId: string;
+    /**
+     * ISO 8601 date (YYYY-MM-DD) — the invoice/reference date
+     *
+     * @generated from field: string date = 2;
+     */
+    date: string;
+};
+/**
+ * Describes the message domain.product.v1.FindApplicablePriceListRequest.
+ * Use `create(FindApplicablePriceListRequestSchema)` to create a new message.
+ */
+export declare const FindApplicablePriceListRequestSchema: GenMessage<FindApplicablePriceListRequest>;
+/**
+ * FindApplicablePriceListResponse returns the matched price list, if any.
+ *
+ * @generated from message domain.product.v1.FindApplicablePriceListResponse
+ */
+export type FindApplicablePriceListResponse = Message<"domain.product.v1.FindApplicablePriceListResponse"> & {
+    /**
+     * NULL/empty if no applicable list found
+     *
+     * @generated from field: optional domain.product.v1.PriceList price_list = 1;
+     */
+    priceList?: PriceList;
+    /**
+     * @generated from field: bool found = 2;
+     */
+    found: boolean;
+    /**
+     * @generated from field: bool success = 3;
+     */
+    success: boolean;
+    /**
+     * @generated from field: optional domain.common.v1.Error error = 4;
+     */
+    error?: Error;
+};
+/**
+ * Describes the message domain.product.v1.FindApplicablePriceListResponse.
+ * Use `create(FindApplicablePriceListResponseSchema)` to create a new message.
+ */
+export declare const FindApplicablePriceListResponseSchema: GenMessage<FindApplicablePriceListResponse>;
+/**
  * @generated from service domain.product.v1.PriceListDomainService
  */
 export declare const PriceListDomainService: GenService<{
@@ -417,5 +467,13 @@ export declare const PriceListDomainService: GenService<{
         methodKind: "unary";
         input: typeof GetPriceListItemPageDataRequestSchema;
         output: typeof GetPriceListItemPageDataResponseSchema;
+    };
+    /**
+     * @generated from rpc domain.product.v1.PriceListDomainService.FindApplicablePriceList
+     */
+    findApplicablePriceList: {
+        methodKind: "unary";
+        input: typeof FindApplicablePriceListRequestSchema;
+        output: typeof FindApplicablePriceListResponseSchema;
     };
 }>;

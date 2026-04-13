@@ -28,35 +28,37 @@ export type PayrollRun = Message<"domain.payroll.v1.PayrollRun"> & {
     /**
      * Pay period
      *
-     * @generated from field: int64 pay_period_start = 3;
+     * ISO 8601 date (YYYY-MM-DD)
+     *
+     * @generated from field: string pay_period_start = 3;
      */
-    payPeriodStart: bigint;
+    payPeriodStart: string;
     /**
-     * @generated from field: optional string pay_period_start_string = 4;
+     * ISO 8601 date (YYYY-MM-DD)
+     *
+     * @generated from field: string pay_period_end = 5;
      */
-    payPeriodStartString?: string;
-    /**
-     * @generated from field: int64 pay_period_end = 5;
-     */
-    payPeriodEnd: bigint;
-    /**
-     * @generated from field: optional string pay_period_end_string = 6;
-     */
-    payPeriodEndString?: string;
+    payPeriodEnd: string;
     /**
      * Aggregated totals across all employee lines
      *
-     * @generated from field: double total_gross = 7;
+     * centavos
+     *
+     * @generated from field: int64 total_gross = 7;
      */
-    totalGross: number;
+    totalGross: bigint;
     /**
-     * @generated from field: double total_deductions = 8;
+     * centavos
+     *
+     * @generated from field: int64 total_deductions = 8;
      */
-    totalDeductions: number;
+    totalDeductions: bigint;
     /**
-     * @generated from field: double total_net = 9;
+     * centavos
+     *
+     * @generated from field: int64 total_net = 9;
      */
-    totalNet: number;
+    totalNet: bigint;
     /**
      * @generated from field: int32 employee_count = 10;
      */

@@ -39,9 +39,11 @@ export type PettyCashVoucher = Message<"domain.treasury.v1.PettyCashVoucher"> & 
      */
     description: string;
     /**
-     * @generated from field: double total_amount = 6;
+     * centavos
+     *
+     * @generated from field: int64 total_amount = 6;
      */
-    totalAmount: number;
+    totalAmount: bigint;
     /**
      * @generated from field: domain.treasury.v1.VoucherStatus status = 7;
      */

@@ -31,11 +31,11 @@ export type PettyCashReplenishment = Message<"domain.treasury.v1.PettyCashReplen
      */
     replenishmentNumber: string;
     /**
-     * Total cash returned to fund (sum of vouchers)
+     * centavos                         // Total cash returned to fund (sum of vouchers)
      *
-     * @generated from field: double amount = 4;
+     * @generated from field: int64 amount = 4;
      */
-    amount: number;
+    amount: bigint;
     /**
      * @generated from field: int64 replenishment_date = 5;
      */

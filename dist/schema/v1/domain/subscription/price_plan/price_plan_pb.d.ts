@@ -55,9 +55,11 @@ export type PricePlan = Message<"domain.subscription.v1.PricePlan"> & {
      */
     active: boolean;
     /**
-     * @generated from field: double amount = 11;
+     * centavos
+     *
+     * @generated from field: int64 amount = 11;
      */
-    amount: number;
+    amount: bigint;
     /**
      * @generated from field: string currency = 12;
      */

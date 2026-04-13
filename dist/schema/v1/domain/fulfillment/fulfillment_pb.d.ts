@@ -50,9 +50,11 @@ export type Fulfillment = Message<"domain.fulfillment.v1.Fulfillment"> & {
      */
     providerReference: string;
     /**
-     * @generated from field: double delivery_cost = 9;
+     * centavos
+     *
+     * @generated from field: int64 delivery_cost = 9;
      */
-    deliveryCost: number;
+    deliveryCost: bigint;
     /**
      * @generated from field: string currency = 10;
      */

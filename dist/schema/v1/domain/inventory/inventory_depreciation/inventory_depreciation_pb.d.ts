@@ -27,13 +27,17 @@ export type InventoryDepreciation = Message<"domain.inventory.v1.InventoryDeprec
      */
     method: string;
     /**
-     * @generated from field: double cost_basis = 4;
+     * centavos
+     *
+     * @generated from field: int64 cost_basis = 4;
      */
-    costBasis: number;
+    costBasis: bigint;
     /**
-     * @generated from field: double salvage_value = 5;
+     * centavos
+     *
+     * @generated from field: int64 salvage_value = 5;
      */
-    salvageValue: number;
+    salvageValue: bigint;
     /**
      * @generated from field: int32 useful_life_months = 6;
      */
@@ -43,13 +47,17 @@ export type InventoryDepreciation = Message<"domain.inventory.v1.InventoryDeprec
      */
     startDate: string;
     /**
-     * @generated from field: double accumulated_depreciation = 8;
+     * centavos
+     *
+     * @generated from field: int64 accumulated_depreciation = 8;
      */
-    accumulatedDepreciation: number;
+    accumulatedDepreciation: bigint;
     /**
-     * @generated from field: double book_value = 9;
+     * centavos
+     *
+     * @generated from field: int64 book_value = 9;
      */
-    bookValue: number;
+    bookValue: bigint;
     /**
      * @generated from field: bool active = 10;
      */

@@ -68,13 +68,17 @@ export type PurchaseOrderLineItem = Message<"domain.expenditure.v1.PurchaseOrder
      */
     quantityBilled: number;
     /**
-     * @generated from field: double unit_price = 11;
+     * centavos
+     *
+     * @generated from field: int64 unit_price = 11;
      */
-    unitPrice: number;
+    unitPrice: bigint;
     /**
-     * @generated from field: double total_price = 12;
+     * centavos
+     *
+     * @generated from field: int64 total_price = 12;
      */
-    totalPrice: number;
+    totalPrice: bigint;
     /**
      * Receiving location
      *

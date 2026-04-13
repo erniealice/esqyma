@@ -22,37 +22,45 @@ export type AssetDisposal = Message<"domain.asset.v1.AssetDisposal"> & {
      */
     assetId: string;
     /**
-     * @generated from field: int64 disposal_date = 3;
+     * ISO 8601 date (YYYY-MM-DD)
+     *
+     * @generated from field: string disposal_date = 3;
      */
-    disposalDate: bigint;
-    /**
-     * @generated from field: string disposal_date_string = 4;
-     */
-    disposalDateString: string;
+    disposalDate: string;
     /**
      * @generated from field: domain.asset.v1.DisposalType disposal_type = 5;
      */
     disposalType: DisposalType;
     /**
-     * @generated from field: double proceeds = 6;
+     * centavos
+     *
+     * @generated from field: int64 proceeds = 6;
      */
-    proceeds: number;
+    proceeds: bigint;
     /**
-     * @generated from field: double cost_at_disposal = 7;
+     * centavos
+     *
+     * @generated from field: int64 cost_at_disposal = 7;
      */
-    costAtDisposal: number;
+    costAtDisposal: bigint;
     /**
-     * @generated from field: double accumulated_depreciation_at_disposal = 8;
+     * centavos
+     *
+     * @generated from field: int64 accumulated_depreciation_at_disposal = 8;
      */
-    accumulatedDepreciationAtDisposal: number;
+    accumulatedDepreciationAtDisposal: bigint;
     /**
-     * @generated from field: double book_value_at_disposal = 9;
+     * centavos
+     *
+     * @generated from field: int64 book_value_at_disposal = 9;
      */
-    bookValueAtDisposal: number;
+    bookValueAtDisposal: bigint;
     /**
-     * @generated from field: double gain_or_loss = 10;
+     * centavos
+     *
+     * @generated from field: int64 gain_or_loss = 10;
      */
-    gainOrLoss: number;
+    gainOrLoss: bigint;
     /**
      * @generated from field: optional string buyer_name = 11;
      */

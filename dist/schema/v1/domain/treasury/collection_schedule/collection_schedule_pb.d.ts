@@ -56,15 +56,11 @@ export type CollectionSchedule = Message<"domain.treasury.v1.CollectionSchedule"
      */
     amount: bigint;
     /**
-     * Unix timestamp
+     * ISO 8601 date (YYYY-MM-DD)
      *
-     * @generated from field: int64 due_date = 10;
+     * @generated from field: string due_date = 10;
      */
-    dueDate: bigint;
-    /**
-     * @generated from field: optional string due_date_string = 11;
-     */
-    dueDateString?: string;
+    dueDate: string;
     /**
      * "pending", "paid", "partial", "overdue"
      *

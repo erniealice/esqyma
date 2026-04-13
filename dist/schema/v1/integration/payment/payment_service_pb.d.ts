@@ -33,12 +33,13 @@ export type CheckoutSessionData = Message<"integration.payment.v1.CheckoutSessio
      */
     providerId: string;
     /**
-     * Amount in base currency units (e.g., dollars, not cents)
-     * Payment providers typically convert to cents internally
+     * Amount in centavos (smallest currency unit)
      *
-     * @generated from field: double amount = 2;
+     * centavos
+     *
+     * @generated from field: int64 amount = 2;
      */
-    amount: number;
+    amount: bigint;
     /**
      * Currency code (ISO 4217)
      *

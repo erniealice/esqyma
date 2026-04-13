@@ -127,11 +127,11 @@ export type Supplier = Message<"domain.entity.v1.Supplier"> & {
      */
     leadTimeDays?: number;
     /**
-     * Maximum outstanding payable
+     * centavos            // Maximum outstanding payable
      *
-     * @generated from field: optional double credit_limit = 24;
+     * @generated from field: optional int64 credit_limit = 24;
      */
-    creditLimit?: number;
+    creditLimit?: bigint;
     /**
      * "active", "blocked", "on_hold"
      *

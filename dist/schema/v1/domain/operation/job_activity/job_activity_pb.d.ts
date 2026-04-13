@@ -39,13 +39,17 @@ export type JobActivity = Message<"domain.operation.v1.JobActivity"> & {
      */
     quantity: number;
     /**
-     * @generated from field: double unit_cost = 7;
+     * centavos
+     *
+     * @generated from field: int64 unit_cost = 7;
      */
-    unitCost: number;
+    unitCost: bigint;
     /**
-     * @generated from field: double total_cost = 8;
+     * centavos
+     *
+     * @generated from field: int64 total_cost = 8;
      */
-    totalCost: number;
+    totalCost: bigint;
     /**
      * @generated from field: string currency = 9;
      */
@@ -455,9 +459,11 @@ export type CostByEntryType = Message<"domain.operation.v1.CostByEntryType"> & {
      */
     entryType: EntryType;
     /**
-     * @generated from field: double total_cost = 2;
+     * centavos
+     *
+     * @generated from field: int64 total_cost = 2;
      */
-    totalCost: number;
+    totalCost: bigint;
     /**
      * @generated from field: int32 count = 3;
      */
@@ -477,9 +483,11 @@ export type GetJobActivityRollupResponse = Message<"domain.operation.v1.GetJobAc
      */
     rollup: CostByEntryType[];
     /**
-     * @generated from field: double grand_total = 2;
+     * centavos
+     *
+     * @generated from field: int64 grand_total = 2;
      */
-    grandTotal: number;
+    grandTotal: bigint;
     /**
      * @generated from field: bool success = 3;
      */

@@ -27,13 +27,17 @@ export type RecurringJournalTemplateLine = Message<"domain.ledger.v1.RecurringJo
      */
     description?: string;
     /**
-     * @generated from field: double debit_amount = 3;
+     * centavos
+     *
+     * @generated from field: int64 debit_amount = 3;
      */
-    debitAmount: number;
+    debitAmount: bigint;
     /**
-     * @generated from field: double credit_amount = 4;
+     * centavos
+     *
+     * @generated from field: int64 credit_amount = 4;
      */
-    creditAmount: number;
+    creditAmount: bigint;
     /**
      * @generated from field: int32 line_order = 5;
      */
@@ -78,15 +82,11 @@ export type RecurringJournalTemplate = Message<"domain.ledger.v1.RecurringJourna
      */
     nextRunDateString?: string;
     /**
-     * Null = runs indefinitely
+     * ISO 8601 date (YYYY-MM-DD) — Null = runs indefinitely
      *
-     * @generated from field: optional int64 end_date = 7;
+     * @generated from field: optional string end_date = 7;
      */
-    endDate?: bigint;
-    /**
-     * @generated from field: optional string end_date_string = 8;
-     */
-    endDateString?: string;
+    endDate?: string;
     /**
      * Template description copied to each generated JournalEntry
      *

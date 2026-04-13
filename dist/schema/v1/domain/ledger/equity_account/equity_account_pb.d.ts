@@ -44,9 +44,11 @@ export type EquityAccount = Message<"domain.ledger.v1.EquityAccount"> & {
     /**
      * Running balance (updated on each equity transaction)
      *
-     * @generated from field: double balance = 6;
+     * centavos
+     *
+     * @generated from field: int64 balance = 6;
      */
-    balance: number;
+    balance: bigint;
     /**
      * Audit fields
      *

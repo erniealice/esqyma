@@ -102,13 +102,11 @@ export type Asset = Message<"domain.asset.v1.Asset"> & {
      */
     invoiceNumber?: string;
     /**
-     * @generated from field: optional int64 acquisition_date = 19;
+     * ISO 8601 date (YYYY-MM-DD)
+     *
+     * @generated from field: optional string acquisition_date = 19;
      */
-    acquisitionDate?: bigint;
-    /**
-     * @generated from field: optional string acquisition_date_string = 20;
-     */
-    acquisitionDateString?: string;
+    acquisitionDate?: string;
     /**
      * @generated from field: optional int64 date_placed_in_service = 21;
      */
@@ -120,25 +118,33 @@ export type Asset = Message<"domain.asset.v1.Asset"> & {
     /**
      * Cost and value
      *
-     * @generated from field: double acquisition_cost = 23;
+     * centavos
+     *
+     * @generated from field: int64 acquisition_cost = 23;
      */
-    acquisitionCost: number;
+    acquisitionCost: bigint;
     /**
      * @generated from field: string currency = 24;
      */
     currency: string;
     /**
-     * @generated from field: double salvage_value = 25;
+     * centavos
+     *
+     * @generated from field: int64 salvage_value = 25;
      */
-    salvageValue: number;
+    salvageValue: bigint;
     /**
-     * @generated from field: double book_value = 26;
+     * centavos
+     *
+     * @generated from field: int64 book_value = 26;
      */
-    bookValue: number;
+    bookValue: bigint;
     /**
-     * @generated from field: optional double fair_value = 27;
+     * centavos
+     *
+     * @generated from field: optional int64 fair_value = 27;
      */
-    fairValue?: number;
+    fairValue?: bigint;
     /**
      * Depreciation configuration
      *
@@ -158,17 +164,17 @@ export type Asset = Message<"domain.asset.v1.Asset"> & {
      */
     depreciationRate?: number;
     /**
-     * @generated from field: optional int64 depreciation_start_date = 32;
+     * ISO 8601 date (YYYY-MM-DD)
+     *
+     * @generated from field: optional string depreciation_start_date = 32;
      */
-    depreciationStartDate?: bigint;
+    depreciationStartDate?: string;
     /**
-     * @generated from field: optional string depreciation_start_date_string = 33;
+     * centavos
+     *
+     * @generated from field: int64 accumulated_depreciation = 34;
      */
-    depreciationStartDateString?: string;
-    /**
-     * @generated from field: double accumulated_depreciation = 34;
-     */
-    accumulatedDepreciation: number;
+    accumulatedDepreciation: bigint;
     /**
      * Measurement model
      *
@@ -554,9 +560,11 @@ export type DisposeAssetRequest = Message<"domain.asset.v1.DisposeAssetRequest">
      */
     disposalType?: string;
     /**
-     * @generated from field: optional double proceeds = 3;
+     * centavos
+     *
+     * @generated from field: optional int64 proceeds = 3;
      */
-    proceeds?: number;
+    proceeds?: bigint;
     /**
      * @generated from field: optional string reason = 4;
      */
@@ -666,13 +674,17 @@ export type RunDepreciationRequest = Message<"domain.asset.v1.RunDepreciationReq
      */
     fiscalPeriod: number;
     /**
-     * @generated from field: int64 period_start_date = 5;
+     * ISO 8601 date (YYYY-MM-DD)
+     *
+     * @generated from field: string period_start_date = 5;
      */
-    periodStartDate: bigint;
+    periodStartDate: string;
     /**
-     * @generated from field: int64 period_end_date = 6;
+     * ISO 8601 date (YYYY-MM-DD)
+     *
+     * @generated from field: string period_end_date = 6;
      */
-    periodEndDate: bigint;
+    periodEndDate: string;
 };
 /**
  * Describes the message domain.asset.v1.RunDepreciationRequest.
@@ -750,9 +762,11 @@ export type RevalueAssetRequest = Message<"domain.asset.v1.RevalueAssetRequest">
      */
     data?: Asset;
     /**
-     * @generated from field: double new_fair_value = 2;
+     * centavos
+     *
+     * @generated from field: int64 new_fair_value = 2;
      */
-    newFairValue: number;
+    newFairValue: bigint;
     /**
      * @generated from field: optional string appraiser_name = 3;
      */

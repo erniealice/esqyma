@@ -184,9 +184,11 @@ export type DeliveryQuote = Message<"integration.fulfillment.v1.DeliveryQuote"> 
      */
     quoteId: string;
     /**
-     * @generated from field: double amount = 2;
+     * centavos
+     *
+     * @generated from field: int64 amount = 2;
      */
-    amount: number;
+    amount: bigint;
     /**
      * @generated from field: string currency = 3;
      */

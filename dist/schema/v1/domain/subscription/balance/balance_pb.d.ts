@@ -19,9 +19,11 @@ export type Balance = Message<"domain.subscription.v1.Balance"> & {
      */
     id: string;
     /**
-     * @generated from field: double amount = 2;
+     * centavos
+     *
+     * @generated from field: int64 amount = 2;
      */
-    amount: number;
+    amount: bigint;
     /**
      * @generated from field: optional int64 date_created = 3;
      */

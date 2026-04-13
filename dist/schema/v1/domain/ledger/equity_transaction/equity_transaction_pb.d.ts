@@ -31,9 +31,11 @@ export type EquityTransaction = Message<"domain.ledger.v1.EquityTransaction"> & 
      */
     transactionType: EquityTransactionType;
     /**
-     * @generated from field: double amount = 4;
+     * centavos
+     *
+     * @generated from field: int64 amount = 4;
      */
-    amount: number;
+    amount: bigint;
     /**
      * @generated from field: optional string description = 5;
      */

@@ -39,23 +39,19 @@ export type FiscalPeriod = Message<"domain.ledger.v1.FiscalPeriod"> & {
      */
     fiscalYear: number;
     /**
-     * Date range — unix timestamps
+     * Date range
      *
-     * @generated from field: int64 start_date = 5;
+     * ISO 8601 date (YYYY-MM-DD)
+     *
+     * @generated from field: string start_date = 5;
      */
-    startDate: bigint;
+    startDate: string;
     /**
-     * @generated from field: int64 end_date = 6;
+     * ISO 8601 date (YYYY-MM-DD)
+     *
+     * @generated from field: string end_date = 6;
      */
-    endDate: bigint;
-    /**
-     * @generated from field: optional string start_date_string = 7;
-     */
-    startDateString?: string;
-    /**
-     * @generated from field: optional string end_date_string = 8;
-     */
-    endDateString?: string;
+    endDate: string;
     /**
      * Status
      *

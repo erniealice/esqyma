@@ -64,13 +64,17 @@ export type RevenueLineItem = Message<"domain.revenue.v1.RevenueLineItem"> & {
      */
     quantity: number;
     /**
-     * @generated from field: double unit_price = 13;
+     * centavos
+     *
+     * @generated from field: int64 unit_price = 13;
      */
-    unitPrice: number;
+    unitPrice: bigint;
     /**
-     * @generated from field: double total_price = 14;
+     * centavos
+     *
+     * @generated from field: int64 total_price = 14;
      */
-    totalPrice: number;
+    totalPrice: bigint;
     /**
      * @generated from field: optional string notes = 16;
      */
@@ -118,11 +122,21 @@ export type RevenueLineItem = Message<"domain.revenue.v1.RevenueLineItem"> & {
      */
     locationId?: string;
     /**
-     * purchase cost for margin tracking
+     * centavos       // purchase cost for margin tracking
      *
-     * @generated from field: optional double cost_price = 24;
+     * @generated from field: optional int64 cost_price = 24;
      */
-    costPrice?: number;
+    costPrice?: bigint;
+    /**
+     * @generated from field: optional string product_price_plan_id = 25;
+     */
+    productPricePlanId?: string;
+    /**
+     * FK to price_product — tracks which price_product was used for one-time revenue line items
+     *
+     * @generated from field: optional string price_product_id = 26;
+     */
+    priceProductId?: string;
 };
 /**
  * Describes the message domain.revenue.v1.RevenueLineItem.

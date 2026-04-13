@@ -60,21 +60,17 @@ export type Subscription = Message<"domain.subscription.v1.Subscription"> & {
      */
     clientId: string;
     /**
-     * @generated from field: optional int64 date_start = 12;
+     * ISO 8601 date (YYYY-MM-DD)
+     *
+     * @generated from field: optional string date_start = 12;
      */
-    dateStart?: bigint;
+    dateStart?: string;
     /**
-     * @generated from field: optional string date_start_string = 13;
+     * ISO 8601 date (YYYY-MM-DD)
+     *
+     * @generated from field: optional string date_end = 14;
      */
-    dateStartString?: string;
-    /**
-     * @generated from field: optional int64 date_end = 14;
-     */
-    dateEnd?: bigint;
-    /**
-     * @generated from field: optional string date_end_string = 15;
-     */
-    dateEndString?: string;
+    dateEnd?: string;
     /**
      * @generated from field: map<string, string> metadata = 16;
      */

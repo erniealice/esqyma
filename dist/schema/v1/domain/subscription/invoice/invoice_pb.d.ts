@@ -23,9 +23,11 @@ export type Invoice = Message<"domain.subscription.v1.Invoice"> & {
      */
     invoiceNumber: string;
     /**
-     * @generated from field: double amount = 3;
+     * centavos
+     *
+     * @generated from field: int64 amount = 3;
      */
-    amount: number;
+    amount: bigint;
     /**
      * @generated from field: optional int64 date_created = 4;
      */

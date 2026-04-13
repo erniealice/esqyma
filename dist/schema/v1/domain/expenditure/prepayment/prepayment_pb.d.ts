@@ -32,33 +32,31 @@ export type Prepayment = Message<"domain.expenditure.v1.Prepayment"> & {
     /**
      * Amounts
      *
-     * @generated from field: double total_amount = 4;
-     */
-    totalAmount: number;
-    /**
-     * Decreases with each amortization entry
+     * centavos
      *
-     * @generated from field: double remaining_amount = 5;
+     * @generated from field: int64 total_amount = 4;
      */
-    remainingAmount: number;
+    totalAmount: bigint;
+    /**
+     * centavos            // Decreases with each amortization entry
+     *
+     * @generated from field: int64 remaining_amount = 5;
+     */
+    remainingAmount: bigint;
     /**
      * Amortization schedule
      *
-     * @generated from field: int64 start_date = 6;
+     * ISO 8601 date (YYYY-MM-DD)
+     *
+     * @generated from field: string start_date = 6;
      */
-    startDate: bigint;
+    startDate: string;
     /**
-     * @generated from field: optional string start_date_string = 7;
+     * ISO 8601 date (YYYY-MM-DD)
+     *
+     * @generated from field: string end_date = 8;
      */
-    startDateString?: string;
-    /**
-     * @generated from field: int64 end_date = 8;
-     */
-    endDate: bigint;
-    /**
-     * @generated from field: optional string end_date_string = 9;
-     */
-    endDateString?: string;
+    endDate: string;
     /**
      * Derived from start/end, stored for convenience
      *
