@@ -34,6 +34,10 @@ type ExpenditureCategory struct {
 	Code               string                 `protobuf:"bytes,8,opt,name=code,proto3" json:"code,omitempty"`
 	Description        *string                `protobuf:"bytes,9,opt,name=description,proto3,oneof" json:"description,omitempty"`
 	ParentCategoryId   *string                `protobuf:"bytes,10,opt,name=parent_category_id,json=parentCategoryId,proto3,oneof" json:"parent_category_id,omitempty"`
+	BillingMode        *string                `protobuf:"bytes,11,opt,name=billing_mode,json=billingMode,proto3,oneof" json:"billing_mode,omitempty"`                      // "pass_through", "markup", "fixed_rate"
+	MarkupPct          *float64               `protobuf:"fixed64,12,opt,name=markup_pct,json=markupPct,proto3,oneof" json:"markup_pct,omitempty"`                          // default markup for this category (e.g., 0.15 = 15%)
+	DefaultRate        *int64                 `protobuf:"varint,13,opt,name=default_rate,json=defaultRate,proto3,oneof" json:"default_rate,omitempty"`                     // fixed rate for soft costs (centavos per unit, e.g., 800 = PHP 8/page)
+	BillableByDefault  *bool                  `protobuf:"varint,14,opt,name=billable_by_default,json=billableByDefault,proto3,oneof" json:"billable_by_default,omitempty"` // default billable_status for new expenses in this category
 	unknownFields      protoimpl.UnknownFields
 	sizeCache          protoimpl.SizeCache
 }
@@ -136,6 +140,34 @@ func (x *ExpenditureCategory) GetParentCategoryId() string {
 		return *x.ParentCategoryId
 	}
 	return ""
+}
+
+func (x *ExpenditureCategory) GetBillingMode() string {
+	if x != nil && x.BillingMode != nil {
+		return *x.BillingMode
+	}
+	return ""
+}
+
+func (x *ExpenditureCategory) GetMarkupPct() float64 {
+	if x != nil && x.MarkupPct != nil {
+		return *x.MarkupPct
+	}
+	return 0
+}
+
+func (x *ExpenditureCategory) GetDefaultRate() int64 {
+	if x != nil && x.DefaultRate != nil {
+		return *x.DefaultRate
+	}
+	return 0
+}
+
+func (x *ExpenditureCategory) GetBillableByDefault() bool {
+	if x != nil && x.BillableByDefault != nil {
+		return *x.BillableByDefault
+	}
+	return false
 }
 
 type CreateExpenditureCategoryRequest struct {
@@ -926,7 +958,7 @@ var File_domain_expenditure_expenditure_category_expenditure_category_proto prot
 
 const file_domain_expenditure_expenditure_category_expenditure_category_proto_rawDesc = "" +
 	"\n" +
-	"Bdomain/expenditure/expenditure_category/expenditure_category.proto\x12\x15domain.expenditure.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/search.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\"\xf8\x03\n" +
+	"Bdomain/expenditure/expenditure_category/expenditure_category.proto\x12\x15domain.expenditure.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/search.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\"\xea\x05\n" +
 	"\x13ExpenditureCategory\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12&\n" +
 	"\fdate_created\x18\x02 \x01(\x03H\x00R\vdateCreated\x88\x01\x01\x123\n" +
@@ -938,13 +970,22 @@ const file_domain_expenditure_expenditure_category_expenditure_category_proto_ra
 	"\x04code\x18\b \x01(\tR\x04code\x12%\n" +
 	"\vdescription\x18\t \x01(\tH\x04R\vdescription\x88\x01\x01\x121\n" +
 	"\x12parent_category_id\x18\n" +
-	" \x01(\tH\x05R\x10parentCategoryId\x88\x01\x01B\x0f\n" +
+	" \x01(\tH\x05R\x10parentCategoryId\x88\x01\x01\x12&\n" +
+	"\fbilling_mode\x18\v \x01(\tH\x06R\vbillingMode\x88\x01\x01\x12\"\n" +
+	"\n" +
+	"markup_pct\x18\f \x01(\x01H\aR\tmarkupPct\x88\x01\x01\x12&\n" +
+	"\fdefault_rate\x18\r \x01(\x03H\bR\vdefaultRate\x88\x01\x01\x123\n" +
+	"\x13billable_by_default\x18\x0e \x01(\bH\tR\x11billableByDefault\x88\x01\x01B\x0f\n" +
 	"\r_date_createdB\x16\n" +
 	"\x14_date_created_stringB\x10\n" +
 	"\x0e_date_modifiedB\x17\n" +
 	"\x15_date_modified_stringB\x0e\n" +
 	"\f_descriptionB\x15\n" +
-	"\x13_parent_category_id\"b\n" +
+	"\x13_parent_category_idB\x0f\n" +
+	"\r_billing_modeB\r\n" +
+	"\v_markup_pctB\x0f\n" +
+	"\r_default_rateB\x16\n" +
+	"\x14_billable_by_default\"b\n" +
 	" CreateExpenditureCategoryRequest\x12>\n" +
 	"\x04data\x18\x01 \x01(\v2*.domain.expenditure.v1.ExpenditureCategoryR\x04data\"\xbb\x01\n" +
 	"!CreateExpenditureCategoryResponse\x12>\n" +

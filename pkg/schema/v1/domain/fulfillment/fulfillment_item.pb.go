@@ -28,9 +28,9 @@ type FulfillmentItem struct {
 	FulfillmentId     string                 `protobuf:"bytes,2,opt,name=fulfillment_id,json=fulfillmentId,proto3" json:"fulfillment_id,omitempty"`
 	RevenueLineItemId string                 `protobuf:"bytes,3,opt,name=revenue_line_item_id,json=revenueLineItemId,proto3" json:"revenue_line_item_id,omitempty"`
 	ProductId         string                 `protobuf:"bytes,4,opt,name=product_id,json=productId,proto3" json:"product_id,omitempty"`
-	FulfillmentMethod string                 `protobuf:"bytes,5,opt,name=fulfillment_method,json=fulfillmentMethod,proto3" json:"fulfillment_method,omitempty"` // snapshot from product at creation time — immutable
-	SourceType        *string                `protobuf:"bytes,6,opt,name=source_type,json=sourceType,proto3,oneof" json:"source_type,omitempty"`                // "job", "subscription", etc.
-	SourceId          *string                `protobuf:"bytes,7,opt,name=source_id,json=sourceId,proto3,oneof" json:"source_id,omitempty"`                      // FK to originating record
+	DeliveryMode      string                 `protobuf:"bytes,5,opt,name=delivery_mode,json=deliveryMode,proto3" json:"delivery_mode,omitempty"` // snapshot of Product.delivery_mode at creation — immutable
+	SourceType        *string                `protobuf:"bytes,6,opt,name=source_type,json=sourceType,proto3,oneof" json:"source_type,omitempty"` // "job", "subscription", etc.
+	SourceId          *string                `protobuf:"bytes,7,opt,name=source_id,json=sourceId,proto3,oneof" json:"source_id,omitempty"`       // FK to originating record
 	QuantityOrdered   float64                `protobuf:"fixed64,8,opt,name=quantity_ordered,json=quantityOrdered,proto3" json:"quantity_ordered,omitempty"`
 	QuantityDelivered float64                `protobuf:"fixed64,9,opt,name=quantity_delivered,json=quantityDelivered,proto3" json:"quantity_delivered,omitempty"`
 	// quantity_remaining is DB GENERATED ALWAYS AS (quantity_ordered - quantity_delivered) STORED — not in proto
@@ -99,9 +99,9 @@ func (x *FulfillmentItem) GetProductId() string {
 	return ""
 }
 
-func (x *FulfillmentItem) GetFulfillmentMethod() string {
+func (x *FulfillmentItem) GetDeliveryMode() string {
 	if x != nil {
-		return x.FulfillmentMethod
+		return x.DeliveryMode
 	}
 	return ""
 }
@@ -159,7 +159,7 @@ var File_domain_fulfillment_fulfillment_item_proto protoreflect.FileDescriptor
 
 const file_domain_fulfillment_fulfillment_item_proto_rawDesc = "" +
 	"\n" +
-	")domain/fulfillment/fulfillment_item.proto\x12\x15domain.fulfillment.v1\x1a\x10options/db.proto\"\xb3\x04\n" +
+	")domain/fulfillment/fulfillment_item.proto\x12\x15domain.fulfillment.v1\x1a\x10options/db.proto\"\xa9\x04\n" +
 	"\x0fFulfillmentItem\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12:\n" +
 	"\x0efulfillment_id\x18\x02 \x01(\tB\x13\x82\xb5\x18\x0f\n" +
@@ -168,8 +168,8 @@ const file_domain_fulfillment_fulfillment_item_proto_rawDesc = "" +
 	"\x11revenue_line_itemR\x11revenueLineItemId\x12,\n" +
 	"\n" +
 	"product_id\x18\x04 \x01(\tB\r\x82\xb5\x18\t\n" +
-	"\aproductR\tproductId\x12-\n" +
-	"\x12fulfillment_method\x18\x05 \x01(\tR\x11fulfillmentMethod\x12$\n" +
+	"\aproductR\tproductId\x12#\n" +
+	"\rdelivery_mode\x18\x05 \x01(\tR\fdeliveryMode\x12$\n" +
 	"\vsource_type\x18\x06 \x01(\tH\x00R\n" +
 	"sourceType\x88\x01\x01\x12 \n" +
 	"\tsource_id\x18\a \x01(\tH\x01R\bsourceId\x88\x01\x01\x12)\n" +

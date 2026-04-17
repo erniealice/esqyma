@@ -52,6 +52,8 @@ message JobSettlement {
   optional string date_created_string = 14;
   bool active = 15;
   optional string workspace_id = 16 [(options.v1.db).references = "workspace", (options.v1.db).index = true];
+  optional double billed_quantity = 17; // quantity billed (for grouped billing — may differ from activity quantity)
+  optional int64 billed_amount = 18; // centavos — amount billed to client via this settlement
 }
 
 // --- Service ---

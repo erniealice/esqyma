@@ -53,6 +53,30 @@ export type ExpenditureCategory = Message<"domain.expenditure.v1.ExpenditureCate
      * @generated from field: optional string parent_category_id = 10;
      */
     parentCategoryId?: string;
+    /**
+     * "pass_through", "markup", "fixed_rate"
+     *
+     * @generated from field: optional string billing_mode = 11;
+     */
+    billingMode?: string;
+    /**
+     * default markup for this category (e.g., 0.15 = 15%)
+     *
+     * @generated from field: optional double markup_pct = 12;
+     */
+    markupPct?: number;
+    /**
+     * fixed rate for soft costs (centavos per unit, e.g., 800 = PHP 8/page)
+     *
+     * @generated from field: optional int64 default_rate = 13;
+     */
+    defaultRate?: bigint;
+    /**
+     * default billable_status for new expenses in this category
+     *
+     * @generated from field: optional bool billable_by_default = 14;
+     */
+    billableByDefault?: boolean;
 };
 /**
  * Describes the message domain.expenditure.v1.ExpenditureCategory.

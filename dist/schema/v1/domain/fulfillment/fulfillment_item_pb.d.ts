@@ -25,11 +25,11 @@ export type FulfillmentItem = Message<"domain.fulfillment.v1.FulfillmentItem"> &
      */
     productId: string;
     /**
-     * snapshot from product at creation time — immutable
+     * snapshot of Product.delivery_mode at creation — immutable
      *
-     * @generated from field: string fulfillment_method = 5;
+     * @generated from field: string delivery_mode = 5;
      */
-    fulfillmentMethod: string;
+    deliveryMode: string;
     /**
      * "job", "subscription", etc.
      *

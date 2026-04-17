@@ -32,7 +32,9 @@ message PricePlan {
   // Email template paths/URLs for dynamic email rendering
   optional string confirmation_template = 15;  // Template for welcome/confirmation emails (first payment)
   optional string receipt_template = 16;       // Template for receipt emails (recurring payments)
-  optional string location_id = 17 [(options.v1.db).references = "location", (options.v1.db).index = true];
+  // Parent schedule — owns location + date range for this plan.
+  // Field 17 was previously location_id (removed 2026-04-17); use price_schedule_id instead.
+  optional string price_schedule_id = 18 [(options.v1.db).references = "price_schedule", (options.v1.db).index = true];
 }
 
 service PricePlanDomainService {

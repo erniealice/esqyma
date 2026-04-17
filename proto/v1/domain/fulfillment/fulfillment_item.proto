@@ -12,7 +12,7 @@ message FulfillmentItem {
   string fulfillment_id = 2 [(options.v1.db).references = "fulfillment", (options.v1.db).index = true];
   string revenue_line_item_id = 3 [(options.v1.db).references = "revenue_line_item"];
   string product_id = 4 [(options.v1.db).references = "product"];
-  string fulfillment_method = 5; // snapshot from product at creation time — immutable
+  string delivery_mode = 5; // snapshot of Product.delivery_mode at creation — immutable
   optional string source_type = 6; // "job", "subscription", etc.
   optional string source_id = 7; // FK to originating record
   double quantity_ordered = 8;

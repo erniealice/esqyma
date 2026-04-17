@@ -43,6 +43,7 @@ message RevenueLineItem {
   optional int64 cost_price = 24; // centavos       // purchase cost for margin tracking
   optional string product_price_plan_id = 25 [(options.v1.db).references = "product_price_plan", (options.v1.db).index = true];
   optional string price_product_id = 26 [(options.v1.db).references = "price_product", (options.v1.db).index = true]; // FK to price_product — tracks which price_product was used for one-time revenue line items
+  optional string job_activity_id = 27 [(options.v1.db).references = "job_activity", (options.v1.db).index = true]; // FK to job_activity — links line item to the activity that generated it
 }
 
 service RevenueLineItemDomainService {

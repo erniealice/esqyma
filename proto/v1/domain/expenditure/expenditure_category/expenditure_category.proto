@@ -21,6 +21,10 @@ message ExpenditureCategory {
   string code = 8;
   optional string description = 9;
   optional string parent_category_id = 10;
+  optional string billing_mode = 11; // "pass_through", "markup", "fixed_rate"
+  optional double markup_pct = 12; // default markup for this category (e.g., 0.15 = 15%)
+  optional int64 default_rate = 13; // fixed rate for soft costs (centavos per unit, e.g., 800 = PHP 8/page)
+  optional bool billable_by_default = 14; // default billable_status for new expenses in this category
 }
 
 service ExpenditureCategoryDomainService {

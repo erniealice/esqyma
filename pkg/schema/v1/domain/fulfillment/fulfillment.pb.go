@@ -30,7 +30,7 @@ type Fulfillment struct {
 	WorkspaceId       string                 `protobuf:"bytes,2,opt,name=workspace_id,json=workspaceId,proto3" json:"workspace_id,omitempty"`
 	RevenueId         string                 `protobuf:"bytes,3,opt,name=revenue_id,json=revenueId,proto3" json:"revenue_id,omitempty"`
 	SupplierId        *string                `protobuf:"bytes,4,opt,name=supplier_id,json=supplierId,proto3,oneof" json:"supplier_id,omitempty"`
-	FulfillmentMethod string                 `protobuf:"bytes,5,opt,name=fulfillment_method,json=fulfillmentMethod,proto3" json:"fulfillment_method,omitempty"` // "physical", "service", "digital", "make_to_order"
+	DeliveryMode      string                 `protobuf:"bytes,5,opt,name=delivery_mode,json=deliveryMode,proto3" json:"delivery_mode,omitempty"`                // snapshot of Product.delivery_mode at creation
 	Status            string                 `protobuf:"bytes,6,opt,name=status,proto3" json:"status,omitempty"`                                                // canonical: PENDING, READY, IN_TRANSIT, DELIVERED, PARTIALLY_DELIVERED, FAILED, CANCELLED
 	ProviderStatus    string                 `protobuf:"bytes,7,opt,name=provider_status,json=providerStatus,proto3" json:"provider_status,omitempty"`          // free-text from fulfillment provider
 	ProviderReference string                 `protobuf:"bytes,8,opt,name=provider_reference,json=providerReference,proto3" json:"provider_reference,omitempty"` // tracking ID from provider
@@ -107,9 +107,9 @@ func (x *Fulfillment) GetSupplierId() string {
 	return ""
 }
 
-func (x *Fulfillment) GetFulfillmentMethod() string {
+func (x *Fulfillment) GetDeliveryMode() string {
 	if x != nil {
-		return x.FulfillmentMethod
+		return x.DeliveryMode
 	}
 	return ""
 }
@@ -216,7 +216,7 @@ var File_domain_fulfillment_fulfillment_proto protoreflect.FileDescriptor
 
 const file_domain_fulfillment_fulfillment_proto_rawDesc = "" +
 	"\n" +
-	"$domain/fulfillment/fulfillment.proto\x12\x15domain.fulfillment.v1\x1a\x1fgoogle/protobuf/timestamp.proto\x1a\x1cgoogle/protobuf/struct.proto\x1a\x10options/db.proto\"\xad\a\n" +
+	"$domain/fulfillment/fulfillment.proto\x12\x15domain.fulfillment.v1\x1a\x1fgoogle/protobuf/timestamp.proto\x1a\x1cgoogle/protobuf/struct.proto\x1a\x10options/db.proto\"\xa3\a\n" +
 	"\vFulfillment\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12)\n" +
 	"\fworkspace_id\x18\x02 \x01(\tB\x06\x82\xb5\x18\x02\x18\x01R\vworkspaceId\x12.\n" +
@@ -226,8 +226,8 @@ const file_domain_fulfillment_fulfillment_proto_rawDesc = "" +
 	"\vsupplier_id\x18\x04 \x01(\tB\x0e\x82\xb5\x18\n" +
 	"\n" +
 	"\bsupplierH\x00R\n" +
-	"supplierId\x88\x01\x01\x12-\n" +
-	"\x12fulfillment_method\x18\x05 \x01(\tR\x11fulfillmentMethod\x12\x1e\n" +
+	"supplierId\x88\x01\x01\x12#\n" +
+	"\rdelivery_mode\x18\x05 \x01(\tR\fdeliveryMode\x12\x1e\n" +
 	"\x06status\x18\x06 \x01(\tB\x06\x82\xb5\x18\x02\x18\x01R\x06status\x12'\n" +
 	"\x0fprovider_status\x18\a \x01(\tR\x0eproviderStatus\x12-\n" +
 	"\x12provider_reference\x18\b \x01(\tR\x11providerReference\x12#\n" +

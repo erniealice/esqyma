@@ -75,6 +75,9 @@ message JobActivity {
   optional string date_created_string = 22;
   bool active = 23;
   optional string workspace_id = 24 [(options.v1.db).references = "workspace", (options.v1.db).index = true];
+  optional string resource_id = 25 [(options.v1.db).references = "resource", (options.v1.db).index = true];
+  optional int64 bill_rate = 26; // centavos — resolved from PriceProduct at billing time
+  optional int64 bill_amount = 27; // centavos — quantity × bill_rate, stamped at billing time
 }
 
 // --- Service ---

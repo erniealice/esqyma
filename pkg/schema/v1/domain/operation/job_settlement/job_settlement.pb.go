@@ -152,6 +152,8 @@ type JobSettlement struct {
 	DateCreatedString    *string                   `protobuf:"bytes,14,opt,name=date_created_string,json=dateCreatedString,proto3,oneof" json:"date_created_string,omitempty"`
 	Active               bool                      `protobuf:"varint,15,opt,name=active,proto3" json:"active,omitempty"`
 	WorkspaceId          *string                   `protobuf:"bytes,16,opt,name=workspace_id,json=workspaceId,proto3,oneof" json:"workspace_id,omitempty"`
+	BilledQuantity       *float64                  `protobuf:"fixed64,17,opt,name=billed_quantity,json=billedQuantity,proto3,oneof" json:"billed_quantity,omitempty"` // quantity billed (for grouped billing — may differ from activity quantity)
+	BilledAmount         *int64                    `protobuf:"varint,18,opt,name=billed_amount,json=billedAmount,proto3,oneof" json:"billed_amount,omitempty"`        // centavos — amount billed to client via this settlement
 	unknownFields        protoimpl.UnknownFields
 	sizeCache            protoimpl.SizeCache
 }
@@ -296,6 +298,20 @@ func (x *JobSettlement) GetWorkspaceId() string {
 		return *x.WorkspaceId
 	}
 	return ""
+}
+
+func (x *JobSettlement) GetBilledQuantity() float64 {
+	if x != nil && x.BilledQuantity != nil {
+		return *x.BilledQuantity
+	}
+	return 0
+}
+
+func (x *JobSettlement) GetBilledAmount() int64 {
+	if x != nil && x.BilledAmount != nil {
+		return *x.BilledAmount
+	}
+	return 0
 }
 
 type CreateJobSettlementRequest struct {
@@ -1474,7 +1490,7 @@ var File_domain_operation_job_settlement_job_settlement_proto protoreflect.FileD
 
 const file_domain_operation_job_settlement_job_settlement_proto_rawDesc = "" +
 	"\n" +
-	"4domain/operation/job_settlement/job_settlement.proto\x12\x13domain.operation.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1adomain/common/search.proto\x1a0domain/operation/job_activity/job_activity.proto\x1a\x10options/db.proto\"\xdb\a\n" +
+	"4domain/operation/job_settlement/job_settlement.proto\x12\x13domain.operation.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1adomain/common/search.proto\x1a0domain/operation/job_activity/job_activity.proto\x1a\x10options/db.proto\"\xd9\b\n" +
 	"\rJobSettlement\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12<\n" +
 	"\x0fjob_activity_id\x18\x02 \x01(\tB\x14\x82\xb5\x18\x10\n" +
@@ -1497,7 +1513,10 @@ const file_domain_operation_job_settlement_job_settlement_proto_rawDesc = "" +
 	"\x13date_created_string\x18\x0e \x01(\tH\aR\x11dateCreatedString\x88\x01\x01\x12\x16\n" +
 	"\x06active\x18\x0f \x01(\bR\x06active\x129\n" +
 	"\fworkspace_id\x18\x10 \x01(\tB\x11\x82\xb5\x18\r\n" +
-	"\tworkspace\x18\x01H\bR\vworkspaceId\x88\x01\x01:\x06\x8a\xb5\x18\x02\b\x01B\x0f\n" +
+	"\tworkspace\x18\x01H\bR\vworkspaceId\x88\x01\x01\x12,\n" +
+	"\x0fbilled_quantity\x18\x11 \x01(\x01H\tR\x0ebilledQuantity\x88\x01\x01\x12(\n" +
+	"\rbilled_amount\x18\x12 \x01(\x03H\n" +
+	"R\fbilledAmount\x88\x01\x01:\x06\x8a\xb5\x18\x02\b\x01B\x0f\n" +
 	"\r_job_activityB\x11\n" +
 	"\x0f_allocation_pctB\x12\n" +
 	"\x10_settlement_dateB\x19\n" +
@@ -1506,7 +1525,9 @@ const file_domain_operation_job_settlement_job_settlement_proto_rawDesc = "" +
 	"\v_created_byB\x0f\n" +
 	"\r_date_createdB\x16\n" +
 	"\x14_date_created_stringB\x0f\n" +
-	"\r_workspace_id\"T\n" +
+	"\r_workspace_idB\x12\n" +
+	"\x10_billed_quantityB\x10\n" +
+	"\x0e_billed_amount\"T\n" +
 	"\x1aCreateJobSettlementRequest\x126\n" +
 	"\x04data\x18\x01 \x01(\v2\".domain.operation.v1.JobSettlementR\x04data\"\xad\x01\n" +
 	"\x1bCreateJobSettlementResponse\x126\n" +

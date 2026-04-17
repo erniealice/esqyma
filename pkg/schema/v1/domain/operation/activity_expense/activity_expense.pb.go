@@ -25,15 +25,18 @@ const (
 )
 
 type ActivityExpense struct {
-	state           protoimpl.MessageState    `protogen:"open.v1"`
-	ActivityId      string                    `protobuf:"bytes,1,opt,name=activity_id,json=activityId,proto3" json:"activity_id,omitempty"`
-	JobActivity     *job_activity.JobActivity `protobuf:"bytes,2,opt,name=job_activity,json=jobActivity,proto3,oneof" json:"job_activity,omitempty"`
-	ExpenseCategory string                    `protobuf:"bytes,3,opt,name=expense_category,json=expenseCategory,proto3" json:"expense_category,omitempty"`
-	VendorRef       *string                   `protobuf:"bytes,4,opt,name=vendor_ref,json=vendorRef,proto3,oneof" json:"vendor_ref,omitempty"`
-	ReceiptUrl      *string                   `protobuf:"bytes,5,opt,name=receipt_url,json=receiptUrl,proto3,oneof" json:"receipt_url,omitempty"`
-	Reimbursable    bool                      `protobuf:"varint,6,opt,name=reimbursable,proto3" json:"reimbursable,omitempty"`
-	unknownFields   protoimpl.UnknownFields
-	sizeCache       protoimpl.SizeCache
+	state             protoimpl.MessageState    `protogen:"open.v1"`
+	ActivityId        string                    `protobuf:"bytes,1,opt,name=activity_id,json=activityId,proto3" json:"activity_id,omitempty"`
+	JobActivity       *job_activity.JobActivity `protobuf:"bytes,2,opt,name=job_activity,json=jobActivity,proto3,oneof" json:"job_activity,omitempty"`
+	ExpenseCategory   string                    `protobuf:"bytes,3,opt,name=expense_category,json=expenseCategory,proto3" json:"expense_category,omitempty"` // deprecated — use expense_category_id instead
+	VendorRef         *string                   `protobuf:"bytes,4,opt,name=vendor_ref,json=vendorRef,proto3,oneof" json:"vendor_ref,omitempty"`
+	ReceiptUrl        *string                   `protobuf:"bytes,5,opt,name=receipt_url,json=receiptUrl,proto3,oneof" json:"receipt_url,omitempty"`
+	Reimbursable      bool                      `protobuf:"varint,6,opt,name=reimbursable,proto3" json:"reimbursable,omitempty"` // deprecated — use payment_method instead
+	ExpenseCategoryId *string                   `protobuf:"bytes,7,opt,name=expense_category_id,json=expenseCategoryId,proto3,oneof" json:"expense_category_id,omitempty"`
+	PaymentMethod     *string                   `protobuf:"bytes,8,opt,name=payment_method,json=paymentMethod,proto3,oneof" json:"payment_method,omitempty"`                 // "employee", "company_card", "vendor_bill"
+	MarkupPctOverride *float64                  `protobuf:"fixed64,9,opt,name=markup_pct_override,json=markupPctOverride,proto3,oneof" json:"markup_pct_override,omitempty"` // per-expense override of category markup (e.g., 0.15 = 15%)
+	unknownFields     protoimpl.UnknownFields
+	sizeCache         protoimpl.SizeCache
 }
 
 func (x *ActivityExpense) Reset() {
@@ -106,6 +109,27 @@ func (x *ActivityExpense) GetReimbursable() bool {
 		return x.Reimbursable
 	}
 	return false
+}
+
+func (x *ActivityExpense) GetExpenseCategoryId() string {
+	if x != nil && x.ExpenseCategoryId != nil {
+		return *x.ExpenseCategoryId
+	}
+	return ""
+}
+
+func (x *ActivityExpense) GetPaymentMethod() string {
+	if x != nil && x.PaymentMethod != nil {
+		return *x.PaymentMethod
+	}
+	return ""
+}
+
+func (x *ActivityExpense) GetMarkupPctOverride() float64 {
+	if x != nil && x.MarkupPctOverride != nil {
+		return *x.MarkupPctOverride
+	}
+	return 0
 }
 
 type CreateActivityExpenseRequest struct {
@@ -896,7 +920,7 @@ var File_domain_operation_activity_expense_activity_expense_proto protoreflect.F
 
 const file_domain_operation_activity_expense_activity_expense_proto_rawDesc = "" +
 	"\n" +
-	"8domain/operation/activity_expense/activity_expense.proto\x12\x13domain.operation.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1adomain/common/search.proto\x1a0domain/operation/job_activity/job_activity.proto\x1a\x10options/db.proto\"\xe1\x02\n" +
+	"8domain/operation/activity_expense/activity_expense.proto\x12\x13domain.operation.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1adomain/common/search.proto\x1a0domain/operation/job_activity/job_activity.proto\x1a\x10options/db.proto\"\xd8\x04\n" +
 	"\x0fActivityExpense\x123\n" +
 	"\vactivity_id\x18\x01 \x01(\tB\x12\x82\xb5\x18\x0e\n" +
 	"\fjob_activityR\n" +
@@ -907,10 +931,17 @@ const file_domain_operation_activity_expense_activity_expense_proto_rawDesc = ""
 	"vendor_ref\x18\x04 \x01(\tH\x01R\tvendorRef\x88\x01\x01\x12$\n" +
 	"\vreceipt_url\x18\x05 \x01(\tH\x02R\n" +
 	"receiptUrl\x88\x01\x01\x12\"\n" +
-	"\freimbursable\x18\x06 \x01(\bR\freimbursable:\x06\x8a\xb5\x18\x02\b\x01B\x0f\n" +
+	"\freimbursable\x18\x06 \x01(\bR\freimbursable\x12Q\n" +
+	"\x13expense_category_id\x18\a \x01(\tB\x1c\x82\xb5\x18\x18\n" +
+	"\x14expenditure_category\x18\x01H\x03R\x11expenseCategoryId\x88\x01\x01\x12*\n" +
+	"\x0epayment_method\x18\b \x01(\tH\x04R\rpaymentMethod\x88\x01\x01\x123\n" +
+	"\x13markup_pct_override\x18\t \x01(\x01H\x05R\x11markupPctOverride\x88\x01\x01:\x06\x8a\xb5\x18\x02\b\x01B\x0f\n" +
 	"\r_job_activityB\r\n" +
 	"\v_vendor_refB\x0e\n" +
-	"\f_receipt_url\"X\n" +
+	"\f_receipt_urlB\x16\n" +
+	"\x14_expense_category_idB\x11\n" +
+	"\x0f_payment_methodB\x16\n" +
+	"\x14_markup_pct_override\"X\n" +
 	"\x1cCreateActivityExpenseRequest\x128\n" +
 	"\x04data\x18\x01 \x01(\v2$.domain.operation.v1.ActivityExpenseR\x04data\"\xb1\x01\n" +
 	"\x1dCreateActivityExpenseResponse\x128\n" +

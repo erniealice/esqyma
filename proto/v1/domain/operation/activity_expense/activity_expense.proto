@@ -20,10 +20,13 @@ message ActivityExpense {
 
   string activity_id = 1 [(options.v1.db).references = "job_activity"];
   optional JobActivity job_activity = 2;
-  string expense_category = 3;
+  string expense_category = 3; // deprecated — use expense_category_id instead
   optional string vendor_ref = 4;
   optional string receipt_url = 5;
-  bool reimbursable = 6;
+  bool reimbursable = 6; // deprecated — use payment_method instead
+  optional string expense_category_id = 7 [(options.v1.db).references = "expenditure_category", (options.v1.db).index = true];
+  optional string payment_method = 8; // "employee", "company_card", "vendor_bill"
+  optional double markup_pct_override = 9; // per-expense override of category markup (e.g., 0.15 = 15%)
 }
 
 // --- Service ---

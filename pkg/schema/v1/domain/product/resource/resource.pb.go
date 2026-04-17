@@ -36,6 +36,7 @@ type Resource struct {
 	Description        *string                `protobuf:"bytes,8,opt,name=description,proto3,oneof" json:"description,omitempty"`
 	Product            *product.Product       `protobuf:"bytes,9,opt,name=product,proto3,oneof" json:"product,omitempty"`
 	ProductId          string                 `protobuf:"bytes,10,opt,name=product_id,json=productId,proto3" json:"product_id,omitempty"`
+	UserId             *string                `protobuf:"bytes,11,opt,name=user_id,json=userId,proto3,oneof" json:"user_id,omitempty"`
 	unknownFields      protoimpl.UnknownFields
 	sizeCache          protoimpl.SizeCache
 }
@@ -136,6 +137,13 @@ func (x *Resource) GetProduct() *product.Product {
 func (x *Resource) GetProductId() string {
 	if x != nil {
 		return x.ProductId
+	}
+	return ""
+}
+
+func (x *Resource) GetUserId() string {
+	if x != nil && x.UserId != nil {
+		return *x.UserId
 	}
 	return ""
 }
@@ -928,7 +936,7 @@ var File_domain_product_resource_resource_proto protoreflect.FileDescriptor
 
 const file_domain_product_resource_resource_proto_rawDesc = "" +
 	"\n" +
-	"&domain/product/resource/resource.proto\x12\x11domain.product.v1\x1a\x19domain/common/error.proto\x1a\x1adomain/common/search.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1edomain/common/pagination.proto\x1a$domain/product/product/product.proto\x1a\x10options/db.proto\"\x9a\x04\n" +
+	"&domain/product/resource/resource.proto\x12\x11domain.product.v1\x1a\x19domain/common/error.proto\x1a\x1adomain/common/search.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1edomain/common/pagination.proto\x1a$domain/product/product/product.proto\x1a\x10options/db.proto\"\xd2\x04\n" +
 	"\bResource\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12&\n" +
 	"\fdate_created\x18\x02 \x01(\x03H\x00R\vdateCreated\x88\x01\x01\x123\n" +
@@ -943,14 +951,18 @@ const file_domain_product_resource_resource_proto_rawDesc = "" +
 	"\n" +
 	"product_id\x18\n" +
 	" \x01(\tB\x0f\x82\xb5\x18\v\n" +
-	"\aproduct\x18\x01R\tproductId:\x06\x8a\xb5\x18\x02\b\x01B\x0f\n" +
+	"\aproduct\x18\x01R\tproductId\x12*\n" +
+	"\auser_id\x18\v \x01(\tB\f\x82\xb5\x18\b\n" +
+	"\x04user\x18\x01H\x06R\x06userId\x88\x01\x01:\x06\x8a\xb5\x18\x02\b\x01B\x0f\n" +
 	"\r_date_createdB\x16\n" +
 	"\x14_date_created_stringB\x10\n" +
 	"\x0e_date_modifiedB\x17\n" +
 	"\x15_date_modified_stringB\x0e\n" +
 	"\f_descriptionB\n" +
 	"\n" +
-	"\b_product\"H\n" +
+	"\b_productB\n" +
+	"\n" +
+	"\b_user_id\"H\n" +
 	"\x15CreateResourceRequest\x12/\n" +
 	"\x04data\x18\x01 \x01(\v2\x1b.domain.product.v1.ResourceR\x04data\"\xa1\x01\n" +
 	"\x16CreateResourceResponse\x12/\n" +

@@ -54,6 +54,10 @@ export type Resource = Message<"domain.product.v1.Resource"> & {
      * @generated from field: string product_id = 10;
      */
     productId: string;
+    /**
+     * @generated from field: optional string user_id = 11;
+     */
+    userId?: string;
 };
 /**
  * Describes the message domain.product.v1.Resource.

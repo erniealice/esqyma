@@ -137,6 +137,12 @@ export type RevenueLineItem = Message<"domain.revenue.v1.RevenueLineItem"> & {
      * @generated from field: optional string price_product_id = 26;
      */
     priceProductId?: string;
+    /**
+     * FK to job_activity — links line item to the activity that generated it
+     *
+     * @generated from field: optional string job_activity_id = 27;
+     */
+    jobActivityId?: string;
 };
 /**
  * Describes the message domain.revenue.v1.RevenueLineItem.

@@ -60,22 +60,30 @@ export type Product = Message<"domain.product.v1.Product"> & {
      */
     currency: string;
     /**
-     * "serialized", "non_serialized", "consumable"
-     *
-     * @generated from field: string item_type = 11;
-     */
-    itemType: string;
-    /**
-     * Determines how this product reaches the client. Defaults to 'physical' for backward compatibility.
-     * Valid values: "physical", "service", "digital", "make_to_order"
-     *
-     * @generated from field: string fulfillment_method = 12;
-     */
-    fulfillmentMethod: string;
-    /**
      * @generated from field: optional string line_id = 14;
      */
     lineId?: string;
+    /**
+     * What type of product? Drives inventory surface inclusion and GL policy.
+     * Valid values: "service" | "stocked_good" | "non_stocked_good" | "consumable"
+     *
+     * @generated from field: string product_kind = 15;
+     */
+    productKind: string;
+    /**
+     * How does it reach the client? Drives fulfillment UI and revenue recognition.
+     * Valid values: "instant" | "scheduled" | "shipped" | "digital" | "project" | "subscription"
+     *
+     * @generated from field: string delivery_mode = 16;
+     */
+    deliveryMode: string;
+    /**
+     * How is inventory counted? Only meaningful when product_kind ∈ {stocked_good, consumable}.
+     * Valid values: "none" | "bulk" | "serialized"
+     *
+     * @generated from field: string tracking_mode = 17;
+     */
+    trackingMode: string;
 };
 /**
  * Describes the message domain.product.v1.Product.

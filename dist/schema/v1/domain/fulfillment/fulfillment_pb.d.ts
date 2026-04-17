@@ -26,11 +26,11 @@ export type Fulfillment = Message<"domain.fulfillment.v1.Fulfillment"> & {
      */
     supplierId?: string;
     /**
-     * "physical", "service", "digital", "make_to_order"
+     * snapshot of Product.delivery_mode at creation
      *
-     * @generated from field: string fulfillment_method = 5;
+     * @generated from field: string delivery_mode = 5;
      */
-    fulfillmentMethod: string;
+    deliveryMode: string;
     /**
      * canonical: PENDING, READY, IN_TRANSIT, DELIVERED, PARTIALLY_DELIVERED, FAILED, CANCELLED
      *

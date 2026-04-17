@@ -26,6 +26,7 @@ const (
 	ProductPlanDomainService_ListProductPlans_FullMethodName           = "/domain.product.v1.ProductPlanDomainService/ListProductPlans"
 	ProductPlanDomainService_GetProductPlanListPageData_FullMethodName = "/domain.product.v1.ProductPlanDomainService/GetProductPlanListPageData"
 	ProductPlanDomainService_GetProductPlanItemPageData_FullMethodName = "/domain.product.v1.ProductPlanDomainService/GetProductPlanItemPageData"
+	ProductPlanDomainService_ListByPlan_FullMethodName                 = "/domain.product.v1.ProductPlanDomainService/ListByPlan"
 )
 
 // ProductPlanDomainServiceClient is the client API for ProductPlanDomainService service.
@@ -39,6 +40,8 @@ type ProductPlanDomainServiceClient interface {
 	ListProductPlans(ctx context.Context, in *ListProductPlansRequest, opts ...grpc.CallOption) (*ListProductPlansResponse, error)
 	GetProductPlanListPageData(ctx context.Context, in *GetProductPlanListPageDataRequest, opts ...grpc.CallOption) (*GetProductPlanListPageDataResponse, error)
 	GetProductPlanItemPageData(ctx context.Context, in *GetProductPlanItemPageDataRequest, opts ...grpc.CallOption) (*GetProductPlanItemPageDataResponse, error)
+	// Extra: filter by plan
+	ListByPlan(ctx context.Context, in *ListProductPlansByPlanRequest, opts ...grpc.CallOption) (*ListProductPlansByPlanResponse, error)
 }
 
 type productPlanDomainServiceClient struct {
@@ -119,6 +122,16 @@ func (c *productPlanDomainServiceClient) GetProductPlanItemPageData(ctx context.
 	return out, nil
 }
 
+func (c *productPlanDomainServiceClient) ListByPlan(ctx context.Context, in *ListProductPlansByPlanRequest, opts ...grpc.CallOption) (*ListProductPlansByPlanResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(ListProductPlansByPlanResponse)
+	err := c.cc.Invoke(ctx, ProductPlanDomainService_ListByPlan_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // ProductPlanDomainServiceServer is the server API for ProductPlanDomainService service.
 // All implementations must embed UnimplementedProductPlanDomainServiceServer
 // for forward compatibility.
@@ -130,6 +143,8 @@ type ProductPlanDomainServiceServer interface {
 	ListProductPlans(context.Context, *ListProductPlansRequest) (*ListProductPlansResponse, error)
 	GetProductPlanListPageData(context.Context, *GetProductPlanListPageDataRequest) (*GetProductPlanListPageDataResponse, error)
 	GetProductPlanItemPageData(context.Context, *GetProductPlanItemPageDataRequest) (*GetProductPlanItemPageDataResponse, error)
+	// Extra: filter by plan
+	ListByPlan(context.Context, *ListProductPlansByPlanRequest) (*ListProductPlansByPlanResponse, error)
 	mustEmbedUnimplementedProductPlanDomainServiceServer()
 }
 
@@ -160,6 +175,9 @@ func (UnimplementedProductPlanDomainServiceServer) GetProductPlanListPageData(co
 }
 func (UnimplementedProductPlanDomainServiceServer) GetProductPlanItemPageData(context.Context, *GetProductPlanItemPageDataRequest) (*GetProductPlanItemPageDataResponse, error) {
 	return nil, status.Error(codes.Unimplemented, "method GetProductPlanItemPageData not implemented")
+}
+func (UnimplementedProductPlanDomainServiceServer) ListByPlan(context.Context, *ListProductPlansByPlanRequest) (*ListProductPlansByPlanResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method ListByPlan not implemented")
 }
 func (UnimplementedProductPlanDomainServiceServer) mustEmbedUnimplementedProductPlanDomainServiceServer() {
 }
@@ -309,6 +327,24 @@ func _ProductPlanDomainService_GetProductPlanItemPageData_Handler(srv interface{
 	return interceptor(ctx, in, info, handler)
 }
 
+func _ProductPlanDomainService_ListByPlan_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ListProductPlansByPlanRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ProductPlanDomainServiceServer).ListByPlan(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: ProductPlanDomainService_ListByPlan_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ProductPlanDomainServiceServer).ListByPlan(ctx, req.(*ListProductPlansByPlanRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // ProductPlanDomainService_ServiceDesc is the grpc.ServiceDesc for ProductPlanDomainService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -343,6 +379,10 @@ var ProductPlanDomainService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "GetProductPlanItemPageData",
 			Handler:    _ProductPlanDomainService_GetProductPlanItemPageData_Handler,
+		},
+		{
+			MethodName: "ListByPlan",
+			Handler:    _ProductPlanDomainService_ListByPlan_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

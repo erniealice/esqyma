@@ -87,9 +87,12 @@ export type PricePlan = Message<"domain.subscription.v1.PricePlan"> & {
      */
     receiptTemplate?: string;
     /**
-     * @generated from field: optional string location_id = 17;
+     * Parent schedule — owns location + date range for this plan.
+     * Field 17 was previously location_id (removed 2026-04-17); use price_schedule_id instead.
+     *
+     * @generated from field: optional string price_schedule_id = 18;
      */
-    locationId?: string;
+    priceScheduleId?: string;
 };
 /**
  * Describes the message domain.subscription.v1.PricePlan.

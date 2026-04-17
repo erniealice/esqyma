@@ -1,0 +1,103 @@
+syntax = "proto3";
+
+package domain.entity.v1;
+
+option go_package = "github.com/erniealice/esqyma/golang/v1/domain/entity/session";
+
+import "domain/common/error.proto";
+import "domain/common/search.proto";
+import "domain/common/filter.proto";
+import "domain/common/sort.proto";
+import "domain/common/pagination.proto";
+import "options/db.proto";
+
+// Session represents an authenticated user's active session.
+// Issued by the password auth provider after a successful login; the opaque
+// token is stored in the cookie and presented on each request.
+//
+// The same row shape is used by Postgres (session table), Firestore
+// (session_v1 collection), and the mock in-memory store.
+message Session {
+  option (options.v1.table).table = true;
+
+  string id = 1;
+  string user_id = 2 [(options.v1.db).index = true];
+  string token = 3 [(options.v1.db).unique = true, (options.v1.db).index = true];
+
+  // Workspace context resolved at login time — nullable for users who have
+  // not yet joined a workspace.
+  optional string workspace_user_id = 4;
+  optional string workspace_id = 5;
+
+  // Session lifetime — unix milliseconds since epoch. The adapter layer is
+  // responsible for any backend-specific type conversion.
+  int64 expires_at = 6;
+
+  bool active = 7 [(options.v1.db).default = "true"];
+
+  // Standard timestamp metadata — matches the rest of the entity domain.
+  optional int64 date_created = 8;
+  optional string date_created_string = 9;
+  optional int64 date_modified = 10;
+  optional string date_modified_string = 11;
+}
+
+service SessionDomainService {
+  rpc CreateSession(CreateSessionRequest) returns (CreateSessionResponse);
+  rpc ReadSession(ReadSessionRequest) returns (ReadSessionResponse);
+  rpc UpdateSession(UpdateSessionRequest) returns (UpdateSessionResponse);
+  rpc DeleteSession(DeleteSessionRequest) returns (DeleteSessionResponse);
+  rpc ListSessions(ListSessionsRequest) returns (ListSessionsResponse);
+}
+
+message CreateSessionRequest {
+  Session data = 1;
+}
+
+message CreateSessionResponse {
+  repeated Session data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message ReadSessionRequest {
+  Session data = 1;
+}
+
+message ReadSessionResponse {
+  repeated Session data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message UpdateSessionRequest {
+  Session data = 1;
+}
+
+message UpdateSessionResponse {
+  repeated Session data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message DeleteSessionRequest {
+  Session data = 1;
+}
+
+message DeleteSessionResponse {
+  bool success = 1;
+  optional domain.common.v1.Error error = 2;
+}
+
+message ListSessionsRequest {
+  optional domain.common.v1.SearchRequest search = 1;
+  optional domain.common.v1.FilterRequest filters = 2;
+  optional domain.common.v1.SortRequest sort = 3;
+  optional domain.common.v1.PaginationRequest pagination = 4;
+}
+
+message ListSessionsResponse {
+  repeated Session data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}

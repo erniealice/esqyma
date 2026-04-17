@@ -265,6 +265,9 @@ type JobActivity struct {
 	DateCreatedString *string                `protobuf:"bytes,22,opt,name=date_created_string,json=dateCreatedString,proto3,oneof" json:"date_created_string,omitempty"`
 	Active            bool                   `protobuf:"varint,23,opt,name=active,proto3" json:"active,omitempty"`
 	WorkspaceId       *string                `protobuf:"bytes,24,opt,name=workspace_id,json=workspaceId,proto3,oneof" json:"workspace_id,omitempty"`
+	ResourceId        *string                `protobuf:"bytes,25,opt,name=resource_id,json=resourceId,proto3,oneof" json:"resource_id,omitempty"`
+	BillRate          *int64                 `protobuf:"varint,26,opt,name=bill_rate,json=billRate,proto3,oneof" json:"bill_rate,omitempty"`       // centavos — resolved from PriceProduct at billing time
+	BillAmount        *int64                 `protobuf:"varint,27,opt,name=bill_amount,json=billAmount,proto3,oneof" json:"bill_amount,omitempty"` // centavos — quantity × bill_rate, stamped at billing time
 	unknownFields     protoimpl.UnknownFields
 	sizeCache         protoimpl.SizeCache
 }
@@ -465,6 +468,27 @@ func (x *JobActivity) GetWorkspaceId() string {
 		return *x.WorkspaceId
 	}
 	return ""
+}
+
+func (x *JobActivity) GetResourceId() string {
+	if x != nil && x.ResourceId != nil {
+		return *x.ResourceId
+	}
+	return ""
+}
+
+func (x *JobActivity) GetBillRate() int64 {
+	if x != nil && x.BillRate != nil {
+		return *x.BillRate
+	}
+	return 0
+}
+
+func (x *JobActivity) GetBillAmount() int64 {
+	if x != nil && x.BillAmount != nil {
+		return *x.BillAmount
+	}
+	return 0
 }
 
 type CreateJobActivityRequest struct {
@@ -2099,8 +2123,7 @@ var File_domain_operation_job_activity_job_activity_proto protoreflect.FileDescr
 
 const file_domain_operation_job_activity_job_activity_proto_rawDesc = "" +
 	"\n" +
-	"0domain/operation/job_activity/job_activity.proto\x12\x13domain.operation.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1adomain/common/search.proto\x1a\x1edomain/operation/job/job.proto\x1a(domain/operation/job_task/job_task.proto\x1a\x10options/db.proto\"\xc3\n" +
-	"\n" +
+	"0domain/operation/job_activity/job_activity.proto\x12\x13domain.operation.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1adomain/common/search.proto\x1a\x1edomain/operation/job/job.proto\x1a(domain/operation/job_task/job_task.proto\x1a\x10options/db.proto\"\xf1\v\n" +
 	"\vJobActivity\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12\"\n" +
 	"\x06job_id\x18\x02 \x01(\tB\v\x82\xb5\x18\a\n" +
@@ -2136,7 +2159,13 @@ const file_domain_operation_job_activity_job_activity_proto_rawDesc = "" +
 	"\x13date_created_string\x18\x16 \x01(\tH\vR\x11dateCreatedString\x88\x01\x01\x12\x16\n" +
 	"\x06active\x18\x17 \x01(\bR\x06active\x129\n" +
 	"\fworkspace_id\x18\x18 \x01(\tB\x11\x82\xb5\x18\r\n" +
-	"\tworkspace\x18\x01H\fR\vworkspaceId\x88\x01\x01:\x06\x8a\xb5\x18\x02\b\x01B\x06\n" +
+	"\tworkspace\x18\x01H\fR\vworkspaceId\x88\x01\x01\x126\n" +
+	"\vresource_id\x18\x19 \x01(\tB\x10\x82\xb5\x18\f\n" +
+	"\bresource\x18\x01H\rR\n" +
+	"resourceId\x88\x01\x01\x12 \n" +
+	"\tbill_rate\x18\x1a \x01(\x03H\x0eR\bbillRate\x88\x01\x01\x12$\n" +
+	"\vbill_amount\x18\x1b \x01(\x03H\x0fR\n" +
+	"billAmount\x88\x01\x01:\x06\x8a\xb5\x18\x02\b\x01B\x06\n" +
 	"\x04_jobB\x0e\n" +
 	"\f_job_task_idB\r\n" +
 	"\v_entry_dateB\x14\n" +
@@ -2150,7 +2179,11 @@ const file_domain_operation_job_activity_job_activity_proto_rawDesc = "" +
 	"\v_created_byB\x0f\n" +
 	"\r_date_createdB\x16\n" +
 	"\x14_date_created_stringB\x0f\n" +
-	"\r_workspace_id\"P\n" +
+	"\r_workspace_idB\x0e\n" +
+	"\f_resource_idB\f\n" +
+	"\n" +
+	"_bill_rateB\x0e\n" +
+	"\f_bill_amount\"P\n" +
 	"\x18CreateJobActivityRequest\x124\n" +
 	"\x04data\x18\x01 \x01(\v2 .domain.operation.v1.JobActivityR\x04data\"\xa9\x01\n" +
 	"\x19CreateJobActivityResponse\x124\n" +

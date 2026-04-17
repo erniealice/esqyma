@@ -28,6 +28,7 @@ message ProductPlan {
   optional Product product = 11;
   string product_id = 12 [(options.v1.db).references = "product", (options.v1.db).index = true];
   string plan_id = 13 [(options.v1.db).references = "plan", (options.v1.db).index = true];
+  optional string job_template_id = 14 [(options.v1.db).references = "job_template", (options.v1.db).index = true];
 }
 
 service ProductPlanDomainService {
@@ -40,6 +41,9 @@ service ProductPlanDomainService {
     returns (GetProductPlanListPageDataResponse);
   rpc GetProductPlanItemPageData(GetProductPlanItemPageDataRequest)
     returns (GetProductPlanItemPageDataResponse);
+
+  // Extra: filter by plan
+  rpc ListByPlan(ListProductPlansByPlanRequest) returns (ListProductPlansByPlanResponse);
 }
 
 message CreateProductPlanRequest {
@@ -115,6 +119,17 @@ message GetProductPlanItemPageDataRequest {
 
 message GetProductPlanItemPageDataResponse {
   ProductPlan product_plan = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+// Extra RPC messages
+message ListProductPlansByPlanRequest {
+  string plan_id = 1;
+}
+
+message ListProductPlansByPlanResponse {
+  repeated ProductPlan product_plans = 1;
   bool success = 2;
   optional domain.common.v1.Error error = 3;
 }

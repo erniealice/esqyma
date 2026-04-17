@@ -1,0 +1,127 @@
+syntax = "proto3";
+
+package domain.subscription.v1;
+
+option go_package = "github.com/erniealice/esqyma/golang/v1/domain/subscription/price_schedule";
+
+import "domain/common/error.proto";
+import "domain/common/pagination.proto";
+import "domain/common/search.proto";
+import "domain/common/filter.proto";
+import "domain/common/sort.proto";
+import "options/db.proto";
+
+message PriceSchedule {
+  option (options.v1.table).table = true;
+  string id = 1;
+  optional int64 date_created = 2;
+  optional string date_created_string = 3;
+  optional int64 date_modified = 4;
+  optional string date_modified_string = 5;
+  bool active = 6 [(options.v1.db).default = "true"];
+  string name = 7;
+  optional string description = 8;
+  string date_start = 9; // ISO 8601 date (YYYY-MM-DD)
+  optional string date_end = 10; // ISO 8601 date (YYYY-MM-DD)
+  optional string location_id = 11 [(options.v1.db).references = "location", (options.v1.db).index = true];
+}
+
+service PriceScheduleDomainService {
+  rpc CreatePriceSchedule(CreatePriceScheduleRequest) returns (CreatePriceScheduleResponse);
+  rpc ReadPriceSchedule(ReadPriceScheduleRequest) returns (ReadPriceScheduleResponse);
+  rpc UpdatePriceSchedule(UpdatePriceScheduleRequest) returns (UpdatePriceScheduleResponse);
+  rpc DeletePriceSchedule(DeletePriceScheduleRequest) returns (DeletePriceScheduleResponse);
+  rpc ListPriceSchedules(ListPriceSchedulesRequest) returns (ListPriceSchedulesResponse);
+  rpc GetPriceScheduleListPageData(GetPriceScheduleListPageDataRequest) returns (GetPriceScheduleListPageDataResponse);
+  rpc GetPriceScheduleItemPageData(GetPriceScheduleItemPageDataRequest) returns (GetPriceScheduleItemPageDataResponse);
+  rpc FindApplicablePriceSchedule(FindApplicablePriceScheduleRequest) returns (FindApplicablePriceScheduleResponse);
+}
+
+message CreatePriceScheduleRequest {
+  PriceSchedule data = 1;
+}
+
+message CreatePriceScheduleResponse {
+  repeated PriceSchedule data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message ReadPriceScheduleRequest {
+  PriceSchedule data = 1;
+}
+
+message ReadPriceScheduleResponse {
+  repeated PriceSchedule data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message UpdatePriceScheduleRequest {
+  PriceSchedule data = 1;
+}
+
+message UpdatePriceScheduleResponse {
+  repeated PriceSchedule data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message DeletePriceScheduleRequest {
+  PriceSchedule data = 1;
+}
+
+message DeletePriceScheduleResponse {
+  bool success = 1;
+  optional domain.common.v1.Error error = 2;
+}
+
+message ListPriceSchedulesRequest {
+  optional domain.common.v1.SearchRequest search = 1;
+  optional domain.common.v1.FilterRequest filters = 2;
+  optional domain.common.v1.SortRequest sort = 3;
+  optional domain.common.v1.PaginationRequest pagination = 4;
+}
+
+message ListPriceSchedulesResponse {
+  repeated PriceSchedule data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message GetPriceScheduleListPageDataRequest {
+  optional domain.common.v1.PaginationRequest pagination = 1;
+  optional domain.common.v1.FilterRequest filters = 2;
+  optional domain.common.v1.SortRequest sort = 3;
+  optional domain.common.v1.SearchRequest search = 4;
+}
+
+message GetPriceScheduleListPageDataResponse {
+  repeated PriceSchedule price_schedule_list = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+  optional domain.common.v1.PaginationResponse pagination = 4;
+  repeated domain.common.v1.SearchResult search_results = 5;
+}
+
+message GetPriceScheduleItemPageDataRequest {
+  string price_schedule_id = 1;
+}
+
+message GetPriceScheduleItemPageDataResponse {
+  optional PriceSchedule price_schedule = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message FindApplicablePriceScheduleRequest {
+  string location_id = 1;
+  string date = 2; // ISO 8601 date (YYYY-MM-DD)
+}
+
+message FindApplicablePriceScheduleResponse {
+  optional PriceSchedule price_schedule = 1;
+  bool found = 2;
+  bool success = 3;
+  optional domain.common.v1.Error error = 4;
+}

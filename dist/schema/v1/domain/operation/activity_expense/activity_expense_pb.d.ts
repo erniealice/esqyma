@@ -23,6 +23,8 @@ export type ActivityExpense = Message<"domain.operation.v1.ActivityExpense"> & {
      */
     jobActivity?: JobActivity;
     /**
+     * deprecated — use expense_category_id instead
+     *
      * @generated from field: string expense_category = 3;
      */
     expenseCategory: string;
@@ -35,9 +37,27 @@ export type ActivityExpense = Message<"domain.operation.v1.ActivityExpense"> & {
      */
     receiptUrl?: string;
     /**
+     * deprecated — use payment_method instead
+     *
      * @generated from field: bool reimbursable = 6;
      */
     reimbursable: boolean;
+    /**
+     * @generated from field: optional string expense_category_id = 7;
+     */
+    expenseCategoryId?: string;
+    /**
+     * "employee", "company_card", "vendor_bill"
+     *
+     * @generated from field: optional string payment_method = 8;
+     */
+    paymentMethod?: string;
+    /**
+     * per-expense override of category markup (e.g., 0.15 = 15%)
+     *
+     * @generated from field: optional double markup_pct_override = 9;
+     */
+    markupPctOverride?: number;
 };
 /**
  * Describes the message domain.operation.v1.ActivityExpense.

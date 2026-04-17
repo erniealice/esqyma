@@ -80,6 +80,18 @@ export type JobSettlement = Message<"domain.operation.v1.JobSettlement"> & {
      * @generated from field: optional string workspace_id = 16;
      */
     workspaceId?: string;
+    /**
+     * quantity billed (for grouped billing — may differ from activity quantity)
+     *
+     * @generated from field: optional double billed_quantity = 17;
+     */
+    billedQuantity?: number;
+    /**
+     * centavos — amount billed to client via this settlement
+     *
+     * @generated from field: optional int64 billed_amount = 18;
+     */
+    billedAmount?: bigint;
 };
 /**
  * Describes the message domain.operation.v1.JobSettlement.

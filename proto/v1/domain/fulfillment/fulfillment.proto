@@ -14,7 +14,7 @@ message Fulfillment {
   string workspace_id = 2 [(options.v1.db).index = true];
   string revenue_id = 3 [(options.v1.db).references = "revenue", (options.v1.db).index = true];
   optional string supplier_id = 4 [(options.v1.db).references = "supplier"];
-  string fulfillment_method = 5; // "physical", "service", "digital", "make_to_order"
+  string delivery_mode = 5; // snapshot of Product.delivery_mode at creation
   string status = 6 [(options.v1.db).index = true]; // canonical: PENDING, READY, IN_TRANSIT, DELIVERED, PARTIALLY_DELIVERED, FAILED, CANCELLED
   string provider_status = 7; // free-text from fulfillment provider
   string provider_reference = 8; // tracking ID from provider

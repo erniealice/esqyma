@@ -114,6 +114,22 @@ export type JobActivity = Message<"domain.operation.v1.JobActivity"> & {
      * @generated from field: optional string workspace_id = 24;
      */
     workspaceId?: string;
+    /**
+     * @generated from field: optional string resource_id = 25;
+     */
+    resourceId?: string;
+    /**
+     * centavos — resolved from PriceProduct at billing time
+     *
+     * @generated from field: optional int64 bill_rate = 26;
+     */
+    billRate?: bigint;
+    /**
+     * centavos — quantity × bill_rate, stamped at billing time
+     *
+     * @generated from field: optional int64 bill_amount = 27;
+     */
+    billAmount?: bigint;
 };
 /**
  * Describes the message domain.operation.v1.JobActivity.

@@ -25,6 +25,7 @@ message Resource {
   optional string description = 8;
   optional Product product = 9;
   string product_id = 10 [(options.v1.db).references = "product", (options.v1.db).index = true];
+  optional string user_id = 11 [(options.v1.db).references = "user", (options.v1.db).index = true];
 }
 
 service ResourceDomainService {

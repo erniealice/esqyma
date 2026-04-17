@@ -26,12 +26,19 @@ message Product {
   optional string description = 8;
   int64 price = 9; // centavos
   string currency = 10;
-  string item_type = 11; // "serialized", "non_serialized", "consumable"
-  // Determines how this product reaches the client. Defaults to 'physical' for backward compatibility.
-  // Valid values: "physical", "service", "digital", "make_to_order"
-  string fulfillment_method = 12;
-  reserved 13; // was with_inventory, removed in favor of fulfillment_method
+  reserved 11; // was item_type — split into tracking_mode (17)
+  reserved 12; // was fulfillment_method — split into product_kind (15) + delivery_mode (16)
+  reserved 13; // was with_inventory
   optional string line_id = 14 [(options.v1.db).references = "line", (options.v1.db).index = true];
+  // What type of product? Drives inventory surface inclusion and GL policy.
+  // Valid values: "service" | "stocked_good" | "non_stocked_good" | "consumable"
+  string product_kind = 15;
+  // How does it reach the client? Drives fulfillment UI and revenue recognition.
+  // Valid values: "instant" | "scheduled" | "shipped" | "digital" | "project" | "subscription"
+  string delivery_mode = 16;
+  // How is inventory counted? Only meaningful when product_kind ∈ {stocked_good, consumable}.
+  // Valid values: "none" | "bulk" | "serialized"
+  string tracking_mode = 17;
 }
 
 service ProductDomainService {

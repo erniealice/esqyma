@@ -58,6 +58,10 @@ export type ProductPlan = Message<"domain.product.v1.ProductPlan"> & {
      * @generated from field: string plan_id = 13;
      */
     planId: string;
+    /**
+     * @generated from field: optional string job_template_id = 14;
+     */
+    jobTemplateId?: string;
 };
 /**
  * Describes the message domain.product.v1.ProductPlan.
@@ -345,6 +349,44 @@ export type GetProductPlanItemPageDataResponse = Message<"domain.product.v1.GetP
  */
 export declare const GetProductPlanItemPageDataResponseSchema: GenMessage<GetProductPlanItemPageDataResponse>;
 /**
+ * Extra RPC messages
+ *
+ * @generated from message domain.product.v1.ListProductPlansByPlanRequest
+ */
+export type ListProductPlansByPlanRequest = Message<"domain.product.v1.ListProductPlansByPlanRequest"> & {
+    /**
+     * @generated from field: string plan_id = 1;
+     */
+    planId: string;
+};
+/**
+ * Describes the message domain.product.v1.ListProductPlansByPlanRequest.
+ * Use `create(ListProductPlansByPlanRequestSchema)` to create a new message.
+ */
+export declare const ListProductPlansByPlanRequestSchema: GenMessage<ListProductPlansByPlanRequest>;
+/**
+ * @generated from message domain.product.v1.ListProductPlansByPlanResponse
+ */
+export type ListProductPlansByPlanResponse = Message<"domain.product.v1.ListProductPlansByPlanResponse"> & {
+    /**
+     * @generated from field: repeated domain.product.v1.ProductPlan product_plans = 1;
+     */
+    productPlans: ProductPlan[];
+    /**
+     * @generated from field: bool success = 2;
+     */
+    success: boolean;
+    /**
+     * @generated from field: optional domain.common.v1.Error error = 3;
+     */
+    error?: Error;
+};
+/**
+ * Describes the message domain.product.v1.ListProductPlansByPlanResponse.
+ * Use `create(ListProductPlansByPlanResponseSchema)` to create a new message.
+ */
+export declare const ListProductPlansByPlanResponseSchema: GenMessage<ListProductPlansByPlanResponse>;
+/**
  * @generated from service domain.product.v1.ProductPlanDomainService
  */
 export declare const ProductPlanDomainService: GenService<{
@@ -403,5 +445,15 @@ export declare const ProductPlanDomainService: GenService<{
         methodKind: "unary";
         input: typeof GetProductPlanItemPageDataRequestSchema;
         output: typeof GetProductPlanItemPageDataResponseSchema;
+    };
+    /**
+     * Extra: filter by plan
+     *
+     * @generated from rpc domain.product.v1.ProductPlanDomainService.ListByPlan
+     */
+    listByPlan: {
+        methodKind: "unary";
+        input: typeof ListProductPlansByPlanRequestSchema;
+        output: typeof ListProductPlansByPlanResponseSchema;
     };
 }>;

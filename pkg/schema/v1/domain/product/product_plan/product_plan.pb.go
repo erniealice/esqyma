@@ -37,6 +37,7 @@ type ProductPlan struct {
 	Product            *product.Product       `protobuf:"bytes,11,opt,name=product,proto3,oneof" json:"product,omitempty"`
 	ProductId          string                 `protobuf:"bytes,12,opt,name=product_id,json=productId,proto3" json:"product_id,omitempty"`
 	PlanId             string                 `protobuf:"bytes,13,opt,name=plan_id,json=planId,proto3" json:"plan_id,omitempty"`
+	JobTemplateId      *string                `protobuf:"bytes,14,opt,name=job_template_id,json=jobTemplateId,proto3,oneof" json:"job_template_id,omitempty"`
 	unknownFields      protoimpl.UnknownFields
 	sizeCache          protoimpl.SizeCache
 }
@@ -144,6 +145,13 @@ func (x *ProductPlan) GetProductId() string {
 func (x *ProductPlan) GetPlanId() string {
 	if x != nil {
 		return x.PlanId
+	}
+	return ""
+}
+
+func (x *ProductPlan) GetJobTemplateId() string {
+	if x != nil && x.JobTemplateId != nil {
+		return *x.JobTemplateId
 	}
 	return ""
 }
@@ -932,11 +940,116 @@ func (x *GetProductPlanItemPageDataResponse) GetError() *common.Error {
 	return nil
 }
 
+// Extra RPC messages
+type ListProductPlansByPlanRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	PlanId        string                 `protobuf:"bytes,1,opt,name=plan_id,json=planId,proto3" json:"plan_id,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *ListProductPlansByPlanRequest) Reset() {
+	*x = ListProductPlansByPlanRequest{}
+	mi := &file_domain_product_product_plan_product_plan_proto_msgTypes[15]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *ListProductPlansByPlanRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ListProductPlansByPlanRequest) ProtoMessage() {}
+
+func (x *ListProductPlansByPlanRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_domain_product_product_plan_product_plan_proto_msgTypes[15]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ListProductPlansByPlanRequest.ProtoReflect.Descriptor instead.
+func (*ListProductPlansByPlanRequest) Descriptor() ([]byte, []int) {
+	return file_domain_product_product_plan_product_plan_proto_rawDescGZIP(), []int{15}
+}
+
+func (x *ListProductPlansByPlanRequest) GetPlanId() string {
+	if x != nil {
+		return x.PlanId
+	}
+	return ""
+}
+
+type ListProductPlansByPlanResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	ProductPlans  []*ProductPlan         `protobuf:"bytes,1,rep,name=product_plans,json=productPlans,proto3" json:"product_plans,omitempty"`
+	Success       bool                   `protobuf:"varint,2,opt,name=success,proto3" json:"success,omitempty"`
+	Error         *common.Error          `protobuf:"bytes,3,opt,name=error,proto3,oneof" json:"error,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *ListProductPlansByPlanResponse) Reset() {
+	*x = ListProductPlansByPlanResponse{}
+	mi := &file_domain_product_product_plan_product_plan_proto_msgTypes[16]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *ListProductPlansByPlanResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ListProductPlansByPlanResponse) ProtoMessage() {}
+
+func (x *ListProductPlansByPlanResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_domain_product_product_plan_product_plan_proto_msgTypes[16]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ListProductPlansByPlanResponse.ProtoReflect.Descriptor instead.
+func (*ListProductPlansByPlanResponse) Descriptor() ([]byte, []int) {
+	return file_domain_product_product_plan_product_plan_proto_rawDescGZIP(), []int{16}
+}
+
+func (x *ListProductPlansByPlanResponse) GetProductPlans() []*ProductPlan {
+	if x != nil {
+		return x.ProductPlans
+	}
+	return nil
+}
+
+func (x *ListProductPlansByPlanResponse) GetSuccess() bool {
+	if x != nil {
+		return x.Success
+	}
+	return false
+}
+
+func (x *ListProductPlansByPlanResponse) GetError() *common.Error {
+	if x != nil {
+		return x.Error
+	}
+	return nil
+}
+
 var File_domain_product_product_plan_product_plan_proto protoreflect.FileDescriptor
 
 const file_domain_product_product_plan_product_plan_proto_rawDesc = "" +
 	"\n" +
-	".domain/product/product_plan/product_plan.proto\x12\x11domain.product.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1adomain/common/search.proto\x1a$domain/product/product/product.proto\x1a\x10options/db.proto\"\xe1\x04\n" +
+	".domain/product/product_plan/product_plan.proto\x12\x11domain.product.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1adomain/common/search.proto\x1a$domain/product/product/product.proto\x1a\x10options/db.proto\"\xb8\x05\n" +
 	"\vProductPlan\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12&\n" +
 	"\fdate_created\x18\x02 \x01(\x03H\x00R\vdateCreated\x88\x01\x01\x123\n" +
@@ -952,14 +1065,17 @@ const file_domain_product_product_plan_product_plan_proto_rawDesc = "" +
 	"product_id\x18\f \x01(\tB\x0f\x82\xb5\x18\v\n" +
 	"\aproduct\x18\x01R\tproductId\x12%\n" +
 	"\aplan_id\x18\r \x01(\tB\f\x82\xb5\x18\b\n" +
-	"\x04plan\x18\x01R\x06planId:\x06\x8a\xb5\x18\x02\b\x01B\x0f\n" +
+	"\x04plan\x18\x01R\x06planId\x12A\n" +
+	"\x0fjob_template_id\x18\x0e \x01(\tB\x14\x82\xb5\x18\x10\n" +
+	"\fjob_template\x18\x01H\x06R\rjobTemplateId\x88\x01\x01:\x06\x8a\xb5\x18\x02\b\x01B\x0f\n" +
 	"\r_date_createdB\x16\n" +
 	"\x14_date_created_stringB\x10\n" +
 	"\x0e_date_modifiedB\x17\n" +
 	"\x15_date_modified_stringB\x0e\n" +
 	"\f_descriptionB\n" +
 	"\n" +
-	"\b_productJ\x04\b\t\x10\n" +
+	"\b_productB\x12\n" +
+	"\x10_job_template_idJ\x04\b\t\x10\n" +
 	"J\x04\b\n" +
 	"\x10\vR\x05priceR\bcurrency\"N\n" +
 	"\x18CreateProductPlanRequest\x122\n" +
@@ -1034,7 +1150,14 @@ const file_domain_product_product_plan_product_plan_proto_rawDesc = "" +
 	"\fproduct_plan\x18\x01 \x01(\v2\x1e.domain.product.v1.ProductPlanR\vproductPlan\x12\x18\n" +
 	"\asuccess\x18\x02 \x01(\bR\asuccess\x122\n" +
 	"\x05error\x18\x03 \x01(\v2\x17.domain.common.v1.ErrorH\x00R\x05error\x88\x01\x01B\b\n" +
-	"\x06_error2\xd9\x06\n" +
+	"\x06_error\"8\n" +
+	"\x1dListProductPlansByPlanRequest\x12\x17\n" +
+	"\aplan_id\x18\x01 \x01(\tR\x06planId\"\xbd\x01\n" +
+	"\x1eListProductPlansByPlanResponse\x12C\n" +
+	"\rproduct_plans\x18\x01 \x03(\v2\x1e.domain.product.v1.ProductPlanR\fproductPlans\x12\x18\n" +
+	"\asuccess\x18\x02 \x01(\bR\asuccess\x122\n" +
+	"\x05error\x18\x03 \x01(\v2\x17.domain.common.v1.ErrorH\x00R\x05error\x88\x01\x01B\b\n" +
+	"\x06_error2\xcc\a\n" +
 	"\x18ProductPlanDomainService\x12n\n" +
 	"\x11CreateProductPlan\x12+.domain.product.v1.CreateProductPlanRequest\x1a,.domain.product.v1.CreateProductPlanResponse\x12h\n" +
 	"\x0fReadProductPlan\x12).domain.product.v1.ReadProductPlanRequest\x1a*.domain.product.v1.ReadProductPlanResponse\x12n\n" +
@@ -1042,7 +1165,9 @@ const file_domain_product_product_plan_product_plan_proto_rawDesc = "" +
 	"\x11DeleteProductPlan\x12+.domain.product.v1.DeleteProductPlanRequest\x1a,.domain.product.v1.DeleteProductPlanResponse\x12k\n" +
 	"\x10ListProductPlans\x12*.domain.product.v1.ListProductPlansRequest\x1a+.domain.product.v1.ListProductPlansResponse\x12\x89\x01\n" +
 	"\x1aGetProductPlanListPageData\x124.domain.product.v1.GetProductPlanListPageDataRequest\x1a5.domain.product.v1.GetProductPlanListPageDataResponse\x12\x89\x01\n" +
-	"\x1aGetProductPlanItemPageData\x124.domain.product.v1.GetProductPlanItemPageDataRequest\x1a5.domain.product.v1.GetProductPlanItemPageDataResponseB\xe1\x01\n" +
+	"\x1aGetProductPlanItemPageData\x124.domain.product.v1.GetProductPlanItemPageDataRequest\x1a5.domain.product.v1.GetProductPlanItemPageDataResponse\x12q\n" +
+	"\n" +
+	"ListByPlan\x120.domain.product.v1.ListProductPlansByPlanRequest\x1a1.domain.product.v1.ListProductPlansByPlanResponseB\xe1\x01\n" +
 	"\x15com.domain.product.v1B\x10ProductPlanProtoP\x01ZPgithub.com/erniealice/esqyma/pkg/schema/v1/domain/product/product_plan;productv1\xa2\x02\x03DPX\xaa\x02\x11Domain.Product.V1\xca\x02\x11Domain\\Product\\V1\xe2\x02\x1dDomain\\Product\\V1\\GPBMetadata\xea\x02\x13Domain::Product::V1b\x06proto3"
 
 var (
@@ -1057,7 +1182,7 @@ func file_domain_product_product_plan_product_plan_proto_rawDescGZIP() []byte {
 	return file_domain_product_product_plan_product_plan_proto_rawDescData
 }
 
-var file_domain_product_product_plan_product_plan_proto_msgTypes = make([]protoimpl.MessageInfo, 15)
+var file_domain_product_product_plan_product_plan_proto_msgTypes = make([]protoimpl.MessageInfo, 17)
 var file_domain_product_product_plan_product_plan_proto_goTypes = []any{
 	(*ProductPlan)(nil),                        // 0: domain.product.v1.ProductPlan
 	(*CreateProductPlanRequest)(nil),           // 1: domain.product.v1.CreateProductPlanRequest
@@ -1074,63 +1199,69 @@ var file_domain_product_product_plan_product_plan_proto_goTypes = []any{
 	(*GetProductPlanListPageDataResponse)(nil), // 12: domain.product.v1.GetProductPlanListPageDataResponse
 	(*GetProductPlanItemPageDataRequest)(nil),  // 13: domain.product.v1.GetProductPlanItemPageDataRequest
 	(*GetProductPlanItemPageDataResponse)(nil), // 14: domain.product.v1.GetProductPlanItemPageDataResponse
-	(*product.Product)(nil),                    // 15: domain.product.v1.Product
-	(*common.Error)(nil),                       // 16: domain.common.v1.Error
-	(*common.SearchRequest)(nil),               // 17: domain.common.v1.SearchRequest
-	(*common.FilterRequest)(nil),               // 18: domain.common.v1.FilterRequest
-	(*common.SortRequest)(nil),                 // 19: domain.common.v1.SortRequest
-	(*common.PaginationRequest)(nil),           // 20: domain.common.v1.PaginationRequest
-	(*common.PaginationResponse)(nil),          // 21: domain.common.v1.PaginationResponse
-	(*common.SearchResult)(nil),                // 22: domain.common.v1.SearchResult
+	(*ListProductPlansByPlanRequest)(nil),      // 15: domain.product.v1.ListProductPlansByPlanRequest
+	(*ListProductPlansByPlanResponse)(nil),     // 16: domain.product.v1.ListProductPlansByPlanResponse
+	(*product.Product)(nil),                    // 17: domain.product.v1.Product
+	(*common.Error)(nil),                       // 18: domain.common.v1.Error
+	(*common.SearchRequest)(nil),               // 19: domain.common.v1.SearchRequest
+	(*common.FilterRequest)(nil),               // 20: domain.common.v1.FilterRequest
+	(*common.SortRequest)(nil),                 // 21: domain.common.v1.SortRequest
+	(*common.PaginationRequest)(nil),           // 22: domain.common.v1.PaginationRequest
+	(*common.PaginationResponse)(nil),          // 23: domain.common.v1.PaginationResponse
+	(*common.SearchResult)(nil),                // 24: domain.common.v1.SearchResult
 }
 var file_domain_product_product_plan_product_plan_proto_depIdxs = []int32{
-	15, // 0: domain.product.v1.ProductPlan.product:type_name -> domain.product.v1.Product
+	17, // 0: domain.product.v1.ProductPlan.product:type_name -> domain.product.v1.Product
 	0,  // 1: domain.product.v1.CreateProductPlanRequest.data:type_name -> domain.product.v1.ProductPlan
 	0,  // 2: domain.product.v1.CreateProductPlanResponse.data:type_name -> domain.product.v1.ProductPlan
-	16, // 3: domain.product.v1.CreateProductPlanResponse.error:type_name -> domain.common.v1.Error
+	18, // 3: domain.product.v1.CreateProductPlanResponse.error:type_name -> domain.common.v1.Error
 	0,  // 4: domain.product.v1.ReadProductPlanRequest.data:type_name -> domain.product.v1.ProductPlan
 	0,  // 5: domain.product.v1.ReadProductPlanResponse.data:type_name -> domain.product.v1.ProductPlan
-	16, // 6: domain.product.v1.ReadProductPlanResponse.error:type_name -> domain.common.v1.Error
+	18, // 6: domain.product.v1.ReadProductPlanResponse.error:type_name -> domain.common.v1.Error
 	0,  // 7: domain.product.v1.UpdateProductPlanRequest.data:type_name -> domain.product.v1.ProductPlan
 	0,  // 8: domain.product.v1.UpdateProductPlanResponse.data:type_name -> domain.product.v1.ProductPlan
-	16, // 9: domain.product.v1.UpdateProductPlanResponse.error:type_name -> domain.common.v1.Error
+	18, // 9: domain.product.v1.UpdateProductPlanResponse.error:type_name -> domain.common.v1.Error
 	0,  // 10: domain.product.v1.DeleteProductPlanRequest.data:type_name -> domain.product.v1.ProductPlan
-	16, // 11: domain.product.v1.DeleteProductPlanResponse.error:type_name -> domain.common.v1.Error
-	17, // 12: domain.product.v1.ListProductPlansRequest.search:type_name -> domain.common.v1.SearchRequest
-	18, // 13: domain.product.v1.ListProductPlansRequest.filters:type_name -> domain.common.v1.FilterRequest
-	19, // 14: domain.product.v1.ListProductPlansRequest.sort:type_name -> domain.common.v1.SortRequest
-	20, // 15: domain.product.v1.ListProductPlansRequest.pagination:type_name -> domain.common.v1.PaginationRequest
+	18, // 11: domain.product.v1.DeleteProductPlanResponse.error:type_name -> domain.common.v1.Error
+	19, // 12: domain.product.v1.ListProductPlansRequest.search:type_name -> domain.common.v1.SearchRequest
+	20, // 13: domain.product.v1.ListProductPlansRequest.filters:type_name -> domain.common.v1.FilterRequest
+	21, // 14: domain.product.v1.ListProductPlansRequest.sort:type_name -> domain.common.v1.SortRequest
+	22, // 15: domain.product.v1.ListProductPlansRequest.pagination:type_name -> domain.common.v1.PaginationRequest
 	0,  // 16: domain.product.v1.ListProductPlansResponse.data:type_name -> domain.product.v1.ProductPlan
-	16, // 17: domain.product.v1.ListProductPlansResponse.error:type_name -> domain.common.v1.Error
-	17, // 18: domain.product.v1.GetProductPlanListPageDataRequest.search:type_name -> domain.common.v1.SearchRequest
-	18, // 19: domain.product.v1.GetProductPlanListPageDataRequest.filters:type_name -> domain.common.v1.FilterRequest
-	19, // 20: domain.product.v1.GetProductPlanListPageDataRequest.sort:type_name -> domain.common.v1.SortRequest
-	20, // 21: domain.product.v1.GetProductPlanListPageDataRequest.pagination:type_name -> domain.common.v1.PaginationRequest
+	18, // 17: domain.product.v1.ListProductPlansResponse.error:type_name -> domain.common.v1.Error
+	19, // 18: domain.product.v1.GetProductPlanListPageDataRequest.search:type_name -> domain.common.v1.SearchRequest
+	20, // 19: domain.product.v1.GetProductPlanListPageDataRequest.filters:type_name -> domain.common.v1.FilterRequest
+	21, // 20: domain.product.v1.GetProductPlanListPageDataRequest.sort:type_name -> domain.common.v1.SortRequest
+	22, // 21: domain.product.v1.GetProductPlanListPageDataRequest.pagination:type_name -> domain.common.v1.PaginationRequest
 	0,  // 22: domain.product.v1.GetProductPlanListPageDataResponse.product_plan_list:type_name -> domain.product.v1.ProductPlan
-	16, // 23: domain.product.v1.GetProductPlanListPageDataResponse.error:type_name -> domain.common.v1.Error
-	21, // 24: domain.product.v1.GetProductPlanListPageDataResponse.pagination:type_name -> domain.common.v1.PaginationResponse
-	22, // 25: domain.product.v1.GetProductPlanListPageDataResponse.search_results:type_name -> domain.common.v1.SearchResult
+	18, // 23: domain.product.v1.GetProductPlanListPageDataResponse.error:type_name -> domain.common.v1.Error
+	23, // 24: domain.product.v1.GetProductPlanListPageDataResponse.pagination:type_name -> domain.common.v1.PaginationResponse
+	24, // 25: domain.product.v1.GetProductPlanListPageDataResponse.search_results:type_name -> domain.common.v1.SearchResult
 	0,  // 26: domain.product.v1.GetProductPlanItemPageDataResponse.product_plan:type_name -> domain.product.v1.ProductPlan
-	16, // 27: domain.product.v1.GetProductPlanItemPageDataResponse.error:type_name -> domain.common.v1.Error
-	1,  // 28: domain.product.v1.ProductPlanDomainService.CreateProductPlan:input_type -> domain.product.v1.CreateProductPlanRequest
-	3,  // 29: domain.product.v1.ProductPlanDomainService.ReadProductPlan:input_type -> domain.product.v1.ReadProductPlanRequest
-	5,  // 30: domain.product.v1.ProductPlanDomainService.UpdateProductPlan:input_type -> domain.product.v1.UpdateProductPlanRequest
-	7,  // 31: domain.product.v1.ProductPlanDomainService.DeleteProductPlan:input_type -> domain.product.v1.DeleteProductPlanRequest
-	9,  // 32: domain.product.v1.ProductPlanDomainService.ListProductPlans:input_type -> domain.product.v1.ListProductPlansRequest
-	11, // 33: domain.product.v1.ProductPlanDomainService.GetProductPlanListPageData:input_type -> domain.product.v1.GetProductPlanListPageDataRequest
-	13, // 34: domain.product.v1.ProductPlanDomainService.GetProductPlanItemPageData:input_type -> domain.product.v1.GetProductPlanItemPageDataRequest
-	2,  // 35: domain.product.v1.ProductPlanDomainService.CreateProductPlan:output_type -> domain.product.v1.CreateProductPlanResponse
-	4,  // 36: domain.product.v1.ProductPlanDomainService.ReadProductPlan:output_type -> domain.product.v1.ReadProductPlanResponse
-	6,  // 37: domain.product.v1.ProductPlanDomainService.UpdateProductPlan:output_type -> domain.product.v1.UpdateProductPlanResponse
-	8,  // 38: domain.product.v1.ProductPlanDomainService.DeleteProductPlan:output_type -> domain.product.v1.DeleteProductPlanResponse
-	10, // 39: domain.product.v1.ProductPlanDomainService.ListProductPlans:output_type -> domain.product.v1.ListProductPlansResponse
-	12, // 40: domain.product.v1.ProductPlanDomainService.GetProductPlanListPageData:output_type -> domain.product.v1.GetProductPlanListPageDataResponse
-	14, // 41: domain.product.v1.ProductPlanDomainService.GetProductPlanItemPageData:output_type -> domain.product.v1.GetProductPlanItemPageDataResponse
-	35, // [35:42] is the sub-list for method output_type
-	28, // [28:35] is the sub-list for method input_type
-	28, // [28:28] is the sub-list for extension type_name
-	28, // [28:28] is the sub-list for extension extendee
-	0,  // [0:28] is the sub-list for field type_name
+	18, // 27: domain.product.v1.GetProductPlanItemPageDataResponse.error:type_name -> domain.common.v1.Error
+	0,  // 28: domain.product.v1.ListProductPlansByPlanResponse.product_plans:type_name -> domain.product.v1.ProductPlan
+	18, // 29: domain.product.v1.ListProductPlansByPlanResponse.error:type_name -> domain.common.v1.Error
+	1,  // 30: domain.product.v1.ProductPlanDomainService.CreateProductPlan:input_type -> domain.product.v1.CreateProductPlanRequest
+	3,  // 31: domain.product.v1.ProductPlanDomainService.ReadProductPlan:input_type -> domain.product.v1.ReadProductPlanRequest
+	5,  // 32: domain.product.v1.ProductPlanDomainService.UpdateProductPlan:input_type -> domain.product.v1.UpdateProductPlanRequest
+	7,  // 33: domain.product.v1.ProductPlanDomainService.DeleteProductPlan:input_type -> domain.product.v1.DeleteProductPlanRequest
+	9,  // 34: domain.product.v1.ProductPlanDomainService.ListProductPlans:input_type -> domain.product.v1.ListProductPlansRequest
+	11, // 35: domain.product.v1.ProductPlanDomainService.GetProductPlanListPageData:input_type -> domain.product.v1.GetProductPlanListPageDataRequest
+	13, // 36: domain.product.v1.ProductPlanDomainService.GetProductPlanItemPageData:input_type -> domain.product.v1.GetProductPlanItemPageDataRequest
+	15, // 37: domain.product.v1.ProductPlanDomainService.ListByPlan:input_type -> domain.product.v1.ListProductPlansByPlanRequest
+	2,  // 38: domain.product.v1.ProductPlanDomainService.CreateProductPlan:output_type -> domain.product.v1.CreateProductPlanResponse
+	4,  // 39: domain.product.v1.ProductPlanDomainService.ReadProductPlan:output_type -> domain.product.v1.ReadProductPlanResponse
+	6,  // 40: domain.product.v1.ProductPlanDomainService.UpdateProductPlan:output_type -> domain.product.v1.UpdateProductPlanResponse
+	8,  // 41: domain.product.v1.ProductPlanDomainService.DeleteProductPlan:output_type -> domain.product.v1.DeleteProductPlanResponse
+	10, // 42: domain.product.v1.ProductPlanDomainService.ListProductPlans:output_type -> domain.product.v1.ListProductPlansResponse
+	12, // 43: domain.product.v1.ProductPlanDomainService.GetProductPlanListPageData:output_type -> domain.product.v1.GetProductPlanListPageDataResponse
+	14, // 44: domain.product.v1.ProductPlanDomainService.GetProductPlanItemPageData:output_type -> domain.product.v1.GetProductPlanItemPageDataResponse
+	16, // 45: domain.product.v1.ProductPlanDomainService.ListByPlan:output_type -> domain.product.v1.ListProductPlansByPlanResponse
+	38, // [38:46] is the sub-list for method output_type
+	30, // [30:38] is the sub-list for method input_type
+	30, // [30:30] is the sub-list for extension type_name
+	30, // [30:30] is the sub-list for extension extendee
+	0,  // [0:30] is the sub-list for field type_name
 }
 
 func init() { file_domain_product_product_plan_product_plan_proto_init() }
@@ -1148,13 +1279,14 @@ func file_domain_product_product_plan_product_plan_proto_init() {
 	file_domain_product_product_plan_product_plan_proto_msgTypes[11].OneofWrappers = []any{}
 	file_domain_product_product_plan_product_plan_proto_msgTypes[12].OneofWrappers = []any{}
 	file_domain_product_product_plan_product_plan_proto_msgTypes[14].OneofWrappers = []any{}
+	file_domain_product_product_plan_product_plan_proto_msgTypes[16].OneofWrappers = []any{}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
 		File: protoimpl.DescBuilder{
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_domain_product_product_plan_product_plan_proto_rawDesc), len(file_domain_product_product_plan_product_plan_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   15,
+			NumMessages:   17,
 			NumExtensions: 0,
 			NumServices:   1,
 		},
