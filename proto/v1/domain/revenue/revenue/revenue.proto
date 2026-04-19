@@ -59,6 +59,8 @@ service RevenueDomainService {
   rpc ListRevenues(ListRevenuesRequest) returns (ListRevenuesResponse);
   rpc GetRevenueListPageData(GetRevenueListPageDataRequest) returns (GetRevenueListPageDataResponse);
   rpc GetRevenueItemPageData(GetRevenueItemPageDataRequest) returns (GetRevenueItemPageDataResponse);
+  rpc CreateRevenueWithLineItems(CreateRevenueWithLineItemsRequest)
+    returns (CreateRevenueWithLineItemsResponse);
 }
 
 message CreateRevenueRequest {
@@ -134,6 +136,20 @@ message GetRevenueItemPageDataRequest {
 
 message GetRevenueItemPageDataResponse {
   optional Revenue revenue = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message CreateRevenueWithLineItemsRequest {
+  Revenue data = 1;
+  // When set, the use case will resolve the subscription's price plan,
+  // verify ProductPlan ⊂ ProductPricePlan coverage, and create line items
+  // atomically alongside the Revenue. Empty = behaves like CreateRevenue.
+  optional string subscription_id = 2;
+}
+
+message CreateRevenueWithLineItemsResponse {
+  repeated Revenue data = 1;
   bool success = 2;
   optional domain.common.v1.Error error = 3;
 }

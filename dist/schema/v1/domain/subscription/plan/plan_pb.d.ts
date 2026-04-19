@@ -54,12 +54,6 @@ export type Plan = Message<"domain.subscription.v1.Plan"> & {
      * @generated from field: optional string thumbnail_url = 10;
      */
     thumbnailUrl?: string;
-    /**
-     * Suggested values: "schedule", "license", "content", "physical"
-     *
-     * @generated from field: optional string fulfillment_type = 11;
-     */
-    fulfillmentType?: string;
 };
 /**
  * Describes the message domain.subscription.v1.Plan.

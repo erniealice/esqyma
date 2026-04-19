@@ -18,8 +18,8 @@ message PricePlan {
   string id = 1;
   optional Plan plan = 2;
   string plan_id = 3 [(options.v1.db).references = "plan", (options.v1.db).index = true];
-  string name = 4;
-  string description = 5;
+  optional string name = 4;
+  optional string description = 5;
   optional int64 date_created = 6;
   optional string date_created_string = 7;
   optional int64 date_modified = 8;

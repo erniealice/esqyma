@@ -1079,6 +1079,121 @@ func (x *GetRevenueItemPageDataResponse) GetError() *common.Error {
 	return nil
 }
 
+type CreateRevenueWithLineItemsRequest struct {
+	state protoimpl.MessageState `protogen:"open.v1"`
+	Data  *Revenue               `protobuf:"bytes,1,opt,name=data,proto3" json:"data,omitempty"`
+	// When set, the use case will resolve the subscription's price plan,
+	// verify ProductPlan ⊂ ProductPricePlan coverage, and create line items
+	// atomically alongside the Revenue. Empty = behaves like CreateRevenue.
+	SubscriptionId *string `protobuf:"bytes,2,opt,name=subscription_id,json=subscriptionId,proto3,oneof" json:"subscription_id,omitempty"`
+	unknownFields  protoimpl.UnknownFields
+	sizeCache      protoimpl.SizeCache
+}
+
+func (x *CreateRevenueWithLineItemsRequest) Reset() {
+	*x = CreateRevenueWithLineItemsRequest{}
+	mi := &file_domain_revenue_revenue_revenue_proto_msgTypes[15]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *CreateRevenueWithLineItemsRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*CreateRevenueWithLineItemsRequest) ProtoMessage() {}
+
+func (x *CreateRevenueWithLineItemsRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_domain_revenue_revenue_revenue_proto_msgTypes[15]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use CreateRevenueWithLineItemsRequest.ProtoReflect.Descriptor instead.
+func (*CreateRevenueWithLineItemsRequest) Descriptor() ([]byte, []int) {
+	return file_domain_revenue_revenue_revenue_proto_rawDescGZIP(), []int{15}
+}
+
+func (x *CreateRevenueWithLineItemsRequest) GetData() *Revenue {
+	if x != nil {
+		return x.Data
+	}
+	return nil
+}
+
+func (x *CreateRevenueWithLineItemsRequest) GetSubscriptionId() string {
+	if x != nil && x.SubscriptionId != nil {
+		return *x.SubscriptionId
+	}
+	return ""
+}
+
+type CreateRevenueWithLineItemsResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Data          []*Revenue             `protobuf:"bytes,1,rep,name=data,proto3" json:"data,omitempty"`
+	Success       bool                   `protobuf:"varint,2,opt,name=success,proto3" json:"success,omitempty"`
+	Error         *common.Error          `protobuf:"bytes,3,opt,name=error,proto3,oneof" json:"error,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *CreateRevenueWithLineItemsResponse) Reset() {
+	*x = CreateRevenueWithLineItemsResponse{}
+	mi := &file_domain_revenue_revenue_revenue_proto_msgTypes[16]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *CreateRevenueWithLineItemsResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*CreateRevenueWithLineItemsResponse) ProtoMessage() {}
+
+func (x *CreateRevenueWithLineItemsResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_domain_revenue_revenue_revenue_proto_msgTypes[16]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use CreateRevenueWithLineItemsResponse.ProtoReflect.Descriptor instead.
+func (*CreateRevenueWithLineItemsResponse) Descriptor() ([]byte, []int) {
+	return file_domain_revenue_revenue_revenue_proto_rawDescGZIP(), []int{16}
+}
+
+func (x *CreateRevenueWithLineItemsResponse) GetData() []*Revenue {
+	if x != nil {
+		return x.Data
+	}
+	return nil
+}
+
+func (x *CreateRevenueWithLineItemsResponse) GetSuccess() bool {
+	if x != nil {
+		return x.Success
+	}
+	return false
+}
+
+func (x *CreateRevenueWithLineItemsResponse) GetError() *common.Error {
+	if x != nil {
+		return x.Error
+	}
+	return nil
+}
+
 var File_domain_revenue_revenue_revenue_proto protoreflect.FileDescriptor
 
 const file_domain_revenue_revenue_revenue_proto_rawDesc = "" +
@@ -1213,7 +1328,16 @@ const file_domain_revenue_revenue_revenue_proto_rawDesc = "" +
 	"\x05error\x18\x03 \x01(\v2\x17.domain.common.v1.ErrorH\x01R\x05error\x88\x01\x01B\n" +
 	"\n" +
 	"\b_revenueB\b\n" +
-	"\x06_error2\xff\x05\n" +
+	"\x06_error\"\x95\x01\n" +
+	"!CreateRevenueWithLineItemsRequest\x12.\n" +
+	"\x04data\x18\x01 \x01(\v2\x1a.domain.revenue.v1.RevenueR\x04data\x12,\n" +
+	"\x0fsubscription_id\x18\x02 \x01(\tH\x00R\x0esubscriptionId\x88\x01\x01B\x12\n" +
+	"\x10_subscription_id\"\xac\x01\n" +
+	"\"CreateRevenueWithLineItemsResponse\x12.\n" +
+	"\x04data\x18\x01 \x03(\v2\x1a.domain.revenue.v1.RevenueR\x04data\x12\x18\n" +
+	"\asuccess\x18\x02 \x01(\bR\asuccess\x122\n" +
+	"\x05error\x18\x03 \x01(\v2\x17.domain.common.v1.ErrorH\x00R\x05error\x88\x01\x01B\b\n" +
+	"\x06_error2\x8b\a\n" +
 	"\x14RevenueDomainService\x12b\n" +
 	"\rCreateRevenue\x12'.domain.revenue.v1.CreateRevenueRequest\x1a(.domain.revenue.v1.CreateRevenueResponse\x12\\\n" +
 	"\vReadRevenue\x12%.domain.revenue.v1.ReadRevenueRequest\x1a&.domain.revenue.v1.ReadRevenueResponse\x12b\n" +
@@ -1221,7 +1345,8 @@ const file_domain_revenue_revenue_revenue_proto_rawDesc = "" +
 	"\rDeleteRevenue\x12'.domain.revenue.v1.DeleteRevenueRequest\x1a(.domain.revenue.v1.DeleteRevenueResponse\x12_\n" +
 	"\fListRevenues\x12&.domain.revenue.v1.ListRevenuesRequest\x1a'.domain.revenue.v1.ListRevenuesResponse\x12}\n" +
 	"\x16GetRevenueListPageData\x120.domain.revenue.v1.GetRevenueListPageDataRequest\x1a1.domain.revenue.v1.GetRevenueListPageDataResponse\x12}\n" +
-	"\x16GetRevenueItemPageData\x120.domain.revenue.v1.GetRevenueItemPageDataRequest\x1a1.domain.revenue.v1.GetRevenueItemPageDataResponseB\xd8\x01\n" +
+	"\x16GetRevenueItemPageData\x120.domain.revenue.v1.GetRevenueItemPageDataRequest\x1a1.domain.revenue.v1.GetRevenueItemPageDataResponse\x12\x89\x01\n" +
+	"\x1aCreateRevenueWithLineItems\x124.domain.revenue.v1.CreateRevenueWithLineItemsRequest\x1a5.domain.revenue.v1.CreateRevenueWithLineItemsResponseB\xd8\x01\n" +
 	"\x15com.domain.revenue.v1B\fRevenueProtoP\x01ZKgithub.com/erniealice/esqyma/pkg/schema/v1/domain/revenue/revenue;revenuev1\xa2\x02\x03DRX\xaa\x02\x11Domain.Revenue.V1\xca\x02\x11Domain\\Revenue\\V1\xe2\x02\x1dDomain\\Revenue\\V1\\GPBMetadata\xea\x02\x13Domain::Revenue::V1b\x06proto3"
 
 var (
@@ -1236,84 +1361,91 @@ func file_domain_revenue_revenue_revenue_proto_rawDescGZIP() []byte {
 	return file_domain_revenue_revenue_revenue_proto_rawDescData
 }
 
-var file_domain_revenue_revenue_revenue_proto_msgTypes = make([]protoimpl.MessageInfo, 15)
+var file_domain_revenue_revenue_revenue_proto_msgTypes = make([]protoimpl.MessageInfo, 17)
 var file_domain_revenue_revenue_revenue_proto_goTypes = []any{
-	(*Revenue)(nil),                        // 0: domain.revenue.v1.Revenue
-	(*CreateRevenueRequest)(nil),           // 1: domain.revenue.v1.CreateRevenueRequest
-	(*CreateRevenueResponse)(nil),          // 2: domain.revenue.v1.CreateRevenueResponse
-	(*ReadRevenueRequest)(nil),             // 3: domain.revenue.v1.ReadRevenueRequest
-	(*ReadRevenueResponse)(nil),            // 4: domain.revenue.v1.ReadRevenueResponse
-	(*UpdateRevenueRequest)(nil),           // 5: domain.revenue.v1.UpdateRevenueRequest
-	(*UpdateRevenueResponse)(nil),          // 6: domain.revenue.v1.UpdateRevenueResponse
-	(*DeleteRevenueRequest)(nil),           // 7: domain.revenue.v1.DeleteRevenueRequest
-	(*DeleteRevenueResponse)(nil),          // 8: domain.revenue.v1.DeleteRevenueResponse
-	(*ListRevenuesRequest)(nil),            // 9: domain.revenue.v1.ListRevenuesRequest
-	(*ListRevenuesResponse)(nil),           // 10: domain.revenue.v1.ListRevenuesResponse
-	(*GetRevenueListPageDataRequest)(nil),  // 11: domain.revenue.v1.GetRevenueListPageDataRequest
-	(*GetRevenueListPageDataResponse)(nil), // 12: domain.revenue.v1.GetRevenueListPageDataResponse
-	(*GetRevenueItemPageDataRequest)(nil),  // 13: domain.revenue.v1.GetRevenueItemPageDataRequest
-	(*GetRevenueItemPageDataResponse)(nil), // 14: domain.revenue.v1.GetRevenueItemPageDataResponse
-	(*client.Client)(nil),                  // 15: domain.entity.v1.Client
-	(*location.Location)(nil),              // 16: domain.entity.v1.Location
-	(*payment_term.PaymentTerm)(nil),       // 17: domain.entity.v1.PaymentTerm
-	(*common.Error)(nil),                   // 18: domain.common.v1.Error
-	(*common.SearchRequest)(nil),           // 19: domain.common.v1.SearchRequest
-	(*common.FilterRequest)(nil),           // 20: domain.common.v1.FilterRequest
-	(*common.SortRequest)(nil),             // 21: domain.common.v1.SortRequest
-	(*common.PaginationRequest)(nil),       // 22: domain.common.v1.PaginationRequest
-	(*common.PaginationResponse)(nil),      // 23: domain.common.v1.PaginationResponse
-	(*common.SearchResult)(nil),            // 24: domain.common.v1.SearchResult
+	(*Revenue)(nil),                            // 0: domain.revenue.v1.Revenue
+	(*CreateRevenueRequest)(nil),               // 1: domain.revenue.v1.CreateRevenueRequest
+	(*CreateRevenueResponse)(nil),              // 2: domain.revenue.v1.CreateRevenueResponse
+	(*ReadRevenueRequest)(nil),                 // 3: domain.revenue.v1.ReadRevenueRequest
+	(*ReadRevenueResponse)(nil),                // 4: domain.revenue.v1.ReadRevenueResponse
+	(*UpdateRevenueRequest)(nil),               // 5: domain.revenue.v1.UpdateRevenueRequest
+	(*UpdateRevenueResponse)(nil),              // 6: domain.revenue.v1.UpdateRevenueResponse
+	(*DeleteRevenueRequest)(nil),               // 7: domain.revenue.v1.DeleteRevenueRequest
+	(*DeleteRevenueResponse)(nil),              // 8: domain.revenue.v1.DeleteRevenueResponse
+	(*ListRevenuesRequest)(nil),                // 9: domain.revenue.v1.ListRevenuesRequest
+	(*ListRevenuesResponse)(nil),               // 10: domain.revenue.v1.ListRevenuesResponse
+	(*GetRevenueListPageDataRequest)(nil),      // 11: domain.revenue.v1.GetRevenueListPageDataRequest
+	(*GetRevenueListPageDataResponse)(nil),     // 12: domain.revenue.v1.GetRevenueListPageDataResponse
+	(*GetRevenueItemPageDataRequest)(nil),      // 13: domain.revenue.v1.GetRevenueItemPageDataRequest
+	(*GetRevenueItemPageDataResponse)(nil),     // 14: domain.revenue.v1.GetRevenueItemPageDataResponse
+	(*CreateRevenueWithLineItemsRequest)(nil),  // 15: domain.revenue.v1.CreateRevenueWithLineItemsRequest
+	(*CreateRevenueWithLineItemsResponse)(nil), // 16: domain.revenue.v1.CreateRevenueWithLineItemsResponse
+	(*client.Client)(nil),                      // 17: domain.entity.v1.Client
+	(*location.Location)(nil),                  // 18: domain.entity.v1.Location
+	(*payment_term.PaymentTerm)(nil),           // 19: domain.entity.v1.PaymentTerm
+	(*common.Error)(nil),                       // 20: domain.common.v1.Error
+	(*common.SearchRequest)(nil),               // 21: domain.common.v1.SearchRequest
+	(*common.FilterRequest)(nil),               // 22: domain.common.v1.FilterRequest
+	(*common.SortRequest)(nil),                 // 23: domain.common.v1.SortRequest
+	(*common.PaginationRequest)(nil),           // 24: domain.common.v1.PaginationRequest
+	(*common.PaginationResponse)(nil),          // 25: domain.common.v1.PaginationResponse
+	(*common.SearchResult)(nil),                // 26: domain.common.v1.SearchResult
 }
 var file_domain_revenue_revenue_revenue_proto_depIdxs = []int32{
-	15, // 0: domain.revenue.v1.Revenue.client:type_name -> domain.entity.v1.Client
-	16, // 1: domain.revenue.v1.Revenue.location:type_name -> domain.entity.v1.Location
-	17, // 2: domain.revenue.v1.Revenue.payment_term:type_name -> domain.entity.v1.PaymentTerm
+	17, // 0: domain.revenue.v1.Revenue.client:type_name -> domain.entity.v1.Client
+	18, // 1: domain.revenue.v1.Revenue.location:type_name -> domain.entity.v1.Location
+	19, // 2: domain.revenue.v1.Revenue.payment_term:type_name -> domain.entity.v1.PaymentTerm
 	0,  // 3: domain.revenue.v1.CreateRevenueRequest.data:type_name -> domain.revenue.v1.Revenue
 	0,  // 4: domain.revenue.v1.CreateRevenueResponse.data:type_name -> domain.revenue.v1.Revenue
-	18, // 5: domain.revenue.v1.CreateRevenueResponse.error:type_name -> domain.common.v1.Error
+	20, // 5: domain.revenue.v1.CreateRevenueResponse.error:type_name -> domain.common.v1.Error
 	0,  // 6: domain.revenue.v1.ReadRevenueRequest.data:type_name -> domain.revenue.v1.Revenue
 	0,  // 7: domain.revenue.v1.ReadRevenueResponse.data:type_name -> domain.revenue.v1.Revenue
-	18, // 8: domain.revenue.v1.ReadRevenueResponse.error:type_name -> domain.common.v1.Error
+	20, // 8: domain.revenue.v1.ReadRevenueResponse.error:type_name -> domain.common.v1.Error
 	0,  // 9: domain.revenue.v1.UpdateRevenueRequest.data:type_name -> domain.revenue.v1.Revenue
 	0,  // 10: domain.revenue.v1.UpdateRevenueResponse.data:type_name -> domain.revenue.v1.Revenue
-	18, // 11: domain.revenue.v1.UpdateRevenueResponse.error:type_name -> domain.common.v1.Error
+	20, // 11: domain.revenue.v1.UpdateRevenueResponse.error:type_name -> domain.common.v1.Error
 	0,  // 12: domain.revenue.v1.DeleteRevenueRequest.data:type_name -> domain.revenue.v1.Revenue
-	18, // 13: domain.revenue.v1.DeleteRevenueResponse.error:type_name -> domain.common.v1.Error
-	19, // 14: domain.revenue.v1.ListRevenuesRequest.search:type_name -> domain.common.v1.SearchRequest
-	20, // 15: domain.revenue.v1.ListRevenuesRequest.filters:type_name -> domain.common.v1.FilterRequest
-	21, // 16: domain.revenue.v1.ListRevenuesRequest.sort:type_name -> domain.common.v1.SortRequest
-	22, // 17: domain.revenue.v1.ListRevenuesRequest.pagination:type_name -> domain.common.v1.PaginationRequest
+	20, // 13: domain.revenue.v1.DeleteRevenueResponse.error:type_name -> domain.common.v1.Error
+	21, // 14: domain.revenue.v1.ListRevenuesRequest.search:type_name -> domain.common.v1.SearchRequest
+	22, // 15: domain.revenue.v1.ListRevenuesRequest.filters:type_name -> domain.common.v1.FilterRequest
+	23, // 16: domain.revenue.v1.ListRevenuesRequest.sort:type_name -> domain.common.v1.SortRequest
+	24, // 17: domain.revenue.v1.ListRevenuesRequest.pagination:type_name -> domain.common.v1.PaginationRequest
 	0,  // 18: domain.revenue.v1.ListRevenuesResponse.data:type_name -> domain.revenue.v1.Revenue
-	18, // 19: domain.revenue.v1.ListRevenuesResponse.error:type_name -> domain.common.v1.Error
-	22, // 20: domain.revenue.v1.GetRevenueListPageDataRequest.pagination:type_name -> domain.common.v1.PaginationRequest
-	20, // 21: domain.revenue.v1.GetRevenueListPageDataRequest.filters:type_name -> domain.common.v1.FilterRequest
-	21, // 22: domain.revenue.v1.GetRevenueListPageDataRequest.sort:type_name -> domain.common.v1.SortRequest
-	19, // 23: domain.revenue.v1.GetRevenueListPageDataRequest.search:type_name -> domain.common.v1.SearchRequest
+	20, // 19: domain.revenue.v1.ListRevenuesResponse.error:type_name -> domain.common.v1.Error
+	24, // 20: domain.revenue.v1.GetRevenueListPageDataRequest.pagination:type_name -> domain.common.v1.PaginationRequest
+	22, // 21: domain.revenue.v1.GetRevenueListPageDataRequest.filters:type_name -> domain.common.v1.FilterRequest
+	23, // 22: domain.revenue.v1.GetRevenueListPageDataRequest.sort:type_name -> domain.common.v1.SortRequest
+	21, // 23: domain.revenue.v1.GetRevenueListPageDataRequest.search:type_name -> domain.common.v1.SearchRequest
 	0,  // 24: domain.revenue.v1.GetRevenueListPageDataResponse.revenue_list:type_name -> domain.revenue.v1.Revenue
-	23, // 25: domain.revenue.v1.GetRevenueListPageDataResponse.pagination:type_name -> domain.common.v1.PaginationResponse
-	24, // 26: domain.revenue.v1.GetRevenueListPageDataResponse.search_results:type_name -> domain.common.v1.SearchResult
-	18, // 27: domain.revenue.v1.GetRevenueListPageDataResponse.error:type_name -> domain.common.v1.Error
+	25, // 25: domain.revenue.v1.GetRevenueListPageDataResponse.pagination:type_name -> domain.common.v1.PaginationResponse
+	26, // 26: domain.revenue.v1.GetRevenueListPageDataResponse.search_results:type_name -> domain.common.v1.SearchResult
+	20, // 27: domain.revenue.v1.GetRevenueListPageDataResponse.error:type_name -> domain.common.v1.Error
 	0,  // 28: domain.revenue.v1.GetRevenueItemPageDataResponse.revenue:type_name -> domain.revenue.v1.Revenue
-	18, // 29: domain.revenue.v1.GetRevenueItemPageDataResponse.error:type_name -> domain.common.v1.Error
-	1,  // 30: domain.revenue.v1.RevenueDomainService.CreateRevenue:input_type -> domain.revenue.v1.CreateRevenueRequest
-	3,  // 31: domain.revenue.v1.RevenueDomainService.ReadRevenue:input_type -> domain.revenue.v1.ReadRevenueRequest
-	5,  // 32: domain.revenue.v1.RevenueDomainService.UpdateRevenue:input_type -> domain.revenue.v1.UpdateRevenueRequest
-	7,  // 33: domain.revenue.v1.RevenueDomainService.DeleteRevenue:input_type -> domain.revenue.v1.DeleteRevenueRequest
-	9,  // 34: domain.revenue.v1.RevenueDomainService.ListRevenues:input_type -> domain.revenue.v1.ListRevenuesRequest
-	11, // 35: domain.revenue.v1.RevenueDomainService.GetRevenueListPageData:input_type -> domain.revenue.v1.GetRevenueListPageDataRequest
-	13, // 36: domain.revenue.v1.RevenueDomainService.GetRevenueItemPageData:input_type -> domain.revenue.v1.GetRevenueItemPageDataRequest
-	2,  // 37: domain.revenue.v1.RevenueDomainService.CreateRevenue:output_type -> domain.revenue.v1.CreateRevenueResponse
-	4,  // 38: domain.revenue.v1.RevenueDomainService.ReadRevenue:output_type -> domain.revenue.v1.ReadRevenueResponse
-	6,  // 39: domain.revenue.v1.RevenueDomainService.UpdateRevenue:output_type -> domain.revenue.v1.UpdateRevenueResponse
-	8,  // 40: domain.revenue.v1.RevenueDomainService.DeleteRevenue:output_type -> domain.revenue.v1.DeleteRevenueResponse
-	10, // 41: domain.revenue.v1.RevenueDomainService.ListRevenues:output_type -> domain.revenue.v1.ListRevenuesResponse
-	12, // 42: domain.revenue.v1.RevenueDomainService.GetRevenueListPageData:output_type -> domain.revenue.v1.GetRevenueListPageDataResponse
-	14, // 43: domain.revenue.v1.RevenueDomainService.GetRevenueItemPageData:output_type -> domain.revenue.v1.GetRevenueItemPageDataResponse
-	37, // [37:44] is the sub-list for method output_type
-	30, // [30:37] is the sub-list for method input_type
-	30, // [30:30] is the sub-list for extension type_name
-	30, // [30:30] is the sub-list for extension extendee
-	0,  // [0:30] is the sub-list for field type_name
+	20, // 29: domain.revenue.v1.GetRevenueItemPageDataResponse.error:type_name -> domain.common.v1.Error
+	0,  // 30: domain.revenue.v1.CreateRevenueWithLineItemsRequest.data:type_name -> domain.revenue.v1.Revenue
+	0,  // 31: domain.revenue.v1.CreateRevenueWithLineItemsResponse.data:type_name -> domain.revenue.v1.Revenue
+	20, // 32: domain.revenue.v1.CreateRevenueWithLineItemsResponse.error:type_name -> domain.common.v1.Error
+	1,  // 33: domain.revenue.v1.RevenueDomainService.CreateRevenue:input_type -> domain.revenue.v1.CreateRevenueRequest
+	3,  // 34: domain.revenue.v1.RevenueDomainService.ReadRevenue:input_type -> domain.revenue.v1.ReadRevenueRequest
+	5,  // 35: domain.revenue.v1.RevenueDomainService.UpdateRevenue:input_type -> domain.revenue.v1.UpdateRevenueRequest
+	7,  // 36: domain.revenue.v1.RevenueDomainService.DeleteRevenue:input_type -> domain.revenue.v1.DeleteRevenueRequest
+	9,  // 37: domain.revenue.v1.RevenueDomainService.ListRevenues:input_type -> domain.revenue.v1.ListRevenuesRequest
+	11, // 38: domain.revenue.v1.RevenueDomainService.GetRevenueListPageData:input_type -> domain.revenue.v1.GetRevenueListPageDataRequest
+	13, // 39: domain.revenue.v1.RevenueDomainService.GetRevenueItemPageData:input_type -> domain.revenue.v1.GetRevenueItemPageDataRequest
+	15, // 40: domain.revenue.v1.RevenueDomainService.CreateRevenueWithLineItems:input_type -> domain.revenue.v1.CreateRevenueWithLineItemsRequest
+	2,  // 41: domain.revenue.v1.RevenueDomainService.CreateRevenue:output_type -> domain.revenue.v1.CreateRevenueResponse
+	4,  // 42: domain.revenue.v1.RevenueDomainService.ReadRevenue:output_type -> domain.revenue.v1.ReadRevenueResponse
+	6,  // 43: domain.revenue.v1.RevenueDomainService.UpdateRevenue:output_type -> domain.revenue.v1.UpdateRevenueResponse
+	8,  // 44: domain.revenue.v1.RevenueDomainService.DeleteRevenue:output_type -> domain.revenue.v1.DeleteRevenueResponse
+	10, // 45: domain.revenue.v1.RevenueDomainService.ListRevenues:output_type -> domain.revenue.v1.ListRevenuesResponse
+	12, // 46: domain.revenue.v1.RevenueDomainService.GetRevenueListPageData:output_type -> domain.revenue.v1.GetRevenueListPageDataResponse
+	14, // 47: domain.revenue.v1.RevenueDomainService.GetRevenueItemPageData:output_type -> domain.revenue.v1.GetRevenueItemPageDataResponse
+	16, // 48: domain.revenue.v1.RevenueDomainService.CreateRevenueWithLineItems:output_type -> domain.revenue.v1.CreateRevenueWithLineItemsResponse
+	41, // [41:49] is the sub-list for method output_type
+	33, // [33:41] is the sub-list for method input_type
+	33, // [33:33] is the sub-list for extension type_name
+	33, // [33:33] is the sub-list for extension extendee
+	0,  // [0:33] is the sub-list for field type_name
 }
 
 func init() { file_domain_revenue_revenue_revenue_proto_init() }
@@ -1331,13 +1463,15 @@ func file_domain_revenue_revenue_revenue_proto_init() {
 	file_domain_revenue_revenue_revenue_proto_msgTypes[11].OneofWrappers = []any{}
 	file_domain_revenue_revenue_revenue_proto_msgTypes[12].OneofWrappers = []any{}
 	file_domain_revenue_revenue_revenue_proto_msgTypes[14].OneofWrappers = []any{}
+	file_domain_revenue_revenue_revenue_proto_msgTypes[15].OneofWrappers = []any{}
+	file_domain_revenue_revenue_revenue_proto_msgTypes[16].OneofWrappers = []any{}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
 		File: protoimpl.DescBuilder{
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_domain_revenue_revenue_revenue_proto_rawDesc), len(file_domain_revenue_revenue_revenue_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   15,
+			NumMessages:   17,
 			NumExtensions: 0,
 			NumServices:   1,
 		},

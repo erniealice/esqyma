@@ -36,7 +36,6 @@ type Plan struct {
 	Description        *string                       `protobuf:"bytes,8,opt,name=description,proto3,oneof" json:"description,omitempty"`
 	PlanLocations      []*plan_location.PlanLocation `protobuf:"bytes,9,rep,name=plan_locations,json=planLocations,proto3" json:"plan_locations,omitempty"`
 	ThumbnailUrl       *string                       `protobuf:"bytes,10,opt,name=thumbnail_url,json=thumbnailUrl,proto3,oneof" json:"thumbnail_url,omitempty"`
-	FulfillmentType    *string                       `protobuf:"bytes,11,opt,name=fulfillment_type,json=fulfillmentType,proto3,oneof" json:"fulfillment_type,omitempty"` // Suggested values: "schedule", "license", "content", "physical"
 	unknownFields      protoimpl.UnknownFields
 	sizeCache          protoimpl.SizeCache
 }
@@ -137,13 +136,6 @@ func (x *Plan) GetPlanLocations() []*plan_location.PlanLocation {
 func (x *Plan) GetThumbnailUrl() string {
 	if x != nil && x.ThumbnailUrl != nil {
 		return *x.ThumbnailUrl
-	}
-	return ""
-}
-
-func (x *Plan) GetFulfillmentType() string {
-	if x != nil && x.FulfillmentType != nil {
-		return *x.FulfillmentType
 	}
 	return ""
 }
@@ -1102,7 +1094,7 @@ var File_domain_subscription_plan_plan_proto protoreflect.FileDescriptor
 
 const file_domain_subscription_plan_plan_proto_rawDesc = "" +
 	"\n" +
-	"#domain/subscription/plan/plan.proto\x12\x16domain.subscription.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1adomain/common/search.proto\x1a5domain/subscription/plan_location/plan_location.proto\x1a\x10options/db.proto\"\xf9\x04\n" +
+	"#domain/subscription/plan/plan.proto\x12\x16domain.subscription.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1adomain/common/search.proto\x1a5domain/subscription/plan_location/plan_location.proto\x1a\x10options/db.proto\"\xcc\x04\n" +
 	"\x04Plan\x12\x13\n" +
 	"\x02id\x18\x01 \x01(\tH\x00R\x02id\x88\x01\x01\x12&\n" +
 	"\fdate_created\x18\x02 \x01(\x03H\x01R\vdateCreated\x88\x01\x01\x123\n" +
@@ -1115,16 +1107,14 @@ const file_domain_subscription_plan_plan_proto_rawDesc = "" +
 	"\vdescription\x18\b \x01(\tH\x05R\vdescription\x88\x01\x01\x12K\n" +
 	"\x0eplan_locations\x18\t \x03(\v2$.domain.subscription.v1.PlanLocationR\rplanLocations\x12(\n" +
 	"\rthumbnail_url\x18\n" +
-	" \x01(\tH\x06R\fthumbnailUrl\x88\x01\x01\x12.\n" +
-	"\x10fulfillment_type\x18\v \x01(\tH\aR\x0ffulfillmentType\x88\x01\x01:\x06\x8a\xb5\x18\x02\b\x01B\x05\n" +
+	" \x01(\tH\x06R\fthumbnailUrl\x88\x01\x01:\x06\x8a\xb5\x18\x02\b\x01B\x05\n" +
 	"\x03_idB\x0f\n" +
 	"\r_date_createdB\x16\n" +
 	"\x14_date_created_stringB\x10\n" +
 	"\x0e_date_modifiedB\x17\n" +
 	"\x15_date_modified_stringB\x0e\n" +
 	"\f_descriptionB\x10\n" +
-	"\x0e_thumbnail_urlB\x13\n" +
-	"\x11_fulfillment_type\"E\n" +
+	"\x0e_thumbnail_urlJ\x04\b\v\x10\fR\x10fulfillment_type\"E\n" +
 	"\x11CreatePlanRequest\x120\n" +
 	"\x04data\x18\x01 \x01(\v2\x1c.domain.subscription.v1.PlanR\x04data\"\x9e\x01\n" +
 	"\x12CreatePlanResponse\x120\n" +

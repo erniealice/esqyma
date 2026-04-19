@@ -443,6 +443,50 @@ export type GetRevenueItemPageDataResponse = Message<"domain.revenue.v1.GetReven
  */
 export declare const GetRevenueItemPageDataResponseSchema: GenMessage<GetRevenueItemPageDataResponse>;
 /**
+ * @generated from message domain.revenue.v1.CreateRevenueWithLineItemsRequest
+ */
+export type CreateRevenueWithLineItemsRequest = Message<"domain.revenue.v1.CreateRevenueWithLineItemsRequest"> & {
+    /**
+     * @generated from field: domain.revenue.v1.Revenue data = 1;
+     */
+    data?: Revenue;
+    /**
+     * When set, the use case will resolve the subscription's price plan,
+     * verify ProductPlan ⊂ ProductPricePlan coverage, and create line items
+     * atomically alongside the Revenue. Empty = behaves like CreateRevenue.
+     *
+     * @generated from field: optional string subscription_id = 2;
+     */
+    subscriptionId?: string;
+};
+/**
+ * Describes the message domain.revenue.v1.CreateRevenueWithLineItemsRequest.
+ * Use `create(CreateRevenueWithLineItemsRequestSchema)` to create a new message.
+ */
+export declare const CreateRevenueWithLineItemsRequestSchema: GenMessage<CreateRevenueWithLineItemsRequest>;
+/**
+ * @generated from message domain.revenue.v1.CreateRevenueWithLineItemsResponse
+ */
+export type CreateRevenueWithLineItemsResponse = Message<"domain.revenue.v1.CreateRevenueWithLineItemsResponse"> & {
+    /**
+     * @generated from field: repeated domain.revenue.v1.Revenue data = 1;
+     */
+    data: Revenue[];
+    /**
+     * @generated from field: bool success = 2;
+     */
+    success: boolean;
+    /**
+     * @generated from field: optional domain.common.v1.Error error = 3;
+     */
+    error?: Error;
+};
+/**
+ * Describes the message domain.revenue.v1.CreateRevenueWithLineItemsResponse.
+ * Use `create(CreateRevenueWithLineItemsResponseSchema)` to create a new message.
+ */
+export declare const CreateRevenueWithLineItemsResponseSchema: GenMessage<CreateRevenueWithLineItemsResponse>;
+/**
  * @generated from service domain.revenue.v1.RevenueDomainService
  */
 export declare const RevenueDomainService: GenService<{
@@ -501,5 +545,13 @@ export declare const RevenueDomainService: GenService<{
         methodKind: "unary";
         input: typeof GetRevenueItemPageDataRequestSchema;
         output: typeof GetRevenueItemPageDataResponseSchema;
+    };
+    /**
+     * @generated from rpc domain.revenue.v1.RevenueDomainService.CreateRevenueWithLineItems
+     */
+    createRevenueWithLineItems: {
+        methodKind: "unary";
+        input: typeof CreateRevenueWithLineItemsRequestSchema;
+        output: typeof CreateRevenueWithLineItemsResponseSchema;
     };
 }>;

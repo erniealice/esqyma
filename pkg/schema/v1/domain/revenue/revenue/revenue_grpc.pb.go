@@ -19,13 +19,14 @@ import (
 const _ = grpc.SupportPackageIsVersion9
 
 const (
-	RevenueDomainService_CreateRevenue_FullMethodName          = "/domain.revenue.v1.RevenueDomainService/CreateRevenue"
-	RevenueDomainService_ReadRevenue_FullMethodName            = "/domain.revenue.v1.RevenueDomainService/ReadRevenue"
-	RevenueDomainService_UpdateRevenue_FullMethodName          = "/domain.revenue.v1.RevenueDomainService/UpdateRevenue"
-	RevenueDomainService_DeleteRevenue_FullMethodName          = "/domain.revenue.v1.RevenueDomainService/DeleteRevenue"
-	RevenueDomainService_ListRevenues_FullMethodName           = "/domain.revenue.v1.RevenueDomainService/ListRevenues"
-	RevenueDomainService_GetRevenueListPageData_FullMethodName = "/domain.revenue.v1.RevenueDomainService/GetRevenueListPageData"
-	RevenueDomainService_GetRevenueItemPageData_FullMethodName = "/domain.revenue.v1.RevenueDomainService/GetRevenueItemPageData"
+	RevenueDomainService_CreateRevenue_FullMethodName              = "/domain.revenue.v1.RevenueDomainService/CreateRevenue"
+	RevenueDomainService_ReadRevenue_FullMethodName                = "/domain.revenue.v1.RevenueDomainService/ReadRevenue"
+	RevenueDomainService_UpdateRevenue_FullMethodName              = "/domain.revenue.v1.RevenueDomainService/UpdateRevenue"
+	RevenueDomainService_DeleteRevenue_FullMethodName              = "/domain.revenue.v1.RevenueDomainService/DeleteRevenue"
+	RevenueDomainService_ListRevenues_FullMethodName               = "/domain.revenue.v1.RevenueDomainService/ListRevenues"
+	RevenueDomainService_GetRevenueListPageData_FullMethodName     = "/domain.revenue.v1.RevenueDomainService/GetRevenueListPageData"
+	RevenueDomainService_GetRevenueItemPageData_FullMethodName     = "/domain.revenue.v1.RevenueDomainService/GetRevenueItemPageData"
+	RevenueDomainService_CreateRevenueWithLineItems_FullMethodName = "/domain.revenue.v1.RevenueDomainService/CreateRevenueWithLineItems"
 )
 
 // RevenueDomainServiceClient is the client API for RevenueDomainService service.
@@ -39,6 +40,7 @@ type RevenueDomainServiceClient interface {
 	ListRevenues(ctx context.Context, in *ListRevenuesRequest, opts ...grpc.CallOption) (*ListRevenuesResponse, error)
 	GetRevenueListPageData(ctx context.Context, in *GetRevenueListPageDataRequest, opts ...grpc.CallOption) (*GetRevenueListPageDataResponse, error)
 	GetRevenueItemPageData(ctx context.Context, in *GetRevenueItemPageDataRequest, opts ...grpc.CallOption) (*GetRevenueItemPageDataResponse, error)
+	CreateRevenueWithLineItems(ctx context.Context, in *CreateRevenueWithLineItemsRequest, opts ...grpc.CallOption) (*CreateRevenueWithLineItemsResponse, error)
 }
 
 type revenueDomainServiceClient struct {
@@ -119,6 +121,16 @@ func (c *revenueDomainServiceClient) GetRevenueItemPageData(ctx context.Context,
 	return out, nil
 }
 
+func (c *revenueDomainServiceClient) CreateRevenueWithLineItems(ctx context.Context, in *CreateRevenueWithLineItemsRequest, opts ...grpc.CallOption) (*CreateRevenueWithLineItemsResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(CreateRevenueWithLineItemsResponse)
+	err := c.cc.Invoke(ctx, RevenueDomainService_CreateRevenueWithLineItems_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // RevenueDomainServiceServer is the server API for RevenueDomainService service.
 // All implementations must embed UnimplementedRevenueDomainServiceServer
 // for forward compatibility.
@@ -130,6 +142,7 @@ type RevenueDomainServiceServer interface {
 	ListRevenues(context.Context, *ListRevenuesRequest) (*ListRevenuesResponse, error)
 	GetRevenueListPageData(context.Context, *GetRevenueListPageDataRequest) (*GetRevenueListPageDataResponse, error)
 	GetRevenueItemPageData(context.Context, *GetRevenueItemPageDataRequest) (*GetRevenueItemPageDataResponse, error)
+	CreateRevenueWithLineItems(context.Context, *CreateRevenueWithLineItemsRequest) (*CreateRevenueWithLineItemsResponse, error)
 	mustEmbedUnimplementedRevenueDomainServiceServer()
 }
 
@@ -160,6 +173,9 @@ func (UnimplementedRevenueDomainServiceServer) GetRevenueListPageData(context.Co
 }
 func (UnimplementedRevenueDomainServiceServer) GetRevenueItemPageData(context.Context, *GetRevenueItemPageDataRequest) (*GetRevenueItemPageDataResponse, error) {
 	return nil, status.Error(codes.Unimplemented, "method GetRevenueItemPageData not implemented")
+}
+func (UnimplementedRevenueDomainServiceServer) CreateRevenueWithLineItems(context.Context, *CreateRevenueWithLineItemsRequest) (*CreateRevenueWithLineItemsResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method CreateRevenueWithLineItems not implemented")
 }
 func (UnimplementedRevenueDomainServiceServer) mustEmbedUnimplementedRevenueDomainServiceServer() {}
 func (UnimplementedRevenueDomainServiceServer) testEmbeddedByValue()                              {}
@@ -308,6 +324,24 @@ func _RevenueDomainService_GetRevenueItemPageData_Handler(srv interface{}, ctx c
 	return interceptor(ctx, in, info, handler)
 }
 
+func _RevenueDomainService_CreateRevenueWithLineItems_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(CreateRevenueWithLineItemsRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(RevenueDomainServiceServer).CreateRevenueWithLineItems(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: RevenueDomainService_CreateRevenueWithLineItems_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(RevenueDomainServiceServer).CreateRevenueWithLineItems(ctx, req.(*CreateRevenueWithLineItemsRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // RevenueDomainService_ServiceDesc is the grpc.ServiceDesc for RevenueDomainService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -342,6 +376,10 @@ var RevenueDomainService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "GetRevenueItemPageData",
 			Handler:    _RevenueDomainService_GetRevenueItemPageData_Handler,
+		},
+		{
+			MethodName: "CreateRevenueWithLineItems",
+			Handler:    _RevenueDomainService_CreateRevenueWithLineItems_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
