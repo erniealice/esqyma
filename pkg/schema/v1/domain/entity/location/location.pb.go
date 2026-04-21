@@ -39,8 +39,10 @@ type Location struct {
 	Description        *string                `protobuf:"bytes,9,opt,name=description,proto3,oneof" json:"description,omitempty"`
 	// IANA timezone e.g. "Asia/Manila"
 	Timezone *string `protobuf:"bytes,10,opt,name=timezone,proto3,oneof" json:"timezone,omitempty"`
-	// FK to location_area
+	// FK to location_area — Location belongs to at most one LocationArea
+	// (LocationArea is a group of Locations, not the other way around).
 	LocationAreaId *string `protobuf:"bytes,11,opt,name=location_area_id,json=locationAreaId,proto3,oneof" json:"location_area_id,omitempty"`
+	WorkspaceId    *string `protobuf:"bytes,12,opt,name=workspace_id,json=workspaceId,proto3,oneof" json:"workspace_id,omitempty"`
 	unknownFields  protoimpl.UnknownFields
 	sizeCache      protoimpl.SizeCache
 }
@@ -148,6 +150,13 @@ func (x *Location) GetTimezone() string {
 func (x *Location) GetLocationAreaId() string {
 	if x != nil && x.LocationAreaId != nil {
 		return *x.LocationAreaId
+	}
+	return ""
+}
+
+func (x *Location) GetWorkspaceId() string {
+	if x != nil && x.WorkspaceId != nil {
+		return *x.WorkspaceId
 	}
 	return ""
 }
@@ -955,7 +964,7 @@ var File_domain_entity_location_location_proto protoreflect.FileDescriptor
 
 const file_domain_entity_location_location_proto_rawDesc = "" +
 	"\n" +
-	"%domain/entity/location/location.proto\x12\x10domain.entity.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1adomain/common/search.proto\x1a\x10options/db.proto\"\xc2\x04\n" +
+	"%domain/entity/location/location.proto\x12\x10domain.entity.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1adomain/common/search.proto\x1a\x10options/db.proto\"\xa5\x05\n" +
 	"\bLocation\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12\x12\n" +
 	"\x04name\x18\x02 \x01(\tR\x04name\x12\x18\n" +
@@ -968,15 +977,19 @@ const file_domain_entity_location_location_proto_rawDesc = "" +
 	"\x82\xb5\x18\x06\"\x04trueR\x06active\x12%\n" +
 	"\vdescription\x18\t \x01(\tH\x04R\vdescription\x88\x01\x01\x122\n" +
 	"\btimezone\x18\n" +
-	" \x01(\tB\x11\x82\xb5\x18\r\"\vAsia/ManilaH\x05R\btimezone\x88\x01\x01\x12-\n" +
-	"\x10location_area_id\x18\v \x01(\tH\x06R\x0elocationAreaId\x88\x01\x01:\x06\x8a\xb5\x18\x02\b\x01B\x0f\n" +
+	" \x01(\tB\x11\x82\xb5\x18\r\"\vAsia/ManilaH\x05R\btimezone\x88\x01\x01\x12D\n" +
+	"\x10location_area_id\x18\v \x01(\tB\x15\x82\xb5\x18\x11\n" +
+	"\rlocation_area\x18\x01H\x06R\x0elocationAreaId\x88\x01\x01\x129\n" +
+	"\fworkspace_id\x18\f \x01(\tB\x11\x82\xb5\x18\r\n" +
+	"\tworkspace\x18\x01H\aR\vworkspaceId\x88\x01\x01:\x06\x8a\xb5\x18\x02\b\x01B\x0f\n" +
 	"\r_date_createdB\x16\n" +
 	"\x14_date_created_stringB\x10\n" +
 	"\x0e_date_modifiedB\x17\n" +
 	"\x15_date_modified_stringB\x0e\n" +
 	"\f_descriptionB\v\n" +
 	"\t_timezoneB\x13\n" +
-	"\x11_location_area_id\"G\n" +
+	"\x11_location_area_idB\x0f\n" +
+	"\r_workspace_id\"G\n" +
 	"\x15CreateLocationRequest\x12.\n" +
 	"\x04data\x18\x01 \x01(\v2\x1a.domain.entity.v1.LocationR\x04data\"\xa0\x01\n" +
 	"\x16CreateLocationResponse\x12.\n" +

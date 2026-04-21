@@ -33,6 +33,7 @@ type LocationArea struct {
 	DateModified       *int64                 `protobuf:"varint,6,opt,name=date_modified,json=dateModified,proto3,oneof" json:"date_modified,omitempty"`
 	DateModifiedString *string                `protobuf:"bytes,7,opt,name=date_modified_string,json=dateModifiedString,proto3,oneof" json:"date_modified_string,omitempty"`
 	Active             bool                   `protobuf:"varint,8,opt,name=active,proto3" json:"active,omitempty"`
+	WorkspaceId        *string                `protobuf:"bytes,9,opt,name=workspace_id,json=workspaceId,proto3,oneof" json:"workspace_id,omitempty"`
 	unknownFields      protoimpl.UnknownFields
 	sizeCache          protoimpl.SizeCache
 }
@@ -121,6 +122,13 @@ func (x *LocationArea) GetActive() bool {
 		return x.Active
 	}
 	return false
+}
+
+func (x *LocationArea) GetWorkspaceId() string {
+	if x != nil && x.WorkspaceId != nil {
+		return *x.WorkspaceId
+	}
+	return ""
 }
 
 type CreateLocationAreaRequest struct {
@@ -911,7 +919,7 @@ var File_domain_entity_location_area_location_area_proto protoreflect.FileDescri
 
 const file_domain_entity_location_area_location_area_proto_rawDesc = "" +
 	"\n" +
-	"/domain/entity/location_area/location_area.proto\x12\x10domain.entity.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1adomain/common/search.proto\x1a\x10options/db.proto\"\x92\x03\n" +
+	"/domain/entity/location_area/location_area.proto\x12\x10domain.entity.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1adomain/common/search.proto\x1a\x10options/db.proto\"\xde\x03\n" +
 	"\fLocationArea\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12\x12\n" +
 	"\x04name\x18\x02 \x01(\tR\x04name\x12 \n" +
@@ -921,11 +929,14 @@ const file_domain_entity_location_area_location_area_proto_rawDesc = "" +
 	"\rdate_modified\x18\x06 \x01(\x03H\x02R\fdateModified\x88\x01\x01\x125\n" +
 	"\x14date_modified_string\x18\a \x01(\tH\x03R\x12dateModifiedString\x88\x01\x01\x12\"\n" +
 	"\x06active\x18\b \x01(\bB\n" +
-	"\x82\xb5\x18\x06\"\x04trueR\x06active:\x06\x8a\xb5\x18\x02\b\x01B\x0f\n" +
+	"\x82\xb5\x18\x06\"\x04trueR\x06active\x129\n" +
+	"\fworkspace_id\x18\t \x01(\tB\x11\x82\xb5\x18\r\n" +
+	"\tworkspace\x18\x01H\x04R\vworkspaceId\x88\x01\x01:\x06\x8a\xb5\x18\x02\b\x01B\x0f\n" +
 	"\r_date_createdB\x16\n" +
 	"\x14_date_created_stringB\x10\n" +
 	"\x0e_date_modifiedB\x17\n" +
-	"\x15_date_modified_string\"O\n" +
+	"\x15_date_modified_stringB\x0f\n" +
+	"\r_workspace_id\"O\n" +
 	"\x19CreateLocationAreaRequest\x122\n" +
 	"\x04data\x18\x01 \x01(\v2\x1e.domain.entity.v1.LocationAreaR\x04data\"\xa8\x01\n" +
 	"\x1aCreateLocationAreaResponse\x122\n" +

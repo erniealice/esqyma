@@ -22,6 +22,7 @@ message LocationArea {
   optional int64 date_modified = 6;
   optional string date_modified_string = 7;
   bool active = 8 [(options.v1.db).default = "true"];
+  optional string workspace_id = 9 [(options.v1.db).references = "workspace", (options.v1.db).index = true];
 }
 
 service LocationAreaDomainService {
