@@ -13,6 +13,13 @@ import "domain/product/product/product.proto";
 import "domain/subscription/price_plan/price_plan.proto";
 import "options/db.proto";
 
+enum BillingTreatment {
+  BILLING_TREATMENT_UNSPECIFIED      = 0;
+  BILLING_TREATMENT_RECURRING        = 1;  // charge every cycle
+  BILLING_TREATMENT_ONE_TIME_INITIAL = 2;  // charge once on first invoice of this subscription
+  BILLING_TREATMENT_USAGE_BASED      = 3;  // metered/consumed (reserved; separate flow)
+}
+
 message ProductPricePlan {
   option (options.v1.table).table = true;
   string id = 1;
@@ -27,6 +34,11 @@ message ProductPricePlan {
   string product_id = 10 [(options.v1.db).references = "product", (options.v1.db).index = true];
   int64 price = 11; // centavos
   string currency = 12;
+  BillingTreatment billing_treatment = 13;
+
+  // Per-line effective dates; optional — overrides parent PriceSchedule dates when set
+  optional string date_start = 14;  // ISO 8601 date (YYYY-MM-DD)
+  optional string date_end   = 15;  // ISO 8601 date (YYYY-MM-DD)
 }
 
 service ProductPricePlanDomainService {

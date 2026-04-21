@@ -13,6 +13,20 @@ import "domain/common/sort.proto";
 import "domain/subscription/plan/plan.proto";
 import "options/db.proto";
 
+enum BillingKind {
+  BILLING_KIND_UNSPECIFIED = 0;
+  BILLING_KIND_ONE_TIME    = 1;  // single charge, no ongoing cycles
+  BILLING_KIND_RECURRING   = 2;  // open-ended cycling (cancel-anytime subscription)
+  BILLING_KIND_CONTRACT    = 3;  // fixed-term commitment (may have periodic billing within)
+}
+
+enum AmountBasis {
+  AMOUNT_BASIS_UNSPECIFIED        = 0;
+  AMOUNT_BASIS_PER_CYCLE          = 1;  // amount = per-cycle fee
+  AMOUNT_BASIS_TOTAL_PACKAGE      = 2;  // amount = one-shot total
+  AMOUNT_BASIS_DERIVED_FROM_LINES = 3;  // amount ignored; sum ProductPricePlan prices
+}
+
 message PricePlan {
   option (options.v1.table).table = true;
   string id = 1;
@@ -27,6 +41,7 @@ message PricePlan {
   bool active = 10 [(options.v1.db).default = "true"];
   int64 amount = 11; // centavos
   string currency = 12;
+  // DEPRECATED: migrate to billing_cycle_* and default_term_* — see docs/plan/20260421-pricing-unification/plan.md
   int32 duration_value = 13;
   string duration_unit = 14;
   // Email template paths/URLs for dynamic email rendering
@@ -35,6 +50,16 @@ message PricePlan {
   // Parent schedule — owns location + date range for this plan.
   // Field 17 was previously location_id (removed 2026-04-17); use price_schedule_id instead.
   optional string price_schedule_id = 18 [(options.v1.db).references = "price_schedule", (options.v1.db).index = true];
+  BillingKind billing_kind = 19;
+  AmountBasis amount_basis = 20;
+
+  // Billing cadence — only meaningful when billing_kind ∈ {RECURRING, CONTRACT with periodic billing}
+  optional int32  billing_cycle_value = 21;
+  optional string billing_cycle_unit  = 22;  // "day" | "week" | "month" | "year"
+
+  // Default catalog validity/term; null = open-ended. Subscription.date_end overrides per-instance.
+  optional int32  default_term_value = 23;
+  optional string default_term_unit  = 24;
 }
 
 service PricePlanDomainService {

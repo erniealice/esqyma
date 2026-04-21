@@ -24,6 +24,110 @@ const (
 	_ = protoimpl.EnforceVersion(protoimpl.MaxVersion - 20)
 )
 
+type BillingKind int32
+
+const (
+	BillingKind_BILLING_KIND_UNSPECIFIED BillingKind = 0
+	BillingKind_BILLING_KIND_ONE_TIME    BillingKind = 1 // single charge, no ongoing cycles
+	BillingKind_BILLING_KIND_RECURRING   BillingKind = 2 // open-ended cycling (cancel-anytime subscription)
+	BillingKind_BILLING_KIND_CONTRACT    BillingKind = 3 // fixed-term commitment (may have periodic billing within)
+)
+
+// Enum value maps for BillingKind.
+var (
+	BillingKind_name = map[int32]string{
+		0: "BILLING_KIND_UNSPECIFIED",
+		1: "BILLING_KIND_ONE_TIME",
+		2: "BILLING_KIND_RECURRING",
+		3: "BILLING_KIND_CONTRACT",
+	}
+	BillingKind_value = map[string]int32{
+		"BILLING_KIND_UNSPECIFIED": 0,
+		"BILLING_KIND_ONE_TIME":    1,
+		"BILLING_KIND_RECURRING":   2,
+		"BILLING_KIND_CONTRACT":    3,
+	}
+)
+
+func (x BillingKind) Enum() *BillingKind {
+	p := new(BillingKind)
+	*p = x
+	return p
+}
+
+func (x BillingKind) String() string {
+	return protoimpl.X.EnumStringOf(x.Descriptor(), protoreflect.EnumNumber(x))
+}
+
+func (BillingKind) Descriptor() protoreflect.EnumDescriptor {
+	return file_domain_subscription_price_plan_price_plan_proto_enumTypes[0].Descriptor()
+}
+
+func (BillingKind) Type() protoreflect.EnumType {
+	return &file_domain_subscription_price_plan_price_plan_proto_enumTypes[0]
+}
+
+func (x BillingKind) Number() protoreflect.EnumNumber {
+	return protoreflect.EnumNumber(x)
+}
+
+// Deprecated: Use BillingKind.Descriptor instead.
+func (BillingKind) EnumDescriptor() ([]byte, []int) {
+	return file_domain_subscription_price_plan_price_plan_proto_rawDescGZIP(), []int{0}
+}
+
+type AmountBasis int32
+
+const (
+	AmountBasis_AMOUNT_BASIS_UNSPECIFIED        AmountBasis = 0
+	AmountBasis_AMOUNT_BASIS_PER_CYCLE          AmountBasis = 1 // amount = per-cycle fee
+	AmountBasis_AMOUNT_BASIS_TOTAL_PACKAGE      AmountBasis = 2 // amount = one-shot total
+	AmountBasis_AMOUNT_BASIS_DERIVED_FROM_LINES AmountBasis = 3 // amount ignored; sum ProductPricePlan prices
+)
+
+// Enum value maps for AmountBasis.
+var (
+	AmountBasis_name = map[int32]string{
+		0: "AMOUNT_BASIS_UNSPECIFIED",
+		1: "AMOUNT_BASIS_PER_CYCLE",
+		2: "AMOUNT_BASIS_TOTAL_PACKAGE",
+		3: "AMOUNT_BASIS_DERIVED_FROM_LINES",
+	}
+	AmountBasis_value = map[string]int32{
+		"AMOUNT_BASIS_UNSPECIFIED":        0,
+		"AMOUNT_BASIS_PER_CYCLE":          1,
+		"AMOUNT_BASIS_TOTAL_PACKAGE":      2,
+		"AMOUNT_BASIS_DERIVED_FROM_LINES": 3,
+	}
+)
+
+func (x AmountBasis) Enum() *AmountBasis {
+	p := new(AmountBasis)
+	*p = x
+	return p
+}
+
+func (x AmountBasis) String() string {
+	return protoimpl.X.EnumStringOf(x.Descriptor(), protoreflect.EnumNumber(x))
+}
+
+func (AmountBasis) Descriptor() protoreflect.EnumDescriptor {
+	return file_domain_subscription_price_plan_price_plan_proto_enumTypes[1].Descriptor()
+}
+
+func (AmountBasis) Type() protoreflect.EnumType {
+	return &file_domain_subscription_price_plan_price_plan_proto_enumTypes[1]
+}
+
+func (x AmountBasis) Number() protoreflect.EnumNumber {
+	return protoreflect.EnumNumber(x)
+}
+
+// Deprecated: Use AmountBasis.Descriptor instead.
+func (AmountBasis) EnumDescriptor() ([]byte, []int) {
+	return file_domain_subscription_price_plan_price_plan_proto_rawDescGZIP(), []int{1}
+}
+
 type PricePlan struct {
 	state              protoimpl.MessageState `protogen:"open.v1"`
 	Id                 string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
@@ -38,16 +142,25 @@ type PricePlan struct {
 	Active             bool                   `protobuf:"varint,10,opt,name=active,proto3" json:"active,omitempty"`
 	Amount             int64                  `protobuf:"varint,11,opt,name=amount,proto3" json:"amount,omitempty"` // centavos
 	Currency           string                 `protobuf:"bytes,12,opt,name=currency,proto3" json:"currency,omitempty"`
-	DurationValue      int32                  `protobuf:"varint,13,opt,name=duration_value,json=durationValue,proto3" json:"duration_value,omitempty"`
-	DurationUnit       string                 `protobuf:"bytes,14,opt,name=duration_unit,json=durationUnit,proto3" json:"duration_unit,omitempty"`
+	// DEPRECATED: migrate to billing_cycle_* and default_term_* — see docs/plan/20260421-pricing-unification/plan.md
+	DurationValue int32  `protobuf:"varint,13,opt,name=duration_value,json=durationValue,proto3" json:"duration_value,omitempty"`
+	DurationUnit  string `protobuf:"bytes,14,opt,name=duration_unit,json=durationUnit,proto3" json:"duration_unit,omitempty"`
 	// Email template paths/URLs for dynamic email rendering
 	ConfirmationTemplate *string `protobuf:"bytes,15,opt,name=confirmation_template,json=confirmationTemplate,proto3,oneof" json:"confirmation_template,omitempty"` // Template for welcome/confirmation emails (first payment)
 	ReceiptTemplate      *string `protobuf:"bytes,16,opt,name=receipt_template,json=receiptTemplate,proto3,oneof" json:"receipt_template,omitempty"`                // Template for receipt emails (recurring payments)
 	// Parent schedule — owns location + date range for this plan.
 	// Field 17 was previously location_id (removed 2026-04-17); use price_schedule_id instead.
-	PriceScheduleId *string `protobuf:"bytes,18,opt,name=price_schedule_id,json=priceScheduleId,proto3,oneof" json:"price_schedule_id,omitempty"`
-	unknownFields   protoimpl.UnknownFields
-	sizeCache       protoimpl.SizeCache
+	PriceScheduleId *string     `protobuf:"bytes,18,opt,name=price_schedule_id,json=priceScheduleId,proto3,oneof" json:"price_schedule_id,omitempty"`
+	BillingKind     BillingKind `protobuf:"varint,19,opt,name=billing_kind,json=billingKind,proto3,enum=domain.subscription.v1.BillingKind" json:"billing_kind,omitempty"`
+	AmountBasis     AmountBasis `protobuf:"varint,20,opt,name=amount_basis,json=amountBasis,proto3,enum=domain.subscription.v1.AmountBasis" json:"amount_basis,omitempty"`
+	// Billing cadence — only meaningful when billing_kind ∈ {RECURRING, CONTRACT with periodic billing}
+	BillingCycleValue *int32  `protobuf:"varint,21,opt,name=billing_cycle_value,json=billingCycleValue,proto3,oneof" json:"billing_cycle_value,omitempty"`
+	BillingCycleUnit  *string `protobuf:"bytes,22,opt,name=billing_cycle_unit,json=billingCycleUnit,proto3,oneof" json:"billing_cycle_unit,omitempty"` // "day" | "week" | "month" | "year"
+	// Default catalog validity/term; null = open-ended. Subscription.date_end overrides per-instance.
+	DefaultTermValue *int32  `protobuf:"varint,23,opt,name=default_term_value,json=defaultTermValue,proto3,oneof" json:"default_term_value,omitempty"`
+	DefaultTermUnit  *string `protobuf:"bytes,24,opt,name=default_term_unit,json=defaultTermUnit,proto3,oneof" json:"default_term_unit,omitempty"`
+	unknownFields    protoimpl.UnknownFields
+	sizeCache        protoimpl.SizeCache
 }
 
 func (x *PricePlan) Reset() {
@@ -195,6 +308,48 @@ func (x *PricePlan) GetReceiptTemplate() string {
 func (x *PricePlan) GetPriceScheduleId() string {
 	if x != nil && x.PriceScheduleId != nil {
 		return *x.PriceScheduleId
+	}
+	return ""
+}
+
+func (x *PricePlan) GetBillingKind() BillingKind {
+	if x != nil {
+		return x.BillingKind
+	}
+	return BillingKind_BILLING_KIND_UNSPECIFIED
+}
+
+func (x *PricePlan) GetAmountBasis() AmountBasis {
+	if x != nil {
+		return x.AmountBasis
+	}
+	return AmountBasis_AMOUNT_BASIS_UNSPECIFIED
+}
+
+func (x *PricePlan) GetBillingCycleValue() int32 {
+	if x != nil && x.BillingCycleValue != nil {
+		return *x.BillingCycleValue
+	}
+	return 0
+}
+
+func (x *PricePlan) GetBillingCycleUnit() string {
+	if x != nil && x.BillingCycleUnit != nil {
+		return *x.BillingCycleUnit
+	}
+	return ""
+}
+
+func (x *PricePlan) GetDefaultTermValue() int32 {
+	if x != nil && x.DefaultTermValue != nil {
+		return *x.DefaultTermValue
+	}
+	return 0
+}
+
+func (x *PricePlan) GetDefaultTermUnit() string {
+	if x != nil && x.DefaultTermUnit != nil {
+		return *x.DefaultTermUnit
 	}
 	return ""
 }
@@ -987,7 +1142,8 @@ var File_domain_subscription_price_plan_price_plan_proto protoreflect.FileDescri
 
 const file_domain_subscription_price_plan_price_plan_proto_rawDesc = "" +
 	"\n" +
-	"/domain/subscription/price_plan/price_plan.proto\x12\x16domain.subscription.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/search.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a#domain/subscription/plan/plan.proto\x1a\x10options/db.proto\"\x91\a\n" +
+	"/domain/subscription/price_plan/price_plan.proto\x12\x16domain.subscription.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/search.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a#domain/subscription/plan/plan.proto\x1a\x10options/db.proto\"\xc9\n" +
+	"\n" +
 	"\tPricePlan\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x125\n" +
 	"\x04plan\x18\x02 \x01(\v2\x1c.domain.subscription.v1.PlanH\x00R\x04plan\x88\x01\x01\x12%\n" +
@@ -1009,7 +1165,14 @@ const file_domain_subscription_price_plan_price_plan_proto_rawDesc = "" +
 	"\x15confirmation_template\x18\x0f \x01(\tH\aR\x14confirmationTemplate\x88\x01\x01\x12.\n" +
 	"\x10receipt_template\x18\x10 \x01(\tH\bR\x0freceiptTemplate\x88\x01\x01\x12G\n" +
 	"\x11price_schedule_id\x18\x12 \x01(\tB\x16\x82\xb5\x18\x12\n" +
-	"\x0eprice_schedule\x18\x01H\tR\x0fpriceScheduleId\x88\x01\x01:\x06\x8a\xb5\x18\x02\b\x01B\a\n" +
+	"\x0eprice_schedule\x18\x01H\tR\x0fpriceScheduleId\x88\x01\x01\x12F\n" +
+	"\fbilling_kind\x18\x13 \x01(\x0e2#.domain.subscription.v1.BillingKindR\vbillingKind\x12F\n" +
+	"\famount_basis\x18\x14 \x01(\x0e2#.domain.subscription.v1.AmountBasisR\vamountBasis\x123\n" +
+	"\x13billing_cycle_value\x18\x15 \x01(\x05H\n" +
+	"R\x11billingCycleValue\x88\x01\x01\x121\n" +
+	"\x12billing_cycle_unit\x18\x16 \x01(\tH\vR\x10billingCycleUnit\x88\x01\x01\x121\n" +
+	"\x12default_term_value\x18\x17 \x01(\x05H\fR\x10defaultTermValue\x88\x01\x01\x12/\n" +
+	"\x11default_term_unit\x18\x18 \x01(\tH\rR\x0fdefaultTermUnit\x88\x01\x01:\x06\x8a\xb5\x18\x02\b\x01B\a\n" +
 	"\x05_planB\a\n" +
 	"\x05_nameB\x0e\n" +
 	"\f_descriptionB\x0f\n" +
@@ -1019,7 +1182,11 @@ const file_domain_subscription_price_plan_price_plan_proto_rawDesc = "" +
 	"\x15_date_modified_stringB\x18\n" +
 	"\x16_confirmation_templateB\x13\n" +
 	"\x11_receipt_templateB\x14\n" +
-	"\x12_price_schedule_id\"O\n" +
+	"\x12_price_schedule_idB\x16\n" +
+	"\x14_billing_cycle_valueB\x15\n" +
+	"\x13_billing_cycle_unitB\x15\n" +
+	"\x13_default_term_valueB\x14\n" +
+	"\x12_default_term_unit\"O\n" +
 	"\x16CreatePricePlanRequest\x125\n" +
 	"\x04data\x18\x01 \x01(\v2!.domain.subscription.v1.PricePlanR\x04data\"\xa8\x01\n" +
 	"\x17CreatePricePlanResponse\x125\n" +
@@ -1094,7 +1261,17 @@ const file_domain_subscription_price_plan_price_plan_proto_rawDesc = "" +
 	"\asuccess\x18\x02 \x01(\bR\asuccess\x122\n" +
 	"\x05error\x18\x03 \x01(\v2\x17.domain.common.v1.ErrorH\x01R\x05error\x88\x01\x01B\r\n" +
 	"\v_price_planB\b\n" +
-	"\x06_error2\xf3\x06\n" +
+	"\x06_error*}\n" +
+	"\vBillingKind\x12\x1c\n" +
+	"\x18BILLING_KIND_UNSPECIFIED\x10\x00\x12\x19\n" +
+	"\x15BILLING_KIND_ONE_TIME\x10\x01\x12\x1a\n" +
+	"\x16BILLING_KIND_RECURRING\x10\x02\x12\x19\n" +
+	"\x15BILLING_KIND_CONTRACT\x10\x03*\x8c\x01\n" +
+	"\vAmountBasis\x12\x1c\n" +
+	"\x18AMOUNT_BASIS_UNSPECIFIED\x10\x00\x12\x1a\n" +
+	"\x16AMOUNT_BASIS_PER_CYCLE\x10\x01\x12\x1e\n" +
+	"\x1aAMOUNT_BASIS_TOTAL_PACKAGE\x10\x02\x12#\n" +
+	"\x1fAMOUNT_BASIS_DERIVED_FROM_LINES\x10\x032\xf3\x06\n" +
 	"\x16PricePlanDomainService\x12r\n" +
 	"\x0fCreatePricePlan\x12..domain.subscription.v1.CreatePricePlanRequest\x1a/.domain.subscription.v1.CreatePricePlanResponse\x12l\n" +
 	"\rReadPricePlan\x12,.domain.subscription.v1.ReadPricePlanRequest\x1a-.domain.subscription.v1.ReadPricePlanResponse\x12r\n" +
@@ -1117,80 +1294,85 @@ func file_domain_subscription_price_plan_price_plan_proto_rawDescGZIP() []byte {
 	return file_domain_subscription_price_plan_price_plan_proto_rawDescData
 }
 
+var file_domain_subscription_price_plan_price_plan_proto_enumTypes = make([]protoimpl.EnumInfo, 2)
 var file_domain_subscription_price_plan_price_plan_proto_msgTypes = make([]protoimpl.MessageInfo, 15)
 var file_domain_subscription_price_plan_price_plan_proto_goTypes = []any{
-	(*PricePlan)(nil),                        // 0: domain.subscription.v1.PricePlan
-	(*CreatePricePlanRequest)(nil),           // 1: domain.subscription.v1.CreatePricePlanRequest
-	(*CreatePricePlanResponse)(nil),          // 2: domain.subscription.v1.CreatePricePlanResponse
-	(*ReadPricePlanRequest)(nil),             // 3: domain.subscription.v1.ReadPricePlanRequest
-	(*ReadPricePlanResponse)(nil),            // 4: domain.subscription.v1.ReadPricePlanResponse
-	(*UpdatePricePlanRequest)(nil),           // 5: domain.subscription.v1.UpdatePricePlanRequest
-	(*UpdatePricePlanResponse)(nil),          // 6: domain.subscription.v1.UpdatePricePlanResponse
-	(*DeletePricePlanRequest)(nil),           // 7: domain.subscription.v1.DeletePricePlanRequest
-	(*DeletePricePlanResponse)(nil),          // 8: domain.subscription.v1.DeletePricePlanResponse
-	(*ListPricePlansRequest)(nil),            // 9: domain.subscription.v1.ListPricePlansRequest
-	(*ListPricePlansResponse)(nil),           // 10: domain.subscription.v1.ListPricePlansResponse
-	(*GetPricePlanListPageDataRequest)(nil),  // 11: domain.subscription.v1.GetPricePlanListPageDataRequest
-	(*GetPricePlanListPageDataResponse)(nil), // 12: domain.subscription.v1.GetPricePlanListPageDataResponse
-	(*GetPricePlanItemPageDataRequest)(nil),  // 13: domain.subscription.v1.GetPricePlanItemPageDataRequest
-	(*GetPricePlanItemPageDataResponse)(nil), // 14: domain.subscription.v1.GetPricePlanItemPageDataResponse
-	(*plan.Plan)(nil),                        // 15: domain.subscription.v1.Plan
-	(*common.Error)(nil),                     // 16: domain.common.v1.Error
-	(*common.PaginationRequest)(nil),         // 17: domain.common.v1.PaginationRequest
-	(*common.FilterRequest)(nil),             // 18: domain.common.v1.FilterRequest
-	(*common.SortRequest)(nil),               // 19: domain.common.v1.SortRequest
-	(*common.SearchRequest)(nil),             // 20: domain.common.v1.SearchRequest
-	(*common.PaginationResponse)(nil),        // 21: domain.common.v1.PaginationResponse
-	(*common.SearchResult)(nil),              // 22: domain.common.v1.SearchResult
+	(BillingKind)(0),                         // 0: domain.subscription.v1.BillingKind
+	(AmountBasis)(0),                         // 1: domain.subscription.v1.AmountBasis
+	(*PricePlan)(nil),                        // 2: domain.subscription.v1.PricePlan
+	(*CreatePricePlanRequest)(nil),           // 3: domain.subscription.v1.CreatePricePlanRequest
+	(*CreatePricePlanResponse)(nil),          // 4: domain.subscription.v1.CreatePricePlanResponse
+	(*ReadPricePlanRequest)(nil),             // 5: domain.subscription.v1.ReadPricePlanRequest
+	(*ReadPricePlanResponse)(nil),            // 6: domain.subscription.v1.ReadPricePlanResponse
+	(*UpdatePricePlanRequest)(nil),           // 7: domain.subscription.v1.UpdatePricePlanRequest
+	(*UpdatePricePlanResponse)(nil),          // 8: domain.subscription.v1.UpdatePricePlanResponse
+	(*DeletePricePlanRequest)(nil),           // 9: domain.subscription.v1.DeletePricePlanRequest
+	(*DeletePricePlanResponse)(nil),          // 10: domain.subscription.v1.DeletePricePlanResponse
+	(*ListPricePlansRequest)(nil),            // 11: domain.subscription.v1.ListPricePlansRequest
+	(*ListPricePlansResponse)(nil),           // 12: domain.subscription.v1.ListPricePlansResponse
+	(*GetPricePlanListPageDataRequest)(nil),  // 13: domain.subscription.v1.GetPricePlanListPageDataRequest
+	(*GetPricePlanListPageDataResponse)(nil), // 14: domain.subscription.v1.GetPricePlanListPageDataResponse
+	(*GetPricePlanItemPageDataRequest)(nil),  // 15: domain.subscription.v1.GetPricePlanItemPageDataRequest
+	(*GetPricePlanItemPageDataResponse)(nil), // 16: domain.subscription.v1.GetPricePlanItemPageDataResponse
+	(*plan.Plan)(nil),                        // 17: domain.subscription.v1.Plan
+	(*common.Error)(nil),                     // 18: domain.common.v1.Error
+	(*common.PaginationRequest)(nil),         // 19: domain.common.v1.PaginationRequest
+	(*common.FilterRequest)(nil),             // 20: domain.common.v1.FilterRequest
+	(*common.SortRequest)(nil),               // 21: domain.common.v1.SortRequest
+	(*common.SearchRequest)(nil),             // 22: domain.common.v1.SearchRequest
+	(*common.PaginationResponse)(nil),        // 23: domain.common.v1.PaginationResponse
+	(*common.SearchResult)(nil),              // 24: domain.common.v1.SearchResult
 }
 var file_domain_subscription_price_plan_price_plan_proto_depIdxs = []int32{
-	15, // 0: domain.subscription.v1.PricePlan.plan:type_name -> domain.subscription.v1.Plan
-	0,  // 1: domain.subscription.v1.CreatePricePlanRequest.data:type_name -> domain.subscription.v1.PricePlan
-	0,  // 2: domain.subscription.v1.CreatePricePlanResponse.data:type_name -> domain.subscription.v1.PricePlan
-	16, // 3: domain.subscription.v1.CreatePricePlanResponse.error:type_name -> domain.common.v1.Error
-	0,  // 4: domain.subscription.v1.ReadPricePlanRequest.data:type_name -> domain.subscription.v1.PricePlan
-	0,  // 5: domain.subscription.v1.ReadPricePlanResponse.data:type_name -> domain.subscription.v1.PricePlan
-	16, // 6: domain.subscription.v1.ReadPricePlanResponse.error:type_name -> domain.common.v1.Error
-	0,  // 7: domain.subscription.v1.UpdatePricePlanRequest.data:type_name -> domain.subscription.v1.PricePlan
-	0,  // 8: domain.subscription.v1.UpdatePricePlanResponse.data:type_name -> domain.subscription.v1.PricePlan
-	16, // 9: domain.subscription.v1.UpdatePricePlanResponse.error:type_name -> domain.common.v1.Error
-	0,  // 10: domain.subscription.v1.DeletePricePlanRequest.data:type_name -> domain.subscription.v1.PricePlan
-	16, // 11: domain.subscription.v1.DeletePricePlanResponse.error:type_name -> domain.common.v1.Error
-	17, // 12: domain.subscription.v1.ListPricePlansRequest.pagination:type_name -> domain.common.v1.PaginationRequest
-	18, // 13: domain.subscription.v1.ListPricePlansRequest.filters:type_name -> domain.common.v1.FilterRequest
-	19, // 14: domain.subscription.v1.ListPricePlansRequest.sort:type_name -> domain.common.v1.SortRequest
-	20, // 15: domain.subscription.v1.ListPricePlansRequest.search:type_name -> domain.common.v1.SearchRequest
-	0,  // 16: domain.subscription.v1.ListPricePlansResponse.data:type_name -> domain.subscription.v1.PricePlan
-	16, // 17: domain.subscription.v1.ListPricePlansResponse.error:type_name -> domain.common.v1.Error
-	17, // 18: domain.subscription.v1.GetPricePlanListPageDataRequest.pagination:type_name -> domain.common.v1.PaginationRequest
-	18, // 19: domain.subscription.v1.GetPricePlanListPageDataRequest.filters:type_name -> domain.common.v1.FilterRequest
-	19, // 20: domain.subscription.v1.GetPricePlanListPageDataRequest.sort:type_name -> domain.common.v1.SortRequest
-	20, // 21: domain.subscription.v1.GetPricePlanListPageDataRequest.search:type_name -> domain.common.v1.SearchRequest
-	0,  // 22: domain.subscription.v1.GetPricePlanListPageDataResponse.price_plan_list:type_name -> domain.subscription.v1.PricePlan
-	16, // 23: domain.subscription.v1.GetPricePlanListPageDataResponse.error:type_name -> domain.common.v1.Error
-	21, // 24: domain.subscription.v1.GetPricePlanListPageDataResponse.pagination:type_name -> domain.common.v1.PaginationResponse
-	22, // 25: domain.subscription.v1.GetPricePlanListPageDataResponse.search_results:type_name -> domain.common.v1.SearchResult
-	0,  // 26: domain.subscription.v1.GetPricePlanItemPageDataResponse.price_plan:type_name -> domain.subscription.v1.PricePlan
-	16, // 27: domain.subscription.v1.GetPricePlanItemPageDataResponse.error:type_name -> domain.common.v1.Error
-	1,  // 28: domain.subscription.v1.PricePlanDomainService.CreatePricePlan:input_type -> domain.subscription.v1.CreatePricePlanRequest
-	3,  // 29: domain.subscription.v1.PricePlanDomainService.ReadPricePlan:input_type -> domain.subscription.v1.ReadPricePlanRequest
-	5,  // 30: domain.subscription.v1.PricePlanDomainService.UpdatePricePlan:input_type -> domain.subscription.v1.UpdatePricePlanRequest
-	7,  // 31: domain.subscription.v1.PricePlanDomainService.DeletePricePlan:input_type -> domain.subscription.v1.DeletePricePlanRequest
-	9,  // 32: domain.subscription.v1.PricePlanDomainService.ListPricePlans:input_type -> domain.subscription.v1.ListPricePlansRequest
-	11, // 33: domain.subscription.v1.PricePlanDomainService.GetPricePlanListPageData:input_type -> domain.subscription.v1.GetPricePlanListPageDataRequest
-	13, // 34: domain.subscription.v1.PricePlanDomainService.GetPricePlanItemPageData:input_type -> domain.subscription.v1.GetPricePlanItemPageDataRequest
-	2,  // 35: domain.subscription.v1.PricePlanDomainService.CreatePricePlan:output_type -> domain.subscription.v1.CreatePricePlanResponse
-	4,  // 36: domain.subscription.v1.PricePlanDomainService.ReadPricePlan:output_type -> domain.subscription.v1.ReadPricePlanResponse
-	6,  // 37: domain.subscription.v1.PricePlanDomainService.UpdatePricePlan:output_type -> domain.subscription.v1.UpdatePricePlanResponse
-	8,  // 38: domain.subscription.v1.PricePlanDomainService.DeletePricePlan:output_type -> domain.subscription.v1.DeletePricePlanResponse
-	10, // 39: domain.subscription.v1.PricePlanDomainService.ListPricePlans:output_type -> domain.subscription.v1.ListPricePlansResponse
-	12, // 40: domain.subscription.v1.PricePlanDomainService.GetPricePlanListPageData:output_type -> domain.subscription.v1.GetPricePlanListPageDataResponse
-	14, // 41: domain.subscription.v1.PricePlanDomainService.GetPricePlanItemPageData:output_type -> domain.subscription.v1.GetPricePlanItemPageDataResponse
-	35, // [35:42] is the sub-list for method output_type
-	28, // [28:35] is the sub-list for method input_type
-	28, // [28:28] is the sub-list for extension type_name
-	28, // [28:28] is the sub-list for extension extendee
-	0,  // [0:28] is the sub-list for field type_name
+	17, // 0: domain.subscription.v1.PricePlan.plan:type_name -> domain.subscription.v1.Plan
+	0,  // 1: domain.subscription.v1.PricePlan.billing_kind:type_name -> domain.subscription.v1.BillingKind
+	1,  // 2: domain.subscription.v1.PricePlan.amount_basis:type_name -> domain.subscription.v1.AmountBasis
+	2,  // 3: domain.subscription.v1.CreatePricePlanRequest.data:type_name -> domain.subscription.v1.PricePlan
+	2,  // 4: domain.subscription.v1.CreatePricePlanResponse.data:type_name -> domain.subscription.v1.PricePlan
+	18, // 5: domain.subscription.v1.CreatePricePlanResponse.error:type_name -> domain.common.v1.Error
+	2,  // 6: domain.subscription.v1.ReadPricePlanRequest.data:type_name -> domain.subscription.v1.PricePlan
+	2,  // 7: domain.subscription.v1.ReadPricePlanResponse.data:type_name -> domain.subscription.v1.PricePlan
+	18, // 8: domain.subscription.v1.ReadPricePlanResponse.error:type_name -> domain.common.v1.Error
+	2,  // 9: domain.subscription.v1.UpdatePricePlanRequest.data:type_name -> domain.subscription.v1.PricePlan
+	2,  // 10: domain.subscription.v1.UpdatePricePlanResponse.data:type_name -> domain.subscription.v1.PricePlan
+	18, // 11: domain.subscription.v1.UpdatePricePlanResponse.error:type_name -> domain.common.v1.Error
+	2,  // 12: domain.subscription.v1.DeletePricePlanRequest.data:type_name -> domain.subscription.v1.PricePlan
+	18, // 13: domain.subscription.v1.DeletePricePlanResponse.error:type_name -> domain.common.v1.Error
+	19, // 14: domain.subscription.v1.ListPricePlansRequest.pagination:type_name -> domain.common.v1.PaginationRequest
+	20, // 15: domain.subscription.v1.ListPricePlansRequest.filters:type_name -> domain.common.v1.FilterRequest
+	21, // 16: domain.subscription.v1.ListPricePlansRequest.sort:type_name -> domain.common.v1.SortRequest
+	22, // 17: domain.subscription.v1.ListPricePlansRequest.search:type_name -> domain.common.v1.SearchRequest
+	2,  // 18: domain.subscription.v1.ListPricePlansResponse.data:type_name -> domain.subscription.v1.PricePlan
+	18, // 19: domain.subscription.v1.ListPricePlansResponse.error:type_name -> domain.common.v1.Error
+	19, // 20: domain.subscription.v1.GetPricePlanListPageDataRequest.pagination:type_name -> domain.common.v1.PaginationRequest
+	20, // 21: domain.subscription.v1.GetPricePlanListPageDataRequest.filters:type_name -> domain.common.v1.FilterRequest
+	21, // 22: domain.subscription.v1.GetPricePlanListPageDataRequest.sort:type_name -> domain.common.v1.SortRequest
+	22, // 23: domain.subscription.v1.GetPricePlanListPageDataRequest.search:type_name -> domain.common.v1.SearchRequest
+	2,  // 24: domain.subscription.v1.GetPricePlanListPageDataResponse.price_plan_list:type_name -> domain.subscription.v1.PricePlan
+	18, // 25: domain.subscription.v1.GetPricePlanListPageDataResponse.error:type_name -> domain.common.v1.Error
+	23, // 26: domain.subscription.v1.GetPricePlanListPageDataResponse.pagination:type_name -> domain.common.v1.PaginationResponse
+	24, // 27: domain.subscription.v1.GetPricePlanListPageDataResponse.search_results:type_name -> domain.common.v1.SearchResult
+	2,  // 28: domain.subscription.v1.GetPricePlanItemPageDataResponse.price_plan:type_name -> domain.subscription.v1.PricePlan
+	18, // 29: domain.subscription.v1.GetPricePlanItemPageDataResponse.error:type_name -> domain.common.v1.Error
+	3,  // 30: domain.subscription.v1.PricePlanDomainService.CreatePricePlan:input_type -> domain.subscription.v1.CreatePricePlanRequest
+	5,  // 31: domain.subscription.v1.PricePlanDomainService.ReadPricePlan:input_type -> domain.subscription.v1.ReadPricePlanRequest
+	7,  // 32: domain.subscription.v1.PricePlanDomainService.UpdatePricePlan:input_type -> domain.subscription.v1.UpdatePricePlanRequest
+	9,  // 33: domain.subscription.v1.PricePlanDomainService.DeletePricePlan:input_type -> domain.subscription.v1.DeletePricePlanRequest
+	11, // 34: domain.subscription.v1.PricePlanDomainService.ListPricePlans:input_type -> domain.subscription.v1.ListPricePlansRequest
+	13, // 35: domain.subscription.v1.PricePlanDomainService.GetPricePlanListPageData:input_type -> domain.subscription.v1.GetPricePlanListPageDataRequest
+	15, // 36: domain.subscription.v1.PricePlanDomainService.GetPricePlanItemPageData:input_type -> domain.subscription.v1.GetPricePlanItemPageDataRequest
+	4,  // 37: domain.subscription.v1.PricePlanDomainService.CreatePricePlan:output_type -> domain.subscription.v1.CreatePricePlanResponse
+	6,  // 38: domain.subscription.v1.PricePlanDomainService.ReadPricePlan:output_type -> domain.subscription.v1.ReadPricePlanResponse
+	8,  // 39: domain.subscription.v1.PricePlanDomainService.UpdatePricePlan:output_type -> domain.subscription.v1.UpdatePricePlanResponse
+	10, // 40: domain.subscription.v1.PricePlanDomainService.DeletePricePlan:output_type -> domain.subscription.v1.DeletePricePlanResponse
+	12, // 41: domain.subscription.v1.PricePlanDomainService.ListPricePlans:output_type -> domain.subscription.v1.ListPricePlansResponse
+	14, // 42: domain.subscription.v1.PricePlanDomainService.GetPricePlanListPageData:output_type -> domain.subscription.v1.GetPricePlanListPageDataResponse
+	16, // 43: domain.subscription.v1.PricePlanDomainService.GetPricePlanItemPageData:output_type -> domain.subscription.v1.GetPricePlanItemPageDataResponse
+	37, // [37:44] is the sub-list for method output_type
+	30, // [30:37] is the sub-list for method input_type
+	30, // [30:30] is the sub-list for extension type_name
+	30, // [30:30] is the sub-list for extension extendee
+	0,  // [0:30] is the sub-list for field type_name
 }
 
 func init() { file_domain_subscription_price_plan_price_plan_proto_init() }
@@ -1213,13 +1395,14 @@ func file_domain_subscription_price_plan_price_plan_proto_init() {
 		File: protoimpl.DescBuilder{
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_domain_subscription_price_plan_price_plan_proto_rawDesc), len(file_domain_subscription_price_plan_price_plan_proto_rawDesc)),
-			NumEnums:      0,
+			NumEnums:      2,
 			NumMessages:   15,
 			NumExtensions: 0,
 			NumServices:   1,
 		},
 		GoTypes:           file_domain_subscription_price_plan_price_plan_proto_goTypes,
 		DependencyIndexes: file_domain_subscription_price_plan_price_plan_proto_depIdxs,
+		EnumInfos:         file_domain_subscription_price_plan_price_plan_proto_enumTypes,
 		MessageInfos:      file_domain_subscription_price_plan_price_plan_proto_msgTypes,
 	}.Build()
 	File_domain_subscription_price_plan_price_plan_proto = out.File
