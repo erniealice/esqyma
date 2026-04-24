@@ -24,7 +24,9 @@ message Product {
   bool active = 6 [(options.v1.db).default = "true"];
   string name = 7;
   optional string description = 8;
-  int64 price = 9; // centavos
+  // Centavos. Optional: null when variant_mode = "configurable" (price lives on each
+  // ProductVariant.price_override) or when pricing is deferred to a rate-card only.
+  optional int64 price = 9;
   string currency = 10;
   reserved 11; // was item_type — split into tracking_mode (17)
   reserved 12; // was fulfillment_method — split into product_kind (15) + delivery_mode (16)
@@ -39,6 +41,14 @@ message Product {
   // How is inventory counted? Only meaningful when product_kind ∈ {stocked_good, consumable}.
   // Valid values: "none" | "bulk" | "serialized"
   string tracking_mode = 17;
+  // Free-text unit of measure for display. No validation; tenants choose their own
+  // convention. Examples: "ea", "lb", "kg", "hr", "unit", "session", "bag".
+  optional string unit = 18;
+  // Does this product have option/variant axes? Drives drawer-form branching + the
+  // binary invariant on ProductPlan / ProductPricePlan (variant_id required iff
+  // variant_mode = "configurable").
+  // Valid values: "none" | "configurable"
+  string variant_mode = 19 [(options.v1.db).default = "none"];
 }
 
 service ProductDomainService {

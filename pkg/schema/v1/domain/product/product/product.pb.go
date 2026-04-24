@@ -36,9 +36,11 @@ type Product struct {
 	Active             bool                   `protobuf:"varint,6,opt,name=active,proto3" json:"active,omitempty"`
 	Name               string                 `protobuf:"bytes,7,opt,name=name,proto3" json:"name,omitempty"`
 	Description        *string                `protobuf:"bytes,8,opt,name=description,proto3,oneof" json:"description,omitempty"`
-	Price              int64                  `protobuf:"varint,9,opt,name=price,proto3" json:"price,omitempty"` // centavos
-	Currency           string                 `protobuf:"bytes,10,opt,name=currency,proto3" json:"currency,omitempty"`
-	LineId             *string                `protobuf:"bytes,14,opt,name=line_id,json=lineId,proto3,oneof" json:"line_id,omitempty"`
+	// Centavos. Optional: null when variant_mode = "configurable" (price lives on each
+	// ProductVariant.price_override) or when pricing is deferred to a rate-card only.
+	Price    *int64  `protobuf:"varint,9,opt,name=price,proto3,oneof" json:"price,omitempty"`
+	Currency string  `protobuf:"bytes,10,opt,name=currency,proto3" json:"currency,omitempty"`
+	LineId   *string `protobuf:"bytes,14,opt,name=line_id,json=lineId,proto3,oneof" json:"line_id,omitempty"`
 	// What type of product? Drives inventory surface inclusion and GL policy.
 	// Valid values: "service" | "stocked_good" | "non_stocked_good" | "consumable"
 	ProductKind string `protobuf:"bytes,15,opt,name=product_kind,json=productKind,proto3" json:"product_kind,omitempty"`
@@ -47,7 +49,15 @@ type Product struct {
 	DeliveryMode string `protobuf:"bytes,16,opt,name=delivery_mode,json=deliveryMode,proto3" json:"delivery_mode,omitempty"`
 	// How is inventory counted? Only meaningful when product_kind ∈ {stocked_good, consumable}.
 	// Valid values: "none" | "bulk" | "serialized"
-	TrackingMode  string `protobuf:"bytes,17,opt,name=tracking_mode,json=trackingMode,proto3" json:"tracking_mode,omitempty"`
+	TrackingMode string `protobuf:"bytes,17,opt,name=tracking_mode,json=trackingMode,proto3" json:"tracking_mode,omitempty"`
+	// Free-text unit of measure for display. No validation; tenants choose their own
+	// convention. Examples: "ea", "lb", "kg", "hr", "unit", "session", "bag".
+	Unit *string `protobuf:"bytes,18,opt,name=unit,proto3,oneof" json:"unit,omitempty"`
+	// Does this product have option/variant axes? Drives drawer-form branching + the
+	// binary invariant on ProductPlan / ProductPricePlan (variant_id required iff
+	// variant_mode = "configurable").
+	// Valid values: "none" | "configurable"
+	VariantMode   string `protobuf:"bytes,19,opt,name=variant_mode,json=variantMode,proto3" json:"variant_mode,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -139,8 +149,8 @@ func (x *Product) GetDescription() string {
 }
 
 func (x *Product) GetPrice() int64 {
-	if x != nil {
-		return x.Price
+	if x != nil && x.Price != nil {
+		return *x.Price
 	}
 	return 0
 }
@@ -176,6 +186,20 @@ func (x *Product) GetDeliveryMode() string {
 func (x *Product) GetTrackingMode() string {
 	if x != nil {
 		return x.TrackingMode
+	}
+	return ""
+}
+
+func (x *Product) GetUnit() string {
+	if x != nil && x.Unit != nil {
+		return *x.Unit
+	}
+	return ""
+}
+
+func (x *Product) GetVariantMode() string {
+	if x != nil {
+		return x.VariantMode
 	}
 	return ""
 }
@@ -983,7 +1007,7 @@ var File_domain_product_product_product_proto protoreflect.FileDescriptor
 
 const file_domain_product_product_product_proto_rawDesc = "" +
 	"\n" +
-	"$domain/product/product/product.proto\x12\x11domain.product.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1adomain/common/search.proto\x1a\x10options/db.proto\"\x8b\x05\n" +
+	"$domain/product/product/product.proto\x12\x11domain.product.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1adomain/common/search.proto\x1a\x10options/db.proto\"\xeb\x05\n" +
 	"\aProduct\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12&\n" +
 	"\fdate_created\x18\x02 \x01(\x03H\x00R\vdateCreated\x88\x01\x01\x123\n" +
@@ -993,22 +1017,27 @@ const file_domain_product_product_product_proto_rawDesc = "" +
 	"\x06active\x18\x06 \x01(\bB\n" +
 	"\x82\xb5\x18\x06\"\x04trueR\x06active\x12\x12\n" +
 	"\x04name\x18\a \x01(\tR\x04name\x12%\n" +
-	"\vdescription\x18\b \x01(\tH\x04R\vdescription\x88\x01\x01\x12\x14\n" +
-	"\x05price\x18\t \x01(\x03R\x05price\x12\x1a\n" +
+	"\vdescription\x18\b \x01(\tH\x04R\vdescription\x88\x01\x01\x12\x19\n" +
+	"\x05price\x18\t \x01(\x03H\x05R\x05price\x88\x01\x01\x12\x1a\n" +
 	"\bcurrency\x18\n" +
 	" \x01(\tR\bcurrency\x12*\n" +
 	"\aline_id\x18\x0e \x01(\tB\f\x82\xb5\x18\b\n" +
-	"\x04line\x18\x01H\x05R\x06lineId\x88\x01\x01\x12!\n" +
+	"\x04line\x18\x01H\x06R\x06lineId\x88\x01\x01\x12!\n" +
 	"\fproduct_kind\x18\x0f \x01(\tR\vproductKind\x12#\n" +
 	"\rdelivery_mode\x18\x10 \x01(\tR\fdeliveryMode\x12#\n" +
-	"\rtracking_mode\x18\x11 \x01(\tR\ftrackingMode:\x06\x8a\xb5\x18\x02\b\x01B\x0f\n" +
+	"\rtracking_mode\x18\x11 \x01(\tR\ftrackingMode\x12\x17\n" +
+	"\x04unit\x18\x12 \x01(\tH\aR\x04unit\x88\x01\x01\x12-\n" +
+	"\fvariant_mode\x18\x13 \x01(\tB\n" +
+	"\x82\xb5\x18\x06\"\x04noneR\vvariantMode:\x06\x8a\xb5\x18\x02\b\x01B\x0f\n" +
 	"\r_date_createdB\x16\n" +
 	"\x14_date_created_stringB\x10\n" +
 	"\x0e_date_modifiedB\x17\n" +
 	"\x15_date_modified_stringB\x0e\n" +
-	"\f_descriptionB\n" +
+	"\f_descriptionB\b\n" +
+	"\x06_priceB\n" +
 	"\n" +
-	"\b_line_idJ\x04\b\v\x10\fJ\x04\b\f\x10\rJ\x04\b\r\x10\x0e\"F\n" +
+	"\b_line_idB\a\n" +
+	"\x05_unitJ\x04\b\v\x10\fJ\x04\b\f\x10\rJ\x04\b\r\x10\x0e\"F\n" +
 	"\x14CreateProductRequest\x12.\n" +
 	"\x04data\x18\x01 \x01(\v2\x1a.domain.product.v1.ProductR\x04data\"\x9f\x01\n" +
 	"\x15CreateProductResponse\x12.\n" +

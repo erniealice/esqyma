@@ -51,8 +51,12 @@ type Client struct {
 	Categories         []*client_category.ClientCategory `protobuf:"bytes,20,rep,name=categories,proto3" json:"categories,omitempty"`
 	PaymentTermId      *string                           `protobuf:"bytes,21,opt,name=payment_term_id,json=paymentTermId,proto3,oneof" json:"payment_term_id,omitempty"`
 	PaymentTerm        *payment_term.PaymentTerm         `protobuf:"bytes,22,opt,name=payment_term,json=paymentTerm,proto3,oneof" json:"payment_term,omitempty"`
-	unknownFields      protoimpl.UnknownFields
-	sizeCache          protoimpl.SizeCache
+	// ISO 4217 currency code — currency this client is billed in. When unset,
+	// the subscription/invoice flow falls back to Workspace.functional_currency.
+	// Used by the subscription drawer to filter applicable PricePlans.
+	BillingCurrency *string `protobuf:"bytes,23,opt,name=billing_currency,json=billingCurrency,proto3,oneof" json:"billing_currency,omitempty"`
+	unknownFields   protoimpl.UnknownFields
+	sizeCache       protoimpl.SizeCache
 }
 
 func (x *Client) Reset() {
@@ -223,6 +227,13 @@ func (x *Client) GetPaymentTerm() *payment_term.PaymentTerm {
 		return x.PaymentTerm
 	}
 	return nil
+}
+
+func (x *Client) GetBillingCurrency() string {
+	if x != nil && x.BillingCurrency != nil {
+		return *x.BillingCurrency
+	}
+	return ""
 }
 
 type CreateClientRequest struct {
@@ -1177,7 +1188,7 @@ var File_domain_entity_client_client_proto protoreflect.FileDescriptor
 
 const file_domain_entity_client_client_proto_rawDesc = "" +
 	"\n" +
-	"!domain/entity/client/client.proto\x12\x10domain.entity.v1\x1a\x19domain/common/error.proto\x1a\x1adomain/common/search.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1edomain/common/pagination.proto\x1a\x10options/db.proto\x1a\x1ddomain/entity/user/user.proto\x1a3domain/entity/client_category/client_category.proto\x1a-domain/entity/payment_term/payment_term.proto\"\xe4\b\n" +
+	"!domain/entity/client/client.proto\x12\x10domain.entity.v1\x1a\x19domain/common/error.proto\x1a\x1adomain/common/search.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1edomain/common/pagination.proto\x1a\x10options/db.proto\x1a\x1ddomain/entity/user/user.proto\x1a3domain/entity/client_category/client_category.proto\x1a-domain/entity/payment_term/payment_term.proto\"\xa9\t\n" +
 	"\x06Client\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12/\n" +
 	"\x04user\x18\x02 \x01(\v2\x16.domain.entity.v1.UserH\x00R\x04user\x88\x01\x01\x12%\n" +
@@ -1208,7 +1219,8 @@ const file_domain_entity_client_client_proto_rawDesc = "" +
 	"categories\x18\x14 \x03(\v2 .domain.entity.v1.ClientCategoryR\n" +
 	"categories\x12+\n" +
 	"\x0fpayment_term_id\x18\x15 \x01(\tH\rR\rpaymentTermId\x88\x01\x01\x12E\n" +
-	"\fpayment_term\x18\x16 \x01(\v2\x1d.domain.entity.v1.PaymentTermH\x0eR\vpaymentTerm\x88\x01\x01:\x06\x8a\xb5\x18\x02\b\x01B\a\n" +
+	"\fpayment_term\x18\x16 \x01(\v2\x1d.domain.entity.v1.PaymentTermH\x0eR\vpaymentTerm\x88\x01\x01\x12.\n" +
+	"\x10billing_currency\x18\x17 \x01(\tH\x0fR\x0fbillingCurrency\x88\x01\x01:\x06\x8a\xb5\x18\x02\b\x01B\a\n" +
 	"\x05_userB\x0f\n" +
 	"\r_date_createdB\x16\n" +
 	"\x14_date_created_stringB\x10\n" +
@@ -1223,7 +1235,8 @@ const file_domain_entity_client_client_proto_rawDesc = "" +
 	"\f_postal_codeB\b\n" +
 	"\x06_notesB\x12\n" +
 	"\x10_payment_term_idB\x0f\n" +
-	"\r_payment_term\"C\n" +
+	"\r_payment_termB\x13\n" +
+	"\x11_billing_currency\"C\n" +
 	"\x13CreateClientRequest\x12,\n" +
 	"\x04data\x18\x01 \x01(\v2\x18.domain.entity.v1.ClientR\x04data\"\x9c\x01\n" +
 	"\x14CreateClientResponse\x12,\n" +

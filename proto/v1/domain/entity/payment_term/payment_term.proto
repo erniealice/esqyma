@@ -31,6 +31,7 @@ message PaymentTerm {
   optional string description = 15;
   optional int32 display_order = 16;
   optional int32 proximate_day = 17;            // Day-of-month for proximate due date (1-28)
+  optional string workspace_id = 18 [(options.v1.db).references = "workspace", (options.v1.db).index = true];
 }
 
 service PaymentTermDomainService {

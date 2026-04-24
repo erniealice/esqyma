@@ -41,6 +41,10 @@ message Client {
   repeated ClientCategory categories = 20;
   optional string payment_term_id = 21;
   optional PaymentTerm payment_term = 22;
+  // ISO 4217 currency code — currency this client is billed in. When unset,
+  // the subscription/invoice flow falls back to Workspace.functional_currency.
+  // Used by the subscription drawer to filter applicable PricePlans.
+  optional string billing_currency = 23;
 }
 
 service ClientDomainService {

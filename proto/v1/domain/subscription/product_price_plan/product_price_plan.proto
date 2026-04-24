@@ -9,7 +9,7 @@ import "domain/common/pagination.proto";
 import "domain/common/search.proto";
 import "domain/common/filter.proto";
 import "domain/common/sort.proto";
-import "domain/product/product/product.proto";
+import "domain/product/product_plan/product_plan.proto";
 import "domain/subscription/price_plan/price_plan.proto";
 import "options/db.proto";
 
@@ -30,15 +30,26 @@ message ProductPricePlan {
   bool active = 6 [(options.v1.db).default = "true"];
   optional PricePlan price_plan = 7;
   string price_plan_id = 8 [(options.v1.db).references = "price_plan", (options.v1.db).index = true];
-  optional domain.product.v1.Product product = 9;
-  string product_id = 10 [(options.v1.db).references = "product", (options.v1.db).index = true];
-  int64 price = 11; // centavos
-  string currency = 12;
+
+  // Model D (2026-04-23): catalog-line FK replaces direct product_id. ProductPricePlan
+  // prices a specific ProductPlan row. Variant identity lives on ProductPlan;
+  // ProductPricePlan reads it via join. Fields 9 and 10 reserved — were `product` /
+  // `product_id`.
+  reserved 9, 10;
+  reserved "product", "product_id";
+  optional domain.product.v1.ProductPlan product_plan = 17;
+  string product_plan_id = 18 [(options.v1.db).references = "product_plan", (options.v1.db).index = true];
+
+  int64 billing_amount = 11;    // centavos — line price charged to the client in billing_currency
+  string billing_currency = 12; // ISO 4217 currency code — must match parent PricePlan.billing_currency
   BillingTreatment billing_treatment = 13;
 
   // Per-line effective dates; optional — overrides parent PriceSchedule dates when set
   optional string date_start = 14;  // ISO 8601 date (YYYY-MM-DD)
   optional string date_end   = 15;  // ISO 8601 date (YYYY-MM-DD)
+
+  reserved 16;  // was product_variant_id (Model B, before pivot to Model D)
+  reserved "product_variant_id";
 }
 
 service ProductPricePlanDomainService {

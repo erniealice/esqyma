@@ -1,0 +1,137 @@
+syntax = "proto3";
+
+package domain.event.v1;
+
+option go_package = "github.com/erniealice/esqyma/golang/v1/domain/event/event_tag";
+
+import "domain/common/error.proto";
+import "domain/common/pagination.proto";
+import "domain/common/filter.proto";
+import "domain/common/sort.proto";
+import "domain/common/search.proto";
+import "options/db.proto";
+
+// EventTag is a per-workspace label applied to events. Modelled on
+// Outlook Categories — a master list of {name, color} pairs that can
+// be multi-assigned to any event via event_tag_assignment.
+// The color palette is seeded from theme tokens (see
+// packages/copya/seeds/common/event_tag.csv); users can rename tags
+// and change their colors but the defaults align to --app-color-* /
+// --accent-* CSS variables.
+message EventTag {
+  option (options.v1.table).table = true;
+
+  string id = 1;
+
+  // Tenant scope
+  string workspace_id = 2 [(options.v1.db).references = "workspace", (options.v1.db).index = true];
+
+  // Display name (e.g. "Red", "Client Meeting", "Personal")
+  string name = 3;
+
+  // Optional long-form description
+  string description = 4;
+
+  // Color as a CSS hex string (e.g. "#dc2626"). Seeded from theme
+  // tokens; override free-form per workspace.
+  string color = 5;
+
+  // Audit fields
+  optional int64 date_created = 6;
+  optional string date_created_string = 7;
+  optional int64 date_modified = 8;
+  optional string date_modified_string = 9;
+
+  bool active = 10 [(options.v1.db).default = "true"];
+}
+
+service EventTagDomainService {
+  rpc CreateEventTag(CreateEventTagRequest) returns (CreateEventTagResponse);
+  rpc ReadEventTag(ReadEventTagRequest) returns (ReadEventTagResponse);
+  rpc UpdateEventTag(UpdateEventTagRequest) returns (UpdateEventTagResponse);
+  rpc DeleteEventTag(DeleteEventTagRequest) returns (DeleteEventTagResponse);
+  rpc ListEventTags(ListEventTagsRequest) returns (ListEventTagsResponse);
+
+  rpc GetEventTagListPageData(GetEventTagListPageDataRequest)
+    returns (GetEventTagListPageDataResponse);
+
+  rpc GetEventTagItemPageData(GetEventTagItemPageDataRequest)
+    returns (GetEventTagItemPageDataResponse);
+}
+
+message CreateEventTagRequest {
+  EventTag data = 1;
+}
+
+message CreateEventTagResponse {
+  repeated EventTag data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message ReadEventTagRequest {
+  EventTag data = 1;
+}
+
+message ReadEventTagResponse {
+  repeated EventTag data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message UpdateEventTagRequest {
+  EventTag data = 1;
+}
+
+message UpdateEventTagResponse {
+  repeated EventTag data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message DeleteEventTagRequest {
+  EventTag data = 1;
+}
+
+message DeleteEventTagResponse {
+  bool success = 1;
+  optional domain.common.v1.Error error = 2;
+}
+
+message ListEventTagsRequest {
+  optional domain.common.v1.SearchRequest search = 1;
+  optional domain.common.v1.FilterRequest filters = 2;
+  optional domain.common.v1.SortRequest sort = 3;
+  optional domain.common.v1.PaginationRequest pagination = 4;
+}
+
+message ListEventTagsResponse {
+  repeated EventTag data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message GetEventTagListPageDataRequest {
+  optional domain.common.v1.PaginationRequest pagination = 1;
+  optional domain.common.v1.FilterRequest filters = 2;
+  optional domain.common.v1.SortRequest sort = 3;
+  optional domain.common.v1.SearchRequest search = 4;
+}
+
+message GetEventTagListPageDataResponse {
+  repeated EventTag event_tag_list = 1;
+  optional domain.common.v1.PaginationResponse pagination = 2;
+  repeated domain.common.v1.SearchResult search_results = 3;
+  bool success = 4;
+  optional domain.common.v1.Error error = 5;
+}
+
+message GetEventTagItemPageDataRequest {
+  string event_tag_id = 1;
+}
+
+message GetEventTagItemPageDataResponse {
+  optional EventTag event_tag = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}

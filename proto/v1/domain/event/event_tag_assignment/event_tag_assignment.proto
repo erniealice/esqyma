@@ -1,0 +1,95 @@
+syntax = "proto3";
+
+package domain.event.v1;
+
+option go_package = "github.com/erniealice/esqyma/golang/v1/domain/event/event_tag_assignment";
+
+import "domain/common/error.proto";
+import "domain/common/pagination.proto";
+import "domain/common/filter.proto";
+import "domain/common/sort.proto";
+import "domain/common/search.proto";
+import "options/db.proto";
+
+// EventTagAssignment is the many-to-many join between Event and EventTag.
+// `position` drives the primary-tag display rule:
+//   - position = 0 → primary tag; color paints the left stripe on
+//     week/day view chips and is the first dot in month view.
+//   - positions 1..N → secondary tags; render as additional dots.
+// Unique constraint on (event_id, event_tag_id) prevents duplicate
+// assignments of the same tag to the same event.
+message EventTagAssignment {
+  option (options.v1.table).table = true;
+  option (options.v1.table).unique_together = "event_id,event_tag_id";
+
+  string id = 1;
+
+  // Event FK (required)
+  string event_id = 2 [(options.v1.db).references = "event", (options.v1.db).index = true];
+
+  // EventTag FK (required)
+  string event_tag_id = 3 [(options.v1.db).references = "event_tag", (options.v1.db).index = true];
+
+  // Display order (0 = primary tag, drives stripe color on chips).
+  int32 position = 4;
+
+  // Tenant scope (denormalized for tenant-scoped queries and RLS).
+  string workspace_id = 5 [(options.v1.db).references = "workspace", (options.v1.db).index = true];
+
+  // Audit fields
+  optional int64 date_created = 6;
+  optional string date_created_string = 7;
+  optional int64 date_modified = 8;
+  optional string date_modified_string = 9;
+
+  bool active = 10 [(options.v1.db).default = "true"];
+}
+
+service EventTagAssignmentDomainService {
+  rpc CreateEventTagAssignment(CreateEventTagAssignmentRequest) returns (CreateEventTagAssignmentResponse);
+  rpc ReadEventTagAssignment(ReadEventTagAssignmentRequest) returns (ReadEventTagAssignmentResponse);
+  rpc DeleteEventTagAssignment(DeleteEventTagAssignmentRequest) returns (DeleteEventTagAssignmentResponse);
+  rpc ListEventTagAssignments(ListEventTagAssignmentsRequest) returns (ListEventTagAssignmentsResponse);
+}
+
+message CreateEventTagAssignmentRequest {
+  EventTagAssignment data = 1;
+}
+
+message CreateEventTagAssignmentResponse {
+  repeated EventTagAssignment data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message ReadEventTagAssignmentRequest {
+  EventTagAssignment data = 1;
+}
+
+message ReadEventTagAssignmentResponse {
+  repeated EventTagAssignment data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message DeleteEventTagAssignmentRequest {
+  EventTagAssignment data = 1;
+}
+
+message DeleteEventTagAssignmentResponse {
+  bool success = 1;
+  optional domain.common.v1.Error error = 2;
+}
+
+message ListEventTagAssignmentsRequest {
+  optional domain.common.v1.SearchRequest search = 1;
+  optional domain.common.v1.FilterRequest filters = 2;
+  optional domain.common.v1.SortRequest sort = 3;
+  optional domain.common.v1.PaginationRequest pagination = 4;
+}
+
+message ListEventTagAssignmentsResponse {
+  repeated EventTagAssignment data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}

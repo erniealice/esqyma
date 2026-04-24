@@ -51,7 +51,7 @@ type Supplier struct {
 	Province           *string                               `protobuf:"bytes,18,opt,name=province,proto3,oneof" json:"province,omitempty"`
 	PostalCode         *string                               `protobuf:"bytes,19,opt,name=postal_code,json=postalCode,proto3,oneof" json:"postal_code,omitempty"`
 	Country            *string                               `protobuf:"bytes,20,opt,name=country,proto3,oneof" json:"country,omitempty"`                                        // ISO 3166 country code
-	DefaultCurrency    *string                               `protobuf:"bytes,21,opt,name=default_currency,json=defaultCurrency,proto3,oneof" json:"default_currency,omitempty"` // ISO 4217 currency code
+	BillingCurrency    *string                               `protobuf:"bytes,21,opt,name=billing_currency,json=billingCurrency,proto3,oneof" json:"billing_currency,omitempty"` // ISO 4217 currency code — currency this supplier invoices you in
 	PaymentTerms       *string                               `protobuf:"bytes,22,opt,name=payment_terms,json=paymentTerms,proto3,oneof" json:"payment_terms,omitempty"`          // "net_30", "net_60", "2_10_net_30", "immediate"
 	LeadTimeDays       *int32                                `protobuf:"varint,23,opt,name=lead_time_days,json=leadTimeDays,proto3,oneof" json:"lead_time_days,omitempty"`       // Default delivery lead time
 	CreditLimit        *int64                                `protobuf:"varint,24,opt,name=credit_limit,json=creditLimit,proto3,oneof" json:"credit_limit,omitempty"`            // centavos            // Maximum outstanding payable
@@ -236,9 +236,9 @@ func (x *Supplier) GetCountry() string {
 	return ""
 }
 
-func (x *Supplier) GetDefaultCurrency() string {
-	if x != nil && x.DefaultCurrency != nil {
-		return *x.DefaultCurrency
+func (x *Supplier) GetBillingCurrency() string {
+	if x != nil && x.BillingCurrency != nil {
+		return *x.BillingCurrency
 	}
 	return ""
 }
@@ -1131,7 +1131,7 @@ const file_domain_entity_supplier_supplier_proto_rawDesc = "" +
 	"\vpostal_code\x18\x13 \x01(\tH\fR\n" +
 	"postalCode\x88\x01\x01\x12\x1d\n" +
 	"\acountry\x18\x14 \x01(\tH\rR\acountry\x88\x01\x01\x12.\n" +
-	"\x10default_currency\x18\x15 \x01(\tH\x0eR\x0fdefaultCurrency\x88\x01\x01\x12(\n" +
+	"\x10billing_currency\x18\x15 \x01(\tH\x0eR\x0fbillingCurrency\x88\x01\x01\x12(\n" +
 	"\rpayment_terms\x18\x16 \x01(\tH\x0fR\fpaymentTerms\x88\x01\x01\x12)\n" +
 	"\x0elead_time_days\x18\x17 \x01(\x05H\x10R\fleadTimeDays\x88\x01\x01\x12&\n" +
 	"\fcredit_limit\x18\x18 \x01(\x03H\x11R\vcreditLimit\x88\x01\x01\x12\x1b\n" +
@@ -1162,7 +1162,7 @@ const file_domain_entity_supplier_supplier_proto_rawDesc = "" +
 	"\f_postal_codeB\n" +
 	"\n" +
 	"\b_countryB\x13\n" +
-	"\x11_default_currencyB\x10\n" +
+	"\x11_billing_currencyB\x10\n" +
 	"\x0e_payment_termsB\x11\n" +
 	"\x0f_lead_time_daysB\x0f\n" +
 	"\r_credit_limitB\t\n" +

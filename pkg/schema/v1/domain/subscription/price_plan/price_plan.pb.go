@@ -140,8 +140,8 @@ type PricePlan struct {
 	DateModified       *int64                 `protobuf:"varint,8,opt,name=date_modified,json=dateModified,proto3,oneof" json:"date_modified,omitempty"`
 	DateModifiedString *string                `protobuf:"bytes,9,opt,name=date_modified_string,json=dateModifiedString,proto3,oneof" json:"date_modified_string,omitempty"`
 	Active             bool                   `protobuf:"varint,10,opt,name=active,proto3" json:"active,omitempty"`
-	Amount             int64                  `protobuf:"varint,11,opt,name=amount,proto3" json:"amount,omitempty"` // centavos
-	Currency           string                 `protobuf:"bytes,12,opt,name=currency,proto3" json:"currency,omitempty"`
+	BillingAmount      int64                  `protobuf:"varint,11,opt,name=billing_amount,json=billingAmount,proto3" json:"billing_amount,omitempty"`      // centavos — charged to the client in billing_currency
+	BillingCurrency    string                 `protobuf:"bytes,12,opt,name=billing_currency,json=billingCurrency,proto3" json:"billing_currency,omitempty"` // ISO 4217 currency code — what the client is billed in
 	// DEPRECATED: migrate to billing_cycle_* and default_term_* — see docs/plan/20260421-pricing-unification/plan.md
 	DurationValue int32  `protobuf:"varint,13,opt,name=duration_value,json=durationValue,proto3" json:"duration_value,omitempty"`
 	DurationUnit  string `protobuf:"bytes,14,opt,name=duration_unit,json=durationUnit,proto3" json:"duration_unit,omitempty"`
@@ -263,16 +263,16 @@ func (x *PricePlan) GetActive() bool {
 	return false
 }
 
-func (x *PricePlan) GetAmount() int64 {
+func (x *PricePlan) GetBillingAmount() int64 {
 	if x != nil {
-		return x.Amount
+		return x.BillingAmount
 	}
 	return 0
 }
 
-func (x *PricePlan) GetCurrency() string {
+func (x *PricePlan) GetBillingCurrency() string {
 	if x != nil {
-		return x.Currency
+		return x.BillingCurrency
 	}
 	return ""
 }
@@ -1142,7 +1142,7 @@ var File_domain_subscription_price_plan_price_plan_proto protoreflect.FileDescri
 
 const file_domain_subscription_price_plan_price_plan_proto_rawDesc = "" +
 	"\n" +
-	"/domain/subscription/price_plan/price_plan.proto\x12\x16domain.subscription.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/search.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a#domain/subscription/plan/plan.proto\x1a\x10options/db.proto\"\xc9\n" +
+	"/domain/subscription/price_plan/price_plan.proto\x12\x16domain.subscription.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/search.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a#domain/subscription/plan/plan.proto\x1a\x10options/db.proto\"\xe7\n" +
 	"\n" +
 	"\tPricePlan\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x125\n" +
@@ -1157,9 +1157,9 @@ const file_domain_subscription_price_plan_price_plan_proto_rawDesc = "" +
 	"\x14date_modified_string\x18\t \x01(\tH\x06R\x12dateModifiedString\x88\x01\x01\x12\"\n" +
 	"\x06active\x18\n" +
 	" \x01(\bB\n" +
-	"\x82\xb5\x18\x06\"\x04trueR\x06active\x12\x16\n" +
-	"\x06amount\x18\v \x01(\x03R\x06amount\x12\x1a\n" +
-	"\bcurrency\x18\f \x01(\tR\bcurrency\x12%\n" +
+	"\x82\xb5\x18\x06\"\x04trueR\x06active\x12%\n" +
+	"\x0ebilling_amount\x18\v \x01(\x03R\rbillingAmount\x12)\n" +
+	"\x10billing_currency\x18\f \x01(\tR\x0fbillingCurrency\x12%\n" +
 	"\x0eduration_value\x18\r \x01(\x05R\rdurationValue\x12#\n" +
 	"\rduration_unit\x18\x0e \x01(\tR\fdurationUnit\x128\n" +
 	"\x15confirmation_template\x18\x0f \x01(\tH\aR\x14confirmationTemplate\x88\x01\x01\x12.\n" +

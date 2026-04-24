@@ -42,6 +42,7 @@ type PaymentTerm struct {
 	Description        *string                `protobuf:"bytes,15,opt,name=description,proto3,oneof" json:"description,omitempty"`
 	DisplayOrder       *int32                 `protobuf:"varint,16,opt,name=display_order,json=displayOrder,proto3,oneof" json:"display_order,omitempty"`
 	ProximateDay       *int32                 `protobuf:"varint,17,opt,name=proximate_day,json=proximateDay,proto3,oneof" json:"proximate_day,omitempty"` // Day-of-month for proximate due date (1-28)
+	WorkspaceId        *string                `protobuf:"bytes,18,opt,name=workspace_id,json=workspaceId,proto3,oneof" json:"workspace_id,omitempty"`
 	unknownFields      protoimpl.UnknownFields
 	sizeCache          protoimpl.SizeCache
 }
@@ -193,6 +194,13 @@ func (x *PaymentTerm) GetProximateDay() int32 {
 		return *x.ProximateDay
 	}
 	return 0
+}
+
+func (x *PaymentTerm) GetWorkspaceId() string {
+	if x != nil && x.WorkspaceId != nil {
+		return *x.WorkspaceId
+	}
+	return ""
 }
 
 type CreatePaymentTermRequest struct {
@@ -983,7 +991,7 @@ var File_domain_entity_payment_term_payment_term_proto protoreflect.FileDescript
 
 const file_domain_entity_payment_term_payment_term_proto_rawDesc = "" +
 	"\n" +
-	"-domain/entity/payment_term/payment_term.proto\x12\x10domain.entity.v1\x1a\x19domain/common/error.proto\x1a\x1adomain/common/search.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1edomain/common/pagination.proto\x1a\x10options/db.proto\"\xb7\x06\n" +
+	"-domain/entity/payment_term/payment_term.proto\x12\x10domain.entity.v1\x1a\x19domain/common/error.proto\x1a\x1adomain/common/search.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1edomain/common/pagination.proto\x1a\x10options/db.proto\"\x83\a\n" +
 	"\vPaymentTerm\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12&\n" +
 	"\fdate_created\x18\x02 \x01(\x03H\x00R\vdateCreated\x88\x01\x01\x123\n" +
@@ -1004,7 +1012,9 @@ const file_domain_entity_payment_term_payment_term_proto_rawDesc = "" +
 	"is_default\x18\x0e \x01(\bR\tisDefault\x12%\n" +
 	"\vdescription\x18\x0f \x01(\tH\x06R\vdescription\x88\x01\x01\x12(\n" +
 	"\rdisplay_order\x18\x10 \x01(\x05H\aR\fdisplayOrder\x88\x01\x01\x12(\n" +
-	"\rproximate_day\x18\x11 \x01(\x05H\bR\fproximateDay\x88\x01\x01:\x06\x8a\xb5\x18\x02\b\x01B\x0f\n" +
+	"\rproximate_day\x18\x11 \x01(\x05H\bR\fproximateDay\x88\x01\x01\x129\n" +
+	"\fworkspace_id\x18\x12 \x01(\tB\x11\x82\xb5\x18\r\n" +
+	"\tworkspace\x18\x01H\tR\vworkspaceId\x88\x01\x01:\x06\x8a\xb5\x18\x02\b\x01B\x0f\n" +
 	"\r_date_createdB\x16\n" +
 	"\x14_date_created_stringB\x10\n" +
 	"\x0e_date_modifiedB\x17\n" +
@@ -1013,7 +1023,8 @@ const file_domain_entity_payment_term_payment_term_proto_rawDesc = "" +
 	"\x15_discount_percent_bpsB\x0e\n" +
 	"\f_descriptionB\x10\n" +
 	"\x0e_display_orderB\x10\n" +
-	"\x0e_proximate_day\"M\n" +
+	"\x0e_proximate_dayB\x0f\n" +
+	"\r_workspace_id\"M\n" +
 	"\x18CreatePaymentTermRequest\x121\n" +
 	"\x04data\x18\x01 \x01(\v2\x1d.domain.entity.v1.PaymentTermR\x04data\"\xa6\x01\n" +
 	"\x19CreatePaymentTermResponse\x121\n" +

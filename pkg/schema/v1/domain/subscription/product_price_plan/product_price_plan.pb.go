@@ -8,7 +8,7 @@ package subscriptionv1
 
 import (
 	common "github.com/erniealice/esqyma/pkg/schema/v1/domain/common"
-	product "github.com/erniealice/esqyma/pkg/schema/v1/domain/product/product"
+	product_plan "github.com/erniealice/esqyma/pkg/schema/v1/domain/product/product_plan"
 	price_plan "github.com/erniealice/esqyma/pkg/schema/v1/domain/subscription/price_plan"
 	_ "github.com/erniealice/esqyma/pkg/schema/v1/options"
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
@@ -78,20 +78,20 @@ func (BillingTreatment) EnumDescriptor() ([]byte, []int) {
 }
 
 type ProductPricePlan struct {
-	state              protoimpl.MessageState `protogen:"open.v1"`
-	Id                 string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
-	DateCreated        *int64                 `protobuf:"varint,2,opt,name=date_created,json=dateCreated,proto3,oneof" json:"date_created,omitempty"`
-	DateCreatedString  *string                `protobuf:"bytes,3,opt,name=date_created_string,json=dateCreatedString,proto3,oneof" json:"date_created_string,omitempty"`
-	DateModified       *int64                 `protobuf:"varint,4,opt,name=date_modified,json=dateModified,proto3,oneof" json:"date_modified,omitempty"`
-	DateModifiedString *string                `protobuf:"bytes,5,opt,name=date_modified_string,json=dateModifiedString,proto3,oneof" json:"date_modified_string,omitempty"`
-	Active             bool                   `protobuf:"varint,6,opt,name=active,proto3" json:"active,omitempty"`
-	PricePlan          *price_plan.PricePlan  `protobuf:"bytes,7,opt,name=price_plan,json=pricePlan,proto3,oneof" json:"price_plan,omitempty"`
-	PricePlanId        string                 `protobuf:"bytes,8,opt,name=price_plan_id,json=pricePlanId,proto3" json:"price_plan_id,omitempty"`
-	Product            *product.Product       `protobuf:"bytes,9,opt,name=product,proto3,oneof" json:"product,omitempty"`
-	ProductId          string                 `protobuf:"bytes,10,opt,name=product_id,json=productId,proto3" json:"product_id,omitempty"`
-	Price              int64                  `protobuf:"varint,11,opt,name=price,proto3" json:"price,omitempty"` // centavos
-	Currency           string                 `protobuf:"bytes,12,opt,name=currency,proto3" json:"currency,omitempty"`
-	BillingTreatment   BillingTreatment       `protobuf:"varint,13,opt,name=billing_treatment,json=billingTreatment,proto3,enum=domain.subscription.v1.BillingTreatment" json:"billing_treatment,omitempty"`
+	state              protoimpl.MessageState    `protogen:"open.v1"`
+	Id                 string                    `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
+	DateCreated        *int64                    `protobuf:"varint,2,opt,name=date_created,json=dateCreated,proto3,oneof" json:"date_created,omitempty"`
+	DateCreatedString  *string                   `protobuf:"bytes,3,opt,name=date_created_string,json=dateCreatedString,proto3,oneof" json:"date_created_string,omitempty"`
+	DateModified       *int64                    `protobuf:"varint,4,opt,name=date_modified,json=dateModified,proto3,oneof" json:"date_modified,omitempty"`
+	DateModifiedString *string                   `protobuf:"bytes,5,opt,name=date_modified_string,json=dateModifiedString,proto3,oneof" json:"date_modified_string,omitempty"`
+	Active             bool                      `protobuf:"varint,6,opt,name=active,proto3" json:"active,omitempty"`
+	PricePlan          *price_plan.PricePlan     `protobuf:"bytes,7,opt,name=price_plan,json=pricePlan,proto3,oneof" json:"price_plan,omitempty"`
+	PricePlanId        string                    `protobuf:"bytes,8,opt,name=price_plan_id,json=pricePlanId,proto3" json:"price_plan_id,omitempty"`
+	ProductPlan        *product_plan.ProductPlan `protobuf:"bytes,17,opt,name=product_plan,json=productPlan,proto3,oneof" json:"product_plan,omitempty"`
+	ProductPlanId      string                    `protobuf:"bytes,18,opt,name=product_plan_id,json=productPlanId,proto3" json:"product_plan_id,omitempty"`
+	BillingAmount      int64                     `protobuf:"varint,11,opt,name=billing_amount,json=billingAmount,proto3" json:"billing_amount,omitempty"`      // centavos — line price charged to the client in billing_currency
+	BillingCurrency    string                    `protobuf:"bytes,12,opt,name=billing_currency,json=billingCurrency,proto3" json:"billing_currency,omitempty"` // ISO 4217 currency code — must match parent PricePlan.billing_currency
+	BillingTreatment   BillingTreatment          `protobuf:"varint,13,opt,name=billing_treatment,json=billingTreatment,proto3,enum=domain.subscription.v1.BillingTreatment" json:"billing_treatment,omitempty"`
 	// Per-line effective dates; optional — overrides parent PriceSchedule dates when set
 	DateStart     *string `protobuf:"bytes,14,opt,name=date_start,json=dateStart,proto3,oneof" json:"date_start,omitempty"` // ISO 8601 date (YYYY-MM-DD)
 	DateEnd       *string `protobuf:"bytes,15,opt,name=date_end,json=dateEnd,proto3,oneof" json:"date_end,omitempty"`       // ISO 8601 date (YYYY-MM-DD)
@@ -185,30 +185,30 @@ func (x *ProductPricePlan) GetPricePlanId() string {
 	return ""
 }
 
-func (x *ProductPricePlan) GetProduct() *product.Product {
+func (x *ProductPricePlan) GetProductPlan() *product_plan.ProductPlan {
 	if x != nil {
-		return x.Product
+		return x.ProductPlan
 	}
 	return nil
 }
 
-func (x *ProductPricePlan) GetProductId() string {
+func (x *ProductPricePlan) GetProductPlanId() string {
 	if x != nil {
-		return x.ProductId
+		return x.ProductPlanId
 	}
 	return ""
 }
 
-func (x *ProductPricePlan) GetPrice() int64 {
+func (x *ProductPricePlan) GetBillingAmount() int64 {
 	if x != nil {
-		return x.Price
+		return x.BillingAmount
 	}
 	return 0
 }
 
-func (x *ProductPricePlan) GetCurrency() string {
+func (x *ProductPricePlan) GetBillingCurrency() string {
 	if x != nil {
-		return x.Currency
+		return x.BillingCurrency
 	}
 	return ""
 }
@@ -1022,7 +1022,7 @@ var File_domain_subscription_product_price_plan_product_price_plan_proto protore
 
 const file_domain_subscription_product_price_plan_product_price_plan_proto_rawDesc = "" +
 	"\n" +
-	"?domain/subscription/product_price_plan/product_price_plan.proto\x12\x16domain.subscription.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/search.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a$domain/product/product/product.proto\x1a/domain/subscription/price_plan/price_plan.proto\x1a\x10options/db.proto\"\xce\x06\n" +
+	"?domain/subscription/product_price_plan/product_price_plan.proto\x12\x16domain.subscription.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/search.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a.domain/product/product_plan/product_plan.proto\x1a/domain/subscription/price_plan/price_plan.proto\x1a\x10options/db.proto\"\xc9\a\n" +
 	"\x10ProductPricePlan\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12&\n" +
 	"\fdate_created\x18\x02 \x01(\x03H\x00R\vdateCreated\x88\x01\x01\x123\n" +
@@ -1035,14 +1035,12 @@ const file_domain_subscription_product_price_plan_product_price_plan_proto_rawDe
 	"price_plan\x18\a \x01(\v2!.domain.subscription.v1.PricePlanH\x04R\tpricePlan\x88\x01\x01\x126\n" +
 	"\rprice_plan_id\x18\b \x01(\tB\x12\x82\xb5\x18\x0e\n" +
 	"\n" +
-	"price_plan\x18\x01R\vpricePlanId\x129\n" +
-	"\aproduct\x18\t \x01(\v2\x1a.domain.product.v1.ProductH\x05R\aproduct\x88\x01\x01\x12.\n" +
-	"\n" +
-	"product_id\x18\n" +
-	" \x01(\tB\x0f\x82\xb5\x18\v\n" +
-	"\aproduct\x18\x01R\tproductId\x12\x14\n" +
-	"\x05price\x18\v \x01(\x03R\x05price\x12\x1a\n" +
-	"\bcurrency\x18\f \x01(\tR\bcurrency\x12U\n" +
+	"price_plan\x18\x01R\vpricePlanId\x12F\n" +
+	"\fproduct_plan\x18\x11 \x01(\v2\x1e.domain.product.v1.ProductPlanH\x05R\vproductPlan\x88\x01\x01\x12<\n" +
+	"\x0fproduct_plan_id\x18\x12 \x01(\tB\x14\x82\xb5\x18\x10\n" +
+	"\fproduct_plan\x18\x01R\rproductPlanId\x12%\n" +
+	"\x0ebilling_amount\x18\v \x01(\x03R\rbillingAmount\x12)\n" +
+	"\x10billing_currency\x18\f \x01(\tR\x0fbillingCurrency\x12U\n" +
 	"\x11billing_treatment\x18\r \x01(\x0e2(.domain.subscription.v1.BillingTreatmentR\x10billingTreatment\x12\"\n" +
 	"\n" +
 	"date_start\x18\x0e \x01(\tH\x06R\tdateStart\x88\x01\x01\x12\x1e\n" +
@@ -1051,11 +1049,13 @@ const file_domain_subscription_product_price_plan_product_price_plan_proto_rawDe
 	"\x14_date_created_stringB\x10\n" +
 	"\x0e_date_modifiedB\x17\n" +
 	"\x15_date_modified_stringB\r\n" +
-	"\v_price_planB\n" +
-	"\n" +
-	"\b_productB\r\n" +
+	"\v_price_planB\x0f\n" +
+	"\r_product_planB\r\n" +
 	"\v_date_startB\v\n" +
-	"\t_date_end\"]\n" +
+	"\t_date_endJ\x04\b\t\x10\n" +
+	"J\x04\b\n" +
+	"\x10\vJ\x04\b\x10\x10\x11R\aproductR\n" +
+	"product_idR\x12product_variant_id\"]\n" +
 	"\x1dCreateProductPricePlanRequest\x12<\n" +
 	"\x04data\x18\x01 \x01(\v2(.domain.subscription.v1.ProductPricePlanR\x04data\"\xb6\x01\n" +
 	"\x1eCreateProductPricePlanResponse\x12<\n" +
@@ -1176,7 +1176,7 @@ var file_domain_subscription_product_price_plan_product_price_plan_proto_goTypes
 	(*GetProductPricePlanItemPageDataRequest)(nil),  // 14: domain.subscription.v1.GetProductPricePlanItemPageDataRequest
 	(*GetProductPricePlanItemPageDataResponse)(nil), // 15: domain.subscription.v1.GetProductPricePlanItemPageDataResponse
 	(*price_plan.PricePlan)(nil),                    // 16: domain.subscription.v1.PricePlan
-	(*product.Product)(nil),                         // 17: domain.product.v1.Product
+	(*product_plan.ProductPlan)(nil),                // 17: domain.product.v1.ProductPlan
 	(*common.Error)(nil),                            // 18: domain.common.v1.Error
 	(*common.SearchRequest)(nil),                    // 19: domain.common.v1.SearchRequest
 	(*common.FilterRequest)(nil),                    // 20: domain.common.v1.FilterRequest
@@ -1187,7 +1187,7 @@ var file_domain_subscription_product_price_plan_product_price_plan_proto_goTypes
 }
 var file_domain_subscription_product_price_plan_product_price_plan_proto_depIdxs = []int32{
 	16, // 0: domain.subscription.v1.ProductPricePlan.price_plan:type_name -> domain.subscription.v1.PricePlan
-	17, // 1: domain.subscription.v1.ProductPricePlan.product:type_name -> domain.product.v1.Product
+	17, // 1: domain.subscription.v1.ProductPricePlan.product_plan:type_name -> domain.product.v1.ProductPlan
 	0,  // 2: domain.subscription.v1.ProductPricePlan.billing_treatment:type_name -> domain.subscription.v1.BillingTreatment
 	1,  // 3: domain.subscription.v1.CreateProductPricePlanRequest.data:type_name -> domain.subscription.v1.ProductPricePlan
 	1,  // 4: domain.subscription.v1.CreateProductPricePlanResponse.data:type_name -> domain.subscription.v1.ProductPricePlan

@@ -39,8 +39,8 @@ message PricePlan {
   optional int64 date_modified = 8;
   optional string date_modified_string = 9;
   bool active = 10 [(options.v1.db).default = "true"];
-  int64 amount = 11; // centavos
-  string currency = 12;
+  int64 billing_amount = 11;    // centavos — charged to the client in billing_currency
+  string billing_currency = 12; // ISO 4217 currency code — what the client is billed in
   // DEPRECATED: migrate to billing_cycle_* and default_term_* — see docs/plan/20260421-pricing-unification/plan.md
   int32 duration_value = 13;
   string duration_unit = 14;
