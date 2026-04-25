@@ -45,6 +45,7 @@ message Client {
   // the subscription/invoice flow falls back to Workspace.functional_currency.
   // Used by the subscription drawer to filter applicable PricePlans.
   optional string billing_currency = 23;
+  optional string status = 24;                  // "prospect", "active", "on_hold", "blocked", "inactive"
 }
 
 service ClientDomainService {

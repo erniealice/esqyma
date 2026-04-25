@@ -1086,8 +1086,26 @@ type CreateRevenueWithLineItemsRequest struct {
 	// verify ProductPlan ⊂ ProductPricePlan coverage, and create line items
 	// atomically alongside the Revenue. Empty = behaves like CreateRevenue.
 	SubscriptionId *string `protobuf:"bytes,2,opt,name=subscription_id,json=subscriptionId,proto3,oneof" json:"subscription_id,omitempty"`
-	unknownFields  protoimpl.UnknownFields
-	sizeCache      protoimpl.SizeCache
+	// Operator-supplied billing period (RFC3339) for revenue recognition.
+	// Used for first-cycle detection and idempotency keying.
+	PeriodStart *string `protobuf:"bytes,3,opt,name=period_start,json=periodStart,proto3,oneof" json:"period_start,omitempty"`
+	PeriodEnd   *string `protobuf:"bytes,4,opt,name=period_end,json=periodEnd,proto3,oneof" json:"period_end,omitempty"`
+	// Operator-supplied invoice issue date (ISO 8601 YYYY-MM-DD).
+	// When empty, defaults to today.
+	RevenueDate *string `protobuf:"bytes,5,opt,name=revenue_date,json=revenueDate,proto3,oneof" json:"revenue_date,omitempty"`
+	// Per-line operator overrides applied to the auto-populated draft.
+	Overrides []*LineItemOverride `protobuf:"bytes,6,rep,name=overrides,proto3" json:"overrides,omitempty"`
+	// When true, the use case computes and returns the proposed Revenue + lines
+	// but does NOT persist anything. Drawer GET path uses this for the preview.
+	DryRun *bool `protobuf:"varint,7,opt,name=dry_run,json=dryRun,proto3,oneof" json:"dry_run,omitempty"`
+	// When true, the use case skips header creation (the caller has already
+	// created a Revenue) and only writes the line items against
+	// existing_revenue_id. Used by the legacy manual revenue-add flow so the
+	// single algorithm has one implementation. Pairs with existing_revenue_id.
+	SkipHeader        *bool   `protobuf:"varint,8,opt,name=skip_header,json=skipHeader,proto3,oneof" json:"skip_header,omitempty"`
+	ExistingRevenueId *string `protobuf:"bytes,9,opt,name=existing_revenue_id,json=existingRevenueId,proto3,oneof" json:"existing_revenue_id,omitempty"`
+	unknownFields     protoimpl.UnknownFields
+	sizeCache         protoimpl.SizeCache
 }
 
 func (x *CreateRevenueWithLineItemsRequest) Reset() {
@@ -1134,18 +1152,156 @@ func (x *CreateRevenueWithLineItemsRequest) GetSubscriptionId() string {
 	return ""
 }
 
-type CreateRevenueWithLineItemsResponse struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	Data          []*Revenue             `protobuf:"bytes,1,rep,name=data,proto3" json:"data,omitempty"`
-	Success       bool                   `protobuf:"varint,2,opt,name=success,proto3" json:"success,omitempty"`
-	Error         *common.Error          `protobuf:"bytes,3,opt,name=error,proto3,oneof" json:"error,omitempty"`
+func (x *CreateRevenueWithLineItemsRequest) GetPeriodStart() string {
+	if x != nil && x.PeriodStart != nil {
+		return *x.PeriodStart
+	}
+	return ""
+}
+
+func (x *CreateRevenueWithLineItemsRequest) GetPeriodEnd() string {
+	if x != nil && x.PeriodEnd != nil {
+		return *x.PeriodEnd
+	}
+	return ""
+}
+
+func (x *CreateRevenueWithLineItemsRequest) GetRevenueDate() string {
+	if x != nil && x.RevenueDate != nil {
+		return *x.RevenueDate
+	}
+	return ""
+}
+
+func (x *CreateRevenueWithLineItemsRequest) GetOverrides() []*LineItemOverride {
+	if x != nil {
+		return x.Overrides
+	}
+	return nil
+}
+
+func (x *CreateRevenueWithLineItemsRequest) GetDryRun() bool {
+	if x != nil && x.DryRun != nil {
+		return *x.DryRun
+	}
+	return false
+}
+
+func (x *CreateRevenueWithLineItemsRequest) GetSkipHeader() bool {
+	if x != nil && x.SkipHeader != nil {
+		return *x.SkipHeader
+	}
+	return false
+}
+
+func (x *CreateRevenueWithLineItemsRequest) GetExistingRevenueId() string {
+	if x != nil && x.ExistingRevenueId != nil {
+		return *x.ExistingRevenueId
+	}
+	return ""
+}
+
+type LineItemOverride struct {
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// Identifies the line being overridden by its source ProductPricePlan.
+	ProductPricePlanId string `protobuf:"bytes,1,opt,name=product_price_plan_id,json=productPricePlanId,proto3" json:"product_price_plan_id,omitempty"`
+	// When set, replaces the auto-populated unit price (centavos).
+	UnitPrice *int64 `protobuf:"varint,2,opt,name=unit_price,json=unitPrice,proto3,oneof" json:"unit_price,omitempty"`
+	// When set, replaces the auto-populated quantity.
+	Quantity *float64 `protobuf:"fixed64,3,opt,name=quantity,proto3,oneof" json:"quantity,omitempty"`
+	// When set, replaces the auto-populated description.
+	Description *string `protobuf:"bytes,4,opt,name=description,proto3,oneof" json:"description,omitempty"`
+	// When true, the operator removed this line from the draft preview.
+	Removed       *bool `protobuf:"varint,5,opt,name=removed,proto3,oneof" json:"removed,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
 
+func (x *LineItemOverride) Reset() {
+	*x = LineItemOverride{}
+	mi := &file_domain_revenue_revenue_revenue_proto_msgTypes[16]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *LineItemOverride) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*LineItemOverride) ProtoMessage() {}
+
+func (x *LineItemOverride) ProtoReflect() protoreflect.Message {
+	mi := &file_domain_revenue_revenue_revenue_proto_msgTypes[16]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use LineItemOverride.ProtoReflect.Descriptor instead.
+func (*LineItemOverride) Descriptor() ([]byte, []int) {
+	return file_domain_revenue_revenue_revenue_proto_rawDescGZIP(), []int{16}
+}
+
+func (x *LineItemOverride) GetProductPricePlanId() string {
+	if x != nil {
+		return x.ProductPricePlanId
+	}
+	return ""
+}
+
+func (x *LineItemOverride) GetUnitPrice() int64 {
+	if x != nil && x.UnitPrice != nil {
+		return *x.UnitPrice
+	}
+	return 0
+}
+
+func (x *LineItemOverride) GetQuantity() float64 {
+	if x != nil && x.Quantity != nil {
+		return *x.Quantity
+	}
+	return 0
+}
+
+func (x *LineItemOverride) GetDescription() string {
+	if x != nil && x.Description != nil {
+		return *x.Description
+	}
+	return ""
+}
+
+func (x *LineItemOverride) GetRemoved() bool {
+	if x != nil && x.Removed != nil {
+		return *x.Removed
+	}
+	return false
+}
+
+type CreateRevenueWithLineItemsResponse struct {
+	state   protoimpl.MessageState `protogen:"open.v1"`
+	Data    []*Revenue             `protobuf:"bytes,1,rep,name=data,proto3" json:"data,omitempty"`
+	Success bool                   `protobuf:"varint,2,opt,name=success,proto3" json:"success,omitempty"`
+	Error   *common.Error          `protobuf:"bytes,3,opt,name=error,proto3,oneof" json:"error,omitempty"`
+	// Populated when the request was a dry_run preview. Mirrors the lines that
+	// would be written. Empty when dry_run = false.
+	PreviewLines []*PreviewLineItem `protobuf:"bytes,4,rep,name=preview_lines,json=previewLines,proto3" json:"preview_lines,omitempty"`
+	// Non-blocking warnings (e.g. "plan has no billing cycle; defaulting to 1mo").
+	Warnings []string `protobuf:"bytes,5,rep,name=warnings,proto3" json:"warnings,omitempty"`
+	// Set when (subscription_id, period_start, period_end) collides with a
+	// non-cancelled Revenue. Drawer surfaces a blocking banner with a link.
+	ConflictingRevenueId *string `protobuf:"bytes,6,opt,name=conflicting_revenue_id,json=conflictingRevenueId,proto3,oneof" json:"conflicting_revenue_id,omitempty"`
+	unknownFields        protoimpl.UnknownFields
+	sizeCache            protoimpl.SizeCache
+}
+
 func (x *CreateRevenueWithLineItemsResponse) Reset() {
 	*x = CreateRevenueWithLineItemsResponse{}
-	mi := &file_domain_revenue_revenue_revenue_proto_msgTypes[16]
+	mi := &file_domain_revenue_revenue_revenue_proto_msgTypes[17]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1157,7 +1313,7 @@ func (x *CreateRevenueWithLineItemsResponse) String() string {
 func (*CreateRevenueWithLineItemsResponse) ProtoMessage() {}
 
 func (x *CreateRevenueWithLineItemsResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_domain_revenue_revenue_revenue_proto_msgTypes[16]
+	mi := &file_domain_revenue_revenue_revenue_proto_msgTypes[17]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1170,7 +1326,7 @@ func (x *CreateRevenueWithLineItemsResponse) ProtoReflect() protoreflect.Message
 
 // Deprecated: Use CreateRevenueWithLineItemsResponse.ProtoReflect.Descriptor instead.
 func (*CreateRevenueWithLineItemsResponse) Descriptor() ([]byte, []int) {
-	return file_domain_revenue_revenue_revenue_proto_rawDescGZIP(), []int{16}
+	return file_domain_revenue_revenue_revenue_proto_rawDescGZIP(), []int{17}
 }
 
 func (x *CreateRevenueWithLineItemsResponse) GetData() []*Revenue {
@@ -1192,6 +1348,121 @@ func (x *CreateRevenueWithLineItemsResponse) GetError() *common.Error {
 		return x.Error
 	}
 	return nil
+}
+
+func (x *CreateRevenueWithLineItemsResponse) GetPreviewLines() []*PreviewLineItem {
+	if x != nil {
+		return x.PreviewLines
+	}
+	return nil
+}
+
+func (x *CreateRevenueWithLineItemsResponse) GetWarnings() []string {
+	if x != nil {
+		return x.Warnings
+	}
+	return nil
+}
+
+func (x *CreateRevenueWithLineItemsResponse) GetConflictingRevenueId() string {
+	if x != nil && x.ConflictingRevenueId != nil {
+		return *x.ConflictingRevenueId
+	}
+	return ""
+}
+
+type PreviewLineItem struct {
+	state              protoimpl.MessageState `protogen:"open.v1"`
+	ProductPricePlanId string                 `protobuf:"bytes,1,opt,name=product_price_plan_id,json=productPricePlanId,proto3" json:"product_price_plan_id,omitempty"`
+	Description        string                 `protobuf:"bytes,2,opt,name=description,proto3" json:"description,omitempty"`
+	UnitPrice          int64                  `protobuf:"varint,3,opt,name=unit_price,json=unitPrice,proto3" json:"unit_price,omitempty"` // centavos
+	Quantity           float64                `protobuf:"fixed64,4,opt,name=quantity,proto3" json:"quantity,omitempty"`
+	TotalPrice         int64                  `protobuf:"varint,5,opt,name=total_price,json=totalPrice,proto3" json:"total_price,omitempty"` // centavos
+	Currency           string                 `protobuf:"bytes,6,opt,name=currency,proto3" json:"currency,omitempty"`
+	// Treatment for badge rendering — one of "recurring", "first_cycle",
+	// "usage_based", "one_time".
+	Treatment     string `protobuf:"bytes,7,opt,name=treatment,proto3" json:"treatment,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *PreviewLineItem) Reset() {
+	*x = PreviewLineItem{}
+	mi := &file_domain_revenue_revenue_revenue_proto_msgTypes[18]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *PreviewLineItem) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*PreviewLineItem) ProtoMessage() {}
+
+func (x *PreviewLineItem) ProtoReflect() protoreflect.Message {
+	mi := &file_domain_revenue_revenue_revenue_proto_msgTypes[18]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use PreviewLineItem.ProtoReflect.Descriptor instead.
+func (*PreviewLineItem) Descriptor() ([]byte, []int) {
+	return file_domain_revenue_revenue_revenue_proto_rawDescGZIP(), []int{18}
+}
+
+func (x *PreviewLineItem) GetProductPricePlanId() string {
+	if x != nil {
+		return x.ProductPricePlanId
+	}
+	return ""
+}
+
+func (x *PreviewLineItem) GetDescription() string {
+	if x != nil {
+		return x.Description
+	}
+	return ""
+}
+
+func (x *PreviewLineItem) GetUnitPrice() int64 {
+	if x != nil {
+		return x.UnitPrice
+	}
+	return 0
+}
+
+func (x *PreviewLineItem) GetQuantity() float64 {
+	if x != nil {
+		return x.Quantity
+	}
+	return 0
+}
+
+func (x *PreviewLineItem) GetTotalPrice() int64 {
+	if x != nil {
+		return x.TotalPrice
+	}
+	return 0
+}
+
+func (x *PreviewLineItem) GetCurrency() string {
+	if x != nil {
+		return x.Currency
+	}
+	return ""
+}
+
+func (x *PreviewLineItem) GetTreatment() string {
+	if x != nil {
+		return x.Treatment
+	}
+	return ""
 }
 
 var File_domain_revenue_revenue_revenue_proto protoreflect.FileDescriptor
@@ -1328,16 +1599,59 @@ const file_domain_revenue_revenue_revenue_proto_rawDesc = "" +
 	"\x05error\x18\x03 \x01(\v2\x17.domain.common.v1.ErrorH\x01R\x05error\x88\x01\x01B\n" +
 	"\n" +
 	"\b_revenueB\b\n" +
-	"\x06_error\"\x95\x01\n" +
+	"\x06_error\"\xc0\x04\n" +
 	"!CreateRevenueWithLineItemsRequest\x12.\n" +
 	"\x04data\x18\x01 \x01(\v2\x1a.domain.revenue.v1.RevenueR\x04data\x12,\n" +
-	"\x0fsubscription_id\x18\x02 \x01(\tH\x00R\x0esubscriptionId\x88\x01\x01B\x12\n" +
-	"\x10_subscription_id\"\xac\x01\n" +
+	"\x0fsubscription_id\x18\x02 \x01(\tH\x00R\x0esubscriptionId\x88\x01\x01\x12&\n" +
+	"\fperiod_start\x18\x03 \x01(\tH\x01R\vperiodStart\x88\x01\x01\x12\"\n" +
+	"\n" +
+	"period_end\x18\x04 \x01(\tH\x02R\tperiodEnd\x88\x01\x01\x12&\n" +
+	"\frevenue_date\x18\x05 \x01(\tH\x03R\vrevenueDate\x88\x01\x01\x12A\n" +
+	"\toverrides\x18\x06 \x03(\v2#.domain.revenue.v1.LineItemOverrideR\toverrides\x12\x1c\n" +
+	"\adry_run\x18\a \x01(\bH\x04R\x06dryRun\x88\x01\x01\x12$\n" +
+	"\vskip_header\x18\b \x01(\bH\x05R\n" +
+	"skipHeader\x88\x01\x01\x123\n" +
+	"\x13existing_revenue_id\x18\t \x01(\tH\x06R\x11existingRevenueId\x88\x01\x01B\x12\n" +
+	"\x10_subscription_idB\x0f\n" +
+	"\r_period_startB\r\n" +
+	"\v_period_endB\x0f\n" +
+	"\r_revenue_dateB\n" +
+	"\n" +
+	"\b_dry_runB\x0e\n" +
+	"\f_skip_headerB\x16\n" +
+	"\x14_existing_revenue_idJ\x04\b\n" +
+	"\x10\vR\x0eforce_override\"\x88\x02\n" +
+	"\x10LineItemOverride\x121\n" +
+	"\x15product_price_plan_id\x18\x01 \x01(\tR\x12productPricePlanId\x12\"\n" +
+	"\n" +
+	"unit_price\x18\x02 \x01(\x03H\x00R\tunitPrice\x88\x01\x01\x12\x1f\n" +
+	"\bquantity\x18\x03 \x01(\x01H\x01R\bquantity\x88\x01\x01\x12%\n" +
+	"\vdescription\x18\x04 \x01(\tH\x02R\vdescription\x88\x01\x01\x12\x1d\n" +
+	"\aremoved\x18\x05 \x01(\bH\x03R\aremoved\x88\x01\x01B\r\n" +
+	"\v_unit_priceB\v\n" +
+	"\t_quantityB\x0e\n" +
+	"\f_descriptionB\n" +
+	"\n" +
+	"\b_removed\"\xe7\x02\n" +
 	"\"CreateRevenueWithLineItemsResponse\x12.\n" +
 	"\x04data\x18\x01 \x03(\v2\x1a.domain.revenue.v1.RevenueR\x04data\x12\x18\n" +
 	"\asuccess\x18\x02 \x01(\bR\asuccess\x122\n" +
-	"\x05error\x18\x03 \x01(\v2\x17.domain.common.v1.ErrorH\x00R\x05error\x88\x01\x01B\b\n" +
-	"\x06_error2\x8b\a\n" +
+	"\x05error\x18\x03 \x01(\v2\x17.domain.common.v1.ErrorH\x00R\x05error\x88\x01\x01\x12G\n" +
+	"\rpreview_lines\x18\x04 \x03(\v2\".domain.revenue.v1.PreviewLineItemR\fpreviewLines\x12\x1a\n" +
+	"\bwarnings\x18\x05 \x03(\tR\bwarnings\x129\n" +
+	"\x16conflicting_revenue_id\x18\x06 \x01(\tH\x01R\x14conflictingRevenueId\x88\x01\x01B\b\n" +
+	"\x06_errorB\x19\n" +
+	"\x17_conflicting_revenue_id\"\xfc\x01\n" +
+	"\x0fPreviewLineItem\x121\n" +
+	"\x15product_price_plan_id\x18\x01 \x01(\tR\x12productPricePlanId\x12 \n" +
+	"\vdescription\x18\x02 \x01(\tR\vdescription\x12\x1d\n" +
+	"\n" +
+	"unit_price\x18\x03 \x01(\x03R\tunitPrice\x12\x1a\n" +
+	"\bquantity\x18\x04 \x01(\x01R\bquantity\x12\x1f\n" +
+	"\vtotal_price\x18\x05 \x01(\x03R\n" +
+	"totalPrice\x12\x1a\n" +
+	"\bcurrency\x18\x06 \x01(\tR\bcurrency\x12\x1c\n" +
+	"\ttreatment\x18\a \x01(\tR\ttreatment2\x8b\a\n" +
 	"\x14RevenueDomainService\x12b\n" +
 	"\rCreateRevenue\x12'.domain.revenue.v1.CreateRevenueRequest\x1a(.domain.revenue.v1.CreateRevenueResponse\x12\\\n" +
 	"\vReadRevenue\x12%.domain.revenue.v1.ReadRevenueRequest\x1a&.domain.revenue.v1.ReadRevenueResponse\x12b\n" +
@@ -1361,7 +1675,7 @@ func file_domain_revenue_revenue_revenue_proto_rawDescGZIP() []byte {
 	return file_domain_revenue_revenue_revenue_proto_rawDescData
 }
 
-var file_domain_revenue_revenue_revenue_proto_msgTypes = make([]protoimpl.MessageInfo, 17)
+var file_domain_revenue_revenue_revenue_proto_msgTypes = make([]protoimpl.MessageInfo, 19)
 var file_domain_revenue_revenue_revenue_proto_goTypes = []any{
 	(*Revenue)(nil),                            // 0: domain.revenue.v1.Revenue
 	(*CreateRevenueRequest)(nil),               // 1: domain.revenue.v1.CreateRevenueRequest
@@ -1379,73 +1693,77 @@ var file_domain_revenue_revenue_revenue_proto_goTypes = []any{
 	(*GetRevenueItemPageDataRequest)(nil),      // 13: domain.revenue.v1.GetRevenueItemPageDataRequest
 	(*GetRevenueItemPageDataResponse)(nil),     // 14: domain.revenue.v1.GetRevenueItemPageDataResponse
 	(*CreateRevenueWithLineItemsRequest)(nil),  // 15: domain.revenue.v1.CreateRevenueWithLineItemsRequest
-	(*CreateRevenueWithLineItemsResponse)(nil), // 16: domain.revenue.v1.CreateRevenueWithLineItemsResponse
-	(*client.Client)(nil),                      // 17: domain.entity.v1.Client
-	(*location.Location)(nil),                  // 18: domain.entity.v1.Location
-	(*payment_term.PaymentTerm)(nil),           // 19: domain.entity.v1.PaymentTerm
-	(*common.Error)(nil),                       // 20: domain.common.v1.Error
-	(*common.SearchRequest)(nil),               // 21: domain.common.v1.SearchRequest
-	(*common.FilterRequest)(nil),               // 22: domain.common.v1.FilterRequest
-	(*common.SortRequest)(nil),                 // 23: domain.common.v1.SortRequest
-	(*common.PaginationRequest)(nil),           // 24: domain.common.v1.PaginationRequest
-	(*common.PaginationResponse)(nil),          // 25: domain.common.v1.PaginationResponse
-	(*common.SearchResult)(nil),                // 26: domain.common.v1.SearchResult
+	(*LineItemOverride)(nil),                   // 16: domain.revenue.v1.LineItemOverride
+	(*CreateRevenueWithLineItemsResponse)(nil), // 17: domain.revenue.v1.CreateRevenueWithLineItemsResponse
+	(*PreviewLineItem)(nil),                    // 18: domain.revenue.v1.PreviewLineItem
+	(*client.Client)(nil),                      // 19: domain.entity.v1.Client
+	(*location.Location)(nil),                  // 20: domain.entity.v1.Location
+	(*payment_term.PaymentTerm)(nil),           // 21: domain.entity.v1.PaymentTerm
+	(*common.Error)(nil),                       // 22: domain.common.v1.Error
+	(*common.SearchRequest)(nil),               // 23: domain.common.v1.SearchRequest
+	(*common.FilterRequest)(nil),               // 24: domain.common.v1.FilterRequest
+	(*common.SortRequest)(nil),                 // 25: domain.common.v1.SortRequest
+	(*common.PaginationRequest)(nil),           // 26: domain.common.v1.PaginationRequest
+	(*common.PaginationResponse)(nil),          // 27: domain.common.v1.PaginationResponse
+	(*common.SearchResult)(nil),                // 28: domain.common.v1.SearchResult
 }
 var file_domain_revenue_revenue_revenue_proto_depIdxs = []int32{
-	17, // 0: domain.revenue.v1.Revenue.client:type_name -> domain.entity.v1.Client
-	18, // 1: domain.revenue.v1.Revenue.location:type_name -> domain.entity.v1.Location
-	19, // 2: domain.revenue.v1.Revenue.payment_term:type_name -> domain.entity.v1.PaymentTerm
+	19, // 0: domain.revenue.v1.Revenue.client:type_name -> domain.entity.v1.Client
+	20, // 1: domain.revenue.v1.Revenue.location:type_name -> domain.entity.v1.Location
+	21, // 2: domain.revenue.v1.Revenue.payment_term:type_name -> domain.entity.v1.PaymentTerm
 	0,  // 3: domain.revenue.v1.CreateRevenueRequest.data:type_name -> domain.revenue.v1.Revenue
 	0,  // 4: domain.revenue.v1.CreateRevenueResponse.data:type_name -> domain.revenue.v1.Revenue
-	20, // 5: domain.revenue.v1.CreateRevenueResponse.error:type_name -> domain.common.v1.Error
+	22, // 5: domain.revenue.v1.CreateRevenueResponse.error:type_name -> domain.common.v1.Error
 	0,  // 6: domain.revenue.v1.ReadRevenueRequest.data:type_name -> domain.revenue.v1.Revenue
 	0,  // 7: domain.revenue.v1.ReadRevenueResponse.data:type_name -> domain.revenue.v1.Revenue
-	20, // 8: domain.revenue.v1.ReadRevenueResponse.error:type_name -> domain.common.v1.Error
+	22, // 8: domain.revenue.v1.ReadRevenueResponse.error:type_name -> domain.common.v1.Error
 	0,  // 9: domain.revenue.v1.UpdateRevenueRequest.data:type_name -> domain.revenue.v1.Revenue
 	0,  // 10: domain.revenue.v1.UpdateRevenueResponse.data:type_name -> domain.revenue.v1.Revenue
-	20, // 11: domain.revenue.v1.UpdateRevenueResponse.error:type_name -> domain.common.v1.Error
+	22, // 11: domain.revenue.v1.UpdateRevenueResponse.error:type_name -> domain.common.v1.Error
 	0,  // 12: domain.revenue.v1.DeleteRevenueRequest.data:type_name -> domain.revenue.v1.Revenue
-	20, // 13: domain.revenue.v1.DeleteRevenueResponse.error:type_name -> domain.common.v1.Error
-	21, // 14: domain.revenue.v1.ListRevenuesRequest.search:type_name -> domain.common.v1.SearchRequest
-	22, // 15: domain.revenue.v1.ListRevenuesRequest.filters:type_name -> domain.common.v1.FilterRequest
-	23, // 16: domain.revenue.v1.ListRevenuesRequest.sort:type_name -> domain.common.v1.SortRequest
-	24, // 17: domain.revenue.v1.ListRevenuesRequest.pagination:type_name -> domain.common.v1.PaginationRequest
+	22, // 13: domain.revenue.v1.DeleteRevenueResponse.error:type_name -> domain.common.v1.Error
+	23, // 14: domain.revenue.v1.ListRevenuesRequest.search:type_name -> domain.common.v1.SearchRequest
+	24, // 15: domain.revenue.v1.ListRevenuesRequest.filters:type_name -> domain.common.v1.FilterRequest
+	25, // 16: domain.revenue.v1.ListRevenuesRequest.sort:type_name -> domain.common.v1.SortRequest
+	26, // 17: domain.revenue.v1.ListRevenuesRequest.pagination:type_name -> domain.common.v1.PaginationRequest
 	0,  // 18: domain.revenue.v1.ListRevenuesResponse.data:type_name -> domain.revenue.v1.Revenue
-	20, // 19: domain.revenue.v1.ListRevenuesResponse.error:type_name -> domain.common.v1.Error
-	24, // 20: domain.revenue.v1.GetRevenueListPageDataRequest.pagination:type_name -> domain.common.v1.PaginationRequest
-	22, // 21: domain.revenue.v1.GetRevenueListPageDataRequest.filters:type_name -> domain.common.v1.FilterRequest
-	23, // 22: domain.revenue.v1.GetRevenueListPageDataRequest.sort:type_name -> domain.common.v1.SortRequest
-	21, // 23: domain.revenue.v1.GetRevenueListPageDataRequest.search:type_name -> domain.common.v1.SearchRequest
+	22, // 19: domain.revenue.v1.ListRevenuesResponse.error:type_name -> domain.common.v1.Error
+	26, // 20: domain.revenue.v1.GetRevenueListPageDataRequest.pagination:type_name -> domain.common.v1.PaginationRequest
+	24, // 21: domain.revenue.v1.GetRevenueListPageDataRequest.filters:type_name -> domain.common.v1.FilterRequest
+	25, // 22: domain.revenue.v1.GetRevenueListPageDataRequest.sort:type_name -> domain.common.v1.SortRequest
+	23, // 23: domain.revenue.v1.GetRevenueListPageDataRequest.search:type_name -> domain.common.v1.SearchRequest
 	0,  // 24: domain.revenue.v1.GetRevenueListPageDataResponse.revenue_list:type_name -> domain.revenue.v1.Revenue
-	25, // 25: domain.revenue.v1.GetRevenueListPageDataResponse.pagination:type_name -> domain.common.v1.PaginationResponse
-	26, // 26: domain.revenue.v1.GetRevenueListPageDataResponse.search_results:type_name -> domain.common.v1.SearchResult
-	20, // 27: domain.revenue.v1.GetRevenueListPageDataResponse.error:type_name -> domain.common.v1.Error
+	27, // 25: domain.revenue.v1.GetRevenueListPageDataResponse.pagination:type_name -> domain.common.v1.PaginationResponse
+	28, // 26: domain.revenue.v1.GetRevenueListPageDataResponse.search_results:type_name -> domain.common.v1.SearchResult
+	22, // 27: domain.revenue.v1.GetRevenueListPageDataResponse.error:type_name -> domain.common.v1.Error
 	0,  // 28: domain.revenue.v1.GetRevenueItemPageDataResponse.revenue:type_name -> domain.revenue.v1.Revenue
-	20, // 29: domain.revenue.v1.GetRevenueItemPageDataResponse.error:type_name -> domain.common.v1.Error
+	22, // 29: domain.revenue.v1.GetRevenueItemPageDataResponse.error:type_name -> domain.common.v1.Error
 	0,  // 30: domain.revenue.v1.CreateRevenueWithLineItemsRequest.data:type_name -> domain.revenue.v1.Revenue
-	0,  // 31: domain.revenue.v1.CreateRevenueWithLineItemsResponse.data:type_name -> domain.revenue.v1.Revenue
-	20, // 32: domain.revenue.v1.CreateRevenueWithLineItemsResponse.error:type_name -> domain.common.v1.Error
-	1,  // 33: domain.revenue.v1.RevenueDomainService.CreateRevenue:input_type -> domain.revenue.v1.CreateRevenueRequest
-	3,  // 34: domain.revenue.v1.RevenueDomainService.ReadRevenue:input_type -> domain.revenue.v1.ReadRevenueRequest
-	5,  // 35: domain.revenue.v1.RevenueDomainService.UpdateRevenue:input_type -> domain.revenue.v1.UpdateRevenueRequest
-	7,  // 36: domain.revenue.v1.RevenueDomainService.DeleteRevenue:input_type -> domain.revenue.v1.DeleteRevenueRequest
-	9,  // 37: domain.revenue.v1.RevenueDomainService.ListRevenues:input_type -> domain.revenue.v1.ListRevenuesRequest
-	11, // 38: domain.revenue.v1.RevenueDomainService.GetRevenueListPageData:input_type -> domain.revenue.v1.GetRevenueListPageDataRequest
-	13, // 39: domain.revenue.v1.RevenueDomainService.GetRevenueItemPageData:input_type -> domain.revenue.v1.GetRevenueItemPageDataRequest
-	15, // 40: domain.revenue.v1.RevenueDomainService.CreateRevenueWithLineItems:input_type -> domain.revenue.v1.CreateRevenueWithLineItemsRequest
-	2,  // 41: domain.revenue.v1.RevenueDomainService.CreateRevenue:output_type -> domain.revenue.v1.CreateRevenueResponse
-	4,  // 42: domain.revenue.v1.RevenueDomainService.ReadRevenue:output_type -> domain.revenue.v1.ReadRevenueResponse
-	6,  // 43: domain.revenue.v1.RevenueDomainService.UpdateRevenue:output_type -> domain.revenue.v1.UpdateRevenueResponse
-	8,  // 44: domain.revenue.v1.RevenueDomainService.DeleteRevenue:output_type -> domain.revenue.v1.DeleteRevenueResponse
-	10, // 45: domain.revenue.v1.RevenueDomainService.ListRevenues:output_type -> domain.revenue.v1.ListRevenuesResponse
-	12, // 46: domain.revenue.v1.RevenueDomainService.GetRevenueListPageData:output_type -> domain.revenue.v1.GetRevenueListPageDataResponse
-	14, // 47: domain.revenue.v1.RevenueDomainService.GetRevenueItemPageData:output_type -> domain.revenue.v1.GetRevenueItemPageDataResponse
-	16, // 48: domain.revenue.v1.RevenueDomainService.CreateRevenueWithLineItems:output_type -> domain.revenue.v1.CreateRevenueWithLineItemsResponse
-	41, // [41:49] is the sub-list for method output_type
-	33, // [33:41] is the sub-list for method input_type
-	33, // [33:33] is the sub-list for extension type_name
-	33, // [33:33] is the sub-list for extension extendee
-	0,  // [0:33] is the sub-list for field type_name
+	16, // 31: domain.revenue.v1.CreateRevenueWithLineItemsRequest.overrides:type_name -> domain.revenue.v1.LineItemOverride
+	0,  // 32: domain.revenue.v1.CreateRevenueWithLineItemsResponse.data:type_name -> domain.revenue.v1.Revenue
+	22, // 33: domain.revenue.v1.CreateRevenueWithLineItemsResponse.error:type_name -> domain.common.v1.Error
+	18, // 34: domain.revenue.v1.CreateRevenueWithLineItemsResponse.preview_lines:type_name -> domain.revenue.v1.PreviewLineItem
+	1,  // 35: domain.revenue.v1.RevenueDomainService.CreateRevenue:input_type -> domain.revenue.v1.CreateRevenueRequest
+	3,  // 36: domain.revenue.v1.RevenueDomainService.ReadRevenue:input_type -> domain.revenue.v1.ReadRevenueRequest
+	5,  // 37: domain.revenue.v1.RevenueDomainService.UpdateRevenue:input_type -> domain.revenue.v1.UpdateRevenueRequest
+	7,  // 38: domain.revenue.v1.RevenueDomainService.DeleteRevenue:input_type -> domain.revenue.v1.DeleteRevenueRequest
+	9,  // 39: domain.revenue.v1.RevenueDomainService.ListRevenues:input_type -> domain.revenue.v1.ListRevenuesRequest
+	11, // 40: domain.revenue.v1.RevenueDomainService.GetRevenueListPageData:input_type -> domain.revenue.v1.GetRevenueListPageDataRequest
+	13, // 41: domain.revenue.v1.RevenueDomainService.GetRevenueItemPageData:input_type -> domain.revenue.v1.GetRevenueItemPageDataRequest
+	15, // 42: domain.revenue.v1.RevenueDomainService.CreateRevenueWithLineItems:input_type -> domain.revenue.v1.CreateRevenueWithLineItemsRequest
+	2,  // 43: domain.revenue.v1.RevenueDomainService.CreateRevenue:output_type -> domain.revenue.v1.CreateRevenueResponse
+	4,  // 44: domain.revenue.v1.RevenueDomainService.ReadRevenue:output_type -> domain.revenue.v1.ReadRevenueResponse
+	6,  // 45: domain.revenue.v1.RevenueDomainService.UpdateRevenue:output_type -> domain.revenue.v1.UpdateRevenueResponse
+	8,  // 46: domain.revenue.v1.RevenueDomainService.DeleteRevenue:output_type -> domain.revenue.v1.DeleteRevenueResponse
+	10, // 47: domain.revenue.v1.RevenueDomainService.ListRevenues:output_type -> domain.revenue.v1.ListRevenuesResponse
+	12, // 48: domain.revenue.v1.RevenueDomainService.GetRevenueListPageData:output_type -> domain.revenue.v1.GetRevenueListPageDataResponse
+	14, // 49: domain.revenue.v1.RevenueDomainService.GetRevenueItemPageData:output_type -> domain.revenue.v1.GetRevenueItemPageDataResponse
+	17, // 50: domain.revenue.v1.RevenueDomainService.CreateRevenueWithLineItems:output_type -> domain.revenue.v1.CreateRevenueWithLineItemsResponse
+	43, // [43:51] is the sub-list for method output_type
+	35, // [35:43] is the sub-list for method input_type
+	35, // [35:35] is the sub-list for extension type_name
+	35, // [35:35] is the sub-list for extension extendee
+	0,  // [0:35] is the sub-list for field type_name
 }
 
 func init() { file_domain_revenue_revenue_revenue_proto_init() }
@@ -1465,13 +1783,14 @@ func file_domain_revenue_revenue_revenue_proto_init() {
 	file_domain_revenue_revenue_revenue_proto_msgTypes[14].OneofWrappers = []any{}
 	file_domain_revenue_revenue_revenue_proto_msgTypes[15].OneofWrappers = []any{}
 	file_domain_revenue_revenue_revenue_proto_msgTypes[16].OneofWrappers = []any{}
+	file_domain_revenue_revenue_revenue_proto_msgTypes[17].OneofWrappers = []any{}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
 		File: protoimpl.DescBuilder{
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_domain_revenue_revenue_revenue_proto_rawDesc), len(file_domain_revenue_revenue_revenue_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   17,
+			NumMessages:   19,
 			NumExtensions: 0,
 			NumServices:   1,
 		},

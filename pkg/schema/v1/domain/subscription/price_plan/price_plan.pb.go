@@ -143,8 +143,11 @@ type PricePlan struct {
 	BillingAmount      int64                  `protobuf:"varint,11,opt,name=billing_amount,json=billingAmount,proto3" json:"billing_amount,omitempty"`      // centavos — charged to the client in billing_currency
 	BillingCurrency    string                 `protobuf:"bytes,12,opt,name=billing_currency,json=billingCurrency,proto3" json:"billing_currency,omitempty"` // ISO 4217 currency code — what the client is billed in
 	// DEPRECATED: migrate to billing_cycle_* and default_term_* — see docs/plan/20260421-pricing-unification/plan.md
-	DurationValue int32  `protobuf:"varint,13,opt,name=duration_value,json=durationValue,proto3" json:"duration_value,omitempty"`
-	DurationUnit  string `protobuf:"bytes,14,opt,name=duration_unit,json=durationUnit,proto3" json:"duration_unit,omitempty"`
+	// Now optional: BILLING_KIND_ONE_TIME plans hide the cycle row in the UI, so the legacy
+	// duration_value/unit dual-write input can be empty. Column NULL-ability follows the proto
+	// (migration 20260425150000_price_plan_duration_value_nullable).
+	DurationValue *int32  `protobuf:"varint,13,opt,name=duration_value,json=durationValue,proto3,oneof" json:"duration_value,omitempty"`
+	DurationUnit  *string `protobuf:"bytes,14,opt,name=duration_unit,json=durationUnit,proto3,oneof" json:"duration_unit,omitempty"`
 	// Email template paths/URLs for dynamic email rendering
 	ConfirmationTemplate *string `protobuf:"bytes,15,opt,name=confirmation_template,json=confirmationTemplate,proto3,oneof" json:"confirmation_template,omitempty"` // Template for welcome/confirmation emails (first payment)
 	ReceiptTemplate      *string `protobuf:"bytes,16,opt,name=receipt_template,json=receiptTemplate,proto3,oneof" json:"receipt_template,omitempty"`                // Template for receipt emails (recurring payments)
@@ -278,15 +281,15 @@ func (x *PricePlan) GetBillingCurrency() string {
 }
 
 func (x *PricePlan) GetDurationValue() int32 {
-	if x != nil {
-		return x.DurationValue
+	if x != nil && x.DurationValue != nil {
+		return *x.DurationValue
 	}
 	return 0
 }
 
 func (x *PricePlan) GetDurationUnit() string {
-	if x != nil {
-		return x.DurationUnit
+	if x != nil && x.DurationUnit != nil {
+		return *x.DurationUnit
 	}
 	return ""
 }
@@ -1142,8 +1145,7 @@ var File_domain_subscription_price_plan_price_plan_proto protoreflect.FileDescri
 
 const file_domain_subscription_price_plan_price_plan_proto_rawDesc = "" +
 	"\n" +
-	"/domain/subscription/price_plan/price_plan.proto\x12\x16domain.subscription.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/search.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a#domain/subscription/plan/plan.proto\x1a\x10options/db.proto\"\xe7\n" +
-	"\n" +
+	"/domain/subscription/price_plan/price_plan.proto\x12\x16domain.subscription.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/search.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a#domain/subscription/plan/plan.proto\x1a\x10options/db.proto\"\x96\v\n" +
 	"\tPricePlan\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x125\n" +
 	"\x04plan\x18\x02 \x01(\v2\x1c.domain.subscription.v1.PlanH\x00R\x04plan\x88\x01\x01\x12%\n" +
@@ -1159,27 +1161,29 @@ const file_domain_subscription_price_plan_price_plan_proto_rawDesc = "" +
 	" \x01(\bB\n" +
 	"\x82\xb5\x18\x06\"\x04trueR\x06active\x12%\n" +
 	"\x0ebilling_amount\x18\v \x01(\x03R\rbillingAmount\x12)\n" +
-	"\x10billing_currency\x18\f \x01(\tR\x0fbillingCurrency\x12%\n" +
-	"\x0eduration_value\x18\r \x01(\x05R\rdurationValue\x12#\n" +
-	"\rduration_unit\x18\x0e \x01(\tR\fdurationUnit\x128\n" +
-	"\x15confirmation_template\x18\x0f \x01(\tH\aR\x14confirmationTemplate\x88\x01\x01\x12.\n" +
-	"\x10receipt_template\x18\x10 \x01(\tH\bR\x0freceiptTemplate\x88\x01\x01\x12G\n" +
+	"\x10billing_currency\x18\f \x01(\tR\x0fbillingCurrency\x12*\n" +
+	"\x0eduration_value\x18\r \x01(\x05H\aR\rdurationValue\x88\x01\x01\x12(\n" +
+	"\rduration_unit\x18\x0e \x01(\tH\bR\fdurationUnit\x88\x01\x01\x128\n" +
+	"\x15confirmation_template\x18\x0f \x01(\tH\tR\x14confirmationTemplate\x88\x01\x01\x12.\n" +
+	"\x10receipt_template\x18\x10 \x01(\tH\n" +
+	"R\x0freceiptTemplate\x88\x01\x01\x12G\n" +
 	"\x11price_schedule_id\x18\x12 \x01(\tB\x16\x82\xb5\x18\x12\n" +
-	"\x0eprice_schedule\x18\x01H\tR\x0fpriceScheduleId\x88\x01\x01\x12F\n" +
+	"\x0eprice_schedule\x18\x01H\vR\x0fpriceScheduleId\x88\x01\x01\x12F\n" +
 	"\fbilling_kind\x18\x13 \x01(\x0e2#.domain.subscription.v1.BillingKindR\vbillingKind\x12F\n" +
 	"\famount_basis\x18\x14 \x01(\x0e2#.domain.subscription.v1.AmountBasisR\vamountBasis\x123\n" +
-	"\x13billing_cycle_value\x18\x15 \x01(\x05H\n" +
-	"R\x11billingCycleValue\x88\x01\x01\x121\n" +
-	"\x12billing_cycle_unit\x18\x16 \x01(\tH\vR\x10billingCycleUnit\x88\x01\x01\x121\n" +
-	"\x12default_term_value\x18\x17 \x01(\x05H\fR\x10defaultTermValue\x88\x01\x01\x12/\n" +
-	"\x11default_term_unit\x18\x18 \x01(\tH\rR\x0fdefaultTermUnit\x88\x01\x01:\x06\x8a\xb5\x18\x02\b\x01B\a\n" +
+	"\x13billing_cycle_value\x18\x15 \x01(\x05H\fR\x11billingCycleValue\x88\x01\x01\x121\n" +
+	"\x12billing_cycle_unit\x18\x16 \x01(\tH\rR\x10billingCycleUnit\x88\x01\x01\x121\n" +
+	"\x12default_term_value\x18\x17 \x01(\x05H\x0eR\x10defaultTermValue\x88\x01\x01\x12/\n" +
+	"\x11default_term_unit\x18\x18 \x01(\tH\x0fR\x0fdefaultTermUnit\x88\x01\x01:\x06\x8a\xb5\x18\x02\b\x01B\a\n" +
 	"\x05_planB\a\n" +
 	"\x05_nameB\x0e\n" +
 	"\f_descriptionB\x0f\n" +
 	"\r_date_createdB\x16\n" +
 	"\x14_date_created_stringB\x10\n" +
 	"\x0e_date_modifiedB\x17\n" +
-	"\x15_date_modified_stringB\x18\n" +
+	"\x15_date_modified_stringB\x11\n" +
+	"\x0f_duration_valueB\x10\n" +
+	"\x0e_duration_unitB\x18\n" +
 	"\x16_confirmation_templateB\x13\n" +
 	"\x11_receipt_templateB\x14\n" +
 	"\x12_price_schedule_idB\x16\n" +

@@ -11,6 +11,7 @@ import (
 	_ "github.com/erniealice/esqyma/pkg/schema/v1/options"
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
+	timestamppb "google.golang.org/protobuf/types/known/timestamppb"
 	reflect "reflect"
 	sync "sync"
 	unsafe "unsafe"
@@ -33,8 +34,8 @@ type PriceSchedule struct {
 	Active             bool                   `protobuf:"varint,6,opt,name=active,proto3" json:"active,omitempty"`
 	Name               string                 `protobuf:"bytes,7,opt,name=name,proto3" json:"name,omitempty"`
 	Description        *string                `protobuf:"bytes,8,opt,name=description,proto3,oneof" json:"description,omitempty"`
-	DateStart          string                 `protobuf:"bytes,9,opt,name=date_start,json=dateStart,proto3" json:"date_start,omitempty"`  // ISO 8601 date (YYYY-MM-DD)
-	DateEnd            *string                `protobuf:"bytes,10,opt,name=date_end,json=dateEnd,proto3,oneof" json:"date_end,omitempty"` // ISO 8601 date (YYYY-MM-DD)
+	DateTimeStart      *timestamppb.Timestamp `protobuf:"bytes,9,opt,name=date_time_start,json=dateTimeStart,proto3" json:"date_time_start,omitempty"`  // UTC timestamp; display TZ resolved per-request
+	DateTimeEnd        *timestamppb.Timestamp `protobuf:"bytes,10,opt,name=date_time_end,json=dateTimeEnd,proto3,oneof" json:"date_time_end,omitempty"` // UTC timestamp; nil = open-ended
 	LocationId         *string                `protobuf:"bytes,11,opt,name=location_id,json=locationId,proto3,oneof" json:"location_id,omitempty"`
 	unknownFields      protoimpl.UnknownFields
 	sizeCache          protoimpl.SizeCache
@@ -126,18 +127,18 @@ func (x *PriceSchedule) GetDescription() string {
 	return ""
 }
 
-func (x *PriceSchedule) GetDateStart() string {
+func (x *PriceSchedule) GetDateTimeStart() *timestamppb.Timestamp {
 	if x != nil {
-		return x.DateStart
+		return x.DateTimeStart
 	}
-	return ""
+	return nil
 }
 
-func (x *PriceSchedule) GetDateEnd() string {
-	if x != nil && x.DateEnd != nil {
-		return *x.DateEnd
+func (x *PriceSchedule) GetDateTimeEnd() *timestamppb.Timestamp {
+	if x != nil {
+		return x.DateTimeEnd
 	}
-	return ""
+	return nil
 }
 
 func (x *PriceSchedule) GetLocationId() string {
@@ -1055,7 +1056,7 @@ var File_domain_subscription_price_schedule_price_schedule_proto protoreflect.Fi
 
 const file_domain_subscription_price_schedule_price_schedule_proto_rawDesc = "" +
 	"\n" +
-	"7domain/subscription/price_schedule/price_schedule.proto\x12\x16domain.subscription.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/search.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x10options/db.proto\"\xbc\x04\n" +
+	"7domain/subscription/price_schedule/price_schedule.proto\x12\x16domain.subscription.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/search.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x10options/db.proto\x1a\x1fgoogle/protobuf/timestamp.proto\"\x8b\x05\n" +
 	"\rPriceSchedule\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12&\n" +
 	"\fdate_created\x18\x02 \x01(\x03H\x00R\vdateCreated\x88\x01\x01\x123\n" +
@@ -1065,11 +1066,10 @@ const file_domain_subscription_price_schedule_price_schedule_proto_rawDesc = "" 
 	"\x06active\x18\x06 \x01(\bB\n" +
 	"\x82\xb5\x18\x06\"\x04trueR\x06active\x12\x12\n" +
 	"\x04name\x18\a \x01(\tR\x04name\x12%\n" +
-	"\vdescription\x18\b \x01(\tH\x04R\vdescription\x88\x01\x01\x12\x1d\n" +
-	"\n" +
-	"date_start\x18\t \x01(\tR\tdateStart\x12\x1e\n" +
-	"\bdate_end\x18\n" +
-	" \x01(\tH\x05R\adateEnd\x88\x01\x01\x126\n" +
+	"\vdescription\x18\b \x01(\tH\x04R\vdescription\x88\x01\x01\x12B\n" +
+	"\x0fdate_time_start\x18\t \x01(\v2\x1a.google.protobuf.TimestampR\rdateTimeStart\x12C\n" +
+	"\rdate_time_end\x18\n" +
+	" \x01(\v2\x1a.google.protobuf.TimestampH\x05R\vdateTimeEnd\x88\x01\x01\x126\n" +
 	"\vlocation_id\x18\v \x01(\tB\x10\x82\xb5\x18\f\n" +
 	"\blocation\x18\x01H\x06R\n" +
 	"locationId\x88\x01\x01:\x06\x8a\xb5\x18\x02\b\x01B\x0f\n" +
@@ -1077,8 +1077,8 @@ const file_domain_subscription_price_schedule_price_schedule_proto_rawDesc = "" 
 	"\x14_date_created_stringB\x10\n" +
 	"\x0e_date_modifiedB\x17\n" +
 	"\x15_date_modified_stringB\x0e\n" +
-	"\f_descriptionB\v\n" +
-	"\t_date_endB\x0e\n" +
+	"\f_descriptionB\x10\n" +
+	"\x0e_date_time_endB\x0e\n" +
 	"\f_location_id\"W\n" +
 	"\x1aCreatePriceScheduleRequest\x129\n" +
 	"\x04data\x18\x01 \x01(\v2%.domain.subscription.v1.PriceScheduleR\x04data\"\xb0\x01\n" +
@@ -1207,65 +1207,68 @@ var file_domain_subscription_price_schedule_price_schedule_proto_goTypes = []any
 	(*GetPriceScheduleItemPageDataResponse)(nil), // 14: domain.subscription.v1.GetPriceScheduleItemPageDataResponse
 	(*FindApplicablePriceScheduleRequest)(nil),   // 15: domain.subscription.v1.FindApplicablePriceScheduleRequest
 	(*FindApplicablePriceScheduleResponse)(nil),  // 16: domain.subscription.v1.FindApplicablePriceScheduleResponse
-	(*common.Error)(nil),                         // 17: domain.common.v1.Error
-	(*common.SearchRequest)(nil),                 // 18: domain.common.v1.SearchRequest
-	(*common.FilterRequest)(nil),                 // 19: domain.common.v1.FilterRequest
-	(*common.SortRequest)(nil),                   // 20: domain.common.v1.SortRequest
-	(*common.PaginationRequest)(nil),             // 21: domain.common.v1.PaginationRequest
-	(*common.PaginationResponse)(nil),            // 22: domain.common.v1.PaginationResponse
-	(*common.SearchResult)(nil),                  // 23: domain.common.v1.SearchResult
+	(*timestamppb.Timestamp)(nil),                // 17: google.protobuf.Timestamp
+	(*common.Error)(nil),                         // 18: domain.common.v1.Error
+	(*common.SearchRequest)(nil),                 // 19: domain.common.v1.SearchRequest
+	(*common.FilterRequest)(nil),                 // 20: domain.common.v1.FilterRequest
+	(*common.SortRequest)(nil),                   // 21: domain.common.v1.SortRequest
+	(*common.PaginationRequest)(nil),             // 22: domain.common.v1.PaginationRequest
+	(*common.PaginationResponse)(nil),            // 23: domain.common.v1.PaginationResponse
+	(*common.SearchResult)(nil),                  // 24: domain.common.v1.SearchResult
 }
 var file_domain_subscription_price_schedule_price_schedule_proto_depIdxs = []int32{
-	0,  // 0: domain.subscription.v1.CreatePriceScheduleRequest.data:type_name -> domain.subscription.v1.PriceSchedule
-	0,  // 1: domain.subscription.v1.CreatePriceScheduleResponse.data:type_name -> domain.subscription.v1.PriceSchedule
-	17, // 2: domain.subscription.v1.CreatePriceScheduleResponse.error:type_name -> domain.common.v1.Error
-	0,  // 3: domain.subscription.v1.ReadPriceScheduleRequest.data:type_name -> domain.subscription.v1.PriceSchedule
-	0,  // 4: domain.subscription.v1.ReadPriceScheduleResponse.data:type_name -> domain.subscription.v1.PriceSchedule
-	17, // 5: domain.subscription.v1.ReadPriceScheduleResponse.error:type_name -> domain.common.v1.Error
-	0,  // 6: domain.subscription.v1.UpdatePriceScheduleRequest.data:type_name -> domain.subscription.v1.PriceSchedule
-	0,  // 7: domain.subscription.v1.UpdatePriceScheduleResponse.data:type_name -> domain.subscription.v1.PriceSchedule
-	17, // 8: domain.subscription.v1.UpdatePriceScheduleResponse.error:type_name -> domain.common.v1.Error
-	0,  // 9: domain.subscription.v1.DeletePriceScheduleRequest.data:type_name -> domain.subscription.v1.PriceSchedule
-	17, // 10: domain.subscription.v1.DeletePriceScheduleResponse.error:type_name -> domain.common.v1.Error
-	18, // 11: domain.subscription.v1.ListPriceSchedulesRequest.search:type_name -> domain.common.v1.SearchRequest
-	19, // 12: domain.subscription.v1.ListPriceSchedulesRequest.filters:type_name -> domain.common.v1.FilterRequest
-	20, // 13: domain.subscription.v1.ListPriceSchedulesRequest.sort:type_name -> domain.common.v1.SortRequest
-	21, // 14: domain.subscription.v1.ListPriceSchedulesRequest.pagination:type_name -> domain.common.v1.PaginationRequest
-	0,  // 15: domain.subscription.v1.ListPriceSchedulesResponse.data:type_name -> domain.subscription.v1.PriceSchedule
-	17, // 16: domain.subscription.v1.ListPriceSchedulesResponse.error:type_name -> domain.common.v1.Error
-	21, // 17: domain.subscription.v1.GetPriceScheduleListPageDataRequest.pagination:type_name -> domain.common.v1.PaginationRequest
-	19, // 18: domain.subscription.v1.GetPriceScheduleListPageDataRequest.filters:type_name -> domain.common.v1.FilterRequest
-	20, // 19: domain.subscription.v1.GetPriceScheduleListPageDataRequest.sort:type_name -> domain.common.v1.SortRequest
-	18, // 20: domain.subscription.v1.GetPriceScheduleListPageDataRequest.search:type_name -> domain.common.v1.SearchRequest
-	0,  // 21: domain.subscription.v1.GetPriceScheduleListPageDataResponse.price_schedule_list:type_name -> domain.subscription.v1.PriceSchedule
-	17, // 22: domain.subscription.v1.GetPriceScheduleListPageDataResponse.error:type_name -> domain.common.v1.Error
-	22, // 23: domain.subscription.v1.GetPriceScheduleListPageDataResponse.pagination:type_name -> domain.common.v1.PaginationResponse
-	23, // 24: domain.subscription.v1.GetPriceScheduleListPageDataResponse.search_results:type_name -> domain.common.v1.SearchResult
-	0,  // 25: domain.subscription.v1.GetPriceScheduleItemPageDataResponse.price_schedule:type_name -> domain.subscription.v1.PriceSchedule
-	17, // 26: domain.subscription.v1.GetPriceScheduleItemPageDataResponse.error:type_name -> domain.common.v1.Error
-	0,  // 27: domain.subscription.v1.FindApplicablePriceScheduleResponse.price_schedule:type_name -> domain.subscription.v1.PriceSchedule
-	17, // 28: domain.subscription.v1.FindApplicablePriceScheduleResponse.error:type_name -> domain.common.v1.Error
-	1,  // 29: domain.subscription.v1.PriceScheduleDomainService.CreatePriceSchedule:input_type -> domain.subscription.v1.CreatePriceScheduleRequest
-	3,  // 30: domain.subscription.v1.PriceScheduleDomainService.ReadPriceSchedule:input_type -> domain.subscription.v1.ReadPriceScheduleRequest
-	5,  // 31: domain.subscription.v1.PriceScheduleDomainService.UpdatePriceSchedule:input_type -> domain.subscription.v1.UpdatePriceScheduleRequest
-	7,  // 32: domain.subscription.v1.PriceScheduleDomainService.DeletePriceSchedule:input_type -> domain.subscription.v1.DeletePriceScheduleRequest
-	9,  // 33: domain.subscription.v1.PriceScheduleDomainService.ListPriceSchedules:input_type -> domain.subscription.v1.ListPriceSchedulesRequest
-	11, // 34: domain.subscription.v1.PriceScheduleDomainService.GetPriceScheduleListPageData:input_type -> domain.subscription.v1.GetPriceScheduleListPageDataRequest
-	13, // 35: domain.subscription.v1.PriceScheduleDomainService.GetPriceScheduleItemPageData:input_type -> domain.subscription.v1.GetPriceScheduleItemPageDataRequest
-	15, // 36: domain.subscription.v1.PriceScheduleDomainService.FindApplicablePriceSchedule:input_type -> domain.subscription.v1.FindApplicablePriceScheduleRequest
-	2,  // 37: domain.subscription.v1.PriceScheduleDomainService.CreatePriceSchedule:output_type -> domain.subscription.v1.CreatePriceScheduleResponse
-	4,  // 38: domain.subscription.v1.PriceScheduleDomainService.ReadPriceSchedule:output_type -> domain.subscription.v1.ReadPriceScheduleResponse
-	6,  // 39: domain.subscription.v1.PriceScheduleDomainService.UpdatePriceSchedule:output_type -> domain.subscription.v1.UpdatePriceScheduleResponse
-	8,  // 40: domain.subscription.v1.PriceScheduleDomainService.DeletePriceSchedule:output_type -> domain.subscription.v1.DeletePriceScheduleResponse
-	10, // 41: domain.subscription.v1.PriceScheduleDomainService.ListPriceSchedules:output_type -> domain.subscription.v1.ListPriceSchedulesResponse
-	12, // 42: domain.subscription.v1.PriceScheduleDomainService.GetPriceScheduleListPageData:output_type -> domain.subscription.v1.GetPriceScheduleListPageDataResponse
-	14, // 43: domain.subscription.v1.PriceScheduleDomainService.GetPriceScheduleItemPageData:output_type -> domain.subscription.v1.GetPriceScheduleItemPageDataResponse
-	16, // 44: domain.subscription.v1.PriceScheduleDomainService.FindApplicablePriceSchedule:output_type -> domain.subscription.v1.FindApplicablePriceScheduleResponse
-	37, // [37:45] is the sub-list for method output_type
-	29, // [29:37] is the sub-list for method input_type
-	29, // [29:29] is the sub-list for extension type_name
-	29, // [29:29] is the sub-list for extension extendee
-	0,  // [0:29] is the sub-list for field type_name
+	17, // 0: domain.subscription.v1.PriceSchedule.date_time_start:type_name -> google.protobuf.Timestamp
+	17, // 1: domain.subscription.v1.PriceSchedule.date_time_end:type_name -> google.protobuf.Timestamp
+	0,  // 2: domain.subscription.v1.CreatePriceScheduleRequest.data:type_name -> domain.subscription.v1.PriceSchedule
+	0,  // 3: domain.subscription.v1.CreatePriceScheduleResponse.data:type_name -> domain.subscription.v1.PriceSchedule
+	18, // 4: domain.subscription.v1.CreatePriceScheduleResponse.error:type_name -> domain.common.v1.Error
+	0,  // 5: domain.subscription.v1.ReadPriceScheduleRequest.data:type_name -> domain.subscription.v1.PriceSchedule
+	0,  // 6: domain.subscription.v1.ReadPriceScheduleResponse.data:type_name -> domain.subscription.v1.PriceSchedule
+	18, // 7: domain.subscription.v1.ReadPriceScheduleResponse.error:type_name -> domain.common.v1.Error
+	0,  // 8: domain.subscription.v1.UpdatePriceScheduleRequest.data:type_name -> domain.subscription.v1.PriceSchedule
+	0,  // 9: domain.subscription.v1.UpdatePriceScheduleResponse.data:type_name -> domain.subscription.v1.PriceSchedule
+	18, // 10: domain.subscription.v1.UpdatePriceScheduleResponse.error:type_name -> domain.common.v1.Error
+	0,  // 11: domain.subscription.v1.DeletePriceScheduleRequest.data:type_name -> domain.subscription.v1.PriceSchedule
+	18, // 12: domain.subscription.v1.DeletePriceScheduleResponse.error:type_name -> domain.common.v1.Error
+	19, // 13: domain.subscription.v1.ListPriceSchedulesRequest.search:type_name -> domain.common.v1.SearchRequest
+	20, // 14: domain.subscription.v1.ListPriceSchedulesRequest.filters:type_name -> domain.common.v1.FilterRequest
+	21, // 15: domain.subscription.v1.ListPriceSchedulesRequest.sort:type_name -> domain.common.v1.SortRequest
+	22, // 16: domain.subscription.v1.ListPriceSchedulesRequest.pagination:type_name -> domain.common.v1.PaginationRequest
+	0,  // 17: domain.subscription.v1.ListPriceSchedulesResponse.data:type_name -> domain.subscription.v1.PriceSchedule
+	18, // 18: domain.subscription.v1.ListPriceSchedulesResponse.error:type_name -> domain.common.v1.Error
+	22, // 19: domain.subscription.v1.GetPriceScheduleListPageDataRequest.pagination:type_name -> domain.common.v1.PaginationRequest
+	20, // 20: domain.subscription.v1.GetPriceScheduleListPageDataRequest.filters:type_name -> domain.common.v1.FilterRequest
+	21, // 21: domain.subscription.v1.GetPriceScheduleListPageDataRequest.sort:type_name -> domain.common.v1.SortRequest
+	19, // 22: domain.subscription.v1.GetPriceScheduleListPageDataRequest.search:type_name -> domain.common.v1.SearchRequest
+	0,  // 23: domain.subscription.v1.GetPriceScheduleListPageDataResponse.price_schedule_list:type_name -> domain.subscription.v1.PriceSchedule
+	18, // 24: domain.subscription.v1.GetPriceScheduleListPageDataResponse.error:type_name -> domain.common.v1.Error
+	23, // 25: domain.subscription.v1.GetPriceScheduleListPageDataResponse.pagination:type_name -> domain.common.v1.PaginationResponse
+	24, // 26: domain.subscription.v1.GetPriceScheduleListPageDataResponse.search_results:type_name -> domain.common.v1.SearchResult
+	0,  // 27: domain.subscription.v1.GetPriceScheduleItemPageDataResponse.price_schedule:type_name -> domain.subscription.v1.PriceSchedule
+	18, // 28: domain.subscription.v1.GetPriceScheduleItemPageDataResponse.error:type_name -> domain.common.v1.Error
+	0,  // 29: domain.subscription.v1.FindApplicablePriceScheduleResponse.price_schedule:type_name -> domain.subscription.v1.PriceSchedule
+	18, // 30: domain.subscription.v1.FindApplicablePriceScheduleResponse.error:type_name -> domain.common.v1.Error
+	1,  // 31: domain.subscription.v1.PriceScheduleDomainService.CreatePriceSchedule:input_type -> domain.subscription.v1.CreatePriceScheduleRequest
+	3,  // 32: domain.subscription.v1.PriceScheduleDomainService.ReadPriceSchedule:input_type -> domain.subscription.v1.ReadPriceScheduleRequest
+	5,  // 33: domain.subscription.v1.PriceScheduleDomainService.UpdatePriceSchedule:input_type -> domain.subscription.v1.UpdatePriceScheduleRequest
+	7,  // 34: domain.subscription.v1.PriceScheduleDomainService.DeletePriceSchedule:input_type -> domain.subscription.v1.DeletePriceScheduleRequest
+	9,  // 35: domain.subscription.v1.PriceScheduleDomainService.ListPriceSchedules:input_type -> domain.subscription.v1.ListPriceSchedulesRequest
+	11, // 36: domain.subscription.v1.PriceScheduleDomainService.GetPriceScheduleListPageData:input_type -> domain.subscription.v1.GetPriceScheduleListPageDataRequest
+	13, // 37: domain.subscription.v1.PriceScheduleDomainService.GetPriceScheduleItemPageData:input_type -> domain.subscription.v1.GetPriceScheduleItemPageDataRequest
+	15, // 38: domain.subscription.v1.PriceScheduleDomainService.FindApplicablePriceSchedule:input_type -> domain.subscription.v1.FindApplicablePriceScheduleRequest
+	2,  // 39: domain.subscription.v1.PriceScheduleDomainService.CreatePriceSchedule:output_type -> domain.subscription.v1.CreatePriceScheduleResponse
+	4,  // 40: domain.subscription.v1.PriceScheduleDomainService.ReadPriceSchedule:output_type -> domain.subscription.v1.ReadPriceScheduleResponse
+	6,  // 41: domain.subscription.v1.PriceScheduleDomainService.UpdatePriceSchedule:output_type -> domain.subscription.v1.UpdatePriceScheduleResponse
+	8,  // 42: domain.subscription.v1.PriceScheduleDomainService.DeletePriceSchedule:output_type -> domain.subscription.v1.DeletePriceScheduleResponse
+	10, // 43: domain.subscription.v1.PriceScheduleDomainService.ListPriceSchedules:output_type -> domain.subscription.v1.ListPriceSchedulesResponse
+	12, // 44: domain.subscription.v1.PriceScheduleDomainService.GetPriceScheduleListPageData:output_type -> domain.subscription.v1.GetPriceScheduleListPageDataResponse
+	14, // 45: domain.subscription.v1.PriceScheduleDomainService.GetPriceScheduleItemPageData:output_type -> domain.subscription.v1.GetPriceScheduleItemPageDataResponse
+	16, // 46: domain.subscription.v1.PriceScheduleDomainService.FindApplicablePriceSchedule:output_type -> domain.subscription.v1.FindApplicablePriceScheduleResponse
+	39, // [39:47] is the sub-list for method output_type
+	31, // [31:39] is the sub-list for method input_type
+	31, // [31:31] is the sub-list for extension type_name
+	31, // [31:31] is the sub-list for extension extendee
+	0,  // [0:31] is the sub-list for field type_name
 }
 
 func init() { file_domain_subscription_price_schedule_price_schedule_proto_init() }

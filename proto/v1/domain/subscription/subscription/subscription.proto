@@ -13,6 +13,7 @@ import "domain/common/search.proto";
 import "domain/subscription/price_plan/price_plan.proto";
 import "domain/entity/client/client.proto";
 import "options/db.proto";
+import "google/protobuf/timestamp.proto";
 
 message Subscription {
   option (options.v1.table).table = true;
@@ -27,9 +28,9 @@ message Subscription {
   string price_plan_id = 9 [(options.v1.db).references = "price_plan", (options.v1.db).index = true];
   optional domain.entity.v1.Client client = 10;
   string client_id = 11 [(options.v1.db).references = "client", (options.v1.db).index = true];
-  optional string date_start = 12; // ISO 8601 date (YYYY-MM-DD)
+  optional google.protobuf.Timestamp date_time_start = 12; // UTC timestamp; display TZ resolved per-request
   reserved 13; // was date_start_string
-  optional string date_end = 14; // ISO 8601 date (YYYY-MM-DD)
+  optional google.protobuf.Timestamp date_time_end = 14; // UTC timestamp; nil = open-ended
   reserved 15; // was date_end_string
   map<string, string> metadata = 16;
 

@@ -30,6 +30,7 @@ message ProductOption {
   optional double min_value = 13;
   optional double max_value = 14;
   bool required = 15 [(options.v1.db).default = "false"];
+  optional string description = 16;
 }
 
 service ProductOptionDomainService {

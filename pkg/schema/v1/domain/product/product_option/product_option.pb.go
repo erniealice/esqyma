@@ -41,6 +41,7 @@ type ProductOption struct {
 	MinValue           *float64               `protobuf:"fixed64,13,opt,name=min_value,json=minValue,proto3,oneof" json:"min_value,omitempty"`
 	MaxValue           *float64               `protobuf:"fixed64,14,opt,name=max_value,json=maxValue,proto3,oneof" json:"max_value,omitempty"`
 	Required           bool                   `protobuf:"varint,15,opt,name=required,proto3" json:"required,omitempty"`
+	Description        *string                `protobuf:"bytes,16,opt,name=description,proto3,oneof" json:"description,omitempty"`
 	unknownFields      protoimpl.UnknownFields
 	sizeCache          protoimpl.SizeCache
 }
@@ -178,6 +179,13 @@ func (x *ProductOption) GetRequired() bool {
 		return x.Required
 	}
 	return false
+}
+
+func (x *ProductOption) GetDescription() string {
+	if x != nil && x.Description != nil {
+		return *x.Description
+	}
+	return ""
 }
 
 type CreateProductOptionRequest struct {
@@ -968,7 +976,7 @@ var File_domain_product_product_option_product_option_proto protoreflect.FileDes
 
 const file_domain_product_product_option_product_option_proto_rawDesc = "" +
 	"\n" +
-	"2domain/product/product_option/product_option.proto\x12\x11domain.product.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1adomain/common/search.proto\x1a$domain/product/product/product.proto\x1a\x10options/db.proto\"\xcc\x05\n" +
+	"2domain/product/product_option/product_option.proto\x12\x11domain.product.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1adomain/common/search.proto\x1a$domain/product/product/product.proto\x1a\x10options/db.proto\"\x83\x06\n" +
 	"\rProductOption\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12.\n" +
 	"\n" +
@@ -989,7 +997,8 @@ const file_domain_product_product_option_product_option_proto_rawDesc = "" +
 	"\aproduct\x18\f \x01(\v2\x1a.domain.product.v1.ProductR\aproduct\x12 \n" +
 	"\tmin_value\x18\r \x01(\x01H\x04R\bminValue\x88\x01\x01\x12 \n" +
 	"\tmax_value\x18\x0e \x01(\x01H\x05R\bmaxValue\x88\x01\x01\x12'\n" +
-	"\brequired\x18\x0f \x01(\bB\v\x82\xb5\x18\a\"\x05falseR\brequired:\x06\x8a\xb5\x18\x02\b\x01B\x0f\n" +
+	"\brequired\x18\x0f \x01(\bB\v\x82\xb5\x18\a\"\x05falseR\brequired\x12%\n" +
+	"\vdescription\x18\x10 \x01(\tH\x06R\vdescription\x88\x01\x01:\x06\x8a\xb5\x18\x02\b\x01B\x0f\n" +
 	"\r_date_createdB\x16\n" +
 	"\x14_date_created_stringB\x10\n" +
 	"\x0e_date_modifiedB\x17\n" +
@@ -997,7 +1006,8 @@ const file_domain_product_product_option_product_option_proto_rawDesc = "" +
 	"\n" +
 	"_min_valueB\f\n" +
 	"\n" +
-	"_max_value\"R\n" +
+	"_max_valueB\x0e\n" +
+	"\f_description\"R\n" +
 	"\x1aCreateProductOptionRequest\x124\n" +
 	"\x04data\x18\x01 \x01(\v2 .domain.product.v1.ProductOptionR\x04data\"\xab\x01\n" +
 	"\x1bCreateProductOptionResponse\x124\n" +

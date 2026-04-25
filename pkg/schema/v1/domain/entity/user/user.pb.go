@@ -36,6 +36,7 @@ type User struct {
 	DateModified       *int64                 `protobuf:"varint,7,opt,name=date_modified,json=dateModified,proto3,oneof" json:"date_modified,omitempty"`
 	DateModifiedString *string                `protobuf:"bytes,8,opt,name=date_modified_string,json=dateModifiedString,proto3,oneof" json:"date_modified_string,omitempty"`
 	Active             bool                   `protobuf:"varint,9,opt,name=active,proto3" json:"active,omitempty"`
+	Timezone           *string                `protobuf:"bytes,12,opt,name=timezone,proto3,oneof" json:"timezone,omitempty"`
 	unknownFields      protoimpl.UnknownFields
 	sizeCache          protoimpl.SizeCache
 }
@@ -145,6 +146,13 @@ func (x *User) GetActive() bool {
 		return x.Active
 	}
 	return false
+}
+
+func (x *User) GetTimezone() string {
+	if x != nil && x.Timezone != nil {
+		return *x.Timezone
+	}
+	return ""
 }
 
 type CreateUserRequest struct {
@@ -943,7 +951,7 @@ var File_domain_entity_user_user_proto protoreflect.FileDescriptor
 
 const file_domain_entity_user_user_proto_rawDesc = "" +
 	"\n" +
-	"\x1ddomain/entity/user/user.proto\x12\x10domain.entity.v1\x1a\x19domain/common/error.proto\x1a\x1adomain/common/search.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1edomain/common/pagination.proto\x1a\x10options/db.proto\"\x8f\x04\n" +
+	"\x1ddomain/entity/user/user.proto\x12\x10domain.entity.v1\x1a\x19domain/common/error.proto\x1a\x1adomain/common/search.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1edomain/common/pagination.proto\x1a\x10options/db.proto\"\xd0\x04\n" +
 	"\x04User\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12\x1d\n" +
 	"\n" +
@@ -958,11 +966,13 @@ const file_domain_entity_user_user_proto_rawDesc = "" +
 	"\rdate_modified\x18\a \x01(\x03H\x02R\fdateModified\x88\x01\x01\x125\n" +
 	"\x14date_modified_string\x18\b \x01(\tH\x03R\x12dateModifiedString\x88\x01\x01\x12\"\n" +
 	"\x06active\x18\t \x01(\bB\n" +
-	"\x82\xb5\x18\x06\"\x04trueR\x06active:\x06\x8a\xb5\x18\x02\b\x01B\x0f\n" +
+	"\x82\xb5\x18\x06\"\x04trueR\x06active\x122\n" +
+	"\btimezone\x18\f \x01(\tB\x11\x82\xb5\x18\r\"\vAsia/ManilaH\x04R\btimezone\x88\x01\x01:\x06\x8a\xb5\x18\x02\b\x01B\x0f\n" +
 	"\r_date_createdB\x16\n" +
 	"\x14_date_created_stringB\x10\n" +
 	"\x0e_date_modifiedB\x17\n" +
-	"\x15_date_modified_string\"?\n" +
+	"\x15_date_modified_stringB\v\n" +
+	"\t_timezone\"?\n" +
 	"\x11CreateUserRequest\x12*\n" +
 	"\x04data\x18\x01 \x01(\v2\x16.domain.entity.v1.UserR\x04data\"\x98\x01\n" +
 	"\x12CreateUserResponse\x12*\n" +

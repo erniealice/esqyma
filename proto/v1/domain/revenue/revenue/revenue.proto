@@ -146,10 +146,78 @@ message CreateRevenueWithLineItemsRequest {
   // verify ProductPlan ⊂ ProductPricePlan coverage, and create line items
   // atomically alongside the Revenue. Empty = behaves like CreateRevenue.
   optional string subscription_id = 2;
+
+  // Operator-supplied billing period (RFC3339) for revenue recognition.
+  // Used for first-cycle detection and idempotency keying.
+  optional string period_start = 3;
+  optional string period_end   = 4;
+
+  // Operator-supplied invoice issue date (ISO 8601 YYYY-MM-DD).
+  // When empty, defaults to today.
+  optional string revenue_date = 5;
+
+  // Per-line operator overrides applied to the auto-populated draft.
+  repeated LineItemOverride overrides = 6;
+
+  // When true, the use case computes and returns the proposed Revenue + lines
+  // but does NOT persist anything. Drawer GET path uses this for the preview.
+  optional bool dry_run = 7;
+
+  // When true, the use case skips header creation (the caller has already
+  // created a Revenue) and only writes the line items against
+  // existing_revenue_id. Used by the legacy manual revenue-add flow so the
+  // single algorithm has one implementation. Pairs with existing_revenue_id.
+  optional bool skip_header = 8;
+  optional string existing_revenue_id = 9;
+
+  // Reserved for a future force-override flag that bypasses the idempotency
+  // check. NOT honored in v1 — see plan §11.3.
+  reserved 10;
+  reserved "force_override";
+}
+
+message LineItemOverride {
+  // Identifies the line being overridden by its source ProductPricePlan.
+  string product_price_plan_id = 1;
+
+  // When set, replaces the auto-populated unit price (centavos).
+  optional int64 unit_price = 2;
+
+  // When set, replaces the auto-populated quantity.
+  optional double quantity = 3;
+
+  // When set, replaces the auto-populated description.
+  optional string description = 4;
+
+  // When true, the operator removed this line from the draft preview.
+  optional bool removed = 5;
 }
 
 message CreateRevenueWithLineItemsResponse {
   repeated Revenue data = 1;
   bool success = 2;
   optional domain.common.v1.Error error = 3;
+
+  // Populated when the request was a dry_run preview. Mirrors the lines that
+  // would be written. Empty when dry_run = false.
+  repeated PreviewLineItem preview_lines = 4;
+
+  // Non-blocking warnings (e.g. "plan has no billing cycle; defaulting to 1mo").
+  repeated string warnings = 5;
+
+  // Set when (subscription_id, period_start, period_end) collides with a
+  // non-cancelled Revenue. Drawer surfaces a blocking banner with a link.
+  optional string conflicting_revenue_id = 6;
+}
+
+message PreviewLineItem {
+  string product_price_plan_id = 1;
+  string description = 2;
+  int64 unit_price = 3;     // centavos
+  double quantity = 4;
+  int64 total_price = 5;    // centavos
+  string currency = 6;
+  // Treatment for badge rendering — one of "recurring", "first_cycle",
+  // "usage_based", "one_time".
+  string treatment = 7;
 }

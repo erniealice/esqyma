@@ -10,6 +10,7 @@ import "domain/common/search.proto";
 import "domain/common/filter.proto";
 import "domain/common/sort.proto";
 import "options/db.proto";
+import "google/protobuf/timestamp.proto";
 
 message PriceSchedule {
   option (options.v1.table).table = true;
@@ -21,8 +22,8 @@ message PriceSchedule {
   bool active = 6 [(options.v1.db).default = "true"];
   string name = 7;
   optional string description = 8;
-  string date_start = 9; // ISO 8601 date (YYYY-MM-DD)
-  optional string date_end = 10; // ISO 8601 date (YYYY-MM-DD)
+  google.protobuf.Timestamp date_time_start = 9; // UTC timestamp; display TZ resolved per-request
+  optional google.protobuf.Timestamp date_time_end = 10; // UTC timestamp; nil = open-ended
   optional string location_id = 11 [(options.v1.db).references = "location", (options.v1.db).index = true];
 }
 
