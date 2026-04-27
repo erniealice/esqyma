@@ -101,6 +101,9 @@ type Prepayment struct {
 	DateCreatedString  *string `protobuf:"bytes,16,opt,name=date_created_string,json=dateCreatedString,proto3,oneof" json:"date_created_string,omitempty"`
 	DateModified       *int64  `protobuf:"varint,17,opt,name=date_modified,json=dateModified,proto3,oneof" json:"date_modified,omitempty"`
 	DateModifiedString *string `protobuf:"bytes,18,opt,name=date_modified_string,json=dateModifiedString,proto3,oneof" json:"date_modified_string,omitempty"`
+	// Supplier commitment back-edges (plan §11.5 — adopted, not deferred)
+	SupplierContractId *string `protobuf:"bytes,19,opt,name=supplier_contract_id,json=supplierContractId,proto3,oneof" json:"supplier_contract_id,omitempty"` // FK to SupplierContract
+	ExpenditureId      *string `protobuf:"bytes,20,opt,name=expenditure_id,json=expenditureId,proto3,oneof" json:"expenditure_id,omitempty"`                  // FK to the originating Expenditure
 	unknownFields      protoimpl.UnknownFields
 	sizeCache          protoimpl.SizeCache
 }
@@ -243,6 +246,20 @@ func (x *Prepayment) GetDateModified() int64 {
 func (x *Prepayment) GetDateModifiedString() string {
 	if x != nil && x.DateModifiedString != nil {
 		return *x.DateModifiedString
+	}
+	return ""
+}
+
+func (x *Prepayment) GetSupplierContractId() string {
+	if x != nil && x.SupplierContractId != nil {
+		return *x.SupplierContractId
+	}
+	return ""
+}
+
+func (x *Prepayment) GetExpenditureId() string {
+	if x != nil && x.ExpenditureId != nil {
+		return *x.ExpenditureId
 	}
 	return ""
 }
@@ -1035,7 +1052,7 @@ var File_domain_expenditure_prepayment_prepayment_proto protoreflect.FileDescrip
 
 const file_domain_expenditure_prepayment_prepayment_proto_rawDesc = "" +
 	"\n" +
-	".domain/expenditure/prepayment/prepayment.proto\x12\x15domain.expenditure.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1adomain/common/search.proto\x1a\x10options/db.proto\"\xd7\x06\n" +
+	".domain/expenditure/prepayment/prepayment.proto\x12\x15domain.expenditure.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1adomain/common/search.proto\x1a\x10options/db.proto\"\x92\b\n" +
 	"\n" +
 	"Prepayment\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12 \n" +
@@ -1060,14 +1077,20 @@ const file_domain_expenditure_prepayment_prepayment_proto_rawDesc = "" +
 	"\fdate_created\x18\x0f \x01(\x03H\x03R\vdateCreated\x88\x01\x01\x123\n" +
 	"\x13date_created_string\x18\x10 \x01(\tH\x04R\x11dateCreatedString\x88\x01\x01\x12(\n" +
 	"\rdate_modified\x18\x11 \x01(\x03H\x05R\fdateModified\x88\x01\x01\x125\n" +
-	"\x14date_modified_string\x18\x12 \x01(\tH\x06R\x12dateModifiedString\x88\x01\x01:\x06\x8a\xb5\x18\x02\b\x01B\x0e\n" +
+	"\x14date_modified_string\x18\x12 \x01(\tH\x06R\x12dateModifiedString\x88\x01\x01\x12N\n" +
+	"\x14supplier_contract_id\x18\x13 \x01(\tB\x17\x82\xb5\x18\x13\n" +
+	"\x11supplier_contractH\aR\x12supplierContractId\x88\x01\x01\x12=\n" +
+	"\x0eexpenditure_id\x18\x14 \x01(\tB\x11\x82\xb5\x18\r\n" +
+	"\vexpenditureH\bR\rexpenditureId\x88\x01\x01:\x06\x8a\xb5\x18\x02\b\x01B\x0e\n" +
 	"\f_vendor_nameB\r\n" +
 	"\v_account_idB\x15\n" +
 	"\x13_expense_account_idB\x0f\n" +
 	"\r_date_createdB\x16\n" +
 	"\x14_date_created_stringB\x10\n" +
 	"\x0e_date_modifiedB\x17\n" +
-	"\x15_date_modified_stringJ\x04\b\a\x10\bJ\x04\b\t\x10\n" +
+	"\x15_date_modified_stringB\x17\n" +
+	"\x15_supplier_contract_idB\x11\n" +
+	"\x0f_expenditure_idJ\x04\b\a\x10\bJ\x04\b\t\x10\n" +
 	"\"P\n" +
 	"\x17CreatePrepaymentRequest\x125\n" +
 	"\x04data\x18\x01 \x01(\v2!.domain.expenditure.v1.PrepaymentR\x04data\"\xa9\x01\n" +

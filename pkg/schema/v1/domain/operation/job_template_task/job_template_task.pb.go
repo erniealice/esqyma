@@ -37,6 +37,17 @@ type JobTemplateTask struct {
 	Name                     string                               `protobuf:"bytes,9,opt,name=name,proto3" json:"name,omitempty"`
 	StepOrder                int32                                `protobuf:"varint,10,opt,name=step_order,json=stepOrder,proto3" json:"step_order,omitempty"`
 	EstimatedDurationMinutes *int32                               `protobuf:"varint,11,opt,name=estimated_duration_minutes,json=estimatedDurationMinutes,proto3,oneof" json:"estimated_duration_minutes,omitempty"`
+	ResourceId               *string                              `protobuf:"bytes,12,opt,name=resource_id,json=resourceId,proto3,oneof" json:"resource_id,omitempty"`
+	SkillRequired            *string                              `protobuf:"bytes,13,opt,name=skill_required,json=skillRequired,proto3,oneof" json:"skill_required,omitempty"`
+	QuantityFactor           *float64                             `protobuf:"fixed64,14,opt,name=quantity_factor,json=quantityFactor,proto3,oneof" json:"quantity_factor,omitempty"`
+	StandardLaborMinutes     *int32                               `protobuf:"varint,15,opt,name=standard_labor_minutes,json=standardLaborMinutes,proto3,oneof" json:"standard_labor_minutes,omitempty"`
+	StandardMachineMinutes   *int32                               `protobuf:"varint,16,opt,name=standard_machine_minutes,json=standardMachineMinutes,proto3,oneof" json:"standard_machine_minutes,omitempty"`
+	SetupMinutes             *int32                               `protobuf:"varint,17,opt,name=setup_minutes,json=setupMinutes,proto3,oneof" json:"setup_minutes,omitempty"`
+	RunMinutesPerUnit        *float64                             `protobuf:"fixed64,18,opt,name=run_minutes_per_unit,json=runMinutesPerUnit,proto3,oneof" json:"run_minutes_per_unit,omitempty"`
+	TeardownMinutes          *int32                               `protobuf:"varint,19,opt,name=teardown_minutes,json=teardownMinutes,proto3,oneof" json:"teardown_minutes,omitempty"`
+	ToolRequired             *string                              `protobuf:"bytes,20,opt,name=tool_required,json=toolRequired,proto3,oneof" json:"tool_required,omitempty"`
+	InstructionDocId         *string                              `protobuf:"bytes,21,opt,name=instruction_doc_id,json=instructionDocId,proto3,oneof" json:"instruction_doc_id,omitempty"`
+	WorkflowStepId           *string                              `protobuf:"bytes,22,opt,name=workflow_step_id,json=workflowStepId,proto3,oneof" json:"workflow_step_id,omitempty"`
 	unknownFields            protoimpl.UnknownFields
 	sizeCache                protoimpl.SizeCache
 }
@@ -146,6 +157,83 @@ func (x *JobTemplateTask) GetEstimatedDurationMinutes() int32 {
 		return *x.EstimatedDurationMinutes
 	}
 	return 0
+}
+
+func (x *JobTemplateTask) GetResourceId() string {
+	if x != nil && x.ResourceId != nil {
+		return *x.ResourceId
+	}
+	return ""
+}
+
+func (x *JobTemplateTask) GetSkillRequired() string {
+	if x != nil && x.SkillRequired != nil {
+		return *x.SkillRequired
+	}
+	return ""
+}
+
+func (x *JobTemplateTask) GetQuantityFactor() float64 {
+	if x != nil && x.QuantityFactor != nil {
+		return *x.QuantityFactor
+	}
+	return 0
+}
+
+func (x *JobTemplateTask) GetStandardLaborMinutes() int32 {
+	if x != nil && x.StandardLaborMinutes != nil {
+		return *x.StandardLaborMinutes
+	}
+	return 0
+}
+
+func (x *JobTemplateTask) GetStandardMachineMinutes() int32 {
+	if x != nil && x.StandardMachineMinutes != nil {
+		return *x.StandardMachineMinutes
+	}
+	return 0
+}
+
+func (x *JobTemplateTask) GetSetupMinutes() int32 {
+	if x != nil && x.SetupMinutes != nil {
+		return *x.SetupMinutes
+	}
+	return 0
+}
+
+func (x *JobTemplateTask) GetRunMinutesPerUnit() float64 {
+	if x != nil && x.RunMinutesPerUnit != nil {
+		return *x.RunMinutesPerUnit
+	}
+	return 0
+}
+
+func (x *JobTemplateTask) GetTeardownMinutes() int32 {
+	if x != nil && x.TeardownMinutes != nil {
+		return *x.TeardownMinutes
+	}
+	return 0
+}
+
+func (x *JobTemplateTask) GetToolRequired() string {
+	if x != nil && x.ToolRequired != nil {
+		return *x.ToolRequired
+	}
+	return ""
+}
+
+func (x *JobTemplateTask) GetInstructionDocId() string {
+	if x != nil && x.InstructionDocId != nil {
+		return *x.InstructionDocId
+	}
+	return ""
+}
+
+func (x *JobTemplateTask) GetWorkflowStepId() string {
+	if x != nil && x.WorkflowStepId != nil {
+		return *x.WorkflowStepId
+	}
+	return ""
 }
 
 type CreateJobTemplateTaskRequest struct {
@@ -1041,7 +1129,7 @@ var File_domain_operation_job_template_task_job_template_task_proto protoreflect
 
 const file_domain_operation_job_template_task_job_template_task_proto_rawDesc = "" +
 	"\n" +
-	":domain/operation/job_template_task/job_template_task.proto\x12\x13domain.operation.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1adomain/common/search.proto\x1a<domain/operation/job_template_phase/job_template_phase.proto\x1a\x10options/db.proto\"\xb4\x05\n" +
+	":domain/operation/job_template_task/job_template_task.proto\x12\x13domain.operation.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1adomain/common/search.proto\x1a<domain/operation/job_template_phase/job_template_phase.proto\x1a\x10options/db.proto\"\xdf\v\n" +
 	"\x0fJobTemplateTask\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12&\n" +
 	"\fdate_created\x18\x02 \x01(\x03H\x00R\vdateCreated\x88\x01\x01\x123\n" +
@@ -1057,13 +1145,38 @@ const file_domain_operation_job_template_task_job_template_task_proto_rawDesc = 
 	"\n" +
 	"step_order\x18\n" +
 	" \x01(\x05R\tstepOrder\x12A\n" +
-	"\x1aestimated_duration_minutes\x18\v \x01(\x05H\x05R\x18estimatedDurationMinutes\x88\x01\x01:\x06\x8a\xb5\x18\x02\b\x01B\x0f\n" +
+	"\x1aestimated_duration_minutes\x18\v \x01(\x05H\x05R\x18estimatedDurationMinutes\x88\x01\x01\x126\n" +
+	"\vresource_id\x18\f \x01(\tB\x10\x82\xb5\x18\f\n" +
+	"\bresource\x18\x01H\x06R\n" +
+	"resourceId\x88\x01\x01\x12*\n" +
+	"\x0eskill_required\x18\r \x01(\tH\aR\rskillRequired\x88\x01\x01\x12,\n" +
+	"\x0fquantity_factor\x18\x0e \x01(\x01H\bR\x0equantityFactor\x88\x01\x01\x129\n" +
+	"\x16standard_labor_minutes\x18\x0f \x01(\x05H\tR\x14standardLaborMinutes\x88\x01\x01\x12=\n" +
+	"\x18standard_machine_minutes\x18\x10 \x01(\x05H\n" +
+	"R\x16standardMachineMinutes\x88\x01\x01\x12(\n" +
+	"\rsetup_minutes\x18\x11 \x01(\x05H\vR\fsetupMinutes\x88\x01\x01\x124\n" +
+	"\x14run_minutes_per_unit\x18\x12 \x01(\x01H\fR\x11runMinutesPerUnit\x88\x01\x01\x12.\n" +
+	"\x10teardown_minutes\x18\x13 \x01(\x05H\rR\x0fteardownMinutes\x88\x01\x01\x12(\n" +
+	"\rtool_required\x18\x14 \x01(\tH\x0eR\ftoolRequired\x88\x01\x01\x129\n" +
+	"\x12instruction_doc_id\x18\x15 \x01(\tB\x06\x82\xb5\x18\x02\x18\x01H\x0fR\x10instructionDocId\x88\x01\x01\x125\n" +
+	"\x10workflow_step_id\x18\x16 \x01(\tB\x06\x82\xb5\x18\x02\x18\x01H\x10R\x0eworkflowStepId\x88\x01\x01:\x06\x8a\xb5\x18\x02\b\x01B\x0f\n" +
 	"\r_date_createdB\x16\n" +
 	"\x14_date_created_stringB\x10\n" +
 	"\x0e_date_modifiedB\x17\n" +
 	"\x15_date_modified_stringB\x15\n" +
 	"\x13_job_template_phaseB\x1d\n" +
-	"\x1b_estimated_duration_minutes\"X\n" +
+	"\x1b_estimated_duration_minutesB\x0e\n" +
+	"\f_resource_idB\x11\n" +
+	"\x0f_skill_requiredB\x12\n" +
+	"\x10_quantity_factorB\x19\n" +
+	"\x17_standard_labor_minutesB\x1b\n" +
+	"\x19_standard_machine_minutesB\x10\n" +
+	"\x0e_setup_minutesB\x17\n" +
+	"\x15_run_minutes_per_unitB\x13\n" +
+	"\x11_teardown_minutesB\x10\n" +
+	"\x0e_tool_requiredB\x15\n" +
+	"\x13_instruction_doc_idB\x13\n" +
+	"\x11_workflow_step_idJ\x04\b\x17\x10(\"X\n" +
 	"\x1cCreateJobTemplateTaskRequest\x128\n" +
 	"\x04data\x18\x01 \x01(\v2$.domain.operation.v1.JobTemplateTaskR\x04data\"\xb1\x01\n" +
 	"\x1dCreateJobTemplateTaskResponse\x128\n" +

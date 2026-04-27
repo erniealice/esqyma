@@ -27,6 +27,19 @@ message JobTemplateTask {
   string name = 9;
   int32 step_order = 10;
   optional int32 estimated_duration_minutes = 11;
+  optional string resource_id = 12 [(options.v1.db).references = "resource", (options.v1.db).index = true];
+  optional string skill_required = 13;
+  optional double quantity_factor = 14;
+  optional int32 standard_labor_minutes = 15;
+  optional int32 standard_machine_minutes = 16;
+  optional int32 setup_minutes = 17;
+  optional double run_minutes_per_unit = 18;
+  optional int32 teardown_minutes = 19;
+  optional string tool_required = 20;
+  optional string instruction_doc_id = 21 [(options.v1.db).index = true];
+  optional string workflow_step_id = 22 [(options.v1.db).index = true];
+
+  reserved 23 to 39;
 }
 
 service JobTemplateTaskDomainService {

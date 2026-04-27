@@ -26,6 +26,23 @@ message Plan {
   optional string thumbnail_url = 10;
   reserved 11;
   reserved "fulfillment_type";
+  // NULL = master plan, appears on /app/services/packages/list.
+  // SET  = client-scoped, hidden from master list.
+  optional string client_id = 12 [(options.v1.db).references = "client", (options.v1.db).index = true];
+  // Self-FK to the master Plan that this clone was derived from. NULL when
+  // this row IS the master. SET when this row is a client-scoped clone created
+  // by CustomizePlanForClient — points at the master plan that was cloned.
+  //
+  // Invariants enforced at use-case layer (CustomizePlanForClient):
+  //   • Always exactly one level deep — cloning a clone flattens parent_id to
+  //     the same master, never the intermediate clone. No grandchildren.
+  //   • Immutable after insert — UpdatePlan ignores body input on this field.
+  //   • Acyclicity — the use case rejects parent_id = self.
+  //
+  // Reports group master + all variants via:
+  //   WHERE id = $masterID OR parent_id = $masterID
+  optional string parent_id = 13
+    [(options.v1.db).references = "plan", (options.v1.db).index = true];
 }
 
 service PlanDomainService {

@@ -43,7 +43,7 @@ type Supplier struct {
 	CategoryId         *string                               `protobuf:"bytes,10,opt,name=category_id,json=categoryId,proto3,oneof" json:"category_id,omitempty"`
 	Category           *supplier_category.SupplierCategory   `protobuf:"bytes,11,opt,name=category,proto3,oneof" json:"category,omitempty"`
 	SupplierType       string                                `protobuf:"bytes,12,opt,name=supplier_type,json=supplierType,proto3" json:"supplier_type,omitempty"` // "company" or "individual"
-	CompanyName        string                                `protobuf:"bytes,13,opt,name=company_name,json=companyName,proto3" json:"company_name,omitempty"`
+	Name               string                                `protobuf:"bytes,13,opt,name=name,proto3" json:"name,omitempty"`
 	TaxId              *string                               `protobuf:"bytes,14,opt,name=tax_id,json=taxId,proto3,oneof" json:"tax_id,omitempty"`                                        // TIN/VAT/EIN
 	RegistrationNumber *string                               `protobuf:"bytes,15,opt,name=registration_number,json=registrationNumber,proto3,oneof" json:"registration_number,omitempty"` // Business registration number
 	StreetAddress      *string                               `protobuf:"bytes,16,opt,name=street_address,json=streetAddress,proto3,oneof" json:"street_address,omitempty"`
@@ -62,6 +62,7 @@ type Supplier struct {
 	Categories         []*supplier_category.SupplierCategory `protobuf:"bytes,29,rep,name=categories,proto3" json:"categories,omitempty"`
 	PaymentTermId      *string                               `protobuf:"bytes,30,opt,name=payment_term_id,json=paymentTermId,proto3,oneof" json:"payment_term_id,omitempty"`
 	PaymentTerm        *payment_term.PaymentTerm             `protobuf:"bytes,31,opt,name=payment_term,json=paymentTerm,proto3,oneof" json:"payment_term,omitempty"`
+	Timezone           *string                               `protobuf:"bytes,32,opt,name=timezone,proto3,oneof" json:"timezone,omitempty"` // IANA timezone (e.g. "Asia/Manila")
 	unknownFields      protoimpl.UnknownFields
 	sizeCache          protoimpl.SizeCache
 }
@@ -180,9 +181,9 @@ func (x *Supplier) GetSupplierType() string {
 	return ""
 }
 
-func (x *Supplier) GetCompanyName() string {
+func (x *Supplier) GetName() string {
 	if x != nil {
-		return x.CompanyName
+		return x.Name
 	}
 	return ""
 }
@@ -311,6 +312,13 @@ func (x *Supplier) GetPaymentTerm() *payment_term.PaymentTerm {
 		return x.PaymentTerm
 	}
 	return nil
+}
+
+func (x *Supplier) GetTimezone() string {
+	if x != nil && x.Timezone != nil {
+		return *x.Timezone
+	}
+	return ""
 }
 
 type CreateSupplierRequest struct {
@@ -1101,7 +1109,7 @@ var File_domain_entity_supplier_supplier_proto protoreflect.FileDescriptor
 
 const file_domain_entity_supplier_supplier_proto_rawDesc = "" +
 	"\n" +
-	"%domain/entity/supplier/supplier.proto\x12\x10domain.entity.v1\x1a\x19domain/common/error.proto\x1a\x1adomain/common/search.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1edomain/common/pagination.proto\x1a\x10options/db.proto\x1a\x1ddomain/entity/user/user.proto\x1a7domain/entity/supplier_category/supplier_category.proto\x1a-domain/entity/payment_term/payment_term.proto\"\xd1\r\n" +
+	"%domain/entity/supplier/supplier.proto\x12\x10domain.entity.v1\x1a\x19domain/common/error.proto\x1a\x1adomain/common/search.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1edomain/common/pagination.proto\x1a\x10options/db.proto\x1a\x1ddomain/entity/user/user.proto\x1a7domain/entity/supplier_category/supplier_category.proto\x1a-domain/entity/payment_term/payment_term.proto\"\xf0\r\n" +
 	"\bSupplier\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12/\n" +
 	"\x04user\x18\x02 \x01(\v2\x16.domain.entity.v1.UserH\x00R\x04user\x88\x01\x01\x12%\n" +
@@ -1120,8 +1128,8 @@ const file_domain_entity_supplier_supplier_proto_rawDesc = "" +
 	"\x11supplier_categoryH\x05R\n" +
 	"categoryId\x88\x01\x01\x12C\n" +
 	"\bcategory\x18\v \x01(\v2\".domain.entity.v1.SupplierCategoryH\x06R\bcategory\x88\x01\x01\x12#\n" +
-	"\rsupplier_type\x18\f \x01(\tR\fsupplierType\x12!\n" +
-	"\fcompany_name\x18\r \x01(\tR\vcompanyName\x12\x1a\n" +
+	"\rsupplier_type\x18\f \x01(\tR\fsupplierType\x12\x12\n" +
+	"\x04name\x18\r \x01(\tR\x04name\x12\x1a\n" +
 	"\x06tax_id\x18\x0e \x01(\tH\aR\x05taxId\x88\x01\x01\x124\n" +
 	"\x13registration_number\x18\x0f \x01(\tH\bR\x12registrationNumber\x88\x01\x01\x12*\n" +
 	"\x0estreet_address\x18\x10 \x01(\tH\tR\rstreetAddress\x88\x01\x01\x12\x17\n" +
@@ -1146,7 +1154,8 @@ const file_domain_entity_supplier_supplier_proto_rawDesc = "" +
 	"categories\x12?\n" +
 	"\x0fpayment_term_id\x18\x1e \x01(\tB\x12\x82\xb5\x18\x0e\n" +
 	"\fpayment_termH\x16R\rpaymentTermId\x88\x01\x01\x12E\n" +
-	"\fpayment_term\x18\x1f \x01(\v2\x1d.domain.entity.v1.PaymentTermH\x17R\vpaymentTerm\x88\x01\x01:\x06\x8a\xb5\x18\x02\b\x01B\a\n" +
+	"\fpayment_term\x18\x1f \x01(\v2\x1d.domain.entity.v1.PaymentTermH\x17R\vpaymentTerm\x88\x01\x01\x12\x1f\n" +
+	"\btimezone\x18  \x01(\tH\x18R\btimezone\x88\x01\x01:\x06\x8a\xb5\x18\x02\b\x01B\a\n" +
 	"\x05_userB\x0f\n" +
 	"\r_date_createdB\x16\n" +
 	"\x14_date_created_stringB\x10\n" +
@@ -1173,7 +1182,8 @@ const file_domain_entity_supplier_supplier_proto_rawDesc = "" +
 	"\b_websiteB\b\n" +
 	"\x06_notesB\x12\n" +
 	"\x10_payment_term_idB\x0f\n" +
-	"\r_payment_term\"G\n" +
+	"\r_payment_termB\v\n" +
+	"\t_timezone\"G\n" +
 	"\x15CreateSupplierRequest\x12.\n" +
 	"\x04data\x18\x01 \x01(\v2\x1a.domain.entity.v1.SupplierR\x04data\"\xa0\x01\n" +
 	"\x16CreateSupplierResponse\x12.\n" +

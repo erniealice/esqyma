@@ -1,0 +1,226 @@
+syntax = "proto3";
+
+package domain.expenditure.v1;
+
+option go_package = "github.com/erniealice/esqyma/golang/v1/domain/expenditure/procurement_request";
+
+import "domain/common/error.proto";
+import "domain/common/pagination.proto";
+import "domain/common/search.proto";
+import "domain/common/filter.proto";
+import "domain/common/sort.proto";
+import "domain/entity/supplier/supplier.proto";
+import "options/db.proto";
+
+// ProcurementRequestStatus drives the internal request workflow.
+enum ProcurementRequestStatus {
+  PROCUREMENT_REQUEST_STATUS_UNSPECIFIED      = 0;
+  PROCUREMENT_REQUEST_STATUS_DRAFT            = 1;  // editing, not yet submitted
+  PROCUREMENT_REQUEST_STATUS_SUBMITTED        = 2;  // submitted by requester
+  PROCUREMENT_REQUEST_STATUS_PENDING_APPROVAL = 3;  // in approver queue
+  PROCUREMENT_REQUEST_STATUS_APPROVED         = 4;  // approved; ready to spawn PO
+  PROCUREMENT_REQUEST_STATUS_REJECTED         = 5;  // denied (terminal)
+  PROCUREMENT_REQUEST_STATUS_FULFILLED        = 6;  // PO created and received (terminal)
+  PROCUREMENT_REQUEST_STATUS_CANCELLED        = 7;  // withdrawn (terminal)
+}
+
+// ProcurementRequest represents an internal purchase intent.
+// The supplier_id is optional: an RFQ-style request may not have a supplier yet.
+// On approval, a PurchaseOrder is spawned via SpawnPurchaseOrder (which sets
+// purchase_order.procurement_request_id back to this record).
+//
+// This is distinct from SupplierContract: a request is an internal intent;
+// a contract is a standing standing commitment with a supplier.
+message ProcurementRequest {
+  option (options.v1.table).table = true;
+
+  string id = 1;
+  string workspace_id = 2 [(options.v1.db).references = "workspace", (options.v1.db).index = true];
+
+  // Audit
+  optional int64 date_created = 3;
+  optional string date_created_string = 4;
+  optional int64 date_modified = 5;
+  optional string date_modified_string = 6;
+  bool active = 7 [(options.v1.db).default = "true"];
+  string request_number = 8 [(options.v1.db).unique = true];  // human-readable ID
+
+  // Status
+  ProcurementRequestStatus status = 10 [(options.v1.db).index = true];
+
+  // Requester
+  string requester_user_id = 11;  // FK to user
+
+  // Counterparty (optional — may be null when RFQ pre-quote)
+  optional string supplier_id = 12 [(options.v1.db).references = "supplier", (options.v1.db).index = true];
+  optional domain.entity.v1.Supplier supplier = 13;
+
+  // Scope
+  optional string location_id = 14 [(options.v1.db).references = "location", (options.v1.db).index = true];
+
+  // Money
+  string currency = 20;
+  int64 estimated_total_amount = 21;  // centavos
+
+  // Needed-by
+  optional string needed_by_date = 22;  // ISO 8601 date (YYYY-MM-DD)
+
+  // Justification
+  optional string justification = 23;
+  optional string notes = 24;
+
+  // Approval
+  optional string approved_by = 30;
+  optional int64 approved_at = 31;
+  optional string approved_at_string = 32;
+  optional string rejection_reason = 33;
+
+  // Spawned artifacts (set after approval)
+  optional string purchase_order_id = 40 [(options.v1.db).references = "purchase_order"];
+
+  // GL / categorization
+  optional string expenditure_category_id = 50 [(options.v1.db).references = "expenditure_category"];
+  optional string expense_account_id = 51 [(options.v1.db).references = "account"];
+}
+
+service ProcurementRequestDomainService {
+  rpc CreateProcurementRequest(CreateProcurementRequestRequest) returns (CreateProcurementRequestResponse);
+  rpc ReadProcurementRequest(ReadProcurementRequestRequest) returns (ReadProcurementRequestResponse);
+  rpc UpdateProcurementRequest(UpdateProcurementRequestRequest) returns (UpdateProcurementRequestResponse);
+  rpc DeleteProcurementRequest(DeleteProcurementRequestRequest) returns (DeleteProcurementRequestResponse);
+  rpc ListProcurementRequests(ListProcurementRequestsRequest) returns (ListProcurementRequestsResponse);
+
+  // Page data for UI views
+  rpc GetProcurementRequestListPageData(GetProcurementRequestListPageDataRequest) returns (GetProcurementRequestListPageDataResponse);
+  rpc GetProcurementRequestItemPageData(GetProcurementRequestItemPageDataRequest) returns (GetProcurementRequestItemPageDataResponse);
+
+  // Workflow actions
+  rpc SubmitProcurementRequest(SubmitProcurementRequestRequest) returns (SubmitProcurementRequestResponse);
+  rpc ApproveProcurementRequest(ApproveProcurementRequestRequest) returns (ApproveProcurementRequestResponse);
+  rpc RejectProcurementRequest(RejectProcurementRequestRequest) returns (RejectProcurementRequestResponse);
+
+  // Creates a PurchaseOrder from an approved request, returns the new PO id.
+  rpc SpawnPurchaseOrder(SpawnPurchaseOrderRequest) returns (SpawnPurchaseOrderResponse);
+}
+
+message CreateProcurementRequestRequest {
+  ProcurementRequest data = 1;
+}
+
+message CreateProcurementRequestResponse {
+  repeated ProcurementRequest data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message ReadProcurementRequestRequest {
+  ProcurementRequest data = 1;
+}
+
+message ReadProcurementRequestResponse {
+  repeated ProcurementRequest data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message UpdateProcurementRequestRequest {
+  ProcurementRequest data = 1;
+}
+
+message UpdateProcurementRequestResponse {
+  repeated ProcurementRequest data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message DeleteProcurementRequestRequest {
+  ProcurementRequest data = 1;
+}
+
+message DeleteProcurementRequestResponse {
+  bool success = 1;
+  optional domain.common.v1.Error error = 2;
+}
+
+message ListProcurementRequestsRequest {
+  optional domain.common.v1.SearchRequest search = 1;
+  optional domain.common.v1.FilterRequest filters = 2;
+  optional domain.common.v1.SortRequest sort = 3;
+  optional domain.common.v1.PaginationRequest pagination = 4;
+  optional string supplier_id = 5;
+  optional ProcurementRequestStatus status = 6;
+  optional string workspace_id = 7;
+}
+
+message ListProcurementRequestsResponse {
+  repeated ProcurementRequest data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message GetProcurementRequestListPageDataRequest {
+  optional domain.common.v1.PaginationRequest pagination = 1;
+  optional domain.common.v1.FilterRequest filters = 2;
+  optional domain.common.v1.SortRequest sort = 3;
+  optional domain.common.v1.SearchRequest search = 4;
+}
+
+message GetProcurementRequestListPageDataResponse {
+  repeated ProcurementRequest procurement_request_list = 1;
+  optional domain.common.v1.PaginationResponse pagination = 2;
+  repeated domain.common.v1.SearchResult search_results = 3;
+  bool success = 4;
+  optional domain.common.v1.Error error = 5;
+}
+
+message GetProcurementRequestItemPageDataRequest {
+  string procurement_request_id = 1;
+}
+
+message GetProcurementRequestItemPageDataResponse {
+  optional ProcurementRequest procurement_request = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message SubmitProcurementRequestRequest {
+  string procurement_request_id = 1;
+}
+
+message SubmitProcurementRequestResponse {
+  optional ProcurementRequest data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message ApproveProcurementRequestRequest {
+  string procurement_request_id = 1;
+  string approved_by = 2;
+}
+
+message ApproveProcurementRequestResponse {
+  optional ProcurementRequest data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message RejectProcurementRequestRequest {
+  string procurement_request_id = 1;
+  optional string rejection_reason = 2;
+}
+
+message RejectProcurementRequestResponse {
+  optional ProcurementRequest data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message SpawnPurchaseOrderRequest {
+  string procurement_request_id = 1;
+}
+
+message SpawnPurchaseOrderResponse {
+  string purchase_order_id = 1;  // ID of the newly created PurchaseOrder
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}

@@ -38,6 +38,21 @@ message JobPhase {
   string name = 9;
   int32 phase_order = 10;
   PhaseStatus status = 11;
+  optional string template_phase_id = 12 [(options.v1.db).references = "job_template_phase", (options.v1.db).index = true];
+  optional string resource_id = 13 [(options.v1.db).references = "resource", (options.v1.db).index = true];
+  optional int64 planned_start = 14;
+  optional string planned_start_string = 15;
+  optional int64 planned_end = 16;
+  optional string planned_end_string = 17;
+  optional int64 actual_start = 18;
+  optional string actual_start_string = 19;
+  optional int64 actual_end = 20;
+  optional string actual_end_string = 21;
+  optional int32 setup_minutes = 22;
+  optional double run_minutes_per_unit = 23;
+  optional string predecessor_phase_id = 24 [(options.v1.db).references = "job_phase"];
+
+  reserved 25 to 39;
 }
 
 // --- Service ---

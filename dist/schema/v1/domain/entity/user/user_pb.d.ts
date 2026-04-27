@@ -57,6 +57,10 @@ export type User = Message<"domain.entity.v1.User"> & {
      * @generated from field: bool active = 9;
      */
     active: boolean;
+    /**
+     * @generated from field: optional string timezone = 12;
+     */
+    timezone?: string;
 };
 /**
  * Describes the message domain.entity.v1.User.

@@ -1,0 +1,273 @@
+syntax = "proto3";
+
+package domain.expenditure.v1;
+
+option go_package = "github.com/erniealice/esqyma/golang/v1/domain/expenditure/supplier_contract";
+
+import "domain/common/error.proto";
+import "domain/common/pagination.proto";
+import "domain/common/search.proto";
+import "domain/common/filter.proto";
+import "domain/common/sort.proto";
+import "domain/entity/supplier/supplier.proto";
+import "domain/entity/payment_term/payment_term.proto";
+import "options/db.proto";
+
+// SupplierContractKind discriminates the type of commitment.
+// Use SUBSCRIPTION for any recurring time-based obligation (SaaS, retainer, hosting,
+// snack boxes, magazine subscriptions, etc.) — not just software.
+enum SupplierContractKind {
+  SUPPLIER_CONTRACT_KIND_UNSPECIFIED  = 0;
+  SUPPLIER_CONTRACT_KIND_SUBSCRIPTION = 1;  // recurring time-based (renamed from SAAS)
+  SUPPLIER_CONTRACT_KIND_RETAINER     = 2;  // professional services retainer
+  SUPPLIER_CONTRACT_KIND_LEASE        = 3;  // asset-backed recurring (rent, equipment)
+  SUPPLIER_CONTRACT_KIND_UTILITY      = 4;  // utility/variable-consumption contract
+  SUPPLIER_CONTRACT_KIND_FRAMEWORK    = 5;  // pricing agreement only, no commitment value
+  SUPPLIER_CONTRACT_KIND_BLANKET      = 6;  // quantity-based committed PO over a window
+  SUPPLIER_CONTRACT_KIND_ONE_TIME     = 7;  // single-shot agreement worth tracking
+  SUPPLIER_CONTRACT_KIND_OTHER        = 8;  // catch-all
+}
+
+// SupplierContractStatus drives the lifecycle state machine.
+// See plan §3.3 for transition rules.
+enum SupplierContractStatus {
+  SUPPLIER_CONTRACT_STATUS_UNSPECIFIED      = 0;
+  SUPPLIER_CONTRACT_STATUS_DRAFT            = 1;  // editing, not yet submitted
+  SUPPLIER_CONTRACT_STATUS_REQUESTED        = 2;  // submitted by requester, awaiting approval
+  SUPPLIER_CONTRACT_STATUS_PENDING_APPROVAL = 3;  // in approver queue
+  SUPPLIER_CONTRACT_STATUS_APPROVED         = 4;  // approved, not yet active
+  SUPPLIER_CONTRACT_STATUS_ACTIVE           = 5;  // in-force, generating expenditures on cycle
+  SUPPLIER_CONTRACT_STATUS_EXPIRING         = 6;  // within renewal_notice_days of date_time_end
+  SUPPLIER_CONTRACT_STATUS_SUSPENDED        = 7;  // transient pause from active
+  SUPPLIER_CONTRACT_STATUS_EXPIRED          = 8;  // past date_time_end, no auto-renew (terminal)
+  SUPPLIER_CONTRACT_STATUS_TERMINATED       = 9;  // manually cancelled or breached (terminal)
+  SUPPLIER_CONTRACT_STATUS_REJECTED         = 10; // request denied (terminal)
+}
+
+// SupplierContract is a standing commitment or agreement with a supplier.
+// It sits above PurchaseOrder and Expenditure in the expense hierarchy:
+//   SupplierContract → PurchaseOrder (releases) → Expenditure (bills)
+//
+// Balance fields follow the single-write-boundary rule (plan §11.7 risk #5):
+// only the SupplierContractDomainService use cases may update committed_amount,
+// released_amount, billed_amount, remaining_amount — never PO or Expenditure adapters.
+message SupplierContract {
+  option (options.v1.table).table = true;
+
+  string id = 1;
+  string workspace_id = 2 [(options.v1.db).references = "workspace", (options.v1.db).index = true];
+
+  // Audit
+  optional int64 date_created = 3;
+  optional string date_created_string = 4;
+  optional int64 date_modified = 5;
+  optional string date_modified_string = 6;
+  bool active = 7 [(options.v1.db).default = "true"];
+  string internal_id = 8 [(options.v1.db).unique = true];
+
+  // Identity
+  string name = 10;                         // "AWS Hosting MSA", "HQ Lease 2026"
+  optional string description = 11;
+  optional string reference_number = 12;    // supplier's contract/reference number
+
+  // Counterparty
+  string supplier_id = 20 [(options.v1.db).references = "supplier", (options.v1.db).index = true];
+  optional domain.entity.v1.Supplier supplier = 21;
+
+  // Discriminator
+  SupplierContractKind kind = 30 [(options.v1.db).index = true];
+
+  // Lifecycle status
+  SupplierContractStatus status = 31 [(options.v1.db).index = true];
+
+  // Recurrence (required when kind IN SUBSCRIPTION/LEASE/UTILITY, nil otherwise)
+  optional string billing_kind = 40;         // "ONE_TIME" | "RECURRING" | "CONTRACT"
+  optional int32  billing_cycle_value = 41;  // e.g. 1
+  optional string billing_cycle_unit  = 42;  // "month" | "year" | "week" | "day"
+  optional int32  default_term_value  = 43;  // e.g. 12 (default contract length)
+  optional string default_term_unit   = 44;
+
+  // Validity window
+  string date_time_start = 50;              // ISO 8601 date (YYYY-MM-DD)
+  optional string date_time_end = 51;       // nil = open-ended
+  bool auto_renew = 52 [(options.v1.db).default = "false"];
+  optional int32 renewal_notice_days = 53;  // notify N days before expiry
+
+  // Money (centavos throughout — no exceptions)
+  string currency = 60;
+  // committed_amount: total committed value at signing (immutable after approval)
+  optional int64 committed_amount = 61;
+  // released_amount: sum of POs created against this contract (incremented by use case on PO create)
+  optional int64 released_amount = 62 [(options.v1.db).default = "0"];
+  // billed_amount: sum of Expenditure rows linked to this contract (incremented on Expenditure post)
+  optional int64 billed_amount = 63 [(options.v1.db).default = "0"];
+  // remaining_amount: committed_amount - billed_amount (derived; stored for query efficiency)
+  optional int64 remaining_amount = 64 [(options.v1.db).default = "0"];
+  // cycle_amount: expected per-cycle charge for recurring types
+  optional int64 cycle_amount = 65;
+  optional string payment_term_id = 66 [(options.v1.db).references = "payment_term"];
+  optional domain.entity.v1.PaymentTerm payment_term = 67;
+
+  // Quantity (for blanket kind)
+  optional double commitment_quantity = 70;
+  optional double released_quantity = 71 [(options.v1.db).default = "0"];
+
+  // Approval workflow
+  optional string requested_by = 80;         // user_id of requester
+  optional int64  requested_date = 81;
+  optional string requested_date_string = 82;
+  optional string approved_by = 83;
+  optional int64  approved_date = 84;
+  optional string approved_date_string = 85;
+  optional string rejection_reason = 86;
+
+  // Location scoping
+  optional string location_id = 90 [(options.v1.db).references = "location", (options.v1.db).index = true];
+
+  // GL mapping
+  optional string expense_account_id = 100 [(options.v1.db).references = "account", (options.v1.db).index = true];
+  optional string accrual_account_id = 101 [(options.v1.db).references = "account"];
+
+  // Categorization
+  optional string expenditure_category_id = 110 [(options.v1.db).references = "expenditure_category"];
+
+  // Notes & metadata
+  optional string notes = 120;
+  map<string, string> metadata = 121;
+}
+
+service SupplierContractDomainService {
+  rpc CreateSupplierContract(CreateSupplierContractRequest) returns (CreateSupplierContractResponse);
+  rpc ReadSupplierContract(ReadSupplierContractRequest) returns (ReadSupplierContractResponse);
+  rpc UpdateSupplierContract(UpdateSupplierContractRequest) returns (UpdateSupplierContractResponse);
+  rpc DeleteSupplierContract(DeleteSupplierContractRequest) returns (DeleteSupplierContractResponse);
+  rpc ListSupplierContracts(ListSupplierContractsRequest) returns (ListSupplierContractsResponse);
+
+  // Page data for UI views
+  rpc GetSupplierContractListPageData(GetSupplierContractListPageDataRequest) returns (GetSupplierContractListPageDataResponse);
+  rpc GetSupplierContractItemPageData(GetSupplierContractItemPageDataRequest) returns (GetSupplierContractItemPageDataResponse);
+
+  // Workflow actions
+  rpc ApproveSupplierContract(ApproveSupplierContractRequest) returns (ApproveSupplierContractResponse);
+  rpc TerminateSupplierContract(TerminateSupplierContractRequest) returns (TerminateSupplierContractResponse);
+
+  // P5 stub — recurrence engine; implementation deferred
+  rpc GenerateUpcomingExpenditures(GenerateUpcomingExpendituresRequest) returns (GenerateUpcomingExpendituresResponse);
+}
+
+message CreateSupplierContractRequest {
+  SupplierContract data = 1;
+}
+
+message CreateSupplierContractResponse {
+  repeated SupplierContract data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message ReadSupplierContractRequest {
+  SupplierContract data = 1;
+}
+
+message ReadSupplierContractResponse {
+  repeated SupplierContract data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message UpdateSupplierContractRequest {
+  SupplierContract data = 1;
+}
+
+message UpdateSupplierContractResponse {
+  repeated SupplierContract data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message DeleteSupplierContractRequest {
+  SupplierContract data = 1;
+}
+
+message DeleteSupplierContractResponse {
+  bool success = 1;
+  optional domain.common.v1.Error error = 2;
+}
+
+message ListSupplierContractsRequest {
+  optional domain.common.v1.SearchRequest search = 1;
+  optional domain.common.v1.FilterRequest filters = 2;
+  optional domain.common.v1.SortRequest sort = 3;
+  optional domain.common.v1.PaginationRequest pagination = 4;
+  optional string supplier_id = 5;
+  optional SupplierContractStatus status = 6;
+  optional SupplierContractKind kind = 7;
+  optional string workspace_id = 8;
+}
+
+message ListSupplierContractsResponse {
+  repeated SupplierContract data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message GetSupplierContractListPageDataRequest {
+  optional domain.common.v1.PaginationRequest pagination = 1;
+  optional domain.common.v1.FilterRequest filters = 2;
+  optional domain.common.v1.SortRequest sort = 3;
+  optional domain.common.v1.SearchRequest search = 4;
+}
+
+message GetSupplierContractListPageDataResponse {
+  repeated SupplierContract supplier_contract_list = 1;
+  optional domain.common.v1.PaginationResponse pagination = 2;
+  repeated domain.common.v1.SearchResult search_results = 3;
+  bool success = 4;
+  optional domain.common.v1.Error error = 5;
+}
+
+message GetSupplierContractItemPageDataRequest {
+  string supplier_contract_id = 1;
+}
+
+message GetSupplierContractItemPageDataResponse {
+  optional SupplierContract supplier_contract = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message ApproveSupplierContractRequest {
+  string supplier_contract_id = 1;
+  string approved_by = 2;
+}
+
+message ApproveSupplierContractResponse {
+  optional SupplierContract data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message TerminateSupplierContractRequest {
+  string supplier_contract_id = 1;
+  optional string reason = 2;
+}
+
+message TerminateSupplierContractResponse {
+  optional SupplierContract data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+// GenerateUpcomingExpendituresRequest — P5 stub.
+// Walks contract cycles from today up to until_date and emits draft Expenditure rows.
+// Implementation deferred to P5 (recurrence engine plan).
+message GenerateUpcomingExpendituresRequest {
+  string contract_id = 1;
+  string until_date = 2;  // ISO 8601 date (YYYY-MM-DD)
+}
+
+message GenerateUpcomingExpendituresResponse {
+  int32 generated_count = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}

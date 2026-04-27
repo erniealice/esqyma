@@ -199,7 +199,19 @@ export declare enum JobStatus {
     /**
      * @generated from enum value: JOB_STATUS_CLOSED = 6;
      */
-    CLOSED = 6
+    CLOSED = 6,
+    /**
+     * NEW
+     *
+     * @generated from enum value: JOB_STATUS_PLANNED = 7;
+     */
+    PLANNED = 7,
+    /**
+     * NEW
+     *
+     * @generated from enum value: JOB_STATUS_RELEASED = 8;
+     */
+    RELEASED = 8
 }
 /**
  * Describes the enum domain.operation.v1.JobStatus.

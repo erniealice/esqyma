@@ -32,6 +32,8 @@ const (
 	EntryType_ENTRY_TYPE_LABOR       EntryType = 1
 	EntryType_ENTRY_TYPE_MATERIAL    EntryType = 2
 	EntryType_ENTRY_TYPE_EXPENSE     EntryType = 3
+	EntryType_ENTRY_TYPE_EQUIPMENT   EntryType = 4 // NEW
+	EntryType_ENTRY_TYPE_SUBCONTRACT EntryType = 5 // NEW
 )
 
 // Enum value maps for EntryType.
@@ -41,12 +43,16 @@ var (
 		1: "ENTRY_TYPE_LABOR",
 		2: "ENTRY_TYPE_MATERIAL",
 		3: "ENTRY_TYPE_EXPENSE",
+		4: "ENTRY_TYPE_EQUIPMENT",
+		5: "ENTRY_TYPE_SUBCONTRACT",
 	}
 	EntryType_value = map[string]int32{
 		"ENTRY_TYPE_UNSPECIFIED": 0,
 		"ENTRY_TYPE_LABOR":       1,
 		"ENTRY_TYPE_MATERIAL":    2,
 		"ENTRY_TYPE_EXPENSE":     3,
+		"ENTRY_TYPE_EQUIPMENT":   4,
+		"ENTRY_TYPE_SUBCONTRACT": 5,
 	}
 )
 
@@ -2333,12 +2339,14 @@ const file_domain_operation_job_activity_job_activity_proto_rawDesc = "" +
 	"\asuccess\x18\x02 \x01(\bR\asuccess\x122\n" +
 	"\x05error\x18\x03 \x01(\v2\x17.domain.common.v1.ErrorH\x01R\x05error\x88\x01\x01B\x0f\n" +
 	"\r_job_activityB\b\n" +
-	"\x06_error*n\n" +
+	"\x06_error*\xa4\x01\n" +
 	"\tEntryType\x12\x1a\n" +
 	"\x16ENTRY_TYPE_UNSPECIFIED\x10\x00\x12\x14\n" +
 	"\x10ENTRY_TYPE_LABOR\x10\x01\x12\x17\n" +
 	"\x13ENTRY_TYPE_MATERIAL\x10\x02\x12\x16\n" +
-	"\x12ENTRY_TYPE_EXPENSE\x10\x03*\xae\x01\n" +
+	"\x12ENTRY_TYPE_EXPENSE\x10\x03\x12\x18\n" +
+	"\x14ENTRY_TYPE_EQUIPMENT\x10\x04\x12\x1a\n" +
+	"\x16ENTRY_TYPE_SUBCONTRACT\x10\x05*\xae\x01\n" +
 	"\x0eBillableStatus\x12\x1f\n" +
 	"\x1bBILLABLE_STATUS_UNSPECIFIED\x10\x00\x12\x1c\n" +
 	"\x18BILLABLE_STATUS_BILLABLE\x10\x01\x12 \n" +

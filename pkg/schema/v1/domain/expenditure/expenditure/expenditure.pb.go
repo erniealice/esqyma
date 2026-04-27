@@ -35,7 +35,7 @@ type Expenditure struct {
 	DateModifiedString    *string                   `protobuf:"bytes,5,opt,name=date_modified_string,json=dateModifiedString,proto3,oneof" json:"date_modified_string,omitempty"`
 	Active                bool                      `protobuf:"varint,6,opt,name=active,proto3" json:"active,omitempty"`
 	Name                  string                    `protobuf:"bytes,7,opt,name=name,proto3" json:"name,omitempty"`
-	ExpenditureType       string                    `protobuf:"bytes,8,opt,name=expenditure_type,json=expenditureType,proto3" json:"expenditure_type,omitempty"` // "purchase", "expense", "refund", "payroll"
+	ExpenditureType       string                    `protobuf:"bytes,8,opt,name=expenditure_type,json=expenditureType,proto3" json:"expenditure_type,omitempty"` // "purchase", "expense", "refund", "payroll", "petty"
 	Vendor                *client.Client            `protobuf:"bytes,9,opt,name=vendor,proto3,oneof" json:"vendor,omitempty"`                                    // counterparty (vendor/supplier)
 	VendorId              string                    `protobuf:"bytes,10,opt,name=vendor_id,json=vendorId,proto3" json:"vendor_id,omitempty"`                     // FK to entity/client (vendors are clients you buy from)
 	ExpenditureDate       *int64                    `protobuf:"varint,11,opt,name=expenditure_date,json=expenditureDate,proto3,oneof" json:"expenditure_date,omitempty"`
@@ -55,8 +55,11 @@ type Expenditure struct {
 	SupplierId            *string                   `protobuf:"bytes,25,opt,name=supplier_id,json=supplierId,proto3,oneof" json:"supplier_id,omitempty"`                  // FK to supplier (new — migrate from vendor_id over time)
 	PaymentTermId         *string                   `protobuf:"bytes,26,opt,name=payment_term_id,json=paymentTermId,proto3,oneof" json:"payment_term_id,omitempty"`
 	PaymentTerm           *payment_term.PaymentTerm `protobuf:"bytes,27,opt,name=payment_term,json=paymentTerm,proto3,oneof" json:"payment_term,omitempty"`
-	unknownFields         protoimpl.UnknownFields
-	sizeCache             protoimpl.SizeCache
+	// Supplier commitment back-edges
+	SupplierContractId *string `protobuf:"bytes,28,opt,name=supplier_contract_id,json=supplierContractId,proto3,oneof" json:"supplier_contract_id,omitempty"` // FK to SupplierContract (roll-up spend)
+	PettyCashFundId    *string `protobuf:"bytes,29,opt,name=petty_cash_fund_id,json=pettyCashFundId,proto3,oneof" json:"petty_cash_fund_id,omitempty"`        // FK to PettyCashFund (sundries flow)
+	unknownFields      protoimpl.UnknownFields
+	sizeCache          protoimpl.SizeCache
 }
 
 func (x *Expenditure) Reset() {
@@ -276,6 +279,20 @@ func (x *Expenditure) GetPaymentTerm() *payment_term.PaymentTerm {
 		return x.PaymentTerm
 	}
 	return nil
+}
+
+func (x *Expenditure) GetSupplierContractId() string {
+	if x != nil && x.SupplierContractId != nil {
+		return *x.SupplierContractId
+	}
+	return ""
+}
+
+func (x *Expenditure) GetPettyCashFundId() string {
+	if x != nil && x.PettyCashFundId != nil {
+		return *x.PettyCashFundId
+	}
+	return ""
 }
 
 type CreateExpenditureRequest struct {
@@ -1066,7 +1083,7 @@ var File_domain_expenditure_expenditure_expenditure_proto protoreflect.FileDescr
 
 const file_domain_expenditure_expenditure_expenditure_proto_rawDesc = "" +
 	"\n" +
-	"0domain/expenditure/expenditure/expenditure.proto\x12\x15domain.expenditure.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/search.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a!domain/entity/client/client.proto\x1a%domain/entity/location/location.proto\x1a-domain/entity/payment_term/payment_term.proto\x1a\x10options/db.proto\"\xe3\v\n" +
+	"0domain/expenditure/expenditure/expenditure.proto\x12\x15domain.expenditure.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/search.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a!domain/entity/client/client.proto\x1a%domain/entity/location/location.proto\x1a-domain/entity/payment_term/payment_term.proto\x1a\x10options/db.proto\"\xac\r\n" +
 	"\vExpenditure\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12&\n" +
 	"\fdate_created\x18\x02 \x01(\x03H\x00R\vdateCreated\x88\x01\x01\x123\n" +
@@ -1102,7 +1119,11 @@ const file_domain_expenditure_expenditure_expenditure_proto_rawDesc = "" +
 	"\bsupplierH\x0fR\n" +
 	"supplierId\x88\x01\x01\x12+\n" +
 	"\x0fpayment_term_id\x18\x1a \x01(\tH\x10R\rpaymentTermId\x88\x01\x01\x12E\n" +
-	"\fpayment_term\x18\x1b \x01(\v2\x1d.domain.entity.v1.PaymentTermH\x11R\vpaymentTerm\x88\x01\x01B\x0f\n" +
+	"\fpayment_term\x18\x1b \x01(\v2\x1d.domain.entity.v1.PaymentTermH\x11R\vpaymentTerm\x88\x01\x01\x12N\n" +
+	"\x14supplier_contract_id\x18\x1c \x01(\tB\x17\x82\xb5\x18\x13\n" +
+	"\x11supplier_contractH\x12R\x12supplierContractId\x88\x01\x01\x12G\n" +
+	"\x12petty_cash_fund_id\x18\x1d \x01(\tB\x15\x82\xb5\x18\x11\n" +
+	"\x0fpetty_cash_fundH\x13R\x0fpettyCashFundId\x88\x01\x01B\x0f\n" +
 	"\r_date_createdB\x16\n" +
 	"\x14_date_created_stringB\x10\n" +
 	"\x0e_date_modifiedB\x17\n" +
@@ -1120,7 +1141,9 @@ const file_domain_expenditure_expenditure_expenditure_proto_rawDesc = "" +
 	"\x12_purchase_order_idB\x0e\n" +
 	"\f_supplier_idB\x12\n" +
 	"\x10_payment_term_idB\x0f\n" +
-	"\r_payment_term\"R\n" +
+	"\r_payment_termB\x17\n" +
+	"\x15_supplier_contract_idB\x15\n" +
+	"\x13_petty_cash_fund_id\"R\n" +
 	"\x18CreateExpenditureRequest\x126\n" +
 	"\x04data\x18\x01 \x01(\v2\".domain.expenditure.v1.ExpenditureR\x04data\"\xab\x01\n" +
 	"\x19CreateExpenditureResponse\x126\n" +

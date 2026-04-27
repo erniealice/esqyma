@@ -58,6 +58,58 @@ export type JobPhase = Message<"domain.operation.v1.JobPhase"> & {
      * @generated from field: domain.operation.v1.PhaseStatus status = 11;
      */
     status: PhaseStatus;
+    /**
+     * @generated from field: optional string template_phase_id = 12;
+     */
+    templatePhaseId?: string;
+    /**
+     * @generated from field: optional string resource_id = 13;
+     */
+    resourceId?: string;
+    /**
+     * @generated from field: optional int64 planned_start = 14;
+     */
+    plannedStart?: bigint;
+    /**
+     * @generated from field: optional string planned_start_string = 15;
+     */
+    plannedStartString?: string;
+    /**
+     * @generated from field: optional int64 planned_end = 16;
+     */
+    plannedEnd?: bigint;
+    /**
+     * @generated from field: optional string planned_end_string = 17;
+     */
+    plannedEndString?: string;
+    /**
+     * @generated from field: optional int64 actual_start = 18;
+     */
+    actualStart?: bigint;
+    /**
+     * @generated from field: optional string actual_start_string = 19;
+     */
+    actualStartString?: string;
+    /**
+     * @generated from field: optional int64 actual_end = 20;
+     */
+    actualEnd?: bigint;
+    /**
+     * @generated from field: optional string actual_end_string = 21;
+     */
+    actualEndString?: string;
+    /**
+     * @generated from field: optional int32 setup_minutes = 22;
+     */
+    setupMinutes?: number;
+    /**
+     * @generated from field: optional double run_minutes_per_unit = 23;
+     */
+    runMinutesPerUnit?: number;
+    /**
+     * @generated from field: optional string predecessor_phase_id = 24;
+     */
+    predecessorPhaseId?: string;
 };
 /**
  * Describes the message domain.operation.v1.JobPhase.

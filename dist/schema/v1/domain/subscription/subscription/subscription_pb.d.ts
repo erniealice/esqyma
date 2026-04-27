@@ -6,6 +6,7 @@ import type { SortRequest } from "../../common/sort_pb";
 import type { SearchRequest, SearchResult } from "../../common/search_pb";
 import type { PricePlan } from "../price_plan/price_plan_pb";
 import type { Client } from "../../entity/client/client_pb";
+import type { Timestamp } from "@bufbuild/protobuf/wkt";
 import type { Message } from "@bufbuild/protobuf";
 /**
  * Describes the file domain/subscription/subscription/subscription.proto.
@@ -60,17 +61,17 @@ export type Subscription = Message<"domain.subscription.v1.Subscription"> & {
      */
     clientId: string;
     /**
-     * ISO 8601 date (YYYY-MM-DD)
+     * UTC timestamp; display TZ resolved per-request
      *
-     * @generated from field: optional string date_start = 12;
+     * @generated from field: optional google.protobuf.Timestamp date_time_start = 12;
      */
-    dateStart?: string;
+    dateTimeStart?: Timestamp;
     /**
-     * ISO 8601 date (YYYY-MM-DD)
+     * UTC timestamp; nil = open-ended
      *
-     * @generated from field: optional string date_end = 14;
+     * @generated from field: optional google.protobuf.Timestamp date_time_end = 14;
      */
-    dateEnd?: string;
+    dateTimeEnd?: Timestamp;
     /**
      * @generated from field: map<string, string> metadata = 16;
      */

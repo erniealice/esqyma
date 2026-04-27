@@ -21,6 +21,8 @@ enum TaskStatus {
   TASK_STATUS_IN_PROGRESS = 2;
   TASK_STATUS_COMPLETED = 3;
   TASK_STATUS_SKIPPED = 4;
+  TASK_STATUS_HOLD = 5;       // NEW
+  TASK_STATUS_REWORK = 6;     // NEW
 }
 
 // --- Message ---
@@ -41,6 +43,20 @@ message JobTask {
   TaskStatus status = 11;
   bool is_ad_hoc = 12;
   optional string assigned_to = 13 [(options.v1.db).references = "staff", (options.v1.db).index = true];
+  optional string template_task_id = 14 [(options.v1.db).references = "job_template_task", (options.v1.db).index = true];
+  optional string resource_id = 15 [(options.v1.db).references = "resource", (options.v1.db).index = true];
+  optional double planned_quantity = 16;
+  optional double completed_quantity = 17;
+  optional double percent_complete = 18;
+  optional int64 actual_start = 19;
+  optional string actual_start_string = 20;
+  optional int64 actual_end = 21;
+  optional string actual_end_string = 22;
+  repeated string predecessor_task_ids = 23;
+  optional bool allow_parallel = 24 [(options.v1.db).default = "false"];
+  optional string workflow_step_id = 25 [(options.v1.db).index = true];
+
+  reserved 26 to 39;
 }
 
 // --- Service ---

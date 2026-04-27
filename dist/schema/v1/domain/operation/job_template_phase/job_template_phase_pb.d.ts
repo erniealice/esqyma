@@ -54,6 +54,26 @@ export type JobTemplatePhase = Message<"domain.operation.v1.JobTemplatePhase"> &
      * @generated from field: int32 phase_order = 10;
      */
     phaseOrder: number;
+    /**
+     * @generated from field: optional string resource_id = 11;
+     */
+    resourceId?: string;
+    /**
+     * @generated from field: optional int32 setup_minutes = 12;
+     */
+    setupMinutes?: number;
+    /**
+     * @generated from field: optional double run_minutes_per_unit = 13;
+     */
+    runMinutesPerUnit?: number;
+    /**
+     * @generated from field: optional int32 teardown_minutes = 14;
+     */
+    teardownMinutes?: number;
+    /**
+     * @generated from field: optional string predecessor_template_phase_id = 15;
+     */
+    predecessorTemplatePhaseId?: string;
 };
 /**
  * Describes the message domain.operation.v1.JobTemplatePhase.

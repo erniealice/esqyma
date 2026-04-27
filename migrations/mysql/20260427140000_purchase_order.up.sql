@@ -1,0 +1,62 @@
+-- Migration: purchase_order (up)
+-- Dialect: mysql
+-- Created: 2026-04-27T14:00:00Z
+
+CREATE TABLE IF NOT EXISTS `purchase_order` (
+  `id`                          VARCHAR(255) PRIMARY KEY,
+  `po_number`                   VARCHAR(255) NOT NULL UNIQUE,
+  `po_type`                     TEXT NOT NULL DEFAULT '',
+  `status`                      TEXT NOT NULL DEFAULT '',
+  `supplier_id`                 VARCHAR(255) NOT NULL,
+  `location_id`                 VARCHAR(255),
+  `order_date`                  BIGINT,
+  `order_date_string`           TEXT,
+  `expected_delivery_date`      BIGINT,
+  `expected_delivery_date_string` TEXT,
+  `currency`                    TEXT NOT NULL DEFAULT '',
+  `subtotal`                    BIGINT NOT NULL DEFAULT 0,
+  `tax_amount`                  BIGINT NOT NULL DEFAULT 0,
+  `total_amount`                BIGINT NOT NULL DEFAULT 0,
+  `payment_terms`               TEXT,
+  `shipping_terms`              TEXT,
+  `approved_by`                 TEXT,
+  `approved_date`               BIGINT,
+  `approved_date_string`        TEXT,
+  `parent_po_id`                VARCHAR(255),
+  `blanket_start_date`          TEXT,
+  `blanket_end_date`            TEXT,
+  `blanket_total_quantity`      DOUBLE NOT NULL DEFAULT 0,
+  `blanket_released_quantity`   DOUBLE NOT NULL DEFAULT 0,
+  `notes`                       TEXT,
+  `reference_number`            TEXT,
+  `payment_term_id`             VARCHAR(255),
+  `supplier_contract_id`        VARCHAR(255),
+  `procurement_request_id`      VARCHAR(255),
+  `active`                      BOOLEAN NOT NULL DEFAULT true,
+  `date_created`                DATETIME DEFAULT NOW(),
+  `date_modified`               DATETIME DEFAULT NOW()
+);
+
+CREATE TABLE IF NOT EXISTS `purchase_order_line_item` (
+  `id`                           VARCHAR(255) PRIMARY KEY,
+  `purchase_order_id`            VARCHAR(255) NOT NULL,
+  `product_id`                   VARCHAR(255),
+  `description`                  TEXT NOT NULL DEFAULT '',
+  `line_type`                    TEXT NOT NULL DEFAULT '',
+  `quantity_ordered`             DOUBLE NOT NULL DEFAULT 0,
+  `quantity_received`            DOUBLE NOT NULL DEFAULT 0,
+  `quantity_billed`              DOUBLE NOT NULL DEFAULT 0,
+  `unit_price`                   BIGINT NOT NULL DEFAULT 0,
+  `total_price`                  BIGINT NOT NULL DEFAULT 0,
+  `location_id`                  VARCHAR(255),
+  `inventory_item_id`            VARCHAR(255),
+  `required_by_date`             BIGINT,
+  `required_by_date_string`      TEXT,
+  `notes`                        TEXT,
+  `line_number`                  INT NOT NULL DEFAULT 0,
+  `supplier_contract_line_id`    VARCHAR(255),
+  `procurement_request_line_id`  VARCHAR(255),
+  `active`                       BOOLEAN NOT NULL DEFAULT true,
+  `date_created`                 DATETIME DEFAULT NOW(),
+  `date_modified`                DATETIME DEFAULT NOW()
+);

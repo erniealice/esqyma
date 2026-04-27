@@ -103,6 +103,20 @@ export type Prepayment = Message<"domain.expenditure.v1.Prepayment"> & {
      * @generated from field: optional string date_modified_string = 18;
      */
     dateModifiedString?: string;
+    /**
+     * Supplier commitment back-edges (plan §11.5 — adopted, not deferred)
+     *
+     * FK to SupplierContract
+     *
+     * @generated from field: optional string supplier_contract_id = 19;
+     */
+    supplierContractId?: string;
+    /**
+     * FK to the originating Expenditure
+     *
+     * @generated from field: optional string expenditure_id = 20;
+     */
+    expenditureId?: string;
 };
 /**
  * Describes the message domain.expenditure.v1.Prepayment.

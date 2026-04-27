@@ -4,7 +4,7 @@ import type { PaginationRequest, PaginationResponse } from "../../common/paginat
 import type { FilterRequest } from "../../common/filter_pb";
 import type { SortRequest } from "../../common/sort_pb";
 import type { SearchRequest, SearchResult } from "../../common/search_pb";
-import type { BillingRuleType, CostFlowType, FulfillmentType } from "../enums/enums_pb";
+import type { BillingRuleType, CostFlowType, FulfillmentType, VersionStatus } from "../enums/enums_pb";
 import type { Message } from "@bufbuild/protobuf";
 /**
  * Describes the file domain/operation/job_template/job_template.proto.
@@ -62,6 +62,86 @@ export type JobTemplate = Message<"domain.operation.v1.JobTemplate"> & {
      * @generated from field: optional string workspace_id = 12;
      */
     workspaceId?: string;
+    /**
+     * Versioning
+     *
+     * @generated from field: optional string template_code = 13;
+     */
+    templateCode?: string;
+    /**
+     * @generated from field: optional int32 revision = 14;
+     */
+    revision?: number;
+    /**
+     * @generated from field: optional domain.operation.v1.VersionStatus version_status = 15;
+     */
+    versionStatus?: VersionStatus;
+    /**
+     * @generated from field: optional int64 effective_from = 16;
+     */
+    effectiveFrom?: bigint;
+    /**
+     * @generated from field: optional string effective_from_string = 17;
+     */
+    effectiveFromString?: string;
+    /**
+     * @generated from field: optional int64 effective_to = 18;
+     */
+    effectiveTo?: bigint;
+    /**
+     * @generated from field: optional string effective_to_string = 19;
+     */
+    effectiveToString?: string;
+    /**
+     * @generated from field: optional string supersedes_template_id = 20;
+     */
+    supersedesTemplateId?: string;
+    /**
+     * @generated from field: optional string change_request_id = 21;
+     */
+    changeRequestId?: string;
+    /**
+     * @generated from field: optional bool is_default = 22;
+     */
+    isDefault?: boolean;
+    /**
+     * @generated from field: optional int64 published_at = 23;
+     */
+    publishedAt?: bigint;
+    /**
+     * @generated from field: optional string published_at_string = 24;
+     */
+    publishedAtString?: string;
+    /**
+     * @generated from field: optional string published_by = 25;
+     */
+    publishedBy?: string;
+    /**
+     * Defaults
+     *
+     * @generated from field: optional int32 default_lot_size = 27;
+     */
+    defaultLotSize?: number;
+    /**
+     * @generated from field: optional string default_uom = 28;
+     */
+    defaultUom?: string;
+    /**
+     * Output target
+     *
+     * @generated from field: optional string output_product_id = 29;
+     */
+    outputProductId?: string;
+    /**
+     * @generated from field: optional string output_product_variant_id = 30;
+     */
+    outputProductVariantId?: string;
+    /**
+     * Workflow
+     *
+     * @generated from field: optional string workflow_template_id = 31;
+     */
+    workflowTemplateId?: string;
 };
 /**
  * Describes the message domain.operation.v1.JobTemplate.

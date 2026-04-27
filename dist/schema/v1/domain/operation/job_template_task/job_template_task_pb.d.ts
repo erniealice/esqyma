@@ -58,6 +58,50 @@ export type JobTemplateTask = Message<"domain.operation.v1.JobTemplateTask"> & {
      * @generated from field: optional int32 estimated_duration_minutes = 11;
      */
     estimatedDurationMinutes?: number;
+    /**
+     * @generated from field: optional string resource_id = 12;
+     */
+    resourceId?: string;
+    /**
+     * @generated from field: optional string skill_required = 13;
+     */
+    skillRequired?: string;
+    /**
+     * @generated from field: optional double quantity_factor = 14;
+     */
+    quantityFactor?: number;
+    /**
+     * @generated from field: optional int32 standard_labor_minutes = 15;
+     */
+    standardLaborMinutes?: number;
+    /**
+     * @generated from field: optional int32 standard_machine_minutes = 16;
+     */
+    standardMachineMinutes?: number;
+    /**
+     * @generated from field: optional int32 setup_minutes = 17;
+     */
+    setupMinutes?: number;
+    /**
+     * @generated from field: optional double run_minutes_per_unit = 18;
+     */
+    runMinutesPerUnit?: number;
+    /**
+     * @generated from field: optional int32 teardown_minutes = 19;
+     */
+    teardownMinutes?: number;
+    /**
+     * @generated from field: optional string tool_required = 20;
+     */
+    toolRequired?: string;
+    /**
+     * @generated from field: optional string instruction_doc_id = 21;
+     */
+    instructionDocId?: string;
+    /**
+     * @generated from field: optional string workflow_step_id = 22;
+     */
+    workflowStepId?: string;
 };
 /**
  * Describes the message domain.operation.v1.JobTemplateTask.

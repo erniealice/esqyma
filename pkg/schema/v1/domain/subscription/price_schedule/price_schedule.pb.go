@@ -37,8 +37,10 @@ type PriceSchedule struct {
 	DateTimeStart      *timestamppb.Timestamp `protobuf:"bytes,9,opt,name=date_time_start,json=dateTimeStart,proto3" json:"date_time_start,omitempty"`  // UTC timestamp; display TZ resolved per-request
 	DateTimeEnd        *timestamppb.Timestamp `protobuf:"bytes,10,opt,name=date_time_end,json=dateTimeEnd,proto3,oneof" json:"date_time_end,omitempty"` // UTC timestamp; nil = open-ended
 	LocationId         *string                `protobuf:"bytes,11,opt,name=location_id,json=locationId,proto3,oneof" json:"location_id,omitempty"`
-	unknownFields      protoimpl.UnknownFields
-	sizeCache          protoimpl.SizeCache
+	// SET = client-scoped schedule. Reuse-or-create driven by ResolveOrCreateClientPriceSchedule.
+	ClientId      *string `protobuf:"bytes,12,opt,name=client_id,json=clientId,proto3,oneof" json:"client_id,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
 }
 
 func (x *PriceSchedule) Reset() {
@@ -144,6 +146,13 @@ func (x *PriceSchedule) GetDateTimeEnd() *timestamppb.Timestamp {
 func (x *PriceSchedule) GetLocationId() string {
 	if x != nil && x.LocationId != nil {
 		return *x.LocationId
+	}
+	return ""
+}
+
+func (x *PriceSchedule) GetClientId() string {
+	if x != nil && x.ClientId != nil {
+		return *x.ClientId
 	}
 	return ""
 }
@@ -1056,7 +1065,7 @@ var File_domain_subscription_price_schedule_price_schedule_proto protoreflect.Fi
 
 const file_domain_subscription_price_schedule_price_schedule_proto_rawDesc = "" +
 	"\n" +
-	"7domain/subscription/price_schedule/price_schedule.proto\x12\x16domain.subscription.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/search.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x10options/db.proto\x1a\x1fgoogle/protobuf/timestamp.proto\"\x8b\x05\n" +
+	"7domain/subscription/price_schedule/price_schedule.proto\x12\x16domain.subscription.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/search.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x10options/db.proto\x1a\x1fgoogle/protobuf/timestamp.proto\"\xcb\x05\n" +
 	"\rPriceSchedule\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12&\n" +
 	"\fdate_created\x18\x02 \x01(\x03H\x00R\vdateCreated\x88\x01\x01\x123\n" +
@@ -1072,14 +1081,19 @@ const file_domain_subscription_price_schedule_price_schedule_proto_rawDesc = "" 
 	" \x01(\v2\x1a.google.protobuf.TimestampH\x05R\vdateTimeEnd\x88\x01\x01\x126\n" +
 	"\vlocation_id\x18\v \x01(\tB\x10\x82\xb5\x18\f\n" +
 	"\blocation\x18\x01H\x06R\n" +
-	"locationId\x88\x01\x01:\x06\x8a\xb5\x18\x02\b\x01B\x0f\n" +
+	"locationId\x88\x01\x01\x120\n" +
+	"\tclient_id\x18\f \x01(\tB\x0e\x82\xb5\x18\n" +
+	"\n" +
+	"\x06client\x18\x01H\aR\bclientId\x88\x01\x01:\x06\x8a\xb5\x18\x02\b\x01B\x0f\n" +
 	"\r_date_createdB\x16\n" +
 	"\x14_date_created_stringB\x10\n" +
 	"\x0e_date_modifiedB\x17\n" +
 	"\x15_date_modified_stringB\x0e\n" +
 	"\f_descriptionB\x10\n" +
 	"\x0e_date_time_endB\x0e\n" +
-	"\f_location_id\"W\n" +
+	"\f_location_idB\f\n" +
+	"\n" +
+	"_client_id\"W\n" +
 	"\x1aCreatePriceScheduleRequest\x129\n" +
 	"\x04data\x18\x01 \x01(\v2%.domain.subscription.v1.PriceScheduleR\x04data\"\xb0\x01\n" +
 	"\x1bCreatePriceScheduleResponse\x129\n" +

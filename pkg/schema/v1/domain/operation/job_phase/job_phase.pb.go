@@ -89,6 +89,19 @@ type JobPhase struct {
 	Name               string                 `protobuf:"bytes,9,opt,name=name,proto3" json:"name,omitempty"`
 	PhaseOrder         int32                  `protobuf:"varint,10,opt,name=phase_order,json=phaseOrder,proto3" json:"phase_order,omitempty"`
 	Status             PhaseStatus            `protobuf:"varint,11,opt,name=status,proto3,enum=domain.operation.v1.PhaseStatus" json:"status,omitempty"`
+	TemplatePhaseId    *string                `protobuf:"bytes,12,opt,name=template_phase_id,json=templatePhaseId,proto3,oneof" json:"template_phase_id,omitempty"`
+	ResourceId         *string                `protobuf:"bytes,13,opt,name=resource_id,json=resourceId,proto3,oneof" json:"resource_id,omitempty"`
+	PlannedStart       *int64                 `protobuf:"varint,14,opt,name=planned_start,json=plannedStart,proto3,oneof" json:"planned_start,omitempty"`
+	PlannedStartString *string                `protobuf:"bytes,15,opt,name=planned_start_string,json=plannedStartString,proto3,oneof" json:"planned_start_string,omitempty"`
+	PlannedEnd         *int64                 `protobuf:"varint,16,opt,name=planned_end,json=plannedEnd,proto3,oneof" json:"planned_end,omitempty"`
+	PlannedEndString   *string                `protobuf:"bytes,17,opt,name=planned_end_string,json=plannedEndString,proto3,oneof" json:"planned_end_string,omitempty"`
+	ActualStart        *int64                 `protobuf:"varint,18,opt,name=actual_start,json=actualStart,proto3,oneof" json:"actual_start,omitempty"`
+	ActualStartString  *string                `protobuf:"bytes,19,opt,name=actual_start_string,json=actualStartString,proto3,oneof" json:"actual_start_string,omitempty"`
+	ActualEnd          *int64                 `protobuf:"varint,20,opt,name=actual_end,json=actualEnd,proto3,oneof" json:"actual_end,omitempty"`
+	ActualEndString    *string                `protobuf:"bytes,21,opt,name=actual_end_string,json=actualEndString,proto3,oneof" json:"actual_end_string,omitempty"`
+	SetupMinutes       *int32                 `protobuf:"varint,22,opt,name=setup_minutes,json=setupMinutes,proto3,oneof" json:"setup_minutes,omitempty"`
+	RunMinutesPerUnit  *float64               `protobuf:"fixed64,23,opt,name=run_minutes_per_unit,json=runMinutesPerUnit,proto3,oneof" json:"run_minutes_per_unit,omitempty"`
+	PredecessorPhaseId *string                `protobuf:"bytes,24,opt,name=predecessor_phase_id,json=predecessorPhaseId,proto3,oneof" json:"predecessor_phase_id,omitempty"`
 	unknownFields      protoimpl.UnknownFields
 	sizeCache          protoimpl.SizeCache
 }
@@ -198,6 +211,97 @@ func (x *JobPhase) GetStatus() PhaseStatus {
 		return x.Status
 	}
 	return PhaseStatus_PHASE_STATUS_UNSPECIFIED
+}
+
+func (x *JobPhase) GetTemplatePhaseId() string {
+	if x != nil && x.TemplatePhaseId != nil {
+		return *x.TemplatePhaseId
+	}
+	return ""
+}
+
+func (x *JobPhase) GetResourceId() string {
+	if x != nil && x.ResourceId != nil {
+		return *x.ResourceId
+	}
+	return ""
+}
+
+func (x *JobPhase) GetPlannedStart() int64 {
+	if x != nil && x.PlannedStart != nil {
+		return *x.PlannedStart
+	}
+	return 0
+}
+
+func (x *JobPhase) GetPlannedStartString() string {
+	if x != nil && x.PlannedStartString != nil {
+		return *x.PlannedStartString
+	}
+	return ""
+}
+
+func (x *JobPhase) GetPlannedEnd() int64 {
+	if x != nil && x.PlannedEnd != nil {
+		return *x.PlannedEnd
+	}
+	return 0
+}
+
+func (x *JobPhase) GetPlannedEndString() string {
+	if x != nil && x.PlannedEndString != nil {
+		return *x.PlannedEndString
+	}
+	return ""
+}
+
+func (x *JobPhase) GetActualStart() int64 {
+	if x != nil && x.ActualStart != nil {
+		return *x.ActualStart
+	}
+	return 0
+}
+
+func (x *JobPhase) GetActualStartString() string {
+	if x != nil && x.ActualStartString != nil {
+		return *x.ActualStartString
+	}
+	return ""
+}
+
+func (x *JobPhase) GetActualEnd() int64 {
+	if x != nil && x.ActualEnd != nil {
+		return *x.ActualEnd
+	}
+	return 0
+}
+
+func (x *JobPhase) GetActualEndString() string {
+	if x != nil && x.ActualEndString != nil {
+		return *x.ActualEndString
+	}
+	return ""
+}
+
+func (x *JobPhase) GetSetupMinutes() int32 {
+	if x != nil && x.SetupMinutes != nil {
+		return *x.SetupMinutes
+	}
+	return 0
+}
+
+func (x *JobPhase) GetRunMinutesPerUnit() float64 {
+	if x != nil && x.RunMinutesPerUnit != nil {
+		return *x.RunMinutesPerUnit
+	}
+	return 0
+}
+
+func (x *JobPhase) GetPredecessorPhaseId() string {
+	if x != nil && x.PredecessorPhaseId != nil {
+		return *x.PredecessorPhaseId
+	}
+	return ""
 }
 
 type CreateJobPhaseRequest struct {
@@ -1092,7 +1196,7 @@ var File_domain_operation_job_phase_job_phase_proto protoreflect.FileDescriptor
 
 const file_domain_operation_job_phase_job_phase_proto_rawDesc = "" +
 	"\n" +
-	"*domain/operation/job_phase/job_phase.proto\x12\x13domain.operation.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1adomain/common/search.proto\x1a\x1edomain/operation/job/job.proto\x1a\x10options/db.proto\"\x98\x04\n" +
+	"*domain/operation/job_phase/job_phase.proto\x12\x13domain.operation.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1adomain/common/search.proto\x1a\x1edomain/operation/job/job.proto\x1a\x10options/db.proto\"\xc1\v\n" +
 	"\bJobPhase\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12&\n" +
 	"\fdate_created\x18\x02 \x01(\x03H\x00R\vdateCreated\x88\x01\x01\x123\n" +
@@ -1107,12 +1211,45 @@ const file_domain_operation_job_phase_job_phase_proto_rawDesc = "" +
 	"\vphase_order\x18\n" +
 	" \x01(\x05R\n" +
 	"phaseOrder\x128\n" +
-	"\x06status\x18\v \x01(\x0e2 .domain.operation.v1.PhaseStatusR\x06status:\x06\x8a\xb5\x18\x02\b\x01B\x0f\n" +
+	"\x06status\x18\v \x01(\x0e2 .domain.operation.v1.PhaseStatusR\x06status\x12K\n" +
+	"\x11template_phase_id\x18\f \x01(\tB\x1a\x82\xb5\x18\x16\n" +
+	"\x12job_template_phase\x18\x01H\x05R\x0ftemplatePhaseId\x88\x01\x01\x126\n" +
+	"\vresource_id\x18\r \x01(\tB\x10\x82\xb5\x18\f\n" +
+	"\bresource\x18\x01H\x06R\n" +
+	"resourceId\x88\x01\x01\x12(\n" +
+	"\rplanned_start\x18\x0e \x01(\x03H\aR\fplannedStart\x88\x01\x01\x125\n" +
+	"\x14planned_start_string\x18\x0f \x01(\tH\bR\x12plannedStartString\x88\x01\x01\x12$\n" +
+	"\vplanned_end\x18\x10 \x01(\x03H\tR\n" +
+	"plannedEnd\x88\x01\x01\x121\n" +
+	"\x12planned_end_string\x18\x11 \x01(\tH\n" +
+	"R\x10plannedEndString\x88\x01\x01\x12&\n" +
+	"\factual_start\x18\x12 \x01(\x03H\vR\vactualStart\x88\x01\x01\x123\n" +
+	"\x13actual_start_string\x18\x13 \x01(\tH\fR\x11actualStartString\x88\x01\x01\x12\"\n" +
+	"\n" +
+	"actual_end\x18\x14 \x01(\x03H\rR\tactualEnd\x88\x01\x01\x12/\n" +
+	"\x11actual_end_string\x18\x15 \x01(\tH\x0eR\x0factualEndString\x88\x01\x01\x12(\n" +
+	"\rsetup_minutes\x18\x16 \x01(\x05H\x0fR\fsetupMinutes\x88\x01\x01\x124\n" +
+	"\x14run_minutes_per_unit\x18\x17 \x01(\x01H\x10R\x11runMinutesPerUnit\x88\x01\x01\x12F\n" +
+	"\x14predecessor_phase_id\x18\x18 \x01(\tB\x0f\x82\xb5\x18\v\n" +
+	"\tjob_phaseH\x11R\x12predecessorPhaseId\x88\x01\x01:\x06\x8a\xb5\x18\x02\b\x01B\x0f\n" +
 	"\r_date_createdB\x16\n" +
 	"\x14_date_created_stringB\x10\n" +
 	"\x0e_date_modifiedB\x17\n" +
 	"\x15_date_modified_stringB\x06\n" +
-	"\x04_job\"J\n" +
+	"\x04_jobB\x14\n" +
+	"\x12_template_phase_idB\x0e\n" +
+	"\f_resource_idB\x10\n" +
+	"\x0e_planned_startB\x17\n" +
+	"\x15_planned_start_stringB\x0e\n" +
+	"\f_planned_endB\x15\n" +
+	"\x13_planned_end_stringB\x0f\n" +
+	"\r_actual_startB\x16\n" +
+	"\x14_actual_start_stringB\r\n" +
+	"\v_actual_endB\x14\n" +
+	"\x12_actual_end_stringB\x10\n" +
+	"\x0e_setup_minutesB\x17\n" +
+	"\x15_run_minutes_per_unitB\x17\n" +
+	"\x15_predecessor_phase_idJ\x04\b\x19\x10(\"J\n" +
 	"\x15CreateJobPhaseRequest\x121\n" +
 	"\x04data\x18\x01 \x01(\v2\x1d.domain.operation.v1.JobPhaseR\x04data\"\xa3\x01\n" +
 	"\x16CreateJobPhaseResponse\x121\n" +

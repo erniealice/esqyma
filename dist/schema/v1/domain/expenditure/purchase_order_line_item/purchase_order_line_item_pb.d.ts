@@ -133,6 +133,20 @@ export type PurchaseOrderLineItem = Message<"domain.expenditure.v1.PurchaseOrder
      * @generated from field: optional string date_modified_string = 23;
      */
     dateModifiedString?: string;
+    /**
+     * Supplier commitment back-edges
+     *
+     * FK to supplier_contract_line (no DB constraint)
+     *
+     * @generated from field: optional string supplier_contract_line_id = 24;
+     */
+    supplierContractLineId?: string;
+    /**
+     * FK to procurement_request_line (no DB constraint)
+     *
+     * @generated from field: optional string procurement_request_line_id = 25;
+     */
+    procurementRequestLineId?: string;
 };
 /**
  * Describes the message domain.expenditure.v1.PurchaseOrderLineItem.

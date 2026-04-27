@@ -45,6 +45,10 @@ export type LocationArea = Message<"domain.entity.v1.LocationArea"> & {
      * @generated from field: bool active = 8;
      */
     active: boolean;
+    /**
+     * @generated from field: optional string workspace_id = 9;
+     */
+    workspaceId?: string;
 };
 /**
  * Describes the message domain.entity.v1.LocationArea.

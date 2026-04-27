@@ -63,6 +63,9 @@ message PricePlan {
   // Default catalog validity/term; null = open-ended. Subscription.date_end overrides per-instance.
   optional int32  default_term_value = 23;
   optional string default_term_unit  = 24;
+
+  // Denormalized mirror of plan.client_id. Cascade enforced at use-case layer.
+  optional string client_id = 25 [(options.v1.db).references = "client", (options.v1.db).index = true];
 }
 
 service PricePlanDomainService {

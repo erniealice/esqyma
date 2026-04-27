@@ -1,4 +1,4 @@
-import type { GenFile, GenMessage, GenService } from "@bufbuild/protobuf/codegenv2";
+import type { GenEnum, GenFile, GenMessage, GenService } from "@bufbuild/protobuf/codegenv2";
 import type { Error } from "../../common/error_pb";
 import type { PaginationRequest, PaginationResponse } from "../../common/pagination_pb";
 import type { SearchRequest, SearchResult } from "../../common/search_pb";
@@ -27,13 +27,13 @@ export type PricePlan = Message<"domain.subscription.v1.PricePlan"> & {
      */
     planId: string;
     /**
-     * @generated from field: string name = 4;
+     * @generated from field: optional string name = 4;
      */
-    name: string;
+    name?: string;
     /**
-     * @generated from field: string description = 5;
+     * @generated from field: optional string description = 5;
      */
-    description: string;
+    description?: string;
     /**
      * @generated from field: optional int64 date_created = 6;
      */
@@ -55,23 +55,30 @@ export type PricePlan = Message<"domain.subscription.v1.PricePlan"> & {
      */
     active: boolean;
     /**
-     * centavos
+     * centavos — charged to the client in billing_currency
      *
-     * @generated from field: int64 amount = 11;
+     * @generated from field: int64 billing_amount = 11;
      */
-    amount: bigint;
+    billingAmount: bigint;
     /**
-     * @generated from field: string currency = 12;
+     * ISO 4217 currency code — what the client is billed in
+     *
+     * @generated from field: string billing_currency = 12;
      */
-    currency: string;
+    billingCurrency: string;
     /**
-     * @generated from field: int32 duration_value = 13;
+     * DEPRECATED: migrate to billing_cycle_* and default_term_* — see docs/plan/20260421-pricing-unification/plan.md
+     * Now optional: BILLING_KIND_ONE_TIME plans hide the cycle row in the UI, so the legacy
+     * duration_value/unit dual-write input can be empty. Column NULL-ability follows the proto
+     * (migration 20260425150000_price_plan_duration_value_nullable).
+     *
+     * @generated from field: optional int32 duration_value = 13;
      */
-    durationValue: number;
+    durationValue?: number;
     /**
-     * @generated from field: string duration_unit = 14;
+     * @generated from field: optional string duration_unit = 14;
      */
-    durationUnit: string;
+    durationUnit?: string;
     /**
      * Email template paths/URLs for dynamic email rendering
      *
@@ -93,6 +100,42 @@ export type PricePlan = Message<"domain.subscription.v1.PricePlan"> & {
      * @generated from field: optional string price_schedule_id = 18;
      */
     priceScheduleId?: string;
+    /**
+     * @generated from field: domain.subscription.v1.BillingKind billing_kind = 19;
+     */
+    billingKind: BillingKind;
+    /**
+     * @generated from field: domain.subscription.v1.AmountBasis amount_basis = 20;
+     */
+    amountBasis: AmountBasis;
+    /**
+     * Billing cadence — only meaningful when billing_kind ∈ {RECURRING, CONTRACT with periodic billing}
+     *
+     * @generated from field: optional int32 billing_cycle_value = 21;
+     */
+    billingCycleValue?: number;
+    /**
+     * "day" | "week" | "month" | "year"
+     *
+     * @generated from field: optional string billing_cycle_unit = 22;
+     */
+    billingCycleUnit?: string;
+    /**
+     * Default catalog validity/term; null = open-ended. Subscription.date_end overrides per-instance.
+     *
+     * @generated from field: optional int32 default_term_value = 23;
+     */
+    defaultTermValue?: number;
+    /**
+     * @generated from field: optional string default_term_unit = 24;
+     */
+    defaultTermUnit?: string;
+    /**
+     * Denormalized mirror of plan.client_id. Cascade enforced at use-case layer.
+     *
+     * @generated from field: optional string client_id = 25;
+     */
+    clientId?: string;
 };
 /**
  * Describes the message domain.subscription.v1.PricePlan.
@@ -379,6 +422,68 @@ export type GetPricePlanItemPageDataResponse = Message<"domain.subscription.v1.G
  * Use `create(GetPricePlanItemPageDataResponseSchema)` to create a new message.
  */
 export declare const GetPricePlanItemPageDataResponseSchema: GenMessage<GetPricePlanItemPageDataResponse>;
+/**
+ * @generated from enum domain.subscription.v1.BillingKind
+ */
+export declare enum BillingKind {
+    /**
+     * @generated from enum value: BILLING_KIND_UNSPECIFIED = 0;
+     */
+    UNSPECIFIED = 0,
+    /**
+     * single charge, no ongoing cycles
+     *
+     * @generated from enum value: BILLING_KIND_ONE_TIME = 1;
+     */
+    ONE_TIME = 1,
+    /**
+     * open-ended cycling (cancel-anytime subscription)
+     *
+     * @generated from enum value: BILLING_KIND_RECURRING = 2;
+     */
+    RECURRING = 2,
+    /**
+     * fixed-term commitment (may have periodic billing within)
+     *
+     * @generated from enum value: BILLING_KIND_CONTRACT = 3;
+     */
+    CONTRACT = 3
+}
+/**
+ * Describes the enum domain.subscription.v1.BillingKind.
+ */
+export declare const BillingKindSchema: GenEnum<BillingKind>;
+/**
+ * @generated from enum domain.subscription.v1.AmountBasis
+ */
+export declare enum AmountBasis {
+    /**
+     * @generated from enum value: AMOUNT_BASIS_UNSPECIFIED = 0;
+     */
+    UNSPECIFIED = 0,
+    /**
+     * amount = per-cycle fee
+     *
+     * @generated from enum value: AMOUNT_BASIS_PER_CYCLE = 1;
+     */
+    PER_CYCLE = 1,
+    /**
+     * amount = one-shot total
+     *
+     * @generated from enum value: AMOUNT_BASIS_TOTAL_PACKAGE = 2;
+     */
+    TOTAL_PACKAGE = 2,
+    /**
+     * amount ignored; sum ProductPricePlan prices
+     *
+     * @generated from enum value: AMOUNT_BASIS_DERIVED_FROM_LINES = 3;
+     */
+    DERIVED_FROM_LINES = 3
+}
+/**
+ * Describes the enum domain.subscription.v1.AmountBasis.
+ */
+export declare const AmountBasisSchema: GenEnum<AmountBasis>;
 /**
  * @generated from service domain.subscription.v1.PricePlanDomainService
  */

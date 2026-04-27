@@ -21,6 +21,8 @@ enum EntryType {
   ENTRY_TYPE_LABOR = 1;
   ENTRY_TYPE_MATERIAL = 2;
   ENTRY_TYPE_EXPENSE = 3;
+  ENTRY_TYPE_EQUIPMENT = 4;     // NEW
+  ENTRY_TYPE_SUBCONTRACT = 5;   // NEW
 }
 
 enum BillableStatus {

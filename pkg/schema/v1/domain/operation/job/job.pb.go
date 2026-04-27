@@ -58,9 +58,41 @@ type Job struct {
 	// Audit
 	CreatedBy *string `protobuf:"bytes,24,opt,name=created_by,json=createdBy,proto3,oneof" json:"created_by,omitempty"`
 	// Tenant isolation
-	WorkspaceId   *string `protobuf:"bytes,25,opt,name=workspace_id,json=workspaceId,proto3,oneof" json:"workspace_id,omitempty"`
-	unknownFields protoimpl.UnknownFields
-	sizeCache     protoimpl.SizeCache
+	WorkspaceId *string `protobuf:"bytes,25,opt,name=workspace_id,json=workspaceId,proto3,oneof" json:"workspace_id,omitempty"`
+	// Output target
+	OutputProductId        *string  `protobuf:"bytes,26,opt,name=output_product_id,json=outputProductId,proto3,oneof" json:"output_product_id,omitempty"`
+	OutputProductVariantId *string  `protobuf:"bytes,27,opt,name=output_product_variant_id,json=outputProductVariantId,proto3,oneof" json:"output_product_variant_id,omitempty"`
+	PlannedQuantity        *float64 `protobuf:"fixed64,28,opt,name=planned_quantity,json=plannedQuantity,proto3,oneof" json:"planned_quantity,omitempty"`
+	OutputUom              *string  `protobuf:"bytes,29,opt,name=output_uom,json=outputUom,proto3,oneof" json:"output_uom,omitempty"`
+	// Dates
+	DueDate            *int64  `protobuf:"varint,30,opt,name=due_date,json=dueDate,proto3,oneof" json:"due_date,omitempty"`
+	DueDateString      *string `protobuf:"bytes,31,opt,name=due_date_string,json=dueDateString,proto3,oneof" json:"due_date_string,omitempty"`
+	ReleaseDate        *int64  `protobuf:"varint,32,opt,name=release_date,json=releaseDate,proto3,oneof" json:"release_date,omitempty"`
+	ReleaseDateString  *string `protobuf:"bytes,33,opt,name=release_date_string,json=releaseDateString,proto3,oneof" json:"release_date_string,omitempty"`
+	PlannedStart       *int64  `protobuf:"varint,34,opt,name=planned_start,json=plannedStart,proto3,oneof" json:"planned_start,omitempty"`
+	PlannedStartString *string `protobuf:"bytes,35,opt,name=planned_start_string,json=plannedStartString,proto3,oneof" json:"planned_start_string,omitempty"`
+	PlannedEnd         *int64  `protobuf:"varint,36,opt,name=planned_end,json=plannedEnd,proto3,oneof" json:"planned_end,omitempty"`
+	PlannedEndString   *string `protobuf:"bytes,37,opt,name=planned_end_string,json=plannedEndString,proto3,oneof" json:"planned_end_string,omitempty"`
+	ActualStart        *int64  `protobuf:"varint,38,opt,name=actual_start,json=actualStart,proto3,oneof" json:"actual_start,omitempty"`
+	ActualStartString  *string `protobuf:"bytes,39,opt,name=actual_start_string,json=actualStartString,proto3,oneof" json:"actual_start_string,omitempty"`
+	ActualEnd          *int64  `protobuf:"varint,40,opt,name=actual_end,json=actualEnd,proto3,oneof" json:"actual_end,omitempty"`
+	ActualEndString    *string `protobuf:"bytes,41,opt,name=actual_end_string,json=actualEndString,proto3,oneof" json:"actual_end_string,omitempty"`
+	// Scheduling
+	Priority          *int32   `protobuf:"varint,42,opt,name=priority,proto3,oneof" json:"priority,omitempty"`
+	ParentJobId       *string  `protobuf:"bytes,43,opt,name=parent_job_id,json=parentJobId,proto3,oneof" json:"parent_job_id,omitempty"`
+	PredecessorJobIds []string `protobuf:"bytes,44,rep,name=predecessor_job_ids,json=predecessorJobIds,proto3" json:"predecessor_job_ids,omitempty"`
+	// Cross-domain links
+	SalesOrderLineId *string `protobuf:"bytes,45,opt,name=sales_order_line_id,json=salesOrderLineId,proto3,oneof" json:"sales_order_line_id,omitempty"`
+	ResourceId       *string `protobuf:"bytes,46,opt,name=resource_id,json=resourceId,proto3,oneof" json:"resource_id,omitempty"`
+	Currency         *string `protobuf:"bytes,47,opt,name=currency,proto3,oneof" json:"currency,omitempty"`
+	CostAccountId    *string `protobuf:"bytes,48,opt,name=cost_account_id,json=costAccountId,proto3,oneof" json:"cost_account_id,omitempty"`
+	// Revision / workflow
+	JobTemplateRevisionSnapshot *int32  `protobuf:"varint,49,opt,name=job_template_revision_snapshot,json=jobTemplateRevisionSnapshot,proto3,oneof" json:"job_template_revision_snapshot,omitempty"`
+	JobTemplateRevisionId       *string `protobuf:"bytes,50,opt,name=job_template_revision_id,json=jobTemplateRevisionId,proto3,oneof" json:"job_template_revision_id,omitempty"`
+	ChangeRequestId             *string `protobuf:"bytes,51,opt,name=change_request_id,json=changeRequestId,proto3,oneof" json:"change_request_id,omitempty"`
+	WorkflowInstanceId          *string `protobuf:"bytes,52,opt,name=workflow_instance_id,json=workflowInstanceId,proto3,oneof" json:"workflow_instance_id,omitempty"`
+	unknownFields               protoimpl.UnknownFields
+	sizeCache                   protoimpl.SizeCache
 }
 
 func (x *Job) Reset() {
@@ -257,6 +289,195 @@ func (x *Job) GetCreatedBy() string {
 func (x *Job) GetWorkspaceId() string {
 	if x != nil && x.WorkspaceId != nil {
 		return *x.WorkspaceId
+	}
+	return ""
+}
+
+func (x *Job) GetOutputProductId() string {
+	if x != nil && x.OutputProductId != nil {
+		return *x.OutputProductId
+	}
+	return ""
+}
+
+func (x *Job) GetOutputProductVariantId() string {
+	if x != nil && x.OutputProductVariantId != nil {
+		return *x.OutputProductVariantId
+	}
+	return ""
+}
+
+func (x *Job) GetPlannedQuantity() float64 {
+	if x != nil && x.PlannedQuantity != nil {
+		return *x.PlannedQuantity
+	}
+	return 0
+}
+
+func (x *Job) GetOutputUom() string {
+	if x != nil && x.OutputUom != nil {
+		return *x.OutputUom
+	}
+	return ""
+}
+
+func (x *Job) GetDueDate() int64 {
+	if x != nil && x.DueDate != nil {
+		return *x.DueDate
+	}
+	return 0
+}
+
+func (x *Job) GetDueDateString() string {
+	if x != nil && x.DueDateString != nil {
+		return *x.DueDateString
+	}
+	return ""
+}
+
+func (x *Job) GetReleaseDate() int64 {
+	if x != nil && x.ReleaseDate != nil {
+		return *x.ReleaseDate
+	}
+	return 0
+}
+
+func (x *Job) GetReleaseDateString() string {
+	if x != nil && x.ReleaseDateString != nil {
+		return *x.ReleaseDateString
+	}
+	return ""
+}
+
+func (x *Job) GetPlannedStart() int64 {
+	if x != nil && x.PlannedStart != nil {
+		return *x.PlannedStart
+	}
+	return 0
+}
+
+func (x *Job) GetPlannedStartString() string {
+	if x != nil && x.PlannedStartString != nil {
+		return *x.PlannedStartString
+	}
+	return ""
+}
+
+func (x *Job) GetPlannedEnd() int64 {
+	if x != nil && x.PlannedEnd != nil {
+		return *x.PlannedEnd
+	}
+	return 0
+}
+
+func (x *Job) GetPlannedEndString() string {
+	if x != nil && x.PlannedEndString != nil {
+		return *x.PlannedEndString
+	}
+	return ""
+}
+
+func (x *Job) GetActualStart() int64 {
+	if x != nil && x.ActualStart != nil {
+		return *x.ActualStart
+	}
+	return 0
+}
+
+func (x *Job) GetActualStartString() string {
+	if x != nil && x.ActualStartString != nil {
+		return *x.ActualStartString
+	}
+	return ""
+}
+
+func (x *Job) GetActualEnd() int64 {
+	if x != nil && x.ActualEnd != nil {
+		return *x.ActualEnd
+	}
+	return 0
+}
+
+func (x *Job) GetActualEndString() string {
+	if x != nil && x.ActualEndString != nil {
+		return *x.ActualEndString
+	}
+	return ""
+}
+
+func (x *Job) GetPriority() int32 {
+	if x != nil && x.Priority != nil {
+		return *x.Priority
+	}
+	return 0
+}
+
+func (x *Job) GetParentJobId() string {
+	if x != nil && x.ParentJobId != nil {
+		return *x.ParentJobId
+	}
+	return ""
+}
+
+func (x *Job) GetPredecessorJobIds() []string {
+	if x != nil {
+		return x.PredecessorJobIds
+	}
+	return nil
+}
+
+func (x *Job) GetSalesOrderLineId() string {
+	if x != nil && x.SalesOrderLineId != nil {
+		return *x.SalesOrderLineId
+	}
+	return ""
+}
+
+func (x *Job) GetResourceId() string {
+	if x != nil && x.ResourceId != nil {
+		return *x.ResourceId
+	}
+	return ""
+}
+
+func (x *Job) GetCurrency() string {
+	if x != nil && x.Currency != nil {
+		return *x.Currency
+	}
+	return ""
+}
+
+func (x *Job) GetCostAccountId() string {
+	if x != nil && x.CostAccountId != nil {
+		return *x.CostAccountId
+	}
+	return ""
+}
+
+func (x *Job) GetJobTemplateRevisionSnapshot() int32 {
+	if x != nil && x.JobTemplateRevisionSnapshot != nil {
+		return *x.JobTemplateRevisionSnapshot
+	}
+	return 0
+}
+
+func (x *Job) GetJobTemplateRevisionId() string {
+	if x != nil && x.JobTemplateRevisionId != nil {
+		return *x.JobTemplateRevisionId
+	}
+	return ""
+}
+
+func (x *Job) GetChangeRequestId() string {
+	if x != nil && x.ChangeRequestId != nil {
+		return *x.ChangeRequestId
+	}
+	return ""
+}
+
+func (x *Job) GetWorkflowInstanceId() string {
+	if x != nil && x.WorkflowInstanceId != nil {
+		return *x.WorkflowInstanceId
 	}
 	return ""
 }
@@ -1377,7 +1598,7 @@ var File_domain_operation_job_job_proto protoreflect.FileDescriptor
 
 const file_domain_operation_job_job_proto_rawDesc = "" +
 	"\n" +
-	"\x1edomain/operation/job/job.proto\x12\x13domain.operation.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1adomain/common/search.proto\x1a!domain/entity/client/client.proto\x1a%domain/entity/location/location.proto\x1a\"domain/operation/enums/enums.proto\x1a\x10options/db.proto\"\x8d\f\n" +
+	"\x1edomain/operation/job/job.proto\x12\x13domain.operation.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1adomain/common/search.proto\x1a!domain/entity/client/client.proto\x1a%domain/entity/location/location.proto\x1a\"domain/operation/enums/enums.proto\x1a\x10options/db.proto\"\x93\x1b\n" +
 	"\x03Job\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12&\n" +
 	"\fdate_created\x18\x02 \x01(\x03H\x00R\vdateCreated\x88\x01\x01\x123\n" +
@@ -1414,7 +1635,43 @@ const file_domain_operation_job_job_proto_rawDesc = "" +
 	"created_by\x18\x18 \x01(\tH\n" +
 	"R\tcreatedBy\x88\x01\x01\x129\n" +
 	"\fworkspace_id\x18\x19 \x01(\tB\x11\x82\xb5\x18\r\n" +
-	"\tworkspace\x18\x01H\vR\vworkspaceId\x88\x01\x01:\x06\x8a\xb5\x18\x02\b\x01B\x0f\n" +
+	"\tworkspace\x18\x01H\vR\vworkspaceId\x88\x01\x01\x12@\n" +
+	"\x11output_product_id\x18\x1a \x01(\tB\x0f\x82\xb5\x18\v\n" +
+	"\aproduct\x18\x01H\fR\x0foutputProductId\x88\x01\x01\x12W\n" +
+	"\x19output_product_variant_id\x18\x1b \x01(\tB\x17\x82\xb5\x18\x13\n" +
+	"\x0fproduct_variant\x18\x01H\rR\x16outputProductVariantId\x88\x01\x01\x12.\n" +
+	"\x10planned_quantity\x18\x1c \x01(\x01H\x0eR\x0fplannedQuantity\x88\x01\x01\x12\"\n" +
+	"\n" +
+	"output_uom\x18\x1d \x01(\tH\x0fR\toutputUom\x88\x01\x01\x12\x1e\n" +
+	"\bdue_date\x18\x1e \x01(\x03H\x10R\adueDate\x88\x01\x01\x12+\n" +
+	"\x0fdue_date_string\x18\x1f \x01(\tH\x11R\rdueDateString\x88\x01\x01\x12&\n" +
+	"\frelease_date\x18  \x01(\x03H\x12R\vreleaseDate\x88\x01\x01\x123\n" +
+	"\x13release_date_string\x18! \x01(\tH\x13R\x11releaseDateString\x88\x01\x01\x12(\n" +
+	"\rplanned_start\x18\" \x01(\x03H\x14R\fplannedStart\x88\x01\x01\x125\n" +
+	"\x14planned_start_string\x18# \x01(\tH\x15R\x12plannedStartString\x88\x01\x01\x12$\n" +
+	"\vplanned_end\x18$ \x01(\x03H\x16R\n" +
+	"plannedEnd\x88\x01\x01\x121\n" +
+	"\x12planned_end_string\x18% \x01(\tH\x17R\x10plannedEndString\x88\x01\x01\x12&\n" +
+	"\factual_start\x18& \x01(\x03H\x18R\vactualStart\x88\x01\x01\x123\n" +
+	"\x13actual_start_string\x18' \x01(\tH\x19R\x11actualStartString\x88\x01\x01\x12\"\n" +
+	"\n" +
+	"actual_end\x18( \x01(\x03H\x1aR\tactualEnd\x88\x01\x01\x12/\n" +
+	"\x11actual_end_string\x18) \x01(\tH\x1bR\x0factualEndString\x88\x01\x01\x12\x1f\n" +
+	"\bpriority\x18* \x01(\x05H\x1cR\bpriority\x88\x01\x01\x124\n" +
+	"\rparent_job_id\x18+ \x01(\tB\v\x82\xb5\x18\a\n" +
+	"\x03job\x18\x01H\x1dR\vparentJobId\x88\x01\x01\x12.\n" +
+	"\x13predecessor_job_ids\x18, \x03(\tR\x11predecessorJobIds\x12:\n" +
+	"\x13sales_order_line_id\x18- \x01(\tB\x06\x82\xb5\x18\x02\x18\x01H\x1eR\x10salesOrderLineId\x88\x01\x01\x126\n" +
+	"\vresource_id\x18. \x01(\tB\x10\x82\xb5\x18\f\n" +
+	"\bresource\x18\x01H\x1fR\n" +
+	"resourceId\x88\x01\x01\x12\x1f\n" +
+	"\bcurrency\x18/ \x01(\tH R\bcurrency\x88\x01\x01\x12<\n" +
+	"\x0fcost_account_id\x180 \x01(\tB\x0f\x82\xb5\x18\v\n" +
+	"\aaccount\x18\x01H!R\rcostAccountId\x88\x01\x01\x12H\n" +
+	"\x1ejob_template_revision_snapshot\x181 \x01(\x05H\"R\x1bjobTemplateRevisionSnapshot\x88\x01\x01\x12D\n" +
+	"\x18job_template_revision_id\x182 \x01(\tB\x06\x82\xb5\x18\x02\x18\x01H#R\x15jobTemplateRevisionId\x88\x01\x01\x127\n" +
+	"\x11change_request_id\x183 \x01(\tB\x06\x82\xb5\x18\x02\x18\x01H$R\x0fchangeRequestId\x88\x01\x01\x12=\n" +
+	"\x14workflow_instance_id\x184 \x01(\tB\x06\x82\xb5\x18\x02\x18\x01H%R\x12workflowInstanceId\x88\x01\x01:\x06\x8a\xb5\x18\x02\b\x01B\x0f\n" +
 	"\r_date_createdB\x16\n" +
 	"\x14_date_created_stringB\x10\n" +
 	"\x0e_date_modifiedB\x17\n" +
@@ -1428,7 +1685,33 @@ const file_domain_operation_job_job_proto_rawDesc = "" +
 	"\f_location_idB\v\n" +
 	"\t_locationB\r\n" +
 	"\v_created_byB\x0f\n" +
-	"\r_workspace_id\"@\n" +
+	"\r_workspace_idB\x14\n" +
+	"\x12_output_product_idB\x1c\n" +
+	"\x1a_output_product_variant_idB\x13\n" +
+	"\x11_planned_quantityB\r\n" +
+	"\v_output_uomB\v\n" +
+	"\t_due_dateB\x12\n" +
+	"\x10_due_date_stringB\x0f\n" +
+	"\r_release_dateB\x16\n" +
+	"\x14_release_date_stringB\x10\n" +
+	"\x0e_planned_startB\x17\n" +
+	"\x15_planned_start_stringB\x0e\n" +
+	"\f_planned_endB\x15\n" +
+	"\x13_planned_end_stringB\x0f\n" +
+	"\r_actual_startB\x16\n" +
+	"\x14_actual_start_stringB\r\n" +
+	"\v_actual_endB\x14\n" +
+	"\x12_actual_end_stringB\v\n" +
+	"\t_priorityB\x10\n" +
+	"\x0e_parent_job_idB\x16\n" +
+	"\x14_sales_order_line_idB\x0e\n" +
+	"\f_resource_idB\v\n" +
+	"\t_currencyB\x12\n" +
+	"\x10_cost_account_idB!\n" +
+	"\x1f_job_template_revision_snapshotB\x1b\n" +
+	"\x19_job_template_revision_idB\x14\n" +
+	"\x12_change_request_idB\x17\n" +
+	"\x15_workflow_instance_idJ\x04\b5\x10F\"@\n" +
 	"\x10CreateJobRequest\x12,\n" +
 	"\x04data\x18\x01 \x01(\v2\x18.domain.operation.v1.JobR\x04data\"\x99\x01\n" +
 	"\x11CreateJobResponse\x12,\n" +

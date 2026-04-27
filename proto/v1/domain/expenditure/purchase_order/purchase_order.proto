@@ -72,6 +72,10 @@ message PurchaseOrder {
   optional string date_modified_string = 35;
   optional string payment_term_id = 36 [(options.v1.db).references = "payment_term"];
   optional domain.entity.v1.PaymentTerm payment_term = 37;
+
+  // Supplier commitment back-edges
+  optional string supplier_contract_id = 38 [(options.v1.db).references = "supplier_contract"];    // FK to SupplierContract (blanket/framework releases)
+  optional string procurement_request_id = 39 [(options.v1.db).references = "procurement_request"]; // FK to ProcurementRequest (spawned PO)
 }
 
 service PurchaseOrderDomainService {

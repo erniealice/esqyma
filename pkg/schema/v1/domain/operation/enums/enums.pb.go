@@ -321,6 +321,8 @@ const (
 	JobStatus_JOB_STATUS_PAUSED      JobStatus = 4
 	JobStatus_JOB_STATUS_COMPLETED   JobStatus = 5
 	JobStatus_JOB_STATUS_CLOSED      JobStatus = 6
+	JobStatus_JOB_STATUS_PLANNED     JobStatus = 7 // NEW
+	JobStatus_JOB_STATUS_RELEASED    JobStatus = 8 // NEW
 )
 
 // Enum value maps for JobStatus.
@@ -333,6 +335,8 @@ var (
 		4: "JOB_STATUS_PAUSED",
 		5: "JOB_STATUS_COMPLETED",
 		6: "JOB_STATUS_CLOSED",
+		7: "JOB_STATUS_PLANNED",
+		8: "JOB_STATUS_RELEASED",
 	}
 	JobStatus_value = map[string]int32{
 		"JOB_STATUS_UNSPECIFIED": 0,
@@ -342,6 +346,8 @@ var (
 		"JOB_STATUS_PAUSED":      4,
 		"JOB_STATUS_COMPLETED":   5,
 		"JOB_STATUS_CLOSED":      6,
+		"JOB_STATUS_PLANNED":     7,
+		"JOB_STATUS_RELEASED":    8,
 	}
 )
 
@@ -1362,7 +1368,7 @@ const file_domain_operation_enums_enums_proto_rawDesc = "" +
 	"\x19BILLING_RULE_TYPE_T_AND_M\x10\x02\x12\x1f\n" +
 	"\x1bBILLING_RULE_TYPE_MILESTONE\x10\x03\x12\x1e\n" +
 	"\x1aBILLING_RULE_TYPE_INCLUDED\x10\x04\x12\"\n" +
-	"\x1eBILLING_RULE_TYPE_NON_BILLABLE\x10\x05*\xb4\x01\n" +
+	"\x1eBILLING_RULE_TYPE_NON_BILLABLE\x10\x05*\xe5\x01\n" +
 	"\tJobStatus\x12\x1a\n" +
 	"\x16JOB_STATUS_UNSPECIFIED\x10\x00\x12\x14\n" +
 	"\x10JOB_STATUS_DRAFT\x10\x01\x12\x16\n" +
@@ -1370,7 +1376,9 @@ const file_domain_operation_enums_enums_proto_rawDesc = "" +
 	"\x11JOB_STATUS_ACTIVE\x10\x03\x12\x15\n" +
 	"\x11JOB_STATUS_PAUSED\x10\x04\x12\x18\n" +
 	"\x14JOB_STATUS_COMPLETED\x10\x05\x12\x15\n" +
-	"\x11JOB_STATUS_CLOSED\x10\x06*\xb5\x01\n" +
+	"\x11JOB_STATUS_CLOSED\x10\x06\x12\x16\n" +
+	"\x12JOB_STATUS_PLANNED\x10\a\x12\x17\n" +
+	"\x13JOB_STATUS_RELEASED\x10\b*\xb5\x01\n" +
 	"\x0eApprovalStatus\x12\x1f\n" +
 	"\x1bAPPROVAL_STATUS_UNSPECIFIED\x10\x00\x12 \n" +
 	"\x1cAPPROVAL_STATUS_NOT_REQUIRED\x10\x01\x12$\n" +

@@ -1,10 +1,10 @@
-import type { GenFile, GenMessage, GenService } from "@bufbuild/protobuf/codegenv2";
+import type { GenEnum, GenFile, GenMessage, GenService } from "@bufbuild/protobuf/codegenv2";
 import type { Error } from "../../common/error_pb";
 import type { PaginationRequest, PaginationResponse } from "../../common/pagination_pb";
 import type { SearchRequest, SearchResult } from "../../common/search_pb";
 import type { FilterRequest } from "../../common/filter_pb";
 import type { SortRequest } from "../../common/sort_pb";
-import type { Product } from "../../product/product/product_pb";
+import type { ProductPlan } from "../../product/product_plan/product_plan_pb";
 import type { PricePlan } from "../price_plan/price_plan_pb";
 import type { Message } from "@bufbuild/protobuf";
 /**
@@ -48,23 +48,43 @@ export type ProductPricePlan = Message<"domain.subscription.v1.ProductPricePlan"
      */
     pricePlanId: string;
     /**
-     * @generated from field: optional domain.product.v1.Product product = 9;
+     * @generated from field: optional domain.product.v1.ProductPlan product_plan = 17;
      */
-    product?: Product;
+    productPlan?: ProductPlan;
     /**
-     * @generated from field: string product_id = 10;
+     * @generated from field: string product_plan_id = 18;
      */
-    productId: string;
+    productPlanId: string;
     /**
-     * centavos
+     * centavos — line price charged to the client in billing_currency
      *
-     * @generated from field: int64 price = 11;
+     * @generated from field: int64 billing_amount = 11;
      */
-    price: bigint;
+    billingAmount: bigint;
     /**
-     * @generated from field: string currency = 12;
+     * ISO 4217 currency code — must match parent PricePlan.billing_currency
+     *
+     * @generated from field: string billing_currency = 12;
      */
-    currency: string;
+    billingCurrency: string;
+    /**
+     * @generated from field: domain.subscription.v1.BillingTreatment billing_treatment = 13;
+     */
+    billingTreatment: BillingTreatment;
+    /**
+     * Per-line effective dates; optional — overrides parent PriceSchedule dates when set
+     *
+     * ISO 8601 date (YYYY-MM-DD)
+     *
+     * @generated from field: optional string date_start = 14;
+     */
+    dateStart?: string;
+    /**
+     * ISO 8601 date (YYYY-MM-DD)
+     *
+     * @generated from field: optional string date_end = 15;
+     */
+    dateEnd?: string;
 };
 /**
  * Describes the message domain.subscription.v1.ProductPricePlan.
@@ -351,6 +371,37 @@ export type GetProductPricePlanItemPageDataResponse = Message<"domain.subscripti
  * Use `create(GetProductPricePlanItemPageDataResponseSchema)` to create a new message.
  */
 export declare const GetProductPricePlanItemPageDataResponseSchema: GenMessage<GetProductPricePlanItemPageDataResponse>;
+/**
+ * @generated from enum domain.subscription.v1.BillingTreatment
+ */
+export declare enum BillingTreatment {
+    /**
+     * @generated from enum value: BILLING_TREATMENT_UNSPECIFIED = 0;
+     */
+    UNSPECIFIED = 0,
+    /**
+     * charge every cycle
+     *
+     * @generated from enum value: BILLING_TREATMENT_RECURRING = 1;
+     */
+    RECURRING = 1,
+    /**
+     * charge once on first invoice of this subscription
+     *
+     * @generated from enum value: BILLING_TREATMENT_ONE_TIME_INITIAL = 2;
+     */
+    ONE_TIME_INITIAL = 2,
+    /**
+     * metered/consumed (reserved; separate flow)
+     *
+     * @generated from enum value: BILLING_TREATMENT_USAGE_BASED = 3;
+     */
+    USAGE_BASED = 3
+}
+/**
+ * Describes the enum domain.subscription.v1.BillingTreatment.
+ */
+export declare const BillingTreatmentSchema: GenEnum<BillingTreatment>;
 /**
  * @generated from service domain.subscription.v1.ProductPricePlanDomainService
  */

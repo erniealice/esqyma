@@ -54,6 +54,30 @@ export type Plan = Message<"domain.subscription.v1.Plan"> & {
      * @generated from field: optional string thumbnail_url = 10;
      */
     thumbnailUrl?: string;
+    /**
+     * NULL = master plan, appears on /app/services/packages/list.
+     * SET  = client-scoped, hidden from master list.
+     *
+     * @generated from field: optional string client_id = 12;
+     */
+    clientId?: string;
+    /**
+     * Self-FK to the master Plan that this clone was derived from. NULL when
+     * this row IS the master. SET when this row is a client-scoped clone created
+     * by CustomizePlanForClient — points at the master plan that was cloned.
+     *
+     * Invariants enforced at use-case layer (CustomizePlanForClient):
+     *   • Always exactly one level deep — cloning a clone flattens parent_id to
+     *     the same master, never the intermediate clone. No grandchildren.
+     *   • Immutable after insert — UpdatePlan ignores body input on this field.
+     *   • Acyclicity — the use case rejects parent_id = self.
+     *
+     * Reports group master + all variants via:
+     *   WHERE id = $masterID OR parent_id = $masterID
+     *
+     * @generated from field: optional string parent_id = 13;
+     */
+    parentId?: string;
 };
 /**
  * Describes the message domain.subscription.v1.Plan.

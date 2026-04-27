@@ -458,12 +458,96 @@ export type CreateRevenueWithLineItemsRequest = Message<"domain.revenue.v1.Creat
      * @generated from field: optional string subscription_id = 2;
      */
     subscriptionId?: string;
+    /**
+     * Operator-supplied billing period (RFC3339) for revenue recognition.
+     * Used for first-cycle detection and idempotency keying.
+     *
+     * @generated from field: optional string period_start = 3;
+     */
+    periodStart?: string;
+    /**
+     * @generated from field: optional string period_end = 4;
+     */
+    periodEnd?: string;
+    /**
+     * Operator-supplied invoice issue date (ISO 8601 YYYY-MM-DD).
+     * When empty, defaults to today.
+     *
+     * @generated from field: optional string revenue_date = 5;
+     */
+    revenueDate?: string;
+    /**
+     * Per-line operator overrides applied to the auto-populated draft.
+     *
+     * @generated from field: repeated domain.revenue.v1.LineItemOverride overrides = 6;
+     */
+    overrides: LineItemOverride[];
+    /**
+     * When true, the use case computes and returns the proposed Revenue + lines
+     * but does NOT persist anything. Drawer GET path uses this for the preview.
+     *
+     * @generated from field: optional bool dry_run = 7;
+     */
+    dryRun?: boolean;
+    /**
+     * When true, the use case skips header creation (the caller has already
+     * created a Revenue) and only writes the line items against
+     * existing_revenue_id. Used by the legacy manual revenue-add flow so the
+     * single algorithm has one implementation. Pairs with existing_revenue_id.
+     *
+     * @generated from field: optional bool skip_header = 8;
+     */
+    skipHeader?: boolean;
+    /**
+     * @generated from field: optional string existing_revenue_id = 9;
+     */
+    existingRevenueId?: string;
 };
 /**
  * Describes the message domain.revenue.v1.CreateRevenueWithLineItemsRequest.
  * Use `create(CreateRevenueWithLineItemsRequestSchema)` to create a new message.
  */
 export declare const CreateRevenueWithLineItemsRequestSchema: GenMessage<CreateRevenueWithLineItemsRequest>;
+/**
+ * @generated from message domain.revenue.v1.LineItemOverride
+ */
+export type LineItemOverride = Message<"domain.revenue.v1.LineItemOverride"> & {
+    /**
+     * Identifies the line being overridden by its source ProductPricePlan.
+     *
+     * @generated from field: string product_price_plan_id = 1;
+     */
+    productPricePlanId: string;
+    /**
+     * When set, replaces the auto-populated unit price (centavos).
+     *
+     * @generated from field: optional int64 unit_price = 2;
+     */
+    unitPrice?: bigint;
+    /**
+     * When set, replaces the auto-populated quantity.
+     *
+     * @generated from field: optional double quantity = 3;
+     */
+    quantity?: number;
+    /**
+     * When set, replaces the auto-populated description.
+     *
+     * @generated from field: optional string description = 4;
+     */
+    description?: string;
+    /**
+     * When true, the operator removed this line from the draft preview.
+     *
+     * @generated from field: optional bool removed = 5;
+     */
+    removed?: boolean;
+};
+/**
+ * Describes the message domain.revenue.v1.LineItemOverride.
+ * Use `create(LineItemOverrideSchema)` to create a new message.
+ */
+export declare const LineItemOverrideSchema: GenMessage<LineItemOverride>;
 /**
  * @generated from message domain.revenue.v1.CreateRevenueWithLineItemsResponse
  */
@@ -480,12 +564,77 @@ export type CreateRevenueWithLineItemsResponse = Message<"domain.revenue.v1.Crea
      * @generated from field: optional domain.common.v1.Error error = 3;
      */
     error?: Error;
+    /**
+     * Populated when the request was a dry_run preview. Mirrors the lines that
+     * would be written. Empty when dry_run = false.
+     *
+     * @generated from field: repeated domain.revenue.v1.PreviewLineItem preview_lines = 4;
+     */
+    previewLines: PreviewLineItem[];
+    /**
+     * Non-blocking warnings (e.g. "plan has no billing cycle; defaulting to 1mo").
+     *
+     * @generated from field: repeated string warnings = 5;
+     */
+    warnings: string[];
+    /**
+     * Set when (subscription_id, period_start, period_end) collides with a
+     * non-cancelled Revenue. Drawer surfaces a blocking banner with a link.
+     *
+     * @generated from field: optional string conflicting_revenue_id = 6;
+     */
+    conflictingRevenueId?: string;
 };
 /**
  * Describes the message domain.revenue.v1.CreateRevenueWithLineItemsResponse.
  * Use `create(CreateRevenueWithLineItemsResponseSchema)` to create a new message.
  */
 export declare const CreateRevenueWithLineItemsResponseSchema: GenMessage<CreateRevenueWithLineItemsResponse>;
+/**
+ * @generated from message domain.revenue.v1.PreviewLineItem
+ */
+export type PreviewLineItem = Message<"domain.revenue.v1.PreviewLineItem"> & {
+    /**
+     * @generated from field: string product_price_plan_id = 1;
+     */
+    productPricePlanId: string;
+    /**
+     * @generated from field: string description = 2;
+     */
+    description: string;
+    /**
+     * centavos
+     *
+     * @generated from field: int64 unit_price = 3;
+     */
+    unitPrice: bigint;
+    /**
+     * @generated from field: double quantity = 4;
+     */
+    quantity: number;
+    /**
+     * centavos
+     *
+     * @generated from field: int64 total_price = 5;
+     */
+    totalPrice: bigint;
+    /**
+     * @generated from field: string currency = 6;
+     */
+    currency: string;
+    /**
+     * Treatment for badge rendering — one of "recurring", "first_cycle",
+     * "usage_based", "one_time".
+     *
+     * @generated from field: string treatment = 7;
+     */
+    treatment: string;
+};
+/**
+ * Describes the message domain.revenue.v1.PreviewLineItem.
+ * Use `create(PreviewLineItemSchema)` to create a new message.
+ */
+export declare const PreviewLineItemSchema: GenMessage<PreviewLineItem>;
 /**
  * @generated from service domain.revenue.v1.RevenueDomainService
  */

@@ -53,6 +53,15 @@ export type Workspace = Message<"domain.entity.v1.Workspace"> & {
      * @generated from field: bool active = 10;
      */
     active: boolean;
+    /**
+     * ISO-4217 reporting-currency code for this workspace (e.g. "PHP", "USD"). This
+     * is the accounting functional currency: books are kept and reports produced
+     * in this currency. Transactions in a different currency snapshot an exchange
+     * rate at recognition time and record a converted amount in this currency.
+     *
+     * @generated from field: optional string functional_currency = 11;
+     */
+    functionalCurrency?: string;
 };
 /**
  * Describes the message domain.entity.v1.Workspace.

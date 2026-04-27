@@ -66,6 +66,54 @@ export type JobTask = Message<"domain.operation.v1.JobTask"> & {
      * @generated from field: optional string assigned_to = 13;
      */
     assignedTo?: string;
+    /**
+     * @generated from field: optional string template_task_id = 14;
+     */
+    templateTaskId?: string;
+    /**
+     * @generated from field: optional string resource_id = 15;
+     */
+    resourceId?: string;
+    /**
+     * @generated from field: optional double planned_quantity = 16;
+     */
+    plannedQuantity?: number;
+    /**
+     * @generated from field: optional double completed_quantity = 17;
+     */
+    completedQuantity?: number;
+    /**
+     * @generated from field: optional double percent_complete = 18;
+     */
+    percentComplete?: number;
+    /**
+     * @generated from field: optional int64 actual_start = 19;
+     */
+    actualStart?: bigint;
+    /**
+     * @generated from field: optional string actual_start_string = 20;
+     */
+    actualStartString?: string;
+    /**
+     * @generated from field: optional int64 actual_end = 21;
+     */
+    actualEnd?: bigint;
+    /**
+     * @generated from field: optional string actual_end_string = 22;
+     */
+    actualEndString?: string;
+    /**
+     * @generated from field: repeated string predecessor_task_ids = 23;
+     */
+    predecessorTaskIds: string[];
+    /**
+     * @generated from field: optional bool allow_parallel = 24;
+     */
+    allowParallel?: boolean;
+    /**
+     * @generated from field: optional string workflow_step_id = 25;
+     */
+    workflowStepId?: string;
 };
 /**
  * Describes the message domain.operation.v1.JobTask.
@@ -447,7 +495,19 @@ export declare enum TaskStatus {
     /**
      * @generated from enum value: TASK_STATUS_SKIPPED = 4;
      */
-    SKIPPED = 4
+    SKIPPED = 4,
+    /**
+     * NEW
+     *
+     * @generated from enum value: TASK_STATUS_HOLD = 5;
+     */
+    HOLD = 5,
+    /**
+     * NEW
+     *
+     * @generated from enum value: TASK_STATUS_REWORK = 6;
+     */
+    REWORK = 6
 }
 /**
  * Describes the enum domain.operation.v1.TaskStatus.

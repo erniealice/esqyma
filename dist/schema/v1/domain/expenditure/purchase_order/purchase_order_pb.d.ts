@@ -190,6 +190,20 @@ export type PurchaseOrder = Message<"domain.expenditure.v1.PurchaseOrder"> & {
      * @generated from field: optional domain.entity.v1.PaymentTerm payment_term = 37;
      */
     paymentTerm?: PaymentTerm;
+    /**
+     * Supplier commitment back-edges
+     *
+     * FK to SupplierContract (blanket/framework releases)
+     *
+     * @generated from field: optional string supplier_contract_id = 38;
+     */
+    supplierContractId?: string;
+    /**
+     * FK to ProcurementRequest (spawned PO)
+     *
+     * @generated from field: optional string procurement_request_id = 39;
+     */
+    procurementRequestId?: string;
 };
 /**
  * Describes the message domain.expenditure.v1.PurchaseOrder.

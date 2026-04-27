@@ -27,11 +27,11 @@ export type ProductVariant = Message<"domain.product.v1.ProductVariant"> & {
      */
     sku: string;
     /**
-     * centavos
+     * centavos; null = no override (use Product.price or rate-card)
      *
-     * @generated from field: int64 price_override = 4;
+     * @generated from field: optional int64 price_override = 4;
      */
-    priceOverride: bigint;
+    priceOverride?: bigint;
     /**
      * @generated from field: bool active = 5;
      */

@@ -1,0 +1,160 @@
+syntax = "proto3";
+
+package domain.expenditure.v1;
+
+option go_package = "github.com/erniealice/esqyma/golang/v1/domain/expenditure/supplier_contract_line";
+
+import "domain/common/error.proto";
+import "domain/common/pagination.proto";
+import "domain/common/search.proto";
+import "domain/common/filter.proto";
+import "domain/common/sort.proto";
+import "domain/expenditure/supplier_contract/supplier_contract.proto";
+import "domain/product/product/product.proto";
+import "options/db.proto";
+
+// SupplierContractLineTreatment mirrors ProductPricePlan.BillingTreatment on the
+// revenue side. MINIMUM_COMMITMENT is the supplier-side addition.
+enum SupplierContractLineTreatment {
+  SUPPLIER_CONTRACT_LINE_TREATMENT_UNSPECIFIED         = 0;
+  SUPPLIER_CONTRACT_LINE_TREATMENT_RECURRING           = 1;  // fixed recurring charge per cycle
+  SUPPLIER_CONTRACT_LINE_TREATMENT_ONE_TIME            = 2;  // single non-recurring charge
+  SUPPLIER_CONTRACT_LINE_TREATMENT_USAGE_BASED         = 3;  // variable, metered consumption
+  SUPPLIER_CONTRACT_LINE_TREATMENT_MINIMUM_COMMITMENT  = 4;  // floor commitment (pay-at-least-X)
+}
+
+// SupplierContractLine is a line item within a SupplierContract.
+// Real contracts often have multiple lines: "50 seats @ $10/mo + 100GB storage @ $0.50/GB".
+// Each line may have its own treatment, account, and date window.
+message SupplierContractLine {
+  option (options.v1.table).table = true;
+
+  string id = 1;
+
+  // Parent contract
+  string supplier_contract_id = 2 [(options.v1.db).references = "supplier_contract", (options.v1.db).index = true];
+  optional SupplierContract supplier_contract = 3;
+
+  // Product (optional — may be a bespoke line with no catalog product)
+  optional string product_id = 4 [(options.v1.db).references = "product", (options.v1.db).index = true];
+  optional domain.product.v1.Product product = 5;
+
+  // Line details
+  string description = 6;
+  string line_type = 7;            // "goods" | "service" | "expense"
+  double quantity = 8;
+  int64 unit_price = 9;            // centavos
+  int64 total_amount = 10;         // centavos
+
+  // Treatment — drives how the line is accounted and billed
+  SupplierContractLineTreatment treatment = 11;
+
+  // Date window (may differ from parent contract window for multi-phase contracts)
+  optional string start_date = 12; // ISO 8601 date (YYYY-MM-DD)
+  optional string end_date = 13;   // ISO 8601 date (YYYY-MM-DD)
+
+  // GL mapping (overrides header-level if set)
+  optional string expenditure_category_id = 14 [(options.v1.db).references = "expenditure_category"];
+  optional string expense_account_id = 15 [(options.v1.db).references = "account"];
+
+  // Receiving location
+  optional string location_id = 16 [(options.v1.db).references = "location"];
+
+  // Display ordering
+  int32 line_number = 17;
+
+  // Audit
+  bool active = 18 [(options.v1.db).default = "true"];
+  optional int64 date_created = 19;
+  optional string date_created_string = 20;
+  optional int64 date_modified = 21;
+  optional string date_modified_string = 22;
+}
+
+service SupplierContractLineDomainService {
+  rpc CreateSupplierContractLine(CreateSupplierContractLineRequest) returns (CreateSupplierContractLineResponse);
+  rpc ReadSupplierContractLine(ReadSupplierContractLineRequest) returns (ReadSupplierContractLineResponse);
+  rpc UpdateSupplierContractLine(UpdateSupplierContractLineRequest) returns (UpdateSupplierContractLineResponse);
+  rpc DeleteSupplierContractLine(DeleteSupplierContractLineRequest) returns (DeleteSupplierContractLineResponse);
+  rpc ListSupplierContractLines(ListSupplierContractLinesRequest) returns (ListSupplierContractLinesResponse);
+  rpc GetSupplierContractLineListPageData(GetSupplierContractLineListPageDataRequest) returns (GetSupplierContractLineListPageDataResponse);
+  rpc GetSupplierContractLineItemPageData(GetSupplierContractLineItemPageDataRequest) returns (GetSupplierContractLineItemPageDataResponse);
+}
+
+message CreateSupplierContractLineRequest {
+  SupplierContractLine data = 1;
+}
+
+message CreateSupplierContractLineResponse {
+  repeated SupplierContractLine data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message ReadSupplierContractLineRequest {
+  SupplierContractLine data = 1;
+}
+
+message ReadSupplierContractLineResponse {
+  repeated SupplierContractLine data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message UpdateSupplierContractLineRequest {
+  SupplierContractLine data = 1;
+}
+
+message UpdateSupplierContractLineResponse {
+  repeated SupplierContractLine data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message DeleteSupplierContractLineRequest {
+  SupplierContractLine data = 1;
+}
+
+message DeleteSupplierContractLineResponse {
+  bool success = 1;
+  optional domain.common.v1.Error error = 2;
+}
+
+message ListSupplierContractLinesRequest {
+  optional string supplier_contract_id = 1;
+  optional domain.common.v1.SearchRequest search = 2;
+  optional domain.common.v1.FilterRequest filters = 3;
+  optional domain.common.v1.SortRequest sort = 4;
+  optional domain.common.v1.PaginationRequest pagination = 5;
+}
+
+message ListSupplierContractLinesResponse {
+  repeated SupplierContractLine data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message GetSupplierContractLineListPageDataRequest {
+  optional domain.common.v1.PaginationRequest pagination = 1;
+  optional domain.common.v1.FilterRequest filters = 2;
+  optional domain.common.v1.SortRequest sort = 3;
+  optional domain.common.v1.SearchRequest search = 4;
+}
+
+message GetSupplierContractLineListPageDataResponse {
+  repeated SupplierContractLine supplier_contract_line_list = 1;
+  optional domain.common.v1.PaginationResponse pagination = 2;
+  repeated domain.common.v1.SearchResult search_results = 3;
+  bool success = 4;
+  optional domain.common.v1.Error error = 5;
+}
+
+message GetSupplierContractLineItemPageDataRequest {
+  string supplier_contract_line_id = 1;
+}
+
+message GetSupplierContractLineItemPageDataResponse {
+  optional SupplierContractLine supplier_contract_line = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}

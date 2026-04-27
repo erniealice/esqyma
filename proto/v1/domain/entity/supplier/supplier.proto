@@ -33,7 +33,7 @@ message Supplier {
   optional string category_id = 10 [(options.v1.db).references = "supplier_category"];
   optional SupplierCategory category = 11;
   string supplier_type = 12;                    // "company" or "individual"
-  string company_name = 13;
+  string name = 13;
   optional string tax_id = 14;                  // TIN/VAT/EIN
   optional string registration_number = 15;     // Business registration number
   optional string street_address = 16;
@@ -52,6 +52,7 @@ message Supplier {
   repeated SupplierCategory categories = 29;
   optional string payment_term_id = 30 [(options.v1.db).references = "payment_term"];
   optional PaymentTerm payment_term = 31;
+  optional string timezone = 32;                // IANA timezone (e.g. "Asia/Manila")
 }
 
 service SupplierDomainService {

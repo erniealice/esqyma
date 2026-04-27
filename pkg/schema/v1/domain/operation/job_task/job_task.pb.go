@@ -32,6 +32,8 @@ const (
 	TaskStatus_TASK_STATUS_IN_PROGRESS TaskStatus = 2
 	TaskStatus_TASK_STATUS_COMPLETED   TaskStatus = 3
 	TaskStatus_TASK_STATUS_SKIPPED     TaskStatus = 4
+	TaskStatus_TASK_STATUS_HOLD        TaskStatus = 5 // NEW
+	TaskStatus_TASK_STATUS_REWORK      TaskStatus = 6 // NEW
 )
 
 // Enum value maps for TaskStatus.
@@ -42,6 +44,8 @@ var (
 		2: "TASK_STATUS_IN_PROGRESS",
 		3: "TASK_STATUS_COMPLETED",
 		4: "TASK_STATUS_SKIPPED",
+		5: "TASK_STATUS_HOLD",
+		6: "TASK_STATUS_REWORK",
 	}
 	TaskStatus_value = map[string]int32{
 		"TASK_STATUS_UNSPECIFIED": 0,
@@ -49,6 +53,8 @@ var (
 		"TASK_STATUS_IN_PROGRESS": 2,
 		"TASK_STATUS_COMPLETED":   3,
 		"TASK_STATUS_SKIPPED":     4,
+		"TASK_STATUS_HOLD":        5,
+		"TASK_STATUS_REWORK":      6,
 	}
 )
 
@@ -94,6 +100,18 @@ type JobTask struct {
 	Status             TaskStatus             `protobuf:"varint,11,opt,name=status,proto3,enum=domain.operation.v1.TaskStatus" json:"status,omitempty"`
 	IsAdHoc            bool                   `protobuf:"varint,12,opt,name=is_ad_hoc,json=isAdHoc,proto3" json:"is_ad_hoc,omitempty"`
 	AssignedTo         *string                `protobuf:"bytes,13,opt,name=assigned_to,json=assignedTo,proto3,oneof" json:"assigned_to,omitempty"`
+	TemplateTaskId     *string                `protobuf:"bytes,14,opt,name=template_task_id,json=templateTaskId,proto3,oneof" json:"template_task_id,omitempty"`
+	ResourceId         *string                `protobuf:"bytes,15,opt,name=resource_id,json=resourceId,proto3,oneof" json:"resource_id,omitempty"`
+	PlannedQuantity    *float64               `protobuf:"fixed64,16,opt,name=planned_quantity,json=plannedQuantity,proto3,oneof" json:"planned_quantity,omitempty"`
+	CompletedQuantity  *float64               `protobuf:"fixed64,17,opt,name=completed_quantity,json=completedQuantity,proto3,oneof" json:"completed_quantity,omitempty"`
+	PercentComplete    *float64               `protobuf:"fixed64,18,opt,name=percent_complete,json=percentComplete,proto3,oneof" json:"percent_complete,omitempty"`
+	ActualStart        *int64                 `protobuf:"varint,19,opt,name=actual_start,json=actualStart,proto3,oneof" json:"actual_start,omitempty"`
+	ActualStartString  *string                `protobuf:"bytes,20,opt,name=actual_start_string,json=actualStartString,proto3,oneof" json:"actual_start_string,omitempty"`
+	ActualEnd          *int64                 `protobuf:"varint,21,opt,name=actual_end,json=actualEnd,proto3,oneof" json:"actual_end,omitempty"`
+	ActualEndString    *string                `protobuf:"bytes,22,opt,name=actual_end_string,json=actualEndString,proto3,oneof" json:"actual_end_string,omitempty"`
+	PredecessorTaskIds []string               `protobuf:"bytes,23,rep,name=predecessor_task_ids,json=predecessorTaskIds,proto3" json:"predecessor_task_ids,omitempty"`
+	AllowParallel      *bool                  `protobuf:"varint,24,opt,name=allow_parallel,json=allowParallel,proto3,oneof" json:"allow_parallel,omitempty"`
+	WorkflowStepId     *string                `protobuf:"bytes,25,opt,name=workflow_step_id,json=workflowStepId,proto3,oneof" json:"workflow_step_id,omitempty"`
 	unknownFields      protoimpl.UnknownFields
 	sizeCache          protoimpl.SizeCache
 }
@@ -215,6 +233,90 @@ func (x *JobTask) GetIsAdHoc() bool {
 func (x *JobTask) GetAssignedTo() string {
 	if x != nil && x.AssignedTo != nil {
 		return *x.AssignedTo
+	}
+	return ""
+}
+
+func (x *JobTask) GetTemplateTaskId() string {
+	if x != nil && x.TemplateTaskId != nil {
+		return *x.TemplateTaskId
+	}
+	return ""
+}
+
+func (x *JobTask) GetResourceId() string {
+	if x != nil && x.ResourceId != nil {
+		return *x.ResourceId
+	}
+	return ""
+}
+
+func (x *JobTask) GetPlannedQuantity() float64 {
+	if x != nil && x.PlannedQuantity != nil {
+		return *x.PlannedQuantity
+	}
+	return 0
+}
+
+func (x *JobTask) GetCompletedQuantity() float64 {
+	if x != nil && x.CompletedQuantity != nil {
+		return *x.CompletedQuantity
+	}
+	return 0
+}
+
+func (x *JobTask) GetPercentComplete() float64 {
+	if x != nil && x.PercentComplete != nil {
+		return *x.PercentComplete
+	}
+	return 0
+}
+
+func (x *JobTask) GetActualStart() int64 {
+	if x != nil && x.ActualStart != nil {
+		return *x.ActualStart
+	}
+	return 0
+}
+
+func (x *JobTask) GetActualStartString() string {
+	if x != nil && x.ActualStartString != nil {
+		return *x.ActualStartString
+	}
+	return ""
+}
+
+func (x *JobTask) GetActualEnd() int64 {
+	if x != nil && x.ActualEnd != nil {
+		return *x.ActualEnd
+	}
+	return 0
+}
+
+func (x *JobTask) GetActualEndString() string {
+	if x != nil && x.ActualEndString != nil {
+		return *x.ActualEndString
+	}
+	return ""
+}
+
+func (x *JobTask) GetPredecessorTaskIds() []string {
+	if x != nil {
+		return x.PredecessorTaskIds
+	}
+	return nil
+}
+
+func (x *JobTask) GetAllowParallel() bool {
+	if x != nil && x.AllowParallel != nil {
+		return *x.AllowParallel
+	}
+	return false
+}
+
+func (x *JobTask) GetWorkflowStepId() string {
+	if x != nil && x.WorkflowStepId != nil {
+		return *x.WorkflowStepId
 	}
 	return ""
 }
@@ -1215,7 +1317,7 @@ var File_domain_operation_job_task_job_task_proto protoreflect.FileDescriptor
 
 const file_domain_operation_job_task_job_task_proto_rawDesc = "" +
 	"\n" +
-	"(domain/operation/job_task/job_task.proto\x12\x13domain.operation.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1adomain/common/search.proto\x1a*domain/operation/job_phase/job_phase.proto\x1a\x10options/db.proto\"\x9c\x05\n" +
+	"(domain/operation/job_task/job_task.proto\x12\x13domain.operation.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1adomain/common/search.proto\x1a*domain/operation/job_phase/job_phase.proto\x1a\x10options/db.proto\"\xe8\v\n" +
 	"\aJobTask\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12&\n" +
 	"\fdate_created\x18\x02 \x01(\x03H\x00R\vdateCreated\x88\x01\x01\x123\n" +
@@ -1235,14 +1337,42 @@ const file_domain_operation_job_task_job_task_proto_rawDesc = "" +
 	"\tis_ad_hoc\x18\f \x01(\bR\aisAdHoc\x123\n" +
 	"\vassigned_to\x18\r \x01(\tB\r\x82\xb5\x18\t\n" +
 	"\x05staff\x18\x01H\x05R\n" +
-	"assignedTo\x88\x01\x01:\x06\x8a\xb5\x18\x02\b\x01B\x0f\n" +
+	"assignedTo\x88\x01\x01\x12H\n" +
+	"\x10template_task_id\x18\x0e \x01(\tB\x19\x82\xb5\x18\x15\n" +
+	"\x11job_template_task\x18\x01H\x06R\x0etemplateTaskId\x88\x01\x01\x126\n" +
+	"\vresource_id\x18\x0f \x01(\tB\x10\x82\xb5\x18\f\n" +
+	"\bresource\x18\x01H\aR\n" +
+	"resourceId\x88\x01\x01\x12.\n" +
+	"\x10planned_quantity\x18\x10 \x01(\x01H\bR\x0fplannedQuantity\x88\x01\x01\x122\n" +
+	"\x12completed_quantity\x18\x11 \x01(\x01H\tR\x11completedQuantity\x88\x01\x01\x12.\n" +
+	"\x10percent_complete\x18\x12 \x01(\x01H\n" +
+	"R\x0fpercentComplete\x88\x01\x01\x12&\n" +
+	"\factual_start\x18\x13 \x01(\x03H\vR\vactualStart\x88\x01\x01\x123\n" +
+	"\x13actual_start_string\x18\x14 \x01(\tH\fR\x11actualStartString\x88\x01\x01\x12\"\n" +
+	"\n" +
+	"actual_end\x18\x15 \x01(\x03H\rR\tactualEnd\x88\x01\x01\x12/\n" +
+	"\x11actual_end_string\x18\x16 \x01(\tH\x0eR\x0factualEndString\x88\x01\x01\x120\n" +
+	"\x14predecessor_task_ids\x18\x17 \x03(\tR\x12predecessorTaskIds\x127\n" +
+	"\x0eallow_parallel\x18\x18 \x01(\bB\v\x82\xb5\x18\a\"\x05falseH\x0fR\rallowParallel\x88\x01\x01\x125\n" +
+	"\x10workflow_step_id\x18\x19 \x01(\tB\x06\x82\xb5\x18\x02\x18\x01H\x10R\x0eworkflowStepId\x88\x01\x01:\x06\x8a\xb5\x18\x02\b\x01B\x0f\n" +
 	"\r_date_createdB\x16\n" +
 	"\x14_date_created_stringB\x10\n" +
 	"\x0e_date_modifiedB\x17\n" +
 	"\x15_date_modified_stringB\f\n" +
 	"\n" +
 	"_job_phaseB\x0e\n" +
-	"\f_assigned_to\"H\n" +
+	"\f_assigned_toB\x13\n" +
+	"\x11_template_task_idB\x0e\n" +
+	"\f_resource_idB\x13\n" +
+	"\x11_planned_quantityB\x15\n" +
+	"\x13_completed_quantityB\x13\n" +
+	"\x11_percent_completeB\x0f\n" +
+	"\r_actual_startB\x16\n" +
+	"\x14_actual_start_stringB\r\n" +
+	"\v_actual_endB\x14\n" +
+	"\x12_actual_end_stringB\x11\n" +
+	"\x0f_allow_parallelB\x13\n" +
+	"\x11_workflow_step_idJ\x04\b\x1a\x10(\"H\n" +
 	"\x14CreateJobTaskRequest\x120\n" +
 	"\x04data\x18\x01 \x01(\v2\x1c.domain.operation.v1.JobTaskR\x04data\"\xa1\x01\n" +
 	"\x15CreateJobTaskResponse\x120\n" +
@@ -1332,14 +1462,16 @@ const file_domain_operation_job_task_job_task_proto_rawDesc = "" +
 	"\tjob_tasks\x18\x01 \x03(\v2\x1c.domain.operation.v1.JobTaskR\bjobTasks\x12\x18\n" +
 	"\asuccess\x18\x02 \x01(\bR\asuccess\x122\n" +
 	"\x05error\x18\x03 \x01(\v2\x17.domain.common.v1.ErrorH\x00R\x05error\x88\x01\x01B\b\n" +
-	"\x06_error*\x93\x01\n" +
+	"\x06_error*\xc1\x01\n" +
 	"\n" +
 	"TaskStatus\x12\x1b\n" +
 	"\x17TASK_STATUS_UNSPECIFIED\x10\x00\x12\x17\n" +
 	"\x13TASK_STATUS_PENDING\x10\x01\x12\x1b\n" +
 	"\x17TASK_STATUS_IN_PROGRESS\x10\x02\x12\x19\n" +
 	"\x15TASK_STATUS_COMPLETED\x10\x03\x12\x17\n" +
-	"\x13TASK_STATUS_SKIPPED\x10\x042\x8a\b\n" +
+	"\x13TASK_STATUS_SKIPPED\x10\x04\x12\x14\n" +
+	"\x10TASK_STATUS_HOLD\x10\x05\x12\x16\n" +
+	"\x12TASK_STATUS_REWORK\x10\x062\x8a\b\n" +
 	"\x14JobTaskDomainService\x12f\n" +
 	"\rCreateJobTask\x12).domain.operation.v1.CreateJobTaskRequest\x1a*.domain.operation.v1.CreateJobTaskResponse\x12`\n" +
 	"\vReadJobTask\x12'.domain.operation.v1.ReadJobTaskRequest\x1a(.domain.operation.v1.ReadJobTaskResponse\x12f\n" +

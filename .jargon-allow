@@ -1,0 +1,8 @@
+# Whitelist for lint-no-jargon.sh.
+# Format: <relative-path>:<token>   to allow a token in a specific file
+#         <token>                    to allow a token globally (use sparingly)
+# Lines starting with # are comments. Empty lines ignored.
+#
+# Add entries with a justification comment ABOVE the entry, e.g.:
+#   # 2026-04-27 cradle: legacy Job.wip_account_id grandfathered until cleanup pass
+#   packages/esqyma/proto/v1/domain/operation/job/job.proto:wip

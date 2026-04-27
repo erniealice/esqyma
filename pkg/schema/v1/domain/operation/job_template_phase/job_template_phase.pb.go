@@ -25,19 +25,24 @@ const (
 )
 
 type JobTemplatePhase struct {
-	state              protoimpl.MessageState    `protogen:"open.v1"`
-	Id                 string                    `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
-	DateCreated        *int64                    `protobuf:"varint,2,opt,name=date_created,json=dateCreated,proto3,oneof" json:"date_created,omitempty"`
-	DateCreatedString  *string                   `protobuf:"bytes,3,opt,name=date_created_string,json=dateCreatedString,proto3,oneof" json:"date_created_string,omitempty"`
-	DateModified       *int64                    `protobuf:"varint,4,opt,name=date_modified,json=dateModified,proto3,oneof" json:"date_modified,omitempty"`
-	DateModifiedString *string                   `protobuf:"bytes,5,opt,name=date_modified_string,json=dateModifiedString,proto3,oneof" json:"date_modified_string,omitempty"`
-	Active             bool                      `protobuf:"varint,6,opt,name=active,proto3" json:"active,omitempty"`
-	JobTemplateId      string                    `protobuf:"bytes,7,opt,name=job_template_id,json=jobTemplateId,proto3" json:"job_template_id,omitempty"`
-	JobTemplate        *job_template.JobTemplate `protobuf:"bytes,8,opt,name=job_template,json=jobTemplate,proto3,oneof" json:"job_template,omitempty"`
-	Name               string                    `protobuf:"bytes,9,opt,name=name,proto3" json:"name,omitempty"`
-	PhaseOrder         int32                     `protobuf:"varint,10,opt,name=phase_order,json=phaseOrder,proto3" json:"phase_order,omitempty"`
-	unknownFields      protoimpl.UnknownFields
-	sizeCache          protoimpl.SizeCache
+	state                      protoimpl.MessageState    `protogen:"open.v1"`
+	Id                         string                    `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
+	DateCreated                *int64                    `protobuf:"varint,2,opt,name=date_created,json=dateCreated,proto3,oneof" json:"date_created,omitempty"`
+	DateCreatedString          *string                   `protobuf:"bytes,3,opt,name=date_created_string,json=dateCreatedString,proto3,oneof" json:"date_created_string,omitempty"`
+	DateModified               *int64                    `protobuf:"varint,4,opt,name=date_modified,json=dateModified,proto3,oneof" json:"date_modified,omitempty"`
+	DateModifiedString         *string                   `protobuf:"bytes,5,opt,name=date_modified_string,json=dateModifiedString,proto3,oneof" json:"date_modified_string,omitempty"`
+	Active                     bool                      `protobuf:"varint,6,opt,name=active,proto3" json:"active,omitempty"`
+	JobTemplateId              string                    `protobuf:"bytes,7,opt,name=job_template_id,json=jobTemplateId,proto3" json:"job_template_id,omitempty"`
+	JobTemplate                *job_template.JobTemplate `protobuf:"bytes,8,opt,name=job_template,json=jobTemplate,proto3,oneof" json:"job_template,omitempty"`
+	Name                       string                    `protobuf:"bytes,9,opt,name=name,proto3" json:"name,omitempty"`
+	PhaseOrder                 int32                     `protobuf:"varint,10,opt,name=phase_order,json=phaseOrder,proto3" json:"phase_order,omitempty"`
+	ResourceId                 *string                   `protobuf:"bytes,11,opt,name=resource_id,json=resourceId,proto3,oneof" json:"resource_id,omitempty"`
+	SetupMinutes               *int32                    `protobuf:"varint,12,opt,name=setup_minutes,json=setupMinutes,proto3,oneof" json:"setup_minutes,omitempty"`
+	RunMinutesPerUnit          *float64                  `protobuf:"fixed64,13,opt,name=run_minutes_per_unit,json=runMinutesPerUnit,proto3,oneof" json:"run_minutes_per_unit,omitempty"`
+	TeardownMinutes            *int32                    `protobuf:"varint,14,opt,name=teardown_minutes,json=teardownMinutes,proto3,oneof" json:"teardown_minutes,omitempty"`
+	PredecessorTemplatePhaseId *string                   `protobuf:"bytes,15,opt,name=predecessor_template_phase_id,json=predecessorTemplatePhaseId,proto3,oneof" json:"predecessor_template_phase_id,omitempty"`
+	unknownFields              protoimpl.UnknownFields
+	sizeCache                  protoimpl.SizeCache
 }
 
 func (x *JobTemplatePhase) Reset() {
@@ -138,6 +143,41 @@ func (x *JobTemplatePhase) GetPhaseOrder() int32 {
 		return x.PhaseOrder
 	}
 	return 0
+}
+
+func (x *JobTemplatePhase) GetResourceId() string {
+	if x != nil && x.ResourceId != nil {
+		return *x.ResourceId
+	}
+	return ""
+}
+
+func (x *JobTemplatePhase) GetSetupMinutes() int32 {
+	if x != nil && x.SetupMinutes != nil {
+		return *x.SetupMinutes
+	}
+	return 0
+}
+
+func (x *JobTemplatePhase) GetRunMinutesPerUnit() float64 {
+	if x != nil && x.RunMinutesPerUnit != nil {
+		return *x.RunMinutesPerUnit
+	}
+	return 0
+}
+
+func (x *JobTemplatePhase) GetTeardownMinutes() int32 {
+	if x != nil && x.TeardownMinutes != nil {
+		return *x.TeardownMinutes
+	}
+	return 0
+}
+
+func (x *JobTemplatePhase) GetPredecessorTemplatePhaseId() string {
+	if x != nil && x.PredecessorTemplatePhaseId != nil {
+		return *x.PredecessorTemplatePhaseId
+	}
+	return ""
 }
 
 type CreateJobTemplatePhaseRequest struct {
@@ -1033,7 +1073,7 @@ var File_domain_operation_job_template_phase_job_template_phase_proto protorefle
 
 const file_domain_operation_job_template_phase_job_template_phase_proto_rawDesc = "" +
 	"\n" +
-	"<domain/operation/job_template_phase/job_template_phase.proto\x12\x13domain.operation.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1adomain/common/search.proto\x1a0domain/operation/job_template/job_template.proto\x1a\x10options/db.proto\"\xae\x04\n" +
+	"<domain/operation/job_template_phase/job_template_phase.proto\x12\x13domain.operation.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1adomain/common/search.proto\x1a0domain/operation/job_template/job_template.proto\x1a\x10options/db.proto\"\xd0\a\n" +
 	"\x10JobTemplatePhase\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12&\n" +
 	"\fdate_created\x18\x02 \x01(\x03H\x00R\vdateCreated\x88\x01\x01\x123\n" +
@@ -1048,12 +1088,25 @@ const file_domain_operation_job_template_phase_job_template_phase_proto_rawDesc 
 	"\x04name\x18\t \x01(\tR\x04name\x12\x1f\n" +
 	"\vphase_order\x18\n" +
 	" \x01(\x05R\n" +
-	"phaseOrder:\x06\x8a\xb5\x18\x02\b\x01B\x0f\n" +
+	"phaseOrder\x126\n" +
+	"\vresource_id\x18\v \x01(\tB\x10\x82\xb5\x18\f\n" +
+	"\bresource\x18\x01H\x05R\n" +
+	"resourceId\x88\x01\x01\x12(\n" +
+	"\rsetup_minutes\x18\f \x01(\x05H\x06R\fsetupMinutes\x88\x01\x01\x124\n" +
+	"\x14run_minutes_per_unit\x18\r \x01(\x01H\aR\x11runMinutesPerUnit\x88\x01\x01\x12.\n" +
+	"\x10teardown_minutes\x18\x0e \x01(\x05H\bR\x0fteardownMinutes\x88\x01\x01\x12`\n" +
+	"\x1dpredecessor_template_phase_id\x18\x0f \x01(\tB\x18\x82\xb5\x18\x14\n" +
+	"\x12job_template_phaseH\tR\x1apredecessorTemplatePhaseId\x88\x01\x01:\x06\x8a\xb5\x18\x02\b\x01B\x0f\n" +
 	"\r_date_createdB\x16\n" +
 	"\x14_date_created_stringB\x10\n" +
 	"\x0e_date_modifiedB\x17\n" +
 	"\x15_date_modified_stringB\x0f\n" +
-	"\r_job_template\"Z\n" +
+	"\r_job_templateB\x0e\n" +
+	"\f_resource_idB\x10\n" +
+	"\x0e_setup_minutesB\x17\n" +
+	"\x15_run_minutes_per_unitB\x13\n" +
+	"\x11_teardown_minutesB \n" +
+	"\x1e_predecessor_template_phase_idJ\x04\b\x10\x10\x1e\"Z\n" +
 	"\x1dCreateJobTemplatePhaseRequest\x129\n" +
 	"\x04data\x18\x01 \x01(\v2%.domain.operation.v1.JobTemplatePhaseR\x04data\"\xb3\x01\n" +
 	"\x1eCreateJobTemplatePhaseResponse\x129\n" +

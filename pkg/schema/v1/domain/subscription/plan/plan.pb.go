@@ -36,8 +36,25 @@ type Plan struct {
 	Description        *string                       `protobuf:"bytes,8,opt,name=description,proto3,oneof" json:"description,omitempty"`
 	PlanLocations      []*plan_location.PlanLocation `protobuf:"bytes,9,rep,name=plan_locations,json=planLocations,proto3" json:"plan_locations,omitempty"`
 	ThumbnailUrl       *string                       `protobuf:"bytes,10,opt,name=thumbnail_url,json=thumbnailUrl,proto3,oneof" json:"thumbnail_url,omitempty"`
-	unknownFields      protoimpl.UnknownFields
-	sizeCache          protoimpl.SizeCache
+	// NULL = master plan, appears on /app/services/packages/list.
+	// SET  = client-scoped, hidden from master list.
+	ClientId *string `protobuf:"bytes,12,opt,name=client_id,json=clientId,proto3,oneof" json:"client_id,omitempty"`
+	// Self-FK to the master Plan that this clone was derived from. NULL when
+	// this row IS the master. SET when this row is a client-scoped clone created
+	// by CustomizePlanForClient — points at the master plan that was cloned.
+	//
+	// Invariants enforced at use-case layer (CustomizePlanForClient):
+	//   - Always exactly one level deep — cloning a clone flattens parent_id to
+	//     the same master, never the intermediate clone. No grandchildren.
+	//   - Immutable after insert — UpdatePlan ignores body input on this field.
+	//   - Acyclicity — the use case rejects parent_id = self.
+	//
+	// Reports group master + all variants via:
+	//
+	//	WHERE id = $masterID OR parent_id = $masterID
+	ParentId      *string `protobuf:"bytes,13,opt,name=parent_id,json=parentId,proto3,oneof" json:"parent_id,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
 }
 
 func (x *Plan) Reset() {
@@ -136,6 +153,20 @@ func (x *Plan) GetPlanLocations() []*plan_location.PlanLocation {
 func (x *Plan) GetThumbnailUrl() string {
 	if x != nil && x.ThumbnailUrl != nil {
 		return *x.ThumbnailUrl
+	}
+	return ""
+}
+
+func (x *Plan) GetClientId() string {
+	if x != nil && x.ClientId != nil {
+		return *x.ClientId
+	}
+	return ""
+}
+
+func (x *Plan) GetParentId() string {
+	if x != nil && x.ParentId != nil {
+		return *x.ParentId
 	}
 	return ""
 }
@@ -1094,7 +1125,7 @@ var File_domain_subscription_plan_plan_proto protoreflect.FileDescriptor
 
 const file_domain_subscription_plan_plan_proto_rawDesc = "" +
 	"\n" +
-	"#domain/subscription/plan/plan.proto\x12\x16domain.subscription.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1adomain/common/search.proto\x1a5domain/subscription/plan_location/plan_location.proto\x1a\x10options/db.proto\"\xcc\x04\n" +
+	"#domain/subscription/plan/plan.proto\x12\x16domain.subscription.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1adomain/common/search.proto\x1a5domain/subscription/plan_location/plan_location.proto\x1a\x10options/db.proto\"\xca\x05\n" +
 	"\x04Plan\x12\x13\n" +
 	"\x02id\x18\x01 \x01(\tH\x00R\x02id\x88\x01\x01\x12&\n" +
 	"\fdate_created\x18\x02 \x01(\x03H\x01R\vdateCreated\x88\x01\x01\x123\n" +
@@ -1107,14 +1138,23 @@ const file_domain_subscription_plan_plan_proto_rawDesc = "" +
 	"\vdescription\x18\b \x01(\tH\x05R\vdescription\x88\x01\x01\x12K\n" +
 	"\x0eplan_locations\x18\t \x03(\v2$.domain.subscription.v1.PlanLocationR\rplanLocations\x12(\n" +
 	"\rthumbnail_url\x18\n" +
-	" \x01(\tH\x06R\fthumbnailUrl\x88\x01\x01:\x06\x8a\xb5\x18\x02\b\x01B\x05\n" +
+	" \x01(\tH\x06R\fthumbnailUrl\x88\x01\x01\x120\n" +
+	"\tclient_id\x18\f \x01(\tB\x0e\x82\xb5\x18\n" +
+	"\n" +
+	"\x06client\x18\x01H\aR\bclientId\x88\x01\x01\x12.\n" +
+	"\tparent_id\x18\r \x01(\tB\f\x82\xb5\x18\b\n" +
+	"\x04plan\x18\x01H\bR\bparentId\x88\x01\x01:\x06\x8a\xb5\x18\x02\b\x01B\x05\n" +
 	"\x03_idB\x0f\n" +
 	"\r_date_createdB\x16\n" +
 	"\x14_date_created_stringB\x10\n" +
 	"\x0e_date_modifiedB\x17\n" +
 	"\x15_date_modified_stringB\x0e\n" +
 	"\f_descriptionB\x10\n" +
-	"\x0e_thumbnail_urlJ\x04\b\v\x10\fR\x10fulfillment_type\"E\n" +
+	"\x0e_thumbnail_urlB\f\n" +
+	"\n" +
+	"_client_idB\f\n" +
+	"\n" +
+	"_parent_idJ\x04\b\v\x10\fR\x10fulfillment_type\"E\n" +
 	"\x11CreatePlanRequest\x120\n" +
 	"\x04data\x18\x01 \x01(\v2\x1c.domain.subscription.v1.PlanR\x04data\"\x9e\x01\n" +
 	"\x12CreatePlanResponse\x120\n" +

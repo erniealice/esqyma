@@ -45,7 +45,7 @@ export type Expenditure = Message<"domain.expenditure.v1.Expenditure"> & {
      */
     name: string;
     /**
-     * "purchase", "expense", "refund", "payroll"
+     * "purchase", "expense", "refund", "payroll", "petty"
      *
      * @generated from field: string expenditure_type = 8;
      */
@@ -146,6 +146,20 @@ export type Expenditure = Message<"domain.expenditure.v1.Expenditure"> & {
      * @generated from field: optional domain.entity.v1.PaymentTerm payment_term = 27;
      */
     paymentTerm?: PaymentTerm;
+    /**
+     * Supplier commitment back-edges
+     *
+     * FK to SupplierContract (roll-up spend)
+     *
+     * @generated from field: optional string supplier_contract_id = 28;
+     */
+    supplierContractId?: string;
+    /**
+     * FK to PettyCashFund (sundries flow)
+     *
+     * @generated from field: optional string petty_cash_fund_id = 29;
+     */
+    pettyCashFundId?: string;
 };
 /**
  * Describes the message domain.expenditure.v1.Expenditure.

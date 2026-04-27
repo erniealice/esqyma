@@ -46,6 +46,8 @@ message Client {
   // Used by the subscription drawer to filter applicable PricePlans.
   optional string billing_currency = 23;
   optional string status = 24;                  // "prospect", "active", "on_hold", "blocked", "inactive"
+  optional string country = 25;                 // ISO 3166-1 alpha-2 country code
+  optional string website = 26;
 }
 
 service ClientDomainService {

@@ -46,8 +46,10 @@ type ExpenditureLineItem struct {
 	InventoryItemId         *string                  `protobuf:"bytes,18,opt,name=inventory_item_id,json=inventoryItemId,proto3,oneof" json:"inventory_item_id,omitempty"`                             // FK to inventory_item (for purchase items going into stock)
 	LocationId              *string                  `protobuf:"bytes,19,opt,name=location_id,json=locationId,proto3,oneof" json:"location_id,omitempty"`                                              // FK to location (where received)
 	PurchaseOrderLineItemId *string                  `protobuf:"bytes,20,opt,name=purchase_order_line_item_id,json=purchaseOrderLineItemId,proto3,oneof" json:"purchase_order_line_item_id,omitempty"` // FK to PO line for line-level 3-way match
-	unknownFields           protoimpl.UnknownFields
-	sizeCache               protoimpl.SizeCache
+	// Supplier commitment back-edge
+	SupplierContractLineId *string `protobuf:"bytes,21,opt,name=supplier_contract_line_id,json=supplierContractLineId,proto3,oneof" json:"supplier_contract_line_id,omitempty"` // FK to supplier_contract_line (no DB constraint)
+	unknownFields          protoimpl.UnknownFields
+	sizeCache              protoimpl.SizeCache
 }
 
 func (x *ExpenditureLineItem) Reset() {
@@ -209,6 +211,13 @@ func (x *ExpenditureLineItem) GetLocationId() string {
 func (x *ExpenditureLineItem) GetPurchaseOrderLineItemId() string {
 	if x != nil && x.PurchaseOrderLineItemId != nil {
 		return *x.PurchaseOrderLineItemId
+	}
+	return ""
+}
+
+func (x *ExpenditureLineItem) GetSupplierContractLineId() string {
+	if x != nil && x.SupplierContractLineId != nil {
+		return *x.SupplierContractLineId
 	}
 	return ""
 }
@@ -1009,7 +1018,7 @@ var File_domain_expenditure_expenditure_line_item_expenditure_line_item_proto pr
 
 const file_domain_expenditure_expenditure_line_item_expenditure_line_item_proto_rawDesc = "" +
 	"\n" +
-	"Ddomain/expenditure/expenditure_line_item/expenditure_line_item.proto\x12\x15domain.expenditure.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/search.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a0domain/expenditure/expenditure/expenditure.proto\x1a$domain/product/product/product.proto\x1a\x10options/db.proto\"\xba\b\n" +
+	"Ddomain/expenditure/expenditure_line_item/expenditure_line_item.proto\x12\x15domain.expenditure.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/search.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a0domain/expenditure/expenditure/expenditure.proto\x1a$domain/product/product/product.proto\x1a\x10options/db.proto\"\x98\t\n" +
 	"\x13ExpenditureLineItem\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12&\n" +
 	"\fdate_created\x18\x02 \x01(\x03H\x00R\vdateCreated\x88\x01\x01\x123\n" +
@@ -1039,7 +1048,8 @@ const file_domain_expenditure_expenditure_line_item_expenditure_line_item_proto_
 	"locationId\x88\x01\x01\x12a\n" +
 	"\x1bpurchase_order_line_item_id\x18\x14 \x01(\tB\x1e\x82\xb5\x18\x1a\n" +
 	"\x18purchase_order_line_itemH\n" +
-	"R\x17purchaseOrderLineItemId\x88\x01\x01B\x0f\n" +
+	"R\x17purchaseOrderLineItemId\x88\x01\x01\x12>\n" +
+	"\x19supplier_contract_line_id\x18\x15 \x01(\tH\vR\x16supplierContractLineId\x88\x01\x01B\x0f\n" +
 	"\r_date_createdB\x16\n" +
 	"\x14_date_created_stringB\x10\n" +
 	"\x0e_date_modifiedB\x17\n" +
@@ -1051,7 +1061,8 @@ const file_domain_expenditure_expenditure_line_item_expenditure_line_item_proto_
 	"\x06_notesB\x14\n" +
 	"\x12_inventory_item_idB\x0e\n" +
 	"\f_location_idB\x1e\n" +
-	"\x1c_purchase_order_line_item_id\"b\n" +
+	"\x1c_purchase_order_line_item_idB\x1c\n" +
+	"\x1a_supplier_contract_line_id\"b\n" +
 	" CreateExpenditureLineItemRequest\x12>\n" +
 	"\x04data\x18\x01 \x01(\v2*.domain.expenditure.v1.ExpenditureLineItemR\x04data\"\xbb\x01\n" +
 	"!CreateExpenditureLineItemResponse\x12>\n" +

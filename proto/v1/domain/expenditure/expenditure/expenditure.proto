@@ -23,7 +23,7 @@ message Expenditure {
   optional string date_modified_string = 5;
   bool active = 6;
   string name = 7;
-  string expenditure_type = 8;                    // "purchase", "expense", "refund", "payroll"
+  string expenditure_type = 8;                    // "purchase", "expense", "refund", "payroll", "petty"
   optional domain.entity.v1.Client vendor = 9;    // counterparty (vendor/supplier)
   string vendor_id = 10;                          // FK to entity/client (vendors are clients you buy from)
   optional int64 expenditure_date = 11;
@@ -43,6 +43,10 @@ message Expenditure {
   optional string supplier_id = 25 [(options.v1.db).references = "supplier"];          // FK to supplier (new — migrate from vendor_id over time)
   optional string payment_term_id = 26;
   optional domain.entity.v1.PaymentTerm payment_term = 27;
+
+  // Supplier commitment back-edges
+  optional string supplier_contract_id = 28 [(options.v1.db).references = "supplier_contract"];  // FK to SupplierContract (roll-up spend)
+  optional string petty_cash_fund_id = 29 [(options.v1.db).references = "petty_cash_fund"];      // FK to PettyCashFund (sundries flow)
 }
 
 service ExpenditureDomainService {

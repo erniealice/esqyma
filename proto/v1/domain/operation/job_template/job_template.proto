@@ -28,6 +28,37 @@ message JobTemplate {
   optional CostFlowType default_cost_flow_type = 10;
   optional BillingRuleType default_billing_rule_type = 11;
   optional string workspace_id = 12 [(options.v1.db).references = "workspace", (options.v1.db).index = true];
+
+  // Versioning
+  optional string template_code = 13 [(options.v1.db).index = true];
+  optional int32 revision = 14;
+  optional VersionStatus version_status = 15;
+  optional int64 effective_from = 16;
+  optional string effective_from_string = 17;
+  optional int64 effective_to = 18;
+  optional string effective_to_string = 19;
+  optional string supersedes_template_id = 20 [(options.v1.db).references = "job_template"];
+  optional string change_request_id = 21 [(options.v1.db).index = true];
+  optional bool is_default = 22 [(options.v1.db).default = "false"];
+  optional int64 published_at = 23;
+  optional string published_at_string = 24;
+  optional string published_by = 25;
+
+  // reserved 26: BackflushPolicy enum imported from job_template_input/ in Wave 2
+  reserved 26;
+
+  // Defaults
+  optional int32 default_lot_size = 27;
+  optional string default_uom = 28;
+
+  // Output target
+  optional string output_product_id = 29 [(options.v1.db).references = "product", (options.v1.db).index = true];
+  optional string output_product_variant_id = 30 [(options.v1.db).references = "product_variant", (options.v1.db).index = true];
+
+  // Workflow
+  optional string workflow_template_id = 31 [(options.v1.db).index = true];
+
+  reserved 32 to 49;
 }
 
 service JobTemplateDomainService {

@@ -162,8 +162,10 @@ type PricePlan struct {
 	// Default catalog validity/term; null = open-ended. Subscription.date_end overrides per-instance.
 	DefaultTermValue *int32  `protobuf:"varint,23,opt,name=default_term_value,json=defaultTermValue,proto3,oneof" json:"default_term_value,omitempty"`
 	DefaultTermUnit  *string `protobuf:"bytes,24,opt,name=default_term_unit,json=defaultTermUnit,proto3,oneof" json:"default_term_unit,omitempty"`
-	unknownFields    protoimpl.UnknownFields
-	sizeCache        protoimpl.SizeCache
+	// Denormalized mirror of plan.client_id. Cascade enforced at use-case layer.
+	ClientId      *string `protobuf:"bytes,25,opt,name=client_id,json=clientId,proto3,oneof" json:"client_id,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
 }
 
 func (x *PricePlan) Reset() {
@@ -353,6 +355,13 @@ func (x *PricePlan) GetDefaultTermValue() int32 {
 func (x *PricePlan) GetDefaultTermUnit() string {
 	if x != nil && x.DefaultTermUnit != nil {
 		return *x.DefaultTermUnit
+	}
+	return ""
+}
+
+func (x *PricePlan) GetClientId() string {
+	if x != nil && x.ClientId != nil {
+		return *x.ClientId
 	}
 	return ""
 }
@@ -1145,7 +1154,7 @@ var File_domain_subscription_price_plan_price_plan_proto protoreflect.FileDescri
 
 const file_domain_subscription_price_plan_price_plan_proto_rawDesc = "" +
 	"\n" +
-	"/domain/subscription/price_plan/price_plan.proto\x12\x16domain.subscription.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/search.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a#domain/subscription/plan/plan.proto\x1a\x10options/db.proto\"\x96\v\n" +
+	"/domain/subscription/price_plan/price_plan.proto\x12\x16domain.subscription.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/search.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a#domain/subscription/plan/plan.proto\x1a\x10options/db.proto\"\xd6\v\n" +
 	"\tPricePlan\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x125\n" +
 	"\x04plan\x18\x02 \x01(\v2\x1c.domain.subscription.v1.PlanH\x00R\x04plan\x88\x01\x01\x12%\n" +
@@ -1174,7 +1183,10 @@ const file_domain_subscription_price_plan_price_plan_proto_rawDesc = "" +
 	"\x13billing_cycle_value\x18\x15 \x01(\x05H\fR\x11billingCycleValue\x88\x01\x01\x121\n" +
 	"\x12billing_cycle_unit\x18\x16 \x01(\tH\rR\x10billingCycleUnit\x88\x01\x01\x121\n" +
 	"\x12default_term_value\x18\x17 \x01(\x05H\x0eR\x10defaultTermValue\x88\x01\x01\x12/\n" +
-	"\x11default_term_unit\x18\x18 \x01(\tH\x0fR\x0fdefaultTermUnit\x88\x01\x01:\x06\x8a\xb5\x18\x02\b\x01B\a\n" +
+	"\x11default_term_unit\x18\x18 \x01(\tH\x0fR\x0fdefaultTermUnit\x88\x01\x01\x120\n" +
+	"\tclient_id\x18\x19 \x01(\tB\x0e\x82\xb5\x18\n" +
+	"\n" +
+	"\x06client\x18\x01H\x10R\bclientId\x88\x01\x01:\x06\x8a\xb5\x18\x02\b\x01B\a\n" +
 	"\x05_planB\a\n" +
 	"\x05_nameB\x0e\n" +
 	"\f_descriptionB\x0f\n" +
@@ -1190,7 +1202,9 @@ const file_domain_subscription_price_plan_price_plan_proto_rawDesc = "" +
 	"\x14_billing_cycle_valueB\x15\n" +
 	"\x13_billing_cycle_unitB\x15\n" +
 	"\x13_default_term_valueB\x14\n" +
-	"\x12_default_term_unit\"O\n" +
+	"\x12_default_term_unitB\f\n" +
+	"\n" +
+	"_client_id\"O\n" +
 	"\x16CreatePricePlanRequest\x125\n" +
 	"\x04data\x18\x01 \x01(\v2!.domain.subscription.v1.PricePlanR\x04data\"\xa8\x01\n" +
 	"\x17CreatePricePlanResponse\x125\n" +

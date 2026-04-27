@@ -4,6 +4,7 @@ import type { PaginationRequest, PaginationResponse } from "../../common/paginat
 import type { SearchRequest, SearchResult } from "../../common/search_pb";
 import type { FilterRequest } from "../../common/filter_pb";
 import type { SortRequest } from "../../common/sort_pb";
+import type { Timestamp } from "@bufbuild/protobuf/wkt";
 import type { Message } from "@bufbuild/protobuf";
 /**
  * Describes the file domain/subscription/price_schedule/price_schedule.proto.
@@ -46,21 +47,27 @@ export type PriceSchedule = Message<"domain.subscription.v1.PriceSchedule"> & {
      */
     description?: string;
     /**
-     * ISO 8601 date (YYYY-MM-DD)
+     * UTC timestamp; display TZ resolved per-request
      *
-     * @generated from field: string date_start = 9;
+     * @generated from field: google.protobuf.Timestamp date_time_start = 9;
      */
-    dateStart: string;
+    dateTimeStart?: Timestamp;
     /**
-     * ISO 8601 date (YYYY-MM-DD)
+     * UTC timestamp; nil = open-ended
      *
-     * @generated from field: optional string date_end = 10;
+     * @generated from field: optional google.protobuf.Timestamp date_time_end = 10;
      */
-    dateEnd?: string;
+    dateTimeEnd?: Timestamp;
     /**
      * @generated from field: optional string location_id = 11;
      */
     locationId?: string;
+    /**
+     * SET = client-scoped schedule. Reuse-or-create driven by ResolveOrCreateClientPriceSchedule.
+     *
+     * @generated from field: optional string client_id = 12;
+     */
+    clientId?: string;
 };
 /**
  * Describes the message domain.subscription.v1.PriceSchedule.

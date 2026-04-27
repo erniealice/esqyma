@@ -103,6 +103,14 @@ export type ExpenditureLineItem = Message<"domain.expenditure.v1.ExpenditureLine
      * @generated from field: optional string purchase_order_line_item_id = 20;
      */
     purchaseOrderLineItemId?: string;
+    /**
+     * Supplier commitment back-edge
+     *
+     * FK to supplier_contract_line (no DB constraint)
+     *
+     * @generated from field: optional string supplier_contract_line_id = 21;
+     */
+    supplierContractLineId?: string;
 };
 /**
  * Describes the message domain.expenditure.v1.ExpenditureLineItem.

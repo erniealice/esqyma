@@ -38,8 +38,30 @@ type JobTemplate struct {
 	DefaultCostFlowType    *enums.CostFlowType    `protobuf:"varint,10,opt,name=default_cost_flow_type,json=defaultCostFlowType,proto3,enum=domain.operation.v1.CostFlowType,oneof" json:"default_cost_flow_type,omitempty"`
 	DefaultBillingRuleType *enums.BillingRuleType `protobuf:"varint,11,opt,name=default_billing_rule_type,json=defaultBillingRuleType,proto3,enum=domain.operation.v1.BillingRuleType,oneof" json:"default_billing_rule_type,omitempty"`
 	WorkspaceId            *string                `protobuf:"bytes,12,opt,name=workspace_id,json=workspaceId,proto3,oneof" json:"workspace_id,omitempty"`
-	unknownFields          protoimpl.UnknownFields
-	sizeCache              protoimpl.SizeCache
+	// Versioning
+	TemplateCode         *string              `protobuf:"bytes,13,opt,name=template_code,json=templateCode,proto3,oneof" json:"template_code,omitempty"`
+	Revision             *int32               `protobuf:"varint,14,opt,name=revision,proto3,oneof" json:"revision,omitempty"`
+	VersionStatus        *enums.VersionStatus `protobuf:"varint,15,opt,name=version_status,json=versionStatus,proto3,enum=domain.operation.v1.VersionStatus,oneof" json:"version_status,omitempty"`
+	EffectiveFrom        *int64               `protobuf:"varint,16,opt,name=effective_from,json=effectiveFrom,proto3,oneof" json:"effective_from,omitempty"`
+	EffectiveFromString  *string              `protobuf:"bytes,17,opt,name=effective_from_string,json=effectiveFromString,proto3,oneof" json:"effective_from_string,omitempty"`
+	EffectiveTo          *int64               `protobuf:"varint,18,opt,name=effective_to,json=effectiveTo,proto3,oneof" json:"effective_to,omitempty"`
+	EffectiveToString    *string              `protobuf:"bytes,19,opt,name=effective_to_string,json=effectiveToString,proto3,oneof" json:"effective_to_string,omitempty"`
+	SupersedesTemplateId *string              `protobuf:"bytes,20,opt,name=supersedes_template_id,json=supersedesTemplateId,proto3,oneof" json:"supersedes_template_id,omitempty"`
+	ChangeRequestId      *string              `protobuf:"bytes,21,opt,name=change_request_id,json=changeRequestId,proto3,oneof" json:"change_request_id,omitempty"`
+	IsDefault            *bool                `protobuf:"varint,22,opt,name=is_default,json=isDefault,proto3,oneof" json:"is_default,omitempty"`
+	PublishedAt          *int64               `protobuf:"varint,23,opt,name=published_at,json=publishedAt,proto3,oneof" json:"published_at,omitempty"`
+	PublishedAtString    *string              `protobuf:"bytes,24,opt,name=published_at_string,json=publishedAtString,proto3,oneof" json:"published_at_string,omitempty"`
+	PublishedBy          *string              `protobuf:"bytes,25,opt,name=published_by,json=publishedBy,proto3,oneof" json:"published_by,omitempty"`
+	// Defaults
+	DefaultLotSize *int32  `protobuf:"varint,27,opt,name=default_lot_size,json=defaultLotSize,proto3,oneof" json:"default_lot_size,omitempty"`
+	DefaultUom     *string `protobuf:"bytes,28,opt,name=default_uom,json=defaultUom,proto3,oneof" json:"default_uom,omitempty"`
+	// Output target
+	OutputProductId        *string `protobuf:"bytes,29,opt,name=output_product_id,json=outputProductId,proto3,oneof" json:"output_product_id,omitempty"`
+	OutputProductVariantId *string `protobuf:"bytes,30,opt,name=output_product_variant_id,json=outputProductVariantId,proto3,oneof" json:"output_product_variant_id,omitempty"`
+	// Workflow
+	WorkflowTemplateId *string `protobuf:"bytes,31,opt,name=workflow_template_id,json=workflowTemplateId,proto3,oneof" json:"workflow_template_id,omitempty"`
+	unknownFields      protoimpl.UnknownFields
+	sizeCache          protoimpl.SizeCache
 }
 
 func (x *JobTemplate) Reset() {
@@ -152,6 +174,132 @@ func (x *JobTemplate) GetDefaultBillingRuleType() enums.BillingRuleType {
 func (x *JobTemplate) GetWorkspaceId() string {
 	if x != nil && x.WorkspaceId != nil {
 		return *x.WorkspaceId
+	}
+	return ""
+}
+
+func (x *JobTemplate) GetTemplateCode() string {
+	if x != nil && x.TemplateCode != nil {
+		return *x.TemplateCode
+	}
+	return ""
+}
+
+func (x *JobTemplate) GetRevision() int32 {
+	if x != nil && x.Revision != nil {
+		return *x.Revision
+	}
+	return 0
+}
+
+func (x *JobTemplate) GetVersionStatus() enums.VersionStatus {
+	if x != nil && x.VersionStatus != nil {
+		return *x.VersionStatus
+	}
+	return enums.VersionStatus(0)
+}
+
+func (x *JobTemplate) GetEffectiveFrom() int64 {
+	if x != nil && x.EffectiveFrom != nil {
+		return *x.EffectiveFrom
+	}
+	return 0
+}
+
+func (x *JobTemplate) GetEffectiveFromString() string {
+	if x != nil && x.EffectiveFromString != nil {
+		return *x.EffectiveFromString
+	}
+	return ""
+}
+
+func (x *JobTemplate) GetEffectiveTo() int64 {
+	if x != nil && x.EffectiveTo != nil {
+		return *x.EffectiveTo
+	}
+	return 0
+}
+
+func (x *JobTemplate) GetEffectiveToString() string {
+	if x != nil && x.EffectiveToString != nil {
+		return *x.EffectiveToString
+	}
+	return ""
+}
+
+func (x *JobTemplate) GetSupersedesTemplateId() string {
+	if x != nil && x.SupersedesTemplateId != nil {
+		return *x.SupersedesTemplateId
+	}
+	return ""
+}
+
+func (x *JobTemplate) GetChangeRequestId() string {
+	if x != nil && x.ChangeRequestId != nil {
+		return *x.ChangeRequestId
+	}
+	return ""
+}
+
+func (x *JobTemplate) GetIsDefault() bool {
+	if x != nil && x.IsDefault != nil {
+		return *x.IsDefault
+	}
+	return false
+}
+
+func (x *JobTemplate) GetPublishedAt() int64 {
+	if x != nil && x.PublishedAt != nil {
+		return *x.PublishedAt
+	}
+	return 0
+}
+
+func (x *JobTemplate) GetPublishedAtString() string {
+	if x != nil && x.PublishedAtString != nil {
+		return *x.PublishedAtString
+	}
+	return ""
+}
+
+func (x *JobTemplate) GetPublishedBy() string {
+	if x != nil && x.PublishedBy != nil {
+		return *x.PublishedBy
+	}
+	return ""
+}
+
+func (x *JobTemplate) GetDefaultLotSize() int32 {
+	if x != nil && x.DefaultLotSize != nil {
+		return *x.DefaultLotSize
+	}
+	return 0
+}
+
+func (x *JobTemplate) GetDefaultUom() string {
+	if x != nil && x.DefaultUom != nil {
+		return *x.DefaultUom
+	}
+	return ""
+}
+
+func (x *JobTemplate) GetOutputProductId() string {
+	if x != nil && x.OutputProductId != nil {
+		return *x.OutputProductId
+	}
+	return ""
+}
+
+func (x *JobTemplate) GetOutputProductVariantId() string {
+	if x != nil && x.OutputProductVariantId != nil {
+		return *x.OutputProductVariantId
+	}
+	return ""
+}
+
+func (x *JobTemplate) GetWorkflowTemplateId() string {
+	if x != nil && x.WorkflowTemplateId != nil {
+		return *x.WorkflowTemplateId
 	}
 	return ""
 }
@@ -944,7 +1092,7 @@ var File_domain_operation_job_template_job_template_proto protoreflect.FileDescr
 
 const file_domain_operation_job_template_job_template_proto_rawDesc = "" +
 	"\n" +
-	"0domain/operation/job_template/job_template.proto\x12\x13domain.operation.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1adomain/common/search.proto\x1a\"domain/operation/enums/enums.proto\x1a\x10options/db.proto\"\xf0\x06\n" +
+	"0domain/operation/job_template/job_template.proto\x12\x13domain.operation.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1adomain/common/search.proto\x1a\"domain/operation/enums/enums.proto\x1a\x10options/db.proto\"\xc2\x11\n" +
 	"\vJobTemplate\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12&\n" +
 	"\fdate_created\x18\x02 \x01(\x03H\x00R\vdateCreated\x88\x01\x01\x123\n" +
@@ -960,7 +1108,31 @@ const file_domain_operation_job_template_job_template_proto_rawDesc = "" +
 	" \x01(\x0e2!.domain.operation.v1.CostFlowTypeH\x06R\x13defaultCostFlowType\x88\x01\x01\x12d\n" +
 	"\x19default_billing_rule_type\x18\v \x01(\x0e2$.domain.operation.v1.BillingRuleTypeH\aR\x16defaultBillingRuleType\x88\x01\x01\x129\n" +
 	"\fworkspace_id\x18\f \x01(\tB\x11\x82\xb5\x18\r\n" +
-	"\tworkspace\x18\x01H\bR\vworkspaceId\x88\x01\x01:\x06\x8a\xb5\x18\x02\b\x01B\x0f\n" +
+	"\tworkspace\x18\x01H\bR\vworkspaceId\x88\x01\x01\x120\n" +
+	"\rtemplate_code\x18\r \x01(\tB\x06\x82\xb5\x18\x02\x18\x01H\tR\ftemplateCode\x88\x01\x01\x12\x1f\n" +
+	"\brevision\x18\x0e \x01(\x05H\n" +
+	"R\brevision\x88\x01\x01\x12N\n" +
+	"\x0eversion_status\x18\x0f \x01(\x0e2\".domain.operation.v1.VersionStatusH\vR\rversionStatus\x88\x01\x01\x12*\n" +
+	"\x0eeffective_from\x18\x10 \x01(\x03H\fR\reffectiveFrom\x88\x01\x01\x127\n" +
+	"\x15effective_from_string\x18\x11 \x01(\tH\rR\x13effectiveFromString\x88\x01\x01\x12&\n" +
+	"\feffective_to\x18\x12 \x01(\x03H\x0eR\veffectiveTo\x88\x01\x01\x123\n" +
+	"\x13effective_to_string\x18\x13 \x01(\tH\x0fR\x11effectiveToString\x88\x01\x01\x12M\n" +
+	"\x16supersedes_template_id\x18\x14 \x01(\tB\x12\x82\xb5\x18\x0e\n" +
+	"\fjob_templateH\x10R\x14supersedesTemplateId\x88\x01\x01\x127\n" +
+	"\x11change_request_id\x18\x15 \x01(\tB\x06\x82\xb5\x18\x02\x18\x01H\x11R\x0fchangeRequestId\x88\x01\x01\x12/\n" +
+	"\n" +
+	"is_default\x18\x16 \x01(\bB\v\x82\xb5\x18\a\"\x05falseH\x12R\tisDefault\x88\x01\x01\x12&\n" +
+	"\fpublished_at\x18\x17 \x01(\x03H\x13R\vpublishedAt\x88\x01\x01\x123\n" +
+	"\x13published_at_string\x18\x18 \x01(\tH\x14R\x11publishedAtString\x88\x01\x01\x12&\n" +
+	"\fpublished_by\x18\x19 \x01(\tH\x15R\vpublishedBy\x88\x01\x01\x12-\n" +
+	"\x10default_lot_size\x18\x1b \x01(\x05H\x16R\x0edefaultLotSize\x88\x01\x01\x12$\n" +
+	"\vdefault_uom\x18\x1c \x01(\tH\x17R\n" +
+	"defaultUom\x88\x01\x01\x12@\n" +
+	"\x11output_product_id\x18\x1d \x01(\tB\x0f\x82\xb5\x18\v\n" +
+	"\aproduct\x18\x01H\x18R\x0foutputProductId\x88\x01\x01\x12W\n" +
+	"\x19output_product_variant_id\x18\x1e \x01(\tB\x17\x82\xb5\x18\x13\n" +
+	"\x0fproduct_variant\x18\x01H\x19R\x16outputProductVariantId\x88\x01\x01\x12=\n" +
+	"\x14workflow_template_id\x18\x1f \x01(\tB\x06\x82\xb5\x18\x02\x18\x01H\x1aR\x12workflowTemplateId\x88\x01\x01:\x06\x8a\xb5\x18\x02\b\x01B\x0f\n" +
 	"\r_date_createdB\x16\n" +
 	"\x14_date_created_stringB\x10\n" +
 	"\x0e_date_modifiedB\x17\n" +
@@ -969,7 +1141,25 @@ const file_domain_operation_job_template_job_template_proto_rawDesc = "" +
 	"\x19_default_fulfillment_typeB\x19\n" +
 	"\x17_default_cost_flow_typeB\x1c\n" +
 	"\x1a_default_billing_rule_typeB\x0f\n" +
-	"\r_workspace_id\"P\n" +
+	"\r_workspace_idB\x10\n" +
+	"\x0e_template_codeB\v\n" +
+	"\t_revisionB\x11\n" +
+	"\x0f_version_statusB\x11\n" +
+	"\x0f_effective_fromB\x18\n" +
+	"\x16_effective_from_stringB\x0f\n" +
+	"\r_effective_toB\x16\n" +
+	"\x14_effective_to_stringB\x19\n" +
+	"\x17_supersedes_template_idB\x14\n" +
+	"\x12_change_request_idB\r\n" +
+	"\v_is_defaultB\x0f\n" +
+	"\r_published_atB\x16\n" +
+	"\x14_published_at_stringB\x0f\n" +
+	"\r_published_byB\x13\n" +
+	"\x11_default_lot_sizeB\x0e\n" +
+	"\f_default_uomB\x14\n" +
+	"\x12_output_product_idB\x1c\n" +
+	"\x1a_output_product_variant_idB\x17\n" +
+	"\x15_workflow_template_idJ\x04\b\x1a\x10\x1bJ\x04\b \x102\"P\n" +
 	"\x18CreateJobTemplateRequest\x124\n" +
 	"\x04data\x18\x01 \x01(\v2 .domain.operation.v1.JobTemplateR\x04data\"\xa9\x01\n" +
 	"\x19CreateJobTemplateResponse\x124\n" +
@@ -1086,64 +1276,66 @@ var file_domain_operation_job_template_job_template_proto_goTypes = []any{
 	(enums.FulfillmentType)(0),                 // 15: domain.operation.v1.FulfillmentType
 	(enums.CostFlowType)(0),                    // 16: domain.operation.v1.CostFlowType
 	(enums.BillingRuleType)(0),                 // 17: domain.operation.v1.BillingRuleType
-	(*common.Error)(nil),                       // 18: domain.common.v1.Error
-	(*common.SearchRequest)(nil),               // 19: domain.common.v1.SearchRequest
-	(*common.FilterRequest)(nil),               // 20: domain.common.v1.FilterRequest
-	(*common.SortRequest)(nil),                 // 21: domain.common.v1.SortRequest
-	(*common.PaginationRequest)(nil),           // 22: domain.common.v1.PaginationRequest
-	(*common.PaginationResponse)(nil),          // 23: domain.common.v1.PaginationResponse
-	(*common.SearchResult)(nil),                // 24: domain.common.v1.SearchResult
+	(enums.VersionStatus)(0),                   // 18: domain.operation.v1.VersionStatus
+	(*common.Error)(nil),                       // 19: domain.common.v1.Error
+	(*common.SearchRequest)(nil),               // 20: domain.common.v1.SearchRequest
+	(*common.FilterRequest)(nil),               // 21: domain.common.v1.FilterRequest
+	(*common.SortRequest)(nil),                 // 22: domain.common.v1.SortRequest
+	(*common.PaginationRequest)(nil),           // 23: domain.common.v1.PaginationRequest
+	(*common.PaginationResponse)(nil),          // 24: domain.common.v1.PaginationResponse
+	(*common.SearchResult)(nil),                // 25: domain.common.v1.SearchResult
 }
 var file_domain_operation_job_template_job_template_proto_depIdxs = []int32{
 	15, // 0: domain.operation.v1.JobTemplate.default_fulfillment_type:type_name -> domain.operation.v1.FulfillmentType
 	16, // 1: domain.operation.v1.JobTemplate.default_cost_flow_type:type_name -> domain.operation.v1.CostFlowType
 	17, // 2: domain.operation.v1.JobTemplate.default_billing_rule_type:type_name -> domain.operation.v1.BillingRuleType
-	0,  // 3: domain.operation.v1.CreateJobTemplateRequest.data:type_name -> domain.operation.v1.JobTemplate
-	0,  // 4: domain.operation.v1.CreateJobTemplateResponse.data:type_name -> domain.operation.v1.JobTemplate
-	18, // 5: domain.operation.v1.CreateJobTemplateResponse.error:type_name -> domain.common.v1.Error
-	0,  // 6: domain.operation.v1.ReadJobTemplateRequest.data:type_name -> domain.operation.v1.JobTemplate
-	0,  // 7: domain.operation.v1.ReadJobTemplateResponse.data:type_name -> domain.operation.v1.JobTemplate
-	18, // 8: domain.operation.v1.ReadJobTemplateResponse.error:type_name -> domain.common.v1.Error
-	0,  // 9: domain.operation.v1.UpdateJobTemplateRequest.data:type_name -> domain.operation.v1.JobTemplate
-	0,  // 10: domain.operation.v1.UpdateJobTemplateResponse.data:type_name -> domain.operation.v1.JobTemplate
-	18, // 11: domain.operation.v1.UpdateJobTemplateResponse.error:type_name -> domain.common.v1.Error
-	0,  // 12: domain.operation.v1.DeleteJobTemplateRequest.data:type_name -> domain.operation.v1.JobTemplate
-	18, // 13: domain.operation.v1.DeleteJobTemplateResponse.error:type_name -> domain.common.v1.Error
-	19, // 14: domain.operation.v1.ListJobTemplatesRequest.search:type_name -> domain.common.v1.SearchRequest
-	20, // 15: domain.operation.v1.ListJobTemplatesRequest.filters:type_name -> domain.common.v1.FilterRequest
-	21, // 16: domain.operation.v1.ListJobTemplatesRequest.sort:type_name -> domain.common.v1.SortRequest
-	22, // 17: domain.operation.v1.ListJobTemplatesRequest.pagination:type_name -> domain.common.v1.PaginationRequest
-	0,  // 18: domain.operation.v1.ListJobTemplatesResponse.data:type_name -> domain.operation.v1.JobTemplate
-	18, // 19: domain.operation.v1.ListJobTemplatesResponse.error:type_name -> domain.common.v1.Error
-	22, // 20: domain.operation.v1.GetJobTemplateListPageDataRequest.pagination:type_name -> domain.common.v1.PaginationRequest
-	20, // 21: domain.operation.v1.GetJobTemplateListPageDataRequest.filters:type_name -> domain.common.v1.FilterRequest
-	21, // 22: domain.operation.v1.GetJobTemplateListPageDataRequest.sort:type_name -> domain.common.v1.SortRequest
-	19, // 23: domain.operation.v1.GetJobTemplateListPageDataRequest.search:type_name -> domain.common.v1.SearchRequest
-	0,  // 24: domain.operation.v1.GetJobTemplateListPageDataResponse.job_template_list:type_name -> domain.operation.v1.JobTemplate
-	23, // 25: domain.operation.v1.GetJobTemplateListPageDataResponse.pagination:type_name -> domain.common.v1.PaginationResponse
-	24, // 26: domain.operation.v1.GetJobTemplateListPageDataResponse.search_results:type_name -> domain.common.v1.SearchResult
-	18, // 27: domain.operation.v1.GetJobTemplateListPageDataResponse.error:type_name -> domain.common.v1.Error
-	0,  // 28: domain.operation.v1.GetJobTemplateItemPageDataResponse.job_template:type_name -> domain.operation.v1.JobTemplate
-	18, // 29: domain.operation.v1.GetJobTemplateItemPageDataResponse.error:type_name -> domain.common.v1.Error
-	1,  // 30: domain.operation.v1.JobTemplateDomainService.CreateJobTemplate:input_type -> domain.operation.v1.CreateJobTemplateRequest
-	3,  // 31: domain.operation.v1.JobTemplateDomainService.ReadJobTemplate:input_type -> domain.operation.v1.ReadJobTemplateRequest
-	5,  // 32: domain.operation.v1.JobTemplateDomainService.UpdateJobTemplate:input_type -> domain.operation.v1.UpdateJobTemplateRequest
-	7,  // 33: domain.operation.v1.JobTemplateDomainService.DeleteJobTemplate:input_type -> domain.operation.v1.DeleteJobTemplateRequest
-	9,  // 34: domain.operation.v1.JobTemplateDomainService.ListJobTemplates:input_type -> domain.operation.v1.ListJobTemplatesRequest
-	11, // 35: domain.operation.v1.JobTemplateDomainService.GetJobTemplateListPageData:input_type -> domain.operation.v1.GetJobTemplateListPageDataRequest
-	13, // 36: domain.operation.v1.JobTemplateDomainService.GetJobTemplateItemPageData:input_type -> domain.operation.v1.GetJobTemplateItemPageDataRequest
-	2,  // 37: domain.operation.v1.JobTemplateDomainService.CreateJobTemplate:output_type -> domain.operation.v1.CreateJobTemplateResponse
-	4,  // 38: domain.operation.v1.JobTemplateDomainService.ReadJobTemplate:output_type -> domain.operation.v1.ReadJobTemplateResponse
-	6,  // 39: domain.operation.v1.JobTemplateDomainService.UpdateJobTemplate:output_type -> domain.operation.v1.UpdateJobTemplateResponse
-	8,  // 40: domain.operation.v1.JobTemplateDomainService.DeleteJobTemplate:output_type -> domain.operation.v1.DeleteJobTemplateResponse
-	10, // 41: domain.operation.v1.JobTemplateDomainService.ListJobTemplates:output_type -> domain.operation.v1.ListJobTemplatesResponse
-	12, // 42: domain.operation.v1.JobTemplateDomainService.GetJobTemplateListPageData:output_type -> domain.operation.v1.GetJobTemplateListPageDataResponse
-	14, // 43: domain.operation.v1.JobTemplateDomainService.GetJobTemplateItemPageData:output_type -> domain.operation.v1.GetJobTemplateItemPageDataResponse
-	37, // [37:44] is the sub-list for method output_type
-	30, // [30:37] is the sub-list for method input_type
-	30, // [30:30] is the sub-list for extension type_name
-	30, // [30:30] is the sub-list for extension extendee
-	0,  // [0:30] is the sub-list for field type_name
+	18, // 3: domain.operation.v1.JobTemplate.version_status:type_name -> domain.operation.v1.VersionStatus
+	0,  // 4: domain.operation.v1.CreateJobTemplateRequest.data:type_name -> domain.operation.v1.JobTemplate
+	0,  // 5: domain.operation.v1.CreateJobTemplateResponse.data:type_name -> domain.operation.v1.JobTemplate
+	19, // 6: domain.operation.v1.CreateJobTemplateResponse.error:type_name -> domain.common.v1.Error
+	0,  // 7: domain.operation.v1.ReadJobTemplateRequest.data:type_name -> domain.operation.v1.JobTemplate
+	0,  // 8: domain.operation.v1.ReadJobTemplateResponse.data:type_name -> domain.operation.v1.JobTemplate
+	19, // 9: domain.operation.v1.ReadJobTemplateResponse.error:type_name -> domain.common.v1.Error
+	0,  // 10: domain.operation.v1.UpdateJobTemplateRequest.data:type_name -> domain.operation.v1.JobTemplate
+	0,  // 11: domain.operation.v1.UpdateJobTemplateResponse.data:type_name -> domain.operation.v1.JobTemplate
+	19, // 12: domain.operation.v1.UpdateJobTemplateResponse.error:type_name -> domain.common.v1.Error
+	0,  // 13: domain.operation.v1.DeleteJobTemplateRequest.data:type_name -> domain.operation.v1.JobTemplate
+	19, // 14: domain.operation.v1.DeleteJobTemplateResponse.error:type_name -> domain.common.v1.Error
+	20, // 15: domain.operation.v1.ListJobTemplatesRequest.search:type_name -> domain.common.v1.SearchRequest
+	21, // 16: domain.operation.v1.ListJobTemplatesRequest.filters:type_name -> domain.common.v1.FilterRequest
+	22, // 17: domain.operation.v1.ListJobTemplatesRequest.sort:type_name -> domain.common.v1.SortRequest
+	23, // 18: domain.operation.v1.ListJobTemplatesRequest.pagination:type_name -> domain.common.v1.PaginationRequest
+	0,  // 19: domain.operation.v1.ListJobTemplatesResponse.data:type_name -> domain.operation.v1.JobTemplate
+	19, // 20: domain.operation.v1.ListJobTemplatesResponse.error:type_name -> domain.common.v1.Error
+	23, // 21: domain.operation.v1.GetJobTemplateListPageDataRequest.pagination:type_name -> domain.common.v1.PaginationRequest
+	21, // 22: domain.operation.v1.GetJobTemplateListPageDataRequest.filters:type_name -> domain.common.v1.FilterRequest
+	22, // 23: domain.operation.v1.GetJobTemplateListPageDataRequest.sort:type_name -> domain.common.v1.SortRequest
+	20, // 24: domain.operation.v1.GetJobTemplateListPageDataRequest.search:type_name -> domain.common.v1.SearchRequest
+	0,  // 25: domain.operation.v1.GetJobTemplateListPageDataResponse.job_template_list:type_name -> domain.operation.v1.JobTemplate
+	24, // 26: domain.operation.v1.GetJobTemplateListPageDataResponse.pagination:type_name -> domain.common.v1.PaginationResponse
+	25, // 27: domain.operation.v1.GetJobTemplateListPageDataResponse.search_results:type_name -> domain.common.v1.SearchResult
+	19, // 28: domain.operation.v1.GetJobTemplateListPageDataResponse.error:type_name -> domain.common.v1.Error
+	0,  // 29: domain.operation.v1.GetJobTemplateItemPageDataResponse.job_template:type_name -> domain.operation.v1.JobTemplate
+	19, // 30: domain.operation.v1.GetJobTemplateItemPageDataResponse.error:type_name -> domain.common.v1.Error
+	1,  // 31: domain.operation.v1.JobTemplateDomainService.CreateJobTemplate:input_type -> domain.operation.v1.CreateJobTemplateRequest
+	3,  // 32: domain.operation.v1.JobTemplateDomainService.ReadJobTemplate:input_type -> domain.operation.v1.ReadJobTemplateRequest
+	5,  // 33: domain.operation.v1.JobTemplateDomainService.UpdateJobTemplate:input_type -> domain.operation.v1.UpdateJobTemplateRequest
+	7,  // 34: domain.operation.v1.JobTemplateDomainService.DeleteJobTemplate:input_type -> domain.operation.v1.DeleteJobTemplateRequest
+	9,  // 35: domain.operation.v1.JobTemplateDomainService.ListJobTemplates:input_type -> domain.operation.v1.ListJobTemplatesRequest
+	11, // 36: domain.operation.v1.JobTemplateDomainService.GetJobTemplateListPageData:input_type -> domain.operation.v1.GetJobTemplateListPageDataRequest
+	13, // 37: domain.operation.v1.JobTemplateDomainService.GetJobTemplateItemPageData:input_type -> domain.operation.v1.GetJobTemplateItemPageDataRequest
+	2,  // 38: domain.operation.v1.JobTemplateDomainService.CreateJobTemplate:output_type -> domain.operation.v1.CreateJobTemplateResponse
+	4,  // 39: domain.operation.v1.JobTemplateDomainService.ReadJobTemplate:output_type -> domain.operation.v1.ReadJobTemplateResponse
+	6,  // 40: domain.operation.v1.JobTemplateDomainService.UpdateJobTemplate:output_type -> domain.operation.v1.UpdateJobTemplateResponse
+	8,  // 41: domain.operation.v1.JobTemplateDomainService.DeleteJobTemplate:output_type -> domain.operation.v1.DeleteJobTemplateResponse
+	10, // 42: domain.operation.v1.JobTemplateDomainService.ListJobTemplates:output_type -> domain.operation.v1.ListJobTemplatesResponse
+	12, // 43: domain.operation.v1.JobTemplateDomainService.GetJobTemplateListPageData:output_type -> domain.operation.v1.GetJobTemplateListPageDataResponse
+	14, // 44: domain.operation.v1.JobTemplateDomainService.GetJobTemplateItemPageData:output_type -> domain.operation.v1.GetJobTemplateItemPageDataResponse
+	38, // [38:45] is the sub-list for method output_type
+	31, // [31:38] is the sub-list for method input_type
+	31, // [31:31] is the sub-list for extension type_name
+	31, // [31:31] is the sub-list for extension extendee
+	0,  // [0:31] is the sub-list for field type_name
 }
 
 func init() { file_domain_operation_job_template_job_template_proto_init() }

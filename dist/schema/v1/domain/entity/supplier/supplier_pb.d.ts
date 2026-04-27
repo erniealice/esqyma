@@ -71,9 +71,9 @@ export type Supplier = Message<"domain.entity.v1.Supplier"> & {
      */
     supplierType: string;
     /**
-     * @generated from field: string company_name = 13;
+     * @generated from field: string name = 13;
      */
-    companyName: string;
+    name: string;
     /**
      * TIN/VAT/EIN
      *
@@ -109,11 +109,11 @@ export type Supplier = Message<"domain.entity.v1.Supplier"> & {
      */
     country?: string;
     /**
-     * ISO 4217 currency code
+     * ISO 4217 currency code — currency this supplier invoices you in
      *
-     * @generated from field: optional string default_currency = 21;
+     * @generated from field: optional string billing_currency = 21;
      */
-    defaultCurrency?: string;
+    billingCurrency?: string;
     /**
      * "net_30", "net_60", "2_10_net_30", "immediate"
      *
@@ -162,6 +162,12 @@ export type Supplier = Message<"domain.entity.v1.Supplier"> & {
      * @generated from field: optional domain.entity.v1.PaymentTerm payment_term = 31;
      */
     paymentTerm?: PaymentTerm;
+    /**
+     * IANA timezone (e.g. "Asia/Manila")
+     *
+     * @generated from field: optional string timezone = 32;
+     */
+    timezone?: string;
 };
 /**
  * Describes the message domain.entity.v1.Supplier.

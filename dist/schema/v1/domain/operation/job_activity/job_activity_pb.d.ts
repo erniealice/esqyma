@@ -741,7 +741,19 @@ export declare enum EntryType {
     /**
      * @generated from enum value: ENTRY_TYPE_EXPENSE = 3;
      */
-    EXPENSE = 3
+    EXPENSE = 3,
+    /**
+     * NEW
+     *
+     * @generated from enum value: ENTRY_TYPE_EQUIPMENT = 4;
+     */
+    EQUIPMENT = 4,
+    /**
+     * NEW
+     *
+     * @generated from enum value: ENTRY_TYPE_SUBCONTRACT = 5;
+     */
+    SUBCONTRACT = 5
 }
 /**
  * Describes the enum domain.operation.v1.EntryType.

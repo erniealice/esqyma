@@ -50,11 +50,12 @@ export type Product = Message<"domain.product.v1.Product"> & {
      */
     description?: string;
     /**
-     * centavos
+     * Centavos. Optional: null when variant_mode = "configurable" (price lives on each
+     * ProductVariant.price_override) or when pricing is deferred to a rate-card only.
      *
-     * @generated from field: int64 price = 9;
+     * @generated from field: optional int64 price = 9;
      */
-    price: bigint;
+    price?: bigint;
     /**
      * @generated from field: string currency = 10;
      */
@@ -84,6 +85,34 @@ export type Product = Message<"domain.product.v1.Product"> & {
      * @generated from field: string tracking_mode = 17;
      */
     trackingMode: string;
+    /**
+     * Free-text unit of measure for display. No validation; tenants choose their own
+     * convention. Examples: "ea", "lb", "kg", "hr", "unit", "session", "bag".
+     *
+     * @generated from field: optional string unit = 18;
+     */
+    unit?: string;
+    /**
+     * Does this product have option/variant axes? Drives drawer-form branching + the
+     * binary invariant on ProductPlan / ProductPricePlan (variant_id required iff
+     * variant_mode = "configurable").
+     * Valid values: "none" | "configurable"
+     *
+     * @generated from field: string variant_mode = 19;
+     */
+    variantMode: string;
+    /**
+     * @generated from field: optional int64 expected_cost = 20;
+     */
+    expectedCost?: bigint;
+    /**
+     * @generated from field: optional string expected_cost_currency = 21;
+     */
+    expectedCostCurrency?: string;
+    /**
+     * @generated from field: optional string default_template_id = 22;
+     */
+    defaultTemplateId?: string;
 };
 /**
  * Describes the message domain.product.v1.Product.

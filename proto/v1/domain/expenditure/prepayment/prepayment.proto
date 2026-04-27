@@ -53,6 +53,10 @@ message Prepayment {
   optional string date_created_string = 16;
   optional int64 date_modified = 17;
   optional string date_modified_string = 18;
+
+  // Supplier commitment back-edges (plan §11.5 — adopted, not deferred)
+  optional string supplier_contract_id = 19 [(options.v1.db).references = "supplier_contract"]; // FK to SupplierContract
+  optional string expenditure_id = 20 [(options.v1.db).references = "expenditure"];             // FK to the originating Expenditure
 }
 
 service PrepaymentDomainService {

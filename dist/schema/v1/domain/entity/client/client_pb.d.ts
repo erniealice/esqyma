@@ -100,6 +100,30 @@ export type Client = Message<"domain.entity.v1.Client"> & {
      * @generated from field: optional domain.entity.v1.PaymentTerm payment_term = 22;
      */
     paymentTerm?: PaymentTerm;
+    /**
+     * ISO 4217 currency code — currency this client is billed in. When unset,
+     * the subscription/invoice flow falls back to Workspace.functional_currency.
+     * Used by the subscription drawer to filter applicable PricePlans.
+     *
+     * @generated from field: optional string billing_currency = 23;
+     */
+    billingCurrency?: string;
+    /**
+     * "prospect", "active", "on_hold", "blocked", "inactive"
+     *
+     * @generated from field: optional string status = 24;
+     */
+    status?: string;
+    /**
+     * ISO 3166-1 alpha-2 country code
+     *
+     * @generated from field: optional string country = 25;
+     */
+    country?: string;
+    /**
+     * @generated from field: optional string website = 26;
+     */
+    website?: string;
 };
 /**
  * Describes the message domain.entity.v1.Client.

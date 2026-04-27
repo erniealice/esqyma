@@ -74,6 +74,10 @@ export type ProductOption = Message<"domain.product.v1.ProductOption"> & {
      * @generated from field: bool required = 15;
      */
     required: boolean;
+    /**
+     * @generated from field: optional string description = 16;
+     */
+    description?: string;
 };
 /**
  * Describes the message domain.product.v1.ProductOption.

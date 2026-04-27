@@ -57,8 +57,11 @@ type PurchaseOrderLineItem struct {
 	DateCreatedString  *string `protobuf:"bytes,21,opt,name=date_created_string,json=dateCreatedString,proto3,oneof" json:"date_created_string,omitempty"`
 	DateModified       *int64  `protobuf:"varint,22,opt,name=date_modified,json=dateModified,proto3,oneof" json:"date_modified,omitempty"`
 	DateModifiedString *string `protobuf:"bytes,23,opt,name=date_modified_string,json=dateModifiedString,proto3,oneof" json:"date_modified_string,omitempty"`
-	unknownFields      protoimpl.UnknownFields
-	sizeCache          protoimpl.SizeCache
+	// Supplier commitment back-edges
+	SupplierContractLineId   *string `protobuf:"bytes,24,opt,name=supplier_contract_line_id,json=supplierContractLineId,proto3,oneof" json:"supplier_contract_line_id,omitempty"`       // FK to supplier_contract_line (no DB constraint)
+	ProcurementRequestLineId *string `protobuf:"bytes,25,opt,name=procurement_request_line_id,json=procurementRequestLineId,proto3,oneof" json:"procurement_request_line_id,omitempty"` // FK to procurement_request_line (no DB constraint)
+	unknownFields            protoimpl.UnknownFields
+	sizeCache                protoimpl.SizeCache
 }
 
 func (x *PurchaseOrderLineItem) Reset() {
@@ -248,6 +251,20 @@ func (x *PurchaseOrderLineItem) GetDateModified() int64 {
 func (x *PurchaseOrderLineItem) GetDateModifiedString() string {
 	if x != nil && x.DateModifiedString != nil {
 		return *x.DateModifiedString
+	}
+	return ""
+}
+
+func (x *PurchaseOrderLineItem) GetSupplierContractLineId() string {
+	if x != nil && x.SupplierContractLineId != nil {
+		return *x.SupplierContractLineId
+	}
+	return ""
+}
+
+func (x *PurchaseOrderLineItem) GetProcurementRequestLineId() string {
+	if x != nil && x.ProcurementRequestLineId != nil {
+		return *x.ProcurementRequestLineId
 	}
 	return ""
 }
@@ -1048,8 +1065,7 @@ var File_domain_expenditure_purchase_order_line_item_purchase_order_line_item_pr
 
 const file_domain_expenditure_purchase_order_line_item_purchase_order_line_item_proto_rawDesc = "" +
 	"\n" +
-	"Jdomain/expenditure/purchase_order_line_item/purchase_order_line_item.proto\x12\x15domain.expenditure.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/search.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a6domain/expenditure/purchase_order/purchase_order.proto\x1a$domain/product/product/product.proto\x1a\x10options/db.proto\"\x9e\n" +
-	"\n" +
+	"Jdomain/expenditure/purchase_order_line_item/purchase_order_line_item.proto\x12\x15domain.expenditure.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/search.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a6domain/expenditure/purchase_order/purchase_order.proto\x1a$domain/product/product/product.proto\x1a\x10options/db.proto\"\xe0\v\n" +
 	"\x15PurchaseOrderLineItem\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12P\n" +
 	"\x0epurchase_order\x18\x02 \x01(\v2$.domain.expenditure.v1.PurchaseOrderH\x00R\rpurchaseOrder\x88\x01\x01\x12B\n" +
@@ -1086,7 +1102,9 @@ const file_domain_expenditure_purchase_order_line_item_purchase_order_line_item_
 	"\x13date_created_string\x18\x15 \x01(\tH\tR\x11dateCreatedString\x88\x01\x01\x12(\n" +
 	"\rdate_modified\x18\x16 \x01(\x03H\n" +
 	"R\fdateModified\x88\x01\x01\x125\n" +
-	"\x14date_modified_string\x18\x17 \x01(\tH\vR\x12dateModifiedString\x88\x01\x01:\x06\x8a\xb5\x18\x02\b\x01B\x11\n" +
+	"\x14date_modified_string\x18\x17 \x01(\tH\vR\x12dateModifiedString\x88\x01\x01\x12>\n" +
+	"\x19supplier_contract_line_id\x18\x18 \x01(\tH\fR\x16supplierContractLineId\x88\x01\x01\x12B\n" +
+	"\x1bprocurement_request_line_id\x18\x19 \x01(\tH\rR\x18procurementRequestLineId\x88\x01\x01:\x06\x8a\xb5\x18\x02\b\x01B\x11\n" +
 	"\x0f_purchase_orderB\n" +
 	"\n" +
 	"\b_productB\r\n" +
@@ -1099,7 +1117,9 @@ const file_domain_expenditure_purchase_order_line_item_purchase_order_line_item_
 	"\r_date_createdB\x16\n" +
 	"\x14_date_created_stringB\x10\n" +
 	"\x0e_date_modifiedB\x17\n" +
-	"\x15_date_modified_string\"f\n" +
+	"\x15_date_modified_stringB\x1c\n" +
+	"\x1a_supplier_contract_line_idB\x1e\n" +
+	"\x1c_procurement_request_line_id\"f\n" +
 	"\"CreatePurchaseOrderLineItemRequest\x12@\n" +
 	"\x04data\x18\x01 \x01(\v2,.domain.expenditure.v1.PurchaseOrderLineItemR\x04data\"\xbf\x01\n" +
 	"#CreatePurchaseOrderLineItemResponse\x12@\n" +

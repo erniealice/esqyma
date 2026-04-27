@@ -99,6 +99,10 @@ export type PaymentTerm = Message<"domain.entity.v1.PaymentTerm"> & {
      * @generated from field: optional int32 proximate_day = 17;
      */
     proximateDay?: number;
+    /**
+     * @generated from field: optional string workspace_id = 18;
+     */
+    workspaceId?: string;
 };
 /**
  * Describes the message domain.entity.v1.PaymentTerm.

@@ -62,6 +62,15 @@ export type ProductPlan = Message<"domain.product.v1.ProductPlan"> & {
      * @generated from field: optional string job_template_id = 14;
      */
     jobTemplateId?: string;
+    /**
+     * Specific variant of product, iff parent product.variant_mode = "configurable".
+     * Null when parent.variant_mode = "none". Model D: catalog-level specificity.
+     * ProductPricePlan does NOT carry variant_id — it joins through product_plan_id to
+     * inherit this row's variant. Binary invariant enforced at use-case layer.
+     *
+     * @generated from field: optional string product_variant_id = 15;
+     */
+    productVariantId?: string;
 };
 /**
  * Describes the message domain.product.v1.ProductPlan.

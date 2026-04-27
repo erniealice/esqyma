@@ -72,8 +72,11 @@ type PurchaseOrder struct {
 	DateModifiedString *string                   `protobuf:"bytes,35,opt,name=date_modified_string,json=dateModifiedString,proto3,oneof" json:"date_modified_string,omitempty"`
 	PaymentTermId      *string                   `protobuf:"bytes,36,opt,name=payment_term_id,json=paymentTermId,proto3,oneof" json:"payment_term_id,omitempty"`
 	PaymentTerm        *payment_term.PaymentTerm `protobuf:"bytes,37,opt,name=payment_term,json=paymentTerm,proto3,oneof" json:"payment_term,omitempty"`
-	unknownFields      protoimpl.UnknownFields
-	sizeCache          protoimpl.SizeCache
+	// Supplier commitment back-edges
+	SupplierContractId   *string `protobuf:"bytes,38,opt,name=supplier_contract_id,json=supplierContractId,proto3,oneof" json:"supplier_contract_id,omitempty"`       // FK to SupplierContract (blanket/framework releases)
+	ProcurementRequestId *string `protobuf:"bytes,39,opt,name=procurement_request_id,json=procurementRequestId,proto3,oneof" json:"procurement_request_id,omitempty"` // FK to ProcurementRequest (spawned PO)
+	unknownFields        protoimpl.UnknownFields
+	sizeCache            protoimpl.SizeCache
 }
 
 func (x *PurchaseOrder) Reset() {
@@ -349,6 +352,20 @@ func (x *PurchaseOrder) GetPaymentTerm() *payment_term.PaymentTerm {
 		return x.PaymentTerm
 	}
 	return nil
+}
+
+func (x *PurchaseOrder) GetSupplierContractId() string {
+	if x != nil && x.SupplierContractId != nil {
+		return *x.SupplierContractId
+	}
+	return ""
+}
+
+func (x *PurchaseOrder) GetProcurementRequestId() string {
+	if x != nil && x.ProcurementRequestId != nil {
+		return *x.ProcurementRequestId
+	}
+	return ""
 }
 
 type CreatePurchaseOrderRequest struct {
@@ -1163,7 +1180,7 @@ var File_domain_expenditure_purchase_order_purchase_order_proto protoreflect.Fil
 
 const file_domain_expenditure_purchase_order_purchase_order_proto_rawDesc = "" +
 	"\n" +
-	"6domain/expenditure/purchase_order/purchase_order.proto\x12\x15domain.expenditure.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/search.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a%domain/entity/supplier/supplier.proto\x1a%domain/entity/location/location.proto\x1a-domain/entity/payment_term/payment_term.proto\x1a\x10options/db.proto\"\x90\x10\n" +
+	"6domain/expenditure/purchase_order/purchase_order.proto\x12\x15domain.expenditure.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/search.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a%domain/entity/supplier/supplier.proto\x1a%domain/entity/location/location.proto\x1a-domain/entity/payment_term/payment_term.proto\x1a\x10options/db.proto\"\xea\x11\n" +
 	"\rPurchaseOrder\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12#\n" +
 	"\tpo_number\x18\x02 \x01(\tB\x06\x82\xb5\x18\x02\x10\x01R\bpoNumber\x12\x17\n" +
@@ -1212,7 +1229,11 @@ const file_domain_expenditure_purchase_order_purchase_order_proto_rawDesc = "" +
 	"\x14date_modified_string\x18# \x01(\tH\x13R\x12dateModifiedString\x88\x01\x01\x12?\n" +
 	"\x0fpayment_term_id\x18$ \x01(\tB\x12\x82\xb5\x18\x0e\n" +
 	"\fpayment_termH\x14R\rpaymentTermId\x88\x01\x01\x12E\n" +
-	"\fpayment_term\x18% \x01(\v2\x1d.domain.entity.v1.PaymentTermH\x15R\vpaymentTerm\x88\x01\x01:\x06\x8a\xb5\x18\x02\b\x01B\v\n" +
+	"\fpayment_term\x18% \x01(\v2\x1d.domain.entity.v1.PaymentTermH\x15R\vpaymentTerm\x88\x01\x01\x12N\n" +
+	"\x14supplier_contract_id\x18& \x01(\tB\x17\x82\xb5\x18\x13\n" +
+	"\x11supplier_contractH\x16R\x12supplierContractId\x88\x01\x01\x12T\n" +
+	"\x16procurement_request_id\x18' \x01(\tB\x19\x82\xb5\x18\x15\n" +
+	"\x13procurement_requestH\x17R\x14procurementRequestId\x88\x01\x01:\x06\x8a\xb5\x18\x02\b\x01B\v\n" +
 	"\t_supplierB\v\n" +
 	"\t_locationB\x0e\n" +
 	"\f_location_idB\x14\n" +
@@ -1234,7 +1255,9 @@ const file_domain_expenditure_purchase_order_purchase_order_proto_rawDesc = "" +
 	"\x0e_date_modifiedB\x17\n" +
 	"\x15_date_modified_stringB\x12\n" +
 	"\x10_payment_term_idB\x0f\n" +
-	"\r_payment_termJ\x04\b\x18\x10\x19J\x04\b\x1a\x10\x1b\"V\n" +
+	"\r_payment_termB\x17\n" +
+	"\x15_supplier_contract_idB\x19\n" +
+	"\x17_procurement_request_idJ\x04\b\x18\x10\x19J\x04\b\x1a\x10\x1b\"V\n" +
 	"\x1aCreatePurchaseOrderRequest\x128\n" +
 	"\x04data\x18\x01 \x01(\v2$.domain.expenditure.v1.PurchaseOrderR\x04data\"\xaf\x01\n" +
 	"\x1bCreatePurchaseOrderResponse\x128\n" +

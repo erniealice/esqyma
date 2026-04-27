@@ -60,6 +60,8 @@ enum JobStatus {
   JOB_STATUS_PAUSED = 4;
   JOB_STATUS_COMPLETED = 5;
   JOB_STATUS_CLOSED = 6;
+  JOB_STATUS_PLANNED = 7;     // NEW
+  JOB_STATUS_RELEASED = 8;    // NEW
 }
 
 enum ApprovalStatus {

@@ -26,6 +26,13 @@ message JobTemplatePhase {
   optional JobTemplate job_template = 8;
   string name = 9;
   int32 phase_order = 10;
+  optional string resource_id = 11 [(options.v1.db).references = "resource", (options.v1.db).index = true];
+  optional int32 setup_minutes = 12;
+  optional double run_minutes_per_unit = 13;
+  optional int32 teardown_minutes = 14;
+  optional string predecessor_template_phase_id = 15 [(options.v1.db).references = "job_template_phase"];
+
+  reserved 16 to 29;
 }
 
 service JobTemplatePhaseDomainService {

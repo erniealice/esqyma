@@ -49,6 +49,11 @@ message Product {
   // variant_mode = "configurable").
   // Valid values: "none" | "configurable"
   string variant_mode = 19 [(options.v1.db).default = "none"];
+  optional int64 expected_cost = 20;
+  optional string expected_cost_currency = 21;
+  optional string default_template_id = 22 [(options.v1.db).references = "job_template", (options.v1.db).index = true];
+
+  reserved 23 to 29;
 }
 
 service ProductDomainService {

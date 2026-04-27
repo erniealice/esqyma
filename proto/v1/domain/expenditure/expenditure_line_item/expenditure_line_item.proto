@@ -34,6 +34,9 @@ message ExpenditureLineItem {
   optional string inventory_item_id = 18 [(options.v1.db).references = "inventory_item"];       // FK to inventory_item (for purchase items going into stock)
   optional string location_id = 19 [(options.v1.db).references = "location"];             // FK to location (where received)
   optional string purchase_order_line_item_id = 20 [(options.v1.db).references = "purchase_order_line_item"];  // FK to PO line for line-level 3-way match
+
+  // Supplier commitment back-edge
+  optional string supplier_contract_line_id = 21; // FK to supplier_contract_line (no DB constraint)
 }
 
 service ExpenditureLineItemDomainService {

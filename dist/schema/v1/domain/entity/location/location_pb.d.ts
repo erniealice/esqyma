@@ -60,11 +60,16 @@ export type Location = Message<"domain.entity.v1.Location"> & {
      */
     timezone?: string;
     /**
-     * FK to location_area
+     * FK to location_area — Location belongs to at most one LocationArea
+     * (LocationArea is a group of Locations, not the other way around).
      *
      * @generated from field: optional string location_area_id = 11;
      */
     locationAreaId?: string;
+    /**
+     * @generated from field: optional string workspace_id = 12;
+     */
+    workspaceId?: string;
 };
 /**
  * Describes the message domain.entity.v1.Location.

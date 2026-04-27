@@ -126,6 +126,124 @@ export type Job = Message<"domain.operation.v1.Job"> & {
      * @generated from field: optional string workspace_id = 25;
      */
     workspaceId?: string;
+    /**
+     * Output target
+     *
+     * @generated from field: optional string output_product_id = 26;
+     */
+    outputProductId?: string;
+    /**
+     * @generated from field: optional string output_product_variant_id = 27;
+     */
+    outputProductVariantId?: string;
+    /**
+     * @generated from field: optional double planned_quantity = 28;
+     */
+    plannedQuantity?: number;
+    /**
+     * @generated from field: optional string output_uom = 29;
+     */
+    outputUom?: string;
+    /**
+     * Dates
+     *
+     * @generated from field: optional int64 due_date = 30;
+     */
+    dueDate?: bigint;
+    /**
+     * @generated from field: optional string due_date_string = 31;
+     */
+    dueDateString?: string;
+    /**
+     * @generated from field: optional int64 release_date = 32;
+     */
+    releaseDate?: bigint;
+    /**
+     * @generated from field: optional string release_date_string = 33;
+     */
+    releaseDateString?: string;
+    /**
+     * @generated from field: optional int64 planned_start = 34;
+     */
+    plannedStart?: bigint;
+    /**
+     * @generated from field: optional string planned_start_string = 35;
+     */
+    plannedStartString?: string;
+    /**
+     * @generated from field: optional int64 planned_end = 36;
+     */
+    plannedEnd?: bigint;
+    /**
+     * @generated from field: optional string planned_end_string = 37;
+     */
+    plannedEndString?: string;
+    /**
+     * @generated from field: optional int64 actual_start = 38;
+     */
+    actualStart?: bigint;
+    /**
+     * @generated from field: optional string actual_start_string = 39;
+     */
+    actualStartString?: string;
+    /**
+     * @generated from field: optional int64 actual_end = 40;
+     */
+    actualEnd?: bigint;
+    /**
+     * @generated from field: optional string actual_end_string = 41;
+     */
+    actualEndString?: string;
+    /**
+     * Scheduling
+     *
+     * @generated from field: optional int32 priority = 42;
+     */
+    priority?: number;
+    /**
+     * @generated from field: optional string parent_job_id = 43;
+     */
+    parentJobId?: string;
+    /**
+     * @generated from field: repeated string predecessor_job_ids = 44;
+     */
+    predecessorJobIds: string[];
+    /**
+     * Cross-domain links
+     *
+     * @generated from field: optional string sales_order_line_id = 45;
+     */
+    salesOrderLineId?: string;
+    /**
+     * @generated from field: optional string resource_id = 46;
+     */
+    resourceId?: string;
+    /**
+     * @generated from field: optional string currency = 47;
+     */
+    currency?: string;
+    /**
+     * @generated from field: optional string cost_account_id = 48;
+     */
+    costAccountId?: string;
+    /**
+     * Revision / workflow
+     *
+     * @generated from field: optional int32 job_template_revision_snapshot = 49;
+     */
+    jobTemplateRevisionSnapshot?: number;
+    /**
+     * @generated from field: optional string job_template_revision_id = 50;
+     */
+    jobTemplateRevisionId?: string;
+    /**
+     * @generated from field: optional string change_request_id = 51;
+     */
+    changeRequestId?: string;
+    /**
+     * @generated from field: optional string workflow_instance_id = 52;
+     */
+    workflowInstanceId?: string;
 };
 /**
  * Describes the message domain.operation.v1.Job.

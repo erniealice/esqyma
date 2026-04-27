@@ -53,6 +53,10 @@ message PurchaseOrderLineItem {
   optional string date_created_string = 21;
   optional int64 date_modified = 22;
   optional string date_modified_string = 23;
+
+  // Supplier commitment back-edges
+  optional string supplier_contract_line_id = 24;   // FK to supplier_contract_line (no DB constraint)
+  optional string procurement_request_line_id = 25; // FK to procurement_request_line (no DB constraint)
 }
 
 service PurchaseOrderLineItemDomainService {
