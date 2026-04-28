@@ -190,7 +190,12 @@ CREATE INDEX IF NOT EXISTS idx_procurement_request_location_id  ON procurement_r
 -- Add FK constraint on procurement_request.purchase_order_id only when table exists
 DO $$
 BEGIN
-  IF EXISTS (SELECT 1 FROM information_schema.tables WHERE table_name = 'purchase_order') THEN
+  IF EXISTS (SELECT 1 FROM information_schema.tables WHERE table_name = 'purchase_order')
+     AND NOT EXISTS (
+       SELECT 1 FROM information_schema.table_constraints
+       WHERE constraint_name = 'fk_procurement_request_purchase_order_id'
+         AND table_name = 'procurement_request'
+     ) THEN
     ALTER TABLE procurement_request
       ADD CONSTRAINT fk_procurement_request_purchase_order_id
       FOREIGN KEY (purchase_order_id) REFERENCES purchase_order(id);
