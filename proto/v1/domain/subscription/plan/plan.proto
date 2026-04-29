@@ -43,6 +43,13 @@ message Plan {
   //   WHERE id = $masterID OR parent_id = $masterID
   optional string parent_id = 13
     [(options.v1.db).references = "plan", (options.v1.db).index = true];
+  // Root JobTemplate for the operational workflow this engagement runs.
+  // NULL = Plan has no operational tracking (advisory retainers, R1 retail
+  // patterns); auto-spawn use case skips silently. SET = MaterializeJobsForSubscription
+  // resolves this template to spawn the root Job. Multi-template Plans link
+  // additional templates via JobTemplateRelation rows. See plan §2.1.
+  optional string job_template_id = 14
+    [(options.v1.db).references = "job_template", (options.v1.db).index = true];
 }
 
 service PlanDomainService {

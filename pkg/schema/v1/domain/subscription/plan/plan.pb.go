@@ -52,7 +52,13 @@ type Plan struct {
 	// Reports group master + all variants via:
 	//
 	//	WHERE id = $masterID OR parent_id = $masterID
-	ParentId      *string `protobuf:"bytes,13,opt,name=parent_id,json=parentId,proto3,oneof" json:"parent_id,omitempty"`
+	ParentId *string `protobuf:"bytes,13,opt,name=parent_id,json=parentId,proto3,oneof" json:"parent_id,omitempty"`
+	// Root JobTemplate for the operational workflow this engagement runs.
+	// NULL = Plan has no operational tracking (advisory retainers, R1 retail
+	// patterns); auto-spawn use case skips silently. SET = MaterializeJobsForSubscription
+	// resolves this template to spawn the root Job. Multi-template Plans link
+	// additional templates via JobTemplateRelation rows. See plan §2.1.
+	JobTemplateId *string `protobuf:"bytes,14,opt,name=job_template_id,json=jobTemplateId,proto3,oneof" json:"job_template_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -167,6 +173,13 @@ func (x *Plan) GetClientId() string {
 func (x *Plan) GetParentId() string {
 	if x != nil && x.ParentId != nil {
 		return *x.ParentId
+	}
+	return ""
+}
+
+func (x *Plan) GetJobTemplateId() string {
+	if x != nil && x.JobTemplateId != nil {
+		return *x.JobTemplateId
 	}
 	return ""
 }
@@ -1125,7 +1138,7 @@ var File_domain_subscription_plan_plan_proto protoreflect.FileDescriptor
 
 const file_domain_subscription_plan_plan_proto_rawDesc = "" +
 	"\n" +
-	"#domain/subscription/plan/plan.proto\x12\x16domain.subscription.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1adomain/common/search.proto\x1a5domain/subscription/plan_location/plan_location.proto\x1a\x10options/db.proto\"\xca\x05\n" +
+	"#domain/subscription/plan/plan.proto\x12\x16domain.subscription.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1adomain/common/search.proto\x1a5domain/subscription/plan_location/plan_location.proto\x1a\x10options/db.proto\"\xa1\x06\n" +
 	"\x04Plan\x12\x13\n" +
 	"\x02id\x18\x01 \x01(\tH\x00R\x02id\x88\x01\x01\x12&\n" +
 	"\fdate_created\x18\x02 \x01(\x03H\x01R\vdateCreated\x88\x01\x01\x123\n" +
@@ -1143,7 +1156,9 @@ const file_domain_subscription_plan_plan_proto_rawDesc = "" +
 	"\n" +
 	"\x06client\x18\x01H\aR\bclientId\x88\x01\x01\x12.\n" +
 	"\tparent_id\x18\r \x01(\tB\f\x82\xb5\x18\b\n" +
-	"\x04plan\x18\x01H\bR\bparentId\x88\x01\x01:\x06\x8a\xb5\x18\x02\b\x01B\x05\n" +
+	"\x04plan\x18\x01H\bR\bparentId\x88\x01\x01\x12A\n" +
+	"\x0fjob_template_id\x18\x0e \x01(\tB\x14\x82\xb5\x18\x10\n" +
+	"\fjob_template\x18\x01H\tR\rjobTemplateId\x88\x01\x01:\x06\x8a\xb5\x18\x02\b\x01B\x05\n" +
 	"\x03_idB\x0f\n" +
 	"\r_date_createdB\x16\n" +
 	"\x14_date_created_stringB\x10\n" +
@@ -1154,7 +1169,8 @@ const file_domain_subscription_plan_plan_proto_rawDesc = "" +
 	"\n" +
 	"_client_idB\f\n" +
 	"\n" +
-	"_parent_idJ\x04\b\v\x10\fR\x10fulfillment_type\"E\n" +
+	"_parent_idB\x12\n" +
+	"\x10_job_template_idJ\x04\b\v\x10\fR\x10fulfillment_type\"E\n" +
 	"\x11CreatePlanRequest\x120\n" +
 	"\x04data\x18\x01 \x01(\v2\x1c.domain.subscription.v1.PlanR\x04data\"\x9e\x01\n" +
 	"\x12CreatePlanResponse\x120\n" +

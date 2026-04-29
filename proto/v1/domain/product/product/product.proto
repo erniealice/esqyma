@@ -51,7 +51,12 @@ message Product {
   string variant_mode = 19 [(options.v1.db).default = "none"];
   optional int64 expected_cost = 20;
   optional string expected_cost_currency = 21;
-  optional string default_template_id = 22 [(options.v1.db).references = "job_template", (options.v1.db).index = true];
+  // Reserved 2026-04-29: per auto-spawn-jobs-from-subscription plan §17 Decision 9,
+  // Products are value units, not process anchors. The Plan owns job_template_id
+  // (subscription/plan/plan.proto field 14). default_template_id was never populated
+  // in production seeds; column dropped in migration 20260429120120.
+  reserved 22;
+  reserved "default_template_id";
 
   reserved 23 to 29;
 }

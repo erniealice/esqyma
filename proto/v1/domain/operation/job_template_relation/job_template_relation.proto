@@ -1,0 +1,173 @@
+syntax = "proto3";
+
+package domain.operation.v1;
+
+option go_package = "github.com/erniealice/esqyma/golang/v1/domain/operation/job_template_relation";
+
+import "domain/common/error.proto";
+import "domain/common/pagination.proto";
+import "domain/common/filter.proto";
+import "domain/common/sort.proto";
+import "domain/common/search.proto";
+
+import "domain/operation/job_template/job_template.proto";
+import "options/db.proto";
+
+// What kind of relationship this row expresses between two JobTemplates.
+//   SUB_TEMPLATE — child template runs as a sub-engagement under the parent
+//                  (e.g., Permit Filing as a child of Tower Audit). Spawned
+//                  child Jobs carry parent_job_id of the root Job.
+enum JobTemplateRelationType {
+  JOB_TEMPLATE_RELATION_TYPE_UNSPECIFIED  = 0;
+  JOB_TEMPLATE_RELATION_TYPE_SUB_TEMPLATE = 1;
+}
+
+// Join table linking JobTemplates in a parent-child relationship. Replaces
+// the rejected self-FK approach on JobTemplate (orphan detection requires
+// recursive CTEs; cycle prevention requires write-time check; sequencing
+// is ambiguous). The join table carries sequence_order explicitly and can
+// be extended without touching JobTemplate's own schema. See auto-spawn
+// plan §2.2 + §4.
+message JobTemplateRelation {
+  option (options.v1.table).table = true;
+
+  string id = 1;
+  optional int64 date_created = 2;
+  optional string date_created_string = 3;
+  optional int64 date_modified = 4;
+  optional string date_modified_string = 5;
+  bool active = 6 [(options.v1.db).default = "true"];
+
+  string parent_template_id = 7
+    [(options.v1.db).references = "job_template", (options.v1.db).index = true];
+  optional JobTemplate parent_template = 8;
+
+  string child_template_id = 9
+    [(options.v1.db).references = "job_template", (options.v1.db).index = true];
+  optional JobTemplate child_template = 10;
+
+  // Deterministic spawn order for child Jobs when a Plan declares multiple
+  // sub-templates. Ascending integer; ties broken by id.
+  int32 sequence_order = 11;
+
+  JobTemplateRelationType relation_type = 12;
+
+  reserved 13 to 29;
+}
+
+service JobTemplateRelationDomainService {
+  rpc CreateJobTemplateRelation(CreateJobTemplateRelationRequest) returns (CreateJobTemplateRelationResponse);
+  rpc ReadJobTemplateRelation(ReadJobTemplateRelationRequest) returns (ReadJobTemplateRelationResponse);
+  rpc UpdateJobTemplateRelation(UpdateJobTemplateRelationRequest) returns (UpdateJobTemplateRelationResponse);
+  rpc DeleteJobTemplateRelation(DeleteJobTemplateRelationRequest) returns (DeleteJobTemplateRelationResponse);
+  rpc ListJobTemplateRelations(ListJobTemplateRelationsRequest) returns (ListJobTemplateRelationsResponse);
+  rpc GetJobTemplateRelationListPageData(GetJobTemplateRelationListPageDataRequest)
+    returns (GetJobTemplateRelationListPageDataResponse);
+  rpc GetJobTemplateRelationItemPageData(GetJobTemplateRelationItemPageDataRequest)
+    returns (GetJobTemplateRelationItemPageDataResponse);
+
+  // Extras: filter by either side of the relation.
+  rpc ListByParent(ListJobTemplateRelationsByParentRequest)
+    returns (ListJobTemplateRelationsByParentResponse);
+  rpc ListByChild(ListJobTemplateRelationsByChildRequest)
+    returns (ListJobTemplateRelationsByChildResponse);
+}
+
+message CreateJobTemplateRelationRequest {
+  JobTemplateRelation data = 1;
+}
+
+message CreateJobTemplateRelationResponse {
+  repeated JobTemplateRelation data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message ReadJobTemplateRelationRequest {
+  JobTemplateRelation data = 1;
+}
+
+message ReadJobTemplateRelationResponse {
+  repeated JobTemplateRelation data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message UpdateJobTemplateRelationRequest {
+  JobTemplateRelation data = 1;
+}
+
+message UpdateJobTemplateRelationResponse {
+  repeated JobTemplateRelation data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message DeleteJobTemplateRelationRequest {
+  JobTemplateRelation data = 1;
+}
+
+message DeleteJobTemplateRelationResponse {
+  bool success = 1;
+  optional domain.common.v1.Error error = 2;
+}
+
+message ListJobTemplateRelationsRequest {
+  optional domain.common.v1.SearchRequest search = 1;
+  optional domain.common.v1.FilterRequest filters = 2;
+  optional domain.common.v1.SortRequest sort = 3;
+  optional domain.common.v1.PaginationRequest pagination = 4;
+}
+
+message ListJobTemplateRelationsResponse {
+  repeated JobTemplateRelation data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message GetJobTemplateRelationListPageDataRequest {
+  optional domain.common.v1.PaginationRequest pagination = 1;
+  optional domain.common.v1.FilterRequest filters = 2;
+  optional domain.common.v1.SortRequest sort = 3;
+  optional domain.common.v1.SearchRequest search = 4;
+}
+
+message GetJobTemplateRelationListPageDataResponse {
+  repeated JobTemplateRelation job_template_relation_list = 1;
+  optional domain.common.v1.PaginationResponse pagination = 2;
+  repeated domain.common.v1.SearchResult search_results = 3;
+  bool success = 4;
+  optional domain.common.v1.Error error = 5;
+}
+
+message GetJobTemplateRelationItemPageDataRequest {
+  string job_template_relation_id = 1;
+}
+
+message GetJobTemplateRelationItemPageDataResponse {
+  optional JobTemplateRelation job_template_relation = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+// Extras
+
+message ListJobTemplateRelationsByParentRequest {
+  string parent_template_id = 1;
+}
+
+message ListJobTemplateRelationsByParentResponse {
+  repeated JobTemplateRelation job_template_relations = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message ListJobTemplateRelationsByChildRequest {
+  string child_template_id = 1;
+}
+
+message ListJobTemplateRelationsByChildResponse {
+  repeated JobTemplateRelation job_template_relations = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
