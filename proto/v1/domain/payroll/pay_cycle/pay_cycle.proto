@@ -1,0 +1,107 @@
+syntax = "proto3";
+
+package domain.payroll.v1;
+
+option go_package = "github.com/erniealice/esqyma/golang/v1/domain/payroll/pay_cycle";
+
+import "domain/common/error.proto";
+import "domain/common/pagination.proto";
+import "domain/common/filter.proto";
+import "domain/common/sort.proto";
+import "domain/common/search.proto";
+
+import "options/db.proto";
+
+// PayCycleStatus is the lifecycle of one cycle of a payroll run.
+enum PayCycleStatus {
+  PAY_CYCLE_STATUS_UNSPECIFIED = 0;
+  PAY_CYCLE_STATUS_OPEN        = 1; // not yet calculated
+  PAY_CYCLE_STATUS_CALCULATING = 2; // calculator in flight
+  PAY_CYCLE_STATUS_CALCULATED  = 3; // amounts locked, pending approval
+  PAY_CYCLE_STATUS_APPROVED    = 4; // approved, ready to post
+  PAY_CYCLE_STATUS_POSTED      = 5; // disbursement + journal written; immutable
+  PAY_CYCLE_STATUS_REOPENED    = 6; // admin reversed; recalculation pending
+}
+
+// PayCycle represents one cutoff window within a payroll run. Semi-monthly produces
+// 2 cycles per run; weekly produces 4–5; monthly produces 1.
+//
+// PayCycle is distinct from PayrollRun: a run is the batch container, a cycle is the
+// per-period unit of calculation that anchors rate-table lookup via pay_date.
+message PayCycle {
+  option (options.v1.table).table = true;
+
+  string id = 1;
+  string workspace_id = 2 [(options.v1.db).references = "workspace", (options.v1.db).index = true];
+  optional string payroll_run_id = 3 [(options.v1.db).references = "payroll_run", (options.v1.db).index = true];
+
+  // Cycle window
+  string cutoff_start = 4;          // ISO 8601 date (YYYY-MM-DD)
+  string cutoff_end = 5;            // ISO 8601 date
+  string pay_date = 6;              // ISO 8601 date — anchor for rate-table lookup
+  string half_index = 7;            // "first" | "second" | "full"
+
+  // Lifecycle
+  PayCycleStatus status = 8 [(options.v1.db).index = true];
+  int32 sequence_no = 9;            // ordering within the run
+
+  // Aggregates (filled at calculate time; recomputed on reopen)
+  int64 total_gross = 10 [(options.v1.db).default = "0"];
+  int64 total_deductions = 11 [(options.v1.db).default = "0"];
+  int64 total_net = 12 [(options.v1.db).default = "0"];
+  int32 employee_count = 13 [(options.v1.db).default = "0"];
+
+  // Audit
+  bool active = 14 [(options.v1.db).default = "true"];
+  optional int64 date_created = 15;
+  optional string date_created_string = 16;
+  optional int64 date_modified = 17;
+  optional string date_modified_string = 18;
+}
+
+service PayCycleDomainService {
+  rpc CreatePayCycle(CreatePayCycleRequest) returns (CreatePayCycleResponse);
+  rpc ReadPayCycle(ReadPayCycleRequest) returns (ReadPayCycleResponse);
+  rpc UpdatePayCycle(UpdatePayCycleRequest) returns (UpdatePayCycleResponse);
+  rpc DeletePayCycle(DeletePayCycleRequest) returns (DeletePayCycleResponse);
+  rpc ListPayCycles(ListPayCyclesRequest) returns (ListPayCyclesResponse);
+  rpc GetPayCycleListPageData(GetPayCycleListPageDataRequest) returns (GetPayCycleListPageDataResponse);
+  rpc GetPayCycleItemPageData(GetPayCycleItemPageDataRequest) returns (GetPayCycleItemPageDataResponse);
+}
+
+message CreatePayCycleRequest { PayCycle data = 1; }
+message CreatePayCycleResponse { repeated PayCycle data = 1; bool success = 2; optional domain.common.v1.Error error = 3; }
+message ReadPayCycleRequest { PayCycle data = 1; }
+message ReadPayCycleResponse { repeated PayCycle data = 1; bool success = 2; optional domain.common.v1.Error error = 3; }
+message UpdatePayCycleRequest { PayCycle data = 1; }
+message UpdatePayCycleResponse { repeated PayCycle data = 1; bool success = 2; optional domain.common.v1.Error error = 3; }
+message DeletePayCycleRequest { PayCycle data = 1; }
+message DeletePayCycleResponse { bool success = 1; optional domain.common.v1.Error error = 2; }
+
+message ListPayCyclesRequest {
+  optional domain.common.v1.SearchRequest search = 1;
+  optional domain.common.v1.FilterRequest filters = 2;
+  optional domain.common.v1.SortRequest sort = 3;
+  optional domain.common.v1.PaginationRequest pagination = 4;
+}
+message ListPayCyclesResponse { repeated PayCycle data = 1; bool success = 2; optional domain.common.v1.Error error = 3; }
+
+message GetPayCycleListPageDataRequest {
+  optional domain.common.v1.PaginationRequest pagination = 1;
+  optional domain.common.v1.FilterRequest filters = 2;
+  optional domain.common.v1.SortRequest sort = 3;
+  optional domain.common.v1.SearchRequest search = 4;
+}
+message GetPayCycleListPageDataResponse {
+  repeated PayCycle pay_cycle_list = 1;
+  optional domain.common.v1.PaginationResponse pagination = 2;
+  repeated domain.common.v1.SearchResult search_results = 3;
+  bool success = 4;
+  optional domain.common.v1.Error error = 5;
+}
+message GetPayCycleItemPageDataRequest { string pay_cycle_id = 1; }
+message GetPayCycleItemPageDataResponse {
+  optional PayCycle pay_cycle = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}

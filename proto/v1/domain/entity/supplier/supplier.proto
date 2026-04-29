@@ -53,6 +53,15 @@ message Supplier {
   optional string payment_term_id = 30 [(options.v1.db).references = "payment_term"];
   optional PaymentTerm payment_term = 31;
   optional string timezone = 32;                // IANA timezone (e.g. "Asia/Manila")
+  // Discriminator: "vendor" (default) | "contractor" | "agency" | "regulator" | "employee".
+  // Drives kind-aware permission gating, list filters, and payroll routing
+  // (Supplier(kind='employee') is the employee identity primitive).
+  optional string kind = 33 [(options.v1.db).index = true];
+  // Salary-data privacy hooks (only populated when kind='employee'). Visible only to
+  // callers holding payroll:read:compensation permission; redacted by default in
+  // ListSuppliers / GetSupplier responses.
+  optional string position = 34;
+  optional string department = 35;
 }
 
 service SupplierDomainService {

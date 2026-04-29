@@ -28,6 +28,9 @@ message Workspace {
   // in this currency. Transactions in a different currency snapshot an exchange
   // rate at recognition time and record a converted amount in this currency.
   optional string functional_currency = 11;
+  // ISO 3166 country or country-subdivision code (e.g. "PH", "US-CA", "EU-DE").
+  // Drives statutory rate-table lookup and payroll calculator selection.
+  optional string compliance_region = 12;
 }
 
 service WorkspaceDomainService {

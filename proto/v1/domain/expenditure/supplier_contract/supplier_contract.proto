@@ -26,6 +26,10 @@ enum SupplierContractKind {
   SUPPLIER_CONTRACT_KIND_BLANKET      = 6;  // quantity-based committed PO over a window
   SUPPLIER_CONTRACT_KIND_ONE_TIME     = 7;  // single-shot agreement worth tracking
   SUPPLIER_CONTRACT_KIND_OTHER        = 8;  // catch-all
+  SUPPLIER_CONTRACT_KIND_EMPLOYMENT       = 9;  // employment contract (Supplier(kind='employee'))
+  SUPPLIER_CONTRACT_KIND_NDA              = 10; // non-disclosure
+  SUPPLIER_CONTRACT_KIND_COI              = 11; // certificate of insurance
+  SUPPLIER_CONTRACT_KIND_SERVICE_AGREEMENT = 12;
 }
 
 // SupplierContractStatus drives the lifecycle state machine.
@@ -134,6 +138,14 @@ message SupplierContract {
   // Notes & metadata
   optional string notes = 120;
   map<string, string> metadata = 121;
+
+  // Employment-specific fields (only populated when kind == EMPLOYMENT).
+  // Drive PayCycle generation and statutory calculator selection.
+  optional string pay_frequency = 130;     // "weekly" | "biweekly" | "semi_monthly" | "monthly"
+  optional string employment_class = 131;  // "regular" | "probationary" | "project_based" |
+                                           // "casual" | "fixed_term" | "agency_deployed"
+  optional string position = 132;
+  optional string department = 133;
 }
 
 service SupplierContractDomainService {

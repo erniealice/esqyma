@@ -1,0 +1,84 @@
+syntax = "proto3";
+
+package domain.payroll.v1;
+
+option go_package = "github.com/erniealice/esqyma/golang/v1/domain/payroll/leave_balance";
+
+import "domain/common/error.proto";
+import "domain/common/pagination.proto";
+import "domain/common/filter.proto";
+import "domain/common/sort.proto";
+import "domain/common/search.proto";
+
+import "options/db.proto";
+
+// LeaveBalance is the per-employee, per-leave-type, per-year accrual ledger.
+// Queried independently from LeaveRequest workflow.
+message LeaveBalance {
+  option (options.v1.table).table = true;
+
+  string id = 1;
+  string workspace_id = 2 [(options.v1.db).references = "workspace", (options.v1.db).index = true];
+  string supplier_id = 3 [(options.v1.db).references = "supplier", (options.v1.db).index = true];
+  string leave_type_id = 4 [(options.v1.db).references = "leave_type", (options.v1.db).index = true];
+
+  int32 year = 5;
+  int32 accrued_days = 6 [(options.v1.db).default = "0"];
+  int32 used_days = 7 [(options.v1.db).default = "0"];
+  int32 carryover_days = 8 [(options.v1.db).default = "0"];
+  optional string last_accrued_on = 9;  // ISO 8601 date
+
+  // Audit
+  bool active = 10 [(options.v1.db).default = "true"];
+  optional int64 date_created = 11;
+  optional string date_created_string = 12;
+  optional int64 date_modified = 13;
+  optional string date_modified_string = 14;
+}
+
+service LeaveBalanceDomainService {
+  rpc CreateLeaveBalance(CreateLeaveBalanceRequest) returns (CreateLeaveBalanceResponse);
+  rpc ReadLeaveBalance(ReadLeaveBalanceRequest) returns (ReadLeaveBalanceResponse);
+  rpc UpdateLeaveBalance(UpdateLeaveBalanceRequest) returns (UpdateLeaveBalanceResponse);
+  rpc DeleteLeaveBalance(DeleteLeaveBalanceRequest) returns (DeleteLeaveBalanceResponse);
+  rpc ListLeaveBalances(ListLeaveBalancesRequest) returns (ListLeaveBalancesResponse);
+  rpc GetLeaveBalanceListPageData(GetLeaveBalanceListPageDataRequest) returns (GetLeaveBalanceListPageDataResponse);
+  rpc GetLeaveBalanceItemPageData(GetLeaveBalanceItemPageDataRequest) returns (GetLeaveBalanceItemPageDataResponse);
+}
+
+message CreateLeaveBalanceRequest { LeaveBalance data = 1; }
+message CreateLeaveBalanceResponse { repeated LeaveBalance data = 1; bool success = 2; optional domain.common.v1.Error error = 3; }
+message ReadLeaveBalanceRequest { LeaveBalance data = 1; }
+message ReadLeaveBalanceResponse { repeated LeaveBalance data = 1; bool success = 2; optional domain.common.v1.Error error = 3; }
+message UpdateLeaveBalanceRequest { LeaveBalance data = 1; }
+message UpdateLeaveBalanceResponse { repeated LeaveBalance data = 1; bool success = 2; optional domain.common.v1.Error error = 3; }
+message DeleteLeaveBalanceRequest { LeaveBalance data = 1; }
+message DeleteLeaveBalanceResponse { bool success = 1; optional domain.common.v1.Error error = 2; }
+
+message ListLeaveBalancesRequest {
+  optional domain.common.v1.SearchRequest search = 1;
+  optional domain.common.v1.FilterRequest filters = 2;
+  optional domain.common.v1.SortRequest sort = 3;
+  optional domain.common.v1.PaginationRequest pagination = 4;
+}
+message ListLeaveBalancesResponse { repeated LeaveBalance data = 1; bool success = 2; optional domain.common.v1.Error error = 3; }
+
+message GetLeaveBalanceListPageDataRequest {
+  optional domain.common.v1.PaginationRequest pagination = 1;
+  optional domain.common.v1.FilterRequest filters = 2;
+  optional domain.common.v1.SortRequest sort = 3;
+  optional domain.common.v1.SearchRequest search = 4;
+}
+message GetLeaveBalanceListPageDataResponse {
+  repeated LeaveBalance leave_balance_list = 1;
+  optional domain.common.v1.PaginationResponse pagination = 2;
+  repeated domain.common.v1.SearchResult search_results = 3;
+  bool success = 4;
+  optional domain.common.v1.Error error = 5;
+}
+message GetLeaveBalanceItemPageDataRequest { string leave_balance_id = 1; }
+message GetLeaveBalanceItemPageDataResponse {
+  optional LeaveBalance leave_balance = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}

@@ -31,40 +31,52 @@ const (
 type SupplierContractKind int32
 
 const (
-	SupplierContractKind_SUPPLIER_CONTRACT_KIND_UNSPECIFIED  SupplierContractKind = 0
-	SupplierContractKind_SUPPLIER_CONTRACT_KIND_SUBSCRIPTION SupplierContractKind = 1 // recurring time-based (renamed from SAAS)
-	SupplierContractKind_SUPPLIER_CONTRACT_KIND_RETAINER     SupplierContractKind = 2 // professional services retainer
-	SupplierContractKind_SUPPLIER_CONTRACT_KIND_LEASE        SupplierContractKind = 3 // asset-backed recurring (rent, equipment)
-	SupplierContractKind_SUPPLIER_CONTRACT_KIND_UTILITY      SupplierContractKind = 4 // utility/variable-consumption contract
-	SupplierContractKind_SUPPLIER_CONTRACT_KIND_FRAMEWORK    SupplierContractKind = 5 // pricing agreement only, no commitment value
-	SupplierContractKind_SUPPLIER_CONTRACT_KIND_BLANKET      SupplierContractKind = 6 // quantity-based committed PO over a window
-	SupplierContractKind_SUPPLIER_CONTRACT_KIND_ONE_TIME     SupplierContractKind = 7 // single-shot agreement worth tracking
-	SupplierContractKind_SUPPLIER_CONTRACT_KIND_OTHER        SupplierContractKind = 8 // catch-all
+	SupplierContractKind_SUPPLIER_CONTRACT_KIND_UNSPECIFIED       SupplierContractKind = 0
+	SupplierContractKind_SUPPLIER_CONTRACT_KIND_SUBSCRIPTION      SupplierContractKind = 1  // recurring time-based (renamed from SAAS)
+	SupplierContractKind_SUPPLIER_CONTRACT_KIND_RETAINER          SupplierContractKind = 2  // professional services retainer
+	SupplierContractKind_SUPPLIER_CONTRACT_KIND_LEASE             SupplierContractKind = 3  // asset-backed recurring (rent, equipment)
+	SupplierContractKind_SUPPLIER_CONTRACT_KIND_UTILITY           SupplierContractKind = 4  // utility/variable-consumption contract
+	SupplierContractKind_SUPPLIER_CONTRACT_KIND_FRAMEWORK         SupplierContractKind = 5  // pricing agreement only, no commitment value
+	SupplierContractKind_SUPPLIER_CONTRACT_KIND_BLANKET           SupplierContractKind = 6  // quantity-based committed PO over a window
+	SupplierContractKind_SUPPLIER_CONTRACT_KIND_ONE_TIME          SupplierContractKind = 7  // single-shot agreement worth tracking
+	SupplierContractKind_SUPPLIER_CONTRACT_KIND_OTHER             SupplierContractKind = 8  // catch-all
+	SupplierContractKind_SUPPLIER_CONTRACT_KIND_EMPLOYMENT        SupplierContractKind = 9  // employment contract (Supplier(kind='employee'))
+	SupplierContractKind_SUPPLIER_CONTRACT_KIND_NDA               SupplierContractKind = 10 // non-disclosure
+	SupplierContractKind_SUPPLIER_CONTRACT_KIND_COI               SupplierContractKind = 11 // certificate of insurance
+	SupplierContractKind_SUPPLIER_CONTRACT_KIND_SERVICE_AGREEMENT SupplierContractKind = 12
 )
 
 // Enum value maps for SupplierContractKind.
 var (
 	SupplierContractKind_name = map[int32]string{
-		0: "SUPPLIER_CONTRACT_KIND_UNSPECIFIED",
-		1: "SUPPLIER_CONTRACT_KIND_SUBSCRIPTION",
-		2: "SUPPLIER_CONTRACT_KIND_RETAINER",
-		3: "SUPPLIER_CONTRACT_KIND_LEASE",
-		4: "SUPPLIER_CONTRACT_KIND_UTILITY",
-		5: "SUPPLIER_CONTRACT_KIND_FRAMEWORK",
-		6: "SUPPLIER_CONTRACT_KIND_BLANKET",
-		7: "SUPPLIER_CONTRACT_KIND_ONE_TIME",
-		8: "SUPPLIER_CONTRACT_KIND_OTHER",
+		0:  "SUPPLIER_CONTRACT_KIND_UNSPECIFIED",
+		1:  "SUPPLIER_CONTRACT_KIND_SUBSCRIPTION",
+		2:  "SUPPLIER_CONTRACT_KIND_RETAINER",
+		3:  "SUPPLIER_CONTRACT_KIND_LEASE",
+		4:  "SUPPLIER_CONTRACT_KIND_UTILITY",
+		5:  "SUPPLIER_CONTRACT_KIND_FRAMEWORK",
+		6:  "SUPPLIER_CONTRACT_KIND_BLANKET",
+		7:  "SUPPLIER_CONTRACT_KIND_ONE_TIME",
+		8:  "SUPPLIER_CONTRACT_KIND_OTHER",
+		9:  "SUPPLIER_CONTRACT_KIND_EMPLOYMENT",
+		10: "SUPPLIER_CONTRACT_KIND_NDA",
+		11: "SUPPLIER_CONTRACT_KIND_COI",
+		12: "SUPPLIER_CONTRACT_KIND_SERVICE_AGREEMENT",
 	}
 	SupplierContractKind_value = map[string]int32{
-		"SUPPLIER_CONTRACT_KIND_UNSPECIFIED":  0,
-		"SUPPLIER_CONTRACT_KIND_SUBSCRIPTION": 1,
-		"SUPPLIER_CONTRACT_KIND_RETAINER":     2,
-		"SUPPLIER_CONTRACT_KIND_LEASE":        3,
-		"SUPPLIER_CONTRACT_KIND_UTILITY":      4,
-		"SUPPLIER_CONTRACT_KIND_FRAMEWORK":    5,
-		"SUPPLIER_CONTRACT_KIND_BLANKET":      6,
-		"SUPPLIER_CONTRACT_KIND_ONE_TIME":     7,
-		"SUPPLIER_CONTRACT_KIND_OTHER":        8,
+		"SUPPLIER_CONTRACT_KIND_UNSPECIFIED":       0,
+		"SUPPLIER_CONTRACT_KIND_SUBSCRIPTION":      1,
+		"SUPPLIER_CONTRACT_KIND_RETAINER":          2,
+		"SUPPLIER_CONTRACT_KIND_LEASE":             3,
+		"SUPPLIER_CONTRACT_KIND_UTILITY":           4,
+		"SUPPLIER_CONTRACT_KIND_FRAMEWORK":         5,
+		"SUPPLIER_CONTRACT_KIND_BLANKET":           6,
+		"SUPPLIER_CONTRACT_KIND_ONE_TIME":          7,
+		"SUPPLIER_CONTRACT_KIND_OTHER":             8,
+		"SUPPLIER_CONTRACT_KIND_EMPLOYMENT":        9,
+		"SUPPLIER_CONTRACT_KIND_NDA":               10,
+		"SUPPLIER_CONTRACT_KIND_COI":               11,
+		"SUPPLIER_CONTRACT_KIND_SERVICE_AGREEMENT": 12,
 	}
 )
 
@@ -244,8 +256,15 @@ type SupplierContract struct {
 	// Categorization
 	ExpenditureCategoryId *string `protobuf:"bytes,110,opt,name=expenditure_category_id,json=expenditureCategoryId,proto3,oneof" json:"expenditure_category_id,omitempty"`
 	// Notes & metadata
-	Notes         *string           `protobuf:"bytes,120,opt,name=notes,proto3,oneof" json:"notes,omitempty"`
-	Metadata      map[string]string `protobuf:"bytes,121,rep,name=metadata,proto3" json:"metadata,omitempty" protobuf_key:"bytes,1,opt,name=key" protobuf_val:"bytes,2,opt,name=value"`
+	Notes    *string           `protobuf:"bytes,120,opt,name=notes,proto3,oneof" json:"notes,omitempty"`
+	Metadata map[string]string `protobuf:"bytes,121,rep,name=metadata,proto3" json:"metadata,omitempty" protobuf_key:"bytes,1,opt,name=key" protobuf_val:"bytes,2,opt,name=value"`
+	// Employment-specific fields (only populated when kind == EMPLOYMENT).
+	// Drive PayCycle generation and statutory calculator selection.
+	PayFrequency    *string `protobuf:"bytes,130,opt,name=pay_frequency,json=payFrequency,proto3,oneof" json:"pay_frequency,omitempty"`          // "weekly" | "biweekly" | "semi_monthly" | "monthly"
+	EmploymentClass *string `protobuf:"bytes,131,opt,name=employment_class,json=employmentClass,proto3,oneof" json:"employment_class,omitempty"` // "regular" | "probationary" | "project_based" |
+	// "casual" | "fixed_term" | "agency_deployed"
+	Position      *string `protobuf:"bytes,132,opt,name=position,proto3,oneof" json:"position,omitempty"`
+	Department    *string `protobuf:"bytes,133,opt,name=department,proto3,oneof" json:"department,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -607,6 +626,34 @@ func (x *SupplierContract) GetMetadata() map[string]string {
 		return x.Metadata
 	}
 	return nil
+}
+
+func (x *SupplierContract) GetPayFrequency() string {
+	if x != nil && x.PayFrequency != nil {
+		return *x.PayFrequency
+	}
+	return ""
+}
+
+func (x *SupplierContract) GetEmploymentClass() string {
+	if x != nil && x.EmploymentClass != nil {
+		return *x.EmploymentClass
+	}
+	return ""
+}
+
+func (x *SupplierContract) GetPosition() string {
+	if x != nil && x.Position != nil {
+		return *x.Position
+	}
+	return ""
+}
+
+func (x *SupplierContract) GetDepartment() string {
+	if x != nil && x.Department != nil {
+		return *x.Department
+	}
+	return ""
 }
 
 type CreateSupplierContractRequest struct {
@@ -1768,7 +1815,7 @@ var File_domain_expenditure_supplier_contract_supplier_contract_proto protorefle
 
 const file_domain_expenditure_supplier_contract_supplier_contract_proto_rawDesc = "" +
 	"\n" +
-	"<domain/expenditure/supplier_contract/supplier_contract.proto\x12\x15domain.expenditure.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/search.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a%domain/entity/supplier/supplier.proto\x1a-domain/entity/payment_term/payment_term.proto\x1a\x10options/db.proto\"\xdd\x18\n" +
+	"<domain/expenditure/supplier_contract/supplier_contract.proto\x12\x15domain.expenditure.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/search.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a%domain/entity/supplier/supplier.proto\x1a-domain/entity/payment_term/payment_term.proto\x1a\x10options/db.proto\"\xc4\x1a\n" +
 	"\x10SupplierContract\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x124\n" +
 	"\fworkspace_id\x18\x02 \x01(\tB\x11\x82\xb5\x18\r\n" +
@@ -1831,7 +1878,13 @@ const file_domain_expenditure_supplier_contract_supplier_contract_proto_rawDesc 
 	"\x17expenditure_category_id\x18n \x01(\tB\x1a\x82\xb5\x18\x16\n" +
 	"\x14expenditure_categoryH!R\x15expenditureCategoryId\x88\x01\x01\x12\x19\n" +
 	"\x05notes\x18x \x01(\tH\"R\x05notes\x88\x01\x01\x12Q\n" +
-	"\bmetadata\x18y \x03(\v25.domain.expenditure.v1.SupplierContract.MetadataEntryR\bmetadata\x1a;\n" +
+	"\bmetadata\x18y \x03(\v25.domain.expenditure.v1.SupplierContract.MetadataEntryR\bmetadata\x12)\n" +
+	"\rpay_frequency\x18\x82\x01 \x01(\tH#R\fpayFrequency\x88\x01\x01\x12/\n" +
+	"\x10employment_class\x18\x83\x01 \x01(\tH$R\x0femploymentClass\x88\x01\x01\x12 \n" +
+	"\bposition\x18\x84\x01 \x01(\tH%R\bposition\x88\x01\x01\x12$\n" +
+	"\n" +
+	"department\x18\x85\x01 \x01(\tH&R\n" +
+	"department\x88\x01\x01\x1a;\n" +
 	"\rMetadataEntry\x12\x10\n" +
 	"\x03key\x18\x01 \x01(\tR\x03key\x12\x14\n" +
 	"\x05value\x18\x02 \x01(\tR\x05value:\x028\x01:\x06\x8a\xb5\x18\x02\b\x01B\x0f\n" +
@@ -1869,7 +1922,11 @@ const file_domain_expenditure_supplier_contract_supplier_contract_proto_rawDesc 
 	"\x13_expense_account_idB\x15\n" +
 	"\x13_accrual_account_idB\x1a\n" +
 	"\x18_expenditure_category_idB\b\n" +
-	"\x06_notes\"\\\n" +
+	"\x06_notesB\x10\n" +
+	"\x0e_pay_frequencyB\x13\n" +
+	"\x11_employment_classB\v\n" +
+	"\t_positionB\r\n" +
+	"\v_department\"\\\n" +
 	"\x1dCreateSupplierContractRequest\x12;\n" +
 	"\x04data\x18\x01 \x01(\v2'.domain.expenditure.v1.SupplierContractR\x04data\"\xb5\x01\n" +
 	"\x1eCreateSupplierContractResponse\x12;\n" +
@@ -1982,7 +2039,7 @@ const file_domain_expenditure_supplier_contract_supplier_contract_proto_rawDesc 
 	"\x0fgenerated_count\x18\x01 \x01(\x05R\x0egeneratedCount\x12\x18\n" +
 	"\asuccess\x18\x02 \x01(\bR\asuccess\x122\n" +
 	"\x05error\x18\x03 \x01(\v2\x17.domain.common.v1.ErrorH\x00R\x05error\x88\x01\x01B\b\n" +
-	"\x06_error*\xe3\x02\n" +
+	"\x06_error*\xf8\x03\n" +
 	"\x14SupplierContractKind\x12&\n" +
 	"\"SUPPLIER_CONTRACT_KIND_UNSPECIFIED\x10\x00\x12'\n" +
 	"#SUPPLIER_CONTRACT_KIND_SUBSCRIPTION\x10\x01\x12#\n" +
@@ -1992,7 +2049,12 @@ const file_domain_expenditure_supplier_contract_supplier_contract_proto_rawDesc 
 	" SUPPLIER_CONTRACT_KIND_FRAMEWORK\x10\x05\x12\"\n" +
 	"\x1eSUPPLIER_CONTRACT_KIND_BLANKET\x10\x06\x12#\n" +
 	"\x1fSUPPLIER_CONTRACT_KIND_ONE_TIME\x10\a\x12 \n" +
-	"\x1cSUPPLIER_CONTRACT_KIND_OTHER\x10\b*\xce\x03\n" +
+	"\x1cSUPPLIER_CONTRACT_KIND_OTHER\x10\b\x12%\n" +
+	"!SUPPLIER_CONTRACT_KIND_EMPLOYMENT\x10\t\x12\x1e\n" +
+	"\x1aSUPPLIER_CONTRACT_KIND_NDA\x10\n" +
+	"\x12\x1e\n" +
+	"\x1aSUPPLIER_CONTRACT_KIND_COI\x10\v\x12,\n" +
+	"(SUPPLIER_CONTRACT_KIND_SERVICE_AGREEMENT\x10\f*\xce\x03\n" +
 	"\x16SupplierContractStatus\x12(\n" +
 	"$SUPPLIER_CONTRACT_STATUS_UNSPECIFIED\x10\x00\x12\"\n" +
 	"\x1eSUPPLIER_CONTRACT_STATUS_DRAFT\x10\x01\x12&\n" +

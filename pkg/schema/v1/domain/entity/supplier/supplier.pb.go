@@ -63,8 +63,17 @@ type Supplier struct {
 	PaymentTermId      *string                               `protobuf:"bytes,30,opt,name=payment_term_id,json=paymentTermId,proto3,oneof" json:"payment_term_id,omitempty"`
 	PaymentTerm        *payment_term.PaymentTerm             `protobuf:"bytes,31,opt,name=payment_term,json=paymentTerm,proto3,oneof" json:"payment_term,omitempty"`
 	Timezone           *string                               `protobuf:"bytes,32,opt,name=timezone,proto3,oneof" json:"timezone,omitempty"` // IANA timezone (e.g. "Asia/Manila")
-	unknownFields      protoimpl.UnknownFields
-	sizeCache          protoimpl.SizeCache
+	// Discriminator: "vendor" (default) | "contractor" | "agency" | "regulator" | "employee".
+	// Drives kind-aware permission gating, list filters, and payroll routing
+	// (Supplier(kind='employee') is the employee identity primitive).
+	Kind *string `protobuf:"bytes,33,opt,name=kind,proto3,oneof" json:"kind,omitempty"`
+	// Salary-data privacy hooks (only populated when kind='employee'). Visible only to
+	// callers holding payroll:read:compensation permission; redacted by default in
+	// ListSuppliers / GetSupplier responses.
+	Position      *string `protobuf:"bytes,34,opt,name=position,proto3,oneof" json:"position,omitempty"`
+	Department    *string `protobuf:"bytes,35,opt,name=department,proto3,oneof" json:"department,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
 }
 
 func (x *Supplier) Reset() {
@@ -317,6 +326,27 @@ func (x *Supplier) GetPaymentTerm() *payment_term.PaymentTerm {
 func (x *Supplier) GetTimezone() string {
 	if x != nil && x.Timezone != nil {
 		return *x.Timezone
+	}
+	return ""
+}
+
+func (x *Supplier) GetKind() string {
+	if x != nil && x.Kind != nil {
+		return *x.Kind
+	}
+	return ""
+}
+
+func (x *Supplier) GetPosition() string {
+	if x != nil && x.Position != nil {
+		return *x.Position
+	}
+	return ""
+}
+
+func (x *Supplier) GetDepartment() string {
+	if x != nil && x.Department != nil {
+		return *x.Department
 	}
 	return ""
 }
@@ -1109,7 +1139,7 @@ var File_domain_entity_supplier_supplier_proto protoreflect.FileDescriptor
 
 const file_domain_entity_supplier_supplier_proto_rawDesc = "" +
 	"\n" +
-	"%domain/entity/supplier/supplier.proto\x12\x10domain.entity.v1\x1a\x19domain/common/error.proto\x1a\x1adomain/common/search.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1edomain/common/pagination.proto\x1a\x10options/db.proto\x1a\x1ddomain/entity/user/user.proto\x1a7domain/entity/supplier_category/supplier_category.proto\x1a-domain/entity/payment_term/payment_term.proto\"\xf0\r\n" +
+	"%domain/entity/supplier/supplier.proto\x12\x10domain.entity.v1\x1a\x19domain/common/error.proto\x1a\x1adomain/common/search.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1edomain/common/pagination.proto\x1a\x10options/db.proto\x1a\x1ddomain/entity/user/user.proto\x1a7domain/entity/supplier_category/supplier_category.proto\x1a-domain/entity/payment_term/payment_term.proto\"\xfc\x0e\n" +
 	"\bSupplier\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12/\n" +
 	"\x04user\x18\x02 \x01(\v2\x16.domain.entity.v1.UserH\x00R\x04user\x88\x01\x01\x12%\n" +
@@ -1155,7 +1185,12 @@ const file_domain_entity_supplier_supplier_proto_rawDesc = "" +
 	"\x0fpayment_term_id\x18\x1e \x01(\tB\x12\x82\xb5\x18\x0e\n" +
 	"\fpayment_termH\x16R\rpaymentTermId\x88\x01\x01\x12E\n" +
 	"\fpayment_term\x18\x1f \x01(\v2\x1d.domain.entity.v1.PaymentTermH\x17R\vpaymentTerm\x88\x01\x01\x12\x1f\n" +
-	"\btimezone\x18  \x01(\tH\x18R\btimezone\x88\x01\x01:\x06\x8a\xb5\x18\x02\b\x01B\a\n" +
+	"\btimezone\x18  \x01(\tH\x18R\btimezone\x88\x01\x01\x12\x1f\n" +
+	"\x04kind\x18! \x01(\tB\x06\x82\xb5\x18\x02\x18\x01H\x19R\x04kind\x88\x01\x01\x12\x1f\n" +
+	"\bposition\x18\" \x01(\tH\x1aR\bposition\x88\x01\x01\x12#\n" +
+	"\n" +
+	"department\x18# \x01(\tH\x1bR\n" +
+	"department\x88\x01\x01:\x06\x8a\xb5\x18\x02\b\x01B\a\n" +
 	"\x05_userB\x0f\n" +
 	"\r_date_createdB\x16\n" +
 	"\x14_date_created_stringB\x10\n" +
@@ -1183,7 +1218,10 @@ const file_domain_entity_supplier_supplier_proto_rawDesc = "" +
 	"\x06_notesB\x12\n" +
 	"\x10_payment_term_idB\x0f\n" +
 	"\r_payment_termB\v\n" +
-	"\t_timezone\"G\n" +
+	"\t_timezoneB\a\n" +
+	"\x05_kindB\v\n" +
+	"\t_positionB\r\n" +
+	"\v_department\"G\n" +
 	"\x15CreateSupplierRequest\x12.\n" +
 	"\x04data\x18\x01 \x01(\v2\x1a.domain.entity.v1.SupplierR\x04data\"\xa0\x01\n" +
 	"\x16CreateSupplierResponse\x12.\n" +

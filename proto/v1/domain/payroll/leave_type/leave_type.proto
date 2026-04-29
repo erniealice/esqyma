@@ -1,0 +1,83 @@
+syntax = "proto3";
+
+package domain.payroll.v1;
+
+option go_package = "github.com/erniealice/esqyma/golang/v1/domain/payroll/leave_type";
+
+import "domain/common/error.proto";
+import "domain/common/pagination.proto";
+import "domain/common/filter.proto";
+import "domain/common/sort.proto";
+import "domain/common/search.proto";
+
+import "options/db.proto";
+
+// LeaveType is a per-jurisdiction leave plan template (VL, SL, ML, PL, BL, SOLO_PARENT, MAGNA_CARTA, etc.).
+message LeaveType {
+  option (options.v1.table).table = true;
+
+  string id = 1;
+  optional string workspace_id = 2 [(options.v1.db).references = "workspace", (options.v1.db).index = true];
+
+  string compliance_region = 3 [(options.v1.db).index = true];
+  string code = 4;                       // "VL" | "SL" | "ML" | "PL" | "BL" | "SOLO_PARENT" | "MAGNA_CARTA"
+  string name = 5;
+  bool paid = 6 [(options.v1.db).default = "true"];
+  int32 accrual_days_per_year = 7;
+  int32 max_carryover_days = 8;
+  optional string source_citation = 9;   // "RA 11210" / "RA 8187"
+
+  // Audit
+  bool active = 10 [(options.v1.db).default = "true"];
+  optional int64 date_created = 11;
+  optional string date_created_string = 12;
+  optional int64 date_modified = 13;
+  optional string date_modified_string = 14;
+}
+
+service LeaveTypeDomainService {
+  rpc CreateLeaveType(CreateLeaveTypeRequest) returns (CreateLeaveTypeResponse);
+  rpc ReadLeaveType(ReadLeaveTypeRequest) returns (ReadLeaveTypeResponse);
+  rpc UpdateLeaveType(UpdateLeaveTypeRequest) returns (UpdateLeaveTypeResponse);
+  rpc DeleteLeaveType(DeleteLeaveTypeRequest) returns (DeleteLeaveTypeResponse);
+  rpc ListLeaveTypes(ListLeaveTypesRequest) returns (ListLeaveTypesResponse);
+  rpc GetLeaveTypeListPageData(GetLeaveTypeListPageDataRequest) returns (GetLeaveTypeListPageDataResponse);
+  rpc GetLeaveTypeItemPageData(GetLeaveTypeItemPageDataRequest) returns (GetLeaveTypeItemPageDataResponse);
+}
+
+message CreateLeaveTypeRequest { LeaveType data = 1; }
+message CreateLeaveTypeResponse { repeated LeaveType data = 1; bool success = 2; optional domain.common.v1.Error error = 3; }
+message ReadLeaveTypeRequest { LeaveType data = 1; }
+message ReadLeaveTypeResponse { repeated LeaveType data = 1; bool success = 2; optional domain.common.v1.Error error = 3; }
+message UpdateLeaveTypeRequest { LeaveType data = 1; }
+message UpdateLeaveTypeResponse { repeated LeaveType data = 1; bool success = 2; optional domain.common.v1.Error error = 3; }
+message DeleteLeaveTypeRequest { LeaveType data = 1; }
+message DeleteLeaveTypeResponse { bool success = 1; optional domain.common.v1.Error error = 2; }
+
+message ListLeaveTypesRequest {
+  optional domain.common.v1.SearchRequest search = 1;
+  optional domain.common.v1.FilterRequest filters = 2;
+  optional domain.common.v1.SortRequest sort = 3;
+  optional domain.common.v1.PaginationRequest pagination = 4;
+}
+message ListLeaveTypesResponse { repeated LeaveType data = 1; bool success = 2; optional domain.common.v1.Error error = 3; }
+
+message GetLeaveTypeListPageDataRequest {
+  optional domain.common.v1.PaginationRequest pagination = 1;
+  optional domain.common.v1.FilterRequest filters = 2;
+  optional domain.common.v1.SortRequest sort = 3;
+  optional domain.common.v1.SearchRequest search = 4;
+}
+message GetLeaveTypeListPageDataResponse {
+  repeated LeaveType leave_type_list = 1;
+  optional domain.common.v1.PaginationResponse pagination = 2;
+  repeated domain.common.v1.SearchResult search_results = 3;
+  bool success = 4;
+  optional domain.common.v1.Error error = 5;
+}
+message GetLeaveTypeItemPageDataRequest { string leave_type_id = 1; }
+message GetLeaveTypeItemPageDataResponse {
+  optional LeaveType leave_type = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}

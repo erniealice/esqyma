@@ -82,6 +82,80 @@ func (SupplierContractLineTreatment) EnumDescriptor() ([]byte, []int) {
 	return file_domain_expenditure_supplier_contract_line_supplier_contract_line_proto_rawDescGZIP(), []int{0}
 }
 
+// SupplierContractLineKind discriminates the role of a line within a contract.
+// Single global enum covering vendor + employment lines (use case validates
+// kind ↔ contract.kind compatibility).
+type SupplierContractLineKind int32
+
+const (
+	SupplierContractLineKind_SUPPLIER_CONTRACT_LINE_KIND_UNSPECIFIED SupplierContractLineKind = 0
+	SupplierContractLineKind_SUPPLIER_CONTRACT_LINE_KIND_GOODS       SupplierContractLineKind = 1
+	SupplierContractLineKind_SUPPLIER_CONTRACT_LINE_KIND_SERVICE     SupplierContractLineKind = 2
+	SupplierContractLineKind_SUPPLIER_CONTRACT_LINE_KIND_EXPENSE     SupplierContractLineKind = 3
+	// Employment-only kinds:
+	SupplierContractLineKind_SUPPLIER_CONTRACT_LINE_KIND_BASIC_SALARY         SupplierContractLineKind = 10 // taxable, statutory base
+	SupplierContractLineKind_SUPPLIER_CONTRACT_LINE_KIND_ALLOWANCE_TAXABLE    SupplierContractLineKind = 11 // fully taxable allowance
+	SupplierContractLineKind_SUPPLIER_CONTRACT_LINE_KIND_ALLOWANCE_DE_MINIMIS SupplierContractLineKind = 12 // tax-exempt up to BIR ceiling
+	SupplierContractLineKind_SUPPLIER_CONTRACT_LINE_KIND_RECURRING_BONUS      SupplierContractLineKind = 13 // 13th-month / supplementary
+	SupplierContractLineKind_SUPPLIER_CONTRACT_LINE_KIND_LOAN_AMORTIZATION    SupplierContractLineKind = 14 // SSS/Pag-IBIG/company loan deduction
+	SupplierContractLineKind_SUPPLIER_CONTRACT_LINE_KIND_COMPANY_DEDUCTION    SupplierContractLineKind = 15 // company-authorized non-loan deduction
+)
+
+// Enum value maps for SupplierContractLineKind.
+var (
+	SupplierContractLineKind_name = map[int32]string{
+		0:  "SUPPLIER_CONTRACT_LINE_KIND_UNSPECIFIED",
+		1:  "SUPPLIER_CONTRACT_LINE_KIND_GOODS",
+		2:  "SUPPLIER_CONTRACT_LINE_KIND_SERVICE",
+		3:  "SUPPLIER_CONTRACT_LINE_KIND_EXPENSE",
+		10: "SUPPLIER_CONTRACT_LINE_KIND_BASIC_SALARY",
+		11: "SUPPLIER_CONTRACT_LINE_KIND_ALLOWANCE_TAXABLE",
+		12: "SUPPLIER_CONTRACT_LINE_KIND_ALLOWANCE_DE_MINIMIS",
+		13: "SUPPLIER_CONTRACT_LINE_KIND_RECURRING_BONUS",
+		14: "SUPPLIER_CONTRACT_LINE_KIND_LOAN_AMORTIZATION",
+		15: "SUPPLIER_CONTRACT_LINE_KIND_COMPANY_DEDUCTION",
+	}
+	SupplierContractLineKind_value = map[string]int32{
+		"SUPPLIER_CONTRACT_LINE_KIND_UNSPECIFIED":          0,
+		"SUPPLIER_CONTRACT_LINE_KIND_GOODS":                1,
+		"SUPPLIER_CONTRACT_LINE_KIND_SERVICE":              2,
+		"SUPPLIER_CONTRACT_LINE_KIND_EXPENSE":              3,
+		"SUPPLIER_CONTRACT_LINE_KIND_BASIC_SALARY":         10,
+		"SUPPLIER_CONTRACT_LINE_KIND_ALLOWANCE_TAXABLE":    11,
+		"SUPPLIER_CONTRACT_LINE_KIND_ALLOWANCE_DE_MINIMIS": 12,
+		"SUPPLIER_CONTRACT_LINE_KIND_RECURRING_BONUS":      13,
+		"SUPPLIER_CONTRACT_LINE_KIND_LOAN_AMORTIZATION":    14,
+		"SUPPLIER_CONTRACT_LINE_KIND_COMPANY_DEDUCTION":    15,
+	}
+)
+
+func (x SupplierContractLineKind) Enum() *SupplierContractLineKind {
+	p := new(SupplierContractLineKind)
+	*p = x
+	return p
+}
+
+func (x SupplierContractLineKind) String() string {
+	return protoimpl.X.EnumStringOf(x.Descriptor(), protoreflect.EnumNumber(x))
+}
+
+func (SupplierContractLineKind) Descriptor() protoreflect.EnumDescriptor {
+	return file_domain_expenditure_supplier_contract_line_supplier_contract_line_proto_enumTypes[1].Descriptor()
+}
+
+func (SupplierContractLineKind) Type() protoreflect.EnumType {
+	return &file_domain_expenditure_supplier_contract_line_supplier_contract_line_proto_enumTypes[1]
+}
+
+func (x SupplierContractLineKind) Number() protoreflect.EnumNumber {
+	return protoreflect.EnumNumber(x)
+}
+
+// Deprecated: Use SupplierContractLineKind.Descriptor instead.
+func (SupplierContractLineKind) EnumDescriptor() ([]byte, []int) {
+	return file_domain_expenditure_supplier_contract_line_supplier_contract_line_proto_rawDescGZIP(), []int{1}
+}
+
 // SupplierContractLine is a line item within a SupplierContract.
 // Real contracts often have multiple lines: "50 seats @ $10/mo + 100GB storage @ $0.50/GB".
 // Each line may have its own treatment, account, and date window.
@@ -118,8 +192,11 @@ type SupplierContractLine struct {
 	DateCreatedString  *string `protobuf:"bytes,20,opt,name=date_created_string,json=dateCreatedString,proto3,oneof" json:"date_created_string,omitempty"`
 	DateModified       *int64  `protobuf:"varint,21,opt,name=date_modified,json=dateModified,proto3,oneof" json:"date_modified,omitempty"`
 	DateModifiedString *string `protobuf:"bytes,22,opt,name=date_modified_string,json=dateModifiedString,proto3,oneof" json:"date_modified_string,omitempty"`
-	unknownFields      protoimpl.UnknownFields
-	sizeCache          protoimpl.SizeCache
+	// Discriminator for line role (drives payroll calculator routing for employment
+	// contract lines; ignored for vendor contracts where line_type is sufficient).
+	Kind          *SupplierContractLineKind `protobuf:"varint,23,opt,name=kind,proto3,enum=domain.expenditure.v1.SupplierContractLineKind,oneof" json:"kind,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
 }
 
 func (x *SupplierContractLine) Reset() {
@@ -304,6 +381,13 @@ func (x *SupplierContractLine) GetDateModifiedString() string {
 		return *x.DateModifiedString
 	}
 	return ""
+}
+
+func (x *SupplierContractLine) GetKind() SupplierContractLineKind {
+	if x != nil && x.Kind != nil {
+		return *x.Kind
+	}
+	return SupplierContractLineKind_SUPPLIER_CONTRACT_LINE_KIND_UNSPECIFIED
 }
 
 type CreateSupplierContractLineRequest struct {
@@ -1102,8 +1186,7 @@ var File_domain_expenditure_supplier_contract_line_supplier_contract_line_proto 
 
 const file_domain_expenditure_supplier_contract_line_supplier_contract_line_proto_rawDesc = "" +
 	"\n" +
-	"Fdomain/expenditure/supplier_contract_line/supplier_contract_line.proto\x12\x15domain.expenditure.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/search.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a<domain/expenditure/supplier_contract/supplier_contract.proto\x1a$domain/product/product/product.proto\x1a\x10options/db.proto\"\xb3\n" +
-	"\n" +
+	"Fdomain/expenditure/supplier_contract_line/supplier_contract_line.proto\x12\x15domain.expenditure.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/search.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a<domain/expenditure/supplier_contract/supplier_contract.proto\x1a$domain/product/product/product.proto\x1a\x10options/db.proto\"\x8e\v\n" +
 	"\x14SupplierContractLine\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12K\n" +
 	"\x14supplier_contract_id\x18\x02 \x01(\tB\x19\x82\xb5\x18\x15\n" +
@@ -1140,7 +1223,8 @@ const file_domain_expenditure_supplier_contract_line_supplier_contract_line_prot
 	"\x13date_created_string\x18\x14 \x01(\tH\tR\x11dateCreatedString\x88\x01\x01\x12(\n" +
 	"\rdate_modified\x18\x15 \x01(\x03H\n" +
 	"R\fdateModified\x88\x01\x01\x125\n" +
-	"\x14date_modified_string\x18\x16 \x01(\tH\vR\x12dateModifiedString\x88\x01\x01:\x06\x8a\xb5\x18\x02\b\x01B\x14\n" +
+	"\x14date_modified_string\x18\x16 \x01(\tH\vR\x12dateModifiedString\x88\x01\x01\x12P\n" +
+	"\x04kind\x18\x17 \x01(\x0e2/.domain.expenditure.v1.SupplierContractLineKindB\x06\x82\xb5\x18\x02\x18\x01H\fR\x04kind\x88\x01\x01:\x06\x8a\xb5\x18\x02\b\x01B\x14\n" +
 	"\x12_supplier_contractB\r\n" +
 	"\v_product_idB\n" +
 	"\n" +
@@ -1153,7 +1237,8 @@ const file_domain_expenditure_supplier_contract_line_supplier_contract_line_prot
 	"\r_date_createdB\x16\n" +
 	"\x14_date_created_stringB\x10\n" +
 	"\x0e_date_modifiedB\x17\n" +
-	"\x15_date_modified_string\"d\n" +
+	"\x15_date_modified_stringB\a\n" +
+	"\x05_kind\"d\n" +
 	"!CreateSupplierContractLineRequest\x12?\n" +
 	"\x04data\x18\x01 \x01(\v2+.domain.expenditure.v1.SupplierContractLineR\x04data\"\xbd\x01\n" +
 	"\"CreateSupplierContractLineResponse\x12?\n" +
@@ -1235,7 +1320,19 @@ const file_domain_expenditure_supplier_contract_line_supplier_contract_line_prot
 	"*SUPPLIER_CONTRACT_LINE_TREATMENT_RECURRING\x10\x01\x12-\n" +
 	")SUPPLIER_CONTRACT_LINE_TREATMENT_ONE_TIME\x10\x02\x120\n" +
 	",SUPPLIER_CONTRACT_LINE_TREATMENT_USAGE_BASED\x10\x03\x127\n" +
-	"3SUPPLIER_CONTRACT_LINE_TREATMENT_MINIMUM_COMMITMENT\x10\x042\xdc\b\n" +
+	"3SUPPLIER_CONTRACT_LINE_TREATMENT_MINIMUM_COMMITMENT\x10\x04*\xee\x03\n" +
+	"\x18SupplierContractLineKind\x12+\n" +
+	"'SUPPLIER_CONTRACT_LINE_KIND_UNSPECIFIED\x10\x00\x12%\n" +
+	"!SUPPLIER_CONTRACT_LINE_KIND_GOODS\x10\x01\x12'\n" +
+	"#SUPPLIER_CONTRACT_LINE_KIND_SERVICE\x10\x02\x12'\n" +
+	"#SUPPLIER_CONTRACT_LINE_KIND_EXPENSE\x10\x03\x12,\n" +
+	"(SUPPLIER_CONTRACT_LINE_KIND_BASIC_SALARY\x10\n" +
+	"\x121\n" +
+	"-SUPPLIER_CONTRACT_LINE_KIND_ALLOWANCE_TAXABLE\x10\v\x124\n" +
+	"0SUPPLIER_CONTRACT_LINE_KIND_ALLOWANCE_DE_MINIMIS\x10\f\x12/\n" +
+	"+SUPPLIER_CONTRACT_LINE_KIND_RECURRING_BONUS\x10\r\x121\n" +
+	"-SUPPLIER_CONTRACT_LINE_KIND_LOAN_AMORTIZATION\x10\x0e\x121\n" +
+	"-SUPPLIER_CONTRACT_LINE_KIND_COMPANY_DEDUCTION\x10\x0f2\xdc\b\n" +
 	"!SupplierContractLineDomainService\x12\x91\x01\n" +
 	"\x1aCreateSupplierContractLine\x128.domain.expenditure.v1.CreateSupplierContractLineRequest\x1a9.domain.expenditure.v1.CreateSupplierContractLineResponse\x12\x8b\x01\n" +
 	"\x18ReadSupplierContractLine\x126.domain.expenditure.v1.ReadSupplierContractLineRequest\x1a7.domain.expenditure.v1.ReadSupplierContractLineResponse\x12\x91\x01\n" +
@@ -1258,85 +1355,87 @@ func file_domain_expenditure_supplier_contract_line_supplier_contract_line_proto
 	return file_domain_expenditure_supplier_contract_line_supplier_contract_line_proto_rawDescData
 }
 
-var file_domain_expenditure_supplier_contract_line_supplier_contract_line_proto_enumTypes = make([]protoimpl.EnumInfo, 1)
+var file_domain_expenditure_supplier_contract_line_supplier_contract_line_proto_enumTypes = make([]protoimpl.EnumInfo, 2)
 var file_domain_expenditure_supplier_contract_line_supplier_contract_line_proto_msgTypes = make([]protoimpl.MessageInfo, 15)
 var file_domain_expenditure_supplier_contract_line_supplier_contract_line_proto_goTypes = []any{
 	(SupplierContractLineTreatment)(0),                  // 0: domain.expenditure.v1.SupplierContractLineTreatment
-	(*SupplierContractLine)(nil),                        // 1: domain.expenditure.v1.SupplierContractLine
-	(*CreateSupplierContractLineRequest)(nil),           // 2: domain.expenditure.v1.CreateSupplierContractLineRequest
-	(*CreateSupplierContractLineResponse)(nil),          // 3: domain.expenditure.v1.CreateSupplierContractLineResponse
-	(*ReadSupplierContractLineRequest)(nil),             // 4: domain.expenditure.v1.ReadSupplierContractLineRequest
-	(*ReadSupplierContractLineResponse)(nil),            // 5: domain.expenditure.v1.ReadSupplierContractLineResponse
-	(*UpdateSupplierContractLineRequest)(nil),           // 6: domain.expenditure.v1.UpdateSupplierContractLineRequest
-	(*UpdateSupplierContractLineResponse)(nil),          // 7: domain.expenditure.v1.UpdateSupplierContractLineResponse
-	(*DeleteSupplierContractLineRequest)(nil),           // 8: domain.expenditure.v1.DeleteSupplierContractLineRequest
-	(*DeleteSupplierContractLineResponse)(nil),          // 9: domain.expenditure.v1.DeleteSupplierContractLineResponse
-	(*ListSupplierContractLinesRequest)(nil),            // 10: domain.expenditure.v1.ListSupplierContractLinesRequest
-	(*ListSupplierContractLinesResponse)(nil),           // 11: domain.expenditure.v1.ListSupplierContractLinesResponse
-	(*GetSupplierContractLineListPageDataRequest)(nil),  // 12: domain.expenditure.v1.GetSupplierContractLineListPageDataRequest
-	(*GetSupplierContractLineListPageDataResponse)(nil), // 13: domain.expenditure.v1.GetSupplierContractLineListPageDataResponse
-	(*GetSupplierContractLineItemPageDataRequest)(nil),  // 14: domain.expenditure.v1.GetSupplierContractLineItemPageDataRequest
-	(*GetSupplierContractLineItemPageDataResponse)(nil), // 15: domain.expenditure.v1.GetSupplierContractLineItemPageDataResponse
-	(*supplier_contract.SupplierContract)(nil),          // 16: domain.expenditure.v1.SupplierContract
-	(*product.Product)(nil),                             // 17: domain.product.v1.Product
-	(*common.Error)(nil),                                // 18: domain.common.v1.Error
-	(*common.SearchRequest)(nil),                        // 19: domain.common.v1.SearchRequest
-	(*common.FilterRequest)(nil),                        // 20: domain.common.v1.FilterRequest
-	(*common.SortRequest)(nil),                          // 21: domain.common.v1.SortRequest
-	(*common.PaginationRequest)(nil),                    // 22: domain.common.v1.PaginationRequest
-	(*common.PaginationResponse)(nil),                   // 23: domain.common.v1.PaginationResponse
-	(*common.SearchResult)(nil),                         // 24: domain.common.v1.SearchResult
+	(SupplierContractLineKind)(0),                       // 1: domain.expenditure.v1.SupplierContractLineKind
+	(*SupplierContractLine)(nil),                        // 2: domain.expenditure.v1.SupplierContractLine
+	(*CreateSupplierContractLineRequest)(nil),           // 3: domain.expenditure.v1.CreateSupplierContractLineRequest
+	(*CreateSupplierContractLineResponse)(nil),          // 4: domain.expenditure.v1.CreateSupplierContractLineResponse
+	(*ReadSupplierContractLineRequest)(nil),             // 5: domain.expenditure.v1.ReadSupplierContractLineRequest
+	(*ReadSupplierContractLineResponse)(nil),            // 6: domain.expenditure.v1.ReadSupplierContractLineResponse
+	(*UpdateSupplierContractLineRequest)(nil),           // 7: domain.expenditure.v1.UpdateSupplierContractLineRequest
+	(*UpdateSupplierContractLineResponse)(nil),          // 8: domain.expenditure.v1.UpdateSupplierContractLineResponse
+	(*DeleteSupplierContractLineRequest)(nil),           // 9: domain.expenditure.v1.DeleteSupplierContractLineRequest
+	(*DeleteSupplierContractLineResponse)(nil),          // 10: domain.expenditure.v1.DeleteSupplierContractLineResponse
+	(*ListSupplierContractLinesRequest)(nil),            // 11: domain.expenditure.v1.ListSupplierContractLinesRequest
+	(*ListSupplierContractLinesResponse)(nil),           // 12: domain.expenditure.v1.ListSupplierContractLinesResponse
+	(*GetSupplierContractLineListPageDataRequest)(nil),  // 13: domain.expenditure.v1.GetSupplierContractLineListPageDataRequest
+	(*GetSupplierContractLineListPageDataResponse)(nil), // 14: domain.expenditure.v1.GetSupplierContractLineListPageDataResponse
+	(*GetSupplierContractLineItemPageDataRequest)(nil),  // 15: domain.expenditure.v1.GetSupplierContractLineItemPageDataRequest
+	(*GetSupplierContractLineItemPageDataResponse)(nil), // 16: domain.expenditure.v1.GetSupplierContractLineItemPageDataResponse
+	(*supplier_contract.SupplierContract)(nil),          // 17: domain.expenditure.v1.SupplierContract
+	(*product.Product)(nil),                             // 18: domain.product.v1.Product
+	(*common.Error)(nil),                                // 19: domain.common.v1.Error
+	(*common.SearchRequest)(nil),                        // 20: domain.common.v1.SearchRequest
+	(*common.FilterRequest)(nil),                        // 21: domain.common.v1.FilterRequest
+	(*common.SortRequest)(nil),                          // 22: domain.common.v1.SortRequest
+	(*common.PaginationRequest)(nil),                    // 23: domain.common.v1.PaginationRequest
+	(*common.PaginationResponse)(nil),                   // 24: domain.common.v1.PaginationResponse
+	(*common.SearchResult)(nil),                         // 25: domain.common.v1.SearchResult
 }
 var file_domain_expenditure_supplier_contract_line_supplier_contract_line_proto_depIdxs = []int32{
-	16, // 0: domain.expenditure.v1.SupplierContractLine.supplier_contract:type_name -> domain.expenditure.v1.SupplierContract
-	17, // 1: domain.expenditure.v1.SupplierContractLine.product:type_name -> domain.product.v1.Product
+	17, // 0: domain.expenditure.v1.SupplierContractLine.supplier_contract:type_name -> domain.expenditure.v1.SupplierContract
+	18, // 1: domain.expenditure.v1.SupplierContractLine.product:type_name -> domain.product.v1.Product
 	0,  // 2: domain.expenditure.v1.SupplierContractLine.treatment:type_name -> domain.expenditure.v1.SupplierContractLineTreatment
-	1,  // 3: domain.expenditure.v1.CreateSupplierContractLineRequest.data:type_name -> domain.expenditure.v1.SupplierContractLine
-	1,  // 4: domain.expenditure.v1.CreateSupplierContractLineResponse.data:type_name -> domain.expenditure.v1.SupplierContractLine
-	18, // 5: domain.expenditure.v1.CreateSupplierContractLineResponse.error:type_name -> domain.common.v1.Error
-	1,  // 6: domain.expenditure.v1.ReadSupplierContractLineRequest.data:type_name -> domain.expenditure.v1.SupplierContractLine
-	1,  // 7: domain.expenditure.v1.ReadSupplierContractLineResponse.data:type_name -> domain.expenditure.v1.SupplierContractLine
-	18, // 8: domain.expenditure.v1.ReadSupplierContractLineResponse.error:type_name -> domain.common.v1.Error
-	1,  // 9: domain.expenditure.v1.UpdateSupplierContractLineRequest.data:type_name -> domain.expenditure.v1.SupplierContractLine
-	1,  // 10: domain.expenditure.v1.UpdateSupplierContractLineResponse.data:type_name -> domain.expenditure.v1.SupplierContractLine
-	18, // 11: domain.expenditure.v1.UpdateSupplierContractLineResponse.error:type_name -> domain.common.v1.Error
-	1,  // 12: domain.expenditure.v1.DeleteSupplierContractLineRequest.data:type_name -> domain.expenditure.v1.SupplierContractLine
-	18, // 13: domain.expenditure.v1.DeleteSupplierContractLineResponse.error:type_name -> domain.common.v1.Error
-	19, // 14: domain.expenditure.v1.ListSupplierContractLinesRequest.search:type_name -> domain.common.v1.SearchRequest
-	20, // 15: domain.expenditure.v1.ListSupplierContractLinesRequest.filters:type_name -> domain.common.v1.FilterRequest
-	21, // 16: domain.expenditure.v1.ListSupplierContractLinesRequest.sort:type_name -> domain.common.v1.SortRequest
-	22, // 17: domain.expenditure.v1.ListSupplierContractLinesRequest.pagination:type_name -> domain.common.v1.PaginationRequest
-	1,  // 18: domain.expenditure.v1.ListSupplierContractLinesResponse.data:type_name -> domain.expenditure.v1.SupplierContractLine
-	18, // 19: domain.expenditure.v1.ListSupplierContractLinesResponse.error:type_name -> domain.common.v1.Error
-	22, // 20: domain.expenditure.v1.GetSupplierContractLineListPageDataRequest.pagination:type_name -> domain.common.v1.PaginationRequest
-	20, // 21: domain.expenditure.v1.GetSupplierContractLineListPageDataRequest.filters:type_name -> domain.common.v1.FilterRequest
-	21, // 22: domain.expenditure.v1.GetSupplierContractLineListPageDataRequest.sort:type_name -> domain.common.v1.SortRequest
-	19, // 23: domain.expenditure.v1.GetSupplierContractLineListPageDataRequest.search:type_name -> domain.common.v1.SearchRequest
-	1,  // 24: domain.expenditure.v1.GetSupplierContractLineListPageDataResponse.supplier_contract_line_list:type_name -> domain.expenditure.v1.SupplierContractLine
-	23, // 25: domain.expenditure.v1.GetSupplierContractLineListPageDataResponse.pagination:type_name -> domain.common.v1.PaginationResponse
-	24, // 26: domain.expenditure.v1.GetSupplierContractLineListPageDataResponse.search_results:type_name -> domain.common.v1.SearchResult
-	18, // 27: domain.expenditure.v1.GetSupplierContractLineListPageDataResponse.error:type_name -> domain.common.v1.Error
-	1,  // 28: domain.expenditure.v1.GetSupplierContractLineItemPageDataResponse.supplier_contract_line:type_name -> domain.expenditure.v1.SupplierContractLine
-	18, // 29: domain.expenditure.v1.GetSupplierContractLineItemPageDataResponse.error:type_name -> domain.common.v1.Error
-	2,  // 30: domain.expenditure.v1.SupplierContractLineDomainService.CreateSupplierContractLine:input_type -> domain.expenditure.v1.CreateSupplierContractLineRequest
-	4,  // 31: domain.expenditure.v1.SupplierContractLineDomainService.ReadSupplierContractLine:input_type -> domain.expenditure.v1.ReadSupplierContractLineRequest
-	6,  // 32: domain.expenditure.v1.SupplierContractLineDomainService.UpdateSupplierContractLine:input_type -> domain.expenditure.v1.UpdateSupplierContractLineRequest
-	8,  // 33: domain.expenditure.v1.SupplierContractLineDomainService.DeleteSupplierContractLine:input_type -> domain.expenditure.v1.DeleteSupplierContractLineRequest
-	10, // 34: domain.expenditure.v1.SupplierContractLineDomainService.ListSupplierContractLines:input_type -> domain.expenditure.v1.ListSupplierContractLinesRequest
-	12, // 35: domain.expenditure.v1.SupplierContractLineDomainService.GetSupplierContractLineListPageData:input_type -> domain.expenditure.v1.GetSupplierContractLineListPageDataRequest
-	14, // 36: domain.expenditure.v1.SupplierContractLineDomainService.GetSupplierContractLineItemPageData:input_type -> domain.expenditure.v1.GetSupplierContractLineItemPageDataRequest
-	3,  // 37: domain.expenditure.v1.SupplierContractLineDomainService.CreateSupplierContractLine:output_type -> domain.expenditure.v1.CreateSupplierContractLineResponse
-	5,  // 38: domain.expenditure.v1.SupplierContractLineDomainService.ReadSupplierContractLine:output_type -> domain.expenditure.v1.ReadSupplierContractLineResponse
-	7,  // 39: domain.expenditure.v1.SupplierContractLineDomainService.UpdateSupplierContractLine:output_type -> domain.expenditure.v1.UpdateSupplierContractLineResponse
-	9,  // 40: domain.expenditure.v1.SupplierContractLineDomainService.DeleteSupplierContractLine:output_type -> domain.expenditure.v1.DeleteSupplierContractLineResponse
-	11, // 41: domain.expenditure.v1.SupplierContractLineDomainService.ListSupplierContractLines:output_type -> domain.expenditure.v1.ListSupplierContractLinesResponse
-	13, // 42: domain.expenditure.v1.SupplierContractLineDomainService.GetSupplierContractLineListPageData:output_type -> domain.expenditure.v1.GetSupplierContractLineListPageDataResponse
-	15, // 43: domain.expenditure.v1.SupplierContractLineDomainService.GetSupplierContractLineItemPageData:output_type -> domain.expenditure.v1.GetSupplierContractLineItemPageDataResponse
-	37, // [37:44] is the sub-list for method output_type
-	30, // [30:37] is the sub-list for method input_type
-	30, // [30:30] is the sub-list for extension type_name
-	30, // [30:30] is the sub-list for extension extendee
-	0,  // [0:30] is the sub-list for field type_name
+	1,  // 3: domain.expenditure.v1.SupplierContractLine.kind:type_name -> domain.expenditure.v1.SupplierContractLineKind
+	2,  // 4: domain.expenditure.v1.CreateSupplierContractLineRequest.data:type_name -> domain.expenditure.v1.SupplierContractLine
+	2,  // 5: domain.expenditure.v1.CreateSupplierContractLineResponse.data:type_name -> domain.expenditure.v1.SupplierContractLine
+	19, // 6: domain.expenditure.v1.CreateSupplierContractLineResponse.error:type_name -> domain.common.v1.Error
+	2,  // 7: domain.expenditure.v1.ReadSupplierContractLineRequest.data:type_name -> domain.expenditure.v1.SupplierContractLine
+	2,  // 8: domain.expenditure.v1.ReadSupplierContractLineResponse.data:type_name -> domain.expenditure.v1.SupplierContractLine
+	19, // 9: domain.expenditure.v1.ReadSupplierContractLineResponse.error:type_name -> domain.common.v1.Error
+	2,  // 10: domain.expenditure.v1.UpdateSupplierContractLineRequest.data:type_name -> domain.expenditure.v1.SupplierContractLine
+	2,  // 11: domain.expenditure.v1.UpdateSupplierContractLineResponse.data:type_name -> domain.expenditure.v1.SupplierContractLine
+	19, // 12: domain.expenditure.v1.UpdateSupplierContractLineResponse.error:type_name -> domain.common.v1.Error
+	2,  // 13: domain.expenditure.v1.DeleteSupplierContractLineRequest.data:type_name -> domain.expenditure.v1.SupplierContractLine
+	19, // 14: domain.expenditure.v1.DeleteSupplierContractLineResponse.error:type_name -> domain.common.v1.Error
+	20, // 15: domain.expenditure.v1.ListSupplierContractLinesRequest.search:type_name -> domain.common.v1.SearchRequest
+	21, // 16: domain.expenditure.v1.ListSupplierContractLinesRequest.filters:type_name -> domain.common.v1.FilterRequest
+	22, // 17: domain.expenditure.v1.ListSupplierContractLinesRequest.sort:type_name -> domain.common.v1.SortRequest
+	23, // 18: domain.expenditure.v1.ListSupplierContractLinesRequest.pagination:type_name -> domain.common.v1.PaginationRequest
+	2,  // 19: domain.expenditure.v1.ListSupplierContractLinesResponse.data:type_name -> domain.expenditure.v1.SupplierContractLine
+	19, // 20: domain.expenditure.v1.ListSupplierContractLinesResponse.error:type_name -> domain.common.v1.Error
+	23, // 21: domain.expenditure.v1.GetSupplierContractLineListPageDataRequest.pagination:type_name -> domain.common.v1.PaginationRequest
+	21, // 22: domain.expenditure.v1.GetSupplierContractLineListPageDataRequest.filters:type_name -> domain.common.v1.FilterRequest
+	22, // 23: domain.expenditure.v1.GetSupplierContractLineListPageDataRequest.sort:type_name -> domain.common.v1.SortRequest
+	20, // 24: domain.expenditure.v1.GetSupplierContractLineListPageDataRequest.search:type_name -> domain.common.v1.SearchRequest
+	2,  // 25: domain.expenditure.v1.GetSupplierContractLineListPageDataResponse.supplier_contract_line_list:type_name -> domain.expenditure.v1.SupplierContractLine
+	24, // 26: domain.expenditure.v1.GetSupplierContractLineListPageDataResponse.pagination:type_name -> domain.common.v1.PaginationResponse
+	25, // 27: domain.expenditure.v1.GetSupplierContractLineListPageDataResponse.search_results:type_name -> domain.common.v1.SearchResult
+	19, // 28: domain.expenditure.v1.GetSupplierContractLineListPageDataResponse.error:type_name -> domain.common.v1.Error
+	2,  // 29: domain.expenditure.v1.GetSupplierContractLineItemPageDataResponse.supplier_contract_line:type_name -> domain.expenditure.v1.SupplierContractLine
+	19, // 30: domain.expenditure.v1.GetSupplierContractLineItemPageDataResponse.error:type_name -> domain.common.v1.Error
+	3,  // 31: domain.expenditure.v1.SupplierContractLineDomainService.CreateSupplierContractLine:input_type -> domain.expenditure.v1.CreateSupplierContractLineRequest
+	5,  // 32: domain.expenditure.v1.SupplierContractLineDomainService.ReadSupplierContractLine:input_type -> domain.expenditure.v1.ReadSupplierContractLineRequest
+	7,  // 33: domain.expenditure.v1.SupplierContractLineDomainService.UpdateSupplierContractLine:input_type -> domain.expenditure.v1.UpdateSupplierContractLineRequest
+	9,  // 34: domain.expenditure.v1.SupplierContractLineDomainService.DeleteSupplierContractLine:input_type -> domain.expenditure.v1.DeleteSupplierContractLineRequest
+	11, // 35: domain.expenditure.v1.SupplierContractLineDomainService.ListSupplierContractLines:input_type -> domain.expenditure.v1.ListSupplierContractLinesRequest
+	13, // 36: domain.expenditure.v1.SupplierContractLineDomainService.GetSupplierContractLineListPageData:input_type -> domain.expenditure.v1.GetSupplierContractLineListPageDataRequest
+	15, // 37: domain.expenditure.v1.SupplierContractLineDomainService.GetSupplierContractLineItemPageData:input_type -> domain.expenditure.v1.GetSupplierContractLineItemPageDataRequest
+	4,  // 38: domain.expenditure.v1.SupplierContractLineDomainService.CreateSupplierContractLine:output_type -> domain.expenditure.v1.CreateSupplierContractLineResponse
+	6,  // 39: domain.expenditure.v1.SupplierContractLineDomainService.ReadSupplierContractLine:output_type -> domain.expenditure.v1.ReadSupplierContractLineResponse
+	8,  // 40: domain.expenditure.v1.SupplierContractLineDomainService.UpdateSupplierContractLine:output_type -> domain.expenditure.v1.UpdateSupplierContractLineResponse
+	10, // 41: domain.expenditure.v1.SupplierContractLineDomainService.DeleteSupplierContractLine:output_type -> domain.expenditure.v1.DeleteSupplierContractLineResponse
+	12, // 42: domain.expenditure.v1.SupplierContractLineDomainService.ListSupplierContractLines:output_type -> domain.expenditure.v1.ListSupplierContractLinesResponse
+	14, // 43: domain.expenditure.v1.SupplierContractLineDomainService.GetSupplierContractLineListPageData:output_type -> domain.expenditure.v1.GetSupplierContractLineListPageDataResponse
+	16, // 44: domain.expenditure.v1.SupplierContractLineDomainService.GetSupplierContractLineItemPageData:output_type -> domain.expenditure.v1.GetSupplierContractLineItemPageDataResponse
+	38, // [38:45] is the sub-list for method output_type
+	31, // [31:38] is the sub-list for method input_type
+	31, // [31:31] is the sub-list for extension type_name
+	31, // [31:31] is the sub-list for extension extendee
+	0,  // [0:31] is the sub-list for field type_name
 }
 
 func init() { file_domain_expenditure_supplier_contract_line_supplier_contract_line_proto_init() }
@@ -1359,7 +1458,7 @@ func file_domain_expenditure_supplier_contract_line_supplier_contract_line_proto
 		File: protoimpl.DescBuilder{
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_domain_expenditure_supplier_contract_line_supplier_contract_line_proto_rawDesc), len(file_domain_expenditure_supplier_contract_line_supplier_contract_line_proto_rawDesc)),
-			NumEnums:      1,
+			NumEnums:      2,
 			NumMessages:   15,
 			NumExtensions: 0,
 			NumServices:   1,

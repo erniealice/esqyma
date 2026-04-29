@@ -104,8 +104,12 @@ type PayrollRun struct {
 	DateCreatedString  *string `protobuf:"bytes,16,opt,name=date_created_string,json=dateCreatedString,proto3,oneof" json:"date_created_string,omitempty"`
 	DateModified       *int64  `protobuf:"varint,17,opt,name=date_modified,json=dateModified,proto3,oneof" json:"date_modified,omitempty"`
 	DateModifiedString *string `protobuf:"bytes,18,opt,name=date_modified_string,json=dateModifiedString,proto3,oneof" json:"date_modified_string,omitempty"`
-	unknownFields      protoimpl.UnknownFields
-	sizeCache          protoimpl.SizeCache
+	// Jurisdiction routing & calculator audit
+	ComplianceRegion  *string `protobuf:"bytes,19,opt,name=compliance_region,json=complianceRegion,proto3,oneof" json:"compliance_region,omitempty"`    // mirrors Workspace.compliance_region at run start
+	CalculatorVersion *string `protobuf:"bytes,20,opt,name=calculator_version,json=calculatorVersion,proto3,oneof" json:"calculator_version,omitempty"` // e.g. "PH-2026.04" — frozen audit string
+	WorkspaceId       *string `protobuf:"bytes,21,opt,name=workspace_id,json=workspaceId,proto3,oneof" json:"workspace_id,omitempty"`
+	unknownFields     protoimpl.UnknownFields
+	sizeCache         protoimpl.SizeCache
 }
 
 func (x *PayrollRun) Reset() {
@@ -246,6 +250,27 @@ func (x *PayrollRun) GetDateModified() int64 {
 func (x *PayrollRun) GetDateModifiedString() string {
 	if x != nil && x.DateModifiedString != nil {
 		return *x.DateModifiedString
+	}
+	return ""
+}
+
+func (x *PayrollRun) GetComplianceRegion() string {
+	if x != nil && x.ComplianceRegion != nil {
+		return *x.ComplianceRegion
+	}
+	return ""
+}
+
+func (x *PayrollRun) GetCalculatorVersion() string {
+	if x != nil && x.CalculatorVersion != nil {
+		return *x.CalculatorVersion
+	}
+	return ""
+}
+
+func (x *PayrollRun) GetWorkspaceId() string {
+	if x != nil && x.WorkspaceId != nil {
+		return *x.WorkspaceId
 	}
 	return ""
 }
@@ -1034,11 +1059,259 @@ func (x *GetPayrollRunItemPageDataResponse) GetError() *common.Error {
 	return nil
 }
 
+type GeneratePayCyclesRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	PayrollRunId  string                 `protobuf:"bytes,1,opt,name=payroll_run_id,json=payrollRunId,proto3" json:"payroll_run_id,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *GeneratePayCyclesRequest) Reset() {
+	*x = GeneratePayCyclesRequest{}
+	mi := &file_domain_payroll_payroll_run_payroll_run_proto_msgTypes[15]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *GeneratePayCyclesRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*GeneratePayCyclesRequest) ProtoMessage() {}
+
+func (x *GeneratePayCyclesRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_domain_payroll_payroll_run_payroll_run_proto_msgTypes[15]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use GeneratePayCyclesRequest.ProtoReflect.Descriptor instead.
+func (*GeneratePayCyclesRequest) Descriptor() ([]byte, []int) {
+	return file_domain_payroll_payroll_run_payroll_run_proto_rawDescGZIP(), []int{15}
+}
+
+func (x *GeneratePayCyclesRequest) GetPayrollRunId() string {
+	if x != nil {
+		return x.PayrollRunId
+	}
+	return ""
+}
+
+type GeneratePayCyclesResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	PayrollRunId  string                 `protobuf:"bytes,1,opt,name=payroll_run_id,json=payrollRunId,proto3" json:"payroll_run_id,omitempty"`
+	Success       bool                   `protobuf:"varint,2,opt,name=success,proto3" json:"success,omitempty"`
+	Error         *common.Error          `protobuf:"bytes,3,opt,name=error,proto3,oneof" json:"error,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *GeneratePayCyclesResponse) Reset() {
+	*x = GeneratePayCyclesResponse{}
+	mi := &file_domain_payroll_payroll_run_payroll_run_proto_msgTypes[16]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *GeneratePayCyclesResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*GeneratePayCyclesResponse) ProtoMessage() {}
+
+func (x *GeneratePayCyclesResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_domain_payroll_payroll_run_payroll_run_proto_msgTypes[16]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use GeneratePayCyclesResponse.ProtoReflect.Descriptor instead.
+func (*GeneratePayCyclesResponse) Descriptor() ([]byte, []int) {
+	return file_domain_payroll_payroll_run_payroll_run_proto_rawDescGZIP(), []int{16}
+}
+
+func (x *GeneratePayCyclesResponse) GetPayrollRunId() string {
+	if x != nil {
+		return x.PayrollRunId
+	}
+	return ""
+}
+
+func (x *GeneratePayCyclesResponse) GetSuccess() bool {
+	if x != nil {
+		return x.Success
+	}
+	return false
+}
+
+func (x *GeneratePayCyclesResponse) GetError() *common.Error {
+	if x != nil {
+		return x.Error
+	}
+	return nil
+}
+
+type CalculatePayrollRunRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	PayrollRunId  string                 `protobuf:"bytes,1,opt,name=payroll_run_id,json=payrollRunId,proto3" json:"payroll_run_id,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *CalculatePayrollRunRequest) Reset() {
+	*x = CalculatePayrollRunRequest{}
+	mi := &file_domain_payroll_payroll_run_payroll_run_proto_msgTypes[17]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *CalculatePayrollRunRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*CalculatePayrollRunRequest) ProtoMessage() {}
+
+func (x *CalculatePayrollRunRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_domain_payroll_payroll_run_payroll_run_proto_msgTypes[17]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use CalculatePayrollRunRequest.ProtoReflect.Descriptor instead.
+func (*CalculatePayrollRunRequest) Descriptor() ([]byte, []int) {
+	return file_domain_payroll_payroll_run_payroll_run_proto_rawDescGZIP(), []int{17}
+}
+
+func (x *CalculatePayrollRunRequest) GetPayrollRunId() string {
+	if x != nil {
+		return x.PayrollRunId
+	}
+	return ""
+}
+
+type CalculatePayrollRunResponse struct {
+	state           protoimpl.MessageState `protogen:"open.v1"`
+	PayrollRunId    string                 `protobuf:"bytes,1,opt,name=payroll_run_id,json=payrollRunId,proto3" json:"payroll_run_id,omitempty"`
+	CyclesProcessed int32                  `protobuf:"varint,2,opt,name=cycles_processed,json=cyclesProcessed,proto3" json:"cycles_processed,omitempty"`
+	EmployeesPaid   int32                  `protobuf:"varint,3,opt,name=employees_paid,json=employeesPaid,proto3" json:"employees_paid,omitempty"`
+	TotalGross      int64                  `protobuf:"varint,4,opt,name=total_gross,json=totalGross,proto3" json:"total_gross,omitempty"`
+	TotalDeductions int64                  `protobuf:"varint,5,opt,name=total_deductions,json=totalDeductions,proto3" json:"total_deductions,omitempty"`
+	TotalNet        int64                  `protobuf:"varint,6,opt,name=total_net,json=totalNet,proto3" json:"total_net,omitempty"`
+	Success         bool                   `protobuf:"varint,7,opt,name=success,proto3" json:"success,omitempty"`
+	Error           *common.Error          `protobuf:"bytes,8,opt,name=error,proto3,oneof" json:"error,omitempty"`
+	unknownFields   protoimpl.UnknownFields
+	sizeCache       protoimpl.SizeCache
+}
+
+func (x *CalculatePayrollRunResponse) Reset() {
+	*x = CalculatePayrollRunResponse{}
+	mi := &file_domain_payroll_payroll_run_payroll_run_proto_msgTypes[18]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *CalculatePayrollRunResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*CalculatePayrollRunResponse) ProtoMessage() {}
+
+func (x *CalculatePayrollRunResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_domain_payroll_payroll_run_payroll_run_proto_msgTypes[18]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use CalculatePayrollRunResponse.ProtoReflect.Descriptor instead.
+func (*CalculatePayrollRunResponse) Descriptor() ([]byte, []int) {
+	return file_domain_payroll_payroll_run_payroll_run_proto_rawDescGZIP(), []int{18}
+}
+
+func (x *CalculatePayrollRunResponse) GetPayrollRunId() string {
+	if x != nil {
+		return x.PayrollRunId
+	}
+	return ""
+}
+
+func (x *CalculatePayrollRunResponse) GetCyclesProcessed() int32 {
+	if x != nil {
+		return x.CyclesProcessed
+	}
+	return 0
+}
+
+func (x *CalculatePayrollRunResponse) GetEmployeesPaid() int32 {
+	if x != nil {
+		return x.EmployeesPaid
+	}
+	return 0
+}
+
+func (x *CalculatePayrollRunResponse) GetTotalGross() int64 {
+	if x != nil {
+		return x.TotalGross
+	}
+	return 0
+}
+
+func (x *CalculatePayrollRunResponse) GetTotalDeductions() int64 {
+	if x != nil {
+		return x.TotalDeductions
+	}
+	return 0
+}
+
+func (x *CalculatePayrollRunResponse) GetTotalNet() int64 {
+	if x != nil {
+		return x.TotalNet
+	}
+	return 0
+}
+
+func (x *CalculatePayrollRunResponse) GetSuccess() bool {
+	if x != nil {
+		return x.Success
+	}
+	return false
+}
+
+func (x *CalculatePayrollRunResponse) GetError() *common.Error {
+	if x != nil {
+		return x.Error
+	}
+	return nil
+}
+
 var File_domain_payroll_payroll_run_payroll_run_proto protoreflect.FileDescriptor
 
 const file_domain_payroll_payroll_run_payroll_run_proto_rawDesc = "" +
 	"\n" +
-	",domain/payroll/payroll_run/payroll_run.proto\x12\x11domain.payroll.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1adomain/common/search.proto\x1a\x10options/db.proto\"\xd6\x06\n" +
+	",domain/payroll/payroll_run/payroll_run.proto\x12\x11domain.payroll.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1adomain/common/search.proto\x1a\x10options/db.proto\"\xb5\b\n" +
 	"\n" +
 	"PayrollRun\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12'\n" +
@@ -1060,7 +1333,11 @@ const file_domain_payroll_payroll_run_payroll_run_proto_rawDesc = "" +
 	"\fdate_created\x18\x0f \x01(\x03H\x03R\vdateCreated\x88\x01\x01\x123\n" +
 	"\x13date_created_string\x18\x10 \x01(\tH\x04R\x11dateCreatedString\x88\x01\x01\x12(\n" +
 	"\rdate_modified\x18\x11 \x01(\x03H\x05R\fdateModified\x88\x01\x01\x125\n" +
-	"\x14date_modified_string\x18\x12 \x01(\tH\x06R\x12dateModifiedString\x88\x01\x01:\x06\x8a\xb5\x18\x02\b\x01B\x0e\n" +
+	"\x14date_modified_string\x18\x12 \x01(\tH\x06R\x12dateModifiedString\x88\x01\x01\x120\n" +
+	"\x11compliance_region\x18\x13 \x01(\tH\aR\x10complianceRegion\x88\x01\x01\x122\n" +
+	"\x12calculator_version\x18\x14 \x01(\tH\bR\x11calculatorVersion\x88\x01\x01\x129\n" +
+	"\fworkspace_id\x18\x15 \x01(\tB\x11\x82\xb5\x18\r\n" +
+	"\tworkspace\x18\x01H\tR\vworkspaceId\x88\x01\x01:\x06\x8a\xb5\x18\x02\b\x01B\x0e\n" +
 	"\f_approved_byB\f\n" +
 	"\n" +
 	"_posted_atB\x13\n" +
@@ -1068,7 +1345,10 @@ const file_domain_payroll_payroll_run_payroll_run_proto_rawDesc = "" +
 	"\r_date_createdB\x16\n" +
 	"\x14_date_created_stringB\x10\n" +
 	"\x0e_date_modifiedB\x17\n" +
-	"\x15_date_modified_stringJ\x04\b\x04\x10\x05J\x04\b\x06\x10\a\"L\n" +
+	"\x15_date_modified_stringB\x14\n" +
+	"\x12_compliance_regionB\x15\n" +
+	"\x13_calculator_versionB\x0f\n" +
+	"\r_workspace_idJ\x04\b\x04\x10\x05J\x04\b\x06\x10\a\"L\n" +
 	"\x17CreatePayrollRunRequest\x121\n" +
 	"\x04data\x18\x01 \x01(\v2\x1d.domain.payroll.v1.PayrollRunR\x04data\"\xa5\x01\n" +
 	"\x18CreatePayrollRunResponse\x121\n" +
@@ -1143,13 +1423,33 @@ const file_domain_payroll_payroll_run_payroll_run_proto_rawDesc = "" +
 	"\asuccess\x18\x02 \x01(\bR\asuccess\x122\n" +
 	"\x05error\x18\x03 \x01(\v2\x17.domain.common.v1.ErrorH\x01R\x05error\x88\x01\x01B\x0e\n" +
 	"\f_payroll_runB\b\n" +
+	"\x06_error\"@\n" +
+	"\x18GeneratePayCyclesRequest\x12$\n" +
+	"\x0epayroll_run_id\x18\x01 \x01(\tR\fpayrollRunId\"\x99\x01\n" +
+	"\x19GeneratePayCyclesResponse\x12$\n" +
+	"\x0epayroll_run_id\x18\x01 \x01(\tR\fpayrollRunId\x12\x18\n" +
+	"\asuccess\x18\x02 \x01(\bR\asuccess\x122\n" +
+	"\x05error\x18\x03 \x01(\v2\x17.domain.common.v1.ErrorH\x00R\x05error\x88\x01\x01B\b\n" +
+	"\x06_error\"B\n" +
+	"\x1aCalculatePayrollRunRequest\x12$\n" +
+	"\x0epayroll_run_id\x18\x01 \x01(\tR\fpayrollRunId\"\xd6\x02\n" +
+	"\x1bCalculatePayrollRunResponse\x12$\n" +
+	"\x0epayroll_run_id\x18\x01 \x01(\tR\fpayrollRunId\x12)\n" +
+	"\x10cycles_processed\x18\x02 \x01(\x05R\x0fcyclesProcessed\x12%\n" +
+	"\x0eemployees_paid\x18\x03 \x01(\x05R\remployeesPaid\x12\x1f\n" +
+	"\vtotal_gross\x18\x04 \x01(\x03R\n" +
+	"totalGross\x12)\n" +
+	"\x10total_deductions\x18\x05 \x01(\x03R\x0ftotalDeductions\x12\x1b\n" +
+	"\ttotal_net\x18\x06 \x01(\x03R\btotalNet\x12\x18\n" +
+	"\asuccess\x18\a \x01(\bR\asuccess\x122\n" +
+	"\x05error\x18\b \x01(\v2\x17.domain.common.v1.ErrorH\x00R\x05error\x88\x01\x01B\b\n" +
 	"\x06_error*\xb7\x01\n" +
 	"\x10PayrollRunStatus\x12\"\n" +
 	"\x1ePAYROLL_RUN_STATUS_UNSPECIFIED\x10\x00\x12\x1c\n" +
 	"\x18PAYROLL_RUN_STATUS_DRAFT\x10\x01\x12!\n" +
 	"\x1dPAYROLL_RUN_STATUS_CALCULATED\x10\x02\x12\x1f\n" +
 	"\x1bPAYROLL_RUN_STATUS_APPROVED\x10\x03\x12\x1d\n" +
-	"\x19PAYROLL_RUN_STATUS_POSTED\x10\x042\xc3\x06\n" +
+	"\x19PAYROLL_RUN_STATUS_POSTED\x10\x042\xa9\b\n" +
 	"\x17PayrollRunDomainService\x12k\n" +
 	"\x10CreatePayrollRun\x12*.domain.payroll.v1.CreatePayrollRunRequest\x1a+.domain.payroll.v1.CreatePayrollRunResponse\x12e\n" +
 	"\x0eReadPayrollRun\x12(.domain.payroll.v1.ReadPayrollRunRequest\x1a).domain.payroll.v1.ReadPayrollRunResponse\x12k\n" +
@@ -1157,7 +1457,9 @@ const file_domain_payroll_payroll_run_payroll_run_proto_rawDesc = "" +
 	"\x10DeletePayrollRun\x12*.domain.payroll.v1.DeletePayrollRunRequest\x1a+.domain.payroll.v1.DeletePayrollRunResponse\x12h\n" +
 	"\x0fListPayrollRuns\x12).domain.payroll.v1.ListPayrollRunsRequest\x1a*.domain.payroll.v1.ListPayrollRunsResponse\x12\x86\x01\n" +
 	"\x19GetPayrollRunListPageData\x123.domain.payroll.v1.GetPayrollRunListPageDataRequest\x1a4.domain.payroll.v1.GetPayrollRunListPageDataResponse\x12\x86\x01\n" +
-	"\x19GetPayrollRunItemPageData\x123.domain.payroll.v1.GetPayrollRunItemPageDataRequest\x1a4.domain.payroll.v1.GetPayrollRunItemPageDataResponseB\xdf\x01\n" +
+	"\x19GetPayrollRunItemPageData\x123.domain.payroll.v1.GetPayrollRunItemPageDataRequest\x1a4.domain.payroll.v1.GetPayrollRunItemPageDataResponse\x12n\n" +
+	"\x11GeneratePayCycles\x12+.domain.payroll.v1.GeneratePayCyclesRequest\x1a,.domain.payroll.v1.GeneratePayCyclesResponse\x12t\n" +
+	"\x13CalculatePayrollRun\x12-.domain.payroll.v1.CalculatePayrollRunRequest\x1a..domain.payroll.v1.CalculatePayrollRunResponseB\xdf\x01\n" +
 	"\x15com.domain.payroll.v1B\x0fPayrollRunProtoP\x01ZOgithub.com/erniealice/esqyma/pkg/schema/v1/domain/payroll/payroll_run;payrollv1\xa2\x02\x03DPX\xaa\x02\x11Domain.Payroll.V1\xca\x02\x11Domain\\Payroll\\V1\xe2\x02\x1dDomain\\Payroll\\V1\\GPBMetadata\xea\x02\x13Domain::Payroll::V1b\x06proto3"
 
 var (
@@ -1173,7 +1475,7 @@ func file_domain_payroll_payroll_run_payroll_run_proto_rawDescGZIP() []byte {
 }
 
 var file_domain_payroll_payroll_run_payroll_run_proto_enumTypes = make([]protoimpl.EnumInfo, 1)
-var file_domain_payroll_payroll_run_payroll_run_proto_msgTypes = make([]protoimpl.MessageInfo, 15)
+var file_domain_payroll_payroll_run_payroll_run_proto_msgTypes = make([]protoimpl.MessageInfo, 19)
 var file_domain_payroll_payroll_run_payroll_run_proto_goTypes = []any{
 	(PayrollRunStatus)(0),                     // 0: domain.payroll.v1.PayrollRunStatus
 	(*PayrollRun)(nil),                        // 1: domain.payroll.v1.PayrollRun
@@ -1191,62 +1493,72 @@ var file_domain_payroll_payroll_run_payroll_run_proto_goTypes = []any{
 	(*GetPayrollRunListPageDataResponse)(nil), // 13: domain.payroll.v1.GetPayrollRunListPageDataResponse
 	(*GetPayrollRunItemPageDataRequest)(nil),  // 14: domain.payroll.v1.GetPayrollRunItemPageDataRequest
 	(*GetPayrollRunItemPageDataResponse)(nil), // 15: domain.payroll.v1.GetPayrollRunItemPageDataResponse
-	(*common.Error)(nil),                      // 16: domain.common.v1.Error
-	(*common.SearchRequest)(nil),              // 17: domain.common.v1.SearchRequest
-	(*common.FilterRequest)(nil),              // 18: domain.common.v1.FilterRequest
-	(*common.SortRequest)(nil),                // 19: domain.common.v1.SortRequest
-	(*common.PaginationRequest)(nil),          // 20: domain.common.v1.PaginationRequest
-	(*common.PaginationResponse)(nil),         // 21: domain.common.v1.PaginationResponse
-	(*common.SearchResult)(nil),               // 22: domain.common.v1.SearchResult
+	(*GeneratePayCyclesRequest)(nil),          // 16: domain.payroll.v1.GeneratePayCyclesRequest
+	(*GeneratePayCyclesResponse)(nil),         // 17: domain.payroll.v1.GeneratePayCyclesResponse
+	(*CalculatePayrollRunRequest)(nil),        // 18: domain.payroll.v1.CalculatePayrollRunRequest
+	(*CalculatePayrollRunResponse)(nil),       // 19: domain.payroll.v1.CalculatePayrollRunResponse
+	(*common.Error)(nil),                      // 20: domain.common.v1.Error
+	(*common.SearchRequest)(nil),              // 21: domain.common.v1.SearchRequest
+	(*common.FilterRequest)(nil),              // 22: domain.common.v1.FilterRequest
+	(*common.SortRequest)(nil),                // 23: domain.common.v1.SortRequest
+	(*common.PaginationRequest)(nil),          // 24: domain.common.v1.PaginationRequest
+	(*common.PaginationResponse)(nil),         // 25: domain.common.v1.PaginationResponse
+	(*common.SearchResult)(nil),               // 26: domain.common.v1.SearchResult
 }
 var file_domain_payroll_payroll_run_payroll_run_proto_depIdxs = []int32{
 	0,  // 0: domain.payroll.v1.PayrollRun.status:type_name -> domain.payroll.v1.PayrollRunStatus
 	1,  // 1: domain.payroll.v1.CreatePayrollRunRequest.data:type_name -> domain.payroll.v1.PayrollRun
 	1,  // 2: domain.payroll.v1.CreatePayrollRunResponse.data:type_name -> domain.payroll.v1.PayrollRun
-	16, // 3: domain.payroll.v1.CreatePayrollRunResponse.error:type_name -> domain.common.v1.Error
+	20, // 3: domain.payroll.v1.CreatePayrollRunResponse.error:type_name -> domain.common.v1.Error
 	1,  // 4: domain.payroll.v1.ReadPayrollRunRequest.data:type_name -> domain.payroll.v1.PayrollRun
 	1,  // 5: domain.payroll.v1.ReadPayrollRunResponse.data:type_name -> domain.payroll.v1.PayrollRun
-	16, // 6: domain.payroll.v1.ReadPayrollRunResponse.error:type_name -> domain.common.v1.Error
+	20, // 6: domain.payroll.v1.ReadPayrollRunResponse.error:type_name -> domain.common.v1.Error
 	1,  // 7: domain.payroll.v1.UpdatePayrollRunRequest.data:type_name -> domain.payroll.v1.PayrollRun
 	1,  // 8: domain.payroll.v1.UpdatePayrollRunResponse.data:type_name -> domain.payroll.v1.PayrollRun
-	16, // 9: domain.payroll.v1.UpdatePayrollRunResponse.error:type_name -> domain.common.v1.Error
+	20, // 9: domain.payroll.v1.UpdatePayrollRunResponse.error:type_name -> domain.common.v1.Error
 	1,  // 10: domain.payroll.v1.DeletePayrollRunRequest.data:type_name -> domain.payroll.v1.PayrollRun
-	16, // 11: domain.payroll.v1.DeletePayrollRunResponse.error:type_name -> domain.common.v1.Error
-	17, // 12: domain.payroll.v1.ListPayrollRunsRequest.search:type_name -> domain.common.v1.SearchRequest
-	18, // 13: domain.payroll.v1.ListPayrollRunsRequest.filters:type_name -> domain.common.v1.FilterRequest
-	19, // 14: domain.payroll.v1.ListPayrollRunsRequest.sort:type_name -> domain.common.v1.SortRequest
-	20, // 15: domain.payroll.v1.ListPayrollRunsRequest.pagination:type_name -> domain.common.v1.PaginationRequest
+	20, // 11: domain.payroll.v1.DeletePayrollRunResponse.error:type_name -> domain.common.v1.Error
+	21, // 12: domain.payroll.v1.ListPayrollRunsRequest.search:type_name -> domain.common.v1.SearchRequest
+	22, // 13: domain.payroll.v1.ListPayrollRunsRequest.filters:type_name -> domain.common.v1.FilterRequest
+	23, // 14: domain.payroll.v1.ListPayrollRunsRequest.sort:type_name -> domain.common.v1.SortRequest
+	24, // 15: domain.payroll.v1.ListPayrollRunsRequest.pagination:type_name -> domain.common.v1.PaginationRequest
 	1,  // 16: domain.payroll.v1.ListPayrollRunsResponse.data:type_name -> domain.payroll.v1.PayrollRun
-	16, // 17: domain.payroll.v1.ListPayrollRunsResponse.error:type_name -> domain.common.v1.Error
-	20, // 18: domain.payroll.v1.GetPayrollRunListPageDataRequest.pagination:type_name -> domain.common.v1.PaginationRequest
-	18, // 19: domain.payroll.v1.GetPayrollRunListPageDataRequest.filters:type_name -> domain.common.v1.FilterRequest
-	19, // 20: domain.payroll.v1.GetPayrollRunListPageDataRequest.sort:type_name -> domain.common.v1.SortRequest
-	17, // 21: domain.payroll.v1.GetPayrollRunListPageDataRequest.search:type_name -> domain.common.v1.SearchRequest
+	20, // 17: domain.payroll.v1.ListPayrollRunsResponse.error:type_name -> domain.common.v1.Error
+	24, // 18: domain.payroll.v1.GetPayrollRunListPageDataRequest.pagination:type_name -> domain.common.v1.PaginationRequest
+	22, // 19: domain.payroll.v1.GetPayrollRunListPageDataRequest.filters:type_name -> domain.common.v1.FilterRequest
+	23, // 20: domain.payroll.v1.GetPayrollRunListPageDataRequest.sort:type_name -> domain.common.v1.SortRequest
+	21, // 21: domain.payroll.v1.GetPayrollRunListPageDataRequest.search:type_name -> domain.common.v1.SearchRequest
 	1,  // 22: domain.payroll.v1.GetPayrollRunListPageDataResponse.payroll_run_list:type_name -> domain.payroll.v1.PayrollRun
-	21, // 23: domain.payroll.v1.GetPayrollRunListPageDataResponse.pagination:type_name -> domain.common.v1.PaginationResponse
-	22, // 24: domain.payroll.v1.GetPayrollRunListPageDataResponse.search_results:type_name -> domain.common.v1.SearchResult
-	16, // 25: domain.payroll.v1.GetPayrollRunListPageDataResponse.error:type_name -> domain.common.v1.Error
+	25, // 23: domain.payroll.v1.GetPayrollRunListPageDataResponse.pagination:type_name -> domain.common.v1.PaginationResponse
+	26, // 24: domain.payroll.v1.GetPayrollRunListPageDataResponse.search_results:type_name -> domain.common.v1.SearchResult
+	20, // 25: domain.payroll.v1.GetPayrollRunListPageDataResponse.error:type_name -> domain.common.v1.Error
 	1,  // 26: domain.payroll.v1.GetPayrollRunItemPageDataResponse.payroll_run:type_name -> domain.payroll.v1.PayrollRun
-	16, // 27: domain.payroll.v1.GetPayrollRunItemPageDataResponse.error:type_name -> domain.common.v1.Error
-	2,  // 28: domain.payroll.v1.PayrollRunDomainService.CreatePayrollRun:input_type -> domain.payroll.v1.CreatePayrollRunRequest
-	4,  // 29: domain.payroll.v1.PayrollRunDomainService.ReadPayrollRun:input_type -> domain.payroll.v1.ReadPayrollRunRequest
-	6,  // 30: domain.payroll.v1.PayrollRunDomainService.UpdatePayrollRun:input_type -> domain.payroll.v1.UpdatePayrollRunRequest
-	8,  // 31: domain.payroll.v1.PayrollRunDomainService.DeletePayrollRun:input_type -> domain.payroll.v1.DeletePayrollRunRequest
-	10, // 32: domain.payroll.v1.PayrollRunDomainService.ListPayrollRuns:input_type -> domain.payroll.v1.ListPayrollRunsRequest
-	12, // 33: domain.payroll.v1.PayrollRunDomainService.GetPayrollRunListPageData:input_type -> domain.payroll.v1.GetPayrollRunListPageDataRequest
-	14, // 34: domain.payroll.v1.PayrollRunDomainService.GetPayrollRunItemPageData:input_type -> domain.payroll.v1.GetPayrollRunItemPageDataRequest
-	3,  // 35: domain.payroll.v1.PayrollRunDomainService.CreatePayrollRun:output_type -> domain.payroll.v1.CreatePayrollRunResponse
-	5,  // 36: domain.payroll.v1.PayrollRunDomainService.ReadPayrollRun:output_type -> domain.payroll.v1.ReadPayrollRunResponse
-	7,  // 37: domain.payroll.v1.PayrollRunDomainService.UpdatePayrollRun:output_type -> domain.payroll.v1.UpdatePayrollRunResponse
-	9,  // 38: domain.payroll.v1.PayrollRunDomainService.DeletePayrollRun:output_type -> domain.payroll.v1.DeletePayrollRunResponse
-	11, // 39: domain.payroll.v1.PayrollRunDomainService.ListPayrollRuns:output_type -> domain.payroll.v1.ListPayrollRunsResponse
-	13, // 40: domain.payroll.v1.PayrollRunDomainService.GetPayrollRunListPageData:output_type -> domain.payroll.v1.GetPayrollRunListPageDataResponse
-	15, // 41: domain.payroll.v1.PayrollRunDomainService.GetPayrollRunItemPageData:output_type -> domain.payroll.v1.GetPayrollRunItemPageDataResponse
-	35, // [35:42] is the sub-list for method output_type
-	28, // [28:35] is the sub-list for method input_type
-	28, // [28:28] is the sub-list for extension type_name
-	28, // [28:28] is the sub-list for extension extendee
-	0,  // [0:28] is the sub-list for field type_name
+	20, // 27: domain.payroll.v1.GetPayrollRunItemPageDataResponse.error:type_name -> domain.common.v1.Error
+	20, // 28: domain.payroll.v1.GeneratePayCyclesResponse.error:type_name -> domain.common.v1.Error
+	20, // 29: domain.payroll.v1.CalculatePayrollRunResponse.error:type_name -> domain.common.v1.Error
+	2,  // 30: domain.payroll.v1.PayrollRunDomainService.CreatePayrollRun:input_type -> domain.payroll.v1.CreatePayrollRunRequest
+	4,  // 31: domain.payroll.v1.PayrollRunDomainService.ReadPayrollRun:input_type -> domain.payroll.v1.ReadPayrollRunRequest
+	6,  // 32: domain.payroll.v1.PayrollRunDomainService.UpdatePayrollRun:input_type -> domain.payroll.v1.UpdatePayrollRunRequest
+	8,  // 33: domain.payroll.v1.PayrollRunDomainService.DeletePayrollRun:input_type -> domain.payroll.v1.DeletePayrollRunRequest
+	10, // 34: domain.payroll.v1.PayrollRunDomainService.ListPayrollRuns:input_type -> domain.payroll.v1.ListPayrollRunsRequest
+	12, // 35: domain.payroll.v1.PayrollRunDomainService.GetPayrollRunListPageData:input_type -> domain.payroll.v1.GetPayrollRunListPageDataRequest
+	14, // 36: domain.payroll.v1.PayrollRunDomainService.GetPayrollRunItemPageData:input_type -> domain.payroll.v1.GetPayrollRunItemPageDataRequest
+	16, // 37: domain.payroll.v1.PayrollRunDomainService.GeneratePayCycles:input_type -> domain.payroll.v1.GeneratePayCyclesRequest
+	18, // 38: domain.payroll.v1.PayrollRunDomainService.CalculatePayrollRun:input_type -> domain.payroll.v1.CalculatePayrollRunRequest
+	3,  // 39: domain.payroll.v1.PayrollRunDomainService.CreatePayrollRun:output_type -> domain.payroll.v1.CreatePayrollRunResponse
+	5,  // 40: domain.payroll.v1.PayrollRunDomainService.ReadPayrollRun:output_type -> domain.payroll.v1.ReadPayrollRunResponse
+	7,  // 41: domain.payroll.v1.PayrollRunDomainService.UpdatePayrollRun:output_type -> domain.payroll.v1.UpdatePayrollRunResponse
+	9,  // 42: domain.payroll.v1.PayrollRunDomainService.DeletePayrollRun:output_type -> domain.payroll.v1.DeletePayrollRunResponse
+	11, // 43: domain.payroll.v1.PayrollRunDomainService.ListPayrollRuns:output_type -> domain.payroll.v1.ListPayrollRunsResponse
+	13, // 44: domain.payroll.v1.PayrollRunDomainService.GetPayrollRunListPageData:output_type -> domain.payroll.v1.GetPayrollRunListPageDataResponse
+	15, // 45: domain.payroll.v1.PayrollRunDomainService.GetPayrollRunItemPageData:output_type -> domain.payroll.v1.GetPayrollRunItemPageDataResponse
+	17, // 46: domain.payroll.v1.PayrollRunDomainService.GeneratePayCycles:output_type -> domain.payroll.v1.GeneratePayCyclesResponse
+	19, // 47: domain.payroll.v1.PayrollRunDomainService.CalculatePayrollRun:output_type -> domain.payroll.v1.CalculatePayrollRunResponse
+	39, // [39:48] is the sub-list for method output_type
+	30, // [30:39] is the sub-list for method input_type
+	30, // [30:30] is the sub-list for extension type_name
+	30, // [30:30] is the sub-list for extension extendee
+	0,  // [0:30] is the sub-list for field type_name
 }
 
 func init() { file_domain_payroll_payroll_run_payroll_run_proto_init() }
@@ -1264,13 +1576,15 @@ func file_domain_payroll_payroll_run_payroll_run_proto_init() {
 	file_domain_payroll_payroll_run_payroll_run_proto_msgTypes[11].OneofWrappers = []any{}
 	file_domain_payroll_payroll_run_payroll_run_proto_msgTypes[12].OneofWrappers = []any{}
 	file_domain_payroll_payroll_run_payroll_run_proto_msgTypes[14].OneofWrappers = []any{}
+	file_domain_payroll_payroll_run_payroll_run_proto_msgTypes[16].OneofWrappers = []any{}
+	file_domain_payroll_payroll_run_payroll_run_proto_msgTypes[18].OneofWrappers = []any{}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
 		File: protoimpl.DescBuilder{
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_domain_payroll_payroll_run_payroll_run_proto_rawDesc), len(file_domain_payroll_payroll_run_payroll_run_proto_rawDesc)),
 			NumEnums:      1,
-			NumMessages:   15,
+			NumMessages:   19,
 			NumExtensions: 0,
 			NumServices:   1,
 		},

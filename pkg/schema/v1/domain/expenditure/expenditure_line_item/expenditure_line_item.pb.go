@@ -48,8 +48,16 @@ type ExpenditureLineItem struct {
 	PurchaseOrderLineItemId *string                  `protobuf:"bytes,20,opt,name=purchase_order_line_item_id,json=purchaseOrderLineItemId,proto3,oneof" json:"purchase_order_line_item_id,omitempty"` // FK to PO line for line-level 3-way match
 	// Supplier commitment back-edge
 	SupplierContractLineId *string `protobuf:"bytes,21,opt,name=supplier_contract_line_id,json=supplierContractLineId,proto3,oneof" json:"supplier_contract_line_id,omitempty"` // FK to supplier_contract_line (no DB constraint)
-	unknownFields          protoimpl.UnknownFields
-	sizeCache              protoimpl.SizeCache
+	// Payroll calculator provenance (only populated for Expenditure(type='payroll') lines).
+	// rate_table_id is pinned at calc time so reposting reproduces despite newer rate rows.
+	RateTableId        *string  `protobuf:"bytes,22,opt,name=rate_table_id,json=rateTableId,proto3,oneof" json:"rate_table_id,omitempty"`                       // FK to rate_table (no DB constraint)
+	PayCycleId         *string  `protobuf:"bytes,23,opt,name=pay_cycle_id,json=payCycleId,proto3,oneof" json:"pay_cycle_id,omitempty"`                          // FK to pay_cycle (no DB constraint)
+	AppliedBasisAmount *int64   `protobuf:"varint,24,opt,name=applied_basis_amount,json=appliedBasisAmount,proto3,oneof" json:"applied_basis_amount,omitempty"` // centavos — the salary basis the line applied to
+	ProrationFactor    *float64 `protobuf:"fixed64,25,opt,name=proration_factor,json=prorationFactor,proto3,oneof" json:"proration_factor,omitempty"`           // 0.0–1.0, for mid-cycle compensation changes
+	CalcMetadata       *string  `protobuf:"bytes,26,opt,name=calc_metadata,json=calcMetadata,proto3,oneof" json:"calc_metadata,omitempty"`                      // JSON-encoded calculator audit (pre/post split, formula refs)
+	LineKind           *string  `protobuf:"bytes,27,opt,name=line_kind,json=lineKind,proto3,oneof" json:"line_kind,omitempty"`                                  // "earning_basic" | "earning_allowance" | "deduction_statutory" |
+	unknownFields      protoimpl.UnknownFields
+	sizeCache          protoimpl.SizeCache
 }
 
 func (x *ExpenditureLineItem) Reset() {
@@ -218,6 +226,48 @@ func (x *ExpenditureLineItem) GetPurchaseOrderLineItemId() string {
 func (x *ExpenditureLineItem) GetSupplierContractLineId() string {
 	if x != nil && x.SupplierContractLineId != nil {
 		return *x.SupplierContractLineId
+	}
+	return ""
+}
+
+func (x *ExpenditureLineItem) GetRateTableId() string {
+	if x != nil && x.RateTableId != nil {
+		return *x.RateTableId
+	}
+	return ""
+}
+
+func (x *ExpenditureLineItem) GetPayCycleId() string {
+	if x != nil && x.PayCycleId != nil {
+		return *x.PayCycleId
+	}
+	return ""
+}
+
+func (x *ExpenditureLineItem) GetAppliedBasisAmount() int64 {
+	if x != nil && x.AppliedBasisAmount != nil {
+		return *x.AppliedBasisAmount
+	}
+	return 0
+}
+
+func (x *ExpenditureLineItem) GetProrationFactor() float64 {
+	if x != nil && x.ProrationFactor != nil {
+		return *x.ProrationFactor
+	}
+	return 0
+}
+
+func (x *ExpenditureLineItem) GetCalcMetadata() string {
+	if x != nil && x.CalcMetadata != nil {
+		return *x.CalcMetadata
+	}
+	return ""
+}
+
+func (x *ExpenditureLineItem) GetLineKind() string {
+	if x != nil && x.LineKind != nil {
+		return *x.LineKind
 	}
 	return ""
 }
@@ -1018,7 +1068,7 @@ var File_domain_expenditure_expenditure_line_item_expenditure_line_item_proto pr
 
 const file_domain_expenditure_expenditure_line_item_expenditure_line_item_proto_rawDesc = "" +
 	"\n" +
-	"Ddomain/expenditure/expenditure_line_item/expenditure_line_item.proto\x12\x15domain.expenditure.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/search.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a0domain/expenditure/expenditure/expenditure.proto\x1a$domain/product/product/product.proto\x1a\x10options/db.proto\"\x98\t\n" +
+	"Ddomain/expenditure/expenditure_line_item/expenditure_line_item.proto\x12\x15domain.expenditure.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/search.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a0domain/expenditure/expenditure/expenditure.proto\x1a$domain/product/product/product.proto\x1a\x10options/db.proto\"\x8c\f\n" +
 	"\x13ExpenditureLineItem\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12&\n" +
 	"\fdate_created\x18\x02 \x01(\x03H\x00R\vdateCreated\x88\x01\x01\x123\n" +
@@ -1049,7 +1099,14 @@ const file_domain_expenditure_expenditure_line_item_expenditure_line_item_proto_
 	"\x1bpurchase_order_line_item_id\x18\x14 \x01(\tB\x1e\x82\xb5\x18\x1a\n" +
 	"\x18purchase_order_line_itemH\n" +
 	"R\x17purchaseOrderLineItemId\x88\x01\x01\x12>\n" +
-	"\x19supplier_contract_line_id\x18\x15 \x01(\tH\vR\x16supplierContractLineId\x88\x01\x01B\x0f\n" +
+	"\x19supplier_contract_line_id\x18\x15 \x01(\tH\vR\x16supplierContractLineId\x88\x01\x01\x12'\n" +
+	"\rrate_table_id\x18\x16 \x01(\tH\fR\vrateTableId\x88\x01\x01\x12%\n" +
+	"\fpay_cycle_id\x18\x17 \x01(\tH\rR\n" +
+	"payCycleId\x88\x01\x01\x125\n" +
+	"\x14applied_basis_amount\x18\x18 \x01(\x03H\x0eR\x12appliedBasisAmount\x88\x01\x01\x12.\n" +
+	"\x10proration_factor\x18\x19 \x01(\x01H\x0fR\x0fprorationFactor\x88\x01\x01\x12(\n" +
+	"\rcalc_metadata\x18\x1a \x01(\tH\x10R\fcalcMetadata\x88\x01\x01\x12 \n" +
+	"\tline_kind\x18\x1b \x01(\tH\x11R\blineKind\x88\x01\x01B\x0f\n" +
 	"\r_date_createdB\x16\n" +
 	"\x14_date_created_stringB\x10\n" +
 	"\x0e_date_modifiedB\x17\n" +
@@ -1062,7 +1119,14 @@ const file_domain_expenditure_expenditure_line_item_expenditure_line_item_proto_
 	"\x12_inventory_item_idB\x0e\n" +
 	"\f_location_idB\x1e\n" +
 	"\x1c_purchase_order_line_item_idB\x1c\n" +
-	"\x1a_supplier_contract_line_id\"b\n" +
+	"\x1a_supplier_contract_line_idB\x10\n" +
+	"\x0e_rate_table_idB\x0f\n" +
+	"\r_pay_cycle_idB\x17\n" +
+	"\x15_applied_basis_amountB\x13\n" +
+	"\x11_proration_factorB\x10\n" +
+	"\x0e_calc_metadataB\f\n" +
+	"\n" +
+	"_line_kind\"b\n" +
 	" CreateExpenditureLineItemRequest\x12>\n" +
 	"\x04data\x18\x01 \x01(\v2*.domain.expenditure.v1.ExpenditureLineItemR\x04data\"\xbb\x01\n" +
 	"!CreateExpenditureLineItemResponse\x12>\n" +

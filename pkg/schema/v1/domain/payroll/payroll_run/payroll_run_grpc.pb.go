@@ -26,6 +26,8 @@ const (
 	PayrollRunDomainService_ListPayrollRuns_FullMethodName           = "/domain.payroll.v1.PayrollRunDomainService/ListPayrollRuns"
 	PayrollRunDomainService_GetPayrollRunListPageData_FullMethodName = "/domain.payroll.v1.PayrollRunDomainService/GetPayrollRunListPageData"
 	PayrollRunDomainService_GetPayrollRunItemPageData_FullMethodName = "/domain.payroll.v1.PayrollRunDomainService/GetPayrollRunItemPageData"
+	PayrollRunDomainService_GeneratePayCycles_FullMethodName         = "/domain.payroll.v1.PayrollRunDomainService/GeneratePayCycles"
+	PayrollRunDomainService_CalculatePayrollRun_FullMethodName       = "/domain.payroll.v1.PayrollRunDomainService/CalculatePayrollRun"
 )
 
 // PayrollRunDomainServiceClient is the client API for PayrollRunDomainService service.
@@ -41,6 +43,9 @@ type PayrollRunDomainServiceClient interface {
 	// Enhanced page data (for UI views)
 	GetPayrollRunListPageData(ctx context.Context, in *GetPayrollRunListPageDataRequest, opts ...grpc.CallOption) (*GetPayrollRunListPageDataResponse, error)
 	GetPayrollRunItemPageData(ctx context.Context, in *GetPayrollRunItemPageDataRequest, opts ...grpc.CallOption) (*GetPayrollRunItemPageDataResponse, error)
+	// Orchestration
+	GeneratePayCycles(ctx context.Context, in *GeneratePayCyclesRequest, opts ...grpc.CallOption) (*GeneratePayCyclesResponse, error)
+	CalculatePayrollRun(ctx context.Context, in *CalculatePayrollRunRequest, opts ...grpc.CallOption) (*CalculatePayrollRunResponse, error)
 }
 
 type payrollRunDomainServiceClient struct {
@@ -121,6 +126,26 @@ func (c *payrollRunDomainServiceClient) GetPayrollRunItemPageData(ctx context.Co
 	return out, nil
 }
 
+func (c *payrollRunDomainServiceClient) GeneratePayCycles(ctx context.Context, in *GeneratePayCyclesRequest, opts ...grpc.CallOption) (*GeneratePayCyclesResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(GeneratePayCyclesResponse)
+	err := c.cc.Invoke(ctx, PayrollRunDomainService_GeneratePayCycles_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *payrollRunDomainServiceClient) CalculatePayrollRun(ctx context.Context, in *CalculatePayrollRunRequest, opts ...grpc.CallOption) (*CalculatePayrollRunResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(CalculatePayrollRunResponse)
+	err := c.cc.Invoke(ctx, PayrollRunDomainService_CalculatePayrollRun_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // PayrollRunDomainServiceServer is the server API for PayrollRunDomainService service.
 // All implementations must embed UnimplementedPayrollRunDomainServiceServer
 // for forward compatibility.
@@ -134,6 +159,9 @@ type PayrollRunDomainServiceServer interface {
 	// Enhanced page data (for UI views)
 	GetPayrollRunListPageData(context.Context, *GetPayrollRunListPageDataRequest) (*GetPayrollRunListPageDataResponse, error)
 	GetPayrollRunItemPageData(context.Context, *GetPayrollRunItemPageDataRequest) (*GetPayrollRunItemPageDataResponse, error)
+	// Orchestration
+	GeneratePayCycles(context.Context, *GeneratePayCyclesRequest) (*GeneratePayCyclesResponse, error)
+	CalculatePayrollRun(context.Context, *CalculatePayrollRunRequest) (*CalculatePayrollRunResponse, error)
 	mustEmbedUnimplementedPayrollRunDomainServiceServer()
 }
 
@@ -164,6 +192,12 @@ func (UnimplementedPayrollRunDomainServiceServer) GetPayrollRunListPageData(cont
 }
 func (UnimplementedPayrollRunDomainServiceServer) GetPayrollRunItemPageData(context.Context, *GetPayrollRunItemPageDataRequest) (*GetPayrollRunItemPageDataResponse, error) {
 	return nil, status.Error(codes.Unimplemented, "method GetPayrollRunItemPageData not implemented")
+}
+func (UnimplementedPayrollRunDomainServiceServer) GeneratePayCycles(context.Context, *GeneratePayCyclesRequest) (*GeneratePayCyclesResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method GeneratePayCycles not implemented")
+}
+func (UnimplementedPayrollRunDomainServiceServer) CalculatePayrollRun(context.Context, *CalculatePayrollRunRequest) (*CalculatePayrollRunResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method CalculatePayrollRun not implemented")
 }
 func (UnimplementedPayrollRunDomainServiceServer) mustEmbedUnimplementedPayrollRunDomainServiceServer() {
 }
@@ -313,6 +347,42 @@ func _PayrollRunDomainService_GetPayrollRunItemPageData_Handler(srv interface{},
 	return interceptor(ctx, in, info, handler)
 }
 
+func _PayrollRunDomainService_GeneratePayCycles_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GeneratePayCyclesRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(PayrollRunDomainServiceServer).GeneratePayCycles(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: PayrollRunDomainService_GeneratePayCycles_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(PayrollRunDomainServiceServer).GeneratePayCycles(ctx, req.(*GeneratePayCyclesRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _PayrollRunDomainService_CalculatePayrollRun_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(CalculatePayrollRunRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(PayrollRunDomainServiceServer).CalculatePayrollRun(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: PayrollRunDomainService_CalculatePayrollRun_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(PayrollRunDomainServiceServer).CalculatePayrollRun(ctx, req.(*CalculatePayrollRunRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // PayrollRunDomainService_ServiceDesc is the grpc.ServiceDesc for PayrollRunDomainService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -347,6 +417,14 @@ var PayrollRunDomainService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "GetPayrollRunItemPageData",
 			Handler:    _PayrollRunDomainService_GetPayrollRunItemPageData_Handler,
+		},
+		{
+			MethodName: "GeneratePayCycles",
+			Handler:    _PayrollRunDomainService_GeneratePayCycles_Handler,
+		},
+		{
+			MethodName: "CalculatePayrollRun",
+			Handler:    _PayrollRunDomainService_CalculatePayrollRun_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

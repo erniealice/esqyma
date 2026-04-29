@@ -1,0 +1,96 @@
+syntax = "proto3";
+
+package domain.payroll.v1;
+
+option go_package = "github.com/erniealice/esqyma/golang/v1/domain/payroll/leave_request";
+
+import "domain/common/error.proto";
+import "domain/common/pagination.proto";
+import "domain/common/filter.proto";
+import "domain/common/sort.proto";
+import "domain/common/search.proto";
+
+import "options/db.proto";
+
+// LeaveRequestStatus drives the approval state machine.
+enum LeaveRequestStatus {
+  LEAVE_REQUEST_STATUS_UNSPECIFIED = 0;
+  LEAVE_REQUEST_STATUS_DRAFT       = 1;
+  LEAVE_REQUEST_STATUS_SUBMITTED   = 2;
+  LEAVE_REQUEST_STATUS_APPROVED    = 3;
+  LEAVE_REQUEST_STATUS_REJECTED    = 4;
+  LEAVE_REQUEST_STATUS_CANCELLED   = 5;
+}
+
+// LeaveRequest is the per-employee leave request workflow.
+message LeaveRequest {
+  option (options.v1.table).table = true;
+
+  string id = 1;
+  string workspace_id = 2 [(options.v1.db).references = "workspace", (options.v1.db).index = true];
+  string supplier_id = 3 [(options.v1.db).references = "supplier", (options.v1.db).index = true];
+  string leave_type_id = 4 [(options.v1.db).references = "leave_type", (options.v1.db).index = true];
+
+  string start_date = 5;     // ISO 8601 date
+  string end_date = 6;       // ISO 8601 date
+  int32 days = 7;
+
+  LeaveRequestStatus status = 8 [(options.v1.db).index = true];
+  optional string approved_by_user_id = 9;
+  optional string reason = 10;
+  optional string approved_on = 11;  // ISO 8601 datetime
+
+  // Audit
+  bool active = 12 [(options.v1.db).default = "true"];
+  optional int64 date_created = 13;
+  optional string date_created_string = 14;
+  optional int64 date_modified = 15;
+  optional string date_modified_string = 16;
+}
+
+service LeaveRequestDomainService {
+  rpc CreateLeaveRequest(CreateLeaveRequestRequest) returns (CreateLeaveRequestResponse);
+  rpc ReadLeaveRequest(ReadLeaveRequestRequest) returns (ReadLeaveRequestResponse);
+  rpc UpdateLeaveRequest(UpdateLeaveRequestRequest) returns (UpdateLeaveRequestResponse);
+  rpc DeleteLeaveRequest(DeleteLeaveRequestRequest) returns (DeleteLeaveRequestResponse);
+  rpc ListLeaveRequests(ListLeaveRequestsRequest) returns (ListLeaveRequestsResponse);
+  rpc GetLeaveRequestListPageData(GetLeaveRequestListPageDataRequest) returns (GetLeaveRequestListPageDataResponse);
+  rpc GetLeaveRequestItemPageData(GetLeaveRequestItemPageDataRequest) returns (GetLeaveRequestItemPageDataResponse);
+}
+
+message CreateLeaveRequestRequest { LeaveRequest data = 1; }
+message CreateLeaveRequestResponse { repeated LeaveRequest data = 1; bool success = 2; optional domain.common.v1.Error error = 3; }
+message ReadLeaveRequestRequest { LeaveRequest data = 1; }
+message ReadLeaveRequestResponse { repeated LeaveRequest data = 1; bool success = 2; optional domain.common.v1.Error error = 3; }
+message UpdateLeaveRequestRequest { LeaveRequest data = 1; }
+message UpdateLeaveRequestResponse { repeated LeaveRequest data = 1; bool success = 2; optional domain.common.v1.Error error = 3; }
+message DeleteLeaveRequestRequest { LeaveRequest data = 1; }
+message DeleteLeaveRequestResponse { bool success = 1; optional domain.common.v1.Error error = 2; }
+
+message ListLeaveRequestsRequest {
+  optional domain.common.v1.SearchRequest search = 1;
+  optional domain.common.v1.FilterRequest filters = 2;
+  optional domain.common.v1.SortRequest sort = 3;
+  optional domain.common.v1.PaginationRequest pagination = 4;
+}
+message ListLeaveRequestsResponse { repeated LeaveRequest data = 1; bool success = 2; optional domain.common.v1.Error error = 3; }
+
+message GetLeaveRequestListPageDataRequest {
+  optional domain.common.v1.PaginationRequest pagination = 1;
+  optional domain.common.v1.FilterRequest filters = 2;
+  optional domain.common.v1.SortRequest sort = 3;
+  optional domain.common.v1.SearchRequest search = 4;
+}
+message GetLeaveRequestListPageDataResponse {
+  repeated LeaveRequest leave_request_list = 1;
+  optional domain.common.v1.PaginationResponse pagination = 2;
+  repeated domain.common.v1.SearchResult search_results = 3;
+  bool success = 4;
+  optional domain.common.v1.Error error = 5;
+}
+message GetLeaveRequestItemPageDataRequest { string leave_request_id = 1; }
+message GetLeaveRequestItemPageDataResponse {
+  optional LeaveRequest leave_request = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}

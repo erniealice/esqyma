@@ -241,7 +241,7 @@ CREATE TABLE IF NOT EXISTS "user" (
   "date_created" TIMESTAMPTZ DEFAULT NOW(),
   "date_modified" TIMESTAMPTZ DEFAULT NOW(),
   "active" BOOLEAN NOT NULL DEFAULT true,
-  "timezone" TEXT NULL DEFAULT Asia/Manila
+  "timezone" TEXT NULL DEFAULT 'Asia/Manila'
 );
 
 -- Table: line
@@ -269,7 +269,7 @@ CREATE TABLE IF NOT EXISTS "product" (
   "delivery_mode" TEXT NOT NULL,
   "tracking_mode" TEXT NOT NULL,
   "unit" TEXT NULL,
-  "variant_mode" TEXT NOT NULL DEFAULT none
+  "variant_mode" TEXT NOT NULL DEFAULT 'none'
 );
 
 -- Table: resource
@@ -366,7 +366,7 @@ CREATE TABLE IF NOT EXISTS "location" (
   "date_modified" TIMESTAMPTZ DEFAULT NOW(),
   "active" BOOLEAN NOT NULL DEFAULT true,
   "description" TEXT NULL,
-  "timezone" TEXT NULL DEFAULT Asia/Manila,
+  "timezone" TEXT NULL DEFAULT 'Asia/Manila',
   "location_area_id" TEXT NULL,
   "workspace_id" TEXT NULL
 );

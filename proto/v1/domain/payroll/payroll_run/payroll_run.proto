@@ -54,6 +54,11 @@ message PayrollRun {
   optional string date_created_string = 16;
   optional int64 date_modified = 17;
   optional string date_modified_string = 18;
+
+  // Jurisdiction routing & calculator audit
+  optional string compliance_region = 19;   // mirrors Workspace.compliance_region at run start
+  optional string calculator_version = 20;  // e.g. "PH-2026.04" — frozen audit string
+  optional string workspace_id = 21 [(options.v1.db).references = "workspace", (options.v1.db).index = true];
 }
 
 service PayrollRunDomainService {
@@ -67,6 +72,10 @@ service PayrollRunDomainService {
   // Enhanced page data (for UI views)
   rpc GetPayrollRunListPageData(GetPayrollRunListPageDataRequest) returns (GetPayrollRunListPageDataResponse);
   rpc GetPayrollRunItemPageData(GetPayrollRunItemPageDataRequest) returns (GetPayrollRunItemPageDataResponse);
+
+  // Orchestration
+  rpc GeneratePayCycles(GeneratePayCyclesRequest) returns (GeneratePayCyclesResponse);
+  rpc CalculatePayrollRun(CalculatePayrollRunRequest) returns (CalculatePayrollRunResponse);
 }
 
 message CreatePayrollRunRequest {
@@ -144,4 +153,29 @@ message GetPayrollRunItemPageDataResponse {
   optional PayrollRun payroll_run = 1;
   bool success = 2;
   optional domain.common.v1.Error error = 3;
+}
+
+// Orchestration request/response types.
+
+message GeneratePayCyclesRequest {
+  string payroll_run_id = 1;
+}
+message GeneratePayCyclesResponse {
+  string payroll_run_id = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message CalculatePayrollRunRequest {
+  string payroll_run_id = 1;
+}
+message CalculatePayrollRunResponse {
+  string payroll_run_id = 1;
+  int32 cycles_processed = 2;
+  int32 employees_paid = 3;
+  int64 total_gross = 4;
+  int64 total_deductions = 5;
+  int64 total_net = 6;
+  bool success = 7;
+  optional domain.common.v1.Error error = 8;
 }

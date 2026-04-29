@@ -23,6 +23,23 @@ enum SupplierContractLineTreatment {
   SUPPLIER_CONTRACT_LINE_TREATMENT_MINIMUM_COMMITMENT  = 4;  // floor commitment (pay-at-least-X)
 }
 
+// SupplierContractLineKind discriminates the role of a line within a contract.
+// Single global enum covering vendor + employment lines (use case validates
+// kind ↔ contract.kind compatibility).
+enum SupplierContractLineKind {
+  SUPPLIER_CONTRACT_LINE_KIND_UNSPECIFIED        = 0;
+  SUPPLIER_CONTRACT_LINE_KIND_GOODS              = 1;
+  SUPPLIER_CONTRACT_LINE_KIND_SERVICE            = 2;
+  SUPPLIER_CONTRACT_LINE_KIND_EXPENSE            = 3;
+  // Employment-only kinds:
+  SUPPLIER_CONTRACT_LINE_KIND_BASIC_SALARY        = 10; // taxable, statutory base
+  SUPPLIER_CONTRACT_LINE_KIND_ALLOWANCE_TAXABLE   = 11; // fully taxable allowance
+  SUPPLIER_CONTRACT_LINE_KIND_ALLOWANCE_DE_MINIMIS = 12; // tax-exempt up to BIR ceiling
+  SUPPLIER_CONTRACT_LINE_KIND_RECURRING_BONUS     = 13; // 13th-month / supplementary
+  SUPPLIER_CONTRACT_LINE_KIND_LOAN_AMORTIZATION   = 14; // SSS/Pag-IBIG/company loan deduction
+  SUPPLIER_CONTRACT_LINE_KIND_COMPANY_DEDUCTION   = 15; // company-authorized non-loan deduction
+}
+
 // SupplierContractLine is a line item within a SupplierContract.
 // Real contracts often have multiple lines: "50 seats @ $10/mo + 100GB storage @ $0.50/GB".
 // Each line may have its own treatment, account, and date window.
@@ -69,6 +86,10 @@ message SupplierContractLine {
   optional string date_created_string = 20;
   optional int64 date_modified = 21;
   optional string date_modified_string = 22;
+
+  // Discriminator for line role (drives payroll calculator routing for employment
+  // contract lines; ignored for vendor contracts where line_type is sufficient).
+  optional SupplierContractLineKind kind = 23 [(options.v1.db).index = true];
 }
 
 service SupplierContractLineDomainService {

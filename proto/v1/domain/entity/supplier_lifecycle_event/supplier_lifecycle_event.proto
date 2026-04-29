@@ -1,0 +1,85 @@
+syntax = "proto3";
+
+package domain.entity.v1;
+
+option go_package = "github.com/erniealice/esqyma/golang/v1/domain/entity/supplier_lifecycle_event";
+
+import "domain/common/error.proto";
+import "domain/common/pagination.proto";
+import "domain/common/filter.proto";
+import "domain/common/sort.proto";
+import "domain/common/search.proto";
+
+import "options/db.proto";
+
+// SupplierLifecycleEvent is an append-only audit-log row for status changes on
+// a supplier counterparty. UI shows a reverse-chronological timeline.
+//
+// Q13 decision: single global enum-as-string for `kind`, with `category` field
+// for UI filters (employee | vendor | regulator).
+message SupplierLifecycleEvent {
+  option (options.v1.table).table = true;
+
+  string id = 1;
+  string workspace_id = 2 [(options.v1.db).references = "workspace", (options.v1.db).index = true];
+  string supplier_id = 3 [(options.v1.db).references = "supplier", (options.v1.db).index = true];
+
+  // "HIRED" | "REGULARIZED" | "PROMOTED" | "TRANSFERRED" | "SUSPENDED" |
+  // "TERMINATED" | "ONBOARDED" | "BLACKLISTED" | "REINSTATED" | "OFFBOARDED"
+  string kind = 4 [(options.v1.db).index = true];
+
+  // "employee" | "vendor" | "regulator" — drives UI filter chips.
+  string category = 5 [(options.v1.db).index = true];
+
+  string event_date = 6;                   // ISO 8601 date
+  optional string supplier_contract_id = 7; // FK — the contract this event created/closed (no DB constraint)
+  optional string actor_user_id = 8;
+  optional string reason = 9;
+  optional string metadata = 10;            // JSON-encoded jsonb
+
+  // Audit (creation only — append-only entity)
+  bool active = 11 [(options.v1.db).default = "true"];
+  optional int64 date_created = 12;
+  optional string date_created_string = 13;
+}
+
+service SupplierLifecycleEventDomainService {
+  rpc CreateSupplierLifecycleEvent(CreateSupplierLifecycleEventRequest) returns (CreateSupplierLifecycleEventResponse);
+  rpc ReadSupplierLifecycleEvent(ReadSupplierLifecycleEventRequest) returns (ReadSupplierLifecycleEventResponse);
+  rpc ListSupplierLifecycleEvents(ListSupplierLifecycleEventsRequest) returns (ListSupplierLifecycleEventsResponse);
+  rpc GetSupplierLifecycleEventListPageData(GetSupplierLifecycleEventListPageDataRequest) returns (GetSupplierLifecycleEventListPageDataResponse);
+  rpc GetSupplierLifecycleEventItemPageData(GetSupplierLifecycleEventItemPageDataRequest) returns (GetSupplierLifecycleEventItemPageDataResponse);
+}
+
+message CreateSupplierLifecycleEventRequest { SupplierLifecycleEvent data = 1; }
+message CreateSupplierLifecycleEventResponse { repeated SupplierLifecycleEvent data = 1; bool success = 2; optional domain.common.v1.Error error = 3; }
+message ReadSupplierLifecycleEventRequest { SupplierLifecycleEvent data = 1; }
+message ReadSupplierLifecycleEventResponse { repeated SupplierLifecycleEvent data = 1; bool success = 2; optional domain.common.v1.Error error = 3; }
+
+message ListSupplierLifecycleEventsRequest {
+  optional domain.common.v1.SearchRequest search = 1;
+  optional domain.common.v1.FilterRequest filters = 2;
+  optional domain.common.v1.SortRequest sort = 3;
+  optional domain.common.v1.PaginationRequest pagination = 4;
+}
+message ListSupplierLifecycleEventsResponse { repeated SupplierLifecycleEvent data = 1; bool success = 2; optional domain.common.v1.Error error = 3; }
+
+message GetSupplierLifecycleEventListPageDataRequest {
+  optional domain.common.v1.PaginationRequest pagination = 1;
+  optional domain.common.v1.FilterRequest filters = 2;
+  optional domain.common.v1.SortRequest sort = 3;
+  optional domain.common.v1.SearchRequest search = 4;
+}
+message GetSupplierLifecycleEventListPageDataResponse {
+  repeated SupplierLifecycleEvent supplier_lifecycle_event_list = 1;
+  optional domain.common.v1.PaginationResponse pagination = 2;
+  repeated domain.common.v1.SearchResult search_results = 3;
+  bool success = 4;
+  optional domain.common.v1.Error error = 5;
+}
+message GetSupplierLifecycleEventItemPageDataRequest { string supplier_lifecycle_event_id = 1; }
+message GetSupplierLifecycleEventItemPageDataResponse {
+  optional SupplierLifecycleEvent supplier_lifecycle_event = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}

@@ -1,0 +1,98 @@
+syntax = "proto3";
+
+package domain.payroll.v1;
+
+option go_package = "github.com/erniealice/esqyma/golang/v1/domain/payroll/rate_band";
+
+import "domain/common/error.proto";
+import "domain/common/pagination.proto";
+import "domain/common/filter.proto";
+import "domain/common/sort.proto";
+import "domain/common/search.proto";
+
+import "options/db.proto";
+
+// RateBand is one bracket within a RateTable.
+//
+// Examples:
+//   SSS_EMPLOYEE_SHARE: {lower: 0, upper: 5249, rate_type: "fixed", fixed_amount: 25000}  (250 PHP in centavos)
+//   BIR_WITHHOLDING_SEMI_MONTHLY: {lower: 16667_00, upper: 33332_00, rate_type: "percentage_of_excess",
+//                                   fixed_amount: 93750, rate_basis_points: 2000}  (15% over 16,667 + 937.50)
+message RateBand {
+  option (options.v1.table).table = true;
+
+  string id = 1;
+  string rate_table_id = 2 [(options.v1.db).references = "rate_table", (options.v1.db).index = true];
+
+  // Bracket window — both bounds in centavos.
+  int64 lower_bound_centavos = 3;
+  optional int64 upper_bound_centavos = 4;  // null = uncapped
+
+  // Rate calculation.
+  // rate_type ∈ {"percentage", "fixed", "percentage_of_excess", "formula"}
+  string rate_type = 5;
+  int32 rate_basis_points = 6;        // for percentage / percentage_of_excess (10000 = 100%)
+  int64 fixed_amount_centavos = 7;    // for fixed; also the additive constant for percentage_of_excess
+  optional string formula_expression = 8;  // for "formula" rate_type
+
+  // Display ordering within the table
+  int32 ordinal = 9;
+
+  // Free-form metadata for jurisdictional quirks (e.g., MPF/WISP split, EC employer-only flag).
+  optional string metadata = 10; // JSON-encoded map
+
+  // Audit
+  bool active = 11 [(options.v1.db).default = "true"];
+  optional int64 date_created = 12;
+  optional string date_created_string = 13;
+  optional int64 date_modified = 14;
+  optional string date_modified_string = 15;
+}
+
+service RateBandDomainService {
+  rpc CreateRateBand(CreateRateBandRequest) returns (CreateRateBandResponse);
+  rpc ReadRateBand(ReadRateBandRequest) returns (ReadRateBandResponse);
+  rpc UpdateRateBand(UpdateRateBandRequest) returns (UpdateRateBandResponse);
+  rpc DeleteRateBand(DeleteRateBandRequest) returns (DeleteRateBandResponse);
+  rpc ListRateBands(ListRateBandsRequest) returns (ListRateBandsResponse);
+  rpc GetRateBandListPageData(GetRateBandListPageDataRequest) returns (GetRateBandListPageDataResponse);
+  rpc GetRateBandItemPageData(GetRateBandItemPageDataRequest) returns (GetRateBandItemPageDataResponse);
+}
+
+message CreateRateBandRequest { RateBand data = 1; }
+message CreateRateBandResponse { repeated RateBand data = 1; bool success = 2; optional domain.common.v1.Error error = 3; }
+message ReadRateBandRequest { RateBand data = 1; }
+message ReadRateBandResponse { repeated RateBand data = 1; bool success = 2; optional domain.common.v1.Error error = 3; }
+message UpdateRateBandRequest { RateBand data = 1; }
+message UpdateRateBandResponse { repeated RateBand data = 1; bool success = 2; optional domain.common.v1.Error error = 3; }
+message DeleteRateBandRequest { RateBand data = 1; }
+message DeleteRateBandResponse { bool success = 1; optional domain.common.v1.Error error = 2; }
+
+message ListRateBandsRequest {
+  optional string rate_table_id = 1;
+  optional domain.common.v1.SearchRequest search = 2;
+  optional domain.common.v1.FilterRequest filters = 3;
+  optional domain.common.v1.SortRequest sort = 4;
+  optional domain.common.v1.PaginationRequest pagination = 5;
+}
+message ListRateBandsResponse { repeated RateBand data = 1; bool success = 2; optional domain.common.v1.Error error = 3; }
+
+message GetRateBandListPageDataRequest {
+  optional domain.common.v1.PaginationRequest pagination = 1;
+  optional domain.common.v1.FilterRequest filters = 2;
+  optional domain.common.v1.SortRequest sort = 3;
+  optional domain.common.v1.SearchRequest search = 4;
+}
+message GetRateBandListPageDataResponse {
+  repeated RateBand rate_band_list = 1;
+  optional domain.common.v1.PaginationResponse pagination = 2;
+  repeated domain.common.v1.SearchResult search_results = 3;
+  bool success = 4;
+  optional domain.common.v1.Error error = 5;
+}
+message GetRateBandItemPageDataRequest { string rate_band_id = 1; }
+message GetRateBandItemPageDataResponse {
+  optional RateBand rate_band = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}

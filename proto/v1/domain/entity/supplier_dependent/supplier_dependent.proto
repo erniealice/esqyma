@@ -1,0 +1,88 @@
+syntax = "proto3";
+
+package domain.entity.v1;
+
+option go_package = "github.com/erniealice/esqyma/golang/v1/domain/entity/supplier_dependent";
+
+import "domain/common/error.proto";
+import "domain/common/pagination.proto";
+import "domain/common/filter.proto";
+import "domain/common/sort.proto";
+import "domain/common/search.proto";
+
+import "options/db.proto";
+
+// SupplierDependent is a kind-agnostic relation table for spouses, children,
+// guarantors, beneficial owners, etc. For Supplier(kind='employee') it carries
+// PH dependent metadata for PhilHealth and BIR 2305.
+message SupplierDependent {
+  option (options.v1.table).table = true;
+
+  string id = 1;
+  string workspace_id = 2 [(options.v1.db).references = "workspace", (options.v1.db).index = true];
+  string supplier_id = 3 [(options.v1.db).references = "supplier", (options.v1.db).index = true];
+
+  string full_name = 4;
+  string relationship = 5;            // "SPOUSE" | "CHILD" | "PARENT" | "GUARANTOR" | "BENEFICIAL_OWNER"
+  optional string date_of_birth = 6;  // ISO 8601 date
+
+  // Employee-specific (PH)
+  bool philhealth_enrolled = 7 [(options.v1.db).default = "false"];
+  bool bir_dependent = 8 [(options.v1.db).default = "false"];
+
+  optional string metadata = 9;       // JSON-encoded
+
+  // Audit
+  bool active = 10 [(options.v1.db).default = "true"];
+  optional int64 date_created = 11;
+  optional string date_created_string = 12;
+  optional int64 date_modified = 13;
+  optional string date_modified_string = 14;
+}
+
+service SupplierDependentDomainService {
+  rpc CreateSupplierDependent(CreateSupplierDependentRequest) returns (CreateSupplierDependentResponse);
+  rpc ReadSupplierDependent(ReadSupplierDependentRequest) returns (ReadSupplierDependentResponse);
+  rpc UpdateSupplierDependent(UpdateSupplierDependentRequest) returns (UpdateSupplierDependentResponse);
+  rpc DeleteSupplierDependent(DeleteSupplierDependentRequest) returns (DeleteSupplierDependentResponse);
+  rpc ListSupplierDependents(ListSupplierDependentsRequest) returns (ListSupplierDependentsResponse);
+  rpc GetSupplierDependentListPageData(GetSupplierDependentListPageDataRequest) returns (GetSupplierDependentListPageDataResponse);
+  rpc GetSupplierDependentItemPageData(GetSupplierDependentItemPageDataRequest) returns (GetSupplierDependentItemPageDataResponse);
+}
+
+message CreateSupplierDependentRequest { SupplierDependent data = 1; }
+message CreateSupplierDependentResponse { repeated SupplierDependent data = 1; bool success = 2; optional domain.common.v1.Error error = 3; }
+message ReadSupplierDependentRequest { SupplierDependent data = 1; }
+message ReadSupplierDependentResponse { repeated SupplierDependent data = 1; bool success = 2; optional domain.common.v1.Error error = 3; }
+message UpdateSupplierDependentRequest { SupplierDependent data = 1; }
+message UpdateSupplierDependentResponse { repeated SupplierDependent data = 1; bool success = 2; optional domain.common.v1.Error error = 3; }
+message DeleteSupplierDependentRequest { SupplierDependent data = 1; }
+message DeleteSupplierDependentResponse { bool success = 1; optional domain.common.v1.Error error = 2; }
+
+message ListSupplierDependentsRequest {
+  optional domain.common.v1.SearchRequest search = 1;
+  optional domain.common.v1.FilterRequest filters = 2;
+  optional domain.common.v1.SortRequest sort = 3;
+  optional domain.common.v1.PaginationRequest pagination = 4;
+}
+message ListSupplierDependentsResponse { repeated SupplierDependent data = 1; bool success = 2; optional domain.common.v1.Error error = 3; }
+
+message GetSupplierDependentListPageDataRequest {
+  optional domain.common.v1.PaginationRequest pagination = 1;
+  optional domain.common.v1.FilterRequest filters = 2;
+  optional domain.common.v1.SortRequest sort = 3;
+  optional domain.common.v1.SearchRequest search = 4;
+}
+message GetSupplierDependentListPageDataResponse {
+  repeated SupplierDependent supplier_dependent_list = 1;
+  optional domain.common.v1.PaginationResponse pagination = 2;
+  repeated domain.common.v1.SearchResult search_results = 3;
+  bool success = 4;
+  optional domain.common.v1.Error error = 5;
+}
+message GetSupplierDependentItemPageDataRequest { string supplier_dependent_id = 1; }
+message GetSupplierDependentItemPageDataResponse {
+  optional SupplierDependent supplier_dependent = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
