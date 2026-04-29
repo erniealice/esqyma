@@ -41,8 +41,21 @@ type JobTemplatePhase struct {
 	RunMinutesPerUnit          *float64                  `protobuf:"fixed64,13,opt,name=run_minutes_per_unit,json=runMinutesPerUnit,proto3,oneof" json:"run_minutes_per_unit,omitempty"`
 	TeardownMinutes            *int32                    `protobuf:"varint,14,opt,name=teardown_minutes,json=teardownMinutes,proto3,oneof" json:"teardown_minutes,omitempty"`
 	PredecessorTemplatePhaseId *string                   `protobuf:"bytes,15,opt,name=predecessor_template_phase_id,json=predecessorTemplatePhaseId,proto3,oneof" json:"predecessor_template_phase_id,omitempty"`
-	unknownFields              protoimpl.UnknownFields
-	sizeCache                  protoimpl.SizeCache
+	// Milestone billing weight fields. Active only when parent JobTemplate's
+	// pricing flows through a PricePlan with billing_kind = MILESTONE.
+	// Presence rules:
+	//
+	//	triggers_billing=false   → internal phase, no event materializes
+	//	triggers_billing=true + billing_percent_bps set, billing_amount null → percent of parent PricePlan total
+	//	triggers_billing=true + billing_amount set, billing_percent_bps null → fixed centavos
+	//	triggers_billing=true + both null → derive from sum of ProductPricePlan rows tagged with this phase
+	//	triggers_billing=true + both set → reject (ambiguous)
+	TriggersBilling   *bool   `protobuf:"varint,16,opt,name=triggers_billing,json=triggersBilling,proto3,oneof" json:"triggers_billing,omitempty"`
+	BillingPercentBps *int32  `protobuf:"varint,17,opt,name=billing_percent_bps,json=billingPercentBps,proto3,oneof" json:"billing_percent_bps,omitempty"` // 10000 = 100% of PricePlan total
+	BillingAmount     *int64  `protobuf:"varint,18,opt,name=billing_amount,json=billingAmount,proto3,oneof" json:"billing_amount,omitempty"`               // centavos; fixed override (mutually exclusive w/ percent)
+	BillingCurrency   *string `protobuf:"bytes,19,opt,name=billing_currency,json=billingCurrency,proto3,oneof" json:"billing_currency,omitempty"`          // ISO 4217; only meaningful when fixed billing_amount used
+	unknownFields     protoimpl.UnknownFields
+	sizeCache         protoimpl.SizeCache
 }
 
 func (x *JobTemplatePhase) Reset() {
@@ -176,6 +189,34 @@ func (x *JobTemplatePhase) GetTeardownMinutes() int32 {
 func (x *JobTemplatePhase) GetPredecessorTemplatePhaseId() string {
 	if x != nil && x.PredecessorTemplatePhaseId != nil {
 		return *x.PredecessorTemplatePhaseId
+	}
+	return ""
+}
+
+func (x *JobTemplatePhase) GetTriggersBilling() bool {
+	if x != nil && x.TriggersBilling != nil {
+		return *x.TriggersBilling
+	}
+	return false
+}
+
+func (x *JobTemplatePhase) GetBillingPercentBps() int32 {
+	if x != nil && x.BillingPercentBps != nil {
+		return *x.BillingPercentBps
+	}
+	return 0
+}
+
+func (x *JobTemplatePhase) GetBillingAmount() int64 {
+	if x != nil && x.BillingAmount != nil {
+		return *x.BillingAmount
+	}
+	return 0
+}
+
+func (x *JobTemplatePhase) GetBillingCurrency() string {
+	if x != nil && x.BillingCurrency != nil {
+		return *x.BillingCurrency
 	}
 	return ""
 }
@@ -1073,7 +1114,7 @@ var File_domain_operation_job_template_phase_job_template_phase_proto protorefle
 
 const file_domain_operation_job_template_phase_job_template_phase_proto_rawDesc = "" +
 	"\n" +
-	"<domain/operation/job_template_phase/job_template_phase.proto\x12\x13domain.operation.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1adomain/common/search.proto\x1a0domain/operation/job_template/job_template.proto\x1a\x10options/db.proto\"\xd0\a\n" +
+	"<domain/operation/job_template_phase/job_template_phase.proto\x12\x13domain.operation.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1adomain/common/search.proto\x1a0domain/operation/job_template/job_template.proto\x1a\x10options/db.proto\"\xe6\t\n" +
 	"\x10JobTemplatePhase\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12&\n" +
 	"\fdate_created\x18\x02 \x01(\x03H\x00R\vdateCreated\x88\x01\x01\x123\n" +
@@ -1096,7 +1137,12 @@ const file_domain_operation_job_template_phase_job_template_phase_proto_rawDesc 
 	"\x14run_minutes_per_unit\x18\r \x01(\x01H\aR\x11runMinutesPerUnit\x88\x01\x01\x12.\n" +
 	"\x10teardown_minutes\x18\x0e \x01(\x05H\bR\x0fteardownMinutes\x88\x01\x01\x12`\n" +
 	"\x1dpredecessor_template_phase_id\x18\x0f \x01(\tB\x18\x82\xb5\x18\x14\n" +
-	"\x12job_template_phaseH\tR\x1apredecessorTemplatePhaseId\x88\x01\x01:\x06\x8a\xb5\x18\x02\b\x01B\x0f\n" +
+	"\x12job_template_phaseH\tR\x1apredecessorTemplatePhaseId\x88\x01\x01\x12.\n" +
+	"\x10triggers_billing\x18\x10 \x01(\bH\n" +
+	"R\x0ftriggersBilling\x88\x01\x01\x123\n" +
+	"\x13billing_percent_bps\x18\x11 \x01(\x05H\vR\x11billingPercentBps\x88\x01\x01\x12*\n" +
+	"\x0ebilling_amount\x18\x12 \x01(\x03H\fR\rbillingAmount\x88\x01\x01\x12.\n" +
+	"\x10billing_currency\x18\x13 \x01(\tH\rR\x0fbillingCurrency\x88\x01\x01:\x06\x8a\xb5\x18\x02\b\x01B\x0f\n" +
 	"\r_date_createdB\x16\n" +
 	"\x14_date_created_stringB\x10\n" +
 	"\x0e_date_modifiedB\x17\n" +
@@ -1106,7 +1152,11 @@ const file_domain_operation_job_template_phase_job_template_phase_proto_rawDesc 
 	"\x0e_setup_minutesB\x17\n" +
 	"\x15_run_minutes_per_unitB\x13\n" +
 	"\x11_teardown_minutesB \n" +
-	"\x1e_predecessor_template_phase_idJ\x04\b\x10\x10\x1e\"Z\n" +
+	"\x1e_predecessor_template_phase_idB\x13\n" +
+	"\x11_triggers_billingB\x16\n" +
+	"\x14_billing_percent_bpsB\x11\n" +
+	"\x0f_billing_amountB\x13\n" +
+	"\x11_billing_currencyJ\x04\b\x14\x10\x1e\"Z\n" +
 	"\x1dCreateJobTemplatePhaseRequest\x129\n" +
 	"\x04data\x18\x01 \x01(\v2%.domain.operation.v1.JobTemplatePhaseR\x04data\"\xb3\x01\n" +
 	"\x1eCreateJobTemplatePhaseResponse\x129\n" +

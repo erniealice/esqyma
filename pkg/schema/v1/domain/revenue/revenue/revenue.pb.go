@@ -11,6 +11,7 @@ import (
 	client "github.com/erniealice/esqyma/pkg/schema/v1/domain/entity/client"
 	location "github.com/erniealice/esqyma/pkg/schema/v1/domain/entity/location"
 	payment_term "github.com/erniealice/esqyma/pkg/schema/v1/domain/entity/payment_term"
+	_ "github.com/erniealice/esqyma/pkg/schema/v1/options"
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
 	reflect "reflect"
@@ -58,8 +59,15 @@ type Revenue struct {
 	DueDate           *string                   `protobuf:"bytes,29,opt,name=due_date,json=dueDate,proto3,oneof" json:"due_date,omitempty"` // ISO 8601 date (YYYY-MM-DD)
 	PaymentTerm       *payment_term.PaymentTerm `protobuf:"bytes,31,opt,name=payment_term,json=paymentTerm,proto3,oneof" json:"payment_term,omitempty"`
 	SubscriptionId    *string                   `protobuf:"bytes,32,opt,name=subscription_id,json=subscriptionId,proto3,oneof" json:"subscription_id,omitempty"`
-	unknownFields     protoimpl.UnknownFields
-	sizeCache         protoimpl.SizeCache
+	// Milestone billing traceability — populated only when the Revenue was
+	// recognized through the MILESTONE branch (PricePlan.billing_kind=MILESTONE).
+	// job_phase_id is denormalized at create time from BillingEvent.job_phase_id
+	// for fast join-free reporting; billing_event_id is the one-to-one link
+	// back to the source event row.
+	JobPhaseId     *string `protobuf:"bytes,33,opt,name=job_phase_id,json=jobPhaseId,proto3,oneof" json:"job_phase_id,omitempty"`
+	BillingEventId *string `protobuf:"bytes,34,opt,name=billing_event_id,json=billingEventId,proto3,oneof" json:"billing_event_id,omitempty"`
+	unknownFields  protoimpl.UnknownFields
+	sizeCache      protoimpl.SizeCache
 }
 
 func (x *Revenue) Reset() {
@@ -291,6 +299,20 @@ func (x *Revenue) GetPaymentTerm() *payment_term.PaymentTerm {
 func (x *Revenue) GetSubscriptionId() string {
 	if x != nil && x.SubscriptionId != nil {
 		return *x.SubscriptionId
+	}
+	return ""
+}
+
+func (x *Revenue) GetJobPhaseId() string {
+	if x != nil && x.JobPhaseId != nil {
+		return *x.JobPhaseId
+	}
+	return ""
+}
+
+func (x *Revenue) GetBillingEventId() string {
+	if x != nil && x.BillingEventId != nil {
+		return *x.BillingEventId
 	}
 	return ""
 }
@@ -1104,8 +1126,19 @@ type CreateRevenueWithLineItemsRequest struct {
 	// single algorithm has one implementation. Pairs with existing_revenue_id.
 	SkipHeader        *bool   `protobuf:"varint,8,opt,name=skip_header,json=skipHeader,proto3,oneof" json:"skip_header,omitempty"`
 	ExistingRevenueId *string `protobuf:"bytes,9,opt,name=existing_revenue_id,json=existingRevenueId,proto3,oneof" json:"existing_revenue_id,omitempty"`
-	unknownFields     protoimpl.UnknownFields
-	sizeCache         protoimpl.SizeCache
+	// Milestone billing — engages the MILESTONE branch of recognize-revenue.
+	// When billing_event_id is set, the use case keys idempotency on it
+	// (single column) instead of (subscription_id, period_start, period_end).
+	// override_total_amount + partial_reason support partial billing
+	// (operator bills less than ev.billable_amount with a reason); when
+	// leave_remainder_open=true, a child BillingEvent is spawned with
+	// status=DEFERRED carrying the remainder.
+	BillingEventId      *string `protobuf:"bytes,11,opt,name=billing_event_id,json=billingEventId,proto3,oneof" json:"billing_event_id,omitempty"`
+	OverrideTotalAmount *int64  `protobuf:"varint,12,opt,name=override_total_amount,json=overrideTotalAmount,proto3,oneof" json:"override_total_amount,omitempty"`
+	PartialReason       *string `protobuf:"bytes,13,opt,name=partial_reason,json=partialReason,proto3,oneof" json:"partial_reason,omitempty"`
+	LeaveRemainderOpen  *bool   `protobuf:"varint,14,opt,name=leave_remainder_open,json=leaveRemainderOpen,proto3,oneof" json:"leave_remainder_open,omitempty"`
+	unknownFields       protoimpl.UnknownFields
+	sizeCache           protoimpl.SizeCache
 }
 
 func (x *CreateRevenueWithLineItemsRequest) Reset() {
@@ -1199,6 +1232,34 @@ func (x *CreateRevenueWithLineItemsRequest) GetExistingRevenueId() string {
 		return *x.ExistingRevenueId
 	}
 	return ""
+}
+
+func (x *CreateRevenueWithLineItemsRequest) GetBillingEventId() string {
+	if x != nil && x.BillingEventId != nil {
+		return *x.BillingEventId
+	}
+	return ""
+}
+
+func (x *CreateRevenueWithLineItemsRequest) GetOverrideTotalAmount() int64 {
+	if x != nil && x.OverrideTotalAmount != nil {
+		return *x.OverrideTotalAmount
+	}
+	return 0
+}
+
+func (x *CreateRevenueWithLineItemsRequest) GetPartialReason() string {
+	if x != nil && x.PartialReason != nil {
+		return *x.PartialReason
+	}
+	return ""
+}
+
+func (x *CreateRevenueWithLineItemsRequest) GetLeaveRemainderOpen() bool {
+	if x != nil && x.LeaveRemainderOpen != nil {
+		return *x.LeaveRemainderOpen
+	}
+	return false
 }
 
 type LineItemOverride struct {
@@ -1469,7 +1530,7 @@ var File_domain_revenue_revenue_revenue_proto protoreflect.FileDescriptor
 
 const file_domain_revenue_revenue_revenue_proto_rawDesc = "" +
 	"\n" +
-	"$domain/revenue/revenue/revenue.proto\x12\x11domain.revenue.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/search.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a!domain/entity/client/client.proto\x1a%domain/entity/location/location.proto\x1a-domain/entity/payment_term/payment_term.proto\"\xf1\f\n" +
+	"$domain/revenue/revenue/revenue.proto\x12\x11domain.revenue.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/search.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a!domain/entity/client/client.proto\x1a%domain/entity/location/location.proto\x1a-domain/entity/payment_term/payment_term.proto\x1a\x10options/db.proto\"\x97\x0e\n" +
 	"\aRevenue\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12&\n" +
 	"\fdate_created\x18\x02 \x01(\x03H\x00R\vdateCreated\x88\x01\x01\x123\n" +
@@ -1502,7 +1563,12 @@ const file_domain_revenue_revenue_revenue_proto_rawDesc = "" +
 	"\x0fpayment_term_id\x18\x1c \x01(\tH\x11R\rpaymentTermId\x88\x01\x01\x12\x1e\n" +
 	"\bdue_date\x18\x1d \x01(\tH\x12R\adueDate\x88\x01\x01\x12E\n" +
 	"\fpayment_term\x18\x1f \x01(\v2\x1d.domain.entity.v1.PaymentTermH\x13R\vpaymentTerm\x88\x01\x01\x12,\n" +
-	"\x0fsubscription_id\x18  \x01(\tH\x14R\x0esubscriptionId\x88\x01\x01B\x0f\n" +
+	"\x0fsubscription_id\x18  \x01(\tH\x14R\x0esubscriptionId\x88\x01\x01\x128\n" +
+	"\fjob_phase_id\x18! \x01(\tB\x11\x82\xb5\x18\r\n" +
+	"\tjob_phase\x18\x01H\x15R\n" +
+	"jobPhaseId\x88\x01\x01\x12D\n" +
+	"\x10billing_event_id\x18\" \x01(\tB\x15\x82\xb5\x18\x11\n" +
+	"\rbilling_event\x18\x01H\x16R\x0ebillingEventId\x88\x01\x01B\x0f\n" +
 	"\r_date_createdB\x16\n" +
 	"\x14_date_created_stringB\x10\n" +
 	"\x0e_date_modifiedB\x17\n" +
@@ -1523,7 +1589,9 @@ const file_domain_revenue_revenue_revenue_proto_rawDesc = "" +
 	"\x10_payment_term_idB\v\n" +
 	"\t_due_dateB\x0f\n" +
 	"\r_payment_termB\x12\n" +
-	"\x10_subscription_idJ\x04\b\v\x10\fJ\x04\b\x1e\x10\x1f\"F\n" +
+	"\x10_subscription_idB\x0f\n" +
+	"\r_job_phase_idB\x13\n" +
+	"\x11_billing_event_idJ\x04\b\v\x10\fJ\x04\b\x1e\x10\x1f\"F\n" +
 	"\x14CreateRevenueRequest\x12.\n" +
 	"\x04data\x18\x01 \x01(\v2\x1a.domain.revenue.v1.RevenueR\x04data\"\x9f\x01\n" +
 	"\x15CreateRevenueResponse\x12.\n" +
@@ -1599,7 +1667,7 @@ const file_domain_revenue_revenue_revenue_proto_rawDesc = "" +
 	"\x05error\x18\x03 \x01(\v2\x17.domain.common.v1.ErrorH\x01R\x05error\x88\x01\x01B\n" +
 	"\n" +
 	"\b_revenueB\b\n" +
-	"\x06_error\"\xc0\x04\n" +
+	"\x06_error\"\xe6\x06\n" +
 	"!CreateRevenueWithLineItemsRequest\x12.\n" +
 	"\x04data\x18\x01 \x01(\v2\x1a.domain.revenue.v1.RevenueR\x04data\x12,\n" +
 	"\x0fsubscription_id\x18\x02 \x01(\tH\x00R\x0esubscriptionId\x88\x01\x01\x12&\n" +
@@ -1611,7 +1679,12 @@ const file_domain_revenue_revenue_revenue_proto_rawDesc = "" +
 	"\adry_run\x18\a \x01(\bH\x04R\x06dryRun\x88\x01\x01\x12$\n" +
 	"\vskip_header\x18\b \x01(\bH\x05R\n" +
 	"skipHeader\x88\x01\x01\x123\n" +
-	"\x13existing_revenue_id\x18\t \x01(\tH\x06R\x11existingRevenueId\x88\x01\x01B\x12\n" +
+	"\x13existing_revenue_id\x18\t \x01(\tH\x06R\x11existingRevenueId\x88\x01\x01\x12-\n" +
+	"\x10billing_event_id\x18\v \x01(\tH\aR\x0ebillingEventId\x88\x01\x01\x127\n" +
+	"\x15override_total_amount\x18\f \x01(\x03H\bR\x13overrideTotalAmount\x88\x01\x01\x12*\n" +
+	"\x0epartial_reason\x18\r \x01(\tH\tR\rpartialReason\x88\x01\x01\x125\n" +
+	"\x14leave_remainder_open\x18\x0e \x01(\bH\n" +
+	"R\x12leaveRemainderOpen\x88\x01\x01B\x12\n" +
 	"\x10_subscription_idB\x0f\n" +
 	"\r_period_startB\r\n" +
 	"\v_period_endB\x0f\n" +
@@ -1619,7 +1692,11 @@ const file_domain_revenue_revenue_revenue_proto_rawDesc = "" +
 	"\n" +
 	"\b_dry_runB\x0e\n" +
 	"\f_skip_headerB\x16\n" +
-	"\x14_existing_revenue_idJ\x04\b\n" +
+	"\x14_existing_revenue_idB\x13\n" +
+	"\x11_billing_event_idB\x18\n" +
+	"\x16_override_total_amountB\x11\n" +
+	"\x0f_partial_reasonB\x17\n" +
+	"\x15_leave_remainder_openJ\x04\b\n" +
 	"\x10\vR\x0eforce_override\"\x88\x02\n" +
 	"\x10LineItemOverride\x121\n" +
 	"\x15product_price_plan_id\x18\x01 \x01(\tR\x12productPricePlanId\x12\"\n" +

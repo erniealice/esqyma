@@ -13,6 +13,7 @@ import "domain/common/sort.proto";
 import "domain/entity/client/client.proto";
 import "domain/entity/location/location.proto";
 import "domain/entity/payment_term/payment_term.proto";
+import "options/db.proto";
 
 message Revenue {
   string id = 1;
@@ -49,6 +50,14 @@ message Revenue {
   reserved 30; // was due_date_string
   optional domain.entity.v1.PaymentTerm payment_term = 31;
   optional string subscription_id = 32;
+
+  // Milestone billing traceability — populated only when the Revenue was
+  // recognized through the MILESTONE branch (PricePlan.billing_kind=MILESTONE).
+  // job_phase_id is denormalized at create time from BillingEvent.job_phase_id
+  // for fast join-free reporting; billing_event_id is the one-to-one link
+  // back to the source event row.
+  optional string job_phase_id     = 33 [(options.v1.db).references = "job_phase",     (options.v1.db).index = true];
+  optional string billing_event_id = 34 [(options.v1.db).references = "billing_event", (options.v1.db).index = true];
 }
 
 service RevenueDomainService {
@@ -174,6 +183,18 @@ message CreateRevenueWithLineItemsRequest {
   // check. NOT honored in v1 — see plan §11.3.
   reserved 10;
   reserved "force_override";
+
+  // Milestone billing — engages the MILESTONE branch of recognize-revenue.
+  // When billing_event_id is set, the use case keys idempotency on it
+  // (single column) instead of (subscription_id, period_start, period_end).
+  // override_total_amount + partial_reason support partial billing
+  // (operator bills less than ev.billable_amount with a reason); when
+  // leave_remainder_open=true, a child BillingEvent is spawned with
+  // status=DEFERRED carrying the remainder.
+  optional string billing_event_id      = 11;
+  optional int64  override_total_amount = 12;
+  optional string partial_reason        = 13;
+  optional bool   leave_remainder_open  = 14;
 }
 
 message LineItemOverride {

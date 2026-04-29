@@ -32,7 +32,20 @@ message JobTemplatePhase {
   optional int32 teardown_minutes = 14;
   optional string predecessor_template_phase_id = 15 [(options.v1.db).references = "job_template_phase"];
 
-  reserved 16 to 29;
+  // Milestone billing weight fields. Active only when parent JobTemplate's
+  // pricing flows through a PricePlan with billing_kind = MILESTONE.
+  // Presence rules:
+  //   triggers_billing=false   → internal phase, no event materializes
+  //   triggers_billing=true + billing_percent_bps set, billing_amount null → percent of parent PricePlan total
+  //   triggers_billing=true + billing_amount set, billing_percent_bps null → fixed centavos
+  //   triggers_billing=true + both null → derive from sum of ProductPricePlan rows tagged with this phase
+  //   triggers_billing=true + both set → reject (ambiguous)
+  optional bool   triggers_billing    = 16;
+  optional int32  billing_percent_bps = 17;  // 10000 = 100% of PricePlan total
+  optional int64  billing_amount      = 18;  // centavos; fixed override (mutually exclusive w/ percent)
+  optional string billing_currency    = 19;  // ISO 4217; only meaningful when fixed billing_amount used
+
+  reserved 20 to 29;
 }
 
 service JobTemplatePhaseDomainService {

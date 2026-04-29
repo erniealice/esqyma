@@ -93,10 +93,14 @@ type ProductPricePlan struct {
 	BillingCurrency    string                    `protobuf:"bytes,12,opt,name=billing_currency,json=billingCurrency,proto3" json:"billing_currency,omitempty"` // ISO 4217 currency code — must match parent PricePlan.billing_currency
 	BillingTreatment   BillingTreatment          `protobuf:"varint,13,opt,name=billing_treatment,json=billingTreatment,proto3,enum=domain.subscription.v1.BillingTreatment" json:"billing_treatment,omitempty"`
 	// Per-line effective dates; optional — overrides parent PriceSchedule dates when set
-	DateStart     *string `protobuf:"bytes,14,opt,name=date_start,json=dateStart,proto3,oneof" json:"date_start,omitempty"` // ISO 8601 date (YYYY-MM-DD)
-	DateEnd       *string `protobuf:"bytes,15,opt,name=date_end,json=dateEnd,proto3,oneof" json:"date_end,omitempty"`       // ISO 8601 date (YYYY-MM-DD)
-	unknownFields protoimpl.UnknownFields
-	sizeCache     protoimpl.SizeCache
+	DateStart *string `protobuf:"bytes,14,opt,name=date_start,json=dateStart,proto3,oneof" json:"date_start,omitempty"` // ISO 8601 date (YYYY-MM-DD)
+	DateEnd   *string `protobuf:"bytes,15,opt,name=date_end,json=dateEnd,proto3,oneof" json:"date_end,omitempty"`       // ISO 8601 date (YYYY-MM-DD)
+	// Milestone billing — when set on a MILESTONE PricePlan, this line bills
+	// under the named phase only. NULL on a MILESTONE plan = falls through to
+	// the first event (analogous to ONE_TIME_INITIAL).
+	JobTemplatePhaseId *string `protobuf:"bytes,19,opt,name=job_template_phase_id,json=jobTemplatePhaseId,proto3,oneof" json:"job_template_phase_id,omitempty"`
+	unknownFields      protoimpl.UnknownFields
+	sizeCache          protoimpl.SizeCache
 }
 
 func (x *ProductPricePlan) Reset() {
@@ -230,6 +234,13 @@ func (x *ProductPricePlan) GetDateStart() string {
 func (x *ProductPricePlan) GetDateEnd() string {
 	if x != nil && x.DateEnd != nil {
 		return *x.DateEnd
+	}
+	return ""
+}
+
+func (x *ProductPricePlan) GetJobTemplatePhaseId() string {
+	if x != nil && x.JobTemplatePhaseId != nil {
+		return *x.JobTemplatePhaseId
 	}
 	return ""
 }
@@ -1022,7 +1033,7 @@ var File_domain_subscription_product_price_plan_product_price_plan_proto protore
 
 const file_domain_subscription_product_price_plan_product_price_plan_proto_rawDesc = "" +
 	"\n" +
-	"?domain/subscription/product_price_plan/product_price_plan.proto\x12\x16domain.subscription.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/search.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a.domain/product/product_plan/product_plan.proto\x1a/domain/subscription/price_plan/price_plan.proto\x1a\x10options/db.proto\"\xc9\a\n" +
+	"?domain/subscription/product_price_plan/product_price_plan.proto\x12\x16domain.subscription.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/search.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a.domain/product/product_plan/product_plan.proto\x1a/domain/subscription/price_plan/price_plan.proto\x1a\x10options/db.proto\"\xb7\b\n" +
 	"\x10ProductPricePlan\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12&\n" +
 	"\fdate_created\x18\x02 \x01(\x03H\x00R\vdateCreated\x88\x01\x01\x123\n" +
@@ -1044,7 +1055,9 @@ const file_domain_subscription_product_price_plan_product_price_plan_proto_rawDe
 	"\x11billing_treatment\x18\r \x01(\x0e2(.domain.subscription.v1.BillingTreatmentR\x10billingTreatment\x12\"\n" +
 	"\n" +
 	"date_start\x18\x0e \x01(\tH\x06R\tdateStart\x88\x01\x01\x12\x1e\n" +
-	"\bdate_end\x18\x0f \x01(\tH\aR\adateEnd\x88\x01\x01:\x06\x8a\xb5\x18\x02\b\x01B\x0f\n" +
+	"\bdate_end\x18\x0f \x01(\tH\aR\adateEnd\x88\x01\x01\x12R\n" +
+	"\x15job_template_phase_id\x18\x13 \x01(\tB\x1a\x82\xb5\x18\x16\n" +
+	"\x12job_template_phase\x18\x01H\bR\x12jobTemplatePhaseId\x88\x01\x01:\x06\x8a\xb5\x18\x02\b\x01B\x0f\n" +
 	"\r_date_createdB\x16\n" +
 	"\x14_date_created_stringB\x10\n" +
 	"\x0e_date_modifiedB\x17\n" +
@@ -1052,7 +1065,8 @@ const file_domain_subscription_product_price_plan_product_price_plan_proto_rawDe
 	"\v_price_planB\x0f\n" +
 	"\r_product_planB\r\n" +
 	"\v_date_startB\v\n" +
-	"\t_date_endJ\x04\b\t\x10\n" +
+	"\t_date_endB\x18\n" +
+	"\x16_job_template_phase_idJ\x04\b\t\x10\n" +
 	"J\x04\b\n" +
 	"\x10\vJ\x04\b\x10\x10\x11R\aproductR\n" +
 	"product_idR\x12product_variant_id\"]\n" +

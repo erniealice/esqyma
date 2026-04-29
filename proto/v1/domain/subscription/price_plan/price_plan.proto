@@ -18,6 +18,7 @@ enum BillingKind {
   BILLING_KIND_ONE_TIME    = 1;  // single charge, no ongoing cycles
   BILLING_KIND_RECURRING   = 2;  // open-ended cycling (cancel-anytime subscription)
   BILLING_KIND_CONTRACT    = 3;  // fixed-term commitment (may have periodic billing within)
+  BILLING_KIND_MILESTONE   = 4;  // gated by JobTemplatePhase + BillingEvent (see milestone-billing plan)
 }
 
 enum AmountBasis {

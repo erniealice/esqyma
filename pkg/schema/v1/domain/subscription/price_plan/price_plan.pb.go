@@ -31,6 +31,7 @@ const (
 	BillingKind_BILLING_KIND_ONE_TIME    BillingKind = 1 // single charge, no ongoing cycles
 	BillingKind_BILLING_KIND_RECURRING   BillingKind = 2 // open-ended cycling (cancel-anytime subscription)
 	BillingKind_BILLING_KIND_CONTRACT    BillingKind = 3 // fixed-term commitment (may have periodic billing within)
+	BillingKind_BILLING_KIND_MILESTONE   BillingKind = 4 // gated by JobTemplatePhase + BillingEvent (see milestone-billing plan)
 )
 
 // Enum value maps for BillingKind.
@@ -40,12 +41,14 @@ var (
 		1: "BILLING_KIND_ONE_TIME",
 		2: "BILLING_KIND_RECURRING",
 		3: "BILLING_KIND_CONTRACT",
+		4: "BILLING_KIND_MILESTONE",
 	}
 	BillingKind_value = map[string]int32{
 		"BILLING_KIND_UNSPECIFIED": 0,
 		"BILLING_KIND_ONE_TIME":    1,
 		"BILLING_KIND_RECURRING":   2,
 		"BILLING_KIND_CONTRACT":    3,
+		"BILLING_KIND_MILESTONE":   4,
 	}
 )
 
@@ -1279,12 +1282,13 @@ const file_domain_subscription_price_plan_price_plan_proto_rawDesc = "" +
 	"\asuccess\x18\x02 \x01(\bR\asuccess\x122\n" +
 	"\x05error\x18\x03 \x01(\v2\x17.domain.common.v1.ErrorH\x01R\x05error\x88\x01\x01B\r\n" +
 	"\v_price_planB\b\n" +
-	"\x06_error*}\n" +
+	"\x06_error*\x99\x01\n" +
 	"\vBillingKind\x12\x1c\n" +
 	"\x18BILLING_KIND_UNSPECIFIED\x10\x00\x12\x19\n" +
 	"\x15BILLING_KIND_ONE_TIME\x10\x01\x12\x1a\n" +
 	"\x16BILLING_KIND_RECURRING\x10\x02\x12\x19\n" +
-	"\x15BILLING_KIND_CONTRACT\x10\x03*\x8c\x01\n" +
+	"\x15BILLING_KIND_CONTRACT\x10\x03\x12\x1a\n" +
+	"\x16BILLING_KIND_MILESTONE\x10\x04*\x8c\x01\n" +
 	"\vAmountBasis\x12\x1c\n" +
 	"\x18AMOUNT_BASIS_UNSPECIFIED\x10\x00\x12\x1a\n" +
 	"\x16AMOUNT_BASIS_PER_CYCLE\x10\x01\x12\x1e\n" +

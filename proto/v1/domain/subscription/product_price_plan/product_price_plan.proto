@@ -50,6 +50,12 @@ message ProductPricePlan {
 
   reserved 16;  // was product_variant_id (Model B, before pivot to Model D)
   reserved "product_variant_id";
+
+  // Milestone billing — when set on a MILESTONE PricePlan, this line bills
+  // under the named phase only. NULL on a MILESTONE plan = falls through to
+  // the first event (analogous to ONE_TIME_INITIAL).
+  optional string job_template_phase_id = 19
+    [(options.v1.db).references = "job_template_phase", (options.v1.db).index = true];
 }
 
 service ProductPricePlanDomainService {
