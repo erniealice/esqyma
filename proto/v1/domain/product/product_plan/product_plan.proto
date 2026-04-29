@@ -28,7 +28,13 @@ message ProductPlan {
   optional Product product = 11;
   string product_id = 12 [(options.v1.db).references = "product", (options.v1.db).index = true];
   string plan_id = 13 [(options.v1.db).references = "plan", (options.v1.db).index = true];
-  optional string job_template_id = 14 [(options.v1.db).references = "job_template", (options.v1.db).index = true];
+  // Tag 14 was previously `job_template_id`. As of 20260429
+  // (auto-spawn-jobs-from-subscription), the JobTemplate anchor moved to
+  // Plan.job_template_id (the engagement, not the catalog row). The
+  // legacy InstantiateJobsFromPlan use case has been retired and no
+  // production code reads this field anymore.
+  reserved 14;
+  reserved "job_template_id";
   // Specific variant of product, iff parent product.variant_mode = "configurable".
   // Null when parent.variant_mode = "none". Model D: catalog-level specificity.
   // ProductPricePlan does NOT carry variant_id — it joins through product_plan_id to

@@ -37,7 +37,6 @@ type ProductPlan struct {
 	Product            *product.Product       `protobuf:"bytes,11,opt,name=product,proto3,oneof" json:"product,omitempty"`
 	ProductId          string                 `protobuf:"bytes,12,opt,name=product_id,json=productId,proto3" json:"product_id,omitempty"`
 	PlanId             string                 `protobuf:"bytes,13,opt,name=plan_id,json=planId,proto3" json:"plan_id,omitempty"`
-	JobTemplateId      *string                `protobuf:"bytes,14,opt,name=job_template_id,json=jobTemplateId,proto3,oneof" json:"job_template_id,omitempty"`
 	// Specific variant of product, iff parent product.variant_mode = "configurable".
 	// Null when parent.variant_mode = "none". Model D: catalog-level specificity.
 	// ProductPricePlan does NOT carry variant_id — it joins through product_plan_id to
@@ -150,13 +149,6 @@ func (x *ProductPlan) GetProductId() string {
 func (x *ProductPlan) GetPlanId() string {
 	if x != nil {
 		return x.PlanId
-	}
-	return ""
-}
-
-func (x *ProductPlan) GetJobTemplateId() string {
-	if x != nil && x.JobTemplateId != nil {
-		return *x.JobTemplateId
 	}
 	return ""
 }
@@ -1061,7 +1053,7 @@ var File_domain_product_product_plan_product_plan_proto protoreflect.FileDescrip
 
 const file_domain_product_product_plan_product_plan_proto_rawDesc = "" +
 	"\n" +
-	".domain/product/product_plan/product_plan.proto\x12\x11domain.product.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1adomain/common/search.proto\x1a$domain/product/product/product.proto\x1a\x10options/db.proto\"\x9b\x06\n" +
+	".domain/product/product_plan/product_plan.proto\x12\x11domain.product.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1adomain/common/search.proto\x1a$domain/product/product/product.proto\x1a\x10options/db.proto\"\xdb\x05\n" +
 	"\vProductPlan\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12&\n" +
 	"\fdate_created\x18\x02 \x01(\x03H\x00R\vdateCreated\x88\x01\x01\x123\n" +
@@ -1077,22 +1069,19 @@ const file_domain_product_product_plan_product_plan_proto_rawDesc = "" +
 	"product_id\x18\f \x01(\tB\x0f\x82\xb5\x18\v\n" +
 	"\aproduct\x18\x01R\tproductId\x12%\n" +
 	"\aplan_id\x18\r \x01(\tB\f\x82\xb5\x18\b\n" +
-	"\x04plan\x18\x01R\x06planId\x12A\n" +
-	"\x0fjob_template_id\x18\x0e \x01(\tB\x14\x82\xb5\x18\x10\n" +
-	"\fjob_template\x18\x01H\x06R\rjobTemplateId\x88\x01\x01\x12J\n" +
+	"\x04plan\x18\x01R\x06planId\x12J\n" +
 	"\x12product_variant_id\x18\x0f \x01(\tB\x17\x82\xb5\x18\x13\n" +
-	"\x0fproduct_variant\x18\x01H\aR\x10productVariantId\x88\x01\x01:\x06\x8a\xb5\x18\x02\b\x01B\x0f\n" +
+	"\x0fproduct_variant\x18\x01H\x06R\x10productVariantId\x88\x01\x01:\x06\x8a\xb5\x18\x02\b\x01B\x0f\n" +
 	"\r_date_createdB\x16\n" +
 	"\x14_date_created_stringB\x10\n" +
 	"\x0e_date_modifiedB\x17\n" +
 	"\x15_date_modified_stringB\x0e\n" +
 	"\f_descriptionB\n" +
 	"\n" +
-	"\b_productB\x12\n" +
-	"\x10_job_template_idB\x15\n" +
+	"\b_productB\x15\n" +
 	"\x13_product_variant_idJ\x04\b\t\x10\n" +
 	"J\x04\b\n" +
-	"\x10\vR\x05priceR\bcurrency\"N\n" +
+	"\x10\vJ\x04\b\x0e\x10\x0fR\x05priceR\bcurrencyR\x0fjob_template_id\"N\n" +
 	"\x18CreateProductPlanRequest\x122\n" +
 	"\x04data\x18\x01 \x01(\v2\x1e.domain.product.v1.ProductPlanR\x04data\"\xa7\x01\n" +
 	"\x19CreateProductPlanResponse\x122\n" +
