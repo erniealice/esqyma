@@ -18,10 +18,29 @@ enum ProcurementRequestStatus {
   PROCUREMENT_REQUEST_STATUS_DRAFT            = 1;  // editing, not yet submitted
   PROCUREMENT_REQUEST_STATUS_SUBMITTED        = 2;  // submitted by requester
   PROCUREMENT_REQUEST_STATUS_PENDING_APPROVAL = 3;  // in approver queue
-  PROCUREMENT_REQUEST_STATUS_APPROVED         = 4;  // approved; ready to spawn PO
+  PROCUREMENT_REQUEST_STATUS_APPROVED         = 4;  // approved; all lines spawned
   PROCUREMENT_REQUEST_STATUS_REJECTED         = 5;  // denied (terminal)
-  PROCUREMENT_REQUEST_STATUS_FULFILLED        = 6;  // PO created and received (terminal)
+  PROCUREMENT_REQUEST_STATUS_FULFILLED        = 6;  // downstream artifacts received (terminal)
   PROCUREMENT_REQUEST_STATUS_CANCELLED        = 7;  // withdrawn (terminal)
+  // CRIT-3 (round-6): interim status held while approval was recorded but
+  // one or more line items have spawn_status ∈ {PENDING, SPAWNING, FAILED}.
+  // Approve action transitions PENDING_APPROVAL → APPROVED_PENDING_SPAWN
+  // (NOT directly to APPROVED). The use case promotes to APPROVED only when
+  // every line reaches spawn_status=SPAWNED.
+  PROCUREMENT_REQUEST_STATUS_APPROVED_PENDING_SPAWN = 8;
+}
+
+// ProcurementRequestFulfillmentStrategy (F3) — header-level rollup of how
+// the request is intended to be fulfilled. Useful for filtering operational
+// queues. Per-line fulfillment_mode (F1) on ProcurementRequestLine drives
+// the actual approval-cascade dispatch.
+enum ProcurementRequestFulfillmentStrategy {
+  PROCUREMENT_REQUEST_FULFILLMENT_STRATEGY_UNSPECIFIED = 0;
+  PROCUREMENT_REQUEST_FULFILLMENT_STRATEGY_OUTRIGHT    = 1;  // single-shot PO
+  PROCUREMENT_REQUEST_FULFILLMENT_STRATEGY_STOCKABLE   = 2;  // PO + GR into stock
+  PROCUREMENT_REQUEST_FULFILLMENT_STRATEGY_RECURRING   = 3;  // standing contract creation
+  PROCUREMENT_REQUEST_FULFILLMENT_STRATEGY_PETTY       = 4;  // expensed direct (sundries)
+  PROCUREMENT_REQUEST_FULFILLMENT_STRATEGY_MIXED       = 5;  // heterogeneous lines
 }
 
 // ProcurementRequest represents an internal purchase intent.
@@ -81,6 +100,19 @@ message ProcurementRequest {
   // GL / categorization
   optional string expenditure_category_id = 50 [(options.v1.db).references = "expenditure_category"];
   optional string expense_account_id = 51 [(options.v1.db).references = "account"];
+
+  // F3 (round-6): header-level fulfillment strategy rollup for operational
+  // filtering. Per-line dispatch is driven by ProcurementRequestLine
+  // .fulfillment_mode. MIXED is set automatically when lines disagree.
+  optional ProcurementRequestFulfillmentStrategy fulfillment_strategy = 52 [(options.v1.db).index = true];
+
+  // HIGH-5 (round-6): free-text JSON column capturing the
+  // ApprovalPolicyResolver decisions per line at submit / approve time.
+  // Each entry: {line_id, requires_approval, reason, resolver_name,
+  // decided_at}. Lets auditors see why a particular line was permitted to
+  // skip approval (PETTY auto-approve, FRAMEWORK skip-approval). Append-
+  // only; never edited after the cascade completes.
+  optional string policy_decision_log = 53;
 }
 
 service ProcurementRequestDomainService {

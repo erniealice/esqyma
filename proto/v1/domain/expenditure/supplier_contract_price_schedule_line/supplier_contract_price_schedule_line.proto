@@ -1,0 +1,157 @@
+syntax = "proto3";
+
+package domain.expenditure.v1;
+
+option go_package = "github.com/erniealice/esqyma/golang/v1/domain/expenditure/supplier_contract_price_schedule_line";
+
+import "domain/common/error.proto";
+import "domain/common/pagination.proto";
+import "domain/common/search.proto";
+import "domain/common/filter.proto";
+import "domain/common/sort.proto";
+import "domain/expenditure/supplier_contract_price_schedule/supplier_contract_price_schedule.proto";
+import "options/db.proto";
+
+// SupplierContractPriceScheduleLine is the per-line, per-window pricing
+// override row. One row per (SupplierContractLine × SupplierContractPriceSchedule).
+//
+// Resolution rule (use-case layer): when ResolveActiveScheduleLine(
+// contract_line_id, asOf) is called, the use case picks the active
+// schedule whose half-open window contains asOf and joins on
+// (schedule_id, contract_line_id). If a row exists, its unit_price is
+// used; otherwise fall back to SupplierContractLine.unit_price. Mirrors
+// the sales-side rate-card precedence (Model D refactor).
+message SupplierContractPriceScheduleLine {
+  option (options.v1.table).table = true;
+
+  string id = 1;
+  string workspace_id = 2 [(options.v1.db).references = "workspace", (options.v1.db).index = true];
+
+  // Audit
+  optional int64 date_created = 3;
+  optional string date_created_string = 4;
+  optional int64 date_modified = 5;
+  optional string date_modified_string = 6;
+  bool active = 7 [(options.v1.db).default = "true"];
+
+  // Parent schedule (the date window)
+  string supplier_contract_price_schedule_id = 10
+    [(options.v1.db).references = "supplier_contract_price_schedule", (options.v1.db).index = true];
+  optional SupplierContractPriceSchedule supplier_contract_price_schedule = 11;
+
+  // The contract line being priced for this window
+  string supplier_contract_line_id = 12
+    [(options.v1.db).references = "supplier_contract_line", (options.v1.db).index = true];
+
+  // Money — overrides SupplierContractLine.unit_price for this window
+  string currency = 20;
+  int64 unit_price = 21;                                       // centavos
+  optional int64 minimum_amount = 22;                          // for MINIMUM_COMMITMENT treatment
+  optional double quantity = 23;                               // optional committed quantity (BLANKET / MINIMUM_COMMITMENT)
+
+  // Cycle override — most lines inherit cycle from the parent contract.
+  // Some lines (utility tiers, indexed escalators) need cycle-specific overrides.
+  optional int32 cycle_value_override = 30;
+  optional string cycle_unit_override = 31;
+
+  // Notes
+  optional string notes = 50;
+  map<string, string> metadata = 51;
+}
+
+service SupplierContractPriceScheduleLineDomainService {
+  rpc CreateSupplierContractPriceScheduleLine(CreateSupplierContractPriceScheduleLineRequest)
+    returns (CreateSupplierContractPriceScheduleLineResponse);
+  rpc ReadSupplierContractPriceScheduleLine(ReadSupplierContractPriceScheduleLineRequest)
+    returns (ReadSupplierContractPriceScheduleLineResponse);
+  rpc UpdateSupplierContractPriceScheduleLine(UpdateSupplierContractPriceScheduleLineRequest)
+    returns (UpdateSupplierContractPriceScheduleLineResponse);
+  rpc DeleteSupplierContractPriceScheduleLine(DeleteSupplierContractPriceScheduleLineRequest)
+    returns (DeleteSupplierContractPriceScheduleLineResponse);
+  rpc ListSupplierContractPriceScheduleLines(ListSupplierContractPriceScheduleLinesRequest)
+    returns (ListSupplierContractPriceScheduleLinesResponse);
+
+  rpc GetSupplierContractPriceScheduleLineListPageData(GetSupplierContractPriceScheduleLineListPageDataRequest)
+    returns (GetSupplierContractPriceScheduleLineListPageDataResponse);
+  rpc GetSupplierContractPriceScheduleLineItemPageData(GetSupplierContractPriceScheduleLineItemPageDataRequest)
+    returns (GetSupplierContractPriceScheduleLineItemPageDataResponse);
+}
+
+message CreateSupplierContractPriceScheduleLineRequest {
+  SupplierContractPriceScheduleLine data = 1;
+}
+
+message CreateSupplierContractPriceScheduleLineResponse {
+  repeated SupplierContractPriceScheduleLine data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message ReadSupplierContractPriceScheduleLineRequest {
+  SupplierContractPriceScheduleLine data = 1;
+}
+
+message ReadSupplierContractPriceScheduleLineResponse {
+  repeated SupplierContractPriceScheduleLine data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message UpdateSupplierContractPriceScheduleLineRequest {
+  SupplierContractPriceScheduleLine data = 1;
+}
+
+message UpdateSupplierContractPriceScheduleLineResponse {
+  repeated SupplierContractPriceScheduleLine data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message DeleteSupplierContractPriceScheduleLineRequest {
+  SupplierContractPriceScheduleLine data = 1;
+}
+
+message DeleteSupplierContractPriceScheduleLineResponse {
+  bool success = 1;
+  optional domain.common.v1.Error error = 2;
+}
+
+message ListSupplierContractPriceScheduleLinesRequest {
+  optional string supplier_contract_price_schedule_id = 1;
+  optional string supplier_contract_line_id = 2;
+  optional domain.common.v1.SearchRequest search = 3;
+  optional domain.common.v1.FilterRequest filters = 4;
+  optional domain.common.v1.SortRequest sort = 5;
+  optional domain.common.v1.PaginationRequest pagination = 6;
+}
+
+message ListSupplierContractPriceScheduleLinesResponse {
+  repeated SupplierContractPriceScheduleLine data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message GetSupplierContractPriceScheduleLineListPageDataRequest {
+  optional domain.common.v1.PaginationRequest pagination = 1;
+  optional domain.common.v1.FilterRequest filters = 2;
+  optional domain.common.v1.SortRequest sort = 3;
+  optional domain.common.v1.SearchRequest search = 4;
+}
+
+message GetSupplierContractPriceScheduleLineListPageDataResponse {
+  repeated SupplierContractPriceScheduleLine supplier_contract_price_schedule_line_list = 1;
+  optional domain.common.v1.PaginationResponse pagination = 2;
+  repeated domain.common.v1.SearchResult search_results = 3;
+  bool success = 4;
+  optional domain.common.v1.Error error = 5;
+}
+
+message GetSupplierContractPriceScheduleLineItemPageDataRequest {
+  string supplier_contract_price_schedule_line_id = 1;
+}
+
+message GetSupplierContractPriceScheduleLineItemPageDataResponse {
+  optional SupplierContractPriceScheduleLine supplier_contract_price_schedule_line = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}

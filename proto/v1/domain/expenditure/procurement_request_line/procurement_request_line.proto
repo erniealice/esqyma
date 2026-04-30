@@ -13,6 +13,29 @@ import "domain/expenditure/procurement_request/procurement_request.proto";
 import "domain/product/product/product.proto";
 import "options/db.proto";
 
+// ProcurementRequestLineFulfillmentMode (F1, round-6) — discriminates how
+// approval of this line spawns its downstream artifact. Drives the
+// approval-cascade dispatch in submit.go / approve.go.
+enum ProcurementRequestLineFulfillmentMode {
+  PROCUREMENT_REQUEST_LINE_FULFILLMENT_MODE_UNSPECIFIED = 0;
+  PROCUREMENT_REQUEST_LINE_FULFILLMENT_MODE_OUTRIGHT    = 1;  // → PurchaseOrder + PurchaseOrderLineItem
+  PROCUREMENT_REQUEST_LINE_FULFILLMENT_MODE_STOCKABLE   = 2;  // → PurchaseOrder (FRAMEWORK release) + GR
+  PROCUREMENT_REQUEST_LINE_FULFILLMENT_MODE_RECURRING   = 3;  // → SupplierContract + Line(s)
+  PROCUREMENT_REQUEST_LINE_FULFILLMENT_MODE_PETTY       = 4;  // → Expenditure direct (sundries)
+}
+
+// ProcurementRequestLineSpawnStatus (CRIT-3, round-6) — per-line spawn
+// lifecycle tracked by the approval cascade. PR.status flips to
+// APPROVED_PENDING_SPAWN at approve-time and only reaches APPROVED once
+// every line on it reaches SPAWNED. FAILED lines are eligible for retry.
+enum ProcurementRequestLineSpawnStatus {
+  PROCUREMENT_REQUEST_LINE_SPAWN_STATUS_UNSPECIFIED = 0;
+  PROCUREMENT_REQUEST_LINE_SPAWN_STATUS_PENDING     = 1;  // event emitted, worker has not started
+  PROCUREMENT_REQUEST_LINE_SPAWN_STATUS_SPAWNING    = 2;  // worker started; downstream txn in progress
+  PROCUREMENT_REQUEST_LINE_SPAWN_STATUS_SPAWNED     = 3;  // downstream artifact created and back-FK populated
+  PROCUREMENT_REQUEST_LINE_SPAWN_STATUS_FAILED      = 4;  // eligible for retry; spawn_error populated
+}
+
 // ProcurementRequestLine is a line item on a ProcurementRequest.
 // It may optionally pre-link to a SupplierContractLine if the item is
 // already covered by a standing contract.
@@ -55,6 +78,34 @@ message ProcurementRequestLine {
   optional string date_created_string = 18;
   optional int64 date_modified = 19;
   optional string date_modified_string = 20;
+
+  // F1 (round-6): per-line fulfillment mode. Drives the approval cascade
+  // dispatch (which Spawn helper to run).
+  optional ProcurementRequestLineFulfillmentMode fulfillment_mode = 21 [(options.v1.db).index = true];
+
+  // F2 (round-6): spawn back-FKs — set by the Spawn* helpers after the
+  // downstream artifact is created. Exactly one of the three is populated
+  // per line, determined by fulfillment_mode. Application-level FKs only
+  // (no DB constraint, mirrors purchase_order_line_item linkage).
+  optional string spawned_supplier_contract_id = 22;          // RECURRING → SupplierContract
+  optional string spawned_purchase_order_line_item_id = 23;   // OUTRIGHT / STOCKABLE → PO line
+  optional string spawned_expenditure_id = 24;                // PETTY → Expenditure direct
+
+  // RECURRING-mode parameters — populated when fulfillment_mode=RECURRING
+  // and used by SpawnSupplierContractForRecurring. cycle == billing cadence,
+  // term == initial contract length.
+  optional int32 recurring_cycle_value = 25;
+  optional string recurring_cycle_unit = 26;                  // "month" | "year" | "week" | "day"
+  optional int32 recurring_term_value = 27;
+  optional string recurring_term_unit = 28;                   // same vocabulary
+
+  // CRIT-3 (round-6): spawn lifecycle fields driving the per-line cascade.
+  // PR.status is APPROVED_PENDING_SPAWN until every line reaches SPAWNED.
+  ProcurementRequestLineSpawnStatus spawn_status = 29 [(options.v1.db).index = true];
+  optional string spawn_error = 30;                           // free-text error from failed spawn (visible in AP UI)
+  string spawn_idempotency_key = 31;                          // "{request_id}:{line_id}:{attempt_n}" — required for safe retry
+  optional int64  spawn_attempted_at = 32;
+  optional int64  spawn_completed_at = 33;
 }
 
 service ProcurementRequestLineDomainService {

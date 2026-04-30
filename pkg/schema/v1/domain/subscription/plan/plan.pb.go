@@ -59,8 +59,21 @@ type Plan struct {
 	// resolves this template to spawn the root Job. Multi-template Plans link
 	// additional templates via JobTemplateRelation rows. See plan §2.1.
 	JobTemplateId *string `protobuf:"bytes,14,opt,name=job_template_id,json=jobTemplateId,proto3,oneof" json:"job_template_id,omitempty"`
-	unknownFields protoimpl.UnknownFields
-	sizeCache     protoimpl.SizeCache
+	// Number of cycle Job instances spawned per billing cycle. Default 1
+	// (semantically — NULL is treated as 1). Examples:
+	//
+	//	Pro Cleaning Biweekly (billed monthly) = 2
+	//	Lawn Care Weekly      (billed monthly) = 4
+	//	Pool Quarterly        (billed quarterly) = 1
+	//
+	// Spawn semantics: cycle_index increments globally; period_start of each
+	// sub-cycle = billing_cycle_start + (k-1) × (cycle_length / N) for k=1..N.
+	// Validation: must be >= 1 when Plan.job_template_id is set. Reset to 1
+	// when job_template_id is cleared. See
+	// docs/plan/20260430-cyclic-subscription-jobs/plan.md §2.4.
+	VisitsPerCycle *int32 `protobuf:"varint,15,opt,name=visits_per_cycle,json=visitsPerCycle,proto3,oneof" json:"visits_per_cycle,omitempty"`
+	unknownFields  protoimpl.UnknownFields
+	sizeCache      protoimpl.SizeCache
 }
 
 func (x *Plan) Reset() {
@@ -182,6 +195,13 @@ func (x *Plan) GetJobTemplateId() string {
 		return *x.JobTemplateId
 	}
 	return ""
+}
+
+func (x *Plan) GetVisitsPerCycle() int32 {
+	if x != nil && x.VisitsPerCycle != nil {
+		return *x.VisitsPerCycle
+	}
+	return 0
 }
 
 type CreatePlanRequest struct {
@@ -1138,7 +1158,7 @@ var File_domain_subscription_plan_plan_proto protoreflect.FileDescriptor
 
 const file_domain_subscription_plan_plan_proto_rawDesc = "" +
 	"\n" +
-	"#domain/subscription/plan/plan.proto\x12\x16domain.subscription.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1adomain/common/search.proto\x1a5domain/subscription/plan_location/plan_location.proto\x1a\x10options/db.proto\"\xa1\x06\n" +
+	"#domain/subscription/plan/plan.proto\x12\x16domain.subscription.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1adomain/common/search.proto\x1a5domain/subscription/plan_location/plan_location.proto\x1a\x10options/db.proto\"\xe5\x06\n" +
 	"\x04Plan\x12\x13\n" +
 	"\x02id\x18\x01 \x01(\tH\x00R\x02id\x88\x01\x01\x12&\n" +
 	"\fdate_created\x18\x02 \x01(\x03H\x01R\vdateCreated\x88\x01\x01\x123\n" +
@@ -1158,7 +1178,9 @@ const file_domain_subscription_plan_plan_proto_rawDesc = "" +
 	"\tparent_id\x18\r \x01(\tB\f\x82\xb5\x18\b\n" +
 	"\x04plan\x18\x01H\bR\bparentId\x88\x01\x01\x12A\n" +
 	"\x0fjob_template_id\x18\x0e \x01(\tB\x14\x82\xb5\x18\x10\n" +
-	"\fjob_template\x18\x01H\tR\rjobTemplateId\x88\x01\x01:\x06\x8a\xb5\x18\x02\b\x01B\x05\n" +
+	"\fjob_template\x18\x01H\tR\rjobTemplateId\x88\x01\x01\x12-\n" +
+	"\x10visits_per_cycle\x18\x0f \x01(\x05H\n" +
+	"R\x0evisitsPerCycle\x88\x01\x01:\x06\x8a\xb5\x18\x02\b\x01B\x05\n" +
 	"\x03_idB\x0f\n" +
 	"\r_date_createdB\x16\n" +
 	"\x14_date_created_stringB\x10\n" +
@@ -1170,7 +1192,8 @@ const file_domain_subscription_plan_plan_proto_rawDesc = "" +
 	"_client_idB\f\n" +
 	"\n" +
 	"_parent_idB\x12\n" +
-	"\x10_job_template_idJ\x04\b\v\x10\fR\x10fulfillment_type\"E\n" +
+	"\x10_job_template_idB\x13\n" +
+	"\x11_visits_per_cycleJ\x04\b\v\x10\fR\x10fulfillment_type\"E\n" +
 	"\x11CreatePlanRequest\x120\n" +
 	"\x04data\x18\x01 \x01(\v2\x1c.domain.subscription.v1.PlanR\x04data\"\x9e\x01\n" +
 	"\x12CreatePlanResponse\x120\n" +

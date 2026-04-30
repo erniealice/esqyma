@@ -91,8 +91,26 @@ type Job struct {
 	JobTemplateRevisionId       *string `protobuf:"bytes,50,opt,name=job_template_revision_id,json=jobTemplateRevisionId,proto3,oneof" json:"job_template_revision_id,omitempty"`
 	ChangeRequestId             *string `protobuf:"bytes,51,opt,name=change_request_id,json=changeRequestId,proto3,oneof" json:"change_request_id,omitempty"`
 	WorkflowInstanceId          *string `protobuf:"bytes,52,opt,name=workflow_instance_id,json=workflowInstanceId,proto3,oneof" json:"workflow_instance_id,omitempty"`
-	unknownFields               protoimpl.UnknownFields
-	sizeCache                   protoimpl.SizeCache
+	// Cycle metadata for cyclic subscriptions. Set on cycle-instance Jobs
+	// (parent_job_id != NULL, spawned by MaterializeCycleJobsForSubscription).
+	// NULL on engagement Jobs (the shell parent) and on lifetime non-cyclic
+	// Jobs (one-shot projects, milestone engagements). See
+	// docs/plan/20260430-cyclic-subscription-jobs/plan.md §3.
+	//
+	// cycle_index: 0-based ordinal of the cycle within the engagement. Monotone
+	// within (origin_id, parent_job_id) — gaps allowed when cycles are skipped
+	// (e.g., subscription paused). Operator-visible as "Cycle 1", "Cycle 2".
+	CycleIndex *int32 `protobuf:"varint,53,opt,name=cycle_index,json=cycleIndex,proto3,oneof" json:"cycle_index,omitempty"`
+	// Billing-cycle window this Job belongs to. ISO 8601 datetime string.
+	// cycle_period_start is inclusive; cycle_period_end is exclusive.
+	// Mirrors PricePlan.billing_cycle_value × billing_cycle_unit semantics
+	// from docs/plan/20260425-subscription-revenue-recognition/plan.md §3.2.
+	// Joining Job ↔ Revenue on (subscription_id, cycle_period_start) gives
+	// the "which invoice covers this cycle Job" trace without a hard FK.
+	CyclePeriodStart *string `protobuf:"bytes,54,opt,name=cycle_period_start,json=cyclePeriodStart,proto3,oneof" json:"cycle_period_start,omitempty"`
+	CyclePeriodEnd   *string `protobuf:"bytes,55,opt,name=cycle_period_end,json=cyclePeriodEnd,proto3,oneof" json:"cycle_period_end,omitempty"`
+	unknownFields    protoimpl.UnknownFields
+	sizeCache        protoimpl.SizeCache
 }
 
 func (x *Job) Reset() {
@@ -478,6 +496,27 @@ func (x *Job) GetChangeRequestId() string {
 func (x *Job) GetWorkflowInstanceId() string {
 	if x != nil && x.WorkflowInstanceId != nil {
 		return *x.WorkflowInstanceId
+	}
+	return ""
+}
+
+func (x *Job) GetCycleIndex() int32 {
+	if x != nil && x.CycleIndex != nil {
+		return *x.CycleIndex
+	}
+	return 0
+}
+
+func (x *Job) GetCyclePeriodStart() string {
+	if x != nil && x.CyclePeriodStart != nil {
+		return *x.CyclePeriodStart
+	}
+	return ""
+}
+
+func (x *Job) GetCyclePeriodEnd() string {
+	if x != nil && x.CyclePeriodEnd != nil {
+		return *x.CyclePeriodEnd
 	}
 	return ""
 }
@@ -1598,7 +1637,7 @@ var File_domain_operation_job_job_proto protoreflect.FileDescriptor
 
 const file_domain_operation_job_job_proto_rawDesc = "" +
 	"\n" +
-	"\x1edomain/operation/job/job.proto\x12\x13domain.operation.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1adomain/common/search.proto\x1a!domain/entity/client/client.proto\x1a%domain/entity/location/location.proto\x1a\"domain/operation/enums/enums.proto\x1a\x10options/db.proto\"\x93\x1b\n" +
+	"\x1edomain/operation/job/job.proto\x12\x13domain.operation.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1adomain/common/search.proto\x1a!domain/entity/client/client.proto\x1a%domain/entity/location/location.proto\x1a\"domain/operation/enums/enums.proto\x1a\x10options/db.proto\"\xd7\x1c\n" +
 	"\x03Job\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12&\n" +
 	"\fdate_created\x18\x02 \x01(\x03H\x00R\vdateCreated\x88\x01\x01\x123\n" +
@@ -1671,7 +1710,11 @@ const file_domain_operation_job_job_proto_rawDesc = "" +
 	"\x1ejob_template_revision_snapshot\x181 \x01(\x05H\"R\x1bjobTemplateRevisionSnapshot\x88\x01\x01\x12D\n" +
 	"\x18job_template_revision_id\x182 \x01(\tB\x06\x82\xb5\x18\x02\x18\x01H#R\x15jobTemplateRevisionId\x88\x01\x01\x127\n" +
 	"\x11change_request_id\x183 \x01(\tB\x06\x82\xb5\x18\x02\x18\x01H$R\x0fchangeRequestId\x88\x01\x01\x12=\n" +
-	"\x14workflow_instance_id\x184 \x01(\tB\x06\x82\xb5\x18\x02\x18\x01H%R\x12workflowInstanceId\x88\x01\x01:\x06\x8a\xb5\x18\x02\b\x01B\x0f\n" +
+	"\x14workflow_instance_id\x184 \x01(\tB\x06\x82\xb5\x18\x02\x18\x01H%R\x12workflowInstanceId\x88\x01\x01\x12$\n" +
+	"\vcycle_index\x185 \x01(\x05H&R\n" +
+	"cycleIndex\x88\x01\x01\x121\n" +
+	"\x12cycle_period_start\x186 \x01(\tH'R\x10cyclePeriodStart\x88\x01\x01\x12-\n" +
+	"\x10cycle_period_end\x187 \x01(\tH(R\x0ecyclePeriodEnd\x88\x01\x01:\x06\x8a\xb5\x18\x02\b\x01B\x0f\n" +
 	"\r_date_createdB\x16\n" +
 	"\x14_date_created_stringB\x10\n" +
 	"\x0e_date_modifiedB\x17\n" +
@@ -1711,7 +1754,10 @@ const file_domain_operation_job_job_proto_rawDesc = "" +
 	"\x1f_job_template_revision_snapshotB\x1b\n" +
 	"\x19_job_template_revision_idB\x14\n" +
 	"\x12_change_request_idB\x17\n" +
-	"\x15_workflow_instance_idJ\x04\b5\x10F\"@\n" +
+	"\x15_workflow_instance_idB\x0e\n" +
+	"\f_cycle_indexB\x15\n" +
+	"\x13_cycle_period_startB\x13\n" +
+	"\x11_cycle_period_endJ\x04\b8\x10F\"@\n" +
 	"\x10CreateJobRequest\x12,\n" +
 	"\x04data\x18\x01 \x01(\v2\x18.domain.operation.v1.JobR\x04data\"\x99\x01\n" +
 	"\x11CreateJobResponse\x12,\n" +

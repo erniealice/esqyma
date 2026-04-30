@@ -29,11 +29,20 @@ const (
 //	SUB_TEMPLATE — child template runs as a sub-engagement under the parent
 //	               (e.g., Permit Filing as a child of Tower Audit). Spawned
 //	               child Jobs carry parent_job_id of the root Job.
+//	ONCE_AT_ENGAGEMENT_START — child template fires ONCE at engagement spawn
+//	               (Subscription.Create), not per cycle. Use for
+//	               onboarding/setup templates that should run only when a
+//	               cyclic subscription is first created. Spawned as a child
+//	               of the engagement Job (parent_job_id=engagement.id), with
+//	               cycle_index=NULL. Rejected on non-cyclic Plans (validation
+//	               at Plan-edit time). See
+//	               docs/plan/20260430-cyclic-subscription-jobs/plan.md §2.3.
 type JobTemplateRelationType int32
 
 const (
-	JobTemplateRelationType_JOB_TEMPLATE_RELATION_TYPE_UNSPECIFIED  JobTemplateRelationType = 0
-	JobTemplateRelationType_JOB_TEMPLATE_RELATION_TYPE_SUB_TEMPLATE JobTemplateRelationType = 1
+	JobTemplateRelationType_JOB_TEMPLATE_RELATION_TYPE_UNSPECIFIED              JobTemplateRelationType = 0
+	JobTemplateRelationType_JOB_TEMPLATE_RELATION_TYPE_SUB_TEMPLATE             JobTemplateRelationType = 1
+	JobTemplateRelationType_JOB_TEMPLATE_RELATION_TYPE_ONCE_AT_ENGAGEMENT_START JobTemplateRelationType = 2
 )
 
 // Enum value maps for JobTemplateRelationType.
@@ -41,10 +50,12 @@ var (
 	JobTemplateRelationType_name = map[int32]string{
 		0: "JOB_TEMPLATE_RELATION_TYPE_UNSPECIFIED",
 		1: "JOB_TEMPLATE_RELATION_TYPE_SUB_TEMPLATE",
+		2: "JOB_TEMPLATE_RELATION_TYPE_ONCE_AT_ENGAGEMENT_START",
 	}
 	JobTemplateRelationType_value = map[string]int32{
-		"JOB_TEMPLATE_RELATION_TYPE_UNSPECIFIED":  0,
-		"JOB_TEMPLATE_RELATION_TYPE_SUB_TEMPLATE": 1,
+		"JOB_TEMPLATE_RELATION_TYPE_UNSPECIFIED":              0,
+		"JOB_TEMPLATE_RELATION_TYPE_SUB_TEMPLATE":             1,
+		"JOB_TEMPLATE_RELATION_TYPE_ONCE_AT_ENGAGEMENT_START": 2,
 	}
 )
 
@@ -1322,10 +1333,11 @@ const file_domain_operation_job_template_relation_job_template_relation_proto_ra
 	"\x16job_template_relations\x18\x01 \x03(\v2(.domain.operation.v1.JobTemplateRelationR\x14jobTemplateRelations\x12\x18\n" +
 	"\asuccess\x18\x02 \x01(\bR\asuccess\x122\n" +
 	"\x05error\x18\x03 \x01(\v2\x17.domain.common.v1.ErrorH\x00R\x05error\x88\x01\x01B\b\n" +
-	"\x06_error*r\n" +
+	"\x06_error*\xab\x01\n" +
 	"\x17JobTemplateRelationType\x12*\n" +
 	"&JOB_TEMPLATE_RELATION_TYPE_UNSPECIFIED\x10\x00\x12+\n" +
-	"'JOB_TEMPLATE_RELATION_TYPE_SUB_TEMPLATE\x10\x012\xc3\n" +
+	"'JOB_TEMPLATE_RELATION_TYPE_SUB_TEMPLATE\x10\x01\x127\n" +
+	"3JOB_TEMPLATE_RELATION_TYPE_ONCE_AT_ENGAGEMENT_START\x10\x022\xc3\n" +
 	"\n" +
 	" JobTemplateRelationDomainService\x12\x8a\x01\n" +
 	"\x19CreateJobTemplateRelation\x125.domain.operation.v1.CreateJobTemplateRelationRequest\x1a6.domain.operation.v1.CreateJobTemplateRelationResponse\x12\x84\x01\n" +

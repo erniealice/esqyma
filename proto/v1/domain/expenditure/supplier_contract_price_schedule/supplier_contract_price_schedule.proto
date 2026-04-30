@@ -1,0 +1,213 @@
+syntax = "proto3";
+
+package domain.expenditure.v1;
+
+option go_package = "github.com/erniealice/esqyma/golang/v1/domain/expenditure/supplier_contract_price_schedule";
+
+import "domain/common/error.proto";
+import "domain/common/pagination.proto";
+import "domain/common/search.proto";
+import "domain/common/filter.proto";
+import "domain/common/sort.proto";
+import "domain/expenditure/supplier_contract/supplier_contract.proto";
+import "options/db.proto";
+import "google/protobuf/timestamp.proto";
+
+// SupplierContractPriceScheduleStatus drives the date-windowed price
+// schedule lifecycle. Mirrors the sales-side PriceSchedule lifecycle but
+// is scoped to a single supplier contract (suppliers don't share catalogs).
+enum SupplierContractPriceScheduleStatus {
+  SUPPLIER_CONTRACT_PRICE_SCHEDULE_STATUS_UNSPECIFIED = 0;
+  SUPPLIER_CONTRACT_PRICE_SCHEDULE_STATUS_SCHEDULED   = 1;  // future window, not yet in effect
+  SUPPLIER_CONTRACT_PRICE_SCHEDULE_STATUS_ACTIVE      = 2;  // currently in effect
+  SUPPLIER_CONTRACT_PRICE_SCHEDULE_STATUS_SUPERSEDED  = 3;  // past window, contract still active
+  SUPPLIER_CONTRACT_PRICE_SCHEDULE_STATUS_CANCELLED   = 4;  // never went into effect
+}
+
+// SupplierContractPriceSchedule is a date-windowed pricing layer scoped to a
+// single supplier contract. Multi-year escalations are modeled as multiple
+// schedule rows ("Year 1", "Year 2", ...).
+//
+// Window semantics: half-open `[date_time_start, date_time_end)` (start
+// inclusive, end exclusive). All values are normalized to UTC at the
+// use-case boundary; display layer renders in workspace timezone.
+//
+// DB-enforced invariants (postgres):
+//   - GIST exclusion constraint blocks overlapping windows within the same
+//     supplier_contract for any non-cancelled schedule (CRIT-1).
+//   - Partial unique index allows at most one open-ended (date_time_end IS
+//     NULL, status != CANCELLED) row per supplier_contract (CRIT-2).
+//   - Partial unique index allows at most one ACTIVE schedule per contract
+//     at a time.
+// MySQL / SQL Server enforcement is deferred (advisory-lock pattern,
+// documented in the adapter file when those dialects ship).
+message SupplierContractPriceSchedule {
+  option (options.v1.table).table = true;
+
+  string id = 1;
+  string workspace_id = 2 [(options.v1.db).references = "workspace", (options.v1.db).index = true];
+
+  // Audit
+  optional int64 date_created = 3;
+  optional string date_created_string = 4;
+  optional int64 date_modified = 5;
+  optional string date_modified_string = 6;
+  bool active = 7 [(options.v1.db).default = "true"];
+  string internal_id = 8 [(options.v1.db).unique = true];
+
+  // Parent contract
+  string supplier_contract_id = 10 [(options.v1.db).references = "supplier_contract", (options.v1.db).index = true];
+  optional SupplierContract supplier_contract = 11;
+
+  // Identity
+  string name = 20;                                       // "Year 1 (2026)", "Renewal terms 2027"
+  optional string description = 21;
+
+  // Validity window — UTC timestamps; half-open [start, end)
+  google.protobuf.Timestamp date_time_start = 22;
+  optional google.protobuf.Timestamp date_time_end = 23;  // nil = open-ended last bucket
+
+  // Scoping
+  optional string location_id = 24 [(options.v1.db).references = "location"];
+  string currency = 25;
+
+  // Lifecycle
+  SupplierContractPriceScheduleStatus status = 30 [(options.v1.db).index = true];
+  int32 sequence_number = 31;                             // 1, 2, 3 ... ordering within a contract
+
+  // Notes
+  optional string notes = 50;
+  map<string, string> metadata = 51;
+}
+
+service SupplierContractPriceScheduleDomainService {
+  rpc CreateSupplierContractPriceSchedule(CreateSupplierContractPriceScheduleRequest)
+    returns (CreateSupplierContractPriceScheduleResponse);
+  rpc ReadSupplierContractPriceSchedule(ReadSupplierContractPriceScheduleRequest)
+    returns (ReadSupplierContractPriceScheduleResponse);
+  rpc UpdateSupplierContractPriceSchedule(UpdateSupplierContractPriceScheduleRequest)
+    returns (UpdateSupplierContractPriceScheduleResponse);
+  rpc DeleteSupplierContractPriceSchedule(DeleteSupplierContractPriceScheduleRequest)
+    returns (DeleteSupplierContractPriceScheduleResponse);
+  rpc ListSupplierContractPriceSchedules(ListSupplierContractPriceSchedulesRequest)
+    returns (ListSupplierContractPriceSchedulesResponse);
+
+  // Page data for UI views
+  rpc GetSupplierContractPriceScheduleListPageData(GetSupplierContractPriceScheduleListPageDataRequest)
+    returns (GetSupplierContractPriceScheduleListPageDataResponse);
+  rpc GetSupplierContractPriceScheduleItemPageData(GetSupplierContractPriceScheduleItemPageDataRequest)
+    returns (GetSupplierContractPriceScheduleItemPageDataResponse);
+
+  // Workflow actions
+  rpc ActivateSupplierContractPriceSchedule(ActivateSupplierContractPriceScheduleRequest)
+    returns (ActivateSupplierContractPriceScheduleResponse);
+  rpc SupersedeSupplierContractPriceSchedule(SupersedeSupplierContractPriceScheduleRequest)
+    returns (SupersedeSupplierContractPriceScheduleResponse);
+}
+
+message CreateSupplierContractPriceScheduleRequest {
+  SupplierContractPriceSchedule data = 1;
+}
+
+message CreateSupplierContractPriceScheduleResponse {
+  repeated SupplierContractPriceSchedule data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message ReadSupplierContractPriceScheduleRequest {
+  SupplierContractPriceSchedule data = 1;
+}
+
+message ReadSupplierContractPriceScheduleResponse {
+  repeated SupplierContractPriceSchedule data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message UpdateSupplierContractPriceScheduleRequest {
+  SupplierContractPriceSchedule data = 1;
+}
+
+message UpdateSupplierContractPriceScheduleResponse {
+  repeated SupplierContractPriceSchedule data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message DeleteSupplierContractPriceScheduleRequest {
+  SupplierContractPriceSchedule data = 1;
+}
+
+message DeleteSupplierContractPriceScheduleResponse {
+  bool success = 1;
+  optional domain.common.v1.Error error = 2;
+}
+
+message ListSupplierContractPriceSchedulesRequest {
+  optional domain.common.v1.SearchRequest search = 1;
+  optional domain.common.v1.FilterRequest filters = 2;
+  optional domain.common.v1.SortRequest sort = 3;
+  optional domain.common.v1.PaginationRequest pagination = 4;
+  optional string supplier_contract_id = 5;
+  optional SupplierContractPriceScheduleStatus status = 6;
+  optional string workspace_id = 7;
+}
+
+message ListSupplierContractPriceSchedulesResponse {
+  repeated SupplierContractPriceSchedule data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message GetSupplierContractPriceScheduleListPageDataRequest {
+  optional domain.common.v1.PaginationRequest pagination = 1;
+  optional domain.common.v1.FilterRequest filters = 2;
+  optional domain.common.v1.SortRequest sort = 3;
+  optional domain.common.v1.SearchRequest search = 4;
+}
+
+message GetSupplierContractPriceScheduleListPageDataResponse {
+  repeated SupplierContractPriceSchedule supplier_contract_price_schedule_list = 1;
+  optional domain.common.v1.PaginationResponse pagination = 2;
+  repeated domain.common.v1.SearchResult search_results = 3;
+  bool success = 4;
+  optional domain.common.v1.Error error = 5;
+}
+
+message GetSupplierContractPriceScheduleItemPageDataRequest {
+  string supplier_contract_price_schedule_id = 1;
+}
+
+message GetSupplierContractPriceScheduleItemPageDataResponse {
+  optional SupplierContractPriceSchedule supplier_contract_price_schedule = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+// ActivateSupplierContractPriceSchedule flips status SCHEDULED→ACTIVE. The
+// use case auto-supersedes any existing ACTIVE schedule for the same
+// supplier_contract (single-write boundary; partial unique index enforces).
+message ActivateSupplierContractPriceScheduleRequest {
+  string supplier_contract_price_schedule_id = 1;
+  string activated_by = 2;
+}
+
+message ActivateSupplierContractPriceScheduleResponse {
+  optional SupplierContractPriceSchedule data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+// SupersedeSupplierContractPriceSchedule flips ACTIVE→SUPERSEDED on
+// date_time_end arrival or operator request.
+message SupersedeSupplierContractPriceScheduleRequest {
+  string supplier_contract_price_schedule_id = 1;
+  optional string reason = 2;
+}
+
+message SupersedeSupplierContractPriceScheduleResponse {
+  optional SupplierContractPriceSchedule data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}

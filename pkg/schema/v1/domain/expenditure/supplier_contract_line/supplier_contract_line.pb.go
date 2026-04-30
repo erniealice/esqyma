@@ -194,9 +194,14 @@ type SupplierContractLine struct {
 	DateModifiedString *string `protobuf:"bytes,22,opt,name=date_modified_string,json=dateModifiedString,proto3,oneof" json:"date_modified_string,omitempty"`
 	// Discriminator for line role (drives payroll calculator routing for employment
 	// contract lines; ignored for vendor contracts where line_type is sufficient).
-	Kind          *SupplierContractLineKind `protobuf:"varint,23,opt,name=kind,proto3,enum=domain.expenditure.v1.SupplierContractLineKind,oneof" json:"kind,omitempty"`
-	unknownFields protoimpl.UnknownFields
-	sizeCache     protoimpl.SizeCache
+	Kind *SupplierContractLineKind `protobuf:"varint,23,opt,name=kind,proto3,enum=domain.expenditure.v1.SupplierContractLineKind,oneof" json:"kind,omitempty"`
+	// Quick-join FK to the active priced row for this contract line. Optional —
+	// absence is fine; the recurrence engine resolves price via
+	// ResolveActiveScheduleLine(line_id, asOf) when this is null. Application-
+	// level FK only (no DB constraint, mirrors purchase_order_line_item linkage).
+	SupplierContractPriceScheduleLineId *string `protobuf:"bytes,24,opt,name=supplier_contract_price_schedule_line_id,json=supplierContractPriceScheduleLineId,proto3,oneof" json:"supplier_contract_price_schedule_line_id,omitempty"`
+	unknownFields                       protoimpl.UnknownFields
+	sizeCache                           protoimpl.SizeCache
 }
 
 func (x *SupplierContractLine) Reset() {
@@ -388,6 +393,13 @@ func (x *SupplierContractLine) GetKind() SupplierContractLineKind {
 		return *x.Kind
 	}
 	return SupplierContractLineKind_SUPPLIER_CONTRACT_LINE_KIND_UNSPECIFIED
+}
+
+func (x *SupplierContractLine) GetSupplierContractPriceScheduleLineId() string {
+	if x != nil && x.SupplierContractPriceScheduleLineId != nil {
+		return *x.SupplierContractPriceScheduleLineId
+	}
+	return ""
 }
 
 type CreateSupplierContractLineRequest struct {
@@ -1186,7 +1198,7 @@ var File_domain_expenditure_supplier_contract_line_supplier_contract_line_proto 
 
 const file_domain_expenditure_supplier_contract_line_supplier_contract_line_proto_rawDesc = "" +
 	"\n" +
-	"Fdomain/expenditure/supplier_contract_line/supplier_contract_line.proto\x12\x15domain.expenditure.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/search.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a<domain/expenditure/supplier_contract/supplier_contract.proto\x1a$domain/product/product/product.proto\x1a\x10options/db.proto\"\x8e\v\n" +
+	"Fdomain/expenditure/supplier_contract_line/supplier_contract_line.proto\x12\x15domain.expenditure.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/search.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a<domain/expenditure/supplier_contract/supplier_contract.proto\x1a$domain/product/product/product.proto\x1a\x10options/db.proto\"\x97\f\n" +
 	"\x14SupplierContractLine\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12K\n" +
 	"\x14supplier_contract_id\x18\x02 \x01(\tB\x19\x82\xb5\x18\x15\n" +
@@ -1224,7 +1236,8 @@ const file_domain_expenditure_supplier_contract_line_supplier_contract_line_prot
 	"\rdate_modified\x18\x15 \x01(\x03H\n" +
 	"R\fdateModified\x88\x01\x01\x125\n" +
 	"\x14date_modified_string\x18\x16 \x01(\tH\vR\x12dateModifiedString\x88\x01\x01\x12P\n" +
-	"\x04kind\x18\x17 \x01(\x0e2/.domain.expenditure.v1.SupplierContractLineKindB\x06\x82\xb5\x18\x02\x18\x01H\fR\x04kind\x88\x01\x01:\x06\x8a\xb5\x18\x02\b\x01B\x14\n" +
+	"\x04kind\x18\x17 \x01(\x0e2/.domain.expenditure.v1.SupplierContractLineKindB\x06\x82\xb5\x18\x02\x18\x01H\fR\x04kind\x88\x01\x01\x12Z\n" +
+	"(supplier_contract_price_schedule_line_id\x18\x18 \x01(\tH\rR#supplierContractPriceScheduleLineId\x88\x01\x01:\x06\x8a\xb5\x18\x02\b\x01B\x14\n" +
 	"\x12_supplier_contractB\r\n" +
 	"\v_product_idB\n" +
 	"\n" +
@@ -1238,7 +1251,8 @@ const file_domain_expenditure_supplier_contract_line_supplier_contract_line_prot
 	"\x14_date_created_stringB\x10\n" +
 	"\x0e_date_modifiedB\x17\n" +
 	"\x15_date_modified_stringB\a\n" +
-	"\x05_kind\"d\n" +
+	"\x05_kindB+\n" +
+	")_supplier_contract_price_schedule_line_id\"d\n" +
 	"!CreateSupplierContractLineRequest\x12?\n" +
 	"\x04data\x18\x01 \x01(\v2+.domain.expenditure.v1.SupplierContractLineR\x04data\"\xbd\x01\n" +
 	"\"CreateSupplierContractLineResponse\x12?\n" +

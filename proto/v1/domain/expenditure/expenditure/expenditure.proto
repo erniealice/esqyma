@@ -23,7 +23,17 @@ message Expenditure {
   optional string date_modified_string = 5;
   bool active = 6;
   string name = 7;
-  string expenditure_type = 8;                    // "purchase", "expense", "refund", "payroll", "petty"
+  // expenditure_type — free-text discriminator (legacy entity, not promoted to enum
+  // per [entity-status-conventions](docs/wiki/articles/entity-status-conventions.md)
+  // "enum for new entities, free-text on legacy" rule).
+  //
+  // Allowed values:
+  //   "purchase"  → bill received from a vendor against a PurchaseOrder
+  //   "expense"   → general expense not tied to a PO
+  //   "refund"    → supplier-issued refund/credit
+  //   "payroll"   → payroll-driven expenditure (wages, statutory)
+  //   "petty"     → sundry petty-cash expense; pair with petty_cash_fund_id (field 29)
+  string expenditure_type = 8;
   optional domain.entity.v1.Client vendor = 9;    // counterparty (vendor/supplier)
   string vendor_id = 10;                          // FK to entity/client (vendors are clients you buy from)
   optional int64 expenditure_date = 11;
@@ -47,6 +57,24 @@ message Expenditure {
   // Supplier commitment back-edges
   optional string supplier_contract_id = 28 [(options.v1.db).references = "supplier_contract"];  // FK to SupplierContract (roll-up spend)
   optional string petty_cash_fund_id = 29 [(options.v1.db).references = "petty_cash_fund"];      // FK to PettyCashFund (sundries flow)
+
+  // Accrual-basis recognition back-edges (SPS plan §6.5).
+  // expense_recognition_id: optional 1:1 link from a bill to its primary
+  //   recognition row. Multi-period amortization uses 1:N via
+  //   DeferredExpense (Prepayment), not via this FK.
+  // accrued_expense_id: when an inbound bill settles a previously recognized
+  //   accrual, the AccruedExpenseSettlement service writes both the
+  //   join row and this back-edge for fast reverse lookup.
+  optional string expense_recognition_id = 30 [(options.v1.db).references = "expense_recognition"];
+  optional string accrued_expense_id = 31 [(options.v1.db).references = "accrued_expense"];
+  // cycle_date: YYYY-MM-DD bucket the recurrence engine produced this draft
+  //   against. Pairs with supplier_contract_id for idempotency when the
+  //   recurrence engine produces draft Expenditures.
+  optional string cycle_date = 32;
+  // source: free-text discriminator for how this row entered the system
+  //   ("manual" | "recurrence" | "po_match" | "import"). Useful for
+  //   filtering operational queues.
+  optional string source = 33;
 }
 
 service ExpenditureDomainService {

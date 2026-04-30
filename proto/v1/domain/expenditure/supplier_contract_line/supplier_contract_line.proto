@@ -90,6 +90,12 @@ message SupplierContractLine {
   // Discriminator for line role (drives payroll calculator routing for employment
   // contract lines; ignored for vendor contracts where line_type is sufficient).
   optional SupplierContractLineKind kind = 23 [(options.v1.db).index = true];
+
+  // Quick-join FK to the active priced row for this contract line. Optional —
+  // absence is fine; the recurrence engine resolves price via
+  // ResolveActiveScheduleLine(line_id, asOf) when this is null. Application-
+  // level FK only (no DB constraint, mirrors purchase_order_line_item linkage).
+  optional string supplier_contract_price_schedule_line_id = 24;
 }
 
 service SupplierContractLineDomainService {

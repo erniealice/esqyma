@@ -1,0 +1,146 @@
+syntax = "proto3";
+
+package domain.expenditure.v1;
+
+option go_package = "github.com/erniealice/esqyma/golang/v1/domain/expenditure/expense_recognition_line";
+
+import "domain/common/error.proto";
+import "domain/common/pagination.proto";
+import "domain/common/search.proto";
+import "domain/common/filter.proto";
+import "domain/common/sort.proto";
+import "options/db.proto";
+
+// ExpenseRecognitionLine is a per-line breakdown of a parent ExpenseRecognition.
+// Mirrors RevenueLineItem on the sales side.
+message ExpenseRecognitionLine {
+  option (options.v1.table).table = true;
+
+  string id = 1;
+  string workspace_id = 2 [(options.v1.db).references = "workspace", (options.v1.db).index = true];
+
+  // Audit
+  optional int64 date_created = 3;
+  optional string date_created_string = 4;
+  optional int64 date_modified = 5;
+  optional string date_modified_string = 6;
+  bool active = 7 [(options.v1.db).default = "true"];
+
+  // Parent
+  string expense_recognition_id = 10
+    [(options.v1.db).references = "expense_recognition", (options.v1.db).index = true];
+
+  // Source links
+  optional string supplier_contract_line_id = 11
+    [(options.v1.db).references = "supplier_contract_line"];
+  optional string expenditure_line_item_id = 12
+    [(options.v1.db).references = "expenditure_line_item"];
+  optional string product_id = 13 [(options.v1.db).references = "product"];
+
+  // Line details
+  string description = 20;
+  double quantity = 21;
+  int64 unit_amount = 22;                                    // centavos
+  int64 amount = 23;                                          // centavos (line total)
+  string currency = 24;
+
+  // GL
+  optional string expense_account_id = 30 [(options.v1.db).references = "account"];
+  optional string job_activity_id = 31 [(options.v1.db).references = "job_activity"];
+}
+
+service ExpenseRecognitionLineDomainService {
+  rpc CreateExpenseRecognitionLine(CreateExpenseRecognitionLineRequest)
+    returns (CreateExpenseRecognitionLineResponse);
+  rpc ReadExpenseRecognitionLine(ReadExpenseRecognitionLineRequest)
+    returns (ReadExpenseRecognitionLineResponse);
+  rpc UpdateExpenseRecognitionLine(UpdateExpenseRecognitionLineRequest)
+    returns (UpdateExpenseRecognitionLineResponse);
+  rpc DeleteExpenseRecognitionLine(DeleteExpenseRecognitionLineRequest)
+    returns (DeleteExpenseRecognitionLineResponse);
+  rpc ListExpenseRecognitionLines(ListExpenseRecognitionLinesRequest)
+    returns (ListExpenseRecognitionLinesResponse);
+
+  rpc GetExpenseRecognitionLineListPageData(GetExpenseRecognitionLineListPageDataRequest)
+    returns (GetExpenseRecognitionLineListPageDataResponse);
+  rpc GetExpenseRecognitionLineItemPageData(GetExpenseRecognitionLineItemPageDataRequest)
+    returns (GetExpenseRecognitionLineItemPageDataResponse);
+}
+
+message CreateExpenseRecognitionLineRequest {
+  ExpenseRecognitionLine data = 1;
+}
+
+message CreateExpenseRecognitionLineResponse {
+  repeated ExpenseRecognitionLine data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message ReadExpenseRecognitionLineRequest {
+  ExpenseRecognitionLine data = 1;
+}
+
+message ReadExpenseRecognitionLineResponse {
+  repeated ExpenseRecognitionLine data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message UpdateExpenseRecognitionLineRequest {
+  ExpenseRecognitionLine data = 1;
+}
+
+message UpdateExpenseRecognitionLineResponse {
+  repeated ExpenseRecognitionLine data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message DeleteExpenseRecognitionLineRequest {
+  ExpenseRecognitionLine data = 1;
+}
+
+message DeleteExpenseRecognitionLineResponse {
+  bool success = 1;
+  optional domain.common.v1.Error error = 2;
+}
+
+message ListExpenseRecognitionLinesRequest {
+  optional string expense_recognition_id = 1;
+  optional domain.common.v1.SearchRequest search = 2;
+  optional domain.common.v1.FilterRequest filters = 3;
+  optional domain.common.v1.SortRequest sort = 4;
+  optional domain.common.v1.PaginationRequest pagination = 5;
+}
+
+message ListExpenseRecognitionLinesResponse {
+  repeated ExpenseRecognitionLine data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message GetExpenseRecognitionLineListPageDataRequest {
+  optional domain.common.v1.PaginationRequest pagination = 1;
+  optional domain.common.v1.FilterRequest filters = 2;
+  optional domain.common.v1.SortRequest sort = 3;
+  optional domain.common.v1.SearchRequest search = 4;
+}
+
+message GetExpenseRecognitionLineListPageDataResponse {
+  repeated ExpenseRecognitionLine expense_recognition_line_list = 1;
+  optional domain.common.v1.PaginationResponse pagination = 2;
+  repeated domain.common.v1.SearchResult search_results = 3;
+  bool success = 4;
+  optional domain.common.v1.Error error = 5;
+}
+
+message GetExpenseRecognitionLineItemPageDataRequest {
+  string expense_recognition_line_id = 1;
+}
+
+message GetExpenseRecognitionLineItemPageDataResponse {
+  optional ExpenseRecognitionLine expense_recognition_line = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}

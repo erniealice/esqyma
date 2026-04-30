@@ -27,17 +27,28 @@ const (
 )
 
 type Expenditure struct {
-	state                 protoimpl.MessageState    `protogen:"open.v1"`
-	Id                    string                    `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
-	DateCreated           *int64                    `protobuf:"varint,2,opt,name=date_created,json=dateCreated,proto3,oneof" json:"date_created,omitempty"`
-	DateCreatedString     *string                   `protobuf:"bytes,3,opt,name=date_created_string,json=dateCreatedString,proto3,oneof" json:"date_created_string,omitempty"`
-	DateModified          *int64                    `protobuf:"varint,4,opt,name=date_modified,json=dateModified,proto3,oneof" json:"date_modified,omitempty"`
-	DateModifiedString    *string                   `protobuf:"bytes,5,opt,name=date_modified_string,json=dateModifiedString,proto3,oneof" json:"date_modified_string,omitempty"`
-	Active                bool                      `protobuf:"varint,6,opt,name=active,proto3" json:"active,omitempty"`
-	Name                  string                    `protobuf:"bytes,7,opt,name=name,proto3" json:"name,omitempty"`
-	ExpenditureType       string                    `protobuf:"bytes,8,opt,name=expenditure_type,json=expenditureType,proto3" json:"expenditure_type,omitempty"` // "purchase", "expense", "refund", "payroll", "petty"
-	Vendor                *client.Client            `protobuf:"bytes,9,opt,name=vendor,proto3,oneof" json:"vendor,omitempty"`                                    // counterparty (vendor/supplier)
-	VendorId              string                    `protobuf:"bytes,10,opt,name=vendor_id,json=vendorId,proto3" json:"vendor_id,omitempty"`                     // FK to entity/client (vendors are clients you buy from)
+	state              protoimpl.MessageState `protogen:"open.v1"`
+	Id                 string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
+	DateCreated        *int64                 `protobuf:"varint,2,opt,name=date_created,json=dateCreated,proto3,oneof" json:"date_created,omitempty"`
+	DateCreatedString  *string                `protobuf:"bytes,3,opt,name=date_created_string,json=dateCreatedString,proto3,oneof" json:"date_created_string,omitempty"`
+	DateModified       *int64                 `protobuf:"varint,4,opt,name=date_modified,json=dateModified,proto3,oneof" json:"date_modified,omitempty"`
+	DateModifiedString *string                `protobuf:"bytes,5,opt,name=date_modified_string,json=dateModifiedString,proto3,oneof" json:"date_modified_string,omitempty"`
+	Active             bool                   `protobuf:"varint,6,opt,name=active,proto3" json:"active,omitempty"`
+	Name               string                 `protobuf:"bytes,7,opt,name=name,proto3" json:"name,omitempty"`
+	// expenditure_type — free-text discriminator (legacy entity, not promoted to enum
+	// per [entity-status-conventions](docs/wiki/articles/entity-status-conventions.md)
+	// "enum for new entities, free-text on legacy" rule).
+	//
+	// Allowed values:
+	//
+	//	"purchase"  → bill received from a vendor against a PurchaseOrder
+	//	"expense"   → general expense not tied to a PO
+	//	"refund"    → supplier-issued refund/credit
+	//	"payroll"   → payroll-driven expenditure (wages, statutory)
+	//	"petty"     → sundry petty-cash expense; pair with petty_cash_fund_id (field 29)
+	ExpenditureType       string                    `protobuf:"bytes,8,opt,name=expenditure_type,json=expenditureType,proto3" json:"expenditure_type,omitempty"`
+	Vendor                *client.Client            `protobuf:"bytes,9,opt,name=vendor,proto3,oneof" json:"vendor,omitempty"`                // counterparty (vendor/supplier)
+	VendorId              string                    `protobuf:"bytes,10,opt,name=vendor_id,json=vendorId,proto3" json:"vendor_id,omitempty"` // FK to entity/client (vendors are clients you buy from)
 	ExpenditureDate       *int64                    `protobuf:"varint,11,opt,name=expenditure_date,json=expenditureDate,proto3,oneof" json:"expenditure_date,omitempty"`
 	ExpenditureDateString *string                   `protobuf:"bytes,12,opt,name=expenditure_date_string,json=expenditureDateString,proto3,oneof" json:"expenditure_date_string,omitempty"`
 	TotalAmount           int64                     `protobuf:"varint,13,opt,name=total_amount,json=totalAmount,proto3" json:"total_amount,omitempty"` // centavos
@@ -58,8 +69,30 @@ type Expenditure struct {
 	// Supplier commitment back-edges
 	SupplierContractId *string `protobuf:"bytes,28,opt,name=supplier_contract_id,json=supplierContractId,proto3,oneof" json:"supplier_contract_id,omitempty"` // FK to SupplierContract (roll-up spend)
 	PettyCashFundId    *string `protobuf:"bytes,29,opt,name=petty_cash_fund_id,json=pettyCashFundId,proto3,oneof" json:"petty_cash_fund_id,omitempty"`        // FK to PettyCashFund (sundries flow)
-	unknownFields      protoimpl.UnknownFields
-	sizeCache          protoimpl.SizeCache
+	// Accrual-basis recognition back-edges (SPS plan §6.5).
+	// expense_recognition_id: optional 1:1 link from a bill to its primary
+	//
+	//	recognition row. Multi-period amortization uses 1:N via
+	//	DeferredExpense (Prepayment), not via this FK.
+	//
+	// accrued_expense_id: when an inbound bill settles a previously recognized
+	//
+	//	accrual, the AccruedExpenseSettlement service writes both the
+	//	join row and this back-edge for fast reverse lookup.
+	ExpenseRecognitionId *string `protobuf:"bytes,30,opt,name=expense_recognition_id,json=expenseRecognitionId,proto3,oneof" json:"expense_recognition_id,omitempty"`
+	AccruedExpenseId     *string `protobuf:"bytes,31,opt,name=accrued_expense_id,json=accruedExpenseId,proto3,oneof" json:"accrued_expense_id,omitempty"`
+	// cycle_date: YYYY-MM-DD bucket the recurrence engine produced this draft
+	//
+	//	against. Pairs with supplier_contract_id for idempotency when the
+	//	recurrence engine produces draft Expenditures.
+	CycleDate *string `protobuf:"bytes,32,opt,name=cycle_date,json=cycleDate,proto3,oneof" json:"cycle_date,omitempty"`
+	// source: free-text discriminator for how this row entered the system
+	//
+	//	("manual" | "recurrence" | "po_match" | "import"). Useful for
+	//	filtering operational queues.
+	Source        *string `protobuf:"bytes,33,opt,name=source,proto3,oneof" json:"source,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
 }
 
 func (x *Expenditure) Reset() {
@@ -291,6 +324,34 @@ func (x *Expenditure) GetSupplierContractId() string {
 func (x *Expenditure) GetPettyCashFundId() string {
 	if x != nil && x.PettyCashFundId != nil {
 		return *x.PettyCashFundId
+	}
+	return ""
+}
+
+func (x *Expenditure) GetExpenseRecognitionId() string {
+	if x != nil && x.ExpenseRecognitionId != nil {
+		return *x.ExpenseRecognitionId
+	}
+	return ""
+}
+
+func (x *Expenditure) GetAccruedExpenseId() string {
+	if x != nil && x.AccruedExpenseId != nil {
+		return *x.AccruedExpenseId
+	}
+	return ""
+}
+
+func (x *Expenditure) GetCycleDate() string {
+	if x != nil && x.CycleDate != nil {
+		return *x.CycleDate
+	}
+	return ""
+}
+
+func (x *Expenditure) GetSource() string {
+	if x != nil && x.Source != nil {
+		return *x.Source
 	}
 	return ""
 }
@@ -1083,7 +1144,7 @@ var File_domain_expenditure_expenditure_expenditure_proto protoreflect.FileDescr
 
 const file_domain_expenditure_expenditure_expenditure_proto_rawDesc = "" +
 	"\n" +
-	"0domain/expenditure/expenditure/expenditure.proto\x12\x15domain.expenditure.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/search.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a!domain/entity/client/client.proto\x1a%domain/entity/location/location.proto\x1a-domain/entity/payment_term/payment_term.proto\x1a\x10options/db.proto\"\xac\r\n" +
+	"0domain/expenditure/expenditure/expenditure.proto\x12\x15domain.expenditure.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/search.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a!domain/entity/client/client.proto\x1a%domain/entity/location/location.proto\x1a-domain/entity/payment_term/payment_term.proto\x1a\x10options/db.proto\"\xd9\x0f\n" +
 	"\vExpenditure\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12&\n" +
 	"\fdate_created\x18\x02 \x01(\x03H\x00R\vdateCreated\x88\x01\x01\x123\n" +
@@ -1123,7 +1184,14 @@ const file_domain_expenditure_expenditure_expenditure_proto_rawDesc = "" +
 	"\x14supplier_contract_id\x18\x1c \x01(\tB\x17\x82\xb5\x18\x13\n" +
 	"\x11supplier_contractH\x12R\x12supplierContractId\x88\x01\x01\x12G\n" +
 	"\x12petty_cash_fund_id\x18\x1d \x01(\tB\x15\x82\xb5\x18\x11\n" +
-	"\x0fpetty_cash_fundH\x13R\x0fpettyCashFundId\x88\x01\x01B\x0f\n" +
+	"\x0fpetty_cash_fundH\x13R\x0fpettyCashFundId\x88\x01\x01\x12T\n" +
+	"\x16expense_recognition_id\x18\x1e \x01(\tB\x19\x82\xb5\x18\x15\n" +
+	"\x13expense_recognitionH\x14R\x14expenseRecognitionId\x88\x01\x01\x12H\n" +
+	"\x12accrued_expense_id\x18\x1f \x01(\tB\x15\x82\xb5\x18\x11\n" +
+	"\x0faccrued_expenseH\x15R\x10accruedExpenseId\x88\x01\x01\x12\"\n" +
+	"\n" +
+	"cycle_date\x18  \x01(\tH\x16R\tcycleDate\x88\x01\x01\x12\x1b\n" +
+	"\x06source\x18! \x01(\tH\x17R\x06source\x88\x01\x01B\x0f\n" +
 	"\r_date_createdB\x16\n" +
 	"\x14_date_created_stringB\x10\n" +
 	"\x0e_date_modifiedB\x17\n" +
@@ -1143,7 +1211,11 @@ const file_domain_expenditure_expenditure_expenditure_proto_rawDesc = "" +
 	"\x10_payment_term_idB\x0f\n" +
 	"\r_payment_termB\x17\n" +
 	"\x15_supplier_contract_idB\x15\n" +
-	"\x13_petty_cash_fund_id\"R\n" +
+	"\x13_petty_cash_fund_idB\x19\n" +
+	"\x17_expense_recognition_idB\x15\n" +
+	"\x13_accrued_expense_idB\r\n" +
+	"\v_cycle_dateB\t\n" +
+	"\a_source\"R\n" +
 	"\x18CreateExpenditureRequest\x126\n" +
 	"\x04data\x18\x01 \x01(\v2\".domain.expenditure.v1.ExpenditureR\x04data\"\xab\x01\n" +
 	"\x19CreateExpenditureResponse\x126\n" +

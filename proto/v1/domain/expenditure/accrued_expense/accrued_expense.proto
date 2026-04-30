@@ -1,0 +1,388 @@
+syntax = "proto3";
+
+package domain.expenditure.v1;
+
+option go_package = "github.com/erniealice/esqyma/golang/v1/domain/expenditure/accrued_expense";
+
+import "domain/common/error.proto";
+import "domain/common/pagination.proto";
+import "domain/common/search.proto";
+import "domain/common/filter.proto";
+import "domain/common/sort.proto";
+import "options/db.proto";
+import "google/protobuf/timestamp.proto";
+
+// AccruedExpenseStatus tracks the lifecycle of a recognized-ahead-of-bill
+// supplier obligation.
+enum AccruedExpenseStatus {
+  ACCRUED_EXPENSE_STATUS_UNSPECIFIED = 0;
+  ACCRUED_EXPENSE_STATUS_OUTSTANDING = 1;  // recognized, no bill yet
+  ACCRUED_EXPENSE_STATUS_PARTIAL     = 2;  // 1+ settlement rows; sum < accrued_amount
+  ACCRUED_EXPENSE_STATUS_SETTLED     = 3;  // sum of settlements = accrued_amount
+  ACCRUED_EXPENSE_STATUS_REVERSED    = 4;  // accrual estimate proved wrong; journal reversed
+}
+
+// AccruedExpense represents a recognized supplier obligation ahead of the
+// supplier invoice (Expenditure) actually arriving. There is no
+// AccruedRevenue analog on the sales side — this is an intentional
+// asymmetry: customers commit and we recognize on the actual transaction.
+//
+// Settlement is modeled as N:M via the AccruedExpenseSettlement join table
+// (round-6 amendment, HIGH-3) — replacing the original single
+// settling_expenditure_id FK which couldn't model partial bills, multi-
+// accrual settlement, or FX-adjusted settlement.
+//
+// Single-write boundary (plan §10 R2/R3): all updates to settled_amount
+// + remaining_amount flow through the AccruedExpenseSettlementService
+// (`SettleAccrual`, `ReverseAccrual`). Adapter-direct writes are forbidden.
+message AccruedExpense {
+  option (options.v1.table).table = true;
+
+  string id = 1;
+  string workspace_id = 2 [(options.v1.db).references = "workspace", (options.v1.db).index = true];
+
+  // Audit
+  optional int64 date_created = 3;
+  optional string date_created_string = 4;
+  optional int64 date_modified = 5;
+  optional string date_modified_string = 6;
+  bool active = 7 [(options.v1.db).default = "true"];
+  string internal_id = 8 [(options.v1.db).unique = true];
+
+  // Identity
+  string name = 10;                                          // "Utilities — May 2026 (estimate)"
+  optional string description = 11;
+
+  // Source contract / supplier
+  string supplier_contract_id = 20
+    [(options.v1.db).references = "supplier_contract", (options.v1.db).index = true];
+  optional string supplier_id = 21 [(options.v1.db).references = "supplier"];
+
+  // Period
+  optional google.protobuf.Timestamp period_start = 30;
+  optional google.protobuf.Timestamp period_end = 31;
+  google.protobuf.Timestamp recognition_date = 32;
+  optional string cycle_date = 33;                            // YYYY-MM-DD bucket; idempotency w/ supplier_contract_id
+
+  // Money (centavos)
+  string currency = 40;
+  int64 accrued_amount = 41;                                  // estimated obligation
+  int64 settled_amount = 42 [(options.v1.db).default = "0"];  // sum of AccruedExpenseSettlement.amount entries
+  int64 remaining_amount = 43 [(options.v1.db).default = "0"];// accrued_amount - settled_amount (derived; stored)
+
+  // Lifecycle
+  AccruedExpenseStatus status = 50 [(options.v1.db).index = true];
+
+  // GL
+  optional string accrual_account_id = 60 [(options.v1.db).references = "account"];
+  optional string expense_account_id = 61 [(options.v1.db).references = "account"];
+
+  // Notes
+  optional string notes = 90;
+  map<string, string> metadata = 91;
+}
+
+// AccruedExpenseSettlement (round-6 HIGH-3): join row capturing the amount
+// of a specific Expenditure that settles a specific AccruedExpense. Allows
+// N:M between AccruedExpense and Expenditure with per-settlement amount,
+// currency, FX revaluation, and reversal tracking.
+message AccruedExpenseSettlement {
+  option (options.v1.table).table = true;
+
+  string id = 1;
+  string workspace_id = 2 [(options.v1.db).references = "workspace", (options.v1.db).index = true];
+
+  // Audit
+  optional int64 date_created = 3;
+  optional string date_created_string = 4;
+  optional int64 date_modified = 5;
+  optional string date_modified_string = 6;
+  bool active = 7 [(options.v1.db).default = "true"];
+
+  // Parents (parent accrual + the bill that settles it)
+  string accrued_expense_id = 10
+    [(options.v1.db).references = "accrued_expense", (options.v1.db).index = true];
+  string expenditure_id = 11
+    [(options.v1.db).references = "expenditure", (options.v1.db).index = true];
+  optional string expenditure_line_item_id = 12
+    [(options.v1.db).references = "expenditure_line_item"];
+
+  // The portion of THIS expenditure that settles THIS accrual.
+  // Independent of expenditure.total_amount — one Expenditure can split
+  // across multiple accruals.
+  int64 amount_settled = 20;                                  // centavos
+  string currency = 21;
+
+  // FX revaluation — if the accrual was estimated at a different rate epoch
+  optional double fx_rate = 30;                               // bill currency → accrual currency rate at settlement date
+  optional int64 fx_adjustment_amount = 31;                   // accrual-currency-equivalent of the FX delta
+
+  // When the settlement was posted
+  google.protobuf.Timestamp settled_at = 40;
+
+  // Reversal — settlement can be reversed (e.g., bill voided after settle posted).
+  // A reversal IS-A settlement with a negative amount; this self-FK points
+  // from the original to its reversing row (and vice-versa).
+  optional string reversed_by_settlement_id = 50;
+  optional string reversal_reason = 51;
+}
+
+service AccruedExpenseDomainService {
+  rpc CreateAccruedExpense(CreateAccruedExpenseRequest)
+    returns (CreateAccruedExpenseResponse);
+  rpc ReadAccruedExpense(ReadAccruedExpenseRequest)
+    returns (ReadAccruedExpenseResponse);
+  rpc UpdateAccruedExpense(UpdateAccruedExpenseRequest)
+    returns (UpdateAccruedExpenseResponse);
+  rpc DeleteAccruedExpense(DeleteAccruedExpenseRequest)
+    returns (DeleteAccruedExpenseResponse);
+  rpc ListAccruedExpenses(ListAccruedExpensesRequest)
+    returns (ListAccruedExpensesResponse);
+
+  rpc GetAccruedExpenseListPageData(GetAccruedExpenseListPageDataRequest)
+    returns (GetAccruedExpenseListPageDataResponse);
+  rpc GetAccruedExpenseItemPageData(GetAccruedExpenseItemPageDataRequest)
+    returns (GetAccruedExpenseItemPageDataResponse);
+
+  // Workflow actions
+  rpc AccrueFromContract(AccrueFromContractRequest)
+    returns (AccrueFromContractResponse);
+  rpc SettleAccrual(SettleAccrualRequest)
+    returns (SettleAccrualResponse);
+  rpc ReverseAccrual(ReverseAccrualRequest)
+    returns (ReverseAccrualResponse);
+}
+
+service AccruedExpenseSettlementDomainService {
+  rpc CreateAccruedExpenseSettlement(CreateAccruedExpenseSettlementRequest)
+    returns (CreateAccruedExpenseSettlementResponse);
+  rpc ReadAccruedExpenseSettlement(ReadAccruedExpenseSettlementRequest)
+    returns (ReadAccruedExpenseSettlementResponse);
+  rpc UpdateAccruedExpenseSettlement(UpdateAccruedExpenseSettlementRequest)
+    returns (UpdateAccruedExpenseSettlementResponse);
+  rpc DeleteAccruedExpenseSettlement(DeleteAccruedExpenseSettlementRequest)
+    returns (DeleteAccruedExpenseSettlementResponse);
+  rpc ListAccruedExpenseSettlements(ListAccruedExpenseSettlementsRequest)
+    returns (ListAccruedExpenseSettlementsResponse);
+
+  rpc GetAccruedExpenseSettlementListPageData(GetAccruedExpenseSettlementListPageDataRequest)
+    returns (GetAccruedExpenseSettlementListPageDataResponse);
+  rpc GetAccruedExpenseSettlementItemPageData(GetAccruedExpenseSettlementItemPageDataRequest)
+    returns (GetAccruedExpenseSettlementItemPageDataResponse);
+}
+
+// ---------------------------------------------------------------------------
+// AccruedExpense messages
+// ---------------------------------------------------------------------------
+
+message CreateAccruedExpenseRequest {
+  AccruedExpense data = 1;
+}
+
+message CreateAccruedExpenseResponse {
+  repeated AccruedExpense data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message ReadAccruedExpenseRequest {
+  AccruedExpense data = 1;
+}
+
+message ReadAccruedExpenseResponse {
+  repeated AccruedExpense data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message UpdateAccruedExpenseRequest {
+  AccruedExpense data = 1;
+}
+
+message UpdateAccruedExpenseResponse {
+  repeated AccruedExpense data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message DeleteAccruedExpenseRequest {
+  AccruedExpense data = 1;
+}
+
+message DeleteAccruedExpenseResponse {
+  bool success = 1;
+  optional domain.common.v1.Error error = 2;
+}
+
+message ListAccruedExpensesRequest {
+  optional domain.common.v1.SearchRequest search = 1;
+  optional domain.common.v1.FilterRequest filters = 2;
+  optional domain.common.v1.SortRequest sort = 3;
+  optional domain.common.v1.PaginationRequest pagination = 4;
+  optional AccruedExpenseStatus status = 5;
+  optional string supplier_contract_id = 6;
+  optional string workspace_id = 7;
+}
+
+message ListAccruedExpensesResponse {
+  repeated AccruedExpense data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message GetAccruedExpenseListPageDataRequest {
+  optional domain.common.v1.PaginationRequest pagination = 1;
+  optional domain.common.v1.FilterRequest filters = 2;
+  optional domain.common.v1.SortRequest sort = 3;
+  optional domain.common.v1.SearchRequest search = 4;
+}
+
+message GetAccruedExpenseListPageDataResponse {
+  repeated AccruedExpense accrued_expense_list = 1;
+  optional domain.common.v1.PaginationResponse pagination = 2;
+  repeated domain.common.v1.SearchResult search_results = 3;
+  bool success = 4;
+  optional domain.common.v1.Error error = 5;
+}
+
+message GetAccruedExpenseItemPageDataRequest {
+  string accrued_expense_id = 1;
+}
+
+message GetAccruedExpenseItemPageDataResponse {
+  optional AccruedExpense accrued_expense = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+// AccrueFromContract — recurrence-engine companion. Idempotent on
+// (supplier_contract_id, cycle_date).
+message AccrueFromContractRequest {
+  string supplier_contract_id = 1;
+  string cycle_date = 2;                    // YYYY-MM-DD
+  optional int64 accrued_amount = 3;        // resolved from schedule if omitted
+}
+
+message AccrueFromContractResponse {
+  optional AccruedExpense data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+// SettleAccrual — single-write entry point for parent settled_amount /
+// remaining_amount. Creates an AccruedExpenseSettlement row, recomputes
+// parent rollups, transitions parent status (OUTSTANDING → PARTIAL → SETTLED).
+message SettleAccrualRequest {
+  string accrued_expense_id = 1;
+  string expenditure_id = 2;
+  optional string expenditure_line_item_id = 3;
+  int64 amount_settled = 4;                 // centavos
+  string currency = 5;
+  optional double fx_rate = 6;
+  optional int64 fx_adjustment_amount = 7;
+}
+
+message SettleAccrualResponse {
+  optional AccruedExpense accrued_expense = 1;
+  optional AccruedExpenseSettlement settlement = 2;
+  bool success = 3;
+  optional domain.common.v1.Error error = 4;
+}
+
+// ReverseAccrual — guards against settled-but-not-yet-fully-reversed cases.
+// If parent status=SETTLED with linked Expenditure already disbursed, emits
+// a warning that a Disbursement reversal or supplier-refund event is also
+// required to reconcile cash (see plan §6.4a HIGH-4 note).
+message ReverseAccrualRequest {
+  string accrued_expense_id = 1;
+  optional string reason = 2;
+}
+
+message ReverseAccrualResponse {
+  optional AccruedExpense data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+// ---------------------------------------------------------------------------
+// AccruedExpenseSettlement messages
+// ---------------------------------------------------------------------------
+
+message CreateAccruedExpenseSettlementRequest {
+  AccruedExpenseSettlement data = 1;
+}
+
+message CreateAccruedExpenseSettlementResponse {
+  repeated AccruedExpenseSettlement data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message ReadAccruedExpenseSettlementRequest {
+  AccruedExpenseSettlement data = 1;
+}
+
+message ReadAccruedExpenseSettlementResponse {
+  repeated AccruedExpenseSettlement data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message UpdateAccruedExpenseSettlementRequest {
+  AccruedExpenseSettlement data = 1;
+}
+
+message UpdateAccruedExpenseSettlementResponse {
+  repeated AccruedExpenseSettlement data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message DeleteAccruedExpenseSettlementRequest {
+  AccruedExpenseSettlement data = 1;
+}
+
+message DeleteAccruedExpenseSettlementResponse {
+  bool success = 1;
+  optional domain.common.v1.Error error = 2;
+}
+
+message ListAccruedExpenseSettlementsRequest {
+  optional string accrued_expense_id = 1;
+  optional string expenditure_id = 2;
+  optional domain.common.v1.SearchRequest search = 3;
+  optional domain.common.v1.FilterRequest filters = 4;
+  optional domain.common.v1.SortRequest sort = 5;
+  optional domain.common.v1.PaginationRequest pagination = 6;
+}
+
+message ListAccruedExpenseSettlementsResponse {
+  repeated AccruedExpenseSettlement data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message GetAccruedExpenseSettlementListPageDataRequest {
+  optional domain.common.v1.PaginationRequest pagination = 1;
+  optional domain.common.v1.FilterRequest filters = 2;
+  optional domain.common.v1.SortRequest sort = 3;
+  optional domain.common.v1.SearchRequest search = 4;
+}
+
+message GetAccruedExpenseSettlementListPageDataResponse {
+  repeated AccruedExpenseSettlement accrued_expense_settlement_list = 1;
+  optional domain.common.v1.PaginationResponse pagination = 2;
+  repeated domain.common.v1.SearchResult search_results = 3;
+  bool success = 4;
+  optional domain.common.v1.Error error = 5;
+}
+
+message GetAccruedExpenseSettlementItemPageDataRequest {
+  string accrued_expense_settlement_id = 1;
+}
+
+message GetAccruedExpenseSettlementItemPageDataResponse {
+  optional AccruedExpenseSettlement accrued_expense_settlement = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}

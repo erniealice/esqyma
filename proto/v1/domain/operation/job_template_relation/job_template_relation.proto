@@ -17,9 +17,18 @@ import "options/db.proto";
 //   SUB_TEMPLATE — child template runs as a sub-engagement under the parent
 //                  (e.g., Permit Filing as a child of Tower Audit). Spawned
 //                  child Jobs carry parent_job_id of the root Job.
+//   ONCE_AT_ENGAGEMENT_START — child template fires ONCE at engagement spawn
+//                  (Subscription.Create), not per cycle. Use for
+//                  onboarding/setup templates that should run only when a
+//                  cyclic subscription is first created. Spawned as a child
+//                  of the engagement Job (parent_job_id=engagement.id), with
+//                  cycle_index=NULL. Rejected on non-cyclic Plans (validation
+//                  at Plan-edit time). See
+//                  docs/plan/20260430-cyclic-subscription-jobs/plan.md §2.3.
 enum JobTemplateRelationType {
-  JOB_TEMPLATE_RELATION_TYPE_UNSPECIFIED  = 0;
-  JOB_TEMPLATE_RELATION_TYPE_SUB_TEMPLATE = 1;
+  JOB_TEMPLATE_RELATION_TYPE_UNSPECIFIED              = 0;
+  JOB_TEMPLATE_RELATION_TYPE_SUB_TEMPLATE             = 1;
+  JOB_TEMPLATE_RELATION_TYPE_ONCE_AT_ENGAGEMENT_START = 2;
 }
 
 // Join table linking JobTemplates in a parent-child relationship. Replaces

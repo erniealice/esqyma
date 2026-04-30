@@ -32,10 +32,16 @@ const (
 	ProcurementRequestStatus_PROCUREMENT_REQUEST_STATUS_DRAFT            ProcurementRequestStatus = 1 // editing, not yet submitted
 	ProcurementRequestStatus_PROCUREMENT_REQUEST_STATUS_SUBMITTED        ProcurementRequestStatus = 2 // submitted by requester
 	ProcurementRequestStatus_PROCUREMENT_REQUEST_STATUS_PENDING_APPROVAL ProcurementRequestStatus = 3 // in approver queue
-	ProcurementRequestStatus_PROCUREMENT_REQUEST_STATUS_APPROVED         ProcurementRequestStatus = 4 // approved; ready to spawn PO
+	ProcurementRequestStatus_PROCUREMENT_REQUEST_STATUS_APPROVED         ProcurementRequestStatus = 4 // approved; all lines spawned
 	ProcurementRequestStatus_PROCUREMENT_REQUEST_STATUS_REJECTED         ProcurementRequestStatus = 5 // denied (terminal)
-	ProcurementRequestStatus_PROCUREMENT_REQUEST_STATUS_FULFILLED        ProcurementRequestStatus = 6 // PO created and received (terminal)
+	ProcurementRequestStatus_PROCUREMENT_REQUEST_STATUS_FULFILLED        ProcurementRequestStatus = 6 // downstream artifacts received (terminal)
 	ProcurementRequestStatus_PROCUREMENT_REQUEST_STATUS_CANCELLED        ProcurementRequestStatus = 7 // withdrawn (terminal)
+	// CRIT-3 (round-6): interim status held while approval was recorded but
+	// one or more line items have spawn_status ∈ {PENDING, SPAWNING, FAILED}.
+	// Approve action transitions PENDING_APPROVAL → APPROVED_PENDING_SPAWN
+	// (NOT directly to APPROVED). The use case promotes to APPROVED only when
+	// every line reaches spawn_status=SPAWNED.
+	ProcurementRequestStatus_PROCUREMENT_REQUEST_STATUS_APPROVED_PENDING_SPAWN ProcurementRequestStatus = 8
 )
 
 // Enum value maps for ProcurementRequestStatus.
@@ -49,16 +55,18 @@ var (
 		5: "PROCUREMENT_REQUEST_STATUS_REJECTED",
 		6: "PROCUREMENT_REQUEST_STATUS_FULFILLED",
 		7: "PROCUREMENT_REQUEST_STATUS_CANCELLED",
+		8: "PROCUREMENT_REQUEST_STATUS_APPROVED_PENDING_SPAWN",
 	}
 	ProcurementRequestStatus_value = map[string]int32{
-		"PROCUREMENT_REQUEST_STATUS_UNSPECIFIED":      0,
-		"PROCUREMENT_REQUEST_STATUS_DRAFT":            1,
-		"PROCUREMENT_REQUEST_STATUS_SUBMITTED":        2,
-		"PROCUREMENT_REQUEST_STATUS_PENDING_APPROVAL": 3,
-		"PROCUREMENT_REQUEST_STATUS_APPROVED":         4,
-		"PROCUREMENT_REQUEST_STATUS_REJECTED":         5,
-		"PROCUREMENT_REQUEST_STATUS_FULFILLED":        6,
-		"PROCUREMENT_REQUEST_STATUS_CANCELLED":        7,
+		"PROCUREMENT_REQUEST_STATUS_UNSPECIFIED":            0,
+		"PROCUREMENT_REQUEST_STATUS_DRAFT":                  1,
+		"PROCUREMENT_REQUEST_STATUS_SUBMITTED":              2,
+		"PROCUREMENT_REQUEST_STATUS_PENDING_APPROVAL":       3,
+		"PROCUREMENT_REQUEST_STATUS_APPROVED":               4,
+		"PROCUREMENT_REQUEST_STATUS_REJECTED":               5,
+		"PROCUREMENT_REQUEST_STATUS_FULFILLED":              6,
+		"PROCUREMENT_REQUEST_STATUS_CANCELLED":              7,
+		"PROCUREMENT_REQUEST_STATUS_APPROVED_PENDING_SPAWN": 8,
 	}
 )
 
@@ -87,6 +95,68 @@ func (x ProcurementRequestStatus) Number() protoreflect.EnumNumber {
 // Deprecated: Use ProcurementRequestStatus.Descriptor instead.
 func (ProcurementRequestStatus) EnumDescriptor() ([]byte, []int) {
 	return file_domain_expenditure_procurement_request_procurement_request_proto_rawDescGZIP(), []int{0}
+}
+
+// ProcurementRequestFulfillmentStrategy (F3) — header-level rollup of how
+// the request is intended to be fulfilled. Useful for filtering operational
+// queues. Per-line fulfillment_mode (F1) on ProcurementRequestLine drives
+// the actual approval-cascade dispatch.
+type ProcurementRequestFulfillmentStrategy int32
+
+const (
+	ProcurementRequestFulfillmentStrategy_PROCUREMENT_REQUEST_FULFILLMENT_STRATEGY_UNSPECIFIED ProcurementRequestFulfillmentStrategy = 0
+	ProcurementRequestFulfillmentStrategy_PROCUREMENT_REQUEST_FULFILLMENT_STRATEGY_OUTRIGHT    ProcurementRequestFulfillmentStrategy = 1 // single-shot PO
+	ProcurementRequestFulfillmentStrategy_PROCUREMENT_REQUEST_FULFILLMENT_STRATEGY_STOCKABLE   ProcurementRequestFulfillmentStrategy = 2 // PO + GR into stock
+	ProcurementRequestFulfillmentStrategy_PROCUREMENT_REQUEST_FULFILLMENT_STRATEGY_RECURRING   ProcurementRequestFulfillmentStrategy = 3 // standing contract creation
+	ProcurementRequestFulfillmentStrategy_PROCUREMENT_REQUEST_FULFILLMENT_STRATEGY_PETTY       ProcurementRequestFulfillmentStrategy = 4 // expensed direct (sundries)
+	ProcurementRequestFulfillmentStrategy_PROCUREMENT_REQUEST_FULFILLMENT_STRATEGY_MIXED       ProcurementRequestFulfillmentStrategy = 5 // heterogeneous lines
+)
+
+// Enum value maps for ProcurementRequestFulfillmentStrategy.
+var (
+	ProcurementRequestFulfillmentStrategy_name = map[int32]string{
+		0: "PROCUREMENT_REQUEST_FULFILLMENT_STRATEGY_UNSPECIFIED",
+		1: "PROCUREMENT_REQUEST_FULFILLMENT_STRATEGY_OUTRIGHT",
+		2: "PROCUREMENT_REQUEST_FULFILLMENT_STRATEGY_STOCKABLE",
+		3: "PROCUREMENT_REQUEST_FULFILLMENT_STRATEGY_RECURRING",
+		4: "PROCUREMENT_REQUEST_FULFILLMENT_STRATEGY_PETTY",
+		5: "PROCUREMENT_REQUEST_FULFILLMENT_STRATEGY_MIXED",
+	}
+	ProcurementRequestFulfillmentStrategy_value = map[string]int32{
+		"PROCUREMENT_REQUEST_FULFILLMENT_STRATEGY_UNSPECIFIED": 0,
+		"PROCUREMENT_REQUEST_FULFILLMENT_STRATEGY_OUTRIGHT":    1,
+		"PROCUREMENT_REQUEST_FULFILLMENT_STRATEGY_STOCKABLE":   2,
+		"PROCUREMENT_REQUEST_FULFILLMENT_STRATEGY_RECURRING":   3,
+		"PROCUREMENT_REQUEST_FULFILLMENT_STRATEGY_PETTY":       4,
+		"PROCUREMENT_REQUEST_FULFILLMENT_STRATEGY_MIXED":       5,
+	}
+)
+
+func (x ProcurementRequestFulfillmentStrategy) Enum() *ProcurementRequestFulfillmentStrategy {
+	p := new(ProcurementRequestFulfillmentStrategy)
+	*p = x
+	return p
+}
+
+func (x ProcurementRequestFulfillmentStrategy) String() string {
+	return protoimpl.X.EnumStringOf(x.Descriptor(), protoreflect.EnumNumber(x))
+}
+
+func (ProcurementRequestFulfillmentStrategy) Descriptor() protoreflect.EnumDescriptor {
+	return file_domain_expenditure_procurement_request_procurement_request_proto_enumTypes[1].Descriptor()
+}
+
+func (ProcurementRequestFulfillmentStrategy) Type() protoreflect.EnumType {
+	return &file_domain_expenditure_procurement_request_procurement_request_proto_enumTypes[1]
+}
+
+func (x ProcurementRequestFulfillmentStrategy) Number() protoreflect.EnumNumber {
+	return protoreflect.EnumNumber(x)
+}
+
+// Deprecated: Use ProcurementRequestFulfillmentStrategy.Descriptor instead.
+func (ProcurementRequestFulfillmentStrategy) EnumDescriptor() ([]byte, []int) {
+	return file_domain_expenditure_procurement_request_procurement_request_proto_rawDescGZIP(), []int{1}
 }
 
 // ProcurementRequest represents an internal purchase intent.
@@ -134,8 +204,19 @@ type ProcurementRequest struct {
 	// GL / categorization
 	ExpenditureCategoryId *string `protobuf:"bytes,50,opt,name=expenditure_category_id,json=expenditureCategoryId,proto3,oneof" json:"expenditure_category_id,omitempty"`
 	ExpenseAccountId      *string `protobuf:"bytes,51,opt,name=expense_account_id,json=expenseAccountId,proto3,oneof" json:"expense_account_id,omitempty"`
-	unknownFields         protoimpl.UnknownFields
-	sizeCache             protoimpl.SizeCache
+	// F3 (round-6): header-level fulfillment strategy rollup for operational
+	// filtering. Per-line dispatch is driven by ProcurementRequestLine
+	// .fulfillment_mode. MIXED is set automatically when lines disagree.
+	FulfillmentStrategy *ProcurementRequestFulfillmentStrategy `protobuf:"varint,52,opt,name=fulfillment_strategy,json=fulfillmentStrategy,proto3,enum=domain.expenditure.v1.ProcurementRequestFulfillmentStrategy,oneof" json:"fulfillment_strategy,omitempty"`
+	// HIGH-5 (round-6): free-text JSON column capturing the
+	// ApprovalPolicyResolver decisions per line at submit / approve time.
+	// Each entry: {line_id, requires_approval, reason, resolver_name,
+	// decided_at}. Lets auditors see why a particular line was permitted to
+	// skip approval (PETTY auto-approve, FRAMEWORK skip-approval). Append-
+	// only; never edited after the cascade completes.
+	PolicyDecisionLog *string `protobuf:"bytes,53,opt,name=policy_decision_log,json=policyDecisionLog,proto3,oneof" json:"policy_decision_log,omitempty"`
+	unknownFields     protoimpl.UnknownFields
+	sizeCache         protoimpl.SizeCache
 }
 
 func (x *ProcurementRequest) Reset() {
@@ -339,6 +420,20 @@ func (x *ProcurementRequest) GetExpenditureCategoryId() string {
 func (x *ProcurementRequest) GetExpenseAccountId() string {
 	if x != nil && x.ExpenseAccountId != nil {
 		return *x.ExpenseAccountId
+	}
+	return ""
+}
+
+func (x *ProcurementRequest) GetFulfillmentStrategy() ProcurementRequestFulfillmentStrategy {
+	if x != nil && x.FulfillmentStrategy != nil {
+		return *x.FulfillmentStrategy
+	}
+	return ProcurementRequestFulfillmentStrategy_PROCUREMENT_REQUEST_FULFILLMENT_STRATEGY_UNSPECIFIED
+}
+
+func (x *ProcurementRequest) GetPolicyDecisionLog() string {
+	if x != nil && x.PolicyDecisionLog != nil {
+		return *x.PolicyDecisionLog
 	}
 	return ""
 }
@@ -1587,7 +1682,7 @@ var File_domain_expenditure_procurement_request_procurement_request_proto protor
 
 const file_domain_expenditure_procurement_request_procurement_request_proto_rawDesc = "" +
 	"\n" +
-	"@domain/expenditure/procurement_request/procurement_request.proto\x12\x15domain.expenditure.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/search.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a%domain/entity/supplier/supplier.proto\x1a\x10options/db.proto\"\xb6\f\n" +
+	"@domain/expenditure/procurement_request/procurement_request.proto\x12\x15domain.expenditure.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/search.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a%domain/entity/supplier/supplier.proto\x1a\x10options/db.proto\"\x9a\x0e\n" +
 	"\x12ProcurementRequest\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x124\n" +
 	"\fworkspace_id\x18\x02 \x01(\tB\x11\x82\xb5\x18\r\n" +
@@ -1626,7 +1721,9 @@ const file_domain_expenditure_procurement_request_procurement_request_proto_rawD
 	"\x17expenditure_category_id\x182 \x01(\tB\x1a\x82\xb5\x18\x16\n" +
 	"\x14expenditure_categoryH\x0fR\x15expenditureCategoryId\x88\x01\x01\x12@\n" +
 	"\x12expense_account_id\x183 \x01(\tB\r\x82\xb5\x18\t\n" +
-	"\aaccountH\x10R\x10expenseAccountId\x88\x01\x01:\x06\x8a\xb5\x18\x02\b\x01B\x0f\n" +
+	"\aaccountH\x10R\x10expenseAccountId\x88\x01\x01\x12|\n" +
+	"\x14fulfillment_strategy\x184 \x01(\x0e2<.domain.expenditure.v1.ProcurementRequestFulfillmentStrategyB\x06\x82\xb5\x18\x02\x18\x01H\x11R\x13fulfillmentStrategy\x88\x01\x01\x123\n" +
+	"\x13policy_decision_log\x185 \x01(\tH\x12R\x11policyDecisionLog\x88\x01\x01:\x06\x8a\xb5\x18\x02\b\x01B\x0f\n" +
 	"\r_date_createdB\x16\n" +
 	"\x14_date_created_stringB\x10\n" +
 	"\x0e_date_modifiedB\x17\n" +
@@ -1643,7 +1740,9 @@ const file_domain_expenditure_procurement_request_procurement_request_proto_rawD
 	"\x11_rejection_reasonB\x14\n" +
 	"\x12_purchase_order_idB\x1a\n" +
 	"\x18_expenditure_category_idB\x15\n" +
-	"\x13_expense_account_id\"`\n" +
+	"\x13_expense_account_idB\x17\n" +
+	"\x15_fulfillment_strategyB\x16\n" +
+	"\x14_policy_decision_log\"`\n" +
 	"\x1fCreateProcurementRequestRequest\x12=\n" +
 	"\x04data\x18\x01 \x01(\v2).domain.expenditure.v1.ProcurementRequestR\x04data\"\xb9\x01\n" +
 	" CreateProcurementRequestResponse\x12=\n" +
@@ -1759,7 +1858,7 @@ const file_domain_expenditure_procurement_request_procurement_request_proto_rawD
 	"\x11purchase_order_id\x18\x01 \x01(\tR\x0fpurchaseOrderId\x12\x18\n" +
 	"\asuccess\x18\x02 \x01(\bR\asuccess\x122\n" +
 	"\x05error\x18\x03 \x01(\v2\x17.domain.common.v1.ErrorH\x00R\x05error\x88\x01\x01B\b\n" +
-	"\x06_error*\xed\x02\n" +
+	"\x06_error*\xa4\x03\n" +
 	"\x18ProcurementRequestStatus\x12*\n" +
 	"&PROCUREMENT_REQUEST_STATUS_UNSPECIFIED\x10\x00\x12$\n" +
 	" PROCUREMENT_REQUEST_STATUS_DRAFT\x10\x01\x12(\n" +
@@ -1768,7 +1867,15 @@ const file_domain_expenditure_procurement_request_procurement_request_proto_rawD
 	"#PROCUREMENT_REQUEST_STATUS_APPROVED\x10\x04\x12'\n" +
 	"#PROCUREMENT_REQUEST_STATUS_REJECTED\x10\x05\x12(\n" +
 	"$PROCUREMENT_REQUEST_STATUS_FULFILLED\x10\x06\x12(\n" +
-	"$PROCUREMENT_REQUEST_STATUS_CANCELLED\x10\a2\xd8\f\n" +
+	"$PROCUREMENT_REQUEST_STATUS_CANCELLED\x10\a\x125\n" +
+	"1PROCUREMENT_REQUEST_STATUS_APPROVED_PENDING_SPAWN\x10\b*\xf0\x02\n" +
+	"%ProcurementRequestFulfillmentStrategy\x128\n" +
+	"4PROCUREMENT_REQUEST_FULFILLMENT_STRATEGY_UNSPECIFIED\x10\x00\x125\n" +
+	"1PROCUREMENT_REQUEST_FULFILLMENT_STRATEGY_OUTRIGHT\x10\x01\x126\n" +
+	"2PROCUREMENT_REQUEST_FULFILLMENT_STRATEGY_STOCKABLE\x10\x02\x126\n" +
+	"2PROCUREMENT_REQUEST_FULFILLMENT_STRATEGY_RECURRING\x10\x03\x122\n" +
+	".PROCUREMENT_REQUEST_FULFILLMENT_STRATEGY_PETTY\x10\x04\x122\n" +
+	".PROCUREMENT_REQUEST_FULFILLMENT_STRATEGY_MIXED\x10\x052\xd8\f\n" +
 	"\x1fProcurementRequestDomainService\x12\x8b\x01\n" +
 	"\x18CreateProcurementRequest\x126.domain.expenditure.v1.CreateProcurementRequestRequest\x1a7.domain.expenditure.v1.CreateProcurementRequestResponse\x12\x85\x01\n" +
 	"\x16ReadProcurementRequest\x124.domain.expenditure.v1.ReadProcurementRequestRequest\x1a5.domain.expenditure.v1.ReadProcurementRequestResponse\x12\x8b\x01\n" +
@@ -1795,107 +1902,109 @@ func file_domain_expenditure_procurement_request_procurement_request_proto_rawDe
 	return file_domain_expenditure_procurement_request_procurement_request_proto_rawDescData
 }
 
-var file_domain_expenditure_procurement_request_procurement_request_proto_enumTypes = make([]protoimpl.EnumInfo, 1)
+var file_domain_expenditure_procurement_request_procurement_request_proto_enumTypes = make([]protoimpl.EnumInfo, 2)
 var file_domain_expenditure_procurement_request_procurement_request_proto_msgTypes = make([]protoimpl.MessageInfo, 23)
 var file_domain_expenditure_procurement_request_procurement_request_proto_goTypes = []any{
 	(ProcurementRequestStatus)(0),                     // 0: domain.expenditure.v1.ProcurementRequestStatus
-	(*ProcurementRequest)(nil),                        // 1: domain.expenditure.v1.ProcurementRequest
-	(*CreateProcurementRequestRequest)(nil),           // 2: domain.expenditure.v1.CreateProcurementRequestRequest
-	(*CreateProcurementRequestResponse)(nil),          // 3: domain.expenditure.v1.CreateProcurementRequestResponse
-	(*ReadProcurementRequestRequest)(nil),             // 4: domain.expenditure.v1.ReadProcurementRequestRequest
-	(*ReadProcurementRequestResponse)(nil),            // 5: domain.expenditure.v1.ReadProcurementRequestResponse
-	(*UpdateProcurementRequestRequest)(nil),           // 6: domain.expenditure.v1.UpdateProcurementRequestRequest
-	(*UpdateProcurementRequestResponse)(nil),          // 7: domain.expenditure.v1.UpdateProcurementRequestResponse
-	(*DeleteProcurementRequestRequest)(nil),           // 8: domain.expenditure.v1.DeleteProcurementRequestRequest
-	(*DeleteProcurementRequestResponse)(nil),          // 9: domain.expenditure.v1.DeleteProcurementRequestResponse
-	(*ListProcurementRequestsRequest)(nil),            // 10: domain.expenditure.v1.ListProcurementRequestsRequest
-	(*ListProcurementRequestsResponse)(nil),           // 11: domain.expenditure.v1.ListProcurementRequestsResponse
-	(*GetProcurementRequestListPageDataRequest)(nil),  // 12: domain.expenditure.v1.GetProcurementRequestListPageDataRequest
-	(*GetProcurementRequestListPageDataResponse)(nil), // 13: domain.expenditure.v1.GetProcurementRequestListPageDataResponse
-	(*GetProcurementRequestItemPageDataRequest)(nil),  // 14: domain.expenditure.v1.GetProcurementRequestItemPageDataRequest
-	(*GetProcurementRequestItemPageDataResponse)(nil), // 15: domain.expenditure.v1.GetProcurementRequestItemPageDataResponse
-	(*SubmitProcurementRequestRequest)(nil),           // 16: domain.expenditure.v1.SubmitProcurementRequestRequest
-	(*SubmitProcurementRequestResponse)(nil),          // 17: domain.expenditure.v1.SubmitProcurementRequestResponse
-	(*ApproveProcurementRequestRequest)(nil),          // 18: domain.expenditure.v1.ApproveProcurementRequestRequest
-	(*ApproveProcurementRequestResponse)(nil),         // 19: domain.expenditure.v1.ApproveProcurementRequestResponse
-	(*RejectProcurementRequestRequest)(nil),           // 20: domain.expenditure.v1.RejectProcurementRequestRequest
-	(*RejectProcurementRequestResponse)(nil),          // 21: domain.expenditure.v1.RejectProcurementRequestResponse
-	(*SpawnPurchaseOrderRequest)(nil),                 // 22: domain.expenditure.v1.SpawnPurchaseOrderRequest
-	(*SpawnPurchaseOrderResponse)(nil),                // 23: domain.expenditure.v1.SpawnPurchaseOrderResponse
-	(*supplier.Supplier)(nil),                         // 24: domain.entity.v1.Supplier
-	(*common.Error)(nil),                              // 25: domain.common.v1.Error
-	(*common.SearchRequest)(nil),                      // 26: domain.common.v1.SearchRequest
-	(*common.FilterRequest)(nil),                      // 27: domain.common.v1.FilterRequest
-	(*common.SortRequest)(nil),                        // 28: domain.common.v1.SortRequest
-	(*common.PaginationRequest)(nil),                  // 29: domain.common.v1.PaginationRequest
-	(*common.PaginationResponse)(nil),                 // 30: domain.common.v1.PaginationResponse
-	(*common.SearchResult)(nil),                       // 31: domain.common.v1.SearchResult
+	(ProcurementRequestFulfillmentStrategy)(0),        // 1: domain.expenditure.v1.ProcurementRequestFulfillmentStrategy
+	(*ProcurementRequest)(nil),                        // 2: domain.expenditure.v1.ProcurementRequest
+	(*CreateProcurementRequestRequest)(nil),           // 3: domain.expenditure.v1.CreateProcurementRequestRequest
+	(*CreateProcurementRequestResponse)(nil),          // 4: domain.expenditure.v1.CreateProcurementRequestResponse
+	(*ReadProcurementRequestRequest)(nil),             // 5: domain.expenditure.v1.ReadProcurementRequestRequest
+	(*ReadProcurementRequestResponse)(nil),            // 6: domain.expenditure.v1.ReadProcurementRequestResponse
+	(*UpdateProcurementRequestRequest)(nil),           // 7: domain.expenditure.v1.UpdateProcurementRequestRequest
+	(*UpdateProcurementRequestResponse)(nil),          // 8: domain.expenditure.v1.UpdateProcurementRequestResponse
+	(*DeleteProcurementRequestRequest)(nil),           // 9: domain.expenditure.v1.DeleteProcurementRequestRequest
+	(*DeleteProcurementRequestResponse)(nil),          // 10: domain.expenditure.v1.DeleteProcurementRequestResponse
+	(*ListProcurementRequestsRequest)(nil),            // 11: domain.expenditure.v1.ListProcurementRequestsRequest
+	(*ListProcurementRequestsResponse)(nil),           // 12: domain.expenditure.v1.ListProcurementRequestsResponse
+	(*GetProcurementRequestListPageDataRequest)(nil),  // 13: domain.expenditure.v1.GetProcurementRequestListPageDataRequest
+	(*GetProcurementRequestListPageDataResponse)(nil), // 14: domain.expenditure.v1.GetProcurementRequestListPageDataResponse
+	(*GetProcurementRequestItemPageDataRequest)(nil),  // 15: domain.expenditure.v1.GetProcurementRequestItemPageDataRequest
+	(*GetProcurementRequestItemPageDataResponse)(nil), // 16: domain.expenditure.v1.GetProcurementRequestItemPageDataResponse
+	(*SubmitProcurementRequestRequest)(nil),           // 17: domain.expenditure.v1.SubmitProcurementRequestRequest
+	(*SubmitProcurementRequestResponse)(nil),          // 18: domain.expenditure.v1.SubmitProcurementRequestResponse
+	(*ApproveProcurementRequestRequest)(nil),          // 19: domain.expenditure.v1.ApproveProcurementRequestRequest
+	(*ApproveProcurementRequestResponse)(nil),         // 20: domain.expenditure.v1.ApproveProcurementRequestResponse
+	(*RejectProcurementRequestRequest)(nil),           // 21: domain.expenditure.v1.RejectProcurementRequestRequest
+	(*RejectProcurementRequestResponse)(nil),          // 22: domain.expenditure.v1.RejectProcurementRequestResponse
+	(*SpawnPurchaseOrderRequest)(nil),                 // 23: domain.expenditure.v1.SpawnPurchaseOrderRequest
+	(*SpawnPurchaseOrderResponse)(nil),                // 24: domain.expenditure.v1.SpawnPurchaseOrderResponse
+	(*supplier.Supplier)(nil),                         // 25: domain.entity.v1.Supplier
+	(*common.Error)(nil),                              // 26: domain.common.v1.Error
+	(*common.SearchRequest)(nil),                      // 27: domain.common.v1.SearchRequest
+	(*common.FilterRequest)(nil),                      // 28: domain.common.v1.FilterRequest
+	(*common.SortRequest)(nil),                        // 29: domain.common.v1.SortRequest
+	(*common.PaginationRequest)(nil),                  // 30: domain.common.v1.PaginationRequest
+	(*common.PaginationResponse)(nil),                 // 31: domain.common.v1.PaginationResponse
+	(*common.SearchResult)(nil),                       // 32: domain.common.v1.SearchResult
 }
 var file_domain_expenditure_procurement_request_procurement_request_proto_depIdxs = []int32{
 	0,  // 0: domain.expenditure.v1.ProcurementRequest.status:type_name -> domain.expenditure.v1.ProcurementRequestStatus
-	24, // 1: domain.expenditure.v1.ProcurementRequest.supplier:type_name -> domain.entity.v1.Supplier
-	1,  // 2: domain.expenditure.v1.CreateProcurementRequestRequest.data:type_name -> domain.expenditure.v1.ProcurementRequest
-	1,  // 3: domain.expenditure.v1.CreateProcurementRequestResponse.data:type_name -> domain.expenditure.v1.ProcurementRequest
-	25, // 4: domain.expenditure.v1.CreateProcurementRequestResponse.error:type_name -> domain.common.v1.Error
-	1,  // 5: domain.expenditure.v1.ReadProcurementRequestRequest.data:type_name -> domain.expenditure.v1.ProcurementRequest
-	1,  // 6: domain.expenditure.v1.ReadProcurementRequestResponse.data:type_name -> domain.expenditure.v1.ProcurementRequest
-	25, // 7: domain.expenditure.v1.ReadProcurementRequestResponse.error:type_name -> domain.common.v1.Error
-	1,  // 8: domain.expenditure.v1.UpdateProcurementRequestRequest.data:type_name -> domain.expenditure.v1.ProcurementRequest
-	1,  // 9: domain.expenditure.v1.UpdateProcurementRequestResponse.data:type_name -> domain.expenditure.v1.ProcurementRequest
-	25, // 10: domain.expenditure.v1.UpdateProcurementRequestResponse.error:type_name -> domain.common.v1.Error
-	1,  // 11: domain.expenditure.v1.DeleteProcurementRequestRequest.data:type_name -> domain.expenditure.v1.ProcurementRequest
-	25, // 12: domain.expenditure.v1.DeleteProcurementRequestResponse.error:type_name -> domain.common.v1.Error
-	26, // 13: domain.expenditure.v1.ListProcurementRequestsRequest.search:type_name -> domain.common.v1.SearchRequest
-	27, // 14: domain.expenditure.v1.ListProcurementRequestsRequest.filters:type_name -> domain.common.v1.FilterRequest
-	28, // 15: domain.expenditure.v1.ListProcurementRequestsRequest.sort:type_name -> domain.common.v1.SortRequest
-	29, // 16: domain.expenditure.v1.ListProcurementRequestsRequest.pagination:type_name -> domain.common.v1.PaginationRequest
-	0,  // 17: domain.expenditure.v1.ListProcurementRequestsRequest.status:type_name -> domain.expenditure.v1.ProcurementRequestStatus
-	1,  // 18: domain.expenditure.v1.ListProcurementRequestsResponse.data:type_name -> domain.expenditure.v1.ProcurementRequest
-	25, // 19: domain.expenditure.v1.ListProcurementRequestsResponse.error:type_name -> domain.common.v1.Error
-	29, // 20: domain.expenditure.v1.GetProcurementRequestListPageDataRequest.pagination:type_name -> domain.common.v1.PaginationRequest
-	27, // 21: domain.expenditure.v1.GetProcurementRequestListPageDataRequest.filters:type_name -> domain.common.v1.FilterRequest
-	28, // 22: domain.expenditure.v1.GetProcurementRequestListPageDataRequest.sort:type_name -> domain.common.v1.SortRequest
-	26, // 23: domain.expenditure.v1.GetProcurementRequestListPageDataRequest.search:type_name -> domain.common.v1.SearchRequest
-	1,  // 24: domain.expenditure.v1.GetProcurementRequestListPageDataResponse.procurement_request_list:type_name -> domain.expenditure.v1.ProcurementRequest
-	30, // 25: domain.expenditure.v1.GetProcurementRequestListPageDataResponse.pagination:type_name -> domain.common.v1.PaginationResponse
-	31, // 26: domain.expenditure.v1.GetProcurementRequestListPageDataResponse.search_results:type_name -> domain.common.v1.SearchResult
-	25, // 27: domain.expenditure.v1.GetProcurementRequestListPageDataResponse.error:type_name -> domain.common.v1.Error
-	1,  // 28: domain.expenditure.v1.GetProcurementRequestItemPageDataResponse.procurement_request:type_name -> domain.expenditure.v1.ProcurementRequest
-	25, // 29: domain.expenditure.v1.GetProcurementRequestItemPageDataResponse.error:type_name -> domain.common.v1.Error
-	1,  // 30: domain.expenditure.v1.SubmitProcurementRequestResponse.data:type_name -> domain.expenditure.v1.ProcurementRequest
-	25, // 31: domain.expenditure.v1.SubmitProcurementRequestResponse.error:type_name -> domain.common.v1.Error
-	1,  // 32: domain.expenditure.v1.ApproveProcurementRequestResponse.data:type_name -> domain.expenditure.v1.ProcurementRequest
-	25, // 33: domain.expenditure.v1.ApproveProcurementRequestResponse.error:type_name -> domain.common.v1.Error
-	1,  // 34: domain.expenditure.v1.RejectProcurementRequestResponse.data:type_name -> domain.expenditure.v1.ProcurementRequest
-	25, // 35: domain.expenditure.v1.RejectProcurementRequestResponse.error:type_name -> domain.common.v1.Error
-	25, // 36: domain.expenditure.v1.SpawnPurchaseOrderResponse.error:type_name -> domain.common.v1.Error
-	2,  // 37: domain.expenditure.v1.ProcurementRequestDomainService.CreateProcurementRequest:input_type -> domain.expenditure.v1.CreateProcurementRequestRequest
-	4,  // 38: domain.expenditure.v1.ProcurementRequestDomainService.ReadProcurementRequest:input_type -> domain.expenditure.v1.ReadProcurementRequestRequest
-	6,  // 39: domain.expenditure.v1.ProcurementRequestDomainService.UpdateProcurementRequest:input_type -> domain.expenditure.v1.UpdateProcurementRequestRequest
-	8,  // 40: domain.expenditure.v1.ProcurementRequestDomainService.DeleteProcurementRequest:input_type -> domain.expenditure.v1.DeleteProcurementRequestRequest
-	10, // 41: domain.expenditure.v1.ProcurementRequestDomainService.ListProcurementRequests:input_type -> domain.expenditure.v1.ListProcurementRequestsRequest
-	12, // 42: domain.expenditure.v1.ProcurementRequestDomainService.GetProcurementRequestListPageData:input_type -> domain.expenditure.v1.GetProcurementRequestListPageDataRequest
-	14, // 43: domain.expenditure.v1.ProcurementRequestDomainService.GetProcurementRequestItemPageData:input_type -> domain.expenditure.v1.GetProcurementRequestItemPageDataRequest
-	16, // 44: domain.expenditure.v1.ProcurementRequestDomainService.SubmitProcurementRequest:input_type -> domain.expenditure.v1.SubmitProcurementRequestRequest
-	18, // 45: domain.expenditure.v1.ProcurementRequestDomainService.ApproveProcurementRequest:input_type -> domain.expenditure.v1.ApproveProcurementRequestRequest
-	20, // 46: domain.expenditure.v1.ProcurementRequestDomainService.RejectProcurementRequest:input_type -> domain.expenditure.v1.RejectProcurementRequestRequest
-	22, // 47: domain.expenditure.v1.ProcurementRequestDomainService.SpawnPurchaseOrder:input_type -> domain.expenditure.v1.SpawnPurchaseOrderRequest
-	3,  // 48: domain.expenditure.v1.ProcurementRequestDomainService.CreateProcurementRequest:output_type -> domain.expenditure.v1.CreateProcurementRequestResponse
-	5,  // 49: domain.expenditure.v1.ProcurementRequestDomainService.ReadProcurementRequest:output_type -> domain.expenditure.v1.ReadProcurementRequestResponse
-	7,  // 50: domain.expenditure.v1.ProcurementRequestDomainService.UpdateProcurementRequest:output_type -> domain.expenditure.v1.UpdateProcurementRequestResponse
-	9,  // 51: domain.expenditure.v1.ProcurementRequestDomainService.DeleteProcurementRequest:output_type -> domain.expenditure.v1.DeleteProcurementRequestResponse
-	11, // 52: domain.expenditure.v1.ProcurementRequestDomainService.ListProcurementRequests:output_type -> domain.expenditure.v1.ListProcurementRequestsResponse
-	13, // 53: domain.expenditure.v1.ProcurementRequestDomainService.GetProcurementRequestListPageData:output_type -> domain.expenditure.v1.GetProcurementRequestListPageDataResponse
-	15, // 54: domain.expenditure.v1.ProcurementRequestDomainService.GetProcurementRequestItemPageData:output_type -> domain.expenditure.v1.GetProcurementRequestItemPageDataResponse
-	17, // 55: domain.expenditure.v1.ProcurementRequestDomainService.SubmitProcurementRequest:output_type -> domain.expenditure.v1.SubmitProcurementRequestResponse
-	19, // 56: domain.expenditure.v1.ProcurementRequestDomainService.ApproveProcurementRequest:output_type -> domain.expenditure.v1.ApproveProcurementRequestResponse
-	21, // 57: domain.expenditure.v1.ProcurementRequestDomainService.RejectProcurementRequest:output_type -> domain.expenditure.v1.RejectProcurementRequestResponse
-	23, // 58: domain.expenditure.v1.ProcurementRequestDomainService.SpawnPurchaseOrder:output_type -> domain.expenditure.v1.SpawnPurchaseOrderResponse
-	48, // [48:59] is the sub-list for method output_type
-	37, // [37:48] is the sub-list for method input_type
-	37, // [37:37] is the sub-list for extension type_name
-	37, // [37:37] is the sub-list for extension extendee
-	0,  // [0:37] is the sub-list for field type_name
+	25, // 1: domain.expenditure.v1.ProcurementRequest.supplier:type_name -> domain.entity.v1.Supplier
+	1,  // 2: domain.expenditure.v1.ProcurementRequest.fulfillment_strategy:type_name -> domain.expenditure.v1.ProcurementRequestFulfillmentStrategy
+	2,  // 3: domain.expenditure.v1.CreateProcurementRequestRequest.data:type_name -> domain.expenditure.v1.ProcurementRequest
+	2,  // 4: domain.expenditure.v1.CreateProcurementRequestResponse.data:type_name -> domain.expenditure.v1.ProcurementRequest
+	26, // 5: domain.expenditure.v1.CreateProcurementRequestResponse.error:type_name -> domain.common.v1.Error
+	2,  // 6: domain.expenditure.v1.ReadProcurementRequestRequest.data:type_name -> domain.expenditure.v1.ProcurementRequest
+	2,  // 7: domain.expenditure.v1.ReadProcurementRequestResponse.data:type_name -> domain.expenditure.v1.ProcurementRequest
+	26, // 8: domain.expenditure.v1.ReadProcurementRequestResponse.error:type_name -> domain.common.v1.Error
+	2,  // 9: domain.expenditure.v1.UpdateProcurementRequestRequest.data:type_name -> domain.expenditure.v1.ProcurementRequest
+	2,  // 10: domain.expenditure.v1.UpdateProcurementRequestResponse.data:type_name -> domain.expenditure.v1.ProcurementRequest
+	26, // 11: domain.expenditure.v1.UpdateProcurementRequestResponse.error:type_name -> domain.common.v1.Error
+	2,  // 12: domain.expenditure.v1.DeleteProcurementRequestRequest.data:type_name -> domain.expenditure.v1.ProcurementRequest
+	26, // 13: domain.expenditure.v1.DeleteProcurementRequestResponse.error:type_name -> domain.common.v1.Error
+	27, // 14: domain.expenditure.v1.ListProcurementRequestsRequest.search:type_name -> domain.common.v1.SearchRequest
+	28, // 15: domain.expenditure.v1.ListProcurementRequestsRequest.filters:type_name -> domain.common.v1.FilterRequest
+	29, // 16: domain.expenditure.v1.ListProcurementRequestsRequest.sort:type_name -> domain.common.v1.SortRequest
+	30, // 17: domain.expenditure.v1.ListProcurementRequestsRequest.pagination:type_name -> domain.common.v1.PaginationRequest
+	0,  // 18: domain.expenditure.v1.ListProcurementRequestsRequest.status:type_name -> domain.expenditure.v1.ProcurementRequestStatus
+	2,  // 19: domain.expenditure.v1.ListProcurementRequestsResponse.data:type_name -> domain.expenditure.v1.ProcurementRequest
+	26, // 20: domain.expenditure.v1.ListProcurementRequestsResponse.error:type_name -> domain.common.v1.Error
+	30, // 21: domain.expenditure.v1.GetProcurementRequestListPageDataRequest.pagination:type_name -> domain.common.v1.PaginationRequest
+	28, // 22: domain.expenditure.v1.GetProcurementRequestListPageDataRequest.filters:type_name -> domain.common.v1.FilterRequest
+	29, // 23: domain.expenditure.v1.GetProcurementRequestListPageDataRequest.sort:type_name -> domain.common.v1.SortRequest
+	27, // 24: domain.expenditure.v1.GetProcurementRequestListPageDataRequest.search:type_name -> domain.common.v1.SearchRequest
+	2,  // 25: domain.expenditure.v1.GetProcurementRequestListPageDataResponse.procurement_request_list:type_name -> domain.expenditure.v1.ProcurementRequest
+	31, // 26: domain.expenditure.v1.GetProcurementRequestListPageDataResponse.pagination:type_name -> domain.common.v1.PaginationResponse
+	32, // 27: domain.expenditure.v1.GetProcurementRequestListPageDataResponse.search_results:type_name -> domain.common.v1.SearchResult
+	26, // 28: domain.expenditure.v1.GetProcurementRequestListPageDataResponse.error:type_name -> domain.common.v1.Error
+	2,  // 29: domain.expenditure.v1.GetProcurementRequestItemPageDataResponse.procurement_request:type_name -> domain.expenditure.v1.ProcurementRequest
+	26, // 30: domain.expenditure.v1.GetProcurementRequestItemPageDataResponse.error:type_name -> domain.common.v1.Error
+	2,  // 31: domain.expenditure.v1.SubmitProcurementRequestResponse.data:type_name -> domain.expenditure.v1.ProcurementRequest
+	26, // 32: domain.expenditure.v1.SubmitProcurementRequestResponse.error:type_name -> domain.common.v1.Error
+	2,  // 33: domain.expenditure.v1.ApproveProcurementRequestResponse.data:type_name -> domain.expenditure.v1.ProcurementRequest
+	26, // 34: domain.expenditure.v1.ApproveProcurementRequestResponse.error:type_name -> domain.common.v1.Error
+	2,  // 35: domain.expenditure.v1.RejectProcurementRequestResponse.data:type_name -> domain.expenditure.v1.ProcurementRequest
+	26, // 36: domain.expenditure.v1.RejectProcurementRequestResponse.error:type_name -> domain.common.v1.Error
+	26, // 37: domain.expenditure.v1.SpawnPurchaseOrderResponse.error:type_name -> domain.common.v1.Error
+	3,  // 38: domain.expenditure.v1.ProcurementRequestDomainService.CreateProcurementRequest:input_type -> domain.expenditure.v1.CreateProcurementRequestRequest
+	5,  // 39: domain.expenditure.v1.ProcurementRequestDomainService.ReadProcurementRequest:input_type -> domain.expenditure.v1.ReadProcurementRequestRequest
+	7,  // 40: domain.expenditure.v1.ProcurementRequestDomainService.UpdateProcurementRequest:input_type -> domain.expenditure.v1.UpdateProcurementRequestRequest
+	9,  // 41: domain.expenditure.v1.ProcurementRequestDomainService.DeleteProcurementRequest:input_type -> domain.expenditure.v1.DeleteProcurementRequestRequest
+	11, // 42: domain.expenditure.v1.ProcurementRequestDomainService.ListProcurementRequests:input_type -> domain.expenditure.v1.ListProcurementRequestsRequest
+	13, // 43: domain.expenditure.v1.ProcurementRequestDomainService.GetProcurementRequestListPageData:input_type -> domain.expenditure.v1.GetProcurementRequestListPageDataRequest
+	15, // 44: domain.expenditure.v1.ProcurementRequestDomainService.GetProcurementRequestItemPageData:input_type -> domain.expenditure.v1.GetProcurementRequestItemPageDataRequest
+	17, // 45: domain.expenditure.v1.ProcurementRequestDomainService.SubmitProcurementRequest:input_type -> domain.expenditure.v1.SubmitProcurementRequestRequest
+	19, // 46: domain.expenditure.v1.ProcurementRequestDomainService.ApproveProcurementRequest:input_type -> domain.expenditure.v1.ApproveProcurementRequestRequest
+	21, // 47: domain.expenditure.v1.ProcurementRequestDomainService.RejectProcurementRequest:input_type -> domain.expenditure.v1.RejectProcurementRequestRequest
+	23, // 48: domain.expenditure.v1.ProcurementRequestDomainService.SpawnPurchaseOrder:input_type -> domain.expenditure.v1.SpawnPurchaseOrderRequest
+	4,  // 49: domain.expenditure.v1.ProcurementRequestDomainService.CreateProcurementRequest:output_type -> domain.expenditure.v1.CreateProcurementRequestResponse
+	6,  // 50: domain.expenditure.v1.ProcurementRequestDomainService.ReadProcurementRequest:output_type -> domain.expenditure.v1.ReadProcurementRequestResponse
+	8,  // 51: domain.expenditure.v1.ProcurementRequestDomainService.UpdateProcurementRequest:output_type -> domain.expenditure.v1.UpdateProcurementRequestResponse
+	10, // 52: domain.expenditure.v1.ProcurementRequestDomainService.DeleteProcurementRequest:output_type -> domain.expenditure.v1.DeleteProcurementRequestResponse
+	12, // 53: domain.expenditure.v1.ProcurementRequestDomainService.ListProcurementRequests:output_type -> domain.expenditure.v1.ListProcurementRequestsResponse
+	14, // 54: domain.expenditure.v1.ProcurementRequestDomainService.GetProcurementRequestListPageData:output_type -> domain.expenditure.v1.GetProcurementRequestListPageDataResponse
+	16, // 55: domain.expenditure.v1.ProcurementRequestDomainService.GetProcurementRequestItemPageData:output_type -> domain.expenditure.v1.GetProcurementRequestItemPageDataResponse
+	18, // 56: domain.expenditure.v1.ProcurementRequestDomainService.SubmitProcurementRequest:output_type -> domain.expenditure.v1.SubmitProcurementRequestResponse
+	20, // 57: domain.expenditure.v1.ProcurementRequestDomainService.ApproveProcurementRequest:output_type -> domain.expenditure.v1.ApproveProcurementRequestResponse
+	22, // 58: domain.expenditure.v1.ProcurementRequestDomainService.RejectProcurementRequest:output_type -> domain.expenditure.v1.RejectProcurementRequestResponse
+	24, // 59: domain.expenditure.v1.ProcurementRequestDomainService.SpawnPurchaseOrder:output_type -> domain.expenditure.v1.SpawnPurchaseOrderResponse
+	49, // [49:60] is the sub-list for method output_type
+	38, // [38:49] is the sub-list for method input_type
+	38, // [38:38] is the sub-list for extension type_name
+	38, // [38:38] is the sub-list for extension extendee
+	0,  // [0:38] is the sub-list for field type_name
 }
 
 func init() { file_domain_expenditure_procurement_request_procurement_request_proto_init() }
@@ -1923,7 +2032,7 @@ func file_domain_expenditure_procurement_request_procurement_request_proto_init(
 		File: protoimpl.DescBuilder{
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_domain_expenditure_procurement_request_procurement_request_proto_rawDesc), len(file_domain_expenditure_procurement_request_procurement_request_proto_rawDesc)),
-			NumEnums:      1,
+			NumEnums:      2,
 			NumMessages:   23,
 			NumExtensions: 0,
 			NumServices:   1,

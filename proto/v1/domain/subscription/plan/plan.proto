@@ -50,6 +50,18 @@ message Plan {
   // additional templates via JobTemplateRelation rows. See plan §2.1.
   optional string job_template_id = 14
     [(options.v1.db).references = "job_template", (options.v1.db).index = true];
+
+  // Number of cycle Job instances spawned per billing cycle. Default 1
+  // (semantically — NULL is treated as 1). Examples:
+  //   Pro Cleaning Biweekly (billed monthly) = 2
+  //   Lawn Care Weekly      (billed monthly) = 4
+  //   Pool Quarterly        (billed quarterly) = 1
+  // Spawn semantics: cycle_index increments globally; period_start of each
+  // sub-cycle = billing_cycle_start + (k-1) × (cycle_length / N) for k=1..N.
+  // Validation: must be >= 1 when Plan.job_template_id is set. Reset to 1
+  // when job_template_id is cleared. See
+  // docs/plan/20260430-cyclic-subscription-jobs/plan.md §2.4.
+  optional int32 visits_per_cycle = 15;
 }
 
 service PlanDomainService {

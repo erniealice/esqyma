@@ -1,0 +1,268 @@
+syntax = "proto3";
+
+package domain.expenditure.v1;
+
+option go_package = "github.com/erniealice/esqyma/golang/v1/domain/expenditure/expense_recognition";
+
+import "domain/common/error.proto";
+import "domain/common/pagination.proto";
+import "domain/common/search.proto";
+import "domain/common/filter.proto";
+import "domain/common/sort.proto";
+import "options/db.proto";
+import "google/protobuf/timestamp.proto";
+
+// ExpenseRecognitionStatus drives the accrual-basis recognition lifecycle.
+// Mirrors the sales-side Revenue lifecycle (DRAFT → POSTED → REVERSED).
+enum ExpenseRecognitionStatus {
+  EXPENSE_RECOGNITION_STATUS_UNSPECIFIED = 0;
+  EXPENSE_RECOGNITION_STATUS_DRAFT       = 1;
+  EXPENSE_RECOGNITION_STATUS_POSTED      = 2;
+  EXPENSE_RECOGNITION_STATUS_REVERSED    = 3;
+}
+
+// ExpenseRecognition captures the period in which a cost is recognized,
+// independent of when the supplier bill (Expenditure) actually arrived.
+//
+// Why this is not just Expenditure with an extra status:
+//   - One Expenditure (bill) can fund multiple recognition periods (a
+//     $36k annual prepayment recognized $3k/month over 12 months).
+//   - One recognition period can aggregate multiple Expenditures
+//     (3 utility bills covering the same May period).
+//   - Reversals (a corrected May expense) need a separate row, not an
+//     Expenditure UPDATE — accounting auditability requires immutable
+//     recognition rows.
+//
+// Idempotency (HIGH-2 amendment): every row carries a stable source-tuple
+// `idempotency_key` of the form
+//   "{workspace_id}:{source_type}:{source_id}:{recognition_period}"
+// where source_type ∈ {RECURRENCE, EXPENDITURE, MANUAL, REVERSAL}.
+// A unique DB index on idempotency_key collapses duplicate writes
+// regardless of status. Reversal rows carry source_type=REVERSAL,
+// source_id=original_recognition_id so they get a distinct key.
+message ExpenseRecognition {
+  option (options.v1.table).table = true;
+
+  string id = 1;
+  string workspace_id = 2 [(options.v1.db).references = "workspace", (options.v1.db).index = true];
+
+  // Audit
+  optional int64 date_created = 3;
+  optional string date_created_string = 4;
+  optional int64 date_modified = 5;
+  optional string date_modified_string = 6;
+  bool active = 7 [(options.v1.db).default = "true"];
+  string internal_id = 8 [(options.v1.db).unique = true];
+
+  // Identity
+  string name = 10;                                          // "AWS Hosting — May 2026"
+  optional string description = 11;
+
+  // What was recognized
+  google.protobuf.Timestamp recognition_date = 20;
+  optional google.protobuf.Timestamp period_start = 21;
+  optional google.protobuf.Timestamp period_end = 22;
+  string currency = 23;
+  int64 total_amount = 24;                                   // centavos
+  ExpenseRecognitionStatus status = 25 [(options.v1.db).index = true];
+
+  // Source links — at most one of {expenditure_id, supplier_contract_id} is
+  // populated for a primary recognition. Reversal rows carry
+  // reversal_of_recognition_id instead.
+  optional string supplier_contract_id = 30 [(options.v1.db).references = "supplier_contract", (options.v1.db).index = true];
+  optional string expenditure_id = 31 [(options.v1.db).references = "expenditure", (options.v1.db).index = true];
+  optional string deferred_expense_id = 32;
+  optional string accrued_expense_id = 33 [(options.v1.db).references = "accrued_expense"];
+  optional string cycle_date = 34;                           // YYYY-MM-DD bucket; informational
+
+  // Stable, status-independent idempotency key. Mandatory.
+  // Format: "{workspace_id}:{source_type}:{source_id}:{recognition_period}"
+  // Database has a UNIQUE INDEX on this column to enforce single-write.
+  string idempotency_key = 35 [(options.v1.db).unique = true];
+
+  // Reversal — set on REVERSED rows that nullify a previously POSTED row.
+  optional string reversal_of_recognition_id = 36;
+
+  // GL
+  optional string expense_account_id = 40 [(options.v1.db).references = "account"];
+  optional string accrual_account_id = 41 [(options.v1.db).references = "account"];
+  optional string journal_entry_id = 42 [(options.v1.db).references = "journal_entry"];
+
+  // Costing dimensions
+  optional string supplier_id = 50 [(options.v1.db).references = "supplier"];
+  optional string location_id = 51 [(options.v1.db).references = "location"];
+  optional string expenditure_category_id = 52 [(options.v1.db).references = "expenditure_category"];
+  optional string job_phase_id = 53 [(options.v1.db).references = "job_phase"];
+
+  // Notes & metadata
+  optional string notes = 90;
+  map<string, string> metadata = 91;
+}
+
+service ExpenseRecognitionDomainService {
+  rpc CreateExpenseRecognition(CreateExpenseRecognitionRequest)
+    returns (CreateExpenseRecognitionResponse);
+  rpc ReadExpenseRecognition(ReadExpenseRecognitionRequest)
+    returns (ReadExpenseRecognitionResponse);
+  rpc UpdateExpenseRecognition(UpdateExpenseRecognitionRequest)
+    returns (UpdateExpenseRecognitionResponse);
+  rpc DeleteExpenseRecognition(DeleteExpenseRecognitionRequest)
+    returns (DeleteExpenseRecognitionResponse);
+  rpc ListExpenseRecognitions(ListExpenseRecognitionsRequest)
+    returns (ListExpenseRecognitionsResponse);
+
+  rpc GetExpenseRecognitionListPageData(GetExpenseRecognitionListPageDataRequest)
+    returns (GetExpenseRecognitionListPageDataResponse);
+  rpc GetExpenseRecognitionItemPageData(GetExpenseRecognitionItemPageDataRequest)
+    returns (GetExpenseRecognitionItemPageDataResponse);
+
+  // Workflow actions
+  rpc RecognizeFromExpenditure(RecognizeFromExpenditureRequest)
+    returns (RecognizeFromExpenditureResponse);
+  rpc RecognizeFromContract(RecognizeFromContractRequest)
+    returns (RecognizeFromContractResponse);
+  rpc Reverse(ReverseExpenseRecognitionRequest)
+    returns (ReverseExpenseRecognitionResponse);
+  rpc GetUnrecognizedExpenditures(GetUnrecognizedExpendituresRequest)
+    returns (GetUnrecognizedExpendituresResponse);
+}
+
+message CreateExpenseRecognitionRequest {
+  ExpenseRecognition data = 1;
+}
+
+message CreateExpenseRecognitionResponse {
+  repeated ExpenseRecognition data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message ReadExpenseRecognitionRequest {
+  ExpenseRecognition data = 1;
+}
+
+message ReadExpenseRecognitionResponse {
+  repeated ExpenseRecognition data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message UpdateExpenseRecognitionRequest {
+  ExpenseRecognition data = 1;
+}
+
+message UpdateExpenseRecognitionResponse {
+  repeated ExpenseRecognition data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message DeleteExpenseRecognitionRequest {
+  ExpenseRecognition data = 1;
+}
+
+message DeleteExpenseRecognitionResponse {
+  bool success = 1;
+  optional domain.common.v1.Error error = 2;
+}
+
+message ListExpenseRecognitionsRequest {
+  optional domain.common.v1.SearchRequest search = 1;
+  optional domain.common.v1.FilterRequest filters = 2;
+  optional domain.common.v1.SortRequest sort = 3;
+  optional domain.common.v1.PaginationRequest pagination = 4;
+  optional ExpenseRecognitionStatus status = 5;
+  optional string supplier_contract_id = 6;
+  optional string expenditure_id = 7;
+  optional string workspace_id = 8;
+}
+
+message ListExpenseRecognitionsResponse {
+  repeated ExpenseRecognition data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message GetExpenseRecognitionListPageDataRequest {
+  optional domain.common.v1.PaginationRequest pagination = 1;
+  optional domain.common.v1.FilterRequest filters = 2;
+  optional domain.common.v1.SortRequest sort = 3;
+  optional domain.common.v1.SearchRequest search = 4;
+}
+
+message GetExpenseRecognitionListPageDataResponse {
+  repeated ExpenseRecognition expense_recognition_list = 1;
+  optional domain.common.v1.PaginationResponse pagination = 2;
+  repeated domain.common.v1.SearchResult search_results = 3;
+  bool success = 4;
+  optional domain.common.v1.Error error = 5;
+}
+
+message GetExpenseRecognitionItemPageDataRequest {
+  string expense_recognition_id = 1;
+}
+
+message GetExpenseRecognitionItemPageDataResponse {
+  optional ExpenseRecognition expense_recognition = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+// RecognizeFromExpenditure — POSTED Expenditure → ExpenseRecognition row(s).
+// 1:1 simple case; 1:N for multi-period via DeferredExpense (Prepayment).
+message RecognizeFromExpenditureRequest {
+  string expenditure_id = 1;
+  optional string recognition_period = 2;  // YYYY-MM (or YYYY-MM-DD)
+  optional string idempotency_key = 3;     // overrides default derivation
+}
+
+message RecognizeFromExpenditureResponse {
+  optional ExpenseRecognition data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+// RecognizeFromContract — recurrence companion path. Idempotent on
+// (workspace_id, RECURRENCE, supplier_contract_id, cycle_date).
+message RecognizeFromContractRequest {
+  string supplier_contract_id = 1;
+  string cycle_date = 2;                    // YYYY-MM-DD
+  optional int64 amount = 3;                // centavos; resolved from schedule if omitted
+  optional string idempotency_key = 4;
+}
+
+message RecognizeFromContractResponse {
+  optional ExpenseRecognition data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+// Reverse — creates a REVERSED recognition row that nullifies an earlier
+// POSTED row. Use case sets reversal_of_recognition_id and a distinct
+// idempotency_key (source_type=REVERSAL, source_id=original_recognition_id).
+message ReverseExpenseRecognitionRequest {
+  string expense_recognition_id = 1;
+  optional string reason = 2;
+}
+
+message ReverseExpenseRecognitionResponse {
+  optional ExpenseRecognition data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+// GetUnrecognizedExpenditures — for the AP review queue. Returns
+// Expenditure rows with status=POSTED that have no linked
+// ExpenseRecognition (or only DRAFT recognitions).
+message GetUnrecognizedExpendituresRequest {
+  optional domain.common.v1.PaginationRequest pagination = 1;
+  optional domain.common.v1.FilterRequest filters = 2;
+  optional string workspace_id = 3;
+}
+
+message GetUnrecognizedExpendituresResponse {
+  repeated string expenditure_ids = 1;
+  optional domain.common.v1.PaginationResponse pagination = 2;
+  bool success = 3;
+  optional domain.common.v1.Error error = 4;
+}
