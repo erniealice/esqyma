@@ -103,6 +103,9 @@ const (
 	BillingEventTrigger_BILLING_EVENT_TRIGGER_MANUAL_EARLY    BillingEventTrigger = 2
 	BillingEventTrigger_BILLING_EVENT_TRIGGER_MANUAL_LATE     BillingEventTrigger = 3
 	BillingEventTrigger_BILLING_EVENT_TRIGGER_DATE            BillingEventTrigger = 4
+	// AD_HOC × PER_OCCURRENCE: visit Job's last phase transitioned to COMPLETED.
+	// See docs/plan/20260501-ad-hoc-subscription-billing/plan.md §4.3 (codex CRIT-1).
+	BillingEventTrigger_BILLING_EVENT_TRIGGER_VISIT_COMPLETED BillingEventTrigger = 5
 )
 
 // Enum value maps for BillingEventTrigger.
@@ -113,6 +116,7 @@ var (
 		2: "BILLING_EVENT_TRIGGER_MANUAL_EARLY",
 		3: "BILLING_EVENT_TRIGGER_MANUAL_LATE",
 		4: "BILLING_EVENT_TRIGGER_DATE",
+		5: "BILLING_EVENT_TRIGGER_VISIT_COMPLETED",
 	}
 	BillingEventTrigger_value = map[string]int32{
 		"BILLING_EVENT_TRIGGER_UNSPECIFIED":     0,
@@ -120,6 +124,7 @@ var (
 		"BILLING_EVENT_TRIGGER_MANUAL_EARLY":    2,
 		"BILLING_EVENT_TRIGGER_MANUAL_LATE":     3,
 		"BILLING_EVENT_TRIGGER_DATE":            4,
+		"BILLING_EVENT_TRIGGER_VISIT_COMPLETED": 5,
 	}
 )
 
@@ -1354,6 +1359,110 @@ func (x *ListBillingEventsByJobPhaseResponse) GetError() *common.Error {
 	return nil
 }
 
+type ListBillingEventsByJobRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	JobId         string                 `protobuf:"bytes,1,opt,name=job_id,json=jobId,proto3" json:"job_id,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *ListBillingEventsByJobRequest) Reset() {
+	*x = ListBillingEventsByJobRequest{}
+	mi := &file_domain_subscription_billing_event_billing_event_proto_msgTypes[19]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *ListBillingEventsByJobRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ListBillingEventsByJobRequest) ProtoMessage() {}
+
+func (x *ListBillingEventsByJobRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_domain_subscription_billing_event_billing_event_proto_msgTypes[19]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ListBillingEventsByJobRequest.ProtoReflect.Descriptor instead.
+func (*ListBillingEventsByJobRequest) Descriptor() ([]byte, []int) {
+	return file_domain_subscription_billing_event_billing_event_proto_rawDescGZIP(), []int{19}
+}
+
+func (x *ListBillingEventsByJobRequest) GetJobId() string {
+	if x != nil {
+		return x.JobId
+	}
+	return ""
+}
+
+type ListBillingEventsByJobResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	BillingEvents []*BillingEvent        `protobuf:"bytes,1,rep,name=billing_events,json=billingEvents,proto3" json:"billing_events,omitempty"`
+	Success       bool                   `protobuf:"varint,2,opt,name=success,proto3" json:"success,omitempty"`
+	Error         *common.Error          `protobuf:"bytes,3,opt,name=error,proto3,oneof" json:"error,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *ListBillingEventsByJobResponse) Reset() {
+	*x = ListBillingEventsByJobResponse{}
+	mi := &file_domain_subscription_billing_event_billing_event_proto_msgTypes[20]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *ListBillingEventsByJobResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ListBillingEventsByJobResponse) ProtoMessage() {}
+
+func (x *ListBillingEventsByJobResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_domain_subscription_billing_event_billing_event_proto_msgTypes[20]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ListBillingEventsByJobResponse.ProtoReflect.Descriptor instead.
+func (*ListBillingEventsByJobResponse) Descriptor() ([]byte, []int) {
+	return file_domain_subscription_billing_event_billing_event_proto_rawDescGZIP(), []int{20}
+}
+
+func (x *ListBillingEventsByJobResponse) GetBillingEvents() []*BillingEvent {
+	if x != nil {
+		return x.BillingEvents
+	}
+	return nil
+}
+
+func (x *ListBillingEventsByJobResponse) GetSuccess() bool {
+	if x != nil {
+		return x.Success
+	}
+	return false
+}
+
+func (x *ListBillingEventsByJobResponse) GetError() *common.Error {
+	if x != nil {
+		return x.Error
+	}
+	return nil
+}
+
 type SetBillingEventStatusRequest struct {
 	state          protoimpl.MessageState `protogen:"open.v1"`
 	BillingEventId string                 `protobuf:"bytes,1,opt,name=billing_event_id,json=billingEventId,proto3" json:"billing_event_id,omitempty"`
@@ -1366,7 +1475,7 @@ type SetBillingEventStatusRequest struct {
 
 func (x *SetBillingEventStatusRequest) Reset() {
 	*x = SetBillingEventStatusRequest{}
-	mi := &file_domain_subscription_billing_event_billing_event_proto_msgTypes[19]
+	mi := &file_domain_subscription_billing_event_billing_event_proto_msgTypes[21]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1378,7 +1487,7 @@ func (x *SetBillingEventStatusRequest) String() string {
 func (*SetBillingEventStatusRequest) ProtoMessage() {}
 
 func (x *SetBillingEventStatusRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_domain_subscription_billing_event_billing_event_proto_msgTypes[19]
+	mi := &file_domain_subscription_billing_event_billing_event_proto_msgTypes[21]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1391,7 +1500,7 @@ func (x *SetBillingEventStatusRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use SetBillingEventStatusRequest.ProtoReflect.Descriptor instead.
 func (*SetBillingEventStatusRequest) Descriptor() ([]byte, []int) {
-	return file_domain_subscription_billing_event_billing_event_proto_rawDescGZIP(), []int{19}
+	return file_domain_subscription_billing_event_billing_event_proto_rawDescGZIP(), []int{21}
 }
 
 func (x *SetBillingEventStatusRequest) GetBillingEventId() string {
@@ -1433,7 +1542,7 @@ type SetBillingEventStatusResponse struct {
 
 func (x *SetBillingEventStatusResponse) Reset() {
 	*x = SetBillingEventStatusResponse{}
-	mi := &file_domain_subscription_billing_event_billing_event_proto_msgTypes[20]
+	mi := &file_domain_subscription_billing_event_billing_event_proto_msgTypes[22]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1445,7 +1554,7 @@ func (x *SetBillingEventStatusResponse) String() string {
 func (*SetBillingEventStatusResponse) ProtoMessage() {}
 
 func (x *SetBillingEventStatusResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_domain_subscription_billing_event_billing_event_proto_msgTypes[20]
+	mi := &file_domain_subscription_billing_event_billing_event_proto_msgTypes[22]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1458,7 +1567,7 @@ func (x *SetBillingEventStatusResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use SetBillingEventStatusResponse.ProtoReflect.Descriptor instead.
 func (*SetBillingEventStatusResponse) Descriptor() ([]byte, []int) {
-	return file_domain_subscription_billing_event_billing_event_proto_rawDescGZIP(), []int{20}
+	return file_domain_subscription_billing_event_billing_event_proto_rawDescGZIP(), []int{22}
 }
 
 func (x *SetBillingEventStatusResponse) GetData() *BillingEvent {
@@ -1625,6 +1734,13 @@ const file_domain_subscription_billing_event_billing_event_proto_rawDesc = "" +
 	"\x0ebilling_events\x18\x01 \x03(\v2$.domain.subscription.v1.BillingEventR\rbillingEvents\x12\x18\n" +
 	"\asuccess\x18\x02 \x01(\bR\asuccess\x122\n" +
 	"\x05error\x18\x03 \x01(\v2\x17.domain.common.v1.ErrorH\x00R\x05error\x88\x01\x01B\b\n" +
+	"\x06_error\"6\n" +
+	"\x1dListBillingEventsByJobRequest\x12\x15\n" +
+	"\x06job_id\x18\x01 \x01(\tR\x05jobId\"\xc5\x01\n" +
+	"\x1eListBillingEventsByJobResponse\x12K\n" +
+	"\x0ebilling_events\x18\x01 \x03(\v2$.domain.subscription.v1.BillingEventR\rbillingEvents\x12\x18\n" +
+	"\asuccess\x18\x02 \x01(\bR\asuccess\x122\n" +
+	"\x05error\x18\x03 \x01(\v2\x17.domain.common.v1.ErrorH\x00R\x05error\x88\x01\x01B\b\n" +
 	"\x06_error\"\xfb\x01\n" +
 	"\x1cSetBillingEventStatusRequest\x12(\n" +
 	"\x10billing_event_id\x18\x01 \x01(\tR\x0ebillingEventId\x12B\n" +
@@ -1644,14 +1760,14 @@ const file_domain_subscription_billing_event_billing_event_proto_rawDesc = "" +
 	"\x1bBILLING_EVENT_STATUS_BILLED\x10\x02\x12\x1f\n" +
 	"\x1bBILLING_EVENT_STATUS_WAIVED\x10\x03\x12!\n" +
 	"\x1dBILLING_EVENT_STATUS_DEFERRED\x10\x04\x12\"\n" +
-	"\x1eBILLING_EVENT_STATUS_CANCELLED\x10\x05*\xd6\x01\n" +
+	"\x1eBILLING_EVENT_STATUS_CANCELLED\x10\x05*\x81\x02\n" +
 	"\x13BillingEventTrigger\x12%\n" +
 	"!BILLING_EVENT_TRIGGER_UNSPECIFIED\x10\x00\x12)\n" +
 	"%BILLING_EVENT_TRIGGER_PHASE_COMPLETED\x10\x01\x12&\n" +
 	"\"BILLING_EVENT_TRIGGER_MANUAL_EARLY\x10\x02\x12%\n" +
 	"!BILLING_EVENT_TRIGGER_MANUAL_LATE\x10\x03\x12\x1e\n" +
-	"\x1aBILLING_EVENT_TRIGGER_DATE\x10\x042\xd3\n" +
-	"\n" +
+	"\x1aBILLING_EVENT_TRIGGER_DATE\x10\x04\x12)\n" +
+	"%BILLING_EVENT_TRIGGER_VISIT_COMPLETED\x10\x052\xcf\v\n" +
 	"\x19BillingEventDomainService\x12{\n" +
 	"\x12CreateBillingEvent\x121.domain.subscription.v1.CreateBillingEventRequest\x1a2.domain.subscription.v1.CreateBillingEventResponse\x12u\n" +
 	"\x10ReadBillingEvent\x12/.domain.subscription.v1.ReadBillingEventRequest\x1a0.domain.subscription.v1.ReadBillingEventResponse\x12{\n" +
@@ -1661,7 +1777,8 @@ const file_domain_subscription_billing_event_billing_event_proto_rawDesc = "" +
 	"\x1bGetBillingEventListPageData\x12:.domain.subscription.v1.GetBillingEventListPageDataRequest\x1a;.domain.subscription.v1.GetBillingEventListPageDataResponse\x12\x96\x01\n" +
 	"\x1bGetBillingEventItemPageData\x12:.domain.subscription.v1.GetBillingEventItemPageDataRequest\x1a;.domain.subscription.v1.GetBillingEventItemPageDataResponse\x12\x95\x01\n" +
 	"\x12ListBySubscription\x12>.domain.subscription.v1.ListBillingEventsBySubscriptionRequest\x1a?.domain.subscription.v1.ListBillingEventsBySubscriptionResponse\x12\x89\x01\n" +
-	"\x0eListByJobPhase\x12:.domain.subscription.v1.ListBillingEventsByJobPhaseRequest\x1a;.domain.subscription.v1.ListBillingEventsByJobPhaseResponse\x12x\n" +
+	"\x0eListByJobPhase\x12:.domain.subscription.v1.ListBillingEventsByJobPhaseRequest\x1a;.domain.subscription.v1.ListBillingEventsByJobPhaseResponse\x12z\n" +
+	"\tListByJob\x125.domain.subscription.v1.ListBillingEventsByJobRequest\x1a6.domain.subscription.v1.ListBillingEventsByJobResponse\x12x\n" +
 	"\tSetStatus\x124.domain.subscription.v1.SetBillingEventStatusRequest\x1a5.domain.subscription.v1.SetBillingEventStatusResponseB\x86\x02\n" +
 	"\x1acom.domain.subscription.v1B\x11BillingEventProtoP\x01Z[github.com/erniealice/esqyma/pkg/schema/v1/domain/subscription/billing_event;subscriptionv1\xa2\x02\x03DSX\xaa\x02\x16Domain.Subscription.V1\xca\x02\x16Domain\\Subscription\\V1\xe2\x02\"Domain\\Subscription\\V1\\GPBMetadata\xea\x02\x18Domain::Subscription::V1b\x06proto3"
 
@@ -1678,7 +1795,7 @@ func file_domain_subscription_billing_event_billing_event_proto_rawDescGZIP() []
 }
 
 var file_domain_subscription_billing_event_billing_event_proto_enumTypes = make([]protoimpl.EnumInfo, 2)
-var file_domain_subscription_billing_event_billing_event_proto_msgTypes = make([]protoimpl.MessageInfo, 21)
+var file_domain_subscription_billing_event_billing_event_proto_msgTypes = make([]protoimpl.MessageInfo, 23)
 var file_domain_subscription_billing_event_billing_event_proto_goTypes = []any{
 	(BillingEventStatus)(0),                         // 0: domain.subscription.v1.BillingEventStatus
 	(BillingEventTrigger)(0),                        // 1: domain.subscription.v1.BillingEventTrigger
@@ -1701,79 +1818,85 @@ var file_domain_subscription_billing_event_billing_event_proto_goTypes = []any{
 	(*ListBillingEventsBySubscriptionResponse)(nil), // 18: domain.subscription.v1.ListBillingEventsBySubscriptionResponse
 	(*ListBillingEventsByJobPhaseRequest)(nil),      // 19: domain.subscription.v1.ListBillingEventsByJobPhaseRequest
 	(*ListBillingEventsByJobPhaseResponse)(nil),     // 20: domain.subscription.v1.ListBillingEventsByJobPhaseResponse
-	(*SetBillingEventStatusRequest)(nil),            // 21: domain.subscription.v1.SetBillingEventStatusRequest
-	(*SetBillingEventStatusResponse)(nil),           // 22: domain.subscription.v1.SetBillingEventStatusResponse
-	(*common.Error)(nil),                            // 23: domain.common.v1.Error
-	(*common.SearchRequest)(nil),                    // 24: domain.common.v1.SearchRequest
-	(*common.FilterRequest)(nil),                    // 25: domain.common.v1.FilterRequest
-	(*common.SortRequest)(nil),                      // 26: domain.common.v1.SortRequest
-	(*common.PaginationRequest)(nil),                // 27: domain.common.v1.PaginationRequest
-	(*common.PaginationResponse)(nil),               // 28: domain.common.v1.PaginationResponse
-	(*common.SearchResult)(nil),                     // 29: domain.common.v1.SearchResult
+	(*ListBillingEventsByJobRequest)(nil),           // 21: domain.subscription.v1.ListBillingEventsByJobRequest
+	(*ListBillingEventsByJobResponse)(nil),          // 22: domain.subscription.v1.ListBillingEventsByJobResponse
+	(*SetBillingEventStatusRequest)(nil),            // 23: domain.subscription.v1.SetBillingEventStatusRequest
+	(*SetBillingEventStatusResponse)(nil),           // 24: domain.subscription.v1.SetBillingEventStatusResponse
+	(*common.Error)(nil),                            // 25: domain.common.v1.Error
+	(*common.SearchRequest)(nil),                    // 26: domain.common.v1.SearchRequest
+	(*common.FilterRequest)(nil),                    // 27: domain.common.v1.FilterRequest
+	(*common.SortRequest)(nil),                      // 28: domain.common.v1.SortRequest
+	(*common.PaginationRequest)(nil),                // 29: domain.common.v1.PaginationRequest
+	(*common.PaginationResponse)(nil),               // 30: domain.common.v1.PaginationResponse
+	(*common.SearchResult)(nil),                     // 31: domain.common.v1.SearchResult
 }
 var file_domain_subscription_billing_event_billing_event_proto_depIdxs = []int32{
 	0,  // 0: domain.subscription.v1.BillingEvent.status:type_name -> domain.subscription.v1.BillingEventStatus
 	1,  // 1: domain.subscription.v1.BillingEvent.trigger:type_name -> domain.subscription.v1.BillingEventTrigger
 	2,  // 2: domain.subscription.v1.CreateBillingEventRequest.data:type_name -> domain.subscription.v1.BillingEvent
 	2,  // 3: domain.subscription.v1.CreateBillingEventResponse.data:type_name -> domain.subscription.v1.BillingEvent
-	23, // 4: domain.subscription.v1.CreateBillingEventResponse.error:type_name -> domain.common.v1.Error
+	25, // 4: domain.subscription.v1.CreateBillingEventResponse.error:type_name -> domain.common.v1.Error
 	2,  // 5: domain.subscription.v1.ReadBillingEventRequest.data:type_name -> domain.subscription.v1.BillingEvent
 	2,  // 6: domain.subscription.v1.ReadBillingEventResponse.data:type_name -> domain.subscription.v1.BillingEvent
-	23, // 7: domain.subscription.v1.ReadBillingEventResponse.error:type_name -> domain.common.v1.Error
+	25, // 7: domain.subscription.v1.ReadBillingEventResponse.error:type_name -> domain.common.v1.Error
 	2,  // 8: domain.subscription.v1.UpdateBillingEventRequest.data:type_name -> domain.subscription.v1.BillingEvent
 	2,  // 9: domain.subscription.v1.UpdateBillingEventResponse.data:type_name -> domain.subscription.v1.BillingEvent
-	23, // 10: domain.subscription.v1.UpdateBillingEventResponse.error:type_name -> domain.common.v1.Error
+	25, // 10: domain.subscription.v1.UpdateBillingEventResponse.error:type_name -> domain.common.v1.Error
 	2,  // 11: domain.subscription.v1.DeleteBillingEventRequest.data:type_name -> domain.subscription.v1.BillingEvent
-	23, // 12: domain.subscription.v1.DeleteBillingEventResponse.error:type_name -> domain.common.v1.Error
-	24, // 13: domain.subscription.v1.ListBillingEventsRequest.search:type_name -> domain.common.v1.SearchRequest
-	25, // 14: domain.subscription.v1.ListBillingEventsRequest.filters:type_name -> domain.common.v1.FilterRequest
-	26, // 15: domain.subscription.v1.ListBillingEventsRequest.sort:type_name -> domain.common.v1.SortRequest
-	27, // 16: domain.subscription.v1.ListBillingEventsRequest.pagination:type_name -> domain.common.v1.PaginationRequest
+	25, // 12: domain.subscription.v1.DeleteBillingEventResponse.error:type_name -> domain.common.v1.Error
+	26, // 13: domain.subscription.v1.ListBillingEventsRequest.search:type_name -> domain.common.v1.SearchRequest
+	27, // 14: domain.subscription.v1.ListBillingEventsRequest.filters:type_name -> domain.common.v1.FilterRequest
+	28, // 15: domain.subscription.v1.ListBillingEventsRequest.sort:type_name -> domain.common.v1.SortRequest
+	29, // 16: domain.subscription.v1.ListBillingEventsRequest.pagination:type_name -> domain.common.v1.PaginationRequest
 	2,  // 17: domain.subscription.v1.ListBillingEventsResponse.data:type_name -> domain.subscription.v1.BillingEvent
-	23, // 18: domain.subscription.v1.ListBillingEventsResponse.error:type_name -> domain.common.v1.Error
-	27, // 19: domain.subscription.v1.GetBillingEventListPageDataRequest.pagination:type_name -> domain.common.v1.PaginationRequest
-	25, // 20: domain.subscription.v1.GetBillingEventListPageDataRequest.filters:type_name -> domain.common.v1.FilterRequest
-	26, // 21: domain.subscription.v1.GetBillingEventListPageDataRequest.sort:type_name -> domain.common.v1.SortRequest
-	24, // 22: domain.subscription.v1.GetBillingEventListPageDataRequest.search:type_name -> domain.common.v1.SearchRequest
+	25, // 18: domain.subscription.v1.ListBillingEventsResponse.error:type_name -> domain.common.v1.Error
+	29, // 19: domain.subscription.v1.GetBillingEventListPageDataRequest.pagination:type_name -> domain.common.v1.PaginationRequest
+	27, // 20: domain.subscription.v1.GetBillingEventListPageDataRequest.filters:type_name -> domain.common.v1.FilterRequest
+	28, // 21: domain.subscription.v1.GetBillingEventListPageDataRequest.sort:type_name -> domain.common.v1.SortRequest
+	26, // 22: domain.subscription.v1.GetBillingEventListPageDataRequest.search:type_name -> domain.common.v1.SearchRequest
 	2,  // 23: domain.subscription.v1.GetBillingEventListPageDataResponse.billing_event_list:type_name -> domain.subscription.v1.BillingEvent
-	28, // 24: domain.subscription.v1.GetBillingEventListPageDataResponse.pagination:type_name -> domain.common.v1.PaginationResponse
-	29, // 25: domain.subscription.v1.GetBillingEventListPageDataResponse.search_results:type_name -> domain.common.v1.SearchResult
-	23, // 26: domain.subscription.v1.GetBillingEventListPageDataResponse.error:type_name -> domain.common.v1.Error
+	30, // 24: domain.subscription.v1.GetBillingEventListPageDataResponse.pagination:type_name -> domain.common.v1.PaginationResponse
+	31, // 25: domain.subscription.v1.GetBillingEventListPageDataResponse.search_results:type_name -> domain.common.v1.SearchResult
+	25, // 26: domain.subscription.v1.GetBillingEventListPageDataResponse.error:type_name -> domain.common.v1.Error
 	2,  // 27: domain.subscription.v1.GetBillingEventItemPageDataResponse.billing_event:type_name -> domain.subscription.v1.BillingEvent
-	23, // 28: domain.subscription.v1.GetBillingEventItemPageDataResponse.error:type_name -> domain.common.v1.Error
+	25, // 28: domain.subscription.v1.GetBillingEventItemPageDataResponse.error:type_name -> domain.common.v1.Error
 	2,  // 29: domain.subscription.v1.ListBillingEventsBySubscriptionResponse.billing_events:type_name -> domain.subscription.v1.BillingEvent
-	23, // 30: domain.subscription.v1.ListBillingEventsBySubscriptionResponse.error:type_name -> domain.common.v1.Error
+	25, // 30: domain.subscription.v1.ListBillingEventsBySubscriptionResponse.error:type_name -> domain.common.v1.Error
 	2,  // 31: domain.subscription.v1.ListBillingEventsByJobPhaseResponse.billing_events:type_name -> domain.subscription.v1.BillingEvent
-	23, // 32: domain.subscription.v1.ListBillingEventsByJobPhaseResponse.error:type_name -> domain.common.v1.Error
-	0,  // 33: domain.subscription.v1.SetBillingEventStatusRequest.status:type_name -> domain.subscription.v1.BillingEventStatus
-	1,  // 34: domain.subscription.v1.SetBillingEventStatusRequest.trigger:type_name -> domain.subscription.v1.BillingEventTrigger
-	2,  // 35: domain.subscription.v1.SetBillingEventStatusResponse.data:type_name -> domain.subscription.v1.BillingEvent
-	23, // 36: domain.subscription.v1.SetBillingEventStatusResponse.error:type_name -> domain.common.v1.Error
-	3,  // 37: domain.subscription.v1.BillingEventDomainService.CreateBillingEvent:input_type -> domain.subscription.v1.CreateBillingEventRequest
-	5,  // 38: domain.subscription.v1.BillingEventDomainService.ReadBillingEvent:input_type -> domain.subscription.v1.ReadBillingEventRequest
-	7,  // 39: domain.subscription.v1.BillingEventDomainService.UpdateBillingEvent:input_type -> domain.subscription.v1.UpdateBillingEventRequest
-	9,  // 40: domain.subscription.v1.BillingEventDomainService.DeleteBillingEvent:input_type -> domain.subscription.v1.DeleteBillingEventRequest
-	11, // 41: domain.subscription.v1.BillingEventDomainService.ListBillingEvents:input_type -> domain.subscription.v1.ListBillingEventsRequest
-	13, // 42: domain.subscription.v1.BillingEventDomainService.GetBillingEventListPageData:input_type -> domain.subscription.v1.GetBillingEventListPageDataRequest
-	15, // 43: domain.subscription.v1.BillingEventDomainService.GetBillingEventItemPageData:input_type -> domain.subscription.v1.GetBillingEventItemPageDataRequest
-	17, // 44: domain.subscription.v1.BillingEventDomainService.ListBySubscription:input_type -> domain.subscription.v1.ListBillingEventsBySubscriptionRequest
-	19, // 45: domain.subscription.v1.BillingEventDomainService.ListByJobPhase:input_type -> domain.subscription.v1.ListBillingEventsByJobPhaseRequest
-	21, // 46: domain.subscription.v1.BillingEventDomainService.SetStatus:input_type -> domain.subscription.v1.SetBillingEventStatusRequest
-	4,  // 47: domain.subscription.v1.BillingEventDomainService.CreateBillingEvent:output_type -> domain.subscription.v1.CreateBillingEventResponse
-	6,  // 48: domain.subscription.v1.BillingEventDomainService.ReadBillingEvent:output_type -> domain.subscription.v1.ReadBillingEventResponse
-	8,  // 49: domain.subscription.v1.BillingEventDomainService.UpdateBillingEvent:output_type -> domain.subscription.v1.UpdateBillingEventResponse
-	10, // 50: domain.subscription.v1.BillingEventDomainService.DeleteBillingEvent:output_type -> domain.subscription.v1.DeleteBillingEventResponse
-	12, // 51: domain.subscription.v1.BillingEventDomainService.ListBillingEvents:output_type -> domain.subscription.v1.ListBillingEventsResponse
-	14, // 52: domain.subscription.v1.BillingEventDomainService.GetBillingEventListPageData:output_type -> domain.subscription.v1.GetBillingEventListPageDataResponse
-	16, // 53: domain.subscription.v1.BillingEventDomainService.GetBillingEventItemPageData:output_type -> domain.subscription.v1.GetBillingEventItemPageDataResponse
-	18, // 54: domain.subscription.v1.BillingEventDomainService.ListBySubscription:output_type -> domain.subscription.v1.ListBillingEventsBySubscriptionResponse
-	20, // 55: domain.subscription.v1.BillingEventDomainService.ListByJobPhase:output_type -> domain.subscription.v1.ListBillingEventsByJobPhaseResponse
-	22, // 56: domain.subscription.v1.BillingEventDomainService.SetStatus:output_type -> domain.subscription.v1.SetBillingEventStatusResponse
-	47, // [47:57] is the sub-list for method output_type
-	37, // [37:47] is the sub-list for method input_type
-	37, // [37:37] is the sub-list for extension type_name
-	37, // [37:37] is the sub-list for extension extendee
-	0,  // [0:37] is the sub-list for field type_name
+	25, // 32: domain.subscription.v1.ListBillingEventsByJobPhaseResponse.error:type_name -> domain.common.v1.Error
+	2,  // 33: domain.subscription.v1.ListBillingEventsByJobResponse.billing_events:type_name -> domain.subscription.v1.BillingEvent
+	25, // 34: domain.subscription.v1.ListBillingEventsByJobResponse.error:type_name -> domain.common.v1.Error
+	0,  // 35: domain.subscription.v1.SetBillingEventStatusRequest.status:type_name -> domain.subscription.v1.BillingEventStatus
+	1,  // 36: domain.subscription.v1.SetBillingEventStatusRequest.trigger:type_name -> domain.subscription.v1.BillingEventTrigger
+	2,  // 37: domain.subscription.v1.SetBillingEventStatusResponse.data:type_name -> domain.subscription.v1.BillingEvent
+	25, // 38: domain.subscription.v1.SetBillingEventStatusResponse.error:type_name -> domain.common.v1.Error
+	3,  // 39: domain.subscription.v1.BillingEventDomainService.CreateBillingEvent:input_type -> domain.subscription.v1.CreateBillingEventRequest
+	5,  // 40: domain.subscription.v1.BillingEventDomainService.ReadBillingEvent:input_type -> domain.subscription.v1.ReadBillingEventRequest
+	7,  // 41: domain.subscription.v1.BillingEventDomainService.UpdateBillingEvent:input_type -> domain.subscription.v1.UpdateBillingEventRequest
+	9,  // 42: domain.subscription.v1.BillingEventDomainService.DeleteBillingEvent:input_type -> domain.subscription.v1.DeleteBillingEventRequest
+	11, // 43: domain.subscription.v1.BillingEventDomainService.ListBillingEvents:input_type -> domain.subscription.v1.ListBillingEventsRequest
+	13, // 44: domain.subscription.v1.BillingEventDomainService.GetBillingEventListPageData:input_type -> domain.subscription.v1.GetBillingEventListPageDataRequest
+	15, // 45: domain.subscription.v1.BillingEventDomainService.GetBillingEventItemPageData:input_type -> domain.subscription.v1.GetBillingEventItemPageDataRequest
+	17, // 46: domain.subscription.v1.BillingEventDomainService.ListBySubscription:input_type -> domain.subscription.v1.ListBillingEventsBySubscriptionRequest
+	19, // 47: domain.subscription.v1.BillingEventDomainService.ListByJobPhase:input_type -> domain.subscription.v1.ListBillingEventsByJobPhaseRequest
+	21, // 48: domain.subscription.v1.BillingEventDomainService.ListByJob:input_type -> domain.subscription.v1.ListBillingEventsByJobRequest
+	23, // 49: domain.subscription.v1.BillingEventDomainService.SetStatus:input_type -> domain.subscription.v1.SetBillingEventStatusRequest
+	4,  // 50: domain.subscription.v1.BillingEventDomainService.CreateBillingEvent:output_type -> domain.subscription.v1.CreateBillingEventResponse
+	6,  // 51: domain.subscription.v1.BillingEventDomainService.ReadBillingEvent:output_type -> domain.subscription.v1.ReadBillingEventResponse
+	8,  // 52: domain.subscription.v1.BillingEventDomainService.UpdateBillingEvent:output_type -> domain.subscription.v1.UpdateBillingEventResponse
+	10, // 53: domain.subscription.v1.BillingEventDomainService.DeleteBillingEvent:output_type -> domain.subscription.v1.DeleteBillingEventResponse
+	12, // 54: domain.subscription.v1.BillingEventDomainService.ListBillingEvents:output_type -> domain.subscription.v1.ListBillingEventsResponse
+	14, // 55: domain.subscription.v1.BillingEventDomainService.GetBillingEventListPageData:output_type -> domain.subscription.v1.GetBillingEventListPageDataResponse
+	16, // 56: domain.subscription.v1.BillingEventDomainService.GetBillingEventItemPageData:output_type -> domain.subscription.v1.GetBillingEventItemPageDataResponse
+	18, // 57: domain.subscription.v1.BillingEventDomainService.ListBySubscription:output_type -> domain.subscription.v1.ListBillingEventsBySubscriptionResponse
+	20, // 58: domain.subscription.v1.BillingEventDomainService.ListByJobPhase:output_type -> domain.subscription.v1.ListBillingEventsByJobPhaseResponse
+	22, // 59: domain.subscription.v1.BillingEventDomainService.ListByJob:output_type -> domain.subscription.v1.ListBillingEventsByJobResponse
+	24, // 60: domain.subscription.v1.BillingEventDomainService.SetStatus:output_type -> domain.subscription.v1.SetBillingEventStatusResponse
+	50, // [50:61] is the sub-list for method output_type
+	39, // [39:50] is the sub-list for method input_type
+	39, // [39:39] is the sub-list for extension type_name
+	39, // [39:39] is the sub-list for extension extendee
+	0,  // [0:39] is the sub-list for field type_name
 }
 
 func init() { file_domain_subscription_billing_event_billing_event_proto_init() }
@@ -1793,15 +1916,16 @@ func file_domain_subscription_billing_event_billing_event_proto_init() {
 	file_domain_subscription_billing_event_billing_event_proto_msgTypes[14].OneofWrappers = []any{}
 	file_domain_subscription_billing_event_billing_event_proto_msgTypes[16].OneofWrappers = []any{}
 	file_domain_subscription_billing_event_billing_event_proto_msgTypes[18].OneofWrappers = []any{}
-	file_domain_subscription_billing_event_billing_event_proto_msgTypes[19].OneofWrappers = []any{}
 	file_domain_subscription_billing_event_billing_event_proto_msgTypes[20].OneofWrappers = []any{}
+	file_domain_subscription_billing_event_billing_event_proto_msgTypes[21].OneofWrappers = []any{}
+	file_domain_subscription_billing_event_billing_event_proto_msgTypes[22].OneofWrappers = []any{}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
 		File: protoimpl.DescBuilder{
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_domain_subscription_billing_event_billing_event_proto_rawDesc), len(file_domain_subscription_billing_event_billing_event_proto_rawDesc)),
 			NumEnums:      2,
-			NumMessages:   21,
+			NumMessages:   23,
 			NumExtensions: 0,
 			NumServices:   1,
 		},

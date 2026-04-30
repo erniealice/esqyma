@@ -109,6 +109,19 @@ type Job struct {
 	// the "which invoice covers this cycle Job" trace without a hard FK.
 	CyclePeriodStart *string `protobuf:"bytes,54,opt,name=cycle_period_start,json=cyclePeriodStart,proto3,oneof" json:"cycle_period_start,omitempty"`
 	CyclePeriodEnd   *string `protobuf:"bytes,55,opt,name=cycle_period_end,json=cyclePeriodEnd,proto3,oneof" json:"cycle_period_end,omitempty"`
+	// AD_HOC × {TOTAL_PACKAGE | PER_OCCURRENCE} per-occurrence metadata.
+	// Companion columns to the composite cycle_period_start key (`YYYY-MM-DD#NNNN`),
+	// exposed as DATE + INT for sort/query convenience without composite-string parsing.
+	// Vertical-neutral naming — semantics flex per industry:
+	//   - field-services: "service visit" → request date + visit ordinal
+	//   - dental / aesthetics: "appointment" → appointment date + occurrence ordinal
+	//   - IT retainer: "support call" → call date + call ordinal
+	//   - equipment service: "service event" → event date + event ordinal
+	//
+	// NULL on cyclic Jobs and engagement shells.
+	// See docs/plan/20260501-ad-hoc-subscription-billing/plan.md §3.2 (codex CRIT-4).
+	UsageRequestDate *string `protobuf:"bytes,56,opt,name=usage_request_date,json=usageRequestDate,proto3,oneof" json:"usage_request_date,omitempty"` // ISO 8601 YYYY-MM-DD
+	UsageOrdinal     *int32  `protobuf:"varint,57,opt,name=usage_ordinal,json=usageOrdinal,proto3,oneof" json:"usage_ordinal,omitempty"`
 	unknownFields    protoimpl.UnknownFields
 	sizeCache        protoimpl.SizeCache
 }
@@ -519,6 +532,20 @@ func (x *Job) GetCyclePeriodEnd() string {
 		return *x.CyclePeriodEnd
 	}
 	return ""
+}
+
+func (x *Job) GetUsageRequestDate() string {
+	if x != nil && x.UsageRequestDate != nil {
+		return *x.UsageRequestDate
+	}
+	return ""
+}
+
+func (x *Job) GetUsageOrdinal() int32 {
+	if x != nil && x.UsageOrdinal != nil {
+		return *x.UsageOrdinal
+	}
+	return 0
 }
 
 type CreateJobRequest struct {
@@ -1637,7 +1664,7 @@ var File_domain_operation_job_job_proto protoreflect.FileDescriptor
 
 const file_domain_operation_job_job_proto_rawDesc = "" +
 	"\n" +
-	"\x1edomain/operation/job/job.proto\x12\x13domain.operation.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1adomain/common/search.proto\x1a!domain/entity/client/client.proto\x1a%domain/entity/location/location.proto\x1a\"domain/operation/enums/enums.proto\x1a\x10options/db.proto\"\xd7\x1c\n" +
+	"\x1edomain/operation/job/job.proto\x12\x13domain.operation.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1adomain/common/search.proto\x1a!domain/entity/client/client.proto\x1a%domain/entity/location/location.proto\x1a\"domain/operation/enums/enums.proto\x1a\x10options/db.proto\"\xdd\x1d\n" +
 	"\x03Job\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12&\n" +
 	"\fdate_created\x18\x02 \x01(\x03H\x00R\vdateCreated\x88\x01\x01\x123\n" +
@@ -1714,7 +1741,9 @@ const file_domain_operation_job_job_proto_rawDesc = "" +
 	"\vcycle_index\x185 \x01(\x05H&R\n" +
 	"cycleIndex\x88\x01\x01\x121\n" +
 	"\x12cycle_period_start\x186 \x01(\tH'R\x10cyclePeriodStart\x88\x01\x01\x12-\n" +
-	"\x10cycle_period_end\x187 \x01(\tH(R\x0ecyclePeriodEnd\x88\x01\x01:\x06\x8a\xb5\x18\x02\b\x01B\x0f\n" +
+	"\x10cycle_period_end\x187 \x01(\tH(R\x0ecyclePeriodEnd\x88\x01\x01\x121\n" +
+	"\x12usage_request_date\x188 \x01(\tH)R\x10usageRequestDate\x88\x01\x01\x12(\n" +
+	"\rusage_ordinal\x189 \x01(\x05H*R\fusageOrdinal\x88\x01\x01:\x06\x8a\xb5\x18\x02\b\x01B\x0f\n" +
 	"\r_date_createdB\x16\n" +
 	"\x14_date_created_stringB\x10\n" +
 	"\x0e_date_modifiedB\x17\n" +
@@ -1757,7 +1786,9 @@ const file_domain_operation_job_job_proto_rawDesc = "" +
 	"\x15_workflow_instance_idB\x0e\n" +
 	"\f_cycle_indexB\x15\n" +
 	"\x13_cycle_period_startB\x13\n" +
-	"\x11_cycle_period_endJ\x04\b8\x10F\"@\n" +
+	"\x11_cycle_period_endB\x15\n" +
+	"\x13_usage_request_dateB\x10\n" +
+	"\x0e_usage_ordinalJ\x04\b:\x10F\"@\n" +
 	"\x10CreateJobRequest\x12,\n" +
 	"\x04data\x18\x01 \x01(\v2\x18.domain.operation.v1.JobR\x04data\"\x99\x01\n" +
 	"\x11CreateJobResponse\x12,\n" +

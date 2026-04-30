@@ -39,6 +39,9 @@ enum BillingEventTrigger {
   BILLING_EVENT_TRIGGER_MANUAL_EARLY    = 2;
   BILLING_EVENT_TRIGGER_MANUAL_LATE     = 3;
   BILLING_EVENT_TRIGGER_DATE            = 4;
+  // AD_HOC × PER_OCCURRENCE: visit Job's last phase transitioned to COMPLETED.
+  // See docs/plan/20260501-ad-hoc-subscription-billing/plan.md §4.3 (codex CRIT-1).
+  BILLING_EVENT_TRIGGER_VISIT_COMPLETED = 5;
 }
 
 message BillingEvent {
@@ -104,6 +107,10 @@ service BillingEventDomainService {
     returns (ListBillingEventsBySubscriptionResponse);
   rpc ListByJobPhase(ListBillingEventsByJobPhaseRequest)
     returns (ListBillingEventsByJobPhaseResponse);
+  // AD_HOC × PER_OCCURRENCE events have job_phase_id = NULL — find them by job_id.
+  // See docs/plan/20260501-ad-hoc-subscription-billing/plan.md §3.5 (codex MAJ-3).
+  rpc ListByJob(ListBillingEventsByJobRequest)
+    returns (ListBillingEventsByJobResponse);
   rpc SetStatus(SetBillingEventStatusRequest) returns (SetBillingEventStatusResponse);
 }
 
@@ -201,6 +208,16 @@ message ListBillingEventsByJobPhaseRequest {
 }
 
 message ListBillingEventsByJobPhaseResponse {
+  repeated BillingEvent billing_events = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message ListBillingEventsByJobRequest {
+  string job_id = 1;
+}
+
+message ListBillingEventsByJobResponse {
   repeated BillingEvent billing_events = 1;
   bool success = 2;
   optional domain.common.v1.Error error = 3;

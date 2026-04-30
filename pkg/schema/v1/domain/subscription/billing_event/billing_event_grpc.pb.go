@@ -28,6 +28,7 @@ const (
 	BillingEventDomainService_GetBillingEventItemPageData_FullMethodName = "/domain.subscription.v1.BillingEventDomainService/GetBillingEventItemPageData"
 	BillingEventDomainService_ListBySubscription_FullMethodName          = "/domain.subscription.v1.BillingEventDomainService/ListBySubscription"
 	BillingEventDomainService_ListByJobPhase_FullMethodName              = "/domain.subscription.v1.BillingEventDomainService/ListByJobPhase"
+	BillingEventDomainService_ListByJob_FullMethodName                   = "/domain.subscription.v1.BillingEventDomainService/ListByJob"
 	BillingEventDomainService_SetStatus_FullMethodName                   = "/domain.subscription.v1.BillingEventDomainService/SetStatus"
 )
 
@@ -45,6 +46,9 @@ type BillingEventDomainServiceClient interface {
 	// Extras
 	ListBySubscription(ctx context.Context, in *ListBillingEventsBySubscriptionRequest, opts ...grpc.CallOption) (*ListBillingEventsBySubscriptionResponse, error)
 	ListByJobPhase(ctx context.Context, in *ListBillingEventsByJobPhaseRequest, opts ...grpc.CallOption) (*ListBillingEventsByJobPhaseResponse, error)
+	// AD_HOC × PER_OCCURRENCE events have job_phase_id = NULL — find them by job_id.
+	// See docs/plan/20260501-ad-hoc-subscription-billing/plan.md §3.5 (codex MAJ-3).
+	ListByJob(ctx context.Context, in *ListBillingEventsByJobRequest, opts ...grpc.CallOption) (*ListBillingEventsByJobResponse, error)
 	SetStatus(ctx context.Context, in *SetBillingEventStatusRequest, opts ...grpc.CallOption) (*SetBillingEventStatusResponse, error)
 }
 
@@ -146,6 +150,16 @@ func (c *billingEventDomainServiceClient) ListByJobPhase(ctx context.Context, in
 	return out, nil
 }
 
+func (c *billingEventDomainServiceClient) ListByJob(ctx context.Context, in *ListBillingEventsByJobRequest, opts ...grpc.CallOption) (*ListBillingEventsByJobResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(ListBillingEventsByJobResponse)
+	err := c.cc.Invoke(ctx, BillingEventDomainService_ListByJob_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 func (c *billingEventDomainServiceClient) SetStatus(ctx context.Context, in *SetBillingEventStatusRequest, opts ...grpc.CallOption) (*SetBillingEventStatusResponse, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(SetBillingEventStatusResponse)
@@ -170,6 +184,9 @@ type BillingEventDomainServiceServer interface {
 	// Extras
 	ListBySubscription(context.Context, *ListBillingEventsBySubscriptionRequest) (*ListBillingEventsBySubscriptionResponse, error)
 	ListByJobPhase(context.Context, *ListBillingEventsByJobPhaseRequest) (*ListBillingEventsByJobPhaseResponse, error)
+	// AD_HOC × PER_OCCURRENCE events have job_phase_id = NULL — find them by job_id.
+	// See docs/plan/20260501-ad-hoc-subscription-billing/plan.md §3.5 (codex MAJ-3).
+	ListByJob(context.Context, *ListBillingEventsByJobRequest) (*ListBillingEventsByJobResponse, error)
 	SetStatus(context.Context, *SetBillingEventStatusRequest) (*SetBillingEventStatusResponse, error)
 	mustEmbedUnimplementedBillingEventDomainServiceServer()
 }
@@ -207,6 +224,9 @@ func (UnimplementedBillingEventDomainServiceServer) ListBySubscription(context.C
 }
 func (UnimplementedBillingEventDomainServiceServer) ListByJobPhase(context.Context, *ListBillingEventsByJobPhaseRequest) (*ListBillingEventsByJobPhaseResponse, error) {
 	return nil, status.Error(codes.Unimplemented, "method ListByJobPhase not implemented")
+}
+func (UnimplementedBillingEventDomainServiceServer) ListByJob(context.Context, *ListBillingEventsByJobRequest) (*ListBillingEventsByJobResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method ListByJob not implemented")
 }
 func (UnimplementedBillingEventDomainServiceServer) SetStatus(context.Context, *SetBillingEventStatusRequest) (*SetBillingEventStatusResponse, error) {
 	return nil, status.Error(codes.Unimplemented, "method SetStatus not implemented")
@@ -395,6 +415,24 @@ func _BillingEventDomainService_ListByJobPhase_Handler(srv interface{}, ctx cont
 	return interceptor(ctx, in, info, handler)
 }
 
+func _BillingEventDomainService_ListByJob_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ListBillingEventsByJobRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(BillingEventDomainServiceServer).ListByJob(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: BillingEventDomainService_ListByJob_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(BillingEventDomainServiceServer).ListByJob(ctx, req.(*ListBillingEventsByJobRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 func _BillingEventDomainService_SetStatus_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(SetBillingEventStatusRequest)
 	if err := dec(in); err != nil {
@@ -455,6 +493,10 @@ var BillingEventDomainService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "ListByJobPhase",
 			Handler:    _BillingEventDomainService_ListByJobPhase_Handler,
+		},
+		{
+			MethodName: "ListByJob",
+			Handler:    _BillingEventDomainService_ListByJob_Handler,
 		},
 		{
 			MethodName: "SetStatus",

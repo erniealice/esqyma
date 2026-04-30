@@ -115,7 +115,20 @@ message Job {
   optional string cycle_period_start = 54;
   optional string cycle_period_end = 55;
 
-  reserved 56 to 69;
+  // AD_HOC × {TOTAL_PACKAGE | PER_OCCURRENCE} per-occurrence metadata.
+  // Companion columns to the composite cycle_period_start key (`YYYY-MM-DD#NNNN`),
+  // exposed as DATE + INT for sort/query convenience without composite-string parsing.
+  // Vertical-neutral naming — semantics flex per industry:
+  //   • field-services: "service visit" → request date + visit ordinal
+  //   • dental / aesthetics: "appointment" → appointment date + occurrence ordinal
+  //   • IT retainer: "support call" → call date + call ordinal
+  //   • equipment service: "service event" → event date + event ordinal
+  // NULL on cyclic Jobs and engagement shells.
+  // See docs/plan/20260501-ad-hoc-subscription-billing/plan.md §3.2 (codex CRIT-4).
+  optional string usage_request_date = 56;  // ISO 8601 YYYY-MM-DD
+  optional int32  usage_ordinal      = 57;
+
+  reserved 58 to 69;
 }
 
 // --- Service ---

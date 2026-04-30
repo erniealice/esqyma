@@ -50,8 +50,13 @@ type Subscription struct {
 	DefaultLicenseType *string `protobuf:"bytes,20,opt,name=default_license_type,json=defaultLicenseType,proto3,oneof" json:"default_license_type,omitempty"` // Default for created licenses
 	AutoAssign         *bool   `protobuf:"varint,21,opt,name=auto_assign,json=autoAssign,proto3,oneof" json:"auto_assign,omitempty"`                          // Auto-assign to purchaser
 	Code               *string `protobuf:"bytes,22,opt,name=code,proto3,oneof" json:"code,omitempty"`                                                         // 7-char alphanumeric engagement code (e.g. "A3K7PXR")
-	unknownFields      protoimpl.UnknownFields
-	sizeCache          protoimpl.SizeCache
+	// AD_HOC × TOTAL_PACKAGE per-subscription entitlement override.
+	// NULL = inherit pricePlan.entitled_occurrences. Set non-NULL when an
+	// operator clicks "Extend pool" — the override is the new total, not a delta.
+	// See docs/plan/20260501-ad-hoc-subscription-billing/plan.md §2.3 (codex MAJ-1).
+	EntitledOccurrencesOverride *int32 `protobuf:"varint,23,opt,name=entitled_occurrences_override,json=entitledOccurrencesOverride,proto3,oneof" json:"entitled_occurrences_override,omitempty"`
+	unknownFields               protoimpl.UnknownFields
+	sizeCache                   protoimpl.SizeCache
 }
 
 func (x *Subscription) Reset() {
@@ -222,6 +227,13 @@ func (x *Subscription) GetCode() string {
 		return *x.Code
 	}
 	return ""
+}
+
+func (x *Subscription) GetEntitledOccurrencesOverride() int32 {
+	if x != nil && x.EntitledOccurrencesOverride != nil {
+		return *x.EntitledOccurrencesOverride
+	}
+	return 0
 }
 
 type CreateSubscriptionRequest struct {
@@ -1027,7 +1039,7 @@ var File_domain_subscription_subscription_subscription_proto protoreflect.FileDe
 
 const file_domain_subscription_subscription_subscription_proto_rawDesc = "" +
 	"\n" +
-	"3domain/subscription/subscription/subscription.proto\x12\x16domain.subscription.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1adomain/common/search.proto\x1a/domain/subscription/price_plan/price_plan.proto\x1a!domain/entity/client/client.proto\x1a\x10options/db.proto\x1a\x1fgoogle/protobuf/timestamp.proto\"\x91\n" +
+	"3domain/subscription/subscription/subscription.proto\x12\x16domain.subscription.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1adomain/common/search.proto\x1a/domain/subscription/price_plan/price_plan.proto\x1a!domain/entity/client/client.proto\x1a\x10options/db.proto\x1a\x1fgoogle/protobuf/timestamp.proto\"\xfc\n" +
 	"\n" +
 	"\fSubscription\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12&\n" +
@@ -1058,7 +1070,8 @@ const file_domain_subscription_subscription_subscription_proto_rawDesc = "" +
 	"\x14default_license_type\x18\x14 \x01(\tH\vR\x12defaultLicenseType\x88\x01\x01\x12$\n" +
 	"\vauto_assign\x18\x15 \x01(\bH\fR\n" +
 	"autoAssign\x88\x01\x01\x12\x17\n" +
-	"\x04code\x18\x16 \x01(\tH\rR\x04code\x88\x01\x01\x1a;\n" +
+	"\x04code\x18\x16 \x01(\tH\rR\x04code\x88\x01\x01\x12G\n" +
+	"\x1dentitled_occurrences_override\x18\x17 \x01(\x05H\x0eR\x1bentitledOccurrencesOverride\x88\x01\x01\x1a;\n" +
 	"\rMetadataEntry\x12\x10\n" +
 	"\x03key\x18\x01 \x01(\tR\x03key\x12\x14\n" +
 	"\x05value\x18\x02 \x01(\tR\x05value:\x028\x01:\x06\x8a\xb5\x18\x02\b\x01B\x0f\n" +
@@ -1075,7 +1088,8 @@ const file_domain_subscription_subscription_subscription_proto_rawDesc = "" +
 	"\x10_available_countB\x17\n" +
 	"\x15_default_license_typeB\x0e\n" +
 	"\f_auto_assignB\a\n" +
-	"\x05_codeJ\x04\b\r\x10\x0eJ\x04\b\x0f\x10\x10\"U\n" +
+	"\x05_codeB \n" +
+	"\x1e_entitled_occurrences_overrideJ\x04\b\r\x10\x0eJ\x04\b\x0f\x10\x10\"U\n" +
 	"\x19CreateSubscriptionRequest\x128\n" +
 	"\x04data\x18\x01 \x01(\v2$.domain.subscription.v1.SubscriptionR\x04data\"\xae\x01\n" +
 	"\x1aCreateSubscriptionResponse\x128\n" +

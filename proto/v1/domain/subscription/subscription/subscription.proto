@@ -43,6 +43,12 @@ message Subscription {
   optional string default_license_type = 20;  // Default for created licenses
   optional bool auto_assign = 21;             // Auto-assign to purchaser
   optional string code = 22;  // 7-char alphanumeric engagement code (e.g. "A3K7PXR")
+
+  // AD_HOC × TOTAL_PACKAGE per-subscription entitlement override.
+  // NULL = inherit pricePlan.entitled_occurrences. Set non-NULL when an
+  // operator clicks "Extend pool" — the override is the new total, not a delta.
+  // See docs/plan/20260501-ad-hoc-subscription-billing/plan.md §2.3 (codex MAJ-1).
+  optional int32 entitled_occurrences_override = 23;
 }
 
 service SubscriptionDomainService {

@@ -19,6 +19,12 @@ enum BillingKind {
   BILLING_KIND_RECURRING   = 2;  // open-ended cycling (cancel-anytime subscription)
   BILLING_KIND_CONTRACT    = 3;  // fixed-term commitment (may have periodic billing within)
   BILLING_KIND_MILESTONE   = 4;  // gated by JobTemplatePhase + BillingEvent (see milestone-billing plan)
+  // Event-driven recurrence — visits/redemptions are operator-requested,
+  // not calendar-driven. Combined with amount_basis to distinguish:
+  //   - TOTAL_PACKAGE   : prepaid pool of N visits, charged upfront
+  //   - PER_OCCURRENCE  : pay-per-call at per-visit rate, no upfront
+  // See docs/plan/20260501-ad-hoc-subscription-billing/plan.md.
+  BILLING_KIND_AD_HOC      = 5;
 }
 
 enum AmountBasis {
@@ -26,6 +32,9 @@ enum AmountBasis {
   AMOUNT_BASIS_PER_CYCLE          = 1;  // amount = per-cycle fee
   AMOUNT_BASIS_TOTAL_PACKAGE      = 2;  // amount = one-shot total
   AMOUNT_BASIS_DERIVED_FROM_LINES = 3;  // amount ignored; sum ProductPricePlan prices
+  // Per-visit / per-event billing. Currently only meaningful with
+  // BILLING_KIND_AD_HOC. Each instance Job spawn fires a BillingEvent.
+  AMOUNT_BASIS_PER_OCCURRENCE     = 4;
 }
 
 message PricePlan {
@@ -67,6 +76,12 @@ message PricePlan {
 
   // Denormalized mirror of plan.client_id. Cascade enforced at use-case layer.
   optional string client_id = 25 [(options.v1.db).references = "client", (options.v1.db).index = true];
+
+  // Template default for AD_HOC × TOTAL_PACKAGE plans. Per-subscription
+  // overrides live on Subscription.entitled_occurrences_override (codex MAJ-1).
+  // Required and > 0 when (billing_kind == AD_HOC and amount_basis == TOTAL_PACKAGE).
+  // NULL otherwise. Reset to NULL on kind/basis change.
+  optional int32 entitled_occurrences = 26;
 }
 
 service PricePlanDomainService {

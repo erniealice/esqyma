@@ -32,6 +32,13 @@ const (
 	BillingKind_BILLING_KIND_RECURRING   BillingKind = 2 // open-ended cycling (cancel-anytime subscription)
 	BillingKind_BILLING_KIND_CONTRACT    BillingKind = 3 // fixed-term commitment (may have periodic billing within)
 	BillingKind_BILLING_KIND_MILESTONE   BillingKind = 4 // gated by JobTemplatePhase + BillingEvent (see milestone-billing plan)
+	// Event-driven recurrence — visits/redemptions are operator-requested,
+	// not calendar-driven. Combined with amount_basis to distinguish:
+	//   - TOTAL_PACKAGE   : prepaid pool of N visits, charged upfront
+	//   - PER_OCCURRENCE  : pay-per-call at per-visit rate, no upfront
+	//
+	// See docs/plan/20260501-ad-hoc-subscription-billing/plan.md.
+	BillingKind_BILLING_KIND_AD_HOC BillingKind = 5
 )
 
 // Enum value maps for BillingKind.
@@ -42,6 +49,7 @@ var (
 		2: "BILLING_KIND_RECURRING",
 		3: "BILLING_KIND_CONTRACT",
 		4: "BILLING_KIND_MILESTONE",
+		5: "BILLING_KIND_AD_HOC",
 	}
 	BillingKind_value = map[string]int32{
 		"BILLING_KIND_UNSPECIFIED": 0,
@@ -49,6 +57,7 @@ var (
 		"BILLING_KIND_RECURRING":   2,
 		"BILLING_KIND_CONTRACT":    3,
 		"BILLING_KIND_MILESTONE":   4,
+		"BILLING_KIND_AD_HOC":      5,
 	}
 )
 
@@ -86,6 +95,9 @@ const (
 	AmountBasis_AMOUNT_BASIS_PER_CYCLE          AmountBasis = 1 // amount = per-cycle fee
 	AmountBasis_AMOUNT_BASIS_TOTAL_PACKAGE      AmountBasis = 2 // amount = one-shot total
 	AmountBasis_AMOUNT_BASIS_DERIVED_FROM_LINES AmountBasis = 3 // amount ignored; sum ProductPricePlan prices
+	// Per-visit / per-event billing. Currently only meaningful with
+	// BILLING_KIND_AD_HOC. Each instance Job spawn fires a BillingEvent.
+	AmountBasis_AMOUNT_BASIS_PER_OCCURRENCE AmountBasis = 4
 )
 
 // Enum value maps for AmountBasis.
@@ -95,12 +107,14 @@ var (
 		1: "AMOUNT_BASIS_PER_CYCLE",
 		2: "AMOUNT_BASIS_TOTAL_PACKAGE",
 		3: "AMOUNT_BASIS_DERIVED_FROM_LINES",
+		4: "AMOUNT_BASIS_PER_OCCURRENCE",
 	}
 	AmountBasis_value = map[string]int32{
 		"AMOUNT_BASIS_UNSPECIFIED":        0,
 		"AMOUNT_BASIS_PER_CYCLE":          1,
 		"AMOUNT_BASIS_TOTAL_PACKAGE":      2,
 		"AMOUNT_BASIS_DERIVED_FROM_LINES": 3,
+		"AMOUNT_BASIS_PER_OCCURRENCE":     4,
 	}
 )
 
@@ -166,9 +180,14 @@ type PricePlan struct {
 	DefaultTermValue *int32  `protobuf:"varint,23,opt,name=default_term_value,json=defaultTermValue,proto3,oneof" json:"default_term_value,omitempty"`
 	DefaultTermUnit  *string `protobuf:"bytes,24,opt,name=default_term_unit,json=defaultTermUnit,proto3,oneof" json:"default_term_unit,omitempty"`
 	// Denormalized mirror of plan.client_id. Cascade enforced at use-case layer.
-	ClientId      *string `protobuf:"bytes,25,opt,name=client_id,json=clientId,proto3,oneof" json:"client_id,omitempty"`
-	unknownFields protoimpl.UnknownFields
-	sizeCache     protoimpl.SizeCache
+	ClientId *string `protobuf:"bytes,25,opt,name=client_id,json=clientId,proto3,oneof" json:"client_id,omitempty"`
+	// Template default for AD_HOC × TOTAL_PACKAGE plans. Per-subscription
+	// overrides live on Subscription.entitled_occurrences_override (codex MAJ-1).
+	// Required and > 0 when (billing_kind == AD_HOC and amount_basis == TOTAL_PACKAGE).
+	// NULL otherwise. Reset to NULL on kind/basis change.
+	EntitledOccurrences *int32 `protobuf:"varint,26,opt,name=entitled_occurrences,json=entitledOccurrences,proto3,oneof" json:"entitled_occurrences,omitempty"`
+	unknownFields       protoimpl.UnknownFields
+	sizeCache           protoimpl.SizeCache
 }
 
 func (x *PricePlan) Reset() {
@@ -367,6 +386,13 @@ func (x *PricePlan) GetClientId() string {
 		return *x.ClientId
 	}
 	return ""
+}
+
+func (x *PricePlan) GetEntitledOccurrences() int32 {
+	if x != nil && x.EntitledOccurrences != nil {
+		return *x.EntitledOccurrences
+	}
+	return 0
 }
 
 type CreatePricePlanRequest struct {
@@ -1157,7 +1183,7 @@ var File_domain_subscription_price_plan_price_plan_proto protoreflect.FileDescri
 
 const file_domain_subscription_price_plan_price_plan_proto_rawDesc = "" +
 	"\n" +
-	"/domain/subscription/price_plan/price_plan.proto\x12\x16domain.subscription.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/search.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a#domain/subscription/plan/plan.proto\x1a\x10options/db.proto\"\xd6\v\n" +
+	"/domain/subscription/price_plan/price_plan.proto\x12\x16domain.subscription.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/search.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a#domain/subscription/plan/plan.proto\x1a\x10options/db.proto\"\xa7\f\n" +
 	"\tPricePlan\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x125\n" +
 	"\x04plan\x18\x02 \x01(\v2\x1c.domain.subscription.v1.PlanH\x00R\x04plan\x88\x01\x01\x12%\n" +
@@ -1189,7 +1215,8 @@ const file_domain_subscription_price_plan_price_plan_proto_rawDesc = "" +
 	"\x11default_term_unit\x18\x18 \x01(\tH\x0fR\x0fdefaultTermUnit\x88\x01\x01\x120\n" +
 	"\tclient_id\x18\x19 \x01(\tB\x0e\x82\xb5\x18\n" +
 	"\n" +
-	"\x06client\x18\x01H\x10R\bclientId\x88\x01\x01:\x06\x8a\xb5\x18\x02\b\x01B\a\n" +
+	"\x06client\x18\x01H\x10R\bclientId\x88\x01\x01\x126\n" +
+	"\x14entitled_occurrences\x18\x1a \x01(\x05H\x11R\x13entitledOccurrences\x88\x01\x01:\x06\x8a\xb5\x18\x02\b\x01B\a\n" +
 	"\x05_planB\a\n" +
 	"\x05_nameB\x0e\n" +
 	"\f_descriptionB\x0f\n" +
@@ -1207,7 +1234,8 @@ const file_domain_subscription_price_plan_price_plan_proto_rawDesc = "" +
 	"\x13_default_term_valueB\x14\n" +
 	"\x12_default_term_unitB\f\n" +
 	"\n" +
-	"_client_id\"O\n" +
+	"_client_idB\x17\n" +
+	"\x15_entitled_occurrences\"O\n" +
 	"\x16CreatePricePlanRequest\x125\n" +
 	"\x04data\x18\x01 \x01(\v2!.domain.subscription.v1.PricePlanR\x04data\"\xa8\x01\n" +
 	"\x17CreatePricePlanResponse\x125\n" +
@@ -1282,18 +1310,20 @@ const file_domain_subscription_price_plan_price_plan_proto_rawDesc = "" +
 	"\asuccess\x18\x02 \x01(\bR\asuccess\x122\n" +
 	"\x05error\x18\x03 \x01(\v2\x17.domain.common.v1.ErrorH\x01R\x05error\x88\x01\x01B\r\n" +
 	"\v_price_planB\b\n" +
-	"\x06_error*\x99\x01\n" +
+	"\x06_error*\xb2\x01\n" +
 	"\vBillingKind\x12\x1c\n" +
 	"\x18BILLING_KIND_UNSPECIFIED\x10\x00\x12\x19\n" +
 	"\x15BILLING_KIND_ONE_TIME\x10\x01\x12\x1a\n" +
 	"\x16BILLING_KIND_RECURRING\x10\x02\x12\x19\n" +
 	"\x15BILLING_KIND_CONTRACT\x10\x03\x12\x1a\n" +
-	"\x16BILLING_KIND_MILESTONE\x10\x04*\x8c\x01\n" +
+	"\x16BILLING_KIND_MILESTONE\x10\x04\x12\x17\n" +
+	"\x13BILLING_KIND_AD_HOC\x10\x05*\xad\x01\n" +
 	"\vAmountBasis\x12\x1c\n" +
 	"\x18AMOUNT_BASIS_UNSPECIFIED\x10\x00\x12\x1a\n" +
 	"\x16AMOUNT_BASIS_PER_CYCLE\x10\x01\x12\x1e\n" +
 	"\x1aAMOUNT_BASIS_TOTAL_PACKAGE\x10\x02\x12#\n" +
-	"\x1fAMOUNT_BASIS_DERIVED_FROM_LINES\x10\x032\xf3\x06\n" +
+	"\x1fAMOUNT_BASIS_DERIVED_FROM_LINES\x10\x03\x12\x1f\n" +
+	"\x1bAMOUNT_BASIS_PER_OCCURRENCE\x10\x042\xf3\x06\n" +
 	"\x16PricePlanDomainService\x12r\n" +
 	"\x0fCreatePricePlan\x12..domain.subscription.v1.CreatePricePlanRequest\x1a/.domain.subscription.v1.CreatePricePlanResponse\x12l\n" +
 	"\rReadPricePlan\x12,.domain.subscription.v1.ReadPricePlanRequest\x1a-.domain.subscription.v1.ReadPricePlanResponse\x12r\n" +
