@@ -26,6 +26,10 @@ message User {
   optional string date_modified_string = 8;
   bool active = 9 [(options.v1.db).default = "true"];
   optional string timezone = 12 [(options.v1.db).default = "Asia/Manila"];
+  optional string password_reset_token = 13;
+  optional int64 password_reset_expires = 14;
+  int32 failed_login_attempts = 15 [(options.v1.db).default = "0"];
+  optional int64 locked_until = 16;
 }
 
 service UserDomainService {
