@@ -1,0 +1,10 @@
+BEGIN;
+ALTER TABLE expenditure_line_item ADD COLUMN IF NOT EXISTS rate_table_id          TEXT;
+ALTER TABLE expenditure_line_item ADD COLUMN IF NOT EXISTS pay_cycle_id           TEXT;
+ALTER TABLE expenditure_line_item ADD COLUMN IF NOT EXISTS applied_basis_amount   BIGINT;
+ALTER TABLE expenditure_line_item ADD COLUMN IF NOT EXISTS proration_factor       DOUBLE PRECISION;
+ALTER TABLE expenditure_line_item ADD COLUMN IF NOT EXISTS calc_metadata          TEXT;
+ALTER TABLE expenditure_line_item ADD COLUMN IF NOT EXISTS line_kind              TEXT;
+CREATE INDEX IF NOT EXISTS idx_expenditure_line_item_pay_cycle_id           ON expenditure_line_item(pay_cycle_id);
+CREATE INDEX IF NOT EXISTS idx_expenditure_line_item_expenditure_line_kind  ON expenditure_line_item(expenditure_id, line_kind);
+COMMIT;

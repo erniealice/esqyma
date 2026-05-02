@@ -1,0 +1,5 @@
+h1:LbljCHD1nh+6O2iv/XGBYXNRGFS1jpZsmSCrs7TW/Sk=
+20260502000000_baseline.sql h1:FW+z8+lBXoY4d0NxWR5YHTd9FrsX5cjfeI/QIufhK1Q=
+20260502050927_add_client_country_website.sql h1:/B+S8LnjbD03MkzjXA9LTkIX32XlD6Y7zyqYLeMqGbk=
+20260502051256_fix_supplier_category_fks.sql h1:HlFZqMRU2spEc4CUuAlE5c6qxFJM7yXOpO12hmc9vjM=
+20260502052707_fix_drift_columns.sql h1:K+vcGf8RZ+5LQ8zqEtDytZrfm986GjGC787dzd/X2+Q=

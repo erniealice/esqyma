@@ -1,0 +1,1 @@
+ALTER TABLE price_plan ALTER COLUMN description DROP NOT NULL;

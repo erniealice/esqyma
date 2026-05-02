@@ -1,8 +1,9 @@
 # esqyma
 
-Single source of truth for all data models, service contracts, and database schema
-in the ichizen monorepo. Proto definitions drive both Go/TypeScript code generation
-and SQL DDL generation — the database schema is never written by hand.
+Single source of truth for all data models and service contracts in the ichizen
+monorepo. Proto definitions drive Go and TypeScript code generation. The
+**database schema is managed with Atlas** — migrations live next to the protos
+in this package and are authored, applied, and verified through `pnpm`.
 
 ## What's in here
 
@@ -11,13 +12,11 @@ and SQL DDL generation — the database schema is never written by hand.
 | `proto/v1/` | Protobuf source definitions (58+ schemas, 4 layers) |
 | `pkg/schema/v1/` | Generated Go structs and repository interfaces |
 | `dist/schema/v1/` | Generated TypeScript (gitignored — run `pnpm build`) |
-| `migrations/{dialect}/` | SQL migration files per dialect |
-| `migrations/{dialect}/0001_initial.sql` | **Canonical DDL** — generated from protos, source of truth |
-| `pkg/migrate/` | Go migration library (used by service-admin `cmd/migration`) |
-| `pkg/dump/` | Database dump interface — `pg_dump` / `mysqldump` / `sqlcmd` |
-| `cmd/migrate/` | Migration CLI (up / down / status / make) |
-| `cmd/diff/` | Schema diff tool — compares proto DDL vs live database |
-| `cmd/generate-ddl/` | Generates `0001_initial.sql` from proto annotations |
+| `migrations/postgres/` | Atlas-format migrations: `<TS>_<name>.sql` + `atlas.sum` |
+| `migrations/postgres/_archive_pre-atlas/` | Old golang-migrate format files (historical reference, not replayed) |
+| `scripts/init/baseline.sql` | `pg_dump` of the schema as it stood when Atlas was adopted (the first migration is identical content) |
+| `atlas.hcl` | Atlas config: dev DB URL, target DB URL, migration directory |
+| `scripts/db-*.sh` | Wrappers that pnpm scripts call |
 
 ## Proto layer rules
 
@@ -34,30 +33,11 @@ and SQL DDL generation — the database schema is never written by hand.
 `domain/` protos must never import `infrastructure/`, `integration/`, or
 `orchestration/`. `buf lint` enforces this.
 
-## Domain structure
-
-```
-proto/v1/
-├── options/             # Custom db.proto options (DDL annotations)
-├── domain/
-│   ├── common/          # Shared types: pagination, filters, errors
-│   ├── entity/          # Core entities: user, client, workspace, roles (19 models)
-│   ├── product/         # Products, collections, variants (10 models)
-│   ├── subscription/    # Plans, licenses, invoices (11 models)
-│   ├── payment/         # Payment records (5 models)
-│   ├── event/           # Scheduling, appointments (5 models)
-│   └── workflow/        # Workflow engine: templates, stages, activities (7 models)
-├── infrastructure/      # Auth, storage, database provider configs
-├── integration/         # Email, payment gateways, webhooks
-└── orchestration/       # Workflow engine service definitions
-```
-
 ## Build commands
 
 ```bash
 pnpm build           # Generate Go + TypeScript from protos
 pnpm generate        # Generate protobuf code only (no TypeScript compile)
-pnpm generate:ddl    # Regenerate migrations/{dialect}/0001_initial.sql from annotations
 pnpm clean           # Remove generated files
 
 buf lint ./proto/v1                                          # Lint protos
@@ -66,8 +46,8 @@ buf breaking --against '.git#branch=main' ./proto/v1        # Check breaking cha
 
 ## Database annotations
 
-`proto/v1/options/db.proto` defines custom options for DDL generation. Tables and
-columns are annotated directly on the proto message:
+`proto/v1/options/db.proto` defines custom options for DDL generation. Tables
+and columns are annotated directly on the proto message:
 
 ```protobuf
 // Message level — mark as table, configure constraints
@@ -87,117 +67,184 @@ string status = 5 [(options.v1.db) = {
 ```
 
 Standard fields on every entity: `id`, `workspace_id`, `active`, `date_created`,
-`date_modified`.
-
-## Migration workflow
-
-### Applying migrations
-
-From `apps/service-admin` (recommended — reads `.env` automatically):
-
-```bash
-go run ./cmd/migration up
-go run ./cmd/migration status
-go run ./cmd/migration down
-```
-
-From esqyma directly:
-
-```bash
-export DATABASE_URL="postgres://user:password@localhost:5432/dbname?sslmode=disable"
-export MIGRATE_DIALECT="postgres"   # postgres | mysql | sqlserver
-
-go run ./cmd/migrate up
-go run ./cmd/migrate status
-go run ./cmd/migrate down
-```
-
-### Creating a new migration
-
-```bash
-go run ./cmd/migrate make <name>
-# Creates migrations/{postgres,mysql,sqlserver}/YYYYMMDDHHMMSS_<name>.{up,down}.sql
-```
+`date_modified`. The annotations are documentation today — the database is
+managed via Atlas migrations, not regenerated from protos. Keeping the
+annotations accurate means a future migration tool could read them.
 
 ---
 
-### Bridge Migration Rule
+## Schema management with Atlas
 
-**After any proto change that adds, removes, or alters a table or column:**
+Adding, altering, and removing tables/columns goes through Atlas. The flow:
 
-1. **Regenerate the DDL** to update `0001_initial.sql`:
-   ```bash
-   pnpm generate:ddl
-   ```
+```
+sketch a draft.sql  →  pnpm db:diff  →  review the generated migration
+                                     →  pnpm db:hash
+                                     →  pnpm db:apply
+                                     →  pnpm db:status
+```
 
-2. **Diff against the live database** to see what changed:
-   ```bash
-   # Set POSTGRES_* or DATABASE_URL, then:
-   go run ./cmd/diff
-   ```
-   The diff tool reads `migrations/postgres/0001_initial.sql` and queries
-   `information_schema` on the live DB. It prints missing tables, extra tables,
-   and column differences.
+Atlas's job is to turn a *short draft* of what you want into a *complete*
+migration file with proper quoting, FK constraint names, index drop order,
+etc. You never write the formal migration by hand.
 
-3. **Create a bridge migration** to close the gap:
-   ```bash
-   go run ./cmd/migrate make bridge_<description>
-   ```
+### Prerequisites
 
-4. **Fill the SQL** — the diff output tells you exactly what `ALTER TABLE` /
-   `CREATE TABLE` / `DROP COLUMN` statements go in the `.up.sql`. Add the
-   reverse in `.down.sql`.
+- `atlas` binary on PATH (one-time install — see *Installing Atlas* below).
+- A running postgres with credentials in `apps/service-admin/.env`. The
+  scripts read that file for `POSTGRES_HOST`, `POSTGRES_PORT`,
+  `POSTGRES_NAME`, `POSTGRES_USER`, `POSTGRES_PASSWORD`, `POSTGRES_SSL_MODE`.
+- A scratch database called `atlas_dev` on the same postgres instance. The
+  scripts auto-create it on first run; if you'd rather use a different name,
+  export `ATLAS_DEV_DB=...` before running.
 
-5. **Apply**:
-   ```bash
-   go run ./cmd/migration up   # from apps/service-admin
-   ```
+### pnpm scripts
 
-**Why this rule matters:** `0001_initial.sql` is the proto-authoritative schema.
-Any working database — on any device, at any point in time — should be bringable
-to the current proto state by running `migrate up`. Bridge migrations are the
-mechanism that keeps that guarantee intact across schema evolution.
+| Command | What it does |
+|---------|--------------|
+| `pnpm atlas:install` | One-time install of Atlas (~117 MB binary). |
+| `pnpm atlas:check` | Quick preflight that Atlas is on PATH. |
+| `pnpm db:status` | Current version, pending migrations, executed count. |
+| `pnpm db:diff <name> <draft.sql>` | Compare draft → live, write the next migration file. |
+| `pnpm db:hash` | Recompute `migrations/postgres/atlas.sum`. Run after editing migrations. |
+| `pnpm db:apply` | Apply pending migrations to the live DB. Auto-baselines on first run. |
+| `pnpm db:inspect` | Dump the current live schema as SQL (replaces the old `00_full_schema.sql`). |
+| `pnpm db:drift-draft [path]` | Scan proto vs live DB; write `ADD COLUMN`/`FK`/`INDEX` SQL for every missing column. Review, then feed through `db:diff`. Does NOT apply. |
 
-## Schema diff tool
+**Multi-dialect:** every command accepts `DIALECT=postgres|mysql|sqlserver`
+(default `postgres`). Convenience aliases exist as
+`pnpm db:apply:postgres`, `pnpm db:apply:mysql`, `pnpm db:apply:all`, etc.
+Mysql / sqlserver are scaffolded only — see
+`migrations/{mysql,sqlserver}/README.md` for the steps to bring a second
+dialect online.
+
+### Fixing proto-vs-DB drift
+
+If the proto declares a column the live DB lacks (sibling repo shipped the
+proto, migration didn't apply, hand-modified DB, etc.):
 
 ```bash
-# From packages/esqyma — requires POSTGRES_* env vars or DATABASE_URL
-go run ./cmd/diff
-
-# Override the DDL file (default: migrations/postgres/0001_initial.sql)
-DDL_FILE=migrations/postgres/0001_initial.sql go run ./cmd/diff
-
-# Against a different dialect
-MIGRATE_DIALECT=mysql go run ./cmd/diff
+cd packages/esqyma
+pnpm db:drift-draft                       # writes /tmp/drift-fixup-<TS>.sql
+$EDITOR /tmp/drift-fixup-<TS>.sql         # review every line; comment out WIP / data-sensitive ones
+pnpm db:diff fix_drift /tmp/drift-fixup-<TS>.sql
+pnpm db:hash && pnpm db:apply
 ```
 
-Output example:
-```
-Tables in DDL but MISSING from live database:
-  - fulfillment_attachment
+Backed by `cmd/protocheck --sql-out`. Reads `(options.v1.db).references` and
+`.index` from the proto annotations, so the drafted FKs and partial indexes
+are properly typed. Always emits NULLable; tighten with a follow-up
+migration after backfilling. Skips missing tables (use a hand-drafted
+migration) and never DROPs extra DB columns.
 
-Column differences (- missing from live, + extra in live):
-  table "revenue":
-    - payment_term_id
-    + legacy_invoice_ref
+### Adding a column with a foreign key — worked example
 
-=== Action: create a bridge migration to close the gap ===
-  go run ./cmd/migrate make bridge_to_proto_ddl
-```
-
-## Database dump (from service-admin)
+Say you want `plan.region_id` referencing `region(id)`:
 
 ```bash
-go run ./cmd/dump
-# → professional-20260406-143022.sql
+# 1. Sketch the change in a scratch file. SQL fragment, not a full migration.
+cat > /tmp/plan_region.sql <<'SQL'
+ALTER TABLE plan ADD COLUMN region_id TEXT REFERENCES region(id) ON DELETE RESTRICT;
+CREATE INDEX idx_plan_region_id ON plan(region_id) WHERE region_id IS NOT NULL;
+SQL
 
-DUMP_OUTPUT_DIR=~/backups go run ./cmd/dump
+# 2. Atlas generates the formal migration file.
+cd packages/esqyma
+pnpm db:diff add_plan_region_id /tmp/plan_region.sql
+# → migrations/postgres/<TS>_add_plan_region_id.sql
+# Open it; Atlas will have produced something like:
+#   ALTER TABLE "public"."plan"
+#     ADD COLUMN "region_id" text NULL,
+#     ADD CONSTRAINT "plan_region_id_fkey" FOREIGN KEY ("region_id")
+#     REFERENCES "public"."region" ("id") ON UPDATE NO ACTION ON DELETE RESTRICT;
+#   CREATE INDEX "idx_plan_region_id" ON "public"."plan" ("region_id")
+#     WHERE (region_id IS NOT NULL);
+
+# 3. Lock the integrity sum + apply.
+pnpm db:hash
+pnpm db:apply
+pnpm db:status     # confirm Current Version advanced
 ```
 
-Backed by `pkg/dump` — a dialect-aware `Dumper` interface:
-- `postgres` → `pg_dump`
-- `mysql` → `mysqldump`
-- `sqlserver` → `sqlcmd BACKUP DATABASE`
+**Update the proto in the same PR.** The annotation isn't enforced today, but
+the rule is: when you add a column to the DB, add the matching `optional`
+field with the `(options.v1.db).references` annotation to the proto. Then
+`pnpm build` so generated code picks it up.
+
+### How `db:diff` works internally
+
+`scripts/db-diff.sh` performs four steps:
+
+1. Spins up a throwaway database (`atlas_target_<pid>`) on your local postgres.
+2. Loads the current live schema into it via `pg_dump | psql`.
+3. Applies your draft SQL on top.
+4. Runs `atlas migrate diff <name> --to postgres://...atlas_target --dev-url postgres://...atlas_dev`.
+   Atlas reads both schemas via the postgres driver (no SQL parser involved,
+   so postgres extensions like `btree_gist` work fine) and writes the diff as
+   a new migration file. The throwaway DB is dropped on exit.
+
+### Non-nullable FKs
+
+Do this in two migrations to avoid breaking running services:
+
+1. First migration — add the column nullable, backfill data.
+2. Second migration — `ALTER COLUMN <col> SET NOT NULL`.
+
+`db:diff` produces the right SQL for each step when you run it twice with
+different drafts.
+
+### Rollback
+
+`atlas migrate down` regenerates the inverse SQL from a snapshot Atlas takes
+before each apply — you don't write `.down.sql` files anymore. Run from the
+package directory:
+
+```bash
+atlas migrate down --env postgres
+```
+
+### First-time apply on a brand new database
+
+`pnpm db:apply` detects an empty DB on first run and executes the baseline
+(`migrations/postgres/<earliest>_baseline.sql`) and every migration after it.
+On a DB that already has the schema (e.g. an existing dev DB or a prod
+clone), it stamps the baseline as already-applied and only runs migrations
+created after the adoption date.
+
+### Schema check
+
+```bash
+pnpm db:status     # quick — does live match expected version?
+pnpm db:inspect    # full schema dump for diffing against another env
+```
+
+There's no automated `db:check` because Atlas's free tier restricts
+`atlas schema diff` against SQL files. If you need a strict CI gate, run
+`pnpm db:status` and assert "Already at latest version" in your pipeline.
+
+---
+
+## Installing Atlas
+
+One-time install, then everyone on the machine can use it. Binary size: ~117 MB.
+
+```bash
+curl -sSf https://atlasgo.sh | sudo sh    # installs to /usr/local/bin/atlas
+# or:
+brew install ariga/tap/atlas              # if you prefer brew
+```
+
+If you can't get admin: install into your home directory and add it to PATH:
+```bash
+mkdir -p $HOME/.local/bin
+curl -L https://release.ariga.io/atlas/atlas-darwin-arm64-latest \
+  -o $HOME/.local/bin/atlas && chmod +x $HOME/.local/bin/atlas
+echo 'export PATH=$HOME/.local/bin:$PATH' >> ~/.zshrc && source ~/.zshrc
+```
+
+Verify: `atlas version`
+
+---
 
 ## Go import
 
@@ -205,12 +252,9 @@ Backed by `pkg/dump` — a dialect-aware `Dumper` interface:
 // Generated types
 import "github.com/erniealice/esqyma/pkg/schema/v1/domain/entity/client"
 
-// Migration library (used by service-admin cmd/migration)
-import "github.com/erniealice/esqyma/pkg/migrate"
-
-// Embedded migrations FS (pass to migrate.Config.FS)
+// Embedded migrations FS
 import esqyma "github.com/erniealice/esqyma"
-// esqyma.MigrationsFS — embed.FS containing migrations/{postgres,mysql,sqlserver}
+// esqyma.MigrationsFS — embed.FS containing migrations/postgres/
 
 // Dump interface
 import "github.com/erniealice/esqyma/pkg/dump"
@@ -231,8 +275,9 @@ import type { Client } from "@leapfor/esqyma/dist/schema/v1/domain/entity/client
 | Tool | Purpose |
 |------|---------|
 | [Buf CLI](https://buf.build/docs/installation) | Proto linting and code generation |
-| Go 1.25+ | Migration CLI and DDL generator |
-| pnpm | TypeScript generation and build |
+| [Atlas](https://atlasgo.io) | Schema migrations (`pnpm atlas:install`) |
+| Go 1.25+ | Build the rest of the monorepo |
+| pnpm | TypeScript generation and Atlas wrapper scripts |
 
 ## License
 

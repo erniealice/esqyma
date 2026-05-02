@@ -1,0 +1,6 @@
+BEGIN;
+ALTER TABLE supplier ADD COLUMN IF NOT EXISTS kind       TEXT NOT NULL DEFAULT 'vendor';
+ALTER TABLE supplier ADD COLUMN IF NOT EXISTS position   TEXT;
+ALTER TABLE supplier ADD COLUMN IF NOT EXISTS department TEXT;
+CREATE INDEX IF NOT EXISTS idx_supplier_kind ON supplier(kind);
+COMMIT;

@@ -1,0 +1,2 @@
+ALTER TABLE product_plan DROP COLUMN IF EXISTS price;
+ALTER TABLE product_plan DROP COLUMN IF EXISTS currency;
