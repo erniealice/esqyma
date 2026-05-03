@@ -450,6 +450,374 @@ func (x *GrossProfitReportResponse) GetError() *common.Error {
 	return nil
 }
 
+type CashBookReportRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Limit         *int32                 `protobuf:"varint,1,opt,name=limit,proto3,oneof" json:"limit,omitempty"` // default 200
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *CashBookReportRequest) Reset() {
+	*x = CashBookReportRequest{}
+	mi := &file_domain_ledger_reporting_gross_profit_gross_profit_proto_msgTypes[4]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *CashBookReportRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*CashBookReportRequest) ProtoMessage() {}
+
+func (x *CashBookReportRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_domain_ledger_reporting_gross_profit_gross_profit_proto_msgTypes[4]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use CashBookReportRequest.ProtoReflect.Descriptor instead.
+func (*CashBookReportRequest) Descriptor() ([]byte, []int) {
+	return file_domain_ledger_reporting_gross_profit_gross_profit_proto_rawDescGZIP(), []int{4}
+}
+
+func (x *CashBookReportRequest) GetLimit() int32 {
+	if x != nil && x.Limit != nil {
+		return *x.Limit
+	}
+	return 0
+}
+
+type CashBookReportRow struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	TxDate        string                 `protobuf:"bytes,1,opt,name=tx_date,json=txDate,proto3" json:"tx_date,omitempty"` // YYYY-MM-DD
+	Description   string                 `protobuf:"bytes,2,opt,name=description,proto3" json:"description,omitempty"`
+	Reference     string                 `protobuf:"bytes,3,opt,name=reference,proto3" json:"reference,omitempty"`
+	TxType        string                 `protobuf:"bytes,4,opt,name=tx_type,json=txType,proto3" json:"tx_type,omitempty"` // "Receipt" | "Expense" | "Purchase"
+	Amount        int64                  `protobuf:"varint,5,opt,name=amount,proto3" json:"amount,omitempty"`              // centavos
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *CashBookReportRow) Reset() {
+	*x = CashBookReportRow{}
+	mi := &file_domain_ledger_reporting_gross_profit_gross_profit_proto_msgTypes[5]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *CashBookReportRow) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*CashBookReportRow) ProtoMessage() {}
+
+func (x *CashBookReportRow) ProtoReflect() protoreflect.Message {
+	mi := &file_domain_ledger_reporting_gross_profit_gross_profit_proto_msgTypes[5]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use CashBookReportRow.ProtoReflect.Descriptor instead.
+func (*CashBookReportRow) Descriptor() ([]byte, []int) {
+	return file_domain_ledger_reporting_gross_profit_gross_profit_proto_rawDescGZIP(), []int{5}
+}
+
+func (x *CashBookReportRow) GetTxDate() string {
+	if x != nil {
+		return x.TxDate
+	}
+	return ""
+}
+
+func (x *CashBookReportRow) GetDescription() string {
+	if x != nil {
+		return x.Description
+	}
+	return ""
+}
+
+func (x *CashBookReportRow) GetReference() string {
+	if x != nil {
+		return x.Reference
+	}
+	return ""
+}
+
+func (x *CashBookReportRow) GetTxType() string {
+	if x != nil {
+		return x.TxType
+	}
+	return ""
+}
+
+func (x *CashBookReportRow) GetAmount() int64 {
+	if x != nil {
+		return x.Amount
+	}
+	return 0
+}
+
+type CashBookReportResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Data          []*CashBookReportRow   `protobuf:"bytes,1,rep,name=data,proto3" json:"data,omitempty"`
+	Success       bool                   `protobuf:"varint,2,opt,name=success,proto3" json:"success,omitempty"`
+	Error         *common.Error          `protobuf:"bytes,3,opt,name=error,proto3,oneof" json:"error,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *CashBookReportResponse) Reset() {
+	*x = CashBookReportResponse{}
+	mi := &file_domain_ledger_reporting_gross_profit_gross_profit_proto_msgTypes[6]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *CashBookReportResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*CashBookReportResponse) ProtoMessage() {}
+
+func (x *CashBookReportResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_domain_ledger_reporting_gross_profit_gross_profit_proto_msgTypes[6]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use CashBookReportResponse.ProtoReflect.Descriptor instead.
+func (*CashBookReportResponse) Descriptor() ([]byte, []int) {
+	return file_domain_ledger_reporting_gross_profit_gross_profit_proto_rawDescGZIP(), []int{6}
+}
+
+func (x *CashBookReportResponse) GetData() []*CashBookReportRow {
+	if x != nil {
+		return x.Data
+	}
+	return nil
+}
+
+func (x *CashBookReportResponse) GetSuccess() bool {
+	if x != nil {
+		return x.Success
+	}
+	return false
+}
+
+func (x *CashBookReportResponse) GetError() *common.Error {
+	if x != nil {
+		return x.Error
+	}
+	return nil
+}
+
+type PayablesAgingReportRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *PayablesAgingReportRequest) Reset() {
+	*x = PayablesAgingReportRequest{}
+	mi := &file_domain_ledger_reporting_gross_profit_gross_profit_proto_msgTypes[7]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *PayablesAgingReportRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*PayablesAgingReportRequest) ProtoMessage() {}
+
+func (x *PayablesAgingReportRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_domain_ledger_reporting_gross_profit_gross_profit_proto_msgTypes[7]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use PayablesAgingReportRequest.ProtoReflect.Descriptor instead.
+func (*PayablesAgingReportRequest) Descriptor() ([]byte, []int) {
+	return file_domain_ledger_reporting_gross_profit_gross_profit_proto_rawDescGZIP(), []int{7}
+}
+
+type PayablesAgingReportRow struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	SupplierName  string                 `protobuf:"bytes,1,opt,name=supplier_name,json=supplierName,proto3" json:"supplier_name,omitempty"`
+	Current       int64                  `protobuf:"varint,2,opt,name=current,proto3" json:"current,omitempty"`             // centavos
+	Days_30       int64                  `protobuf:"varint,3,opt,name=days_30,json=days30,proto3" json:"days_30,omitempty"` // centavos
+	Days_60       int64                  `protobuf:"varint,4,opt,name=days_60,json=days60,proto3" json:"days_60,omitempty"` // centavos
+	Days_90       int64                  `protobuf:"varint,5,opt,name=days_90,json=days90,proto3" json:"days_90,omitempty"` // centavos
+	Over_90       int64                  `protobuf:"varint,6,opt,name=over_90,json=over90,proto3" json:"over_90,omitempty"` // centavos
+	Total         int64                  `protobuf:"varint,7,opt,name=total,proto3" json:"total,omitempty"`                 // centavos
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *PayablesAgingReportRow) Reset() {
+	*x = PayablesAgingReportRow{}
+	mi := &file_domain_ledger_reporting_gross_profit_gross_profit_proto_msgTypes[8]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *PayablesAgingReportRow) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*PayablesAgingReportRow) ProtoMessage() {}
+
+func (x *PayablesAgingReportRow) ProtoReflect() protoreflect.Message {
+	mi := &file_domain_ledger_reporting_gross_profit_gross_profit_proto_msgTypes[8]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use PayablesAgingReportRow.ProtoReflect.Descriptor instead.
+func (*PayablesAgingReportRow) Descriptor() ([]byte, []int) {
+	return file_domain_ledger_reporting_gross_profit_gross_profit_proto_rawDescGZIP(), []int{8}
+}
+
+func (x *PayablesAgingReportRow) GetSupplierName() string {
+	if x != nil {
+		return x.SupplierName
+	}
+	return ""
+}
+
+func (x *PayablesAgingReportRow) GetCurrent() int64 {
+	if x != nil {
+		return x.Current
+	}
+	return 0
+}
+
+func (x *PayablesAgingReportRow) GetDays_30() int64 {
+	if x != nil {
+		return x.Days_30
+	}
+	return 0
+}
+
+func (x *PayablesAgingReportRow) GetDays_60() int64 {
+	if x != nil {
+		return x.Days_60
+	}
+	return 0
+}
+
+func (x *PayablesAgingReportRow) GetDays_90() int64 {
+	if x != nil {
+		return x.Days_90
+	}
+	return 0
+}
+
+func (x *PayablesAgingReportRow) GetOver_90() int64 {
+	if x != nil {
+		return x.Over_90
+	}
+	return 0
+}
+
+func (x *PayablesAgingReportRow) GetTotal() int64 {
+	if x != nil {
+		return x.Total
+	}
+	return 0
+}
+
+type PayablesAgingReportResponse struct {
+	state         protoimpl.MessageState    `protogen:"open.v1"`
+	Data          []*PayablesAgingReportRow `protobuf:"bytes,1,rep,name=data,proto3" json:"data,omitempty"`
+	Success       bool                      `protobuf:"varint,2,opt,name=success,proto3" json:"success,omitempty"`
+	Error         *common.Error             `protobuf:"bytes,3,opt,name=error,proto3,oneof" json:"error,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *PayablesAgingReportResponse) Reset() {
+	*x = PayablesAgingReportResponse{}
+	mi := &file_domain_ledger_reporting_gross_profit_gross_profit_proto_msgTypes[9]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *PayablesAgingReportResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*PayablesAgingReportResponse) ProtoMessage() {}
+
+func (x *PayablesAgingReportResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_domain_ledger_reporting_gross_profit_gross_profit_proto_msgTypes[9]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use PayablesAgingReportResponse.ProtoReflect.Descriptor instead.
+func (*PayablesAgingReportResponse) Descriptor() ([]byte, []int) {
+	return file_domain_ledger_reporting_gross_profit_gross_profit_proto_rawDescGZIP(), []int{9}
+}
+
+func (x *PayablesAgingReportResponse) GetData() []*PayablesAgingReportRow {
+	if x != nil {
+		return x.Data
+	}
+	return nil
+}
+
+func (x *PayablesAgingReportResponse) GetSuccess() bool {
+	if x != nil {
+		return x.Success
+	}
+	return false
+}
+
+func (x *PayablesAgingReportResponse) GetError() *common.Error {
+	if x != nil {
+		return x.Error
+	}
+	return nil
+}
+
 var File_domain_ledger_reporting_gross_profit_gross_profit_proto protoreflect.FileDescriptor
 
 const file_domain_ledger_reporting_gross_profit_gross_profit_proto_rawDesc = "" +
@@ -524,9 +892,39 @@ const file_domain_ledger_reporting_gross_profit_gross_profit_proto_rawDesc = "" 
 	"\n" +
 	"\b_summaryB\r\n" +
 	"\v_paginationB\b\n" +
-	"\x06_error2\x8f\x01\n" +
+	"\x06_error\"<\n" +
+	"\x15CashBookReportRequest\x12\x19\n" +
+	"\x05limit\x18\x01 \x01(\x05H\x00R\x05limit\x88\x01\x01B\b\n" +
+	"\x06_limit\"\x9d\x01\n" +
+	"\x11CashBookReportRow\x12\x17\n" +
+	"\atx_date\x18\x01 \x01(\tR\x06txDate\x12 \n" +
+	"\vdescription\x18\x02 \x01(\tR\vdescription\x12\x1c\n" +
+	"\treference\x18\x03 \x01(\tR\treference\x12\x17\n" +
+	"\atx_type\x18\x04 \x01(\tR\x06txType\x12\x16\n" +
+	"\x06amount\x18\x05 \x01(\x03R\x06amount\"\xa9\x01\n" +
+	"\x16CashBookReportResponse\x127\n" +
+	"\x04data\x18\x01 \x03(\v2#.domain.ledger.v1.CashBookReportRowR\x04data\x12\x18\n" +
+	"\asuccess\x18\x02 \x01(\bR\asuccess\x122\n" +
+	"\x05error\x18\x03 \x01(\v2\x17.domain.common.v1.ErrorH\x00R\x05error\x88\x01\x01B\b\n" +
+	"\x06_error\"\x1c\n" +
+	"\x1aPayablesAgingReportRequest\"\xd1\x01\n" +
+	"\x16PayablesAgingReportRow\x12#\n" +
+	"\rsupplier_name\x18\x01 \x01(\tR\fsupplierName\x12\x18\n" +
+	"\acurrent\x18\x02 \x01(\x03R\acurrent\x12\x17\n" +
+	"\adays_30\x18\x03 \x01(\x03R\x06days30\x12\x17\n" +
+	"\adays_60\x18\x04 \x01(\x03R\x06days60\x12\x17\n" +
+	"\adays_90\x18\x05 \x01(\x03R\x06days90\x12\x17\n" +
+	"\aover_90\x18\x06 \x01(\x03R\x06over90\x12\x14\n" +
+	"\x05total\x18\a \x01(\x03R\x05total\"\xb3\x01\n" +
+	"\x1bPayablesAgingReportResponse\x12<\n" +
+	"\x04data\x18\x01 \x03(\v2(.domain.ledger.v1.PayablesAgingReportRowR\x04data\x12\x18\n" +
+	"\asuccess\x18\x02 \x01(\bR\asuccess\x122\n" +
+	"\x05error\x18\x03 \x01(\v2\x17.domain.common.v1.ErrorH\x00R\x05error\x88\x01\x01B\b\n" +
+	"\x06_error2\xee\x02\n" +
 	"\x1cLedgerReportingDomainService\x12o\n" +
-	"\x14GetGrossProfitReport\x12*.domain.ledger.v1.GrossProfitReportRequest\x1a+.domain.ledger.v1.GrossProfitReportResponseB\xe4\x01\n" +
+	"\x14GetGrossProfitReport\x12*.domain.ledger.v1.GrossProfitReportRequest\x1a+.domain.ledger.v1.GrossProfitReportResponse\x12f\n" +
+	"\x11GetCashBookReport\x12'.domain.ledger.v1.CashBookReportRequest\x1a(.domain.ledger.v1.CashBookReportResponse\x12u\n" +
+	"\x16GetPayablesAgingReport\x12,.domain.ledger.v1.PayablesAgingReportRequest\x1a-.domain.ledger.v1.PayablesAgingReportResponseB\xe4\x01\n" +
 	"\x14com.domain.ledger.v1B\x10GrossProfitProtoP\x01ZXgithub.com/erniealice/esqyma/pkg/schema/v1/domain/ledger/reporting/gross_profit;ledgerv1\xa2\x02\x03DLX\xaa\x02\x10Domain.Ledger.V1\xca\x02\x10Domain\\Ledger\\V1\xe2\x02\x1cDomain\\Ledger\\V1\\GPBMetadata\xea\x02\x12Domain::Ledger::V1b\x06proto3"
 
 var (
@@ -541,29 +939,43 @@ func file_domain_ledger_reporting_gross_profit_gross_profit_proto_rawDescGZIP() 
 	return file_domain_ledger_reporting_gross_profit_gross_profit_proto_rawDescData
 }
 
-var file_domain_ledger_reporting_gross_profit_gross_profit_proto_msgTypes = make([]protoimpl.MessageInfo, 4)
+var file_domain_ledger_reporting_gross_profit_gross_profit_proto_msgTypes = make([]protoimpl.MessageInfo, 10)
 var file_domain_ledger_reporting_gross_profit_gross_profit_proto_goTypes = []any{
-	(*GrossProfitReportRequest)(nil),  // 0: domain.ledger.v1.GrossProfitReportRequest
-	(*GrossProfitLineItem)(nil),       // 1: domain.ledger.v1.GrossProfitLineItem
-	(*GrossProfitSummary)(nil),        // 2: domain.ledger.v1.GrossProfitSummary
-	(*GrossProfitReportResponse)(nil), // 3: domain.ledger.v1.GrossProfitReportResponse
-	(*common.PaginationRequest)(nil),  // 4: domain.common.v1.PaginationRequest
-	(*common.PaginationResponse)(nil), // 5: domain.common.v1.PaginationResponse
-	(*common.Error)(nil),              // 6: domain.common.v1.Error
+	(*GrossProfitReportRequest)(nil),    // 0: domain.ledger.v1.GrossProfitReportRequest
+	(*GrossProfitLineItem)(nil),         // 1: domain.ledger.v1.GrossProfitLineItem
+	(*GrossProfitSummary)(nil),          // 2: domain.ledger.v1.GrossProfitSummary
+	(*GrossProfitReportResponse)(nil),   // 3: domain.ledger.v1.GrossProfitReportResponse
+	(*CashBookReportRequest)(nil),       // 4: domain.ledger.v1.CashBookReportRequest
+	(*CashBookReportRow)(nil),           // 5: domain.ledger.v1.CashBookReportRow
+	(*CashBookReportResponse)(nil),      // 6: domain.ledger.v1.CashBookReportResponse
+	(*PayablesAgingReportRequest)(nil),  // 7: domain.ledger.v1.PayablesAgingReportRequest
+	(*PayablesAgingReportRow)(nil),      // 8: domain.ledger.v1.PayablesAgingReportRow
+	(*PayablesAgingReportResponse)(nil), // 9: domain.ledger.v1.PayablesAgingReportResponse
+	(*common.PaginationRequest)(nil),    // 10: domain.common.v1.PaginationRequest
+	(*common.PaginationResponse)(nil),   // 11: domain.common.v1.PaginationResponse
+	(*common.Error)(nil),                // 12: domain.common.v1.Error
 }
 var file_domain_ledger_reporting_gross_profit_gross_profit_proto_depIdxs = []int32{
-	4, // 0: domain.ledger.v1.GrossProfitReportRequest.pagination:type_name -> domain.common.v1.PaginationRequest
-	1, // 1: domain.ledger.v1.GrossProfitReportResponse.line_items:type_name -> domain.ledger.v1.GrossProfitLineItem
-	2, // 2: domain.ledger.v1.GrossProfitReportResponse.summary:type_name -> domain.ledger.v1.GrossProfitSummary
-	5, // 3: domain.ledger.v1.GrossProfitReportResponse.pagination:type_name -> domain.common.v1.PaginationResponse
-	6, // 4: domain.ledger.v1.GrossProfitReportResponse.error:type_name -> domain.common.v1.Error
-	0, // 5: domain.ledger.v1.LedgerReportingDomainService.GetGrossProfitReport:input_type -> domain.ledger.v1.GrossProfitReportRequest
-	3, // 6: domain.ledger.v1.LedgerReportingDomainService.GetGrossProfitReport:output_type -> domain.ledger.v1.GrossProfitReportResponse
-	6, // [6:7] is the sub-list for method output_type
-	5, // [5:6] is the sub-list for method input_type
-	5, // [5:5] is the sub-list for extension type_name
-	5, // [5:5] is the sub-list for extension extendee
-	0, // [0:5] is the sub-list for field type_name
+	10, // 0: domain.ledger.v1.GrossProfitReportRequest.pagination:type_name -> domain.common.v1.PaginationRequest
+	1,  // 1: domain.ledger.v1.GrossProfitReportResponse.line_items:type_name -> domain.ledger.v1.GrossProfitLineItem
+	2,  // 2: domain.ledger.v1.GrossProfitReportResponse.summary:type_name -> domain.ledger.v1.GrossProfitSummary
+	11, // 3: domain.ledger.v1.GrossProfitReportResponse.pagination:type_name -> domain.common.v1.PaginationResponse
+	12, // 4: domain.ledger.v1.GrossProfitReportResponse.error:type_name -> domain.common.v1.Error
+	5,  // 5: domain.ledger.v1.CashBookReportResponse.data:type_name -> domain.ledger.v1.CashBookReportRow
+	12, // 6: domain.ledger.v1.CashBookReportResponse.error:type_name -> domain.common.v1.Error
+	8,  // 7: domain.ledger.v1.PayablesAgingReportResponse.data:type_name -> domain.ledger.v1.PayablesAgingReportRow
+	12, // 8: domain.ledger.v1.PayablesAgingReportResponse.error:type_name -> domain.common.v1.Error
+	0,  // 9: domain.ledger.v1.LedgerReportingDomainService.GetGrossProfitReport:input_type -> domain.ledger.v1.GrossProfitReportRequest
+	4,  // 10: domain.ledger.v1.LedgerReportingDomainService.GetCashBookReport:input_type -> domain.ledger.v1.CashBookReportRequest
+	7,  // 11: domain.ledger.v1.LedgerReportingDomainService.GetPayablesAgingReport:input_type -> domain.ledger.v1.PayablesAgingReportRequest
+	3,  // 12: domain.ledger.v1.LedgerReportingDomainService.GetGrossProfitReport:output_type -> domain.ledger.v1.GrossProfitReportResponse
+	6,  // 13: domain.ledger.v1.LedgerReportingDomainService.GetCashBookReport:output_type -> domain.ledger.v1.CashBookReportResponse
+	9,  // 14: domain.ledger.v1.LedgerReportingDomainService.GetPayablesAgingReport:output_type -> domain.ledger.v1.PayablesAgingReportResponse
+	12, // [12:15] is the sub-list for method output_type
+	9,  // [9:12] is the sub-list for method input_type
+	9,  // [9:9] is the sub-list for extension type_name
+	9,  // [9:9] is the sub-list for extension extendee
+	0,  // [0:9] is the sub-list for field type_name
 }
 
 func init() { file_domain_ledger_reporting_gross_profit_gross_profit_proto_init() }
@@ -575,13 +987,16 @@ func file_domain_ledger_reporting_gross_profit_gross_profit_proto_init() {
 	file_domain_ledger_reporting_gross_profit_gross_profit_proto_msgTypes[1].OneofWrappers = []any{}
 	file_domain_ledger_reporting_gross_profit_gross_profit_proto_msgTypes[2].OneofWrappers = []any{}
 	file_domain_ledger_reporting_gross_profit_gross_profit_proto_msgTypes[3].OneofWrappers = []any{}
+	file_domain_ledger_reporting_gross_profit_gross_profit_proto_msgTypes[4].OneofWrappers = []any{}
+	file_domain_ledger_reporting_gross_profit_gross_profit_proto_msgTypes[6].OneofWrappers = []any{}
+	file_domain_ledger_reporting_gross_profit_gross_profit_proto_msgTypes[9].OneofWrappers = []any{}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
 		File: protoimpl.DescBuilder{
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_domain_ledger_reporting_gross_profit_gross_profit_proto_rawDesc), len(file_domain_ledger_reporting_gross_profit_gross_profit_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   4,
+			NumMessages:   10,
 			NumExtensions: 0,
 			NumServices:   1,
 		},

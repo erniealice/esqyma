@@ -26,6 +26,7 @@ const (
 	SubscriptionDomainService_ListSubscriptions_FullMethodName           = "/domain.subscription.v1.SubscriptionDomainService/ListSubscriptions"
 	SubscriptionDomainService_GetSubscriptionListPageData_FullMethodName = "/domain.subscription.v1.SubscriptionDomainService/GetSubscriptionListPageData"
 	SubscriptionDomainService_GetSubscriptionItemPageData_FullMethodName = "/domain.subscription.v1.SubscriptionDomainService/GetSubscriptionItemPageData"
+	SubscriptionDomainService_CountActiveByClientIds_FullMethodName      = "/domain.subscription.v1.SubscriptionDomainService/CountActiveByClientIds"
 )
 
 // SubscriptionDomainServiceClient is the client API for SubscriptionDomainService service.
@@ -41,6 +42,7 @@ type SubscriptionDomainServiceClient interface {
 	GetSubscriptionListPageData(ctx context.Context, in *GetSubscriptionListPageDataRequest, opts ...grpc.CallOption) (*GetSubscriptionListPageDataResponse, error)
 	// NEW: Enhanced item view with related data
 	GetSubscriptionItemPageData(ctx context.Context, in *GetSubscriptionItemPageDataRequest, opts ...grpc.CallOption) (*GetSubscriptionItemPageDataResponse, error)
+	CountActiveByClientIds(ctx context.Context, in *CountActiveByClientIdsRequest, opts ...grpc.CallOption) (*CountActiveByClientIdsResponse, error)
 }
 
 type subscriptionDomainServiceClient struct {
@@ -121,6 +123,16 @@ func (c *subscriptionDomainServiceClient) GetSubscriptionItemPageData(ctx contex
 	return out, nil
 }
 
+func (c *subscriptionDomainServiceClient) CountActiveByClientIds(ctx context.Context, in *CountActiveByClientIdsRequest, opts ...grpc.CallOption) (*CountActiveByClientIdsResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(CountActiveByClientIdsResponse)
+	err := c.cc.Invoke(ctx, SubscriptionDomainService_CountActiveByClientIds_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // SubscriptionDomainServiceServer is the server API for SubscriptionDomainService service.
 // All implementations must embed UnimplementedSubscriptionDomainServiceServer
 // for forward compatibility.
@@ -134,6 +146,7 @@ type SubscriptionDomainServiceServer interface {
 	GetSubscriptionListPageData(context.Context, *GetSubscriptionListPageDataRequest) (*GetSubscriptionListPageDataResponse, error)
 	// NEW: Enhanced item view with related data
 	GetSubscriptionItemPageData(context.Context, *GetSubscriptionItemPageDataRequest) (*GetSubscriptionItemPageDataResponse, error)
+	CountActiveByClientIds(context.Context, *CountActiveByClientIdsRequest) (*CountActiveByClientIdsResponse, error)
 	mustEmbedUnimplementedSubscriptionDomainServiceServer()
 }
 
@@ -164,6 +177,9 @@ func (UnimplementedSubscriptionDomainServiceServer) GetSubscriptionListPageData(
 }
 func (UnimplementedSubscriptionDomainServiceServer) GetSubscriptionItemPageData(context.Context, *GetSubscriptionItemPageDataRequest) (*GetSubscriptionItemPageDataResponse, error) {
 	return nil, status.Error(codes.Unimplemented, "method GetSubscriptionItemPageData not implemented")
+}
+func (UnimplementedSubscriptionDomainServiceServer) CountActiveByClientIds(context.Context, *CountActiveByClientIdsRequest) (*CountActiveByClientIdsResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method CountActiveByClientIds not implemented")
 }
 func (UnimplementedSubscriptionDomainServiceServer) mustEmbedUnimplementedSubscriptionDomainServiceServer() {
 }
@@ -313,6 +329,24 @@ func _SubscriptionDomainService_GetSubscriptionItemPageData_Handler(srv interfac
 	return interceptor(ctx, in, info, handler)
 }
 
+func _SubscriptionDomainService_CountActiveByClientIds_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(CountActiveByClientIdsRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(SubscriptionDomainServiceServer).CountActiveByClientIds(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: SubscriptionDomainService_CountActiveByClientIds_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(SubscriptionDomainServiceServer).CountActiveByClientIds(ctx, req.(*CountActiveByClientIdsRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // SubscriptionDomainService_ServiceDesc is the grpc.ServiceDesc for SubscriptionDomainService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -347,6 +381,10 @@ var SubscriptionDomainService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "GetSubscriptionItemPageData",
 			Handler:    _SubscriptionDomainService_GetSubscriptionItemPageData_Handler,
+		},
+		{
+			MethodName: "CountActiveByClientIds",
+			Handler:    _SubscriptionDomainService_CountActiveByClientIds_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

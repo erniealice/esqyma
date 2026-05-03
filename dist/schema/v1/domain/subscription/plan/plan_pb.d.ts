@@ -78,6 +78,43 @@ export type Plan = Message<"domain.subscription.v1.Plan"> & {
      * @generated from field: optional string parent_id = 13;
      */
     parentId?: string;
+    /**
+     * Root JobTemplate for the operational workflow this engagement runs.
+     * NULL = Plan has no operational tracking (advisory retainers, R1 retail
+     * patterns); auto-spawn use case skips silently. SET = MaterializeJobsForSubscription
+     * resolves this template to spawn the root Job. Multi-template Plans link
+     * additional templates via JobTemplateRelation rows. See plan §2.1.
+     *
+     * @generated from field: optional string job_template_id = 14;
+     */
+    jobTemplateId?: string;
+    /**
+     * Number of cycle Job instances spawned per billing cycle. Default 1
+     * (semantically — NULL is treated as 1). Examples:
+     *   Pro Cleaning Biweekly (billed monthly) = 2
+     *   Lawn Care Weekly      (billed monthly) = 4
+     *   Pool Quarterly        (billed quarterly) = 1
+     * Spawn semantics: cycle_index increments globally; period_start of each
+     * sub-cycle = billing_cycle_start + (k-1) × (cycle_length / N) for k=1..N.
+     * Validation: must be >= 1 when Plan.job_template_id is set. Reset to 1
+     * when job_template_id is cleared. See
+     * docs/plan/20260430-cyclic-subscription-jobs/plan.md §2.4.
+     *
+     * @generated from field: optional int32 visits_per_cycle = 15;
+     */
+    visitsPerCycle?: number;
+    /**
+     * Drift-recovered columns (DB had these; proto did not)
+     *
+     * Legacy migration shim — links to old price-list IDs
+     *
+     * @generated from field: optional string legacy_price_list_id = 16;
+     */
+    legacyPriceListId?: string;
+    /**
+     * @generated from field: optional string workspace_id = 17;
+     */
+    workspaceId?: string;
 };
 /**
  * Describes the message domain.subscription.v1.Plan.

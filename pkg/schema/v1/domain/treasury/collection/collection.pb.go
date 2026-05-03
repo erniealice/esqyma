@@ -1019,6 +1019,110 @@ func (x *GetCollectionItemPageDataResponse) GetError() *common.Error {
 	return nil
 }
 
+type ListByClientRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	ClientId      string                 `protobuf:"bytes,1,opt,name=client_id,json=clientId,proto3" json:"client_id,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *ListByClientRequest) Reset() {
+	*x = ListByClientRequest{}
+	mi := &file_domain_treasury_collection_collection_proto_msgTypes[15]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *ListByClientRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ListByClientRequest) ProtoMessage() {}
+
+func (x *ListByClientRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_domain_treasury_collection_collection_proto_msgTypes[15]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ListByClientRequest.ProtoReflect.Descriptor instead.
+func (*ListByClientRequest) Descriptor() ([]byte, []int) {
+	return file_domain_treasury_collection_collection_proto_rawDescGZIP(), []int{15}
+}
+
+func (x *ListByClientRequest) GetClientId() string {
+	if x != nil {
+		return x.ClientId
+	}
+	return ""
+}
+
+type ListByClientResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Data          []*Collection          `protobuf:"bytes,1,rep,name=data,proto3" json:"data,omitempty"`
+	Success       bool                   `protobuf:"varint,2,opt,name=success,proto3" json:"success,omitempty"`
+	Error         *common.Error          `protobuf:"bytes,3,opt,name=error,proto3,oneof" json:"error,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *ListByClientResponse) Reset() {
+	*x = ListByClientResponse{}
+	mi := &file_domain_treasury_collection_collection_proto_msgTypes[16]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *ListByClientResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ListByClientResponse) ProtoMessage() {}
+
+func (x *ListByClientResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_domain_treasury_collection_collection_proto_msgTypes[16]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ListByClientResponse.ProtoReflect.Descriptor instead.
+func (*ListByClientResponse) Descriptor() ([]byte, []int) {
+	return file_domain_treasury_collection_collection_proto_rawDescGZIP(), []int{16}
+}
+
+func (x *ListByClientResponse) GetData() []*Collection {
+	if x != nil {
+		return x.Data
+	}
+	return nil
+}
+
+func (x *ListByClientResponse) GetSuccess() bool {
+	if x != nil {
+		return x.Success
+	}
+	return false
+}
+
+func (x *ListByClientResponse) GetError() *common.Error {
+	if x != nil {
+		return x.Error
+	}
+	return nil
+}
+
 var File_domain_treasury_collection_collection_proto protoreflect.FileDescriptor
 
 const file_domain_treasury_collection_collection_proto_rawDesc = "" +
@@ -1132,7 +1236,14 @@ const file_domain_treasury_collection_collection_proto_rawDesc = "" +
 	"\asuccess\x18\x02 \x01(\bR\asuccess\x122\n" +
 	"\x05error\x18\x03 \x01(\v2\x17.domain.common.v1.ErrorH\x01R\x05error\x88\x01\x01B\r\n" +
 	"\v_collectionB\b\n" +
-	"\x06_error2\xd1\x06\n" +
+	"\x06_error\"2\n" +
+	"\x13ListByClientRequest\x12\x1b\n" +
+	"\tclient_id\x18\x01 \x01(\tR\bclientId\"\xa2\x01\n" +
+	"\x14ListByClientResponse\x122\n" +
+	"\x04data\x18\x01 \x03(\v2\x1e.domain.treasury.v1.CollectionR\x04data\x12\x18\n" +
+	"\asuccess\x18\x02 \x01(\bR\asuccess\x122\n" +
+	"\x05error\x18\x03 \x01(\v2\x17.domain.common.v1.ErrorH\x00R\x05error\x88\x01\x01B\b\n" +
+	"\x06_error2\xb4\a\n" +
 	"\x17CollectionDomainService\x12m\n" +
 	"\x10CreateCollection\x12+.domain.treasury.v1.CreateCollectionRequest\x1a,.domain.treasury.v1.CreateCollectionResponse\x12g\n" +
 	"\x0eReadCollection\x12).domain.treasury.v1.ReadCollectionRequest\x1a*.domain.treasury.v1.ReadCollectionResponse\x12m\n" +
@@ -1140,7 +1251,8 @@ const file_domain_treasury_collection_collection_proto_rawDesc = "" +
 	"\x10DeleteCollection\x12+.domain.treasury.v1.DeleteCollectionRequest\x1a,.domain.treasury.v1.DeleteCollectionResponse\x12j\n" +
 	"\x0fListCollections\x12*.domain.treasury.v1.ListCollectionsRequest\x1a+.domain.treasury.v1.ListCollectionsResponse\x12\x88\x01\n" +
 	"\x19GetCollectionListPageData\x124.domain.treasury.v1.GetCollectionListPageDataRequest\x1a5.domain.treasury.v1.GetCollectionListPageDataResponse\x12\x88\x01\n" +
-	"\x19GetCollectionItemPageData\x124.domain.treasury.v1.GetCollectionItemPageDataRequest\x1a5.domain.treasury.v1.GetCollectionItemPageDataResponseB\xe5\x01\n" +
+	"\x19GetCollectionItemPageData\x124.domain.treasury.v1.GetCollectionItemPageDataRequest\x1a5.domain.treasury.v1.GetCollectionItemPageDataResponse\x12a\n" +
+	"\fListByClient\x12'.domain.treasury.v1.ListByClientRequest\x1a(.domain.treasury.v1.ListByClientResponseB\xe5\x01\n" +
 	"\x16com.domain.treasury.v1B\x0fCollectionProtoP\x01ZPgithub.com/erniealice/esqyma/pkg/schema/v1/domain/treasury/collection;treasuryv1\xa2\x02\x03DTX\xaa\x02\x12Domain.Treasury.V1\xca\x02\x12Domain\\Treasury\\V1\xe2\x02\x1eDomain\\Treasury\\V1\\GPBMetadata\xea\x02\x14Domain::Treasury::V1b\x06proto3"
 
 var (
@@ -1155,7 +1267,7 @@ func file_domain_treasury_collection_collection_proto_rawDescGZIP() []byte {
 	return file_domain_treasury_collection_collection_proto_rawDescData
 }
 
-var file_domain_treasury_collection_collection_proto_msgTypes = make([]protoimpl.MessageInfo, 15)
+var file_domain_treasury_collection_collection_proto_msgTypes = make([]protoimpl.MessageInfo, 17)
 var file_domain_treasury_collection_collection_proto_goTypes = []any{
 	(*Collection)(nil),                                                             // 0: domain.treasury.v1.Collection
 	(*CreateCollectionRequest)(nil),                                                // 1: domain.treasury.v1.CreateCollectionRequest
@@ -1172,65 +1284,71 @@ var file_domain_treasury_collection_collection_proto_goTypes = []any{
 	(*GetCollectionListPageDataResponse)(nil),                                      // 12: domain.treasury.v1.GetCollectionListPageDataResponse
 	(*GetCollectionItemPageDataRequest)(nil),                                       // 13: domain.treasury.v1.GetCollectionItemPageDataRequest
 	(*GetCollectionItemPageDataResponse)(nil),                                      // 14: domain.treasury.v1.GetCollectionItemPageDataResponse
-	(*subscription.Subscription)(nil),                                              // 15: domain.subscription.v1.Subscription
-	(*collection_profile_collection_method.CollectionProfileCollectionMethod)(nil), // 16: domain.treasury.v1.CollectionProfileCollectionMethod
-	(*common.Error)(nil),                                                           // 17: domain.common.v1.Error
-	(*common.SearchRequest)(nil),                                                   // 18: domain.common.v1.SearchRequest
-	(*common.FilterRequest)(nil),                                                   // 19: domain.common.v1.FilterRequest
-	(*common.SortRequest)(nil),                                                     // 20: domain.common.v1.SortRequest
-	(*common.PaginationRequest)(nil),                                               // 21: domain.common.v1.PaginationRequest
-	(*common.PaginationResponse)(nil),                                              // 22: domain.common.v1.PaginationResponse
-	(*common.SearchResult)(nil),                                                    // 23: domain.common.v1.SearchResult
+	(*ListByClientRequest)(nil),                                                    // 15: domain.treasury.v1.ListByClientRequest
+	(*ListByClientResponse)(nil),                                                   // 16: domain.treasury.v1.ListByClientResponse
+	(*subscription.Subscription)(nil),                                              // 17: domain.subscription.v1.Subscription
+	(*collection_profile_collection_method.CollectionProfileCollectionMethod)(nil), // 18: domain.treasury.v1.CollectionProfileCollectionMethod
+	(*common.Error)(nil),                                                           // 19: domain.common.v1.Error
+	(*common.SearchRequest)(nil),                                                   // 20: domain.common.v1.SearchRequest
+	(*common.FilterRequest)(nil),                                                   // 21: domain.common.v1.FilterRequest
+	(*common.SortRequest)(nil),                                                     // 22: domain.common.v1.SortRequest
+	(*common.PaginationRequest)(nil),                                               // 23: domain.common.v1.PaginationRequest
+	(*common.PaginationResponse)(nil),                                              // 24: domain.common.v1.PaginationResponse
+	(*common.SearchResult)(nil),                                                    // 25: domain.common.v1.SearchResult
 }
 var file_domain_treasury_collection_collection_proto_depIdxs = []int32{
-	15, // 0: domain.treasury.v1.Collection.subscription:type_name -> domain.subscription.v1.Subscription
-	16, // 1: domain.treasury.v1.Collection.collection_method:type_name -> domain.treasury.v1.CollectionProfileCollectionMethod
+	17, // 0: domain.treasury.v1.Collection.subscription:type_name -> domain.subscription.v1.Subscription
+	18, // 1: domain.treasury.v1.Collection.collection_method:type_name -> domain.treasury.v1.CollectionProfileCollectionMethod
 	0,  // 2: domain.treasury.v1.CreateCollectionRequest.data:type_name -> domain.treasury.v1.Collection
 	0,  // 3: domain.treasury.v1.CreateCollectionResponse.data:type_name -> domain.treasury.v1.Collection
-	17, // 4: domain.treasury.v1.CreateCollectionResponse.error:type_name -> domain.common.v1.Error
+	19, // 4: domain.treasury.v1.CreateCollectionResponse.error:type_name -> domain.common.v1.Error
 	0,  // 5: domain.treasury.v1.ReadCollectionRequest.data:type_name -> domain.treasury.v1.Collection
 	0,  // 6: domain.treasury.v1.ReadCollectionResponse.data:type_name -> domain.treasury.v1.Collection
-	17, // 7: domain.treasury.v1.ReadCollectionResponse.error:type_name -> domain.common.v1.Error
+	19, // 7: domain.treasury.v1.ReadCollectionResponse.error:type_name -> domain.common.v1.Error
 	0,  // 8: domain.treasury.v1.UpdateCollectionRequest.data:type_name -> domain.treasury.v1.Collection
 	0,  // 9: domain.treasury.v1.UpdateCollectionResponse.data:type_name -> domain.treasury.v1.Collection
-	17, // 10: domain.treasury.v1.UpdateCollectionResponse.error:type_name -> domain.common.v1.Error
+	19, // 10: domain.treasury.v1.UpdateCollectionResponse.error:type_name -> domain.common.v1.Error
 	0,  // 11: domain.treasury.v1.DeleteCollectionRequest.data:type_name -> domain.treasury.v1.Collection
-	17, // 12: domain.treasury.v1.DeleteCollectionResponse.error:type_name -> domain.common.v1.Error
-	18, // 13: domain.treasury.v1.ListCollectionsRequest.search:type_name -> domain.common.v1.SearchRequest
-	19, // 14: domain.treasury.v1.ListCollectionsRequest.filters:type_name -> domain.common.v1.FilterRequest
-	20, // 15: domain.treasury.v1.ListCollectionsRequest.sort:type_name -> domain.common.v1.SortRequest
-	21, // 16: domain.treasury.v1.ListCollectionsRequest.pagination:type_name -> domain.common.v1.PaginationRequest
+	19, // 12: domain.treasury.v1.DeleteCollectionResponse.error:type_name -> domain.common.v1.Error
+	20, // 13: domain.treasury.v1.ListCollectionsRequest.search:type_name -> domain.common.v1.SearchRequest
+	21, // 14: domain.treasury.v1.ListCollectionsRequest.filters:type_name -> domain.common.v1.FilterRequest
+	22, // 15: domain.treasury.v1.ListCollectionsRequest.sort:type_name -> domain.common.v1.SortRequest
+	23, // 16: domain.treasury.v1.ListCollectionsRequest.pagination:type_name -> domain.common.v1.PaginationRequest
 	0,  // 17: domain.treasury.v1.ListCollectionsResponse.data:type_name -> domain.treasury.v1.Collection
-	17, // 18: domain.treasury.v1.ListCollectionsResponse.error:type_name -> domain.common.v1.Error
-	21, // 19: domain.treasury.v1.GetCollectionListPageDataRequest.pagination:type_name -> domain.common.v1.PaginationRequest
-	19, // 20: domain.treasury.v1.GetCollectionListPageDataRequest.filters:type_name -> domain.common.v1.FilterRequest
-	20, // 21: domain.treasury.v1.GetCollectionListPageDataRequest.sort:type_name -> domain.common.v1.SortRequest
-	18, // 22: domain.treasury.v1.GetCollectionListPageDataRequest.search:type_name -> domain.common.v1.SearchRequest
+	19, // 18: domain.treasury.v1.ListCollectionsResponse.error:type_name -> domain.common.v1.Error
+	23, // 19: domain.treasury.v1.GetCollectionListPageDataRequest.pagination:type_name -> domain.common.v1.PaginationRequest
+	21, // 20: domain.treasury.v1.GetCollectionListPageDataRequest.filters:type_name -> domain.common.v1.FilterRequest
+	22, // 21: domain.treasury.v1.GetCollectionListPageDataRequest.sort:type_name -> domain.common.v1.SortRequest
+	20, // 22: domain.treasury.v1.GetCollectionListPageDataRequest.search:type_name -> domain.common.v1.SearchRequest
 	0,  // 23: domain.treasury.v1.GetCollectionListPageDataResponse.collection_list:type_name -> domain.treasury.v1.Collection
-	17, // 24: domain.treasury.v1.GetCollectionListPageDataResponse.error:type_name -> domain.common.v1.Error
-	22, // 25: domain.treasury.v1.GetCollectionListPageDataResponse.pagination:type_name -> domain.common.v1.PaginationResponse
-	23, // 26: domain.treasury.v1.GetCollectionListPageDataResponse.search_results:type_name -> domain.common.v1.SearchResult
+	19, // 24: domain.treasury.v1.GetCollectionListPageDataResponse.error:type_name -> domain.common.v1.Error
+	24, // 25: domain.treasury.v1.GetCollectionListPageDataResponse.pagination:type_name -> domain.common.v1.PaginationResponse
+	25, // 26: domain.treasury.v1.GetCollectionListPageDataResponse.search_results:type_name -> domain.common.v1.SearchResult
 	0,  // 27: domain.treasury.v1.GetCollectionItemPageDataResponse.collection:type_name -> domain.treasury.v1.Collection
-	17, // 28: domain.treasury.v1.GetCollectionItemPageDataResponse.error:type_name -> domain.common.v1.Error
-	1,  // 29: domain.treasury.v1.CollectionDomainService.CreateCollection:input_type -> domain.treasury.v1.CreateCollectionRequest
-	3,  // 30: domain.treasury.v1.CollectionDomainService.ReadCollection:input_type -> domain.treasury.v1.ReadCollectionRequest
-	5,  // 31: domain.treasury.v1.CollectionDomainService.UpdateCollection:input_type -> domain.treasury.v1.UpdateCollectionRequest
-	7,  // 32: domain.treasury.v1.CollectionDomainService.DeleteCollection:input_type -> domain.treasury.v1.DeleteCollectionRequest
-	9,  // 33: domain.treasury.v1.CollectionDomainService.ListCollections:input_type -> domain.treasury.v1.ListCollectionsRequest
-	11, // 34: domain.treasury.v1.CollectionDomainService.GetCollectionListPageData:input_type -> domain.treasury.v1.GetCollectionListPageDataRequest
-	13, // 35: domain.treasury.v1.CollectionDomainService.GetCollectionItemPageData:input_type -> domain.treasury.v1.GetCollectionItemPageDataRequest
-	2,  // 36: domain.treasury.v1.CollectionDomainService.CreateCollection:output_type -> domain.treasury.v1.CreateCollectionResponse
-	4,  // 37: domain.treasury.v1.CollectionDomainService.ReadCollection:output_type -> domain.treasury.v1.ReadCollectionResponse
-	6,  // 38: domain.treasury.v1.CollectionDomainService.UpdateCollection:output_type -> domain.treasury.v1.UpdateCollectionResponse
-	8,  // 39: domain.treasury.v1.CollectionDomainService.DeleteCollection:output_type -> domain.treasury.v1.DeleteCollectionResponse
-	10, // 40: domain.treasury.v1.CollectionDomainService.ListCollections:output_type -> domain.treasury.v1.ListCollectionsResponse
-	12, // 41: domain.treasury.v1.CollectionDomainService.GetCollectionListPageData:output_type -> domain.treasury.v1.GetCollectionListPageDataResponse
-	14, // 42: domain.treasury.v1.CollectionDomainService.GetCollectionItemPageData:output_type -> domain.treasury.v1.GetCollectionItemPageDataResponse
-	36, // [36:43] is the sub-list for method output_type
-	29, // [29:36] is the sub-list for method input_type
-	29, // [29:29] is the sub-list for extension type_name
-	29, // [29:29] is the sub-list for extension extendee
-	0,  // [0:29] is the sub-list for field type_name
+	19, // 28: domain.treasury.v1.GetCollectionItemPageDataResponse.error:type_name -> domain.common.v1.Error
+	0,  // 29: domain.treasury.v1.ListByClientResponse.data:type_name -> domain.treasury.v1.Collection
+	19, // 30: domain.treasury.v1.ListByClientResponse.error:type_name -> domain.common.v1.Error
+	1,  // 31: domain.treasury.v1.CollectionDomainService.CreateCollection:input_type -> domain.treasury.v1.CreateCollectionRequest
+	3,  // 32: domain.treasury.v1.CollectionDomainService.ReadCollection:input_type -> domain.treasury.v1.ReadCollectionRequest
+	5,  // 33: domain.treasury.v1.CollectionDomainService.UpdateCollection:input_type -> domain.treasury.v1.UpdateCollectionRequest
+	7,  // 34: domain.treasury.v1.CollectionDomainService.DeleteCollection:input_type -> domain.treasury.v1.DeleteCollectionRequest
+	9,  // 35: domain.treasury.v1.CollectionDomainService.ListCollections:input_type -> domain.treasury.v1.ListCollectionsRequest
+	11, // 36: domain.treasury.v1.CollectionDomainService.GetCollectionListPageData:input_type -> domain.treasury.v1.GetCollectionListPageDataRequest
+	13, // 37: domain.treasury.v1.CollectionDomainService.GetCollectionItemPageData:input_type -> domain.treasury.v1.GetCollectionItemPageDataRequest
+	15, // 38: domain.treasury.v1.CollectionDomainService.ListByClient:input_type -> domain.treasury.v1.ListByClientRequest
+	2,  // 39: domain.treasury.v1.CollectionDomainService.CreateCollection:output_type -> domain.treasury.v1.CreateCollectionResponse
+	4,  // 40: domain.treasury.v1.CollectionDomainService.ReadCollection:output_type -> domain.treasury.v1.ReadCollectionResponse
+	6,  // 41: domain.treasury.v1.CollectionDomainService.UpdateCollection:output_type -> domain.treasury.v1.UpdateCollectionResponse
+	8,  // 42: domain.treasury.v1.CollectionDomainService.DeleteCollection:output_type -> domain.treasury.v1.DeleteCollectionResponse
+	10, // 43: domain.treasury.v1.CollectionDomainService.ListCollections:output_type -> domain.treasury.v1.ListCollectionsResponse
+	12, // 44: domain.treasury.v1.CollectionDomainService.GetCollectionListPageData:output_type -> domain.treasury.v1.GetCollectionListPageDataResponse
+	14, // 45: domain.treasury.v1.CollectionDomainService.GetCollectionItemPageData:output_type -> domain.treasury.v1.GetCollectionItemPageDataResponse
+	16, // 46: domain.treasury.v1.CollectionDomainService.ListByClient:output_type -> domain.treasury.v1.ListByClientResponse
+	39, // [39:47] is the sub-list for method output_type
+	31, // [31:39] is the sub-list for method input_type
+	31, // [31:31] is the sub-list for extension type_name
+	31, // [31:31] is the sub-list for extension extendee
+	0,  // [0:31] is the sub-list for field type_name
 }
 
 func init() { file_domain_treasury_collection_collection_proto_init() }
@@ -1248,13 +1366,14 @@ func file_domain_treasury_collection_collection_proto_init() {
 	file_domain_treasury_collection_collection_proto_msgTypes[11].OneofWrappers = []any{}
 	file_domain_treasury_collection_collection_proto_msgTypes[12].OneofWrappers = []any{}
 	file_domain_treasury_collection_collection_proto_msgTypes[14].OneofWrappers = []any{}
+	file_domain_treasury_collection_collection_proto_msgTypes[16].OneofWrappers = []any{}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
 		File: protoimpl.DescBuilder{
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_domain_treasury_collection_collection_proto_rawDesc), len(file_domain_treasury_collection_collection_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   15,
+			NumMessages:   17,
 			NumExtensions: 0,
 			NumServices:   1,
 		},

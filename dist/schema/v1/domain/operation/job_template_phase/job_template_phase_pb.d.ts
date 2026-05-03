@@ -74,6 +74,37 @@ export type JobTemplatePhase = Message<"domain.operation.v1.JobTemplatePhase"> &
      * @generated from field: optional string predecessor_template_phase_id = 15;
      */
     predecessorTemplatePhaseId?: string;
+    /**
+     * Milestone billing weight fields. Active only when parent JobTemplate's
+     * pricing flows through a PricePlan with billing_kind = MILESTONE.
+     * Presence rules:
+     *   triggers_billing=false   → internal phase, no event materializes
+     *   triggers_billing=true + billing_percent_bps set, billing_amount null → percent of parent PricePlan total
+     *   triggers_billing=true + billing_amount set, billing_percent_bps null → fixed centavos
+     *   triggers_billing=true + both null → derive from sum of ProductPricePlan rows tagged with this phase
+     *   triggers_billing=true + both set → reject (ambiguous)
+     *
+     * @generated from field: optional bool triggers_billing = 16;
+     */
+    triggersBilling?: boolean;
+    /**
+     * 10000 = 100% of PricePlan total
+     *
+     * @generated from field: optional int32 billing_percent_bps = 17;
+     */
+    billingPercentBps?: number;
+    /**
+     * centavos; fixed override (mutually exclusive w/ percent)
+     *
+     * @generated from field: optional int64 billing_amount = 18;
+     */
+    billingAmount?: bigint;
+    /**
+     * ISO 4217; only meaningful when fixed billing_amount used
+     *
+     * @generated from field: optional string billing_currency = 19;
+     */
+    billingCurrency?: string;
 };
 /**
  * Describes the message domain.operation.v1.JobTemplatePhase.

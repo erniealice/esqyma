@@ -63,6 +63,7 @@ service CollectionDomainService {
     returns (GetCollectionListPageDataResponse);
   rpc GetCollectionItemPageData(GetCollectionItemPageDataRequest)
     returns (GetCollectionItemPageDataResponse);
+  rpc ListByClient(ListByClientRequest) returns (ListByClientResponse);
 }
 
 message CreateCollectionRequest {
@@ -138,6 +139,16 @@ message GetCollectionItemPageDataRequest {
 
 message GetCollectionItemPageDataResponse {
   optional Collection collection = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message ListByClientRequest {
+  string client_id = 1;
+}
+
+message ListByClientResponse {
+  repeated Collection data = 1;
   bool success = 2;
   optional domain.common.v1.Error error = 3;
 }

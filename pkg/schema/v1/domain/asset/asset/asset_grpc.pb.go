@@ -32,6 +32,7 @@ const (
 	AssetDomainService_RunDepreciation_FullMethodName         = "/domain.asset.v1.AssetDomainService/RunDepreciation"
 	AssetDomainService_GetDepreciationSchedule_FullMethodName = "/domain.asset.v1.AssetDomainService/GetDepreciationSchedule"
 	AssetDomainService_RevalueAsset_FullMethodName            = "/domain.asset.v1.AssetDomainService/RevalueAsset"
+	AssetDomainService_SetAssetActive_FullMethodName          = "/domain.asset.v1.AssetDomainService/SetAssetActive"
 )
 
 // AssetDomainServiceClient is the client API for AssetDomainService service.
@@ -56,6 +57,9 @@ type AssetDomainServiceClient interface {
 	GetDepreciationSchedule(ctx context.Context, in *GetDepreciationScheduleRequest, opts ...grpc.CallOption) (*GetDepreciationScheduleResponse, error)
 	// Revaluation (IFRS only)
 	RevalueAsset(ctx context.Context, in *RevalueAssetRequest, opts ...grpc.CallOption) (*RevalueAssetResponse, error)
+	// Partial-field mutation: toggle the bool active field without a full Asset payload.
+	// Mirrors BillingEvent.SetStatus — dedicated rpc for proto3-zero-vulnerable bool.
+	SetAssetActive(ctx context.Context, in *SetAssetActiveRequest, opts ...grpc.CallOption) (*SetAssetActiveResponse, error)
 }
 
 type assetDomainServiceClient struct {
@@ -196,6 +200,16 @@ func (c *assetDomainServiceClient) RevalueAsset(ctx context.Context, in *Revalue
 	return out, nil
 }
 
+func (c *assetDomainServiceClient) SetAssetActive(ctx context.Context, in *SetAssetActiveRequest, opts ...grpc.CallOption) (*SetAssetActiveResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(SetAssetActiveResponse)
+	err := c.cc.Invoke(ctx, AssetDomainService_SetAssetActive_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // AssetDomainServiceServer is the server API for AssetDomainService service.
 // All implementations must embed UnimplementedAssetDomainServiceServer
 // for forward compatibility.
@@ -218,6 +232,9 @@ type AssetDomainServiceServer interface {
 	GetDepreciationSchedule(context.Context, *GetDepreciationScheduleRequest) (*GetDepreciationScheduleResponse, error)
 	// Revaluation (IFRS only)
 	RevalueAsset(context.Context, *RevalueAssetRequest) (*RevalueAssetResponse, error)
+	// Partial-field mutation: toggle the bool active field without a full Asset payload.
+	// Mirrors BillingEvent.SetStatus — dedicated rpc for proto3-zero-vulnerable bool.
+	SetAssetActive(context.Context, *SetAssetActiveRequest) (*SetAssetActiveResponse, error)
 	mustEmbedUnimplementedAssetDomainServiceServer()
 }
 
@@ -266,6 +283,9 @@ func (UnimplementedAssetDomainServiceServer) GetDepreciationSchedule(context.Con
 }
 func (UnimplementedAssetDomainServiceServer) RevalueAsset(context.Context, *RevalueAssetRequest) (*RevalueAssetResponse, error) {
 	return nil, status.Error(codes.Unimplemented, "method RevalueAsset not implemented")
+}
+func (UnimplementedAssetDomainServiceServer) SetAssetActive(context.Context, *SetAssetActiveRequest) (*SetAssetActiveResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method SetAssetActive not implemented")
 }
 func (UnimplementedAssetDomainServiceServer) mustEmbedUnimplementedAssetDomainServiceServer() {}
 func (UnimplementedAssetDomainServiceServer) testEmbeddedByValue()                            {}
@@ -522,6 +542,24 @@ func _AssetDomainService_RevalueAsset_Handler(srv interface{}, ctx context.Conte
 	return interceptor(ctx, in, info, handler)
 }
 
+func _AssetDomainService_SetAssetActive_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(SetAssetActiveRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(AssetDomainServiceServer).SetAssetActive(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: AssetDomainService_SetAssetActive_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(AssetDomainServiceServer).SetAssetActive(ctx, req.(*SetAssetActiveRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // AssetDomainService_ServiceDesc is the grpc.ServiceDesc for AssetDomainService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -580,6 +618,10 @@ var AssetDomainService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "RevalueAsset",
 			Handler:    _AssetDomainService_RevalueAsset_Handler,
+		},
+		{
+			MethodName: "SetAssetActive",
+			Handler:    _AssetDomainService_SetAssetActive_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

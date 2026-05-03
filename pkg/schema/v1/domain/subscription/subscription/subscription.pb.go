@@ -1044,6 +1044,96 @@ func (x *GetSubscriptionItemPageDataResponse) GetError() *common.Error {
 	return nil
 }
 
+type CountActiveByClientIdsRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	ClientIds     []string               `protobuf:"bytes,1,rep,name=client_ids,json=clientIds,proto3" json:"client_ids,omitempty"` // empty = count all clients in the workspace
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *CountActiveByClientIdsRequest) Reset() {
+	*x = CountActiveByClientIdsRequest{}
+	mi := &file_domain_subscription_subscription_subscription_proto_msgTypes[15]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *CountActiveByClientIdsRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*CountActiveByClientIdsRequest) ProtoMessage() {}
+
+func (x *CountActiveByClientIdsRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_domain_subscription_subscription_subscription_proto_msgTypes[15]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use CountActiveByClientIdsRequest.ProtoReflect.Descriptor instead.
+func (*CountActiveByClientIdsRequest) Descriptor() ([]byte, []int) {
+	return file_domain_subscription_subscription_subscription_proto_rawDescGZIP(), []int{15}
+}
+
+func (x *CountActiveByClientIdsRequest) GetClientIds() []string {
+	if x != nil {
+		return x.ClientIds
+	}
+	return nil
+}
+
+type CountActiveByClientIdsResponse struct {
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// Keys are client IDs; values are counts of active subscriptions for each.
+	// Clients with zero active subscriptions are omitted (caller defaults to 0).
+	Counts        map[string]int32 `protobuf:"bytes,1,rep,name=counts,proto3" json:"counts,omitempty" protobuf_key:"bytes,1,opt,name=key" protobuf_val:"varint,2,opt,name=value"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *CountActiveByClientIdsResponse) Reset() {
+	*x = CountActiveByClientIdsResponse{}
+	mi := &file_domain_subscription_subscription_subscription_proto_msgTypes[16]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *CountActiveByClientIdsResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*CountActiveByClientIdsResponse) ProtoMessage() {}
+
+func (x *CountActiveByClientIdsResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_domain_subscription_subscription_subscription_proto_msgTypes[16]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use CountActiveByClientIdsResponse.ProtoReflect.Descriptor instead.
+func (*CountActiveByClientIdsResponse) Descriptor() ([]byte, []int) {
+	return file_domain_subscription_subscription_subscription_proto_rawDescGZIP(), []int{16}
+}
+
+func (x *CountActiveByClientIdsResponse) GetCounts() map[string]int32 {
+	if x != nil {
+		return x.Counts
+	}
+	return nil
+}
+
 var File_domain_subscription_subscription_subscription_proto protoreflect.FileDescriptor
 
 const file_domain_subscription_subscription_subscription_proto_rawDesc = "" +
@@ -1167,7 +1257,15 @@ const file_domain_subscription_subscription_subscription_proto_rawDesc = "" +
 	"\fsubscription\x18\x01 \x01(\v2$.domain.subscription.v1.SubscriptionR\fsubscription\x12\x18\n" +
 	"\asuccess\x18\x02 \x01(\bR\asuccess\x122\n" +
 	"\x05error\x18\x03 \x01(\v2\x17.domain.common.v1.ErrorH\x00R\x05error\x88\x01\x01B\b\n" +
-	"\x06_error2\xb5\a\n" +
+	"\x06_error\">\n" +
+	"\x1dCountActiveByClientIdsRequest\x12\x1d\n" +
+	"\n" +
+	"client_ids\x18\x01 \x03(\tR\tclientIds\"\xb7\x01\n" +
+	"\x1eCountActiveByClientIdsResponse\x12Z\n" +
+	"\x06counts\x18\x01 \x03(\v2B.domain.subscription.v1.CountActiveByClientIdsResponse.CountsEntryR\x06counts\x1a9\n" +
+	"\vCountsEntry\x12\x10\n" +
+	"\x03key\x18\x01 \x01(\tR\x03key\x12\x14\n" +
+	"\x05value\x18\x02 \x01(\x05R\x05value:\x028\x012\xbf\b\n" +
 	"\x19SubscriptionDomainService\x12{\n" +
 	"\x12CreateSubscription\x121.domain.subscription.v1.CreateSubscriptionRequest\x1a2.domain.subscription.v1.CreateSubscriptionResponse\x12u\n" +
 	"\x10ReadSubscription\x12/.domain.subscription.v1.ReadSubscriptionRequest\x1a0.domain.subscription.v1.ReadSubscriptionResponse\x12{\n" +
@@ -1175,7 +1273,8 @@ const file_domain_subscription_subscription_subscription_proto_rawDesc = "" +
 	"\x12DeleteSubscription\x121.domain.subscription.v1.DeleteSubscriptionRequest\x1a2.domain.subscription.v1.DeleteSubscriptionResponse\x12x\n" +
 	"\x11ListSubscriptions\x120.domain.subscription.v1.ListSubscriptionsRequest\x1a1.domain.subscription.v1.ListSubscriptionsResponse\x12\x96\x01\n" +
 	"\x1bGetSubscriptionListPageData\x12:.domain.subscription.v1.GetSubscriptionListPageDataRequest\x1a;.domain.subscription.v1.GetSubscriptionListPageDataResponse\x12\x96\x01\n" +
-	"\x1bGetSubscriptionItemPageData\x12:.domain.subscription.v1.GetSubscriptionItemPageDataRequest\x1a;.domain.subscription.v1.GetSubscriptionItemPageDataResponseB\x85\x02\n" +
+	"\x1bGetSubscriptionItemPageData\x12:.domain.subscription.v1.GetSubscriptionItemPageDataRequest\x1a;.domain.subscription.v1.GetSubscriptionItemPageDataResponse\x12\x87\x01\n" +
+	"\x16CountActiveByClientIds\x125.domain.subscription.v1.CountActiveByClientIdsRequest\x1a6.domain.subscription.v1.CountActiveByClientIdsResponseB\x85\x02\n" +
 	"\x1acom.domain.subscription.v1B\x11SubscriptionProtoP\x01ZZgithub.com/erniealice/esqyma/pkg/schema/v1/domain/subscription/subscription;subscriptionv1\xa2\x02\x03DSX\xaa\x02\x16Domain.Subscription.V1\xca\x02\x16Domain\\Subscription\\V1\xe2\x02\"Domain\\Subscription\\V1\\GPBMetadata\xea\x02\x18Domain::Subscription::V1b\x06proto3"
 
 var (
@@ -1190,7 +1289,7 @@ func file_domain_subscription_subscription_subscription_proto_rawDescGZIP() []by
 	return file_domain_subscription_subscription_subscription_proto_rawDescData
 }
 
-var file_domain_subscription_subscription_subscription_proto_msgTypes = make([]protoimpl.MessageInfo, 16)
+var file_domain_subscription_subscription_subscription_proto_msgTypes = make([]protoimpl.MessageInfo, 19)
 var file_domain_subscription_subscription_subscription_proto_goTypes = []any{
 	(*Subscription)(nil),                        // 0: domain.subscription.v1.Subscription
 	(*CreateSubscriptionRequest)(nil),           // 1: domain.subscription.v1.CreateSubscriptionRequest
@@ -1207,70 +1306,76 @@ var file_domain_subscription_subscription_subscription_proto_goTypes = []any{
 	(*GetSubscriptionListPageDataResponse)(nil), // 12: domain.subscription.v1.GetSubscriptionListPageDataResponse
 	(*GetSubscriptionItemPageDataRequest)(nil),  // 13: domain.subscription.v1.GetSubscriptionItemPageDataRequest
 	(*GetSubscriptionItemPageDataResponse)(nil), // 14: domain.subscription.v1.GetSubscriptionItemPageDataResponse
-	nil,                               // 15: domain.subscription.v1.Subscription.MetadataEntry
-	(*price_plan.PricePlan)(nil),      // 16: domain.subscription.v1.PricePlan
-	(*client.Client)(nil),             // 17: domain.entity.v1.Client
-	(*timestamppb.Timestamp)(nil),     // 18: google.protobuf.Timestamp
-	(*common.Error)(nil),              // 19: domain.common.v1.Error
-	(*common.SearchRequest)(nil),      // 20: domain.common.v1.SearchRequest
-	(*common.FilterRequest)(nil),      // 21: domain.common.v1.FilterRequest
-	(*common.SortRequest)(nil),        // 22: domain.common.v1.SortRequest
-	(*common.PaginationRequest)(nil),  // 23: domain.common.v1.PaginationRequest
-	(*common.PaginationResponse)(nil), // 24: domain.common.v1.PaginationResponse
-	(*common.SearchResult)(nil),       // 25: domain.common.v1.SearchResult
+	(*CountActiveByClientIdsRequest)(nil),       // 15: domain.subscription.v1.CountActiveByClientIdsRequest
+	(*CountActiveByClientIdsResponse)(nil),      // 16: domain.subscription.v1.CountActiveByClientIdsResponse
+	nil,                                         // 17: domain.subscription.v1.Subscription.MetadataEntry
+	nil,                                         // 18: domain.subscription.v1.CountActiveByClientIdsResponse.CountsEntry
+	(*price_plan.PricePlan)(nil),                // 19: domain.subscription.v1.PricePlan
+	(*client.Client)(nil),                       // 20: domain.entity.v1.Client
+	(*timestamppb.Timestamp)(nil),               // 21: google.protobuf.Timestamp
+	(*common.Error)(nil),                        // 22: domain.common.v1.Error
+	(*common.SearchRequest)(nil),                // 23: domain.common.v1.SearchRequest
+	(*common.FilterRequest)(nil),                // 24: domain.common.v1.FilterRequest
+	(*common.SortRequest)(nil),                  // 25: domain.common.v1.SortRequest
+	(*common.PaginationRequest)(nil),            // 26: domain.common.v1.PaginationRequest
+	(*common.PaginationResponse)(nil),           // 27: domain.common.v1.PaginationResponse
+	(*common.SearchResult)(nil),                 // 28: domain.common.v1.SearchResult
 }
 var file_domain_subscription_subscription_subscription_proto_depIdxs = []int32{
-	16, // 0: domain.subscription.v1.Subscription.price_plan:type_name -> domain.subscription.v1.PricePlan
-	17, // 1: domain.subscription.v1.Subscription.client:type_name -> domain.entity.v1.Client
-	18, // 2: domain.subscription.v1.Subscription.date_time_start:type_name -> google.protobuf.Timestamp
-	18, // 3: domain.subscription.v1.Subscription.date_time_end:type_name -> google.protobuf.Timestamp
-	15, // 4: domain.subscription.v1.Subscription.metadata:type_name -> domain.subscription.v1.Subscription.MetadataEntry
+	19, // 0: domain.subscription.v1.Subscription.price_plan:type_name -> domain.subscription.v1.PricePlan
+	20, // 1: domain.subscription.v1.Subscription.client:type_name -> domain.entity.v1.Client
+	21, // 2: domain.subscription.v1.Subscription.date_time_start:type_name -> google.protobuf.Timestamp
+	21, // 3: domain.subscription.v1.Subscription.date_time_end:type_name -> google.protobuf.Timestamp
+	17, // 4: domain.subscription.v1.Subscription.metadata:type_name -> domain.subscription.v1.Subscription.MetadataEntry
 	0,  // 5: domain.subscription.v1.CreateSubscriptionRequest.data:type_name -> domain.subscription.v1.Subscription
 	0,  // 6: domain.subscription.v1.CreateSubscriptionResponse.data:type_name -> domain.subscription.v1.Subscription
-	19, // 7: domain.subscription.v1.CreateSubscriptionResponse.error:type_name -> domain.common.v1.Error
+	22, // 7: domain.subscription.v1.CreateSubscriptionResponse.error:type_name -> domain.common.v1.Error
 	0,  // 8: domain.subscription.v1.ReadSubscriptionRequest.data:type_name -> domain.subscription.v1.Subscription
 	0,  // 9: domain.subscription.v1.ReadSubscriptionResponse.data:type_name -> domain.subscription.v1.Subscription
-	19, // 10: domain.subscription.v1.ReadSubscriptionResponse.error:type_name -> domain.common.v1.Error
+	22, // 10: domain.subscription.v1.ReadSubscriptionResponse.error:type_name -> domain.common.v1.Error
 	0,  // 11: domain.subscription.v1.UpdateSubscriptionRequest.data:type_name -> domain.subscription.v1.Subscription
 	0,  // 12: domain.subscription.v1.UpdateSubscriptionResponse.data:type_name -> domain.subscription.v1.Subscription
-	19, // 13: domain.subscription.v1.UpdateSubscriptionResponse.error:type_name -> domain.common.v1.Error
+	22, // 13: domain.subscription.v1.UpdateSubscriptionResponse.error:type_name -> domain.common.v1.Error
 	0,  // 14: domain.subscription.v1.DeleteSubscriptionRequest.data:type_name -> domain.subscription.v1.Subscription
-	19, // 15: domain.subscription.v1.DeleteSubscriptionResponse.error:type_name -> domain.common.v1.Error
-	20, // 16: domain.subscription.v1.ListSubscriptionsRequest.search:type_name -> domain.common.v1.SearchRequest
-	21, // 17: domain.subscription.v1.ListSubscriptionsRequest.filters:type_name -> domain.common.v1.FilterRequest
-	22, // 18: domain.subscription.v1.ListSubscriptionsRequest.sort:type_name -> domain.common.v1.SortRequest
-	23, // 19: domain.subscription.v1.ListSubscriptionsRequest.pagination:type_name -> domain.common.v1.PaginationRequest
+	22, // 15: domain.subscription.v1.DeleteSubscriptionResponse.error:type_name -> domain.common.v1.Error
+	23, // 16: domain.subscription.v1.ListSubscriptionsRequest.search:type_name -> domain.common.v1.SearchRequest
+	24, // 17: domain.subscription.v1.ListSubscriptionsRequest.filters:type_name -> domain.common.v1.FilterRequest
+	25, // 18: domain.subscription.v1.ListSubscriptionsRequest.sort:type_name -> domain.common.v1.SortRequest
+	26, // 19: domain.subscription.v1.ListSubscriptionsRequest.pagination:type_name -> domain.common.v1.PaginationRequest
 	0,  // 20: domain.subscription.v1.ListSubscriptionsResponse.data:type_name -> domain.subscription.v1.Subscription
-	19, // 21: domain.subscription.v1.ListSubscriptionsResponse.error:type_name -> domain.common.v1.Error
-	23, // 22: domain.subscription.v1.GetSubscriptionListPageDataRequest.pagination:type_name -> domain.common.v1.PaginationRequest
-	21, // 23: domain.subscription.v1.GetSubscriptionListPageDataRequest.filters:type_name -> domain.common.v1.FilterRequest
-	22, // 24: domain.subscription.v1.GetSubscriptionListPageDataRequest.sort:type_name -> domain.common.v1.SortRequest
-	20, // 25: domain.subscription.v1.GetSubscriptionListPageDataRequest.search:type_name -> domain.common.v1.SearchRequest
+	22, // 21: domain.subscription.v1.ListSubscriptionsResponse.error:type_name -> domain.common.v1.Error
+	26, // 22: domain.subscription.v1.GetSubscriptionListPageDataRequest.pagination:type_name -> domain.common.v1.PaginationRequest
+	24, // 23: domain.subscription.v1.GetSubscriptionListPageDataRequest.filters:type_name -> domain.common.v1.FilterRequest
+	25, // 24: domain.subscription.v1.GetSubscriptionListPageDataRequest.sort:type_name -> domain.common.v1.SortRequest
+	23, // 25: domain.subscription.v1.GetSubscriptionListPageDataRequest.search:type_name -> domain.common.v1.SearchRequest
 	0,  // 26: domain.subscription.v1.GetSubscriptionListPageDataResponse.subscription_list:type_name -> domain.subscription.v1.Subscription
-	24, // 27: domain.subscription.v1.GetSubscriptionListPageDataResponse.pagination:type_name -> domain.common.v1.PaginationResponse
-	25, // 28: domain.subscription.v1.GetSubscriptionListPageDataResponse.search_results:type_name -> domain.common.v1.SearchResult
-	19, // 29: domain.subscription.v1.GetSubscriptionListPageDataResponse.error:type_name -> domain.common.v1.Error
+	27, // 27: domain.subscription.v1.GetSubscriptionListPageDataResponse.pagination:type_name -> domain.common.v1.PaginationResponse
+	28, // 28: domain.subscription.v1.GetSubscriptionListPageDataResponse.search_results:type_name -> domain.common.v1.SearchResult
+	22, // 29: domain.subscription.v1.GetSubscriptionListPageDataResponse.error:type_name -> domain.common.v1.Error
 	0,  // 30: domain.subscription.v1.GetSubscriptionItemPageDataResponse.subscription:type_name -> domain.subscription.v1.Subscription
-	19, // 31: domain.subscription.v1.GetSubscriptionItemPageDataResponse.error:type_name -> domain.common.v1.Error
-	1,  // 32: domain.subscription.v1.SubscriptionDomainService.CreateSubscription:input_type -> domain.subscription.v1.CreateSubscriptionRequest
-	3,  // 33: domain.subscription.v1.SubscriptionDomainService.ReadSubscription:input_type -> domain.subscription.v1.ReadSubscriptionRequest
-	5,  // 34: domain.subscription.v1.SubscriptionDomainService.UpdateSubscription:input_type -> domain.subscription.v1.UpdateSubscriptionRequest
-	7,  // 35: domain.subscription.v1.SubscriptionDomainService.DeleteSubscription:input_type -> domain.subscription.v1.DeleteSubscriptionRequest
-	9,  // 36: domain.subscription.v1.SubscriptionDomainService.ListSubscriptions:input_type -> domain.subscription.v1.ListSubscriptionsRequest
-	11, // 37: domain.subscription.v1.SubscriptionDomainService.GetSubscriptionListPageData:input_type -> domain.subscription.v1.GetSubscriptionListPageDataRequest
-	13, // 38: domain.subscription.v1.SubscriptionDomainService.GetSubscriptionItemPageData:input_type -> domain.subscription.v1.GetSubscriptionItemPageDataRequest
-	2,  // 39: domain.subscription.v1.SubscriptionDomainService.CreateSubscription:output_type -> domain.subscription.v1.CreateSubscriptionResponse
-	4,  // 40: domain.subscription.v1.SubscriptionDomainService.ReadSubscription:output_type -> domain.subscription.v1.ReadSubscriptionResponse
-	6,  // 41: domain.subscription.v1.SubscriptionDomainService.UpdateSubscription:output_type -> domain.subscription.v1.UpdateSubscriptionResponse
-	8,  // 42: domain.subscription.v1.SubscriptionDomainService.DeleteSubscription:output_type -> domain.subscription.v1.DeleteSubscriptionResponse
-	10, // 43: domain.subscription.v1.SubscriptionDomainService.ListSubscriptions:output_type -> domain.subscription.v1.ListSubscriptionsResponse
-	12, // 44: domain.subscription.v1.SubscriptionDomainService.GetSubscriptionListPageData:output_type -> domain.subscription.v1.GetSubscriptionListPageDataResponse
-	14, // 45: domain.subscription.v1.SubscriptionDomainService.GetSubscriptionItemPageData:output_type -> domain.subscription.v1.GetSubscriptionItemPageDataResponse
-	39, // [39:46] is the sub-list for method output_type
-	32, // [32:39] is the sub-list for method input_type
-	32, // [32:32] is the sub-list for extension type_name
-	32, // [32:32] is the sub-list for extension extendee
-	0,  // [0:32] is the sub-list for field type_name
+	22, // 31: domain.subscription.v1.GetSubscriptionItemPageDataResponse.error:type_name -> domain.common.v1.Error
+	18, // 32: domain.subscription.v1.CountActiveByClientIdsResponse.counts:type_name -> domain.subscription.v1.CountActiveByClientIdsResponse.CountsEntry
+	1,  // 33: domain.subscription.v1.SubscriptionDomainService.CreateSubscription:input_type -> domain.subscription.v1.CreateSubscriptionRequest
+	3,  // 34: domain.subscription.v1.SubscriptionDomainService.ReadSubscription:input_type -> domain.subscription.v1.ReadSubscriptionRequest
+	5,  // 35: domain.subscription.v1.SubscriptionDomainService.UpdateSubscription:input_type -> domain.subscription.v1.UpdateSubscriptionRequest
+	7,  // 36: domain.subscription.v1.SubscriptionDomainService.DeleteSubscription:input_type -> domain.subscription.v1.DeleteSubscriptionRequest
+	9,  // 37: domain.subscription.v1.SubscriptionDomainService.ListSubscriptions:input_type -> domain.subscription.v1.ListSubscriptionsRequest
+	11, // 38: domain.subscription.v1.SubscriptionDomainService.GetSubscriptionListPageData:input_type -> domain.subscription.v1.GetSubscriptionListPageDataRequest
+	13, // 39: domain.subscription.v1.SubscriptionDomainService.GetSubscriptionItemPageData:input_type -> domain.subscription.v1.GetSubscriptionItemPageDataRequest
+	15, // 40: domain.subscription.v1.SubscriptionDomainService.CountActiveByClientIds:input_type -> domain.subscription.v1.CountActiveByClientIdsRequest
+	2,  // 41: domain.subscription.v1.SubscriptionDomainService.CreateSubscription:output_type -> domain.subscription.v1.CreateSubscriptionResponse
+	4,  // 42: domain.subscription.v1.SubscriptionDomainService.ReadSubscription:output_type -> domain.subscription.v1.ReadSubscriptionResponse
+	6,  // 43: domain.subscription.v1.SubscriptionDomainService.UpdateSubscription:output_type -> domain.subscription.v1.UpdateSubscriptionResponse
+	8,  // 44: domain.subscription.v1.SubscriptionDomainService.DeleteSubscription:output_type -> domain.subscription.v1.DeleteSubscriptionResponse
+	10, // 45: domain.subscription.v1.SubscriptionDomainService.ListSubscriptions:output_type -> domain.subscription.v1.ListSubscriptionsResponse
+	12, // 46: domain.subscription.v1.SubscriptionDomainService.GetSubscriptionListPageData:output_type -> domain.subscription.v1.GetSubscriptionListPageDataResponse
+	14, // 47: domain.subscription.v1.SubscriptionDomainService.GetSubscriptionItemPageData:output_type -> domain.subscription.v1.GetSubscriptionItemPageDataResponse
+	16, // 48: domain.subscription.v1.SubscriptionDomainService.CountActiveByClientIds:output_type -> domain.subscription.v1.CountActiveByClientIdsResponse
+	41, // [41:49] is the sub-list for method output_type
+	33, // [33:41] is the sub-list for method input_type
+	33, // [33:33] is the sub-list for extension type_name
+	33, // [33:33] is the sub-list for extension extendee
+	0,  // [0:33] is the sub-list for field type_name
 }
 
 func init() { file_domain_subscription_subscription_subscription_proto_init() }
@@ -1293,7 +1398,7 @@ func file_domain_subscription_subscription_subscription_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_domain_subscription_subscription_subscription_proto_rawDesc), len(file_domain_subscription_subscription_subscription_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   16,
+			NumMessages:   19,
 			NumExtensions: 0,
 			NumServices:   1,
 		},

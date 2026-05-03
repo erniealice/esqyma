@@ -156,6 +156,20 @@ export type Revenue = Message<"domain.revenue.v1.Revenue"> & {
      * @generated from field: optional string subscription_id = 32;
      */
     subscriptionId?: string;
+    /**
+     * Milestone billing traceability — populated only when the Revenue was
+     * recognized through the MILESTONE branch (PricePlan.billing_kind=MILESTONE).
+     * job_phase_id is denormalized at create time from BillingEvent.job_phase_id
+     * for fast join-free reporting; billing_event_id is the one-to-one link
+     * back to the source event row.
+     *
+     * @generated from field: optional string job_phase_id = 33;
+     */
+    jobPhaseId?: string;
+    /**
+     * @generated from field: optional string billing_event_id = 34;
+     */
+    billingEventId?: string;
 };
 /**
  * Describes the message domain.revenue.v1.Revenue.
@@ -502,6 +516,30 @@ export type CreateRevenueWithLineItemsRequest = Message<"domain.revenue.v1.Creat
      * @generated from field: optional string existing_revenue_id = 9;
      */
     existingRevenueId?: string;
+    /**
+     * Milestone billing — engages the MILESTONE branch of recognize-revenue.
+     * When billing_event_id is set, the use case keys idempotency on it
+     * (single column) instead of (subscription_id, period_start, period_end).
+     * override_total_amount + partial_reason support partial billing
+     * (operator bills less than ev.billable_amount with a reason); when
+     * leave_remainder_open=true, a child BillingEvent is spawned with
+     * status=DEFERRED carrying the remainder.
+     *
+     * @generated from field: optional string billing_event_id = 11;
+     */
+    billingEventId?: string;
+    /**
+     * @generated from field: optional int64 override_total_amount = 12;
+     */
+    overrideTotalAmount?: bigint;
+    /**
+     * @generated from field: optional string partial_reason = 13;
+     */
+    partialReason?: string;
+    /**
+     * @generated from field: optional bool leave_remainder_open = 14;
+     */
+    leaveRemainderOpen?: boolean;
 };
 /**
  * Describes the message domain.revenue.v1.CreateRevenueWithLineItemsRequest.

@@ -89,6 +89,12 @@ export type Category = Message<"domain.common.v1.Category"> & {
      * @generated from field: optional int32 display_order = 12;
      */
     displayOrder?: number;
+    /**
+     * Workspace ownership — categories are scoped per workspace.
+     *
+     * @generated from field: optional string workspace_id = 13;
+     */
+    workspaceId?: string;
 };
 /**
  * Describes the message domain.common.v1.Category.

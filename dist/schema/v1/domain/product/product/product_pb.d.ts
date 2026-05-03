@@ -110,9 +110,11 @@ export type Product = Message<"domain.product.v1.Product"> & {
      */
     expectedCostCurrency?: string;
     /**
-     * @generated from field: optional string default_template_id = 22;
+     * Drift-recovered column (DB had this; proto did not)
+     *
+     * @generated from field: optional string workspace_id = 30;
      */
-    defaultTemplateId?: string;
+    workspaceId?: string;
 };
 /**
  * Describes the message domain.product.v1.Product.

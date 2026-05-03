@@ -1034,6 +1034,283 @@ func (x *GetInventoryTransactionItemPageDataResponse) GetError() *common.Error {
 	return nil
 }
 
+// Movements list page row — denormalized data from inventory_transaction + joined tables.
+type InventoryMovementRow struct {
+	state           protoimpl.MessageState `protogen:"open.v1"`
+	Id              string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
+	TransactionDate string                 `protobuf:"bytes,2,opt,name=transaction_date,json=transactionDate,proto3" json:"transaction_date,omitempty"` // ISO 8601 date (YYYY-MM-DD)
+	TransactionType string                 `protobuf:"bytes,3,opt,name=transaction_type,json=transactionType,proto3" json:"transaction_type,omitempty"`
+	Quantity        float64                `protobuf:"fixed64,4,opt,name=quantity,proto3" json:"quantity,omitempty"`
+	ItemName        string                 `protobuf:"bytes,5,opt,name=item_name,json=itemName,proto3" json:"item_name,omitempty"`          // from inventory_item.name
+	LocationId      string                 `protobuf:"bytes,6,opt,name=location_id,json=locationId,proto3" json:"location_id,omitempty"`    // from inventory_item.location_id
+	ItemSku         string                 `protobuf:"bytes,7,opt,name=item_sku,json=itemSku,proto3" json:"item_sku,omitempty"`             // from inventory_item.sku
+	VariantSku      string                 `protobuf:"bytes,8,opt,name=variant_sku,json=variantSku,proto3" json:"variant_sku,omitempty"`    // from product_variant.sku
+	ProductName     string                 `protobuf:"bytes,9,opt,name=product_name,json=productName,proto3" json:"product_name,omitempty"` // from product.name
+	SerialNumber    *string                `protobuf:"bytes,10,opt,name=serial_number,json=serialNumber,proto3,oneof" json:"serial_number,omitempty"`
+	ReferenceType   *string                `protobuf:"bytes,11,opt,name=reference_type,json=referenceType,proto3,oneof" json:"reference_type,omitempty"`
+	ReferenceId     *string                `protobuf:"bytes,12,opt,name=reference_id,json=referenceId,proto3,oneof" json:"reference_id,omitempty"`
+	PerformedBy     *string                `protobuf:"bytes,13,opt,name=performed_by,json=performedBy,proto3,oneof" json:"performed_by,omitempty"`
+	unknownFields   protoimpl.UnknownFields
+	sizeCache       protoimpl.SizeCache
+}
+
+func (x *InventoryMovementRow) Reset() {
+	*x = InventoryMovementRow{}
+	mi := &file_domain_inventory_inventory_transaction_inventory_transaction_proto_msgTypes[15]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *InventoryMovementRow) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*InventoryMovementRow) ProtoMessage() {}
+
+func (x *InventoryMovementRow) ProtoReflect() protoreflect.Message {
+	mi := &file_domain_inventory_inventory_transaction_inventory_transaction_proto_msgTypes[15]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use InventoryMovementRow.ProtoReflect.Descriptor instead.
+func (*InventoryMovementRow) Descriptor() ([]byte, []int) {
+	return file_domain_inventory_inventory_transaction_inventory_transaction_proto_rawDescGZIP(), []int{15}
+}
+
+func (x *InventoryMovementRow) GetId() string {
+	if x != nil {
+		return x.Id
+	}
+	return ""
+}
+
+func (x *InventoryMovementRow) GetTransactionDate() string {
+	if x != nil {
+		return x.TransactionDate
+	}
+	return ""
+}
+
+func (x *InventoryMovementRow) GetTransactionType() string {
+	if x != nil {
+		return x.TransactionType
+	}
+	return ""
+}
+
+func (x *InventoryMovementRow) GetQuantity() float64 {
+	if x != nil {
+		return x.Quantity
+	}
+	return 0
+}
+
+func (x *InventoryMovementRow) GetItemName() string {
+	if x != nil {
+		return x.ItemName
+	}
+	return ""
+}
+
+func (x *InventoryMovementRow) GetLocationId() string {
+	if x != nil {
+		return x.LocationId
+	}
+	return ""
+}
+
+func (x *InventoryMovementRow) GetItemSku() string {
+	if x != nil {
+		return x.ItemSku
+	}
+	return ""
+}
+
+func (x *InventoryMovementRow) GetVariantSku() string {
+	if x != nil {
+		return x.VariantSku
+	}
+	return ""
+}
+
+func (x *InventoryMovementRow) GetProductName() string {
+	if x != nil {
+		return x.ProductName
+	}
+	return ""
+}
+
+func (x *InventoryMovementRow) GetSerialNumber() string {
+	if x != nil && x.SerialNumber != nil {
+		return *x.SerialNumber
+	}
+	return ""
+}
+
+func (x *InventoryMovementRow) GetReferenceType() string {
+	if x != nil && x.ReferenceType != nil {
+		return *x.ReferenceType
+	}
+	return ""
+}
+
+func (x *InventoryMovementRow) GetReferenceId() string {
+	if x != nil && x.ReferenceId != nil {
+		return *x.ReferenceId
+	}
+	return ""
+}
+
+func (x *InventoryMovementRow) GetPerformedBy() string {
+	if x != nil && x.PerformedBy != nil {
+		return *x.PerformedBy
+	}
+	return ""
+}
+
+type GetInventoryMovementsListPageDataRequest struct {
+	state           protoimpl.MessageState `protogen:"open.v1"`
+	DateFrom        *string                `protobuf:"bytes,1,opt,name=date_from,json=dateFrom,proto3,oneof" json:"date_from,omitempty"`                      // ISO 8601 date (YYYY-MM-DD), empty = no lower bound
+	DateTo          *string                `protobuf:"bytes,2,opt,name=date_to,json=dateTo,proto3,oneof" json:"date_to,omitempty"`                            // ISO 8601 date (YYYY-MM-DD), empty = no upper bound
+	LocationId      *string                `protobuf:"bytes,3,opt,name=location_id,json=locationId,proto3,oneof" json:"location_id,omitempty"`                // filter by inventory_item.location_id
+	TransactionType *string                `protobuf:"bytes,4,opt,name=transaction_type,json=transactionType,proto3,oneof" json:"transaction_type,omitempty"` // filter by transaction_type
+	Search          *string                `protobuf:"bytes,5,opt,name=search,proto3,oneof" json:"search,omitempty"`                                          // ILIKE search across product_name, SKUs, item_name
+	unknownFields   protoimpl.UnknownFields
+	sizeCache       protoimpl.SizeCache
+}
+
+func (x *GetInventoryMovementsListPageDataRequest) Reset() {
+	*x = GetInventoryMovementsListPageDataRequest{}
+	mi := &file_domain_inventory_inventory_transaction_inventory_transaction_proto_msgTypes[16]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *GetInventoryMovementsListPageDataRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*GetInventoryMovementsListPageDataRequest) ProtoMessage() {}
+
+func (x *GetInventoryMovementsListPageDataRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_domain_inventory_inventory_transaction_inventory_transaction_proto_msgTypes[16]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use GetInventoryMovementsListPageDataRequest.ProtoReflect.Descriptor instead.
+func (*GetInventoryMovementsListPageDataRequest) Descriptor() ([]byte, []int) {
+	return file_domain_inventory_inventory_transaction_inventory_transaction_proto_rawDescGZIP(), []int{16}
+}
+
+func (x *GetInventoryMovementsListPageDataRequest) GetDateFrom() string {
+	if x != nil && x.DateFrom != nil {
+		return *x.DateFrom
+	}
+	return ""
+}
+
+func (x *GetInventoryMovementsListPageDataRequest) GetDateTo() string {
+	if x != nil && x.DateTo != nil {
+		return *x.DateTo
+	}
+	return ""
+}
+
+func (x *GetInventoryMovementsListPageDataRequest) GetLocationId() string {
+	if x != nil && x.LocationId != nil {
+		return *x.LocationId
+	}
+	return ""
+}
+
+func (x *GetInventoryMovementsListPageDataRequest) GetTransactionType() string {
+	if x != nil && x.TransactionType != nil {
+		return *x.TransactionType
+	}
+	return ""
+}
+
+func (x *GetInventoryMovementsListPageDataRequest) GetSearch() string {
+	if x != nil && x.Search != nil {
+		return *x.Search
+	}
+	return ""
+}
+
+type GetInventoryMovementsListPageDataResponse struct {
+	state         protoimpl.MessageState  `protogen:"open.v1"`
+	Data          []*InventoryMovementRow `protobuf:"bytes,1,rep,name=data,proto3" json:"data,omitempty"`
+	Success       bool                    `protobuf:"varint,2,opt,name=success,proto3" json:"success,omitempty"`
+	Error         *common.Error           `protobuf:"bytes,3,opt,name=error,proto3,oneof" json:"error,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *GetInventoryMovementsListPageDataResponse) Reset() {
+	*x = GetInventoryMovementsListPageDataResponse{}
+	mi := &file_domain_inventory_inventory_transaction_inventory_transaction_proto_msgTypes[17]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *GetInventoryMovementsListPageDataResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*GetInventoryMovementsListPageDataResponse) ProtoMessage() {}
+
+func (x *GetInventoryMovementsListPageDataResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_domain_inventory_inventory_transaction_inventory_transaction_proto_msgTypes[17]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use GetInventoryMovementsListPageDataResponse.ProtoReflect.Descriptor instead.
+func (*GetInventoryMovementsListPageDataResponse) Descriptor() ([]byte, []int) {
+	return file_domain_inventory_inventory_transaction_inventory_transaction_proto_rawDescGZIP(), []int{17}
+}
+
+func (x *GetInventoryMovementsListPageDataResponse) GetData() []*InventoryMovementRow {
+	if x != nil {
+		return x.Data
+	}
+	return nil
+}
+
+func (x *GetInventoryMovementsListPageDataResponse) GetSuccess() bool {
+	if x != nil {
+		return x.Success
+	}
+	return false
+}
+
+func (x *GetInventoryMovementsListPageDataResponse) GetError() *common.Error {
+	if x != nil {
+		return x.Error
+	}
+	return nil
+}
+
 var File_domain_inventory_inventory_transaction_inventory_transaction_proto protoreflect.FileDescriptor
 
 const file_domain_inventory_inventory_transaction_inventory_transaction_proto_rawDesc = "" +
@@ -1147,7 +1424,47 @@ const file_domain_inventory_inventory_transaction_inventory_transaction_proto_ra
 	"\x15inventory_transaction\x18\x01 \x01(\v2).domain.inventory.v1.InventoryTransactionR\x14inventoryTransaction\x12\x18\n" +
 	"\asuccess\x18\x02 \x01(\bR\asuccess\x122\n" +
 	"\x05error\x18\x03 \x01(\v2\x17.domain.common.v1.ErrorH\x00R\x05error\x88\x01\x01B\b\n" +
-	"\x06_error2\xc0\b\n" +
+	"\x06_error\"\xa2\x04\n" +
+	"\x14InventoryMovementRow\x12\x0e\n" +
+	"\x02id\x18\x01 \x01(\tR\x02id\x12)\n" +
+	"\x10transaction_date\x18\x02 \x01(\tR\x0ftransactionDate\x12)\n" +
+	"\x10transaction_type\x18\x03 \x01(\tR\x0ftransactionType\x12\x1a\n" +
+	"\bquantity\x18\x04 \x01(\x01R\bquantity\x12\x1b\n" +
+	"\titem_name\x18\x05 \x01(\tR\bitemName\x12\x1f\n" +
+	"\vlocation_id\x18\x06 \x01(\tR\n" +
+	"locationId\x12\x19\n" +
+	"\bitem_sku\x18\a \x01(\tR\aitemSku\x12\x1f\n" +
+	"\vvariant_sku\x18\b \x01(\tR\n" +
+	"variantSku\x12!\n" +
+	"\fproduct_name\x18\t \x01(\tR\vproductName\x12(\n" +
+	"\rserial_number\x18\n" +
+	" \x01(\tH\x00R\fserialNumber\x88\x01\x01\x12*\n" +
+	"\x0ereference_type\x18\v \x01(\tH\x01R\rreferenceType\x88\x01\x01\x12&\n" +
+	"\freference_id\x18\f \x01(\tH\x02R\vreferenceId\x88\x01\x01\x12&\n" +
+	"\fperformed_by\x18\r \x01(\tH\x03R\vperformedBy\x88\x01\x01B\x10\n" +
+	"\x0e_serial_numberB\x11\n" +
+	"\x0f_reference_typeB\x0f\n" +
+	"\r_reference_idB\x0f\n" +
+	"\r_performed_by\"\xa7\x02\n" +
+	"(GetInventoryMovementsListPageDataRequest\x12 \n" +
+	"\tdate_from\x18\x01 \x01(\tH\x00R\bdateFrom\x88\x01\x01\x12\x1c\n" +
+	"\adate_to\x18\x02 \x01(\tH\x01R\x06dateTo\x88\x01\x01\x12$\n" +
+	"\vlocation_id\x18\x03 \x01(\tH\x02R\n" +
+	"locationId\x88\x01\x01\x12.\n" +
+	"\x10transaction_type\x18\x04 \x01(\tH\x03R\x0ftransactionType\x88\x01\x01\x12\x1b\n" +
+	"\x06search\x18\x05 \x01(\tH\x04R\x06search\x88\x01\x01B\f\n" +
+	"\n" +
+	"_date_fromB\n" +
+	"\n" +
+	"\b_date_toB\x0e\n" +
+	"\f_location_idB\x13\n" +
+	"\x11_transaction_typeB\t\n" +
+	"\a_search\"\xc2\x01\n" +
+	")GetInventoryMovementsListPageDataResponse\x12=\n" +
+	"\x04data\x18\x01 \x03(\v2).domain.inventory.v1.InventoryMovementRowR\x04data\x12\x18\n" +
+	"\asuccess\x18\x02 \x01(\bR\asuccess\x122\n" +
+	"\x05error\x18\x03 \x01(\v2\x17.domain.common.v1.ErrorH\x00R\x05error\x88\x01\x01B\b\n" +
+	"\x06_error2\xe5\t\n" +
 	"!InventoryTransactionDomainService\x12\x8d\x01\n" +
 	"\x1aCreateInventoryTransaction\x126.domain.inventory.v1.CreateInventoryTransactionRequest\x1a7.domain.inventory.v1.CreateInventoryTransactionResponse\x12\x87\x01\n" +
 	"\x18ReadInventoryTransaction\x124.domain.inventory.v1.ReadInventoryTransactionRequest\x1a5.domain.inventory.v1.ReadInventoryTransactionResponse\x12\x8d\x01\n" +
@@ -1155,7 +1472,8 @@ const file_domain_inventory_inventory_transaction_inventory_transaction_proto_ra
 	"\x1aDeleteInventoryTransaction\x126.domain.inventory.v1.DeleteInventoryTransactionRequest\x1a7.domain.inventory.v1.DeleteInventoryTransactionResponse\x12\x8a\x01\n" +
 	"\x19ListInventoryTransactions\x125.domain.inventory.v1.ListInventoryTransactionsRequest\x1a6.domain.inventory.v1.ListInventoryTransactionsResponse\x12\xa8\x01\n" +
 	"#GetInventoryTransactionListPageData\x12?.domain.inventory.v1.GetInventoryTransactionListPageDataRequest\x1a@.domain.inventory.v1.GetInventoryTransactionListPageDataResponse\x12\xa8\x01\n" +
-	"#GetInventoryTransactionItemPageData\x12?.domain.inventory.v1.GetInventoryTransactionItemPageDataRequest\x1a@.domain.inventory.v1.GetInventoryTransactionItemPageDataResponseB\x81\x02\n" +
+	"#GetInventoryTransactionItemPageData\x12?.domain.inventory.v1.GetInventoryTransactionItemPageDataRequest\x1a@.domain.inventory.v1.GetInventoryTransactionItemPageDataResponse\x12\xa2\x01\n" +
+	"!GetInventoryMovementsListPageData\x12=.domain.inventory.v1.GetInventoryMovementsListPageDataRequest\x1a>.domain.inventory.v1.GetInventoryMovementsListPageDataResponseB\x81\x02\n" +
 	"\x17com.domain.inventory.v1B\x19InventoryTransactionProtoP\x01Z]github.com/erniealice/esqyma/pkg/schema/v1/domain/inventory/inventory_transaction;inventoryv1\xa2\x02\x03DIX\xaa\x02\x13Domain.Inventory.V1\xca\x02\x13Domain\\Inventory\\V1\xe2\x02\x1fDomain\\Inventory\\V1\\GPBMetadata\xea\x02\x15Domain::Inventory::V1b\x06proto3"
 
 var (
@@ -1170,7 +1488,7 @@ func file_domain_inventory_inventory_transaction_inventory_transaction_proto_raw
 	return file_domain_inventory_inventory_transaction_inventory_transaction_proto_rawDescData
 }
 
-var file_domain_inventory_inventory_transaction_inventory_transaction_proto_msgTypes = make([]protoimpl.MessageInfo, 15)
+var file_domain_inventory_inventory_transaction_inventory_transaction_proto_msgTypes = make([]protoimpl.MessageInfo, 18)
 var file_domain_inventory_inventory_transaction_inventory_transaction_proto_goTypes = []any{
 	(*InventoryTransaction)(nil),                        // 0: domain.inventory.v1.InventoryTransaction
 	(*CreateInventoryTransactionRequest)(nil),           // 1: domain.inventory.v1.CreateInventoryTransactionRequest
@@ -1187,63 +1505,70 @@ var file_domain_inventory_inventory_transaction_inventory_transaction_proto_goTy
 	(*GetInventoryTransactionListPageDataResponse)(nil), // 12: domain.inventory.v1.GetInventoryTransactionListPageDataResponse
 	(*GetInventoryTransactionItemPageDataRequest)(nil),  // 13: domain.inventory.v1.GetInventoryTransactionItemPageDataRequest
 	(*GetInventoryTransactionItemPageDataResponse)(nil), // 14: domain.inventory.v1.GetInventoryTransactionItemPageDataResponse
-	(*inventory_item.InventoryItem)(nil),                // 15: domain.inventory.v1.InventoryItem
-	(*common.Error)(nil),                                // 16: domain.common.v1.Error
-	(*common.SearchRequest)(nil),                        // 17: domain.common.v1.SearchRequest
-	(*common.FilterRequest)(nil),                        // 18: domain.common.v1.FilterRequest
-	(*common.SortRequest)(nil),                          // 19: domain.common.v1.SortRequest
-	(*common.PaginationRequest)(nil),                    // 20: domain.common.v1.PaginationRequest
-	(*common.PaginationResponse)(nil),                   // 21: domain.common.v1.PaginationResponse
-	(*common.SearchResult)(nil),                         // 22: domain.common.v1.SearchResult
+	(*InventoryMovementRow)(nil),                        // 15: domain.inventory.v1.InventoryMovementRow
+	(*GetInventoryMovementsListPageDataRequest)(nil),    // 16: domain.inventory.v1.GetInventoryMovementsListPageDataRequest
+	(*GetInventoryMovementsListPageDataResponse)(nil),   // 17: domain.inventory.v1.GetInventoryMovementsListPageDataResponse
+	(*inventory_item.InventoryItem)(nil),                // 18: domain.inventory.v1.InventoryItem
+	(*common.Error)(nil),                                // 19: domain.common.v1.Error
+	(*common.SearchRequest)(nil),                        // 20: domain.common.v1.SearchRequest
+	(*common.FilterRequest)(nil),                        // 21: domain.common.v1.FilterRequest
+	(*common.SortRequest)(nil),                          // 22: domain.common.v1.SortRequest
+	(*common.PaginationRequest)(nil),                    // 23: domain.common.v1.PaginationRequest
+	(*common.PaginationResponse)(nil),                   // 24: domain.common.v1.PaginationResponse
+	(*common.SearchResult)(nil),                         // 25: domain.common.v1.SearchResult
 }
 var file_domain_inventory_inventory_transaction_inventory_transaction_proto_depIdxs = []int32{
-	15, // 0: domain.inventory.v1.InventoryTransaction.inventory_item:type_name -> domain.inventory.v1.InventoryItem
+	18, // 0: domain.inventory.v1.InventoryTransaction.inventory_item:type_name -> domain.inventory.v1.InventoryItem
 	0,  // 1: domain.inventory.v1.CreateInventoryTransactionRequest.data:type_name -> domain.inventory.v1.InventoryTransaction
 	0,  // 2: domain.inventory.v1.CreateInventoryTransactionResponse.data:type_name -> domain.inventory.v1.InventoryTransaction
-	16, // 3: domain.inventory.v1.CreateInventoryTransactionResponse.error:type_name -> domain.common.v1.Error
+	19, // 3: domain.inventory.v1.CreateInventoryTransactionResponse.error:type_name -> domain.common.v1.Error
 	0,  // 4: domain.inventory.v1.ReadInventoryTransactionRequest.data:type_name -> domain.inventory.v1.InventoryTransaction
 	0,  // 5: domain.inventory.v1.ReadInventoryTransactionResponse.data:type_name -> domain.inventory.v1.InventoryTransaction
-	16, // 6: domain.inventory.v1.ReadInventoryTransactionResponse.error:type_name -> domain.common.v1.Error
+	19, // 6: domain.inventory.v1.ReadInventoryTransactionResponse.error:type_name -> domain.common.v1.Error
 	0,  // 7: domain.inventory.v1.UpdateInventoryTransactionRequest.data:type_name -> domain.inventory.v1.InventoryTransaction
 	0,  // 8: domain.inventory.v1.UpdateInventoryTransactionResponse.data:type_name -> domain.inventory.v1.InventoryTransaction
-	16, // 9: domain.inventory.v1.UpdateInventoryTransactionResponse.error:type_name -> domain.common.v1.Error
+	19, // 9: domain.inventory.v1.UpdateInventoryTransactionResponse.error:type_name -> domain.common.v1.Error
 	0,  // 10: domain.inventory.v1.DeleteInventoryTransactionRequest.data:type_name -> domain.inventory.v1.InventoryTransaction
-	16, // 11: domain.inventory.v1.DeleteInventoryTransactionResponse.error:type_name -> domain.common.v1.Error
-	17, // 12: domain.inventory.v1.ListInventoryTransactionsRequest.search:type_name -> domain.common.v1.SearchRequest
-	18, // 13: domain.inventory.v1.ListInventoryTransactionsRequest.filters:type_name -> domain.common.v1.FilterRequest
-	19, // 14: domain.inventory.v1.ListInventoryTransactionsRequest.sort:type_name -> domain.common.v1.SortRequest
-	20, // 15: domain.inventory.v1.ListInventoryTransactionsRequest.pagination:type_name -> domain.common.v1.PaginationRequest
+	19, // 11: domain.inventory.v1.DeleteInventoryTransactionResponse.error:type_name -> domain.common.v1.Error
+	20, // 12: domain.inventory.v1.ListInventoryTransactionsRequest.search:type_name -> domain.common.v1.SearchRequest
+	21, // 13: domain.inventory.v1.ListInventoryTransactionsRequest.filters:type_name -> domain.common.v1.FilterRequest
+	22, // 14: domain.inventory.v1.ListInventoryTransactionsRequest.sort:type_name -> domain.common.v1.SortRequest
+	23, // 15: domain.inventory.v1.ListInventoryTransactionsRequest.pagination:type_name -> domain.common.v1.PaginationRequest
 	0,  // 16: domain.inventory.v1.ListInventoryTransactionsResponse.data:type_name -> domain.inventory.v1.InventoryTransaction
-	16, // 17: domain.inventory.v1.ListInventoryTransactionsResponse.error:type_name -> domain.common.v1.Error
-	20, // 18: domain.inventory.v1.GetInventoryTransactionListPageDataRequest.pagination:type_name -> domain.common.v1.PaginationRequest
-	18, // 19: domain.inventory.v1.GetInventoryTransactionListPageDataRequest.filters:type_name -> domain.common.v1.FilterRequest
-	19, // 20: domain.inventory.v1.GetInventoryTransactionListPageDataRequest.sort:type_name -> domain.common.v1.SortRequest
-	17, // 21: domain.inventory.v1.GetInventoryTransactionListPageDataRequest.search:type_name -> domain.common.v1.SearchRequest
+	19, // 17: domain.inventory.v1.ListInventoryTransactionsResponse.error:type_name -> domain.common.v1.Error
+	23, // 18: domain.inventory.v1.GetInventoryTransactionListPageDataRequest.pagination:type_name -> domain.common.v1.PaginationRequest
+	21, // 19: domain.inventory.v1.GetInventoryTransactionListPageDataRequest.filters:type_name -> domain.common.v1.FilterRequest
+	22, // 20: domain.inventory.v1.GetInventoryTransactionListPageDataRequest.sort:type_name -> domain.common.v1.SortRequest
+	20, // 21: domain.inventory.v1.GetInventoryTransactionListPageDataRequest.search:type_name -> domain.common.v1.SearchRequest
 	0,  // 22: domain.inventory.v1.GetInventoryTransactionListPageDataResponse.inventory_transaction_list:type_name -> domain.inventory.v1.InventoryTransaction
-	21, // 23: domain.inventory.v1.GetInventoryTransactionListPageDataResponse.pagination:type_name -> domain.common.v1.PaginationResponse
-	22, // 24: domain.inventory.v1.GetInventoryTransactionListPageDataResponse.search_results:type_name -> domain.common.v1.SearchResult
-	16, // 25: domain.inventory.v1.GetInventoryTransactionListPageDataResponse.error:type_name -> domain.common.v1.Error
+	24, // 23: domain.inventory.v1.GetInventoryTransactionListPageDataResponse.pagination:type_name -> domain.common.v1.PaginationResponse
+	25, // 24: domain.inventory.v1.GetInventoryTransactionListPageDataResponse.search_results:type_name -> domain.common.v1.SearchResult
+	19, // 25: domain.inventory.v1.GetInventoryTransactionListPageDataResponse.error:type_name -> domain.common.v1.Error
 	0,  // 26: domain.inventory.v1.GetInventoryTransactionItemPageDataResponse.inventory_transaction:type_name -> domain.inventory.v1.InventoryTransaction
-	16, // 27: domain.inventory.v1.GetInventoryTransactionItemPageDataResponse.error:type_name -> domain.common.v1.Error
-	1,  // 28: domain.inventory.v1.InventoryTransactionDomainService.CreateInventoryTransaction:input_type -> domain.inventory.v1.CreateInventoryTransactionRequest
-	3,  // 29: domain.inventory.v1.InventoryTransactionDomainService.ReadInventoryTransaction:input_type -> domain.inventory.v1.ReadInventoryTransactionRequest
-	5,  // 30: domain.inventory.v1.InventoryTransactionDomainService.UpdateInventoryTransaction:input_type -> domain.inventory.v1.UpdateInventoryTransactionRequest
-	7,  // 31: domain.inventory.v1.InventoryTransactionDomainService.DeleteInventoryTransaction:input_type -> domain.inventory.v1.DeleteInventoryTransactionRequest
-	9,  // 32: domain.inventory.v1.InventoryTransactionDomainService.ListInventoryTransactions:input_type -> domain.inventory.v1.ListInventoryTransactionsRequest
-	11, // 33: domain.inventory.v1.InventoryTransactionDomainService.GetInventoryTransactionListPageData:input_type -> domain.inventory.v1.GetInventoryTransactionListPageDataRequest
-	13, // 34: domain.inventory.v1.InventoryTransactionDomainService.GetInventoryTransactionItemPageData:input_type -> domain.inventory.v1.GetInventoryTransactionItemPageDataRequest
-	2,  // 35: domain.inventory.v1.InventoryTransactionDomainService.CreateInventoryTransaction:output_type -> domain.inventory.v1.CreateInventoryTransactionResponse
-	4,  // 36: domain.inventory.v1.InventoryTransactionDomainService.ReadInventoryTransaction:output_type -> domain.inventory.v1.ReadInventoryTransactionResponse
-	6,  // 37: domain.inventory.v1.InventoryTransactionDomainService.UpdateInventoryTransaction:output_type -> domain.inventory.v1.UpdateInventoryTransactionResponse
-	8,  // 38: domain.inventory.v1.InventoryTransactionDomainService.DeleteInventoryTransaction:output_type -> domain.inventory.v1.DeleteInventoryTransactionResponse
-	10, // 39: domain.inventory.v1.InventoryTransactionDomainService.ListInventoryTransactions:output_type -> domain.inventory.v1.ListInventoryTransactionsResponse
-	12, // 40: domain.inventory.v1.InventoryTransactionDomainService.GetInventoryTransactionListPageData:output_type -> domain.inventory.v1.GetInventoryTransactionListPageDataResponse
-	14, // 41: domain.inventory.v1.InventoryTransactionDomainService.GetInventoryTransactionItemPageData:output_type -> domain.inventory.v1.GetInventoryTransactionItemPageDataResponse
-	35, // [35:42] is the sub-list for method output_type
-	28, // [28:35] is the sub-list for method input_type
-	28, // [28:28] is the sub-list for extension type_name
-	28, // [28:28] is the sub-list for extension extendee
-	0,  // [0:28] is the sub-list for field type_name
+	19, // 27: domain.inventory.v1.GetInventoryTransactionItemPageDataResponse.error:type_name -> domain.common.v1.Error
+	15, // 28: domain.inventory.v1.GetInventoryMovementsListPageDataResponse.data:type_name -> domain.inventory.v1.InventoryMovementRow
+	19, // 29: domain.inventory.v1.GetInventoryMovementsListPageDataResponse.error:type_name -> domain.common.v1.Error
+	1,  // 30: domain.inventory.v1.InventoryTransactionDomainService.CreateInventoryTransaction:input_type -> domain.inventory.v1.CreateInventoryTransactionRequest
+	3,  // 31: domain.inventory.v1.InventoryTransactionDomainService.ReadInventoryTransaction:input_type -> domain.inventory.v1.ReadInventoryTransactionRequest
+	5,  // 32: domain.inventory.v1.InventoryTransactionDomainService.UpdateInventoryTransaction:input_type -> domain.inventory.v1.UpdateInventoryTransactionRequest
+	7,  // 33: domain.inventory.v1.InventoryTransactionDomainService.DeleteInventoryTransaction:input_type -> domain.inventory.v1.DeleteInventoryTransactionRequest
+	9,  // 34: domain.inventory.v1.InventoryTransactionDomainService.ListInventoryTransactions:input_type -> domain.inventory.v1.ListInventoryTransactionsRequest
+	11, // 35: domain.inventory.v1.InventoryTransactionDomainService.GetInventoryTransactionListPageData:input_type -> domain.inventory.v1.GetInventoryTransactionListPageDataRequest
+	13, // 36: domain.inventory.v1.InventoryTransactionDomainService.GetInventoryTransactionItemPageData:input_type -> domain.inventory.v1.GetInventoryTransactionItemPageDataRequest
+	16, // 37: domain.inventory.v1.InventoryTransactionDomainService.GetInventoryMovementsListPageData:input_type -> domain.inventory.v1.GetInventoryMovementsListPageDataRequest
+	2,  // 38: domain.inventory.v1.InventoryTransactionDomainService.CreateInventoryTransaction:output_type -> domain.inventory.v1.CreateInventoryTransactionResponse
+	4,  // 39: domain.inventory.v1.InventoryTransactionDomainService.ReadInventoryTransaction:output_type -> domain.inventory.v1.ReadInventoryTransactionResponse
+	6,  // 40: domain.inventory.v1.InventoryTransactionDomainService.UpdateInventoryTransaction:output_type -> domain.inventory.v1.UpdateInventoryTransactionResponse
+	8,  // 41: domain.inventory.v1.InventoryTransactionDomainService.DeleteInventoryTransaction:output_type -> domain.inventory.v1.DeleteInventoryTransactionResponse
+	10, // 42: domain.inventory.v1.InventoryTransactionDomainService.ListInventoryTransactions:output_type -> domain.inventory.v1.ListInventoryTransactionsResponse
+	12, // 43: domain.inventory.v1.InventoryTransactionDomainService.GetInventoryTransactionListPageData:output_type -> domain.inventory.v1.GetInventoryTransactionListPageDataResponse
+	14, // 44: domain.inventory.v1.InventoryTransactionDomainService.GetInventoryTransactionItemPageData:output_type -> domain.inventory.v1.GetInventoryTransactionItemPageDataResponse
+	17, // 45: domain.inventory.v1.InventoryTransactionDomainService.GetInventoryMovementsListPageData:output_type -> domain.inventory.v1.GetInventoryMovementsListPageDataResponse
+	38, // [38:46] is the sub-list for method output_type
+	30, // [30:38] is the sub-list for method input_type
+	30, // [30:30] is the sub-list for extension type_name
+	30, // [30:30] is the sub-list for extension extendee
+	0,  // [0:30] is the sub-list for field type_name
 }
 
 func init() { file_domain_inventory_inventory_transaction_inventory_transaction_proto_init() }
@@ -1260,13 +1585,16 @@ func file_domain_inventory_inventory_transaction_inventory_transaction_proto_ini
 	file_domain_inventory_inventory_transaction_inventory_transaction_proto_msgTypes[10].OneofWrappers = []any{}
 	file_domain_inventory_inventory_transaction_inventory_transaction_proto_msgTypes[12].OneofWrappers = []any{}
 	file_domain_inventory_inventory_transaction_inventory_transaction_proto_msgTypes[14].OneofWrappers = []any{}
+	file_domain_inventory_inventory_transaction_inventory_transaction_proto_msgTypes[15].OneofWrappers = []any{}
+	file_domain_inventory_inventory_transaction_inventory_transaction_proto_msgTypes[16].OneofWrappers = []any{}
+	file_domain_inventory_inventory_transaction_inventory_transaction_proto_msgTypes[17].OneofWrappers = []any{}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
 		File: protoimpl.DescBuilder{
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_domain_inventory_inventory_transaction_inventory_transaction_proto_rawDesc), len(file_domain_inventory_inventory_transaction_inventory_transaction_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   15,
+			NumMessages:   18,
 			NumExtensions: 0,
 			NumServices:   1,
 		},

@@ -62,6 +62,21 @@ export type Workspace = Message<"domain.entity.v1.Workspace"> & {
      * @generated from field: optional string functional_currency = 11;
      */
     functionalCurrency?: string;
+    /**
+     * ISO 3166 country or country-subdivision code (e.g. "PH", "US-CA", "EU-DE").
+     * Drives statutory rate-table lookup and payroll calculator selection.
+     *
+     * @generated from field: optional string compliance_region = 12;
+     */
+    complianceRegion?: string;
+    /**
+     * Drift-recovered column (DB had this; proto did not)
+     *
+     * ISO 4217 default currency for new entities (separate from functional_currency)
+     *
+     * @generated from field: optional string default_currency = 13;
+     */
+    defaultCurrency?: string;
 };
 /**
  * Describes the message domain.entity.v1.Workspace.

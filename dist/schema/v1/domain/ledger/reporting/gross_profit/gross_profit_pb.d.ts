@@ -247,6 +247,161 @@ export type GrossProfitReportResponse = Message<"domain.ledger.v1.GrossProfitRep
  */
 export declare const GrossProfitReportResponseSchema: GenMessage<GrossProfitReportResponse>;
 /**
+ * @generated from message domain.ledger.v1.CashBookReportRequest
+ */
+export type CashBookReportRequest = Message<"domain.ledger.v1.CashBookReportRequest"> & {
+    /**
+     * default 200
+     *
+     * @generated from field: optional int32 limit = 1;
+     */
+    limit?: number;
+};
+/**
+ * Describes the message domain.ledger.v1.CashBookReportRequest.
+ * Use `create(CashBookReportRequestSchema)` to create a new message.
+ */
+export declare const CashBookReportRequestSchema: GenMessage<CashBookReportRequest>;
+/**
+ * @generated from message domain.ledger.v1.CashBookReportRow
+ */
+export type CashBookReportRow = Message<"domain.ledger.v1.CashBookReportRow"> & {
+    /**
+     * YYYY-MM-DD
+     *
+     * @generated from field: string tx_date = 1;
+     */
+    txDate: string;
+    /**
+     * @generated from field: string description = 2;
+     */
+    description: string;
+    /**
+     * @generated from field: string reference = 3;
+     */
+    reference: string;
+    /**
+     * "Receipt" | "Expense" | "Purchase"
+     *
+     * @generated from field: string tx_type = 4;
+     */
+    txType: string;
+    /**
+     * centavos
+     *
+     * @generated from field: int64 amount = 5;
+     */
+    amount: bigint;
+};
+/**
+ * Describes the message domain.ledger.v1.CashBookReportRow.
+ * Use `create(CashBookReportRowSchema)` to create a new message.
+ */
+export declare const CashBookReportRowSchema: GenMessage<CashBookReportRow>;
+/**
+ * @generated from message domain.ledger.v1.CashBookReportResponse
+ */
+export type CashBookReportResponse = Message<"domain.ledger.v1.CashBookReportResponse"> & {
+    /**
+     * @generated from field: repeated domain.ledger.v1.CashBookReportRow data = 1;
+     */
+    data: CashBookReportRow[];
+    /**
+     * @generated from field: bool success = 2;
+     */
+    success: boolean;
+    /**
+     * @generated from field: optional domain.common.v1.Error error = 3;
+     */
+    error?: Error;
+};
+/**
+ * Describes the message domain.ledger.v1.CashBookReportResponse.
+ * Use `create(CashBookReportResponseSchema)` to create a new message.
+ */
+export declare const CashBookReportResponseSchema: GenMessage<CashBookReportResponse>;
+/**
+ * @generated from message domain.ledger.v1.PayablesAgingReportRequest
+ */
+export type PayablesAgingReportRequest = Message<"domain.ledger.v1.PayablesAgingReportRequest"> & {};
+/**
+ * Describes the message domain.ledger.v1.PayablesAgingReportRequest.
+ * Use `create(PayablesAgingReportRequestSchema)` to create a new message.
+ */
+export declare const PayablesAgingReportRequestSchema: GenMessage<PayablesAgingReportRequest>;
+/**
+ * @generated from message domain.ledger.v1.PayablesAgingReportRow
+ */
+export type PayablesAgingReportRow = Message<"domain.ledger.v1.PayablesAgingReportRow"> & {
+    /**
+     * @generated from field: string supplier_name = 1;
+     */
+    supplierName: string;
+    /**
+     * centavos
+     *
+     * @generated from field: int64 current = 2;
+     */
+    current: bigint;
+    /**
+     * centavos
+     *
+     * @generated from field: int64 days_30 = 3;
+     */
+    days30: bigint;
+    /**
+     * centavos
+     *
+     * @generated from field: int64 days_60 = 4;
+     */
+    days60: bigint;
+    /**
+     * centavos
+     *
+     * @generated from field: int64 days_90 = 5;
+     */
+    days90: bigint;
+    /**
+     * centavos
+     *
+     * @generated from field: int64 over_90 = 6;
+     */
+    over90: bigint;
+    /**
+     * centavos
+     *
+     * @generated from field: int64 total = 7;
+     */
+    total: bigint;
+};
+/**
+ * Describes the message domain.ledger.v1.PayablesAgingReportRow.
+ * Use `create(PayablesAgingReportRowSchema)` to create a new message.
+ */
+export declare const PayablesAgingReportRowSchema: GenMessage<PayablesAgingReportRow>;
+/**
+ * @generated from message domain.ledger.v1.PayablesAgingReportResponse
+ */
+export type PayablesAgingReportResponse = Message<"domain.ledger.v1.PayablesAgingReportResponse"> & {
+    /**
+     * @generated from field: repeated domain.ledger.v1.PayablesAgingReportRow data = 1;
+     */
+    data: PayablesAgingReportRow[];
+    /**
+     * @generated from field: bool success = 2;
+     */
+    success: boolean;
+    /**
+     * @generated from field: optional domain.common.v1.Error error = 3;
+     */
+    error?: Error;
+};
+/**
+ * Describes the message domain.ledger.v1.PayablesAgingReportResponse.
+ * Use `create(PayablesAgingReportResponseSchema)` to create a new message.
+ */
+export declare const PayablesAgingReportResponseSchema: GenMessage<PayablesAgingReportResponse>;
+/**
  * LedgerReportingDomainService defines ledger reporting operations.
  *
  * @generated from service domain.ledger.v1.LedgerReportingDomainService
@@ -259,5 +414,21 @@ export declare const LedgerReportingDomainService: GenService<{
         methodKind: "unary";
         input: typeof GrossProfitReportRequestSchema;
         output: typeof GrossProfitReportResponseSchema;
+    };
+    /**
+     * @generated from rpc domain.ledger.v1.LedgerReportingDomainService.GetCashBookReport
+     */
+    getCashBookReport: {
+        methodKind: "unary";
+        input: typeof CashBookReportRequestSchema;
+        output: typeof CashBookReportResponseSchema;
+    };
+    /**
+     * @generated from rpc domain.ledger.v1.LedgerReportingDomainService.GetPayablesAgingReport
+     */
+    getPayablesAgingReport: {
+        methodKind: "unary";
+        input: typeof PayablesAgingReportRequestSchema;
+        output: typeof PayablesAgingReportResponseSchema;
     };
 }>;

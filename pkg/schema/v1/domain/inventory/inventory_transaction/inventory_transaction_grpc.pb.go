@@ -26,6 +26,7 @@ const (
 	InventoryTransactionDomainService_ListInventoryTransactions_FullMethodName           = "/domain.inventory.v1.InventoryTransactionDomainService/ListInventoryTransactions"
 	InventoryTransactionDomainService_GetInventoryTransactionListPageData_FullMethodName = "/domain.inventory.v1.InventoryTransactionDomainService/GetInventoryTransactionListPageData"
 	InventoryTransactionDomainService_GetInventoryTransactionItemPageData_FullMethodName = "/domain.inventory.v1.InventoryTransactionDomainService/GetInventoryTransactionItemPageData"
+	InventoryTransactionDomainService_GetInventoryMovementsListPageData_FullMethodName   = "/domain.inventory.v1.InventoryTransactionDomainService/GetInventoryMovementsListPageData"
 )
 
 // InventoryTransactionDomainServiceClient is the client API for InventoryTransactionDomainService service.
@@ -41,6 +42,8 @@ type InventoryTransactionDomainServiceClient interface {
 	GetInventoryTransactionListPageData(ctx context.Context, in *GetInventoryTransactionListPageDataRequest, opts ...grpc.CallOption) (*GetInventoryTransactionListPageDataResponse, error)
 	// NEW: Enhanced item view with related data
 	GetInventoryTransactionItemPageData(ctx context.Context, in *GetInventoryTransactionItemPageDataRequest, opts ...grpc.CallOption) (*GetInventoryTransactionItemPageDataResponse, error)
+	// Movements list page — JOIN-enriched query with date, location, type, search filters.
+	GetInventoryMovementsListPageData(ctx context.Context, in *GetInventoryMovementsListPageDataRequest, opts ...grpc.CallOption) (*GetInventoryMovementsListPageDataResponse, error)
 }
 
 type inventoryTransactionDomainServiceClient struct {
@@ -121,6 +124,16 @@ func (c *inventoryTransactionDomainServiceClient) GetInventoryTransactionItemPag
 	return out, nil
 }
 
+func (c *inventoryTransactionDomainServiceClient) GetInventoryMovementsListPageData(ctx context.Context, in *GetInventoryMovementsListPageDataRequest, opts ...grpc.CallOption) (*GetInventoryMovementsListPageDataResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(GetInventoryMovementsListPageDataResponse)
+	err := c.cc.Invoke(ctx, InventoryTransactionDomainService_GetInventoryMovementsListPageData_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // InventoryTransactionDomainServiceServer is the server API for InventoryTransactionDomainService service.
 // All implementations must embed UnimplementedInventoryTransactionDomainServiceServer
 // for forward compatibility.
@@ -134,6 +147,8 @@ type InventoryTransactionDomainServiceServer interface {
 	GetInventoryTransactionListPageData(context.Context, *GetInventoryTransactionListPageDataRequest) (*GetInventoryTransactionListPageDataResponse, error)
 	// NEW: Enhanced item view with related data
 	GetInventoryTransactionItemPageData(context.Context, *GetInventoryTransactionItemPageDataRequest) (*GetInventoryTransactionItemPageDataResponse, error)
+	// Movements list page — JOIN-enriched query with date, location, type, search filters.
+	GetInventoryMovementsListPageData(context.Context, *GetInventoryMovementsListPageDataRequest) (*GetInventoryMovementsListPageDataResponse, error)
 	mustEmbedUnimplementedInventoryTransactionDomainServiceServer()
 }
 
@@ -164,6 +179,9 @@ func (UnimplementedInventoryTransactionDomainServiceServer) GetInventoryTransact
 }
 func (UnimplementedInventoryTransactionDomainServiceServer) GetInventoryTransactionItemPageData(context.Context, *GetInventoryTransactionItemPageDataRequest) (*GetInventoryTransactionItemPageDataResponse, error) {
 	return nil, status.Error(codes.Unimplemented, "method GetInventoryTransactionItemPageData not implemented")
+}
+func (UnimplementedInventoryTransactionDomainServiceServer) GetInventoryMovementsListPageData(context.Context, *GetInventoryMovementsListPageDataRequest) (*GetInventoryMovementsListPageDataResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method GetInventoryMovementsListPageData not implemented")
 }
 func (UnimplementedInventoryTransactionDomainServiceServer) mustEmbedUnimplementedInventoryTransactionDomainServiceServer() {
 }
@@ -313,6 +331,24 @@ func _InventoryTransactionDomainService_GetInventoryTransactionItemPageData_Hand
 	return interceptor(ctx, in, info, handler)
 }
 
+func _InventoryTransactionDomainService_GetInventoryMovementsListPageData_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetInventoryMovementsListPageDataRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(InventoryTransactionDomainServiceServer).GetInventoryMovementsListPageData(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: InventoryTransactionDomainService_GetInventoryMovementsListPageData_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(InventoryTransactionDomainServiceServer).GetInventoryMovementsListPageData(ctx, req.(*GetInventoryMovementsListPageDataRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // InventoryTransactionDomainService_ServiceDesc is the grpc.ServiceDesc for InventoryTransactionDomainService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -347,6 +383,10 @@ var InventoryTransactionDomainService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "GetInventoryTransactionItemPageData",
 			Handler:    _InventoryTransactionDomainService_GetInventoryTransactionItemPageData_Handler,
+		},
+		{
+			MethodName: "GetInventoryMovementsListPageData",
+			Handler:    _InventoryTransactionDomainService_GetInventoryMovementsListPageData_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

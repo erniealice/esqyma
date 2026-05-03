@@ -85,6 +85,14 @@ export type ProductPricePlan = Message<"domain.subscription.v1.ProductPricePlan"
      * @generated from field: optional string date_end = 15;
      */
     dateEnd?: string;
+    /**
+     * Milestone billing — when set on a MILESTONE PricePlan, this line bills
+     * under the named phase only. NULL on a MILESTONE plan = falls through to
+     * the first event (analogous to ONE_TIME_INITIAL).
+     *
+     * @generated from field: optional string job_template_phase_id = 19;
+     */
+    jobTemplatePhaseId?: string;
 };
 /**
  * Describes the message domain.subscription.v1.ProductPricePlan.

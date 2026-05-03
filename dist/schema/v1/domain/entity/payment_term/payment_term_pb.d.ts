@@ -44,7 +44,7 @@ export type PaymentTerm = Message<"domain.entity.v1.PaymentTerm"> & {
      */
     name: string;
     /**
-     * Machine key: "net_30", "2_10_net_30", "cod"
+     * Machine key: "net_30", "2_10_net_30", "cod" — uniqueness scoped via PaymentTerm-level unique_together
      *
      * @generated from field: string code = 8;
      */

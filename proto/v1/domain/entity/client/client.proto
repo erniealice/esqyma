@@ -54,6 +54,13 @@ message Client {
   optional string first_name = 28;              // Given name (individual clients)
   optional string last_name = 29;               // Family name (individual clients)
   optional string workspace_id = 30 [(options.v1.db).references = "workspace", (options.v1.db).index = true];
+
+  // Accounting fields — mirror supplier's equivalent columns so a future
+  // shared scanner/builder can unify both sides.
+  optional string tax_id = 31;                  // TIN/VAT/EIN
+  optional string registration_number = 32;     // Business registration number
+  optional int64 credit_limit = 33;             // centavos — maximum outstanding receivable
+  optional int32 lead_time_days = 34;           // Default delivery promise to this client
 }
 
 service ClientDomainService {

@@ -32,7 +32,7 @@ type PaymentTerm struct {
 	DateModifiedString *string                `protobuf:"bytes,5,opt,name=date_modified_string,json=dateModifiedString,proto3,oneof" json:"date_modified_string,omitempty"`
 	Active             bool                   `protobuf:"varint,6,opt,name=active,proto3" json:"active,omitempty"`
 	Name               string                 `protobuf:"bytes,7,opt,name=name,proto3" json:"name,omitempty"`                                                                 // Display: "Net 30", "2/10 Net 30", "COD"
-	Code               string                 `protobuf:"bytes,8,opt,name=code,proto3" json:"code,omitempty"`                                                                 // Machine key: "net_30", "2_10_net_30", "cod"
+	Code               string                 `protobuf:"bytes,8,opt,name=code,proto3" json:"code,omitempty"`                                                                 // Machine key: "net_30", "2_10_net_30", "cod" — uniqueness scoped via PaymentTerm-level unique_together
 	Type               string                 `protobuf:"bytes,9,opt,name=type,proto3" json:"type,omitempty"`                                                                 // "due_on_receipt", "net", "cod", "proximate"
 	NetDays            int32                  `protobuf:"varint,10,opt,name=net_days,json=netDays,proto3" json:"net_days,omitempty"`                                          // Days until due (0 = immediate)
 	DiscountDays       *int32                 `protobuf:"varint,11,opt,name=discount_days,json=discountDays,proto3,oneof" json:"discount_days,omitempty"`                     // Early payment window
@@ -991,7 +991,7 @@ var File_domain_entity_payment_term_payment_term_proto protoreflect.FileDescript
 
 const file_domain_entity_payment_term_payment_term_proto_rawDesc = "" +
 	"\n" +
-	"-domain/entity/payment_term/payment_term.proto\x12\x10domain.entity.v1\x1a\x19domain/common/error.proto\x1a\x1adomain/common/search.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1edomain/common/pagination.proto\x1a\x10options/db.proto\"\x83\a\n" +
+	"-domain/entity/payment_term/payment_term.proto\x12\x10domain.entity.v1\x1a\x19domain/common/error.proto\x1a\x1adomain/common/search.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1edomain/common/pagination.proto\x1a\x10options/db.proto\"\x9b\a\n" +
 	"\vPaymentTerm\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12&\n" +
 	"\fdate_created\x18\x02 \x01(\x03H\x00R\vdateCreated\x88\x01\x01\x123\n" +
@@ -1000,21 +1000,21 @@ const file_domain_entity_payment_term_payment_term_proto_rawDesc = "" +
 	"\x14date_modified_string\x18\x05 \x01(\tH\x03R\x12dateModifiedString\x88\x01\x01\x12\"\n" +
 	"\x06active\x18\x06 \x01(\bB\n" +
 	"\x82\xb5\x18\x06\"\x04trueR\x06active\x12\x12\n" +
-	"\x04name\x18\a \x01(\tR\x04name\x12\x1a\n" +
-	"\x04code\x18\b \x01(\tB\x06\x82\xb5\x18\x02\x10\x01R\x04code\x12\x12\n" +
+	"\x04name\x18\a \x01(\tR\x04name\x12\x12\n" +
+	"\x04code\x18\b \x01(\tR\x04code\x12\x12\n" +
 	"\x04type\x18\t \x01(\tR\x04type\x12\x19\n" +
 	"\bnet_days\x18\n" +
 	" \x01(\x05R\anetDays\x12(\n" +
 	"\rdiscount_days\x18\v \x01(\x05H\x04R\fdiscountDays\x88\x01\x01\x125\n" +
 	"\x14discount_percent_bps\x18\f \x01(\x05H\x05R\x12discountPercentBps\x88\x01\x01\x12!\n" +
-	"\fentity_scope\x18\r \x01(\tR\ventityScope\x12\x1d\n" +
+	"\fentity_scope\x18\r \x01(\tR\ventityScope\x12*\n" +
 	"\n" +
-	"is_default\x18\x0e \x01(\bR\tisDefault\x12%\n" +
+	"is_default\x18\x0e \x01(\bB\v\x82\xb5\x18\a\"\x05falseR\tisDefault\x12%\n" +
 	"\vdescription\x18\x0f \x01(\tH\x06R\vdescription\x88\x01\x01\x12(\n" +
 	"\rdisplay_order\x18\x10 \x01(\x05H\aR\fdisplayOrder\x88\x01\x01\x12(\n" +
 	"\rproximate_day\x18\x11 \x01(\x05H\bR\fproximateDay\x88\x01\x01\x129\n" +
 	"\fworkspace_id\x18\x12 \x01(\tB\x11\x82\xb5\x18\r\n" +
-	"\tworkspace\x18\x01H\tR\vworkspaceId\x88\x01\x01:\x06\x8a\xb5\x18\x02\b\x01B\x0f\n" +
+	"\tworkspace\x18\x01H\tR\vworkspaceId\x88\x01\x01:\x19\x8a\xb5\x18\x15\b\x01\x1a\x11workspace_id,codeB\x0f\n" +
 	"\r_date_createdB\x16\n" +
 	"\x14_date_created_stringB\x10\n" +
 	"\x0e_date_modifiedB\x17\n" +

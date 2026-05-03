@@ -101,6 +101,32 @@ export type PayrollRun = Message<"domain.payroll.v1.PayrollRun"> & {
      * @generated from field: optional string date_modified_string = 18;
      */
     dateModifiedString?: string;
+    /**
+     * Jurisdiction routing & calculator audit
+     *
+     * mirrors Workspace.compliance_region at run start
+     *
+     * @generated from field: optional string compliance_region = 19;
+     */
+    complianceRegion?: string;
+    /**
+     * e.g. "PH-2026.04" — frozen audit string
+     *
+     * @generated from field: optional string calculator_version = 20;
+     */
+    calculatorVersion?: string;
+    /**
+     * @generated from field: optional string workspace_id = 21;
+     */
+    workspaceId?: string;
+    /**
+     * Drift-recovered column (DB had this; proto did not)
+     *
+     * Soft-delete flag
+     *
+     * @generated from field: optional bool active = 22;
+     */
+    active?: boolean;
 };
 /**
  * Describes the message domain.payroll.v1.PayrollRun.
@@ -388,6 +414,98 @@ export type GetPayrollRunItemPageDataResponse = Message<"domain.payroll.v1.GetPa
  */
 export declare const GetPayrollRunItemPageDataResponseSchema: GenMessage<GetPayrollRunItemPageDataResponse>;
 /**
+ * @generated from message domain.payroll.v1.GeneratePayCyclesRequest
+ */
+export type GeneratePayCyclesRequest = Message<"domain.payroll.v1.GeneratePayCyclesRequest"> & {
+    /**
+     * @generated from field: string payroll_run_id = 1;
+     */
+    payrollRunId: string;
+};
+/**
+ * Describes the message domain.payroll.v1.GeneratePayCyclesRequest.
+ * Use `create(GeneratePayCyclesRequestSchema)` to create a new message.
+ */
+export declare const GeneratePayCyclesRequestSchema: GenMessage<GeneratePayCyclesRequest>;
+/**
+ * @generated from message domain.payroll.v1.GeneratePayCyclesResponse
+ */
+export type GeneratePayCyclesResponse = Message<"domain.payroll.v1.GeneratePayCyclesResponse"> & {
+    /**
+     * @generated from field: string payroll_run_id = 1;
+     */
+    payrollRunId: string;
+    /**
+     * @generated from field: bool success = 2;
+     */
+    success: boolean;
+    /**
+     * @generated from field: optional domain.common.v1.Error error = 3;
+     */
+    error?: Error;
+};
+/**
+ * Describes the message domain.payroll.v1.GeneratePayCyclesResponse.
+ * Use `create(GeneratePayCyclesResponseSchema)` to create a new message.
+ */
+export declare const GeneratePayCyclesResponseSchema: GenMessage<GeneratePayCyclesResponse>;
+/**
+ * @generated from message domain.payroll.v1.CalculatePayrollRunRequest
+ */
+export type CalculatePayrollRunRequest = Message<"domain.payroll.v1.CalculatePayrollRunRequest"> & {
+    /**
+     * @generated from field: string payroll_run_id = 1;
+     */
+    payrollRunId: string;
+};
+/**
+ * Describes the message domain.payroll.v1.CalculatePayrollRunRequest.
+ * Use `create(CalculatePayrollRunRequestSchema)` to create a new message.
+ */
+export declare const CalculatePayrollRunRequestSchema: GenMessage<CalculatePayrollRunRequest>;
+/**
+ * @generated from message domain.payroll.v1.CalculatePayrollRunResponse
+ */
+export type CalculatePayrollRunResponse = Message<"domain.payroll.v1.CalculatePayrollRunResponse"> & {
+    /**
+     * @generated from field: string payroll_run_id = 1;
+     */
+    payrollRunId: string;
+    /**
+     * @generated from field: int32 cycles_processed = 2;
+     */
+    cyclesProcessed: number;
+    /**
+     * @generated from field: int32 employees_paid = 3;
+     */
+    employeesPaid: number;
+    /**
+     * @generated from field: int64 total_gross = 4;
+     */
+    totalGross: bigint;
+    /**
+     * @generated from field: int64 total_deductions = 5;
+     */
+    totalDeductions: bigint;
+    /**
+     * @generated from field: int64 total_net = 6;
+     */
+    totalNet: bigint;
+    /**
+     * @generated from field: bool success = 7;
+     */
+    success: boolean;
+    /**
+     * @generated from field: optional domain.common.v1.Error error = 8;
+     */
+    error?: Error;
+};
+/**
+ * Describes the message domain.payroll.v1.CalculatePayrollRunResponse.
+ * Use `create(CalculatePayrollRunResponseSchema)` to create a new message.
+ */
+export declare const CalculatePayrollRunResponseSchema: GenMessage<CalculatePayrollRunResponse>;
+/**
  * PayrollRunStatus tracks the lifecycle of a payroll processing batch.
  *
  * @generated from enum domain.payroll.v1.PayrollRunStatus
@@ -489,5 +607,23 @@ export declare const PayrollRunDomainService: GenService<{
         methodKind: "unary";
         input: typeof GetPayrollRunItemPageDataRequestSchema;
         output: typeof GetPayrollRunItemPageDataResponseSchema;
+    };
+    /**
+     * Orchestration
+     *
+     * @generated from rpc domain.payroll.v1.PayrollRunDomainService.GeneratePayCycles
+     */
+    generatePayCycles: {
+        methodKind: "unary";
+        input: typeof GeneratePayCyclesRequestSchema;
+        output: typeof GeneratePayCyclesResponseSchema;
+    };
+    /**
+     * @generated from rpc domain.payroll.v1.PayrollRunDomainService.CalculatePayrollRun
+     */
+    calculatePayrollRun: {
+        methodKind: "unary";
+        input: typeof CalculatePayrollRunRequestSchema;
+        output: typeof CalculatePayrollRunResponseSchema;
     };
 }>;

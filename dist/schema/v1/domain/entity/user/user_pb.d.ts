@@ -61,6 +61,22 @@ export type User = Message<"domain.entity.v1.User"> & {
      * @generated from field: optional string timezone = 12;
      */
     timezone?: string;
+    /**
+     * @generated from field: optional string password_reset_token = 13;
+     */
+    passwordResetToken?: string;
+    /**
+     * @generated from field: optional int64 password_reset_expires = 14;
+     */
+    passwordResetExpires?: bigint;
+    /**
+     * @generated from field: int32 failed_login_attempts = 15;
+     */
+    failedLoginAttempts: number;
+    /**
+     * @generated from field: optional int64 locked_until = 16;
+     */
+    lockedUntil?: bigint;
 };
 /**
  * Describes the message domain.entity.v1.User.

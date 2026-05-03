@@ -143,6 +143,24 @@ export type RevenueLineItem = Message<"domain.revenue.v1.RevenueLineItem"> & {
      * @generated from field: optional string job_activity_id = 27;
      */
     jobActivityId?: string;
+    /**
+     * Drift-recovered columns (DB had these; proto did not)
+     *
+     * centavos — total amount for this line (NOT NULL in DB)
+     *
+     * @generated from field: int64 line_amount = 28;
+     */
+    lineAmount: bigint;
+    /**
+     * FK to subscription — links line item to recurring source
+     *
+     * @generated from field: optional string subscription_id = 29;
+     */
+    subscriptionId?: string;
+    /**
+     * @generated from field: optional string workspace_id = 30;
+     */
+    workspaceId?: string;
 };
 /**
  * Describes the message domain.revenue.v1.RevenueLineItem.

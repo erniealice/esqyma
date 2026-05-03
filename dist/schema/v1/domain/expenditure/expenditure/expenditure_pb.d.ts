@@ -45,7 +45,16 @@ export type Expenditure = Message<"domain.expenditure.v1.Expenditure"> & {
      */
     name: string;
     /**
-     * "purchase", "expense", "refund", "payroll", "petty"
+     * expenditure_type — free-text discriminator (legacy entity, not promoted to enum
+     * per [entity-status-conventions](docs/wiki/articles/entity-status-conventions.md)
+     * "enum for new entities, free-text on legacy" rule).
+     *
+     * Allowed values:
+     *   "purchase"  → bill received from a vendor against a PurchaseOrder
+     *   "expense"   → general expense not tied to a PO
+     *   "refund"    → supplier-issued refund/credit
+     *   "payroll"   → payroll-driven expenditure (wages, statutory)
+     *   "petty"     → sundry petty-cash expense; pair with petty_cash_fund_id (field 29)
      *
      * @generated from field: string expenditure_type = 8;
      */
@@ -160,6 +169,38 @@ export type Expenditure = Message<"domain.expenditure.v1.Expenditure"> & {
      * @generated from field: optional string petty_cash_fund_id = 29;
      */
     pettyCashFundId?: string;
+    /**
+     * Accrual-basis recognition back-edges (SPS plan §6.5).
+     * expense_recognition_id: optional 1:1 link from a bill to its primary
+     *   recognition row. Multi-period amortization uses 1:N via
+     *   DeferredExpense (Prepayment), not via this FK.
+     * accrued_expense_id: when an inbound bill settles a previously recognized
+     *   accrual, the AccruedExpenseSettlement service writes both the
+     *   join row and this back-edge for fast reverse lookup.
+     *
+     * @generated from field: optional string expense_recognition_id = 30;
+     */
+    expenseRecognitionId?: string;
+    /**
+     * @generated from field: optional string accrued_expense_id = 31;
+     */
+    accruedExpenseId?: string;
+    /**
+     * cycle_date: YYYY-MM-DD bucket the recurrence engine produced this draft
+     *   against. Pairs with supplier_contract_id for idempotency when the
+     *   recurrence engine produces draft Expenditures.
+     *
+     * @generated from field: optional string cycle_date = 32;
+     */
+    cycleDate?: string;
+    /**
+     * source: free-text discriminator for how this row entered the system
+     *   ("manual" | "recurrence" | "po_match" | "import"). Useful for
+     *   filtering operational queues.
+     *
+     * @generated from field: optional string source = 33;
+     */
+    source?: string;
 };
 /**
  * Describes the message domain.expenditure.v1.Expenditure.

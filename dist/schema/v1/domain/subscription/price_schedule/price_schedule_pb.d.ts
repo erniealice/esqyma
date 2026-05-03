@@ -68,6 +68,30 @@ export type PriceSchedule = Message<"domain.subscription.v1.PriceSchedule"> & {
      * @generated from field: optional string client_id = 12;
      */
     clientId?: string;
+    /**
+     * Drift-recovered columns (DB had these; proto did not)
+     *
+     * ISO 8601 date (YYYY-MM-DD), date-only mirror of date_time_start
+     *
+     * @generated from field: optional string date_start = 13;
+     */
+    dateStart?: string;
+    /**
+     * ISO 8601 date (YYYY-MM-DD), date-only mirror of date_time_end
+     *
+     * @generated from field: optional string date_end = 14;
+     */
+    dateEnd?: string;
+    /**
+     * Legacy migration shim — links to old price-list IDs
+     *
+     * @generated from field: optional string legacy_price_list_id = 15;
+     */
+    legacyPriceListId?: string;
+    /**
+     * @generated from field: optional string workspace_id = 16;
+     */
+    workspaceId?: string;
 };
 /**
  * Describes the message domain.subscription.v1.PriceSchedule.

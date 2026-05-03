@@ -135,6 +135,22 @@ export type SupplierContractLine = Message<"domain.expenditure.v1.SupplierContra
      * @generated from field: optional string date_modified_string = 22;
      */
     dateModifiedString?: string;
+    /**
+     * Discriminator for line role (drives payroll calculator routing for employment
+     * contract lines; ignored for vendor contracts where line_type is sufficient).
+     *
+     * @generated from field: optional domain.expenditure.v1.SupplierContractLineKind kind = 23;
+     */
+    kind?: SupplierContractLineKind;
+    /**
+     * Quick-join FK to the active priced row for this contract line. Optional —
+     * absence is fine; the recurrence engine resolves price via
+     * ResolveActiveScheduleLine(line_id, asOf) when this is null. Application-
+     * level FK only (no DB constraint, mirrors purchase_order_line_item linkage).
+     *
+     * @generated from field: optional string supplier_contract_price_schedule_line_id = 24;
+     */
+    supplierContractPriceScheduleLineId?: string;
 };
 /**
  * Describes the message domain.expenditure.v1.SupplierContractLine.
@@ -465,6 +481,73 @@ export declare enum SupplierContractLineTreatment {
  * Describes the enum domain.expenditure.v1.SupplierContractLineTreatment.
  */
 export declare const SupplierContractLineTreatmentSchema: GenEnum<SupplierContractLineTreatment>;
+/**
+ * SupplierContractLineKind discriminates the role of a line within a contract.
+ * Single global enum covering vendor + employment lines (use case validates
+ * kind ↔ contract.kind compatibility).
+ *
+ * @generated from enum domain.expenditure.v1.SupplierContractLineKind
+ */
+export declare enum SupplierContractLineKind {
+    /**
+     * @generated from enum value: SUPPLIER_CONTRACT_LINE_KIND_UNSPECIFIED = 0;
+     */
+    UNSPECIFIED = 0,
+    /**
+     * @generated from enum value: SUPPLIER_CONTRACT_LINE_KIND_GOODS = 1;
+     */
+    GOODS = 1,
+    /**
+     * @generated from enum value: SUPPLIER_CONTRACT_LINE_KIND_SERVICE = 2;
+     */
+    SERVICE = 2,
+    /**
+     * @generated from enum value: SUPPLIER_CONTRACT_LINE_KIND_EXPENSE = 3;
+     */
+    EXPENSE = 3,
+    /**
+     * Employment-only kinds:
+     *
+     * taxable, statutory base
+     *
+     * @generated from enum value: SUPPLIER_CONTRACT_LINE_KIND_BASIC_SALARY = 10;
+     */
+    BASIC_SALARY = 10,
+    /**
+     * fully taxable allowance
+     *
+     * @generated from enum value: SUPPLIER_CONTRACT_LINE_KIND_ALLOWANCE_TAXABLE = 11;
+     */
+    ALLOWANCE_TAXABLE = 11,
+    /**
+     * tax-exempt up to BIR ceiling
+     *
+     * @generated from enum value: SUPPLIER_CONTRACT_LINE_KIND_ALLOWANCE_DE_MINIMIS = 12;
+     */
+    ALLOWANCE_DE_MINIMIS = 12,
+    /**
+     * 13th-month / supplementary
+     *
+     * @generated from enum value: SUPPLIER_CONTRACT_LINE_KIND_RECURRING_BONUS = 13;
+     */
+    RECURRING_BONUS = 13,
+    /**
+     * SSS/Pag-IBIG/company loan deduction
+     *
+     * @generated from enum value: SUPPLIER_CONTRACT_LINE_KIND_LOAN_AMORTIZATION = 14;
+     */
+    LOAN_AMORTIZATION = 14,
+    /**
+     * company-authorized non-loan deduction
+     *
+     * @generated from enum value: SUPPLIER_CONTRACT_LINE_KIND_COMPANY_DEDUCTION = 15;
+     */
+    COMPANY_DEDUCTION = 15
+}
+/**
+ * Describes the enum domain.expenditure.v1.SupplierContractLineKind.
+ */
+export declare const SupplierContractLineKindSchema: GenEnum<SupplierContractLineKind>;
 /**
  * @generated from service domain.expenditure.v1.SupplierContractLineDomainService
  */

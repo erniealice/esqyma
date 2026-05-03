@@ -152,6 +152,25 @@ export type ProcurementRequest = Message<"domain.expenditure.v1.ProcurementReque
      * @generated from field: optional string expense_account_id = 51;
      */
     expenseAccountId?: string;
+    /**
+     * F3 (round-6): header-level fulfillment strategy rollup for operational
+     * filtering. Per-line dispatch is driven by ProcurementRequestLine
+     * .fulfillment_mode. MIXED is set automatically when lines disagree.
+     *
+     * @generated from field: optional domain.expenditure.v1.ProcurementRequestFulfillmentStrategy fulfillment_strategy = 52;
+     */
+    fulfillmentStrategy?: ProcurementRequestFulfillmentStrategy;
+    /**
+     * HIGH-5 (round-6): free-text JSON column capturing the
+     * ApprovalPolicyResolver decisions per line at submit / approve time.
+     * Each entry: {line_id, requires_approval, reason, resolver_name,
+     * decided_at}. Lets auditors see why a particular line was permitted to
+     * skip approval (PETTY auto-approve, FRAMEWORK skip-approval). Append-
+     * only; never edited after the cascade completes.
+     *
+     * @generated from field: optional string policy_decision_log = 53;
+     */
+    policyDecisionLog?: string;
 };
 /**
  * Describes the message domain.expenditure.v1.ProcurementRequest.
@@ -633,7 +652,7 @@ export declare enum ProcurementRequestStatus {
      */
     PENDING_APPROVAL = 3,
     /**
-     * approved; ready to spawn PO
+     * approved; all lines spawned
      *
      * @generated from enum value: PROCUREMENT_REQUEST_STATUS_APPROVED = 4;
      */
@@ -645,7 +664,7 @@ export declare enum ProcurementRequestStatus {
      */
     REJECTED = 5,
     /**
-     * PO created and received (terminal)
+     * downstream artifacts received (terminal)
      *
      * @generated from enum value: PROCUREMENT_REQUEST_STATUS_FULFILLED = 6;
      */
@@ -655,12 +674,70 @@ export declare enum ProcurementRequestStatus {
      *
      * @generated from enum value: PROCUREMENT_REQUEST_STATUS_CANCELLED = 7;
      */
-    CANCELLED = 7
+    CANCELLED = 7,
+    /**
+     * CRIT-3 (round-6): interim status held while approval was recorded but
+     * one or more line items have spawn_status ∈ {PENDING, SPAWNING, FAILED}.
+     * Approve action transitions PENDING_APPROVAL → APPROVED_PENDING_SPAWN
+     * (NOT directly to APPROVED). The use case promotes to APPROVED only when
+     * every line reaches spawn_status=SPAWNED.
+     *
+     * @generated from enum value: PROCUREMENT_REQUEST_STATUS_APPROVED_PENDING_SPAWN = 8;
+     */
+    APPROVED_PENDING_SPAWN = 8
 }
 /**
  * Describes the enum domain.expenditure.v1.ProcurementRequestStatus.
  */
 export declare const ProcurementRequestStatusSchema: GenEnum<ProcurementRequestStatus>;
+/**
+ * ProcurementRequestFulfillmentStrategy (F3) — header-level rollup of how
+ * the request is intended to be fulfilled. Useful for filtering operational
+ * queues. Per-line fulfillment_mode (F1) on ProcurementRequestLine drives
+ * the actual approval-cascade dispatch.
+ *
+ * @generated from enum domain.expenditure.v1.ProcurementRequestFulfillmentStrategy
+ */
+export declare enum ProcurementRequestFulfillmentStrategy {
+    /**
+     * @generated from enum value: PROCUREMENT_REQUEST_FULFILLMENT_STRATEGY_UNSPECIFIED = 0;
+     */
+    UNSPECIFIED = 0,
+    /**
+     * single-shot PO
+     *
+     * @generated from enum value: PROCUREMENT_REQUEST_FULFILLMENT_STRATEGY_OUTRIGHT = 1;
+     */
+    OUTRIGHT = 1,
+    /**
+     * PO + GR into stock
+     *
+     * @generated from enum value: PROCUREMENT_REQUEST_FULFILLMENT_STRATEGY_STOCKABLE = 2;
+     */
+    STOCKABLE = 2,
+    /**
+     * standing contract creation
+     *
+     * @generated from enum value: PROCUREMENT_REQUEST_FULFILLMENT_STRATEGY_RECURRING = 3;
+     */
+    RECURRING = 3,
+    /**
+     * expensed direct (sundries)
+     *
+     * @generated from enum value: PROCUREMENT_REQUEST_FULFILLMENT_STRATEGY_PETTY = 4;
+     */
+    PETTY = 4,
+    /**
+     * heterogeneous lines
+     *
+     * @generated from enum value: PROCUREMENT_REQUEST_FULFILLMENT_STRATEGY_MIXED = 5;
+     */
+    MIXED = 5
+}
+/**
+ * Describes the enum domain.expenditure.v1.ProcurementRequestFulfillmentStrategy.
+ */
+export declare const ProcurementRequestFulfillmentStrategySchema: GenEnum<ProcurementRequestFulfillmentStrategy>;
 /**
  * @generated from service domain.expenditure.v1.ProcurementRequestDomainService
  */

@@ -419,6 +419,144 @@ export type GetInventoryTransactionItemPageDataResponse = Message<"domain.invent
  */
 export declare const GetInventoryTransactionItemPageDataResponseSchema: GenMessage<GetInventoryTransactionItemPageDataResponse>;
 /**
+ * Movements list page row — denormalized data from inventory_transaction + joined tables.
+ *
+ * @generated from message domain.inventory.v1.InventoryMovementRow
+ */
+export type InventoryMovementRow = Message<"domain.inventory.v1.InventoryMovementRow"> & {
+    /**
+     * @generated from field: string id = 1;
+     */
+    id: string;
+    /**
+     * ISO 8601 date (YYYY-MM-DD)
+     *
+     * @generated from field: string transaction_date = 2;
+     */
+    transactionDate: string;
+    /**
+     * @generated from field: string transaction_type = 3;
+     */
+    transactionType: string;
+    /**
+     * @generated from field: double quantity = 4;
+     */
+    quantity: number;
+    /**
+     * from inventory_item.name
+     *
+     * @generated from field: string item_name = 5;
+     */
+    itemName: string;
+    /**
+     * from inventory_item.location_id
+     *
+     * @generated from field: string location_id = 6;
+     */
+    locationId: string;
+    /**
+     * from inventory_item.sku
+     *
+     * @generated from field: string item_sku = 7;
+     */
+    itemSku: string;
+    /**
+     * from product_variant.sku
+     *
+     * @generated from field: string variant_sku = 8;
+     */
+    variantSku: string;
+    /**
+     * from product.name
+     *
+     * @generated from field: string product_name = 9;
+     */
+    productName: string;
+    /**
+     * @generated from field: optional string serial_number = 10;
+     */
+    serialNumber?: string;
+    /**
+     * @generated from field: optional string reference_type = 11;
+     */
+    referenceType?: string;
+    /**
+     * @generated from field: optional string reference_id = 12;
+     */
+    referenceId?: string;
+    /**
+     * @generated from field: optional string performed_by = 13;
+     */
+    performedBy?: string;
+};
+/**
+ * Describes the message domain.inventory.v1.InventoryMovementRow.
+ * Use `create(InventoryMovementRowSchema)` to create a new message.
+ */
+export declare const InventoryMovementRowSchema: GenMessage<InventoryMovementRow>;
+/**
+ * @generated from message domain.inventory.v1.GetInventoryMovementsListPageDataRequest
+ */
+export type GetInventoryMovementsListPageDataRequest = Message<"domain.inventory.v1.GetInventoryMovementsListPageDataRequest"> & {
+    /**
+     * ISO 8601 date (YYYY-MM-DD), empty = no lower bound
+     *
+     * @generated from field: optional string date_from = 1;
+     */
+    dateFrom?: string;
+    /**
+     * ISO 8601 date (YYYY-MM-DD), empty = no upper bound
+     *
+     * @generated from field: optional string date_to = 2;
+     */
+    dateTo?: string;
+    /**
+     * filter by inventory_item.location_id
+     *
+     * @generated from field: optional string location_id = 3;
+     */
+    locationId?: string;
+    /**
+     * filter by transaction_type
+     *
+     * @generated from field: optional string transaction_type = 4;
+     */
+    transactionType?: string;
+    /**
+     * ILIKE search across product_name, SKUs, item_name
+     *
+     * @generated from field: optional string search = 5;
+     */
+    search?: string;
+};
+/**
+ * Describes the message domain.inventory.v1.GetInventoryMovementsListPageDataRequest.
+ * Use `create(GetInventoryMovementsListPageDataRequestSchema)` to create a new message.
+ */
+export declare const GetInventoryMovementsListPageDataRequestSchema: GenMessage<GetInventoryMovementsListPageDataRequest>;
+/**
+ * @generated from message domain.inventory.v1.GetInventoryMovementsListPageDataResponse
+ */
+export type GetInventoryMovementsListPageDataResponse = Message<"domain.inventory.v1.GetInventoryMovementsListPageDataResponse"> & {
+    /**
+     * @generated from field: repeated domain.inventory.v1.InventoryMovementRow data = 1;
+     */
+    data: InventoryMovementRow[];
+    /**
+     * @generated from field: bool success = 2;
+     */
+    success: boolean;
+    /**
+     * @generated from field: optional domain.common.v1.Error error = 3;
+     */
+    error?: Error;
+};
+/**
+ * Describes the message domain.inventory.v1.GetInventoryMovementsListPageDataResponse.
+ * Use `create(GetInventoryMovementsListPageDataResponseSchema)` to create a new message.
+ */
+export declare const GetInventoryMovementsListPageDataResponseSchema: GenMessage<GetInventoryMovementsListPageDataResponse>;
+/**
  * @generated from service domain.inventory.v1.InventoryTransactionDomainService
  */
 export declare const InventoryTransactionDomainService: GenService<{
@@ -481,5 +619,15 @@ export declare const InventoryTransactionDomainService: GenService<{
         methodKind: "unary";
         input: typeof GetInventoryTransactionItemPageDataRequestSchema;
         output: typeof GetInventoryTransactionItemPageDataResponseSchema;
+    };
+    /**
+     * Movements list page — JOIN-enriched query with date, location, type, search filters.
+     *
+     * @generated from rpc domain.inventory.v1.InventoryTransactionDomainService.GetInventoryMovementsListPageData
+     */
+    getInventoryMovementsListPageData: {
+        methodKind: "unary";
+        input: typeof GetInventoryMovementsListPageDataRequestSchema;
+        output: typeof GetInventoryMovementsListPageDataResponseSchema;
     };
 }>;

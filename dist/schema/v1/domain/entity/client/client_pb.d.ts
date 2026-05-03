@@ -124,6 +124,57 @@ export type Client = Message<"domain.entity.v1.Client"> & {
      * @generated from field: optional string website = 26;
      */
     website?: string;
+    /**
+     * Drift-recovered columns (DB had these; proto did not)
+     *
+     * Primary email address
+     *
+     * @generated from field: optional string email = 27;
+     */
+    email?: string;
+    /**
+     * Given name (individual clients)
+     *
+     * @generated from field: optional string first_name = 28;
+     */
+    firstName?: string;
+    /**
+     * Family name (individual clients)
+     *
+     * @generated from field: optional string last_name = 29;
+     */
+    lastName?: string;
+    /**
+     * @generated from field: optional string workspace_id = 30;
+     */
+    workspaceId?: string;
+    /**
+     * Accounting fields — mirror supplier's equivalent columns so a future
+     * shared scanner/builder can unify both sides.
+     *
+     * TIN/VAT/EIN
+     *
+     * @generated from field: optional string tax_id = 31;
+     */
+    taxId?: string;
+    /**
+     * Business registration number
+     *
+     * @generated from field: optional string registration_number = 32;
+     */
+    registrationNumber?: string;
+    /**
+     * centavos — maximum outstanding receivable
+     *
+     * @generated from field: optional int64 credit_limit = 33;
+     */
+    creditLimit?: bigint;
+    /**
+     * Default delivery promise to this client
+     *
+     * @generated from field: optional int32 lead_time_days = 34;
+     */
+    leadTimeDays?: number;
 };
 /**
  * Describes the message domain.entity.v1.Client.

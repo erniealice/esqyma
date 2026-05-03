@@ -14,7 +14,7 @@ import type { Message } from "@bufbuild/protobuf";
  * Describes the file domain/ledger/reporting/gross_profit/gross_profit.proto.
  */
 export const file_domain_ledger_reporting_gross_profit_gross_profit: GenFile = /*@__PURE__*/
-  fileDesc("Cjdkb21haW4vbGVkZ2VyL3JlcG9ydGluZy9ncm9zc19wcm9maXQvZ3Jvc3NfcHJvZml0LnByb3RvEhBkb21haW4ubGVkZ2VyLnYxIr8DChhHcm9zc1Byb2ZpdFJlcG9ydFJlcXVlc3QSFwoKc3RhcnRfZGF0ZRgBIAEoCUgAiAEBEhUKCGVuZF9kYXRlGAIgASgJSAGIAQESFQoIZ3JvdXBfYnkYAyABKAlIAogBARIfChJwZXJpb2RfZ3JhbnVsYXJpdHkYBCABKAlIA4gBARIXCgpwcm9kdWN0X2lkGAUgASgJSASIAQESGAoLbG9jYXRpb25faWQYBiABKAlIBYgBARIgChNyZXZlbnVlX2NhdGVnb3J5X2lkGAcgASgJSAaIAQESFQoIY3VycmVuY3kYCCABKAlIB4gBARI8CgpwYWdpbmF0aW9uGAkgASgLMiMuZG9tYWluLmNvbW1vbi52MS5QYWdpbmF0aW9uUmVxdWVzdEgIiAEBQg0KC19zdGFydF9kYXRlQgsKCV9lbmRfZGF0ZUILCglfZ3JvdXBfYnlCFQoTX3BlcmlvZF9ncmFudWxhcml0eUINCgtfcHJvZHVjdF9pZEIOCgxfbG9jYXRpb25faWRCFgoUX3JldmVudWVfY2F0ZWdvcnlfaWRCCwoJX2N1cnJlbmN5Qg0KC19wYWdpbmF0aW9uIo4CChNHcm9zc1Byb2ZpdExpbmVJdGVtEhEKCWdyb3VwX2tleRgBIAEoCRIVCghncm91cF9pZBgCIAEoCUgAiAEBEhUKDXRvdGFsX3JldmVudWUYAyABKAMSFgoOdG90YWxfZGlzY291bnQYBCABKAMSEwoLbmV0X3JldmVudWUYBSABKAMSGgoSY29zdF9vZl9nb29kc19zb2xkGAYgASgDEhQKDGdyb3NzX3Byb2ZpdBgHIAEoAxIbChNncm9zc19wcm9maXRfbWFyZ2luGAggASgBEhIKCnVuaXRzX3NvbGQYCSABKAMSGQoRdHJhbnNhY3Rpb25fY291bnQYCiABKANCCwoJX2dyb3VwX2lkIrQCChJHcm9zc1Byb2ZpdFN1bW1hcnkSFQoNdG90YWxfcmV2ZW51ZRgBIAEoAxIWCg50b3RhbF9kaXNjb3VudBgCIAEoAxITCgtuZXRfcmV2ZW51ZRgDIAEoAxISCgp0b3RhbF9jb2dzGAQgASgDEhoKEnRvdGFsX2dyb3NzX3Byb2ZpdBgFIAEoAxIWCg5vdmVyYWxsX21hcmdpbhgGIAEoARIYChB0b3RhbF91bml0c19zb2xkGAcgASgDEhoKEnRvdGFsX3RyYW5zYWN0aW9ucxgIIAEoAxIQCghjdXJyZW5jeRgJIAEoCRIXCgpzdGFydF9kYXRlGAogASgJSACIAQESFQoIZW5kX2RhdGUYCyABKAlIAYgBAUINCgtfc3RhcnRfZGF0ZUILCglfZW5kX2RhdGUitAIKGUdyb3NzUHJvZml0UmVwb3J0UmVzcG9uc2USOQoKbGluZV9pdGVtcxgBIAMoCzIlLmRvbWFpbi5sZWRnZXIudjEuR3Jvc3NQcm9maXRMaW5lSXRlbRI6CgdzdW1tYXJ5GAIgASgLMiQuZG9tYWluLmxlZGdlci52MS5Hcm9zc1Byb2ZpdFN1bW1hcnlIAIgBARI9CgpwYWdpbmF0aW9uGAMgASgLMiQuZG9tYWluLmNvbW1vbi52MS5QYWdpbmF0aW9uUmVzcG9uc2VIAYgBARIPCgdzdWNjZXNzGAQgASgIEisKBWVycm9yGAUgASgLMhcuZG9tYWluLmNvbW1vbi52MS5FcnJvckgCiAEBQgoKCF9zdW1tYXJ5Qg0KC19wYWdpbmF0aW9uQggKBl9lcnJvcjKPAQocTGVkZ2VyUmVwb3J0aW5nRG9tYWluU2VydmljZRJvChRHZXRHcm9zc1Byb2ZpdFJlcG9ydBIqLmRvbWFpbi5sZWRnZXIudjEuR3Jvc3NQcm9maXRSZXBvcnRSZXF1ZXN0GisuZG9tYWluLmxlZGdlci52MS5Hcm9zc1Byb2ZpdFJlcG9ydFJlc3BvbnNlQuQBChRjb20uZG9tYWluLmxlZGdlci52MUIQR3Jvc3NQcm9maXRQcm90b1ABWlhnaXRodWIuY29tL2VybmllYWxpY2UvZXNxeW1hL3BrZy9zY2hlbWEvdjEvZG9tYWluL2xlZGdlci9yZXBvcnRpbmcvZ3Jvc3NfcHJvZml0O2xlZGdlcnYxogIDRExYqgIQRG9tYWluLkxlZGdlci5WMcoCEERvbWFpblxMZWRnZXJcVjHiAhxEb21haW5cTGVkZ2VyXFYxXEdQQk1ldGFkYXRh6gISRG9tYWluOjpMZWRnZXI6OlYxYgZwcm90bzM", [file_domain_common_error, file_domain_common_pagination]);
+  fileDesc("Cjdkb21haW4vbGVkZ2VyL3JlcG9ydGluZy9ncm9zc19wcm9maXQvZ3Jvc3NfcHJvZml0LnByb3RvEhBkb21haW4ubGVkZ2VyLnYxIr8DChhHcm9zc1Byb2ZpdFJlcG9ydFJlcXVlc3QSFwoKc3RhcnRfZGF0ZRgBIAEoCUgAiAEBEhUKCGVuZF9kYXRlGAIgASgJSAGIAQESFQoIZ3JvdXBfYnkYAyABKAlIAogBARIfChJwZXJpb2RfZ3JhbnVsYXJpdHkYBCABKAlIA4gBARIXCgpwcm9kdWN0X2lkGAUgASgJSASIAQESGAoLbG9jYXRpb25faWQYBiABKAlIBYgBARIgChNyZXZlbnVlX2NhdGVnb3J5X2lkGAcgASgJSAaIAQESFQoIY3VycmVuY3kYCCABKAlIB4gBARI8CgpwYWdpbmF0aW9uGAkgASgLMiMuZG9tYWluLmNvbW1vbi52MS5QYWdpbmF0aW9uUmVxdWVzdEgIiAEBQg0KC19zdGFydF9kYXRlQgsKCV9lbmRfZGF0ZUILCglfZ3JvdXBfYnlCFQoTX3BlcmlvZF9ncmFudWxhcml0eUINCgtfcHJvZHVjdF9pZEIOCgxfbG9jYXRpb25faWRCFgoUX3JldmVudWVfY2F0ZWdvcnlfaWRCCwoJX2N1cnJlbmN5Qg0KC19wYWdpbmF0aW9uIo4CChNHcm9zc1Byb2ZpdExpbmVJdGVtEhEKCWdyb3VwX2tleRgBIAEoCRIVCghncm91cF9pZBgCIAEoCUgAiAEBEhUKDXRvdGFsX3JldmVudWUYAyABKAMSFgoOdG90YWxfZGlzY291bnQYBCABKAMSEwoLbmV0X3JldmVudWUYBSABKAMSGgoSY29zdF9vZl9nb29kc19zb2xkGAYgASgDEhQKDGdyb3NzX3Byb2ZpdBgHIAEoAxIbChNncm9zc19wcm9maXRfbWFyZ2luGAggASgBEhIKCnVuaXRzX3NvbGQYCSABKAMSGQoRdHJhbnNhY3Rpb25fY291bnQYCiABKANCCwoJX2dyb3VwX2lkIrQCChJHcm9zc1Byb2ZpdFN1bW1hcnkSFQoNdG90YWxfcmV2ZW51ZRgBIAEoAxIWCg50b3RhbF9kaXNjb3VudBgCIAEoAxITCgtuZXRfcmV2ZW51ZRgDIAEoAxISCgp0b3RhbF9jb2dzGAQgASgDEhoKEnRvdGFsX2dyb3NzX3Byb2ZpdBgFIAEoAxIWCg5vdmVyYWxsX21hcmdpbhgGIAEoARIYChB0b3RhbF91bml0c19zb2xkGAcgASgDEhoKEnRvdGFsX3RyYW5zYWN0aW9ucxgIIAEoAxIQCghjdXJyZW5jeRgJIAEoCRIXCgpzdGFydF9kYXRlGAogASgJSACIAQESFQoIZW5kX2RhdGUYCyABKAlIAYgBAUINCgtfc3RhcnRfZGF0ZUILCglfZW5kX2RhdGUitAIKGUdyb3NzUHJvZml0UmVwb3J0UmVzcG9uc2USOQoKbGluZV9pdGVtcxgBIAMoCzIlLmRvbWFpbi5sZWRnZXIudjEuR3Jvc3NQcm9maXRMaW5lSXRlbRI6CgdzdW1tYXJ5GAIgASgLMiQuZG9tYWluLmxlZGdlci52MS5Hcm9zc1Byb2ZpdFN1bW1hcnlIAIgBARI9CgpwYWdpbmF0aW9uGAMgASgLMiQuZG9tYWluLmNvbW1vbi52MS5QYWdpbmF0aW9uUmVzcG9uc2VIAYgBARIPCgdzdWNjZXNzGAQgASgIEisKBWVycm9yGAUgASgLMhcuZG9tYWluLmNvbW1vbi52MS5FcnJvckgCiAEBQgoKCF9zdW1tYXJ5Qg0KC19wYWdpbmF0aW9uQggKBl9lcnJvciI1ChVDYXNoQm9va1JlcG9ydFJlcXVlc3QSEgoFbGltaXQYASABKAVIAIgBAUIICgZfbGltaXQibQoRQ2FzaEJvb2tSZXBvcnRSb3cSDwoHdHhfZGF0ZRgBIAEoCRITCgtkZXNjcmlwdGlvbhgCIAEoCRIRCglyZWZlcmVuY2UYAyABKAkSDwoHdHhfdHlwZRgEIAEoCRIOCgZhbW91bnQYBSABKAMikwEKFkNhc2hCb29rUmVwb3J0UmVzcG9uc2USMQoEZGF0YRgBIAMoCzIjLmRvbWFpbi5sZWRnZXIudjEuQ2FzaEJvb2tSZXBvcnRSb3cSDwoHc3VjY2VzcxgCIAEoCBIrCgVlcnJvchgDIAEoCzIXLmRvbWFpbi5jb21tb24udjEuRXJyb3JIAIgBAUIICgZfZXJyb3IiHAoaUGF5YWJsZXNBZ2luZ1JlcG9ydFJlcXVlc3QikwEKFlBheWFibGVzQWdpbmdSZXBvcnRSb3cSFQoNc3VwcGxpZXJfbmFtZRgBIAEoCRIPCgdjdXJyZW50GAIgASgDEg8KB2RheXNfMzAYAyABKAMSDwoHZGF5c182MBgEIAEoAxIPCgdkYXlzXzkwGAUgASgDEg8KB292ZXJfOTAYBiABKAMSDQoFdG90YWwYByABKAMinQEKG1BheWFibGVzQWdpbmdSZXBvcnRSZXNwb25zZRI2CgRkYXRhGAEgAygLMiguZG9tYWluLmxlZGdlci52MS5QYXlhYmxlc0FnaW5nUmVwb3J0Um93Eg8KB3N1Y2Nlc3MYAiABKAgSKwoFZXJyb3IYAyABKAsyFy5kb21haW4uY29tbW9uLnYxLkVycm9ySACIAQFCCAoGX2Vycm9yMu4CChxMZWRnZXJSZXBvcnRpbmdEb21haW5TZXJ2aWNlEm8KFEdldEdyb3NzUHJvZml0UmVwb3J0EiouZG9tYWluLmxlZGdlci52MS5Hcm9zc1Byb2ZpdFJlcG9ydFJlcXVlc3QaKy5kb21haW4ubGVkZ2VyLnYxLkdyb3NzUHJvZml0UmVwb3J0UmVzcG9uc2USZgoRR2V0Q2FzaEJvb2tSZXBvcnQSJy5kb21haW4ubGVkZ2VyLnYxLkNhc2hCb29rUmVwb3J0UmVxdWVzdBooLmRvbWFpbi5sZWRnZXIudjEuQ2FzaEJvb2tSZXBvcnRSZXNwb25zZRJ1ChZHZXRQYXlhYmxlc0FnaW5nUmVwb3J0EiwuZG9tYWluLmxlZGdlci52MS5QYXlhYmxlc0FnaW5nUmVwb3J0UmVxdWVzdBotLmRvbWFpbi5sZWRnZXIudjEuUGF5YWJsZXNBZ2luZ1JlcG9ydFJlc3BvbnNlQuQBChRjb20uZG9tYWluLmxlZGdlci52MUIQR3Jvc3NQcm9maXRQcm90b1ABWlhnaXRodWIuY29tL2VybmllYWxpY2UvZXNxeW1hL3BrZy9zY2hlbWEvdjEvZG9tYWluL2xlZGdlci9yZXBvcnRpbmcvZ3Jvc3NfcHJvZml0O2xlZGdlcnYxogIDRExYqgIQRG9tYWluLkxlZGdlci5WMcoCEERvbWFpblxMZWRnZXJcVjHiAhxEb21haW5cTGVkZ2VyXFYxXEdQQk1ldGFkYXRh6gISRG9tYWluOjpMZWRnZXI6OlYxYgZwcm90bzM", [file_domain_common_error, file_domain_common_pagination]);
 
 /**
  * GrossProfitReportRequest defines parameters for generating a gross profit report.
@@ -300,6 +300,194 @@ export const GrossProfitReportResponseSchema: GenMessage<GrossProfitReportRespon
   messageDesc(file_domain_ledger_reporting_gross_profit_gross_profit, 3);
 
 /**
+ * @generated from message domain.ledger.v1.CashBookReportRequest
+ */
+export type CashBookReportRequest = Message<"domain.ledger.v1.CashBookReportRequest"> & {
+  /**
+   * default 200
+   *
+   * @generated from field: optional int32 limit = 1;
+   */
+  limit?: number;
+};
+
+/**
+ * Describes the message domain.ledger.v1.CashBookReportRequest.
+ * Use `create(CashBookReportRequestSchema)` to create a new message.
+ */
+export const CashBookReportRequestSchema: GenMessage<CashBookReportRequest> = /*@__PURE__*/
+  messageDesc(file_domain_ledger_reporting_gross_profit_gross_profit, 4);
+
+/**
+ * @generated from message domain.ledger.v1.CashBookReportRow
+ */
+export type CashBookReportRow = Message<"domain.ledger.v1.CashBookReportRow"> & {
+  /**
+   * YYYY-MM-DD
+   *
+   * @generated from field: string tx_date = 1;
+   */
+  txDate: string;
+
+  /**
+   * @generated from field: string description = 2;
+   */
+  description: string;
+
+  /**
+   * @generated from field: string reference = 3;
+   */
+  reference: string;
+
+  /**
+   * "Receipt" | "Expense" | "Purchase"
+   *
+   * @generated from field: string tx_type = 4;
+   */
+  txType: string;
+
+  /**
+   * centavos
+   *
+   * @generated from field: int64 amount = 5;
+   */
+  amount: bigint;
+};
+
+/**
+ * Describes the message domain.ledger.v1.CashBookReportRow.
+ * Use `create(CashBookReportRowSchema)` to create a new message.
+ */
+export const CashBookReportRowSchema: GenMessage<CashBookReportRow> = /*@__PURE__*/
+  messageDesc(file_domain_ledger_reporting_gross_profit_gross_profit, 5);
+
+/**
+ * @generated from message domain.ledger.v1.CashBookReportResponse
+ */
+export type CashBookReportResponse = Message<"domain.ledger.v1.CashBookReportResponse"> & {
+  /**
+   * @generated from field: repeated domain.ledger.v1.CashBookReportRow data = 1;
+   */
+  data: CashBookReportRow[];
+
+  /**
+   * @generated from field: bool success = 2;
+   */
+  success: boolean;
+
+  /**
+   * @generated from field: optional domain.common.v1.Error error = 3;
+   */
+  error?: Error;
+};
+
+/**
+ * Describes the message domain.ledger.v1.CashBookReportResponse.
+ * Use `create(CashBookReportResponseSchema)` to create a new message.
+ */
+export const CashBookReportResponseSchema: GenMessage<CashBookReportResponse> = /*@__PURE__*/
+  messageDesc(file_domain_ledger_reporting_gross_profit_gross_profit, 6);
+
+/**
+ * @generated from message domain.ledger.v1.PayablesAgingReportRequest
+ */
+export type PayablesAgingReportRequest = Message<"domain.ledger.v1.PayablesAgingReportRequest"> & {
+};
+
+/**
+ * Describes the message domain.ledger.v1.PayablesAgingReportRequest.
+ * Use `create(PayablesAgingReportRequestSchema)` to create a new message.
+ */
+export const PayablesAgingReportRequestSchema: GenMessage<PayablesAgingReportRequest> = /*@__PURE__*/
+  messageDesc(file_domain_ledger_reporting_gross_profit_gross_profit, 7);
+
+/**
+ * @generated from message domain.ledger.v1.PayablesAgingReportRow
+ */
+export type PayablesAgingReportRow = Message<"domain.ledger.v1.PayablesAgingReportRow"> & {
+  /**
+   * @generated from field: string supplier_name = 1;
+   */
+  supplierName: string;
+
+  /**
+   * centavos
+   *
+   * @generated from field: int64 current = 2;
+   */
+  current: bigint;
+
+  /**
+   * centavos
+   *
+   * @generated from field: int64 days_30 = 3;
+   */
+  days30: bigint;
+
+  /**
+   * centavos
+   *
+   * @generated from field: int64 days_60 = 4;
+   */
+  days60: bigint;
+
+  /**
+   * centavos
+   *
+   * @generated from field: int64 days_90 = 5;
+   */
+  days90: bigint;
+
+  /**
+   * centavos
+   *
+   * @generated from field: int64 over_90 = 6;
+   */
+  over90: bigint;
+
+  /**
+   * centavos
+   *
+   * @generated from field: int64 total = 7;
+   */
+  total: bigint;
+};
+
+/**
+ * Describes the message domain.ledger.v1.PayablesAgingReportRow.
+ * Use `create(PayablesAgingReportRowSchema)` to create a new message.
+ */
+export const PayablesAgingReportRowSchema: GenMessage<PayablesAgingReportRow> = /*@__PURE__*/
+  messageDesc(file_domain_ledger_reporting_gross_profit_gross_profit, 8);
+
+/**
+ * @generated from message domain.ledger.v1.PayablesAgingReportResponse
+ */
+export type PayablesAgingReportResponse = Message<"domain.ledger.v1.PayablesAgingReportResponse"> & {
+  /**
+   * @generated from field: repeated domain.ledger.v1.PayablesAgingReportRow data = 1;
+   */
+  data: PayablesAgingReportRow[];
+
+  /**
+   * @generated from field: bool success = 2;
+   */
+  success: boolean;
+
+  /**
+   * @generated from field: optional domain.common.v1.Error error = 3;
+   */
+  error?: Error;
+};
+
+/**
+ * Describes the message domain.ledger.v1.PayablesAgingReportResponse.
+ * Use `create(PayablesAgingReportResponseSchema)` to create a new message.
+ */
+export const PayablesAgingReportResponseSchema: GenMessage<PayablesAgingReportResponse> = /*@__PURE__*/
+  messageDesc(file_domain_ledger_reporting_gross_profit_gross_profit, 9);
+
+/**
  * LedgerReportingDomainService defines ledger reporting operations.
  *
  * @generated from service domain.ledger.v1.LedgerReportingDomainService
@@ -312,6 +500,22 @@ export const LedgerReportingDomainService: GenService<{
     methodKind: "unary";
     input: typeof GrossProfitReportRequestSchema;
     output: typeof GrossProfitReportResponseSchema;
+  },
+  /**
+   * @generated from rpc domain.ledger.v1.LedgerReportingDomainService.GetCashBookReport
+   */
+  getCashBookReport: {
+    methodKind: "unary";
+    input: typeof CashBookReportRequestSchema;
+    output: typeof CashBookReportResponseSchema;
+  },
+  /**
+   * @generated from rpc domain.ledger.v1.LedgerReportingDomainService.GetPayablesAgingReport
+   */
+  getPayablesAgingReport: {
+    methodKind: "unary";
+    input: typeof PayablesAgingReportRequestSchema;
+    output: typeof PayablesAgingReportResponseSchema;
   },
 }> = /*@__PURE__*/
   serviceDesc(file_domain_ledger_reporting_gross_profit_gross_profit, 0);

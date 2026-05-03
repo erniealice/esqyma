@@ -2,6 +2,7 @@
 -- PostgreSQL database dump
 --
 
+\restrict rRSzRYtyKctdtJdyseQsvoaDukKd4ELVRyKM4HFVNKD62fYJVzrK6VeRzv73m5y
 
 -- Dumped from database version 18.3 (Postgres.app)
 -- Dumped by pg_dump version 18.3 (Postgres.app)
@@ -17,6 +18,13 @@ SET check_function_bodies = false;
 SET xmloption = content;
 SET client_min_messages = warning;
 SET row_security = off;
+
+--
+-- Name: atlas_schema_revisions; Type: SCHEMA; Schema: -; Owner: -
+--
+
+CREATE SCHEMA atlas_schema_revisions;
+
 
 --
 -- Name: audit_trail; Type: SCHEMA; Schema: -; Owner: -
@@ -55,6 +63,28 @@ COMMENT ON EXTENSION btree_gist IS 'support for indexing common datatypes in GiS
 
 SET default_tablespace = '';
 
+SET default_table_access_method = heap;
+
+--
+-- Name: atlas_schema_revisions; Type: TABLE; Schema: atlas_schema_revisions; Owner: -
+--
+
+CREATE TABLE atlas_schema_revisions.atlas_schema_revisions (
+    version character varying NOT NULL,
+    description character varying NOT NULL,
+    type bigint DEFAULT 2 NOT NULL,
+    applied bigint DEFAULT 0 NOT NULL,
+    total bigint DEFAULT 0 NOT NULL,
+    executed_at timestamp with time zone NOT NULL,
+    execution_time bigint NOT NULL,
+    error text,
+    error_stmt text,
+    hash character varying NOT NULL,
+    partial_hashes jsonb,
+    operator_version character varying NOT NULL
+);
+
+
 --
 -- Name: audit_entry; Type: TABLE; Schema: audit_trail; Owner: -
 --
@@ -81,8 +111,6 @@ CREATE TABLE audit_trail.audit_entry (
 )
 PARTITION BY RANGE (occurred_at);
 
-
-SET default_table_access_method = heap;
 
 --
 -- Name: audit_entry_2026_03; Type: TABLE; Schema: audit_trail; Owner: -
@@ -779,7 +807,8 @@ CREATE TABLE public.category (
     date_created timestamp with time zone DEFAULT now(),
     date_modified timestamp with time zone DEFAULT now(),
     active boolean DEFAULT true NOT NULL,
-    display_order integer
+    display_order integer,
+    workspace_id text
 );
 
 
@@ -807,7 +836,13 @@ CREATE TABLE public.client (
     first_name text,
     last_name text,
     email text,
-    workspace_id text
+    workspace_id text,
+    country text,
+    website text,
+    tax_id text,
+    registration_number text,
+    credit_limit bigint,
+    lead_time_days integer
 );
 
 
@@ -1761,7 +1796,26 @@ CREATE TABLE public.job (
     cycle_period_start text,
     cycle_period_end text,
     usage_request_date date,
-    usage_ordinal integer
+    usage_ordinal integer,
+    actual_end bigint,
+    actual_start bigint,
+    change_request_id text,
+    cost_account_id text,
+    currency text,
+    due_date bigint,
+    job_template_revision_id text,
+    job_template_revision_snapshot integer,
+    output_product_id text,
+    output_product_variant_id text,
+    output_uom text,
+    planned_end bigint,
+    planned_quantity double precision,
+    planned_start bigint,
+    priority integer,
+    release_date bigint,
+    resource_id text,
+    sales_order_line_id text,
+    workflow_instance_id text
 );
 
 
@@ -1837,7 +1891,16 @@ CREATE TABLE public.job_phase (
     job_id text,
     name text,
     phase_order integer,
-    status text
+    status text,
+    actual_end bigint,
+    actual_start bigint,
+    planned_end bigint,
+    planned_start bigint,
+    predecessor_phase_id text,
+    resource_id text,
+    run_minutes_per_unit double precision,
+    setup_minutes integer,
+    template_phase_id text
 );
 
 
@@ -1878,7 +1941,16 @@ CREATE TABLE public.job_task (
     step_order integer,
     status text,
     is_ad_hoc boolean DEFAULT false NOT NULL,
-    assigned_to text
+    assigned_to text,
+    actual_end bigint,
+    actual_start bigint,
+    allow_parallel boolean DEFAULT false,
+    completed_quantity double precision,
+    percent_complete double precision,
+    planned_quantity double precision,
+    resource_id text,
+    template_task_id text,
+    workflow_step_id text
 );
 
 
@@ -1896,7 +1968,22 @@ CREATE TABLE public.job_template (
     default_fulfillment_type text,
     default_cost_flow_type text,
     default_billing_rule_type text,
-    workspace_id text
+    workspace_id text,
+    change_request_id text,
+    default_lot_size integer,
+    default_uom text,
+    effective_from bigint,
+    effective_to bigint,
+    is_default boolean DEFAULT false,
+    output_product_id text,
+    output_product_variant_id text,
+    published_at bigint,
+    published_by text,
+    revision integer,
+    supersedes_template_id text,
+    template_code text,
+    version_status text,
+    workflow_template_id text
 );
 
 
@@ -1915,7 +2002,12 @@ CREATE TABLE public.job_template_phase (
     triggers_billing boolean,
     billing_percent_bps integer,
     billing_amount bigint,
-    billing_currency text
+    billing_currency text,
+    predecessor_template_phase_id text,
+    resource_id text,
+    run_minutes_per_unit double precision,
+    setup_minutes integer,
+    teardown_minutes integer
 );
 
 
@@ -1949,7 +2041,18 @@ CREATE TABLE public.job_template_task (
     job_template_phase_id text,
     name text,
     step_order integer,
-    estimated_duration_minutes integer
+    estimated_duration_minutes integer,
+    instruction_doc_id text,
+    quantity_factor double precision,
+    resource_id text,
+    run_minutes_per_unit double precision,
+    setup_minutes integer,
+    skill_required text,
+    standard_labor_minutes integer,
+    standard_machine_minutes integer,
+    teardown_minutes integer,
+    tool_required text,
+    workflow_step_id text
 );
 
 
@@ -2307,7 +2410,7 @@ CREATE TABLE public.payment_term (
     discount_days integer,
     discount_percent_bps integer,
     entity_scope text,
-    is_default boolean,
+    is_default boolean DEFAULT false NOT NULL,
     description text,
     display_order integer,
     proximate_day integer,
@@ -2724,7 +2827,9 @@ CREATE TABLE public.product (
     tracking_mode text,
     unit text,
     variant_mode text DEFAULT 'none'::text NOT NULL,
-    workspace_id text
+    workspace_id text,
+    expected_cost bigint,
+    expected_cost_currency text
 );
 
 
@@ -3173,6 +3278,19 @@ CREATE TABLE public.role_permission (
 
 
 --
+-- Name: schema_migrations; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.schema_migrations (
+    id integer NOT NULL,
+    version bigint NOT NULL,
+    name text NOT NULL,
+    batch integer NOT NULL,
+    executed_at timestamp with time zone DEFAULT CURRENT_TIMESTAMP
+);
+
+
+--
 -- Name: schema_migrations_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
@@ -3183,6 +3301,13 @@ CREATE SEQUENCE public.schema_migrations_id_seq
     NO MINVALUE
     NO MAXVALUE
     CACHE 1;
+
+
+--
+-- Name: schema_migrations_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.schema_migrations_id_seq OWNED BY public.schema_migrations.id;
 
 
 --
@@ -3318,7 +3443,8 @@ CREATE TABLE public.subscription (
     code text,
     date_time_start timestamp with time zone,
     date_time_end timestamp with time zone,
-    entitled_occurrences_override integer
+    entitled_occurrences_override integer,
+    workspace_id text
 );
 
 
@@ -3402,7 +3528,9 @@ CREATE TABLE public.supplier_category (
     active boolean DEFAULT true NOT NULL,
     code text DEFAULT ''::text NOT NULL,
     name text DEFAULT ''::text NOT NULL,
-    description text
+    description text,
+    supplier_id text NOT NULL,
+    category_id text NOT NULL
 );
 
 
@@ -3819,6 +3947,21 @@ ALTER TABLE ONLY audit_trail.audit_entry ATTACH PARTITION audit_trail.audit_entr
 --
 
 ALTER TABLE ONLY audit_trail.audit_entry ATTACH PARTITION audit_trail.audit_entry_2026_05 FOR VALUES FROM ('2026-05-01 00:00:00+08') TO ('2026-06-01 00:00:00+08');
+
+
+--
+-- Name: schema_migrations id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.schema_migrations ALTER COLUMN id SET DEFAULT nextval('public.schema_migrations_id_seq'::regclass);
+
+
+--
+-- Name: atlas_schema_revisions atlas_schema_revisions_pkey; Type: CONSTRAINT; Schema: atlas_schema_revisions; Owner: -
+--
+
+ALTER TABLE ONLY atlas_schema_revisions.atlas_schema_revisions
+    ADD CONSTRAINT atlas_schema_revisions_pkey PRIMARY KEY (version);
 
 
 --
@@ -4734,19 +4877,19 @@ ALTER TABLE ONLY public.payment_method
 
 
 --
--- Name: payment_term payment_term_code_key; Type: CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.payment_term
-    ADD CONSTRAINT payment_term_code_key UNIQUE (code);
-
-
---
 -- Name: payment_term payment_term_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.payment_term
     ADD CONSTRAINT payment_term_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: payment_term payment_term_workspace_id_code_key; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.payment_term
+    ADD CONSTRAINT payment_term_workspace_id_code_key UNIQUE (workspace_id, code);
 
 
 --
@@ -5115,6 +5258,22 @@ ALTER TABLE ONLY public.role_permission
 
 ALTER TABLE ONLY public.role
     ADD CONSTRAINT role_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: schema_migrations schema_migrations_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.schema_migrations
+    ADD CONSTRAINT schema_migrations_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: schema_migrations schema_migrations_version_key; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.schema_migrations
+    ADD CONSTRAINT schema_migrations_version_key UNIQUE (version);
 
 
 --
@@ -6176,6 +6335,13 @@ CREATE INDEX idx_category_parent_id ON public.category USING btree (parent_id);
 
 
 --
+-- Name: idx_category_workspace_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX idx_category_workspace_id ON public.category USING btree (workspace_id) WHERE (workspace_id IS NOT NULL);
+
+
+--
 -- Name: idx_client_attribute_attribute_id; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -6932,6 +7098,13 @@ CREATE INDEX idx_job_activity_workspace_id ON public.job_activity USING btree (w
 
 
 --
+-- Name: idx_job_change_request_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX idx_job_change_request_id ON public.job USING btree (change_request_id) WHERE (change_request_id IS NOT NULL);
+
+
+--
 -- Name: idx_job_client_id; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -6939,10 +7112,24 @@ CREATE INDEX idx_job_client_id ON public.job USING btree (client_id);
 
 
 --
+-- Name: idx_job_cost_account_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX idx_job_cost_account_id ON public.job USING btree (cost_account_id) WHERE (cost_account_id IS NOT NULL);
+
+
+--
 -- Name: idx_job_job_template_id; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX idx_job_job_template_id ON public.job USING btree (job_template_id);
+
+
+--
+-- Name: idx_job_job_template_revision_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX idx_job_job_template_revision_id ON public.job USING btree (job_template_revision_id) WHERE (job_template_revision_id IS NOT NULL);
 
 
 --
@@ -6967,6 +7154,20 @@ CREATE INDEX idx_job_outcome_summary_job_id ON public.job_outcome_summary USING 
 
 
 --
+-- Name: idx_job_output_product_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX idx_job_output_product_id ON public.job USING btree (output_product_id) WHERE (output_product_id IS NOT NULL);
+
+
+--
+-- Name: idx_job_output_product_variant_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX idx_job_output_product_variant_id ON public.job USING btree (output_product_variant_id) WHERE (output_product_variant_id IS NOT NULL);
+
+
+--
 -- Name: idx_job_parent_job_id; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -6978,6 +7179,34 @@ CREATE INDEX idx_job_parent_job_id ON public.job USING btree (parent_job_id);
 --
 
 CREATE INDEX idx_job_phase_job_id ON public.job_phase USING btree (job_id);
+
+
+--
+-- Name: idx_job_phase_resource_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX idx_job_phase_resource_id ON public.job_phase USING btree (resource_id) WHERE (resource_id IS NOT NULL);
+
+
+--
+-- Name: idx_job_phase_template_phase_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX idx_job_phase_template_phase_id ON public.job_phase USING btree (template_phase_id) WHERE (template_phase_id IS NOT NULL);
+
+
+--
+-- Name: idx_job_resource_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX idx_job_resource_id ON public.job USING btree (resource_id) WHERE (resource_id IS NOT NULL);
+
+
+--
+-- Name: idx_job_sales_order_line_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX idx_job_sales_order_line_id ON public.job USING btree (sales_order_line_id) WHERE (sales_order_line_id IS NOT NULL);
 
 
 --
@@ -7016,10 +7245,59 @@ CREATE INDEX idx_job_task_job_phase_id ON public.job_task USING btree (job_phase
 
 
 --
+-- Name: idx_job_task_resource_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX idx_job_task_resource_id ON public.job_task USING btree (resource_id) WHERE (resource_id IS NOT NULL);
+
+
+--
+-- Name: idx_job_task_template_task_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX idx_job_task_template_task_id ON public.job_task USING btree (template_task_id) WHERE (template_task_id IS NOT NULL);
+
+
+--
+-- Name: idx_job_task_workflow_step_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX idx_job_task_workflow_step_id ON public.job_task USING btree (workflow_step_id) WHERE (workflow_step_id IS NOT NULL);
+
+
+--
+-- Name: idx_job_template_change_request_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX idx_job_template_change_request_id ON public.job_template USING btree (change_request_id) WHERE (change_request_id IS NOT NULL);
+
+
+--
+-- Name: idx_job_template_output_product_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX idx_job_template_output_product_id ON public.job_template USING btree (output_product_id) WHERE (output_product_id IS NOT NULL);
+
+
+--
+-- Name: idx_job_template_output_product_variant_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX idx_job_template_output_product_variant_id ON public.job_template USING btree (output_product_variant_id) WHERE (output_product_variant_id IS NOT NULL);
+
+
+--
 -- Name: idx_job_template_phase_job_template_id; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX idx_job_template_phase_job_template_id ON public.job_template_phase USING btree (job_template_id);
+
+
+--
+-- Name: idx_job_template_phase_resource_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX idx_job_template_phase_resource_id ON public.job_template_phase USING btree (resource_id) WHERE (resource_id IS NOT NULL);
 
 
 --
@@ -7037,10 +7315,45 @@ CREATE INDEX idx_job_template_relation_parent_template_id ON public.job_template
 
 
 --
+-- Name: idx_job_template_task_instruction_doc_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX idx_job_template_task_instruction_doc_id ON public.job_template_task USING btree (instruction_doc_id) WHERE (instruction_doc_id IS NOT NULL);
+
+
+--
 -- Name: idx_job_template_task_job_template_phase_id; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX idx_job_template_task_job_template_phase_id ON public.job_template_task USING btree (job_template_phase_id);
+
+
+--
+-- Name: idx_job_template_task_resource_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX idx_job_template_task_resource_id ON public.job_template_task USING btree (resource_id) WHERE (resource_id IS NOT NULL);
+
+
+--
+-- Name: idx_job_template_task_workflow_step_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX idx_job_template_task_workflow_step_id ON public.job_template_task USING btree (workflow_step_id) WHERE (workflow_step_id IS NOT NULL);
+
+
+--
+-- Name: idx_job_template_template_code; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX idx_job_template_template_code ON public.job_template USING btree (template_code) WHERE (template_code IS NOT NULL);
+
+
+--
+-- Name: idx_job_template_workflow_template_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX idx_job_template_workflow_template_id ON public.job_template USING btree (workflow_template_id) WHERE (workflow_template_id IS NOT NULL);
 
 
 --
@@ -7055,6 +7368,13 @@ CREATE INDEX idx_job_template_workspace_id ON public.job_template USING btree (w
 --
 
 CREATE INDEX idx_job_usage_request_date ON public.job USING btree (origin_id, usage_request_date) WHERE (usage_request_date IS NOT NULL);
+
+
+--
+-- Name: idx_job_workflow_instance_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX idx_job_workflow_instance_id ON public.job USING btree (workflow_instance_id) WHERE (workflow_instance_id IS NOT NULL);
 
 
 --
@@ -8017,6 +8337,13 @@ CREATE INDEX idx_role_workspace_id ON public.role USING btree (workspace_id);
 
 
 --
+-- Name: idx_schema_migrations_batch; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX idx_schema_migrations_batch ON public.schema_migrations USING btree (batch);
+
+
+--
 -- Name: idx_security_deposit_account_id; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -8108,6 +8435,13 @@ CREATE INDEX idx_subscription_price_plan_id ON public.subscription USING btree (
 
 
 --
+-- Name: idx_subscription_workspace_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX idx_subscription_workspace_id ON public.subscription USING btree (workspace_id) WHERE (workspace_id IS NOT NULL);
+
+
+--
 -- Name: idx_supplier_attribute_attribute_id; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -8119,6 +8453,13 @@ CREATE INDEX idx_supplier_attribute_attribute_id ON public.supplier_attribute US
 --
 
 CREATE INDEX idx_supplier_attribute_supplier_id ON public.supplier_attribute USING btree (supplier_id);
+
+
+--
+-- Name: idx_supplier_category_pair; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX idx_supplier_category_pair ON public.supplier_category USING btree (supplier_id, category_id);
 
 
 --
@@ -8797,6 +9138,14 @@ ALTER TABLE ONLY public.billing_event
 
 
 --
+-- Name: category category_workspace_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.category
+    ADD CONSTRAINT category_workspace_id_fkey FOREIGN KEY (workspace_id) REFERENCES public.workspace(id) ON DELETE RESTRICT;
+
+
+--
 -- Name: client client_workspace_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -8981,11 +9330,115 @@ ALTER TABLE ONLY public.procurement_request
 
 
 --
+-- Name: job job_cost_account_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.job
+    ADD CONSTRAINT job_cost_account_id_fkey FOREIGN KEY (cost_account_id) REFERENCES public.account(id) ON DELETE RESTRICT;
+
+
+--
+-- Name: job job_output_product_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.job
+    ADD CONSTRAINT job_output_product_id_fkey FOREIGN KEY (output_product_id) REFERENCES public.product(id) ON DELETE RESTRICT;
+
+
+--
+-- Name: job job_output_product_variant_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.job
+    ADD CONSTRAINT job_output_product_variant_id_fkey FOREIGN KEY (output_product_variant_id) REFERENCES public.product_variant(id) ON DELETE RESTRICT;
+
+
+--
 -- Name: job job_parent_job_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.job
     ADD CONSTRAINT job_parent_job_id_fkey FOREIGN KEY (parent_job_id) REFERENCES public.job(id);
+
+
+--
+-- Name: job_phase job_phase_predecessor_phase_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.job_phase
+    ADD CONSTRAINT job_phase_predecessor_phase_id_fkey FOREIGN KEY (predecessor_phase_id) REFERENCES public.job_phase(id) ON DELETE RESTRICT;
+
+
+--
+-- Name: job_phase job_phase_resource_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.job_phase
+    ADD CONSTRAINT job_phase_resource_id_fkey FOREIGN KEY (resource_id) REFERENCES public.resource(id) ON DELETE RESTRICT;
+
+
+--
+-- Name: job_phase job_phase_template_phase_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.job_phase
+    ADD CONSTRAINT job_phase_template_phase_id_fkey FOREIGN KEY (template_phase_id) REFERENCES public.job_template_phase(id) ON DELETE RESTRICT;
+
+
+--
+-- Name: job job_resource_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.job
+    ADD CONSTRAINT job_resource_id_fkey FOREIGN KEY (resource_id) REFERENCES public.resource(id) ON DELETE RESTRICT;
+
+
+--
+-- Name: job_task job_task_resource_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.job_task
+    ADD CONSTRAINT job_task_resource_id_fkey FOREIGN KEY (resource_id) REFERENCES public.resource(id) ON DELETE RESTRICT;
+
+
+--
+-- Name: job_task job_task_template_task_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.job_task
+    ADD CONSTRAINT job_task_template_task_id_fkey FOREIGN KEY (template_task_id) REFERENCES public.job_template_task(id) ON DELETE RESTRICT;
+
+
+--
+-- Name: job_template job_template_output_product_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.job_template
+    ADD CONSTRAINT job_template_output_product_id_fkey FOREIGN KEY (output_product_id) REFERENCES public.product(id) ON DELETE RESTRICT;
+
+
+--
+-- Name: job_template job_template_output_product_variant_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.job_template
+    ADD CONSTRAINT job_template_output_product_variant_id_fkey FOREIGN KEY (output_product_variant_id) REFERENCES public.product_variant(id) ON DELETE RESTRICT;
+
+
+--
+-- Name: job_template_phase job_template_phase_predecessor_template_phase_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.job_template_phase
+    ADD CONSTRAINT job_template_phase_predecessor_template_phase_id_fkey FOREIGN KEY (predecessor_template_phase_id) REFERENCES public.job_template_phase(id) ON DELETE RESTRICT;
+
+
+--
+-- Name: job_template_phase job_template_phase_resource_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.job_template_phase
+    ADD CONSTRAINT job_template_phase_resource_id_fkey FOREIGN KEY (resource_id) REFERENCES public.resource(id) ON DELETE RESTRICT;
 
 
 --
@@ -9002,6 +9455,22 @@ ALTER TABLE ONLY public.job_template_relation
 
 ALTER TABLE ONLY public.job_template_relation
     ADD CONSTRAINT job_template_relation_parent_template_id_fkey FOREIGN KEY (parent_template_id) REFERENCES public.job_template(id);
+
+
+--
+-- Name: job_template job_template_supersedes_template_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.job_template
+    ADD CONSTRAINT job_template_supersedes_template_id_fkey FOREIGN KEY (supersedes_template_id) REFERENCES public.job_template(id) ON DELETE RESTRICT;
+
+
+--
+-- Name: job_template_task job_template_task_resource_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.job_template_task
+    ADD CONSTRAINT job_template_task_resource_id_fkey FOREIGN KEY (resource_id) REFERENCES public.resource(id) ON DELETE RESTRICT;
 
 
 --
@@ -9301,6 +9770,30 @@ ALTER TABLE ONLY public.revenue
 
 
 --
+-- Name: subscription subscription_workspace_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.subscription
+    ADD CONSTRAINT subscription_workspace_id_fkey FOREIGN KEY (workspace_id) REFERENCES public.workspace(id) ON DELETE RESTRICT;
+
+
+--
+-- Name: supplier_category supplier_category_category_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.supplier_category
+    ADD CONSTRAINT supplier_category_category_id_fkey FOREIGN KEY (category_id) REFERENCES public.category(id) ON DELETE CASCADE;
+
+
+--
+-- Name: supplier_category supplier_category_supplier_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.supplier_category
+    ADD CONSTRAINT supplier_category_supplier_id_fkey FOREIGN KEY (supplier_id) REFERENCES public.supplier(id) ON DELETE CASCADE;
+
+
+--
 -- Name: supplier_contract supplier_contract_accrual_account_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -9480,4 +9973,5 @@ ALTER TABLE ONLY public.supplier
 -- PostgreSQL database dump complete
 --
 
+\unrestrict rRSzRYtyKctdtJdyseQsvoaDukKd4ELVRyKM4HFVNKD62fYJVzrK6VeRzv73m5y
 

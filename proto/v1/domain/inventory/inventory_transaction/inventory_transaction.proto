@@ -49,6 +49,10 @@ service InventoryTransactionDomainService {
   // NEW: Enhanced item view with related data
   rpc GetInventoryTransactionItemPageData(GetInventoryTransactionItemPageDataRequest)
     returns (GetInventoryTransactionItemPageDataResponse);
+
+  // Movements list page — JOIN-enriched query with date, location, type, search filters.
+  rpc GetInventoryMovementsListPageData(GetInventoryMovementsListPageDataRequest)
+    returns (GetInventoryMovementsListPageDataResponse);
 }
 
 message CreateInventoryTransactionRequest {
@@ -148,6 +152,37 @@ message GetInventoryTransactionItemPageDataResponse {
   InventoryTransaction inventory_transaction = 1;
 
   // Response status
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+// Movements list page row — denormalized data from inventory_transaction + joined tables.
+message InventoryMovementRow {
+  string id = 1;
+  string transaction_date = 2;  // ISO 8601 date (YYYY-MM-DD)
+  string transaction_type = 3;
+  double quantity = 4;
+  string item_name = 5;         // from inventory_item.name
+  string location_id = 6;       // from inventory_item.location_id
+  string item_sku = 7;          // from inventory_item.sku
+  string variant_sku = 8;       // from product_variant.sku
+  string product_name = 9;      // from product.name
+  optional string serial_number = 10;
+  optional string reference_type = 11;
+  optional string reference_id = 12;
+  optional string performed_by = 13;
+}
+
+message GetInventoryMovementsListPageDataRequest {
+  optional string date_from = 1;      // ISO 8601 date (YYYY-MM-DD), empty = no lower bound
+  optional string date_to = 2;        // ISO 8601 date (YYYY-MM-DD), empty = no upper bound
+  optional string location_id = 3;    // filter by inventory_item.location_id
+  optional string transaction_type = 4; // filter by transaction_type
+  optional string search = 5;         // ILIKE search across product_name, SKUs, item_name
+}
+
+message GetInventoryMovementsListPageDataResponse {
+  repeated InventoryMovementRow data = 1;
   bool success = 2;
   optional domain.common.v1.Error error = 3;
 }

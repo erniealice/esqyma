@@ -1,4 +1,4 @@
-import type { GenFile, GenMessage, GenService } from "@bufbuild/protobuf/codegenv2";
+import type { GenEnum, GenFile, GenMessage, GenService } from "@bufbuild/protobuf/codegenv2";
 import type { Error } from "../../common/error_pb";
 import type { PaginationRequest, PaginationResponse } from "../../common/pagination_pb";
 import type { SearchRequest, SearchResult } from "../../common/search_pb";
@@ -123,6 +123,87 @@ export type ProcurementRequestLine = Message<"domain.expenditure.v1.ProcurementR
      * @generated from field: optional string date_modified_string = 20;
      */
     dateModifiedString?: string;
+    /**
+     * F1 (round-6): per-line fulfillment mode. Drives the approval cascade
+     * dispatch (which Spawn helper to run).
+     *
+     * @generated from field: optional domain.expenditure.v1.ProcurementRequestLineFulfillmentMode fulfillment_mode = 21;
+     */
+    fulfillmentMode?: ProcurementRequestLineFulfillmentMode;
+    /**
+     * F2 (round-6): spawn back-FKs — set by the Spawn* helpers after the
+     * downstream artifact is created. Exactly one of the three is populated
+     * per line, determined by fulfillment_mode. Application-level FKs only
+     * (no DB constraint, mirrors purchase_order_line_item linkage).
+     *
+     * RECURRING → SupplierContract
+     *
+     * @generated from field: optional string spawned_supplier_contract_id = 22;
+     */
+    spawnedSupplierContractId?: string;
+    /**
+     * OUTRIGHT / STOCKABLE → PO line
+     *
+     * @generated from field: optional string spawned_purchase_order_line_item_id = 23;
+     */
+    spawnedPurchaseOrderLineItemId?: string;
+    /**
+     * PETTY → Expenditure direct
+     *
+     * @generated from field: optional string spawned_expenditure_id = 24;
+     */
+    spawnedExpenditureId?: string;
+    /**
+     * RECURRING-mode parameters — populated when fulfillment_mode=RECURRING
+     * and used by SpawnSupplierContractForRecurring. cycle == billing cadence,
+     * term == initial contract length.
+     *
+     * @generated from field: optional int32 recurring_cycle_value = 25;
+     */
+    recurringCycleValue?: number;
+    /**
+     * "month" | "year" | "week" | "day"
+     *
+     * @generated from field: optional string recurring_cycle_unit = 26;
+     */
+    recurringCycleUnit?: string;
+    /**
+     * @generated from field: optional int32 recurring_term_value = 27;
+     */
+    recurringTermValue?: number;
+    /**
+     * same vocabulary
+     *
+     * @generated from field: optional string recurring_term_unit = 28;
+     */
+    recurringTermUnit?: string;
+    /**
+     * CRIT-3 (round-6): spawn lifecycle fields driving the per-line cascade.
+     * PR.status is APPROVED_PENDING_SPAWN until every line reaches SPAWNED.
+     *
+     * @generated from field: domain.expenditure.v1.ProcurementRequestLineSpawnStatus spawn_status = 29;
+     */
+    spawnStatus: ProcurementRequestLineSpawnStatus;
+    /**
+     * free-text error from failed spawn (visible in AP UI)
+     *
+     * @generated from field: optional string spawn_error = 30;
+     */
+    spawnError?: string;
+    /**
+     * "{request_id}:{line_id}:{attempt_n}" — required for safe retry
+     *
+     * @generated from field: string spawn_idempotency_key = 31;
+     */
+    spawnIdempotencyKey: string;
+    /**
+     * @generated from field: optional int64 spawn_attempted_at = 32;
+     */
+    spawnAttemptedAt?: bigint;
+    /**
+     * @generated from field: optional int64 spawn_completed_at = 33;
+     */
+    spawnCompletedAt?: bigint;
 };
 /**
  * Describes the message domain.expenditure.v1.ProcurementRequestLine.
@@ -413,6 +494,89 @@ export type GetProcurementRequestLineItemPageDataResponse = Message<"domain.expe
  * Use `create(GetProcurementRequestLineItemPageDataResponseSchema)` to create a new message.
  */
 export declare const GetProcurementRequestLineItemPageDataResponseSchema: GenMessage<GetProcurementRequestLineItemPageDataResponse>;
+/**
+ * ProcurementRequestLineFulfillmentMode (F1, round-6) — discriminates how
+ * approval of this line spawns its downstream artifact. Drives the
+ * approval-cascade dispatch in submit.go / approve.go.
+ *
+ * @generated from enum domain.expenditure.v1.ProcurementRequestLineFulfillmentMode
+ */
+export declare enum ProcurementRequestLineFulfillmentMode {
+    /**
+     * @generated from enum value: PROCUREMENT_REQUEST_LINE_FULFILLMENT_MODE_UNSPECIFIED = 0;
+     */
+    UNSPECIFIED = 0,
+    /**
+     * → PurchaseOrder + PurchaseOrderLineItem
+     *
+     * @generated from enum value: PROCUREMENT_REQUEST_LINE_FULFILLMENT_MODE_OUTRIGHT = 1;
+     */
+    OUTRIGHT = 1,
+    /**
+     * → PurchaseOrder (FRAMEWORK release) + GR
+     *
+     * @generated from enum value: PROCUREMENT_REQUEST_LINE_FULFILLMENT_MODE_STOCKABLE = 2;
+     */
+    STOCKABLE = 2,
+    /**
+     * → SupplierContract + Line(s)
+     *
+     * @generated from enum value: PROCUREMENT_REQUEST_LINE_FULFILLMENT_MODE_RECURRING = 3;
+     */
+    RECURRING = 3,
+    /**
+     * → Expenditure direct (sundries)
+     *
+     * @generated from enum value: PROCUREMENT_REQUEST_LINE_FULFILLMENT_MODE_PETTY = 4;
+     */
+    PETTY = 4
+}
+/**
+ * Describes the enum domain.expenditure.v1.ProcurementRequestLineFulfillmentMode.
+ */
+export declare const ProcurementRequestLineFulfillmentModeSchema: GenEnum<ProcurementRequestLineFulfillmentMode>;
+/**
+ * ProcurementRequestLineSpawnStatus (CRIT-3, round-6) — per-line spawn
+ * lifecycle tracked by the approval cascade. PR.status flips to
+ * APPROVED_PENDING_SPAWN at approve-time and only reaches APPROVED once
+ * every line on it reaches SPAWNED. FAILED lines are eligible for retry.
+ *
+ * @generated from enum domain.expenditure.v1.ProcurementRequestLineSpawnStatus
+ */
+export declare enum ProcurementRequestLineSpawnStatus {
+    /**
+     * @generated from enum value: PROCUREMENT_REQUEST_LINE_SPAWN_STATUS_UNSPECIFIED = 0;
+     */
+    UNSPECIFIED = 0,
+    /**
+     * event emitted, worker has not started
+     *
+     * @generated from enum value: PROCUREMENT_REQUEST_LINE_SPAWN_STATUS_PENDING = 1;
+     */
+    PENDING = 1,
+    /**
+     * worker started; downstream txn in progress
+     *
+     * @generated from enum value: PROCUREMENT_REQUEST_LINE_SPAWN_STATUS_SPAWNING = 2;
+     */
+    SPAWNING = 2,
+    /**
+     * downstream artifact created and back-FK populated
+     *
+     * @generated from enum value: PROCUREMENT_REQUEST_LINE_SPAWN_STATUS_SPAWNED = 3;
+     */
+    SPAWNED = 3,
+    /**
+     * eligible for retry; spawn_error populated
+     *
+     * @generated from enum value: PROCUREMENT_REQUEST_LINE_SPAWN_STATUS_FAILED = 4;
+     */
+    FAILED = 4
+}
+/**
+ * Describes the enum domain.expenditure.v1.ProcurementRequestLineSpawnStatus.
+ */
+export declare const ProcurementRequestLineSpawnStatusSchema: GenEnum<ProcurementRequestLineSpawnStatus>;
 /**
  * @generated from service domain.expenditure.v1.ProcurementRequestLineDomainService
  */

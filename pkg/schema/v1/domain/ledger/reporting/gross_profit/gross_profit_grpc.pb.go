@@ -19,7 +19,9 @@ import (
 const _ = grpc.SupportPackageIsVersion9
 
 const (
-	LedgerReportingDomainService_GetGrossProfitReport_FullMethodName = "/domain.ledger.v1.LedgerReportingDomainService/GetGrossProfitReport"
+	LedgerReportingDomainService_GetGrossProfitReport_FullMethodName   = "/domain.ledger.v1.LedgerReportingDomainService/GetGrossProfitReport"
+	LedgerReportingDomainService_GetCashBookReport_FullMethodName      = "/domain.ledger.v1.LedgerReportingDomainService/GetCashBookReport"
+	LedgerReportingDomainService_GetPayablesAgingReport_FullMethodName = "/domain.ledger.v1.LedgerReportingDomainService/GetPayablesAgingReport"
 )
 
 // LedgerReportingDomainServiceClient is the client API for LedgerReportingDomainService service.
@@ -29,6 +31,8 @@ const (
 // LedgerReportingDomainService defines ledger reporting operations.
 type LedgerReportingDomainServiceClient interface {
 	GetGrossProfitReport(ctx context.Context, in *GrossProfitReportRequest, opts ...grpc.CallOption) (*GrossProfitReportResponse, error)
+	GetCashBookReport(ctx context.Context, in *CashBookReportRequest, opts ...grpc.CallOption) (*CashBookReportResponse, error)
+	GetPayablesAgingReport(ctx context.Context, in *PayablesAgingReportRequest, opts ...grpc.CallOption) (*PayablesAgingReportResponse, error)
 }
 
 type ledgerReportingDomainServiceClient struct {
@@ -49,6 +53,26 @@ func (c *ledgerReportingDomainServiceClient) GetGrossProfitReport(ctx context.Co
 	return out, nil
 }
 
+func (c *ledgerReportingDomainServiceClient) GetCashBookReport(ctx context.Context, in *CashBookReportRequest, opts ...grpc.CallOption) (*CashBookReportResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(CashBookReportResponse)
+	err := c.cc.Invoke(ctx, LedgerReportingDomainService_GetCashBookReport_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *ledgerReportingDomainServiceClient) GetPayablesAgingReport(ctx context.Context, in *PayablesAgingReportRequest, opts ...grpc.CallOption) (*PayablesAgingReportResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(PayablesAgingReportResponse)
+	err := c.cc.Invoke(ctx, LedgerReportingDomainService_GetPayablesAgingReport_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // LedgerReportingDomainServiceServer is the server API for LedgerReportingDomainService service.
 // All implementations must embed UnimplementedLedgerReportingDomainServiceServer
 // for forward compatibility.
@@ -56,6 +80,8 @@ func (c *ledgerReportingDomainServiceClient) GetGrossProfitReport(ctx context.Co
 // LedgerReportingDomainService defines ledger reporting operations.
 type LedgerReportingDomainServiceServer interface {
 	GetGrossProfitReport(context.Context, *GrossProfitReportRequest) (*GrossProfitReportResponse, error)
+	GetCashBookReport(context.Context, *CashBookReportRequest) (*CashBookReportResponse, error)
+	GetPayablesAgingReport(context.Context, *PayablesAgingReportRequest) (*PayablesAgingReportResponse, error)
 	mustEmbedUnimplementedLedgerReportingDomainServiceServer()
 }
 
@@ -68,6 +94,12 @@ type UnimplementedLedgerReportingDomainServiceServer struct{}
 
 func (UnimplementedLedgerReportingDomainServiceServer) GetGrossProfitReport(context.Context, *GrossProfitReportRequest) (*GrossProfitReportResponse, error) {
 	return nil, status.Error(codes.Unimplemented, "method GetGrossProfitReport not implemented")
+}
+func (UnimplementedLedgerReportingDomainServiceServer) GetCashBookReport(context.Context, *CashBookReportRequest) (*CashBookReportResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method GetCashBookReport not implemented")
+}
+func (UnimplementedLedgerReportingDomainServiceServer) GetPayablesAgingReport(context.Context, *PayablesAgingReportRequest) (*PayablesAgingReportResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method GetPayablesAgingReport not implemented")
 }
 func (UnimplementedLedgerReportingDomainServiceServer) mustEmbedUnimplementedLedgerReportingDomainServiceServer() {
 }
@@ -109,6 +141,42 @@ func _LedgerReportingDomainService_GetGrossProfitReport_Handler(srv interface{},
 	return interceptor(ctx, in, info, handler)
 }
 
+func _LedgerReportingDomainService_GetCashBookReport_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(CashBookReportRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(LedgerReportingDomainServiceServer).GetCashBookReport(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: LedgerReportingDomainService_GetCashBookReport_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(LedgerReportingDomainServiceServer).GetCashBookReport(ctx, req.(*CashBookReportRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _LedgerReportingDomainService_GetPayablesAgingReport_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(PayablesAgingReportRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(LedgerReportingDomainServiceServer).GetPayablesAgingReport(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: LedgerReportingDomainService_GetPayablesAgingReport_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(LedgerReportingDomainServiceServer).GetPayablesAgingReport(ctx, req.(*PayablesAgingReportRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // LedgerReportingDomainService_ServiceDesc is the grpc.ServiceDesc for LedgerReportingDomainService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -119,6 +187,14 @@ var LedgerReportingDomainService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "GetGrossProfitReport",
 			Handler:    _LedgerReportingDomainService_GetGrossProfitReport_Handler,
+		},
+		{
+			MethodName: "GetCashBookReport",
+			Handler:    _LedgerReportingDomainService_GetCashBookReport_Handler,
+		},
+		{
+			MethodName: "GetPayablesAgingReport",
+			Handler:    _LedgerReportingDomainService_GetPayablesAgingReport_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

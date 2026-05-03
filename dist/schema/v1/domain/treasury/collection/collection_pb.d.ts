@@ -422,6 +422,42 @@ export type GetCollectionItemPageDataResponse = Message<"domain.treasury.v1.GetC
  */
 export declare const GetCollectionItemPageDataResponseSchema: GenMessage<GetCollectionItemPageDataResponse>;
 /**
+ * @generated from message domain.treasury.v1.ListByClientRequest
+ */
+export type ListByClientRequest = Message<"domain.treasury.v1.ListByClientRequest"> & {
+    /**
+     * @generated from field: string client_id = 1;
+     */
+    clientId: string;
+};
+/**
+ * Describes the message domain.treasury.v1.ListByClientRequest.
+ * Use `create(ListByClientRequestSchema)` to create a new message.
+ */
+export declare const ListByClientRequestSchema: GenMessage<ListByClientRequest>;
+/**
+ * @generated from message domain.treasury.v1.ListByClientResponse
+ */
+export type ListByClientResponse = Message<"domain.treasury.v1.ListByClientResponse"> & {
+    /**
+     * @generated from field: repeated domain.treasury.v1.Collection data = 1;
+     */
+    data: Collection[];
+    /**
+     * @generated from field: bool success = 2;
+     */
+    success: boolean;
+    /**
+     * @generated from field: optional domain.common.v1.Error error = 3;
+     */
+    error?: Error;
+};
+/**
+ * Describes the message domain.treasury.v1.ListByClientResponse.
+ * Use `create(ListByClientResponseSchema)` to create a new message.
+ */
+export declare const ListByClientResponseSchema: GenMessage<ListByClientResponse>;
+/**
  * @generated from service domain.treasury.v1.CollectionDomainService
  */
 export declare const CollectionDomainService: GenService<{
@@ -480,5 +516,13 @@ export declare const CollectionDomainService: GenService<{
         methodKind: "unary";
         input: typeof GetCollectionItemPageDataRequestSchema;
         output: typeof GetCollectionItemPageDataResponseSchema;
+    };
+    /**
+     * @generated from rpc domain.treasury.v1.CollectionDomainService.ListByClient
+     */
+    listByClient: {
+        methodKind: "unary";
+        input: typeof ListByClientRequestSchema;
+        output: typeof ListByClientResponseSchema;
     };
 }>;

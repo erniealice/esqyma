@@ -68,6 +68,8 @@ service SubscriptionDomainService {
   // NEW: Enhanced item view with related data
   rpc GetSubscriptionItemPageData(GetSubscriptionItemPageDataRequest)
     returns (GetSubscriptionItemPageDataResponse);
+
+  rpc CountActiveByClientIds(CountActiveByClientIdsRequest) returns (CountActiveByClientIdsResponse);
 }
 
 message CreateSubscriptionRequest {
@@ -167,4 +169,14 @@ message GetSubscriptionItemPageDataResponse {
   // Response status
   bool success = 2;
   optional domain.common.v1.Error error = 3;
+}
+
+message CountActiveByClientIdsRequest {
+  repeated string client_ids = 1;  // empty = count all clients in the workspace
+}
+
+message CountActiveByClientIdsResponse {
+  // Keys are client IDs; values are counts of active subscriptions for each.
+  // Clients with zero active subscriptions are omitted (caller defaults to 0).
+  map<string, int32> counts = 1;
 }

@@ -99,6 +99,26 @@ export type AssetCategory = Message<"domain.asset.v1.AssetCategory"> & {
      * @generated from field: bool active = 20;
      */
     active: boolean;
+    /**
+     * Drift-recovered columns (DB had these; proto did not)
+     *
+     * Effective depreciation method (separate from default_depreciation_method)
+     *
+     * @generated from field: optional string depreciation_method = 21;
+     */
+    depreciationMethod?: string;
+    /**
+     * Effective salvage percentage
+     *
+     * @generated from field: optional double salvage_pct = 22;
+     */
+    salvagePct?: number;
+    /**
+     * Effective useful life in months
+     *
+     * @generated from field: optional int32 useful_life_months = 23;
+     */
+    usefulLifeMonths?: number;
 };
 /**
  * Describes the message domain.asset.v1.AssetCategory.

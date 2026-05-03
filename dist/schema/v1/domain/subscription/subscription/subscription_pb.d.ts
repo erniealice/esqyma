@@ -118,6 +118,21 @@ export type Subscription = Message<"domain.subscription.v1.Subscription"> & {
      * @generated from field: optional string code = 22;
      */
     code?: string;
+    /**
+     * AD_HOC × TOTAL_PACKAGE per-subscription entitlement override.
+     * NULL = inherit pricePlan.entitled_occurrences. Set non-NULL when an
+     * operator clicks "Extend pool" — the override is the new total, not a delta.
+     * See docs/plan/20260501-ad-hoc-subscription-billing/plan.md §2.3 (codex MAJ-1).
+     *
+     * @generated from field: optional int32 entitled_occurrences_override = 23;
+     */
+    entitledOccurrencesOverride?: number;
+    /**
+     * Workspace ownership — subscriptions are scoped per workspace.
+     *
+     * @generated from field: optional string workspace_id = 24;
+     */
+    workspaceId?: string;
 };
 /**
  * Describes the message domain.subscription.v1.Subscription.
@@ -435,6 +450,41 @@ export type GetSubscriptionItemPageDataResponse = Message<"domain.subscription.v
  */
 export declare const GetSubscriptionItemPageDataResponseSchema: GenMessage<GetSubscriptionItemPageDataResponse>;
 /**
+ * @generated from message domain.subscription.v1.CountActiveByClientIdsRequest
+ */
+export type CountActiveByClientIdsRequest = Message<"domain.subscription.v1.CountActiveByClientIdsRequest"> & {
+    /**
+     * empty = count all clients in the workspace
+     *
+     * @generated from field: repeated string client_ids = 1;
+     */
+    clientIds: string[];
+};
+/**
+ * Describes the message domain.subscription.v1.CountActiveByClientIdsRequest.
+ * Use `create(CountActiveByClientIdsRequestSchema)` to create a new message.
+ */
+export declare const CountActiveByClientIdsRequestSchema: GenMessage<CountActiveByClientIdsRequest>;
+/**
+ * @generated from message domain.subscription.v1.CountActiveByClientIdsResponse
+ */
+export type CountActiveByClientIdsResponse = Message<"domain.subscription.v1.CountActiveByClientIdsResponse"> & {
+    /**
+     * Keys are client IDs; values are counts of active subscriptions for each.
+     * Clients with zero active subscriptions are omitted (caller defaults to 0).
+     *
+     * @generated from field: map<string, int32> counts = 1;
+     */
+    counts: {
+        [key: string]: number;
+    };
+};
+/**
+ * Describes the message domain.subscription.v1.CountActiveByClientIdsResponse.
+ * Use `create(CountActiveByClientIdsResponseSchema)` to create a new message.
+ */
+export declare const CountActiveByClientIdsResponseSchema: GenMessage<CountActiveByClientIdsResponse>;
+/**
  * @generated from service domain.subscription.v1.SubscriptionDomainService
  */
 export declare const SubscriptionDomainService: GenService<{
@@ -497,5 +547,13 @@ export declare const SubscriptionDomainService: GenService<{
         methodKind: "unary";
         input: typeof GetSubscriptionItemPageDataRequestSchema;
         output: typeof GetSubscriptionItemPageDataResponseSchema;
+    };
+    /**
+     * @generated from rpc domain.subscription.v1.SubscriptionDomainService.CountActiveByClientIds
+     */
+    countActiveByClientIds: {
+        methodKind: "unary";
+        input: typeof CountActiveByClientIdsRequestSchema;
+        output: typeof CountActiveByClientIdsResponseSchema;
     };
 }>;

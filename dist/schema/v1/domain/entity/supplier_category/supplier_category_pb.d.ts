@@ -53,6 +53,26 @@ export type SupplierCategory = Message<"domain.entity.v1.SupplierCategory"> & {
      * @generated from field: bool active = 9;
      */
     active: boolean;
+    /**
+     * Drift-recovered columns (DB had these; proto did not)
+     *
+     * Machine key
+     *
+     * @generated from field: string code = 10;
+     */
+    code: string;
+    /**
+     * Display name
+     *
+     * @generated from field: string name = 11;
+     */
+    name: string;
+    /**
+     * Optional description
+     *
+     * @generated from field: optional string description = 12;
+     */
+    description?: string;
 };
 /**
  * Describes the message domain.entity.v1.SupplierCategory.

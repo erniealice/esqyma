@@ -26,6 +26,7 @@ const (
 	CollectionDomainService_ListCollections_FullMethodName           = "/domain.treasury.v1.CollectionDomainService/ListCollections"
 	CollectionDomainService_GetCollectionListPageData_FullMethodName = "/domain.treasury.v1.CollectionDomainService/GetCollectionListPageData"
 	CollectionDomainService_GetCollectionItemPageData_FullMethodName = "/domain.treasury.v1.CollectionDomainService/GetCollectionItemPageData"
+	CollectionDomainService_ListByClient_FullMethodName              = "/domain.treasury.v1.CollectionDomainService/ListByClient"
 )
 
 // CollectionDomainServiceClient is the client API for CollectionDomainService service.
@@ -39,6 +40,7 @@ type CollectionDomainServiceClient interface {
 	ListCollections(ctx context.Context, in *ListCollectionsRequest, opts ...grpc.CallOption) (*ListCollectionsResponse, error)
 	GetCollectionListPageData(ctx context.Context, in *GetCollectionListPageDataRequest, opts ...grpc.CallOption) (*GetCollectionListPageDataResponse, error)
 	GetCollectionItemPageData(ctx context.Context, in *GetCollectionItemPageDataRequest, opts ...grpc.CallOption) (*GetCollectionItemPageDataResponse, error)
+	ListByClient(ctx context.Context, in *ListByClientRequest, opts ...grpc.CallOption) (*ListByClientResponse, error)
 }
 
 type collectionDomainServiceClient struct {
@@ -119,6 +121,16 @@ func (c *collectionDomainServiceClient) GetCollectionItemPageData(ctx context.Co
 	return out, nil
 }
 
+func (c *collectionDomainServiceClient) ListByClient(ctx context.Context, in *ListByClientRequest, opts ...grpc.CallOption) (*ListByClientResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(ListByClientResponse)
+	err := c.cc.Invoke(ctx, CollectionDomainService_ListByClient_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // CollectionDomainServiceServer is the server API for CollectionDomainService service.
 // All implementations must embed UnimplementedCollectionDomainServiceServer
 // for forward compatibility.
@@ -130,6 +142,7 @@ type CollectionDomainServiceServer interface {
 	ListCollections(context.Context, *ListCollectionsRequest) (*ListCollectionsResponse, error)
 	GetCollectionListPageData(context.Context, *GetCollectionListPageDataRequest) (*GetCollectionListPageDataResponse, error)
 	GetCollectionItemPageData(context.Context, *GetCollectionItemPageDataRequest) (*GetCollectionItemPageDataResponse, error)
+	ListByClient(context.Context, *ListByClientRequest) (*ListByClientResponse, error)
 	mustEmbedUnimplementedCollectionDomainServiceServer()
 }
 
@@ -160,6 +173,9 @@ func (UnimplementedCollectionDomainServiceServer) GetCollectionListPageData(cont
 }
 func (UnimplementedCollectionDomainServiceServer) GetCollectionItemPageData(context.Context, *GetCollectionItemPageDataRequest) (*GetCollectionItemPageDataResponse, error) {
 	return nil, status.Error(codes.Unimplemented, "method GetCollectionItemPageData not implemented")
+}
+func (UnimplementedCollectionDomainServiceServer) ListByClient(context.Context, *ListByClientRequest) (*ListByClientResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method ListByClient not implemented")
 }
 func (UnimplementedCollectionDomainServiceServer) mustEmbedUnimplementedCollectionDomainServiceServer() {
 }
@@ -309,6 +325,24 @@ func _CollectionDomainService_GetCollectionItemPageData_Handler(srv interface{},
 	return interceptor(ctx, in, info, handler)
 }
 
+func _CollectionDomainService_ListByClient_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ListByClientRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(CollectionDomainServiceServer).ListByClient(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: CollectionDomainService_ListByClient_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(CollectionDomainServiceServer).ListByClient(ctx, req.(*ListByClientRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // CollectionDomainService_ServiceDesc is the grpc.ServiceDesc for CollectionDomainService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -343,6 +377,10 @@ var CollectionDomainService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "GetCollectionItemPageData",
 			Handler:    _CollectionDomainService_GetCollectionItemPageData_Handler,
+		},
+		{
+			MethodName: "ListByClient",
+			Handler:    _CollectionDomainService_ListByClient_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

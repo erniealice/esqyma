@@ -59,12 +59,18 @@ type Client struct {
 	Country         *string `protobuf:"bytes,25,opt,name=country,proto3,oneof" json:"country,omitempty"` // ISO 3166-1 alpha-2 country code
 	Website         *string `protobuf:"bytes,26,opt,name=website,proto3,oneof" json:"website,omitempty"`
 	// Drift-recovered columns (DB had these; proto did not)
-	Email         *string `protobuf:"bytes,27,opt,name=email,proto3,oneof" json:"email,omitempty"`                          // Primary email address
-	FirstName     *string `protobuf:"bytes,28,opt,name=first_name,json=firstName,proto3,oneof" json:"first_name,omitempty"` // Given name (individual clients)
-	LastName      *string `protobuf:"bytes,29,opt,name=last_name,json=lastName,proto3,oneof" json:"last_name,omitempty"`    // Family name (individual clients)
-	WorkspaceId   *string `protobuf:"bytes,30,opt,name=workspace_id,json=workspaceId,proto3,oneof" json:"workspace_id,omitempty"`
-	unknownFields protoimpl.UnknownFields
-	sizeCache     protoimpl.SizeCache
+	Email       *string `protobuf:"bytes,27,opt,name=email,proto3,oneof" json:"email,omitempty"`                          // Primary email address
+	FirstName   *string `protobuf:"bytes,28,opt,name=first_name,json=firstName,proto3,oneof" json:"first_name,omitempty"` // Given name (individual clients)
+	LastName    *string `protobuf:"bytes,29,opt,name=last_name,json=lastName,proto3,oneof" json:"last_name,omitempty"`    // Family name (individual clients)
+	WorkspaceId *string `protobuf:"bytes,30,opt,name=workspace_id,json=workspaceId,proto3,oneof" json:"workspace_id,omitempty"`
+	// Accounting fields — mirror supplier's equivalent columns so a future
+	// shared scanner/builder can unify both sides.
+	TaxId              *string `protobuf:"bytes,31,opt,name=tax_id,json=taxId,proto3,oneof" json:"tax_id,omitempty"`                                        // TIN/VAT/EIN
+	RegistrationNumber *string `protobuf:"bytes,32,opt,name=registration_number,json=registrationNumber,proto3,oneof" json:"registration_number,omitempty"` // Business registration number
+	CreditLimit        *int64  `protobuf:"varint,33,opt,name=credit_limit,json=creditLimit,proto3,oneof" json:"credit_limit,omitempty"`                     // centavos — maximum outstanding receivable
+	LeadTimeDays       *int32  `protobuf:"varint,34,opt,name=lead_time_days,json=leadTimeDays,proto3,oneof" json:"lead_time_days,omitempty"`                // Default delivery promise to this client
+	unknownFields      protoimpl.UnknownFields
+	sizeCache          protoimpl.SizeCache
 }
 
 func (x *Client) Reset() {
@@ -291,6 +297,34 @@ func (x *Client) GetWorkspaceId() string {
 		return *x.WorkspaceId
 	}
 	return ""
+}
+
+func (x *Client) GetTaxId() string {
+	if x != nil && x.TaxId != nil {
+		return *x.TaxId
+	}
+	return ""
+}
+
+func (x *Client) GetRegistrationNumber() string {
+	if x != nil && x.RegistrationNumber != nil {
+		return *x.RegistrationNumber
+	}
+	return ""
+}
+
+func (x *Client) GetCreditLimit() int64 {
+	if x != nil && x.CreditLimit != nil {
+		return *x.CreditLimit
+	}
+	return 0
+}
+
+func (x *Client) GetLeadTimeDays() int32 {
+	if x != nil && x.LeadTimeDays != nil {
+		return *x.LeadTimeDays
+	}
+	return 0
 }
 
 type CreateClientRequest struct {
@@ -1245,7 +1279,7 @@ var File_domain_entity_client_client_proto protoreflect.FileDescriptor
 
 const file_domain_entity_client_client_proto_rawDesc = "" +
 	"\n" +
-	"!domain/entity/client/client.proto\x12\x10domain.entity.v1\x1a\x19domain/common/error.proto\x1a\x1adomain/common/search.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1edomain/common/pagination.proto\x1a\x10options/db.proto\x1a\x1ddomain/entity/user/user.proto\x1a3domain/entity/client_category/client_category.proto\x1a-domain/entity/payment_term/payment_term.proto\"\xfb\v\n" +
+	"!domain/entity/client/client.proto\x12\x10domain.entity.v1\x1a\x19domain/common/error.proto\x1a\x1adomain/common/search.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1edomain/common/pagination.proto\x1a\x10options/db.proto\x1a\x1ddomain/entity/user/user.proto\x1a3domain/entity/client_category/client_category.proto\x1a-domain/entity/payment_term/payment_term.proto\"\xe7\r\n" +
 	"\x06Client\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12/\n" +
 	"\x04user\x18\x02 \x01(\v2\x16.domain.entity.v1.UserH\x00R\x04user\x88\x01\x01\x12%\n" +
@@ -1286,7 +1320,11 @@ const file_domain_entity_client_client_proto_rawDesc = "" +
 	"first_name\x18\x1c \x01(\tH\x14R\tfirstName\x88\x01\x01\x12 \n" +
 	"\tlast_name\x18\x1d \x01(\tH\x15R\blastName\x88\x01\x01\x129\n" +
 	"\fworkspace_id\x18\x1e \x01(\tB\x11\x82\xb5\x18\r\n" +
-	"\tworkspace\x18\x01H\x16R\vworkspaceId\x88\x01\x01:\x06\x8a\xb5\x18\x02\b\x01B\a\n" +
+	"\tworkspace\x18\x01H\x16R\vworkspaceId\x88\x01\x01\x12\x1a\n" +
+	"\x06tax_id\x18\x1f \x01(\tH\x17R\x05taxId\x88\x01\x01\x124\n" +
+	"\x13registration_number\x18  \x01(\tH\x18R\x12registrationNumber\x88\x01\x01\x12&\n" +
+	"\fcredit_limit\x18! \x01(\x03H\x19R\vcreditLimit\x88\x01\x01\x12)\n" +
+	"\x0elead_time_days\x18\" \x01(\x05H\x1aR\fleadTimeDays\x88\x01\x01:\x06\x8a\xb5\x18\x02\b\x01B\a\n" +
 	"\x05_userB\x0f\n" +
 	"\r_date_createdB\x16\n" +
 	"\x14_date_created_stringB\x10\n" +
@@ -1312,7 +1350,11 @@ const file_domain_entity_client_client_proto_rawDesc = "" +
 	"\v_first_nameB\f\n" +
 	"\n" +
 	"_last_nameB\x0f\n" +
-	"\r_workspace_id\"C\n" +
+	"\r_workspace_idB\t\n" +
+	"\a_tax_idB\x16\n" +
+	"\x14_registration_numberB\x0f\n" +
+	"\r_credit_limitB\x11\n" +
+	"\x0f_lead_time_days\"C\n" +
 	"\x13CreateClientRequest\x12,\n" +
 	"\x04data\x18\x01 \x01(\v2\x18.domain.entity.v1.ClientR\x04data\"\x9c\x01\n" +
 	"\x14CreateClientResponse\x12,\n" +

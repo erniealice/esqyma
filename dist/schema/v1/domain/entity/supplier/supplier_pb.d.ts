@@ -168,6 +168,38 @@ export type Supplier = Message<"domain.entity.v1.Supplier"> & {
      * @generated from field: optional string timezone = 32;
      */
     timezone?: string;
+    /**
+     * Discriminator: "vendor" (default) | "contractor" | "agency" | "regulator" | "employee".
+     * Drives kind-aware permission gating, list filters, and payroll routing
+     * (Supplier(kind='employee') is the employee identity primitive).
+     *
+     * @generated from field: optional string kind = 33;
+     */
+    kind?: string;
+    /**
+     * Salary-data privacy hooks (only populated when kind='employee'). Visible only to
+     * callers holding payroll:read:compensation permission; redacted by default in
+     * ListSuppliers / GetSupplier responses.
+     *
+     * @generated from field: optional string position = 34;
+     */
+    position?: string;
+    /**
+     * @generated from field: optional string department = 35;
+     */
+    department?: string;
+    /**
+     * Drift-recovered columns (DB had these; proto did not)
+     *
+     * ISO 4217 currency code — separate from billing_currency
+     *
+     * @generated from field: optional string currency = 36;
+     */
+    currency?: string;
+    /**
+     * @generated from field: optional string workspace_id = 37;
+     */
+    workspaceId?: string;
 };
 /**
  * Describes the message domain.entity.v1.Supplier.

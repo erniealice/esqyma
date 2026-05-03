@@ -144,6 +144,10 @@ service AssetDomainService {
 
   // Revaluation (IFRS only)
   rpc RevalueAsset(RevalueAssetRequest) returns (RevalueAssetResponse);
+
+  // Partial-field mutation: toggle the bool active field without a full Asset payload.
+  // Mirrors BillingEvent.SetStatus — dedicated rpc for proto3-zero-vulnerable bool.
+  rpc SetAssetActive(SetAssetActiveRequest) returns (SetAssetActiveResponse);
 }
 
 message CreateAssetRequest {
@@ -300,6 +304,22 @@ message RevalueAssetRequest {
 
 message RevalueAssetResponse {
   repeated Asset data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+// SetAssetActive toggles the bool active field on an asset without
+// requiring a full Asset payload. Mirrors the BillingEvent.SetStatus
+// pattern at billing_event.proto:226-237 — partial-field mutation
+// for proto3-zero-vulnerable fields.
+message SetAssetActiveRequest {
+  string asset_id = 1;
+  bool active = 2;
+  optional string reason = 3;
+}
+
+message SetAssetActiveResponse {
+  optional Asset data = 1;
   bool success = 2;
   optional domain.common.v1.Error error = 3;
 }

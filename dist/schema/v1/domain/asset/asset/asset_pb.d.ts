@@ -808,6 +808,55 @@ export type RevalueAssetResponse = Message<"domain.asset.v1.RevalueAssetResponse
  */
 export declare const RevalueAssetResponseSchema: GenMessage<RevalueAssetResponse>;
 /**
+ * SetAssetActive toggles the bool active field on an asset without
+ * requiring a full Asset payload. Mirrors the BillingEvent.SetStatus
+ * pattern at billing_event.proto:226-237 — partial-field mutation
+ * for proto3-zero-vulnerable fields.
+ *
+ * @generated from message domain.asset.v1.SetAssetActiveRequest
+ */
+export type SetAssetActiveRequest = Message<"domain.asset.v1.SetAssetActiveRequest"> & {
+    /**
+     * @generated from field: string asset_id = 1;
+     */
+    assetId: string;
+    /**
+     * @generated from field: bool active = 2;
+     */
+    active: boolean;
+    /**
+     * @generated from field: optional string reason = 3;
+     */
+    reason?: string;
+};
+/**
+ * Describes the message domain.asset.v1.SetAssetActiveRequest.
+ * Use `create(SetAssetActiveRequestSchema)` to create a new message.
+ */
+export declare const SetAssetActiveRequestSchema: GenMessage<SetAssetActiveRequest>;
+/**
+ * @generated from message domain.asset.v1.SetAssetActiveResponse
+ */
+export type SetAssetActiveResponse = Message<"domain.asset.v1.SetAssetActiveResponse"> & {
+    /**
+     * @generated from field: optional domain.asset.v1.Asset data = 1;
+     */
+    data?: Asset;
+    /**
+     * @generated from field: bool success = 2;
+     */
+    success: boolean;
+    /**
+     * @generated from field: optional domain.common.v1.Error error = 3;
+     */
+    error?: Error;
+};
+/**
+ * Describes the message domain.asset.v1.SetAssetActiveResponse.
+ * Use `create(SetAssetActiveResponseSchema)` to create a new message.
+ */
+export declare const SetAssetActiveResponseSchema: GenMessage<SetAssetActiveResponse>;
+/**
  * AssetType distinguishes the accounting standard governing the asset.
  *
  * @generated from enum domain.asset.v1.AssetType
@@ -1094,5 +1143,16 @@ export declare const AssetDomainService: GenService<{
         methodKind: "unary";
         input: typeof RevalueAssetRequestSchema;
         output: typeof RevalueAssetResponseSchema;
+    };
+    /**
+     * Partial-field mutation: toggle the bool active field without a full Asset payload.
+     * Mirrors BillingEvent.SetStatus — dedicated rpc for proto3-zero-vulnerable bool.
+     *
+     * @generated from rpc domain.asset.v1.AssetDomainService.SetAssetActive
+     */
+    setAssetActive: {
+        methodKind: "unary";
+        input: typeof SetAssetActiveRequestSchema;
+        output: typeof SetAssetActiveResponseSchema;
     };
 }>;

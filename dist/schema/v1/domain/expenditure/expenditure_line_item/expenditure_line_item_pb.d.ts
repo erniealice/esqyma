@@ -111,6 +111,45 @@ export type ExpenditureLineItem = Message<"domain.expenditure.v1.ExpenditureLine
      * @generated from field: optional string supplier_contract_line_id = 21;
      */
     supplierContractLineId?: string;
+    /**
+     * Payroll calculator provenance (only populated for Expenditure(type='payroll') lines).
+     * rate_table_id is pinned at calc time so reposting reproduces despite newer rate rows.
+     *
+     * FK to rate_table (no DB constraint)
+     *
+     * @generated from field: optional string rate_table_id = 22;
+     */
+    rateTableId?: string;
+    /**
+     * FK to pay_cycle (no DB constraint)
+     *
+     * @generated from field: optional string pay_cycle_id = 23;
+     */
+    payCycleId?: string;
+    /**
+     * centavos — the salary basis the line applied to
+     *
+     * @generated from field: optional int64 applied_basis_amount = 24;
+     */
+    appliedBasisAmount?: bigint;
+    /**
+     * 0.0–1.0, for mid-cycle compensation changes
+     *
+     * @generated from field: optional double proration_factor = 25;
+     */
+    prorationFactor?: number;
+    /**
+     * JSON-encoded calculator audit (pre/post split, formula refs)
+     *
+     * @generated from field: optional string calc_metadata = 26;
+     */
+    calcMetadata?: string;
+    /**
+     * "earning_basic" | "earning_allowance" | "deduction_statutory" |
+     *
+     * @generated from field: optional string line_kind = 27;
+     */
+    lineKind?: string;
 };
 /**
  * Describes the message domain.expenditure.v1.ExpenditureLineItem.

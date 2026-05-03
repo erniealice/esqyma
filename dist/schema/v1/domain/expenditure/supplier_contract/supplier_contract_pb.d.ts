@@ -271,6 +271,31 @@ export type SupplierContract = Message<"domain.expenditure.v1.SupplierContract">
     metadata: {
         [key: string]: string;
     };
+    /**
+     * Employment-specific fields (only populated when kind == EMPLOYMENT).
+     * Drive PayCycle generation and statutory calculator selection.
+     *
+     * "weekly" | "biweekly" | "semi_monthly" | "monthly"
+     *
+     * @generated from field: optional string pay_frequency = 130;
+     */
+    payFrequency?: string;
+    /**
+     * "regular" | "probationary" | "project_based" |
+     *
+     * @generated from field: optional string employment_class = 131;
+     */
+    employmentClass?: string;
+    /**
+     * "casual" | "fixed_term" | "agency_deployed"
+     *
+     * @generated from field: optional string position = 132;
+     */
+    position?: string;
+    /**
+     * @generated from field: optional string department = 133;
+     */
+    department?: string;
 };
 /**
  * Describes the message domain.expenditure.v1.SupplierContract.
@@ -758,7 +783,29 @@ export declare enum SupplierContractKind {
      *
      * @generated from enum value: SUPPLIER_CONTRACT_KIND_OTHER = 8;
      */
-    OTHER = 8
+    OTHER = 8,
+    /**
+     * employment contract (Supplier(kind='employee'))
+     *
+     * @generated from enum value: SUPPLIER_CONTRACT_KIND_EMPLOYMENT = 9;
+     */
+    EMPLOYMENT = 9,
+    /**
+     * non-disclosure
+     *
+     * @generated from enum value: SUPPLIER_CONTRACT_KIND_NDA = 10;
+     */
+    NDA = 10,
+    /**
+     * certificate of insurance
+     *
+     * @generated from enum value: SUPPLIER_CONTRACT_KIND_COI = 11;
+     */
+    COI = 11,
+    /**
+     * @generated from enum value: SUPPLIER_CONTRACT_KIND_SERVICE_AGREEMENT = 12;
+     */
+    SERVICE_AGREEMENT = 12
 }
 /**
  * Describes the enum domain.expenditure.v1.SupplierContractKind.

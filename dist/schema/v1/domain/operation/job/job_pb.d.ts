@@ -244,6 +244,56 @@ export type Job = Message<"domain.operation.v1.Job"> & {
      * @generated from field: optional string workflow_instance_id = 52;
      */
     workflowInstanceId?: string;
+    /**
+     * Cycle metadata for cyclic subscriptions. Set on cycle-instance Jobs
+     * (parent_job_id != NULL, spawned by MaterializeCycleJobsForSubscription).
+     * NULL on engagement Jobs (the shell parent) and on lifetime non-cyclic
+     * Jobs (one-shot projects, milestone engagements). See
+     * docs/plan/20260430-cyclic-subscription-jobs/plan.md §3.
+     *
+     * cycle_index: 0-based ordinal of the cycle within the engagement. Monotone
+     * within (origin_id, parent_job_id) — gaps allowed when cycles are skipped
+     * (e.g., subscription paused). Operator-visible as "Cycle 1", "Cycle 2".
+     *
+     * @generated from field: optional int32 cycle_index = 53;
+     */
+    cycleIndex?: number;
+    /**
+     * Billing-cycle window this Job belongs to. ISO 8601 datetime string.
+     * cycle_period_start is inclusive; cycle_period_end is exclusive.
+     * Mirrors PricePlan.billing_cycle_value × billing_cycle_unit semantics
+     * from docs/plan/20260425-subscription-revenue-recognition/plan.md §3.2.
+     * Joining Job ↔ Revenue on (subscription_id, cycle_period_start) gives
+     * the "which invoice covers this cycle Job" trace without a hard FK.
+     *
+     * @generated from field: optional string cycle_period_start = 54;
+     */
+    cyclePeriodStart?: string;
+    /**
+     * @generated from field: optional string cycle_period_end = 55;
+     */
+    cyclePeriodEnd?: string;
+    /**
+     * AD_HOC × {TOTAL_PACKAGE | PER_OCCURRENCE} per-occurrence metadata.
+     * Companion columns to the composite cycle_period_start key (`YYYY-MM-DD#NNNN`),
+     * exposed as DATE + INT for sort/query convenience without composite-string parsing.
+     * Vertical-neutral naming — semantics flex per industry:
+     *   • field-services: "service visit" → request date + visit ordinal
+     *   • dental / aesthetics: "appointment" → appointment date + occurrence ordinal
+     *   • IT retainer: "support call" → call date + call ordinal
+     *   • equipment service: "service event" → event date + event ordinal
+     * NULL on cyclic Jobs and engagement shells.
+     * See docs/plan/20260501-ad-hoc-subscription-billing/plan.md §3.2 (codex CRIT-4).
+     *
+     * ISO 8601 YYYY-MM-DD
+     *
+     * @generated from field: optional string usage_request_date = 56;
+     */
+    usageRequestDate?: string;
+    /**
+     * @generated from field: optional int32 usage_ordinal = 57;
+     */
+    usageOrdinal?: number;
 };
 /**
  * Describes the message domain.operation.v1.Job.

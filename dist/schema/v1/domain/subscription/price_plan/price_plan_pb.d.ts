@@ -136,6 +136,23 @@ export type PricePlan = Message<"domain.subscription.v1.PricePlan"> & {
      * @generated from field: optional string client_id = 25;
      */
     clientId?: string;
+    /**
+     * Template default for AD_HOC × TOTAL_PACKAGE plans. Per-subscription
+     * overrides live on Subscription.entitled_occurrences_override (codex MAJ-1).
+     * Required and > 0 when (billing_kind == AD_HOC and amount_basis == TOTAL_PACKAGE).
+     * NULL otherwise. Reset to NULL on kind/basis change.
+     *
+     * @generated from field: optional int32 entitled_occurrences = 26;
+     */
+    entitledOccurrences?: number;
+    /**
+     * Drift-recovered column (DB had this; proto did not)
+     *
+     * Legacy migration shim — links to old price-list IDs
+     *
+     * @generated from field: optional string legacy_price_list_id = 27;
+     */
+    legacyPriceListId?: string;
 };
 /**
  * Describes the message domain.subscription.v1.PricePlan.
@@ -447,7 +464,23 @@ export declare enum BillingKind {
      *
      * @generated from enum value: BILLING_KIND_CONTRACT = 3;
      */
-    CONTRACT = 3
+    CONTRACT = 3,
+    /**
+     * gated by JobTemplatePhase + BillingEvent (see milestone-billing plan)
+     *
+     * @generated from enum value: BILLING_KIND_MILESTONE = 4;
+     */
+    MILESTONE = 4,
+    /**
+     * Event-driven recurrence — visits/redemptions are operator-requested,
+     * not calendar-driven. Combined with amount_basis to distinguish:
+     *   - TOTAL_PACKAGE   : prepaid pool of N visits, charged upfront
+     *   - PER_OCCURRENCE  : pay-per-call at per-visit rate, no upfront
+     * See docs/plan/20260501-ad-hoc-subscription-billing/plan.md.
+     *
+     * @generated from enum value: BILLING_KIND_AD_HOC = 5;
+     */
+    AD_HOC = 5
 }
 /**
  * Describes the enum domain.subscription.v1.BillingKind.
@@ -478,7 +511,14 @@ export declare enum AmountBasis {
      *
      * @generated from enum value: AMOUNT_BASIS_DERIVED_FROM_LINES = 3;
      */
-    DERIVED_FROM_LINES = 3
+    DERIVED_FROM_LINES = 3,
+    /**
+     * Per-visit / per-event billing. Currently only meaningful with
+     * BILLING_KIND_AD_HOC. Each instance Job spawn fires a BillingEvent.
+     *
+     * @generated from enum value: AMOUNT_BASIS_PER_OCCURRENCE = 4;
+     */
+    PER_OCCURRENCE = 4
 }
 /**
  * Describes the enum domain.subscription.v1.AmountBasis.
