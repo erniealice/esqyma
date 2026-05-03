@@ -44,6 +44,11 @@ message RevenueLineItem {
   optional string product_price_plan_id = 25 [(options.v1.db).references = "product_price_plan", (options.v1.db).index = true];
   optional string price_product_id = 26 [(options.v1.db).references = "price_product", (options.v1.db).index = true]; // FK to price_product — tracks which price_product was used for one-time revenue line items
   optional string job_activity_id = 27 [(options.v1.db).references = "job_activity", (options.v1.db).index = true]; // FK to job_activity — links line item to the activity that generated it
+
+  // Drift-recovered columns (DB had these; proto did not)
+  int64 line_amount = 28;                        // centavos — total amount for this line (NOT NULL in DB)
+  optional string subscription_id = 29 [(options.v1.db).references = "subscription", (options.v1.db).index = true]; // FK to subscription — links line item to recurring source
+  optional string workspace_id = 30 [(options.v1.db).references = "workspace", (options.v1.db).index = true];
 }
 
 service RevenueLineItemDomainService {

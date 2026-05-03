@@ -43,8 +43,10 @@ type Workspace struct {
 	// ISO 3166 country or country-subdivision code (e.g. "PH", "US-CA", "EU-DE").
 	// Drives statutory rate-table lookup and payroll calculator selection.
 	ComplianceRegion *string `protobuf:"bytes,12,opt,name=compliance_region,json=complianceRegion,proto3,oneof" json:"compliance_region,omitempty"`
-	unknownFields    protoimpl.UnknownFields
-	sizeCache        protoimpl.SizeCache
+	// Drift-recovered column (DB had this; proto did not)
+	DefaultCurrency *string `protobuf:"bytes,13,opt,name=default_currency,json=defaultCurrency,proto3,oneof" json:"default_currency,omitempty"` // ISO 4217 default currency for new entities (separate from functional_currency)
+	unknownFields   protoimpl.UnknownFields
+	sizeCache       protoimpl.SizeCache
 }
 
 func (x *Workspace) Reset() {
@@ -157,6 +159,13 @@ func (x *Workspace) GetFunctionalCurrency() string {
 func (x *Workspace) GetComplianceRegion() string {
 	if x != nil && x.ComplianceRegion != nil {
 		return *x.ComplianceRegion
+	}
+	return ""
+}
+
+func (x *Workspace) GetDefaultCurrency() string {
+	if x != nil && x.DefaultCurrency != nil {
+		return *x.DefaultCurrency
 	}
 	return ""
 }
@@ -1243,7 +1252,7 @@ var File_domain_entity_workspace_workspace_proto protoreflect.FileDescriptor
 
 const file_domain_entity_workspace_workspace_proto_rawDesc = "" +
 	"\n" +
-	"'domain/entity/workspace/workspace.proto\x12\x10domain.entity.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1adomain/common/search.proto\x1a\x10options/db.proto\"\xaa\x05\n" +
+	"'domain/entity/workspace/workspace.proto\x12\x10domain.entity.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1adomain/common/search.proto\x1a\x10options/db.proto\"\xef\x05\n" +
 	"\tWorkspace\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12\x12\n" +
 	"\x04name\x18\x02 \x01(\tR\x04name\x12 \n" +
@@ -1259,14 +1268,16 @@ const file_domain_entity_workspace_workspace_proto_rawDesc = "" +
 	" \x01(\bB\n" +
 	"\x82\xb5\x18\x06\"\x04trueR\x06active\x124\n" +
 	"\x13functional_currency\x18\v \x01(\tH\x05R\x12functionalCurrency\x88\x01\x01\x120\n" +
-	"\x11compliance_region\x18\f \x01(\tH\x06R\x10complianceRegion\x88\x01\x01:\x06\x8a\xb5\x18\x02\b\x01B\x17\n" +
+	"\x11compliance_region\x18\f \x01(\tH\x06R\x10complianceRegion\x88\x01\x01\x12.\n" +
+	"\x10default_currency\x18\r \x01(\tH\aR\x0fdefaultCurrency\x88\x01\x01:\x06\x8a\xb5\x18\x02\b\x01B\x17\n" +
 	"\x15_workflow_template_idB\x0f\n" +
 	"\r_date_createdB\x16\n" +
 	"\x14_date_created_stringB\x10\n" +
 	"\x0e_date_modifiedB\x17\n" +
 	"\x15_date_modified_stringB\x16\n" +
 	"\x14_functional_currencyB\x14\n" +
-	"\x12_compliance_region\"I\n" +
+	"\x12_compliance_regionB\x13\n" +
+	"\x11_default_currency\"I\n" +
 	"\x16CreateWorkspaceRequest\x12/\n" +
 	"\x04data\x18\x01 \x01(\v2\x1b.domain.entity.v1.WorkspaceR\x04data\"\xa2\x01\n" +
 	"\x17CreateWorkspaceResponse\x12/\n" +

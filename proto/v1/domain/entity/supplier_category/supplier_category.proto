@@ -27,6 +27,11 @@ message SupplierCategory {
   optional int64 date_modified = 7;
   optional string date_modified_string = 8;
   bool active = 9 [(options.v1.db).default = "true"];
+
+  // Drift-recovered columns (DB had these; proto did not)
+  string code = 10 [(options.v1.db).unique = true]; // Machine key
+  string name = 11;                                  // Display name
+  optional string description = 12;                  // Optional description
 }
 
 service SupplierCategoryDomainService {

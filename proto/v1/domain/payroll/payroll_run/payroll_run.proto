@@ -59,6 +59,9 @@ message PayrollRun {
   optional string compliance_region = 19;   // mirrors Workspace.compliance_region at run start
   optional string calculator_version = 20;  // e.g. "PH-2026.04" — frozen audit string
   optional string workspace_id = 21 [(options.v1.db).references = "workspace", (options.v1.db).index = true];
+
+  // Drift-recovered column (DB had this; proto did not)
+  optional bool active = 22 [(options.v1.db).default = "true"]; // Soft-delete flag
 }
 
 service PayrollRunDomainService {

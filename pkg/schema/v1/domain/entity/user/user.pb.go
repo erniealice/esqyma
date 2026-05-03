@@ -24,21 +24,25 @@ const (
 )
 
 type User struct {
-	state              protoimpl.MessageState `protogen:"open.v1"`
-	Id                 string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
-	FirstName          string                 `protobuf:"bytes,2,opt,name=first_name,json=firstName,proto3" json:"first_name,omitempty"`
-	LastName           string                 `protobuf:"bytes,3,opt,name=last_name,json=lastName,proto3" json:"last_name,omitempty"`
-	EmailAddress       string                 `protobuf:"bytes,4,opt,name=email_address,json=emailAddress,proto3" json:"email_address,omitempty"`
-	MobileNumber       string                 `protobuf:"bytes,10,opt,name=mobile_number,json=mobileNumber,proto3" json:"mobile_number,omitempty"`
-	PasswordHash       string                 `protobuf:"bytes,11,opt,name=password_hash,json=passwordHash,proto3" json:"password_hash,omitempty"`
-	DateCreated        *int64                 `protobuf:"varint,5,opt,name=date_created,json=dateCreated,proto3,oneof" json:"date_created,omitempty"`
-	DateCreatedString  *string                `protobuf:"bytes,6,opt,name=date_created_string,json=dateCreatedString,proto3,oneof" json:"date_created_string,omitempty"`
-	DateModified       *int64                 `protobuf:"varint,7,opt,name=date_modified,json=dateModified,proto3,oneof" json:"date_modified,omitempty"`
-	DateModifiedString *string                `protobuf:"bytes,8,opt,name=date_modified_string,json=dateModifiedString,proto3,oneof" json:"date_modified_string,omitempty"`
-	Active             bool                   `protobuf:"varint,9,opt,name=active,proto3" json:"active,omitempty"`
-	Timezone           *string                `protobuf:"bytes,12,opt,name=timezone,proto3,oneof" json:"timezone,omitempty"`
-	unknownFields      protoimpl.UnknownFields
-	sizeCache          protoimpl.SizeCache
+	state                protoimpl.MessageState `protogen:"open.v1"`
+	Id                   string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
+	FirstName            string                 `protobuf:"bytes,2,opt,name=first_name,json=firstName,proto3" json:"first_name,omitempty"`
+	LastName             string                 `protobuf:"bytes,3,opt,name=last_name,json=lastName,proto3" json:"last_name,omitempty"`
+	EmailAddress         string                 `protobuf:"bytes,4,opt,name=email_address,json=emailAddress,proto3" json:"email_address,omitempty"`
+	MobileNumber         string                 `protobuf:"bytes,10,opt,name=mobile_number,json=mobileNumber,proto3" json:"mobile_number,omitempty"`
+	PasswordHash         string                 `protobuf:"bytes,11,opt,name=password_hash,json=passwordHash,proto3" json:"password_hash,omitempty"`
+	DateCreated          *int64                 `protobuf:"varint,5,opt,name=date_created,json=dateCreated,proto3,oneof" json:"date_created,omitempty"`
+	DateCreatedString    *string                `protobuf:"bytes,6,opt,name=date_created_string,json=dateCreatedString,proto3,oneof" json:"date_created_string,omitempty"`
+	DateModified         *int64                 `protobuf:"varint,7,opt,name=date_modified,json=dateModified,proto3,oneof" json:"date_modified,omitempty"`
+	DateModifiedString   *string                `protobuf:"bytes,8,opt,name=date_modified_string,json=dateModifiedString,proto3,oneof" json:"date_modified_string,omitempty"`
+	Active               bool                   `protobuf:"varint,9,opt,name=active,proto3" json:"active,omitempty"`
+	Timezone             *string                `protobuf:"bytes,12,opt,name=timezone,proto3,oneof" json:"timezone,omitempty"`
+	PasswordResetToken   *string                `protobuf:"bytes,13,opt,name=password_reset_token,json=passwordResetToken,proto3,oneof" json:"password_reset_token,omitempty"`
+	PasswordResetExpires *int64                 `protobuf:"varint,14,opt,name=password_reset_expires,json=passwordResetExpires,proto3,oneof" json:"password_reset_expires,omitempty"`
+	FailedLoginAttempts  int32                  `protobuf:"varint,15,opt,name=failed_login_attempts,json=failedLoginAttempts,proto3" json:"failed_login_attempts,omitempty"`
+	LockedUntil          *int64                 `protobuf:"varint,16,opt,name=locked_until,json=lockedUntil,proto3,oneof" json:"locked_until,omitempty"`
+	unknownFields        protoimpl.UnknownFields
+	sizeCache            protoimpl.SizeCache
 }
 
 func (x *User) Reset() {
@@ -153,6 +157,34 @@ func (x *User) GetTimezone() string {
 		return *x.Timezone
 	}
 	return ""
+}
+
+func (x *User) GetPasswordResetToken() string {
+	if x != nil && x.PasswordResetToken != nil {
+		return *x.PasswordResetToken
+	}
+	return ""
+}
+
+func (x *User) GetPasswordResetExpires() int64 {
+	if x != nil && x.PasswordResetExpires != nil {
+		return *x.PasswordResetExpires
+	}
+	return 0
+}
+
+func (x *User) GetFailedLoginAttempts() int32 {
+	if x != nil {
+		return x.FailedLoginAttempts
+	}
+	return 0
+}
+
+func (x *User) GetLockedUntil() int64 {
+	if x != nil && x.LockedUntil != nil {
+		return *x.LockedUntil
+	}
+	return 0
 }
 
 type CreateUserRequest struct {
@@ -951,7 +983,7 @@ var File_domain_entity_user_user_proto protoreflect.FileDescriptor
 
 const file_domain_entity_user_user_proto_rawDesc = "" +
 	"\n" +
-	"\x1ddomain/entity/user/user.proto\x12\x10domain.entity.v1\x1a\x19domain/common/error.proto\x1a\x1adomain/common/search.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1edomain/common/pagination.proto\x1a\x10options/db.proto\"\xd0\x04\n" +
+	"\x1ddomain/entity/user/user.proto\x12\x10domain.entity.v1\x1a\x19domain/common/error.proto\x1a\x1adomain/common/search.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1edomain/common/pagination.proto\x1a\x10options/db.proto\"\xec\x06\n" +
 	"\x04User\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12\x1d\n" +
 	"\n" +
@@ -967,12 +999,19 @@ const file_domain_entity_user_user_proto_rawDesc = "" +
 	"\x14date_modified_string\x18\b \x01(\tH\x03R\x12dateModifiedString\x88\x01\x01\x12\"\n" +
 	"\x06active\x18\t \x01(\bB\n" +
 	"\x82\xb5\x18\x06\"\x04trueR\x06active\x122\n" +
-	"\btimezone\x18\f \x01(\tB\x11\x82\xb5\x18\r\"\vAsia/ManilaH\x04R\btimezone\x88\x01\x01:\x06\x8a\xb5\x18\x02\b\x01B\x0f\n" +
+	"\btimezone\x18\f \x01(\tB\x11\x82\xb5\x18\r\"\vAsia/ManilaH\x04R\btimezone\x88\x01\x01\x125\n" +
+	"\x14password_reset_token\x18\r \x01(\tH\x05R\x12passwordResetToken\x88\x01\x01\x129\n" +
+	"\x16password_reset_expires\x18\x0e \x01(\x03H\x06R\x14passwordResetExpires\x88\x01\x01\x12;\n" +
+	"\x15failed_login_attempts\x18\x0f \x01(\x05B\a\x82\xb5\x18\x03\"\x010R\x13failedLoginAttempts\x12&\n" +
+	"\flocked_until\x18\x10 \x01(\x03H\aR\vlockedUntil\x88\x01\x01:\x06\x8a\xb5\x18\x02\b\x01B\x0f\n" +
 	"\r_date_createdB\x16\n" +
 	"\x14_date_created_stringB\x10\n" +
 	"\x0e_date_modifiedB\x17\n" +
 	"\x15_date_modified_stringB\v\n" +
-	"\t_timezone\"?\n" +
+	"\t_timezoneB\x17\n" +
+	"\x15_password_reset_tokenB\x19\n" +
+	"\x17_password_reset_expiresB\x0f\n" +
+	"\r_locked_until\"?\n" +
 	"\x11CreateUserRequest\x12*\n" +
 	"\x04data\x18\x01 \x01(\v2\x16.domain.entity.v1.UserR\x04data\"\x98\x01\n" +
 	"\x12CreateUserResponse\x12*\n" +

@@ -62,6 +62,10 @@ message Plan {
   // when job_template_id is cleared. See
   // docs/plan/20260430-cyclic-subscription-jobs/plan.md §2.4.
   optional int32 visits_per_cycle = 15;
+
+  // Drift-recovered columns (DB had these; proto did not)
+  optional string legacy_price_list_id = 16;    // Legacy migration shim — links to old price-list IDs
+  optional string workspace_id = 17 [(options.v1.db).references = "workspace", (options.v1.db).index = true];
 }
 
 service PlanDomainService {

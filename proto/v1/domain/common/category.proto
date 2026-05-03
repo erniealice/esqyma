@@ -52,6 +52,9 @@ message Category {
 
   // Display order for sorting categories (optional)
   optional int32 display_order = 12;
+
+  // Workspace ownership — categories are scoped per workspace.
+  optional string workspace_id = 13 [(options.v1.db).references = "workspace", (options.v1.db).index = true];
 }
 
 // CategoryCodeValue represents a category by its code and value.

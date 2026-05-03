@@ -58,8 +58,13 @@ type Client struct {
 	Status          *string `protobuf:"bytes,24,opt,name=status,proto3,oneof" json:"status,omitempty"`   // "prospect", "active", "on_hold", "blocked", "inactive"
 	Country         *string `protobuf:"bytes,25,opt,name=country,proto3,oneof" json:"country,omitempty"` // ISO 3166-1 alpha-2 country code
 	Website         *string `protobuf:"bytes,26,opt,name=website,proto3,oneof" json:"website,omitempty"`
-	unknownFields   protoimpl.UnknownFields
-	sizeCache       protoimpl.SizeCache
+	// Drift-recovered columns (DB had these; proto did not)
+	Email         *string `protobuf:"bytes,27,opt,name=email,proto3,oneof" json:"email,omitempty"`                          // Primary email address
+	FirstName     *string `protobuf:"bytes,28,opt,name=first_name,json=firstName,proto3,oneof" json:"first_name,omitempty"` // Given name (individual clients)
+	LastName      *string `protobuf:"bytes,29,opt,name=last_name,json=lastName,proto3,oneof" json:"last_name,omitempty"`    // Family name (individual clients)
+	WorkspaceId   *string `protobuf:"bytes,30,opt,name=workspace_id,json=workspaceId,proto3,oneof" json:"workspace_id,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
 }
 
 func (x *Client) Reset() {
@@ -256,6 +261,34 @@ func (x *Client) GetCountry() string {
 func (x *Client) GetWebsite() string {
 	if x != nil && x.Website != nil {
 		return *x.Website
+	}
+	return ""
+}
+
+func (x *Client) GetEmail() string {
+	if x != nil && x.Email != nil {
+		return *x.Email
+	}
+	return ""
+}
+
+func (x *Client) GetFirstName() string {
+	if x != nil && x.FirstName != nil {
+		return *x.FirstName
+	}
+	return ""
+}
+
+func (x *Client) GetLastName() string {
+	if x != nil && x.LastName != nil {
+		return *x.LastName
+	}
+	return ""
+}
+
+func (x *Client) GetWorkspaceId() string {
+	if x != nil && x.WorkspaceId != nil {
+		return *x.WorkspaceId
 	}
 	return ""
 }
@@ -1212,8 +1245,7 @@ var File_domain_entity_client_client_proto protoreflect.FileDescriptor
 
 const file_domain_entity_client_client_proto_rawDesc = "" +
 	"\n" +
-	"!domain/entity/client/client.proto\x12\x10domain.entity.v1\x1a\x19domain/common/error.proto\x1a\x1adomain/common/search.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1edomain/common/pagination.proto\x1a\x10options/db.proto\x1a\x1ddomain/entity/user/user.proto\x1a3domain/entity/client_category/client_category.proto\x1a-domain/entity/payment_term/payment_term.proto\"\xa7\n" +
-	"\n" +
+	"!domain/entity/client/client.proto\x12\x10domain.entity.v1\x1a\x19domain/common/error.proto\x1a\x1adomain/common/search.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1edomain/common/pagination.proto\x1a\x10options/db.proto\x1a\x1ddomain/entity/user/user.proto\x1a3domain/entity/client_category/client_category.proto\x1a-domain/entity/payment_term/payment_term.proto\"\xfb\v\n" +
 	"\x06Client\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12/\n" +
 	"\x04user\x18\x02 \x01(\v2\x16.domain.entity.v1.UserH\x00R\x04user\x88\x01\x01\x12%\n" +
@@ -1248,7 +1280,13 @@ const file_domain_entity_client_client_proto_rawDesc = "" +
 	"\x10billing_currency\x18\x17 \x01(\tH\x0fR\x0fbillingCurrency\x88\x01\x01\x12\x1b\n" +
 	"\x06status\x18\x18 \x01(\tH\x10R\x06status\x88\x01\x01\x12\x1d\n" +
 	"\acountry\x18\x19 \x01(\tH\x11R\acountry\x88\x01\x01\x12\x1d\n" +
-	"\awebsite\x18\x1a \x01(\tH\x12R\awebsite\x88\x01\x01:\x06\x8a\xb5\x18\x02\b\x01B\a\n" +
+	"\awebsite\x18\x1a \x01(\tH\x12R\awebsite\x88\x01\x01\x12\x19\n" +
+	"\x05email\x18\x1b \x01(\tH\x13R\x05email\x88\x01\x01\x12\"\n" +
+	"\n" +
+	"first_name\x18\x1c \x01(\tH\x14R\tfirstName\x88\x01\x01\x12 \n" +
+	"\tlast_name\x18\x1d \x01(\tH\x15R\blastName\x88\x01\x01\x129\n" +
+	"\fworkspace_id\x18\x1e \x01(\tB\x11\x82\xb5\x18\r\n" +
+	"\tworkspace\x18\x01H\x16R\vworkspaceId\x88\x01\x01:\x06\x8a\xb5\x18\x02\b\x01B\a\n" +
 	"\x05_userB\x0f\n" +
 	"\r_date_createdB\x16\n" +
 	"\x14_date_created_stringB\x10\n" +
@@ -1269,7 +1307,12 @@ const file_domain_entity_client_client_proto_rawDesc = "" +
 	"\n" +
 	"\b_countryB\n" +
 	"\n" +
-	"\b_website\"C\n" +
+	"\b_websiteB\b\n" +
+	"\x06_emailB\r\n" +
+	"\v_first_nameB\f\n" +
+	"\n" +
+	"_last_nameB\x0f\n" +
+	"\r_workspace_id\"C\n" +
 	"\x13CreateClientRequest\x12,\n" +
 	"\x04data\x18\x01 \x01(\v2\x18.domain.entity.v1.ClientR\x04data\"\x9c\x01\n" +
 	"\x14CreateClientResponse\x12,\n" +

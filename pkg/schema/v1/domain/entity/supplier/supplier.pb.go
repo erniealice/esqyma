@@ -70,8 +70,11 @@ type Supplier struct {
 	// Salary-data privacy hooks (only populated when kind='employee'). Visible only to
 	// callers holding payroll:read:compensation permission; redacted by default in
 	// ListSuppliers / GetSupplier responses.
-	Position      *string `protobuf:"bytes,34,opt,name=position,proto3,oneof" json:"position,omitempty"`
-	Department    *string `protobuf:"bytes,35,opt,name=department,proto3,oneof" json:"department,omitempty"`
+	Position   *string `protobuf:"bytes,34,opt,name=position,proto3,oneof" json:"position,omitempty"`
+	Department *string `protobuf:"bytes,35,opt,name=department,proto3,oneof" json:"department,omitempty"`
+	// Drift-recovered columns (DB had these; proto did not)
+	Currency      *string `protobuf:"bytes,36,opt,name=currency,proto3,oneof" json:"currency,omitempty"` // ISO 4217 currency code — separate from billing_currency
+	WorkspaceId   *string `protobuf:"bytes,37,opt,name=workspace_id,json=workspaceId,proto3,oneof" json:"workspace_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -347,6 +350,20 @@ func (x *Supplier) GetPosition() string {
 func (x *Supplier) GetDepartment() string {
 	if x != nil && x.Department != nil {
 		return *x.Department
+	}
+	return ""
+}
+
+func (x *Supplier) GetCurrency() string {
+	if x != nil && x.Currency != nil {
+		return *x.Currency
+	}
+	return ""
+}
+
+func (x *Supplier) GetWorkspaceId() string {
+	if x != nil && x.WorkspaceId != nil {
+		return *x.WorkspaceId
 	}
 	return ""
 }
@@ -1139,7 +1156,7 @@ var File_domain_entity_supplier_supplier_proto protoreflect.FileDescriptor
 
 const file_domain_entity_supplier_supplier_proto_rawDesc = "" +
 	"\n" +
-	"%domain/entity/supplier/supplier.proto\x12\x10domain.entity.v1\x1a\x19domain/common/error.proto\x1a\x1adomain/common/search.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1edomain/common/pagination.proto\x1a\x10options/db.proto\x1a\x1ddomain/entity/user/user.proto\x1a7domain/entity/supplier_category/supplier_category.proto\x1a-domain/entity/payment_term/payment_term.proto\"\xfc\x0e\n" +
+	"%domain/entity/supplier/supplier.proto\x12\x10domain.entity.v1\x1a\x19domain/common/error.proto\x1a\x1adomain/common/search.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1edomain/common/pagination.proto\x1a\x10options/db.proto\x1a\x1ddomain/entity/user/user.proto\x1a7domain/entity/supplier_category/supplier_category.proto\x1a-domain/entity/payment_term/payment_term.proto\"\xf6\x0f\n" +
 	"\bSupplier\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12/\n" +
 	"\x04user\x18\x02 \x01(\v2\x16.domain.entity.v1.UserH\x00R\x04user\x88\x01\x01\x12%\n" +
@@ -1190,7 +1207,10 @@ const file_domain_entity_supplier_supplier_proto_rawDesc = "" +
 	"\bposition\x18\" \x01(\tH\x1aR\bposition\x88\x01\x01\x12#\n" +
 	"\n" +
 	"department\x18# \x01(\tH\x1bR\n" +
-	"department\x88\x01\x01:\x06\x8a\xb5\x18\x02\b\x01B\a\n" +
+	"department\x88\x01\x01\x12\x1f\n" +
+	"\bcurrency\x18$ \x01(\tH\x1cR\bcurrency\x88\x01\x01\x129\n" +
+	"\fworkspace_id\x18% \x01(\tB\x11\x82\xb5\x18\r\n" +
+	"\tworkspace\x18\x01H\x1dR\vworkspaceId\x88\x01\x01:\x06\x8a\xb5\x18\x02\b\x01B\a\n" +
 	"\x05_userB\x0f\n" +
 	"\r_date_createdB\x16\n" +
 	"\x14_date_created_stringB\x10\n" +
@@ -1221,7 +1241,9 @@ const file_domain_entity_supplier_supplier_proto_rawDesc = "" +
 	"\t_timezoneB\a\n" +
 	"\x05_kindB\v\n" +
 	"\t_positionB\r\n" +
-	"\v_department\"G\n" +
+	"\v_departmentB\v\n" +
+	"\t_currencyB\x0f\n" +
+	"\r_workspace_id\"G\n" +
 	"\x15CreateSupplierRequest\x12.\n" +
 	"\x04data\x18\x01 \x01(\v2\x1a.domain.entity.v1.SupplierR\x04data\"\xa0\x01\n" +
 	"\x16CreateSupplierResponse\x12.\n" +

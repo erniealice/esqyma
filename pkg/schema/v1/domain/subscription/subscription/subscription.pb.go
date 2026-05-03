@@ -55,8 +55,10 @@ type Subscription struct {
 	// operator clicks "Extend pool" — the override is the new total, not a delta.
 	// See docs/plan/20260501-ad-hoc-subscription-billing/plan.md §2.3 (codex MAJ-1).
 	EntitledOccurrencesOverride *int32 `protobuf:"varint,23,opt,name=entitled_occurrences_override,json=entitledOccurrencesOverride,proto3,oneof" json:"entitled_occurrences_override,omitempty"`
-	unknownFields               protoimpl.UnknownFields
-	sizeCache                   protoimpl.SizeCache
+	// Workspace ownership — subscriptions are scoped per workspace.
+	WorkspaceId   *string `protobuf:"bytes,24,opt,name=workspace_id,json=workspaceId,proto3,oneof" json:"workspace_id,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
 }
 
 func (x *Subscription) Reset() {
@@ -234,6 +236,13 @@ func (x *Subscription) GetEntitledOccurrencesOverride() int32 {
 		return *x.EntitledOccurrencesOverride
 	}
 	return 0
+}
+
+func (x *Subscription) GetWorkspaceId() string {
+	if x != nil && x.WorkspaceId != nil {
+		return *x.WorkspaceId
+	}
+	return ""
 }
 
 type CreateSubscriptionRequest struct {
@@ -1039,8 +1048,7 @@ var File_domain_subscription_subscription_subscription_proto protoreflect.FileDe
 
 const file_domain_subscription_subscription_subscription_proto_rawDesc = "" +
 	"\n" +
-	"3domain/subscription/subscription/subscription.proto\x12\x16domain.subscription.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1adomain/common/search.proto\x1a/domain/subscription/price_plan/price_plan.proto\x1a!domain/entity/client/client.proto\x1a\x10options/db.proto\x1a\x1fgoogle/protobuf/timestamp.proto\"\xfc\n" +
-	"\n" +
+	"3domain/subscription/subscription/subscription.proto\x12\x16domain.subscription.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1adomain/common/search.proto\x1a/domain/subscription/price_plan/price_plan.proto\x1a!domain/entity/client/client.proto\x1a\x10options/db.proto\x1a\x1fgoogle/protobuf/timestamp.proto\"\xc8\v\n" +
 	"\fSubscription\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12&\n" +
 	"\fdate_created\x18\x02 \x01(\x03H\x00R\vdateCreated\x88\x01\x01\x123\n" +
@@ -1071,7 +1079,9 @@ const file_domain_subscription_subscription_subscription_proto_rawDesc = "" +
 	"\vauto_assign\x18\x15 \x01(\bH\fR\n" +
 	"autoAssign\x88\x01\x01\x12\x17\n" +
 	"\x04code\x18\x16 \x01(\tH\rR\x04code\x88\x01\x01\x12G\n" +
-	"\x1dentitled_occurrences_override\x18\x17 \x01(\x05H\x0eR\x1bentitledOccurrencesOverride\x88\x01\x01\x1a;\n" +
+	"\x1dentitled_occurrences_override\x18\x17 \x01(\x05H\x0eR\x1bentitledOccurrencesOverride\x88\x01\x01\x129\n" +
+	"\fworkspace_id\x18\x18 \x01(\tB\x11\x82\xb5\x18\r\n" +
+	"\tworkspace\x18\x01H\x0fR\vworkspaceId\x88\x01\x01\x1a;\n" +
 	"\rMetadataEntry\x12\x10\n" +
 	"\x03key\x18\x01 \x01(\tR\x03key\x12\x14\n" +
 	"\x05value\x18\x02 \x01(\tR\x05value:\x028\x01:\x06\x8a\xb5\x18\x02\b\x01B\x0f\n" +
@@ -1089,7 +1099,8 @@ const file_domain_subscription_subscription_subscription_proto_rawDesc = "" +
 	"\x15_default_license_typeB\x0e\n" +
 	"\f_auto_assignB\a\n" +
 	"\x05_codeB \n" +
-	"\x1e_entitled_occurrences_overrideJ\x04\b\r\x10\x0eJ\x04\b\x0f\x10\x10\"U\n" +
+	"\x1e_entitled_occurrences_overrideB\x0f\n" +
+	"\r_workspace_idJ\x04\b\r\x10\x0eJ\x04\b\x0f\x10\x10\"U\n" +
 	"\x19CreateSubscriptionRequest\x128\n" +
 	"\x04data\x18\x01 \x01(\v2$.domain.subscription.v1.SubscriptionR\x04data\"\xae\x01\n" +
 	"\x1aCreateSubscriptionResponse\x128\n" +

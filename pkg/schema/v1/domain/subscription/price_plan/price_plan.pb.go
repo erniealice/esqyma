@@ -186,8 +186,10 @@ type PricePlan struct {
 	// Required and > 0 when (billing_kind == AD_HOC and amount_basis == TOTAL_PACKAGE).
 	// NULL otherwise. Reset to NULL on kind/basis change.
 	EntitledOccurrences *int32 `protobuf:"varint,26,opt,name=entitled_occurrences,json=entitledOccurrences,proto3,oneof" json:"entitled_occurrences,omitempty"`
-	unknownFields       protoimpl.UnknownFields
-	sizeCache           protoimpl.SizeCache
+	// Drift-recovered column (DB had this; proto did not)
+	LegacyPriceListId *string `protobuf:"bytes,27,opt,name=legacy_price_list_id,json=legacyPriceListId,proto3,oneof" json:"legacy_price_list_id,omitempty"` // Legacy migration shim — links to old price-list IDs
+	unknownFields     protoimpl.UnknownFields
+	sizeCache         protoimpl.SizeCache
 }
 
 func (x *PricePlan) Reset() {
@@ -393,6 +395,13 @@ func (x *PricePlan) GetEntitledOccurrences() int32 {
 		return *x.EntitledOccurrences
 	}
 	return 0
+}
+
+func (x *PricePlan) GetLegacyPriceListId() string {
+	if x != nil && x.LegacyPriceListId != nil {
+		return *x.LegacyPriceListId
+	}
+	return ""
 }
 
 type CreatePricePlanRequest struct {
@@ -1183,7 +1192,7 @@ var File_domain_subscription_price_plan_price_plan_proto protoreflect.FileDescri
 
 const file_domain_subscription_price_plan_price_plan_proto_rawDesc = "" +
 	"\n" +
-	"/domain/subscription/price_plan/price_plan.proto\x12\x16domain.subscription.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/search.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a#domain/subscription/plan/plan.proto\x1a\x10options/db.proto\"\xa7\f\n" +
+	"/domain/subscription/price_plan/price_plan.proto\x12\x16domain.subscription.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/search.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a#domain/subscription/plan/plan.proto\x1a\x10options/db.proto\"\xf6\f\n" +
 	"\tPricePlan\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x125\n" +
 	"\x04plan\x18\x02 \x01(\v2\x1c.domain.subscription.v1.PlanH\x00R\x04plan\x88\x01\x01\x12%\n" +
@@ -1216,7 +1225,8 @@ const file_domain_subscription_price_plan_price_plan_proto_rawDesc = "" +
 	"\tclient_id\x18\x19 \x01(\tB\x0e\x82\xb5\x18\n" +
 	"\n" +
 	"\x06client\x18\x01H\x10R\bclientId\x88\x01\x01\x126\n" +
-	"\x14entitled_occurrences\x18\x1a \x01(\x05H\x11R\x13entitledOccurrences\x88\x01\x01:\x06\x8a\xb5\x18\x02\b\x01B\a\n" +
+	"\x14entitled_occurrences\x18\x1a \x01(\x05H\x11R\x13entitledOccurrences\x88\x01\x01\x124\n" +
+	"\x14legacy_price_list_id\x18\x1b \x01(\tH\x12R\x11legacyPriceListId\x88\x01\x01:\x06\x8a\xb5\x18\x02\b\x01B\a\n" +
 	"\x05_planB\a\n" +
 	"\x05_nameB\x0e\n" +
 	"\f_descriptionB\x0f\n" +
@@ -1235,7 +1245,8 @@ const file_domain_subscription_price_plan_price_plan_proto_rawDesc = "" +
 	"\x12_default_term_unitB\f\n" +
 	"\n" +
 	"_client_idB\x17\n" +
-	"\x15_entitled_occurrences\"O\n" +
+	"\x15_entitled_occurrencesB\x17\n" +
+	"\x15_legacy_price_list_id\"O\n" +
 	"\x16CreatePricePlanRequest\x125\n" +
 	"\x04data\x18\x01 \x01(\v2!.domain.subscription.v1.PricePlanR\x04data\"\xa8\x01\n" +
 	"\x17CreatePricePlanResponse\x125\n" +

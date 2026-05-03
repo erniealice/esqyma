@@ -59,6 +59,9 @@ message Product {
   reserved "default_template_id";
 
   reserved 23 to 29;
+
+  // Drift-recovered column (DB had this; proto did not)
+  optional string workspace_id = 30 [(options.v1.db).references = "workspace", (options.v1.db).index = true];
 }
 
 service ProductDomainService {

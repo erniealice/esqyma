@@ -31,6 +31,9 @@ message Workspace {
   // ISO 3166 country or country-subdivision code (e.g. "PH", "US-CA", "EU-DE").
   // Drives statutory rate-table lookup and payroll calculator selection.
   optional string compliance_region = 12;
+
+  // Drift-recovered column (DB had this; proto did not)
+  optional string default_currency = 13;        // ISO 4217 default currency for new entities (separate from functional_currency)
 }
 
 service WorkspaceDomainService {

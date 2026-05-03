@@ -53,8 +53,12 @@ type RevenueLineItem struct {
 	ProductPricePlanId *string                `protobuf:"bytes,25,opt,name=product_price_plan_id,json=productPricePlanId,proto3,oneof" json:"product_price_plan_id,omitempty"`
 	PriceProductId     *string                `protobuf:"bytes,26,opt,name=price_product_id,json=priceProductId,proto3,oneof" json:"price_product_id,omitempty"` // FK to price_product — tracks which price_product was used for one-time revenue line items
 	JobActivityId      *string                `protobuf:"bytes,27,opt,name=job_activity_id,json=jobActivityId,proto3,oneof" json:"job_activity_id,omitempty"`    // FK to job_activity — links line item to the activity that generated it
-	unknownFields      protoimpl.UnknownFields
-	sizeCache          protoimpl.SizeCache
+	// Drift-recovered columns (DB had these; proto did not)
+	LineAmount     int64   `protobuf:"varint,28,opt,name=line_amount,json=lineAmount,proto3" json:"line_amount,omitempty"`                  // centavos — total amount for this line (NOT NULL in DB)
+	SubscriptionId *string `protobuf:"bytes,29,opt,name=subscription_id,json=subscriptionId,proto3,oneof" json:"subscription_id,omitempty"` // FK to subscription — links line item to recurring source
+	WorkspaceId    *string `protobuf:"bytes,30,opt,name=workspace_id,json=workspaceId,proto3,oneof" json:"workspace_id,omitempty"`
+	unknownFields  protoimpl.UnknownFields
+	sizeCache      protoimpl.SizeCache
 }
 
 func (x *RevenueLineItem) Reset() {
@@ -265,6 +269,27 @@ func (x *RevenueLineItem) GetPriceProductId() string {
 func (x *RevenueLineItem) GetJobActivityId() string {
 	if x != nil && x.JobActivityId != nil {
 		return *x.JobActivityId
+	}
+	return ""
+}
+
+func (x *RevenueLineItem) GetLineAmount() int64 {
+	if x != nil {
+		return x.LineAmount
+	}
+	return 0
+}
+
+func (x *RevenueLineItem) GetSubscriptionId() string {
+	if x != nil && x.SubscriptionId != nil {
+		return *x.SubscriptionId
+	}
+	return ""
+}
+
+func (x *RevenueLineItem) GetWorkspaceId() string {
+	if x != nil && x.WorkspaceId != nil {
+		return *x.WorkspaceId
 	}
 	return ""
 }
@@ -1065,7 +1090,7 @@ var File_domain_revenue_revenue_line_item_revenue_line_item_proto protoreflect.F
 
 const file_domain_revenue_revenue_line_item_revenue_line_item_proto_rawDesc = "" +
 	"\n" +
-	"8domain/revenue/revenue_line_item/revenue_line_item.proto\x12\x11domain.revenue.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/search.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a$domain/revenue/revenue/revenue.proto\x1a$domain/product/product/product.proto\x1a\x10options/db.proto\"\x8b\v\n" +
+	"8domain/revenue/revenue_line_item/revenue_line_item.proto\x12\x11domain.revenue.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/search.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a$domain/revenue/revenue/revenue.proto\x1a$domain/product/product/product.proto\x1a\x10options/db.proto\"\xd0\f\n" +
 	"\x0fRevenueLineItem\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12&\n" +
 	"\fdate_created\x18\x02 \x01(\x03H\x00R\vdateCreated\x88\x01\x01\x123\n" +
@@ -1104,7 +1129,13 @@ const file_domain_revenue_revenue_line_item_revenue_line_item_proto_rawDesc = ""
 	"\x10price_product_id\x18\x1a \x01(\tB\x15\x82\xb5\x18\x11\n" +
 	"\rprice_product\x18\x01H\x0eR\x0epriceProductId\x88\x01\x01\x12A\n" +
 	"\x0fjob_activity_id\x18\x1b \x01(\tB\x14\x82\xb5\x18\x10\n" +
-	"\fjob_activity\x18\x01H\x0fR\rjobActivityId\x88\x01\x01:\x06\x8a\xb5\x18\x02\b\x01B\x0f\n" +
+	"\fjob_activity\x18\x01H\x0fR\rjobActivityId\x88\x01\x01\x12\x1f\n" +
+	"\vline_amount\x18\x1c \x01(\x03R\n" +
+	"lineAmount\x12B\n" +
+	"\x0fsubscription_id\x18\x1d \x01(\tB\x14\x82\xb5\x18\x10\n" +
+	"\fsubscription\x18\x01H\x10R\x0esubscriptionId\x88\x01\x01\x129\n" +
+	"\fworkspace_id\x18\x1e \x01(\tB\x11\x82\xb5\x18\r\n" +
+	"\tworkspace\x18\x01H\x11R\vworkspaceId\x88\x01\x01:\x06\x8a\xb5\x18\x02\b\x01B\x0f\n" +
 	"\r_date_createdB\x16\n" +
 	"\x14_date_created_stringB\x10\n" +
 	"\x0e_date_modifiedB\x17\n" +
@@ -1122,7 +1153,9 @@ const file_domain_revenue_revenue_line_item_revenue_line_item_proto_rawDesc = ""
 	"\v_cost_priceB\x18\n" +
 	"\x16_product_price_plan_idB\x13\n" +
 	"\x11_price_product_idB\x12\n" +
-	"\x10_job_activity_id\"V\n" +
+	"\x10_job_activity_idB\x12\n" +
+	"\x10_subscription_idB\x0f\n" +
+	"\r_workspace_id\"V\n" +
 	"\x1cCreateRevenueLineItemRequest\x126\n" +
 	"\x04data\x18\x01 \x01(\v2\".domain.revenue.v1.RevenueLineItemR\x04data\"\xaf\x01\n" +
 	"\x1dCreateRevenueLineItemResponse\x126\n" +

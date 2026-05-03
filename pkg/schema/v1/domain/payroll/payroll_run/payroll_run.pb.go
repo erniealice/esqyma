@@ -108,8 +108,10 @@ type PayrollRun struct {
 	ComplianceRegion  *string `protobuf:"bytes,19,opt,name=compliance_region,json=complianceRegion,proto3,oneof" json:"compliance_region,omitempty"`    // mirrors Workspace.compliance_region at run start
 	CalculatorVersion *string `protobuf:"bytes,20,opt,name=calculator_version,json=calculatorVersion,proto3,oneof" json:"calculator_version,omitempty"` // e.g. "PH-2026.04" — frozen audit string
 	WorkspaceId       *string `protobuf:"bytes,21,opt,name=workspace_id,json=workspaceId,proto3,oneof" json:"workspace_id,omitempty"`
-	unknownFields     protoimpl.UnknownFields
-	sizeCache         protoimpl.SizeCache
+	// Drift-recovered column (DB had this; proto did not)
+	Active        *bool `protobuf:"varint,22,opt,name=active,proto3,oneof" json:"active,omitempty"` // Soft-delete flag
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
 }
 
 func (x *PayrollRun) Reset() {
@@ -273,6 +275,13 @@ func (x *PayrollRun) GetWorkspaceId() string {
 		return *x.WorkspaceId
 	}
 	return ""
+}
+
+func (x *PayrollRun) GetActive() bool {
+	if x != nil && x.Active != nil {
+		return *x.Active
+	}
+	return false
 }
 
 type CreatePayrollRunRequest struct {
@@ -1311,7 +1320,7 @@ var File_domain_payroll_payroll_run_payroll_run_proto protoreflect.FileDescripto
 
 const file_domain_payroll_payroll_run_payroll_run_proto_rawDesc = "" +
 	"\n" +
-	",domain/payroll/payroll_run/payroll_run.proto\x12\x11domain.payroll.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1adomain/common/search.proto\x1a\x10options/db.proto\"\xb5\b\n" +
+	",domain/payroll/payroll_run/payroll_run.proto\x12\x11domain.payroll.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1adomain/common/search.proto\x1a\x10options/db.proto\"\xe9\b\n" +
 	"\n" +
 	"PayrollRun\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12'\n" +
@@ -1337,7 +1346,10 @@ const file_domain_payroll_payroll_run_payroll_run_proto_rawDesc = "" +
 	"\x11compliance_region\x18\x13 \x01(\tH\aR\x10complianceRegion\x88\x01\x01\x122\n" +
 	"\x12calculator_version\x18\x14 \x01(\tH\bR\x11calculatorVersion\x88\x01\x01\x129\n" +
 	"\fworkspace_id\x18\x15 \x01(\tB\x11\x82\xb5\x18\r\n" +
-	"\tworkspace\x18\x01H\tR\vworkspaceId\x88\x01\x01:\x06\x8a\xb5\x18\x02\b\x01B\x0e\n" +
+	"\tworkspace\x18\x01H\tR\vworkspaceId\x88\x01\x01\x12'\n" +
+	"\x06active\x18\x16 \x01(\bB\n" +
+	"\x82\xb5\x18\x06\"\x04trueH\n" +
+	"R\x06active\x88\x01\x01:\x06\x8a\xb5\x18\x02\b\x01B\x0e\n" +
 	"\f_approved_byB\f\n" +
 	"\n" +
 	"_posted_atB\x13\n" +
@@ -1348,7 +1360,8 @@ const file_domain_payroll_payroll_run_payroll_run_proto_rawDesc = "" +
 	"\x15_date_modified_stringB\x14\n" +
 	"\x12_compliance_regionB\x15\n" +
 	"\x13_calculator_versionB\x0f\n" +
-	"\r_workspace_idJ\x04\b\x04\x10\x05J\x04\b\x06\x10\a\"L\n" +
+	"\r_workspace_idB\t\n" +
+	"\a_activeJ\x04\b\x04\x10\x05J\x04\b\x06\x10\a\"L\n" +
 	"\x17CreatePayrollRunRequest\x121\n" +
 	"\x04data\x18\x01 \x01(\v2\x1d.domain.payroll.v1.PayrollRunR\x04data\"\xa5\x01\n" +
 	"\x18CreatePayrollRunResponse\x121\n" +

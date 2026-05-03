@@ -40,6 +40,11 @@ message AssetCategory {
   optional int64 date_modified = 18;
   optional string date_modified_string = 19;
   bool active = 20 [(options.v1.db).default = "true"];
+
+  // Drift-recovered columns (DB had these; proto did not)
+  optional string depreciation_method = 21;       // Effective depreciation method (separate from default_depreciation_method)
+  optional double salvage_pct = 22;               // Effective salvage percentage
+  optional int32 useful_life_months = 23;         // Effective useful life in months
 }
 
 service AssetCategoryDomainService {

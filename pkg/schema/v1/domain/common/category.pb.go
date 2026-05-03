@@ -52,7 +52,9 @@ type Category struct {
 	// Whether the category is currently active
 	Active bool `protobuf:"varint,11,opt,name=active,proto3" json:"active,omitempty"`
 	// Display order for sorting categories (optional)
-	DisplayOrder  *int32 `protobuf:"varint,12,opt,name=display_order,json=displayOrder,proto3,oneof" json:"display_order,omitempty"`
+	DisplayOrder *int32 `protobuf:"varint,12,opt,name=display_order,json=displayOrder,proto3,oneof" json:"display_order,omitempty"`
+	// Workspace ownership — categories are scoped per workspace.
+	WorkspaceId   *string `protobuf:"bytes,13,opt,name=workspace_id,json=workspaceId,proto3,oneof" json:"workspace_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -169,6 +171,13 @@ func (x *Category) GetDisplayOrder() int32 {
 		return *x.DisplayOrder
 	}
 	return 0
+}
+
+func (x *Category) GetWorkspaceId() string {
+	if x != nil && x.WorkspaceId != nil {
+		return *x.WorkspaceId
+	}
+	return ""
 }
 
 // CategoryCodeValue represents a category by its code and value.
@@ -757,7 +766,7 @@ var File_domain_common_category_proto protoreflect.FileDescriptor
 
 const file_domain_common_category_proto_rawDesc = "" +
 	"\n" +
-	"\x1cdomain/common/category.proto\x12\x10domain.common.v1\x1a\x19domain/common/error.proto\x1a\x1adomain/common/filter.proto\x1a\x1edomain/common/pagination.proto\x1a\x10options/db.proto\"\xb8\x04\n" +
+	"\x1cdomain/common/category.proto\x12\x10domain.common.v1\x1a\x19domain/common/error.proto\x1a\x1adomain/common/filter.proto\x1a\x1edomain/common/pagination.proto\x1a\x10options/db.proto\"\x84\x05\n" +
 	"\bCategory\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12\x12\n" +
 	"\x04name\x18\x02 \x01(\tR\x04name\x12 \n" +
@@ -773,14 +782,17 @@ const file_domain_common_category_proto_rawDesc = "" +
 	" \x01(\tH\x04R\x12dateModifiedString\x88\x01\x01\x12\"\n" +
 	"\x06active\x18\v \x01(\bB\n" +
 	"\x82\xb5\x18\x06\"\x04trueR\x06active\x12(\n" +
-	"\rdisplay_order\x18\f \x01(\x05H\x05R\fdisplayOrder\x88\x01\x01:\x06\x8a\xb5\x18\x02\b\x01B\f\n" +
+	"\rdisplay_order\x18\f \x01(\x05H\x05R\fdisplayOrder\x88\x01\x01\x129\n" +
+	"\fworkspace_id\x18\r \x01(\tB\x11\x82\xb5\x18\r\n" +
+	"\tworkspace\x18\x01H\x06R\vworkspaceId\x88\x01\x01:\x06\x8a\xb5\x18\x02\b\x01B\f\n" +
 	"\n" +
 	"_parent_idB\x0f\n" +
 	"\r_date_createdB\x16\n" +
 	"\x14_date_created_stringB\x10\n" +
 	"\x0e_date_modifiedB\x17\n" +
 	"\x15_date_modified_stringB\x10\n" +
-	"\x0e_display_order\"=\n" +
+	"\x0e_display_orderB\x0f\n" +
+	"\r_workspace_id\"=\n" +
 	"\x11CategoryCodeValue\x12\x12\n" +
 	"\x04code\x18\x01 \x01(\tR\x04code\x12\x14\n" +
 	"\x05value\x18\x02 \x01(\tR\x05value\"G\n" +

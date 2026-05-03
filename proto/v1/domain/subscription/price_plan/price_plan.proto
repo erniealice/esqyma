@@ -82,6 +82,9 @@ message PricePlan {
   // Required and > 0 when (billing_kind == AD_HOC and amount_basis == TOTAL_PACKAGE).
   // NULL otherwise. Reset to NULL on kind/basis change.
   optional int32 entitled_occurrences = 26;
+
+  // Drift-recovered column (DB had this; proto did not)
+  optional string legacy_price_list_id = 27;    // Legacy migration shim — links to old price-list IDs
 }
 
 service PricePlanDomainService {

@@ -48,6 +48,10 @@ type AssetCategory struct {
 	DateModified       *int64  `protobuf:"varint,18,opt,name=date_modified,json=dateModified,proto3,oneof" json:"date_modified,omitempty"`
 	DateModifiedString *string `protobuf:"bytes,19,opt,name=date_modified_string,json=dateModifiedString,proto3,oneof" json:"date_modified_string,omitempty"`
 	Active             bool    `protobuf:"varint,20,opt,name=active,proto3" json:"active,omitempty"`
+	// Drift-recovered columns (DB had these; proto did not)
+	DepreciationMethod *string  `protobuf:"bytes,21,opt,name=depreciation_method,json=depreciationMethod,proto3,oneof" json:"depreciation_method,omitempty"` // Effective depreciation method (separate from default_depreciation_method)
+	SalvagePct         *float64 `protobuf:"fixed64,22,opt,name=salvage_pct,json=salvagePct,proto3,oneof" json:"salvage_pct,omitempty"`                       // Effective salvage percentage
+	UsefulLifeMonths   *int32   `protobuf:"varint,23,opt,name=useful_life_months,json=usefulLifeMonths,proto3,oneof" json:"useful_life_months,omitempty"`    // Effective useful life in months
 	unknownFields      protoimpl.UnknownFields
 	sizeCache          protoimpl.SizeCache
 }
@@ -220,6 +224,27 @@ func (x *AssetCategory) GetActive() bool {
 		return x.Active
 	}
 	return false
+}
+
+func (x *AssetCategory) GetDepreciationMethod() string {
+	if x != nil && x.DepreciationMethod != nil {
+		return *x.DepreciationMethod
+	}
+	return ""
+}
+
+func (x *AssetCategory) GetSalvagePct() float64 {
+	if x != nil && x.SalvagePct != nil {
+		return *x.SalvagePct
+	}
+	return 0
+}
+
+func (x *AssetCategory) GetUsefulLifeMonths() int32 {
+	if x != nil && x.UsefulLifeMonths != nil {
+		return *x.UsefulLifeMonths
+	}
+	return 0
 }
 
 type CreateAssetCategoryRequest struct {
@@ -1010,7 +1035,7 @@ var File_domain_asset_asset_category_asset_category_proto protoreflect.FileDescr
 
 const file_domain_asset_asset_category_asset_category_proto_rawDesc = "" +
 	"\n" +
-	"0domain/asset/asset_category/asset_category.proto\x12\x0fdomain.asset.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1adomain/common/search.proto\x1a\x10options/db.proto\"\x80\v\n" +
+	"0domain/asset/asset_category/asset_category.proto\x12\x0fdomain.asset.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1adomain/common/search.proto\x1a\x10options/db.proto\"\xce\f\n" +
 	"\rAssetCategory\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12\x1a\n" +
 	"\x04code\x18\x02 \x01(\tB\x06\x82\xb5\x18\x02\x10\x01R\x04code\x12\x12\n" +
@@ -1035,7 +1060,11 @@ const file_domain_asset_asset_category_asset_category_proto_rawDesc = "" +
 	"\rdate_modified\x18\x12 \x01(\x03H\vR\fdateModified\x88\x01\x01\x125\n" +
 	"\x14date_modified_string\x18\x13 \x01(\tH\fR\x12dateModifiedString\x88\x01\x01\x12\"\n" +
 	"\x06active\x18\x14 \x01(\bB\n" +
-	"\x82\xb5\x18\x06\"\x04trueR\x06active:\x06\x8a\xb5\x18\x02\b\x01B\x0e\n" +
+	"\x82\xb5\x18\x06\"\x04trueR\x06active\x124\n" +
+	"\x13depreciation_method\x18\x15 \x01(\tH\rR\x12depreciationMethod\x88\x01\x01\x12$\n" +
+	"\vsalvage_pct\x18\x16 \x01(\x01H\x0eR\n" +
+	"salvagePct\x88\x01\x01\x121\n" +
+	"\x12useful_life_months\x18\x17 \x01(\x05H\x0fR\x10usefulLifeMonths\x88\x01\x01:\x06\x8a\xb5\x18\x02\b\x01B\x0e\n" +
 	"\f_descriptionB\x15\n" +
 	"\x13_parent_category_idB\x15\n" +
 	"\x13_asset_cost_accountB#\n" +
@@ -1048,7 +1077,10 @@ const file_domain_asset_asset_category_asset_category_proto_rawDesc = "" +
 	"\r_date_createdB\x16\n" +
 	"\x14_date_created_stringB\x10\n" +
 	"\x0e_date_modifiedB\x17\n" +
-	"\x15_date_modified_string\"P\n" +
+	"\x15_date_modified_stringB\x16\n" +
+	"\x14_depreciation_methodB\x0e\n" +
+	"\f_salvage_pctB\x15\n" +
+	"\x13_useful_life_months\"P\n" +
 	"\x1aCreateAssetCategoryRequest\x122\n" +
 	"\x04data\x18\x01 \x01(\v2\x1e.domain.asset.v1.AssetCategoryR\x04data\"\xa9\x01\n" +
 	"\x1bCreateAssetCategoryResponse\x122\n" +

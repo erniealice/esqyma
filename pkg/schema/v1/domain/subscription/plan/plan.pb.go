@@ -72,8 +72,11 @@ type Plan struct {
 	// when job_template_id is cleared. See
 	// docs/plan/20260430-cyclic-subscription-jobs/plan.md §2.4.
 	VisitsPerCycle *int32 `protobuf:"varint,15,opt,name=visits_per_cycle,json=visitsPerCycle,proto3,oneof" json:"visits_per_cycle,omitempty"`
-	unknownFields  protoimpl.UnknownFields
-	sizeCache      protoimpl.SizeCache
+	// Drift-recovered columns (DB had these; proto did not)
+	LegacyPriceListId *string `protobuf:"bytes,16,opt,name=legacy_price_list_id,json=legacyPriceListId,proto3,oneof" json:"legacy_price_list_id,omitempty"` // Legacy migration shim — links to old price-list IDs
+	WorkspaceId       *string `protobuf:"bytes,17,opt,name=workspace_id,json=workspaceId,proto3,oneof" json:"workspace_id,omitempty"`
+	unknownFields     protoimpl.UnknownFields
+	sizeCache         protoimpl.SizeCache
 }
 
 func (x *Plan) Reset() {
@@ -202,6 +205,20 @@ func (x *Plan) GetVisitsPerCycle() int32 {
 		return *x.VisitsPerCycle
 	}
 	return 0
+}
+
+func (x *Plan) GetLegacyPriceListId() string {
+	if x != nil && x.LegacyPriceListId != nil {
+		return *x.LegacyPriceListId
+	}
+	return ""
+}
+
+func (x *Plan) GetWorkspaceId() string {
+	if x != nil && x.WorkspaceId != nil {
+		return *x.WorkspaceId
+	}
+	return ""
 }
 
 type CreatePlanRequest struct {
@@ -1158,7 +1175,7 @@ var File_domain_subscription_plan_plan_proto protoreflect.FileDescriptor
 
 const file_domain_subscription_plan_plan_proto_rawDesc = "" +
 	"\n" +
-	"#domain/subscription/plan/plan.proto\x12\x16domain.subscription.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1adomain/common/search.proto\x1a5domain/subscription/plan_location/plan_location.proto\x1a\x10options/db.proto\"\xe5\x06\n" +
+	"#domain/subscription/plan/plan.proto\x12\x16domain.subscription.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1adomain/common/search.proto\x1a5domain/subscription/plan_location/plan_location.proto\x1a\x10options/db.proto\"\x80\b\n" +
 	"\x04Plan\x12\x13\n" +
 	"\x02id\x18\x01 \x01(\tH\x00R\x02id\x88\x01\x01\x12&\n" +
 	"\fdate_created\x18\x02 \x01(\x03H\x01R\vdateCreated\x88\x01\x01\x123\n" +
@@ -1180,7 +1197,10 @@ const file_domain_subscription_plan_plan_proto_rawDesc = "" +
 	"\x0fjob_template_id\x18\x0e \x01(\tB\x14\x82\xb5\x18\x10\n" +
 	"\fjob_template\x18\x01H\tR\rjobTemplateId\x88\x01\x01\x12-\n" +
 	"\x10visits_per_cycle\x18\x0f \x01(\x05H\n" +
-	"R\x0evisitsPerCycle\x88\x01\x01:\x06\x8a\xb5\x18\x02\b\x01B\x05\n" +
+	"R\x0evisitsPerCycle\x88\x01\x01\x124\n" +
+	"\x14legacy_price_list_id\x18\x10 \x01(\tH\vR\x11legacyPriceListId\x88\x01\x01\x129\n" +
+	"\fworkspace_id\x18\x11 \x01(\tB\x11\x82\xb5\x18\r\n" +
+	"\tworkspace\x18\x01H\fR\vworkspaceId\x88\x01\x01:\x06\x8a\xb5\x18\x02\b\x01B\x05\n" +
 	"\x03_idB\x0f\n" +
 	"\r_date_createdB\x16\n" +
 	"\x14_date_created_stringB\x10\n" +
@@ -1193,7 +1213,9 @@ const file_domain_subscription_plan_plan_proto_rawDesc = "" +
 	"\n" +
 	"_parent_idB\x12\n" +
 	"\x10_job_template_idB\x13\n" +
-	"\x11_visits_per_cycleJ\x04\b\v\x10\fR\x10fulfillment_type\"E\n" +
+	"\x11_visits_per_cycleB\x17\n" +
+	"\x15_legacy_price_list_idB\x0f\n" +
+	"\r_workspace_idJ\x04\b\v\x10\fR\x10fulfillment_type\"E\n" +
 	"\x11CreatePlanRequest\x120\n" +
 	"\x04data\x18\x01 \x01(\v2\x1c.domain.subscription.v1.PlanR\x04data\"\x9e\x01\n" +
 	"\x12CreatePlanResponse\x120\n" +

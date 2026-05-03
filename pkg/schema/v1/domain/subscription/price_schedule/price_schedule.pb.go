@@ -38,9 +38,14 @@ type PriceSchedule struct {
 	DateTimeEnd        *timestamppb.Timestamp `protobuf:"bytes,10,opt,name=date_time_end,json=dateTimeEnd,proto3,oneof" json:"date_time_end,omitempty"` // UTC timestamp; nil = open-ended
 	LocationId         *string                `protobuf:"bytes,11,opt,name=location_id,json=locationId,proto3,oneof" json:"location_id,omitempty"`
 	// SET = client-scoped schedule. Reuse-or-create driven by ResolveOrCreateClientPriceSchedule.
-	ClientId      *string `protobuf:"bytes,12,opt,name=client_id,json=clientId,proto3,oneof" json:"client_id,omitempty"`
-	unknownFields protoimpl.UnknownFields
-	sizeCache     protoimpl.SizeCache
+	ClientId *string `protobuf:"bytes,12,opt,name=client_id,json=clientId,proto3,oneof" json:"client_id,omitempty"`
+	// Drift-recovered columns (DB had these; proto did not)
+	DateStart         *string `protobuf:"bytes,13,opt,name=date_start,json=dateStart,proto3,oneof" json:"date_start,omitempty"`                             // ISO 8601 date (YYYY-MM-DD), date-only mirror of date_time_start
+	DateEnd           *string `protobuf:"bytes,14,opt,name=date_end,json=dateEnd,proto3,oneof" json:"date_end,omitempty"`                                   // ISO 8601 date (YYYY-MM-DD), date-only mirror of date_time_end
+	LegacyPriceListId *string `protobuf:"bytes,15,opt,name=legacy_price_list_id,json=legacyPriceListId,proto3,oneof" json:"legacy_price_list_id,omitempty"` // Legacy migration shim — links to old price-list IDs
+	WorkspaceId       *string `protobuf:"bytes,16,opt,name=workspace_id,json=workspaceId,proto3,oneof" json:"workspace_id,omitempty"`
+	unknownFields     protoimpl.UnknownFields
+	sizeCache         protoimpl.SizeCache
 }
 
 func (x *PriceSchedule) Reset() {
@@ -153,6 +158,34 @@ func (x *PriceSchedule) GetLocationId() string {
 func (x *PriceSchedule) GetClientId() string {
 	if x != nil && x.ClientId != nil {
 		return *x.ClientId
+	}
+	return ""
+}
+
+func (x *PriceSchedule) GetDateStart() string {
+	if x != nil && x.DateStart != nil {
+		return *x.DateStart
+	}
+	return ""
+}
+
+func (x *PriceSchedule) GetDateEnd() string {
+	if x != nil && x.DateEnd != nil {
+		return *x.DateEnd
+	}
+	return ""
+}
+
+func (x *PriceSchedule) GetLegacyPriceListId() string {
+	if x != nil && x.LegacyPriceListId != nil {
+		return *x.LegacyPriceListId
+	}
+	return ""
+}
+
+func (x *PriceSchedule) GetWorkspaceId() string {
+	if x != nil && x.WorkspaceId != nil {
+		return *x.WorkspaceId
 	}
 	return ""
 }
@@ -1065,7 +1098,7 @@ var File_domain_subscription_price_schedule_price_schedule_proto protoreflect.Fi
 
 const file_domain_subscription_price_schedule_price_schedule_proto_rawDesc = "" +
 	"\n" +
-	"7domain/subscription/price_schedule/price_schedule.proto\x12\x16domain.subscription.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/search.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x10options/db.proto\x1a\x1fgoogle/protobuf/timestamp.proto\"\xcb\x05\n" +
+	"7domain/subscription/price_schedule/price_schedule.proto\x12\x16domain.subscription.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/search.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x10options/db.proto\x1a\x1fgoogle/protobuf/timestamp.proto\"\xc6\a\n" +
 	"\rPriceSchedule\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12&\n" +
 	"\fdate_created\x18\x02 \x01(\x03H\x00R\vdateCreated\x88\x01\x01\x123\n" +
@@ -1084,7 +1117,14 @@ const file_domain_subscription_price_schedule_price_schedule_proto_rawDesc = "" 
 	"locationId\x88\x01\x01\x120\n" +
 	"\tclient_id\x18\f \x01(\tB\x0e\x82\xb5\x18\n" +
 	"\n" +
-	"\x06client\x18\x01H\aR\bclientId\x88\x01\x01:\x06\x8a\xb5\x18\x02\b\x01B\x0f\n" +
+	"\x06client\x18\x01H\aR\bclientId\x88\x01\x01\x12\"\n" +
+	"\n" +
+	"date_start\x18\r \x01(\tH\bR\tdateStart\x88\x01\x01\x12\x1e\n" +
+	"\bdate_end\x18\x0e \x01(\tH\tR\adateEnd\x88\x01\x01\x124\n" +
+	"\x14legacy_price_list_id\x18\x0f \x01(\tH\n" +
+	"R\x11legacyPriceListId\x88\x01\x01\x129\n" +
+	"\fworkspace_id\x18\x10 \x01(\tB\x11\x82\xb5\x18\r\n" +
+	"\tworkspace\x18\x01H\vR\vworkspaceId\x88\x01\x01:\x06\x8a\xb5\x18\x02\b\x01B\x0f\n" +
 	"\r_date_createdB\x16\n" +
 	"\x14_date_created_stringB\x10\n" +
 	"\x0e_date_modifiedB\x17\n" +
@@ -1093,7 +1133,11 @@ const file_domain_subscription_price_schedule_price_schedule_proto_rawDesc = "" 
 	"\x0e_date_time_endB\x0e\n" +
 	"\f_location_idB\f\n" +
 	"\n" +
-	"_client_id\"W\n" +
+	"_client_idB\r\n" +
+	"\v_date_startB\v\n" +
+	"\t_date_endB\x17\n" +
+	"\x15_legacy_price_list_idB\x0f\n" +
+	"\r_workspace_id\"W\n" +
 	"\x1aCreatePriceScheduleRequest\x129\n" +
 	"\x04data\x18\x01 \x01(\v2%.domain.subscription.v1.PriceScheduleR\x04data\"\xb0\x01\n" +
 	"\x1bCreatePriceScheduleResponse\x129\n" +

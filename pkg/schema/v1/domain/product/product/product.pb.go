@@ -60,8 +60,10 @@ type Product struct {
 	VariantMode          string  `protobuf:"bytes,19,opt,name=variant_mode,json=variantMode,proto3" json:"variant_mode,omitempty"`
 	ExpectedCost         *int64  `protobuf:"varint,20,opt,name=expected_cost,json=expectedCost,proto3,oneof" json:"expected_cost,omitempty"`
 	ExpectedCostCurrency *string `protobuf:"bytes,21,opt,name=expected_cost_currency,json=expectedCostCurrency,proto3,oneof" json:"expected_cost_currency,omitempty"`
-	unknownFields        protoimpl.UnknownFields
-	sizeCache            protoimpl.SizeCache
+	// Drift-recovered column (DB had this; proto did not)
+	WorkspaceId   *string `protobuf:"bytes,30,opt,name=workspace_id,json=workspaceId,proto3,oneof" json:"workspace_id,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
 }
 
 func (x *Product) Reset() {
@@ -216,6 +218,13 @@ func (x *Product) GetExpectedCost() int64 {
 func (x *Product) GetExpectedCostCurrency() string {
 	if x != nil && x.ExpectedCostCurrency != nil {
 		return *x.ExpectedCostCurrency
+	}
+	return ""
+}
+
+func (x *Product) GetWorkspaceId() string {
+	if x != nil && x.WorkspaceId != nil {
+		return *x.WorkspaceId
 	}
 	return ""
 }
@@ -1023,7 +1032,7 @@ var File_domain_product_product_product_proto protoreflect.FileDescriptor
 
 const file_domain_product_product_product_proto_rawDesc = "" +
 	"\n" +
-	"$domain/product/product/product.proto\x12\x11domain.product.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1adomain/common/search.proto\x1a\x10options/db.proto\"\x9e\a\n" +
+	"$domain/product/product/product.proto\x12\x11domain.product.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1adomain/common/search.proto\x1a\x10options/db.proto\"\xea\a\n" +
 	"\aProduct\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12&\n" +
 	"\fdate_created\x18\x02 \x01(\x03H\x00R\vdateCreated\x88\x01\x01\x123\n" +
@@ -1046,7 +1055,10 @@ const file_domain_product_product_product_proto_rawDesc = "" +
 	"\fvariant_mode\x18\x13 \x01(\tB\n" +
 	"\x82\xb5\x18\x06\"\x04noneR\vvariantMode\x12(\n" +
 	"\rexpected_cost\x18\x14 \x01(\x03H\bR\fexpectedCost\x88\x01\x01\x129\n" +
-	"\x16expected_cost_currency\x18\x15 \x01(\tH\tR\x14expectedCostCurrency\x88\x01\x01:\x06\x8a\xb5\x18\x02\b\x01B\x0f\n" +
+	"\x16expected_cost_currency\x18\x15 \x01(\tH\tR\x14expectedCostCurrency\x88\x01\x01\x129\n" +
+	"\fworkspace_id\x18\x1e \x01(\tB\x11\x82\xb5\x18\r\n" +
+	"\tworkspace\x18\x01H\n" +
+	"R\vworkspaceId\x88\x01\x01:\x06\x8a\xb5\x18\x02\b\x01B\x0f\n" +
 	"\r_date_createdB\x16\n" +
 	"\x14_date_created_stringB\x10\n" +
 	"\x0e_date_modifiedB\x17\n" +
@@ -1057,7 +1069,8 @@ const file_domain_product_product_product_proto_rawDesc = "" +
 	"\b_line_idB\a\n" +
 	"\x05_unitB\x10\n" +
 	"\x0e_expected_costB\x19\n" +
-	"\x17_expected_cost_currencyJ\x04\b\v\x10\fJ\x04\b\f\x10\rJ\x04\b\r\x10\x0eJ\x04\b\x16\x10\x17J\x04\b\x17\x10\x1eR\x13default_template_id\"F\n" +
+	"\x17_expected_cost_currencyB\x0f\n" +
+	"\r_workspace_idJ\x04\b\v\x10\fJ\x04\b\f\x10\rJ\x04\b\r\x10\x0eJ\x04\b\x16\x10\x17J\x04\b\x17\x10\x1eR\x13default_template_id\"F\n" +
 	"\x14CreateProductRequest\x12.\n" +
 	"\x04data\x18\x01 \x01(\v2\x1a.domain.product.v1.ProductR\x04data\"\x9f\x01\n" +
 	"\x15CreateProductResponse\x12.\n" +

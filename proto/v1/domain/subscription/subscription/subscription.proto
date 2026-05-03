@@ -49,6 +49,9 @@ message Subscription {
   // operator clicks "Extend pool" — the override is the new total, not a delta.
   // See docs/plan/20260501-ad-hoc-subscription-billing/plan.md §2.3 (codex MAJ-1).
   optional int32 entitled_occurrences_override = 23;
+
+  // Workspace ownership — subscriptions are scoped per workspace.
+  optional string workspace_id = 24 [(options.v1.db).references = "workspace", (options.v1.db).index = true];
 }
 
 service SubscriptionDomainService {

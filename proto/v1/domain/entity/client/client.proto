@@ -48,6 +48,12 @@ message Client {
   optional string status = 24;                  // "prospect", "active", "on_hold", "blocked", "inactive"
   optional string country = 25;                 // ISO 3166-1 alpha-2 country code
   optional string website = 26;
+
+  // Drift-recovered columns (DB had these; proto did not)
+  optional string email = 27;                   // Primary email address
+  optional string first_name = 28;              // Given name (individual clients)
+  optional string last_name = 29;               // Family name (individual clients)
+  optional string workspace_id = 30 [(options.v1.db).references = "workspace", (options.v1.db).index = true];
 }
 
 service ClientDomainService {
