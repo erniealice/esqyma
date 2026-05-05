@@ -19,14 +19,15 @@ import (
 const _ = grpc.SupportPackageIsVersion9
 
 const (
-	SubscriptionDomainService_CreateSubscription_FullMethodName          = "/domain.subscription.v1.SubscriptionDomainService/CreateSubscription"
-	SubscriptionDomainService_ReadSubscription_FullMethodName            = "/domain.subscription.v1.SubscriptionDomainService/ReadSubscription"
-	SubscriptionDomainService_UpdateSubscription_FullMethodName          = "/domain.subscription.v1.SubscriptionDomainService/UpdateSubscription"
-	SubscriptionDomainService_DeleteSubscription_FullMethodName          = "/domain.subscription.v1.SubscriptionDomainService/DeleteSubscription"
-	SubscriptionDomainService_ListSubscriptions_FullMethodName           = "/domain.subscription.v1.SubscriptionDomainService/ListSubscriptions"
-	SubscriptionDomainService_GetSubscriptionListPageData_FullMethodName = "/domain.subscription.v1.SubscriptionDomainService/GetSubscriptionListPageData"
-	SubscriptionDomainService_GetSubscriptionItemPageData_FullMethodName = "/domain.subscription.v1.SubscriptionDomainService/GetSubscriptionItemPageData"
-	SubscriptionDomainService_CountActiveByClientIds_FullMethodName      = "/domain.subscription.v1.SubscriptionDomainService/CountActiveByClientIds"
+	SubscriptionDomainService_CreateSubscription_FullMethodName           = "/domain.subscription.v1.SubscriptionDomainService/CreateSubscription"
+	SubscriptionDomainService_ReadSubscription_FullMethodName             = "/domain.subscription.v1.SubscriptionDomainService/ReadSubscription"
+	SubscriptionDomainService_UpdateSubscription_FullMethodName           = "/domain.subscription.v1.SubscriptionDomainService/UpdateSubscription"
+	SubscriptionDomainService_DeleteSubscription_FullMethodName           = "/domain.subscription.v1.SubscriptionDomainService/DeleteSubscription"
+	SubscriptionDomainService_ListSubscriptions_FullMethodName            = "/domain.subscription.v1.SubscriptionDomainService/ListSubscriptions"
+	SubscriptionDomainService_GetSubscriptionListPageData_FullMethodName  = "/domain.subscription.v1.SubscriptionDomainService/GetSubscriptionListPageData"
+	SubscriptionDomainService_GetSubscriptionItemPageData_FullMethodName  = "/domain.subscription.v1.SubscriptionDomainService/GetSubscriptionItemPageData"
+	SubscriptionDomainService_CountActiveByClientIds_FullMethodName       = "/domain.subscription.v1.SubscriptionDomainService/CountActiveByClientIds"
+	SubscriptionDomainService_ListSubscriptionsByPricePlan_FullMethodName = "/domain.subscription.v1.SubscriptionDomainService/ListSubscriptionsByPricePlan"
 )
 
 // SubscriptionDomainServiceClient is the client API for SubscriptionDomainService service.
@@ -43,6 +44,11 @@ type SubscriptionDomainServiceClient interface {
 	// NEW: Enhanced item view with related data
 	GetSubscriptionItemPageData(ctx context.Context, in *GetSubscriptionItemPageDataRequest, opts ...grpc.CallOption) (*GetSubscriptionItemPageDataResponse, error)
 	CountActiveByClientIds(ctx context.Context, in *CountActiveByClientIdsRequest, opts ...grpc.CallOption) (*CountActiveByClientIdsResponse, error)
+	// Reverse index: subscriptions referencing a given price plan. Hydrates
+	// Client + PricePlan + PricePlan.Plan via the same JOIN path as
+	// GetSubscriptionListPageData. Used by the price-plan detail "Engagements"
+	// tab (centymo) — see docs/plan/20260504-price-plan-engagements-tab/.
+	ListSubscriptionsByPricePlan(ctx context.Context, in *ListSubscriptionsByPricePlanRequest, opts ...grpc.CallOption) (*ListSubscriptionsByPricePlanResponse, error)
 }
 
 type subscriptionDomainServiceClient struct {
@@ -133,6 +139,16 @@ func (c *subscriptionDomainServiceClient) CountActiveByClientIds(ctx context.Con
 	return out, nil
 }
 
+func (c *subscriptionDomainServiceClient) ListSubscriptionsByPricePlan(ctx context.Context, in *ListSubscriptionsByPricePlanRequest, opts ...grpc.CallOption) (*ListSubscriptionsByPricePlanResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(ListSubscriptionsByPricePlanResponse)
+	err := c.cc.Invoke(ctx, SubscriptionDomainService_ListSubscriptionsByPricePlan_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // SubscriptionDomainServiceServer is the server API for SubscriptionDomainService service.
 // All implementations must embed UnimplementedSubscriptionDomainServiceServer
 // for forward compatibility.
@@ -147,6 +163,11 @@ type SubscriptionDomainServiceServer interface {
 	// NEW: Enhanced item view with related data
 	GetSubscriptionItemPageData(context.Context, *GetSubscriptionItemPageDataRequest) (*GetSubscriptionItemPageDataResponse, error)
 	CountActiveByClientIds(context.Context, *CountActiveByClientIdsRequest) (*CountActiveByClientIdsResponse, error)
+	// Reverse index: subscriptions referencing a given price plan. Hydrates
+	// Client + PricePlan + PricePlan.Plan via the same JOIN path as
+	// GetSubscriptionListPageData. Used by the price-plan detail "Engagements"
+	// tab (centymo) — see docs/plan/20260504-price-plan-engagements-tab/.
+	ListSubscriptionsByPricePlan(context.Context, *ListSubscriptionsByPricePlanRequest) (*ListSubscriptionsByPricePlanResponse, error)
 	mustEmbedUnimplementedSubscriptionDomainServiceServer()
 }
 
@@ -180,6 +201,9 @@ func (UnimplementedSubscriptionDomainServiceServer) GetSubscriptionItemPageData(
 }
 func (UnimplementedSubscriptionDomainServiceServer) CountActiveByClientIds(context.Context, *CountActiveByClientIdsRequest) (*CountActiveByClientIdsResponse, error) {
 	return nil, status.Error(codes.Unimplemented, "method CountActiveByClientIds not implemented")
+}
+func (UnimplementedSubscriptionDomainServiceServer) ListSubscriptionsByPricePlan(context.Context, *ListSubscriptionsByPricePlanRequest) (*ListSubscriptionsByPricePlanResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method ListSubscriptionsByPricePlan not implemented")
 }
 func (UnimplementedSubscriptionDomainServiceServer) mustEmbedUnimplementedSubscriptionDomainServiceServer() {
 }
@@ -347,6 +371,24 @@ func _SubscriptionDomainService_CountActiveByClientIds_Handler(srv interface{}, 
 	return interceptor(ctx, in, info, handler)
 }
 
+func _SubscriptionDomainService_ListSubscriptionsByPricePlan_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ListSubscriptionsByPricePlanRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(SubscriptionDomainServiceServer).ListSubscriptionsByPricePlan(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: SubscriptionDomainService_ListSubscriptionsByPricePlan_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(SubscriptionDomainServiceServer).ListSubscriptionsByPricePlan(ctx, req.(*ListSubscriptionsByPricePlanRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // SubscriptionDomainService_ServiceDesc is the grpc.ServiceDesc for SubscriptionDomainService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -385,6 +427,10 @@ var SubscriptionDomainService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "CountActiveByClientIds",
 			Handler:    _SubscriptionDomainService_CountActiveByClientIds_Handler,
+		},
+		{
+			MethodName: "ListSubscriptionsByPricePlan",
+			Handler:    _SubscriptionDomainService_ListSubscriptionsByPricePlan_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

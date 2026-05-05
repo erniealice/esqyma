@@ -70,6 +70,13 @@ service SubscriptionDomainService {
     returns (GetSubscriptionItemPageDataResponse);
 
   rpc CountActiveByClientIds(CountActiveByClientIdsRequest) returns (CountActiveByClientIdsResponse);
+
+  // Reverse index: subscriptions referencing a given price plan. Hydrates
+  // Client + PricePlan + PricePlan.Plan via the same JOIN path as
+  // GetSubscriptionListPageData. Used by the price-plan detail "Engagements"
+  // tab (centymo) — see docs/plan/20260504-price-plan-engagements-tab/.
+  rpc ListSubscriptionsByPricePlan(ListSubscriptionsByPricePlanRequest)
+    returns (ListSubscriptionsByPricePlanResponse);
 }
 
 message CreateSubscriptionRequest {
@@ -179,4 +186,24 @@ message CountActiveByClientIdsResponse {
   // Keys are client IDs; values are counts of active subscriptions for each.
   // Clients with zero active subscriptions are omitted (caller defaults to 0).
   map<string, int32> counts = 1;
+}
+
+message ListSubscriptionsByPricePlanRequest {
+  string price_plan_id = 1;
+  // When true (default), only active subscriptions are returned.
+  optional bool active_only = 2;
+  // Optional pagination — omit for "all rows" (typical use case: a tab
+  // listing engagements for one plan).
+  optional domain.common.v1.PaginationRequest pagination = 3;
+  // Optional sort — defaults to subscription name ascending when omitted.
+  optional domain.common.v1.SortRequest sort = 4;
+}
+
+message ListSubscriptionsByPricePlanResponse {
+  // Subscriptions hydrated with Client, PricePlan, and PricePlan.Plan so the
+  // view layer can render Client name and Plan name without N+1 lookups.
+  repeated Subscription subscription_list = 1;
+  optional domain.common.v1.PaginationResponse pagination = 2;
+  bool success = 3;
+  optional domain.common.v1.Error error = 4;
 }
