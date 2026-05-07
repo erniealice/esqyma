@@ -75,6 +75,11 @@ message Expenditure {
   //   ("manual" | "recurrence" | "po_match" | "import"). Useful for
   //   filtering operational queues.
   optional string source = 33;
+
+  // Supplier subscription back-edges (supplier-subscriptions plan).
+  // Fields 30/31 were taken (expense_recognition_id, accrued_expense_id); using 34/35.
+  optional string supplier_subscription_id = 34 [(options.v1.db).references = "supplier_subscription", (options.v1.db).index = true]; // FK to SupplierSubscription (subscription-driven expenditure)
+  optional string cost_plan_id = 35 [(options.v1.db).references = "cost_plan", (options.v1.db).index = true];                         // FK to CostPlan (denormalized for join-free reporting)
 }
 
 service ExpenditureDomainService {

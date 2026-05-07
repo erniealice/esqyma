@@ -201,6 +201,8 @@ type ProcurementRequest struct {
 	RejectionReason  *string `protobuf:"bytes,33,opt,name=rejection_reason,json=rejectionReason,proto3,oneof" json:"rejection_reason,omitempty"`
 	// Spawned artifacts (set after approval)
 	PurchaseOrderId *string `protobuf:"bytes,40,opt,name=purchase_order_id,json=purchaseOrderId,proto3,oneof" json:"purchase_order_id,omitempty"`
+	// Field 22 was taken (needed_by_date); spawned subscription FK placed in the artifacts section at 41.
+	SpawnedSupplierSubscriptionId *string `protobuf:"bytes,41,opt,name=spawned_supplier_subscription_id,json=spawnedSupplierSubscriptionId,proto3,oneof" json:"spawned_supplier_subscription_id,omitempty"` // FK to SupplierSubscription (set when operator picks "Spawn recurring SupplierSubscription" at approval)
 	// GL / categorization
 	ExpenditureCategoryId *string `protobuf:"bytes,50,opt,name=expenditure_category_id,json=expenditureCategoryId,proto3,oneof" json:"expenditure_category_id,omitempty"`
 	ExpenseAccountId      *string `protobuf:"bytes,51,opt,name=expense_account_id,json=expenseAccountId,proto3,oneof" json:"expense_account_id,omitempty"`
@@ -406,6 +408,13 @@ func (x *ProcurementRequest) GetRejectionReason() string {
 func (x *ProcurementRequest) GetPurchaseOrderId() string {
 	if x != nil && x.PurchaseOrderId != nil {
 		return *x.PurchaseOrderId
+	}
+	return ""
+}
+
+func (x *ProcurementRequest) GetSpawnedSupplierSubscriptionId() string {
+	if x != nil && x.SpawnedSupplierSubscriptionId != nil {
+		return *x.SpawnedSupplierSubscriptionId
 	}
 	return ""
 }
@@ -1682,7 +1691,7 @@ var File_domain_expenditure_procurement_request_procurement_request_proto protor
 
 const file_domain_expenditure_procurement_request_procurement_request_proto_rawDesc = "" +
 	"\n" +
-	"@domain/expenditure/procurement_request/procurement_request.proto\x12\x15domain.expenditure.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/search.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a%domain/entity/supplier/supplier.proto\x1a\x10options/db.proto\"\x9a\x0e\n" +
+	"@domain/expenditure/procurement_request/procurement_request.proto\x12\x15domain.expenditure.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/search.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a%domain/entity/supplier/supplier.proto\x1a\x10options/db.proto\"\xac\x0f\n" +
 	"\x12ProcurementRequest\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x124\n" +
 	"\fworkspace_id\x18\x02 \x01(\tB\x11\x82\xb5\x18\r\n" +
@@ -1717,13 +1726,15 @@ const file_domain_expenditure_procurement_request_procurement_request_proto_rawD
 	"\x12approved_at_string\x18  \x01(\tH\fR\x10approvedAtString\x88\x01\x01\x12.\n" +
 	"\x10rejection_reason\x18! \x01(\tH\rR\x0frejectionReason\x88\x01\x01\x12E\n" +
 	"\x11purchase_order_id\x18( \x01(\tB\x14\x82\xb5\x18\x10\n" +
-	"\x0epurchase_orderH\x0eR\x0fpurchaseOrderId\x88\x01\x01\x12W\n" +
+	"\x0epurchase_orderH\x0eR\x0fpurchaseOrderId\x88\x01\x01\x12k\n" +
+	" spawned_supplier_subscription_id\x18) \x01(\tB\x1d\x82\xb5\x18\x19\n" +
+	"\x15supplier_subscription\x18\x01H\x0fR\x1dspawnedSupplierSubscriptionId\x88\x01\x01\x12W\n" +
 	"\x17expenditure_category_id\x182 \x01(\tB\x1a\x82\xb5\x18\x16\n" +
-	"\x14expenditure_categoryH\x0fR\x15expenditureCategoryId\x88\x01\x01\x12@\n" +
+	"\x14expenditure_categoryH\x10R\x15expenditureCategoryId\x88\x01\x01\x12@\n" +
 	"\x12expense_account_id\x183 \x01(\tB\r\x82\xb5\x18\t\n" +
-	"\aaccountH\x10R\x10expenseAccountId\x88\x01\x01\x12|\n" +
-	"\x14fulfillment_strategy\x184 \x01(\x0e2<.domain.expenditure.v1.ProcurementRequestFulfillmentStrategyB\x06\x82\xb5\x18\x02\x18\x01H\x11R\x13fulfillmentStrategy\x88\x01\x01\x123\n" +
-	"\x13policy_decision_log\x185 \x01(\tH\x12R\x11policyDecisionLog\x88\x01\x01:\x06\x8a\xb5\x18\x02\b\x01B\x0f\n" +
+	"\aaccountH\x11R\x10expenseAccountId\x88\x01\x01\x12|\n" +
+	"\x14fulfillment_strategy\x184 \x01(\x0e2<.domain.expenditure.v1.ProcurementRequestFulfillmentStrategyB\x06\x82\xb5\x18\x02\x18\x01H\x12R\x13fulfillmentStrategy\x88\x01\x01\x123\n" +
+	"\x13policy_decision_log\x185 \x01(\tH\x13R\x11policyDecisionLog\x88\x01\x01:\x06\x8a\xb5\x18\x02\b\x01B\x0f\n" +
 	"\r_date_createdB\x16\n" +
 	"\x14_date_created_stringB\x10\n" +
 	"\x0e_date_modifiedB\x17\n" +
@@ -1738,7 +1749,8 @@ const file_domain_expenditure_procurement_request_procurement_request_proto_rawD
 	"\f_approved_atB\x15\n" +
 	"\x13_approved_at_stringB\x13\n" +
 	"\x11_rejection_reasonB\x14\n" +
-	"\x12_purchase_order_idB\x1a\n" +
+	"\x12_purchase_order_idB#\n" +
+	"!_spawned_supplier_subscription_idB\x1a\n" +
 	"\x18_expenditure_category_idB\x15\n" +
 	"\x13_expense_account_idB\x17\n" +
 	"\x15_fulfillment_strategyB\x16\n" +

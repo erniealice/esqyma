@@ -45,8 +45,13 @@ type Workspace struct {
 	ComplianceRegion *string `protobuf:"bytes,12,opt,name=compliance_region,json=complianceRegion,proto3,oneof" json:"compliance_region,omitempty"`
 	// Drift-recovered column (DB had this; proto did not)
 	DefaultCurrency *string `protobuf:"bytes,13,opt,name=default_currency,json=defaultCurrency,proto3,oneof" json:"default_currency,omitempty"` // ISO 4217 default currency for new entities (separate from functional_currency)
-	unknownFields   protoimpl.UnknownFields
-	sizeCache       protoimpl.SizeCache
+	// IANA timezone name (e.g. "Asia/Manila", "America/Los_Angeles"). Source of
+	// truth for billing-cycle math, period boundaries, AR aging buckets, and
+	// any "what calendar day is this?" computation. Domain reads only — display
+	// (e.g. "edited 5 min ago") may still resolve via user/operator tz.
+	Timezone      *string `protobuf:"bytes,14,opt,name=timezone,proto3,oneof" json:"timezone,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
 }
 
 func (x *Workspace) Reset() {
@@ -166,6 +171,13 @@ func (x *Workspace) GetComplianceRegion() string {
 func (x *Workspace) GetDefaultCurrency() string {
 	if x != nil && x.DefaultCurrency != nil {
 		return *x.DefaultCurrency
+	}
+	return ""
+}
+
+func (x *Workspace) GetTimezone() string {
+	if x != nil && x.Timezone != nil {
+		return *x.Timezone
 	}
 	return ""
 }
@@ -1252,7 +1264,7 @@ var File_domain_entity_workspace_workspace_proto protoreflect.FileDescriptor
 
 const file_domain_entity_workspace_workspace_proto_rawDesc = "" +
 	"\n" +
-	"'domain/entity/workspace/workspace.proto\x12\x10domain.entity.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1adomain/common/search.proto\x1a\x10options/db.proto\"\xef\x05\n" +
+	"'domain/entity/workspace/workspace.proto\x12\x10domain.entity.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1adomain/common/search.proto\x1a\x10options/db.proto\"\x9d\x06\n" +
 	"\tWorkspace\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12\x12\n" +
 	"\x04name\x18\x02 \x01(\tR\x04name\x12 \n" +
@@ -1269,7 +1281,8 @@ const file_domain_entity_workspace_workspace_proto_rawDesc = "" +
 	"\x82\xb5\x18\x06\"\x04trueR\x06active\x124\n" +
 	"\x13functional_currency\x18\v \x01(\tH\x05R\x12functionalCurrency\x88\x01\x01\x120\n" +
 	"\x11compliance_region\x18\f \x01(\tH\x06R\x10complianceRegion\x88\x01\x01\x12.\n" +
-	"\x10default_currency\x18\r \x01(\tH\aR\x0fdefaultCurrency\x88\x01\x01:\x06\x8a\xb5\x18\x02\b\x01B\x17\n" +
+	"\x10default_currency\x18\r \x01(\tH\aR\x0fdefaultCurrency\x88\x01\x01\x12\x1f\n" +
+	"\btimezone\x18\x0e \x01(\tH\bR\btimezone\x88\x01\x01:\x06\x8a\xb5\x18\x02\b\x01B\x17\n" +
 	"\x15_workflow_template_idB\x0f\n" +
 	"\r_date_createdB\x16\n" +
 	"\x14_date_created_stringB\x10\n" +
@@ -1277,7 +1290,8 @@ const file_domain_entity_workspace_workspace_proto_rawDesc = "" +
 	"\x15_date_modified_stringB\x16\n" +
 	"\x14_functional_currencyB\x14\n" +
 	"\x12_compliance_regionB\x13\n" +
-	"\x11_default_currency\"I\n" +
+	"\x11_default_currencyB\v\n" +
+	"\t_timezone\"I\n" +
 	"\x16CreateWorkspaceRequest\x12/\n" +
 	"\x04data\x18\x01 \x01(\v2\x1b.domain.entity.v1.WorkspaceR\x04data\"\xa2\x01\n" +
 	"\x17CreateWorkspaceResponse\x12/\n" +

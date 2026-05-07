@@ -56,8 +56,11 @@ type ExpenditureLineItem struct {
 	ProrationFactor    *float64 `protobuf:"fixed64,25,opt,name=proration_factor,json=prorationFactor,proto3,oneof" json:"proration_factor,omitempty"`           // 0.0–1.0, for mid-cycle compensation changes
 	CalcMetadata       *string  `protobuf:"bytes,26,opt,name=calc_metadata,json=calcMetadata,proto3,oneof" json:"calc_metadata,omitempty"`                      // JSON-encoded calculator audit (pre/post split, formula refs)
 	LineKind           *string  `protobuf:"bytes,27,opt,name=line_kind,json=lineKind,proto3,oneof" json:"line_kind,omitempty"`                                  // "earning_basic" | "earning_allowance" | "deduction_statutory" |
-	unknownFields      protoimpl.UnknownFields
-	sizeCache          protoimpl.SizeCache
+	// Supplier subscription back-edge (supplier-subscriptions plan).
+	// Field 22 was taken (rate_table_id); using 28.
+	SupplierProductCostPlanId *string `protobuf:"bytes,28,opt,name=supplier_product_cost_plan_id,json=supplierProductCostPlanId,proto3,oneof" json:"supplier_product_cost_plan_id,omitempty"` // FK to SupplierProductCostPlan (line-level cost plan traceability)
+	unknownFields             protoimpl.UnknownFields
+	sizeCache                 protoimpl.SizeCache
 }
 
 func (x *ExpenditureLineItem) Reset() {
@@ -268,6 +271,13 @@ func (x *ExpenditureLineItem) GetCalcMetadata() string {
 func (x *ExpenditureLineItem) GetLineKind() string {
 	if x != nil && x.LineKind != nil {
 		return *x.LineKind
+	}
+	return ""
+}
+
+func (x *ExpenditureLineItem) GetSupplierProductCostPlanId() string {
+	if x != nil && x.SupplierProductCostPlanId != nil {
+		return *x.SupplierProductCostPlanId
 	}
 	return ""
 }
@@ -1068,7 +1078,7 @@ var File_domain_expenditure_expenditure_line_item_expenditure_line_item_proto pr
 
 const file_domain_expenditure_expenditure_line_item_expenditure_line_item_proto_rawDesc = "" +
 	"\n" +
-	"Ddomain/expenditure/expenditure_line_item/expenditure_line_item.proto\x12\x15domain.expenditure.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/search.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a0domain/expenditure/expenditure/expenditure.proto\x1a$domain/product/product/product.proto\x1a\x10options/db.proto\"\x8c\f\n" +
+	"Ddomain/expenditure/expenditure_line_item/expenditure_line_item.proto\x12\x15domain.expenditure.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/search.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a0domain/expenditure/expenditure/expenditure.proto\x1a$domain/product/product/product.proto\x1a\x10options/db.proto\"\x99\r\n" +
 	"\x13ExpenditureLineItem\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12&\n" +
 	"\fdate_created\x18\x02 \x01(\x03H\x00R\vdateCreated\x88\x01\x01\x123\n" +
@@ -1106,7 +1116,9 @@ const file_domain_expenditure_expenditure_line_item_expenditure_line_item_proto_
 	"\x14applied_basis_amount\x18\x18 \x01(\x03H\x0eR\x12appliedBasisAmount\x88\x01\x01\x12.\n" +
 	"\x10proration_factor\x18\x19 \x01(\x01H\x0fR\x0fprorationFactor\x88\x01\x01\x12(\n" +
 	"\rcalc_metadata\x18\x1a \x01(\tH\x10R\fcalcMetadata\x88\x01\x01\x12 \n" +
-	"\tline_kind\x18\x1b \x01(\tH\x11R\blineKind\x88\x01\x01B\x0f\n" +
+	"\tline_kind\x18\x1b \x01(\tH\x11R\blineKind\x88\x01\x01\x12i\n" +
+	"\x1dsupplier_product_cost_plan_id\x18\x1c \x01(\tB\"\x82\xb5\x18\x1e\n" +
+	"\x1asupplier_product_cost_plan\x18\x01H\x12R\x19supplierProductCostPlanId\x88\x01\x01B\x0f\n" +
 	"\r_date_createdB\x16\n" +
 	"\x14_date_created_stringB\x10\n" +
 	"\x0e_date_modifiedB\x17\n" +
@@ -1126,7 +1138,8 @@ const file_domain_expenditure_expenditure_line_item_expenditure_line_item_proto_
 	"\x11_proration_factorB\x10\n" +
 	"\x0e_calc_metadataB\f\n" +
 	"\n" +
-	"_line_kind\"b\n" +
+	"_line_kindB \n" +
+	"\x1e_supplier_product_cost_plan_id\"b\n" +
 	" CreateExpenditureLineItemRequest\x12>\n" +
 	"\x04data\x18\x01 \x01(\v2*.domain.expenditure.v1.ExpenditureLineItemR\x04data\"\xbb\x01\n" +
 	"!CreateExpenditureLineItemResponse\x12>\n" +

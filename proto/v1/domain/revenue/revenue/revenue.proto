@@ -58,6 +58,7 @@ message Revenue {
   // back to the source event row.
   optional string job_phase_id     = 33 [(options.v1.db).references = "job_phase",     (options.v1.db).index = true];
   optional string billing_event_id = 34 [(options.v1.db).references = "billing_event", (options.v1.db).index = true];
+  optional string run_id           = 35 [(options.v1.db).references = "revenue_run",   (options.v1.db).index = true];
 }
 
 service RevenueDomainService {

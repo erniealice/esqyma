@@ -12,6 +12,7 @@ import "domain/common/sort.proto";
 import "domain/entity/supplier/supplier.proto";
 import "domain/entity/location/location.proto";
 import "domain/entity/payment_term/payment_term.proto";
+import "domain/procurement/cost_plan/cost_plan.proto";
 import "options/db.proto";
 
 message PurchaseOrder {
@@ -76,6 +77,10 @@ message PurchaseOrder {
   // Supplier commitment back-edges
   optional string supplier_contract_id = 38 [(options.v1.db).references = "supplier_contract"];    // FK to SupplierContract (blanket/framework releases)
   optional string procurement_request_id = 39 [(options.v1.db).references = "procurement_request"]; // FK to ProcurementRequest (spawned PO)
+
+  // Supplier subscription back-edges (supplier-subscriptions plan)
+  optional string supplier_subscription_id = 40 [(options.v1.db).references = "supplier_subscription", (options.v1.db).index = true]; // FK to SupplierSubscription (subscription-driven PO)
+  optional domain.procurement.v1.CostPlanBillingKind billing_kind = 41; // denormalized from cost_plan for operational filtering
 }
 
 service PurchaseOrderDomainService {

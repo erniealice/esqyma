@@ -90,9 +90,13 @@ type Expenditure struct {
 	//
 	//	("manual" | "recurrence" | "po_match" | "import"). Useful for
 	//	filtering operational queues.
-	Source        *string `protobuf:"bytes,33,opt,name=source,proto3,oneof" json:"source,omitempty"`
-	unknownFields protoimpl.UnknownFields
-	sizeCache     protoimpl.SizeCache
+	Source *string `protobuf:"bytes,33,opt,name=source,proto3,oneof" json:"source,omitempty"`
+	// Supplier subscription back-edges (supplier-subscriptions plan).
+	// Fields 30/31 were taken (expense_recognition_id, accrued_expense_id); using 34/35.
+	SupplierSubscriptionId *string `protobuf:"bytes,34,opt,name=supplier_subscription_id,json=supplierSubscriptionId,proto3,oneof" json:"supplier_subscription_id,omitempty"` // FK to SupplierSubscription (subscription-driven expenditure)
+	CostPlanId             *string `protobuf:"bytes,35,opt,name=cost_plan_id,json=costPlanId,proto3,oneof" json:"cost_plan_id,omitempty"`                                     // FK to CostPlan (denormalized for join-free reporting)
+	unknownFields          protoimpl.UnknownFields
+	sizeCache              protoimpl.SizeCache
 }
 
 func (x *Expenditure) Reset() {
@@ -352,6 +356,20 @@ func (x *Expenditure) GetCycleDate() string {
 func (x *Expenditure) GetSource() string {
 	if x != nil && x.Source != nil {
 		return *x.Source
+	}
+	return ""
+}
+
+func (x *Expenditure) GetSupplierSubscriptionId() string {
+	if x != nil && x.SupplierSubscriptionId != nil {
+		return *x.SupplierSubscriptionId
+	}
+	return ""
+}
+
+func (x *Expenditure) GetCostPlanId() string {
+	if x != nil && x.CostPlanId != nil {
+		return *x.CostPlanId
 	}
 	return ""
 }
@@ -1144,7 +1162,7 @@ var File_domain_expenditure_expenditure_expenditure_proto protoreflect.FileDescr
 
 const file_domain_expenditure_expenditure_expenditure_proto_rawDesc = "" +
 	"\n" +
-	"0domain/expenditure/expenditure/expenditure.proto\x12\x15domain.expenditure.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/search.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a!domain/entity/client/client.proto\x1a%domain/entity/location/location.proto\x1a-domain/entity/payment_term/payment_term.proto\x1a\x10options/db.proto\"\xd9\x0f\n" +
+	"0domain/expenditure/expenditure/expenditure.proto\x12\x15domain.expenditure.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/search.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a!domain/entity/client/client.proto\x1a%domain/entity/location/location.proto\x1a-domain/entity/payment_term/payment_term.proto\x1a\x10options/db.proto\"\x9f\x11\n" +
 	"\vExpenditure\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12&\n" +
 	"\fdate_created\x18\x02 \x01(\x03H\x00R\vdateCreated\x88\x01\x01\x123\n" +
@@ -1191,7 +1209,12 @@ const file_domain_expenditure_expenditure_expenditure_proto_rawDesc = "" +
 	"\x0faccrued_expenseH\x15R\x10accruedExpenseId\x88\x01\x01\x12\"\n" +
 	"\n" +
 	"cycle_date\x18  \x01(\tH\x16R\tcycleDate\x88\x01\x01\x12\x1b\n" +
-	"\x06source\x18! \x01(\tH\x17R\x06source\x88\x01\x01B\x0f\n" +
+	"\x06source\x18! \x01(\tH\x17R\x06source\x88\x01\x01\x12\\\n" +
+	"\x18supplier_subscription_id\x18\" \x01(\tB\x1d\x82\xb5\x18\x19\n" +
+	"\x15supplier_subscription\x18\x01H\x18R\x16supplierSubscriptionId\x88\x01\x01\x128\n" +
+	"\fcost_plan_id\x18# \x01(\tB\x11\x82\xb5\x18\r\n" +
+	"\tcost_plan\x18\x01H\x19R\n" +
+	"costPlanId\x88\x01\x01B\x0f\n" +
 	"\r_date_createdB\x16\n" +
 	"\x14_date_created_stringB\x10\n" +
 	"\x0e_date_modifiedB\x17\n" +
@@ -1215,7 +1238,9 @@ const file_domain_expenditure_expenditure_expenditure_proto_rawDesc = "" +
 	"\x17_expense_recognition_idB\x15\n" +
 	"\x13_accrued_expense_idB\r\n" +
 	"\v_cycle_dateB\t\n" +
-	"\a_source\"R\n" +
+	"\a_sourceB\x1b\n" +
+	"\x19_supplier_subscription_idB\x0f\n" +
+	"\r_cost_plan_id\"R\n" +
 	"\x18CreateExpenditureRequest\x126\n" +
 	"\x04data\x18\x01 \x01(\v2\".domain.expenditure.v1.ExpenditureR\x04data\"\xab\x01\n" +
 	"\x19CreateExpenditureResponse\x126\n" +

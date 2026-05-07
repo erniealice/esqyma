@@ -34,6 +34,12 @@ message Workspace {
 
   // Drift-recovered column (DB had this; proto did not)
   optional string default_currency = 13;        // ISO 4217 default currency for new entities (separate from functional_currency)
+
+  // IANA timezone name (e.g. "Asia/Manila", "America/Los_Angeles"). Source of
+  // truth for billing-cycle math, period boundaries, AR aging buckets, and
+  // any "what calendar day is this?" computation. Domain reads only — display
+  // (e.g. "edited 5 min ago") may still resolve via user/operator tz.
+  optional string timezone = 14;
 }
 
 service WorkspaceDomainService {

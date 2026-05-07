@@ -66,6 +66,7 @@ type Revenue struct {
 	// back to the source event row.
 	JobPhaseId     *string `protobuf:"bytes,33,opt,name=job_phase_id,json=jobPhaseId,proto3,oneof" json:"job_phase_id,omitempty"`
 	BillingEventId *string `protobuf:"bytes,34,opt,name=billing_event_id,json=billingEventId,proto3,oneof" json:"billing_event_id,omitempty"`
+	RunId          *string `protobuf:"bytes,35,opt,name=run_id,json=runId,proto3,oneof" json:"run_id,omitempty"`
 	unknownFields  protoimpl.UnknownFields
 	sizeCache      protoimpl.SizeCache
 }
@@ -313,6 +314,13 @@ func (x *Revenue) GetJobPhaseId() string {
 func (x *Revenue) GetBillingEventId() string {
 	if x != nil && x.BillingEventId != nil {
 		return *x.BillingEventId
+	}
+	return ""
+}
+
+func (x *Revenue) GetRunId() string {
+	if x != nil && x.RunId != nil {
+		return *x.RunId
 	}
 	return ""
 }
@@ -1530,7 +1538,7 @@ var File_domain_revenue_revenue_revenue_proto protoreflect.FileDescriptor
 
 const file_domain_revenue_revenue_revenue_proto_rawDesc = "" +
 	"\n" +
-	"$domain/revenue/revenue/revenue.proto\x12\x11domain.revenue.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/search.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a!domain/entity/client/client.proto\x1a%domain/entity/location/location.proto\x1a-domain/entity/payment_term/payment_term.proto\x1a\x10options/db.proto\"\x97\x0e\n" +
+	"$domain/revenue/revenue/revenue.proto\x12\x11domain.revenue.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/search.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a!domain/entity/client/client.proto\x1a%domain/entity/location/location.proto\x1a-domain/entity/payment_term/payment_term.proto\x1a\x10options/db.proto\"\xd3\x0e\n" +
 	"\aRevenue\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12&\n" +
 	"\fdate_created\x18\x02 \x01(\x03H\x00R\vdateCreated\x88\x01\x01\x123\n" +
@@ -1568,7 +1576,9 @@ const file_domain_revenue_revenue_revenue_proto_rawDesc = "" +
 	"\tjob_phase\x18\x01H\x15R\n" +
 	"jobPhaseId\x88\x01\x01\x12D\n" +
 	"\x10billing_event_id\x18\" \x01(\tB\x15\x82\xb5\x18\x11\n" +
-	"\rbilling_event\x18\x01H\x16R\x0ebillingEventId\x88\x01\x01B\x0f\n" +
+	"\rbilling_event\x18\x01H\x16R\x0ebillingEventId\x88\x01\x01\x12/\n" +
+	"\x06run_id\x18# \x01(\tB\x13\x82\xb5\x18\x0f\n" +
+	"\vrevenue_run\x18\x01H\x17R\x05runId\x88\x01\x01B\x0f\n" +
 	"\r_date_createdB\x16\n" +
 	"\x14_date_created_stringB\x10\n" +
 	"\x0e_date_modifiedB\x17\n" +
@@ -1591,7 +1601,8 @@ const file_domain_revenue_revenue_revenue_proto_rawDesc = "" +
 	"\r_payment_termB\x12\n" +
 	"\x10_subscription_idB\x0f\n" +
 	"\r_job_phase_idB\x13\n" +
-	"\x11_billing_event_idJ\x04\b\v\x10\fJ\x04\b\x1e\x10\x1f\"F\n" +
+	"\x11_billing_event_idB\t\n" +
+	"\a_run_idJ\x04\b\v\x10\fJ\x04\b\x1e\x10\x1f\"F\n" +
 	"\x14CreateRevenueRequest\x12.\n" +
 	"\x04data\x18\x01 \x01(\v2\x1a.domain.revenue.v1.RevenueR\x04data\"\x9f\x01\n" +
 	"\x15CreateRevenueResponse\x12.\n" +

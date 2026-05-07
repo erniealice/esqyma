@@ -57,6 +57,9 @@ message Prepayment {
   // Supplier commitment back-edges (plan §11.5 — adopted, not deferred)
   optional string supplier_contract_id = 19 [(options.v1.db).references = "supplier_contract"]; // FK to SupplierContract
   optional string expenditure_id = 20 [(options.v1.db).references = "expenditure"];             // FK to the originating Expenditure
+
+  // Supplier subscription back-edge (supplier-subscriptions plan)
+  optional string supplier_subscription_id = 21 [(options.v1.db).references = "supplier_subscription", (options.v1.db).index = true]; // FK to SupplierSubscription (subscription-driven prepayment)
 }
 
 service PrepaymentDomainService {

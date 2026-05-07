@@ -96,6 +96,8 @@ message ProcurementRequest {
 
   // Spawned artifacts (set after approval)
   optional string purchase_order_id = 40 [(options.v1.db).references = "purchase_order"];
+  // Field 22 was taken (needed_by_date); spawned subscription FK placed in the artifacts section at 41.
+  optional string spawned_supplier_subscription_id = 41 [(options.v1.db).references = "supplier_subscription", (options.v1.db).index = true]; // FK to SupplierSubscription (set when operator picks "Spawn recurring SupplierSubscription" at approval)
 
   // GL / categorization
   optional string expenditure_category_id = 50 [(options.v1.db).references = "expenditure_category"];

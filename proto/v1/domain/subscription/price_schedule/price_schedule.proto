@@ -28,9 +28,12 @@ message PriceSchedule {
   // SET = client-scoped schedule. Reuse-or-create driven by ResolveOrCreateClientPriceSchedule.
   optional string client_id = 12 [(options.v1.db).references = "client", (options.v1.db).index = true];
 
-  // Drift-recovered columns (DB had these; proto did not)
-  optional string date_start = 13;              // ISO 8601 date (YYYY-MM-DD), date-only mirror of date_time_start
-  optional string date_end = 14;                // ISO 8601 date (YYYY-MM-DD), date-only mirror of date_time_end
+  // 2026-05-07: dropped — string mirrors were drift-recovered but never read
+  // by any view (drawer + detail go through date_time_start / date_time_end
+  // Timestamp + request-scoped tz). Removed alongside the matching DB-column
+  // drop migration. See price_schedule.proto history for prior usage.
+  reserved 13, 14;
+  reserved "date_start", "date_end";
   optional string legacy_price_list_id = 15;    // Legacy migration shim — links to old price-list IDs
   optional string workspace_id = 16 [(options.v1.db).references = "workspace", (options.v1.db).index = true];
 }

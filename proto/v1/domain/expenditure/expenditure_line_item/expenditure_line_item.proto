@@ -47,6 +47,10 @@ message ExpenditureLineItem {
   optional string calc_metadata = 26;       // JSON-encoded calculator audit (pre/post split, formula refs)
   optional string line_kind = 27;           // "earning_basic" | "earning_allowance" | "deduction_statutory" |
                                             // "deduction_tax" | "deduction_loan" | "employer_cost"
+
+  // Supplier subscription back-edge (supplier-subscriptions plan).
+  // Field 22 was taken (rate_table_id); using 28.
+  optional string supplier_product_cost_plan_id = 28 [(options.v1.db).references = "supplier_product_cost_plan", (options.v1.db).index = true]; // FK to SupplierProductCostPlan (line-level cost plan traceability)
 }
 
 service ExpenditureLineItemDomainService {

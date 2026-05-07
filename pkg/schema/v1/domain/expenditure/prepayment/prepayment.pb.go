@@ -104,8 +104,10 @@ type Prepayment struct {
 	// Supplier commitment back-edges (plan §11.5 — adopted, not deferred)
 	SupplierContractId *string `protobuf:"bytes,19,opt,name=supplier_contract_id,json=supplierContractId,proto3,oneof" json:"supplier_contract_id,omitempty"` // FK to SupplierContract
 	ExpenditureId      *string `protobuf:"bytes,20,opt,name=expenditure_id,json=expenditureId,proto3,oneof" json:"expenditure_id,omitempty"`                  // FK to the originating Expenditure
-	unknownFields      protoimpl.UnknownFields
-	sizeCache          protoimpl.SizeCache
+	// Supplier subscription back-edge (supplier-subscriptions plan)
+	SupplierSubscriptionId *string `protobuf:"bytes,21,opt,name=supplier_subscription_id,json=supplierSubscriptionId,proto3,oneof" json:"supplier_subscription_id,omitempty"` // FK to SupplierSubscription (subscription-driven prepayment)
+	unknownFields          protoimpl.UnknownFields
+	sizeCache              protoimpl.SizeCache
 }
 
 func (x *Prepayment) Reset() {
@@ -260,6 +262,13 @@ func (x *Prepayment) GetSupplierContractId() string {
 func (x *Prepayment) GetExpenditureId() string {
 	if x != nil && x.ExpenditureId != nil {
 		return *x.ExpenditureId
+	}
+	return ""
+}
+
+func (x *Prepayment) GetSupplierSubscriptionId() string {
+	if x != nil && x.SupplierSubscriptionId != nil {
+		return *x.SupplierSubscriptionId
 	}
 	return ""
 }
@@ -1052,7 +1061,7 @@ var File_domain_expenditure_prepayment_prepayment_proto protoreflect.FileDescrip
 
 const file_domain_expenditure_prepayment_prepayment_proto_rawDesc = "" +
 	"\n" +
-	".domain/expenditure/prepayment/prepayment.proto\x12\x15domain.expenditure.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1adomain/common/search.proto\x1a\x10options/db.proto\"\x92\b\n" +
+	".domain/expenditure/prepayment/prepayment.proto\x12\x15domain.expenditure.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1adomain/common/search.proto\x1a\x10options/db.proto\"\x8d\t\n" +
 	"\n" +
 	"Prepayment\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12 \n" +
@@ -1081,7 +1090,9 @@ const file_domain_expenditure_prepayment_prepayment_proto_rawDesc = "" +
 	"\x14supplier_contract_id\x18\x13 \x01(\tB\x17\x82\xb5\x18\x13\n" +
 	"\x11supplier_contractH\aR\x12supplierContractId\x88\x01\x01\x12=\n" +
 	"\x0eexpenditure_id\x18\x14 \x01(\tB\x11\x82\xb5\x18\r\n" +
-	"\vexpenditureH\bR\rexpenditureId\x88\x01\x01:\x06\x8a\xb5\x18\x02\b\x01B\x0e\n" +
+	"\vexpenditureH\bR\rexpenditureId\x88\x01\x01\x12\\\n" +
+	"\x18supplier_subscription_id\x18\x15 \x01(\tB\x1d\x82\xb5\x18\x19\n" +
+	"\x15supplier_subscription\x18\x01H\tR\x16supplierSubscriptionId\x88\x01\x01:\x06\x8a\xb5\x18\x02\b\x01B\x0e\n" +
 	"\f_vendor_nameB\r\n" +
 	"\v_account_idB\x15\n" +
 	"\x13_expense_account_idB\x0f\n" +
@@ -1090,7 +1101,8 @@ const file_domain_expenditure_prepayment_prepayment_proto_rawDesc = "" +
 	"\x0e_date_modifiedB\x17\n" +
 	"\x15_date_modified_stringB\x17\n" +
 	"\x15_supplier_contract_idB\x11\n" +
-	"\x0f_expenditure_idJ\x04\b\a\x10\bJ\x04\b\t\x10\n" +
+	"\x0f_expenditure_idB\x1b\n" +
+	"\x19_supplier_subscription_idJ\x04\b\a\x10\bJ\x04\b\t\x10\n" +
 	"\"P\n" +
 	"\x17CreatePrepaymentRequest\x125\n" +
 	"\x04data\x18\x01 \x01(\v2!.domain.expenditure.v1.PrepaymentR\x04data\"\xa9\x01\n" +
