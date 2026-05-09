@@ -780,7 +780,7 @@ var File_domain_revenue_revenue_tax_line_revenue_tax_line_proto protoreflect.Fil
 
 const file_domain_revenue_revenue_tax_line_revenue_tax_line_proto_rawDesc = "" +
 	"\n" +
-	"6domain/revenue/revenue_tax_line/revenue_tax_line.proto\x12\x11domain.revenue.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1adomain/common/search.proto\x1a\x10options/db.proto\"\xa4\t\n" +
+	"6domain/revenue/revenue_tax_line/revenue_tax_line.proto\x12\x11domain.revenue.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1adomain/common/search.proto\x1a\x10options/db.proto\"\xbe\t\n" +
 	"\x0eRevenueTaxLine\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12&\n" +
 	"\fdate_created\x18\x02 \x01(\x03H\x00R\vdateCreated\x88\x01\x01\x123\n" +
@@ -795,9 +795,10 @@ const file_domain_revenue_revenue_tax_line_revenue_tax_line_proto_rawDesc = "" +
 	"revenue_id\x18\b \x01(\tB\x0f\x82\xb5\x18\v\n" +
 	"\arevenue\x18\x01R\trevenueId\x125\n" +
 	"\vtax_rate_id\x18\t \x01(\tB\x10\x82\xb5\x18\f\n" +
-	"\btax_rate\x18\x01H\x04R\ttaxRateId\x88\x01\x01\x12E\n" +
+	"\btax_rate\x18\x01H\x04R\ttaxRateId\x88\x01\x01\x12_\n" +
 	"\x1fsource_registration_id_snapshot\x18\n" +
-	" \x01(\tR\x1csourceRegistrationIdSnapshot\x126\n" +
+	" \x01(\tB\x18\x82\xb5\x18\x14\n" +
+	"\x10tax_registration\x18\x01R\x1csourceRegistrationIdSnapshot\x126\n" +
 	"\x17authority_code_snapshot\x18\v \x01(\tR\x15authorityCodeSnapshot\x12;\n" +
 	"\x17regulator_code_snapshot\x18\f \x01(\tH\x05R\x15regulatorCodeSnapshot\x88\x01\x01\x12>\n" +
 	"\x19filing_form_code_snapshot\x18\r \x01(\tH\x06R\x16filingFormCodeSnapshot\x88\x01\x01\x12*\n" +

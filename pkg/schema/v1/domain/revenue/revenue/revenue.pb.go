@@ -69,13 +69,13 @@ type Revenue struct {
 	RunId          *string `protobuf:"bytes,35,opt,name=run_id,json=runId,proto3,oneof" json:"run_id,omitempty"`
 	// Tax denorm fields — Phase 1 tax integration
 	// Populated by ComputeTaxesForRevenue; snapshotted at recognition time.
-	CashAmountExpected            *int64  `protobuf:"varint,36,opt,name=cash_amount_expected,json=cashAmountExpected,proto3,oneof" json:"cash_amount_expected,omitempty"`                                   // centavos: total_amount + SUM(SURCHARGE) - SUM(WITHHOLDING)
-	WhtAmountExpected             *int64  `protobuf:"varint,37,opt,name=wht_amount_expected,json=whtAmountExpected,proto3,oneof" json:"wht_amount_expected,omitempty"`                                      // centavos: SUM(WITHHOLDING) — expected from buyer
-	WhtAmountCertified            *int64  `protobuf:"varint,38,opt,name=wht_amount_certified,json=whtAmountCertified,proto3,oneof" json:"wht_amount_certified,omitempty"`                                   // centavos: SUM(actual_amount) across non-void WithholdingCertificate rows
-	WhtAmountVariance             *int64  `protobuf:"varint,39,opt,name=wht_amount_variance,json=whtAmountVariance,proto3,oneof" json:"wht_amount_variance,omitempty"`                                      // centavos: wht_amount_expected - wht_amount_certified
-	SettlementStatus              *string `protobuf:"bytes,40,opt,name=settlement_status,json=settlementStatus,proto3,oneof" json:"settlement_status,omitempty"`                                            // OPEN, CASH_RECEIVED_WHT_PENDING, FULLY_SETTLED, VARIANCE_OPEN
-	TaxInclusivePricingSnapshot   *bool   `protobuf:"varint,41,opt,name=tax_inclusive_pricing_snapshot,json=taxInclusivePricingSnapshot,proto3,oneof" json:"tax_inclusive_pricing_snapshot,omitempty"`      // Snapshotted from workspace.tax_inclusive_pricing at recognition
-	TaxComputationEnabledSnapshot *string `protobuf:"bytes,42,opt,name=tax_computation_enabled_snapshot,json=taxComputationEnabledSnapshot,proto3,oneof" json:"tax_computation_enabled_snapshot,omitempty"` // Snapshotted from workspace.tax_computation_enabled
+	CashAmountExpected            *int64  `protobuf:"varint,36,opt,name=cash_amount_expected,json=cashAmountExpected,proto3,oneof" json:"cash_amount_expected,omitempty"`                                    // centavos: total_amount + SUM(SURCHARGE) - SUM(WITHHOLDING)
+	WhtAmountExpected             *int64  `protobuf:"varint,37,opt,name=wht_amount_expected,json=whtAmountExpected,proto3,oneof" json:"wht_amount_expected,omitempty"`                                       // centavos: SUM(WITHHOLDING) — expected from buyer
+	WhtAmountCertified            *int64  `protobuf:"varint,38,opt,name=wht_amount_certified,json=whtAmountCertified,proto3,oneof" json:"wht_amount_certified,omitempty"`                                    // centavos: SUM(actual_amount) across non-void WithholdingCertificate rows
+	WhtAmountVariance             *int64  `protobuf:"varint,39,opt,name=wht_amount_variance,json=whtAmountVariance,proto3,oneof" json:"wht_amount_variance,omitempty"`                                       // centavos: wht_amount_expected - wht_amount_certified
+	SettlementStatus              *string `protobuf:"bytes,40,opt,name=settlement_status,json=settlementStatus,proto3,oneof" json:"settlement_status,omitempty"`                                             // OPEN, CASH_RECEIVED_WHT_PENDING, FULLY_SETTLED, VARIANCE_OPEN
+	TaxInclusivePricingSnapshot   *bool   `protobuf:"varint,41,opt,name=tax_inclusive_pricing_snapshot,json=taxInclusivePricingSnapshot,proto3,oneof" json:"tax_inclusive_pricing_snapshot,omitempty"`       // Snapshotted from workspace.tax_inclusive_pricing at recognition
+	TaxComputationEnabledSnapshot *bool   `protobuf:"varint,42,opt,name=tax_computation_enabled_snapshot,json=taxComputationEnabledSnapshot,proto3,oneof" json:"tax_computation_enabled_snapshot,omitempty"` // Snapshotted from workspace.tax_computation_enabled (bool)
 	// Multi-currency / FX fields — Phase 1 tax integration
 	BillingCurrency     *string `protobuf:"bytes,43,opt,name=billing_currency,json=billingCurrency,proto3,oneof" json:"billing_currency,omitempty"`                  // ISO 4217 billing currency when different from functional_currency
 	BillingAmount       *int64  `protobuf:"varint,44,opt,name=billing_amount,json=billingAmount,proto3,oneof" json:"billing_amount,omitempty"`                       // Original amount in billing_currency centavos (before FX conversion)
@@ -381,11 +381,11 @@ func (x *Revenue) GetTaxInclusivePricingSnapshot() bool {
 	return false
 }
 
-func (x *Revenue) GetTaxComputationEnabledSnapshot() string {
+func (x *Revenue) GetTaxComputationEnabledSnapshot() bool {
 	if x != nil && x.TaxComputationEnabledSnapshot != nil {
 		return *x.TaxComputationEnabledSnapshot
 	}
-	return ""
+	return false
 }
 
 func (x *Revenue) GetBillingCurrency() string {
@@ -1788,7 +1788,7 @@ const file_domain_revenue_revenue_revenue_proto_rawDesc = "" +
 	"\x13wht_amount_variance\x18' \x01(\x03H\x1bR\x11whtAmountVariance\x88\x01\x01\x120\n" +
 	"\x11settlement_status\x18( \x01(\tH\x1cR\x10settlementStatus\x88\x01\x01\x12H\n" +
 	"\x1etax_inclusive_pricing_snapshot\x18) \x01(\bH\x1dR\x1btaxInclusivePricingSnapshot\x88\x01\x01\x12L\n" +
-	" tax_computation_enabled_snapshot\x18* \x01(\tH\x1eR\x1dtaxComputationEnabledSnapshot\x88\x01\x01\x12.\n" +
+	" tax_computation_enabled_snapshot\x18* \x01(\bH\x1eR\x1dtaxComputationEnabledSnapshot\x88\x01\x01\x12.\n" +
 	"\x10billing_currency\x18+ \x01(\tH\x1fR\x0fbillingCurrency\x88\x01\x01\x12*\n" +
 	"\x0ebilling_amount\x18, \x01(\x03H R\rbillingAmount\x88\x01\x01\x128\n" +
 	"\x16forex_rate_micro_units\x18- \x01(\x03H!R\x13forexRateMicroUnits\x88\x01\x01\x12/\n" +

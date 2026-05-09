@@ -44,7 +44,7 @@ message RevenueTaxLine {
   // Audit FK — the TaxRegistration row active at asOf that triggered this pass.
   // Immutable snapshot: even if the registration is later CANCELLED or VOIDED,
   // this FK still resolves for auditor queries.
-  string source_registration_id_snapshot = 10;
+  string source_registration_id_snapshot = 10 [(options.v1.db).references = "tax_registration", (options.v1.db).index = true];
 
   // Denormed snapshots from tax_rate at compute time (for display + audit without joins)
   string authority_code_snapshot = 11;

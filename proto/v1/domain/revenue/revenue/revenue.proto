@@ -68,7 +68,7 @@ message Revenue {
   optional int64 wht_amount_variance = 39;           // centavos: wht_amount_expected - wht_amount_certified
   optional string settlement_status = 40;            // OPEN, CASH_RECEIVED_WHT_PENDING, FULLY_SETTLED, VARIANCE_OPEN
   optional bool tax_inclusive_pricing_snapshot = 41; // Snapshotted from workspace.tax_inclusive_pricing at recognition
-  optional string tax_computation_enabled_snapshot = 42; // Snapshotted from workspace.tax_computation_enabled
+  optional bool tax_computation_enabled_snapshot = 42;   // Snapshotted from workspace.tax_computation_enabled (bool)
 
   // Multi-currency / FX fields — Phase 1 tax integration
   optional string billing_currency = 43;             // ISO 4217 billing currency when different from functional_currency
