@@ -1,0 +1,134 @@
+syntax = "proto3";
+
+package domain.procurement.v1;
+
+option go_package = "github.com/erniealice/esqyma/golang/v1/domain/procurement/supplier_product_plan";
+
+import "domain/common/error.proto";
+import "domain/common/pagination.proto";
+import "domain/common/filter.proto";
+import "domain/common/sort.proto";
+import "domain/common/search.proto";
+
+import "domain/product/product/product.proto";
+import "options/db.proto";
+
+message SupplierProductPlan {
+  option (options.v1.table).table = true;
+  string id = 1;
+  optional int64 date_created = 2;
+  optional string date_created_string = 3;
+  optional int64 date_modified = 4;
+  optional string date_modified_string = 5;
+  bool active = 6 [(options.v1.db).default = "true"];
+  string name = 7;
+  optional string description = 8;
+  optional domain.product.v1.Product product = 9;
+  string product_id = 10 [(options.v1.db).references = "product", (options.v1.db).index = true];
+  string supplier_plan_id = 11 [(options.v1.db).references = "supplier_plan", (options.v1.db).index = true];
+  // Specific variant of product, iff parent product.variant_mode = "configurable".
+  // Null when parent.variant_mode = "none". Model D: catalog-level specificity.
+  optional string product_variant_id = 12 [(options.v1.db).references = "product_variant", (options.v1.db).index = true];
+}
+
+service SupplierProductPlanDomainService {
+  rpc CreateSupplierProductPlan(CreateSupplierProductPlanRequest) returns (CreateSupplierProductPlanResponse);
+  rpc ReadSupplierProductPlan(ReadSupplierProductPlanRequest) returns (ReadSupplierProductPlanResponse);
+  rpc UpdateSupplierProductPlan(UpdateSupplierProductPlanRequest) returns (UpdateSupplierProductPlanResponse);
+  rpc DeleteSupplierProductPlan(DeleteSupplierProductPlanRequest) returns (DeleteSupplierProductPlanResponse);
+  rpc ListSupplierProductPlans(ListSupplierProductPlansRequest) returns (ListSupplierProductPlansResponse);
+  rpc GetSupplierProductPlanListPageData(GetSupplierProductPlanListPageDataRequest)
+    returns (GetSupplierProductPlanListPageDataResponse);
+  rpc GetSupplierProductPlanItemPageData(GetSupplierProductPlanItemPageDataRequest)
+    returns (GetSupplierProductPlanItemPageDataResponse);
+
+  // Reverse index: product plans for a given supplier plan.
+  rpc ListBySupplierPlan(ListSupplierProductPlansBySupplierPlanRequest) returns (ListSupplierProductPlansBySupplierPlanResponse);
+}
+
+message CreateSupplierProductPlanRequest {
+  SupplierProductPlan data = 1;
+}
+
+message CreateSupplierProductPlanResponse {
+  repeated SupplierProductPlan data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message ReadSupplierProductPlanRequest {
+  SupplierProductPlan data = 1;
+}
+
+message ReadSupplierProductPlanResponse {
+  repeated SupplierProductPlan data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message UpdateSupplierProductPlanRequest {
+  SupplierProductPlan data = 1;
+}
+
+message UpdateSupplierProductPlanResponse {
+  repeated SupplierProductPlan data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message DeleteSupplierProductPlanRequest {
+  SupplierProductPlan data = 1;
+}
+
+message DeleteSupplierProductPlanResponse {
+  bool success = 1;
+  optional domain.common.v1.Error error = 2;
+}
+
+message ListSupplierProductPlansRequest {
+  optional domain.common.v1.SearchRequest search = 1;
+  optional domain.common.v1.FilterRequest filters = 2;
+  optional domain.common.v1.SortRequest sort = 3;
+  optional domain.common.v1.PaginationRequest pagination = 4;
+}
+
+message ListSupplierProductPlansResponse {
+  repeated SupplierProductPlan data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message GetSupplierProductPlanListPageDataRequest {
+  optional domain.common.v1.SearchRequest search = 1;
+  optional domain.common.v1.FilterRequest filters = 2;
+  optional domain.common.v1.SortRequest sort = 3;
+  optional domain.common.v1.PaginationRequest pagination = 4;
+}
+
+message GetSupplierProductPlanListPageDataResponse {
+  repeated SupplierProductPlan supplier_product_plan_list = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+  optional domain.common.v1.PaginationResponse pagination = 4;
+  repeated domain.common.v1.SearchResult search_results = 5;
+}
+
+message GetSupplierProductPlanItemPageDataRequest {
+  string supplier_product_plan_id = 1;
+}
+
+message GetSupplierProductPlanItemPageDataResponse {
+  SupplierProductPlan supplier_product_plan = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message ListSupplierProductPlansBySupplierPlanRequest {
+  string supplier_plan_id = 1;
+}
+
+message ListSupplierProductPlansBySupplierPlanResponse {
+  repeated SupplierProductPlan supplier_product_plans = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}

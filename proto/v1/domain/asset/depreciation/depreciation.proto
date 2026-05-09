@@ -45,6 +45,15 @@ message DepreciationSchedule {
   optional int64 date_modified = 19;
   optional string date_modified_string = 20;
   bool active = 21 [(options.v1.db).default = "true"];
+
+  // Depreciation run linkage (Phase 0 — 2026-05-09)
+  // depreciation_run_id is NULL for rows posted by the legacy RunDepreciation path.
+  optional string depreciation_run_id = 22 [(options.v1.db).references = "depreciation_run", (options.v1.db).index = true];
+  // outcome records the per-entry result of the batch run (CREATED / SKIPPED / ERRORED).
+  // Stored as string matching DepreciationRunOutcome enum values.
+  optional string outcome = 23;
+  // error_message is populated only when outcome = ERRORED.
+  optional string error_message = 24;
 }
 
 service DepreciationDomainService {

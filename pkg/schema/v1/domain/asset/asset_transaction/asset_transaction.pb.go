@@ -138,6 +138,19 @@ type AssetTransaction struct {
 	DateModified       *int64  `protobuf:"varint,15,opt,name=date_modified,json=dateModified,proto3,oneof" json:"date_modified,omitempty"`
 	DateModifiedString *string `protobuf:"bytes,16,opt,name=date_modified_string,json=dateModifiedString,proto3,oneof" json:"date_modified_string,omitempty"`
 	Active             bool    `protobuf:"varint,17,opt,name=active,proto3" json:"active,omitempty"`
+	// Depreciation run linkage (Phase 0 — 2026-05-09)
+	// Fields 18–19 verified free at 2026-05-09 (proto used fields 1–17 only).
+	// depreciation_run_id is NULL for transactions posted by the legacy RunDepreciation path.
+	DepreciationRunId *string `protobuf:"bytes,18,opt,name=depreciation_run_id,json=depreciationRunId,proto3,oneof" json:"depreciation_run_id,omitempty"`
+	// depreciation_period_start_date is set only on DEPRECIATION-type rows.
+	// This field (not transaction_date, which is the posting date) feeds the
+	// GENERATED period_marker column used for idempotency.
+	// DO NOT add period_marker to this proto — it is a DB-level GENERATED column only.
+	DepreciationPeriodStartDate *string `protobuf:"bytes,19,opt,name=depreciation_period_start_date,json=depreciationPeriodStartDate,proto3,oneof" json:"depreciation_period_start_date,omitempty"` // ISO 8601 date (YYYY-MM-DD)
+	// asset_revaluation_id is set only on REVALUATION_UP/REVALUATION_DOWN-type rows.
+	// Back-ref from the audit transaction to the immutable AssetRevaluation record
+	// (added Phase 2 — missed in Phase 0).
+	AssetRevaluationId *string `protobuf:"bytes,20,opt,name=asset_revaluation_id,json=assetRevaluationId,proto3,oneof" json:"asset_revaluation_id,omitempty"`
 	unknownFields      protoimpl.UnknownFields
 	sizeCache          protoimpl.SizeCache
 }
@@ -289,6 +302,27 @@ func (x *AssetTransaction) GetActive() bool {
 		return x.Active
 	}
 	return false
+}
+
+func (x *AssetTransaction) GetDepreciationRunId() string {
+	if x != nil && x.DepreciationRunId != nil {
+		return *x.DepreciationRunId
+	}
+	return ""
+}
+
+func (x *AssetTransaction) GetDepreciationPeriodStartDate() string {
+	if x != nil && x.DepreciationPeriodStartDate != nil {
+		return *x.DepreciationPeriodStartDate
+	}
+	return ""
+}
+
+func (x *AssetTransaction) GetAssetRevaluationId() string {
+	if x != nil && x.AssetRevaluationId != nil {
+		return *x.AssetRevaluationId
+	}
+	return ""
 }
 
 type CreateAssetTransactionRequest struct {
@@ -887,7 +921,8 @@ var File_domain_asset_asset_transaction_asset_transaction_proto protoreflect.Fil
 
 const file_domain_asset_asset_transaction_asset_transaction_proto_rawDesc = "" +
 	"\n" +
-	"6domain/asset/asset_transaction/asset_transaction.proto\x12\x0fdomain.asset.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1adomain/common/search.proto\x1a\x10options/db.proto\"\xd2\a\n" +
+	"6domain/asset/asset_transaction/asset_transaction.proto\x12\x0fdomain.asset.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1adomain/common/search.proto\x1a\x10options/db.proto\"\x91\n" +
+	"\n" +
 	"\x10AssetTransaction\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12(\n" +
 	"\basset_id\x18\x02 \x01(\tB\r\x82\xb5\x18\t\n" +
@@ -908,7 +943,13 @@ const file_domain_asset_asset_transaction_asset_transaction_proto_rawDesc = "" +
 	"\rdate_modified\x18\x0f \x01(\x03H\bR\fdateModified\x88\x01\x01\x125\n" +
 	"\x14date_modified_string\x18\x10 \x01(\tH\tR\x12dateModifiedString\x88\x01\x01\x12\"\n" +
 	"\x06active\x18\x11 \x01(\bB\n" +
-	"\x82\xb5\x18\x06\"\x04trueR\x06active:\x06\x8a\xb5\x18\x02\b\x01B\x0e\n" +
+	"\x82\xb5\x18\x06\"\x04trueR\x06active\x12M\n" +
+	"\x13depreciation_run_id\x18\x12 \x01(\tB\x18\x82\xb5\x18\x14\n" +
+	"\x10depreciation_run\x18\x01H\n" +
+	"R\x11depreciationRunId\x88\x01\x01\x12H\n" +
+	"\x1edepreciation_period_start_date\x18\x13 \x01(\tH\vR\x1bdepreciationPeriodStartDate\x88\x01\x01\x12P\n" +
+	"\x14asset_revaluation_id\x18\x14 \x01(\tB\x19\x82\xb5\x18\x15\n" +
+	"\x11asset_revaluation\x18\x01H\fR\x12assetRevaluationId\x88\x01\x01:\x06\x8a\xb5\x18\x02\b\x01B\x0e\n" +
 	"\f_descriptionB\x13\n" +
 	"\x11_reference_numberB\x13\n" +
 	"\x11_from_location_idB\x11\n" +
@@ -918,7 +959,10 @@ const file_domain_asset_asset_transaction_asset_transaction_proto_rawDesc = "" +
 	"\r_date_createdB\x16\n" +
 	"\x14_date_created_stringB\x10\n" +
 	"\x0e_date_modifiedB\x17\n" +
-	"\x15_date_modified_string\"V\n" +
+	"\x15_date_modified_stringB\x16\n" +
+	"\x14_depreciation_run_idB!\n" +
+	"\x1f_depreciation_period_start_dateB\x17\n" +
+	"\x15_asset_revaluation_id\"V\n" +
 	"\x1dCreateAssetTransactionRequest\x125\n" +
 	"\x04data\x18\x01 \x01(\v2!.domain.asset.v1.AssetTransactionR\x04data\"\xaf\x01\n" +
 	"\x1eCreateAssetTransactionResponse\x125\n" +

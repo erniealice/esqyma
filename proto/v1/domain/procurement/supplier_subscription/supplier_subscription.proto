@@ -1,0 +1,208 @@
+syntax = "proto3";
+
+package domain.procurement.v1;
+
+option go_package = "github.com/erniealice/esqyma/golang/v1/domain/procurement/supplier_subscription";
+
+import "domain/common/error.proto";
+import "domain/common/pagination.proto";
+import "domain/common/filter.proto";
+import "domain/common/sort.proto";
+import "domain/common/search.proto";
+
+import "domain/procurement/cost_plan/cost_plan.proto";
+import "domain/entity/supplier/supplier.proto";
+import "domain/expenditure/procurement_request/procurement_request.proto";
+import "options/db.proto";
+import "google/protobuf/timestamp.proto";
+
+message SupplierSubscription {
+  option (options.v1.table).table = true;
+  string id = 1;
+  optional int64 date_created = 2;
+  optional string date_created_string = 3;
+  optional int64 date_modified = 4;
+  optional string date_modified_string = 5;
+  bool active = 6 [(options.v1.db).default = "true"];
+  string name = 7;
+
+  // Cost plan FK (mirrors price_plan / price_plan_id on selling-side Subscription)
+  optional CostPlan cost_plan = 8;
+  string cost_plan_id = 9 [(options.v1.db).references = "cost_plan", (options.v1.db).index = true];
+
+  // Supplier FK (mirrors client / client_id on selling-side Subscription)
+  optional domain.entity.v1.Supplier supplier = 10;
+  string supplier_id = 11 [(options.v1.db).references = "supplier", (options.v1.db).index = true];
+
+  optional google.protobuf.Timestamp date_time_start = 12; // UTC timestamp; display TZ resolved per-request
+  reserved 13; // reserved for future use (was date_start_string on selling side)
+  optional google.protobuf.Timestamp date_time_end = 14; // UTC timestamp; nil = open-ended
+  reserved 15; // reserved for future use (was date_end_string on selling side)
+
+  map<string, string> metadata = 16;
+
+  // License-pool fields 17–21 intentionally omitted — no licensing concept on buying side.
+  // Field 17: omitted (was quantity on selling side)
+  // Field 18: omitted (was assigned_count on selling side)
+  // Field 19: omitted (was available_count on selling side)
+  // Field 20: omitted (was default_license_type on selling side)
+  // Field 21: omitted (was auto_assign on selling side)
+
+  // 7-char alphanumeric engagement code (parity with selling-side Subscription.code)
+  optional string code = 22;
+
+  // Field 23 intentionally omitted — was entitled_occurrences_override on selling side (AD_HOC pool only).
+
+  // Workspace ownership — supplier subscriptions are scoped per workspace.
+  optional string workspace_id = 24 [(options.v1.db).references = "workspace", (options.v1.db).index = true];
+
+  // Fields 25–26 reserved for future use.
+
+  // Back-link to the ProcurementRequest that spawned this subscription (set at approval time).
+  optional string procurement_request_id = 27 [(options.v1.db).references = "procurement_request", (options.v1.db).index = true];
+  optional domain.expenditure.v1.ProcurementRequest procurement_request = 28;
+
+  // Field 29 reserved for future use.
+
+  // Location scope — mirrors PriceSchedule.location_id on selling side.
+  optional string location_id = 30 [(options.v1.db).references = "location", (options.v1.db).index = true];
+
+  // Field 31 reserved for future use.
+
+  // Operator-driven auto-renew flag. When date_time_end passes and auto_renew=true,
+  // an operator-clicked "Renew" extends date_time_end by default_term_value × default_term_unit
+  // from cost_plan. Nothing happens automatically in v1 (cron deferred to D2).
+  bool auto_renew = 32 [(options.v1.db).default = "false"];
+}
+
+service SupplierSubscriptionDomainService {
+  rpc CreateSupplierSubscription(CreateSupplierSubscriptionRequest) returns (CreateSupplierSubscriptionResponse);
+  rpc ReadSupplierSubscription(ReadSupplierSubscriptionRequest) returns (ReadSupplierSubscriptionResponse);
+  rpc UpdateSupplierSubscription(UpdateSupplierSubscriptionRequest) returns (UpdateSupplierSubscriptionResponse);
+  rpc DeleteSupplierSubscription(DeleteSupplierSubscriptionRequest) returns (DeleteSupplierSubscriptionResponse);
+  rpc ListSupplierSubscriptions(ListSupplierSubscriptionsRequest) returns (ListSupplierSubscriptionsResponse);
+
+  // Enhanced list with pagination, filtering, sorting, search
+  rpc GetSupplierSubscriptionListPageData(GetSupplierSubscriptionListPageDataRequest)
+    returns (GetSupplierSubscriptionListPageDataResponse);
+
+  // Enhanced item view with related data
+  rpc GetSupplierSubscriptionItemPageData(GetSupplierSubscriptionItemPageDataRequest)
+    returns (GetSupplierSubscriptionItemPageDataResponse);
+
+  // Count active subscriptions for each of the given supplier IDs.
+  // Mirrors CountActiveByClientIds on selling-side SubscriptionDomainService.
+  rpc CountActiveBySupplierIds(CountActiveBySupplierIdsRequest) returns (CountActiveBySupplierIdsResponse);
+
+  // Reverse index: subscriptions referencing a given cost plan.
+  // Mirrors ListSubscriptionsByPricePlan on selling side.
+  rpc ListSupplierSubscriptionsByCostPlan(ListSupplierSubscriptionsByCostPlanRequest)
+    returns (ListSupplierSubscriptionsByCostPlanResponse);
+}
+
+message CreateSupplierSubscriptionRequest {
+  SupplierSubscription data = 1;
+}
+
+message CreateSupplierSubscriptionResponse {
+  repeated SupplierSubscription data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message ReadSupplierSubscriptionRequest {
+  SupplierSubscription data = 1;
+}
+
+message ReadSupplierSubscriptionResponse {
+  repeated SupplierSubscription data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message UpdateSupplierSubscriptionRequest {
+  SupplierSubscription data = 1;
+}
+
+message UpdateSupplierSubscriptionResponse {
+  repeated SupplierSubscription data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message DeleteSupplierSubscriptionRequest {
+  SupplierSubscription data = 1;
+}
+
+message DeleteSupplierSubscriptionResponse {
+  bool success = 1;
+  optional domain.common.v1.Error error = 2;
+}
+
+message ListSupplierSubscriptionsRequest {
+  optional domain.common.v1.SearchRequest search = 1;
+  optional domain.common.v1.FilterRequest filters = 2;
+  optional domain.common.v1.SortRequest sort = 3;
+  optional domain.common.v1.PaginationRequest pagination = 4;
+}
+
+message ListSupplierSubscriptionsResponse {
+  repeated SupplierSubscription data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message GetSupplierSubscriptionListPageDataRequest {
+  domain.common.v1.PaginationRequest pagination = 1;
+  domain.common.v1.FilterRequest filters = 2;
+  domain.common.v1.SortRequest sort = 3;
+  domain.common.v1.SearchRequest search = 4;
+}
+
+message GetSupplierSubscriptionListPageDataResponse {
+  repeated SupplierSubscription supplier_subscription_list = 1;
+  domain.common.v1.PaginationResponse pagination = 2;
+  repeated domain.common.v1.SearchResult search_results = 3;
+  bool success = 4;
+  optional domain.common.v1.Error error = 5;
+}
+
+message GetSupplierSubscriptionItemPageDataRequest {
+  string supplier_subscription_id = 1;
+}
+
+message GetSupplierSubscriptionItemPageDataResponse {
+  SupplierSubscription supplier_subscription = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message CountActiveBySupplierIdsRequest {
+  repeated string supplier_ids = 1;  // empty = count all suppliers in the workspace
+}
+
+message CountActiveBySupplierIdsResponse {
+  // Keys are supplier IDs; values are counts of active subscriptions for each.
+  // Suppliers with zero active subscriptions are omitted (caller defaults to 0).
+  map<string, int32> counts = 1;
+}
+
+message ListSupplierSubscriptionsByCostPlanRequest {
+  string cost_plan_id = 1;
+  // When true (default), only active subscriptions are returned.
+  optional bool active_only = 2;
+  // Optional pagination — omit for "all rows" (typical use case: a tab
+  // listing engagements for one plan).
+  optional domain.common.v1.PaginationRequest pagination = 3;
+  // Optional sort — defaults to subscription name ascending when omitted.
+  optional domain.common.v1.SortRequest sort = 4;
+}
+
+message ListSupplierSubscriptionsByCostPlanResponse {
+  // Subscriptions hydrated with Supplier, CostPlan, and CostPlan.SupplierPlan
+  // so the view layer can render Supplier name and Plan name without N+1 lookups.
+  repeated SupplierSubscription supplier_subscription_list = 1;
+  optional domain.common.v1.PaginationResponse pagination = 2;
+  bool success = 3;
+  optional domain.common.v1.Error error = 4;
+}

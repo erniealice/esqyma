@@ -1,0 +1,215 @@
+syntax = "proto3";
+
+package domain.asset.v1;
+
+option go_package = "github.com/erniealice/esqyma/golang/v1/domain/asset/depreciation_run";
+
+import "domain/common/error.proto";
+import "domain/common/pagination.proto";
+import "domain/common/filter.proto";
+import "domain/common/sort.proto";
+import "domain/common/search.proto";
+
+import "options/db.proto";
+
+// DepreciationRunScopeKind determines which assets are included in a run.
+enum DepreciationRunScopeKind {
+  DEPRECIATION_RUN_SCOPE_KIND_UNSPECIFIED = 0;
+  DEPRECIATION_RUN_SCOPE_KIND_ASSET = 1;       // Surface A — single asset
+  DEPRECIATION_RUN_SCOPE_KIND_CATEGORY = 2;    // Surface C — all assets in category
+  DEPRECIATION_RUN_SCOPE_KIND_POLICY = 3;      // Surface F — all assets under policy (= category in v1)
+  DEPRECIATION_RUN_SCOPE_KIND_WORKSPACE = 4;   // Surface B — all in-service assets workspace-wide
+}
+
+// DepreciationRunStatus tracks the lifecycle of a batch depreciation run.
+enum DepreciationRunStatus {
+  DEPRECIATION_RUN_STATUS_UNSPECIFIED = 0;
+  DEPRECIATION_RUN_STATUS_PENDING = 1;
+  DEPRECIATION_RUN_STATUS_COMPLETE = 2;
+  DEPRECIATION_RUN_STATUS_FAILED = 3;
+}
+
+// DepreciationRunOutcome is the per-entry result for a single asset+period pair.
+// Used on DepreciationSchedule.outcome and DepreciationRunSelection responses.
+// NOTE: append-only. Do not call Update/Delete on posted DepreciationSchedule rows —
+// corrections must be made via offsetting transactions.
+enum DepreciationRunOutcome {
+  DEPRECIATION_RUN_OUTCOME_UNSPECIFIED = 0;
+  DEPRECIATION_RUN_OUTCOME_CREATED = 1;   // Transaction + schedule row posted successfully
+  DEPRECIATION_RUN_OUTCOME_SKIPPED = 2;   // period_marker already exists (idempotent re-run)
+  DEPRECIATION_RUN_OUTCOME_ERRORED = 3;   // Unexpected error — see error_message
+}
+
+// DepreciationRun is the parent record for a batch depreciation posting.
+// Every row carries workspace_id for multi-tenant isolation.
+message DepreciationRun {
+  option (options.v1.table).table = true;
+  string id = 1;
+  string workspace_id = 2 [(options.v1.db).index = true];
+  DepreciationRunScopeKind scope_kind = 3;
+  optional string scope_id = 4;     // asset_id | category_id | policy_id (= category_id in v1) | NULL for WORKSPACE
+  string as_of_date = 5;            // ISO 8601 date (YYYY-MM-DD)
+  string initiator_id = 6;          // FK to entity.User
+  optional int64 initiated_at = 7;
+  optional int64 completed_at = 8;
+  DepreciationRunStatus status = 9;
+  int32 created_count = 10;
+  int32 skipped_count = 11;
+  int32 errored_count = 12;
+  optional string error_summary = 13;
+  optional string notes = 14;
+  bool active = 15 [(options.v1.db).default = "true"];
+  optional int64 created_at = 16;
+  optional string created_at_string = 17;
+  optional int64 updated_at = 18;
+  optional string updated_at_string = 19;
+}
+
+service DepreciationRunDomainService {
+  // Standard CRUD for audit/history access
+  rpc CreateDepreciationRun(CreateDepreciationRunRequest) returns (CreateDepreciationRunResponse);
+  rpc ReadDepreciationRun(ReadDepreciationRunRequest) returns (ReadDepreciationRunResponse);
+  rpc UpdateDepreciationRun(UpdateDepreciationRunRequest) returns (UpdateDepreciationRunResponse);
+  rpc DeleteDepreciationRun(DeleteDepreciationRunRequest) returns (DeleteDepreciationRunResponse);
+  rpc ListDepreciationRuns(ListDepreciationRunsRequest) returns (ListDepreciationRunsResponse);
+
+  // Engine — read-only dry run, no DB writes
+  rpc ListDepreciationCandidates(ListDepreciationCandidatesRequest) returns (ListDepreciationCandidatesResponse);
+
+  // Engine — batch write; idempotent per (asset_id, period_marker) unique index
+  rpc GenerateDepreciationRun(GenerateDepreciationRunRequest) returns (GenerateDepreciationRunResponse);
+}
+
+message CreateDepreciationRunRequest {
+  DepreciationRun data = 1;
+}
+
+message CreateDepreciationRunResponse {
+  repeated DepreciationRun data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message ReadDepreciationRunRequest {
+  DepreciationRun data = 1;
+}
+
+message ReadDepreciationRunResponse {
+  repeated DepreciationRun data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message UpdateDepreciationRunRequest {
+  DepreciationRun data = 1;
+}
+
+message UpdateDepreciationRunResponse {
+  repeated DepreciationRun data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message DeleteDepreciationRunRequest {
+  DepreciationRun data = 1;
+}
+
+message DeleteDepreciationRunResponse {
+  bool success = 1;
+  optional domain.common.v1.Error error = 2;
+}
+
+message ListDepreciationRunsRequest {
+  optional string workspace_id = 1;
+  optional domain.common.v1.SearchRequest search = 2;
+  optional domain.common.v1.FilterRequest filters = 3;
+  optional domain.common.v1.SortRequest sort = 4;
+  optional domain.common.v1.PaginationRequest pagination = 5;
+}
+
+message ListDepreciationRunsResponse {
+  repeated DepreciationRun data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+  optional domain.common.v1.PaginationResponse pagination = 4;
+}
+
+// ListDepreciationCandidatesRequest — dry-run engine; computes eligible periods
+// per asset from depreciation_start_date → as_of_date. No writes.
+message ListDepreciationCandidatesRequest {
+  string workspace_id = 1;
+  DepreciationRunScopeKind scope_kind = 2;
+  optional string scope_id = 3;
+  string as_of_date = 4;  // ISO 8601 date (YYYY-MM-DD)
+  optional domain.common.v1.PaginationRequest pagination = 5;
+}
+
+message ListDepreciationCandidatesResponse {
+  repeated DepreciationCandidate data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+  optional domain.common.v1.PaginationResponse pagination = 4;
+}
+
+// DepreciationCandidate is the per-asset result of the dry-run engine.
+message DepreciationCandidate {
+  string asset_id = 1;
+  string asset_name = 2;
+  string currency = 3;
+  int64 current_book_value = 4;   // centavos
+  int64 projected_book_value = 5; // centavos — after all pending periods
+  repeated DepreciationCandidatePeriod periods = 6;
+  repeated DepreciationCandidateBlocker blockers = 7;
+}
+
+// DepreciationCandidatePeriod is one eligible period for a candidate asset.
+message DepreciationCandidatePeriod {
+  string period_start_date = 1;   // ISO 8601 date (YYYY-MM-DD)
+  string period_end_date = 2;     // ISO 8601 date (YYYY-MM-DD)
+  int64 amount = 3;               // centavos — depreciation for this period
+  int64 running_accumulated = 4;  // centavos — accumulated after this period
+  int64 running_book_value = 5;   // centavos — book value after this period
+}
+
+// DepreciationCandidateBlocker describes why an asset cannot be depreciated.
+message DepreciationCandidateBlocker {
+  enum Kind {
+    DEPRECIATION_CANDIDATE_BLOCKER_KIND_UNSPECIFIED = 0;
+    DEPRECIATION_CANDIDATE_BLOCKER_KIND_NO_START_DATE = 1;
+    DEPRECIATION_CANDIDATE_BLOCKER_KIND_NOT_IN_SERVICE = 2;
+    DEPRECIATION_CANDIDATE_BLOCKER_KIND_FULLY_DEPRECIATED = 3;
+    DEPRECIATION_CANDIDATE_BLOCKER_KIND_MISSING_METHOD = 4;
+    DEPRECIATION_CANDIDATE_BLOCKER_KIND_ZERO_USEFUL_LIFE = 5;
+    // Units-of-production assets require units_produced input per period.
+    // See docs/plan/20260601-uop-depreciation/ for the blocked roadmap item.
+    DEPRECIATION_CANDIDATE_BLOCKER_KIND_UNITS_REQUIRED = 6;
+  }
+  Kind kind = 1;
+  string label = 2;
+}
+
+// GenerateDepreciationRunRequest — initiates a batch posting run.
+// Idempotent: period_marker unique index on asset_transaction prevents double-posting.
+message GenerateDepreciationRunRequest {
+  string workspace_id = 1;
+  DepreciationRunScopeKind scope_kind = 2;
+  optional string scope_id = 3;
+  string as_of_date = 4;  // ISO 8601 date (YYYY-MM-DD)
+  repeated DepreciationRunSelection selections = 5;
+}
+
+// DepreciationRunSelection identifies the periods to post for one asset.
+message DepreciationRunSelection {
+  string asset_id = 1;
+  repeated string period_start_dates = 2;  // each maps to one DepreciationSchedule row
+}
+
+// GenerateDepreciationRunResponse is returned after the batch run completes (or fails).
+message GenerateDepreciationRunResponse {
+  DepreciationRun run = 1;
+  int32 created_count = 2;
+  int32 skipped_count = 3;
+  int32 errored_count = 4;
+  bool success = 5;
+  optional domain.common.v1.Error error = 6;
+}

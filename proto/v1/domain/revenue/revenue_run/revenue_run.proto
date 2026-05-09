@@ -1,0 +1,159 @@
+syntax = "proto3";
+
+package domain.revenue.v1;
+
+option go_package = "github.com/erniealice/esqyma/golang/v1/domain/revenue/revenue_run";
+
+import "domain/common/error.proto";
+import "domain/common/pagination.proto";
+import "domain/common/search.proto";
+import "domain/common/filter.proto";
+import "domain/common/sort.proto";
+
+enum RevenueRunScopeKind {
+  REVENUE_RUN_SCOPE_KIND_UNSPECIFIED = 0;
+  REVENUE_RUN_SCOPE_KIND_SUBSCRIPTION = 1;
+  REVENUE_RUN_SCOPE_KIND_CLIENT = 2;
+  REVENUE_RUN_SCOPE_KIND_WORKSPACE = 3;
+}
+
+enum RevenueRunStatus {
+  REVENUE_RUN_STATUS_UNSPECIFIED = 0;
+  REVENUE_RUN_STATUS_PENDING = 1;
+  REVENUE_RUN_STATUS_COMPLETE = 2;
+  REVENUE_RUN_STATUS_FAILED = 3;
+}
+
+enum RevenueRunAttemptOutcome {
+  REVENUE_RUN_ATTEMPT_OUTCOME_UNSPECIFIED = 0;
+  REVENUE_RUN_ATTEMPT_OUTCOME_CREATED = 1;
+  REVENUE_RUN_ATTEMPT_OUTCOME_SKIPPED = 2;
+  REVENUE_RUN_ATTEMPT_OUTCOME_ERRORED = 3;
+}
+
+message RevenueRun {
+  string id = 1;
+  string workspace_id = 2;
+  optional string client_id = 3;
+  optional string subscription_id = 4;
+  RevenueRunScopeKind scope_kind = 5;
+  string as_of_date = 6; // YYYY-MM-DD
+  int32 selection_count = 7;
+  int32 created_count = 8;
+  int32 skipped_count = 9;
+  int32 errored_count = 10;
+  RevenueRunStatus status = 11;
+  string initiated_by = 12;
+  optional int64 initiated_at = 13;
+  optional int64 completed_at = 14;
+  optional string notes = 15;
+  bool active = 16;
+  optional int64 date_created = 17;
+  optional string date_created_string = 18;
+  optional int64 date_modified = 19;
+  optional string date_modified_string = 20;
+}
+
+message RevenueRunAttempt {
+  string id = 1;
+  string run_id = 2;
+  string subscription_id = 3;
+  string period_start = 4; // YYYY-MM-DD
+  string period_end = 5; // YYYY-MM-DD
+  string period_marker = 6;
+  RevenueRunAttemptOutcome outcome = 7;
+  optional string revenue_id = 8;
+  optional string error_code = 9;
+  optional string error_message = 10;
+  optional int64 attempted_at = 11;
+  bool active = 12;
+  optional int64 date_created = 13;
+  optional string date_created_string = 14;
+  optional int64 date_modified = 15;
+  optional string date_modified_string = 16;
+}
+
+service RevenueRunDomainService {
+  rpc CreateRevenueRun(CreateRevenueRunRequest) returns (CreateRevenueRunResponse);
+  rpc ReadRevenueRun(ReadRevenueRunRequest) returns (ReadRevenueRunResponse);
+  rpc UpdateRevenueRun(UpdateRevenueRunRequest) returns (UpdateRevenueRunResponse);
+  rpc DeleteRevenueRun(DeleteRevenueRunRequest) returns (DeleteRevenueRunResponse);
+  rpc ListRevenueRuns(ListRevenueRunsRequest) returns (ListRevenueRunsResponse);
+  rpc CreateRevenueRunAttempt(CreateRevenueRunAttemptRequest) returns (CreateRevenueRunAttemptResponse);
+  rpc ListRevenueRunAttempts(ListRevenueRunAttemptsRequest) returns (ListRevenueRunAttemptsResponse);
+}
+
+message CreateRevenueRunRequest {
+  RevenueRun data = 1;
+}
+
+message CreateRevenueRunResponse {
+  repeated RevenueRun data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message ReadRevenueRunRequest {
+  RevenueRun data = 1;
+}
+
+message ReadRevenueRunResponse {
+  repeated RevenueRun data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message UpdateRevenueRunRequest {
+  RevenueRun data = 1;
+}
+
+message UpdateRevenueRunResponse {
+  repeated RevenueRun data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message DeleteRevenueRunRequest {
+  RevenueRun data = 1;
+}
+
+message DeleteRevenueRunResponse {
+  bool success = 1;
+  optional domain.common.v1.Error error = 2;
+}
+
+message ListRevenueRunsRequest {
+  optional domain.common.v1.SearchRequest search = 1;
+  optional domain.common.v1.FilterRequest filters = 2;
+  optional domain.common.v1.SortRequest sort = 3;
+  optional domain.common.v1.PaginationRequest pagination = 4;
+}
+
+message ListRevenueRunsResponse {
+  repeated RevenueRun data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+  optional domain.common.v1.PaginationResponse pagination = 4;
+}
+
+message CreateRevenueRunAttemptRequest {
+  RevenueRunAttempt data = 1;
+}
+
+message CreateRevenueRunAttemptResponse {
+  repeated RevenueRunAttempt data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message ListRevenueRunAttemptsRequest {
+  string run_id = 1;
+  optional domain.common.v1.FilterRequest filters = 2;
+  optional domain.common.v1.SortRequest sort = 3;
+}
+
+message ListRevenueRunAttemptsResponse {
+  repeated RevenueRunAttempt data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}

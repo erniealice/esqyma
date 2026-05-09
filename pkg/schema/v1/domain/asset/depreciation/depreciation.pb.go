@@ -49,8 +49,16 @@ type DepreciationSchedule struct {
 	DateModified       *int64  `protobuf:"varint,19,opt,name=date_modified,json=dateModified,proto3,oneof" json:"date_modified,omitempty"`
 	DateModifiedString *string `protobuf:"bytes,20,opt,name=date_modified_string,json=dateModifiedString,proto3,oneof" json:"date_modified_string,omitempty"`
 	Active             bool    `protobuf:"varint,21,opt,name=active,proto3" json:"active,omitempty"`
-	unknownFields      protoimpl.UnknownFields
-	sizeCache          protoimpl.SizeCache
+	// Depreciation run linkage (Phase 0 — 2026-05-09)
+	// depreciation_run_id is NULL for rows posted by the legacy RunDepreciation path.
+	DepreciationRunId *string `protobuf:"bytes,22,opt,name=depreciation_run_id,json=depreciationRunId,proto3,oneof" json:"depreciation_run_id,omitempty"`
+	// outcome records the per-entry result of the batch run (CREATED / SKIPPED / ERRORED).
+	// Stored as string matching DepreciationRunOutcome enum values.
+	Outcome *string `protobuf:"bytes,23,opt,name=outcome,proto3,oneof" json:"outcome,omitempty"`
+	// error_message is populated only when outcome = ERRORED.
+	ErrorMessage  *string `protobuf:"bytes,24,opt,name=error_message,json=errorMessage,proto3,oneof" json:"error_message,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
 }
 
 func (x *DepreciationSchedule) Reset() {
@@ -214,6 +222,27 @@ func (x *DepreciationSchedule) GetActive() bool {
 		return x.Active
 	}
 	return false
+}
+
+func (x *DepreciationSchedule) GetDepreciationRunId() string {
+	if x != nil && x.DepreciationRunId != nil {
+		return *x.DepreciationRunId
+	}
+	return ""
+}
+
+func (x *DepreciationSchedule) GetOutcome() string {
+	if x != nil && x.Outcome != nil {
+		return *x.Outcome
+	}
+	return ""
+}
+
+func (x *DepreciationSchedule) GetErrorMessage() string {
+	if x != nil && x.ErrorMessage != nil {
+		return *x.ErrorMessage
+	}
+	return ""
 }
 
 type CreateDepreciationScheduleRequest struct {
@@ -1012,7 +1041,7 @@ var File_domain_asset_depreciation_depreciation_proto protoreflect.FileDescripto
 
 const file_domain_asset_depreciation_depreciation_proto_rawDesc = "" +
 	"\n" +
-	",domain/asset/depreciation/depreciation.proto\x12\x0fdomain.asset.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1adomain/common/search.proto\x1a\x10options/db.proto\"\xc1\a\n" +
+	",domain/asset/depreciation/depreciation.proto\x12\x0fdomain.asset.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1adomain/common/search.proto\x1a\x10options/db.proto\"\x8f\t\n" +
 	"\x14DepreciationSchedule\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12(\n" +
 	"\basset_id\x18\x02 \x01(\tB\r\x82\xb5\x18\t\n" +
@@ -1036,13 +1065,21 @@ const file_domain_asset_depreciation_depreciation_proto_rawDesc = "" +
 	"\rdate_modified\x18\x13 \x01(\x03H\x04R\fdateModified\x88\x01\x01\x125\n" +
 	"\x14date_modified_string\x18\x14 \x01(\tH\x05R\x12dateModifiedString\x88\x01\x01\x12\"\n" +
 	"\x06active\x18\x15 \x01(\bB\n" +
-	"\x82\xb5\x18\x06\"\x04trueR\x06active:\x06\x8a\xb5\x18\x02\b\x01B\x11\n" +
+	"\x82\xb5\x18\x06\"\x04trueR\x06active\x12M\n" +
+	"\x13depreciation_run_id\x18\x16 \x01(\tB\x18\x82\xb5\x18\x14\n" +
+	"\x10depreciation_run\x18\x01H\x06R\x11depreciationRunId\x88\x01\x01\x12\x1d\n" +
+	"\aoutcome\x18\x17 \x01(\tH\aR\aoutcome\x88\x01\x01\x12(\n" +
+	"\rerror_message\x18\x18 \x01(\tH\bR\ferrorMessage\x88\x01\x01:\x06\x8a\xb5\x18\x02\b\x01B\x11\n" +
 	"\x0f_units_producedB\x13\n" +
 	"\x11_journal_entry_idB\x0f\n" +
 	"\r_date_createdB\x16\n" +
 	"\x14_date_created_stringB\x10\n" +
 	"\x0e_date_modifiedB\x17\n" +
-	"\x15_date_modified_stringJ\x04\b\a\x10\bJ\x04\b\t\x10\n" +
+	"\x15_date_modified_stringB\x16\n" +
+	"\x14_depreciation_run_idB\n" +
+	"\n" +
+	"\b_outcomeB\x10\n" +
+	"\x0e_error_messageJ\x04\b\a\x10\bJ\x04\b\t\x10\n" +
 	"\"^\n" +
 	"!CreateDepreciationScheduleRequest\x129\n" +
 	"\x04data\x18\x01 \x01(\v2%.domain.asset.v1.DepreciationScheduleR\x04data\"\xb7\x01\n" +

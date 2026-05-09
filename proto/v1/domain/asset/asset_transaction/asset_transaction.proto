@@ -55,6 +55,21 @@ message AssetTransaction {
   optional int64 date_modified = 15;
   optional string date_modified_string = 16;
   bool active = 17 [(options.v1.db).default = "true"];
+
+  // Depreciation run linkage (Phase 0 — 2026-05-09)
+  // Fields 18–19 verified free at 2026-05-09 (proto used fields 1–17 only).
+  // depreciation_run_id is NULL for transactions posted by the legacy RunDepreciation path.
+  optional string depreciation_run_id = 18 [(options.v1.db).references = "depreciation_run", (options.v1.db).index = true];
+  // depreciation_period_start_date is set only on DEPRECIATION-type rows.
+  // This field (not transaction_date, which is the posting date) feeds the
+  // GENERATED period_marker column used for idempotency.
+  // DO NOT add period_marker to this proto — it is a DB-level GENERATED column only.
+  optional string depreciation_period_start_date = 19;  // ISO 8601 date (YYYY-MM-DD)
+
+  // asset_revaluation_id is set only on REVALUATION_UP/REVALUATION_DOWN-type rows.
+  // Back-ref from the audit transaction to the immutable AssetRevaluation record
+  // (added Phase 2 — missed in Phase 0).
+  optional string asset_revaluation_id = 20 [(options.v1.db).references = "asset_revaluation", (options.v1.db).index = true];
 }
 
 // AssetTransactionDomainService — append-only audit trail.

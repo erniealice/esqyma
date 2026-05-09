@@ -37,6 +37,13 @@ message ExpenseRecognitionLine {
     [(options.v1.db).references = "expenditure_line_item"];
   optional string product_id = 13 [(options.v1.db).references = "product"];
 
+  // Pricing back-edges — mirrors revenue_line_item.proto:44 product_price_plan_id = 25
+  // and revenue_line_item.proto subscription_id = 29.
+  // supplier_product_cost_plan_id is the rate-card record (4-way join) for this line.
+  // supplier_subscription_id propagates from the parent ExpenseRecognition for fast filtering.
+  optional string supplier_product_cost_plan_id = 14 [(options.v1.db).references = "supplier_product_cost_plan", (options.v1.db).index = true];
+  optional string supplier_subscription_id      = 15 [(options.v1.db).references = "supplier_subscription",      (options.v1.db).index = true];
+
   // Line details
   string description = 20;
   double quantity = 21;

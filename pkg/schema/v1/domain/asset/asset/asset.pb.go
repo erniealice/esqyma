@@ -8,6 +8,7 @@ package assetv1
 
 import (
 	asset_category "github.com/erniealice/esqyma/pkg/schema/v1/domain/asset/asset_category"
+	depreciation "github.com/erniealice/esqyma/pkg/schema/v1/domain/asset/depreciation"
 	common "github.com/erniealice/esqyma/pkg/schema/v1/domain/common"
 	location "github.com/erniealice/esqyma/pkg/schema/v1/domain/entity/location"
 	_ "github.com/erniealice/esqyma/pkg/schema/v1/options"
@@ -1985,11 +1986,13 @@ func (x *GetDepreciationScheduleRequest) GetAssetId() string {
 	return ""
 }
 
+// Bug fix (2026-05-09): was `repeated Asset data` — incorrect return type.
+// The rpc is unimplemented; no callers to break.
 type GetDepreciationScheduleResponse struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	Data          []*Asset               `protobuf:"bytes,1,rep,name=data,proto3" json:"data,omitempty"`
-	Success       bool                   `protobuf:"varint,2,opt,name=success,proto3" json:"success,omitempty"`
-	Error         *common.Error          `protobuf:"bytes,3,opt,name=error,proto3,oneof" json:"error,omitempty"`
+	state         protoimpl.MessageState               `protogen:"open.v1"`
+	Data          []*depreciation.DepreciationSchedule `protobuf:"bytes,1,rep,name=data,proto3" json:"data,omitempty"`
+	Success       bool                                 `protobuf:"varint,2,opt,name=success,proto3" json:"success,omitempty"`
+	Error         *common.Error                        `protobuf:"bytes,3,opt,name=error,proto3,oneof" json:"error,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -2024,7 +2027,7 @@ func (*GetDepreciationScheduleResponse) Descriptor() ([]byte, []int) {
 	return file_domain_asset_asset_asset_proto_rawDescGZIP(), []int{24}
 }
 
-func (x *GetDepreciationScheduleResponse) GetData() []*Asset {
+func (x *GetDepreciationScheduleResponse) GetData() []*depreciation.DepreciationSchedule {
 	if x != nil {
 		return x.Data
 	}
@@ -2310,7 +2313,7 @@ var File_domain_asset_asset_asset_proto protoreflect.FileDescriptor
 
 const file_domain_asset_asset_asset_proto_rawDesc = "" +
 	"\n" +
-	"\x1edomain/asset/asset/asset.proto\x12\x0fdomain.asset.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1adomain/common/search.proto\x1a0domain/asset/asset_category/asset_category.proto\x1a%domain/entity/location/location.proto\x1a\x10options/db.proto\"\x8a\x14\n" +
+	"\x1edomain/asset/asset/asset.proto\x12\x0fdomain.asset.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1adomain/common/search.proto\x1a0domain/asset/asset_category/asset_category.proto\x1a,domain/asset/depreciation/depreciation.proto\x1a%domain/entity/location/location.proto\x1a\x10options/db.proto\"\x8a\x14\n" +
 	"\x05Asset\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12)\n" +
 	"\fasset_number\x18\x02 \x01(\tB\x06\x82\xb5\x18\x02\x10\x01R\vassetNumber\x12\x12\n" +
@@ -2515,9 +2518,9 @@ const file_domain_asset_asset_asset_proto_rawDesc = "" +
 	"\x05error\x18\x03 \x01(\v2\x17.domain.common.v1.ErrorH\x00R\x05error\x88\x01\x01B\b\n" +
 	"\x06_error\";\n" +
 	"\x1eGetDepreciationScheduleRequest\x12\x19\n" +
-	"\basset_id\x18\x01 \x01(\tR\aassetId\"\xa5\x01\n" +
-	"\x1fGetDepreciationScheduleResponse\x12*\n" +
-	"\x04data\x18\x01 \x03(\v2\x16.domain.asset.v1.AssetR\x04data\x12\x18\n" +
+	"\basset_id\x18\x01 \x01(\tR\aassetId\"\xb4\x01\n" +
+	"\x1fGetDepreciationScheduleResponse\x129\n" +
+	"\x04data\x18\x01 \x03(\v2%.domain.asset.v1.DepreciationScheduleR\x04data\x12\x18\n" +
 	"\asuccess\x18\x02 \x01(\bR\asuccess\x122\n" +
 	"\x05error\x18\x03 \x01(\v2\x17.domain.common.v1.ErrorH\x00R\x05error\x88\x01\x01B\b\n" +
 	"\x06_error\"\x90\x02\n" +
@@ -2612,48 +2615,49 @@ func file_domain_asset_asset_asset_proto_rawDescGZIP() []byte {
 var file_domain_asset_asset_asset_proto_enumTypes = make([]protoimpl.EnumInfo, 4)
 var file_domain_asset_asset_asset_proto_msgTypes = make([]protoimpl.MessageInfo, 29)
 var file_domain_asset_asset_asset_proto_goTypes = []any{
-	(AssetType)(0),                          // 0: domain.asset.v1.AssetType
-	(AssetStatus)(0),                        // 1: domain.asset.v1.AssetStatus
-	(DepreciationMethod)(0),                 // 2: domain.asset.v1.DepreciationMethod
-	(MeasurementModel)(0),                   // 3: domain.asset.v1.MeasurementModel
-	(*Asset)(nil),                           // 4: domain.asset.v1.Asset
-	(*CreateAssetRequest)(nil),              // 5: domain.asset.v1.CreateAssetRequest
-	(*CreateAssetResponse)(nil),             // 6: domain.asset.v1.CreateAssetResponse
-	(*ReadAssetRequest)(nil),                // 7: domain.asset.v1.ReadAssetRequest
-	(*ReadAssetResponse)(nil),               // 8: domain.asset.v1.ReadAssetResponse
-	(*UpdateAssetRequest)(nil),              // 9: domain.asset.v1.UpdateAssetRequest
-	(*UpdateAssetResponse)(nil),             // 10: domain.asset.v1.UpdateAssetResponse
-	(*DeleteAssetRequest)(nil),              // 11: domain.asset.v1.DeleteAssetRequest
-	(*DeleteAssetResponse)(nil),             // 12: domain.asset.v1.DeleteAssetResponse
-	(*ListAssetsRequest)(nil),               // 13: domain.asset.v1.ListAssetsRequest
-	(*ListAssetsResponse)(nil),              // 14: domain.asset.v1.ListAssetsResponse
-	(*GetAssetListPageDataRequest)(nil),     // 15: domain.asset.v1.GetAssetListPageDataRequest
-	(*GetAssetListPageDataResponse)(nil),    // 16: domain.asset.v1.GetAssetListPageDataResponse
-	(*GetAssetItemPageDataRequest)(nil),     // 17: domain.asset.v1.GetAssetItemPageDataRequest
-	(*GetAssetItemPageDataResponse)(nil),    // 18: domain.asset.v1.GetAssetItemPageDataResponse
-	(*AcquireAssetRequest)(nil),             // 19: domain.asset.v1.AcquireAssetRequest
-	(*AcquireAssetResponse)(nil),            // 20: domain.asset.v1.AcquireAssetResponse
-	(*DisposeAssetRequest)(nil),             // 21: domain.asset.v1.DisposeAssetRequest
-	(*DisposeAssetResponse)(nil),            // 22: domain.asset.v1.DisposeAssetResponse
-	(*TransferAssetRequest)(nil),            // 23: domain.asset.v1.TransferAssetRequest
-	(*TransferAssetResponse)(nil),           // 24: domain.asset.v1.TransferAssetResponse
-	(*RunDepreciationRequest)(nil),          // 25: domain.asset.v1.RunDepreciationRequest
-	(*RunDepreciationResponse)(nil),         // 26: domain.asset.v1.RunDepreciationResponse
-	(*GetDepreciationScheduleRequest)(nil),  // 27: domain.asset.v1.GetDepreciationScheduleRequest
-	(*GetDepreciationScheduleResponse)(nil), // 28: domain.asset.v1.GetDepreciationScheduleResponse
-	(*RevalueAssetRequest)(nil),             // 29: domain.asset.v1.RevalueAssetRequest
-	(*RevalueAssetResponse)(nil),            // 30: domain.asset.v1.RevalueAssetResponse
-	(*SetAssetActiveRequest)(nil),           // 31: domain.asset.v1.SetAssetActiveRequest
-	(*SetAssetActiveResponse)(nil),          // 32: domain.asset.v1.SetAssetActiveResponse
-	(*asset_category.AssetCategory)(nil),    // 33: domain.asset.v1.AssetCategory
-	(*location.Location)(nil),               // 34: domain.entity.v1.Location
-	(*common.Error)(nil),                    // 35: domain.common.v1.Error
-	(*common.SearchRequest)(nil),            // 36: domain.common.v1.SearchRequest
-	(*common.FilterRequest)(nil),            // 37: domain.common.v1.FilterRequest
-	(*common.SortRequest)(nil),              // 38: domain.common.v1.SortRequest
-	(*common.PaginationRequest)(nil),        // 39: domain.common.v1.PaginationRequest
-	(*common.PaginationResponse)(nil),       // 40: domain.common.v1.PaginationResponse
-	(*common.SearchResult)(nil),             // 41: domain.common.v1.SearchResult
+	(AssetType)(0),                            // 0: domain.asset.v1.AssetType
+	(AssetStatus)(0),                          // 1: domain.asset.v1.AssetStatus
+	(DepreciationMethod)(0),                   // 2: domain.asset.v1.DepreciationMethod
+	(MeasurementModel)(0),                     // 3: domain.asset.v1.MeasurementModel
+	(*Asset)(nil),                             // 4: domain.asset.v1.Asset
+	(*CreateAssetRequest)(nil),                // 5: domain.asset.v1.CreateAssetRequest
+	(*CreateAssetResponse)(nil),               // 6: domain.asset.v1.CreateAssetResponse
+	(*ReadAssetRequest)(nil),                  // 7: domain.asset.v1.ReadAssetRequest
+	(*ReadAssetResponse)(nil),                 // 8: domain.asset.v1.ReadAssetResponse
+	(*UpdateAssetRequest)(nil),                // 9: domain.asset.v1.UpdateAssetRequest
+	(*UpdateAssetResponse)(nil),               // 10: domain.asset.v1.UpdateAssetResponse
+	(*DeleteAssetRequest)(nil),                // 11: domain.asset.v1.DeleteAssetRequest
+	(*DeleteAssetResponse)(nil),               // 12: domain.asset.v1.DeleteAssetResponse
+	(*ListAssetsRequest)(nil),                 // 13: domain.asset.v1.ListAssetsRequest
+	(*ListAssetsResponse)(nil),                // 14: domain.asset.v1.ListAssetsResponse
+	(*GetAssetListPageDataRequest)(nil),       // 15: domain.asset.v1.GetAssetListPageDataRequest
+	(*GetAssetListPageDataResponse)(nil),      // 16: domain.asset.v1.GetAssetListPageDataResponse
+	(*GetAssetItemPageDataRequest)(nil),       // 17: domain.asset.v1.GetAssetItemPageDataRequest
+	(*GetAssetItemPageDataResponse)(nil),      // 18: domain.asset.v1.GetAssetItemPageDataResponse
+	(*AcquireAssetRequest)(nil),               // 19: domain.asset.v1.AcquireAssetRequest
+	(*AcquireAssetResponse)(nil),              // 20: domain.asset.v1.AcquireAssetResponse
+	(*DisposeAssetRequest)(nil),               // 21: domain.asset.v1.DisposeAssetRequest
+	(*DisposeAssetResponse)(nil),              // 22: domain.asset.v1.DisposeAssetResponse
+	(*TransferAssetRequest)(nil),              // 23: domain.asset.v1.TransferAssetRequest
+	(*TransferAssetResponse)(nil),             // 24: domain.asset.v1.TransferAssetResponse
+	(*RunDepreciationRequest)(nil),            // 25: domain.asset.v1.RunDepreciationRequest
+	(*RunDepreciationResponse)(nil),           // 26: domain.asset.v1.RunDepreciationResponse
+	(*GetDepreciationScheduleRequest)(nil),    // 27: domain.asset.v1.GetDepreciationScheduleRequest
+	(*GetDepreciationScheduleResponse)(nil),   // 28: domain.asset.v1.GetDepreciationScheduleResponse
+	(*RevalueAssetRequest)(nil),               // 29: domain.asset.v1.RevalueAssetRequest
+	(*RevalueAssetResponse)(nil),              // 30: domain.asset.v1.RevalueAssetResponse
+	(*SetAssetActiveRequest)(nil),             // 31: domain.asset.v1.SetAssetActiveRequest
+	(*SetAssetActiveResponse)(nil),            // 32: domain.asset.v1.SetAssetActiveResponse
+	(*asset_category.AssetCategory)(nil),      // 33: domain.asset.v1.AssetCategory
+	(*location.Location)(nil),                 // 34: domain.entity.v1.Location
+	(*common.Error)(nil),                      // 35: domain.common.v1.Error
+	(*common.SearchRequest)(nil),              // 36: domain.common.v1.SearchRequest
+	(*common.FilterRequest)(nil),              // 37: domain.common.v1.FilterRequest
+	(*common.SortRequest)(nil),                // 38: domain.common.v1.SortRequest
+	(*common.PaginationRequest)(nil),          // 39: domain.common.v1.PaginationRequest
+	(*common.PaginationResponse)(nil),         // 40: domain.common.v1.PaginationResponse
+	(*common.SearchResult)(nil),               // 41: domain.common.v1.SearchResult
+	(*depreciation.DepreciationSchedule)(nil), // 42: domain.asset.v1.DepreciationSchedule
 }
 var file_domain_asset_asset_asset_proto_depIdxs = []int32{
 	0,  // 0: domain.asset.v1.Asset.asset_type:type_name -> domain.asset.v1.AssetType
@@ -2699,7 +2703,7 @@ var file_domain_asset_asset_asset_proto_depIdxs = []int32{
 	4,  // 40: domain.asset.v1.TransferAssetResponse.data:type_name -> domain.asset.v1.Asset
 	35, // 41: domain.asset.v1.TransferAssetResponse.error:type_name -> domain.common.v1.Error
 	35, // 42: domain.asset.v1.RunDepreciationResponse.error:type_name -> domain.common.v1.Error
-	4,  // 43: domain.asset.v1.GetDepreciationScheduleResponse.data:type_name -> domain.asset.v1.Asset
+	42, // 43: domain.asset.v1.GetDepreciationScheduleResponse.data:type_name -> domain.asset.v1.DepreciationSchedule
 	35, // 44: domain.asset.v1.GetDepreciationScheduleResponse.error:type_name -> domain.common.v1.Error
 	4,  // 45: domain.asset.v1.RevalueAssetRequest.data:type_name -> domain.asset.v1.Asset
 	4,  // 46: domain.asset.v1.RevalueAssetResponse.data:type_name -> domain.asset.v1.Asset

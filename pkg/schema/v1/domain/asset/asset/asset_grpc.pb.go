@@ -53,7 +53,10 @@ type AssetDomainServiceClient interface {
 	DisposeAsset(ctx context.Context, in *DisposeAssetRequest, opts ...grpc.CallOption) (*DisposeAssetResponse, error)
 	TransferAsset(ctx context.Context, in *TransferAssetRequest, opts ...grpc.CallOption) (*TransferAssetResponse, error)
 	// Depreciation engine
+	// deprecated: use DepreciationRunDomainService.GenerateDepreciationRun instead.
+	// The adapter stub returns "not implemented". Removal targeted for v2.
 	RunDepreciation(ctx context.Context, in *RunDepreciationRequest, opts ...grpc.CallOption) (*RunDepreciationResponse, error)
+	// deprecated: use DepreciationDomainService.ListDepreciationSchedules instead.
 	GetDepreciationSchedule(ctx context.Context, in *GetDepreciationScheduleRequest, opts ...grpc.CallOption) (*GetDepreciationScheduleResponse, error)
 	// Revaluation (IFRS only)
 	RevalueAsset(ctx context.Context, in *RevalueAssetRequest, opts ...grpc.CallOption) (*RevalueAssetResponse, error)
@@ -228,7 +231,10 @@ type AssetDomainServiceServer interface {
 	DisposeAsset(context.Context, *DisposeAssetRequest) (*DisposeAssetResponse, error)
 	TransferAsset(context.Context, *TransferAssetRequest) (*TransferAssetResponse, error)
 	// Depreciation engine
+	// deprecated: use DepreciationRunDomainService.GenerateDepreciationRun instead.
+	// The adapter stub returns "not implemented". Removal targeted for v2.
 	RunDepreciation(context.Context, *RunDepreciationRequest) (*RunDepreciationResponse, error)
+	// deprecated: use DepreciationDomainService.ListDepreciationSchedules instead.
 	GetDepreciationSchedule(context.Context, *GetDepreciationScheduleRequest) (*GetDepreciationScheduleResponse, error)
 	// Revaluation (IFRS only)
 	RevalueAsset(context.Context, *RevalueAssetRequest) (*RevalueAssetResponse, error)

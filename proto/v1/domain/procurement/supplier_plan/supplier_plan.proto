@@ -1,0 +1,137 @@
+syntax = "proto3";
+
+package domain.procurement.v1;
+
+option go_package = "github.com/erniealice/esqyma/golang/v1/domain/procurement/supplier_plan";
+
+import "domain/common/error.proto";
+import "domain/common/pagination.proto";
+import "domain/common/filter.proto";
+import "domain/common/sort.proto";
+import "domain/common/search.proto";
+import "options/db.proto";
+
+message SupplierPlan {
+  option (options.v1.table).table = true;
+  string id = 1;
+  optional int64 date_created = 2;
+  optional string date_created_string = 3;
+  optional int64 date_modified = 4;
+  optional string date_modified_string = 5;
+  bool active = 6 [(options.v1.db).default = "true"];
+  string name = 7;
+  optional string description = 8;
+  // Supplier FK — buying-side asymmetry (selling-side Plan has no client_id on the plan itself;
+  // buying-side anchors the plan to a specific supplier).
+  string supplier_id = 9 [(options.v1.db).references = "supplier", (options.v1.db).index = true];
+  optional string workspace_id = 10 [(options.v1.db).references = "workspace", (options.v1.db).index = true];
+}
+
+service SupplierPlanDomainService {
+  rpc CreateSupplierPlan(CreateSupplierPlanRequest) returns (CreateSupplierPlanResponse);
+  rpc ReadSupplierPlan(ReadSupplierPlanRequest) returns (ReadSupplierPlanResponse);
+  rpc UpdateSupplierPlan(UpdateSupplierPlanRequest) returns (UpdateSupplierPlanResponse);
+  rpc DeleteSupplierPlan(DeleteSupplierPlanRequest) returns (DeleteSupplierPlanResponse);
+  rpc ListSupplierPlans(ListSupplierPlansRequest) returns (ListSupplierPlansResponse);
+
+  rpc GetSupplierPlanListPageData(GetSupplierPlanListPageDataRequest)
+    returns (GetSupplierPlanListPageDataResponse);
+
+  rpc GetSupplierPlanItemPageData(GetSupplierPlanItemPageDataRequest)
+    returns (GetSupplierPlanItemPageDataResponse);
+
+  rpc SearchSupplierPlansByName(SearchSupplierPlansByNameRequest) returns (SearchSupplierPlansByNameResponse);
+}
+
+message CreateSupplierPlanRequest {
+  SupplierPlan data = 1;
+}
+
+message CreateSupplierPlanResponse {
+  repeated SupplierPlan data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message ReadSupplierPlanRequest {
+  SupplierPlan data = 1;
+}
+
+message ReadSupplierPlanResponse {
+  repeated SupplierPlan data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message UpdateSupplierPlanRequest {
+  SupplierPlan data = 1;
+}
+
+message UpdateSupplierPlanResponse {
+  repeated SupplierPlan data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message DeleteSupplierPlanRequest {
+  SupplierPlan data = 1;
+}
+
+message DeleteSupplierPlanResponse {
+  bool success = 1;
+  optional domain.common.v1.Error error = 2;
+}
+
+message ListSupplierPlansRequest {
+  optional domain.common.v1.SearchRequest search = 1;
+  optional domain.common.v1.FilterRequest filters = 2;
+  optional domain.common.v1.SortRequest sort = 3;
+  optional domain.common.v1.PaginationRequest pagination = 4;
+}
+
+message ListSupplierPlansResponse {
+  repeated SupplierPlan data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message GetSupplierPlanListPageDataRequest {
+  optional domain.common.v1.PaginationRequest pagination = 1;
+  optional domain.common.v1.FilterRequest filters = 2;
+  optional domain.common.v1.SortRequest sort = 3;
+  optional domain.common.v1.SearchRequest search = 4;
+}
+
+message GetSupplierPlanListPageDataResponse {
+  repeated SupplierPlan supplier_plan_list = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+  optional domain.common.v1.PaginationResponse pagination = 4;
+  repeated domain.common.v1.SearchResult search_results = 5;
+}
+
+message GetSupplierPlanItemPageDataRequest {
+  string supplier_plan_id = 1;
+}
+
+message GetSupplierPlanItemPageDataResponse {
+  optional SupplierPlan supplier_plan = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message SearchSupplierPlansByNameRequest {
+  string query = 1;
+  optional int32 limit = 2;
+}
+
+message SearchSupplierPlansByNameResponse {
+  repeated SearchSupplierPlanResult results = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message SearchSupplierPlanResult {
+  string id = 1;
+  string label = 2;
+}

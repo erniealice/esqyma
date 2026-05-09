@@ -41,6 +41,12 @@ type ExpenseRecognitionLine struct {
 	SupplierContractLineId *string `protobuf:"bytes,11,opt,name=supplier_contract_line_id,json=supplierContractLineId,proto3,oneof" json:"supplier_contract_line_id,omitempty"`
 	ExpenditureLineItemId  *string `protobuf:"bytes,12,opt,name=expenditure_line_item_id,json=expenditureLineItemId,proto3,oneof" json:"expenditure_line_item_id,omitempty"`
 	ProductId              *string `protobuf:"bytes,13,opt,name=product_id,json=productId,proto3,oneof" json:"product_id,omitempty"`
+	// Pricing back-edges — mirrors revenue_line_item.proto:44 product_price_plan_id = 25
+	// and revenue_line_item.proto subscription_id = 29.
+	// supplier_product_cost_plan_id is the rate-card record (4-way join) for this line.
+	// supplier_subscription_id propagates from the parent ExpenseRecognition for fast filtering.
+	SupplierProductCostPlanId *string `protobuf:"bytes,14,opt,name=supplier_product_cost_plan_id,json=supplierProductCostPlanId,proto3,oneof" json:"supplier_product_cost_plan_id,omitempty"`
+	SupplierSubscriptionId    *string `protobuf:"bytes,15,opt,name=supplier_subscription_id,json=supplierSubscriptionId,proto3,oneof" json:"supplier_subscription_id,omitempty"`
 	// Line details
 	Description string  `protobuf:"bytes,20,opt,name=description,proto3" json:"description,omitempty"`
 	Quantity    float64 `protobuf:"fixed64,21,opt,name=quantity,proto3" json:"quantity,omitempty"`
@@ -157,6 +163,20 @@ func (x *ExpenseRecognitionLine) GetExpenditureLineItemId() string {
 func (x *ExpenseRecognitionLine) GetProductId() string {
 	if x != nil && x.ProductId != nil {
 		return *x.ProductId
+	}
+	return ""
+}
+
+func (x *ExpenseRecognitionLine) GetSupplierProductCostPlanId() string {
+	if x != nil && x.SupplierProductCostPlanId != nil {
+		return *x.SupplierProductCostPlanId
+	}
+	return ""
+}
+
+func (x *ExpenseRecognitionLine) GetSupplierSubscriptionId() string {
+	if x != nil && x.SupplierSubscriptionId != nil {
+		return *x.SupplierSubscriptionId
 	}
 	return ""
 }
@@ -1006,7 +1026,8 @@ var File_domain_expenditure_expense_recognition_line_expense_recognition_line_pr
 
 const file_domain_expenditure_expense_recognition_line_expense_recognition_line_proto_rawDesc = "" +
 	"\n" +
-	"Jdomain/expenditure/expense_recognition_line/expense_recognition_line.proto\x12\x15domain.expenditure.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/search.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x10options/db.proto\"\xe6\b\n" +
+	"Jdomain/expenditure/expense_recognition_line/expense_recognition_line.proto\x12\x15domain.expenditure.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/search.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x10options/db.proto\"\xee\n" +
+	"\n" +
 	"\x16ExpenseRecognitionLine\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x124\n" +
 	"\fworkspace_id\x18\x02 \x01(\tB\x11\x82\xb5\x18\r\n" +
@@ -1026,7 +1047,11 @@ const file_domain_expenditure_expense_recognition_line_expense_recognition_line_
 	"\x15expenditure_line_itemH\x05R\x15expenditureLineItemId\x88\x01\x01\x121\n" +
 	"\n" +
 	"product_id\x18\r \x01(\tB\r\x82\xb5\x18\t\n" +
-	"\aproductH\x06R\tproductId\x88\x01\x01\x12 \n" +
+	"\aproductH\x06R\tproductId\x88\x01\x01\x12i\n" +
+	"\x1dsupplier_product_cost_plan_id\x18\x0e \x01(\tB\"\x82\xb5\x18\x1e\n" +
+	"\x1asupplier_product_cost_plan\x18\x01H\aR\x19supplierProductCostPlanId\x88\x01\x01\x12\\\n" +
+	"\x18supplier_subscription_id\x18\x0f \x01(\tB\x1d\x82\xb5\x18\x19\n" +
+	"\x15supplier_subscription\x18\x01H\bR\x16supplierSubscriptionId\x88\x01\x01\x12 \n" +
 	"\vdescription\x18\x14 \x01(\tR\vdescription\x12\x1a\n" +
 	"\bquantity\x18\x15 \x01(\x01R\bquantity\x12\x1f\n" +
 	"\vunit_amount\x18\x16 \x01(\x03R\n" +
@@ -1034,16 +1059,19 @@ const file_domain_expenditure_expense_recognition_line_expense_recognition_line_
 	"\x06amount\x18\x17 \x01(\x03R\x06amount\x12\x1a\n" +
 	"\bcurrency\x18\x18 \x01(\tR\bcurrency\x12@\n" +
 	"\x12expense_account_id\x18\x1e \x01(\tB\r\x82\xb5\x18\t\n" +
-	"\aaccountH\aR\x10expenseAccountId\x88\x01\x01\x12?\n" +
+	"\aaccountH\tR\x10expenseAccountId\x88\x01\x01\x12?\n" +
 	"\x0fjob_activity_id\x18\x1f \x01(\tB\x12\x82\xb5\x18\x0e\n" +
-	"\fjob_activityH\bR\rjobActivityId\x88\x01\x01:\x06\x8a\xb5\x18\x02\b\x01B\x0f\n" +
+	"\fjob_activityH\n" +
+	"R\rjobActivityId\x88\x01\x01:\x06\x8a\xb5\x18\x02\b\x01B\x0f\n" +
 	"\r_date_createdB\x16\n" +
 	"\x14_date_created_stringB\x10\n" +
 	"\x0e_date_modifiedB\x17\n" +
 	"\x15_date_modified_stringB\x1c\n" +
 	"\x1a_supplier_contract_line_idB\x1b\n" +
 	"\x19_expenditure_line_item_idB\r\n" +
-	"\v_product_idB\x15\n" +
+	"\v_product_idB \n" +
+	"\x1e_supplier_product_cost_plan_idB\x1b\n" +
+	"\x19_supplier_subscription_idB\x15\n" +
 	"\x13_expense_account_idB\x12\n" +
 	"\x10_job_activity_id\"h\n" +
 	"#CreateExpenseRecognitionLineRequest\x12A\n" +

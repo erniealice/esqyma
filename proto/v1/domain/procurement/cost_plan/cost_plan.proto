@@ -1,0 +1,166 @@
+syntax = "proto3";
+
+package domain.procurement.v1;
+
+option go_package = "github.com/erniealice/esqyma/golang/v1/domain/procurement/cost_plan";
+
+import "domain/common/error.proto";
+import "domain/common/pagination.proto";
+import "domain/common/search.proto";
+import "domain/common/filter.proto";
+import "domain/common/sort.proto";
+
+import "domain/procurement/supplier_plan/supplier_plan.proto";
+import "domain/procurement/cost_schedule/cost_schedule.proto";
+import "options/db.proto";
+
+// Buying-side billing kind.
+// Intentional divergence from selling-side BillingKind: MILESTONE replaced with USAGE_BASED.
+// Selling-side: ONE_TIME / RECURRING / CONTRACT / MILESTONE / AD_HOC (job-gated).
+// Buying-side:  ONE_TIME / RECURRING / CONTRACT / USAGE_BASED / AD_HOC (metered/cloud).
+enum CostPlanBillingKind {
+  COST_PLAN_BILLING_KIND_UNSPECIFIED  = 0;
+  COST_PLAN_BILLING_KIND_ONE_TIME     = 1;  // single charge, no ongoing cycles
+  COST_PLAN_BILLING_KIND_RECURRING    = 2;  // open-ended cycling (cancel-anytime subscription)
+  COST_PLAN_BILLING_KIND_CONTRACT     = 3;  // fixed-term commitment (may have periodic billing within)
+  COST_PLAN_BILLING_KIND_USAGE_BASED  = 4;  // metered/cloud billing (replaces selling-side MILESTONE)
+  COST_PLAN_BILLING_KIND_AD_HOC       = 5;  // event-driven recurrence; operator-requested occurrences
+}
+
+enum CostPlanAmountBasis {
+  COST_PLAN_AMOUNT_BASIS_UNSPECIFIED        = 0;
+  COST_PLAN_AMOUNT_BASIS_PER_CYCLE          = 1;  // amount = per-cycle fee
+  COST_PLAN_AMOUNT_BASIS_TOTAL_PACKAGE      = 2;  // amount = one-shot total
+  COST_PLAN_AMOUNT_BASIS_DERIVED_FROM_LINES = 3;  // amount ignored; sum SupplierProductCostPlan prices
+  COST_PLAN_AMOUNT_BASIS_PER_OCCURRENCE     = 4;  // per-event billing; currently only meaningful with USAGE_BASED
+}
+
+message CostPlan {
+  option (options.v1.table).table = true;
+  string id = 1;
+  optional SupplierPlan supplier_plan = 2;
+  string supplier_plan_id = 3 [(options.v1.db).references = "supplier_plan", (options.v1.db).index = true];
+  optional string name = 4;
+  optional string description = 5;
+  optional int64 date_created = 6;
+  optional string date_created_string = 7;
+  optional int64 date_modified = 8;
+  optional string date_modified_string = 9;
+  bool active = 10 [(options.v1.db).default = "true"];
+  int64 billing_amount = 11;    // centavos — charged by the supplier in billing_currency
+  string billing_currency = 12; // ISO 4217 currency code
+
+  // DEPRECATED dual-write fields (preserved for migration parity with price_plan).
+  // Use billing_cycle_* and default_term_* instead.
+  optional int32 duration_value = 13;
+  optional string duration_unit = 14;
+
+  // Email template paths/URLs (optional — procurement context, e.g. payment confirmation)
+  optional string confirmation_template = 15;
+  optional string receipt_template = 16;
+
+  // Parent schedule — owns location + date range for this plan.
+  optional string cost_schedule_id = 18 [(options.v1.db).references = "cost_schedule", (options.v1.db).index = true];
+  CostPlanBillingKind billing_kind = 19;
+  CostPlanAmountBasis amount_basis = 20;
+
+  // Billing cadence — only meaningful when billing_kind ∈ {RECURRING, CONTRACT}
+  optional int32  billing_cycle_value = 21;
+  optional string billing_cycle_unit  = 22;  // "day" | "week" | "month" | "year"
+
+  // Default catalog validity/term; null = open-ended.
+  optional int32  default_term_value = 23;
+  optional string default_term_unit  = 24;
+
+  // Denormalized mirror of supplier_plan.supplier_id. Cascade enforced at use-case layer.
+  optional string supplier_id = 25 [(options.v1.db).references = "supplier", (options.v1.db).index = true];
+
+  optional string workspace_id = 26 [(options.v1.db).references = "workspace", (options.v1.db).index = true];
+}
+
+service CostPlanDomainService {
+  rpc CreateCostPlan(CreateCostPlanRequest) returns (CreateCostPlanResponse);
+  rpc ReadCostPlan(ReadCostPlanRequest) returns (ReadCostPlanResponse);
+  rpc UpdateCostPlan(UpdateCostPlanRequest) returns (UpdateCostPlanResponse);
+  rpc DeleteCostPlan(DeleteCostPlanRequest) returns (DeleteCostPlanResponse);
+  rpc ListCostPlans(ListCostPlansRequest) returns (ListCostPlansResponse);
+  rpc GetCostPlanListPageData(GetCostPlanListPageDataRequest) returns (GetCostPlanListPageDataResponse);
+  rpc GetCostPlanItemPageData(GetCostPlanItemPageDataRequest) returns (GetCostPlanItemPageDataResponse);
+}
+
+message CreateCostPlanRequest {
+  CostPlan data = 1;
+}
+
+message CreateCostPlanResponse {
+  repeated CostPlan data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message ReadCostPlanRequest {
+  CostPlan data = 1;
+}
+
+message ReadCostPlanResponse {
+  repeated CostPlan data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message UpdateCostPlanRequest {
+  CostPlan data = 1;
+}
+
+message UpdateCostPlanResponse {
+  repeated CostPlan data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message DeleteCostPlanRequest {
+  CostPlan data = 1;
+}
+
+message DeleteCostPlanResponse {
+  bool success = 1;
+  optional domain.common.v1.Error error = 2;
+}
+
+message ListCostPlansRequest {
+  optional domain.common.v1.PaginationRequest pagination = 1;
+  optional domain.common.v1.FilterRequest filters = 2;
+  optional domain.common.v1.SortRequest sort = 3;
+  optional domain.common.v1.SearchRequest search = 4;
+}
+
+message ListCostPlansResponse {
+  repeated CostPlan data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message GetCostPlanListPageDataRequest {
+  optional domain.common.v1.PaginationRequest pagination = 1;
+  optional domain.common.v1.FilterRequest filters = 2;
+  optional domain.common.v1.SortRequest sort = 3;
+  optional domain.common.v1.SearchRequest search = 4;
+}
+
+message GetCostPlanListPageDataResponse {
+  repeated CostPlan cost_plan_list = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+  optional domain.common.v1.PaginationResponse pagination = 4;
+  repeated domain.common.v1.SearchResult search_results = 5;
+}
+
+message GetCostPlanItemPageDataRequest {
+  string cost_plan_id = 1;
+}
+
+message GetCostPlanItemPageDataResponse {
+  optional CostPlan cost_plan = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}

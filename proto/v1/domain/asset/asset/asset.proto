@@ -11,6 +11,7 @@ import "domain/common/sort.proto";
 import "domain/common/search.proto";
 
 import "domain/asset/asset_category/asset_category.proto";
+import "domain/asset/depreciation/depreciation.proto";
 import "domain/entity/location/location.proto";
 import "options/db.proto";
 
@@ -139,7 +140,10 @@ service AssetDomainService {
   rpc TransferAsset(TransferAssetRequest) returns (TransferAssetResponse);
 
   // Depreciation engine
+  // deprecated: use DepreciationRunDomainService.GenerateDepreciationRun instead.
+  // The adapter stub returns "not implemented". Removal targeted for v2.
   rpc RunDepreciation(RunDepreciationRequest) returns (RunDepreciationResponse);
+  // deprecated: use DepreciationDomainService.ListDepreciationSchedules instead.
   rpc GetDepreciationSchedule(GetDepreciationScheduleRequest) returns (GetDepreciationScheduleResponse);
 
   // Revaluation (IFRS only)
@@ -287,8 +291,10 @@ message GetDepreciationScheduleRequest {
   string asset_id = 1;
 }
 
+// Bug fix (2026-05-09): was `repeated Asset data` — incorrect return type.
+// The rpc is unimplemented; no callers to break.
 message GetDepreciationScheduleResponse {
-  repeated Asset data = 1;
+  repeated DepreciationSchedule data = 1;
   bool success = 2;
   optional domain.common.v1.Error error = 3;
 }

@@ -94,6 +94,11 @@ message ExpenseRecognition {
   optional string expenditure_category_id = 52 [(options.v1.db).references = "expenditure_category"];
   optional string job_phase_id = 53 [(options.v1.db).references = "job_phase"];
 
+  // Subscription back-edge — mirrors revenue.proto:52 subscription_id = 32.
+  // Set when the ExpenseRecognition is generated from a SupplierSubscription
+  // (recurring-recognition path) rather than from a one-off Expenditure.
+  optional string supplier_subscription_id = 60 [(options.v1.db).references = "supplier_subscription", (options.v1.db).index = true];
+
   // Notes & metadata
   optional string notes = 90;
   map<string, string> metadata = 91;
