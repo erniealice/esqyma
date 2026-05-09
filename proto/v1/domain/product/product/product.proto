@@ -62,6 +62,12 @@ message Product {
 
   // Drift-recovered column (DB had this; proto did not)
   optional string workspace_id = 30 [(options.v1.db).references = "workspace", (options.v1.db).index = true];
+
+  // Tax fields — Phase 1 tax integration
+  // FK to tax_treatment — jurisdiction-agnostic taxability category (STANDARD, REDUCED, ZERO_RATED, EXEMPT, OUT_OF_SCOPE)
+  optional string tax_treatment_id = 31 [(options.v1.db).references = "tax_treatment", (options.v1.db).index = true];
+  // FK to tax_class — withholding category (e.g. PROFESSIONAL_CORPORATE, RENTAL). Used in WITHHOLDING compute pass.
+  optional string withholding_class_id = 32 [(options.v1.db).references = "tax_class", (options.v1.db).index = true];
 }
 
 service ProductDomainService {

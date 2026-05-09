@@ -49,6 +49,16 @@ message RevenueLineItem {
   int64 line_amount = 28;                        // centavos — total amount for this line (NOT NULL in DB)
   optional string subscription_id = 29 [(options.v1.db).references = "subscription", (options.v1.db).index = true]; // FK to subscription — links line item to recurring source
   optional string workspace_id = 30 [(options.v1.db).references = "workspace", (options.v1.db).index = true];
+
+  // Tax snapshot fields — Phase 1 tax integration
+  // Snapshotted at revenue recognition time from product / product_price_plan.
+  // Used by ComputeTaxesForRevenue as the authoritative treatment for this line.
+  optional string tax_treatment_snapshot = 31;    // TaxTreatment.code at recognition (e.g. "STANDARD")
+  optional string withholding_class_snapshot = 32; // TaxClass.code at recognition (e.g. "PROFESSIONAL_CORPORATE")
+
+  // Multi-currency: original billing amount for this line before FX conversion.
+  // NULL when billing_currency == functional_currency.
+  optional int64 billing_amount = 33;             // centavos in billing_currency
 }
 
 service RevenueLineItemDomainService {

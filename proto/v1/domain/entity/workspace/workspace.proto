@@ -40,6 +40,12 @@ message Workspace {
   // any "what calendar day is this?" computation. Domain reads only — display
   // (e.g. "edited 5 min ago") may still resolve via user/operator tz.
   optional string timezone = 14;
+
+  // Tax identity fields — Phase 1 tax integration
+  optional string tin = 15;                         // Taxpayer Identification Number
+  optional bool tax_inclusive_pricing = 16;         // When true, PricePlan amounts are gross-of-SURCHARGE (extract). Default false (exclusive).
+  optional bool tax_computation_enabled = 17;       // Master gate: when false, ComputeTaxesForRevenue is a no-op. Default true.
+  optional string home_jurisdiction = 18;           // Jurisdiction scope for SURCHARGE lookups (e.g. "PH-NATIONAL"). Defaults to compliance_region for backward compat.
 }
 
 service WorkspaceDomainService {

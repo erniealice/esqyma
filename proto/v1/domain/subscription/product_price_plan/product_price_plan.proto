@@ -56,6 +56,12 @@ message ProductPricePlan {
   // the first event (analogous to ONE_TIME_INITIAL).
   optional string job_template_phase_id = 19
     [(options.v1.db).references = "job_template_phase", (options.v1.db).index = true];
+
+  // Tax override fields — Phase 1 tax integration
+  // When set, overrides the parent product's tax_treatment_id for this specific price plan line.
+  optional string tax_treatment_id = 20 [(options.v1.db).references = "tax_treatment", (options.v1.db).index = true];
+  // When set, overrides the parent product's withholding_class_id for this specific price plan line.
+  optional string withholding_class_id = 21 [(options.v1.db).references = "tax_class", (options.v1.db).index = true];
 }
 
 service ProductPricePlanDomainService {

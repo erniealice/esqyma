@@ -1,0 +1,136 @@
+syntax = "proto3";
+
+package domain.tax.v1;
+
+option go_package = "github.com/erniealice/esqyma/golang/v1/domain/tax/tax_class";
+
+import "domain/common/error.proto";
+import "domain/common/pagination.proto";
+import "domain/common/filter.proto";
+import "domain/common/sort.proto";
+import "domain/common/search.proto";
+import "options/db.proto";
+
+// TaxClassDirection — what kind of tax line this class produces.
+// v1 ships WITHHOLDING only; OUTPUT/EXCISE/SALES_TAX/DST/GST reserved for v2.
+enum TaxClassDirection {
+  TAX_CLASS_DIRECTION_UNSPECIFIED = 0;
+  TAX_CLASS_DIRECTION_WITHHOLDING = 1;
+  TAX_CLASS_DIRECTION_OUTPUT      = 2;  // v2
+  TAX_CLASS_DIRECTION_EXCISE      = 3;  // v2
+  TAX_CLASS_DIRECTION_SALES_TAX   = 4;  // v2
+  TAX_CLASS_DIRECTION_DST         = 5;  // v2
+  TAX_CLASS_DIRECTION_GST         = 6;  // v2
+}
+
+// TaxClassCounterpartyRole — when set on a class, the WITHHOLDING pass only
+// fires if the client (buyer) has an ACTIVE registration with this party_role.
+enum TaxClassCounterpartyRole {
+  TAX_CLASS_COUNTERPARTY_ROLE_UNSPECIFIED = 0;
+  TAX_CLASS_COUNTERPARTY_ROLE_BUYER       = 1;
+  TAX_CLASS_COUNTERPARTY_ROLE_SELLER      = 2;
+}
+
+// TaxClass — lookup table for withholding categories (and future output tax
+// classes). Each class points to a default rate kind and optionally requires a
+// specific counterparty role to fire (e.g. PH TWA buyer designation).
+// Rows are seed-only (no operator CRUD in v1).
+message TaxClass {
+  option (options.v1.table).table = true;
+
+  string id = 1;
+  optional int64 date_created = 2;
+  optional string date_created_string = 3;
+  optional int64 date_modified = 4;
+  optional string date_modified_string = 5;
+  bool active = 6 [(options.v1.db).default = "true"];
+
+  // Short unique code (e.g. "PROFESSIONAL_CORPORATE", "RENTAL")
+  string code = 7 [(options.v1.db).unique = true];
+  string name = 8;
+  optional string description = 9;
+
+  // Direction of the tax line this class produces (WITHHOLDING in v1)
+  TaxClassDirection direction = 10;
+
+  // FK to tax_authority that governs this class
+  string tax_authority_id = 11 [(options.v1.db).references = "tax_authority", (options.v1.db).index = true];
+
+  // BIR/regulator ATC code (e.g. "WC011") — used in withholding certificate
+  optional string regulator_code = 12;
+
+  // The kind of rate to look up in tax_rate for WITHHOLDING compute
+  // (e.g. "WHT_PROFESSIONAL_CORPORATE")
+  optional string default_rate_kind = 13;
+
+  // When set, the WITHHOLDING pass only fires for lines where the client
+  // has an ACTIVE registration with this party_role (e.g. BUYER for PH TWA).
+  // NULL = no counterparty requirement.
+  optional TaxClassCounterpartyRole requires_counterparty_role = 14;
+
+  // Jurisdiction scope (e.g. "PH-NATIONAL")
+  optional string jurisdiction = 15;
+
+  // Optional: type of recipient/payment subject (e.g. "juridical", "individual")
+  optional string recipient_type = 16;
+
+  // Threshold rules for rate switching (v2 / future)
+  optional int64 threshold_amount = 17;  // centavos
+  optional string threshold_period = 18; // "ANNUAL", "QUARTERLY"
+  optional string rate_kind_above_threshold = 19;
+}
+
+service TaxClassDomainService {
+  rpc ReadTaxClass(ReadTaxClassRequest) returns (ReadTaxClassResponse);
+  rpc ListTaxClasses(ListTaxClassesRequest) returns (ListTaxClassesResponse);
+  rpc GetTaxClassListPageData(GetTaxClassListPageDataRequest) returns (GetTaxClassListPageDataResponse);
+  rpc GetTaxClassItemPageData(GetTaxClassItemPageDataRequest) returns (GetTaxClassItemPageDataResponse);
+}
+
+message ReadTaxClassRequest {
+  TaxClass data = 1;
+}
+
+message ReadTaxClassResponse {
+  repeated TaxClass data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message ListTaxClassesRequest {
+  optional domain.common.v1.SearchRequest search = 1;
+  optional domain.common.v1.FilterRequest filters = 2;
+  optional domain.common.v1.SortRequest sort = 3;
+  optional domain.common.v1.PaginationRequest pagination = 4;
+}
+
+message ListTaxClassesResponse {
+  repeated TaxClass data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message GetTaxClassListPageDataRequest {
+  optional domain.common.v1.PaginationRequest pagination = 1;
+  optional domain.common.v1.FilterRequest filters = 2;
+  optional domain.common.v1.SortRequest sort = 3;
+  optional domain.common.v1.SearchRequest search = 4;
+}
+
+message GetTaxClassListPageDataResponse {
+  repeated TaxClass tax_class_list = 1;
+  optional domain.common.v1.PaginationResponse pagination = 2;
+  repeated domain.common.v1.SearchResult search_results = 3;
+  bool success = 4;
+  optional domain.common.v1.Error error = 5;
+}
+
+message GetTaxClassItemPageDataRequest {
+  string tax_class_id = 1;
+}
+
+message GetTaxClassItemPageDataResponse {
+  optional TaxClass tax_class = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}

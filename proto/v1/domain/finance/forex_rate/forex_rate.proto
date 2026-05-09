@@ -1,0 +1,134 @@
+syntax = "proto3";
+
+package domain.finance.v1;
+
+option go_package = "github.com/erniealice/esqyma/golang/v1/domain/finance/forex_rate";
+
+import "domain/common/error.proto";
+import "domain/common/pagination.proto";
+import "domain/common/filter.proto";
+import "domain/common/sort.proto";
+import "domain/common/search.proto";
+import "options/db.proto";
+
+// ForexRateStatus — lifecycle of a forex rate row.
+// New versions SUPERSEDE old via self-FK (supersedes_id + effective_to).
+enum ForexRateStatus {
+  FOREX_RATE_STATUS_UNSPECIFIED = 0;
+  FOREX_RATE_STATUS_DRAFT       = 1;
+  FOREX_RATE_STATUS_ACTIVE      = 2;
+  FOREX_RATE_STATUS_SUPERSEDED  = 3;
+  FOREX_RATE_STATUS_VOIDED      = 4;
+}
+
+// ForexRateSource — how the rate was obtained.
+enum ForexRateSource {
+  FOREX_RATE_SOURCE_UNSPECIFIED = 0;
+  FOREX_RATE_SOURCE_OPERATOR    = 1;  // Manually typed by the operator
+  FOREX_RATE_SOURCE_BSP_REF     = 2;  // Auto-imported from BSP (v2)
+}
+
+// ForexRate — operator-typed forex rate auto-growing table.
+// Rates are quoted as: functional_units per 1 unit of billing_currency.
+// e.g. rate_micro_units=56500000 = "56.500000 PHP per 1 USD"
+// Computation: functional_centavos = billing_centavos * rate_micro_units / 1_000_000
+//
+// Immutable per row. New versions SUPERSEDE old.
+// Partial unique index on (workspace_id, from_currency, to_currency) WHERE status='ACTIVE'
+// prevents two simultaneously ACTIVE rates for the same currency pair per workspace.
+message ForexRate {
+  option (options.v1.table).table = true;
+
+  string id = 1;
+  optional int64 date_created = 2;
+  optional string date_created_string = 3;
+  optional int64 date_modified = 4;
+  optional string date_modified_string = 5;
+  bool active = 6 [(options.v1.db).default = "true"];
+
+  string workspace_id = 7 [(options.v1.db).references = "workspace", (options.v1.db).index = true];
+
+  // Currency pair — from_currency is the billing currency, to_currency is the functional currency
+  string from_currency = 8;  // ISO 4217 (e.g. "USD")
+  string to_currency = 9;    // ISO 4217 — must match workspace.functional_currency
+
+  // Rate as micro-units: rate_micro_units / 1_000_000 = exact rate.
+  // e.g. 56_500_000 = 56.500000 (functional units per 1 billing unit)
+  int64 rate_micro_units = 10;
+
+  // How the rate was sourced
+  ForexRateSource source = 11;
+
+  // When sourced from BSP (v2), the reference date of the published rate
+  optional string source_reference_date = 12;  // ISO 8601 date
+
+  // Optional: operator who entered the rate (for audit trail)
+  optional string created_by_user_id = 13 [(options.v1.db).references = "user", (options.v1.db).index = true];
+
+  // Lifecycle status
+  ForexRateStatus status = 14;
+
+  // asOf window — effective_from <= asOf AND (effective_to IS NULL OR effective_to > asOf)
+  string effective_from = 15;   // ISO 8601 date
+  optional string effective_to = 16;  // ISO 8601 date — NULL for open-ended ACTIVE rows
+
+  // Self-FK for supersession chain. NULL on the first version.
+  optional string supersedes_id = 17 [(options.v1.db).references = "forex_rate", (options.v1.db).index = true];
+
+  optional string notes = 18;
+}
+
+service ForexRateDomainService {
+  rpc ReadForexRate(ReadForexRateRequest) returns (ReadForexRateResponse);
+  rpc ListForexRates(ListForexRatesRequest) returns (ListForexRatesResponse);
+  rpc GetForexRateListPageData(GetForexRateListPageDataRequest) returns (GetForexRateListPageDataResponse);
+  rpc GetForexRateItemPageData(GetForexRateItemPageDataRequest) returns (GetForexRateItemPageDataResponse);
+}
+
+message ReadForexRateRequest {
+  ForexRate data = 1;
+}
+
+message ReadForexRateResponse {
+  repeated ForexRate data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message ListForexRatesRequest {
+  optional domain.common.v1.SearchRequest search = 1;
+  optional domain.common.v1.FilterRequest filters = 2;
+  optional domain.common.v1.SortRequest sort = 3;
+  optional domain.common.v1.PaginationRequest pagination = 4;
+}
+
+message ListForexRatesResponse {
+  repeated ForexRate data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message GetForexRateListPageDataRequest {
+  optional domain.common.v1.PaginationRequest pagination = 1;
+  optional domain.common.v1.FilterRequest filters = 2;
+  optional domain.common.v1.SortRequest sort = 3;
+  optional domain.common.v1.SearchRequest search = 4;
+}
+
+message GetForexRateListPageDataResponse {
+  repeated ForexRate forex_rate_list = 1;
+  optional domain.common.v1.PaginationResponse pagination = 2;
+  repeated domain.common.v1.SearchResult search_results = 3;
+  bool success = 4;
+  optional domain.common.v1.Error error = 5;
+}
+
+message GetForexRateItemPageDataRequest {
+  string forex_rate_id = 1;
+}
+
+message GetForexRateItemPageDataResponse {
+  optional ForexRate forex_rate = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}

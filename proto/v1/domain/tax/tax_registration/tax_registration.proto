@@ -1,0 +1,194 @@
+syntax = "proto3";
+
+package domain.tax.v1;
+
+option go_package = "github.com/erniealice/esqyma/golang/v1/domain/tax/tax_registration";
+
+import "domain/common/error.proto";
+import "domain/common/pagination.proto";
+import "domain/common/filter.proto";
+import "domain/common/sort.proto";
+import "domain/common/search.proto";
+import "options/db.proto";
+
+// TaxRegistrationStatus — lifecycle of a single immutable registration row.
+// New versions SUPERSEDE old via self-FK (supersedes_id + effective_to).
+enum TaxRegistrationStatus {
+  TAX_REGISTRATION_STATUS_UNSPECIFIED = 0;
+  TAX_REGISTRATION_STATUS_DRAFT       = 1;
+  TAX_REGISTRATION_STATUS_ACTIVE      = 2;
+  TAX_REGISTRATION_STATUS_SUPERSEDED  = 3;
+  TAX_REGISTRATION_STATUS_CANCELLED   = 4;
+  TAX_REGISTRATION_STATUS_VOIDED      = 5;
+}
+
+// PartyType — the kind of party that holds this registration.
+// Polymorphic: one table covers clients, workspaces, suppliers, employees.
+enum TaxRegistrationPartyType {
+  TAX_REGISTRATION_PARTY_TYPE_UNSPECIFIED = 0;
+  TAX_REGISTRATION_PARTY_TYPE_CLIENT      = 1;
+  TAX_REGISTRATION_PARTY_TYPE_WORKSPACE   = 2;
+  TAX_REGISTRATION_PARTY_TYPE_SUPPLIER    = 3;
+  TAX_REGISTRATION_PARTY_TYPE_EMPLOYEE    = 4;
+}
+
+// ComputePathSnapshot — denormed from TaxRegistrationKind.compute_path for
+// the partial unique index on (party_type, party_id, tax_authority_id,
+// compute_path_snapshot) WHERE status='ACTIVE'.
+enum TaxRegistrationComputePathSnapshot {
+  TAX_REGISTRATION_COMPUTE_PATH_SNAPSHOT_UNSPECIFIED   = 0;
+  TAX_REGISTRATION_COMPUTE_PATH_SNAPSHOT_SURCHARGE     = 1;
+  TAX_REGISTRATION_COMPUTE_PATH_SNAPSHOT_WITHHOLDING   = 2;
+  TAX_REGISTRATION_COMPUTE_PATH_SNAPSHOT_PERIODIC_ONLY = 3;
+  TAX_REGISTRATION_COMPUTE_PATH_SNAPSHOT_NONE          = 4;
+}
+
+// PartyRoleSnapshot — denormed from TaxRegistrationKind.party_role.
+enum TaxRegistrationPartyRoleSnapshot {
+  TAX_REGISTRATION_PARTY_ROLE_SNAPSHOT_UNSPECIFIED = 0;
+  TAX_REGISTRATION_PARTY_ROLE_SNAPSHOT_SELLER      = 1;
+  TAX_REGISTRATION_PARTY_ROLE_SNAPSHOT_BUYER       = 2;
+}
+
+// TaxRegistration — polymorphic, immutable-per-row table. Edits create new
+// rows via supersession; old rows are stamped SUPERSEDED with an effective_to.
+//
+// The partial unique index on (party_type, party_id, tax_authority_id,
+// compute_path_snapshot) WHERE status='ACTIVE' prevents two simultaneously
+// ACTIVE registrations of the same compute path per (party, authority).
+message TaxRegistration {
+  option (options.v1.table).table = true;
+
+  string id = 1;
+  optional int64 date_created = 2;
+  optional string date_created_string = 3;
+  optional int64 date_modified = 4;
+  optional string date_modified_string = 5;
+  bool active = 6 [(options.v1.db).default = "true"];
+
+  // Which type of party holds this registration (CLIENT, WORKSPACE, SUPPLIER, EMPLOYEE)
+  TaxRegistrationPartyType party_type = 7;
+
+  // UUID of the party (client.id, workspace.id, etc.) — polymorphic FK, no DB constraint
+  string party_id = 8;
+
+  // FK to tax_authority
+  string tax_authority_id = 9 [(options.v1.db).references = "tax_authority", (options.v1.db).index = true];
+
+  // FK to tax_registration_kind
+  string tax_registration_kind_id = 10 [(options.v1.db).references = "tax_registration_kind", (options.v1.db).index = true];
+
+  // Denormed from kind.compute_path — used by the partial unique index.
+  // MUST be set equal to kind.compute_path at create/supersede time.
+  TaxRegistrationComputePathSnapshot compute_path_snapshot = 11;
+
+  // Denormed from kind.party_role.
+  TaxRegistrationPartyRoleSnapshot party_role_snapshot = 12;
+
+  // Official registration number (e.g. TIN, VAT number, BIR registration)
+  string registration_number = 13;
+
+  // Lifecycle status — see invariants in plan.md
+  TaxRegistrationStatus status = 14;
+
+  // asOf window — effective_from <= asOf AND (effective_to IS NULL OR effective_to > asOf)
+  string effective_from = 15;  // ISO 8601 date
+  optional string effective_to = 16;  // ISO 8601 date — NULL for open-ended ACTIVE rows
+
+  // Self-FK for supersession chain. NULL on the first version of a registration.
+  optional string supersedes_id = 17 [(options.v1.db).references = "tax_registration", (options.v1.db).index = true];
+
+  // Audit fields
+  optional string source_citation = 18;   // e.g. "COR / RDO 39"
+  optional string source_document_id = 19; // FK to document/attachment
+
+  // Workspace scope — all registrations scoped to a workspace for multi-tenant isolation
+  string workspace_id = 20 [(options.v1.db).references = "workspace", (options.v1.db).index = true];
+}
+
+service TaxRegistrationDomainService {
+  rpc CreateTaxRegistration(CreateTaxRegistrationRequest) returns (CreateTaxRegistrationResponse);
+  rpc ReadTaxRegistration(ReadTaxRegistrationRequest) returns (ReadTaxRegistrationResponse);
+  rpc UpdateTaxRegistration(UpdateTaxRegistrationRequest) returns (UpdateTaxRegistrationResponse);
+  rpc DeleteTaxRegistration(DeleteTaxRegistrationRequest) returns (DeleteTaxRegistrationResponse);
+  rpc ListTaxRegistrations(ListTaxRegistrationsRequest) returns (ListTaxRegistrationsResponse);
+  rpc GetTaxRegistrationListPageData(GetTaxRegistrationListPageDataRequest) returns (GetTaxRegistrationListPageDataResponse);
+  rpc GetTaxRegistrationItemPageData(GetTaxRegistrationItemPageDataRequest) returns (GetTaxRegistrationItemPageDataResponse);
+}
+
+message CreateTaxRegistrationRequest {
+  TaxRegistration data = 1;
+}
+
+message CreateTaxRegistrationResponse {
+  repeated TaxRegistration data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message ReadTaxRegistrationRequest {
+  TaxRegistration data = 1;
+}
+
+message ReadTaxRegistrationResponse {
+  repeated TaxRegistration data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message UpdateTaxRegistrationRequest {
+  TaxRegistration data = 1;
+}
+
+message UpdateTaxRegistrationResponse {
+  repeated TaxRegistration data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message DeleteTaxRegistrationRequest {
+  TaxRegistration data = 1;
+}
+
+message DeleteTaxRegistrationResponse {
+  bool success = 1;
+  optional domain.common.v1.Error error = 2;
+}
+
+message ListTaxRegistrationsRequest {
+  optional domain.common.v1.SearchRequest search = 1;
+  optional domain.common.v1.FilterRequest filters = 2;
+  optional domain.common.v1.SortRequest sort = 3;
+  optional domain.common.v1.PaginationRequest pagination = 4;
+}
+
+message ListTaxRegistrationsResponse {
+  repeated TaxRegistration data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message GetTaxRegistrationListPageDataRequest {
+  optional domain.common.v1.PaginationRequest pagination = 1;
+  optional domain.common.v1.FilterRequest filters = 2;
+  optional domain.common.v1.SortRequest sort = 3;
+  optional domain.common.v1.SearchRequest search = 4;
+}
+
+message GetTaxRegistrationListPageDataResponse {
+  repeated TaxRegistration tax_registration_list = 1;
+  optional domain.common.v1.PaginationResponse pagination = 2;
+  repeated domain.common.v1.SearchResult search_results = 3;
+  bool success = 4;
+  optional domain.common.v1.Error error = 5;
+}
+
+message GetTaxRegistrationItemPageDataRequest {
+  string tax_registration_id = 1;
+}
+
+message GetTaxRegistrationItemPageDataResponse {
+  optional TaxRegistration tax_registration = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}

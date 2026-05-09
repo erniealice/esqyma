@@ -69,8 +69,11 @@ type Client struct {
 	RegistrationNumber *string `protobuf:"bytes,32,opt,name=registration_number,json=registrationNumber,proto3,oneof" json:"registration_number,omitempty"` // Business registration number
 	CreditLimit        *int64  `protobuf:"varint,33,opt,name=credit_limit,json=creditLimit,proto3,oneof" json:"credit_limit,omitempty"`                     // centavos — maximum outstanding receivable
 	LeadTimeDays       *int32  `protobuf:"varint,34,opt,name=lead_time_days,json=leadTimeDays,proto3,oneof" json:"lead_time_days,omitempty"`                // Default delivery promise to this client
-	unknownFields      protoimpl.UnknownFields
-	sizeCache          protoimpl.SizeCache
+	// Tax identity fields — Phase 1 tax integration
+	Tin           *string `protobuf:"bytes,35,opt,name=tin,proto3,oneof" json:"tin,omitempty"`                                    // Taxpayer Identification Number (TIN / VAT / EIN)
+	CountryCode   *string `protobuf:"bytes,36,opt,name=country_code,json=countryCode,proto3,oneof" json:"country_code,omitempty"` // ISO 3166-1 alpha-2 (e.g. "PH"). NULL = same as workspace home jurisdiction. Used in v2 customer-jurisdiction lookup.
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
 }
 
 func (x *Client) Reset() {
@@ -325,6 +328,20 @@ func (x *Client) GetLeadTimeDays() int32 {
 		return *x.LeadTimeDays
 	}
 	return 0
+}
+
+func (x *Client) GetTin() string {
+	if x != nil && x.Tin != nil {
+		return *x.Tin
+	}
+	return ""
+}
+
+func (x *Client) GetCountryCode() string {
+	if x != nil && x.CountryCode != nil {
+		return *x.CountryCode
+	}
+	return ""
 }
 
 type CreateClientRequest struct {
@@ -1279,7 +1296,7 @@ var File_domain_entity_client_client_proto protoreflect.FileDescriptor
 
 const file_domain_entity_client_client_proto_rawDesc = "" +
 	"\n" +
-	"!domain/entity/client/client.proto\x12\x10domain.entity.v1\x1a\x19domain/common/error.proto\x1a\x1adomain/common/search.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1edomain/common/pagination.proto\x1a\x10options/db.proto\x1a\x1ddomain/entity/user/user.proto\x1a3domain/entity/client_category/client_category.proto\x1a-domain/entity/payment_term/payment_term.proto\"\xe7\r\n" +
+	"!domain/entity/client/client.proto\x12\x10domain.entity.v1\x1a\x19domain/common/error.proto\x1a\x1adomain/common/search.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1edomain/common/pagination.proto\x1a\x10options/db.proto\x1a\x1ddomain/entity/user/user.proto\x1a3domain/entity/client_category/client_category.proto\x1a-domain/entity/payment_term/payment_term.proto\"\xbf\x0e\n" +
 	"\x06Client\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12/\n" +
 	"\x04user\x18\x02 \x01(\v2\x16.domain.entity.v1.UserH\x00R\x04user\x88\x01\x01\x12%\n" +
@@ -1324,7 +1341,9 @@ const file_domain_entity_client_client_proto_rawDesc = "" +
 	"\x06tax_id\x18\x1f \x01(\tH\x17R\x05taxId\x88\x01\x01\x124\n" +
 	"\x13registration_number\x18  \x01(\tH\x18R\x12registrationNumber\x88\x01\x01\x12&\n" +
 	"\fcredit_limit\x18! \x01(\x03H\x19R\vcreditLimit\x88\x01\x01\x12)\n" +
-	"\x0elead_time_days\x18\" \x01(\x05H\x1aR\fleadTimeDays\x88\x01\x01:\x06\x8a\xb5\x18\x02\b\x01B\a\n" +
+	"\x0elead_time_days\x18\" \x01(\x05H\x1aR\fleadTimeDays\x88\x01\x01\x12\x15\n" +
+	"\x03tin\x18# \x01(\tH\x1bR\x03tin\x88\x01\x01\x12&\n" +
+	"\fcountry_code\x18$ \x01(\tH\x1cR\vcountryCode\x88\x01\x01:\x06\x8a\xb5\x18\x02\b\x01B\a\n" +
 	"\x05_userB\x0f\n" +
 	"\r_date_createdB\x16\n" +
 	"\x14_date_created_stringB\x10\n" +
@@ -1354,7 +1373,9 @@ const file_domain_entity_client_client_proto_rawDesc = "" +
 	"\a_tax_idB\x16\n" +
 	"\x14_registration_numberB\x0f\n" +
 	"\r_credit_limitB\x11\n" +
-	"\x0f_lead_time_days\"C\n" +
+	"\x0f_lead_time_daysB\x06\n" +
+	"\x04_tinB\x0f\n" +
+	"\r_country_code\"C\n" +
 	"\x13CreateClientRequest\x12,\n" +
 	"\x04data\x18\x01 \x01(\v2\x18.domain.entity.v1.ClientR\x04data\"\x9c\x01\n" +
 	"\x14CreateClientResponse\x12,\n" +

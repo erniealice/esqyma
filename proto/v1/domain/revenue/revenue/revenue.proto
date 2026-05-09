@@ -59,6 +59,35 @@ message Revenue {
   optional string job_phase_id     = 33 [(options.v1.db).references = "job_phase",     (options.v1.db).index = true];
   optional string billing_event_id = 34 [(options.v1.db).references = "billing_event", (options.v1.db).index = true];
   optional string run_id           = 35 [(options.v1.db).references = "revenue_run",   (options.v1.db).index = true];
+
+  // Tax denorm fields — Phase 1 tax integration
+  // Populated by ComputeTaxesForRevenue; snapshotted at recognition time.
+  optional int64 cash_amount_expected = 36;          // centavos: total_amount + SUM(SURCHARGE) - SUM(WITHHOLDING)
+  optional int64 wht_amount_expected = 37;           // centavos: SUM(WITHHOLDING) — expected from buyer
+  optional int64 wht_amount_certified = 38;          // centavos: SUM(actual_amount) across non-void WithholdingCertificate rows
+  optional int64 wht_amount_variance = 39;           // centavos: wht_amount_expected - wht_amount_certified
+  optional string settlement_status = 40;            // OPEN, CASH_RECEIVED_WHT_PENDING, FULLY_SETTLED, VARIANCE_OPEN
+  optional bool tax_inclusive_pricing_snapshot = 41; // Snapshotted from workspace.tax_inclusive_pricing at recognition
+  optional string tax_computation_enabled_snapshot = 42; // Snapshotted from workspace.tax_computation_enabled
+
+  // Multi-currency / FX fields — Phase 1 tax integration
+  optional string billing_currency = 43;             // ISO 4217 billing currency when different from functional_currency
+  optional int64 billing_amount = 44;                // Original amount in billing_currency centavos (before FX conversion)
+  optional int64 forex_rate_micro_units = 45;        // Snapshotted FX rate at recognition (functional per 1 billing unit * 1_000_000)
+  optional string forex_rate_source = 46;            // "operator", "bsp_ref:<date>" — source of the FX rate used
+}
+
+// PreviewTaxLine — ephemeral, dry-run only. Not persisted.
+// Populated in CreateRevenueWithLineItemsResponse when dry_run=true.
+message PreviewTaxLine {
+  string direction = 1;          // "SURCHARGE" or "WITHHOLDING"
+  string tax_kind_snapshot = 2;
+  optional string regulator_code_snapshot = 3;
+  string authority_code_snapshot = 4;
+  int64 taxable_base = 5;        // centavos
+  int64 tax_amount = 6;          // centavos
+  int32 rate_basis_points = 7;
+  repeated string applied_to_line_item_ids = 8;
 }
 
 service RevenueDomainService {
@@ -230,6 +259,10 @@ message CreateRevenueWithLineItemsResponse {
   // Set when (subscription_id, period_start, period_end) collides with a
   // non-cancelled Revenue. Drawer surfaces a blocking banner with a link.
   optional string conflicting_revenue_id = 6;
+
+  // Tax preview lines — populated when dry_run=true and tax_computation_enabled.
+  // Shows the computed RevenueTaxLine rows without persisting them.
+  repeated PreviewTaxLine preview_tax_lines = 7;
 }
 
 message PreviewLineItem {

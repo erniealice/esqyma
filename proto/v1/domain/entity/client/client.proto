@@ -61,6 +61,10 @@ message Client {
   optional string registration_number = 32;     // Business registration number
   optional int64 credit_limit = 33;             // centavos — maximum outstanding receivable
   optional int32 lead_time_days = 34;           // Default delivery promise to this client
+
+  // Tax identity fields — Phase 1 tax integration
+  optional string tin = 35;                    // Taxpayer Identification Number (TIN / VAT / EIN)
+  optional string country_code = 36;           // ISO 3166-1 alpha-2 (e.g. "PH"). NULL = same as workspace home jurisdiction. Used in v2 customer-jurisdiction lookup.
 }
 
 service ClientDomainService {

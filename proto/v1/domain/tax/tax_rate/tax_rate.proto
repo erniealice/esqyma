@@ -1,0 +1,147 @@
+syntax = "proto3";
+
+package domain.tax.v1;
+
+option go_package = "github.com/erniealice/esqyma/golang/v1/domain/tax/tax_rate";
+
+import "domain/common/error.proto";
+import "domain/common/pagination.proto";
+import "domain/common/filter.proto";
+import "domain/common/sort.proto";
+import "domain/common/search.proto";
+import "options/db.proto";
+
+// TaxRateDirection — which compute pass uses this rate.
+// SURCHARGE: adds to cash_amount_expected (VAT, GST, sales tax)
+// WITHHOLDING: deducts from cash_amount_expected (WHT)
+enum TaxRateDirection {
+  TAX_RATE_DIRECTION_UNSPECIFIED = 0;
+  TAX_RATE_DIRECTION_SURCHARGE   = 1;
+  TAX_RATE_DIRECTION_WITHHOLDING = 2;
+}
+
+// TaxRateStatus — lifecycle of a single immutable rate row.
+// New versions SUPERSEDE old via self-FK (supersedes_id + effective_to).
+enum TaxRateStatus {
+  TAX_RATE_STATUS_UNSPECIFIED = 0;
+  TAX_RATE_STATUS_DRAFT       = 1;
+  TAX_RATE_STATUS_ACTIVE      = 2;
+  TAX_RATE_STATUS_SUPERSEDED  = 3;
+  TAX_RATE_STATUS_VOIDED      = 4;
+}
+
+// TaxRate — immutable-per-row rate table. Edits create new rows via
+// supersession; old rows are stamped SUPERSEDED with an effective_to.
+// Lookup: WHERE status IN ('ACTIVE','SUPERSEDED') AND effective_from <= $asOf
+//           AND (effective_to IS NULL OR effective_to > $asOf)
+//         ORDER BY effective_from DESC
+message TaxRate {
+  option (options.v1.table).table = true;
+
+  string id = 1;
+  optional int64 date_created = 2;
+  optional string date_created_string = 3;
+  optional int64 date_modified = 4;
+  optional string date_modified_string = 5;
+  bool active = 6 [(options.v1.db).default = "true"];
+
+  // Optional: scoped rate overrides a global rate when workspace_id matches.
+  // NULL = global fallback rate (applies to all workspaces in this jurisdiction).
+  optional string workspace_id = 7 [(options.v1.db).references = "workspace", (options.v1.db).index = true];
+
+  // Jurisdiction this rate applies to (e.g. "PH-NATIONAL", "UK", "US-CA")
+  string jurisdiction = 8;
+
+  // Short code of the issuing authority (e.g. "BIR", "HMRC") — denorm for lookup
+  string authority_code = 9;
+
+  // Regulator filing code (e.g. BIR ATC "VT010", "WC011") — audit / reporting
+  optional string regulator_code = 10;
+
+  // BIR form code (e.g. "2550M") — reserved for future filing automation
+  optional string filing_form_code = 11;
+
+  // Rate kind used to join registration kind → rate.
+  // e.g. "VAT_STANDARD", "WHT_PROFESSIONAL_CORPORATE"
+  string kind = 12;
+
+  // Treatment this rate applies to. NULL = any treatment of the given kind.
+  // Use STANDARD / REDUCED / ZERO_RATED to differentiate rates within a kind.
+  optional string treatment_code = 13;
+
+  // SURCHARGE adds to invoice; WITHHOLDING deducts from cash expected
+  TaxRateDirection direction = 14;
+
+  // Rate in basis points (100 bp = 1%). e.g. 1200 = 12.00%, 0 = 0% (ZERO_RATED)
+  // Stored as int32 — max 10000 bp (100%). No floats.
+  int32 rate_basis_points = 15;
+
+  // asOf window — effective_from <= asOf AND (effective_to IS NULL OR effective_to > asOf)
+  string effective_from = 16;  // ISO 8601 date
+  optional string effective_to = 17;  // ISO 8601 date — NULL for open-ended ACTIVE rows
+
+  // Lifecycle status
+  TaxRateStatus status = 18;
+
+  // Self-FK for supersession chain. NULL on the first version of a rate.
+  optional string supersedes_id = 19 [(options.v1.db).references = "tax_rate", (options.v1.db).index = true];
+
+  // Audit fields
+  optional string source_citation = 20;  // e.g. "TRAIN Law RA 10963"
+  optional string version_label = 21;    // e.g. "TRAIN Act 2018 rate"
+}
+
+service TaxRateDomainService {
+  rpc ReadTaxRate(ReadTaxRateRequest) returns (ReadTaxRateResponse);
+  rpc ListTaxRates(ListTaxRatesRequest) returns (ListTaxRatesResponse);
+  rpc GetTaxRateListPageData(GetTaxRateListPageDataRequest) returns (GetTaxRateListPageDataResponse);
+  rpc GetTaxRateItemPageData(GetTaxRateItemPageDataRequest) returns (GetTaxRateItemPageDataResponse);
+}
+
+message ReadTaxRateRequest {
+  TaxRate data = 1;
+}
+
+message ReadTaxRateResponse {
+  repeated TaxRate data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message ListTaxRatesRequest {
+  optional domain.common.v1.SearchRequest search = 1;
+  optional domain.common.v1.FilterRequest filters = 2;
+  optional domain.common.v1.SortRequest sort = 3;
+  optional domain.common.v1.PaginationRequest pagination = 4;
+}
+
+message ListTaxRatesResponse {
+  repeated TaxRate data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message GetTaxRateListPageDataRequest {
+  optional domain.common.v1.PaginationRequest pagination = 1;
+  optional domain.common.v1.FilterRequest filters = 2;
+  optional domain.common.v1.SortRequest sort = 3;
+  optional domain.common.v1.SearchRequest search = 4;
+}
+
+message GetTaxRateListPageDataResponse {
+  repeated TaxRate tax_rate_list = 1;
+  optional domain.common.v1.PaginationResponse pagination = 2;
+  repeated domain.common.v1.SearchResult search_results = 3;
+  bool success = 4;
+  optional domain.common.v1.Error error = 5;
+}
+
+message GetTaxRateItemPageDataRequest {
+  string tax_rate_id = 1;
+}
+
+message GetTaxRateItemPageDataResponse {
+  optional TaxRate tax_rate = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}

@@ -67,8 +67,22 @@ type Revenue struct {
 	JobPhaseId     *string `protobuf:"bytes,33,opt,name=job_phase_id,json=jobPhaseId,proto3,oneof" json:"job_phase_id,omitempty"`
 	BillingEventId *string `protobuf:"bytes,34,opt,name=billing_event_id,json=billingEventId,proto3,oneof" json:"billing_event_id,omitempty"`
 	RunId          *string `protobuf:"bytes,35,opt,name=run_id,json=runId,proto3,oneof" json:"run_id,omitempty"`
-	unknownFields  protoimpl.UnknownFields
-	sizeCache      protoimpl.SizeCache
+	// Tax denorm fields — Phase 1 tax integration
+	// Populated by ComputeTaxesForRevenue; snapshotted at recognition time.
+	CashAmountExpected            *int64  `protobuf:"varint,36,opt,name=cash_amount_expected,json=cashAmountExpected,proto3,oneof" json:"cash_amount_expected,omitempty"`                                   // centavos: total_amount + SUM(SURCHARGE) - SUM(WITHHOLDING)
+	WhtAmountExpected             *int64  `protobuf:"varint,37,opt,name=wht_amount_expected,json=whtAmountExpected,proto3,oneof" json:"wht_amount_expected,omitempty"`                                      // centavos: SUM(WITHHOLDING) — expected from buyer
+	WhtAmountCertified            *int64  `protobuf:"varint,38,opt,name=wht_amount_certified,json=whtAmountCertified,proto3,oneof" json:"wht_amount_certified,omitempty"`                                   // centavos: SUM(actual_amount) across non-void WithholdingCertificate rows
+	WhtAmountVariance             *int64  `protobuf:"varint,39,opt,name=wht_amount_variance,json=whtAmountVariance,proto3,oneof" json:"wht_amount_variance,omitempty"`                                      // centavos: wht_amount_expected - wht_amount_certified
+	SettlementStatus              *string `protobuf:"bytes,40,opt,name=settlement_status,json=settlementStatus,proto3,oneof" json:"settlement_status,omitempty"`                                            // OPEN, CASH_RECEIVED_WHT_PENDING, FULLY_SETTLED, VARIANCE_OPEN
+	TaxInclusivePricingSnapshot   *bool   `protobuf:"varint,41,opt,name=tax_inclusive_pricing_snapshot,json=taxInclusivePricingSnapshot,proto3,oneof" json:"tax_inclusive_pricing_snapshot,omitempty"`      // Snapshotted from workspace.tax_inclusive_pricing at recognition
+	TaxComputationEnabledSnapshot *string `protobuf:"bytes,42,opt,name=tax_computation_enabled_snapshot,json=taxComputationEnabledSnapshot,proto3,oneof" json:"tax_computation_enabled_snapshot,omitempty"` // Snapshotted from workspace.tax_computation_enabled
+	// Multi-currency / FX fields — Phase 1 tax integration
+	BillingCurrency     *string `protobuf:"bytes,43,opt,name=billing_currency,json=billingCurrency,proto3,oneof" json:"billing_currency,omitempty"`                  // ISO 4217 billing currency when different from functional_currency
+	BillingAmount       *int64  `protobuf:"varint,44,opt,name=billing_amount,json=billingAmount,proto3,oneof" json:"billing_amount,omitempty"`                       // Original amount in billing_currency centavos (before FX conversion)
+	ForexRateMicroUnits *int64  `protobuf:"varint,45,opt,name=forex_rate_micro_units,json=forexRateMicroUnits,proto3,oneof" json:"forex_rate_micro_units,omitempty"` // Snapshotted FX rate at recognition (functional per 1 billing unit * 1_000_000)
+	ForexRateSource     *string `protobuf:"bytes,46,opt,name=forex_rate_source,json=forexRateSource,proto3,oneof" json:"forex_rate_source,omitempty"`                // "operator", "bsp_ref:<date>" — source of the FX rate used
+	unknownFields       protoimpl.UnknownFields
+	sizeCache           protoimpl.SizeCache
 }
 
 func (x *Revenue) Reset() {
@@ -325,6 +339,185 @@ func (x *Revenue) GetRunId() string {
 	return ""
 }
 
+func (x *Revenue) GetCashAmountExpected() int64 {
+	if x != nil && x.CashAmountExpected != nil {
+		return *x.CashAmountExpected
+	}
+	return 0
+}
+
+func (x *Revenue) GetWhtAmountExpected() int64 {
+	if x != nil && x.WhtAmountExpected != nil {
+		return *x.WhtAmountExpected
+	}
+	return 0
+}
+
+func (x *Revenue) GetWhtAmountCertified() int64 {
+	if x != nil && x.WhtAmountCertified != nil {
+		return *x.WhtAmountCertified
+	}
+	return 0
+}
+
+func (x *Revenue) GetWhtAmountVariance() int64 {
+	if x != nil && x.WhtAmountVariance != nil {
+		return *x.WhtAmountVariance
+	}
+	return 0
+}
+
+func (x *Revenue) GetSettlementStatus() string {
+	if x != nil && x.SettlementStatus != nil {
+		return *x.SettlementStatus
+	}
+	return ""
+}
+
+func (x *Revenue) GetTaxInclusivePricingSnapshot() bool {
+	if x != nil && x.TaxInclusivePricingSnapshot != nil {
+		return *x.TaxInclusivePricingSnapshot
+	}
+	return false
+}
+
+func (x *Revenue) GetTaxComputationEnabledSnapshot() string {
+	if x != nil && x.TaxComputationEnabledSnapshot != nil {
+		return *x.TaxComputationEnabledSnapshot
+	}
+	return ""
+}
+
+func (x *Revenue) GetBillingCurrency() string {
+	if x != nil && x.BillingCurrency != nil {
+		return *x.BillingCurrency
+	}
+	return ""
+}
+
+func (x *Revenue) GetBillingAmount() int64 {
+	if x != nil && x.BillingAmount != nil {
+		return *x.BillingAmount
+	}
+	return 0
+}
+
+func (x *Revenue) GetForexRateMicroUnits() int64 {
+	if x != nil && x.ForexRateMicroUnits != nil {
+		return *x.ForexRateMicroUnits
+	}
+	return 0
+}
+
+func (x *Revenue) GetForexRateSource() string {
+	if x != nil && x.ForexRateSource != nil {
+		return *x.ForexRateSource
+	}
+	return ""
+}
+
+// PreviewTaxLine — ephemeral, dry-run only. Not persisted.
+// Populated in CreateRevenueWithLineItemsResponse when dry_run=true.
+type PreviewTaxLine struct {
+	state                 protoimpl.MessageState `protogen:"open.v1"`
+	Direction             string                 `protobuf:"bytes,1,opt,name=direction,proto3" json:"direction,omitempty"` // "SURCHARGE" or "WITHHOLDING"
+	TaxKindSnapshot       string                 `protobuf:"bytes,2,opt,name=tax_kind_snapshot,json=taxKindSnapshot,proto3" json:"tax_kind_snapshot,omitempty"`
+	RegulatorCodeSnapshot *string                `protobuf:"bytes,3,opt,name=regulator_code_snapshot,json=regulatorCodeSnapshot,proto3,oneof" json:"regulator_code_snapshot,omitempty"`
+	AuthorityCodeSnapshot string                 `protobuf:"bytes,4,opt,name=authority_code_snapshot,json=authorityCodeSnapshot,proto3" json:"authority_code_snapshot,omitempty"`
+	TaxableBase           int64                  `protobuf:"varint,5,opt,name=taxable_base,json=taxableBase,proto3" json:"taxable_base,omitempty"` // centavos
+	TaxAmount             int64                  `protobuf:"varint,6,opt,name=tax_amount,json=taxAmount,proto3" json:"tax_amount,omitempty"`       // centavos
+	RateBasisPoints       int32                  `protobuf:"varint,7,opt,name=rate_basis_points,json=rateBasisPoints,proto3" json:"rate_basis_points,omitempty"`
+	AppliedToLineItemIds  []string               `protobuf:"bytes,8,rep,name=applied_to_line_item_ids,json=appliedToLineItemIds,proto3" json:"applied_to_line_item_ids,omitempty"`
+	unknownFields         protoimpl.UnknownFields
+	sizeCache             protoimpl.SizeCache
+}
+
+func (x *PreviewTaxLine) Reset() {
+	*x = PreviewTaxLine{}
+	mi := &file_domain_revenue_revenue_revenue_proto_msgTypes[1]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *PreviewTaxLine) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*PreviewTaxLine) ProtoMessage() {}
+
+func (x *PreviewTaxLine) ProtoReflect() protoreflect.Message {
+	mi := &file_domain_revenue_revenue_revenue_proto_msgTypes[1]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use PreviewTaxLine.ProtoReflect.Descriptor instead.
+func (*PreviewTaxLine) Descriptor() ([]byte, []int) {
+	return file_domain_revenue_revenue_revenue_proto_rawDescGZIP(), []int{1}
+}
+
+func (x *PreviewTaxLine) GetDirection() string {
+	if x != nil {
+		return x.Direction
+	}
+	return ""
+}
+
+func (x *PreviewTaxLine) GetTaxKindSnapshot() string {
+	if x != nil {
+		return x.TaxKindSnapshot
+	}
+	return ""
+}
+
+func (x *PreviewTaxLine) GetRegulatorCodeSnapshot() string {
+	if x != nil && x.RegulatorCodeSnapshot != nil {
+		return *x.RegulatorCodeSnapshot
+	}
+	return ""
+}
+
+func (x *PreviewTaxLine) GetAuthorityCodeSnapshot() string {
+	if x != nil {
+		return x.AuthorityCodeSnapshot
+	}
+	return ""
+}
+
+func (x *PreviewTaxLine) GetTaxableBase() int64 {
+	if x != nil {
+		return x.TaxableBase
+	}
+	return 0
+}
+
+func (x *PreviewTaxLine) GetTaxAmount() int64 {
+	if x != nil {
+		return x.TaxAmount
+	}
+	return 0
+}
+
+func (x *PreviewTaxLine) GetRateBasisPoints() int32 {
+	if x != nil {
+		return x.RateBasisPoints
+	}
+	return 0
+}
+
+func (x *PreviewTaxLine) GetAppliedToLineItemIds() []string {
+	if x != nil {
+		return x.AppliedToLineItemIds
+	}
+	return nil
+}
+
 type CreateRevenueRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Data          *Revenue               `protobuf:"bytes,1,opt,name=data,proto3" json:"data,omitempty"`
@@ -334,7 +527,7 @@ type CreateRevenueRequest struct {
 
 func (x *CreateRevenueRequest) Reset() {
 	*x = CreateRevenueRequest{}
-	mi := &file_domain_revenue_revenue_revenue_proto_msgTypes[1]
+	mi := &file_domain_revenue_revenue_revenue_proto_msgTypes[2]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -346,7 +539,7 @@ func (x *CreateRevenueRequest) String() string {
 func (*CreateRevenueRequest) ProtoMessage() {}
 
 func (x *CreateRevenueRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_domain_revenue_revenue_revenue_proto_msgTypes[1]
+	mi := &file_domain_revenue_revenue_revenue_proto_msgTypes[2]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -359,7 +552,7 @@ func (x *CreateRevenueRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use CreateRevenueRequest.ProtoReflect.Descriptor instead.
 func (*CreateRevenueRequest) Descriptor() ([]byte, []int) {
-	return file_domain_revenue_revenue_revenue_proto_rawDescGZIP(), []int{1}
+	return file_domain_revenue_revenue_revenue_proto_rawDescGZIP(), []int{2}
 }
 
 func (x *CreateRevenueRequest) GetData() *Revenue {
@@ -380,7 +573,7 @@ type CreateRevenueResponse struct {
 
 func (x *CreateRevenueResponse) Reset() {
 	*x = CreateRevenueResponse{}
-	mi := &file_domain_revenue_revenue_revenue_proto_msgTypes[2]
+	mi := &file_domain_revenue_revenue_revenue_proto_msgTypes[3]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -392,7 +585,7 @@ func (x *CreateRevenueResponse) String() string {
 func (*CreateRevenueResponse) ProtoMessage() {}
 
 func (x *CreateRevenueResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_domain_revenue_revenue_revenue_proto_msgTypes[2]
+	mi := &file_domain_revenue_revenue_revenue_proto_msgTypes[3]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -405,7 +598,7 @@ func (x *CreateRevenueResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use CreateRevenueResponse.ProtoReflect.Descriptor instead.
 func (*CreateRevenueResponse) Descriptor() ([]byte, []int) {
-	return file_domain_revenue_revenue_revenue_proto_rawDescGZIP(), []int{2}
+	return file_domain_revenue_revenue_revenue_proto_rawDescGZIP(), []int{3}
 }
 
 func (x *CreateRevenueResponse) GetData() []*Revenue {
@@ -438,7 +631,7 @@ type ReadRevenueRequest struct {
 
 func (x *ReadRevenueRequest) Reset() {
 	*x = ReadRevenueRequest{}
-	mi := &file_domain_revenue_revenue_revenue_proto_msgTypes[3]
+	mi := &file_domain_revenue_revenue_revenue_proto_msgTypes[4]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -450,7 +643,7 @@ func (x *ReadRevenueRequest) String() string {
 func (*ReadRevenueRequest) ProtoMessage() {}
 
 func (x *ReadRevenueRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_domain_revenue_revenue_revenue_proto_msgTypes[3]
+	mi := &file_domain_revenue_revenue_revenue_proto_msgTypes[4]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -463,7 +656,7 @@ func (x *ReadRevenueRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ReadRevenueRequest.ProtoReflect.Descriptor instead.
 func (*ReadRevenueRequest) Descriptor() ([]byte, []int) {
-	return file_domain_revenue_revenue_revenue_proto_rawDescGZIP(), []int{3}
+	return file_domain_revenue_revenue_revenue_proto_rawDescGZIP(), []int{4}
 }
 
 func (x *ReadRevenueRequest) GetData() *Revenue {
@@ -484,7 +677,7 @@ type ReadRevenueResponse struct {
 
 func (x *ReadRevenueResponse) Reset() {
 	*x = ReadRevenueResponse{}
-	mi := &file_domain_revenue_revenue_revenue_proto_msgTypes[4]
+	mi := &file_domain_revenue_revenue_revenue_proto_msgTypes[5]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -496,7 +689,7 @@ func (x *ReadRevenueResponse) String() string {
 func (*ReadRevenueResponse) ProtoMessage() {}
 
 func (x *ReadRevenueResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_domain_revenue_revenue_revenue_proto_msgTypes[4]
+	mi := &file_domain_revenue_revenue_revenue_proto_msgTypes[5]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -509,7 +702,7 @@ func (x *ReadRevenueResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ReadRevenueResponse.ProtoReflect.Descriptor instead.
 func (*ReadRevenueResponse) Descriptor() ([]byte, []int) {
-	return file_domain_revenue_revenue_revenue_proto_rawDescGZIP(), []int{4}
+	return file_domain_revenue_revenue_revenue_proto_rawDescGZIP(), []int{5}
 }
 
 func (x *ReadRevenueResponse) GetData() []*Revenue {
@@ -542,7 +735,7 @@ type UpdateRevenueRequest struct {
 
 func (x *UpdateRevenueRequest) Reset() {
 	*x = UpdateRevenueRequest{}
-	mi := &file_domain_revenue_revenue_revenue_proto_msgTypes[5]
+	mi := &file_domain_revenue_revenue_revenue_proto_msgTypes[6]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -554,7 +747,7 @@ func (x *UpdateRevenueRequest) String() string {
 func (*UpdateRevenueRequest) ProtoMessage() {}
 
 func (x *UpdateRevenueRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_domain_revenue_revenue_revenue_proto_msgTypes[5]
+	mi := &file_domain_revenue_revenue_revenue_proto_msgTypes[6]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -567,7 +760,7 @@ func (x *UpdateRevenueRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use UpdateRevenueRequest.ProtoReflect.Descriptor instead.
 func (*UpdateRevenueRequest) Descriptor() ([]byte, []int) {
-	return file_domain_revenue_revenue_revenue_proto_rawDescGZIP(), []int{5}
+	return file_domain_revenue_revenue_revenue_proto_rawDescGZIP(), []int{6}
 }
 
 func (x *UpdateRevenueRequest) GetData() *Revenue {
@@ -588,7 +781,7 @@ type UpdateRevenueResponse struct {
 
 func (x *UpdateRevenueResponse) Reset() {
 	*x = UpdateRevenueResponse{}
-	mi := &file_domain_revenue_revenue_revenue_proto_msgTypes[6]
+	mi := &file_domain_revenue_revenue_revenue_proto_msgTypes[7]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -600,7 +793,7 @@ func (x *UpdateRevenueResponse) String() string {
 func (*UpdateRevenueResponse) ProtoMessage() {}
 
 func (x *UpdateRevenueResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_domain_revenue_revenue_revenue_proto_msgTypes[6]
+	mi := &file_domain_revenue_revenue_revenue_proto_msgTypes[7]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -613,7 +806,7 @@ func (x *UpdateRevenueResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use UpdateRevenueResponse.ProtoReflect.Descriptor instead.
 func (*UpdateRevenueResponse) Descriptor() ([]byte, []int) {
-	return file_domain_revenue_revenue_revenue_proto_rawDescGZIP(), []int{6}
+	return file_domain_revenue_revenue_revenue_proto_rawDescGZIP(), []int{7}
 }
 
 func (x *UpdateRevenueResponse) GetData() []*Revenue {
@@ -646,7 +839,7 @@ type DeleteRevenueRequest struct {
 
 func (x *DeleteRevenueRequest) Reset() {
 	*x = DeleteRevenueRequest{}
-	mi := &file_domain_revenue_revenue_revenue_proto_msgTypes[7]
+	mi := &file_domain_revenue_revenue_revenue_proto_msgTypes[8]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -658,7 +851,7 @@ func (x *DeleteRevenueRequest) String() string {
 func (*DeleteRevenueRequest) ProtoMessage() {}
 
 func (x *DeleteRevenueRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_domain_revenue_revenue_revenue_proto_msgTypes[7]
+	mi := &file_domain_revenue_revenue_revenue_proto_msgTypes[8]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -671,7 +864,7 @@ func (x *DeleteRevenueRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use DeleteRevenueRequest.ProtoReflect.Descriptor instead.
 func (*DeleteRevenueRequest) Descriptor() ([]byte, []int) {
-	return file_domain_revenue_revenue_revenue_proto_rawDescGZIP(), []int{7}
+	return file_domain_revenue_revenue_revenue_proto_rawDescGZIP(), []int{8}
 }
 
 func (x *DeleteRevenueRequest) GetData() *Revenue {
@@ -691,7 +884,7 @@ type DeleteRevenueResponse struct {
 
 func (x *DeleteRevenueResponse) Reset() {
 	*x = DeleteRevenueResponse{}
-	mi := &file_domain_revenue_revenue_revenue_proto_msgTypes[8]
+	mi := &file_domain_revenue_revenue_revenue_proto_msgTypes[9]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -703,7 +896,7 @@ func (x *DeleteRevenueResponse) String() string {
 func (*DeleteRevenueResponse) ProtoMessage() {}
 
 func (x *DeleteRevenueResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_domain_revenue_revenue_revenue_proto_msgTypes[8]
+	mi := &file_domain_revenue_revenue_revenue_proto_msgTypes[9]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -716,7 +909,7 @@ func (x *DeleteRevenueResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use DeleteRevenueResponse.ProtoReflect.Descriptor instead.
 func (*DeleteRevenueResponse) Descriptor() ([]byte, []int) {
-	return file_domain_revenue_revenue_revenue_proto_rawDescGZIP(), []int{8}
+	return file_domain_revenue_revenue_revenue_proto_rawDescGZIP(), []int{9}
 }
 
 func (x *DeleteRevenueResponse) GetSuccess() bool {
@@ -745,7 +938,7 @@ type ListRevenuesRequest struct {
 
 func (x *ListRevenuesRequest) Reset() {
 	*x = ListRevenuesRequest{}
-	mi := &file_domain_revenue_revenue_revenue_proto_msgTypes[9]
+	mi := &file_domain_revenue_revenue_revenue_proto_msgTypes[10]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -757,7 +950,7 @@ func (x *ListRevenuesRequest) String() string {
 func (*ListRevenuesRequest) ProtoMessage() {}
 
 func (x *ListRevenuesRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_domain_revenue_revenue_revenue_proto_msgTypes[9]
+	mi := &file_domain_revenue_revenue_revenue_proto_msgTypes[10]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -770,7 +963,7 @@ func (x *ListRevenuesRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ListRevenuesRequest.ProtoReflect.Descriptor instead.
 func (*ListRevenuesRequest) Descriptor() ([]byte, []int) {
-	return file_domain_revenue_revenue_revenue_proto_rawDescGZIP(), []int{9}
+	return file_domain_revenue_revenue_revenue_proto_rawDescGZIP(), []int{10}
 }
 
 func (x *ListRevenuesRequest) GetSearch() *common.SearchRequest {
@@ -812,7 +1005,7 @@ type ListRevenuesResponse struct {
 
 func (x *ListRevenuesResponse) Reset() {
 	*x = ListRevenuesResponse{}
-	mi := &file_domain_revenue_revenue_revenue_proto_msgTypes[10]
+	mi := &file_domain_revenue_revenue_revenue_proto_msgTypes[11]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -824,7 +1017,7 @@ func (x *ListRevenuesResponse) String() string {
 func (*ListRevenuesResponse) ProtoMessage() {}
 
 func (x *ListRevenuesResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_domain_revenue_revenue_revenue_proto_msgTypes[10]
+	mi := &file_domain_revenue_revenue_revenue_proto_msgTypes[11]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -837,7 +1030,7 @@ func (x *ListRevenuesResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ListRevenuesResponse.ProtoReflect.Descriptor instead.
 func (*ListRevenuesResponse) Descriptor() ([]byte, []int) {
-	return file_domain_revenue_revenue_revenue_proto_rawDescGZIP(), []int{10}
+	return file_domain_revenue_revenue_revenue_proto_rawDescGZIP(), []int{11}
 }
 
 func (x *ListRevenuesResponse) GetData() []*Revenue {
@@ -873,7 +1066,7 @@ type GetRevenueListPageDataRequest struct {
 
 func (x *GetRevenueListPageDataRequest) Reset() {
 	*x = GetRevenueListPageDataRequest{}
-	mi := &file_domain_revenue_revenue_revenue_proto_msgTypes[11]
+	mi := &file_domain_revenue_revenue_revenue_proto_msgTypes[12]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -885,7 +1078,7 @@ func (x *GetRevenueListPageDataRequest) String() string {
 func (*GetRevenueListPageDataRequest) ProtoMessage() {}
 
 func (x *GetRevenueListPageDataRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_domain_revenue_revenue_revenue_proto_msgTypes[11]
+	mi := &file_domain_revenue_revenue_revenue_proto_msgTypes[12]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -898,7 +1091,7 @@ func (x *GetRevenueListPageDataRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetRevenueListPageDataRequest.ProtoReflect.Descriptor instead.
 func (*GetRevenueListPageDataRequest) Descriptor() ([]byte, []int) {
-	return file_domain_revenue_revenue_revenue_proto_rawDescGZIP(), []int{11}
+	return file_domain_revenue_revenue_revenue_proto_rawDescGZIP(), []int{12}
 }
 
 func (x *GetRevenueListPageDataRequest) GetPagination() *common.PaginationRequest {
@@ -942,7 +1135,7 @@ type GetRevenueListPageDataResponse struct {
 
 func (x *GetRevenueListPageDataResponse) Reset() {
 	*x = GetRevenueListPageDataResponse{}
-	mi := &file_domain_revenue_revenue_revenue_proto_msgTypes[12]
+	mi := &file_domain_revenue_revenue_revenue_proto_msgTypes[13]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -954,7 +1147,7 @@ func (x *GetRevenueListPageDataResponse) String() string {
 func (*GetRevenueListPageDataResponse) ProtoMessage() {}
 
 func (x *GetRevenueListPageDataResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_domain_revenue_revenue_revenue_proto_msgTypes[12]
+	mi := &file_domain_revenue_revenue_revenue_proto_msgTypes[13]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -967,7 +1160,7 @@ func (x *GetRevenueListPageDataResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetRevenueListPageDataResponse.ProtoReflect.Descriptor instead.
 func (*GetRevenueListPageDataResponse) Descriptor() ([]byte, []int) {
-	return file_domain_revenue_revenue_revenue_proto_rawDescGZIP(), []int{12}
+	return file_domain_revenue_revenue_revenue_proto_rawDescGZIP(), []int{13}
 }
 
 func (x *GetRevenueListPageDataResponse) GetRevenueList() []*Revenue {
@@ -1014,7 +1207,7 @@ type GetRevenueItemPageDataRequest struct {
 
 func (x *GetRevenueItemPageDataRequest) Reset() {
 	*x = GetRevenueItemPageDataRequest{}
-	mi := &file_domain_revenue_revenue_revenue_proto_msgTypes[13]
+	mi := &file_domain_revenue_revenue_revenue_proto_msgTypes[14]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1026,7 +1219,7 @@ func (x *GetRevenueItemPageDataRequest) String() string {
 func (*GetRevenueItemPageDataRequest) ProtoMessage() {}
 
 func (x *GetRevenueItemPageDataRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_domain_revenue_revenue_revenue_proto_msgTypes[13]
+	mi := &file_domain_revenue_revenue_revenue_proto_msgTypes[14]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1039,7 +1232,7 @@ func (x *GetRevenueItemPageDataRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetRevenueItemPageDataRequest.ProtoReflect.Descriptor instead.
 func (*GetRevenueItemPageDataRequest) Descriptor() ([]byte, []int) {
-	return file_domain_revenue_revenue_revenue_proto_rawDescGZIP(), []int{13}
+	return file_domain_revenue_revenue_revenue_proto_rawDescGZIP(), []int{14}
 }
 
 func (x *GetRevenueItemPageDataRequest) GetRevenueId() string {
@@ -1060,7 +1253,7 @@ type GetRevenueItemPageDataResponse struct {
 
 func (x *GetRevenueItemPageDataResponse) Reset() {
 	*x = GetRevenueItemPageDataResponse{}
-	mi := &file_domain_revenue_revenue_revenue_proto_msgTypes[14]
+	mi := &file_domain_revenue_revenue_revenue_proto_msgTypes[15]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1072,7 +1265,7 @@ func (x *GetRevenueItemPageDataResponse) String() string {
 func (*GetRevenueItemPageDataResponse) ProtoMessage() {}
 
 func (x *GetRevenueItemPageDataResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_domain_revenue_revenue_revenue_proto_msgTypes[14]
+	mi := &file_domain_revenue_revenue_revenue_proto_msgTypes[15]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1085,7 +1278,7 @@ func (x *GetRevenueItemPageDataResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetRevenueItemPageDataResponse.ProtoReflect.Descriptor instead.
 func (*GetRevenueItemPageDataResponse) Descriptor() ([]byte, []int) {
-	return file_domain_revenue_revenue_revenue_proto_rawDescGZIP(), []int{14}
+	return file_domain_revenue_revenue_revenue_proto_rawDescGZIP(), []int{15}
 }
 
 func (x *GetRevenueItemPageDataResponse) GetRevenue() *Revenue {
@@ -1151,7 +1344,7 @@ type CreateRevenueWithLineItemsRequest struct {
 
 func (x *CreateRevenueWithLineItemsRequest) Reset() {
 	*x = CreateRevenueWithLineItemsRequest{}
-	mi := &file_domain_revenue_revenue_revenue_proto_msgTypes[15]
+	mi := &file_domain_revenue_revenue_revenue_proto_msgTypes[16]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1163,7 +1356,7 @@ func (x *CreateRevenueWithLineItemsRequest) String() string {
 func (*CreateRevenueWithLineItemsRequest) ProtoMessage() {}
 
 func (x *CreateRevenueWithLineItemsRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_domain_revenue_revenue_revenue_proto_msgTypes[15]
+	mi := &file_domain_revenue_revenue_revenue_proto_msgTypes[16]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1176,7 +1369,7 @@ func (x *CreateRevenueWithLineItemsRequest) ProtoReflect() protoreflect.Message 
 
 // Deprecated: Use CreateRevenueWithLineItemsRequest.ProtoReflect.Descriptor instead.
 func (*CreateRevenueWithLineItemsRequest) Descriptor() ([]byte, []int) {
-	return file_domain_revenue_revenue_revenue_proto_rawDescGZIP(), []int{15}
+	return file_domain_revenue_revenue_revenue_proto_rawDescGZIP(), []int{16}
 }
 
 func (x *CreateRevenueWithLineItemsRequest) GetData() *Revenue {
@@ -1288,7 +1481,7 @@ type LineItemOverride struct {
 
 func (x *LineItemOverride) Reset() {
 	*x = LineItemOverride{}
-	mi := &file_domain_revenue_revenue_revenue_proto_msgTypes[16]
+	mi := &file_domain_revenue_revenue_revenue_proto_msgTypes[17]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1300,7 +1493,7 @@ func (x *LineItemOverride) String() string {
 func (*LineItemOverride) ProtoMessage() {}
 
 func (x *LineItemOverride) ProtoReflect() protoreflect.Message {
-	mi := &file_domain_revenue_revenue_revenue_proto_msgTypes[16]
+	mi := &file_domain_revenue_revenue_revenue_proto_msgTypes[17]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1313,7 +1506,7 @@ func (x *LineItemOverride) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use LineItemOverride.ProtoReflect.Descriptor instead.
 func (*LineItemOverride) Descriptor() ([]byte, []int) {
-	return file_domain_revenue_revenue_revenue_proto_rawDescGZIP(), []int{16}
+	return file_domain_revenue_revenue_revenue_proto_rawDescGZIP(), []int{17}
 }
 
 func (x *LineItemOverride) GetProductPricePlanId() string {
@@ -1364,13 +1557,16 @@ type CreateRevenueWithLineItemsResponse struct {
 	// Set when (subscription_id, period_start, period_end) collides with a
 	// non-cancelled Revenue. Drawer surfaces a blocking banner with a link.
 	ConflictingRevenueId *string `protobuf:"bytes,6,opt,name=conflicting_revenue_id,json=conflictingRevenueId,proto3,oneof" json:"conflicting_revenue_id,omitempty"`
-	unknownFields        protoimpl.UnknownFields
-	sizeCache            protoimpl.SizeCache
+	// Tax preview lines — populated when dry_run=true and tax_computation_enabled.
+	// Shows the computed RevenueTaxLine rows without persisting them.
+	PreviewTaxLines []*PreviewTaxLine `protobuf:"bytes,7,rep,name=preview_tax_lines,json=previewTaxLines,proto3" json:"preview_tax_lines,omitempty"`
+	unknownFields   protoimpl.UnknownFields
+	sizeCache       protoimpl.SizeCache
 }
 
 func (x *CreateRevenueWithLineItemsResponse) Reset() {
 	*x = CreateRevenueWithLineItemsResponse{}
-	mi := &file_domain_revenue_revenue_revenue_proto_msgTypes[17]
+	mi := &file_domain_revenue_revenue_revenue_proto_msgTypes[18]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1382,7 +1578,7 @@ func (x *CreateRevenueWithLineItemsResponse) String() string {
 func (*CreateRevenueWithLineItemsResponse) ProtoMessage() {}
 
 func (x *CreateRevenueWithLineItemsResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_domain_revenue_revenue_revenue_proto_msgTypes[17]
+	mi := &file_domain_revenue_revenue_revenue_proto_msgTypes[18]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1395,7 +1591,7 @@ func (x *CreateRevenueWithLineItemsResponse) ProtoReflect() protoreflect.Message
 
 // Deprecated: Use CreateRevenueWithLineItemsResponse.ProtoReflect.Descriptor instead.
 func (*CreateRevenueWithLineItemsResponse) Descriptor() ([]byte, []int) {
-	return file_domain_revenue_revenue_revenue_proto_rawDescGZIP(), []int{17}
+	return file_domain_revenue_revenue_revenue_proto_rawDescGZIP(), []int{18}
 }
 
 func (x *CreateRevenueWithLineItemsResponse) GetData() []*Revenue {
@@ -1440,6 +1636,13 @@ func (x *CreateRevenueWithLineItemsResponse) GetConflictingRevenueId() string {
 	return ""
 }
 
+func (x *CreateRevenueWithLineItemsResponse) GetPreviewTaxLines() []*PreviewTaxLine {
+	if x != nil {
+		return x.PreviewTaxLines
+	}
+	return nil
+}
+
 type PreviewLineItem struct {
 	state              protoimpl.MessageState `protogen:"open.v1"`
 	ProductPricePlanId string                 `protobuf:"bytes,1,opt,name=product_price_plan_id,json=productPricePlanId,proto3" json:"product_price_plan_id,omitempty"`
@@ -1457,7 +1660,7 @@ type PreviewLineItem struct {
 
 func (x *PreviewLineItem) Reset() {
 	*x = PreviewLineItem{}
-	mi := &file_domain_revenue_revenue_revenue_proto_msgTypes[18]
+	mi := &file_domain_revenue_revenue_revenue_proto_msgTypes[19]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1469,7 +1672,7 @@ func (x *PreviewLineItem) String() string {
 func (*PreviewLineItem) ProtoMessage() {}
 
 func (x *PreviewLineItem) ProtoReflect() protoreflect.Message {
-	mi := &file_domain_revenue_revenue_revenue_proto_msgTypes[18]
+	mi := &file_domain_revenue_revenue_revenue_proto_msgTypes[19]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1482,7 +1685,7 @@ func (x *PreviewLineItem) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use PreviewLineItem.ProtoReflect.Descriptor instead.
 func (*PreviewLineItem) Descriptor() ([]byte, []int) {
-	return file_domain_revenue_revenue_revenue_proto_rawDescGZIP(), []int{18}
+	return file_domain_revenue_revenue_revenue_proto_rawDescGZIP(), []int{19}
 }
 
 func (x *PreviewLineItem) GetProductPricePlanId() string {
@@ -1538,7 +1741,7 @@ var File_domain_revenue_revenue_revenue_proto protoreflect.FileDescriptor
 
 const file_domain_revenue_revenue_revenue_proto_rawDesc = "" +
 	"\n" +
-	"$domain/revenue/revenue/revenue.proto\x12\x11domain.revenue.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/search.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a!domain/entity/client/client.proto\x1a%domain/entity/location/location.proto\x1a-domain/entity/payment_term/payment_term.proto\x1a\x10options/db.proto\"\xd3\x0e\n" +
+	"$domain/revenue/revenue/revenue.proto\x12\x11domain.revenue.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/search.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a!domain/entity/client/client.proto\x1a%domain/entity/location/location.proto\x1a-domain/entity/payment_term/payment_term.proto\x1a\x10options/db.proto\"\xd5\x15\n" +
 	"\aRevenue\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12&\n" +
 	"\fdate_created\x18\x02 \x01(\x03H\x00R\vdateCreated\x88\x01\x01\x123\n" +
@@ -1578,7 +1781,18 @@ const file_domain_revenue_revenue_revenue_proto_rawDesc = "" +
 	"\x10billing_event_id\x18\" \x01(\tB\x15\x82\xb5\x18\x11\n" +
 	"\rbilling_event\x18\x01H\x16R\x0ebillingEventId\x88\x01\x01\x12/\n" +
 	"\x06run_id\x18# \x01(\tB\x13\x82\xb5\x18\x0f\n" +
-	"\vrevenue_run\x18\x01H\x17R\x05runId\x88\x01\x01B\x0f\n" +
+	"\vrevenue_run\x18\x01H\x17R\x05runId\x88\x01\x01\x125\n" +
+	"\x14cash_amount_expected\x18$ \x01(\x03H\x18R\x12cashAmountExpected\x88\x01\x01\x123\n" +
+	"\x13wht_amount_expected\x18% \x01(\x03H\x19R\x11whtAmountExpected\x88\x01\x01\x125\n" +
+	"\x14wht_amount_certified\x18& \x01(\x03H\x1aR\x12whtAmountCertified\x88\x01\x01\x123\n" +
+	"\x13wht_amount_variance\x18' \x01(\x03H\x1bR\x11whtAmountVariance\x88\x01\x01\x120\n" +
+	"\x11settlement_status\x18( \x01(\tH\x1cR\x10settlementStatus\x88\x01\x01\x12H\n" +
+	"\x1etax_inclusive_pricing_snapshot\x18) \x01(\bH\x1dR\x1btaxInclusivePricingSnapshot\x88\x01\x01\x12L\n" +
+	" tax_computation_enabled_snapshot\x18* \x01(\tH\x1eR\x1dtaxComputationEnabledSnapshot\x88\x01\x01\x12.\n" +
+	"\x10billing_currency\x18+ \x01(\tH\x1fR\x0fbillingCurrency\x88\x01\x01\x12*\n" +
+	"\x0ebilling_amount\x18, \x01(\x03H R\rbillingAmount\x88\x01\x01\x128\n" +
+	"\x16forex_rate_micro_units\x18- \x01(\x03H!R\x13forexRateMicroUnits\x88\x01\x01\x12/\n" +
+	"\x11forex_rate_source\x18. \x01(\tH\"R\x0fforexRateSource\x88\x01\x01B\x0f\n" +
 	"\r_date_createdB\x16\n" +
 	"\x14_date_created_stringB\x10\n" +
 	"\x0e_date_modifiedB\x17\n" +
@@ -1602,7 +1816,29 @@ const file_domain_revenue_revenue_revenue_proto_rawDesc = "" +
 	"\x10_subscription_idB\x0f\n" +
 	"\r_job_phase_idB\x13\n" +
 	"\x11_billing_event_idB\t\n" +
-	"\a_run_idJ\x04\b\v\x10\fJ\x04\b\x1e\x10\x1f\"F\n" +
+	"\a_run_idB\x17\n" +
+	"\x15_cash_amount_expectedB\x16\n" +
+	"\x14_wht_amount_expectedB\x17\n" +
+	"\x15_wht_amount_certifiedB\x16\n" +
+	"\x14_wht_amount_varianceB\x14\n" +
+	"\x12_settlement_statusB!\n" +
+	"\x1f_tax_inclusive_pricing_snapshotB#\n" +
+	"!_tax_computation_enabled_snapshotB\x13\n" +
+	"\x11_billing_currencyB\x11\n" +
+	"\x0f_billing_amountB\x19\n" +
+	"\x17_forex_rate_micro_unitsB\x14\n" +
+	"\x12_forex_rate_sourceJ\x04\b\v\x10\fJ\x04\b\x1e\x10\x1f\"\x91\x03\n" +
+	"\x0ePreviewTaxLine\x12\x1c\n" +
+	"\tdirection\x18\x01 \x01(\tR\tdirection\x12*\n" +
+	"\x11tax_kind_snapshot\x18\x02 \x01(\tR\x0ftaxKindSnapshot\x12;\n" +
+	"\x17regulator_code_snapshot\x18\x03 \x01(\tH\x00R\x15regulatorCodeSnapshot\x88\x01\x01\x126\n" +
+	"\x17authority_code_snapshot\x18\x04 \x01(\tR\x15authorityCodeSnapshot\x12!\n" +
+	"\ftaxable_base\x18\x05 \x01(\x03R\vtaxableBase\x12\x1d\n" +
+	"\n" +
+	"tax_amount\x18\x06 \x01(\x03R\ttaxAmount\x12*\n" +
+	"\x11rate_basis_points\x18\a \x01(\x05R\x0frateBasisPoints\x126\n" +
+	"\x18applied_to_line_item_ids\x18\b \x03(\tR\x14appliedToLineItemIdsB\x1a\n" +
+	"\x18_regulator_code_snapshot\"F\n" +
 	"\x14CreateRevenueRequest\x12.\n" +
 	"\x04data\x18\x01 \x01(\v2\x1a.domain.revenue.v1.RevenueR\x04data\"\x9f\x01\n" +
 	"\x15CreateRevenueResponse\x12.\n" +
@@ -1720,14 +1956,15 @@ const file_domain_revenue_revenue_revenue_proto_rawDesc = "" +
 	"\t_quantityB\x0e\n" +
 	"\f_descriptionB\n" +
 	"\n" +
-	"\b_removed\"\xe7\x02\n" +
+	"\b_removed\"\xb6\x03\n" +
 	"\"CreateRevenueWithLineItemsResponse\x12.\n" +
 	"\x04data\x18\x01 \x03(\v2\x1a.domain.revenue.v1.RevenueR\x04data\x12\x18\n" +
 	"\asuccess\x18\x02 \x01(\bR\asuccess\x122\n" +
 	"\x05error\x18\x03 \x01(\v2\x17.domain.common.v1.ErrorH\x00R\x05error\x88\x01\x01\x12G\n" +
 	"\rpreview_lines\x18\x04 \x03(\v2\".domain.revenue.v1.PreviewLineItemR\fpreviewLines\x12\x1a\n" +
 	"\bwarnings\x18\x05 \x03(\tR\bwarnings\x129\n" +
-	"\x16conflicting_revenue_id\x18\x06 \x01(\tH\x01R\x14conflictingRevenueId\x88\x01\x01B\b\n" +
+	"\x16conflicting_revenue_id\x18\x06 \x01(\tH\x01R\x14conflictingRevenueId\x88\x01\x01\x12M\n" +
+	"\x11preview_tax_lines\x18\a \x03(\v2!.domain.revenue.v1.PreviewTaxLineR\x0fpreviewTaxLinesB\b\n" +
 	"\x06_errorB\x19\n" +
 	"\x17_conflicting_revenue_id\"\xfc\x01\n" +
 	"\x0fPreviewLineItem\x121\n" +
@@ -1763,95 +2000,97 @@ func file_domain_revenue_revenue_revenue_proto_rawDescGZIP() []byte {
 	return file_domain_revenue_revenue_revenue_proto_rawDescData
 }
 
-var file_domain_revenue_revenue_revenue_proto_msgTypes = make([]protoimpl.MessageInfo, 19)
+var file_domain_revenue_revenue_revenue_proto_msgTypes = make([]protoimpl.MessageInfo, 20)
 var file_domain_revenue_revenue_revenue_proto_goTypes = []any{
 	(*Revenue)(nil),                            // 0: domain.revenue.v1.Revenue
-	(*CreateRevenueRequest)(nil),               // 1: domain.revenue.v1.CreateRevenueRequest
-	(*CreateRevenueResponse)(nil),              // 2: domain.revenue.v1.CreateRevenueResponse
-	(*ReadRevenueRequest)(nil),                 // 3: domain.revenue.v1.ReadRevenueRequest
-	(*ReadRevenueResponse)(nil),                // 4: domain.revenue.v1.ReadRevenueResponse
-	(*UpdateRevenueRequest)(nil),               // 5: domain.revenue.v1.UpdateRevenueRequest
-	(*UpdateRevenueResponse)(nil),              // 6: domain.revenue.v1.UpdateRevenueResponse
-	(*DeleteRevenueRequest)(nil),               // 7: domain.revenue.v1.DeleteRevenueRequest
-	(*DeleteRevenueResponse)(nil),              // 8: domain.revenue.v1.DeleteRevenueResponse
-	(*ListRevenuesRequest)(nil),                // 9: domain.revenue.v1.ListRevenuesRequest
-	(*ListRevenuesResponse)(nil),               // 10: domain.revenue.v1.ListRevenuesResponse
-	(*GetRevenueListPageDataRequest)(nil),      // 11: domain.revenue.v1.GetRevenueListPageDataRequest
-	(*GetRevenueListPageDataResponse)(nil),     // 12: domain.revenue.v1.GetRevenueListPageDataResponse
-	(*GetRevenueItemPageDataRequest)(nil),      // 13: domain.revenue.v1.GetRevenueItemPageDataRequest
-	(*GetRevenueItemPageDataResponse)(nil),     // 14: domain.revenue.v1.GetRevenueItemPageDataResponse
-	(*CreateRevenueWithLineItemsRequest)(nil),  // 15: domain.revenue.v1.CreateRevenueWithLineItemsRequest
-	(*LineItemOverride)(nil),                   // 16: domain.revenue.v1.LineItemOverride
-	(*CreateRevenueWithLineItemsResponse)(nil), // 17: domain.revenue.v1.CreateRevenueWithLineItemsResponse
-	(*PreviewLineItem)(nil),                    // 18: domain.revenue.v1.PreviewLineItem
-	(*client.Client)(nil),                      // 19: domain.entity.v1.Client
-	(*location.Location)(nil),                  // 20: domain.entity.v1.Location
-	(*payment_term.PaymentTerm)(nil),           // 21: domain.entity.v1.PaymentTerm
-	(*common.Error)(nil),                       // 22: domain.common.v1.Error
-	(*common.SearchRequest)(nil),               // 23: domain.common.v1.SearchRequest
-	(*common.FilterRequest)(nil),               // 24: domain.common.v1.FilterRequest
-	(*common.SortRequest)(nil),                 // 25: domain.common.v1.SortRequest
-	(*common.PaginationRequest)(nil),           // 26: domain.common.v1.PaginationRequest
-	(*common.PaginationResponse)(nil),          // 27: domain.common.v1.PaginationResponse
-	(*common.SearchResult)(nil),                // 28: domain.common.v1.SearchResult
+	(*PreviewTaxLine)(nil),                     // 1: domain.revenue.v1.PreviewTaxLine
+	(*CreateRevenueRequest)(nil),               // 2: domain.revenue.v1.CreateRevenueRequest
+	(*CreateRevenueResponse)(nil),              // 3: domain.revenue.v1.CreateRevenueResponse
+	(*ReadRevenueRequest)(nil),                 // 4: domain.revenue.v1.ReadRevenueRequest
+	(*ReadRevenueResponse)(nil),                // 5: domain.revenue.v1.ReadRevenueResponse
+	(*UpdateRevenueRequest)(nil),               // 6: domain.revenue.v1.UpdateRevenueRequest
+	(*UpdateRevenueResponse)(nil),              // 7: domain.revenue.v1.UpdateRevenueResponse
+	(*DeleteRevenueRequest)(nil),               // 8: domain.revenue.v1.DeleteRevenueRequest
+	(*DeleteRevenueResponse)(nil),              // 9: domain.revenue.v1.DeleteRevenueResponse
+	(*ListRevenuesRequest)(nil),                // 10: domain.revenue.v1.ListRevenuesRequest
+	(*ListRevenuesResponse)(nil),               // 11: domain.revenue.v1.ListRevenuesResponse
+	(*GetRevenueListPageDataRequest)(nil),      // 12: domain.revenue.v1.GetRevenueListPageDataRequest
+	(*GetRevenueListPageDataResponse)(nil),     // 13: domain.revenue.v1.GetRevenueListPageDataResponse
+	(*GetRevenueItemPageDataRequest)(nil),      // 14: domain.revenue.v1.GetRevenueItemPageDataRequest
+	(*GetRevenueItemPageDataResponse)(nil),     // 15: domain.revenue.v1.GetRevenueItemPageDataResponse
+	(*CreateRevenueWithLineItemsRequest)(nil),  // 16: domain.revenue.v1.CreateRevenueWithLineItemsRequest
+	(*LineItemOverride)(nil),                   // 17: domain.revenue.v1.LineItemOverride
+	(*CreateRevenueWithLineItemsResponse)(nil), // 18: domain.revenue.v1.CreateRevenueWithLineItemsResponse
+	(*PreviewLineItem)(nil),                    // 19: domain.revenue.v1.PreviewLineItem
+	(*client.Client)(nil),                      // 20: domain.entity.v1.Client
+	(*location.Location)(nil),                  // 21: domain.entity.v1.Location
+	(*payment_term.PaymentTerm)(nil),           // 22: domain.entity.v1.PaymentTerm
+	(*common.Error)(nil),                       // 23: domain.common.v1.Error
+	(*common.SearchRequest)(nil),               // 24: domain.common.v1.SearchRequest
+	(*common.FilterRequest)(nil),               // 25: domain.common.v1.FilterRequest
+	(*common.SortRequest)(nil),                 // 26: domain.common.v1.SortRequest
+	(*common.PaginationRequest)(nil),           // 27: domain.common.v1.PaginationRequest
+	(*common.PaginationResponse)(nil),          // 28: domain.common.v1.PaginationResponse
+	(*common.SearchResult)(nil),                // 29: domain.common.v1.SearchResult
 }
 var file_domain_revenue_revenue_revenue_proto_depIdxs = []int32{
-	19, // 0: domain.revenue.v1.Revenue.client:type_name -> domain.entity.v1.Client
-	20, // 1: domain.revenue.v1.Revenue.location:type_name -> domain.entity.v1.Location
-	21, // 2: domain.revenue.v1.Revenue.payment_term:type_name -> domain.entity.v1.PaymentTerm
+	20, // 0: domain.revenue.v1.Revenue.client:type_name -> domain.entity.v1.Client
+	21, // 1: domain.revenue.v1.Revenue.location:type_name -> domain.entity.v1.Location
+	22, // 2: domain.revenue.v1.Revenue.payment_term:type_name -> domain.entity.v1.PaymentTerm
 	0,  // 3: domain.revenue.v1.CreateRevenueRequest.data:type_name -> domain.revenue.v1.Revenue
 	0,  // 4: domain.revenue.v1.CreateRevenueResponse.data:type_name -> domain.revenue.v1.Revenue
-	22, // 5: domain.revenue.v1.CreateRevenueResponse.error:type_name -> domain.common.v1.Error
+	23, // 5: domain.revenue.v1.CreateRevenueResponse.error:type_name -> domain.common.v1.Error
 	0,  // 6: domain.revenue.v1.ReadRevenueRequest.data:type_name -> domain.revenue.v1.Revenue
 	0,  // 7: domain.revenue.v1.ReadRevenueResponse.data:type_name -> domain.revenue.v1.Revenue
-	22, // 8: domain.revenue.v1.ReadRevenueResponse.error:type_name -> domain.common.v1.Error
+	23, // 8: domain.revenue.v1.ReadRevenueResponse.error:type_name -> domain.common.v1.Error
 	0,  // 9: domain.revenue.v1.UpdateRevenueRequest.data:type_name -> domain.revenue.v1.Revenue
 	0,  // 10: domain.revenue.v1.UpdateRevenueResponse.data:type_name -> domain.revenue.v1.Revenue
-	22, // 11: domain.revenue.v1.UpdateRevenueResponse.error:type_name -> domain.common.v1.Error
+	23, // 11: domain.revenue.v1.UpdateRevenueResponse.error:type_name -> domain.common.v1.Error
 	0,  // 12: domain.revenue.v1.DeleteRevenueRequest.data:type_name -> domain.revenue.v1.Revenue
-	22, // 13: domain.revenue.v1.DeleteRevenueResponse.error:type_name -> domain.common.v1.Error
-	23, // 14: domain.revenue.v1.ListRevenuesRequest.search:type_name -> domain.common.v1.SearchRequest
-	24, // 15: domain.revenue.v1.ListRevenuesRequest.filters:type_name -> domain.common.v1.FilterRequest
-	25, // 16: domain.revenue.v1.ListRevenuesRequest.sort:type_name -> domain.common.v1.SortRequest
-	26, // 17: domain.revenue.v1.ListRevenuesRequest.pagination:type_name -> domain.common.v1.PaginationRequest
+	23, // 13: domain.revenue.v1.DeleteRevenueResponse.error:type_name -> domain.common.v1.Error
+	24, // 14: domain.revenue.v1.ListRevenuesRequest.search:type_name -> domain.common.v1.SearchRequest
+	25, // 15: domain.revenue.v1.ListRevenuesRequest.filters:type_name -> domain.common.v1.FilterRequest
+	26, // 16: domain.revenue.v1.ListRevenuesRequest.sort:type_name -> domain.common.v1.SortRequest
+	27, // 17: domain.revenue.v1.ListRevenuesRequest.pagination:type_name -> domain.common.v1.PaginationRequest
 	0,  // 18: domain.revenue.v1.ListRevenuesResponse.data:type_name -> domain.revenue.v1.Revenue
-	22, // 19: domain.revenue.v1.ListRevenuesResponse.error:type_name -> domain.common.v1.Error
-	26, // 20: domain.revenue.v1.GetRevenueListPageDataRequest.pagination:type_name -> domain.common.v1.PaginationRequest
-	24, // 21: domain.revenue.v1.GetRevenueListPageDataRequest.filters:type_name -> domain.common.v1.FilterRequest
-	25, // 22: domain.revenue.v1.GetRevenueListPageDataRequest.sort:type_name -> domain.common.v1.SortRequest
-	23, // 23: domain.revenue.v1.GetRevenueListPageDataRequest.search:type_name -> domain.common.v1.SearchRequest
+	23, // 19: domain.revenue.v1.ListRevenuesResponse.error:type_name -> domain.common.v1.Error
+	27, // 20: domain.revenue.v1.GetRevenueListPageDataRequest.pagination:type_name -> domain.common.v1.PaginationRequest
+	25, // 21: domain.revenue.v1.GetRevenueListPageDataRequest.filters:type_name -> domain.common.v1.FilterRequest
+	26, // 22: domain.revenue.v1.GetRevenueListPageDataRequest.sort:type_name -> domain.common.v1.SortRequest
+	24, // 23: domain.revenue.v1.GetRevenueListPageDataRequest.search:type_name -> domain.common.v1.SearchRequest
 	0,  // 24: domain.revenue.v1.GetRevenueListPageDataResponse.revenue_list:type_name -> domain.revenue.v1.Revenue
-	27, // 25: domain.revenue.v1.GetRevenueListPageDataResponse.pagination:type_name -> domain.common.v1.PaginationResponse
-	28, // 26: domain.revenue.v1.GetRevenueListPageDataResponse.search_results:type_name -> domain.common.v1.SearchResult
-	22, // 27: domain.revenue.v1.GetRevenueListPageDataResponse.error:type_name -> domain.common.v1.Error
+	28, // 25: domain.revenue.v1.GetRevenueListPageDataResponse.pagination:type_name -> domain.common.v1.PaginationResponse
+	29, // 26: domain.revenue.v1.GetRevenueListPageDataResponse.search_results:type_name -> domain.common.v1.SearchResult
+	23, // 27: domain.revenue.v1.GetRevenueListPageDataResponse.error:type_name -> domain.common.v1.Error
 	0,  // 28: domain.revenue.v1.GetRevenueItemPageDataResponse.revenue:type_name -> domain.revenue.v1.Revenue
-	22, // 29: domain.revenue.v1.GetRevenueItemPageDataResponse.error:type_name -> domain.common.v1.Error
+	23, // 29: domain.revenue.v1.GetRevenueItemPageDataResponse.error:type_name -> domain.common.v1.Error
 	0,  // 30: domain.revenue.v1.CreateRevenueWithLineItemsRequest.data:type_name -> domain.revenue.v1.Revenue
-	16, // 31: domain.revenue.v1.CreateRevenueWithLineItemsRequest.overrides:type_name -> domain.revenue.v1.LineItemOverride
+	17, // 31: domain.revenue.v1.CreateRevenueWithLineItemsRequest.overrides:type_name -> domain.revenue.v1.LineItemOverride
 	0,  // 32: domain.revenue.v1.CreateRevenueWithLineItemsResponse.data:type_name -> domain.revenue.v1.Revenue
-	22, // 33: domain.revenue.v1.CreateRevenueWithLineItemsResponse.error:type_name -> domain.common.v1.Error
-	18, // 34: domain.revenue.v1.CreateRevenueWithLineItemsResponse.preview_lines:type_name -> domain.revenue.v1.PreviewLineItem
-	1,  // 35: domain.revenue.v1.RevenueDomainService.CreateRevenue:input_type -> domain.revenue.v1.CreateRevenueRequest
-	3,  // 36: domain.revenue.v1.RevenueDomainService.ReadRevenue:input_type -> domain.revenue.v1.ReadRevenueRequest
-	5,  // 37: domain.revenue.v1.RevenueDomainService.UpdateRevenue:input_type -> domain.revenue.v1.UpdateRevenueRequest
-	7,  // 38: domain.revenue.v1.RevenueDomainService.DeleteRevenue:input_type -> domain.revenue.v1.DeleteRevenueRequest
-	9,  // 39: domain.revenue.v1.RevenueDomainService.ListRevenues:input_type -> domain.revenue.v1.ListRevenuesRequest
-	11, // 40: domain.revenue.v1.RevenueDomainService.GetRevenueListPageData:input_type -> domain.revenue.v1.GetRevenueListPageDataRequest
-	13, // 41: domain.revenue.v1.RevenueDomainService.GetRevenueItemPageData:input_type -> domain.revenue.v1.GetRevenueItemPageDataRequest
-	15, // 42: domain.revenue.v1.RevenueDomainService.CreateRevenueWithLineItems:input_type -> domain.revenue.v1.CreateRevenueWithLineItemsRequest
-	2,  // 43: domain.revenue.v1.RevenueDomainService.CreateRevenue:output_type -> domain.revenue.v1.CreateRevenueResponse
-	4,  // 44: domain.revenue.v1.RevenueDomainService.ReadRevenue:output_type -> domain.revenue.v1.ReadRevenueResponse
-	6,  // 45: domain.revenue.v1.RevenueDomainService.UpdateRevenue:output_type -> domain.revenue.v1.UpdateRevenueResponse
-	8,  // 46: domain.revenue.v1.RevenueDomainService.DeleteRevenue:output_type -> domain.revenue.v1.DeleteRevenueResponse
-	10, // 47: domain.revenue.v1.RevenueDomainService.ListRevenues:output_type -> domain.revenue.v1.ListRevenuesResponse
-	12, // 48: domain.revenue.v1.RevenueDomainService.GetRevenueListPageData:output_type -> domain.revenue.v1.GetRevenueListPageDataResponse
-	14, // 49: domain.revenue.v1.RevenueDomainService.GetRevenueItemPageData:output_type -> domain.revenue.v1.GetRevenueItemPageDataResponse
-	17, // 50: domain.revenue.v1.RevenueDomainService.CreateRevenueWithLineItems:output_type -> domain.revenue.v1.CreateRevenueWithLineItemsResponse
-	43, // [43:51] is the sub-list for method output_type
-	35, // [35:43] is the sub-list for method input_type
-	35, // [35:35] is the sub-list for extension type_name
-	35, // [35:35] is the sub-list for extension extendee
-	0,  // [0:35] is the sub-list for field type_name
+	23, // 33: domain.revenue.v1.CreateRevenueWithLineItemsResponse.error:type_name -> domain.common.v1.Error
+	19, // 34: domain.revenue.v1.CreateRevenueWithLineItemsResponse.preview_lines:type_name -> domain.revenue.v1.PreviewLineItem
+	1,  // 35: domain.revenue.v1.CreateRevenueWithLineItemsResponse.preview_tax_lines:type_name -> domain.revenue.v1.PreviewTaxLine
+	2,  // 36: domain.revenue.v1.RevenueDomainService.CreateRevenue:input_type -> domain.revenue.v1.CreateRevenueRequest
+	4,  // 37: domain.revenue.v1.RevenueDomainService.ReadRevenue:input_type -> domain.revenue.v1.ReadRevenueRequest
+	6,  // 38: domain.revenue.v1.RevenueDomainService.UpdateRevenue:input_type -> domain.revenue.v1.UpdateRevenueRequest
+	8,  // 39: domain.revenue.v1.RevenueDomainService.DeleteRevenue:input_type -> domain.revenue.v1.DeleteRevenueRequest
+	10, // 40: domain.revenue.v1.RevenueDomainService.ListRevenues:input_type -> domain.revenue.v1.ListRevenuesRequest
+	12, // 41: domain.revenue.v1.RevenueDomainService.GetRevenueListPageData:input_type -> domain.revenue.v1.GetRevenueListPageDataRequest
+	14, // 42: domain.revenue.v1.RevenueDomainService.GetRevenueItemPageData:input_type -> domain.revenue.v1.GetRevenueItemPageDataRequest
+	16, // 43: domain.revenue.v1.RevenueDomainService.CreateRevenueWithLineItems:input_type -> domain.revenue.v1.CreateRevenueWithLineItemsRequest
+	3,  // 44: domain.revenue.v1.RevenueDomainService.CreateRevenue:output_type -> domain.revenue.v1.CreateRevenueResponse
+	5,  // 45: domain.revenue.v1.RevenueDomainService.ReadRevenue:output_type -> domain.revenue.v1.ReadRevenueResponse
+	7,  // 46: domain.revenue.v1.RevenueDomainService.UpdateRevenue:output_type -> domain.revenue.v1.UpdateRevenueResponse
+	9,  // 47: domain.revenue.v1.RevenueDomainService.DeleteRevenue:output_type -> domain.revenue.v1.DeleteRevenueResponse
+	11, // 48: domain.revenue.v1.RevenueDomainService.ListRevenues:output_type -> domain.revenue.v1.ListRevenuesResponse
+	13, // 49: domain.revenue.v1.RevenueDomainService.GetRevenueListPageData:output_type -> domain.revenue.v1.GetRevenueListPageDataResponse
+	15, // 50: domain.revenue.v1.RevenueDomainService.GetRevenueItemPageData:output_type -> domain.revenue.v1.GetRevenueItemPageDataResponse
+	18, // 51: domain.revenue.v1.RevenueDomainService.CreateRevenueWithLineItems:output_type -> domain.revenue.v1.CreateRevenueWithLineItemsResponse
+	44, // [44:52] is the sub-list for method output_type
+	36, // [36:44] is the sub-list for method input_type
+	36, // [36:36] is the sub-list for extension type_name
+	36, // [36:36] is the sub-list for extension extendee
+	0,  // [0:36] is the sub-list for field type_name
 }
 
 func init() { file_domain_revenue_revenue_revenue_proto_init() }
@@ -1860,25 +2099,26 @@ func file_domain_revenue_revenue_revenue_proto_init() {
 		return
 	}
 	file_domain_revenue_revenue_revenue_proto_msgTypes[0].OneofWrappers = []any{}
-	file_domain_revenue_revenue_revenue_proto_msgTypes[2].OneofWrappers = []any{}
-	file_domain_revenue_revenue_revenue_proto_msgTypes[4].OneofWrappers = []any{}
-	file_domain_revenue_revenue_revenue_proto_msgTypes[6].OneofWrappers = []any{}
-	file_domain_revenue_revenue_revenue_proto_msgTypes[8].OneofWrappers = []any{}
+	file_domain_revenue_revenue_revenue_proto_msgTypes[1].OneofWrappers = []any{}
+	file_domain_revenue_revenue_revenue_proto_msgTypes[3].OneofWrappers = []any{}
+	file_domain_revenue_revenue_revenue_proto_msgTypes[5].OneofWrappers = []any{}
+	file_domain_revenue_revenue_revenue_proto_msgTypes[7].OneofWrappers = []any{}
 	file_domain_revenue_revenue_revenue_proto_msgTypes[9].OneofWrappers = []any{}
 	file_domain_revenue_revenue_revenue_proto_msgTypes[10].OneofWrappers = []any{}
 	file_domain_revenue_revenue_revenue_proto_msgTypes[11].OneofWrappers = []any{}
 	file_domain_revenue_revenue_revenue_proto_msgTypes[12].OneofWrappers = []any{}
-	file_domain_revenue_revenue_revenue_proto_msgTypes[14].OneofWrappers = []any{}
+	file_domain_revenue_revenue_revenue_proto_msgTypes[13].OneofWrappers = []any{}
 	file_domain_revenue_revenue_revenue_proto_msgTypes[15].OneofWrappers = []any{}
 	file_domain_revenue_revenue_revenue_proto_msgTypes[16].OneofWrappers = []any{}
 	file_domain_revenue_revenue_revenue_proto_msgTypes[17].OneofWrappers = []any{}
+	file_domain_revenue_revenue_revenue_proto_msgTypes[18].OneofWrappers = []any{}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
 		File: protoimpl.DescBuilder{
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_domain_revenue_revenue_revenue_proto_rawDesc), len(file_domain_revenue_revenue_revenue_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   19,
+			NumMessages:   20,
 			NumExtensions: 0,
 			NumServices:   1,
 		},

@@ -1,0 +1,130 @@
+syntax = "proto3";
+
+package domain.revenue.v1;
+
+option go_package = "github.com/erniealice/esqyma/golang/v1/domain/revenue/revenue_tax_line";
+
+import "domain/common/error.proto";
+import "domain/common/pagination.proto";
+import "domain/common/filter.proto";
+import "domain/common/sort.proto";
+import "domain/common/search.proto";
+import "options/db.proto";
+
+// RevenueTaxLineDirection — which compute pass wrote this line.
+enum RevenueTaxLineDirection {
+  REVENUE_TAX_LINE_DIRECTION_UNSPECIFIED = 0;
+  REVENUE_TAX_LINE_DIRECTION_SURCHARGE   = 1;
+  REVENUE_TAX_LINE_DIRECTION_WITHHOLDING = 2;
+}
+
+// RevenueTaxLine — system-generated tax computation output for a Revenue.
+// One RevenueTaxLine per (direction, tax_rate) combination per Revenue.
+// Idempotency: on recompute, DELETE WHERE revenue_id then re-INSERT all.
+//
+// ON DELETE CASCADE from revenue — deleting a Revenue removes its tax lines.
+message RevenueTaxLine {
+  option (options.v1.table).table = true;
+
+  string id = 1;
+  optional int64 date_created = 2;
+  optional string date_created_string = 3;
+  optional int64 date_modified = 4;
+  optional string date_modified_string = 5;
+  bool active = 6 [(options.v1.db).default = "true"];
+
+  string workspace_id = 7 [(options.v1.db).references = "workspace", (options.v1.db).index = true];
+
+  // Parent revenue — indexed; ON DELETE CASCADE in schema
+  string revenue_id = 8 [(options.v1.db).references = "revenue", (options.v1.db).index = true];
+
+  // FK to the tax_rate row that produced this line (NULL if rate was ad-hoc / override)
+  optional string tax_rate_id = 9 [(options.v1.db).references = "tax_rate", (options.v1.db).index = true];
+
+  // Audit FK — the TaxRegistration row active at asOf that triggered this pass.
+  // Immutable snapshot: even if the registration is later CANCELLED or VOIDED,
+  // this FK still resolves for auditor queries.
+  string source_registration_id_snapshot = 10;
+
+  // Denormed snapshots from tax_rate at compute time (for display + audit without joins)
+  string authority_code_snapshot = 11;
+  optional string regulator_code_snapshot = 12;
+  optional string filing_form_code_snapshot = 13;
+  string tax_kind_snapshot = 14;
+
+  // SURCHARGE or WITHHOLDING
+  RevenueTaxLineDirection direction = 15;
+
+  // Base amount on which the rate was applied (centavos, functional currency)
+  int64 taxable_base = 16;
+
+  // Computed tax amount (centavos, functional currency)
+  // 0 for ZERO_RATED surcharge lines (audit trail still written)
+  int64 tax_amount = 17;
+
+  // Rate in basis points as used at compute time (snapshot from tax_rate)
+  int32 rate_basis_points_snapshot = 18;
+
+  // IDs of the RevenueLineItem rows that contributed to this tax line.
+  // Stored as TEXT[] in PostgreSQL. Maps back to line-level detail.
+  repeated string applied_to_line_item_ids = 19;
+
+  // Timestamp when this tax line was computed (ISO 8601 or unix millis)
+  optional string computed_at = 20;
+}
+
+service RevenueTaxLineDomainService {
+  rpc ReadRevenueTaxLine(ReadRevenueTaxLineRequest) returns (ReadRevenueTaxLineResponse);
+  rpc ListRevenueTaxLines(ListRevenueTaxLinesRequest) returns (ListRevenueTaxLinesResponse);
+  rpc GetRevenueTaxLineListPageData(GetRevenueTaxLineListPageDataRequest) returns (GetRevenueTaxLineListPageDataResponse);
+  rpc GetRevenueTaxLineItemPageData(GetRevenueTaxLineItemPageDataRequest) returns (GetRevenueTaxLineItemPageDataResponse);
+}
+
+message ReadRevenueTaxLineRequest {
+  RevenueTaxLine data = 1;
+}
+
+message ReadRevenueTaxLineResponse {
+  repeated RevenueTaxLine data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message ListRevenueTaxLinesRequest {
+  optional string revenue_id = 1;
+  optional domain.common.v1.SearchRequest search = 2;
+  optional domain.common.v1.FilterRequest filters = 3;
+  optional domain.common.v1.SortRequest sort = 4;
+  optional domain.common.v1.PaginationRequest pagination = 5;
+}
+
+message ListRevenueTaxLinesResponse {
+  repeated RevenueTaxLine data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message GetRevenueTaxLineListPageDataRequest {
+  optional domain.common.v1.PaginationRequest pagination = 1;
+  optional domain.common.v1.FilterRequest filters = 2;
+  optional domain.common.v1.SortRequest sort = 3;
+  optional domain.common.v1.SearchRequest search = 4;
+}
+
+message GetRevenueTaxLineListPageDataResponse {
+  repeated RevenueTaxLine revenue_tax_line_list = 1;
+  optional domain.common.v1.PaginationResponse pagination = 2;
+  repeated domain.common.v1.SearchResult search_results = 3;
+  bool success = 4;
+  optional domain.common.v1.Error error = 5;
+}
+
+message GetRevenueTaxLineItemPageDataRequest {
+  string revenue_tax_line_id = 1;
+}
+
+message GetRevenueTaxLineItemPageDataResponse {
+  optional RevenueTaxLine revenue_tax_line = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}

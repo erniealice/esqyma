@@ -57,8 +57,16 @@ type RevenueLineItem struct {
 	LineAmount     int64   `protobuf:"varint,28,opt,name=line_amount,json=lineAmount,proto3" json:"line_amount,omitempty"`                  // centavos — total amount for this line (NOT NULL in DB)
 	SubscriptionId *string `protobuf:"bytes,29,opt,name=subscription_id,json=subscriptionId,proto3,oneof" json:"subscription_id,omitempty"` // FK to subscription — links line item to recurring source
 	WorkspaceId    *string `protobuf:"bytes,30,opt,name=workspace_id,json=workspaceId,proto3,oneof" json:"workspace_id,omitempty"`
-	unknownFields  protoimpl.UnknownFields
-	sizeCache      protoimpl.SizeCache
+	// Tax snapshot fields — Phase 1 tax integration
+	// Snapshotted at revenue recognition time from product / product_price_plan.
+	// Used by ComputeTaxesForRevenue as the authoritative treatment for this line.
+	TaxTreatmentSnapshot     *string `protobuf:"bytes,31,opt,name=tax_treatment_snapshot,json=taxTreatmentSnapshot,proto3,oneof" json:"tax_treatment_snapshot,omitempty"`             // TaxTreatment.code at recognition (e.g. "STANDARD")
+	WithholdingClassSnapshot *string `protobuf:"bytes,32,opt,name=withholding_class_snapshot,json=withholdingClassSnapshot,proto3,oneof" json:"withholding_class_snapshot,omitempty"` // TaxClass.code at recognition (e.g. "PROFESSIONAL_CORPORATE")
+	// Multi-currency: original billing amount for this line before FX conversion.
+	// NULL when billing_currency == functional_currency.
+	BillingAmount *int64 `protobuf:"varint,33,opt,name=billing_amount,json=billingAmount,proto3,oneof" json:"billing_amount,omitempty"` // centavos in billing_currency
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
 }
 
 func (x *RevenueLineItem) Reset() {
@@ -292,6 +300,27 @@ func (x *RevenueLineItem) GetWorkspaceId() string {
 		return *x.WorkspaceId
 	}
 	return ""
+}
+
+func (x *RevenueLineItem) GetTaxTreatmentSnapshot() string {
+	if x != nil && x.TaxTreatmentSnapshot != nil {
+		return *x.TaxTreatmentSnapshot
+	}
+	return ""
+}
+
+func (x *RevenueLineItem) GetWithholdingClassSnapshot() string {
+	if x != nil && x.WithholdingClassSnapshot != nil {
+		return *x.WithholdingClassSnapshot
+	}
+	return ""
+}
+
+func (x *RevenueLineItem) GetBillingAmount() int64 {
+	if x != nil && x.BillingAmount != nil {
+		return *x.BillingAmount
+	}
+	return 0
 }
 
 type CreateRevenueLineItemRequest struct {
@@ -1090,7 +1119,7 @@ var File_domain_revenue_revenue_line_item_revenue_line_item_proto protoreflect.F
 
 const file_domain_revenue_revenue_line_item_revenue_line_item_proto_rawDesc = "" +
 	"\n" +
-	"8domain/revenue/revenue_line_item/revenue_line_item.proto\x12\x11domain.revenue.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/search.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a$domain/revenue/revenue/revenue.proto\x1a$domain/product/product/product.proto\x1a\x10options/db.proto\"\xd0\f\n" +
+	"8domain/revenue/revenue_line_item/revenue_line_item.proto\x12\x11domain.revenue.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/search.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a$domain/revenue/revenue/revenue.proto\x1a$domain/product/product/product.proto\x1a\x10options/db.proto\"\xc7\x0e\n" +
 	"\x0fRevenueLineItem\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12&\n" +
 	"\fdate_created\x18\x02 \x01(\x03H\x00R\vdateCreated\x88\x01\x01\x123\n" +
@@ -1135,7 +1164,10 @@ const file_domain_revenue_revenue_line_item_revenue_line_item_proto_rawDesc = ""
 	"\x0fsubscription_id\x18\x1d \x01(\tB\x14\x82\xb5\x18\x10\n" +
 	"\fsubscription\x18\x01H\x10R\x0esubscriptionId\x88\x01\x01\x129\n" +
 	"\fworkspace_id\x18\x1e \x01(\tB\x11\x82\xb5\x18\r\n" +
-	"\tworkspace\x18\x01H\x11R\vworkspaceId\x88\x01\x01:\x06\x8a\xb5\x18\x02\b\x01B\x0f\n" +
+	"\tworkspace\x18\x01H\x11R\vworkspaceId\x88\x01\x01\x129\n" +
+	"\x16tax_treatment_snapshot\x18\x1f \x01(\tH\x12R\x14taxTreatmentSnapshot\x88\x01\x01\x12A\n" +
+	"\x1awithholding_class_snapshot\x18  \x01(\tH\x13R\x18withholdingClassSnapshot\x88\x01\x01\x12*\n" +
+	"\x0ebilling_amount\x18! \x01(\x03H\x14R\rbillingAmount\x88\x01\x01:\x06\x8a\xb5\x18\x02\b\x01B\x0f\n" +
 	"\r_date_createdB\x16\n" +
 	"\x14_date_created_stringB\x10\n" +
 	"\x0e_date_modifiedB\x17\n" +
@@ -1155,7 +1187,10 @@ const file_domain_revenue_revenue_line_item_revenue_line_item_proto_rawDesc = ""
 	"\x11_price_product_idB\x12\n" +
 	"\x10_job_activity_idB\x12\n" +
 	"\x10_subscription_idB\x0f\n" +
-	"\r_workspace_id\"V\n" +
+	"\r_workspace_idB\x19\n" +
+	"\x17_tax_treatment_snapshotB\x1d\n" +
+	"\x1b_withholding_class_snapshotB\x11\n" +
+	"\x0f_billing_amount\"V\n" +
 	"\x1cCreateRevenueLineItemRequest\x126\n" +
 	"\x04data\x18\x01 \x01(\v2\".domain.revenue.v1.RevenueLineItemR\x04data\"\xaf\x01\n" +
 	"\x1dCreateRevenueLineItemResponse\x126\n" +

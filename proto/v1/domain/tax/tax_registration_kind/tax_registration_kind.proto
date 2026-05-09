@@ -1,0 +1,139 @@
+syntax = "proto3";
+
+package domain.tax.v1;
+
+option go_package = "github.com/erniealice/esqyma/golang/v1/domain/tax/tax_registration_kind";
+
+import "domain/common/error.proto";
+import "domain/common/pagination.proto";
+import "domain/common/filter.proto";
+import "domain/common/sort.proto";
+import "domain/common/search.proto";
+import "options/db.proto";
+
+// PartyRole describes whether this registration kind belongs to the seller
+// (workspace / supplier) or the buyer (client). Compute gates on this.
+enum TaxRegistrationKindPartyRole {
+  TAX_REGISTRATION_KIND_PARTY_ROLE_UNSPECIFIED = 0;
+  TAX_REGISTRATION_KIND_PARTY_ROLE_SELLER      = 1;
+  TAX_REGISTRATION_KIND_PARTY_ROLE_BUYER       = 2;
+}
+
+// ComputePath describes what happens at revenue-recognition time when a party
+// holds an ACTIVE registration of this kind.
+//   SURCHARGE      → adds a tax line on the invoice (increases cash_amount_expected)
+//   WITHHOLDING    → deducts a tax line (decreases cash_amount_expected)
+//   PERIODIC_ONLY  → filed on a periodic basis; does NOT produce a RevenueTaxLine
+//   NONE           → recorded for audit/status only; no compute effect
+enum TaxRegistrationKindComputePath {
+  TAX_REGISTRATION_KIND_COMPUTE_PATH_UNSPECIFIED    = 0;
+  TAX_REGISTRATION_KIND_COMPUTE_PATH_SURCHARGE      = 1;
+  TAX_REGISTRATION_KIND_COMPUTE_PATH_WITHHOLDING    = 2;
+  TAX_REGISTRATION_KIND_COMPUTE_PATH_PERIODIC_ONLY  = 3;
+  TAX_REGISTRATION_KIND_COMPUTE_PATH_NONE           = 4;
+}
+
+// PartyType is the set of entity types a registration kind can be applied to.
+// Used to filter the Kind dropdown when creating a TaxRegistration.
+enum TaxRegistrationKindPartyType {
+  TAX_REGISTRATION_KIND_PARTY_TYPE_UNSPECIFIED = 0;
+  TAX_REGISTRATION_KIND_PARTY_TYPE_CLIENT      = 1;
+  TAX_REGISTRATION_KIND_PARTY_TYPE_WORKSPACE   = 2;
+  TAX_REGISTRATION_KIND_PARTY_TYPE_SUPPLIER    = 3;
+  TAX_REGISTRATION_KIND_PARTY_TYPE_EMPLOYEE    = 4;
+}
+
+// TaxRegistrationKind is a lookup table describing the behavior of a
+// registration type in a given jurisdiction. Rows are seed-only (no operator
+// CRUD in v1). Adding a new jurisdiction = adding a CSV row.
+message TaxRegistrationKind {
+  option (options.v1.table).table = true;
+
+  string id = 1;
+  optional int64 date_created = 2;
+  optional string date_created_string = 3;
+  optional int64 date_modified = 4;
+  optional string date_modified_string = 5;
+  bool active = 6 [(options.v1.db).default = "true"];
+
+  // Short unique code identifying this kind (e.g. "PH_VAT_REGISTERED", "PH_TWA")
+  string code = 7 [(options.v1.db).unique = true];
+  string name = 8;
+
+  // FK to tax_authority — which authority issues this registration
+  string tax_authority_id = 9 [(options.v1.db).references = "tax_authority", (options.v1.db).index = true];
+
+  // Jurisdiction scope this kind applies to (e.g. "PH-NATIONAL", "UK")
+  string jurisdiction = 10;
+
+  // Axis 1: which party role does this apply to?
+  TaxRegistrationKindPartyRole party_role = 11;
+
+  // Axis 2: what compute behavior does this produce?
+  TaxRegistrationKindComputePath compute_path = 12;
+
+  // Kind of tax rate to look up in tax_rate for the SURCHARGE pass.
+  // NULL for WITHHOLDING/PERIODIC_ONLY/NONE kinds (rate comes from TaxClass).
+  optional string default_rate_kind = 13;
+
+  // Which party types can hold a registration of this kind.
+  // Stored as TEXT[] in the DB. Drives the Kind dropdown filter.
+  repeated TaxRegistrationKindPartyType applicable_party_types = 14;
+
+  optional string description = 15;
+}
+
+service TaxRegistrationKindDomainService {
+  rpc ReadTaxRegistrationKind(ReadTaxRegistrationKindRequest) returns (ReadTaxRegistrationKindResponse);
+  rpc ListTaxRegistrationKinds(ListTaxRegistrationKindsRequest) returns (ListTaxRegistrationKindsResponse);
+  rpc GetTaxRegistrationKindListPageData(GetTaxRegistrationKindListPageDataRequest) returns (GetTaxRegistrationKindListPageDataResponse);
+  rpc GetTaxRegistrationKindItemPageData(GetTaxRegistrationKindItemPageDataRequest) returns (GetTaxRegistrationKindItemPageDataResponse);
+}
+
+message ReadTaxRegistrationKindRequest {
+  TaxRegistrationKind data = 1;
+}
+
+message ReadTaxRegistrationKindResponse {
+  repeated TaxRegistrationKind data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message ListTaxRegistrationKindsRequest {
+  optional domain.common.v1.SearchRequest search = 1;
+  optional domain.common.v1.FilterRequest filters = 2;
+  optional domain.common.v1.SortRequest sort = 3;
+  optional domain.common.v1.PaginationRequest pagination = 4;
+}
+
+message ListTaxRegistrationKindsResponse {
+  repeated TaxRegistrationKind data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message GetTaxRegistrationKindListPageDataRequest {
+  optional domain.common.v1.PaginationRequest pagination = 1;
+  optional domain.common.v1.FilterRequest filters = 2;
+  optional domain.common.v1.SortRequest sort = 3;
+  optional domain.common.v1.SearchRequest search = 4;
+}
+
+message GetTaxRegistrationKindListPageDataResponse {
+  repeated TaxRegistrationKind tax_registration_kind_list = 1;
+  optional domain.common.v1.PaginationResponse pagination = 2;
+  repeated domain.common.v1.SearchResult search_results = 3;
+  bool success = 4;
+  optional domain.common.v1.Error error = 5;
+}
+
+message GetTaxRegistrationKindItemPageDataRequest {
+  string tax_registration_kind_id = 1;
+}
+
+message GetTaxRegistrationKindItemPageDataResponse {
+  optional TaxRegistrationKind tax_registration_kind = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}

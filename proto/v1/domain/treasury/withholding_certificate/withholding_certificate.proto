@@ -1,0 +1,170 @@
+syntax = "proto3";
+
+package domain.treasury.v1;
+
+option go_package = "github.com/erniealice/esqyma/golang/v1/domain/treasury/withholding_certificate";
+
+import "domain/common/error.proto";
+import "domain/common/pagination.proto";
+import "domain/common/filter.proto";
+import "domain/common/sort.proto";
+import "domain/common/search.proto";
+import "options/db.proto";
+
+// WithholdingCertificateStatus — lifecycle of a BIR Form 2307 (or equivalent).
+enum WithholdingCertificateStatus {
+  WITHHOLDING_CERTIFICATE_STATUS_UNSPECIFIED          = 0;
+  WITHHOLDING_CERTIFICATE_STATUS_PENDING_RECEIPT      = 1;  // Expected but not yet received
+  WITHHOLDING_CERTIFICATE_STATUS_RECEIVED             = 2;  // Received in full
+  WITHHOLDING_CERTIFICATE_STATUS_RECEIVED_WITH_VARIANCE = 3; // Received with amount discrepancy
+  WITHHOLDING_CERTIFICATE_STATUS_VOIDED               = 4;  // Cancelled; does not count toward settlement
+  WITHHOLDING_CERTIFICATE_STATUS_REJECTED             = 5;  // Formally rejected
+}
+
+// WithholdingCertificate — a BIR Form 2307 or equivalent received from the
+// buyer after they remit withheld tax to the authority.
+// N rows per revenue allowed; UNIQUE on (revenue_id, certificate_number).
+// ON DELETE RESTRICT from revenue — must void certificates before deleting revenue.
+message WithholdingCertificate {
+  option (options.v1.table).table = true;
+
+  string id = 1;
+  optional int64 date_created = 2;
+  optional string date_created_string = 3;
+  optional int64 date_modified = 4;
+  optional string date_modified_string = 5;
+  bool active = 6 [(options.v1.db).default = "true"];
+
+  string workspace_id = 7 [(options.v1.db).references = "workspace", (options.v1.db).index = true];
+
+  // Parent revenue — indexed; ON DELETE RESTRICT
+  string revenue_id = 8 [(options.v1.db).references = "revenue", (options.v1.db).index = true];
+
+  // Authority that issued the withholding requirement
+  optional string tax_authority_id = 9 [(options.v1.db).references = "tax_authority", (options.v1.db).index = true];
+
+  // Regulator code at time of issuance (e.g. BIR ATC "WC011") — snapshot
+  optional string regulator_code_snapshot = 10;
+
+  // Certificate serial number from the physical document.
+  // UNIQUE together with revenue_id (allows N certs per revenue with distinct numbers).
+  string certificate_number = 11;
+
+  // The tax period the certificate covers (e.g. "2026-04")
+  optional string certificate_period = 12;
+
+  // Date the buyer issued the certificate
+  optional string issued_date = 13;   // ISO 8601 date
+
+  // Date the workspace received the physical document
+  optional string received_date = 14;  // ISO 8601 date
+
+  // Expected amount from RevenueTaxLine(WITHHOLDING) — centavos
+  int64 expected_amount = 15;
+
+  // Actual amount stated on the physical certificate — centavos
+  int64 actual_amount = 16;
+
+  // variance_amount = expected_amount - actual_amount (positive = under-withheld)
+  int64 variance_amount = 17;
+
+  // Buyer TIN snapshot (from client.tin at create time)
+  optional string buyer_tin_snapshot = 18;
+
+  // Reference to uploaded certificate document
+  optional string source_document_id = 19;
+
+  // Lifecycle status
+  WithholdingCertificateStatus status = 20;
+
+  // Optional notes / reason for variance or rejection
+  optional string notes = 21;
+}
+
+service WithholdingCertificateDomainService {
+  rpc CreateWithholdingCertificate(CreateWithholdingCertificateRequest) returns (CreateWithholdingCertificateResponse);
+  rpc ReadWithholdingCertificate(ReadWithholdingCertificateRequest) returns (ReadWithholdingCertificateResponse);
+  rpc UpdateWithholdingCertificate(UpdateWithholdingCertificateRequest) returns (UpdateWithholdingCertificateResponse);
+  rpc DeleteWithholdingCertificate(DeleteWithholdingCertificateRequest) returns (DeleteWithholdingCertificateResponse);
+  rpc ListWithholdingCertificates(ListWithholdingCertificatesRequest) returns (ListWithholdingCertificatesResponse);
+  rpc GetWithholdingCertificateListPageData(GetWithholdingCertificateListPageDataRequest) returns (GetWithholdingCertificateListPageDataResponse);
+  rpc GetWithholdingCertificateItemPageData(GetWithholdingCertificateItemPageDataRequest) returns (GetWithholdingCertificateItemPageDataResponse);
+}
+
+message CreateWithholdingCertificateRequest {
+  WithholdingCertificate data = 1;
+}
+
+message CreateWithholdingCertificateResponse {
+  repeated WithholdingCertificate data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message ReadWithholdingCertificateRequest {
+  WithholdingCertificate data = 1;
+}
+
+message ReadWithholdingCertificateResponse {
+  repeated WithholdingCertificate data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message UpdateWithholdingCertificateRequest {
+  WithholdingCertificate data = 1;
+}
+
+message UpdateWithholdingCertificateResponse {
+  repeated WithholdingCertificate data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message DeleteWithholdingCertificateRequest {
+  WithholdingCertificate data = 1;
+}
+
+message DeleteWithholdingCertificateResponse {
+  bool success = 1;
+  optional domain.common.v1.Error error = 2;
+}
+
+message ListWithholdingCertificatesRequest {
+  optional string revenue_id = 1;
+  optional domain.common.v1.SearchRequest search = 2;
+  optional domain.common.v1.FilterRequest filters = 3;
+  optional domain.common.v1.SortRequest sort = 4;
+  optional domain.common.v1.PaginationRequest pagination = 5;
+}
+
+message ListWithholdingCertificatesResponse {
+  repeated WithholdingCertificate data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message GetWithholdingCertificateListPageDataRequest {
+  optional domain.common.v1.PaginationRequest pagination = 1;
+  optional domain.common.v1.FilterRequest filters = 2;
+  optional domain.common.v1.SortRequest sort = 3;
+  optional domain.common.v1.SearchRequest search = 4;
+}
+
+message GetWithholdingCertificateListPageDataResponse {
+  repeated WithholdingCertificate withholding_certificate_list = 1;
+  optional domain.common.v1.PaginationResponse pagination = 2;
+  repeated domain.common.v1.SearchResult search_results = 3;
+  bool success = 4;
+  optional domain.common.v1.Error error = 5;
+}
+
+message GetWithholdingCertificateItemPageDataRequest {
+  string withholding_certificate_id = 1;
+}
+
+message GetWithholdingCertificateItemPageDataResponse {
+  optional WithholdingCertificate withholding_certificate = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
