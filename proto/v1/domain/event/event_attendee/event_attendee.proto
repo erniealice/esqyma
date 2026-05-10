@@ -67,6 +67,17 @@ message EventAttendee {
   optional int64 date_modified = 12;
   optional string date_modified_string = 13;
   bool active = 14 [(options.v1.db).default = "true"];
+
+  // Mutual / cooperative voting extension (2026-05-10)
+  // These fields are only populated when the parent Event.kind = GOVERNANCE_VOTE.
+  // vote_choice: the member's recorded vote — "yes" | "no" | "abstain"
+  optional string vote_choice = 15;
+  // vote_weight: multiplier for weighted voting (default 1; 0 = ineligible; >1 = bylaw-defined weighted vote)
+  optional int32 vote_weight = 16;
+  // vote_cast_at: epoch ms when the vote was recorded
+  optional int64 vote_cast_at = 17;
+  // eligible_to_vote: pre-check result — was this attendee eligible to vote at the time of the event?
+  optional bool eligible_to_vote = 18;
 }
 
 service EventAttendeeDomainService {

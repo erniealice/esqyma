@@ -321,8 +321,13 @@ type Asset struct {
 	DateModified       *int64  `protobuf:"varint,42,opt,name=date_modified,json=dateModified,proto3,oneof" json:"date_modified,omitempty"`
 	DateModifiedString *string `protobuf:"bytes,43,opt,name=date_modified_string,json=dateModifiedString,proto3,oneof" json:"date_modified_string,omitempty"`
 	Active             bool    `protobuf:"varint,44,opt,name=active,proto3" json:"active,omitempty"`
-	unknownFields      protoimpl.UnknownFields
-	sizeCache          protoimpl.SizeCache
+	// Workspace tenancy (Phase 1 — 2026-05-10).
+	// Field 45 verified free at 2026-05-10 (proto used fields 1–44 only).
+	// Stored as nullable in the DB during the additive migration; a future
+	// 2-step migration tightens to NOT NULL after backfill is reconciled.
+	WorkspaceId   *string `protobuf:"bytes,45,opt,name=workspace_id,json=workspaceId,proto3,oneof" json:"workspace_id,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
 }
 
 func (x *Asset) Reset() {
@@ -647,6 +652,13 @@ func (x *Asset) GetActive() bool {
 		return x.Active
 	}
 	return false
+}
+
+func (x *Asset) GetWorkspaceId() string {
+	if x != nil && x.WorkspaceId != nil {
+		return *x.WorkspaceId
+	}
+	return ""
 }
 
 type CreateAssetRequest struct {
@@ -2313,7 +2325,7 @@ var File_domain_asset_asset_asset_proto protoreflect.FileDescriptor
 
 const file_domain_asset_asset_asset_proto_rawDesc = "" +
 	"\n" +
-	"\x1edomain/asset/asset/asset.proto\x12\x0fdomain.asset.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1adomain/common/search.proto\x1a0domain/asset/asset_category/asset_category.proto\x1a,domain/asset/depreciation/depreciation.proto\x1a%domain/entity/location/location.proto\x1a\x10options/db.proto\"\x8a\x14\n" +
+	"\x1edomain/asset/asset/asset.proto\x12\x0fdomain.asset.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1adomain/common/search.proto\x1a0domain/asset/asset_category/asset_category.proto\x1a,domain/asset/depreciation/depreciation.proto\x1a%domain/entity/location/location.proto\x1a\x10options/db.proto\"\xd6\x14\n" +
 	"\x05Asset\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12)\n" +
 	"\fasset_number\x18\x02 \x01(\tB\x06\x82\xb5\x18\x02\x10\x01R\vassetNumber\x12\x12\n" +
@@ -2367,7 +2379,9 @@ const file_domain_asset_asset_asset_proto_rawDesc = "" +
 	"\rdate_modified\x18* \x01(\x03H\x19R\fdateModified\x88\x01\x01\x125\n" +
 	"\x14date_modified_string\x18+ \x01(\tH\x1aR\x12dateModifiedString\x88\x01\x01\x12\"\n" +
 	"\x06active\x18, \x01(\bB\n" +
-	"\x82\xb5\x18\x06\"\x04trueR\x06active:\x06\x8a\xb5\x18\x02\b\x01B\x0e\n" +
+	"\x82\xb5\x18\x06\"\x04trueR\x06active\x129\n" +
+	"\fworkspace_id\x18- \x01(\tB\x11\x82\xb5\x18\r\n" +
+	"\tworkspace\x18\x01H\x1bR\vworkspaceId\x88\x01\x01:\x06\x8a\xb5\x18\x02\b\x01B\x0e\n" +
 	"\f_descriptionB\x11\n" +
 	"\x0f_asset_categoryB\x10\n" +
 	"\x0e_serial_numberB\r\n" +
@@ -2395,7 +2409,8 @@ const file_domain_asset_asset_asset_proto_rawDesc = "" +
 	"\r_date_createdB\x16\n" +
 	"\x14_date_created_stringB\x10\n" +
 	"\x0e_date_modifiedB\x17\n" +
-	"\x15_date_modified_stringJ\x04\b\x14\x10\x15J\x04\b!\x10\"\"@\n" +
+	"\x15_date_modified_stringB\x0f\n" +
+	"\r_workspace_idJ\x04\b\x14\x10\x15J\x04\b!\x10\"\"@\n" +
 	"\x12CreateAssetRequest\x12*\n" +
 	"\x04data\x18\x01 \x01(\v2\x16.domain.asset.v1.AssetR\x04data\"\x99\x01\n" +
 	"\x13CreateAssetResponse\x12*\n" +

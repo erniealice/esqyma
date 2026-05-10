@@ -32,6 +32,9 @@ const (
 	EquityTransactionType_EQUITY_TRANSACTION_TYPE_WITHDRAWAL   EquityTransactionType = 2 // Owner draws (debit Draw, credit Cash)
 	EquityTransactionType_EQUITY_TRANSACTION_TYPE_DISTRIBUTION EquityTransactionType = 3 // Profit distribution (debit Retained Earnings, credit Cash)
 	EquityTransactionType_EQUITY_TRANSACTION_TYPE_TRANSFER     EquityTransactionType = 4 // Between equity accounts (e.g. close Draw to Capital)
+	// Mutual / cooperative extension (2026-05-10):
+	EquityTransactionType_EQUITY_TRANSACTION_TYPE_PATRONAGE_RETENTION    EquityTransactionType = 5 // Surplus retained as member equity (IRS Sub-T: non-cash patronage dividend)
+	EquityTransactionType_EQUITY_TRANSACTION_TYPE_PATRONAGE_DISTRIBUTION EquityTransactionType = 6 // Surplus distributed as cash refund (IRS Sub-T: cash patronage dividend)
 )
 
 // Enum value maps for EquityTransactionType.
@@ -42,13 +45,17 @@ var (
 		2: "EQUITY_TRANSACTION_TYPE_WITHDRAWAL",
 		3: "EQUITY_TRANSACTION_TYPE_DISTRIBUTION",
 		4: "EQUITY_TRANSACTION_TYPE_TRANSFER",
+		5: "EQUITY_TRANSACTION_TYPE_PATRONAGE_RETENTION",
+		6: "EQUITY_TRANSACTION_TYPE_PATRONAGE_DISTRIBUTION",
 	}
 	EquityTransactionType_value = map[string]int32{
-		"EQUITY_TRANSACTION_TYPE_UNSPECIFIED":  0,
-		"EQUITY_TRANSACTION_TYPE_CONTRIBUTION": 1,
-		"EQUITY_TRANSACTION_TYPE_WITHDRAWAL":   2,
-		"EQUITY_TRANSACTION_TYPE_DISTRIBUTION": 3,
-		"EQUITY_TRANSACTION_TYPE_TRANSFER":     4,
+		"EQUITY_TRANSACTION_TYPE_UNSPECIFIED":            0,
+		"EQUITY_TRANSACTION_TYPE_CONTRIBUTION":           1,
+		"EQUITY_TRANSACTION_TYPE_WITHDRAWAL":             2,
+		"EQUITY_TRANSACTION_TYPE_DISTRIBUTION":           3,
+		"EQUITY_TRANSACTION_TYPE_TRANSFER":               4,
+		"EQUITY_TRANSACTION_TYPE_PATRONAGE_RETENTION":    5,
+		"EQUITY_TRANSACTION_TYPE_PATRONAGE_DISTRIBUTION": 6,
 	}
 )
 
@@ -1082,13 +1089,15 @@ const file_domain_ledger_equity_transaction_equity_transaction_proto_rawDesc = "
 	"\asuccess\x18\x02 \x01(\bR\asuccess\x122\n" +
 	"\x05error\x18\x03 \x01(\v2\x17.domain.common.v1.ErrorH\x01R\x05error\x88\x01\x01B\x15\n" +
 	"\x13_equity_transactionB\b\n" +
-	"\x06_error*\xe2\x01\n" +
+	"\x06_error*\xc7\x02\n" +
 	"\x15EquityTransactionType\x12'\n" +
 	"#EQUITY_TRANSACTION_TYPE_UNSPECIFIED\x10\x00\x12(\n" +
 	"$EQUITY_TRANSACTION_TYPE_CONTRIBUTION\x10\x01\x12&\n" +
 	"\"EQUITY_TRANSACTION_TYPE_WITHDRAWAL\x10\x02\x12(\n" +
 	"$EQUITY_TRANSACTION_TYPE_DISTRIBUTION\x10\x03\x12$\n" +
-	" EQUITY_TRANSACTION_TYPE_TRANSFER\x10\x042\xcf\a\n" +
+	" EQUITY_TRANSACTION_TYPE_TRANSFER\x10\x04\x12/\n" +
+	"+EQUITY_TRANSACTION_TYPE_PATRONAGE_RETENTION\x10\x05\x122\n" +
+	".EQUITY_TRANSACTION_TYPE_PATRONAGE_DISTRIBUTION\x10\x062\xcf\a\n" +
 	"\x1eEquityTransactionDomainService\x12~\n" +
 	"\x17CreateEquityTransaction\x120.domain.ledger.v1.CreateEquityTransactionRequest\x1a1.domain.ledger.v1.CreateEquityTransactionResponse\x12x\n" +
 	"\x15ReadEquityTransaction\x12..domain.ledger.v1.ReadEquityTransactionRequest\x1a/.domain.ledger.v1.ReadEquityTransactionResponse\x12~\n" +

@@ -45,6 +45,12 @@ message AssetCategory {
   optional string depreciation_method = 21;       // Effective depreciation method (separate from default_depreciation_method)
   optional double salvage_pct = 22;               // Effective salvage percentage
   optional int32 useful_life_months = 23;         // Effective useful life in months
+
+  // Workspace tenancy (Phase 1 — 2026-05-10).
+  // Field 24 verified free at 2026-05-10 (proto used fields 1–23 only).
+  // Stored as nullable in the DB during the additive migration; a future
+  // 2-step migration tightens to NOT NULL after backfill is reconciled.
+  optional string workspace_id = 24 [(options.v1.db).references = "workspace", (options.v1.db).index = true];
 }
 
 service AssetCategoryDomainService {

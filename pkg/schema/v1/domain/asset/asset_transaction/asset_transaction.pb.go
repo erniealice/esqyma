@@ -45,6 +45,12 @@ const (
 	AssetTransactionType_ASSET_TRANSACTION_TYPE_REINSTATEMENT       AssetTransactionType = 15
 	AssetTransactionType_ASSET_TRANSACTION_TYPE_MAINTENANCE         AssetTransactionType = 16
 	AssetTransactionType_ASSET_TRANSACTION_TYPE_WRITE_OFF           AssetTransactionType = 17
+	// Leasing-specific lifecycle events (added 2026-05-10 — verticals expansion).
+	// These disambiguate the lease-out vs internal-transfer vs damage-finding paths
+	// that previously overloaded TRANSFER + ADJUSTMENT respectively.
+	AssetTransactionType_ASSET_TRANSACTION_TYPE_LEASE_OUT    AssetTransactionType = 18 // Asset deployed to lessee (asset leaves yard, custody = customer)
+	AssetTransactionType_ASSET_TRANSACTION_TYPE_LEASE_RETURN AssetTransactionType = 19 // Asset back from lessee (asset re-enters yard, custody = firm)
+	AssetTransactionType_ASSET_TRANSACTION_TYPE_DAMAGE_FOUND AssetTransactionType = 20 // Inspection finding post-return (drives chargeback Revenue line)
 )
 
 // Enum value maps for AssetTransactionType.
@@ -68,6 +74,9 @@ var (
 		15: "ASSET_TRANSACTION_TYPE_REINSTATEMENT",
 		16: "ASSET_TRANSACTION_TYPE_MAINTENANCE",
 		17: "ASSET_TRANSACTION_TYPE_WRITE_OFF",
+		18: "ASSET_TRANSACTION_TYPE_LEASE_OUT",
+		19: "ASSET_TRANSACTION_TYPE_LEASE_RETURN",
+		20: "ASSET_TRANSACTION_TYPE_DAMAGE_FOUND",
 	}
 	AssetTransactionType_value = map[string]int32{
 		"ASSET_TRANSACTION_TYPE_UNSPECIFIED":         0,
@@ -88,6 +97,9 @@ var (
 		"ASSET_TRANSACTION_TYPE_REINSTATEMENT":       15,
 		"ASSET_TRANSACTION_TYPE_MAINTENANCE":         16,
 		"ASSET_TRANSACTION_TYPE_WRITE_OFF":           17,
+		"ASSET_TRANSACTION_TYPE_LEASE_OUT":           18,
+		"ASSET_TRANSACTION_TYPE_LEASE_RETURN":        19,
+		"ASSET_TRANSACTION_TYPE_DAMAGE_FOUND":        20,
 	}
 )
 
@@ -151,8 +163,13 @@ type AssetTransaction struct {
 	// Back-ref from the audit transaction to the immutable AssetRevaluation record
 	// (added Phase 2 — missed in Phase 0).
 	AssetRevaluationId *string `protobuf:"bytes,20,opt,name=asset_revaluation_id,json=assetRevaluationId,proto3,oneof" json:"asset_revaluation_id,omitempty"`
-	unknownFields      protoimpl.UnknownFields
-	sizeCache          protoimpl.SizeCache
+	// Workspace tenancy (Phase 1 — 2026-05-10).
+	// Field 21 verified free at 2026-05-10 (proto used fields 1–20 only).
+	// Stored as nullable in the DB during the additive migration; a future
+	// 2-step migration tightens to NOT NULL after backfill is reconciled.
+	WorkspaceId   *string `protobuf:"bytes,21,opt,name=workspace_id,json=workspaceId,proto3,oneof" json:"workspace_id,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
 }
 
 func (x *AssetTransaction) Reset() {
@@ -321,6 +338,13 @@ func (x *AssetTransaction) GetDepreciationPeriodStartDate() string {
 func (x *AssetTransaction) GetAssetRevaluationId() string {
 	if x != nil && x.AssetRevaluationId != nil {
 		return *x.AssetRevaluationId
+	}
+	return ""
+}
+
+func (x *AssetTransaction) GetWorkspaceId() string {
+	if x != nil && x.WorkspaceId != nil {
+		return *x.WorkspaceId
 	}
 	return ""
 }
@@ -921,7 +945,7 @@ var File_domain_asset_asset_transaction_asset_transaction_proto protoreflect.Fil
 
 const file_domain_asset_asset_transaction_asset_transaction_proto_rawDesc = "" +
 	"\n" +
-	"6domain/asset/asset_transaction/asset_transaction.proto\x12\x0fdomain.asset.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1adomain/common/search.proto\x1a\x10options/db.proto\"\x91\n" +
+	"6domain/asset/asset_transaction/asset_transaction.proto\x12\x0fdomain.asset.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1adomain/common/search.proto\x1a\x10options/db.proto\"\xdd\n" +
 	"\n" +
 	"\x10AssetTransaction\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12(\n" +
@@ -949,7 +973,9 @@ const file_domain_asset_asset_transaction_asset_transaction_proto_rawDesc = "" +
 	"R\x11depreciationRunId\x88\x01\x01\x12H\n" +
 	"\x1edepreciation_period_start_date\x18\x13 \x01(\tH\vR\x1bdepreciationPeriodStartDate\x88\x01\x01\x12P\n" +
 	"\x14asset_revaluation_id\x18\x14 \x01(\tB\x19\x82\xb5\x18\x15\n" +
-	"\x11asset_revaluation\x18\x01H\fR\x12assetRevaluationId\x88\x01\x01:\x06\x8a\xb5\x18\x02\b\x01B\x0e\n" +
+	"\x11asset_revaluation\x18\x01H\fR\x12assetRevaluationId\x88\x01\x01\x129\n" +
+	"\fworkspace_id\x18\x15 \x01(\tB\x11\x82\xb5\x18\r\n" +
+	"\tworkspace\x18\x01H\rR\vworkspaceId\x88\x01\x01:\x06\x8a\xb5\x18\x02\b\x01B\x0e\n" +
 	"\f_descriptionB\x13\n" +
 	"\x11_reference_numberB\x13\n" +
 	"\x11_from_location_idB\x11\n" +
@@ -962,7 +988,8 @@ const file_domain_asset_asset_transaction_asset_transaction_proto_rawDesc = "" +
 	"\x15_date_modified_stringB\x16\n" +
 	"\x14_depreciation_run_idB!\n" +
 	"\x1f_depreciation_period_start_dateB\x17\n" +
-	"\x15_asset_revaluation_id\"V\n" +
+	"\x15_asset_revaluation_idB\x0f\n" +
+	"\r_workspace_id\"V\n" +
 	"\x1dCreateAssetTransactionRequest\x125\n" +
 	"\x04data\x18\x01 \x01(\v2!.domain.asset.v1.AssetTransactionR\x04data\"\xaf\x01\n" +
 	"\x1eCreateAssetTransactionResponse\x125\n" +
@@ -1025,7 +1052,7 @@ const file_domain_asset_asset_transaction_asset_transaction_proto_rawDesc = "" +
 	"\asuccess\x18\x02 \x01(\bR\asuccess\x122\n" +
 	"\x05error\x18\x03 \x01(\v2\x17.domain.common.v1.ErrorH\x01R\x05error\x88\x01\x01B\x14\n" +
 	"\x12_asset_transactionB\b\n" +
-	"\x06_error*\xff\x05\n" +
+	"\x06_error*\xf7\x06\n" +
 	"\x14AssetTransactionType\x12&\n" +
 	"\"ASSET_TRANSACTION_TYPE_UNSPECIFIED\x10\x00\x12&\n" +
 	"\"ASSET_TRANSACTION_TYPE_ACQUISITION\x10\x01\x12#\n" +
@@ -1045,7 +1072,10 @@ const file_domain_asset_asset_transaction_asset_transaction_proto_rawDesc = "" +
 	"!ASSET_TRANSACTION_TYPE_RETIREMENT\x10\x0e\x12(\n" +
 	"$ASSET_TRANSACTION_TYPE_REINSTATEMENT\x10\x0f\x12&\n" +
 	"\"ASSET_TRANSACTION_TYPE_MAINTENANCE\x10\x10\x12$\n" +
-	" ASSET_TRANSACTION_TYPE_WRITE_OFF\x10\x112\xb5\x05\n" +
+	" ASSET_TRANSACTION_TYPE_WRITE_OFF\x10\x11\x12$\n" +
+	" ASSET_TRANSACTION_TYPE_LEASE_OUT\x10\x12\x12'\n" +
+	"#ASSET_TRANSACTION_TYPE_LEASE_RETURN\x10\x13\x12'\n" +
+	"#ASSET_TRANSACTION_TYPE_DAMAGE_FOUND\x10\x142\xb5\x05\n" +
 	"\x1dAssetTransactionDomainService\x12y\n" +
 	"\x16CreateAssetTransaction\x12..domain.asset.v1.CreateAssetTransactionRequest\x1a/.domain.asset.v1.CreateAssetTransactionResponse\x12s\n" +
 	"\x14ReadAssetTransaction\x12,.domain.asset.v1.ReadAssetTransactionRequest\x1a-.domain.asset.v1.ReadAssetTransactionResponse\x12v\n" +

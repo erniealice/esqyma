@@ -353,7 +353,7 @@ Detailed scenarios are organized by domain category in separate files:
 
 | Domain | File | Scenarios |
 |---|---|---|
-| **Sales** | [scenarios/sales.md](scenarios/sales.md) | Walk-in Botox appointment billing, beauty bank credit redemption, Botox party group billing |
+| **Revenue** | [scenarios/revenue.md](scenarios/revenue.md) | Walk-in Botox appointment billing, beauty bank credit redemption, Botox party group billing |
 | **Inventory** | [scenarios/inventory.md](scenarios/inventory.md) | Receiving injectable shipment, Botox vial consumption during treatment, expired product write-off, inter-clinic transfer |
 | **Plan** | [scenarios/plan.md](scenarios/plan.md) | Beauty bank membership setup, multi-session laser package, corporate wellness program |
 | **Subscription** | [scenarios/subscription.md](scenarios/subscription.md) | Patient joins beauty bank, package purchase and session tracking, membership upgrade |

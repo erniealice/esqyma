@@ -120,6 +120,12 @@ message Asset {
   optional int64 date_modified = 42;
   optional string date_modified_string = 43;
   bool active = 44 [(options.v1.db).default = "true"];
+
+  // Workspace tenancy (Phase 1 — 2026-05-10).
+  // Field 45 verified free at 2026-05-10 (proto used fields 1–44 only).
+  // Stored as nullable in the DB during the additive migration; a future
+  // 2-step migration tightens to NOT NULL after backfill is reconciled.
+  optional string workspace_id = 45 [(options.v1.db).references = "workspace", (options.v1.db).index = true];
 }
 
 service AssetDomainService {

@@ -52,8 +52,13 @@ type AssetCategory struct {
 	DepreciationMethod *string  `protobuf:"bytes,21,opt,name=depreciation_method,json=depreciationMethod,proto3,oneof" json:"depreciation_method,omitempty"` // Effective depreciation method (separate from default_depreciation_method)
 	SalvagePct         *float64 `protobuf:"fixed64,22,opt,name=salvage_pct,json=salvagePct,proto3,oneof" json:"salvage_pct,omitempty"`                       // Effective salvage percentage
 	UsefulLifeMonths   *int32   `protobuf:"varint,23,opt,name=useful_life_months,json=usefulLifeMonths,proto3,oneof" json:"useful_life_months,omitempty"`    // Effective useful life in months
-	unknownFields      protoimpl.UnknownFields
-	sizeCache          protoimpl.SizeCache
+	// Workspace tenancy (Phase 1 — 2026-05-10).
+	// Field 24 verified free at 2026-05-10 (proto used fields 1–23 only).
+	// Stored as nullable in the DB during the additive migration; a future
+	// 2-step migration tightens to NOT NULL after backfill is reconciled.
+	WorkspaceId   *string `protobuf:"bytes,24,opt,name=workspace_id,json=workspaceId,proto3,oneof" json:"workspace_id,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
 }
 
 func (x *AssetCategory) Reset() {
@@ -245,6 +250,13 @@ func (x *AssetCategory) GetUsefulLifeMonths() int32 {
 		return *x.UsefulLifeMonths
 	}
 	return 0
+}
+
+func (x *AssetCategory) GetWorkspaceId() string {
+	if x != nil && x.WorkspaceId != nil {
+		return *x.WorkspaceId
+	}
+	return ""
 }
 
 type CreateAssetCategoryRequest struct {
@@ -1035,7 +1047,7 @@ var File_domain_asset_asset_category_asset_category_proto protoreflect.FileDescr
 
 const file_domain_asset_asset_category_asset_category_proto_rawDesc = "" +
 	"\n" +
-	"0domain/asset/asset_category/asset_category.proto\x12\x0fdomain.asset.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1adomain/common/search.proto\x1a\x10options/db.proto\"\xce\f\n" +
+	"0domain/asset/asset_category/asset_category.proto\x12\x0fdomain.asset.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1adomain/common/search.proto\x1a\x10options/db.proto\"\x9a\r\n" +
 	"\rAssetCategory\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12\x1a\n" +
 	"\x04code\x18\x02 \x01(\tB\x06\x82\xb5\x18\x02\x10\x01R\x04code\x12\x12\n" +
@@ -1064,7 +1076,9 @@ const file_domain_asset_asset_category_asset_category_proto_rawDesc = "" +
 	"\x13depreciation_method\x18\x15 \x01(\tH\rR\x12depreciationMethod\x88\x01\x01\x12$\n" +
 	"\vsalvage_pct\x18\x16 \x01(\x01H\x0eR\n" +
 	"salvagePct\x88\x01\x01\x121\n" +
-	"\x12useful_life_months\x18\x17 \x01(\x05H\x0fR\x10usefulLifeMonths\x88\x01\x01:\x06\x8a\xb5\x18\x02\b\x01B\x0e\n" +
+	"\x12useful_life_months\x18\x17 \x01(\x05H\x0fR\x10usefulLifeMonths\x88\x01\x01\x129\n" +
+	"\fworkspace_id\x18\x18 \x01(\tB\x11\x82\xb5\x18\r\n" +
+	"\tworkspace\x18\x01H\x10R\vworkspaceId\x88\x01\x01:\x06\x8a\xb5\x18\x02\b\x01B\x0e\n" +
 	"\f_descriptionB\x15\n" +
 	"\x13_parent_category_idB\x15\n" +
 	"\x13_asset_cost_accountB#\n" +
@@ -1080,7 +1094,8 @@ const file_domain_asset_asset_category_asset_category_proto_rawDesc = "" +
 	"\x15_date_modified_stringB\x16\n" +
 	"\x14_depreciation_methodB\x0e\n" +
 	"\f_salvage_pctB\x15\n" +
-	"\x13_useful_life_months\"P\n" +
+	"\x13_useful_life_monthsB\x0f\n" +
+	"\r_workspace_id\"P\n" +
 	"\x1aCreateAssetCategoryRequest\x122\n" +
 	"\x04data\x18\x01 \x01(\v2\x1e.domain.asset.v1.AssetCategoryR\x04data\"\xa9\x01\n" +
 	"\x1bCreateAssetCategoryResponse\x122\n" +

@@ -76,6 +76,59 @@ func (EventStatus) EnumDescriptor() ([]byte, []int) {
 	return file_domain_event_event_event_proto_rawDescGZIP(), []int{0}
 }
 
+// EventKind classifies the purpose of an event.
+// Added 2026-05-10 for mutual/cooperative vertical — governance votes need
+// a distinct kind so vote tallying, quorum checks, and voting eligibility
+// logic can branch on event type.
+type EventKind int32
+
+const (
+	EventKind_EVENT_KIND_UNSPECIFIED     EventKind = 0
+	EventKind_EVENT_KIND_MEETING         EventKind = 1 // General meeting (board meeting, team standup, etc.)
+	EventKind_EVENT_KIND_GOVERNANCE_VOTE EventKind = 2 // Formal vote / general assembly (mutual/cooperative governance)
+)
+
+// Enum value maps for EventKind.
+var (
+	EventKind_name = map[int32]string{
+		0: "EVENT_KIND_UNSPECIFIED",
+		1: "EVENT_KIND_MEETING",
+		2: "EVENT_KIND_GOVERNANCE_VOTE",
+	}
+	EventKind_value = map[string]int32{
+		"EVENT_KIND_UNSPECIFIED":     0,
+		"EVENT_KIND_MEETING":         1,
+		"EVENT_KIND_GOVERNANCE_VOTE": 2,
+	}
+)
+
+func (x EventKind) Enum() *EventKind {
+	p := new(EventKind)
+	*p = x
+	return p
+}
+
+func (x EventKind) String() string {
+	return protoimpl.X.EnumStringOf(x.Descriptor(), protoreflect.EnumNumber(x))
+}
+
+func (EventKind) Descriptor() protoreflect.EnumDescriptor {
+	return file_domain_event_event_event_proto_enumTypes[1].Descriptor()
+}
+
+func (EventKind) Type() protoreflect.EnumType {
+	return &file_domain_event_event_event_proto_enumTypes[1]
+}
+
+func (x EventKind) Number() protoreflect.EnumNumber {
+	return protoreflect.EnumNumber(x)
+}
+
+// Deprecated: Use EventKind.Descriptor instead.
+func (EventKind) EnumDescriptor() ([]byte, []int) {
+	return file_domain_event_event_event_proto_rawDescGZIP(), []int{1}
+}
+
 type Event struct {
 	state                  protoimpl.MessageState `protogen:"open.v1"`
 	Id                     string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
@@ -108,8 +161,11 @@ type Event struct {
 	ParentEventId *string `protobuf:"bytes,21,opt,name=parent_event_id,json=parentEventId,proto3,oneof" json:"parent_event_id,omitempty"`
 	// Original occurrence timestamp this exception replaces (RFC 5545 RECURRENCE-ID value)
 	OriginalOccurrenceUtc *int64 `protobuf:"varint,22,opt,name=original_occurrence_utc,json=originalOccurrenceUtc,proto3,oneof" json:"original_occurrence_utc,omitempty"`
-	unknownFields         protoimpl.UnknownFields
-	sizeCache             protoimpl.SizeCache
+	// Mutual / cooperative extension (2026-05-10)
+	// kind: classifies the event purpose; used for governance-vote branching
+	Kind          *EventKind `protobuf:"varint,23,opt,name=kind,proto3,enum=domain.event.v1.EventKind,oneof" json:"kind,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
 }
 
 func (x *Event) Reset() {
@@ -287,6 +343,13 @@ func (x *Event) GetOriginalOccurrenceUtc() int64 {
 		return *x.OriginalOccurrenceUtc
 	}
 	return 0
+}
+
+func (x *Event) GetKind() EventKind {
+	if x != nil && x.Kind != nil {
+		return *x.Kind
+	}
+	return EventKind_EVENT_KIND_UNSPECIFIED
 }
 
 type CreateEventRequest struct {
@@ -1081,7 +1144,8 @@ var File_domain_event_event_event_proto protoreflect.FileDescriptor
 
 const file_domain_event_event_event_proto_rawDesc = "" +
 	"\n" +
-	"\x1edomain/event/event/event.proto\x12\x0fdomain.event.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1adomain/common/search.proto\x1a\x10options/db.proto\"\xfe\t\n" +
+	"\x1edomain/event/event/event.proto\x12\x0fdomain.event.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1adomain/common/search.proto\x1a\x10options/db.proto\"\xbc\n" +
+	"\n" +
 	"\x05Event\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12\x12\n" +
 	"\x04name\x18\x02 \x01(\tR\x04name\x12%\n" +
@@ -1112,7 +1176,8 @@ const file_domain_event_event_event_proto_rawDesc = "" +
 	"\x0fparent_event_id\x18\x15 \x01(\tB\r\x82\xb5\x18\t\n" +
 	"\x05event\x18\x01H\n" +
 	"R\rparentEventId\x88\x01\x01\x12;\n" +
-	"\x17original_occurrence_utc\x18\x16 \x01(\x03H\vR\x15originalOccurrenceUtc\x88\x01\x01:\x06\x8a\xb5\x18\x02\b\x01B\x0e\n" +
+	"\x17original_occurrence_utc\x18\x16 \x01(\x03H\vR\x15originalOccurrenceUtc\x88\x01\x01\x123\n" +
+	"\x04kind\x18\x17 \x01(\x0e2\x1a.domain.event.v1.EventKindH\fR\x04kind\x88\x01\x01:\x06\x8a\xb5\x18\x02\b\x01B\x0e\n" +
 	"\f_descriptionB\x0f\n" +
 	"\r_date_createdB\x16\n" +
 	"\x14_date_created_stringB\x10\n" +
@@ -1124,7 +1189,8 @@ const file_domain_event_event_event_proto_rawDesc = "" +
 	"\f_location_idB\x16\n" +
 	"\x14_event_recurrence_idB\x12\n" +
 	"\x10_parent_event_idB\x1a\n" +
-	"\x18_original_occurrence_utc\"@\n" +
+	"\x18_original_occurrence_utcB\a\n" +
+	"\x05_kind\"@\n" +
 	"\x12CreateEventRequest\x12*\n" +
 	"\x04data\x18\x01 \x01(\v2\x16.domain.event.v1.EventR\x04data\"\x99\x01\n" +
 	"\x13CreateEventResponse\x12*\n" +
@@ -1202,7 +1268,11 @@ const file_domain_event_event_event_proto_rawDesc = "" +
 	"\x18EVENT_STATUS_UNSPECIFIED\x10\x00\x12\x1a\n" +
 	"\x16EVENT_STATUS_TENTATIVE\x10\x01\x12\x1a\n" +
 	"\x16EVENT_STATUS_CONFIRMED\x10\x02\x12\x1a\n" +
-	"\x16EVENT_STATUS_CANCELLED\x10\x032\xb7\x05\n" +
+	"\x16EVENT_STATUS_CANCELLED\x10\x03*_\n" +
+	"\tEventKind\x12\x1a\n" +
+	"\x16EVENT_KIND_UNSPECIFIED\x10\x00\x12\x16\n" +
+	"\x12EVENT_KIND_MEETING\x10\x01\x12\x1e\n" +
+	"\x1aEVENT_KIND_GOVERNANCE_VOTE\x10\x022\xb7\x05\n" +
 	"\x12EventDomainService\x12X\n" +
 	"\vCreateEvent\x12#.domain.event.v1.CreateEventRequest\x1a$.domain.event.v1.CreateEventResponse\x12R\n" +
 	"\tReadEvent\x12!.domain.event.v1.ReadEventRequest\x1a\".domain.event.v1.ReadEventResponse\x12X\n" +
@@ -1227,81 +1297,83 @@ func file_domain_event_event_event_proto_rawDescGZIP() []byte {
 	return file_domain_event_event_event_proto_rawDescData
 }
 
-var file_domain_event_event_event_proto_enumTypes = make([]protoimpl.EnumInfo, 1)
+var file_domain_event_event_event_proto_enumTypes = make([]protoimpl.EnumInfo, 2)
 var file_domain_event_event_event_proto_msgTypes = make([]protoimpl.MessageInfo, 15)
 var file_domain_event_event_event_proto_goTypes = []any{
 	(EventStatus)(0),                     // 0: domain.event.v1.EventStatus
-	(*Event)(nil),                        // 1: domain.event.v1.Event
-	(*CreateEventRequest)(nil),           // 2: domain.event.v1.CreateEventRequest
-	(*CreateEventResponse)(nil),          // 3: domain.event.v1.CreateEventResponse
-	(*ReadEventRequest)(nil),             // 4: domain.event.v1.ReadEventRequest
-	(*ReadEventResponse)(nil),            // 5: domain.event.v1.ReadEventResponse
-	(*UpdateEventRequest)(nil),           // 6: domain.event.v1.UpdateEventRequest
-	(*UpdateEventResponse)(nil),          // 7: domain.event.v1.UpdateEventResponse
-	(*DeleteEventRequest)(nil),           // 8: domain.event.v1.DeleteEventRequest
-	(*DeleteEventResponse)(nil),          // 9: domain.event.v1.DeleteEventResponse
-	(*ListEventsRequest)(nil),            // 10: domain.event.v1.ListEventsRequest
-	(*ListEventsResponse)(nil),           // 11: domain.event.v1.ListEventsResponse
-	(*GetEventListPageDataRequest)(nil),  // 12: domain.event.v1.GetEventListPageDataRequest
-	(*GetEventListPageDataResponse)(nil), // 13: domain.event.v1.GetEventListPageDataResponse
-	(*GetEventItemPageDataRequest)(nil),  // 14: domain.event.v1.GetEventItemPageDataRequest
-	(*GetEventItemPageDataResponse)(nil), // 15: domain.event.v1.GetEventItemPageDataResponse
-	(*common.Error)(nil),                 // 16: domain.common.v1.Error
-	(*common.SearchRequest)(nil),         // 17: domain.common.v1.SearchRequest
-	(*common.FilterRequest)(nil),         // 18: domain.common.v1.FilterRequest
-	(*common.SortRequest)(nil),           // 19: domain.common.v1.SortRequest
-	(*common.PaginationRequest)(nil),     // 20: domain.common.v1.PaginationRequest
-	(*common.PaginationResponse)(nil),    // 21: domain.common.v1.PaginationResponse
-	(*common.SearchResult)(nil),          // 22: domain.common.v1.SearchResult
+	(EventKind)(0),                       // 1: domain.event.v1.EventKind
+	(*Event)(nil),                        // 2: domain.event.v1.Event
+	(*CreateEventRequest)(nil),           // 3: domain.event.v1.CreateEventRequest
+	(*CreateEventResponse)(nil),          // 4: domain.event.v1.CreateEventResponse
+	(*ReadEventRequest)(nil),             // 5: domain.event.v1.ReadEventRequest
+	(*ReadEventResponse)(nil),            // 6: domain.event.v1.ReadEventResponse
+	(*UpdateEventRequest)(nil),           // 7: domain.event.v1.UpdateEventRequest
+	(*UpdateEventResponse)(nil),          // 8: domain.event.v1.UpdateEventResponse
+	(*DeleteEventRequest)(nil),           // 9: domain.event.v1.DeleteEventRequest
+	(*DeleteEventResponse)(nil),          // 10: domain.event.v1.DeleteEventResponse
+	(*ListEventsRequest)(nil),            // 11: domain.event.v1.ListEventsRequest
+	(*ListEventsResponse)(nil),           // 12: domain.event.v1.ListEventsResponse
+	(*GetEventListPageDataRequest)(nil),  // 13: domain.event.v1.GetEventListPageDataRequest
+	(*GetEventListPageDataResponse)(nil), // 14: domain.event.v1.GetEventListPageDataResponse
+	(*GetEventItemPageDataRequest)(nil),  // 15: domain.event.v1.GetEventItemPageDataRequest
+	(*GetEventItemPageDataResponse)(nil), // 16: domain.event.v1.GetEventItemPageDataResponse
+	(*common.Error)(nil),                 // 17: domain.common.v1.Error
+	(*common.SearchRequest)(nil),         // 18: domain.common.v1.SearchRequest
+	(*common.FilterRequest)(nil),         // 19: domain.common.v1.FilterRequest
+	(*common.SortRequest)(nil),           // 20: domain.common.v1.SortRequest
+	(*common.PaginationRequest)(nil),     // 21: domain.common.v1.PaginationRequest
+	(*common.PaginationResponse)(nil),    // 22: domain.common.v1.PaginationResponse
+	(*common.SearchResult)(nil),          // 23: domain.common.v1.SearchResult
 }
 var file_domain_event_event_event_proto_depIdxs = []int32{
 	0,  // 0: domain.event.v1.Event.status:type_name -> domain.event.v1.EventStatus
-	1,  // 1: domain.event.v1.CreateEventRequest.data:type_name -> domain.event.v1.Event
-	1,  // 2: domain.event.v1.CreateEventResponse.data:type_name -> domain.event.v1.Event
-	16, // 3: domain.event.v1.CreateEventResponse.error:type_name -> domain.common.v1.Error
-	1,  // 4: domain.event.v1.ReadEventRequest.data:type_name -> domain.event.v1.Event
-	1,  // 5: domain.event.v1.ReadEventResponse.data:type_name -> domain.event.v1.Event
-	16, // 6: domain.event.v1.ReadEventResponse.error:type_name -> domain.common.v1.Error
-	1,  // 7: domain.event.v1.UpdateEventRequest.data:type_name -> domain.event.v1.Event
-	1,  // 8: domain.event.v1.UpdateEventResponse.data:type_name -> domain.event.v1.Event
-	16, // 9: domain.event.v1.UpdateEventResponse.error:type_name -> domain.common.v1.Error
-	1,  // 10: domain.event.v1.DeleteEventRequest.data:type_name -> domain.event.v1.Event
-	16, // 11: domain.event.v1.DeleteEventResponse.error:type_name -> domain.common.v1.Error
-	17, // 12: domain.event.v1.ListEventsRequest.search:type_name -> domain.common.v1.SearchRequest
-	18, // 13: domain.event.v1.ListEventsRequest.filters:type_name -> domain.common.v1.FilterRequest
-	19, // 14: domain.event.v1.ListEventsRequest.sort:type_name -> domain.common.v1.SortRequest
-	20, // 15: domain.event.v1.ListEventsRequest.pagination:type_name -> domain.common.v1.PaginationRequest
-	1,  // 16: domain.event.v1.ListEventsResponse.data:type_name -> domain.event.v1.Event
-	16, // 17: domain.event.v1.ListEventsResponse.error:type_name -> domain.common.v1.Error
-	20, // 18: domain.event.v1.GetEventListPageDataRequest.pagination:type_name -> domain.common.v1.PaginationRequest
-	18, // 19: domain.event.v1.GetEventListPageDataRequest.filters:type_name -> domain.common.v1.FilterRequest
-	19, // 20: domain.event.v1.GetEventListPageDataRequest.sort:type_name -> domain.common.v1.SortRequest
-	17, // 21: domain.event.v1.GetEventListPageDataRequest.search:type_name -> domain.common.v1.SearchRequest
-	1,  // 22: domain.event.v1.GetEventListPageDataResponse.event_list:type_name -> domain.event.v1.Event
-	21, // 23: domain.event.v1.GetEventListPageDataResponse.pagination:type_name -> domain.common.v1.PaginationResponse
-	22, // 24: domain.event.v1.GetEventListPageDataResponse.search_results:type_name -> domain.common.v1.SearchResult
-	16, // 25: domain.event.v1.GetEventListPageDataResponse.error:type_name -> domain.common.v1.Error
-	1,  // 26: domain.event.v1.GetEventItemPageDataResponse.event:type_name -> domain.event.v1.Event
-	16, // 27: domain.event.v1.GetEventItemPageDataResponse.error:type_name -> domain.common.v1.Error
-	2,  // 28: domain.event.v1.EventDomainService.CreateEvent:input_type -> domain.event.v1.CreateEventRequest
-	4,  // 29: domain.event.v1.EventDomainService.ReadEvent:input_type -> domain.event.v1.ReadEventRequest
-	6,  // 30: domain.event.v1.EventDomainService.UpdateEvent:input_type -> domain.event.v1.UpdateEventRequest
-	8,  // 31: domain.event.v1.EventDomainService.DeleteEvent:input_type -> domain.event.v1.DeleteEventRequest
-	10, // 32: domain.event.v1.EventDomainService.ListEvents:input_type -> domain.event.v1.ListEventsRequest
-	12, // 33: domain.event.v1.EventDomainService.GetEventListPageData:input_type -> domain.event.v1.GetEventListPageDataRequest
-	14, // 34: domain.event.v1.EventDomainService.GetEventItemPageData:input_type -> domain.event.v1.GetEventItemPageDataRequest
-	3,  // 35: domain.event.v1.EventDomainService.CreateEvent:output_type -> domain.event.v1.CreateEventResponse
-	5,  // 36: domain.event.v1.EventDomainService.ReadEvent:output_type -> domain.event.v1.ReadEventResponse
-	7,  // 37: domain.event.v1.EventDomainService.UpdateEvent:output_type -> domain.event.v1.UpdateEventResponse
-	9,  // 38: domain.event.v1.EventDomainService.DeleteEvent:output_type -> domain.event.v1.DeleteEventResponse
-	11, // 39: domain.event.v1.EventDomainService.ListEvents:output_type -> domain.event.v1.ListEventsResponse
-	13, // 40: domain.event.v1.EventDomainService.GetEventListPageData:output_type -> domain.event.v1.GetEventListPageDataResponse
-	15, // 41: domain.event.v1.EventDomainService.GetEventItemPageData:output_type -> domain.event.v1.GetEventItemPageDataResponse
-	35, // [35:42] is the sub-list for method output_type
-	28, // [28:35] is the sub-list for method input_type
-	28, // [28:28] is the sub-list for extension type_name
-	28, // [28:28] is the sub-list for extension extendee
-	0,  // [0:28] is the sub-list for field type_name
+	1,  // 1: domain.event.v1.Event.kind:type_name -> domain.event.v1.EventKind
+	2,  // 2: domain.event.v1.CreateEventRequest.data:type_name -> domain.event.v1.Event
+	2,  // 3: domain.event.v1.CreateEventResponse.data:type_name -> domain.event.v1.Event
+	17, // 4: domain.event.v1.CreateEventResponse.error:type_name -> domain.common.v1.Error
+	2,  // 5: domain.event.v1.ReadEventRequest.data:type_name -> domain.event.v1.Event
+	2,  // 6: domain.event.v1.ReadEventResponse.data:type_name -> domain.event.v1.Event
+	17, // 7: domain.event.v1.ReadEventResponse.error:type_name -> domain.common.v1.Error
+	2,  // 8: domain.event.v1.UpdateEventRequest.data:type_name -> domain.event.v1.Event
+	2,  // 9: domain.event.v1.UpdateEventResponse.data:type_name -> domain.event.v1.Event
+	17, // 10: domain.event.v1.UpdateEventResponse.error:type_name -> domain.common.v1.Error
+	2,  // 11: domain.event.v1.DeleteEventRequest.data:type_name -> domain.event.v1.Event
+	17, // 12: domain.event.v1.DeleteEventResponse.error:type_name -> domain.common.v1.Error
+	18, // 13: domain.event.v1.ListEventsRequest.search:type_name -> domain.common.v1.SearchRequest
+	19, // 14: domain.event.v1.ListEventsRequest.filters:type_name -> domain.common.v1.FilterRequest
+	20, // 15: domain.event.v1.ListEventsRequest.sort:type_name -> domain.common.v1.SortRequest
+	21, // 16: domain.event.v1.ListEventsRequest.pagination:type_name -> domain.common.v1.PaginationRequest
+	2,  // 17: domain.event.v1.ListEventsResponse.data:type_name -> domain.event.v1.Event
+	17, // 18: domain.event.v1.ListEventsResponse.error:type_name -> domain.common.v1.Error
+	21, // 19: domain.event.v1.GetEventListPageDataRequest.pagination:type_name -> domain.common.v1.PaginationRequest
+	19, // 20: domain.event.v1.GetEventListPageDataRequest.filters:type_name -> domain.common.v1.FilterRequest
+	20, // 21: domain.event.v1.GetEventListPageDataRequest.sort:type_name -> domain.common.v1.SortRequest
+	18, // 22: domain.event.v1.GetEventListPageDataRequest.search:type_name -> domain.common.v1.SearchRequest
+	2,  // 23: domain.event.v1.GetEventListPageDataResponse.event_list:type_name -> domain.event.v1.Event
+	22, // 24: domain.event.v1.GetEventListPageDataResponse.pagination:type_name -> domain.common.v1.PaginationResponse
+	23, // 25: domain.event.v1.GetEventListPageDataResponse.search_results:type_name -> domain.common.v1.SearchResult
+	17, // 26: domain.event.v1.GetEventListPageDataResponse.error:type_name -> domain.common.v1.Error
+	2,  // 27: domain.event.v1.GetEventItemPageDataResponse.event:type_name -> domain.event.v1.Event
+	17, // 28: domain.event.v1.GetEventItemPageDataResponse.error:type_name -> domain.common.v1.Error
+	3,  // 29: domain.event.v1.EventDomainService.CreateEvent:input_type -> domain.event.v1.CreateEventRequest
+	5,  // 30: domain.event.v1.EventDomainService.ReadEvent:input_type -> domain.event.v1.ReadEventRequest
+	7,  // 31: domain.event.v1.EventDomainService.UpdateEvent:input_type -> domain.event.v1.UpdateEventRequest
+	9,  // 32: domain.event.v1.EventDomainService.DeleteEvent:input_type -> domain.event.v1.DeleteEventRequest
+	11, // 33: domain.event.v1.EventDomainService.ListEvents:input_type -> domain.event.v1.ListEventsRequest
+	13, // 34: domain.event.v1.EventDomainService.GetEventListPageData:input_type -> domain.event.v1.GetEventListPageDataRequest
+	15, // 35: domain.event.v1.EventDomainService.GetEventItemPageData:input_type -> domain.event.v1.GetEventItemPageDataRequest
+	4,  // 36: domain.event.v1.EventDomainService.CreateEvent:output_type -> domain.event.v1.CreateEventResponse
+	6,  // 37: domain.event.v1.EventDomainService.ReadEvent:output_type -> domain.event.v1.ReadEventResponse
+	8,  // 38: domain.event.v1.EventDomainService.UpdateEvent:output_type -> domain.event.v1.UpdateEventResponse
+	10, // 39: domain.event.v1.EventDomainService.DeleteEvent:output_type -> domain.event.v1.DeleteEventResponse
+	12, // 40: domain.event.v1.EventDomainService.ListEvents:output_type -> domain.event.v1.ListEventsResponse
+	14, // 41: domain.event.v1.EventDomainService.GetEventListPageData:output_type -> domain.event.v1.GetEventListPageDataResponse
+	16, // 42: domain.event.v1.EventDomainService.GetEventItemPageData:output_type -> domain.event.v1.GetEventItemPageDataResponse
+	36, // [36:43] is the sub-list for method output_type
+	29, // [29:36] is the sub-list for method input_type
+	29, // [29:29] is the sub-list for extension type_name
+	29, // [29:29] is the sub-list for extension extendee
+	0,  // [0:29] is the sub-list for field type_name
 }
 
 func init() { file_domain_event_event_event_proto_init() }
@@ -1324,7 +1396,7 @@ func file_domain_event_event_event_proto_init() {
 		File: protoimpl.DescBuilder{
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_domain_event_event_event_proto_rawDesc), len(file_domain_event_event_event_proto_rawDesc)),
-			NumEnums:      1,
+			NumEnums:      2,
 			NumMessages:   15,
 			NumExtensions: 0,
 			NumServices:   1,

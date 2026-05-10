@@ -222,7 +222,7 @@ Detailed scenarios are organized by domain category in separate files:
 
 | Domain | File | Scenarios |
 |---|---|---|
-| **Sales** | [scenarios/sales.md](scenarios/sales.md) | Walk-in POS purchase, multi-item cart with mixed pricing, VIP member discount at checkout |
+| **Revenue** | [scenarios/revenue.md](scenarios/revenue.md) | Walk-in POS purchase, multi-item cart with mixed pricing, VIP member discount at checkout |
 | **Inventory** | [scenarios/inventory.md](scenarios/inventory.md) | Receiving stock, inter-store transfer, cycle count adjustment (shrinkage), serialized item tracking |
 | **Plan** | [scenarios/plan.md](scenarios/plan.md) | Launch new loyalty tier, seasonal VIP early access plan |
 | **Subscription** | [scenarios/subscription.md](scenarios/subscription.md) | Customer joins loyalty program, membership upgrade (Gold to Platinum), B2B wholesale agreement |

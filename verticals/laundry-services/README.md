@@ -379,7 +379,7 @@ Detailed scenarios are organized by domain category in separate files:
 
 | Domain | File | Scenarios |
 |---|---|---|
-| **Sales** | [scenarios/sales.md](scenarios/sales.md) | Walk-in drop-off billing, monthly B2B hotel statement, residential subscription overage billing |
+| **Revenue** | [scenarios/revenue.md](scenarios/revenue.md) | Walk-in drop-off billing, monthly B2B hotel statement, residential subscription overage billing |
 | **Inventory** | [scenarios/inventory.md](scenarios/inventory.md) | Hotel linen lifecycle with RFID, residential bag intake and processing, chemical consumable reorder, damaged linen replacement |
 | **Plan** | [scenarios/plan.md](scenarios/plan.md) | Residential weekly subscription plan, hotel linen rental program, prepaid bag credit plan |
 | **Subscription** | [scenarios/subscription.md](scenarios/subscription.md) | Hotel signs 5-year linen contract, resident joins weekly plan, contract renewal with rate adjustment |

@@ -45,8 +45,19 @@ type WorkspaceUser struct {
 	DateModified       *int64                                   `protobuf:"varint,9,opt,name=date_modified,json=dateModified,proto3,oneof" json:"date_modified,omitempty"`
 	DateModifiedString *string                                  `protobuf:"bytes,10,opt,name=date_modified_string,json=dateModifiedString,proto3,oneof" json:"date_modified_string,omitempty"`
 	Active             bool                                     `protobuf:"varint,11,opt,name=active,proto3" json:"active,omitempty"`
-	unknownFields      protoimpl.UnknownFields
-	sizeCache          protoimpl.SizeCache
+	// Member registry fields — cooperative / mutual vertical extension (2026-05-10)
+	// These fields turn WorkspaceUser into the member anchor for cooperatives, credit unions,
+	// mutual insurance companies, housing co-ops, DAOs, and professional partnerships.
+	// member_number: unique registry ID within this workspace (e.g. "M-00042")
+	MemberNumber *string `protobuf:"bytes,12,opt,name=member_number,json=memberNumber,proto3,oneof" json:"member_number,omitempty"`
+	// member_status: admission lifecycle — "applicant" | "active" | "suspended" | "withdrawn" | "expelled"
+	MemberStatus *string `protobuf:"bytes,13,opt,name=member_status,json=memberStatus,proto3,oneof" json:"member_status,omitempty"`
+	// member_since: admission date (epoch ms); NULL = not yet admitted
+	MemberSince *int64 `protobuf:"varint,14,opt,name=member_since,json=memberSince,proto3,oneof" json:"member_since,omitempty"`
+	// member_until: withdrawal or termination date (epoch ms); NULL = still an active member
+	MemberUntil   *int64 `protobuf:"varint,15,opt,name=member_until,json=memberUntil,proto3,oneof" json:"member_until,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
 }
 
 func (x *WorkspaceUser) Reset() {
@@ -154,6 +165,34 @@ func (x *WorkspaceUser) GetActive() bool {
 		return x.Active
 	}
 	return false
+}
+
+func (x *WorkspaceUser) GetMemberNumber() string {
+	if x != nil && x.MemberNumber != nil {
+		return *x.MemberNumber
+	}
+	return ""
+}
+
+func (x *WorkspaceUser) GetMemberStatus() string {
+	if x != nil && x.MemberStatus != nil {
+		return *x.MemberStatus
+	}
+	return ""
+}
+
+func (x *WorkspaceUser) GetMemberSince() int64 {
+	if x != nil && x.MemberSince != nil {
+		return *x.MemberSince
+	}
+	return 0
+}
+
+func (x *WorkspaceUser) GetMemberUntil() int64 {
+	if x != nil && x.MemberUntil != nil {
+		return *x.MemberUntil
+	}
+	return 0
 }
 
 type CreateWorkspaceUserRequest struct {
@@ -948,7 +987,7 @@ var File_domain_entity_workspace_user_workspace_user_proto protoreflect.FileDesc
 
 const file_domain_entity_workspace_user_workspace_user_proto_rawDesc = "" +
 	"\n" +
-	"1domain/entity/workspace_user/workspace_user.proto\x12\x10domain.entity.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1adomain/common/search.proto\x1a'domain/entity/workspace/workspace.proto\x1a\x1ddomain/entity/user/user.proto\x1a;domain/entity/workspace_user_role/workspace_user_role.proto\x1a\x10options/db.proto\"\xaf\x05\n" +
+	"1domain/entity/workspace_user/workspace_user.proto\x12\x10domain.entity.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1adomain/common/search.proto\x1a'domain/entity/workspace/workspace.proto\x1a\x1ddomain/entity/user/user.proto\x1a;domain/entity/workspace_user_role/workspace_user_role.proto\x1a\x10options/db.proto\"\xa1\a\n" +
 	"\rWorkspaceUser\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12>\n" +
 	"\tworkspace\x18\x02 \x01(\v2\x1b.domain.entity.v1.WorkspaceH\x00R\tworkspace\x88\x01\x01\x124\n" +
@@ -964,14 +1003,22 @@ const file_domain_entity_workspace_user_workspace_user_proto_rawDesc = "" +
 	"\x14date_modified_string\x18\n" +
 	" \x01(\tH\x05R\x12dateModifiedString\x88\x01\x01\x12\"\n" +
 	"\x06active\x18\v \x01(\bB\n" +
-	"\x82\xb5\x18\x06\"\x04trueR\x06active:\x1c\x8a\xb5\x18\x18\b\x01\x1a\x14workspace_id,user_idB\f\n" +
+	"\x82\xb5\x18\x06\"\x04trueR\x06active\x120\n" +
+	"\rmember_number\x18\f \x01(\tB\x06\x82\xb5\x18\x02\x18\x01H\x06R\fmemberNumber\x88\x01\x01\x12(\n" +
+	"\rmember_status\x18\r \x01(\tH\aR\fmemberStatus\x88\x01\x01\x12&\n" +
+	"\fmember_since\x18\x0e \x01(\x03H\bR\vmemberSince\x88\x01\x01\x12&\n" +
+	"\fmember_until\x18\x0f \x01(\x03H\tR\vmemberUntil\x88\x01\x01:\x1c\x8a\xb5\x18\x18\b\x01\x1a\x14workspace_id,user_idB\f\n" +
 	"\n" +
 	"_workspaceB\a\n" +
 	"\x05_userB\x0f\n" +
 	"\r_date_createdB\x16\n" +
 	"\x14_date_created_stringB\x10\n" +
 	"\x0e_date_modifiedB\x17\n" +
-	"\x15_date_modified_string\"Q\n" +
+	"\x15_date_modified_stringB\x10\n" +
+	"\x0e_member_numberB\x10\n" +
+	"\x0e_member_statusB\x0f\n" +
+	"\r_member_sinceB\x0f\n" +
+	"\r_member_until\"Q\n" +
 	"\x1aCreateWorkspaceUserRequest\x123\n" +
 	"\x04data\x18\x01 \x01(\v2\x1f.domain.entity.v1.WorkspaceUserR\x04data\"\xaa\x01\n" +
 	"\x1bCreateWorkspaceUserResponse\x123\n" +

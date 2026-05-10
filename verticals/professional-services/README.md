@@ -384,7 +384,7 @@ Detailed scenarios are organized by domain category in separate files:
 
 | Domain | File | Scenarios |
 |---|---|---|
-| **Sales** | [scenarios/sales.md](scenarios/sales.md) | Monthly T&M billing cycle, fixed-fee milestone billing, credit note for over-billing |
+| **Revenue** | [scenarios/revenue.md](scenarios/revenue.md) | Monthly T&M billing cycle, fixed-fee milestone billing, credit note for over-billing |
 | **Inventory** | [scenarios/inventory.md](scenarios/inventory.md) | Staff submits weekly timesheet, non-billable time (training/PTO), resource transfer between offices, contractor hours |
 | **Plan** | [scenarios/plan.md](scenarios/plan.md) | New T&M engagement type, advisory engagement (deliverable-based), staff augmentation engagement |
 | **Subscription** | [scenarios/subscription.md](scenarios/subscription.md) | New T&M engagement setup, retainer contract with hour credits, engagement renewal and extension |

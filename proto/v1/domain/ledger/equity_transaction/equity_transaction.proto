@@ -19,6 +19,9 @@ enum EquityTransactionType {
   EQUITY_TRANSACTION_TYPE_WITHDRAWAL = 2;    // Owner draws (debit Draw, credit Cash)
   EQUITY_TRANSACTION_TYPE_DISTRIBUTION = 3;  // Profit distribution (debit Retained Earnings, credit Cash)
   EQUITY_TRANSACTION_TYPE_TRANSFER = 4;      // Between equity accounts (e.g. close Draw to Capital)
+  // Mutual / cooperative extension (2026-05-10):
+  EQUITY_TRANSACTION_TYPE_PATRONAGE_RETENTION = 5;    // Surplus retained as member equity (IRS Sub-T: non-cash patronage dividend)
+  EQUITY_TRANSACTION_TYPE_PATRONAGE_DISTRIBUTION = 6; // Surplus distributed as cash refund (IRS Sub-T: cash patronage dividend)
 }
 
 // EquityTransaction records a capital movement against an EquityAccount.

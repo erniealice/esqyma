@@ -163,8 +163,18 @@ type EventAttendee struct {
 	DateModified       *int64  `protobuf:"varint,12,opt,name=date_modified,json=dateModified,proto3,oneof" json:"date_modified,omitempty"`
 	DateModifiedString *string `protobuf:"bytes,13,opt,name=date_modified_string,json=dateModifiedString,proto3,oneof" json:"date_modified_string,omitempty"`
 	Active             bool    `protobuf:"varint,14,opt,name=active,proto3" json:"active,omitempty"`
-	unknownFields      protoimpl.UnknownFields
-	sizeCache          protoimpl.SizeCache
+	// Mutual / cooperative voting extension (2026-05-10)
+	// These fields are only populated when the parent Event.kind = GOVERNANCE_VOTE.
+	// vote_choice: the member's recorded vote — "yes" | "no" | "abstain"
+	VoteChoice *string `protobuf:"bytes,15,opt,name=vote_choice,json=voteChoice,proto3,oneof" json:"vote_choice,omitempty"`
+	// vote_weight: multiplier for weighted voting (default 1; 0 = ineligible; >1 = bylaw-defined weighted vote)
+	VoteWeight *int32 `protobuf:"varint,16,opt,name=vote_weight,json=voteWeight,proto3,oneof" json:"vote_weight,omitempty"`
+	// vote_cast_at: epoch ms when the vote was recorded
+	VoteCastAt *int64 `protobuf:"varint,17,opt,name=vote_cast_at,json=voteCastAt,proto3,oneof" json:"vote_cast_at,omitempty"`
+	// eligible_to_vote: pre-check result — was this attendee eligible to vote at the time of the event?
+	EligibleToVote *bool `protobuf:"varint,18,opt,name=eligible_to_vote,json=eligibleToVote,proto3,oneof" json:"eligible_to_vote,omitempty"`
+	unknownFields  protoimpl.UnknownFields
+	sizeCache      protoimpl.SizeCache
 }
 
 func (x *EventAttendee) Reset() {
@@ -291,6 +301,34 @@ func (x *EventAttendee) GetDateModifiedString() string {
 func (x *EventAttendee) GetActive() bool {
 	if x != nil {
 		return x.Active
+	}
+	return false
+}
+
+func (x *EventAttendee) GetVoteChoice() string {
+	if x != nil && x.VoteChoice != nil {
+		return *x.VoteChoice
+	}
+	return ""
+}
+
+func (x *EventAttendee) GetVoteWeight() int32 {
+	if x != nil && x.VoteWeight != nil {
+		return *x.VoteWeight
+	}
+	return 0
+}
+
+func (x *EventAttendee) GetVoteCastAt() int64 {
+	if x != nil && x.VoteCastAt != nil {
+		return *x.VoteCastAt
+	}
+	return 0
+}
+
+func (x *EventAttendee) GetEligibleToVote() bool {
+	if x != nil && x.EligibleToVote != nil {
+		return *x.EligibleToVote
 	}
 	return false
 }
@@ -1083,7 +1121,7 @@ var File_domain_event_event_attendee_event_attendee_proto protoreflect.FileDescr
 
 const file_domain_event_event_attendee_event_attendee_proto_rawDesc = "" +
 	"\n" +
-	"0domain/event/event_attendee/event_attendee.proto\x12\x0fdomain.event.v1\x1a\x19domain/common/error.proto\x1a\x1adomain/common/search.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1edomain/common/pagination.proto\x1a\x10options/db.proto\"\xb8\x06\n" +
+	"0domain/event/event_attendee/event_attendee.proto\x12\x0fdomain.event.v1\x1a\x19domain/common/error.proto\x1a\x1adomain/common/search.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1edomain/common/pagination.proto\x1a\x10options/db.proto\"\xa0\b\n" +
 	"\rEventAttendee\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12(\n" +
 	"\bevent_id\x18\x02 \x01(\tB\r\x82\xb5\x18\t\n" +
@@ -1105,7 +1143,15 @@ const file_domain_event_event_attendee_event_attendee_proto_rawDesc = "" +
 	"\rdate_modified\x18\f \x01(\x03H\x05R\fdateModified\x88\x01\x01\x125\n" +
 	"\x14date_modified_string\x18\r \x01(\tH\x06R\x12dateModifiedString\x88\x01\x01\x12\"\n" +
 	"\x06active\x18\x0e \x01(\bB\n" +
-	"\x82\xb5\x18\x06\"\x04trueR\x06active:\x1a\x8a\xb5\x18\x16\b\x01\x1a\x12event_id,client_idB\f\n" +
+	"\x82\xb5\x18\x06\"\x04trueR\x06active\x12$\n" +
+	"\vvote_choice\x18\x0f \x01(\tH\aR\n" +
+	"voteChoice\x88\x01\x01\x12$\n" +
+	"\vvote_weight\x18\x10 \x01(\x05H\bR\n" +
+	"voteWeight\x88\x01\x01\x12%\n" +
+	"\fvote_cast_at\x18\x11 \x01(\x03H\tR\n" +
+	"voteCastAt\x88\x01\x01\x12-\n" +
+	"\x10eligible_to_vote\x18\x12 \x01(\bH\n" +
+	"R\x0eeligibleToVote\x88\x01\x01:\x1a\x8a\xb5\x18\x16\b\x01\x1a\x12event_id,client_idB\f\n" +
 	"\n" +
 	"_client_idB\x14\n" +
 	"\x12_workspace_user_idB\x0f\n" +
@@ -1113,7 +1159,11 @@ const file_domain_event_event_attendee_event_attendee_proto_rawDesc = "" +
 	"\r_date_createdB\x16\n" +
 	"\x14_date_created_stringB\x10\n" +
 	"\x0e_date_modifiedB\x17\n" +
-	"\x15_date_modified_string\"P\n" +
+	"\x15_date_modified_stringB\x0e\n" +
+	"\f_vote_choiceB\x0e\n" +
+	"\f_vote_weightB\x0f\n" +
+	"\r_vote_cast_atB\x13\n" +
+	"\x11_eligible_to_vote\"P\n" +
 	"\x1aCreateEventAttendeeRequest\x122\n" +
 	"\x04data\x18\x01 \x01(\v2\x1e.domain.event.v1.EventAttendeeR\x04data\"\xa9\x01\n" +
 	"\x1bCreateEventAttendeeResponse\x122\n" +

@@ -59,13 +59,33 @@ CREATE TABLE IF NOT EXISTS depreciation_run (
 -- ---------------------------------------------------------------------------
 -- 3. depreciation_run constraints and indexes
 -- ---------------------------------------------------------------------------
-ALTER TABLE ONLY depreciation_run
-    ADD CONSTRAINT depreciation_run_workspace_id_fkey
-    FOREIGN KEY (workspace_id) REFERENCES workspace(id) NOT VALID;
+DO $$
+BEGIN
+    IF NOT EXISTS (
+        SELECT 1 FROM information_schema.table_constraints
+        WHERE constraint_name = 'depreciation_run_workspace_id_fkey'
+          AND table_name = 'depreciation_run'
+    ) THEN
+        ALTER TABLE depreciation_run
+            ADD CONSTRAINT depreciation_run_workspace_id_fkey
+            FOREIGN KEY (workspace_id) REFERENCES workspace(id) NOT VALID;
+    END IF;
+END;
+$$;
 
-ALTER TABLE ONLY depreciation_run
-    ADD CONSTRAINT depreciation_run_initiator_id_fkey
-    FOREIGN KEY (initiator_id) REFERENCES "user"(id) NOT VALID;
+DO $$
+BEGIN
+    IF NOT EXISTS (
+        SELECT 1 FROM information_schema.table_constraints
+        WHERE constraint_name = 'depreciation_run_initiator_id_fkey'
+          AND table_name = 'depreciation_run'
+    ) THEN
+        ALTER TABLE depreciation_run
+            ADD CONSTRAINT depreciation_run_initiator_id_fkey
+            FOREIGN KEY (initiator_id) REFERENCES "user"(id) NOT VALID;
+    END IF;
+END;
+$$;
 
 CREATE INDEX IF NOT EXISTS idx_depreciation_run_workspace_id
     ON depreciation_run USING btree (workspace_id);

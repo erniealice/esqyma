@@ -54,6 +54,12 @@ message DepreciationSchedule {
   optional string outcome = 23;
   // error_message is populated only when outcome = ERRORED.
   optional string error_message = 24;
+
+  // Workspace tenancy (Phase 1 — 2026-05-10).
+  // Field 25 verified free at 2026-05-10 (proto used fields 1–24 only).
+  // Stored as nullable in the DB during the additive migration; a future
+  // 2-step migration tightens to NOT NULL after backfill is reconciled.
+  optional string workspace_id = 25 [(options.v1.db).references = "workspace", (options.v1.db).index = true];
 }
 
 service DepreciationDomainService {

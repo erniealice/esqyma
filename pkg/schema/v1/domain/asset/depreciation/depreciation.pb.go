@@ -56,7 +56,12 @@ type DepreciationSchedule struct {
 	// Stored as string matching DepreciationRunOutcome enum values.
 	Outcome *string `protobuf:"bytes,23,opt,name=outcome,proto3,oneof" json:"outcome,omitempty"`
 	// error_message is populated only when outcome = ERRORED.
-	ErrorMessage  *string `protobuf:"bytes,24,opt,name=error_message,json=errorMessage,proto3,oneof" json:"error_message,omitempty"`
+	ErrorMessage *string `protobuf:"bytes,24,opt,name=error_message,json=errorMessage,proto3,oneof" json:"error_message,omitempty"`
+	// Workspace tenancy (Phase 1 — 2026-05-10).
+	// Field 25 verified free at 2026-05-10 (proto used fields 1–24 only).
+	// Stored as nullable in the DB during the additive migration; a future
+	// 2-step migration tightens to NOT NULL after backfill is reconciled.
+	WorkspaceId   *string `protobuf:"bytes,25,opt,name=workspace_id,json=workspaceId,proto3,oneof" json:"workspace_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -241,6 +246,13 @@ func (x *DepreciationSchedule) GetOutcome() string {
 func (x *DepreciationSchedule) GetErrorMessage() string {
 	if x != nil && x.ErrorMessage != nil {
 		return *x.ErrorMessage
+	}
+	return ""
+}
+
+func (x *DepreciationSchedule) GetWorkspaceId() string {
+	if x != nil && x.WorkspaceId != nil {
+		return *x.WorkspaceId
 	}
 	return ""
 }
@@ -1041,7 +1053,7 @@ var File_domain_asset_depreciation_depreciation_proto protoreflect.FileDescripto
 
 const file_domain_asset_depreciation_depreciation_proto_rawDesc = "" +
 	"\n" +
-	",domain/asset/depreciation/depreciation.proto\x12\x0fdomain.asset.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1adomain/common/search.proto\x1a\x10options/db.proto\"\x8f\t\n" +
+	",domain/asset/depreciation/depreciation.proto\x12\x0fdomain.asset.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1adomain/common/search.proto\x1a\x10options/db.proto\"\xdb\t\n" +
 	"\x14DepreciationSchedule\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12(\n" +
 	"\basset_id\x18\x02 \x01(\tB\r\x82\xb5\x18\t\n" +
@@ -1069,7 +1081,9 @@ const file_domain_asset_depreciation_depreciation_proto_rawDesc = "" +
 	"\x13depreciation_run_id\x18\x16 \x01(\tB\x18\x82\xb5\x18\x14\n" +
 	"\x10depreciation_run\x18\x01H\x06R\x11depreciationRunId\x88\x01\x01\x12\x1d\n" +
 	"\aoutcome\x18\x17 \x01(\tH\aR\aoutcome\x88\x01\x01\x12(\n" +
-	"\rerror_message\x18\x18 \x01(\tH\bR\ferrorMessage\x88\x01\x01:\x06\x8a\xb5\x18\x02\b\x01B\x11\n" +
+	"\rerror_message\x18\x18 \x01(\tH\bR\ferrorMessage\x88\x01\x01\x129\n" +
+	"\fworkspace_id\x18\x19 \x01(\tB\x11\x82\xb5\x18\r\n" +
+	"\tworkspace\x18\x01H\tR\vworkspaceId\x88\x01\x01:\x06\x8a\xb5\x18\x02\b\x01B\x11\n" +
 	"\x0f_units_producedB\x13\n" +
 	"\x11_journal_entry_idB\x0f\n" +
 	"\r_date_createdB\x16\n" +
@@ -1079,7 +1093,8 @@ const file_domain_asset_depreciation_depreciation_proto_rawDesc = "" +
 	"\x14_depreciation_run_idB\n" +
 	"\n" +
 	"\b_outcomeB\x10\n" +
-	"\x0e_error_messageJ\x04\b\a\x10\bJ\x04\b\t\x10\n" +
+	"\x0e_error_messageB\x0f\n" +
+	"\r_workspace_idJ\x04\b\a\x10\bJ\x04\b\t\x10\n" +
 	"\"^\n" +
 	"!CreateDepreciationScheduleRequest\x129\n" +
 	"\x04data\x18\x01 \x01(\v2%.domain.asset.v1.DepreciationScheduleR\x04data\"\xb7\x01\n" +

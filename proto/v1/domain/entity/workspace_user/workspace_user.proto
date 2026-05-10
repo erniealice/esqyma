@@ -37,6 +37,18 @@ message WorkspaceUser {
   optional int64 date_modified = 9;
   optional string date_modified_string = 10;
   bool active = 11 [(options.v1.db).default = "true"];
+
+  // Member registry fields — cooperative / mutual vertical extension (2026-05-10)
+  // These fields turn WorkspaceUser into the member anchor for cooperatives, credit unions,
+  // mutual insurance companies, housing co-ops, DAOs, and professional partnerships.
+  // member_number: unique registry ID within this workspace (e.g. "M-00042")
+  optional string member_number = 12 [(options.v1.db).index = true];
+  // member_status: admission lifecycle — "applicant" | "active" | "suspended" | "withdrawn" | "expelled"
+  optional string member_status = 13;
+  // member_since: admission date (epoch ms); NULL = not yet admitted
+  optional int64 member_since = 14;
+  // member_until: withdrawal or termination date (epoch ms); NULL = still an active member
+  optional int64 member_until = 15;
 }
 
 service WorkspaceUserDomainService {

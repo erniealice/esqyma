@@ -32,6 +32,13 @@ enum AssetTransactionType {
   ASSET_TRANSACTION_TYPE_REINSTATEMENT = 15;
   ASSET_TRANSACTION_TYPE_MAINTENANCE = 16;
   ASSET_TRANSACTION_TYPE_WRITE_OFF = 17;
+
+  // Leasing-specific lifecycle events (added 2026-05-10 — verticals expansion).
+  // These disambiguate the lease-out vs internal-transfer vs damage-finding paths
+  // that previously overloaded TRANSFER + ADJUSTMENT respectively.
+  ASSET_TRANSACTION_TYPE_LEASE_OUT    = 18;  // Asset deployed to lessee (asset leaves yard, custody = customer)
+  ASSET_TRANSACTION_TYPE_LEASE_RETURN = 19;  // Asset back from lessee (asset re-enters yard, custody = firm)
+  ASSET_TRANSACTION_TYPE_DAMAGE_FOUND = 20;  // Inspection finding post-return (drives chargeback Revenue line)
 }
 
 message AssetTransaction {
@@ -70,6 +77,12 @@ message AssetTransaction {
   // Back-ref from the audit transaction to the immutable AssetRevaluation record
   // (added Phase 2 — missed in Phase 0).
   optional string asset_revaluation_id = 20 [(options.v1.db).references = "asset_revaluation", (options.v1.db).index = true];
+
+  // Workspace tenancy (Phase 1 — 2026-05-10).
+  // Field 21 verified free at 2026-05-10 (proto used fields 1–20 only).
+  // Stored as nullable in the DB during the additive migration; a future
+  // 2-step migration tightens to NOT NULL after backfill is reconciled.
+  optional string workspace_id = 21 [(options.v1.db).references = "workspace", (options.v1.db).index = true];
 }
 
 // AssetTransactionDomainService — append-only audit trail.

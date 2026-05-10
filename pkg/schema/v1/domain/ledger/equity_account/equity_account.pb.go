@@ -98,8 +98,17 @@ type EquityAccount struct {
 	DateCreatedString  *string `protobuf:"bytes,9,opt,name=date_created_string,json=dateCreatedString,proto3,oneof" json:"date_created_string,omitempty"`
 	DateModified       *int64  `protobuf:"varint,10,opt,name=date_modified,json=dateModified,proto3,oneof" json:"date_modified,omitempty"`
 	DateModifiedString *string `protobuf:"bytes,11,opt,name=date_modified_string,json=dateModifiedString,proto3,oneof" json:"date_modified_string,omitempty"`
-	unknownFields      protoimpl.UnknownFields
-	sizeCache          protoimpl.SizeCache
+	// Mutual / cooperative extension (2026-05-10)
+	// workspace_user_id: FK to the member this equity account belongs to (workspace-scoped;
+	//
+	//	membership is per co-op, not global — hence workspace_user_id not user_id)
+	WorkspaceUserId *string `protobuf:"bytes,12,opt,name=workspace_user_id,json=workspaceUserId,proto3,oneof" json:"workspace_user_id,omitempty"`
+	// patronage_basis: what activity drives patronage allocation
+	//
+	//	"PURCHASES" | "HOURS" | "DELIVERIES" | "DEPOSITS"
+	PatronageBasis *string `protobuf:"bytes,13,opt,name=patronage_basis,json=patronageBasis,proto3,oneof" json:"patronage_basis,omitempty"`
+	unknownFields  protoimpl.UnknownFields
+	sizeCache      protoimpl.SizeCache
 }
 
 func (x *EquityAccount) Reset() {
@@ -205,6 +214,20 @@ func (x *EquityAccount) GetDateModified() int64 {
 func (x *EquityAccount) GetDateModifiedString() string {
 	if x != nil && x.DateModifiedString != nil {
 		return *x.DateModifiedString
+	}
+	return ""
+}
+
+func (x *EquityAccount) GetWorkspaceUserId() string {
+	if x != nil && x.WorkspaceUserId != nil {
+		return *x.WorkspaceUserId
+	}
+	return ""
+}
+
+func (x *EquityAccount) GetPatronageBasis() string {
+	if x != nil && x.PatronageBasis != nil {
+		return *x.PatronageBasis
 	}
 	return ""
 }
@@ -997,7 +1020,7 @@ var File_domain_ledger_equity_account_equity_account_proto protoreflect.FileDesc
 
 const file_domain_ledger_equity_account_equity_account_proto_rawDesc = "" +
 	"\n" +
-	"1domain/ledger/equity_account/equity_account.proto\x12\x10domain.ledger.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1adomain/common/search.proto\x1a\x10options/db.proto\"\xbf\x04\n" +
+	"1domain/ledger/equity_account/equity_account.proto\x12\x10domain.ledger.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1adomain/common/search.proto\x1a\x10options/db.proto\"\xe0\x05\n" +
 	"\rEquityAccount\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12\x12\n" +
 	"\x04name\x18\x02 \x01(\tR\x04name\x12F\n" +
@@ -1014,12 +1037,17 @@ const file_domain_ledger_equity_account_equity_account_proto_rawDesc = "" +
 	"\x13date_created_string\x18\t \x01(\tH\x02R\x11dateCreatedString\x88\x01\x01\x12(\n" +
 	"\rdate_modified\x18\n" +
 	" \x01(\x03H\x03R\fdateModified\x88\x01\x01\x125\n" +
-	"\x14date_modified_string\x18\v \x01(\tH\x04R\x12dateModifiedString\x88\x01\x01:\x06\x8a\xb5\x18\x02\b\x01B\r\n" +
+	"\x14date_modified_string\x18\v \x01(\tH\x04R\x12dateModifiedString\x88\x01\x01\x12G\n" +
+	"\x11workspace_user_id\x18\f \x01(\tB\x16\x82\xb5\x18\x12\n" +
+	"\x0eworkspace_user\x18\x01H\x05R\x0fworkspaceUserId\x88\x01\x01\x12,\n" +
+	"\x0fpatronage_basis\x18\r \x01(\tH\x06R\x0epatronageBasis\x88\x01\x01:\x06\x8a\xb5\x18\x02\b\x01B\r\n" +
 	"\v_owner_nameB\x0f\n" +
 	"\r_date_createdB\x16\n" +
 	"\x14_date_created_stringB\x10\n" +
 	"\x0e_date_modifiedB\x17\n" +
-	"\x15_date_modified_string\"Q\n" +
+	"\x15_date_modified_stringB\x14\n" +
+	"\x12_workspace_user_idB\x12\n" +
+	"\x10_patronage_basis\"Q\n" +
 	"\x1aCreateEquityAccountRequest\x123\n" +
 	"\x04data\x18\x01 \x01(\v2\x1f.domain.ledger.v1.EquityAccountR\x04data\"\xaa\x01\n" +
 	"\x1bCreateEquityAccountResponse\x123\n" +

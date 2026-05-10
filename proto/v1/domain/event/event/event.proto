@@ -19,6 +19,16 @@ enum EventStatus {
   EVENT_STATUS_CANCELLED = 3;
 }
 
+// EventKind classifies the purpose of an event.
+// Added 2026-05-10 for mutual/cooperative vertical — governance votes need
+// a distinct kind so vote tallying, quorum checks, and voting eligibility
+// logic can branch on event type.
+enum EventKind {
+  EVENT_KIND_UNSPECIFIED = 0;
+  EVENT_KIND_MEETING = 1;           // General meeting (board meeting, team standup, etc.)
+  EVENT_KIND_GOVERNANCE_VOTE = 2;   // Formal vote / general assembly (mutual/cooperative governance)
+}
+
 message Event {
   option (options.v1.table).table = true;
   string id = 1;
@@ -59,6 +69,10 @@ message Event {
 
   // Original occurrence timestamp this exception replaces (RFC 5545 RECURRENCE-ID value)
   optional int64 original_occurrence_utc = 22;
+
+  // Mutual / cooperative extension (2026-05-10)
+  // kind: classifies the event purpose; used for governance-vote branching
+  optional EventKind kind = 23;
 }
 
 service EventDomainService {
