@@ -12,6 +12,7 @@ import "domain/common/search.proto";
 
 import "domain/subscription/price_plan/price_plan.proto";
 import "domain/entity/client/client.proto";
+import "domain/operation/job/job.proto";
 import "options/db.proto";
 import "google/protobuf/timestamp.proto";
 
@@ -206,4 +207,58 @@ message ListSubscriptionsByPricePlanResponse {
   optional domain.common.v1.PaginationResponse pagination = 2;
   bool success = 3;
   optional domain.common.v1.Error error = 4;
+}
+
+// Use-case messages (consumed by espyna use cases, not bound to an RPC).
+
+// MaterializeJobsForSubscriptionRequest drives the auto-spawn-jobs-from-subscription
+// use case (docs/plan/20260429-auto-spawn-jobs-from-subscription/plan.md §3).
+message MaterializeJobsForSubscriptionRequest {
+  string subscription_id = 1;
+  // spawn_jobs is the operator-facing override. When false the use case
+  // returns immediately with skipped_reason="operator_opt_out".
+  bool spawn_jobs = 2;
+}
+
+// MaterializeJobsForSubscriptionResponse surfaces the spawned Jobs + skip reason.
+message MaterializeJobsForSubscriptionResponse {
+  bool success = 1;
+  optional domain.common.v1.Error error = 2;
+  repeated domain.operation.v1.Job spawned_jobs = 3;
+  optional string skipped_reason = 4;
+}
+
+// MaterializeInstanceJobsForSubscriptionRequest drives the cyclic-instance-Job
+// spawn use case (docs/plan/20260501-cyclic-subscription-jobs/plan.md §3).
+message MaterializeInstanceJobsForSubscriptionRequest {
+  string subscription_id = 1;
+  // cycle_period_start is optional. When empty, the use case picks the next
+  // un-spawned cycle. When non-empty, spawns exactly that one cycle (idempotent).
+  optional string cycle_period_start = 2;
+  // backfill, when true, walks the cycle window from sub.date_time_start up
+  // to today and spawns every missing cycle (capped at MaxBackfillCycles).
+  bool backfill = 3;
+  // usage_request_date is the AD_HOC equivalent (ISO 8601 YYYY-MM-DD).
+  // Defaults to today UTC when empty. Ignored on cyclic plans.
+  optional string usage_request_date = 4;
+}
+
+// MaterializeInstanceJobsForSubscriptionResponse surfaces counts + skip reason.
+// The full Job proto records are intentionally omitted (circular import constraint
+// — same as MaterializeJobsForSubscriptionResponse above).
+message MaterializeInstanceJobsForSubscriptionResponse {
+  bool success = 1;
+  optional domain.common.v1.Error error = 2;
+  // spawned_cycle_count is the number of cycle accordions materialised.
+  int32 spawned_cycle_count = 3;
+  // spawned_job_count is the total cycle Job rows actually inserted.
+  int32 spawned_job_count = 4;
+  // once_at_start_job_count is how many ONCE_AT_ENGAGEMENT_START child Jobs fired.
+  int32 once_at_start_job_count = 5;
+  // engagement_was_newly_created reports whether this call created the
+  // engagement-shell Job.
+  bool engagement_was_newly_created = 6;
+  optional string skipped_reason = 7;
+  // backfill_capped_at > 0 when the backfill window exceeded the cap.
+  int32 backfill_capped_at = 8;
 }

@@ -9,6 +9,7 @@ package subscriptionv1
 import (
 	common "github.com/erniealice/esqyma/pkg/schema/v1/domain/common"
 	client "github.com/erniealice/esqyma/pkg/schema/v1/domain/entity/client"
+	job "github.com/erniealice/esqyma/pkg/schema/v1/domain/operation/job"
 	price_plan "github.com/erniealice/esqyma/pkg/schema/v1/domain/subscription/price_plan"
 	_ "github.com/erniealice/esqyma/pkg/schema/v1/options"
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
@@ -1276,11 +1277,321 @@ func (x *ListSubscriptionsByPricePlanResponse) GetError() *common.Error {
 	return nil
 }
 
+// MaterializeJobsForSubscriptionRequest drives the auto-spawn-jobs-from-subscription
+// use case (docs/plan/20260429-auto-spawn-jobs-from-subscription/plan.md §3).
+type MaterializeJobsForSubscriptionRequest struct {
+	state          protoimpl.MessageState `protogen:"open.v1"`
+	SubscriptionId string                 `protobuf:"bytes,1,opt,name=subscription_id,json=subscriptionId,proto3" json:"subscription_id,omitempty"`
+	// spawn_jobs is the operator-facing override. When false the use case
+	// returns immediately with skipped_reason="operator_opt_out".
+	SpawnJobs     bool `protobuf:"varint,2,opt,name=spawn_jobs,json=spawnJobs,proto3" json:"spawn_jobs,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *MaterializeJobsForSubscriptionRequest) Reset() {
+	*x = MaterializeJobsForSubscriptionRequest{}
+	mi := &file_domain_subscription_subscription_subscription_proto_msgTypes[19]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *MaterializeJobsForSubscriptionRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*MaterializeJobsForSubscriptionRequest) ProtoMessage() {}
+
+func (x *MaterializeJobsForSubscriptionRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_domain_subscription_subscription_subscription_proto_msgTypes[19]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use MaterializeJobsForSubscriptionRequest.ProtoReflect.Descriptor instead.
+func (*MaterializeJobsForSubscriptionRequest) Descriptor() ([]byte, []int) {
+	return file_domain_subscription_subscription_subscription_proto_rawDescGZIP(), []int{19}
+}
+
+func (x *MaterializeJobsForSubscriptionRequest) GetSubscriptionId() string {
+	if x != nil {
+		return x.SubscriptionId
+	}
+	return ""
+}
+
+func (x *MaterializeJobsForSubscriptionRequest) GetSpawnJobs() bool {
+	if x != nil {
+		return x.SpawnJobs
+	}
+	return false
+}
+
+// MaterializeJobsForSubscriptionResponse surfaces the spawned Jobs + skip reason.
+type MaterializeJobsForSubscriptionResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Success       bool                   `protobuf:"varint,1,opt,name=success,proto3" json:"success,omitempty"`
+	Error         *common.Error          `protobuf:"bytes,2,opt,name=error,proto3,oneof" json:"error,omitempty"`
+	SpawnedJobs   []*job.Job             `protobuf:"bytes,3,rep,name=spawned_jobs,json=spawnedJobs,proto3" json:"spawned_jobs,omitempty"`
+	SkippedReason *string                `protobuf:"bytes,4,opt,name=skipped_reason,json=skippedReason,proto3,oneof" json:"skipped_reason,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *MaterializeJobsForSubscriptionResponse) Reset() {
+	*x = MaterializeJobsForSubscriptionResponse{}
+	mi := &file_domain_subscription_subscription_subscription_proto_msgTypes[20]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *MaterializeJobsForSubscriptionResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*MaterializeJobsForSubscriptionResponse) ProtoMessage() {}
+
+func (x *MaterializeJobsForSubscriptionResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_domain_subscription_subscription_subscription_proto_msgTypes[20]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use MaterializeJobsForSubscriptionResponse.ProtoReflect.Descriptor instead.
+func (*MaterializeJobsForSubscriptionResponse) Descriptor() ([]byte, []int) {
+	return file_domain_subscription_subscription_subscription_proto_rawDescGZIP(), []int{20}
+}
+
+func (x *MaterializeJobsForSubscriptionResponse) GetSuccess() bool {
+	if x != nil {
+		return x.Success
+	}
+	return false
+}
+
+func (x *MaterializeJobsForSubscriptionResponse) GetError() *common.Error {
+	if x != nil {
+		return x.Error
+	}
+	return nil
+}
+
+func (x *MaterializeJobsForSubscriptionResponse) GetSpawnedJobs() []*job.Job {
+	if x != nil {
+		return x.SpawnedJobs
+	}
+	return nil
+}
+
+func (x *MaterializeJobsForSubscriptionResponse) GetSkippedReason() string {
+	if x != nil && x.SkippedReason != nil {
+		return *x.SkippedReason
+	}
+	return ""
+}
+
+// MaterializeInstanceJobsForSubscriptionRequest drives the cyclic-instance-Job
+// spawn use case (docs/plan/20260501-cyclic-subscription-jobs/plan.md §3).
+type MaterializeInstanceJobsForSubscriptionRequest struct {
+	state          protoimpl.MessageState `protogen:"open.v1"`
+	SubscriptionId string                 `protobuf:"bytes,1,opt,name=subscription_id,json=subscriptionId,proto3" json:"subscription_id,omitempty"`
+	// cycle_period_start is optional. When empty, the use case picks the next
+	// un-spawned cycle. When non-empty, spawns exactly that one cycle (idempotent).
+	CyclePeriodStart *string `protobuf:"bytes,2,opt,name=cycle_period_start,json=cyclePeriodStart,proto3,oneof" json:"cycle_period_start,omitempty"`
+	// backfill, when true, walks the cycle window from sub.date_time_start up
+	// to today and spawns every missing cycle (capped at MaxBackfillCycles).
+	Backfill bool `protobuf:"varint,3,opt,name=backfill,proto3" json:"backfill,omitempty"`
+	// usage_request_date is the AD_HOC equivalent (ISO 8601 YYYY-MM-DD).
+	// Defaults to today UTC when empty. Ignored on cyclic plans.
+	UsageRequestDate *string `protobuf:"bytes,4,opt,name=usage_request_date,json=usageRequestDate,proto3,oneof" json:"usage_request_date,omitempty"`
+	unknownFields    protoimpl.UnknownFields
+	sizeCache        protoimpl.SizeCache
+}
+
+func (x *MaterializeInstanceJobsForSubscriptionRequest) Reset() {
+	*x = MaterializeInstanceJobsForSubscriptionRequest{}
+	mi := &file_domain_subscription_subscription_subscription_proto_msgTypes[21]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *MaterializeInstanceJobsForSubscriptionRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*MaterializeInstanceJobsForSubscriptionRequest) ProtoMessage() {}
+
+func (x *MaterializeInstanceJobsForSubscriptionRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_domain_subscription_subscription_subscription_proto_msgTypes[21]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use MaterializeInstanceJobsForSubscriptionRequest.ProtoReflect.Descriptor instead.
+func (*MaterializeInstanceJobsForSubscriptionRequest) Descriptor() ([]byte, []int) {
+	return file_domain_subscription_subscription_subscription_proto_rawDescGZIP(), []int{21}
+}
+
+func (x *MaterializeInstanceJobsForSubscriptionRequest) GetSubscriptionId() string {
+	if x != nil {
+		return x.SubscriptionId
+	}
+	return ""
+}
+
+func (x *MaterializeInstanceJobsForSubscriptionRequest) GetCyclePeriodStart() string {
+	if x != nil && x.CyclePeriodStart != nil {
+		return *x.CyclePeriodStart
+	}
+	return ""
+}
+
+func (x *MaterializeInstanceJobsForSubscriptionRequest) GetBackfill() bool {
+	if x != nil {
+		return x.Backfill
+	}
+	return false
+}
+
+func (x *MaterializeInstanceJobsForSubscriptionRequest) GetUsageRequestDate() string {
+	if x != nil && x.UsageRequestDate != nil {
+		return *x.UsageRequestDate
+	}
+	return ""
+}
+
+// MaterializeInstanceJobsForSubscriptionResponse surfaces counts + skip reason.
+// The full Job proto records are intentionally omitted (circular import constraint
+// — same as MaterializeJobsForSubscriptionResponse above).
+type MaterializeInstanceJobsForSubscriptionResponse struct {
+	state   protoimpl.MessageState `protogen:"open.v1"`
+	Success bool                   `protobuf:"varint,1,opt,name=success,proto3" json:"success,omitempty"`
+	Error   *common.Error          `protobuf:"bytes,2,opt,name=error,proto3,oneof" json:"error,omitempty"`
+	// spawned_cycle_count is the number of cycle accordions materialised.
+	SpawnedCycleCount int32 `protobuf:"varint,3,opt,name=spawned_cycle_count,json=spawnedCycleCount,proto3" json:"spawned_cycle_count,omitempty"`
+	// spawned_job_count is the total cycle Job rows actually inserted.
+	SpawnedJobCount int32 `protobuf:"varint,4,opt,name=spawned_job_count,json=spawnedJobCount,proto3" json:"spawned_job_count,omitempty"`
+	// once_at_start_job_count is how many ONCE_AT_ENGAGEMENT_START child Jobs fired.
+	OnceAtStartJobCount int32 `protobuf:"varint,5,opt,name=once_at_start_job_count,json=onceAtStartJobCount,proto3" json:"once_at_start_job_count,omitempty"`
+	// engagement_was_newly_created reports whether this call created the
+	// engagement-shell Job.
+	EngagementWasNewlyCreated bool    `protobuf:"varint,6,opt,name=engagement_was_newly_created,json=engagementWasNewlyCreated,proto3" json:"engagement_was_newly_created,omitempty"`
+	SkippedReason             *string `protobuf:"bytes,7,opt,name=skipped_reason,json=skippedReason,proto3,oneof" json:"skipped_reason,omitempty"`
+	// backfill_capped_at > 0 when the backfill window exceeded the cap.
+	BackfillCappedAt int32 `protobuf:"varint,8,opt,name=backfill_capped_at,json=backfillCappedAt,proto3" json:"backfill_capped_at,omitempty"`
+	unknownFields    protoimpl.UnknownFields
+	sizeCache        protoimpl.SizeCache
+}
+
+func (x *MaterializeInstanceJobsForSubscriptionResponse) Reset() {
+	*x = MaterializeInstanceJobsForSubscriptionResponse{}
+	mi := &file_domain_subscription_subscription_subscription_proto_msgTypes[22]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *MaterializeInstanceJobsForSubscriptionResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*MaterializeInstanceJobsForSubscriptionResponse) ProtoMessage() {}
+
+func (x *MaterializeInstanceJobsForSubscriptionResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_domain_subscription_subscription_subscription_proto_msgTypes[22]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use MaterializeInstanceJobsForSubscriptionResponse.ProtoReflect.Descriptor instead.
+func (*MaterializeInstanceJobsForSubscriptionResponse) Descriptor() ([]byte, []int) {
+	return file_domain_subscription_subscription_subscription_proto_rawDescGZIP(), []int{22}
+}
+
+func (x *MaterializeInstanceJobsForSubscriptionResponse) GetSuccess() bool {
+	if x != nil {
+		return x.Success
+	}
+	return false
+}
+
+func (x *MaterializeInstanceJobsForSubscriptionResponse) GetError() *common.Error {
+	if x != nil {
+		return x.Error
+	}
+	return nil
+}
+
+func (x *MaterializeInstanceJobsForSubscriptionResponse) GetSpawnedCycleCount() int32 {
+	if x != nil {
+		return x.SpawnedCycleCount
+	}
+	return 0
+}
+
+func (x *MaterializeInstanceJobsForSubscriptionResponse) GetSpawnedJobCount() int32 {
+	if x != nil {
+		return x.SpawnedJobCount
+	}
+	return 0
+}
+
+func (x *MaterializeInstanceJobsForSubscriptionResponse) GetOnceAtStartJobCount() int32 {
+	if x != nil {
+		return x.OnceAtStartJobCount
+	}
+	return 0
+}
+
+func (x *MaterializeInstanceJobsForSubscriptionResponse) GetEngagementWasNewlyCreated() bool {
+	if x != nil {
+		return x.EngagementWasNewlyCreated
+	}
+	return false
+}
+
+func (x *MaterializeInstanceJobsForSubscriptionResponse) GetSkippedReason() string {
+	if x != nil && x.SkippedReason != nil {
+		return *x.SkippedReason
+	}
+	return ""
+}
+
+func (x *MaterializeInstanceJobsForSubscriptionResponse) GetBackfillCappedAt() int32 {
+	if x != nil {
+		return x.BackfillCappedAt
+	}
+	return 0
+}
+
 var File_domain_subscription_subscription_subscription_proto protoreflect.FileDescriptor
 
 const file_domain_subscription_subscription_subscription_proto_rawDesc = "" +
 	"\n" +
-	"3domain/subscription/subscription/subscription.proto\x12\x16domain.subscription.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1adomain/common/search.proto\x1a/domain/subscription/price_plan/price_plan.proto\x1a!domain/entity/client/client.proto\x1a\x10options/db.proto\x1a\x1fgoogle/protobuf/timestamp.proto\"\xc8\v\n" +
+	"3domain/subscription/subscription/subscription.proto\x12\x16domain.subscription.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1adomain/common/search.proto\x1a/domain/subscription/price_plan/price_plan.proto\x1a!domain/entity/client/client.proto\x1a\x1edomain/operation/job/job.proto\x1a\x10options/db.proto\x1a\x1fgoogle/protobuf/timestamp.proto\"\xc8\v\n" +
 	"\fSubscription\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12&\n" +
 	"\fdate_created\x18\x02 \x01(\x03H\x00R\vdateCreated\x88\x01\x01\x123\n" +
@@ -1427,7 +1738,36 @@ const file_domain_subscription_subscription_subscription_proto_rawDesc = "" +
 	"\asuccess\x18\x03 \x01(\bR\asuccess\x122\n" +
 	"\x05error\x18\x04 \x01(\v2\x17.domain.common.v1.ErrorH\x01R\x05error\x88\x01\x01B\r\n" +
 	"\v_paginationB\b\n" +
-	"\x06_error2\xdb\t\n" +
+	"\x06_error\"o\n" +
+	"%MaterializeJobsForSubscriptionRequest\x12'\n" +
+	"\x0fsubscription_id\x18\x01 \x01(\tR\x0esubscriptionId\x12\x1d\n" +
+	"\n" +
+	"spawn_jobs\x18\x02 \x01(\bR\tspawnJobs\"\xfc\x01\n" +
+	"&MaterializeJobsForSubscriptionResponse\x12\x18\n" +
+	"\asuccess\x18\x01 \x01(\bR\asuccess\x122\n" +
+	"\x05error\x18\x02 \x01(\v2\x17.domain.common.v1.ErrorH\x00R\x05error\x88\x01\x01\x12;\n" +
+	"\fspawned_jobs\x18\x03 \x03(\v2\x18.domain.operation.v1.JobR\vspawnedJobs\x12*\n" +
+	"\x0eskipped_reason\x18\x04 \x01(\tH\x01R\rskippedReason\x88\x01\x01B\b\n" +
+	"\x06_errorB\x11\n" +
+	"\x0f_skipped_reason\"\x88\x02\n" +
+	"-MaterializeInstanceJobsForSubscriptionRequest\x12'\n" +
+	"\x0fsubscription_id\x18\x01 \x01(\tR\x0esubscriptionId\x121\n" +
+	"\x12cycle_period_start\x18\x02 \x01(\tH\x00R\x10cyclePeriodStart\x88\x01\x01\x12\x1a\n" +
+	"\bbackfill\x18\x03 \x01(\bR\bbackfill\x121\n" +
+	"\x12usage_request_date\x18\x04 \x01(\tH\x01R\x10usageRequestDate\x88\x01\x01B\x15\n" +
+	"\x13_cycle_period_startB\x15\n" +
+	"\x13_usage_request_date\"\xc8\x03\n" +
+	".MaterializeInstanceJobsForSubscriptionResponse\x12\x18\n" +
+	"\asuccess\x18\x01 \x01(\bR\asuccess\x122\n" +
+	"\x05error\x18\x02 \x01(\v2\x17.domain.common.v1.ErrorH\x00R\x05error\x88\x01\x01\x12.\n" +
+	"\x13spawned_cycle_count\x18\x03 \x01(\x05R\x11spawnedCycleCount\x12*\n" +
+	"\x11spawned_job_count\x18\x04 \x01(\x05R\x0fspawnedJobCount\x124\n" +
+	"\x17once_at_start_job_count\x18\x05 \x01(\x05R\x13onceAtStartJobCount\x12?\n" +
+	"\x1cengagement_was_newly_created\x18\x06 \x01(\bR\x19engagementWasNewlyCreated\x12*\n" +
+	"\x0eskipped_reason\x18\a \x01(\tH\x01R\rskippedReason\x88\x01\x01\x12,\n" +
+	"\x12backfill_capped_at\x18\b \x01(\x05R\x10backfillCappedAtB\b\n" +
+	"\x06_errorB\x11\n" +
+	"\x0f_skipped_reason2\xdb\t\n" +
 	"\x19SubscriptionDomainService\x12{\n" +
 	"\x12CreateSubscription\x121.domain.subscription.v1.CreateSubscriptionRequest\x1a2.domain.subscription.v1.CreateSubscriptionResponse\x12u\n" +
 	"\x10ReadSubscription\x12/.domain.subscription.v1.ReadSubscriptionRequest\x1a0.domain.subscription.v1.ReadSubscriptionResponse\x12{\n" +
@@ -1452,102 +1792,110 @@ func file_domain_subscription_subscription_subscription_proto_rawDescGZIP() []by
 	return file_domain_subscription_subscription_subscription_proto_rawDescData
 }
 
-var file_domain_subscription_subscription_subscription_proto_msgTypes = make([]protoimpl.MessageInfo, 21)
+var file_domain_subscription_subscription_subscription_proto_msgTypes = make([]protoimpl.MessageInfo, 25)
 var file_domain_subscription_subscription_subscription_proto_goTypes = []any{
-	(*Subscription)(nil),                         // 0: domain.subscription.v1.Subscription
-	(*CreateSubscriptionRequest)(nil),            // 1: domain.subscription.v1.CreateSubscriptionRequest
-	(*CreateSubscriptionResponse)(nil),           // 2: domain.subscription.v1.CreateSubscriptionResponse
-	(*ReadSubscriptionRequest)(nil),              // 3: domain.subscription.v1.ReadSubscriptionRequest
-	(*ReadSubscriptionResponse)(nil),             // 4: domain.subscription.v1.ReadSubscriptionResponse
-	(*UpdateSubscriptionRequest)(nil),            // 5: domain.subscription.v1.UpdateSubscriptionRequest
-	(*UpdateSubscriptionResponse)(nil),           // 6: domain.subscription.v1.UpdateSubscriptionResponse
-	(*DeleteSubscriptionRequest)(nil),            // 7: domain.subscription.v1.DeleteSubscriptionRequest
-	(*DeleteSubscriptionResponse)(nil),           // 8: domain.subscription.v1.DeleteSubscriptionResponse
-	(*ListSubscriptionsRequest)(nil),             // 9: domain.subscription.v1.ListSubscriptionsRequest
-	(*ListSubscriptionsResponse)(nil),            // 10: domain.subscription.v1.ListSubscriptionsResponse
-	(*GetSubscriptionListPageDataRequest)(nil),   // 11: domain.subscription.v1.GetSubscriptionListPageDataRequest
-	(*GetSubscriptionListPageDataResponse)(nil),  // 12: domain.subscription.v1.GetSubscriptionListPageDataResponse
-	(*GetSubscriptionItemPageDataRequest)(nil),   // 13: domain.subscription.v1.GetSubscriptionItemPageDataRequest
-	(*GetSubscriptionItemPageDataResponse)(nil),  // 14: domain.subscription.v1.GetSubscriptionItemPageDataResponse
-	(*CountActiveByClientIdsRequest)(nil),        // 15: domain.subscription.v1.CountActiveByClientIdsRequest
-	(*CountActiveByClientIdsResponse)(nil),       // 16: domain.subscription.v1.CountActiveByClientIdsResponse
-	(*ListSubscriptionsByPricePlanRequest)(nil),  // 17: domain.subscription.v1.ListSubscriptionsByPricePlanRequest
-	(*ListSubscriptionsByPricePlanResponse)(nil), // 18: domain.subscription.v1.ListSubscriptionsByPricePlanResponse
-	nil,                               // 19: domain.subscription.v1.Subscription.MetadataEntry
-	nil,                               // 20: domain.subscription.v1.CountActiveByClientIdsResponse.CountsEntry
-	(*price_plan.PricePlan)(nil),      // 21: domain.subscription.v1.PricePlan
-	(*client.Client)(nil),             // 22: domain.entity.v1.Client
-	(*timestamppb.Timestamp)(nil),     // 23: google.protobuf.Timestamp
-	(*common.Error)(nil),              // 24: domain.common.v1.Error
-	(*common.SearchRequest)(nil),      // 25: domain.common.v1.SearchRequest
-	(*common.FilterRequest)(nil),      // 26: domain.common.v1.FilterRequest
-	(*common.SortRequest)(nil),        // 27: domain.common.v1.SortRequest
-	(*common.PaginationRequest)(nil),  // 28: domain.common.v1.PaginationRequest
-	(*common.PaginationResponse)(nil), // 29: domain.common.v1.PaginationResponse
-	(*common.SearchResult)(nil),       // 30: domain.common.v1.SearchResult
+	(*Subscription)(nil),                                   // 0: domain.subscription.v1.Subscription
+	(*CreateSubscriptionRequest)(nil),                      // 1: domain.subscription.v1.CreateSubscriptionRequest
+	(*CreateSubscriptionResponse)(nil),                     // 2: domain.subscription.v1.CreateSubscriptionResponse
+	(*ReadSubscriptionRequest)(nil),                        // 3: domain.subscription.v1.ReadSubscriptionRequest
+	(*ReadSubscriptionResponse)(nil),                       // 4: domain.subscription.v1.ReadSubscriptionResponse
+	(*UpdateSubscriptionRequest)(nil),                      // 5: domain.subscription.v1.UpdateSubscriptionRequest
+	(*UpdateSubscriptionResponse)(nil),                     // 6: domain.subscription.v1.UpdateSubscriptionResponse
+	(*DeleteSubscriptionRequest)(nil),                      // 7: domain.subscription.v1.DeleteSubscriptionRequest
+	(*DeleteSubscriptionResponse)(nil),                     // 8: domain.subscription.v1.DeleteSubscriptionResponse
+	(*ListSubscriptionsRequest)(nil),                       // 9: domain.subscription.v1.ListSubscriptionsRequest
+	(*ListSubscriptionsResponse)(nil),                      // 10: domain.subscription.v1.ListSubscriptionsResponse
+	(*GetSubscriptionListPageDataRequest)(nil),             // 11: domain.subscription.v1.GetSubscriptionListPageDataRequest
+	(*GetSubscriptionListPageDataResponse)(nil),            // 12: domain.subscription.v1.GetSubscriptionListPageDataResponse
+	(*GetSubscriptionItemPageDataRequest)(nil),             // 13: domain.subscription.v1.GetSubscriptionItemPageDataRequest
+	(*GetSubscriptionItemPageDataResponse)(nil),            // 14: domain.subscription.v1.GetSubscriptionItemPageDataResponse
+	(*CountActiveByClientIdsRequest)(nil),                  // 15: domain.subscription.v1.CountActiveByClientIdsRequest
+	(*CountActiveByClientIdsResponse)(nil),                 // 16: domain.subscription.v1.CountActiveByClientIdsResponse
+	(*ListSubscriptionsByPricePlanRequest)(nil),            // 17: domain.subscription.v1.ListSubscriptionsByPricePlanRequest
+	(*ListSubscriptionsByPricePlanResponse)(nil),           // 18: domain.subscription.v1.ListSubscriptionsByPricePlanResponse
+	(*MaterializeJobsForSubscriptionRequest)(nil),          // 19: domain.subscription.v1.MaterializeJobsForSubscriptionRequest
+	(*MaterializeJobsForSubscriptionResponse)(nil),         // 20: domain.subscription.v1.MaterializeJobsForSubscriptionResponse
+	(*MaterializeInstanceJobsForSubscriptionRequest)(nil),  // 21: domain.subscription.v1.MaterializeInstanceJobsForSubscriptionRequest
+	(*MaterializeInstanceJobsForSubscriptionResponse)(nil), // 22: domain.subscription.v1.MaterializeInstanceJobsForSubscriptionResponse
+	nil,                               // 23: domain.subscription.v1.Subscription.MetadataEntry
+	nil,                               // 24: domain.subscription.v1.CountActiveByClientIdsResponse.CountsEntry
+	(*price_plan.PricePlan)(nil),      // 25: domain.subscription.v1.PricePlan
+	(*client.Client)(nil),             // 26: domain.entity.v1.Client
+	(*timestamppb.Timestamp)(nil),     // 27: google.protobuf.Timestamp
+	(*common.Error)(nil),              // 28: domain.common.v1.Error
+	(*common.SearchRequest)(nil),      // 29: domain.common.v1.SearchRequest
+	(*common.FilterRequest)(nil),      // 30: domain.common.v1.FilterRequest
+	(*common.SortRequest)(nil),        // 31: domain.common.v1.SortRequest
+	(*common.PaginationRequest)(nil),  // 32: domain.common.v1.PaginationRequest
+	(*common.PaginationResponse)(nil), // 33: domain.common.v1.PaginationResponse
+	(*common.SearchResult)(nil),       // 34: domain.common.v1.SearchResult
+	(*job.Job)(nil),                   // 35: domain.operation.v1.Job
 }
 var file_domain_subscription_subscription_subscription_proto_depIdxs = []int32{
-	21, // 0: domain.subscription.v1.Subscription.price_plan:type_name -> domain.subscription.v1.PricePlan
-	22, // 1: domain.subscription.v1.Subscription.client:type_name -> domain.entity.v1.Client
-	23, // 2: domain.subscription.v1.Subscription.date_time_start:type_name -> google.protobuf.Timestamp
-	23, // 3: domain.subscription.v1.Subscription.date_time_end:type_name -> google.protobuf.Timestamp
-	19, // 4: domain.subscription.v1.Subscription.metadata:type_name -> domain.subscription.v1.Subscription.MetadataEntry
+	25, // 0: domain.subscription.v1.Subscription.price_plan:type_name -> domain.subscription.v1.PricePlan
+	26, // 1: domain.subscription.v1.Subscription.client:type_name -> domain.entity.v1.Client
+	27, // 2: domain.subscription.v1.Subscription.date_time_start:type_name -> google.protobuf.Timestamp
+	27, // 3: domain.subscription.v1.Subscription.date_time_end:type_name -> google.protobuf.Timestamp
+	23, // 4: domain.subscription.v1.Subscription.metadata:type_name -> domain.subscription.v1.Subscription.MetadataEntry
 	0,  // 5: domain.subscription.v1.CreateSubscriptionRequest.data:type_name -> domain.subscription.v1.Subscription
 	0,  // 6: domain.subscription.v1.CreateSubscriptionResponse.data:type_name -> domain.subscription.v1.Subscription
-	24, // 7: domain.subscription.v1.CreateSubscriptionResponse.error:type_name -> domain.common.v1.Error
+	28, // 7: domain.subscription.v1.CreateSubscriptionResponse.error:type_name -> domain.common.v1.Error
 	0,  // 8: domain.subscription.v1.ReadSubscriptionRequest.data:type_name -> domain.subscription.v1.Subscription
 	0,  // 9: domain.subscription.v1.ReadSubscriptionResponse.data:type_name -> domain.subscription.v1.Subscription
-	24, // 10: domain.subscription.v1.ReadSubscriptionResponse.error:type_name -> domain.common.v1.Error
+	28, // 10: domain.subscription.v1.ReadSubscriptionResponse.error:type_name -> domain.common.v1.Error
 	0,  // 11: domain.subscription.v1.UpdateSubscriptionRequest.data:type_name -> domain.subscription.v1.Subscription
 	0,  // 12: domain.subscription.v1.UpdateSubscriptionResponse.data:type_name -> domain.subscription.v1.Subscription
-	24, // 13: domain.subscription.v1.UpdateSubscriptionResponse.error:type_name -> domain.common.v1.Error
+	28, // 13: domain.subscription.v1.UpdateSubscriptionResponse.error:type_name -> domain.common.v1.Error
 	0,  // 14: domain.subscription.v1.DeleteSubscriptionRequest.data:type_name -> domain.subscription.v1.Subscription
-	24, // 15: domain.subscription.v1.DeleteSubscriptionResponse.error:type_name -> domain.common.v1.Error
-	25, // 16: domain.subscription.v1.ListSubscriptionsRequest.search:type_name -> domain.common.v1.SearchRequest
-	26, // 17: domain.subscription.v1.ListSubscriptionsRequest.filters:type_name -> domain.common.v1.FilterRequest
-	27, // 18: domain.subscription.v1.ListSubscriptionsRequest.sort:type_name -> domain.common.v1.SortRequest
-	28, // 19: domain.subscription.v1.ListSubscriptionsRequest.pagination:type_name -> domain.common.v1.PaginationRequest
+	28, // 15: domain.subscription.v1.DeleteSubscriptionResponse.error:type_name -> domain.common.v1.Error
+	29, // 16: domain.subscription.v1.ListSubscriptionsRequest.search:type_name -> domain.common.v1.SearchRequest
+	30, // 17: domain.subscription.v1.ListSubscriptionsRequest.filters:type_name -> domain.common.v1.FilterRequest
+	31, // 18: domain.subscription.v1.ListSubscriptionsRequest.sort:type_name -> domain.common.v1.SortRequest
+	32, // 19: domain.subscription.v1.ListSubscriptionsRequest.pagination:type_name -> domain.common.v1.PaginationRequest
 	0,  // 20: domain.subscription.v1.ListSubscriptionsResponse.data:type_name -> domain.subscription.v1.Subscription
-	24, // 21: domain.subscription.v1.ListSubscriptionsResponse.error:type_name -> domain.common.v1.Error
-	28, // 22: domain.subscription.v1.GetSubscriptionListPageDataRequest.pagination:type_name -> domain.common.v1.PaginationRequest
-	26, // 23: domain.subscription.v1.GetSubscriptionListPageDataRequest.filters:type_name -> domain.common.v1.FilterRequest
-	27, // 24: domain.subscription.v1.GetSubscriptionListPageDataRequest.sort:type_name -> domain.common.v1.SortRequest
-	25, // 25: domain.subscription.v1.GetSubscriptionListPageDataRequest.search:type_name -> domain.common.v1.SearchRequest
+	28, // 21: domain.subscription.v1.ListSubscriptionsResponse.error:type_name -> domain.common.v1.Error
+	32, // 22: domain.subscription.v1.GetSubscriptionListPageDataRequest.pagination:type_name -> domain.common.v1.PaginationRequest
+	30, // 23: domain.subscription.v1.GetSubscriptionListPageDataRequest.filters:type_name -> domain.common.v1.FilterRequest
+	31, // 24: domain.subscription.v1.GetSubscriptionListPageDataRequest.sort:type_name -> domain.common.v1.SortRequest
+	29, // 25: domain.subscription.v1.GetSubscriptionListPageDataRequest.search:type_name -> domain.common.v1.SearchRequest
 	0,  // 26: domain.subscription.v1.GetSubscriptionListPageDataResponse.subscription_list:type_name -> domain.subscription.v1.Subscription
-	29, // 27: domain.subscription.v1.GetSubscriptionListPageDataResponse.pagination:type_name -> domain.common.v1.PaginationResponse
-	30, // 28: domain.subscription.v1.GetSubscriptionListPageDataResponse.search_results:type_name -> domain.common.v1.SearchResult
-	24, // 29: domain.subscription.v1.GetSubscriptionListPageDataResponse.error:type_name -> domain.common.v1.Error
+	33, // 27: domain.subscription.v1.GetSubscriptionListPageDataResponse.pagination:type_name -> domain.common.v1.PaginationResponse
+	34, // 28: domain.subscription.v1.GetSubscriptionListPageDataResponse.search_results:type_name -> domain.common.v1.SearchResult
+	28, // 29: domain.subscription.v1.GetSubscriptionListPageDataResponse.error:type_name -> domain.common.v1.Error
 	0,  // 30: domain.subscription.v1.GetSubscriptionItemPageDataResponse.subscription:type_name -> domain.subscription.v1.Subscription
-	24, // 31: domain.subscription.v1.GetSubscriptionItemPageDataResponse.error:type_name -> domain.common.v1.Error
-	20, // 32: domain.subscription.v1.CountActiveByClientIdsResponse.counts:type_name -> domain.subscription.v1.CountActiveByClientIdsResponse.CountsEntry
-	28, // 33: domain.subscription.v1.ListSubscriptionsByPricePlanRequest.pagination:type_name -> domain.common.v1.PaginationRequest
-	27, // 34: domain.subscription.v1.ListSubscriptionsByPricePlanRequest.sort:type_name -> domain.common.v1.SortRequest
+	28, // 31: domain.subscription.v1.GetSubscriptionItemPageDataResponse.error:type_name -> domain.common.v1.Error
+	24, // 32: domain.subscription.v1.CountActiveByClientIdsResponse.counts:type_name -> domain.subscription.v1.CountActiveByClientIdsResponse.CountsEntry
+	32, // 33: domain.subscription.v1.ListSubscriptionsByPricePlanRequest.pagination:type_name -> domain.common.v1.PaginationRequest
+	31, // 34: domain.subscription.v1.ListSubscriptionsByPricePlanRequest.sort:type_name -> domain.common.v1.SortRequest
 	0,  // 35: domain.subscription.v1.ListSubscriptionsByPricePlanResponse.subscription_list:type_name -> domain.subscription.v1.Subscription
-	29, // 36: domain.subscription.v1.ListSubscriptionsByPricePlanResponse.pagination:type_name -> domain.common.v1.PaginationResponse
-	24, // 37: domain.subscription.v1.ListSubscriptionsByPricePlanResponse.error:type_name -> domain.common.v1.Error
-	1,  // 38: domain.subscription.v1.SubscriptionDomainService.CreateSubscription:input_type -> domain.subscription.v1.CreateSubscriptionRequest
-	3,  // 39: domain.subscription.v1.SubscriptionDomainService.ReadSubscription:input_type -> domain.subscription.v1.ReadSubscriptionRequest
-	5,  // 40: domain.subscription.v1.SubscriptionDomainService.UpdateSubscription:input_type -> domain.subscription.v1.UpdateSubscriptionRequest
-	7,  // 41: domain.subscription.v1.SubscriptionDomainService.DeleteSubscription:input_type -> domain.subscription.v1.DeleteSubscriptionRequest
-	9,  // 42: domain.subscription.v1.SubscriptionDomainService.ListSubscriptions:input_type -> domain.subscription.v1.ListSubscriptionsRequest
-	11, // 43: domain.subscription.v1.SubscriptionDomainService.GetSubscriptionListPageData:input_type -> domain.subscription.v1.GetSubscriptionListPageDataRequest
-	13, // 44: domain.subscription.v1.SubscriptionDomainService.GetSubscriptionItemPageData:input_type -> domain.subscription.v1.GetSubscriptionItemPageDataRequest
-	15, // 45: domain.subscription.v1.SubscriptionDomainService.CountActiveByClientIds:input_type -> domain.subscription.v1.CountActiveByClientIdsRequest
-	17, // 46: domain.subscription.v1.SubscriptionDomainService.ListSubscriptionsByPricePlan:input_type -> domain.subscription.v1.ListSubscriptionsByPricePlanRequest
-	2,  // 47: domain.subscription.v1.SubscriptionDomainService.CreateSubscription:output_type -> domain.subscription.v1.CreateSubscriptionResponse
-	4,  // 48: domain.subscription.v1.SubscriptionDomainService.ReadSubscription:output_type -> domain.subscription.v1.ReadSubscriptionResponse
-	6,  // 49: domain.subscription.v1.SubscriptionDomainService.UpdateSubscription:output_type -> domain.subscription.v1.UpdateSubscriptionResponse
-	8,  // 50: domain.subscription.v1.SubscriptionDomainService.DeleteSubscription:output_type -> domain.subscription.v1.DeleteSubscriptionResponse
-	10, // 51: domain.subscription.v1.SubscriptionDomainService.ListSubscriptions:output_type -> domain.subscription.v1.ListSubscriptionsResponse
-	12, // 52: domain.subscription.v1.SubscriptionDomainService.GetSubscriptionListPageData:output_type -> domain.subscription.v1.GetSubscriptionListPageDataResponse
-	14, // 53: domain.subscription.v1.SubscriptionDomainService.GetSubscriptionItemPageData:output_type -> domain.subscription.v1.GetSubscriptionItemPageDataResponse
-	16, // 54: domain.subscription.v1.SubscriptionDomainService.CountActiveByClientIds:output_type -> domain.subscription.v1.CountActiveByClientIdsResponse
-	18, // 55: domain.subscription.v1.SubscriptionDomainService.ListSubscriptionsByPricePlan:output_type -> domain.subscription.v1.ListSubscriptionsByPricePlanResponse
-	47, // [47:56] is the sub-list for method output_type
-	38, // [38:47] is the sub-list for method input_type
-	38, // [38:38] is the sub-list for extension type_name
-	38, // [38:38] is the sub-list for extension extendee
-	0,  // [0:38] is the sub-list for field type_name
+	33, // 36: domain.subscription.v1.ListSubscriptionsByPricePlanResponse.pagination:type_name -> domain.common.v1.PaginationResponse
+	28, // 37: domain.subscription.v1.ListSubscriptionsByPricePlanResponse.error:type_name -> domain.common.v1.Error
+	28, // 38: domain.subscription.v1.MaterializeJobsForSubscriptionResponse.error:type_name -> domain.common.v1.Error
+	35, // 39: domain.subscription.v1.MaterializeJobsForSubscriptionResponse.spawned_jobs:type_name -> domain.operation.v1.Job
+	28, // 40: domain.subscription.v1.MaterializeInstanceJobsForSubscriptionResponse.error:type_name -> domain.common.v1.Error
+	1,  // 41: domain.subscription.v1.SubscriptionDomainService.CreateSubscription:input_type -> domain.subscription.v1.CreateSubscriptionRequest
+	3,  // 42: domain.subscription.v1.SubscriptionDomainService.ReadSubscription:input_type -> domain.subscription.v1.ReadSubscriptionRequest
+	5,  // 43: domain.subscription.v1.SubscriptionDomainService.UpdateSubscription:input_type -> domain.subscription.v1.UpdateSubscriptionRequest
+	7,  // 44: domain.subscription.v1.SubscriptionDomainService.DeleteSubscription:input_type -> domain.subscription.v1.DeleteSubscriptionRequest
+	9,  // 45: domain.subscription.v1.SubscriptionDomainService.ListSubscriptions:input_type -> domain.subscription.v1.ListSubscriptionsRequest
+	11, // 46: domain.subscription.v1.SubscriptionDomainService.GetSubscriptionListPageData:input_type -> domain.subscription.v1.GetSubscriptionListPageDataRequest
+	13, // 47: domain.subscription.v1.SubscriptionDomainService.GetSubscriptionItemPageData:input_type -> domain.subscription.v1.GetSubscriptionItemPageDataRequest
+	15, // 48: domain.subscription.v1.SubscriptionDomainService.CountActiveByClientIds:input_type -> domain.subscription.v1.CountActiveByClientIdsRequest
+	17, // 49: domain.subscription.v1.SubscriptionDomainService.ListSubscriptionsByPricePlan:input_type -> domain.subscription.v1.ListSubscriptionsByPricePlanRequest
+	2,  // 50: domain.subscription.v1.SubscriptionDomainService.CreateSubscription:output_type -> domain.subscription.v1.CreateSubscriptionResponse
+	4,  // 51: domain.subscription.v1.SubscriptionDomainService.ReadSubscription:output_type -> domain.subscription.v1.ReadSubscriptionResponse
+	6,  // 52: domain.subscription.v1.SubscriptionDomainService.UpdateSubscription:output_type -> domain.subscription.v1.UpdateSubscriptionResponse
+	8,  // 53: domain.subscription.v1.SubscriptionDomainService.DeleteSubscription:output_type -> domain.subscription.v1.DeleteSubscriptionResponse
+	10, // 54: domain.subscription.v1.SubscriptionDomainService.ListSubscriptions:output_type -> domain.subscription.v1.ListSubscriptionsResponse
+	12, // 55: domain.subscription.v1.SubscriptionDomainService.GetSubscriptionListPageData:output_type -> domain.subscription.v1.GetSubscriptionListPageDataResponse
+	14, // 56: domain.subscription.v1.SubscriptionDomainService.GetSubscriptionItemPageData:output_type -> domain.subscription.v1.GetSubscriptionItemPageDataResponse
+	16, // 57: domain.subscription.v1.SubscriptionDomainService.CountActiveByClientIds:output_type -> domain.subscription.v1.CountActiveByClientIdsResponse
+	18, // 58: domain.subscription.v1.SubscriptionDomainService.ListSubscriptionsByPricePlan:output_type -> domain.subscription.v1.ListSubscriptionsByPricePlanResponse
+	50, // [50:59] is the sub-list for method output_type
+	41, // [41:50] is the sub-list for method input_type
+	41, // [41:41] is the sub-list for extension type_name
+	41, // [41:41] is the sub-list for extension extendee
+	0,  // [0:41] is the sub-list for field type_name
 }
 
 func init() { file_domain_subscription_subscription_subscription_proto_init() }
@@ -1566,13 +1914,16 @@ func file_domain_subscription_subscription_subscription_proto_init() {
 	file_domain_subscription_subscription_subscription_proto_msgTypes[14].OneofWrappers = []any{}
 	file_domain_subscription_subscription_subscription_proto_msgTypes[17].OneofWrappers = []any{}
 	file_domain_subscription_subscription_subscription_proto_msgTypes[18].OneofWrappers = []any{}
+	file_domain_subscription_subscription_subscription_proto_msgTypes[20].OneofWrappers = []any{}
+	file_domain_subscription_subscription_subscription_proto_msgTypes[21].OneofWrappers = []any{}
+	file_domain_subscription_subscription_subscription_proto_msgTypes[22].OneofWrappers = []any{}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
 		File: protoimpl.DescBuilder{
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_domain_subscription_subscription_subscription_proto_rawDesc), len(file_domain_subscription_subscription_subscription_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   21,
+			NumMessages:   25,
 			NumExtensions: 0,
 			NumServices:   1,
 		},

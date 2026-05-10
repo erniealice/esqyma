@@ -213,3 +213,12 @@ message GenerateDepreciationRunResponse {
   bool success = 5;
   optional domain.common.v1.Error error = 6;
 }
+
+// Use-case messages (consumed by espyna use cases, not bound to an RPC).
+
+// ListDepreciationRunEntriesRequest lists DepreciationSchedule rows by run_id.
+// Used by the Surface D run-detail page entries tab.
+message ListDepreciationRunEntriesRequest {
+  string run_id = 1;
+  optional domain.common.v1.PaginationRequest pagination = 2;
+}

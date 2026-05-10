@@ -1306,6 +1306,606 @@ func (x *ListRevenueRunAttemptsResponse) GetError() *common.Error {
 	return nil
 }
 
+// RevenueRunScope describes the filter for a candidate list or generate call.
+// Empty fields mean "no filter for that dimension". Shared by
+// ListRevenueRunCandidates and GenerateRevenueRun.
+type RevenueRunScope struct {
+	state          protoimpl.MessageState `protogen:"open.v1"`
+	WorkspaceId    *string                `protobuf:"bytes,1,opt,name=workspace_id,json=workspaceId,proto3,oneof" json:"workspace_id,omitempty"`
+	ClientId       *string                `protobuf:"bytes,2,opt,name=client_id,json=clientId,proto3,oneof" json:"client_id,omitempty"`
+	SubscriptionId *string                `protobuf:"bytes,3,opt,name=subscription_id,json=subscriptionId,proto3,oneof" json:"subscription_id,omitempty"`
+	AsOfDate       *string                `protobuf:"bytes,4,opt,name=as_of_date,json=asOfDate,proto3,oneof" json:"as_of_date,omitempty"` // YYYY-MM-DD; defaults to today (in workspace tz) when empty
+	unknownFields  protoimpl.UnknownFields
+	sizeCache      protoimpl.SizeCache
+}
+
+func (x *RevenueRunScope) Reset() {
+	*x = RevenueRunScope{}
+	mi := &file_domain_revenue_revenue_run_revenue_run_proto_msgTypes[16]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *RevenueRunScope) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*RevenueRunScope) ProtoMessage() {}
+
+func (x *RevenueRunScope) ProtoReflect() protoreflect.Message {
+	mi := &file_domain_revenue_revenue_run_revenue_run_proto_msgTypes[16]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use RevenueRunScope.ProtoReflect.Descriptor instead.
+func (*RevenueRunScope) Descriptor() ([]byte, []int) {
+	return file_domain_revenue_revenue_run_revenue_run_proto_rawDescGZIP(), []int{16}
+}
+
+func (x *RevenueRunScope) GetWorkspaceId() string {
+	if x != nil && x.WorkspaceId != nil {
+		return *x.WorkspaceId
+	}
+	return ""
+}
+
+func (x *RevenueRunScope) GetClientId() string {
+	if x != nil && x.ClientId != nil {
+		return *x.ClientId
+	}
+	return ""
+}
+
+func (x *RevenueRunScope) GetSubscriptionId() string {
+	if x != nil && x.SubscriptionId != nil {
+		return *x.SubscriptionId
+	}
+	return ""
+}
+
+func (x *RevenueRunScope) GetAsOfDate() string {
+	if x != nil && x.AsOfDate != nil {
+		return *x.AsOfDate
+	}
+	return ""
+}
+
+// RevenueRunCandidate represents one billed period for one subscription that
+// has not yet been invoiced (or that has a blocker preventing invoicing).
+type RevenueRunCandidate struct {
+	state             protoimpl.MessageState `protogen:"open.v1"`
+	SubscriptionId    string                 `protobuf:"bytes,1,opt,name=subscription_id,json=subscriptionId,proto3" json:"subscription_id,omitempty"`
+	SubscriptionName  string                 `protobuf:"bytes,2,opt,name=subscription_name,json=subscriptionName,proto3" json:"subscription_name,omitempty"`
+	ClientId          string                 `protobuf:"bytes,3,opt,name=client_id,json=clientId,proto3" json:"client_id,omitempty"`
+	ClientName        string                 `protobuf:"bytes,4,opt,name=client_name,json=clientName,proto3" json:"client_name,omitempty"`
+	PlanName          string                 `protobuf:"bytes,5,opt,name=plan_name,json=planName,proto3" json:"plan_name,omitempty"`
+	BillingCycleLabel string                 `protobuf:"bytes,6,opt,name=billing_cycle_label,json=billingCycleLabel,proto3" json:"billing_cycle_label,omitempty"`
+	Currency          string                 `protobuf:"bytes,7,opt,name=currency,proto3" json:"currency,omitempty"`
+	PeriodStart       string                 `protobuf:"bytes,8,opt,name=period_start,json=periodStart,proto3" json:"period_start,omitempty"` // YYYY-MM-DD
+	PeriodEnd         string                 `protobuf:"bytes,9,opt,name=period_end,json=periodEnd,proto3" json:"period_end,omitempty"`       // YYYY-MM-DD
+	PeriodLabel       string                 `protobuf:"bytes,10,opt,name=period_label,json=periodLabel,proto3" json:"period_label,omitempty"`
+	PeriodMarker      string                 `protobuf:"bytes,11,opt,name=period_marker,json=periodMarker,proto3" json:"period_marker,omitempty"`
+	Amount            int64                  `protobuf:"varint,12,opt,name=amount,proto3" json:"amount,omitempty"`
+	LineItemCount     int32                  `protobuf:"varint,13,opt,name=line_item_count,json=lineItemCount,proto3" json:"line_item_count,omitempty"`
+	Eligible          bool                   `protobuf:"varint,14,opt,name=eligible,proto3" json:"eligible,omitempty"`
+	BlockerReason     string                 `protobuf:"bytes,15,opt,name=blocker_reason,json=blockerReason,proto3" json:"blocker_reason,omitempty"`
+	unknownFields     protoimpl.UnknownFields
+	sizeCache         protoimpl.SizeCache
+}
+
+func (x *RevenueRunCandidate) Reset() {
+	*x = RevenueRunCandidate{}
+	mi := &file_domain_revenue_revenue_run_revenue_run_proto_msgTypes[17]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *RevenueRunCandidate) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*RevenueRunCandidate) ProtoMessage() {}
+
+func (x *RevenueRunCandidate) ProtoReflect() protoreflect.Message {
+	mi := &file_domain_revenue_revenue_run_revenue_run_proto_msgTypes[17]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use RevenueRunCandidate.ProtoReflect.Descriptor instead.
+func (*RevenueRunCandidate) Descriptor() ([]byte, []int) {
+	return file_domain_revenue_revenue_run_revenue_run_proto_rawDescGZIP(), []int{17}
+}
+
+func (x *RevenueRunCandidate) GetSubscriptionId() string {
+	if x != nil {
+		return x.SubscriptionId
+	}
+	return ""
+}
+
+func (x *RevenueRunCandidate) GetSubscriptionName() string {
+	if x != nil {
+		return x.SubscriptionName
+	}
+	return ""
+}
+
+func (x *RevenueRunCandidate) GetClientId() string {
+	if x != nil {
+		return x.ClientId
+	}
+	return ""
+}
+
+func (x *RevenueRunCandidate) GetClientName() string {
+	if x != nil {
+		return x.ClientName
+	}
+	return ""
+}
+
+func (x *RevenueRunCandidate) GetPlanName() string {
+	if x != nil {
+		return x.PlanName
+	}
+	return ""
+}
+
+func (x *RevenueRunCandidate) GetBillingCycleLabel() string {
+	if x != nil {
+		return x.BillingCycleLabel
+	}
+	return ""
+}
+
+func (x *RevenueRunCandidate) GetCurrency() string {
+	if x != nil {
+		return x.Currency
+	}
+	return ""
+}
+
+func (x *RevenueRunCandidate) GetPeriodStart() string {
+	if x != nil {
+		return x.PeriodStart
+	}
+	return ""
+}
+
+func (x *RevenueRunCandidate) GetPeriodEnd() string {
+	if x != nil {
+		return x.PeriodEnd
+	}
+	return ""
+}
+
+func (x *RevenueRunCandidate) GetPeriodLabel() string {
+	if x != nil {
+		return x.PeriodLabel
+	}
+	return ""
+}
+
+func (x *RevenueRunCandidate) GetPeriodMarker() string {
+	if x != nil {
+		return x.PeriodMarker
+	}
+	return ""
+}
+
+func (x *RevenueRunCandidate) GetAmount() int64 {
+	if x != nil {
+		return x.Amount
+	}
+	return 0
+}
+
+func (x *RevenueRunCandidate) GetLineItemCount() int32 {
+	if x != nil {
+		return x.LineItemCount
+	}
+	return 0
+}
+
+func (x *RevenueRunCandidate) GetEligible() bool {
+	if x != nil {
+		return x.Eligible
+	}
+	return false
+}
+
+func (x *RevenueRunCandidate) GetBlockerReason() string {
+	if x != nil {
+		return x.BlockerReason
+	}
+	return ""
+}
+
+type ListRevenueRunCandidatesRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Scope         *RevenueRunScope       `protobuf:"bytes,1,opt,name=scope,proto3" json:"scope,omitempty"`
+	Cursor        *string                `protobuf:"bytes,2,opt,name=cursor,proto3,oneof" json:"cursor,omitempty"`
+	Limit         *int32                 `protobuf:"varint,3,opt,name=limit,proto3,oneof" json:"limit,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *ListRevenueRunCandidatesRequest) Reset() {
+	*x = ListRevenueRunCandidatesRequest{}
+	mi := &file_domain_revenue_revenue_run_revenue_run_proto_msgTypes[18]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *ListRevenueRunCandidatesRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ListRevenueRunCandidatesRequest) ProtoMessage() {}
+
+func (x *ListRevenueRunCandidatesRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_domain_revenue_revenue_run_revenue_run_proto_msgTypes[18]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ListRevenueRunCandidatesRequest.ProtoReflect.Descriptor instead.
+func (*ListRevenueRunCandidatesRequest) Descriptor() ([]byte, []int) {
+	return file_domain_revenue_revenue_run_revenue_run_proto_rawDescGZIP(), []int{18}
+}
+
+func (x *ListRevenueRunCandidatesRequest) GetScope() *RevenueRunScope {
+	if x != nil {
+		return x.Scope
+	}
+	return nil
+}
+
+func (x *ListRevenueRunCandidatesRequest) GetCursor() string {
+	if x != nil && x.Cursor != nil {
+		return *x.Cursor
+	}
+	return ""
+}
+
+func (x *ListRevenueRunCandidatesRequest) GetLimit() int32 {
+	if x != nil && x.Limit != nil {
+		return *x.Limit
+	}
+	return 0
+}
+
+type ListRevenueRunCandidatesResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Data          []*RevenueRunCandidate `protobuf:"bytes,1,rep,name=data,proto3" json:"data,omitempty"`
+	Success       bool                   `protobuf:"varint,2,opt,name=success,proto3" json:"success,omitempty"`
+	Error         *common.Error          `protobuf:"bytes,3,opt,name=error,proto3,oneof" json:"error,omitempty"`
+	NextCursor    *string                `protobuf:"bytes,4,opt,name=next_cursor,json=nextCursor,proto3,oneof" json:"next_cursor,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *ListRevenueRunCandidatesResponse) Reset() {
+	*x = ListRevenueRunCandidatesResponse{}
+	mi := &file_domain_revenue_revenue_run_revenue_run_proto_msgTypes[19]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *ListRevenueRunCandidatesResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ListRevenueRunCandidatesResponse) ProtoMessage() {}
+
+func (x *ListRevenueRunCandidatesResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_domain_revenue_revenue_run_revenue_run_proto_msgTypes[19]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ListRevenueRunCandidatesResponse.ProtoReflect.Descriptor instead.
+func (*ListRevenueRunCandidatesResponse) Descriptor() ([]byte, []int) {
+	return file_domain_revenue_revenue_run_revenue_run_proto_rawDescGZIP(), []int{19}
+}
+
+func (x *ListRevenueRunCandidatesResponse) GetData() []*RevenueRunCandidate {
+	if x != nil {
+		return x.Data
+	}
+	return nil
+}
+
+func (x *ListRevenueRunCandidatesResponse) GetSuccess() bool {
+	if x != nil {
+		return x.Success
+	}
+	return false
+}
+
+func (x *ListRevenueRunCandidatesResponse) GetError() *common.Error {
+	if x != nil {
+		return x.Error
+	}
+	return nil
+}
+
+func (x *ListRevenueRunCandidatesResponse) GetNextCursor() string {
+	if x != nil && x.NextCursor != nil {
+		return *x.NextCursor
+	}
+	return ""
+}
+
+// SelectedRevenueRunCandidate is one operator-confirmed selection to invoice.
+type SelectedRevenueRunCandidate struct {
+	state          protoimpl.MessageState `protogen:"open.v1"`
+	SubscriptionId string                 `protobuf:"bytes,1,opt,name=subscription_id,json=subscriptionId,proto3" json:"subscription_id,omitempty"`
+	PeriodStart    string                 `protobuf:"bytes,2,opt,name=period_start,json=periodStart,proto3" json:"period_start,omitempty"`    // YYYY-MM-DD
+	PeriodEnd      string                 `protobuf:"bytes,3,opt,name=period_end,json=periodEnd,proto3" json:"period_end,omitempty"`          // YYYY-MM-DD
+	PeriodMarker   string                 `protobuf:"bytes,4,opt,name=period_marker,json=periodMarker,proto3" json:"period_marker,omitempty"` // canonical idempotency anchor
+	unknownFields  protoimpl.UnknownFields
+	sizeCache      protoimpl.SizeCache
+}
+
+func (x *SelectedRevenueRunCandidate) Reset() {
+	*x = SelectedRevenueRunCandidate{}
+	mi := &file_domain_revenue_revenue_run_revenue_run_proto_msgTypes[20]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *SelectedRevenueRunCandidate) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*SelectedRevenueRunCandidate) ProtoMessage() {}
+
+func (x *SelectedRevenueRunCandidate) ProtoReflect() protoreflect.Message {
+	mi := &file_domain_revenue_revenue_run_revenue_run_proto_msgTypes[20]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use SelectedRevenueRunCandidate.ProtoReflect.Descriptor instead.
+func (*SelectedRevenueRunCandidate) Descriptor() ([]byte, []int) {
+	return file_domain_revenue_revenue_run_revenue_run_proto_rawDescGZIP(), []int{20}
+}
+
+func (x *SelectedRevenueRunCandidate) GetSubscriptionId() string {
+	if x != nil {
+		return x.SubscriptionId
+	}
+	return ""
+}
+
+func (x *SelectedRevenueRunCandidate) GetPeriodStart() string {
+	if x != nil {
+		return x.PeriodStart
+	}
+	return ""
+}
+
+func (x *SelectedRevenueRunCandidate) GetPeriodEnd() string {
+	if x != nil {
+		return x.PeriodEnd
+	}
+	return ""
+}
+
+func (x *SelectedRevenueRunCandidate) GetPeriodMarker() string {
+	if x != nil {
+		return x.PeriodMarker
+	}
+	return ""
+}
+
+// RevenueRunSelections carries either an explicit list or a filter token.
+// Exactly one of explicit_list or filter_token should be set.
+type RevenueRunSelections struct {
+	state         protoimpl.MessageState         `protogen:"open.v1"`
+	ExplicitList  []*SelectedRevenueRunCandidate `protobuf:"bytes,1,rep,name=explicit_list,json=explicitList,proto3" json:"explicit_list,omitempty"`
+	FilterToken   *string                        `protobuf:"bytes,2,opt,name=filter_token,json=filterToken,proto3,oneof" json:"filter_token,omitempty"` // signed server snapshot; deferred per v1 progress.md D9
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *RevenueRunSelections) Reset() {
+	*x = RevenueRunSelections{}
+	mi := &file_domain_revenue_revenue_run_revenue_run_proto_msgTypes[21]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *RevenueRunSelections) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*RevenueRunSelections) ProtoMessage() {}
+
+func (x *RevenueRunSelections) ProtoReflect() protoreflect.Message {
+	mi := &file_domain_revenue_revenue_run_revenue_run_proto_msgTypes[21]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use RevenueRunSelections.ProtoReflect.Descriptor instead.
+func (*RevenueRunSelections) Descriptor() ([]byte, []int) {
+	return file_domain_revenue_revenue_run_revenue_run_proto_rawDescGZIP(), []int{21}
+}
+
+func (x *RevenueRunSelections) GetExplicitList() []*SelectedRevenueRunCandidate {
+	if x != nil {
+		return x.ExplicitList
+	}
+	return nil
+}
+
+func (x *RevenueRunSelections) GetFilterToken() string {
+	if x != nil && x.FilterToken != nil {
+		return *x.FilterToken
+	}
+	return ""
+}
+
+type GenerateRevenueRunRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Scope         *RevenueRunScope       `protobuf:"bytes,1,opt,name=scope,proto3" json:"scope,omitempty"`
+	Selections    *RevenueRunSelections  `protobuf:"bytes,2,opt,name=selections,proto3" json:"selections,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *GenerateRevenueRunRequest) Reset() {
+	*x = GenerateRevenueRunRequest{}
+	mi := &file_domain_revenue_revenue_run_revenue_run_proto_msgTypes[22]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *GenerateRevenueRunRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*GenerateRevenueRunRequest) ProtoMessage() {}
+
+func (x *GenerateRevenueRunRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_domain_revenue_revenue_run_revenue_run_proto_msgTypes[22]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use GenerateRevenueRunRequest.ProtoReflect.Descriptor instead.
+func (*GenerateRevenueRunRequest) Descriptor() ([]byte, []int) {
+	return file_domain_revenue_revenue_run_revenue_run_proto_rawDescGZIP(), []int{22}
+}
+
+func (x *GenerateRevenueRunRequest) GetScope() *RevenueRunScope {
+	if x != nil {
+		return x.Scope
+	}
+	return nil
+}
+
+func (x *GenerateRevenueRunRequest) GetSelections() *RevenueRunSelections {
+	if x != nil {
+		return x.Selections
+	}
+	return nil
+}
+
+type GenerateRevenueRunResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Success       bool                   `protobuf:"varint,1,opt,name=success,proto3" json:"success,omitempty"`
+	Error         *common.Error          `protobuf:"bytes,2,opt,name=error,proto3,oneof" json:"error,omitempty"`
+	Run           *RevenueRun            `protobuf:"bytes,3,opt,name=run,proto3,oneof" json:"run,omitempty"`
+	Attempts      []*RevenueRunAttempt   `protobuf:"bytes,4,rep,name=attempts,proto3" json:"attempts,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *GenerateRevenueRunResponse) Reset() {
+	*x = GenerateRevenueRunResponse{}
+	mi := &file_domain_revenue_revenue_run_revenue_run_proto_msgTypes[23]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *GenerateRevenueRunResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*GenerateRevenueRunResponse) ProtoMessage() {}
+
+func (x *GenerateRevenueRunResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_domain_revenue_revenue_run_revenue_run_proto_msgTypes[23]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use GenerateRevenueRunResponse.ProtoReflect.Descriptor instead.
+func (*GenerateRevenueRunResponse) Descriptor() ([]byte, []int) {
+	return file_domain_revenue_revenue_run_revenue_run_proto_rawDescGZIP(), []int{23}
+}
+
+func (x *GenerateRevenueRunResponse) GetSuccess() bool {
+	if x != nil {
+		return x.Success
+	}
+	return false
+}
+
+func (x *GenerateRevenueRunResponse) GetError() *common.Error {
+	if x != nil {
+		return x.Error
+	}
+	return nil
+}
+
+func (x *GenerateRevenueRunResponse) GetRun() *RevenueRun {
+	if x != nil {
+		return x.Run
+	}
+	return nil
+}
+
+func (x *GenerateRevenueRunResponse) GetAttempts() []*RevenueRunAttempt {
+	if x != nil {
+		return x.Attempts
+	}
+	return nil
+}
+
 var File_domain_revenue_revenue_run_revenue_run_proto protoreflect.FileDescriptor
 
 const file_domain_revenue_revenue_run_revenue_run_proto_rawDesc = "" +
@@ -1441,7 +2041,73 @@ const file_domain_revenue_revenue_run_revenue_run_proto_rawDesc = "" +
 	"\x04data\x18\x01 \x03(\v2$.domain.revenue.v1.RevenueRunAttemptR\x04data\x12\x18\n" +
 	"\asuccess\x18\x02 \x01(\bR\asuccess\x122\n" +
 	"\x05error\x18\x03 \x01(\v2\x17.domain.common.v1.ErrorH\x00R\x05error\x88\x01\x01B\b\n" +
-	"\x06_error*\xaf\x01\n" +
+	"\x06_error\"\xee\x01\n" +
+	"\x0fRevenueRunScope\x12&\n" +
+	"\fworkspace_id\x18\x01 \x01(\tH\x00R\vworkspaceId\x88\x01\x01\x12 \n" +
+	"\tclient_id\x18\x02 \x01(\tH\x01R\bclientId\x88\x01\x01\x12,\n" +
+	"\x0fsubscription_id\x18\x03 \x01(\tH\x02R\x0esubscriptionId\x88\x01\x01\x12!\n" +
+	"\n" +
+	"as_of_date\x18\x04 \x01(\tH\x03R\basOfDate\x88\x01\x01B\x0f\n" +
+	"\r_workspace_idB\f\n" +
+	"\n" +
+	"_client_idB\x12\n" +
+	"\x10_subscription_idB\r\n" +
+	"\v_as_of_date\"\x9f\x04\n" +
+	"\x13RevenueRunCandidate\x12'\n" +
+	"\x0fsubscription_id\x18\x01 \x01(\tR\x0esubscriptionId\x12+\n" +
+	"\x11subscription_name\x18\x02 \x01(\tR\x10subscriptionName\x12\x1b\n" +
+	"\tclient_id\x18\x03 \x01(\tR\bclientId\x12\x1f\n" +
+	"\vclient_name\x18\x04 \x01(\tR\n" +
+	"clientName\x12\x1b\n" +
+	"\tplan_name\x18\x05 \x01(\tR\bplanName\x12.\n" +
+	"\x13billing_cycle_label\x18\x06 \x01(\tR\x11billingCycleLabel\x12\x1a\n" +
+	"\bcurrency\x18\a \x01(\tR\bcurrency\x12!\n" +
+	"\fperiod_start\x18\b \x01(\tR\vperiodStart\x12\x1d\n" +
+	"\n" +
+	"period_end\x18\t \x01(\tR\tperiodEnd\x12!\n" +
+	"\fperiod_label\x18\n" +
+	" \x01(\tR\vperiodLabel\x12#\n" +
+	"\rperiod_marker\x18\v \x01(\tR\fperiodMarker\x12\x16\n" +
+	"\x06amount\x18\f \x01(\x03R\x06amount\x12&\n" +
+	"\x0fline_item_count\x18\r \x01(\x05R\rlineItemCount\x12\x1a\n" +
+	"\beligible\x18\x0e \x01(\bR\beligible\x12%\n" +
+	"\x0eblocker_reason\x18\x0f \x01(\tR\rblockerReason\"\xa8\x01\n" +
+	"\x1fListRevenueRunCandidatesRequest\x128\n" +
+	"\x05scope\x18\x01 \x01(\v2\".domain.revenue.v1.RevenueRunScopeR\x05scope\x12\x1b\n" +
+	"\x06cursor\x18\x02 \x01(\tH\x00R\x06cursor\x88\x01\x01\x12\x19\n" +
+	"\x05limit\x18\x03 \x01(\x05H\x01R\x05limit\x88\x01\x01B\t\n" +
+	"\a_cursorB\b\n" +
+	"\x06_limit\"\xec\x01\n" +
+	" ListRevenueRunCandidatesResponse\x12:\n" +
+	"\x04data\x18\x01 \x03(\v2&.domain.revenue.v1.RevenueRunCandidateR\x04data\x12\x18\n" +
+	"\asuccess\x18\x02 \x01(\bR\asuccess\x122\n" +
+	"\x05error\x18\x03 \x01(\v2\x17.domain.common.v1.ErrorH\x00R\x05error\x88\x01\x01\x12$\n" +
+	"\vnext_cursor\x18\x04 \x01(\tH\x01R\n" +
+	"nextCursor\x88\x01\x01B\b\n" +
+	"\x06_errorB\x0e\n" +
+	"\f_next_cursor\"\xad\x01\n" +
+	"\x1bSelectedRevenueRunCandidate\x12'\n" +
+	"\x0fsubscription_id\x18\x01 \x01(\tR\x0esubscriptionId\x12!\n" +
+	"\fperiod_start\x18\x02 \x01(\tR\vperiodStart\x12\x1d\n" +
+	"\n" +
+	"period_end\x18\x03 \x01(\tR\tperiodEnd\x12#\n" +
+	"\rperiod_marker\x18\x04 \x01(\tR\fperiodMarker\"\xa4\x01\n" +
+	"\x14RevenueRunSelections\x12S\n" +
+	"\rexplicit_list\x18\x01 \x03(\v2..domain.revenue.v1.SelectedRevenueRunCandidateR\fexplicitList\x12&\n" +
+	"\ffilter_token\x18\x02 \x01(\tH\x00R\vfilterToken\x88\x01\x01B\x0f\n" +
+	"\r_filter_token\"\x9e\x01\n" +
+	"\x19GenerateRevenueRunRequest\x128\n" +
+	"\x05scope\x18\x01 \x01(\v2\".domain.revenue.v1.RevenueRunScopeR\x05scope\x12G\n" +
+	"\n" +
+	"selections\x18\x02 \x01(\v2'.domain.revenue.v1.RevenueRunSelectionsR\n" +
+	"selections\"\xf4\x01\n" +
+	"\x1aGenerateRevenueRunResponse\x12\x18\n" +
+	"\asuccess\x18\x01 \x01(\bR\asuccess\x122\n" +
+	"\x05error\x18\x02 \x01(\v2\x17.domain.common.v1.ErrorH\x00R\x05error\x88\x01\x01\x124\n" +
+	"\x03run\x18\x03 \x01(\v2\x1d.domain.revenue.v1.RevenueRunH\x01R\x03run\x88\x01\x01\x12@\n" +
+	"\battempts\x18\x04 \x03(\v2$.domain.revenue.v1.RevenueRunAttemptR\battemptsB\b\n" +
+	"\x06_errorB\x06\n" +
+	"\x04_run*\xaf\x01\n" +
 	"\x13RevenueRunScopeKind\x12&\n" +
 	"\"REVENUE_RUN_SCOPE_KIND_UNSPECIFIED\x10\x00\x12'\n" +
 	"#REVENUE_RUN_SCOPE_KIND_SUBSCRIPTION\x10\x01\x12!\n" +
@@ -1480,33 +2146,41 @@ func file_domain_revenue_revenue_run_revenue_run_proto_rawDescGZIP() []byte {
 }
 
 var file_domain_revenue_revenue_run_revenue_run_proto_enumTypes = make([]protoimpl.EnumInfo, 3)
-var file_domain_revenue_revenue_run_revenue_run_proto_msgTypes = make([]protoimpl.MessageInfo, 16)
+var file_domain_revenue_revenue_run_revenue_run_proto_msgTypes = make([]protoimpl.MessageInfo, 24)
 var file_domain_revenue_revenue_run_revenue_run_proto_goTypes = []any{
-	(RevenueRunScopeKind)(0),                // 0: domain.revenue.v1.RevenueRunScopeKind
-	(RevenueRunStatus)(0),                   // 1: domain.revenue.v1.RevenueRunStatus
-	(RevenueRunAttemptOutcome)(0),           // 2: domain.revenue.v1.RevenueRunAttemptOutcome
-	(*RevenueRun)(nil),                      // 3: domain.revenue.v1.RevenueRun
-	(*RevenueRunAttempt)(nil),               // 4: domain.revenue.v1.RevenueRunAttempt
-	(*CreateRevenueRunRequest)(nil),         // 5: domain.revenue.v1.CreateRevenueRunRequest
-	(*CreateRevenueRunResponse)(nil),        // 6: domain.revenue.v1.CreateRevenueRunResponse
-	(*ReadRevenueRunRequest)(nil),           // 7: domain.revenue.v1.ReadRevenueRunRequest
-	(*ReadRevenueRunResponse)(nil),          // 8: domain.revenue.v1.ReadRevenueRunResponse
-	(*UpdateRevenueRunRequest)(nil),         // 9: domain.revenue.v1.UpdateRevenueRunRequest
-	(*UpdateRevenueRunResponse)(nil),        // 10: domain.revenue.v1.UpdateRevenueRunResponse
-	(*DeleteRevenueRunRequest)(nil),         // 11: domain.revenue.v1.DeleteRevenueRunRequest
-	(*DeleteRevenueRunResponse)(nil),        // 12: domain.revenue.v1.DeleteRevenueRunResponse
-	(*ListRevenueRunsRequest)(nil),          // 13: domain.revenue.v1.ListRevenueRunsRequest
-	(*ListRevenueRunsResponse)(nil),         // 14: domain.revenue.v1.ListRevenueRunsResponse
-	(*CreateRevenueRunAttemptRequest)(nil),  // 15: domain.revenue.v1.CreateRevenueRunAttemptRequest
-	(*CreateRevenueRunAttemptResponse)(nil), // 16: domain.revenue.v1.CreateRevenueRunAttemptResponse
-	(*ListRevenueRunAttemptsRequest)(nil),   // 17: domain.revenue.v1.ListRevenueRunAttemptsRequest
-	(*ListRevenueRunAttemptsResponse)(nil),  // 18: domain.revenue.v1.ListRevenueRunAttemptsResponse
-	(*common.Error)(nil),                    // 19: domain.common.v1.Error
-	(*common.SearchRequest)(nil),            // 20: domain.common.v1.SearchRequest
-	(*common.FilterRequest)(nil),            // 21: domain.common.v1.FilterRequest
-	(*common.SortRequest)(nil),              // 22: domain.common.v1.SortRequest
-	(*common.PaginationRequest)(nil),        // 23: domain.common.v1.PaginationRequest
-	(*common.PaginationResponse)(nil),       // 24: domain.common.v1.PaginationResponse
+	(RevenueRunScopeKind)(0),                 // 0: domain.revenue.v1.RevenueRunScopeKind
+	(RevenueRunStatus)(0),                    // 1: domain.revenue.v1.RevenueRunStatus
+	(RevenueRunAttemptOutcome)(0),            // 2: domain.revenue.v1.RevenueRunAttemptOutcome
+	(*RevenueRun)(nil),                       // 3: domain.revenue.v1.RevenueRun
+	(*RevenueRunAttempt)(nil),                // 4: domain.revenue.v1.RevenueRunAttempt
+	(*CreateRevenueRunRequest)(nil),          // 5: domain.revenue.v1.CreateRevenueRunRequest
+	(*CreateRevenueRunResponse)(nil),         // 6: domain.revenue.v1.CreateRevenueRunResponse
+	(*ReadRevenueRunRequest)(nil),            // 7: domain.revenue.v1.ReadRevenueRunRequest
+	(*ReadRevenueRunResponse)(nil),           // 8: domain.revenue.v1.ReadRevenueRunResponse
+	(*UpdateRevenueRunRequest)(nil),          // 9: domain.revenue.v1.UpdateRevenueRunRequest
+	(*UpdateRevenueRunResponse)(nil),         // 10: domain.revenue.v1.UpdateRevenueRunResponse
+	(*DeleteRevenueRunRequest)(nil),          // 11: domain.revenue.v1.DeleteRevenueRunRequest
+	(*DeleteRevenueRunResponse)(nil),         // 12: domain.revenue.v1.DeleteRevenueRunResponse
+	(*ListRevenueRunsRequest)(nil),           // 13: domain.revenue.v1.ListRevenueRunsRequest
+	(*ListRevenueRunsResponse)(nil),          // 14: domain.revenue.v1.ListRevenueRunsResponse
+	(*CreateRevenueRunAttemptRequest)(nil),   // 15: domain.revenue.v1.CreateRevenueRunAttemptRequest
+	(*CreateRevenueRunAttemptResponse)(nil),  // 16: domain.revenue.v1.CreateRevenueRunAttemptResponse
+	(*ListRevenueRunAttemptsRequest)(nil),    // 17: domain.revenue.v1.ListRevenueRunAttemptsRequest
+	(*ListRevenueRunAttemptsResponse)(nil),   // 18: domain.revenue.v1.ListRevenueRunAttemptsResponse
+	(*RevenueRunScope)(nil),                  // 19: domain.revenue.v1.RevenueRunScope
+	(*RevenueRunCandidate)(nil),              // 20: domain.revenue.v1.RevenueRunCandidate
+	(*ListRevenueRunCandidatesRequest)(nil),  // 21: domain.revenue.v1.ListRevenueRunCandidatesRequest
+	(*ListRevenueRunCandidatesResponse)(nil), // 22: domain.revenue.v1.ListRevenueRunCandidatesResponse
+	(*SelectedRevenueRunCandidate)(nil),      // 23: domain.revenue.v1.SelectedRevenueRunCandidate
+	(*RevenueRunSelections)(nil),             // 24: domain.revenue.v1.RevenueRunSelections
+	(*GenerateRevenueRunRequest)(nil),        // 25: domain.revenue.v1.GenerateRevenueRunRequest
+	(*GenerateRevenueRunResponse)(nil),       // 26: domain.revenue.v1.GenerateRevenueRunResponse
+	(*common.Error)(nil),                     // 27: domain.common.v1.Error
+	(*common.SearchRequest)(nil),             // 28: domain.common.v1.SearchRequest
+	(*common.FilterRequest)(nil),             // 29: domain.common.v1.FilterRequest
+	(*common.SortRequest)(nil),               // 30: domain.common.v1.SortRequest
+	(*common.PaginationRequest)(nil),         // 31: domain.common.v1.PaginationRequest
+	(*common.PaginationResponse)(nil),        // 32: domain.common.v1.PaginationResponse
 }
 var file_domain_revenue_revenue_run_revenue_run_proto_depIdxs = []int32{
 	0,  // 0: domain.revenue.v1.RevenueRun.scope_kind:type_name -> domain.revenue.v1.RevenueRunScopeKind
@@ -1514,48 +2188,57 @@ var file_domain_revenue_revenue_run_revenue_run_proto_depIdxs = []int32{
 	2,  // 2: domain.revenue.v1.RevenueRunAttempt.outcome:type_name -> domain.revenue.v1.RevenueRunAttemptOutcome
 	3,  // 3: domain.revenue.v1.CreateRevenueRunRequest.data:type_name -> domain.revenue.v1.RevenueRun
 	3,  // 4: domain.revenue.v1.CreateRevenueRunResponse.data:type_name -> domain.revenue.v1.RevenueRun
-	19, // 5: domain.revenue.v1.CreateRevenueRunResponse.error:type_name -> domain.common.v1.Error
+	27, // 5: domain.revenue.v1.CreateRevenueRunResponse.error:type_name -> domain.common.v1.Error
 	3,  // 6: domain.revenue.v1.ReadRevenueRunRequest.data:type_name -> domain.revenue.v1.RevenueRun
 	3,  // 7: domain.revenue.v1.ReadRevenueRunResponse.data:type_name -> domain.revenue.v1.RevenueRun
-	19, // 8: domain.revenue.v1.ReadRevenueRunResponse.error:type_name -> domain.common.v1.Error
+	27, // 8: domain.revenue.v1.ReadRevenueRunResponse.error:type_name -> domain.common.v1.Error
 	3,  // 9: domain.revenue.v1.UpdateRevenueRunRequest.data:type_name -> domain.revenue.v1.RevenueRun
 	3,  // 10: domain.revenue.v1.UpdateRevenueRunResponse.data:type_name -> domain.revenue.v1.RevenueRun
-	19, // 11: domain.revenue.v1.UpdateRevenueRunResponse.error:type_name -> domain.common.v1.Error
+	27, // 11: domain.revenue.v1.UpdateRevenueRunResponse.error:type_name -> domain.common.v1.Error
 	3,  // 12: domain.revenue.v1.DeleteRevenueRunRequest.data:type_name -> domain.revenue.v1.RevenueRun
-	19, // 13: domain.revenue.v1.DeleteRevenueRunResponse.error:type_name -> domain.common.v1.Error
-	20, // 14: domain.revenue.v1.ListRevenueRunsRequest.search:type_name -> domain.common.v1.SearchRequest
-	21, // 15: domain.revenue.v1.ListRevenueRunsRequest.filters:type_name -> domain.common.v1.FilterRequest
-	22, // 16: domain.revenue.v1.ListRevenueRunsRequest.sort:type_name -> domain.common.v1.SortRequest
-	23, // 17: domain.revenue.v1.ListRevenueRunsRequest.pagination:type_name -> domain.common.v1.PaginationRequest
+	27, // 13: domain.revenue.v1.DeleteRevenueRunResponse.error:type_name -> domain.common.v1.Error
+	28, // 14: domain.revenue.v1.ListRevenueRunsRequest.search:type_name -> domain.common.v1.SearchRequest
+	29, // 15: domain.revenue.v1.ListRevenueRunsRequest.filters:type_name -> domain.common.v1.FilterRequest
+	30, // 16: domain.revenue.v1.ListRevenueRunsRequest.sort:type_name -> domain.common.v1.SortRequest
+	31, // 17: domain.revenue.v1.ListRevenueRunsRequest.pagination:type_name -> domain.common.v1.PaginationRequest
 	3,  // 18: domain.revenue.v1.ListRevenueRunsResponse.data:type_name -> domain.revenue.v1.RevenueRun
-	19, // 19: domain.revenue.v1.ListRevenueRunsResponse.error:type_name -> domain.common.v1.Error
-	24, // 20: domain.revenue.v1.ListRevenueRunsResponse.pagination:type_name -> domain.common.v1.PaginationResponse
+	27, // 19: domain.revenue.v1.ListRevenueRunsResponse.error:type_name -> domain.common.v1.Error
+	32, // 20: domain.revenue.v1.ListRevenueRunsResponse.pagination:type_name -> domain.common.v1.PaginationResponse
 	4,  // 21: domain.revenue.v1.CreateRevenueRunAttemptRequest.data:type_name -> domain.revenue.v1.RevenueRunAttempt
 	4,  // 22: domain.revenue.v1.CreateRevenueRunAttemptResponse.data:type_name -> domain.revenue.v1.RevenueRunAttempt
-	19, // 23: domain.revenue.v1.CreateRevenueRunAttemptResponse.error:type_name -> domain.common.v1.Error
-	21, // 24: domain.revenue.v1.ListRevenueRunAttemptsRequest.filters:type_name -> domain.common.v1.FilterRequest
-	22, // 25: domain.revenue.v1.ListRevenueRunAttemptsRequest.sort:type_name -> domain.common.v1.SortRequest
+	27, // 23: domain.revenue.v1.CreateRevenueRunAttemptResponse.error:type_name -> domain.common.v1.Error
+	29, // 24: domain.revenue.v1.ListRevenueRunAttemptsRequest.filters:type_name -> domain.common.v1.FilterRequest
+	30, // 25: domain.revenue.v1.ListRevenueRunAttemptsRequest.sort:type_name -> domain.common.v1.SortRequest
 	4,  // 26: domain.revenue.v1.ListRevenueRunAttemptsResponse.data:type_name -> domain.revenue.v1.RevenueRunAttempt
-	19, // 27: domain.revenue.v1.ListRevenueRunAttemptsResponse.error:type_name -> domain.common.v1.Error
-	5,  // 28: domain.revenue.v1.RevenueRunDomainService.CreateRevenueRun:input_type -> domain.revenue.v1.CreateRevenueRunRequest
-	7,  // 29: domain.revenue.v1.RevenueRunDomainService.ReadRevenueRun:input_type -> domain.revenue.v1.ReadRevenueRunRequest
-	9,  // 30: domain.revenue.v1.RevenueRunDomainService.UpdateRevenueRun:input_type -> domain.revenue.v1.UpdateRevenueRunRequest
-	11, // 31: domain.revenue.v1.RevenueRunDomainService.DeleteRevenueRun:input_type -> domain.revenue.v1.DeleteRevenueRunRequest
-	13, // 32: domain.revenue.v1.RevenueRunDomainService.ListRevenueRuns:input_type -> domain.revenue.v1.ListRevenueRunsRequest
-	15, // 33: domain.revenue.v1.RevenueRunDomainService.CreateRevenueRunAttempt:input_type -> domain.revenue.v1.CreateRevenueRunAttemptRequest
-	17, // 34: domain.revenue.v1.RevenueRunDomainService.ListRevenueRunAttempts:input_type -> domain.revenue.v1.ListRevenueRunAttemptsRequest
-	6,  // 35: domain.revenue.v1.RevenueRunDomainService.CreateRevenueRun:output_type -> domain.revenue.v1.CreateRevenueRunResponse
-	8,  // 36: domain.revenue.v1.RevenueRunDomainService.ReadRevenueRun:output_type -> domain.revenue.v1.ReadRevenueRunResponse
-	10, // 37: domain.revenue.v1.RevenueRunDomainService.UpdateRevenueRun:output_type -> domain.revenue.v1.UpdateRevenueRunResponse
-	12, // 38: domain.revenue.v1.RevenueRunDomainService.DeleteRevenueRun:output_type -> domain.revenue.v1.DeleteRevenueRunResponse
-	14, // 39: domain.revenue.v1.RevenueRunDomainService.ListRevenueRuns:output_type -> domain.revenue.v1.ListRevenueRunsResponse
-	16, // 40: domain.revenue.v1.RevenueRunDomainService.CreateRevenueRunAttempt:output_type -> domain.revenue.v1.CreateRevenueRunAttemptResponse
-	18, // 41: domain.revenue.v1.RevenueRunDomainService.ListRevenueRunAttempts:output_type -> domain.revenue.v1.ListRevenueRunAttemptsResponse
-	35, // [35:42] is the sub-list for method output_type
-	28, // [28:35] is the sub-list for method input_type
-	28, // [28:28] is the sub-list for extension type_name
-	28, // [28:28] is the sub-list for extension extendee
-	0,  // [0:28] is the sub-list for field type_name
+	27, // 27: domain.revenue.v1.ListRevenueRunAttemptsResponse.error:type_name -> domain.common.v1.Error
+	19, // 28: domain.revenue.v1.ListRevenueRunCandidatesRequest.scope:type_name -> domain.revenue.v1.RevenueRunScope
+	20, // 29: domain.revenue.v1.ListRevenueRunCandidatesResponse.data:type_name -> domain.revenue.v1.RevenueRunCandidate
+	27, // 30: domain.revenue.v1.ListRevenueRunCandidatesResponse.error:type_name -> domain.common.v1.Error
+	23, // 31: domain.revenue.v1.RevenueRunSelections.explicit_list:type_name -> domain.revenue.v1.SelectedRevenueRunCandidate
+	19, // 32: domain.revenue.v1.GenerateRevenueRunRequest.scope:type_name -> domain.revenue.v1.RevenueRunScope
+	24, // 33: domain.revenue.v1.GenerateRevenueRunRequest.selections:type_name -> domain.revenue.v1.RevenueRunSelections
+	27, // 34: domain.revenue.v1.GenerateRevenueRunResponse.error:type_name -> domain.common.v1.Error
+	3,  // 35: domain.revenue.v1.GenerateRevenueRunResponse.run:type_name -> domain.revenue.v1.RevenueRun
+	4,  // 36: domain.revenue.v1.GenerateRevenueRunResponse.attempts:type_name -> domain.revenue.v1.RevenueRunAttempt
+	5,  // 37: domain.revenue.v1.RevenueRunDomainService.CreateRevenueRun:input_type -> domain.revenue.v1.CreateRevenueRunRequest
+	7,  // 38: domain.revenue.v1.RevenueRunDomainService.ReadRevenueRun:input_type -> domain.revenue.v1.ReadRevenueRunRequest
+	9,  // 39: domain.revenue.v1.RevenueRunDomainService.UpdateRevenueRun:input_type -> domain.revenue.v1.UpdateRevenueRunRequest
+	11, // 40: domain.revenue.v1.RevenueRunDomainService.DeleteRevenueRun:input_type -> domain.revenue.v1.DeleteRevenueRunRequest
+	13, // 41: domain.revenue.v1.RevenueRunDomainService.ListRevenueRuns:input_type -> domain.revenue.v1.ListRevenueRunsRequest
+	15, // 42: domain.revenue.v1.RevenueRunDomainService.CreateRevenueRunAttempt:input_type -> domain.revenue.v1.CreateRevenueRunAttemptRequest
+	17, // 43: domain.revenue.v1.RevenueRunDomainService.ListRevenueRunAttempts:input_type -> domain.revenue.v1.ListRevenueRunAttemptsRequest
+	6,  // 44: domain.revenue.v1.RevenueRunDomainService.CreateRevenueRun:output_type -> domain.revenue.v1.CreateRevenueRunResponse
+	8,  // 45: domain.revenue.v1.RevenueRunDomainService.ReadRevenueRun:output_type -> domain.revenue.v1.ReadRevenueRunResponse
+	10, // 46: domain.revenue.v1.RevenueRunDomainService.UpdateRevenueRun:output_type -> domain.revenue.v1.UpdateRevenueRunResponse
+	12, // 47: domain.revenue.v1.RevenueRunDomainService.DeleteRevenueRun:output_type -> domain.revenue.v1.DeleteRevenueRunResponse
+	14, // 48: domain.revenue.v1.RevenueRunDomainService.ListRevenueRuns:output_type -> domain.revenue.v1.ListRevenueRunsResponse
+	16, // 49: domain.revenue.v1.RevenueRunDomainService.CreateRevenueRunAttempt:output_type -> domain.revenue.v1.CreateRevenueRunAttemptResponse
+	18, // 50: domain.revenue.v1.RevenueRunDomainService.ListRevenueRunAttempts:output_type -> domain.revenue.v1.ListRevenueRunAttemptsResponse
+	44, // [44:51] is the sub-list for method output_type
+	37, // [37:44] is the sub-list for method input_type
+	37, // [37:37] is the sub-list for extension type_name
+	37, // [37:37] is the sub-list for extension extendee
+	0,  // [0:37] is the sub-list for field type_name
 }
 
 func init() { file_domain_revenue_revenue_run_revenue_run_proto_init() }
@@ -1574,13 +2257,18 @@ func file_domain_revenue_revenue_run_revenue_run_proto_init() {
 	file_domain_revenue_revenue_run_revenue_run_proto_msgTypes[13].OneofWrappers = []any{}
 	file_domain_revenue_revenue_run_revenue_run_proto_msgTypes[14].OneofWrappers = []any{}
 	file_domain_revenue_revenue_run_revenue_run_proto_msgTypes[15].OneofWrappers = []any{}
+	file_domain_revenue_revenue_run_revenue_run_proto_msgTypes[16].OneofWrappers = []any{}
+	file_domain_revenue_revenue_run_revenue_run_proto_msgTypes[18].OneofWrappers = []any{}
+	file_domain_revenue_revenue_run_revenue_run_proto_msgTypes[19].OneofWrappers = []any{}
+	file_domain_revenue_revenue_run_revenue_run_proto_msgTypes[21].OneofWrappers = []any{}
+	file_domain_revenue_revenue_run_revenue_run_proto_msgTypes[23].OneofWrappers = []any{}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
 		File: protoimpl.DescBuilder{
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_domain_revenue_revenue_run_revenue_run_proto_rawDesc), len(file_domain_revenue_revenue_run_revenue_run_proto_rawDesc)),
 			NumEnums:      3,
-			NumMessages:   16,
+			NumMessages:   24,
 			NumExtensions: 0,
 			NumServices:   1,
 		},

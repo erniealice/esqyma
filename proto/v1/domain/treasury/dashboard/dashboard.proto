@@ -1,0 +1,48 @@
+syntax = "proto3";
+
+package domain.treasury.dashboard.v1;
+
+option go_package = "github.com/erniealice/esqyma/pkg/schema/v1/domain/treasury/dashboard";
+
+import "domain/common/error.proto";
+import "domain/treasury/loan_payment/loan_payment.proto";
+
+// LoanStats holds the six stat-card values for the dashboard. Centavos.
+message LoanStats {
+  int64 total_outstanding = 1;
+  int64 interest_ytd      = 2;
+  // payments_due30 — sum (in centavos) of remaining balance for loans maturing in 30d
+  int64 payments_due30    = 3;
+  int64 defaulted_count   = 4;
+  int64 active_count      = 5;
+  int64 completed_count   = 6;
+}
+
+// LoanSlice mirrors the loan row shape for dashboard widgets.
+message LoanSlice {
+  string id                = 1;
+  string loan_number       = 2;
+  string lender_name       = 3;
+  int64  remaining_balance = 4; // centavos
+  int64  principal_amount  = 5; // centavos
+  string status            = 6;
+}
+
+// GetLoanDashboardRequest is the request shape.
+message GetLoanDashboardRequest {
+  string workspace_id = 1;
+  // now_millis — unix milliseconds used for YTD and trend calculations.
+  // Zero means "use server time".
+  optional int64 now_millis = 2;
+}
+
+// GetLoanDashboardResponse is the projection the view layer reads.
+message GetLoanDashboardResponse {
+  bool success                          = 1;
+  optional domain.common.v1.Error error = 2;
+  LoanStats stats                       = 3;
+  repeated string trend_labels          = 4;
+  repeated double trend_values          = 5;
+  repeated LoanSlice top_loans          = 6;
+  repeated domain.treasury.v1.LoanPayment recent_payments = 7;
+}

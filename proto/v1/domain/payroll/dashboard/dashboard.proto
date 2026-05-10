@@ -1,0 +1,38 @@
+syntax = "proto3";
+
+package domain.payroll.dashboard.v1;
+
+option go_package = "github.com/erniealice/esqyma/pkg/schema/v1/domain/payroll/dashboard";
+
+import "domain/common/error.proto";
+import "domain/payroll/payroll_run/payroll_run.proto";
+import "domain/payroll/payroll_remittance/payroll_remittance.proto";
+
+// PayrollStats are the four dashboard stats for payroll.
+message PayrollStats {
+  // current_run_status: "draft" | "calculated" | "approved" | "posted" | "" (no run)
+  string current_run_status    = 1;
+  int32  employees_in_current  = 2;
+  int64  total_gross_mtd       = 3; // centavos
+  int64  remittances_due30_cnt = 4;
+}
+
+// GetPayrollDashboardRequest is the request shape.
+message GetPayrollDashboardRequest {
+  string workspace_id = 1;
+  // now_millis — unix milliseconds used for MTD and 12-month trend calculations.
+  // Zero means "use server time".
+  optional int64 now_millis = 2;
+}
+
+// GetPayrollDashboardResponse is the view-layer projection.
+message GetPayrollDashboardResponse {
+  bool success                          = 1;
+  optional domain.common.v1.Error error = 2;
+  PayrollStats stats                    = 3;
+  optional domain.payroll.v1.PayrollRun latest_run                    = 4;
+  repeated domain.payroll.v1.PayrollRun recent_runs                   = 5;
+  repeated domain.payroll.v1.PayrollRemittance upcoming_deadlines      = 6;
+  repeated string  gross_trend_labels   = 7;
+  repeated double  gross_trend_values   = 8;
+}

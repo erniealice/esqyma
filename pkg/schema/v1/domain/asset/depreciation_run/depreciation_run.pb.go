@@ -1578,6 +1578,60 @@ func (x *GenerateDepreciationRunResponse) GetError() *common.Error {
 	return nil
 }
 
+// ListDepreciationRunEntriesRequest lists DepreciationSchedule rows by run_id.
+// Used by the Surface D run-detail page entries tab.
+type ListDepreciationRunEntriesRequest struct {
+	state         protoimpl.MessageState    `protogen:"open.v1"`
+	RunId         string                    `protobuf:"bytes,1,opt,name=run_id,json=runId,proto3" json:"run_id,omitempty"`
+	Pagination    *common.PaginationRequest `protobuf:"bytes,2,opt,name=pagination,proto3,oneof" json:"pagination,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *ListDepreciationRunEntriesRequest) Reset() {
+	*x = ListDepreciationRunEntriesRequest{}
+	mi := &file_domain_asset_depreciation_run_depreciation_run_proto_msgTypes[19]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *ListDepreciationRunEntriesRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ListDepreciationRunEntriesRequest) ProtoMessage() {}
+
+func (x *ListDepreciationRunEntriesRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_domain_asset_depreciation_run_depreciation_run_proto_msgTypes[19]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ListDepreciationRunEntriesRequest.ProtoReflect.Descriptor instead.
+func (*ListDepreciationRunEntriesRequest) Descriptor() ([]byte, []int) {
+	return file_domain_asset_depreciation_run_depreciation_run_proto_rawDescGZIP(), []int{19}
+}
+
+func (x *ListDepreciationRunEntriesRequest) GetRunId() string {
+	if x != nil {
+		return x.RunId
+	}
+	return ""
+}
+
+func (x *ListDepreciationRunEntriesRequest) GetPagination() *common.PaginationRequest {
+	if x != nil {
+		return x.Pagination
+	}
+	return nil
+}
+
 var File_domain_asset_depreciation_run_depreciation_run_proto protoreflect.FileDescriptor
 
 const file_domain_asset_depreciation_run_depreciation_run_proto_rawDesc = "" +
@@ -1736,7 +1790,13 @@ const file_domain_asset_depreciation_run_depreciation_run_proto_rawDesc = "" +
 	"\rerrored_count\x18\x04 \x01(\x05R\ferroredCount\x12\x18\n" +
 	"\asuccess\x18\x05 \x01(\bR\asuccess\x122\n" +
 	"\x05error\x18\x06 \x01(\v2\x17.domain.common.v1.ErrorH\x00R\x05error\x88\x01\x01B\b\n" +
-	"\x06_error*\xeb\x01\n" +
+	"\x06_error\"\x93\x01\n" +
+	"!ListDepreciationRunEntriesRequest\x12\x15\n" +
+	"\x06run_id\x18\x01 \x01(\tR\x05runId\x12H\n" +
+	"\n" +
+	"pagination\x18\x02 \x01(\v2#.domain.common.v1.PaginationRequestH\x00R\n" +
+	"pagination\x88\x01\x01B\r\n" +
+	"\v_pagination*\xeb\x01\n" +
 	"\x18DepreciationRunScopeKind\x12+\n" +
 	"'DEPRECIATION_RUN_SCOPE_KIND_UNSPECIFIED\x10\x00\x12%\n" +
 	"!DEPRECIATION_RUN_SCOPE_KIND_ASSET\x10\x01\x12(\n" +
@@ -1776,7 +1836,7 @@ func file_domain_asset_depreciation_run_depreciation_run_proto_rawDescGZIP() []b
 }
 
 var file_domain_asset_depreciation_run_depreciation_run_proto_enumTypes = make([]protoimpl.EnumInfo, 4)
-var file_domain_asset_depreciation_run_depreciation_run_proto_msgTypes = make([]protoimpl.MessageInfo, 19)
+var file_domain_asset_depreciation_run_depreciation_run_proto_msgTypes = make([]protoimpl.MessageInfo, 20)
 var file_domain_asset_depreciation_run_depreciation_run_proto_goTypes = []any{
 	(DepreciationRunScopeKind)(0),              // 0: domain.asset.v1.DepreciationRunScopeKind
 	(DepreciationRunStatus)(0),                 // 1: domain.asset.v1.DepreciationRunStatus
@@ -1801,65 +1861,67 @@ var file_domain_asset_depreciation_run_depreciation_run_proto_goTypes = []any{
 	(*GenerateDepreciationRunRequest)(nil),     // 20: domain.asset.v1.GenerateDepreciationRunRequest
 	(*DepreciationRunSelection)(nil),           // 21: domain.asset.v1.DepreciationRunSelection
 	(*GenerateDepreciationRunResponse)(nil),    // 22: domain.asset.v1.GenerateDepreciationRunResponse
-	(*common.Error)(nil),                       // 23: domain.common.v1.Error
-	(*common.SearchRequest)(nil),               // 24: domain.common.v1.SearchRequest
-	(*common.FilterRequest)(nil),               // 25: domain.common.v1.FilterRequest
-	(*common.SortRequest)(nil),                 // 26: domain.common.v1.SortRequest
-	(*common.PaginationRequest)(nil),           // 27: domain.common.v1.PaginationRequest
-	(*common.PaginationResponse)(nil),          // 28: domain.common.v1.PaginationResponse
+	(*ListDepreciationRunEntriesRequest)(nil),  // 23: domain.asset.v1.ListDepreciationRunEntriesRequest
+	(*common.Error)(nil),                       // 24: domain.common.v1.Error
+	(*common.SearchRequest)(nil),               // 25: domain.common.v1.SearchRequest
+	(*common.FilterRequest)(nil),               // 26: domain.common.v1.FilterRequest
+	(*common.SortRequest)(nil),                 // 27: domain.common.v1.SortRequest
+	(*common.PaginationRequest)(nil),           // 28: domain.common.v1.PaginationRequest
+	(*common.PaginationResponse)(nil),          // 29: domain.common.v1.PaginationResponse
 }
 var file_domain_asset_depreciation_run_depreciation_run_proto_depIdxs = []int32{
 	0,  // 0: domain.asset.v1.DepreciationRun.scope_kind:type_name -> domain.asset.v1.DepreciationRunScopeKind
 	1,  // 1: domain.asset.v1.DepreciationRun.status:type_name -> domain.asset.v1.DepreciationRunStatus
 	4,  // 2: domain.asset.v1.CreateDepreciationRunRequest.data:type_name -> domain.asset.v1.DepreciationRun
 	4,  // 3: domain.asset.v1.CreateDepreciationRunResponse.data:type_name -> domain.asset.v1.DepreciationRun
-	23, // 4: domain.asset.v1.CreateDepreciationRunResponse.error:type_name -> domain.common.v1.Error
+	24, // 4: domain.asset.v1.CreateDepreciationRunResponse.error:type_name -> domain.common.v1.Error
 	4,  // 5: domain.asset.v1.ReadDepreciationRunRequest.data:type_name -> domain.asset.v1.DepreciationRun
 	4,  // 6: domain.asset.v1.ReadDepreciationRunResponse.data:type_name -> domain.asset.v1.DepreciationRun
-	23, // 7: domain.asset.v1.ReadDepreciationRunResponse.error:type_name -> domain.common.v1.Error
+	24, // 7: domain.asset.v1.ReadDepreciationRunResponse.error:type_name -> domain.common.v1.Error
 	4,  // 8: domain.asset.v1.UpdateDepreciationRunRequest.data:type_name -> domain.asset.v1.DepreciationRun
 	4,  // 9: domain.asset.v1.UpdateDepreciationRunResponse.data:type_name -> domain.asset.v1.DepreciationRun
-	23, // 10: domain.asset.v1.UpdateDepreciationRunResponse.error:type_name -> domain.common.v1.Error
+	24, // 10: domain.asset.v1.UpdateDepreciationRunResponse.error:type_name -> domain.common.v1.Error
 	4,  // 11: domain.asset.v1.DeleteDepreciationRunRequest.data:type_name -> domain.asset.v1.DepreciationRun
-	23, // 12: domain.asset.v1.DeleteDepreciationRunResponse.error:type_name -> domain.common.v1.Error
-	24, // 13: domain.asset.v1.ListDepreciationRunsRequest.search:type_name -> domain.common.v1.SearchRequest
-	25, // 14: domain.asset.v1.ListDepreciationRunsRequest.filters:type_name -> domain.common.v1.FilterRequest
-	26, // 15: domain.asset.v1.ListDepreciationRunsRequest.sort:type_name -> domain.common.v1.SortRequest
-	27, // 16: domain.asset.v1.ListDepreciationRunsRequest.pagination:type_name -> domain.common.v1.PaginationRequest
+	24, // 12: domain.asset.v1.DeleteDepreciationRunResponse.error:type_name -> domain.common.v1.Error
+	25, // 13: domain.asset.v1.ListDepreciationRunsRequest.search:type_name -> domain.common.v1.SearchRequest
+	26, // 14: domain.asset.v1.ListDepreciationRunsRequest.filters:type_name -> domain.common.v1.FilterRequest
+	27, // 15: domain.asset.v1.ListDepreciationRunsRequest.sort:type_name -> domain.common.v1.SortRequest
+	28, // 16: domain.asset.v1.ListDepreciationRunsRequest.pagination:type_name -> domain.common.v1.PaginationRequest
 	4,  // 17: domain.asset.v1.ListDepreciationRunsResponse.data:type_name -> domain.asset.v1.DepreciationRun
-	23, // 18: domain.asset.v1.ListDepreciationRunsResponse.error:type_name -> domain.common.v1.Error
-	28, // 19: domain.asset.v1.ListDepreciationRunsResponse.pagination:type_name -> domain.common.v1.PaginationResponse
+	24, // 18: domain.asset.v1.ListDepreciationRunsResponse.error:type_name -> domain.common.v1.Error
+	29, // 19: domain.asset.v1.ListDepreciationRunsResponse.pagination:type_name -> domain.common.v1.PaginationResponse
 	0,  // 20: domain.asset.v1.ListDepreciationCandidatesRequest.scope_kind:type_name -> domain.asset.v1.DepreciationRunScopeKind
-	27, // 21: domain.asset.v1.ListDepreciationCandidatesRequest.pagination:type_name -> domain.common.v1.PaginationRequest
+	28, // 21: domain.asset.v1.ListDepreciationCandidatesRequest.pagination:type_name -> domain.common.v1.PaginationRequest
 	17, // 22: domain.asset.v1.ListDepreciationCandidatesResponse.data:type_name -> domain.asset.v1.DepreciationCandidate
-	23, // 23: domain.asset.v1.ListDepreciationCandidatesResponse.error:type_name -> domain.common.v1.Error
-	28, // 24: domain.asset.v1.ListDepreciationCandidatesResponse.pagination:type_name -> domain.common.v1.PaginationResponse
+	24, // 23: domain.asset.v1.ListDepreciationCandidatesResponse.error:type_name -> domain.common.v1.Error
+	29, // 24: domain.asset.v1.ListDepreciationCandidatesResponse.pagination:type_name -> domain.common.v1.PaginationResponse
 	18, // 25: domain.asset.v1.DepreciationCandidate.periods:type_name -> domain.asset.v1.DepreciationCandidatePeriod
 	19, // 26: domain.asset.v1.DepreciationCandidate.blockers:type_name -> domain.asset.v1.DepreciationCandidateBlocker
 	3,  // 27: domain.asset.v1.DepreciationCandidateBlocker.kind:type_name -> domain.asset.v1.DepreciationCandidateBlocker.Kind
 	0,  // 28: domain.asset.v1.GenerateDepreciationRunRequest.scope_kind:type_name -> domain.asset.v1.DepreciationRunScopeKind
 	21, // 29: domain.asset.v1.GenerateDepreciationRunRequest.selections:type_name -> domain.asset.v1.DepreciationRunSelection
 	4,  // 30: domain.asset.v1.GenerateDepreciationRunResponse.run:type_name -> domain.asset.v1.DepreciationRun
-	23, // 31: domain.asset.v1.GenerateDepreciationRunResponse.error:type_name -> domain.common.v1.Error
-	5,  // 32: domain.asset.v1.DepreciationRunDomainService.CreateDepreciationRun:input_type -> domain.asset.v1.CreateDepreciationRunRequest
-	7,  // 33: domain.asset.v1.DepreciationRunDomainService.ReadDepreciationRun:input_type -> domain.asset.v1.ReadDepreciationRunRequest
-	9,  // 34: domain.asset.v1.DepreciationRunDomainService.UpdateDepreciationRun:input_type -> domain.asset.v1.UpdateDepreciationRunRequest
-	11, // 35: domain.asset.v1.DepreciationRunDomainService.DeleteDepreciationRun:input_type -> domain.asset.v1.DeleteDepreciationRunRequest
-	13, // 36: domain.asset.v1.DepreciationRunDomainService.ListDepreciationRuns:input_type -> domain.asset.v1.ListDepreciationRunsRequest
-	15, // 37: domain.asset.v1.DepreciationRunDomainService.ListDepreciationCandidates:input_type -> domain.asset.v1.ListDepreciationCandidatesRequest
-	20, // 38: domain.asset.v1.DepreciationRunDomainService.GenerateDepreciationRun:input_type -> domain.asset.v1.GenerateDepreciationRunRequest
-	6,  // 39: domain.asset.v1.DepreciationRunDomainService.CreateDepreciationRun:output_type -> domain.asset.v1.CreateDepreciationRunResponse
-	8,  // 40: domain.asset.v1.DepreciationRunDomainService.ReadDepreciationRun:output_type -> domain.asset.v1.ReadDepreciationRunResponse
-	10, // 41: domain.asset.v1.DepreciationRunDomainService.UpdateDepreciationRun:output_type -> domain.asset.v1.UpdateDepreciationRunResponse
-	12, // 42: domain.asset.v1.DepreciationRunDomainService.DeleteDepreciationRun:output_type -> domain.asset.v1.DeleteDepreciationRunResponse
-	14, // 43: domain.asset.v1.DepreciationRunDomainService.ListDepreciationRuns:output_type -> domain.asset.v1.ListDepreciationRunsResponse
-	16, // 44: domain.asset.v1.DepreciationRunDomainService.ListDepreciationCandidates:output_type -> domain.asset.v1.ListDepreciationCandidatesResponse
-	22, // 45: domain.asset.v1.DepreciationRunDomainService.GenerateDepreciationRun:output_type -> domain.asset.v1.GenerateDepreciationRunResponse
-	39, // [39:46] is the sub-list for method output_type
-	32, // [32:39] is the sub-list for method input_type
-	32, // [32:32] is the sub-list for extension type_name
-	32, // [32:32] is the sub-list for extension extendee
-	0,  // [0:32] is the sub-list for field type_name
+	24, // 31: domain.asset.v1.GenerateDepreciationRunResponse.error:type_name -> domain.common.v1.Error
+	28, // 32: domain.asset.v1.ListDepreciationRunEntriesRequest.pagination:type_name -> domain.common.v1.PaginationRequest
+	5,  // 33: domain.asset.v1.DepreciationRunDomainService.CreateDepreciationRun:input_type -> domain.asset.v1.CreateDepreciationRunRequest
+	7,  // 34: domain.asset.v1.DepreciationRunDomainService.ReadDepreciationRun:input_type -> domain.asset.v1.ReadDepreciationRunRequest
+	9,  // 35: domain.asset.v1.DepreciationRunDomainService.UpdateDepreciationRun:input_type -> domain.asset.v1.UpdateDepreciationRunRequest
+	11, // 36: domain.asset.v1.DepreciationRunDomainService.DeleteDepreciationRun:input_type -> domain.asset.v1.DeleteDepreciationRunRequest
+	13, // 37: domain.asset.v1.DepreciationRunDomainService.ListDepreciationRuns:input_type -> domain.asset.v1.ListDepreciationRunsRequest
+	15, // 38: domain.asset.v1.DepreciationRunDomainService.ListDepreciationCandidates:input_type -> domain.asset.v1.ListDepreciationCandidatesRequest
+	20, // 39: domain.asset.v1.DepreciationRunDomainService.GenerateDepreciationRun:input_type -> domain.asset.v1.GenerateDepreciationRunRequest
+	6,  // 40: domain.asset.v1.DepreciationRunDomainService.CreateDepreciationRun:output_type -> domain.asset.v1.CreateDepreciationRunResponse
+	8,  // 41: domain.asset.v1.DepreciationRunDomainService.ReadDepreciationRun:output_type -> domain.asset.v1.ReadDepreciationRunResponse
+	10, // 42: domain.asset.v1.DepreciationRunDomainService.UpdateDepreciationRun:output_type -> domain.asset.v1.UpdateDepreciationRunResponse
+	12, // 43: domain.asset.v1.DepreciationRunDomainService.DeleteDepreciationRun:output_type -> domain.asset.v1.DeleteDepreciationRunResponse
+	14, // 44: domain.asset.v1.DepreciationRunDomainService.ListDepreciationRuns:output_type -> domain.asset.v1.ListDepreciationRunsResponse
+	16, // 45: domain.asset.v1.DepreciationRunDomainService.ListDepreciationCandidates:output_type -> domain.asset.v1.ListDepreciationCandidatesResponse
+	22, // 46: domain.asset.v1.DepreciationRunDomainService.GenerateDepreciationRun:output_type -> domain.asset.v1.GenerateDepreciationRunResponse
+	40, // [40:47] is the sub-list for method output_type
+	33, // [33:40] is the sub-list for method input_type
+	33, // [33:33] is the sub-list for extension type_name
+	33, // [33:33] is the sub-list for extension extendee
+	0,  // [0:33] is the sub-list for field type_name
 }
 
 func init() { file_domain_asset_depreciation_run_depreciation_run_proto_init() }
@@ -1878,13 +1940,14 @@ func file_domain_asset_depreciation_run_depreciation_run_proto_init() {
 	file_domain_asset_depreciation_run_depreciation_run_proto_msgTypes[12].OneofWrappers = []any{}
 	file_domain_asset_depreciation_run_depreciation_run_proto_msgTypes[16].OneofWrappers = []any{}
 	file_domain_asset_depreciation_run_depreciation_run_proto_msgTypes[18].OneofWrappers = []any{}
+	file_domain_asset_depreciation_run_depreciation_run_proto_msgTypes[19].OneofWrappers = []any{}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
 		File: protoimpl.DescBuilder{
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_domain_asset_depreciation_run_depreciation_run_proto_rawDesc), len(file_domain_asset_depreciation_run_depreciation_run_proto_rawDesc)),
 			NumEnums:      4,
-			NumMessages:   19,
+			NumMessages:   20,
 			NumExtensions: 0,
 			NumServices:   1,
 		},

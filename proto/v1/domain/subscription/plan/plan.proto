@@ -179,3 +179,33 @@ message SearchPlanResult {
   string id = 1;
   string label = 2;
 }
+
+// ---------------------------------------------------------------------------
+// Use-case messages (consumed by espyna use cases, not bound to an RPC).
+// ---------------------------------------------------------------------------
+
+// CustomizePlanForClientRequest carries the inputs to clone a master Plan +
+// PricePlan tree under a client's namespace.
+message CustomizePlanForClientRequest {
+  string source_plan_id = 1;       // Plan to clone from
+  string source_price_plan_id = 2; // PricePlan to clone from
+  string client_id = 3;            // Target client_id stamped on every cloned row
+  optional string subscription_id = 4; // Optional: when set, repoint subscription.price_plan_id atomically
+  optional string new_schedule_name = 5; // Pre-built display name; falls back to "<Client> - Price Schedule" when empty
+}
+
+// CustomizePlanForClientResponse carries the resolved IDs produced by the
+// flow. reused = true iff a matching client PriceSchedule was found and
+// reused (no new schedule row was inserted). Full PricePlan/PriceSchedule
+// records are intentionally omitted (cross-package proto imports would
+// circle back through plan.proto); callers needing the full rows re-read by
+// ID. The full Plan row is included since it is local to this proto.
+message CustomizePlanForClientResponse {
+  bool success = 1;
+  optional domain.common.v1.Error error = 2;
+  string new_plan_id = 3;
+  string new_price_plan_id = 4;
+  string new_price_schedule_id = 5;
+  bool reused = 6;
+  optional Plan plan = 7;
+}

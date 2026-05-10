@@ -1004,6 +1004,332 @@ func (x *GetAssetRevaluationItemPageDataResponse) GetError() *common.Error {
 	return nil
 }
 
+// RevalueAssetUseCaseRequest is the input to the IAS 16 revaluation use case.
+type RevalueAssetUseCaseRequest struct {
+	state           protoimpl.MessageState `protogen:"open.v1"`
+	AssetId         string                 `protobuf:"bytes,1,opt,name=asset_id,json=assetId,proto3" json:"asset_id,omitempty"`
+	NewFairValue    int64                  `protobuf:"varint,2,opt,name=new_fair_value,json=newFairValue,proto3" json:"new_fair_value,omitempty"` // centavos
+	AppraiserName   *string                `protobuf:"bytes,3,opt,name=appraiser_name,json=appraiserName,proto3,oneof" json:"appraiser_name,omitempty"`
+	ValuationMethod *string                `protobuf:"bytes,4,opt,name=valuation_method,json=valuationMethod,proto3,oneof" json:"valuation_method,omitempty"`
+	Notes           *string                `protobuf:"bytes,5,opt,name=notes,proto3,oneof" json:"notes,omitempty"`
+	unknownFields   protoimpl.UnknownFields
+	sizeCache       protoimpl.SizeCache
+}
+
+func (x *RevalueAssetUseCaseRequest) Reset() {
+	*x = RevalueAssetUseCaseRequest{}
+	mi := &file_domain_asset_asset_revaluation_asset_revaluation_proto_msgTypes[15]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *RevalueAssetUseCaseRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*RevalueAssetUseCaseRequest) ProtoMessage() {}
+
+func (x *RevalueAssetUseCaseRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_domain_asset_asset_revaluation_asset_revaluation_proto_msgTypes[15]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use RevalueAssetUseCaseRequest.ProtoReflect.Descriptor instead.
+func (*RevalueAssetUseCaseRequest) Descriptor() ([]byte, []int) {
+	return file_domain_asset_asset_revaluation_asset_revaluation_proto_rawDescGZIP(), []int{15}
+}
+
+func (x *RevalueAssetUseCaseRequest) GetAssetId() string {
+	if x != nil {
+		return x.AssetId
+	}
+	return ""
+}
+
+func (x *RevalueAssetUseCaseRequest) GetNewFairValue() int64 {
+	if x != nil {
+		return x.NewFairValue
+	}
+	return 0
+}
+
+func (x *RevalueAssetUseCaseRequest) GetAppraiserName() string {
+	if x != nil && x.AppraiserName != nil {
+		return *x.AppraiserName
+	}
+	return ""
+}
+
+func (x *RevalueAssetUseCaseRequest) GetValuationMethod() string {
+	if x != nil && x.ValuationMethod != nil {
+		return *x.ValuationMethod
+	}
+	return ""
+}
+
+func (x *RevalueAssetUseCaseRequest) GetNotes() string {
+	if x != nil && x.Notes != nil {
+		return *x.Notes
+	}
+	return ""
+}
+
+// RevalueAssetUseCaseResponse is the output of the IAS 16 revaluation use case.
+type RevalueAssetUseCaseResponse struct {
+	state       protoimpl.MessageState `protogen:"open.v1"`
+	Success     bool                   `protobuf:"varint,1,opt,name=success,proto3" json:"success,omitempty"`
+	Error       *common.Error          `protobuf:"bytes,2,opt,name=error,proto3,oneof" json:"error,omitempty"`
+	Revaluation *AssetRevaluation      `protobuf:"bytes,3,opt,name=revaluation,proto3,oneof" json:"revaluation,omitempty"`
+	// asset_transaction_id surfaces the FK back-ref without requiring a
+	// cross-package import of asset_transaction.proto.
+	AssetTransactionId *string `protobuf:"bytes,4,opt,name=asset_transaction_id,json=assetTransactionId,proto3,oneof" json:"asset_transaction_id,omitempty"`
+	unknownFields      protoimpl.UnknownFields
+	sizeCache          protoimpl.SizeCache
+}
+
+func (x *RevalueAssetUseCaseResponse) Reset() {
+	*x = RevalueAssetUseCaseResponse{}
+	mi := &file_domain_asset_asset_revaluation_asset_revaluation_proto_msgTypes[16]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *RevalueAssetUseCaseResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*RevalueAssetUseCaseResponse) ProtoMessage() {}
+
+func (x *RevalueAssetUseCaseResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_domain_asset_asset_revaluation_asset_revaluation_proto_msgTypes[16]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use RevalueAssetUseCaseResponse.ProtoReflect.Descriptor instead.
+func (*RevalueAssetUseCaseResponse) Descriptor() ([]byte, []int) {
+	return file_domain_asset_asset_revaluation_asset_revaluation_proto_rawDescGZIP(), []int{16}
+}
+
+func (x *RevalueAssetUseCaseResponse) GetSuccess() bool {
+	if x != nil {
+		return x.Success
+	}
+	return false
+}
+
+func (x *RevalueAssetUseCaseResponse) GetError() *common.Error {
+	if x != nil {
+		return x.Error
+	}
+	return nil
+}
+
+func (x *RevalueAssetUseCaseResponse) GetRevaluation() *AssetRevaluation {
+	if x != nil {
+		return x.Revaluation
+	}
+	return nil
+}
+
+func (x *RevalueAssetUseCaseResponse) GetAssetTransactionId() string {
+	if x != nil && x.AssetTransactionId != nil {
+		return *x.AssetTransactionId
+	}
+	return ""
+}
+
+// PreviewRevaluationUseCaseRequest is the input to the read-only preview use case.
+type PreviewRevaluationUseCaseRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	AssetId       string                 `protobuf:"bytes,1,opt,name=asset_id,json=assetId,proto3" json:"asset_id,omitempty"`
+	NewFairValue  int64                  `protobuf:"varint,2,opt,name=new_fair_value,json=newFairValue,proto3" json:"new_fair_value,omitempty"` // centavos
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *PreviewRevaluationUseCaseRequest) Reset() {
+	*x = PreviewRevaluationUseCaseRequest{}
+	mi := &file_domain_asset_asset_revaluation_asset_revaluation_proto_msgTypes[17]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *PreviewRevaluationUseCaseRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*PreviewRevaluationUseCaseRequest) ProtoMessage() {}
+
+func (x *PreviewRevaluationUseCaseRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_domain_asset_asset_revaluation_asset_revaluation_proto_msgTypes[17]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use PreviewRevaluationUseCaseRequest.ProtoReflect.Descriptor instead.
+func (*PreviewRevaluationUseCaseRequest) Descriptor() ([]byte, []int) {
+	return file_domain_asset_asset_revaluation_asset_revaluation_proto_rawDescGZIP(), []int{17}
+}
+
+func (x *PreviewRevaluationUseCaseRequest) GetAssetId() string {
+	if x != nil {
+		return x.AssetId
+	}
+	return ""
+}
+
+func (x *PreviewRevaluationUseCaseRequest) GetNewFairValue() int64 {
+	if x != nil {
+		return x.NewFairValue
+	}
+	return 0
+}
+
+// PreviewRevaluationUseCaseResponse is the predicted IAS 16.39-40 split.
+type PreviewRevaluationUseCaseResponse struct {
+	state                  protoimpl.MessageState `protogen:"open.v1"`
+	Success                bool                   `protobuf:"varint,1,opt,name=success,proto3" json:"success,omitempty"`
+	Error                  *common.Error          `protobuf:"bytes,2,opt,name=error,proto3,oneof" json:"error,omitempty"`
+	PreviousCarryingAmount int64                  `protobuf:"varint,3,opt,name=previous_carrying_amount,json=previousCarryingAmount,proto3" json:"previous_carrying_amount,omitempty"` // centavos
+	NewFairValue           int64                  `protobuf:"varint,4,opt,name=new_fair_value,json=newFairValue,proto3" json:"new_fair_value,omitempty"`                               // centavos
+	RevaluationAmount      int64                  `protobuf:"varint,5,opt,name=revaluation_amount,json=revaluationAmount,proto3" json:"revaluation_amount,omitempty"`                  // signed; positive=up, negative=down
+	IsIncrease             bool                   `protobuf:"varint,6,opt,name=is_increase,json=isIncrease,proto3" json:"is_increase,omitempty"`
+	RecognizedInPnl        int64                  `protobuf:"varint,7,opt,name=recognized_in_pnl,json=recognizedInPnl,proto3" json:"recognized_in_pnl,omitempty"`       // signed centavos
+	RecognizedInOci        int64                  `protobuf:"varint,8,opt,name=recognized_in_oci,json=recognizedInOci,proto3" json:"recognized_in_oci,omitempty"`       // signed centavos
+	NewSurplusBalance      int64                  `protobuf:"varint,9,opt,name=new_surplus_balance,json=newSurplusBalance,proto3" json:"new_surplus_balance,omitempty"` // centavos
+	PriorSurplusBalance    int64                  `protobuf:"varint,10,opt,name=prior_surplus_balance,json=priorSurplusBalance,proto3" json:"prior_surplus_balance,omitempty"`
+	PriorPnlLossBalance    int64                  `protobuf:"varint,11,opt,name=prior_pnl_loss_balance,json=priorPnlLossBalance,proto3" json:"prior_pnl_loss_balance,omitempty"`
+	unknownFields          protoimpl.UnknownFields
+	sizeCache              protoimpl.SizeCache
+}
+
+func (x *PreviewRevaluationUseCaseResponse) Reset() {
+	*x = PreviewRevaluationUseCaseResponse{}
+	mi := &file_domain_asset_asset_revaluation_asset_revaluation_proto_msgTypes[18]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *PreviewRevaluationUseCaseResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*PreviewRevaluationUseCaseResponse) ProtoMessage() {}
+
+func (x *PreviewRevaluationUseCaseResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_domain_asset_asset_revaluation_asset_revaluation_proto_msgTypes[18]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use PreviewRevaluationUseCaseResponse.ProtoReflect.Descriptor instead.
+func (*PreviewRevaluationUseCaseResponse) Descriptor() ([]byte, []int) {
+	return file_domain_asset_asset_revaluation_asset_revaluation_proto_rawDescGZIP(), []int{18}
+}
+
+func (x *PreviewRevaluationUseCaseResponse) GetSuccess() bool {
+	if x != nil {
+		return x.Success
+	}
+	return false
+}
+
+func (x *PreviewRevaluationUseCaseResponse) GetError() *common.Error {
+	if x != nil {
+		return x.Error
+	}
+	return nil
+}
+
+func (x *PreviewRevaluationUseCaseResponse) GetPreviousCarryingAmount() int64 {
+	if x != nil {
+		return x.PreviousCarryingAmount
+	}
+	return 0
+}
+
+func (x *PreviewRevaluationUseCaseResponse) GetNewFairValue() int64 {
+	if x != nil {
+		return x.NewFairValue
+	}
+	return 0
+}
+
+func (x *PreviewRevaluationUseCaseResponse) GetRevaluationAmount() int64 {
+	if x != nil {
+		return x.RevaluationAmount
+	}
+	return 0
+}
+
+func (x *PreviewRevaluationUseCaseResponse) GetIsIncrease() bool {
+	if x != nil {
+		return x.IsIncrease
+	}
+	return false
+}
+
+func (x *PreviewRevaluationUseCaseResponse) GetRecognizedInPnl() int64 {
+	if x != nil {
+		return x.RecognizedInPnl
+	}
+	return 0
+}
+
+func (x *PreviewRevaluationUseCaseResponse) GetRecognizedInOci() int64 {
+	if x != nil {
+		return x.RecognizedInOci
+	}
+	return 0
+}
+
+func (x *PreviewRevaluationUseCaseResponse) GetNewSurplusBalance() int64 {
+	if x != nil {
+		return x.NewSurplusBalance
+	}
+	return 0
+}
+
+func (x *PreviewRevaluationUseCaseResponse) GetPriorSurplusBalance() int64 {
+	if x != nil {
+		return x.PriorSurplusBalance
+	}
+	return 0
+}
+
+func (x *PreviewRevaluationUseCaseResponse) GetPriorPnlLossBalance() int64 {
+	if x != nil {
+		return x.PriorPnlLossBalance
+	}
+	return 0
+}
+
 var File_domain_asset_asset_revaluation_asset_revaluation_proto protoreflect.FileDescriptor
 
 const file_domain_asset_asset_revaluation_asset_revaluation_proto_rawDesc = "" +
@@ -1116,6 +1442,41 @@ const file_domain_asset_asset_revaluation_asset_revaluation_proto_rawDesc = "" +
 	"\asuccess\x18\x02 \x01(\bR\asuccess\x122\n" +
 	"\x05error\x18\x03 \x01(\v2\x17.domain.common.v1.ErrorH\x01R\x05error\x88\x01\x01B\x14\n" +
 	"\x12_asset_revaluationB\b\n" +
+	"\x06_error\"\x86\x02\n" +
+	"\x1aRevalueAssetUseCaseRequest\x12\x19\n" +
+	"\basset_id\x18\x01 \x01(\tR\aassetId\x12$\n" +
+	"\x0enew_fair_value\x18\x02 \x01(\x03R\fnewFairValue\x12*\n" +
+	"\x0eappraiser_name\x18\x03 \x01(\tH\x00R\rappraiserName\x88\x01\x01\x12.\n" +
+	"\x10valuation_method\x18\x04 \x01(\tH\x01R\x0fvaluationMethod\x88\x01\x01\x12\x19\n" +
+	"\x05notes\x18\x05 \x01(\tH\x02R\x05notes\x88\x01\x01B\x11\n" +
+	"\x0f_appraiser_nameB\x13\n" +
+	"\x11_valuation_methodB\b\n" +
+	"\x06_notes\"\x9f\x02\n" +
+	"\x1bRevalueAssetUseCaseResponse\x12\x18\n" +
+	"\asuccess\x18\x01 \x01(\bR\asuccess\x122\n" +
+	"\x05error\x18\x02 \x01(\v2\x17.domain.common.v1.ErrorH\x00R\x05error\x88\x01\x01\x12H\n" +
+	"\vrevaluation\x18\x03 \x01(\v2!.domain.asset.v1.AssetRevaluationH\x01R\vrevaluation\x88\x01\x01\x125\n" +
+	"\x14asset_transaction_id\x18\x04 \x01(\tH\x02R\x12assetTransactionId\x88\x01\x01B\b\n" +
+	"\x06_errorB\x0e\n" +
+	"\f_revaluationB\x17\n" +
+	"\x15_asset_transaction_id\"c\n" +
+	" PreviewRevaluationUseCaseRequest\x12\x19\n" +
+	"\basset_id\x18\x01 \x01(\tR\aassetId\x12$\n" +
+	"\x0enew_fair_value\x18\x02 \x01(\x03R\fnewFairValue\"\x9c\x04\n" +
+	"!PreviewRevaluationUseCaseResponse\x12\x18\n" +
+	"\asuccess\x18\x01 \x01(\bR\asuccess\x122\n" +
+	"\x05error\x18\x02 \x01(\v2\x17.domain.common.v1.ErrorH\x00R\x05error\x88\x01\x01\x128\n" +
+	"\x18previous_carrying_amount\x18\x03 \x01(\x03R\x16previousCarryingAmount\x12$\n" +
+	"\x0enew_fair_value\x18\x04 \x01(\x03R\fnewFairValue\x12-\n" +
+	"\x12revaluation_amount\x18\x05 \x01(\x03R\x11revaluationAmount\x12\x1f\n" +
+	"\vis_increase\x18\x06 \x01(\bR\n" +
+	"isIncrease\x12*\n" +
+	"\x11recognized_in_pnl\x18\a \x01(\x03R\x0frecognizedInPnl\x12*\n" +
+	"\x11recognized_in_oci\x18\b \x01(\x03R\x0frecognizedInOci\x12.\n" +
+	"\x13new_surplus_balance\x18\t \x01(\x03R\x11newSurplusBalance\x122\n" +
+	"\x15prior_surplus_balance\x18\n" +
+	" \x01(\x03R\x13priorSurplusBalance\x123\n" +
+	"\x16prior_pnl_loss_balance\x18\v \x01(\x03R\x13priorPnlLossBalanceB\b\n" +
 	"\x06_error2\xab\a\n" +
 	"\x1dAssetRevaluationDomainService\x12y\n" +
 	"\x16CreateAssetRevaluation\x12..domain.asset.v1.CreateAssetRevaluationRequest\x1a/.domain.asset.v1.CreateAssetRevaluationResponse\x12s\n" +
@@ -1139,7 +1500,7 @@ func file_domain_asset_asset_revaluation_asset_revaluation_proto_rawDescGZIP() [
 	return file_domain_asset_asset_revaluation_asset_revaluation_proto_rawDescData
 }
 
-var file_domain_asset_asset_revaluation_asset_revaluation_proto_msgTypes = make([]protoimpl.MessageInfo, 15)
+var file_domain_asset_asset_revaluation_asset_revaluation_proto_msgTypes = make([]protoimpl.MessageInfo, 19)
 var file_domain_asset_asset_revaluation_asset_revaluation_proto_goTypes = []any{
 	(*AssetRevaluation)(nil),                        // 0: domain.asset.v1.AssetRevaluation
 	(*CreateAssetRevaluationRequest)(nil),           // 1: domain.asset.v1.CreateAssetRevaluationRequest
@@ -1156,61 +1517,68 @@ var file_domain_asset_asset_revaluation_asset_revaluation_proto_goTypes = []any{
 	(*GetAssetRevaluationListPageDataResponse)(nil), // 12: domain.asset.v1.GetAssetRevaluationListPageDataResponse
 	(*GetAssetRevaluationItemPageDataRequest)(nil),  // 13: domain.asset.v1.GetAssetRevaluationItemPageDataRequest
 	(*GetAssetRevaluationItemPageDataResponse)(nil), // 14: domain.asset.v1.GetAssetRevaluationItemPageDataResponse
-	(*common.Error)(nil),                            // 15: domain.common.v1.Error
-	(*common.SearchRequest)(nil),                    // 16: domain.common.v1.SearchRequest
-	(*common.FilterRequest)(nil),                    // 17: domain.common.v1.FilterRequest
-	(*common.SortRequest)(nil),                      // 18: domain.common.v1.SortRequest
-	(*common.PaginationRequest)(nil),                // 19: domain.common.v1.PaginationRequest
-	(*common.PaginationResponse)(nil),               // 20: domain.common.v1.PaginationResponse
-	(*common.SearchResult)(nil),                     // 21: domain.common.v1.SearchResult
+	(*RevalueAssetUseCaseRequest)(nil),              // 15: domain.asset.v1.RevalueAssetUseCaseRequest
+	(*RevalueAssetUseCaseResponse)(nil),             // 16: domain.asset.v1.RevalueAssetUseCaseResponse
+	(*PreviewRevaluationUseCaseRequest)(nil),        // 17: domain.asset.v1.PreviewRevaluationUseCaseRequest
+	(*PreviewRevaluationUseCaseResponse)(nil),       // 18: domain.asset.v1.PreviewRevaluationUseCaseResponse
+	(*common.Error)(nil),                            // 19: domain.common.v1.Error
+	(*common.SearchRequest)(nil),                    // 20: domain.common.v1.SearchRequest
+	(*common.FilterRequest)(nil),                    // 21: domain.common.v1.FilterRequest
+	(*common.SortRequest)(nil),                      // 22: domain.common.v1.SortRequest
+	(*common.PaginationRequest)(nil),                // 23: domain.common.v1.PaginationRequest
+	(*common.PaginationResponse)(nil),               // 24: domain.common.v1.PaginationResponse
+	(*common.SearchResult)(nil),                     // 25: domain.common.v1.SearchResult
 }
 var file_domain_asset_asset_revaluation_asset_revaluation_proto_depIdxs = []int32{
 	0,  // 0: domain.asset.v1.CreateAssetRevaluationRequest.data:type_name -> domain.asset.v1.AssetRevaluation
 	0,  // 1: domain.asset.v1.CreateAssetRevaluationResponse.data:type_name -> domain.asset.v1.AssetRevaluation
-	15, // 2: domain.asset.v1.CreateAssetRevaluationResponse.error:type_name -> domain.common.v1.Error
+	19, // 2: domain.asset.v1.CreateAssetRevaluationResponse.error:type_name -> domain.common.v1.Error
 	0,  // 3: domain.asset.v1.ReadAssetRevaluationRequest.data:type_name -> domain.asset.v1.AssetRevaluation
 	0,  // 4: domain.asset.v1.ReadAssetRevaluationResponse.data:type_name -> domain.asset.v1.AssetRevaluation
-	15, // 5: domain.asset.v1.ReadAssetRevaluationResponse.error:type_name -> domain.common.v1.Error
+	19, // 5: domain.asset.v1.ReadAssetRevaluationResponse.error:type_name -> domain.common.v1.Error
 	0,  // 6: domain.asset.v1.UpdateAssetRevaluationRequest.data:type_name -> domain.asset.v1.AssetRevaluation
 	0,  // 7: domain.asset.v1.UpdateAssetRevaluationResponse.data:type_name -> domain.asset.v1.AssetRevaluation
-	15, // 8: domain.asset.v1.UpdateAssetRevaluationResponse.error:type_name -> domain.common.v1.Error
+	19, // 8: domain.asset.v1.UpdateAssetRevaluationResponse.error:type_name -> domain.common.v1.Error
 	0,  // 9: domain.asset.v1.DeleteAssetRevaluationRequest.data:type_name -> domain.asset.v1.AssetRevaluation
-	15, // 10: domain.asset.v1.DeleteAssetRevaluationResponse.error:type_name -> domain.common.v1.Error
-	16, // 11: domain.asset.v1.ListAssetRevaluationsRequest.search:type_name -> domain.common.v1.SearchRequest
-	17, // 12: domain.asset.v1.ListAssetRevaluationsRequest.filters:type_name -> domain.common.v1.FilterRequest
-	18, // 13: domain.asset.v1.ListAssetRevaluationsRequest.sort:type_name -> domain.common.v1.SortRequest
-	19, // 14: domain.asset.v1.ListAssetRevaluationsRequest.pagination:type_name -> domain.common.v1.PaginationRequest
+	19, // 10: domain.asset.v1.DeleteAssetRevaluationResponse.error:type_name -> domain.common.v1.Error
+	20, // 11: domain.asset.v1.ListAssetRevaluationsRequest.search:type_name -> domain.common.v1.SearchRequest
+	21, // 12: domain.asset.v1.ListAssetRevaluationsRequest.filters:type_name -> domain.common.v1.FilterRequest
+	22, // 13: domain.asset.v1.ListAssetRevaluationsRequest.sort:type_name -> domain.common.v1.SortRequest
+	23, // 14: domain.asset.v1.ListAssetRevaluationsRequest.pagination:type_name -> domain.common.v1.PaginationRequest
 	0,  // 15: domain.asset.v1.ListAssetRevaluationsResponse.data:type_name -> domain.asset.v1.AssetRevaluation
-	15, // 16: domain.asset.v1.ListAssetRevaluationsResponse.error:type_name -> domain.common.v1.Error
-	19, // 17: domain.asset.v1.GetAssetRevaluationListPageDataRequest.pagination:type_name -> domain.common.v1.PaginationRequest
-	17, // 18: domain.asset.v1.GetAssetRevaluationListPageDataRequest.filters:type_name -> domain.common.v1.FilterRequest
-	18, // 19: domain.asset.v1.GetAssetRevaluationListPageDataRequest.sort:type_name -> domain.common.v1.SortRequest
-	16, // 20: domain.asset.v1.GetAssetRevaluationListPageDataRequest.search:type_name -> domain.common.v1.SearchRequest
+	19, // 16: domain.asset.v1.ListAssetRevaluationsResponse.error:type_name -> domain.common.v1.Error
+	23, // 17: domain.asset.v1.GetAssetRevaluationListPageDataRequest.pagination:type_name -> domain.common.v1.PaginationRequest
+	21, // 18: domain.asset.v1.GetAssetRevaluationListPageDataRequest.filters:type_name -> domain.common.v1.FilterRequest
+	22, // 19: domain.asset.v1.GetAssetRevaluationListPageDataRequest.sort:type_name -> domain.common.v1.SortRequest
+	20, // 20: domain.asset.v1.GetAssetRevaluationListPageDataRequest.search:type_name -> domain.common.v1.SearchRequest
 	0,  // 21: domain.asset.v1.GetAssetRevaluationListPageDataResponse.asset_revaluation_list:type_name -> domain.asset.v1.AssetRevaluation
-	20, // 22: domain.asset.v1.GetAssetRevaluationListPageDataResponse.pagination:type_name -> domain.common.v1.PaginationResponse
-	21, // 23: domain.asset.v1.GetAssetRevaluationListPageDataResponse.search_results:type_name -> domain.common.v1.SearchResult
-	15, // 24: domain.asset.v1.GetAssetRevaluationListPageDataResponse.error:type_name -> domain.common.v1.Error
+	24, // 22: domain.asset.v1.GetAssetRevaluationListPageDataResponse.pagination:type_name -> domain.common.v1.PaginationResponse
+	25, // 23: domain.asset.v1.GetAssetRevaluationListPageDataResponse.search_results:type_name -> domain.common.v1.SearchResult
+	19, // 24: domain.asset.v1.GetAssetRevaluationListPageDataResponse.error:type_name -> domain.common.v1.Error
 	0,  // 25: domain.asset.v1.GetAssetRevaluationItemPageDataResponse.asset_revaluation:type_name -> domain.asset.v1.AssetRevaluation
-	15, // 26: domain.asset.v1.GetAssetRevaluationItemPageDataResponse.error:type_name -> domain.common.v1.Error
-	1,  // 27: domain.asset.v1.AssetRevaluationDomainService.CreateAssetRevaluation:input_type -> domain.asset.v1.CreateAssetRevaluationRequest
-	3,  // 28: domain.asset.v1.AssetRevaluationDomainService.ReadAssetRevaluation:input_type -> domain.asset.v1.ReadAssetRevaluationRequest
-	5,  // 29: domain.asset.v1.AssetRevaluationDomainService.UpdateAssetRevaluation:input_type -> domain.asset.v1.UpdateAssetRevaluationRequest
-	7,  // 30: domain.asset.v1.AssetRevaluationDomainService.DeleteAssetRevaluation:input_type -> domain.asset.v1.DeleteAssetRevaluationRequest
-	9,  // 31: domain.asset.v1.AssetRevaluationDomainService.ListAssetRevaluations:input_type -> domain.asset.v1.ListAssetRevaluationsRequest
-	11, // 32: domain.asset.v1.AssetRevaluationDomainService.GetAssetRevaluationListPageData:input_type -> domain.asset.v1.GetAssetRevaluationListPageDataRequest
-	13, // 33: domain.asset.v1.AssetRevaluationDomainService.GetAssetRevaluationItemPageData:input_type -> domain.asset.v1.GetAssetRevaluationItemPageDataRequest
-	2,  // 34: domain.asset.v1.AssetRevaluationDomainService.CreateAssetRevaluation:output_type -> domain.asset.v1.CreateAssetRevaluationResponse
-	4,  // 35: domain.asset.v1.AssetRevaluationDomainService.ReadAssetRevaluation:output_type -> domain.asset.v1.ReadAssetRevaluationResponse
-	6,  // 36: domain.asset.v1.AssetRevaluationDomainService.UpdateAssetRevaluation:output_type -> domain.asset.v1.UpdateAssetRevaluationResponse
-	8,  // 37: domain.asset.v1.AssetRevaluationDomainService.DeleteAssetRevaluation:output_type -> domain.asset.v1.DeleteAssetRevaluationResponse
-	10, // 38: domain.asset.v1.AssetRevaluationDomainService.ListAssetRevaluations:output_type -> domain.asset.v1.ListAssetRevaluationsResponse
-	12, // 39: domain.asset.v1.AssetRevaluationDomainService.GetAssetRevaluationListPageData:output_type -> domain.asset.v1.GetAssetRevaluationListPageDataResponse
-	14, // 40: domain.asset.v1.AssetRevaluationDomainService.GetAssetRevaluationItemPageData:output_type -> domain.asset.v1.GetAssetRevaluationItemPageDataResponse
-	34, // [34:41] is the sub-list for method output_type
-	27, // [27:34] is the sub-list for method input_type
-	27, // [27:27] is the sub-list for extension type_name
-	27, // [27:27] is the sub-list for extension extendee
-	0,  // [0:27] is the sub-list for field type_name
+	19, // 26: domain.asset.v1.GetAssetRevaluationItemPageDataResponse.error:type_name -> domain.common.v1.Error
+	19, // 27: domain.asset.v1.RevalueAssetUseCaseResponse.error:type_name -> domain.common.v1.Error
+	0,  // 28: domain.asset.v1.RevalueAssetUseCaseResponse.revaluation:type_name -> domain.asset.v1.AssetRevaluation
+	19, // 29: domain.asset.v1.PreviewRevaluationUseCaseResponse.error:type_name -> domain.common.v1.Error
+	1,  // 30: domain.asset.v1.AssetRevaluationDomainService.CreateAssetRevaluation:input_type -> domain.asset.v1.CreateAssetRevaluationRequest
+	3,  // 31: domain.asset.v1.AssetRevaluationDomainService.ReadAssetRevaluation:input_type -> domain.asset.v1.ReadAssetRevaluationRequest
+	5,  // 32: domain.asset.v1.AssetRevaluationDomainService.UpdateAssetRevaluation:input_type -> domain.asset.v1.UpdateAssetRevaluationRequest
+	7,  // 33: domain.asset.v1.AssetRevaluationDomainService.DeleteAssetRevaluation:input_type -> domain.asset.v1.DeleteAssetRevaluationRequest
+	9,  // 34: domain.asset.v1.AssetRevaluationDomainService.ListAssetRevaluations:input_type -> domain.asset.v1.ListAssetRevaluationsRequest
+	11, // 35: domain.asset.v1.AssetRevaluationDomainService.GetAssetRevaluationListPageData:input_type -> domain.asset.v1.GetAssetRevaluationListPageDataRequest
+	13, // 36: domain.asset.v1.AssetRevaluationDomainService.GetAssetRevaluationItemPageData:input_type -> domain.asset.v1.GetAssetRevaluationItemPageDataRequest
+	2,  // 37: domain.asset.v1.AssetRevaluationDomainService.CreateAssetRevaluation:output_type -> domain.asset.v1.CreateAssetRevaluationResponse
+	4,  // 38: domain.asset.v1.AssetRevaluationDomainService.ReadAssetRevaluation:output_type -> domain.asset.v1.ReadAssetRevaluationResponse
+	6,  // 39: domain.asset.v1.AssetRevaluationDomainService.UpdateAssetRevaluation:output_type -> domain.asset.v1.UpdateAssetRevaluationResponse
+	8,  // 40: domain.asset.v1.AssetRevaluationDomainService.DeleteAssetRevaluation:output_type -> domain.asset.v1.DeleteAssetRevaluationResponse
+	10, // 41: domain.asset.v1.AssetRevaluationDomainService.ListAssetRevaluations:output_type -> domain.asset.v1.ListAssetRevaluationsResponse
+	12, // 42: domain.asset.v1.AssetRevaluationDomainService.GetAssetRevaluationListPageData:output_type -> domain.asset.v1.GetAssetRevaluationListPageDataResponse
+	14, // 43: domain.asset.v1.AssetRevaluationDomainService.GetAssetRevaluationItemPageData:output_type -> domain.asset.v1.GetAssetRevaluationItemPageDataResponse
+	37, // [37:44] is the sub-list for method output_type
+	30, // [30:37] is the sub-list for method input_type
+	30, // [30:30] is the sub-list for extension type_name
+	30, // [30:30] is the sub-list for extension extendee
+	0,  // [0:30] is the sub-list for field type_name
 }
 
 func init() { file_domain_asset_asset_revaluation_asset_revaluation_proto_init() }
@@ -1228,13 +1596,16 @@ func file_domain_asset_asset_revaluation_asset_revaluation_proto_init() {
 	file_domain_asset_asset_revaluation_asset_revaluation_proto_msgTypes[11].OneofWrappers = []any{}
 	file_domain_asset_asset_revaluation_asset_revaluation_proto_msgTypes[12].OneofWrappers = []any{}
 	file_domain_asset_asset_revaluation_asset_revaluation_proto_msgTypes[14].OneofWrappers = []any{}
+	file_domain_asset_asset_revaluation_asset_revaluation_proto_msgTypes[15].OneofWrappers = []any{}
+	file_domain_asset_asset_revaluation_asset_revaluation_proto_msgTypes[16].OneofWrappers = []any{}
+	file_domain_asset_asset_revaluation_asset_revaluation_proto_msgTypes[18].OneofWrappers = []any{}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
 		File: protoimpl.DescBuilder{
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_domain_asset_asset_revaluation_asset_revaluation_proto_rawDesc), len(file_domain_asset_asset_revaluation_asset_revaluation_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   15,
+			NumMessages:   19,
 			NumExtensions: 0,
 			NumServices:   1,
 		},

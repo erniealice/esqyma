@@ -144,3 +144,25 @@ message GetAssetCategoryItemPageDataResponse {
   bool success = 2;
   optional domain.common.v1.Error error = 3;
 }
+
+// Use-case messages (consumed by espyna use cases, not bound to an RPC).
+
+// AssetCategoryWithPolicyRollup enriches an AssetCategory with per-policy
+// aggregate counts derived from a single JOIN-aggregate query.
+message AssetCategoryWithPolicyRollup {
+  optional AssetCategory category = 1;
+  int32 assets_in_policy = 2;   // IN_SERVICE assets in this category
+  int32 assets_deviating = 3;   // in-service assets deviating from category defaults
+}
+
+// ListAssetCategoriesWithPolicyRollupRequest — no required input fields;
+// workspace_id is derived from the request context by the workspace-aware adapter.
+message ListAssetCategoriesWithPolicyRollupRequest {
+}
+
+// ListAssetCategoriesWithPolicyRollupResponse wraps the enriched category list.
+message ListAssetCategoriesWithPolicyRollupResponse {
+  repeated AssetCategoryWithPolicyRollup data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}

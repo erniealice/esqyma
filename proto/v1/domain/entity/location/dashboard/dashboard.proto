@@ -1,0 +1,44 @@
+syntax = "proto3";
+
+package domain.entity.location.dashboard.v1;
+
+option go_package = "github.com/erniealice/esqyma/pkg/schema/v1/domain/entity/location/dashboard";
+
+import "domain/common/error.proto";
+import "domain/entity/location/location.proto";
+
+// LocationStats are the four stat cards shown at the top of the location
+// dashboard: Total / Active / Regions / Areas Count.
+message LocationStats {
+  int64 total_locations  = 1;
+  int64 active_locations = 2;
+  int64 regions_count    = 3;
+  int64 areas_count      = 4;
+}
+
+// LocationAreaCount is one row of the "top areas by location count" widget.
+message LocationAreaCount {
+  string location_area_id   = 1;
+  string location_area_name = 2;
+  int64  location_count     = 3;
+}
+
+// GetLocationDashboardRequest is the workspace-scoped input for the
+// location dashboard use case.
+message GetLocationDashboardRequest {
+  string workspace_id = 1;
+  // now_millis is unused by the current implementation but kept for
+  // future time-range filtering. Zero means "use server time".
+  optional int64 now_millis = 2;
+}
+
+// GetLocationDashboardResponse is the projected aggregate set the
+// view layer renders into the dashboard page.
+message GetLocationDashboardResponse {
+  bool success                          = 1;
+  optional domain.common.v1.Error error = 2;
+  LocationStats stats                   = 3;
+  map<string, int64> locations_by_region = 4;
+  repeated LocationAreaCount top_areas   = 5;
+  repeated domain.entity.v1.Location recent_locations = 6;
+}

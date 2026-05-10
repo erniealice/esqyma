@@ -157,3 +157,77 @@ message ListRevenueRunAttemptsResponse {
   bool success = 2;
   optional domain.common.v1.Error error = 3;
 }
+
+// ---------------------------------------------------------------------------
+// Use-case messages (consumed by espyna use cases, not bound to an RPC).
+// ---------------------------------------------------------------------------
+
+// RevenueRunScope describes the filter for a candidate list or generate call.
+// Empty fields mean "no filter for that dimension". Shared by
+// ListRevenueRunCandidates and GenerateRevenueRun.
+message RevenueRunScope {
+  optional string workspace_id = 1;
+  optional string client_id = 2;
+  optional string subscription_id = 3;
+  optional string as_of_date = 4; // YYYY-MM-DD; defaults to today (in workspace tz) when empty
+}
+
+// RevenueRunCandidate represents one billed period for one subscription that
+// has not yet been invoiced (or that has a blocker preventing invoicing).
+message RevenueRunCandidate {
+  string subscription_id = 1;
+  string subscription_name = 2;
+  string client_id = 3;
+  string client_name = 4;
+  string plan_name = 5;
+  string billing_cycle_label = 6;
+  string currency = 7;
+  string period_start = 8;  // YYYY-MM-DD
+  string period_end = 9;    // YYYY-MM-DD
+  string period_label = 10;
+  string period_marker = 11;
+  int64 amount = 12;
+  int32 line_item_count = 13;
+  bool eligible = 14;
+  string blocker_reason = 15;
+}
+
+message ListRevenueRunCandidatesRequest {
+  RevenueRunScope scope = 1;
+  optional string cursor = 2;
+  optional int32 limit = 3;
+}
+
+message ListRevenueRunCandidatesResponse {
+  repeated RevenueRunCandidate data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+  optional string next_cursor = 4;
+}
+
+// SelectedRevenueRunCandidate is one operator-confirmed selection to invoice.
+message SelectedRevenueRunCandidate {
+  string subscription_id = 1;
+  string period_start = 2;  // YYYY-MM-DD
+  string period_end = 3;    // YYYY-MM-DD
+  string period_marker = 4; // canonical idempotency anchor
+}
+
+// RevenueRunSelections carries either an explicit list or a filter token.
+// Exactly one of explicit_list or filter_token should be set.
+message RevenueRunSelections {
+  repeated SelectedRevenueRunCandidate explicit_list = 1;
+  optional string filter_token = 2; // signed server snapshot; deferred per v1 progress.md D9
+}
+
+message GenerateRevenueRunRequest {
+  RevenueRunScope scope = 1;
+  RevenueRunSelections selections = 2;
+}
+
+message GenerateRevenueRunResponse {
+  bool success = 1;
+  optional domain.common.v1.Error error = 2;
+  optional RevenueRun run = 3;
+  repeated RevenueRunAttempt attempts = 4;
+}

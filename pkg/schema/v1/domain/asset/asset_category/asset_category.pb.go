@@ -1043,6 +1043,167 @@ func (x *GetAssetCategoryItemPageDataResponse) GetError() *common.Error {
 	return nil
 }
 
+// AssetCategoryWithPolicyRollup enriches an AssetCategory with per-policy
+// aggregate counts derived from a single JOIN-aggregate query.
+type AssetCategoryWithPolicyRollup struct {
+	state           protoimpl.MessageState `protogen:"open.v1"`
+	Category        *AssetCategory         `protobuf:"bytes,1,opt,name=category,proto3,oneof" json:"category,omitempty"`
+	AssetsInPolicy  int32                  `protobuf:"varint,2,opt,name=assets_in_policy,json=assetsInPolicy,proto3" json:"assets_in_policy,omitempty"`  // IN_SERVICE assets in this category
+	AssetsDeviating int32                  `protobuf:"varint,3,opt,name=assets_deviating,json=assetsDeviating,proto3" json:"assets_deviating,omitempty"` // in-service assets deviating from category defaults
+	unknownFields   protoimpl.UnknownFields
+	sizeCache       protoimpl.SizeCache
+}
+
+func (x *AssetCategoryWithPolicyRollup) Reset() {
+	*x = AssetCategoryWithPolicyRollup{}
+	mi := &file_domain_asset_asset_category_asset_category_proto_msgTypes[15]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *AssetCategoryWithPolicyRollup) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*AssetCategoryWithPolicyRollup) ProtoMessage() {}
+
+func (x *AssetCategoryWithPolicyRollup) ProtoReflect() protoreflect.Message {
+	mi := &file_domain_asset_asset_category_asset_category_proto_msgTypes[15]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use AssetCategoryWithPolicyRollup.ProtoReflect.Descriptor instead.
+func (*AssetCategoryWithPolicyRollup) Descriptor() ([]byte, []int) {
+	return file_domain_asset_asset_category_asset_category_proto_rawDescGZIP(), []int{15}
+}
+
+func (x *AssetCategoryWithPolicyRollup) GetCategory() *AssetCategory {
+	if x != nil {
+		return x.Category
+	}
+	return nil
+}
+
+func (x *AssetCategoryWithPolicyRollup) GetAssetsInPolicy() int32 {
+	if x != nil {
+		return x.AssetsInPolicy
+	}
+	return 0
+}
+
+func (x *AssetCategoryWithPolicyRollup) GetAssetsDeviating() int32 {
+	if x != nil {
+		return x.AssetsDeviating
+	}
+	return 0
+}
+
+// ListAssetCategoriesWithPolicyRollupRequest — no required input fields;
+// workspace_id is derived from the request context by the workspace-aware adapter.
+type ListAssetCategoriesWithPolicyRollupRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *ListAssetCategoriesWithPolicyRollupRequest) Reset() {
+	*x = ListAssetCategoriesWithPolicyRollupRequest{}
+	mi := &file_domain_asset_asset_category_asset_category_proto_msgTypes[16]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *ListAssetCategoriesWithPolicyRollupRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ListAssetCategoriesWithPolicyRollupRequest) ProtoMessage() {}
+
+func (x *ListAssetCategoriesWithPolicyRollupRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_domain_asset_asset_category_asset_category_proto_msgTypes[16]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ListAssetCategoriesWithPolicyRollupRequest.ProtoReflect.Descriptor instead.
+func (*ListAssetCategoriesWithPolicyRollupRequest) Descriptor() ([]byte, []int) {
+	return file_domain_asset_asset_category_asset_category_proto_rawDescGZIP(), []int{16}
+}
+
+// ListAssetCategoriesWithPolicyRollupResponse wraps the enriched category list.
+type ListAssetCategoriesWithPolicyRollupResponse struct {
+	state         protoimpl.MessageState           `protogen:"open.v1"`
+	Data          []*AssetCategoryWithPolicyRollup `protobuf:"bytes,1,rep,name=data,proto3" json:"data,omitempty"`
+	Success       bool                             `protobuf:"varint,2,opt,name=success,proto3" json:"success,omitempty"`
+	Error         *common.Error                    `protobuf:"bytes,3,opt,name=error,proto3,oneof" json:"error,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *ListAssetCategoriesWithPolicyRollupResponse) Reset() {
+	*x = ListAssetCategoriesWithPolicyRollupResponse{}
+	mi := &file_domain_asset_asset_category_asset_category_proto_msgTypes[17]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *ListAssetCategoriesWithPolicyRollupResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ListAssetCategoriesWithPolicyRollupResponse) ProtoMessage() {}
+
+func (x *ListAssetCategoriesWithPolicyRollupResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_domain_asset_asset_category_asset_category_proto_msgTypes[17]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ListAssetCategoriesWithPolicyRollupResponse.ProtoReflect.Descriptor instead.
+func (*ListAssetCategoriesWithPolicyRollupResponse) Descriptor() ([]byte, []int) {
+	return file_domain_asset_asset_category_asset_category_proto_rawDescGZIP(), []int{17}
+}
+
+func (x *ListAssetCategoriesWithPolicyRollupResponse) GetData() []*AssetCategoryWithPolicyRollup {
+	if x != nil {
+		return x.Data
+	}
+	return nil
+}
+
+func (x *ListAssetCategoriesWithPolicyRollupResponse) GetSuccess() bool {
+	if x != nil {
+		return x.Success
+	}
+	return false
+}
+
+func (x *ListAssetCategoriesWithPolicyRollupResponse) GetError() *common.Error {
+	if x != nil {
+		return x.Error
+	}
+	return nil
+}
+
 var File_domain_asset_asset_category_asset_category_proto protoreflect.FileDescriptor
 
 const file_domain_asset_asset_category_asset_category_proto_rawDesc = "" +
@@ -1169,6 +1330,17 @@ const file_domain_asset_asset_category_asset_category_proto_rawDesc = "" +
 	"\asuccess\x18\x02 \x01(\bR\asuccess\x122\n" +
 	"\x05error\x18\x03 \x01(\v2\x17.domain.common.v1.ErrorH\x01R\x05error\x88\x01\x01B\x11\n" +
 	"\x0f_asset_categoryB\b\n" +
+	"\x06_error\"\xc2\x01\n" +
+	"\x1dAssetCategoryWithPolicyRollup\x12?\n" +
+	"\bcategory\x18\x01 \x01(\v2\x1e.domain.asset.v1.AssetCategoryH\x00R\bcategory\x88\x01\x01\x12(\n" +
+	"\x10assets_in_policy\x18\x02 \x01(\x05R\x0eassetsInPolicy\x12)\n" +
+	"\x10assets_deviating\x18\x03 \x01(\x05R\x0fassetsDeviatingB\v\n" +
+	"\t_category\",\n" +
+	"*ListAssetCategoriesWithPolicyRollupRequest\"\xc9\x01\n" +
+	"+ListAssetCategoriesWithPolicyRollupResponse\x12B\n" +
+	"\x04data\x18\x01 \x03(\v2..domain.asset.v1.AssetCategoryWithPolicyRollupR\x04data\x12\x18\n" +
+	"\asuccess\x18\x02 \x01(\bR\asuccess\x122\n" +
+	"\x05error\x18\x03 \x01(\v2\x17.domain.common.v1.ErrorH\x00R\x05error\x88\x01\x01B\b\n" +
 	"\x06_error2\xec\x06\n" +
 	"\x1aAssetCategoryDomainService\x12p\n" +
 	"\x13CreateAssetCategory\x12+.domain.asset.v1.CreateAssetCategoryRequest\x1a,.domain.asset.v1.CreateAssetCategoryResponse\x12j\n" +
@@ -1192,78 +1364,84 @@ func file_domain_asset_asset_category_asset_category_proto_rawDescGZIP() []byte 
 	return file_domain_asset_asset_category_asset_category_proto_rawDescData
 }
 
-var file_domain_asset_asset_category_asset_category_proto_msgTypes = make([]protoimpl.MessageInfo, 15)
+var file_domain_asset_asset_category_asset_category_proto_msgTypes = make([]protoimpl.MessageInfo, 18)
 var file_domain_asset_asset_category_asset_category_proto_goTypes = []any{
-	(*AssetCategory)(nil),                        // 0: domain.asset.v1.AssetCategory
-	(*CreateAssetCategoryRequest)(nil),           // 1: domain.asset.v1.CreateAssetCategoryRequest
-	(*CreateAssetCategoryResponse)(nil),          // 2: domain.asset.v1.CreateAssetCategoryResponse
-	(*ReadAssetCategoryRequest)(nil),             // 3: domain.asset.v1.ReadAssetCategoryRequest
-	(*ReadAssetCategoryResponse)(nil),            // 4: domain.asset.v1.ReadAssetCategoryResponse
-	(*UpdateAssetCategoryRequest)(nil),           // 5: domain.asset.v1.UpdateAssetCategoryRequest
-	(*UpdateAssetCategoryResponse)(nil),          // 6: domain.asset.v1.UpdateAssetCategoryResponse
-	(*DeleteAssetCategoryRequest)(nil),           // 7: domain.asset.v1.DeleteAssetCategoryRequest
-	(*DeleteAssetCategoryResponse)(nil),          // 8: domain.asset.v1.DeleteAssetCategoryResponse
-	(*ListAssetCategoriesRequest)(nil),           // 9: domain.asset.v1.ListAssetCategoriesRequest
-	(*ListAssetCategoriesResponse)(nil),          // 10: domain.asset.v1.ListAssetCategoriesResponse
-	(*GetAssetCategoryListPageDataRequest)(nil),  // 11: domain.asset.v1.GetAssetCategoryListPageDataRequest
-	(*GetAssetCategoryListPageDataResponse)(nil), // 12: domain.asset.v1.GetAssetCategoryListPageDataResponse
-	(*GetAssetCategoryItemPageDataRequest)(nil),  // 13: domain.asset.v1.GetAssetCategoryItemPageDataRequest
-	(*GetAssetCategoryItemPageDataResponse)(nil), // 14: domain.asset.v1.GetAssetCategoryItemPageDataResponse
-	(*common.Error)(nil),                         // 15: domain.common.v1.Error
-	(*common.SearchRequest)(nil),                 // 16: domain.common.v1.SearchRequest
-	(*common.FilterRequest)(nil),                 // 17: domain.common.v1.FilterRequest
-	(*common.SortRequest)(nil),                   // 18: domain.common.v1.SortRequest
-	(*common.PaginationRequest)(nil),             // 19: domain.common.v1.PaginationRequest
-	(*common.PaginationResponse)(nil),            // 20: domain.common.v1.PaginationResponse
-	(*common.SearchResult)(nil),                  // 21: domain.common.v1.SearchResult
+	(*AssetCategory)(nil),                               // 0: domain.asset.v1.AssetCategory
+	(*CreateAssetCategoryRequest)(nil),                  // 1: domain.asset.v1.CreateAssetCategoryRequest
+	(*CreateAssetCategoryResponse)(nil),                 // 2: domain.asset.v1.CreateAssetCategoryResponse
+	(*ReadAssetCategoryRequest)(nil),                    // 3: domain.asset.v1.ReadAssetCategoryRequest
+	(*ReadAssetCategoryResponse)(nil),                   // 4: domain.asset.v1.ReadAssetCategoryResponse
+	(*UpdateAssetCategoryRequest)(nil),                  // 5: domain.asset.v1.UpdateAssetCategoryRequest
+	(*UpdateAssetCategoryResponse)(nil),                 // 6: domain.asset.v1.UpdateAssetCategoryResponse
+	(*DeleteAssetCategoryRequest)(nil),                  // 7: domain.asset.v1.DeleteAssetCategoryRequest
+	(*DeleteAssetCategoryResponse)(nil),                 // 8: domain.asset.v1.DeleteAssetCategoryResponse
+	(*ListAssetCategoriesRequest)(nil),                  // 9: domain.asset.v1.ListAssetCategoriesRequest
+	(*ListAssetCategoriesResponse)(nil),                 // 10: domain.asset.v1.ListAssetCategoriesResponse
+	(*GetAssetCategoryListPageDataRequest)(nil),         // 11: domain.asset.v1.GetAssetCategoryListPageDataRequest
+	(*GetAssetCategoryListPageDataResponse)(nil),        // 12: domain.asset.v1.GetAssetCategoryListPageDataResponse
+	(*GetAssetCategoryItemPageDataRequest)(nil),         // 13: domain.asset.v1.GetAssetCategoryItemPageDataRequest
+	(*GetAssetCategoryItemPageDataResponse)(nil),        // 14: domain.asset.v1.GetAssetCategoryItemPageDataResponse
+	(*AssetCategoryWithPolicyRollup)(nil),               // 15: domain.asset.v1.AssetCategoryWithPolicyRollup
+	(*ListAssetCategoriesWithPolicyRollupRequest)(nil),  // 16: domain.asset.v1.ListAssetCategoriesWithPolicyRollupRequest
+	(*ListAssetCategoriesWithPolicyRollupResponse)(nil), // 17: domain.asset.v1.ListAssetCategoriesWithPolicyRollupResponse
+	(*common.Error)(nil),                                // 18: domain.common.v1.Error
+	(*common.SearchRequest)(nil),                        // 19: domain.common.v1.SearchRequest
+	(*common.FilterRequest)(nil),                        // 20: domain.common.v1.FilterRequest
+	(*common.SortRequest)(nil),                          // 21: domain.common.v1.SortRequest
+	(*common.PaginationRequest)(nil),                    // 22: domain.common.v1.PaginationRequest
+	(*common.PaginationResponse)(nil),                   // 23: domain.common.v1.PaginationResponse
+	(*common.SearchResult)(nil),                         // 24: domain.common.v1.SearchResult
 }
 var file_domain_asset_asset_category_asset_category_proto_depIdxs = []int32{
 	0,  // 0: domain.asset.v1.CreateAssetCategoryRequest.data:type_name -> domain.asset.v1.AssetCategory
 	0,  // 1: domain.asset.v1.CreateAssetCategoryResponse.data:type_name -> domain.asset.v1.AssetCategory
-	15, // 2: domain.asset.v1.CreateAssetCategoryResponse.error:type_name -> domain.common.v1.Error
+	18, // 2: domain.asset.v1.CreateAssetCategoryResponse.error:type_name -> domain.common.v1.Error
 	0,  // 3: domain.asset.v1.ReadAssetCategoryRequest.data:type_name -> domain.asset.v1.AssetCategory
 	0,  // 4: domain.asset.v1.ReadAssetCategoryResponse.data:type_name -> domain.asset.v1.AssetCategory
-	15, // 5: domain.asset.v1.ReadAssetCategoryResponse.error:type_name -> domain.common.v1.Error
+	18, // 5: domain.asset.v1.ReadAssetCategoryResponse.error:type_name -> domain.common.v1.Error
 	0,  // 6: domain.asset.v1.UpdateAssetCategoryRequest.data:type_name -> domain.asset.v1.AssetCategory
 	0,  // 7: domain.asset.v1.UpdateAssetCategoryResponse.data:type_name -> domain.asset.v1.AssetCategory
-	15, // 8: domain.asset.v1.UpdateAssetCategoryResponse.error:type_name -> domain.common.v1.Error
+	18, // 8: domain.asset.v1.UpdateAssetCategoryResponse.error:type_name -> domain.common.v1.Error
 	0,  // 9: domain.asset.v1.DeleteAssetCategoryRequest.data:type_name -> domain.asset.v1.AssetCategory
-	15, // 10: domain.asset.v1.DeleteAssetCategoryResponse.error:type_name -> domain.common.v1.Error
-	16, // 11: domain.asset.v1.ListAssetCategoriesRequest.search:type_name -> domain.common.v1.SearchRequest
-	17, // 12: domain.asset.v1.ListAssetCategoriesRequest.filters:type_name -> domain.common.v1.FilterRequest
-	18, // 13: domain.asset.v1.ListAssetCategoriesRequest.sort:type_name -> domain.common.v1.SortRequest
-	19, // 14: domain.asset.v1.ListAssetCategoriesRequest.pagination:type_name -> domain.common.v1.PaginationRequest
+	18, // 10: domain.asset.v1.DeleteAssetCategoryResponse.error:type_name -> domain.common.v1.Error
+	19, // 11: domain.asset.v1.ListAssetCategoriesRequest.search:type_name -> domain.common.v1.SearchRequest
+	20, // 12: domain.asset.v1.ListAssetCategoriesRequest.filters:type_name -> domain.common.v1.FilterRequest
+	21, // 13: domain.asset.v1.ListAssetCategoriesRequest.sort:type_name -> domain.common.v1.SortRequest
+	22, // 14: domain.asset.v1.ListAssetCategoriesRequest.pagination:type_name -> domain.common.v1.PaginationRequest
 	0,  // 15: domain.asset.v1.ListAssetCategoriesResponse.data:type_name -> domain.asset.v1.AssetCategory
-	15, // 16: domain.asset.v1.ListAssetCategoriesResponse.error:type_name -> domain.common.v1.Error
-	19, // 17: domain.asset.v1.GetAssetCategoryListPageDataRequest.pagination:type_name -> domain.common.v1.PaginationRequest
-	17, // 18: domain.asset.v1.GetAssetCategoryListPageDataRequest.filters:type_name -> domain.common.v1.FilterRequest
-	18, // 19: domain.asset.v1.GetAssetCategoryListPageDataRequest.sort:type_name -> domain.common.v1.SortRequest
-	16, // 20: domain.asset.v1.GetAssetCategoryListPageDataRequest.search:type_name -> domain.common.v1.SearchRequest
+	18, // 16: domain.asset.v1.ListAssetCategoriesResponse.error:type_name -> domain.common.v1.Error
+	22, // 17: domain.asset.v1.GetAssetCategoryListPageDataRequest.pagination:type_name -> domain.common.v1.PaginationRequest
+	20, // 18: domain.asset.v1.GetAssetCategoryListPageDataRequest.filters:type_name -> domain.common.v1.FilterRequest
+	21, // 19: domain.asset.v1.GetAssetCategoryListPageDataRequest.sort:type_name -> domain.common.v1.SortRequest
+	19, // 20: domain.asset.v1.GetAssetCategoryListPageDataRequest.search:type_name -> domain.common.v1.SearchRequest
 	0,  // 21: domain.asset.v1.GetAssetCategoryListPageDataResponse.asset_category_list:type_name -> domain.asset.v1.AssetCategory
-	20, // 22: domain.asset.v1.GetAssetCategoryListPageDataResponse.pagination:type_name -> domain.common.v1.PaginationResponse
-	21, // 23: domain.asset.v1.GetAssetCategoryListPageDataResponse.search_results:type_name -> domain.common.v1.SearchResult
-	15, // 24: domain.asset.v1.GetAssetCategoryListPageDataResponse.error:type_name -> domain.common.v1.Error
+	23, // 22: domain.asset.v1.GetAssetCategoryListPageDataResponse.pagination:type_name -> domain.common.v1.PaginationResponse
+	24, // 23: domain.asset.v1.GetAssetCategoryListPageDataResponse.search_results:type_name -> domain.common.v1.SearchResult
+	18, // 24: domain.asset.v1.GetAssetCategoryListPageDataResponse.error:type_name -> domain.common.v1.Error
 	0,  // 25: domain.asset.v1.GetAssetCategoryItemPageDataResponse.asset_category:type_name -> domain.asset.v1.AssetCategory
-	15, // 26: domain.asset.v1.GetAssetCategoryItemPageDataResponse.error:type_name -> domain.common.v1.Error
-	1,  // 27: domain.asset.v1.AssetCategoryDomainService.CreateAssetCategory:input_type -> domain.asset.v1.CreateAssetCategoryRequest
-	3,  // 28: domain.asset.v1.AssetCategoryDomainService.ReadAssetCategory:input_type -> domain.asset.v1.ReadAssetCategoryRequest
-	5,  // 29: domain.asset.v1.AssetCategoryDomainService.UpdateAssetCategory:input_type -> domain.asset.v1.UpdateAssetCategoryRequest
-	7,  // 30: domain.asset.v1.AssetCategoryDomainService.DeleteAssetCategory:input_type -> domain.asset.v1.DeleteAssetCategoryRequest
-	9,  // 31: domain.asset.v1.AssetCategoryDomainService.ListAssetCategories:input_type -> domain.asset.v1.ListAssetCategoriesRequest
-	11, // 32: domain.asset.v1.AssetCategoryDomainService.GetAssetCategoryListPageData:input_type -> domain.asset.v1.GetAssetCategoryListPageDataRequest
-	13, // 33: domain.asset.v1.AssetCategoryDomainService.GetAssetCategoryItemPageData:input_type -> domain.asset.v1.GetAssetCategoryItemPageDataRequest
-	2,  // 34: domain.asset.v1.AssetCategoryDomainService.CreateAssetCategory:output_type -> domain.asset.v1.CreateAssetCategoryResponse
-	4,  // 35: domain.asset.v1.AssetCategoryDomainService.ReadAssetCategory:output_type -> domain.asset.v1.ReadAssetCategoryResponse
-	6,  // 36: domain.asset.v1.AssetCategoryDomainService.UpdateAssetCategory:output_type -> domain.asset.v1.UpdateAssetCategoryResponse
-	8,  // 37: domain.asset.v1.AssetCategoryDomainService.DeleteAssetCategory:output_type -> domain.asset.v1.DeleteAssetCategoryResponse
-	10, // 38: domain.asset.v1.AssetCategoryDomainService.ListAssetCategories:output_type -> domain.asset.v1.ListAssetCategoriesResponse
-	12, // 39: domain.asset.v1.AssetCategoryDomainService.GetAssetCategoryListPageData:output_type -> domain.asset.v1.GetAssetCategoryListPageDataResponse
-	14, // 40: domain.asset.v1.AssetCategoryDomainService.GetAssetCategoryItemPageData:output_type -> domain.asset.v1.GetAssetCategoryItemPageDataResponse
-	34, // [34:41] is the sub-list for method output_type
-	27, // [27:34] is the sub-list for method input_type
-	27, // [27:27] is the sub-list for extension type_name
-	27, // [27:27] is the sub-list for extension extendee
-	0,  // [0:27] is the sub-list for field type_name
+	18, // 26: domain.asset.v1.GetAssetCategoryItemPageDataResponse.error:type_name -> domain.common.v1.Error
+	0,  // 27: domain.asset.v1.AssetCategoryWithPolicyRollup.category:type_name -> domain.asset.v1.AssetCategory
+	15, // 28: domain.asset.v1.ListAssetCategoriesWithPolicyRollupResponse.data:type_name -> domain.asset.v1.AssetCategoryWithPolicyRollup
+	18, // 29: domain.asset.v1.ListAssetCategoriesWithPolicyRollupResponse.error:type_name -> domain.common.v1.Error
+	1,  // 30: domain.asset.v1.AssetCategoryDomainService.CreateAssetCategory:input_type -> domain.asset.v1.CreateAssetCategoryRequest
+	3,  // 31: domain.asset.v1.AssetCategoryDomainService.ReadAssetCategory:input_type -> domain.asset.v1.ReadAssetCategoryRequest
+	5,  // 32: domain.asset.v1.AssetCategoryDomainService.UpdateAssetCategory:input_type -> domain.asset.v1.UpdateAssetCategoryRequest
+	7,  // 33: domain.asset.v1.AssetCategoryDomainService.DeleteAssetCategory:input_type -> domain.asset.v1.DeleteAssetCategoryRequest
+	9,  // 34: domain.asset.v1.AssetCategoryDomainService.ListAssetCategories:input_type -> domain.asset.v1.ListAssetCategoriesRequest
+	11, // 35: domain.asset.v1.AssetCategoryDomainService.GetAssetCategoryListPageData:input_type -> domain.asset.v1.GetAssetCategoryListPageDataRequest
+	13, // 36: domain.asset.v1.AssetCategoryDomainService.GetAssetCategoryItemPageData:input_type -> domain.asset.v1.GetAssetCategoryItemPageDataRequest
+	2,  // 37: domain.asset.v1.AssetCategoryDomainService.CreateAssetCategory:output_type -> domain.asset.v1.CreateAssetCategoryResponse
+	4,  // 38: domain.asset.v1.AssetCategoryDomainService.ReadAssetCategory:output_type -> domain.asset.v1.ReadAssetCategoryResponse
+	6,  // 39: domain.asset.v1.AssetCategoryDomainService.UpdateAssetCategory:output_type -> domain.asset.v1.UpdateAssetCategoryResponse
+	8,  // 40: domain.asset.v1.AssetCategoryDomainService.DeleteAssetCategory:output_type -> domain.asset.v1.DeleteAssetCategoryResponse
+	10, // 41: domain.asset.v1.AssetCategoryDomainService.ListAssetCategories:output_type -> domain.asset.v1.ListAssetCategoriesResponse
+	12, // 42: domain.asset.v1.AssetCategoryDomainService.GetAssetCategoryListPageData:output_type -> domain.asset.v1.GetAssetCategoryListPageDataResponse
+	14, // 43: domain.asset.v1.AssetCategoryDomainService.GetAssetCategoryItemPageData:output_type -> domain.asset.v1.GetAssetCategoryItemPageDataResponse
+	37, // [37:44] is the sub-list for method output_type
+	30, // [30:37] is the sub-list for method input_type
+	30, // [30:30] is the sub-list for extension type_name
+	30, // [30:30] is the sub-list for extension extendee
+	0,  // [0:30] is the sub-list for field type_name
 }
 
 func init() { file_domain_asset_asset_category_asset_category_proto_init() }
@@ -1281,13 +1459,15 @@ func file_domain_asset_asset_category_asset_category_proto_init() {
 	file_domain_asset_asset_category_asset_category_proto_msgTypes[11].OneofWrappers = []any{}
 	file_domain_asset_asset_category_asset_category_proto_msgTypes[12].OneofWrappers = []any{}
 	file_domain_asset_asset_category_asset_category_proto_msgTypes[14].OneofWrappers = []any{}
+	file_domain_asset_asset_category_asset_category_proto_msgTypes[15].OneofWrappers = []any{}
+	file_domain_asset_asset_category_asset_category_proto_msgTypes[17].OneofWrappers = []any{}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
 		File: protoimpl.DescBuilder{
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_domain_asset_asset_category_asset_category_proto_rawDesc), len(file_domain_asset_asset_category_asset_category_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   15,
+			NumMessages:   18,
 			NumExtensions: 0,
 			NumServices:   1,
 		},

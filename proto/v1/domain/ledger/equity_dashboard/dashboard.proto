@@ -1,0 +1,44 @@
+syntax = "proto3";
+
+package domain.ledger.equity_dashboard.v1;
+
+option go_package = "github.com/erniealice/esqyma/pkg/schema/v1/domain/ledger/equity_dashboard";
+
+import "domain/common/error.proto";
+import "domain/ledger/equity_transaction/equity_transaction.proto";
+
+// EquityStats are the four stat values for the dashboard. Centavos.
+message EquityStats {
+  int64 total_contributed  = 1;
+  int64 active_owners      = 2;
+  int64 distributions_ytd  = 3;
+  int64 net_movement_ytd   = 4;
+}
+
+// EquityAccountSlice mirrors the equity_account row shape for dashboard widgets.
+message EquityAccountSlice {
+  string id           = 1;
+  string name         = 2;
+  string owner_name   = 3;
+  string account_type = 4;
+  int64  balance      = 5; // centavos
+}
+
+// GetEquityDashboardRequest is the request shape.
+message GetEquityDashboardRequest {
+  string workspace_id = 1;
+  // now_millis — unix milliseconds used for YTD calculations.
+  // Zero means "use server time".
+  optional int64 now_millis = 2;
+}
+
+// GetEquityDashboardResponse is the view-layer projection.
+message GetEquityDashboardResponse {
+  bool success                          = 1;
+  optional domain.common.v1.Error error = 2;
+  EquityStats stats                     = 3;
+  // by_type_ytd keys: contribution / withdrawal / distribution / transfer
+  map<string, int64> by_type_ytd                                      = 4;
+  repeated EquityAccountSlice top_contributors                         = 5;
+  repeated domain.ledger.v1.EquityTransaction recent                   = 6;
+}

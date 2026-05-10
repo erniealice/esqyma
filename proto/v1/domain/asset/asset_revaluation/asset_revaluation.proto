@@ -130,3 +130,47 @@ message GetAssetRevaluationItemPageDataResponse {
   bool success = 2;
   optional domain.common.v1.Error error = 3;
 }
+
+// Use-case messages (consumed by espyna use cases, not bound to an RPC).
+// NOTE: RevalueAssetRequest/Response are already defined in asset/asset.proto
+// for the repo-level CRUD RPC, so use-case messages use the UseCaseRequest suffix.
+
+// RevalueAssetUseCaseRequest is the input to the IAS 16 revaluation use case.
+message RevalueAssetUseCaseRequest {
+  string asset_id = 1;
+  int64 new_fair_value = 2;       // centavos
+  optional string appraiser_name = 3;
+  optional string valuation_method = 4;
+  optional string notes = 5;
+}
+
+// RevalueAssetUseCaseResponse is the output of the IAS 16 revaluation use case.
+message RevalueAssetUseCaseResponse {
+  bool success = 1;
+  optional domain.common.v1.Error error = 2;
+  optional AssetRevaluation revaluation = 3;
+  // asset_transaction_id surfaces the FK back-ref without requiring a
+  // cross-package import of asset_transaction.proto.
+  optional string asset_transaction_id = 4;
+}
+
+// PreviewRevaluationUseCaseRequest is the input to the read-only preview use case.
+message PreviewRevaluationUseCaseRequest {
+  string asset_id = 1;
+  int64 new_fair_value = 2;   // centavos
+}
+
+// PreviewRevaluationUseCaseResponse is the predicted IAS 16.39-40 split.
+message PreviewRevaluationUseCaseResponse {
+  bool success = 1;
+  optional domain.common.v1.Error error = 2;
+  int64 previous_carrying_amount = 3;   // centavos
+  int64 new_fair_value = 4;             // centavos
+  int64 revaluation_amount = 5;         // signed; positive=up, negative=down
+  bool is_increase = 6;
+  int64 recognized_in_pnl = 7;          // signed centavos
+  int64 recognized_in_oci = 8;          // signed centavos
+  int64 new_surplus_balance = 9;        // centavos
+  int64 prior_surplus_balance = 10;
+  int64 prior_pnl_loss_balance = 11;
+}

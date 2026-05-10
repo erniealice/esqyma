@@ -20,7 +20,7 @@ import type { Message } from "@bufbuild/protobuf";
  * Describes the file domain/revenue/revenue_run/revenue_run.proto.
  */
 export const file_domain_revenue_revenue_run_revenue_run: GenFile = /*@__PURE__*/
-  fileDesc("Cixkb21haW4vcmV2ZW51ZS9yZXZlbnVlX3J1bi9yZXZlbnVlX3J1bi5wcm90bxIRZG9tYWluLnJldmVudWUudjEi1QUKClJldmVudWVSdW4SCgoCaWQYASABKAkSFAoMd29ya3NwYWNlX2lkGAIgASgJEhYKCWNsaWVudF9pZBgDIAEoCUgAiAEBEhwKD3N1YnNjcmlwdGlvbl9pZBgEIAEoCUgBiAEBEjoKCnNjb3BlX2tpbmQYBSABKA4yJi5kb21haW4ucmV2ZW51ZS52MS5SZXZlbnVlUnVuU2NvcGVLaW5kEhIKCmFzX29mX2RhdGUYBiABKAkSFwoPc2VsZWN0aW9uX2NvdW50GAcgASgFEhUKDWNyZWF0ZWRfY291bnQYCCABKAUSFQoNc2tpcHBlZF9jb3VudBgJIAEoBRIVCg1lcnJvcmVkX2NvdW50GAogASgFEjMKBnN0YXR1cxgLIAEoDjIjLmRvbWFpbi5yZXZlbnVlLnYxLlJldmVudWVSdW5TdGF0dXMSFAoMaW5pdGlhdGVkX2J5GAwgASgJEhkKDGluaXRpYXRlZF9hdBgNIAEoA0gCiAEBEhkKDGNvbXBsZXRlZF9hdBgOIAEoA0gDiAEBEhIKBW5vdGVzGA8gASgJSASIAQESDgoGYWN0aXZlGBAgASgIEhkKDGRhdGVfY3JlYXRlZBgRIAEoA0gFiAEBEiAKE2RhdGVfY3JlYXRlZF9zdHJpbmcYEiABKAlIBogBARIaCg1kYXRlX21vZGlmaWVkGBMgASgDSAeIAQESIQoUZGF0ZV9tb2RpZmllZF9zdHJpbmcYFCABKAlICIgBAUIMCgpfY2xpZW50X2lkQhIKEF9zdWJzY3JpcHRpb25faWRCDwoNX2luaXRpYXRlZF9hdEIPCg1fY29tcGxldGVkX2F0QggKBl9ub3Rlc0IPCg1fZGF0ZV9jcmVhdGVkQhYKFF9kYXRlX2NyZWF0ZWRfc3RyaW5nQhAKDl9kYXRlX21vZGlmaWVkQhcKFV9kYXRlX21vZGlmaWVkX3N0cmluZyLRBAoRUmV2ZW51ZVJ1bkF0dGVtcHQSCgoCaWQYASABKAkSDgoGcnVuX2lkGAIgASgJEhcKD3N1YnNjcmlwdGlvbl9pZBgDIAEoCRIUCgxwZXJpb2Rfc3RhcnQYBCABKAkSEgoKcGVyaW9kX2VuZBgFIAEoCRIVCg1wZXJpb2RfbWFya2VyGAYgASgJEjwKB291dGNvbWUYByABKA4yKy5kb21haW4ucmV2ZW51ZS52MS5SZXZlbnVlUnVuQXR0ZW1wdE91dGNvbWUSFwoKcmV2ZW51ZV9pZBgIIAEoCUgAiAEBEhcKCmVycm9yX2NvZGUYCSABKAlIAYgBARIaCg1lcnJvcl9tZXNzYWdlGAogASgJSAKIAQESGQoMYXR0ZW1wdGVkX2F0GAsgASgDSAOIAQESDgoGYWN0aXZlGAwgASgIEhkKDGRhdGVfY3JlYXRlZBgNIAEoA0gEiAEBEiAKE2RhdGVfY3JlYXRlZF9zdHJpbmcYDiABKAlIBYgBARIaCg1kYXRlX21vZGlmaWVkGA8gASgDSAaIAQESIQoUZGF0ZV9tb2RpZmllZF9zdHJpbmcYECABKAlIB4gBAUINCgtfcmV2ZW51ZV9pZEINCgtfZXJyb3JfY29kZUIQCg5fZXJyb3JfbWVzc2FnZUIPCg1fYXR0ZW1wdGVkX2F0Qg8KDV9kYXRlX2NyZWF0ZWRCFgoUX2RhdGVfY3JlYXRlZF9zdHJpbmdCEAoOX2RhdGVfbW9kaWZpZWRCFwoVX2RhdGVfbW9kaWZpZWRfc3RyaW5nIkYKF0NyZWF0ZVJldmVudWVSdW5SZXF1ZXN0EisKBGRhdGEYASABKAsyHS5kb21haW4ucmV2ZW51ZS52MS5SZXZlbnVlUnVuIo8BChhDcmVhdGVSZXZlbnVlUnVuUmVzcG9uc2USKwoEZGF0YRgBIAMoCzIdLmRvbWFpbi5yZXZlbnVlLnYxLlJldmVudWVSdW4SDwoHc3VjY2VzcxgCIAEoCBIrCgVlcnJvchgDIAEoCzIXLmRvbWFpbi5jb21tb24udjEuRXJyb3JIAIgBAUIICgZfZXJyb3IiRAoVUmVhZFJldmVudWVSdW5SZXF1ZXN0EisKBGRhdGEYASABKAsyHS5kb21haW4ucmV2ZW51ZS52MS5SZXZlbnVlUnVuIo0BChZSZWFkUmV2ZW51ZVJ1blJlc3BvbnNlEisKBGRhdGEYASADKAsyHS5kb21haW4ucmV2ZW51ZS52MS5SZXZlbnVlUnVuEg8KB3N1Y2Nlc3MYAiABKAgSKwoFZXJyb3IYAyABKAsyFy5kb21haW4uY29tbW9uLnYxLkVycm9ySACIAQFCCAoGX2Vycm9yIkYKF1VwZGF0ZVJldmVudWVSdW5SZXF1ZXN0EisKBGRhdGEYASABKAsyHS5kb21haW4ucmV2ZW51ZS52MS5SZXZlbnVlUnVuIo8BChhVcGRhdGVSZXZlbnVlUnVuUmVzcG9uc2USKwoEZGF0YRgBIAMoCzIdLmRvbWFpbi5yZXZlbnVlLnYxLlJldmVudWVSdW4SDwoHc3VjY2VzcxgCIAEoCBIrCgVlcnJvchgDIAEoCzIXLmRvbWFpbi5jb21tb24udjEuRXJyb3JIAIgBAUIICgZfZXJyb3IiRgoXRGVsZXRlUmV2ZW51ZVJ1blJlcXVlc3QSKwoEZGF0YRgBIAEoCzIdLmRvbWFpbi5yZXZlbnVlLnYxLlJldmVudWVSdW4iYgoYRGVsZXRlUmV2ZW51ZVJ1blJlc3BvbnNlEg8KB3N1Y2Nlc3MYASABKAgSKwoFZXJyb3IYAiABKAsyFy5kb21haW4uY29tbW9uLnYxLkVycm9ySACIAQFCCAoGX2Vycm9yIqQCChZMaXN0UmV2ZW51ZVJ1bnNSZXF1ZXN0EjQKBnNlYXJjaBgBIAEoCzIfLmRvbWFpbi5jb21tb24udjEuU2VhcmNoUmVxdWVzdEgAiAEBEjUKB2ZpbHRlcnMYAiABKAsyHy5kb21haW4uY29tbW9uLnYxLkZpbHRlclJlcXVlc3RIAYgBARIwCgRzb3J0GAMgASgLMh0uZG9tYWluLmNvbW1vbi52MS5Tb3J0UmVxdWVzdEgCiAEBEjwKCnBhZ2luYXRpb24YBCABKAsyIy5kb21haW4uY29tbW9uLnYxLlBhZ2luYXRpb25SZXF1ZXN0SAOIAQFCCQoHX3NlYXJjaEIKCghfZmlsdGVyc0IHCgVfc29ydEINCgtfcGFnaW5hdGlvbiLcAQoXTGlzdFJldmVudWVSdW5zUmVzcG9uc2USKwoEZGF0YRgBIAMoCzIdLmRvbWFpbi5yZXZlbnVlLnYxLlJldmVudWVSdW4SDwoHc3VjY2VzcxgCIAEoCBIrCgVlcnJvchgDIAEoCzIXLmRvbWFpbi5jb21tb24udjEuRXJyb3JIAIgBARI9CgpwYWdpbmF0aW9uGAQgASgLMiQuZG9tYWluLmNvbW1vbi52MS5QYWdpbmF0aW9uUmVzcG9uc2VIAYgBAUIICgZfZXJyb3JCDQoLX3BhZ2luYXRpb24iVAoeQ3JlYXRlUmV2ZW51ZVJ1bkF0dGVtcHRSZXF1ZXN0EjIKBGRhdGEYASABKAsyJC5kb21haW4ucmV2ZW51ZS52MS5SZXZlbnVlUnVuQXR0ZW1wdCKdAQofQ3JlYXRlUmV2ZW51ZVJ1bkF0dGVtcHRSZXNwb25zZRIyCgRkYXRhGAEgAygLMiQuZG9tYWluLnJldmVudWUudjEuUmV2ZW51ZVJ1bkF0dGVtcHQSDwoHc3VjY2VzcxgCIAEoCBIrCgVlcnJvchgDIAEoCzIXLmRvbWFpbi5jb21tb24udjEuRXJyb3JIAIgBAUIICgZfZXJyb3IirQEKHUxpc3RSZXZlbnVlUnVuQXR0ZW1wdHNSZXF1ZXN0Eg4KBnJ1bl9pZBgBIAEoCRI1CgdmaWx0ZXJzGAIgASgLMh8uZG9tYWluLmNvbW1vbi52MS5GaWx0ZXJSZXF1ZXN0SACIAQESMAoEc29ydBgDIAEoCzIdLmRvbWFpbi5jb21tb24udjEuU29ydFJlcXVlc3RIAYgBAUIKCghfZmlsdGVyc0IHCgVfc29ydCKcAQoeTGlzdFJldmVudWVSdW5BdHRlbXB0c1Jlc3BvbnNlEjIKBGRhdGEYASADKAsyJC5kb21haW4ucmV2ZW51ZS52MS5SZXZlbnVlUnVuQXR0ZW1wdBIPCgdzdWNjZXNzGAIgASgIEisKBWVycm9yGAMgASgLMhcuZG9tYWluLmNvbW1vbi52MS5FcnJvckgAiAEBQggKBl9lcnJvciqvAQoTUmV2ZW51ZVJ1blNjb3BlS2luZBImCiJSRVZFTlVFX1JVTl9TQ09QRV9LSU5EX1VOU1BFQ0lGSUVEEAASJwojUkVWRU5VRV9SVU5fU0NPUEVfS0lORF9TVUJTQ1JJUFRJT04QARIhCh1SRVZFTlVFX1JVTl9TQ09QRV9LSU5EX0NMSUVOVBACEiQKIFJFVkVOVUVfUlVOX1NDT1BFX0tJTkRfV09SS1NQQUNFEAMqlgEKEFJldmVudWVSdW5TdGF0dXMSIgoeUkVWRU5VRV9SVU5fU1RBVFVTX1VOU1BFQ0lGSUVEEAASHgoaUkVWRU5VRV9SVU5fU1RBVFVTX1BFTkRJTkcQARIfChtSRVZFTlVFX1JVTl9TVEFUVVNfQ09NUExFVEUQAhIdChlSRVZFTlVFX1JVTl9TVEFUVVNfRkFJTEVEEAMqwgEKGFJldmVudWVSdW5BdHRlbXB0T3V0Y29tZRIrCidSRVZFTlVFX1JVTl9BVFRFTVBUX09VVENPTUVfVU5TUEVDSUZJRUQQABInCiNSRVZFTlVFX1JVTl9BVFRFTVBUX09VVENPTUVfQ1JFQVRFRBABEicKI1JFVkVOVUVfUlVOX0FUVEVNUFRfT1VUQ09NRV9TS0lQUEVEEAISJwojUkVWRU5VRV9SVU5fQVRURU1QVF9PVVRDT01FX0VSUk9SRUQQAzKzBgoXUmV2ZW51ZVJ1bkRvbWFpblNlcnZpY2USawoQQ3JlYXRlUmV2ZW51ZVJ1bhIqLmRvbWFpbi5yZXZlbnVlLnYxLkNyZWF0ZVJldmVudWVSdW5SZXF1ZXN0GisuZG9tYWluLnJldmVudWUudjEuQ3JlYXRlUmV2ZW51ZVJ1blJlc3BvbnNlEmUKDlJlYWRSZXZlbnVlUnVuEiguZG9tYWluLnJldmVudWUudjEuUmVhZFJldmVudWVSdW5SZXF1ZXN0GikuZG9tYWluLnJldmVudWUudjEuUmVhZFJldmVudWVSdW5SZXNwb25zZRJrChBVcGRhdGVSZXZlbnVlUnVuEiouZG9tYWluLnJldmVudWUudjEuVXBkYXRlUmV2ZW51ZVJ1blJlcXVlc3QaKy5kb21haW4ucmV2ZW51ZS52MS5VcGRhdGVSZXZlbnVlUnVuUmVzcG9uc2USawoQRGVsZXRlUmV2ZW51ZVJ1bhIqLmRvbWFpbi5yZXZlbnVlLnYxLkRlbGV0ZVJldmVudWVSdW5SZXF1ZXN0GisuZG9tYWluLnJldmVudWUudjEuRGVsZXRlUmV2ZW51ZVJ1blJlc3BvbnNlEmgKD0xpc3RSZXZlbnVlUnVucxIpLmRvbWFpbi5yZXZlbnVlLnYxLkxpc3RSZXZlbnVlUnVuc1JlcXVlc3QaKi5kb21haW4ucmV2ZW51ZS52MS5MaXN0UmV2ZW51ZVJ1bnNSZXNwb25zZRKAAQoXQ3JlYXRlUmV2ZW51ZVJ1bkF0dGVtcHQSMS5kb21haW4ucmV2ZW51ZS52MS5DcmVhdGVSZXZlbnVlUnVuQXR0ZW1wdFJlcXVlc3QaMi5kb21haW4ucmV2ZW51ZS52MS5DcmVhdGVSZXZlbnVlUnVuQXR0ZW1wdFJlc3BvbnNlEn0KFkxpc3RSZXZlbnVlUnVuQXR0ZW1wdHMSMC5kb21haW4ucmV2ZW51ZS52MS5MaXN0UmV2ZW51ZVJ1bkF0dGVtcHRzUmVxdWVzdBoxLmRvbWFpbi5yZXZlbnVlLnYxLkxpc3RSZXZlbnVlUnVuQXR0ZW1wdHNSZXNwb25zZULfAQoVY29tLmRvbWFpbi5yZXZlbnVlLnYxQg9SZXZlbnVlUnVuUHJvdG9QAVpPZ2l0aHViLmNvbS9lcm5pZWFsaWNlL2VzcXltYS9wa2cvc2NoZW1hL3YxL2RvbWFpbi9yZXZlbnVlL3JldmVudWVfcnVuO3JldmVudWV2MaICA0RSWKoCEURvbWFpbi5SZXZlbnVlLlYxygIRRG9tYWluXFJldmVudWVcVjHiAh1Eb21haW5cUmV2ZW51ZVxWMVxHUEJNZXRhZGF0YeoCE0RvbWFpbjo6UmV2ZW51ZTo6VjFiBnByb3RvMw", [file_domain_common_error, file_domain_common_pagination, file_domain_common_search, file_domain_common_filter, file_domain_common_sort]);
+  fileDesc("Cixkb21haW4vcmV2ZW51ZS9yZXZlbnVlX3J1bi9yZXZlbnVlX3J1bi5wcm90bxIRZG9tYWluLnJldmVudWUudjEi1QUKClJldmVudWVSdW4SCgoCaWQYASABKAkSFAoMd29ya3NwYWNlX2lkGAIgASgJEhYKCWNsaWVudF9pZBgDIAEoCUgAiAEBEhwKD3N1YnNjcmlwdGlvbl9pZBgEIAEoCUgBiAEBEjoKCnNjb3BlX2tpbmQYBSABKA4yJi5kb21haW4ucmV2ZW51ZS52MS5SZXZlbnVlUnVuU2NvcGVLaW5kEhIKCmFzX29mX2RhdGUYBiABKAkSFwoPc2VsZWN0aW9uX2NvdW50GAcgASgFEhUKDWNyZWF0ZWRfY291bnQYCCABKAUSFQoNc2tpcHBlZF9jb3VudBgJIAEoBRIVCg1lcnJvcmVkX2NvdW50GAogASgFEjMKBnN0YXR1cxgLIAEoDjIjLmRvbWFpbi5yZXZlbnVlLnYxLlJldmVudWVSdW5TdGF0dXMSFAoMaW5pdGlhdGVkX2J5GAwgASgJEhkKDGluaXRpYXRlZF9hdBgNIAEoA0gCiAEBEhkKDGNvbXBsZXRlZF9hdBgOIAEoA0gDiAEBEhIKBW5vdGVzGA8gASgJSASIAQESDgoGYWN0aXZlGBAgASgIEhkKDGRhdGVfY3JlYXRlZBgRIAEoA0gFiAEBEiAKE2RhdGVfY3JlYXRlZF9zdHJpbmcYEiABKAlIBogBARIaCg1kYXRlX21vZGlmaWVkGBMgASgDSAeIAQESIQoUZGF0ZV9tb2RpZmllZF9zdHJpbmcYFCABKAlICIgBAUIMCgpfY2xpZW50X2lkQhIKEF9zdWJzY3JpcHRpb25faWRCDwoNX2luaXRpYXRlZF9hdEIPCg1fY29tcGxldGVkX2F0QggKBl9ub3Rlc0IPCg1fZGF0ZV9jcmVhdGVkQhYKFF9kYXRlX2NyZWF0ZWRfc3RyaW5nQhAKDl9kYXRlX21vZGlmaWVkQhcKFV9kYXRlX21vZGlmaWVkX3N0cmluZyLRBAoRUmV2ZW51ZVJ1bkF0dGVtcHQSCgoCaWQYASABKAkSDgoGcnVuX2lkGAIgASgJEhcKD3N1YnNjcmlwdGlvbl9pZBgDIAEoCRIUCgxwZXJpb2Rfc3RhcnQYBCABKAkSEgoKcGVyaW9kX2VuZBgFIAEoCRIVCg1wZXJpb2RfbWFya2VyGAYgASgJEjwKB291dGNvbWUYByABKA4yKy5kb21haW4ucmV2ZW51ZS52MS5SZXZlbnVlUnVuQXR0ZW1wdE91dGNvbWUSFwoKcmV2ZW51ZV9pZBgIIAEoCUgAiAEBEhcKCmVycm9yX2NvZGUYCSABKAlIAYgBARIaCg1lcnJvcl9tZXNzYWdlGAogASgJSAKIAQESGQoMYXR0ZW1wdGVkX2F0GAsgASgDSAOIAQESDgoGYWN0aXZlGAwgASgIEhkKDGRhdGVfY3JlYXRlZBgNIAEoA0gEiAEBEiAKE2RhdGVfY3JlYXRlZF9zdHJpbmcYDiABKAlIBYgBARIaCg1kYXRlX21vZGlmaWVkGA8gASgDSAaIAQESIQoUZGF0ZV9tb2RpZmllZF9zdHJpbmcYECABKAlIB4gBAUINCgtfcmV2ZW51ZV9pZEINCgtfZXJyb3JfY29kZUIQCg5fZXJyb3JfbWVzc2FnZUIPCg1fYXR0ZW1wdGVkX2F0Qg8KDV9kYXRlX2NyZWF0ZWRCFgoUX2RhdGVfY3JlYXRlZF9zdHJpbmdCEAoOX2RhdGVfbW9kaWZpZWRCFwoVX2RhdGVfbW9kaWZpZWRfc3RyaW5nIkYKF0NyZWF0ZVJldmVudWVSdW5SZXF1ZXN0EisKBGRhdGEYASABKAsyHS5kb21haW4ucmV2ZW51ZS52MS5SZXZlbnVlUnVuIo8BChhDcmVhdGVSZXZlbnVlUnVuUmVzcG9uc2USKwoEZGF0YRgBIAMoCzIdLmRvbWFpbi5yZXZlbnVlLnYxLlJldmVudWVSdW4SDwoHc3VjY2VzcxgCIAEoCBIrCgVlcnJvchgDIAEoCzIXLmRvbWFpbi5jb21tb24udjEuRXJyb3JIAIgBAUIICgZfZXJyb3IiRAoVUmVhZFJldmVudWVSdW5SZXF1ZXN0EisKBGRhdGEYASABKAsyHS5kb21haW4ucmV2ZW51ZS52MS5SZXZlbnVlUnVuIo0BChZSZWFkUmV2ZW51ZVJ1blJlc3BvbnNlEisKBGRhdGEYASADKAsyHS5kb21haW4ucmV2ZW51ZS52MS5SZXZlbnVlUnVuEg8KB3N1Y2Nlc3MYAiABKAgSKwoFZXJyb3IYAyABKAsyFy5kb21haW4uY29tbW9uLnYxLkVycm9ySACIAQFCCAoGX2Vycm9yIkYKF1VwZGF0ZVJldmVudWVSdW5SZXF1ZXN0EisKBGRhdGEYASABKAsyHS5kb21haW4ucmV2ZW51ZS52MS5SZXZlbnVlUnVuIo8BChhVcGRhdGVSZXZlbnVlUnVuUmVzcG9uc2USKwoEZGF0YRgBIAMoCzIdLmRvbWFpbi5yZXZlbnVlLnYxLlJldmVudWVSdW4SDwoHc3VjY2VzcxgCIAEoCBIrCgVlcnJvchgDIAEoCzIXLmRvbWFpbi5jb21tb24udjEuRXJyb3JIAIgBAUIICgZfZXJyb3IiRgoXRGVsZXRlUmV2ZW51ZVJ1blJlcXVlc3QSKwoEZGF0YRgBIAEoCzIdLmRvbWFpbi5yZXZlbnVlLnYxLlJldmVudWVSdW4iYgoYRGVsZXRlUmV2ZW51ZVJ1blJlc3BvbnNlEg8KB3N1Y2Nlc3MYASABKAgSKwoFZXJyb3IYAiABKAsyFy5kb21haW4uY29tbW9uLnYxLkVycm9ySACIAQFCCAoGX2Vycm9yIqQCChZMaXN0UmV2ZW51ZVJ1bnNSZXF1ZXN0EjQKBnNlYXJjaBgBIAEoCzIfLmRvbWFpbi5jb21tb24udjEuU2VhcmNoUmVxdWVzdEgAiAEBEjUKB2ZpbHRlcnMYAiABKAsyHy5kb21haW4uY29tbW9uLnYxLkZpbHRlclJlcXVlc3RIAYgBARIwCgRzb3J0GAMgASgLMh0uZG9tYWluLmNvbW1vbi52MS5Tb3J0UmVxdWVzdEgCiAEBEjwKCnBhZ2luYXRpb24YBCABKAsyIy5kb21haW4uY29tbW9uLnYxLlBhZ2luYXRpb25SZXF1ZXN0SAOIAQFCCQoHX3NlYXJjaEIKCghfZmlsdGVyc0IHCgVfc29ydEINCgtfcGFnaW5hdGlvbiLcAQoXTGlzdFJldmVudWVSdW5zUmVzcG9uc2USKwoEZGF0YRgBIAMoCzIdLmRvbWFpbi5yZXZlbnVlLnYxLlJldmVudWVSdW4SDwoHc3VjY2VzcxgCIAEoCBIrCgVlcnJvchgDIAEoCzIXLmRvbWFpbi5jb21tb24udjEuRXJyb3JIAIgBARI9CgpwYWdpbmF0aW9uGAQgASgLMiQuZG9tYWluLmNvbW1vbi52MS5QYWdpbmF0aW9uUmVzcG9uc2VIAYgBAUIICgZfZXJyb3JCDQoLX3BhZ2luYXRpb24iVAoeQ3JlYXRlUmV2ZW51ZVJ1bkF0dGVtcHRSZXF1ZXN0EjIKBGRhdGEYASABKAsyJC5kb21haW4ucmV2ZW51ZS52MS5SZXZlbnVlUnVuQXR0ZW1wdCKdAQofQ3JlYXRlUmV2ZW51ZVJ1bkF0dGVtcHRSZXNwb25zZRIyCgRkYXRhGAEgAygLMiQuZG9tYWluLnJldmVudWUudjEuUmV2ZW51ZVJ1bkF0dGVtcHQSDwoHc3VjY2VzcxgCIAEoCBIrCgVlcnJvchgDIAEoCzIXLmRvbWFpbi5jb21tb24udjEuRXJyb3JIAIgBAUIICgZfZXJyb3IirQEKHUxpc3RSZXZlbnVlUnVuQXR0ZW1wdHNSZXF1ZXN0Eg4KBnJ1bl9pZBgBIAEoCRI1CgdmaWx0ZXJzGAIgASgLMh8uZG9tYWluLmNvbW1vbi52MS5GaWx0ZXJSZXF1ZXN0SACIAQESMAoEc29ydBgDIAEoCzIdLmRvbWFpbi5jb21tb24udjEuU29ydFJlcXVlc3RIAYgBAUIKCghfZmlsdGVyc0IHCgVfc29ydCKcAQoeTGlzdFJldmVudWVSdW5BdHRlbXB0c1Jlc3BvbnNlEjIKBGRhdGEYASADKAsyJC5kb21haW4ucmV2ZW51ZS52MS5SZXZlbnVlUnVuQXR0ZW1wdBIPCgdzdWNjZXNzGAIgASgIEisKBWVycm9yGAMgASgLMhcuZG9tYWluLmNvbW1vbi52MS5FcnJvckgAiAEBQggKBl9lcnJvciK9AQoPUmV2ZW51ZVJ1blNjb3BlEhkKDHdvcmtzcGFjZV9pZBgBIAEoCUgAiAEBEhYKCWNsaWVudF9pZBgCIAEoCUgBiAEBEhwKD3N1YnNjcmlwdGlvbl9pZBgDIAEoCUgCiAEBEhcKCmFzX29mX2RhdGUYBCABKAlIA4gBAUIPCg1fd29ya3NwYWNlX2lkQgwKCl9jbGllbnRfaWRCEgoQX3N1YnNjcmlwdGlvbl9pZEINCgtfYXNfb2ZfZGF0ZSLdAgoTUmV2ZW51ZVJ1bkNhbmRpZGF0ZRIXCg9zdWJzY3JpcHRpb25faWQYASABKAkSGQoRc3Vic2NyaXB0aW9uX25hbWUYAiABKAkSEQoJY2xpZW50X2lkGAMgASgJEhMKC2NsaWVudF9uYW1lGAQgASgJEhEKCXBsYW5fbmFtZRgFIAEoCRIbChNiaWxsaW5nX2N5Y2xlX2xhYmVsGAYgASgJEhAKCGN1cnJlbmN5GAcgASgJEhQKDHBlcmlvZF9zdGFydBgIIAEoCRISCgpwZXJpb2RfZW5kGAkgASgJEhQKDHBlcmlvZF9sYWJlbBgKIAEoCRIVCg1wZXJpb2RfbWFya2VyGAsgASgJEg4KBmFtb3VudBgMIAEoAxIXCg9saW5lX2l0ZW1fY291bnQYDSABKAUSEAoIZWxpZ2libGUYDiABKAgSFgoOYmxvY2tlcl9yZWFzb24YDyABKAkikgEKH0xpc3RSZXZlbnVlUnVuQ2FuZGlkYXRlc1JlcXVlc3QSMQoFc2NvcGUYASABKAsyIi5kb21haW4ucmV2ZW51ZS52MS5SZXZlbnVlUnVuU2NvcGUSEwoGY3Vyc29yGAIgASgJSACIAQESEgoFbGltaXQYAyABKAVIAYgBAUIJCgdfY3Vyc29yQggKBl9saW1pdCLKAQogTGlzdFJldmVudWVSdW5DYW5kaWRhdGVzUmVzcG9uc2USNAoEZGF0YRgBIAMoCzImLmRvbWFpbi5yZXZlbnVlLnYxLlJldmVudWVSdW5DYW5kaWRhdGUSDwoHc3VjY2VzcxgCIAEoCBIrCgVlcnJvchgDIAEoCzIXLmRvbWFpbi5jb21tb24udjEuRXJyb3JIAIgBARIYCgtuZXh0X2N1cnNvchgEIAEoCUgBiAEBQggKBl9lcnJvckIOCgxfbmV4dF9jdXJzb3IidwobU2VsZWN0ZWRSZXZlbnVlUnVuQ2FuZGlkYXRlEhcKD3N1YnNjcmlwdGlvbl9pZBgBIAEoCRIUCgxwZXJpb2Rfc3RhcnQYAiABKAkSEgoKcGVyaW9kX2VuZBgDIAEoCRIVCg1wZXJpb2RfbWFya2VyGAQgASgJIokBChRSZXZlbnVlUnVuU2VsZWN0aW9ucxJFCg1leHBsaWNpdF9saXN0GAEgAygLMi4uZG9tYWluLnJldmVudWUudjEuU2VsZWN0ZWRSZXZlbnVlUnVuQ2FuZGlkYXRlEhkKDGZpbHRlcl90b2tlbhgCIAEoCUgAiAEBQg8KDV9maWx0ZXJfdG9rZW4iiwEKGUdlbmVyYXRlUmV2ZW51ZVJ1blJlcXVlc3QSMQoFc2NvcGUYASABKAsyIi5kb21haW4ucmV2ZW51ZS52MS5SZXZlbnVlUnVuU2NvcGUSOwoKc2VsZWN0aW9ucxgCIAEoCzInLmRvbWFpbi5yZXZlbnVlLnYxLlJldmVudWVSdW5TZWxlY3Rpb25zItUBChpHZW5lcmF0ZVJldmVudWVSdW5SZXNwb25zZRIPCgdzdWNjZXNzGAEgASgIEisKBWVycm9yGAIgASgLMhcuZG9tYWluLmNvbW1vbi52MS5FcnJvckgAiAEBEi8KA3J1bhgDIAEoCzIdLmRvbWFpbi5yZXZlbnVlLnYxLlJldmVudWVSdW5IAYgBARI2CghhdHRlbXB0cxgEIAMoCzIkLmRvbWFpbi5yZXZlbnVlLnYxLlJldmVudWVSdW5BdHRlbXB0QggKBl9lcnJvckIGCgRfcnVuKq8BChNSZXZlbnVlUnVuU2NvcGVLaW5kEiYKIlJFVkVOVUVfUlVOX1NDT1BFX0tJTkRfVU5TUEVDSUZJRUQQABInCiNSRVZFTlVFX1JVTl9TQ09QRV9LSU5EX1NVQlNDUklQVElPThABEiEKHVJFVkVOVUVfUlVOX1NDT1BFX0tJTkRfQ0xJRU5UEAISJAogUkVWRU5VRV9SVU5fU0NPUEVfS0lORF9XT1JLU1BBQ0UQAyqWAQoQUmV2ZW51ZVJ1blN0YXR1cxIiCh5SRVZFTlVFX1JVTl9TVEFUVVNfVU5TUEVDSUZJRUQQABIeChpSRVZFTlVFX1JVTl9TVEFUVVNfUEVORElORxABEh8KG1JFVkVOVUVfUlVOX1NUQVRVU19DT01QTEVURRACEh0KGVJFVkVOVUVfUlVOX1NUQVRVU19GQUlMRUQQAyrCAQoYUmV2ZW51ZVJ1bkF0dGVtcHRPdXRjb21lEisKJ1JFVkVOVUVfUlVOX0FUVEVNUFRfT1VUQ09NRV9VTlNQRUNJRklFRBAAEicKI1JFVkVOVUVfUlVOX0FUVEVNUFRfT1VUQ09NRV9DUkVBVEVEEAESJwojUkVWRU5VRV9SVU5fQVRURU1QVF9PVVRDT01FX1NLSVBQRUQQAhInCiNSRVZFTlVFX1JVTl9BVFRFTVBUX09VVENPTUVfRVJST1JFRBADMrMGChdSZXZlbnVlUnVuRG9tYWluU2VydmljZRJrChBDcmVhdGVSZXZlbnVlUnVuEiouZG9tYWluLnJldmVudWUudjEuQ3JlYXRlUmV2ZW51ZVJ1blJlcXVlc3QaKy5kb21haW4ucmV2ZW51ZS52MS5DcmVhdGVSZXZlbnVlUnVuUmVzcG9uc2USZQoOUmVhZFJldmVudWVSdW4SKC5kb21haW4ucmV2ZW51ZS52MS5SZWFkUmV2ZW51ZVJ1blJlcXVlc3QaKS5kb21haW4ucmV2ZW51ZS52MS5SZWFkUmV2ZW51ZVJ1blJlc3BvbnNlEmsKEFVwZGF0ZVJldmVudWVSdW4SKi5kb21haW4ucmV2ZW51ZS52MS5VcGRhdGVSZXZlbnVlUnVuUmVxdWVzdBorLmRvbWFpbi5yZXZlbnVlLnYxLlVwZGF0ZVJldmVudWVSdW5SZXNwb25zZRJrChBEZWxldGVSZXZlbnVlUnVuEiouZG9tYWluLnJldmVudWUudjEuRGVsZXRlUmV2ZW51ZVJ1blJlcXVlc3QaKy5kb21haW4ucmV2ZW51ZS52MS5EZWxldGVSZXZlbnVlUnVuUmVzcG9uc2USaAoPTGlzdFJldmVudWVSdW5zEikuZG9tYWluLnJldmVudWUudjEuTGlzdFJldmVudWVSdW5zUmVxdWVzdBoqLmRvbWFpbi5yZXZlbnVlLnYxLkxpc3RSZXZlbnVlUnVuc1Jlc3BvbnNlEoABChdDcmVhdGVSZXZlbnVlUnVuQXR0ZW1wdBIxLmRvbWFpbi5yZXZlbnVlLnYxLkNyZWF0ZVJldmVudWVSdW5BdHRlbXB0UmVxdWVzdBoyLmRvbWFpbi5yZXZlbnVlLnYxLkNyZWF0ZVJldmVudWVSdW5BdHRlbXB0UmVzcG9uc2USfQoWTGlzdFJldmVudWVSdW5BdHRlbXB0cxIwLmRvbWFpbi5yZXZlbnVlLnYxLkxpc3RSZXZlbnVlUnVuQXR0ZW1wdHNSZXF1ZXN0GjEuZG9tYWluLnJldmVudWUudjEuTGlzdFJldmVudWVSdW5BdHRlbXB0c1Jlc3BvbnNlQt8BChVjb20uZG9tYWluLnJldmVudWUudjFCD1JldmVudWVSdW5Qcm90b1ABWk9naXRodWIuY29tL2VybmllYWxpY2UvZXNxeW1hL3BrZy9zY2hlbWEvdjEvZG9tYWluL3JldmVudWUvcmV2ZW51ZV9ydW47cmV2ZW51ZXYxogIDRFJYqgIRRG9tYWluLlJldmVudWUuVjHKAhFEb21haW5cUmV2ZW51ZVxWMeICHURvbWFpblxSZXZlbnVlXFYxXEdQQk1ldGFkYXRh6gITRG9tYWluOjpSZXZlbnVlOjpWMWIGcHJvdG8z", [file_domain_common_error, file_domain_common_pagination, file_domain_common_search, file_domain_common_filter, file_domain_common_sort]);
 
 /**
  * @generated from message domain.revenue.v1.RevenueRun
@@ -564,6 +564,318 @@ export type ListRevenueRunAttemptsResponse = Message<"domain.revenue.v1.ListReve
  */
 export const ListRevenueRunAttemptsResponseSchema: GenMessage<ListRevenueRunAttemptsResponse> = /*@__PURE__*/
   messageDesc(file_domain_revenue_revenue_run_revenue_run, 15);
+
+/**
+ * RevenueRunScope describes the filter for a candidate list or generate call.
+ * Empty fields mean "no filter for that dimension". Shared by
+ * ListRevenueRunCandidates and GenerateRevenueRun.
+ *
+ * @generated from message domain.revenue.v1.RevenueRunScope
+ */
+export type RevenueRunScope = Message<"domain.revenue.v1.RevenueRunScope"> & {
+  /**
+   * @generated from field: optional string workspace_id = 1;
+   */
+  workspaceId?: string;
+
+  /**
+   * @generated from field: optional string client_id = 2;
+   */
+  clientId?: string;
+
+  /**
+   * @generated from field: optional string subscription_id = 3;
+   */
+  subscriptionId?: string;
+
+  /**
+   * YYYY-MM-DD; defaults to today (in workspace tz) when empty
+   *
+   * @generated from field: optional string as_of_date = 4;
+   */
+  asOfDate?: string;
+};
+
+/**
+ * Describes the message domain.revenue.v1.RevenueRunScope.
+ * Use `create(RevenueRunScopeSchema)` to create a new message.
+ */
+export const RevenueRunScopeSchema: GenMessage<RevenueRunScope> = /*@__PURE__*/
+  messageDesc(file_domain_revenue_revenue_run_revenue_run, 16);
+
+/**
+ * RevenueRunCandidate represents one billed period for one subscription that
+ * has not yet been invoiced (or that has a blocker preventing invoicing).
+ *
+ * @generated from message domain.revenue.v1.RevenueRunCandidate
+ */
+export type RevenueRunCandidate = Message<"domain.revenue.v1.RevenueRunCandidate"> & {
+  /**
+   * @generated from field: string subscription_id = 1;
+   */
+  subscriptionId: string;
+
+  /**
+   * @generated from field: string subscription_name = 2;
+   */
+  subscriptionName: string;
+
+  /**
+   * @generated from field: string client_id = 3;
+   */
+  clientId: string;
+
+  /**
+   * @generated from field: string client_name = 4;
+   */
+  clientName: string;
+
+  /**
+   * @generated from field: string plan_name = 5;
+   */
+  planName: string;
+
+  /**
+   * @generated from field: string billing_cycle_label = 6;
+   */
+  billingCycleLabel: string;
+
+  /**
+   * @generated from field: string currency = 7;
+   */
+  currency: string;
+
+  /**
+   * YYYY-MM-DD
+   *
+   * @generated from field: string period_start = 8;
+   */
+  periodStart: string;
+
+  /**
+   * YYYY-MM-DD
+   *
+   * @generated from field: string period_end = 9;
+   */
+  periodEnd: string;
+
+  /**
+   * @generated from field: string period_label = 10;
+   */
+  periodLabel: string;
+
+  /**
+   * @generated from field: string period_marker = 11;
+   */
+  periodMarker: string;
+
+  /**
+   * @generated from field: int64 amount = 12;
+   */
+  amount: bigint;
+
+  /**
+   * @generated from field: int32 line_item_count = 13;
+   */
+  lineItemCount: number;
+
+  /**
+   * @generated from field: bool eligible = 14;
+   */
+  eligible: boolean;
+
+  /**
+   * @generated from field: string blocker_reason = 15;
+   */
+  blockerReason: string;
+};
+
+/**
+ * Describes the message domain.revenue.v1.RevenueRunCandidate.
+ * Use `create(RevenueRunCandidateSchema)` to create a new message.
+ */
+export const RevenueRunCandidateSchema: GenMessage<RevenueRunCandidate> = /*@__PURE__*/
+  messageDesc(file_domain_revenue_revenue_run_revenue_run, 17);
+
+/**
+ * @generated from message domain.revenue.v1.ListRevenueRunCandidatesRequest
+ */
+export type ListRevenueRunCandidatesRequest = Message<"domain.revenue.v1.ListRevenueRunCandidatesRequest"> & {
+  /**
+   * @generated from field: domain.revenue.v1.RevenueRunScope scope = 1;
+   */
+  scope?: RevenueRunScope;
+
+  /**
+   * @generated from field: optional string cursor = 2;
+   */
+  cursor?: string;
+
+  /**
+   * @generated from field: optional int32 limit = 3;
+   */
+  limit?: number;
+};
+
+/**
+ * Describes the message domain.revenue.v1.ListRevenueRunCandidatesRequest.
+ * Use `create(ListRevenueRunCandidatesRequestSchema)` to create a new message.
+ */
+export const ListRevenueRunCandidatesRequestSchema: GenMessage<ListRevenueRunCandidatesRequest> = /*@__PURE__*/
+  messageDesc(file_domain_revenue_revenue_run_revenue_run, 18);
+
+/**
+ * @generated from message domain.revenue.v1.ListRevenueRunCandidatesResponse
+ */
+export type ListRevenueRunCandidatesResponse = Message<"domain.revenue.v1.ListRevenueRunCandidatesResponse"> & {
+  /**
+   * @generated from field: repeated domain.revenue.v1.RevenueRunCandidate data = 1;
+   */
+  data: RevenueRunCandidate[];
+
+  /**
+   * @generated from field: bool success = 2;
+   */
+  success: boolean;
+
+  /**
+   * @generated from field: optional domain.common.v1.Error error = 3;
+   */
+  error?: Error;
+
+  /**
+   * @generated from field: optional string next_cursor = 4;
+   */
+  nextCursor?: string;
+};
+
+/**
+ * Describes the message domain.revenue.v1.ListRevenueRunCandidatesResponse.
+ * Use `create(ListRevenueRunCandidatesResponseSchema)` to create a new message.
+ */
+export const ListRevenueRunCandidatesResponseSchema: GenMessage<ListRevenueRunCandidatesResponse> = /*@__PURE__*/
+  messageDesc(file_domain_revenue_revenue_run_revenue_run, 19);
+
+/**
+ * SelectedRevenueRunCandidate is one operator-confirmed selection to invoice.
+ *
+ * @generated from message domain.revenue.v1.SelectedRevenueRunCandidate
+ */
+export type SelectedRevenueRunCandidate = Message<"domain.revenue.v1.SelectedRevenueRunCandidate"> & {
+  /**
+   * @generated from field: string subscription_id = 1;
+   */
+  subscriptionId: string;
+
+  /**
+   * YYYY-MM-DD
+   *
+   * @generated from field: string period_start = 2;
+   */
+  periodStart: string;
+
+  /**
+   * YYYY-MM-DD
+   *
+   * @generated from field: string period_end = 3;
+   */
+  periodEnd: string;
+
+  /**
+   * canonical idempotency anchor
+   *
+   * @generated from field: string period_marker = 4;
+   */
+  periodMarker: string;
+};
+
+/**
+ * Describes the message domain.revenue.v1.SelectedRevenueRunCandidate.
+ * Use `create(SelectedRevenueRunCandidateSchema)` to create a new message.
+ */
+export const SelectedRevenueRunCandidateSchema: GenMessage<SelectedRevenueRunCandidate> = /*@__PURE__*/
+  messageDesc(file_domain_revenue_revenue_run_revenue_run, 20);
+
+/**
+ * RevenueRunSelections carries either an explicit list or a filter token.
+ * Exactly one of explicit_list or filter_token should be set.
+ *
+ * @generated from message domain.revenue.v1.RevenueRunSelections
+ */
+export type RevenueRunSelections = Message<"domain.revenue.v1.RevenueRunSelections"> & {
+  /**
+   * @generated from field: repeated domain.revenue.v1.SelectedRevenueRunCandidate explicit_list = 1;
+   */
+  explicitList: SelectedRevenueRunCandidate[];
+
+  /**
+   * signed server snapshot; deferred per v1 progress.md D9
+   *
+   * @generated from field: optional string filter_token = 2;
+   */
+  filterToken?: string;
+};
+
+/**
+ * Describes the message domain.revenue.v1.RevenueRunSelections.
+ * Use `create(RevenueRunSelectionsSchema)` to create a new message.
+ */
+export const RevenueRunSelectionsSchema: GenMessage<RevenueRunSelections> = /*@__PURE__*/
+  messageDesc(file_domain_revenue_revenue_run_revenue_run, 21);
+
+/**
+ * @generated from message domain.revenue.v1.GenerateRevenueRunRequest
+ */
+export type GenerateRevenueRunRequest = Message<"domain.revenue.v1.GenerateRevenueRunRequest"> & {
+  /**
+   * @generated from field: domain.revenue.v1.RevenueRunScope scope = 1;
+   */
+  scope?: RevenueRunScope;
+
+  /**
+   * @generated from field: domain.revenue.v1.RevenueRunSelections selections = 2;
+   */
+  selections?: RevenueRunSelections;
+};
+
+/**
+ * Describes the message domain.revenue.v1.GenerateRevenueRunRequest.
+ * Use `create(GenerateRevenueRunRequestSchema)` to create a new message.
+ */
+export const GenerateRevenueRunRequestSchema: GenMessage<GenerateRevenueRunRequest> = /*@__PURE__*/
+  messageDesc(file_domain_revenue_revenue_run_revenue_run, 22);
+
+/**
+ * @generated from message domain.revenue.v1.GenerateRevenueRunResponse
+ */
+export type GenerateRevenueRunResponse = Message<"domain.revenue.v1.GenerateRevenueRunResponse"> & {
+  /**
+   * @generated from field: bool success = 1;
+   */
+  success: boolean;
+
+  /**
+   * @generated from field: optional domain.common.v1.Error error = 2;
+   */
+  error?: Error;
+
+  /**
+   * @generated from field: optional domain.revenue.v1.RevenueRun run = 3;
+   */
+  run?: RevenueRun;
+
+  /**
+   * @generated from field: repeated domain.revenue.v1.RevenueRunAttempt attempts = 4;
+   */
+  attempts: RevenueRunAttempt[];
+};
+
+/**
+ * Describes the message domain.revenue.v1.GenerateRevenueRunResponse.
+ * Use `create(GenerateRevenueRunResponseSchema)` to create a new message.
+ */
+export const GenerateRevenueRunResponseSchema: GenMessage<GenerateRevenueRunResponse> = /*@__PURE__*/
+  messageDesc(file_domain_revenue_revenue_run_revenue_run, 23);
 
 /**
  * @generated from enum domain.revenue.v1.RevenueRunScopeKind
