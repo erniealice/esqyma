@@ -55,8 +55,14 @@ type Workspace struct {
 	TaxInclusivePricing   *bool   `protobuf:"varint,16,opt,name=tax_inclusive_pricing,json=taxInclusivePricing,proto3,oneof" json:"tax_inclusive_pricing,omitempty"`       // When true, PricePlan amounts are gross-of-SURCHARGE (extract). Default false (exclusive).
 	TaxComputationEnabled *bool   `protobuf:"varint,17,opt,name=tax_computation_enabled,json=taxComputationEnabled,proto3,oneof" json:"tax_computation_enabled,omitempty"` // Master gate: when false, ComputeTaxesForRevenue is a no-op. Default true.
 	HomeJurisdiction      *string `protobuf:"bytes,18,opt,name=home_jurisdiction,json=homeJurisdiction,proto3,oneof" json:"home_jurisdiction,omitempty"`                   // Jurisdiction scope for SURCHARGE lookups (e.g. "PH-NATIONAL"). Defaults to compliance_region for backward compat.
-	unknownFields         protoimpl.UnknownFields
-	sizeCache             protoimpl.SizeCache
+	// Display format preferences — drive UI date/time rendering across the workspace.
+	// Values are Go time-layout strings (e.g. "Jan 2, 2006" or "2006-01-02") for
+	// date_format, and "3:04 PM" / "15:04" etc. for time_format.
+	// When empty the UI falls back to the locale default for the compliance_region.
+	DateFormat    *string `protobuf:"bytes,19,opt,name=date_format,json=dateFormat,proto3,oneof" json:"date_format,omitempty"` // Preferred date display format (Go layout string)
+	TimeFormat    *string `protobuf:"bytes,20,opt,name=time_format,json=timeFormat,proto3,oneof" json:"time_format,omitempty"` // Preferred time display format (Go layout string)
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
 }
 
 func (x *Workspace) Reset() {
@@ -211,6 +217,20 @@ func (x *Workspace) GetTaxComputationEnabled() bool {
 func (x *Workspace) GetHomeJurisdiction() string {
 	if x != nil && x.HomeJurisdiction != nil {
 		return *x.HomeJurisdiction
+	}
+	return ""
+}
+
+func (x *Workspace) GetDateFormat() string {
+	if x != nil && x.DateFormat != nil {
+		return *x.DateFormat
+	}
+	return ""
+}
+
+func (x *Workspace) GetTimeFormat() string {
+	if x != nil && x.TimeFormat != nil {
+		return *x.TimeFormat
 	}
 	return ""
 }
@@ -1297,7 +1317,7 @@ var File_domain_entity_workspace_workspace_proto protoreflect.FileDescriptor
 
 const file_domain_entity_workspace_workspace_proto_rawDesc = "" +
 	"\n" +
-	"'domain/entity/workspace/workspace.proto\x12\x10domain.entity.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1adomain/common/search.proto\x1a\x10options/db.proto\"\xb0\b\n" +
+	"'domain/entity/workspace/workspace.proto\x12\x10domain.entity.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1adomain/common/search.proto\x1a\x10options/db.proto\"\x9c\t\n" +
 	"\tWorkspace\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12\x12\n" +
 	"\x04name\x18\x02 \x01(\tR\x04name\x12 \n" +
@@ -1320,7 +1340,11 @@ const file_domain_entity_workspace_workspace_proto_rawDesc = "" +
 	"\x15tax_inclusive_pricing\x18\x10 \x01(\bH\n" +
 	"R\x13taxInclusivePricing\x88\x01\x01\x12;\n" +
 	"\x17tax_computation_enabled\x18\x11 \x01(\bH\vR\x15taxComputationEnabled\x88\x01\x01\x120\n" +
-	"\x11home_jurisdiction\x18\x12 \x01(\tH\fR\x10homeJurisdiction\x88\x01\x01:\x06\x8a\xb5\x18\x02\b\x01B\x17\n" +
+	"\x11home_jurisdiction\x18\x12 \x01(\tH\fR\x10homeJurisdiction\x88\x01\x01\x12$\n" +
+	"\vdate_format\x18\x13 \x01(\tH\rR\n" +
+	"dateFormat\x88\x01\x01\x12$\n" +
+	"\vtime_format\x18\x14 \x01(\tH\x0eR\n" +
+	"timeFormat\x88\x01\x01:\x06\x8a\xb5\x18\x02\b\x01B\x17\n" +
 	"\x15_workflow_template_idB\x0f\n" +
 	"\r_date_createdB\x16\n" +
 	"\x14_date_created_stringB\x10\n" +
@@ -1333,7 +1357,9 @@ const file_domain_entity_workspace_workspace_proto_rawDesc = "" +
 	"\x04_tinB\x18\n" +
 	"\x16_tax_inclusive_pricingB\x1a\n" +
 	"\x18_tax_computation_enabledB\x14\n" +
-	"\x12_home_jurisdiction\"I\n" +
+	"\x12_home_jurisdictionB\x0e\n" +
+	"\f_date_formatB\x0e\n" +
+	"\f_time_format\"I\n" +
 	"\x16CreateWorkspaceRequest\x12/\n" +
 	"\x04data\x18\x01 \x01(\v2\x1b.domain.entity.v1.WorkspaceR\x04data\"\xa2\x01\n" +
 	"\x17CreateWorkspaceResponse\x12/\n" +

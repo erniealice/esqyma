@@ -46,6 +46,13 @@ message Workspace {
   optional bool tax_inclusive_pricing = 16;         // When true, PricePlan amounts are gross-of-SURCHARGE (extract). Default false (exclusive).
   optional bool tax_computation_enabled = 17;       // Master gate: when false, ComputeTaxesForRevenue is a no-op. Default true.
   optional string home_jurisdiction = 18;           // Jurisdiction scope for SURCHARGE lookups (e.g. "PH-NATIONAL"). Defaults to compliance_region for backward compat.
+
+  // Display format preferences — drive UI date/time rendering across the workspace.
+  // Values are Go time-layout strings (e.g. "Jan 2, 2006" or "2006-01-02") for
+  // date_format, and "3:04 PM" / "15:04" etc. for time_format.
+  // When empty the UI falls back to the locale default for the compliance_region.
+  optional string date_format = 19;                 // Preferred date display format (Go layout string)
+  optional string time_format = 20;                 // Preferred time display format (Go layout string)
 }
 
 service WorkspaceDomainService {
