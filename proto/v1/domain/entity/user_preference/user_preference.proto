@@ -1,0 +1,135 @@
+syntax = "proto3";
+
+package domain.entity.v1;
+
+option go_package = "github.com/erniealice/esqyma/golang/v1/domain/entity/user_preference";
+
+import "domain/common/error.proto";
+import "domain/common/search.proto";
+import "domain/common/filter.proto";
+import "domain/common/sort.proto";
+import "domain/common/pagination.proto";
+import "options/db.proto";
+
+// UserPreference stores per-user, per-workspace appearance, locale, and
+// notification preferences. One row per (user_id, workspace_id) pair enforced
+// by unique_together. Appearance fields mirror the theme-switcher.js localStorage
+// key names (lf-* prefix omitted here; resolved at read time by the view layer).
+message UserPreference {
+  option (options.v1.table).table = true;
+  option (options.v1.table).unique_together = "user_id,workspace_id";
+
+  string id                            = 1;
+  optional int64 date_created          = 2;
+  optional string date_created_string  = 3;
+  optional int64 date_modified         = 4;
+  optional string date_modified_string = 5;
+  bool active                          = 6 [(options.v1.db).default = "true"];
+
+  string user_id                       = 7 [(options.v1.db).references = "user",      (options.v1.db).index = true];
+  string workspace_id                  = 8 [(options.v1.db).references = "workspace", (options.v1.db).index = true];
+
+  // Appearance — mirrors theme-switcher.js localStorage keys
+  optional string theme                = 9;  // "light" | "dark" | "corporate-steel" | ...
+  optional string density              = 10; // "compact" | "comfortable" | "spacious"
+  optional string font                 = 11;
+  optional string radius               = 12;
+  optional string border               = 13;
+
+  // Locale
+  optional string language             = 14; // ISO 639-1 (e.g. "en")
+  optional string region               = 15; // ISO 3166-1 alpha-2 (e.g. "PH")
+  optional string timezone             = 16; // IANA tz name; fallback to workspace.timezone
+
+  // Notifications
+  optional bool notify_email_billing   = 17;
+  optional bool notify_email_account   = 18;
+  optional bool notify_inapp_mentions  = 19;
+}
+
+service UserPreferenceDomainService {
+  rpc CreateUserPreference(CreateUserPreferenceRequest) returns (CreateUserPreferenceResponse);
+  rpc ReadUserPreference(ReadUserPreferenceRequest) returns (ReadUserPreferenceResponse);
+  rpc UpdateUserPreference(UpdateUserPreferenceRequest) returns (UpdateUserPreferenceResponse);
+  rpc DeleteUserPreference(DeleteUserPreferenceRequest) returns (DeleteUserPreferenceResponse);
+  rpc ListUserPreferences(ListUserPreferencesRequest) returns (ListUserPreferencesResponse);
+  rpc GetUserPreferenceListPageData(GetUserPreferenceListPageDataRequest) returns (GetUserPreferenceListPageDataResponse);
+  rpc GetUserPreferenceItemPageData(GetUserPreferenceItemPageDataRequest) returns (GetUserPreferenceItemPageDataResponse);
+}
+
+message CreateUserPreferenceRequest {
+  UserPreference data = 1;
+}
+
+message CreateUserPreferenceResponse {
+  repeated UserPreference data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message ReadUserPreferenceRequest {
+  UserPreference data = 1;
+}
+
+message ReadUserPreferenceResponse {
+  repeated UserPreference data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message UpdateUserPreferenceRequest {
+  UserPreference data = 1;
+}
+
+message UpdateUserPreferenceResponse {
+  repeated UserPreference data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message DeleteUserPreferenceRequest {
+  UserPreference data = 1;
+}
+
+message DeleteUserPreferenceResponse {
+  bool success = 1;
+  optional domain.common.v1.Error error = 2;
+}
+
+message ListUserPreferencesRequest {
+  optional domain.common.v1.SearchRequest search = 1;
+  optional domain.common.v1.FilterRequest filters = 2;
+  optional domain.common.v1.SortRequest sort = 3;
+  optional domain.common.v1.PaginationRequest pagination = 4;
+}
+
+message ListUserPreferencesResponse {
+  repeated UserPreference data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message GetUserPreferenceListPageDataRequest {
+  optional domain.common.v1.PaginationRequest pagination = 1;
+  optional domain.common.v1.FilterRequest filters = 2;
+  optional domain.common.v1.SortRequest sort = 3;
+  optional domain.common.v1.SearchRequest search = 4;
+}
+
+message GetUserPreferenceListPageDataResponse {
+  repeated UserPreference user_preference_list = 1;
+  optional domain.common.v1.PaginationResponse pagination = 2;
+  repeated domain.common.v1.SearchResult search_results = 3;
+  bool success = 4;
+  optional domain.common.v1.Error error = 5;
+}
+
+message GetUserPreferenceItemPageDataRequest {
+  string user_preference_id = 1;
+}
+
+message GetUserPreferenceItemPageDataResponse {
+  optional UserPreference user_preference = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}

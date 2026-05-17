@@ -12,6 +12,7 @@ import "domain/common/search.proto";
 
 import "domain/subscription/subscription/subscription.proto";
 import "domain/treasury/collection_profile_collection_method/collection_profile_collection_method.proto";
+import "options/db.proto";
 
 message Collection {
   string id = 1;
@@ -51,6 +52,12 @@ message Collection {
 
   // GL traceability
   optional string journal_entry_id = 30;    // FK to journal_entry — set when collection is posted to ledger
+
+  // FK back-edge — FS-D shared-fund-sources plan (2026-05-17).
+  // Links this collection to the FundTransaction (kind=CASH_IN) that was inserted
+  // when this payment was deposited into a shared fund source. NULL when the collection
+  // is deposited to a regular cash account (no shared-fund involvement).
+  optional string fund_transaction_id = 31 [(options.v1.db).references = "fund_transaction"];
 }
 
 service CollectionDomainService {

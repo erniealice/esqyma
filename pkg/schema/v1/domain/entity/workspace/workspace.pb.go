@@ -59,10 +59,15 @@ type Workspace struct {
 	// Values are Go time-layout strings (e.g. "Jan 2, 2006" or "2006-01-02") for
 	// date_format, and "3:04 PM" / "15:04" etc. for time_format.
 	// When empty the UI falls back to the locale default for the compliance_region.
-	DateFormat    *string `protobuf:"bytes,19,opt,name=date_format,json=dateFormat,proto3,oneof" json:"date_format,omitempty"` // Preferred date display format (Go layout string)
-	TimeFormat    *string `protobuf:"bytes,20,opt,name=time_format,json=timeFormat,proto3,oneof" json:"time_format,omitempty"` // Preferred time display format (Go layout string)
-	unknownFields protoimpl.UnknownFields
-	sizeCache     protoimpl.SizeCache
+	DateFormat *string `protobuf:"bytes,19,opt,name=date_format,json=dateFormat,proto3,oneof" json:"date_format,omitempty"` // Preferred date display format (Go layout string)
+	TimeFormat *string `protobuf:"bytes,20,opt,name=time_format,json=timeFormat,proto3,oneof" json:"time_format,omitempty"` // Preferred time display format (Go layout string)
+	// FK back-edge — Wave 4 self-domain plan (2026-05-17).
+	// Convenience denorm: current Ichizen plan FK. The true source of truth is
+	// TenantSubscription.workspace_id — this field is a fast-path lookup for
+	// the /app/billing view. See architecture.md §3.5.
+	TenantSubscriptionId *string `protobuf:"bytes,21,opt,name=tenant_subscription_id,json=tenantSubscriptionId,proto3,oneof" json:"tenant_subscription_id,omitempty"`
+	unknownFields        protoimpl.UnknownFields
+	sizeCache            protoimpl.SizeCache
 }
 
 func (x *Workspace) Reset() {
@@ -231,6 +236,13 @@ func (x *Workspace) GetDateFormat() string {
 func (x *Workspace) GetTimeFormat() string {
 	if x != nil && x.TimeFormat != nil {
 		return *x.TimeFormat
+	}
+	return ""
+}
+
+func (x *Workspace) GetTenantSubscriptionId() string {
+	if x != nil && x.TenantSubscriptionId != nil {
+		return *x.TenantSubscriptionId
 	}
 	return ""
 }
@@ -1317,7 +1329,8 @@ var File_domain_entity_workspace_workspace_proto protoreflect.FileDescriptor
 
 const file_domain_entity_workspace_workspace_proto_rawDesc = "" +
 	"\n" +
-	"'domain/entity/workspace/workspace.proto\x12\x10domain.entity.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1adomain/common/search.proto\x1a\x10options/db.proto\"\x9c\t\n" +
+	"'domain/entity/workspace/workspace.proto\x12\x10domain.entity.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1adomain/common/search.proto\x1a\x10options/db.proto\"\x8f\n" +
+	"\n" +
 	"\tWorkspace\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12\x12\n" +
 	"\x04name\x18\x02 \x01(\tR\x04name\x12 \n" +
@@ -1344,7 +1357,9 @@ const file_domain_entity_workspace_workspace_proto_rawDesc = "" +
 	"\vdate_format\x18\x13 \x01(\tH\rR\n" +
 	"dateFormat\x88\x01\x01\x12$\n" +
 	"\vtime_format\x18\x14 \x01(\tH\x0eR\n" +
-	"timeFormat\x88\x01\x01:\x06\x8a\xb5\x18\x02\b\x01B\x17\n" +
+	"timeFormat\x88\x01\x01\x12V\n" +
+	"\x16tenant_subscription_id\x18\x15 \x01(\tB\x1b\x82\xb5\x18\x17\n" +
+	"\x13tenant_subscription\x18\x01H\x0fR\x14tenantSubscriptionId\x88\x01\x01:\x06\x8a\xb5\x18\x02\b\x01B\x17\n" +
 	"\x15_workflow_template_idB\x0f\n" +
 	"\r_date_createdB\x16\n" +
 	"\x14_date_created_stringB\x10\n" +
@@ -1359,7 +1374,8 @@ const file_domain_entity_workspace_workspace_proto_rawDesc = "" +
 	"\x18_tax_computation_enabledB\x14\n" +
 	"\x12_home_jurisdictionB\x0e\n" +
 	"\f_date_formatB\x0e\n" +
-	"\f_time_format\"I\n" +
+	"\f_time_formatB\x19\n" +
+	"\x17_tenant_subscription_id\"I\n" +
 	"\x16CreateWorkspaceRequest\x12/\n" +
 	"\x04data\x18\x01 \x01(\v2\x1b.domain.entity.v1.WorkspaceR\x04data\"\xa2\x01\n" +
 	"\x17CreateWorkspaceResponse\x12/\n" +

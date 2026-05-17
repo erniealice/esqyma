@@ -1,0 +1,122 @@
+syntax = "proto3";
+
+package domain.entity.v1;
+
+option go_package = "github.com/erniealice/esqyma/golang/v1/domain/entity/supplier_portal_grant";
+
+import "domain/common/error.proto";
+import "domain/common/search.proto";
+import "domain/common/filter.proto";
+import "domain/common/sort.proto";
+import "domain/common/pagination.proto";
+
+import "options/db.proto";
+
+// SupplierPortalGrant anchors sessions for PRINCIPAL_TYPE_SUPPLIER.
+// Mirror of ClientPortalGrant — a grant row means: user_id IS the supplier
+// (identified by supplier_id) in workspace_id.
+// Unique constraint: (workspace_id, supplier_id, user_id) — one active grant per
+// (workspace, supplier, user) tuple; role change = revoke + re-grant.
+message SupplierPortalGrant {
+  option (options.v1.table).table = true;
+  option (options.v1.table).unique_together = "workspace_id,supplier_id,user_id";
+
+  string id                            = 1;
+  string workspace_id                  = 2 [(options.v1.db).references = "workspace", (options.v1.db).index = true];
+  string user_id                       = 3 [(options.v1.db).references = "user",      (options.v1.db).index = true];
+  string supplier_id                   = 4 [(options.v1.db).references = "supplier",  (options.v1.db).index = true];
+  string role_id                       = 5 [(options.v1.db).references = "role",      (options.v1.db).index = true];
+  string granted_by_user_id            = 6 [(options.v1.db).references = "user"];
+  optional int64 date_created          = 7;
+  optional string date_created_string  = 8;
+  optional int64 date_modified         = 9;
+  optional string date_modified_string = 10;
+  bool active                          = 11 [(options.v1.db).default = "true"];
+}
+
+service SupplierPortalGrantDomainService {
+  rpc CreateSupplierPortalGrant(CreateSupplierPortalGrantRequest) returns (CreateSupplierPortalGrantResponse);
+  rpc ReadSupplierPortalGrant(ReadSupplierPortalGrantRequest) returns (ReadSupplierPortalGrantResponse);
+  rpc UpdateSupplierPortalGrant(UpdateSupplierPortalGrantRequest) returns (UpdateSupplierPortalGrantResponse);
+  rpc DeleteSupplierPortalGrant(DeleteSupplierPortalGrantRequest) returns (DeleteSupplierPortalGrantResponse);
+  rpc ListSupplierPortalGrants(ListSupplierPortalGrantsRequest) returns (ListSupplierPortalGrantsResponse);
+  rpc GetSupplierPortalGrantListPageData(GetSupplierPortalGrantListPageDataRequest) returns (GetSupplierPortalGrantListPageDataResponse);
+  rpc GetSupplierPortalGrantItemPageData(GetSupplierPortalGrantItemPageDataRequest) returns (GetSupplierPortalGrantItemPageDataResponse);
+}
+
+message CreateSupplierPortalGrantRequest {
+  SupplierPortalGrant data = 1;
+}
+
+message CreateSupplierPortalGrantResponse {
+  repeated SupplierPortalGrant data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message ReadSupplierPortalGrantRequest {
+  SupplierPortalGrant data = 1;
+}
+
+message ReadSupplierPortalGrantResponse {
+  repeated SupplierPortalGrant data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message UpdateSupplierPortalGrantRequest {
+  SupplierPortalGrant data = 1;
+}
+
+message UpdateSupplierPortalGrantResponse {
+  repeated SupplierPortalGrant data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message DeleteSupplierPortalGrantRequest {
+  SupplierPortalGrant data = 1;
+}
+
+message DeleteSupplierPortalGrantResponse {
+  bool success = 1;
+  optional domain.common.v1.Error error = 2;
+}
+
+message ListSupplierPortalGrantsRequest {
+  optional domain.common.v1.SearchRequest search = 1;
+  optional domain.common.v1.FilterRequest filters = 2;
+  optional domain.common.v1.SortRequest sort = 3;
+  optional domain.common.v1.PaginationRequest pagination = 4;
+}
+
+message ListSupplierPortalGrantsResponse {
+  repeated SupplierPortalGrant data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message GetSupplierPortalGrantListPageDataRequest {
+  optional domain.common.v1.PaginationRequest pagination = 1;
+  optional domain.common.v1.FilterRequest filters = 2;
+  optional domain.common.v1.SortRequest sort = 3;
+  optional domain.common.v1.SearchRequest search = 4;
+}
+
+message GetSupplierPortalGrantListPageDataResponse {
+  repeated SupplierPortalGrant supplier_portal_grant_list = 1;
+  optional domain.common.v1.PaginationResponse pagination = 2;
+  repeated domain.common.v1.SearchResult search_results = 3;
+  bool success = 4;
+  optional domain.common.v1.Error error = 5;
+}
+
+message GetSupplierPortalGrantItemPageDataRequest {
+  string supplier_portal_grant_id = 1;
+}
+
+message GetSupplierPortalGrantItemPageDataResponse {
+  optional SupplierPortalGrant supplier_portal_grant = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}

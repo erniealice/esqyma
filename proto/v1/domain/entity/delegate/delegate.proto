@@ -12,6 +12,7 @@ import "domain/common/pagination.proto";
 
 import "domain/entity/user/user.proto";
 import "domain/entity/delegate_client/delegate_client.proto";
+import "domain/entity/delegate_supplier/delegate_supplier.proto";
 import "options/db.proto";
 
 message Delegate {
@@ -26,6 +27,7 @@ message Delegate {
   optional string date_modified_string = 7;
   bool active = 8 [(options.v1.db).default = "true"];
   repeated DelegateClient delegate_clients = 9;
+  repeated DelegateSupplier delegate_suppliers = 10;
 }
 
 service DelegateDomainService {

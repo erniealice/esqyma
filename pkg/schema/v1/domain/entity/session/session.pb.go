@@ -8,6 +8,7 @@ package entityv1
 
 import (
 	common "github.com/erniealice/esqyma/pkg/schema/v1/domain/common"
+	principal_type "github.com/erniealice/esqyma/pkg/schema/v1/domain/entity/principal_type"
 	_ "github.com/erniealice/esqyma/pkg/schema/v1/options"
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
@@ -47,8 +48,15 @@ type Session struct {
 	DateCreatedString  *string `protobuf:"bytes,9,opt,name=date_created_string,json=dateCreatedString,proto3,oneof" json:"date_created_string,omitempty"`
 	DateModified       *int64  `protobuf:"varint,10,opt,name=date_modified,json=dateModified,proto3,oneof" json:"date_modified,omitempty"`
 	DateModifiedString *string `protobuf:"bytes,11,opt,name=date_modified_string,json=dateModifiedString,proto3,oneof" json:"date_modified_string,omitempty"`
-	unknownFields      protoimpl.UnknownFields
-	sizeCache          protoimpl.SizeCache
+	// Multi-principal session context — populated at login time.
+	// All optional for migration safety (existing rows have NULL).
+	PrincipalType       *principal_type.PrincipalType `protobuf:"varint,12,opt,name=principal_type,json=principalType,proto3,enum=domain.entity.v1.PrincipalType,oneof" json:"principal_type,omitempty"`
+	PrincipalId         *string                       `protobuf:"bytes,13,opt,name=principal_id,json=principalId,proto3,oneof" json:"principal_id,omitempty"`
+	ActingAsClientId    *string                       `protobuf:"bytes,14,opt,name=acting_as_client_id,json=actingAsClientId,proto3,oneof" json:"acting_as_client_id,omitempty"`
+	ActingAsSupplierId  *string                       `protobuf:"bytes,15,opt,name=acting_as_supplier_id,json=actingAsSupplierId,proto3,oneof" json:"acting_as_supplier_id,omitempty"`
+	ActingAsWorkspaceId *string                       `protobuf:"bytes,16,opt,name=acting_as_workspace_id,json=actingAsWorkspaceId,proto3,oneof" json:"acting_as_workspace_id,omitempty"`
+	unknownFields       protoimpl.UnknownFields
+	sizeCache           protoimpl.SizeCache
 }
 
 func (x *Session) Reset() {
@@ -154,6 +162,41 @@ func (x *Session) GetDateModified() int64 {
 func (x *Session) GetDateModifiedString() string {
 	if x != nil && x.DateModifiedString != nil {
 		return *x.DateModifiedString
+	}
+	return ""
+}
+
+func (x *Session) GetPrincipalType() principal_type.PrincipalType {
+	if x != nil && x.PrincipalType != nil {
+		return *x.PrincipalType
+	}
+	return principal_type.PrincipalType(0)
+}
+
+func (x *Session) GetPrincipalId() string {
+	if x != nil && x.PrincipalId != nil {
+		return *x.PrincipalId
+	}
+	return ""
+}
+
+func (x *Session) GetActingAsClientId() string {
+	if x != nil && x.ActingAsClientId != nil {
+		return *x.ActingAsClientId
+	}
+	return ""
+}
+
+func (x *Session) GetActingAsSupplierId() string {
+	if x != nil && x.ActingAsSupplierId != nil {
+		return *x.ActingAsSupplierId
+	}
+	return ""
+}
+
+func (x *Session) GetActingAsWorkspaceId() string {
+	if x != nil && x.ActingAsWorkspaceId != nil {
+		return *x.ActingAsWorkspaceId
 	}
 	return ""
 }
@@ -698,7 +741,7 @@ var File_domain_entity_session_session_proto protoreflect.FileDescriptor
 
 const file_domain_entity_session_session_proto_rawDesc = "" +
 	"\n" +
-	"#domain/entity/session/session.proto\x12\x10domain.entity.v1\x1a\x19domain/common/error.proto\x1a\x1adomain/common/search.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1edomain/common/pagination.proto\x1a\x10options/db.proto\"\xb7\x04\n" +
+	"#domain/entity/session/session.proto\x12\x10domain.entity.v1\x1a\x19domain/common/error.proto\x1a\x1adomain/common/search.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1edomain/common/pagination.proto\x1a1domain/entity/principal_type/principal_type.proto\x1a\x10options/db.proto\"\xd4\a\n" +
 	"\aSession\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12\x1f\n" +
 	"\auser_id\x18\x02 \x01(\tB\x06\x82\xb5\x18\x02\x18\x01R\x06userId\x12\x1e\n" +
@@ -713,13 +756,25 @@ const file_domain_entity_session_session_proto_rawDesc = "" +
 	"\x13date_created_string\x18\t \x01(\tH\x03R\x11dateCreatedString\x88\x01\x01\x12(\n" +
 	"\rdate_modified\x18\n" +
 	" \x01(\x03H\x04R\fdateModified\x88\x01\x01\x125\n" +
-	"\x14date_modified_string\x18\v \x01(\tH\x05R\x12dateModifiedString\x88\x01\x01:\x06\x8a\xb5\x18\x02\b\x01B\x14\n" +
+	"\x14date_modified_string\x18\v \x01(\tH\x05R\x12dateModifiedString\x88\x01\x01\x12K\n" +
+	"\x0eprincipal_type\x18\f \x01(\x0e2\x1f.domain.entity.v1.PrincipalTypeH\x06R\rprincipalType\x88\x01\x01\x12&\n" +
+	"\fprincipal_id\x18\r \x01(\tH\aR\vprincipalId\x88\x01\x01\x122\n" +
+	"\x13acting_as_client_id\x18\x0e \x01(\tH\bR\x10actingAsClientId\x88\x01\x01\x126\n" +
+	"\x15acting_as_supplier_id\x18\x0f \x01(\tH\tR\x12actingAsSupplierId\x88\x01\x01\x12I\n" +
+	"\x16acting_as_workspace_id\x18\x10 \x01(\tB\x0f\x82\xb5\x18\v\n" +
+	"\tworkspaceH\n" +
+	"R\x13actingAsWorkspaceId\x88\x01\x01:\x06\x8a\xb5\x18\x02\b\x01B\x14\n" +
 	"\x12_workspace_user_idB\x0f\n" +
 	"\r_workspace_idB\x0f\n" +
 	"\r_date_createdB\x16\n" +
 	"\x14_date_created_stringB\x10\n" +
 	"\x0e_date_modifiedB\x17\n" +
-	"\x15_date_modified_string\"E\n" +
+	"\x15_date_modified_stringB\x11\n" +
+	"\x0f_principal_typeB\x0f\n" +
+	"\r_principal_idB\x16\n" +
+	"\x14_acting_as_client_idB\x18\n" +
+	"\x16_acting_as_supplier_idB\x19\n" +
+	"\x17_acting_as_workspace_id\"E\n" +
 	"\x14CreateSessionRequest\x12-\n" +
 	"\x04data\x18\x01 \x01(\v2\x19.domain.entity.v1.SessionR\x04data\"\x9e\x01\n" +
 	"\x15CreateSessionResponse\x12-\n" +
@@ -786,56 +841,58 @@ func file_domain_entity_session_session_proto_rawDescGZIP() []byte {
 
 var file_domain_entity_session_session_proto_msgTypes = make([]protoimpl.MessageInfo, 11)
 var file_domain_entity_session_session_proto_goTypes = []any{
-	(*Session)(nil),                  // 0: domain.entity.v1.Session
-	(*CreateSessionRequest)(nil),     // 1: domain.entity.v1.CreateSessionRequest
-	(*CreateSessionResponse)(nil),    // 2: domain.entity.v1.CreateSessionResponse
-	(*ReadSessionRequest)(nil),       // 3: domain.entity.v1.ReadSessionRequest
-	(*ReadSessionResponse)(nil),      // 4: domain.entity.v1.ReadSessionResponse
-	(*UpdateSessionRequest)(nil),     // 5: domain.entity.v1.UpdateSessionRequest
-	(*UpdateSessionResponse)(nil),    // 6: domain.entity.v1.UpdateSessionResponse
-	(*DeleteSessionRequest)(nil),     // 7: domain.entity.v1.DeleteSessionRequest
-	(*DeleteSessionResponse)(nil),    // 8: domain.entity.v1.DeleteSessionResponse
-	(*ListSessionsRequest)(nil),      // 9: domain.entity.v1.ListSessionsRequest
-	(*ListSessionsResponse)(nil),     // 10: domain.entity.v1.ListSessionsResponse
-	(*common.Error)(nil),             // 11: domain.common.v1.Error
-	(*common.SearchRequest)(nil),     // 12: domain.common.v1.SearchRequest
-	(*common.FilterRequest)(nil),     // 13: domain.common.v1.FilterRequest
-	(*common.SortRequest)(nil),       // 14: domain.common.v1.SortRequest
-	(*common.PaginationRequest)(nil), // 15: domain.common.v1.PaginationRequest
+	(*Session)(nil),                   // 0: domain.entity.v1.Session
+	(*CreateSessionRequest)(nil),      // 1: domain.entity.v1.CreateSessionRequest
+	(*CreateSessionResponse)(nil),     // 2: domain.entity.v1.CreateSessionResponse
+	(*ReadSessionRequest)(nil),        // 3: domain.entity.v1.ReadSessionRequest
+	(*ReadSessionResponse)(nil),       // 4: domain.entity.v1.ReadSessionResponse
+	(*UpdateSessionRequest)(nil),      // 5: domain.entity.v1.UpdateSessionRequest
+	(*UpdateSessionResponse)(nil),     // 6: domain.entity.v1.UpdateSessionResponse
+	(*DeleteSessionRequest)(nil),      // 7: domain.entity.v1.DeleteSessionRequest
+	(*DeleteSessionResponse)(nil),     // 8: domain.entity.v1.DeleteSessionResponse
+	(*ListSessionsRequest)(nil),       // 9: domain.entity.v1.ListSessionsRequest
+	(*ListSessionsResponse)(nil),      // 10: domain.entity.v1.ListSessionsResponse
+	(principal_type.PrincipalType)(0), // 11: domain.entity.v1.PrincipalType
+	(*common.Error)(nil),              // 12: domain.common.v1.Error
+	(*common.SearchRequest)(nil),      // 13: domain.common.v1.SearchRequest
+	(*common.FilterRequest)(nil),      // 14: domain.common.v1.FilterRequest
+	(*common.SortRequest)(nil),        // 15: domain.common.v1.SortRequest
+	(*common.PaginationRequest)(nil),  // 16: domain.common.v1.PaginationRequest
 }
 var file_domain_entity_session_session_proto_depIdxs = []int32{
-	0,  // 0: domain.entity.v1.CreateSessionRequest.data:type_name -> domain.entity.v1.Session
-	0,  // 1: domain.entity.v1.CreateSessionResponse.data:type_name -> domain.entity.v1.Session
-	11, // 2: domain.entity.v1.CreateSessionResponse.error:type_name -> domain.common.v1.Error
-	0,  // 3: domain.entity.v1.ReadSessionRequest.data:type_name -> domain.entity.v1.Session
-	0,  // 4: domain.entity.v1.ReadSessionResponse.data:type_name -> domain.entity.v1.Session
-	11, // 5: domain.entity.v1.ReadSessionResponse.error:type_name -> domain.common.v1.Error
-	0,  // 6: domain.entity.v1.UpdateSessionRequest.data:type_name -> domain.entity.v1.Session
-	0,  // 7: domain.entity.v1.UpdateSessionResponse.data:type_name -> domain.entity.v1.Session
-	11, // 8: domain.entity.v1.UpdateSessionResponse.error:type_name -> domain.common.v1.Error
-	0,  // 9: domain.entity.v1.DeleteSessionRequest.data:type_name -> domain.entity.v1.Session
-	11, // 10: domain.entity.v1.DeleteSessionResponse.error:type_name -> domain.common.v1.Error
-	12, // 11: domain.entity.v1.ListSessionsRequest.search:type_name -> domain.common.v1.SearchRequest
-	13, // 12: domain.entity.v1.ListSessionsRequest.filters:type_name -> domain.common.v1.FilterRequest
-	14, // 13: domain.entity.v1.ListSessionsRequest.sort:type_name -> domain.common.v1.SortRequest
-	15, // 14: domain.entity.v1.ListSessionsRequest.pagination:type_name -> domain.common.v1.PaginationRequest
-	0,  // 15: domain.entity.v1.ListSessionsResponse.data:type_name -> domain.entity.v1.Session
-	11, // 16: domain.entity.v1.ListSessionsResponse.error:type_name -> domain.common.v1.Error
-	1,  // 17: domain.entity.v1.SessionDomainService.CreateSession:input_type -> domain.entity.v1.CreateSessionRequest
-	3,  // 18: domain.entity.v1.SessionDomainService.ReadSession:input_type -> domain.entity.v1.ReadSessionRequest
-	5,  // 19: domain.entity.v1.SessionDomainService.UpdateSession:input_type -> domain.entity.v1.UpdateSessionRequest
-	7,  // 20: domain.entity.v1.SessionDomainService.DeleteSession:input_type -> domain.entity.v1.DeleteSessionRequest
-	9,  // 21: domain.entity.v1.SessionDomainService.ListSessions:input_type -> domain.entity.v1.ListSessionsRequest
-	2,  // 22: domain.entity.v1.SessionDomainService.CreateSession:output_type -> domain.entity.v1.CreateSessionResponse
-	4,  // 23: domain.entity.v1.SessionDomainService.ReadSession:output_type -> domain.entity.v1.ReadSessionResponse
-	6,  // 24: domain.entity.v1.SessionDomainService.UpdateSession:output_type -> domain.entity.v1.UpdateSessionResponse
-	8,  // 25: domain.entity.v1.SessionDomainService.DeleteSession:output_type -> domain.entity.v1.DeleteSessionResponse
-	10, // 26: domain.entity.v1.SessionDomainService.ListSessions:output_type -> domain.entity.v1.ListSessionsResponse
-	22, // [22:27] is the sub-list for method output_type
-	17, // [17:22] is the sub-list for method input_type
-	17, // [17:17] is the sub-list for extension type_name
-	17, // [17:17] is the sub-list for extension extendee
-	0,  // [0:17] is the sub-list for field type_name
+	11, // 0: domain.entity.v1.Session.principal_type:type_name -> domain.entity.v1.PrincipalType
+	0,  // 1: domain.entity.v1.CreateSessionRequest.data:type_name -> domain.entity.v1.Session
+	0,  // 2: domain.entity.v1.CreateSessionResponse.data:type_name -> domain.entity.v1.Session
+	12, // 3: domain.entity.v1.CreateSessionResponse.error:type_name -> domain.common.v1.Error
+	0,  // 4: domain.entity.v1.ReadSessionRequest.data:type_name -> domain.entity.v1.Session
+	0,  // 5: domain.entity.v1.ReadSessionResponse.data:type_name -> domain.entity.v1.Session
+	12, // 6: domain.entity.v1.ReadSessionResponse.error:type_name -> domain.common.v1.Error
+	0,  // 7: domain.entity.v1.UpdateSessionRequest.data:type_name -> domain.entity.v1.Session
+	0,  // 8: domain.entity.v1.UpdateSessionResponse.data:type_name -> domain.entity.v1.Session
+	12, // 9: domain.entity.v1.UpdateSessionResponse.error:type_name -> domain.common.v1.Error
+	0,  // 10: domain.entity.v1.DeleteSessionRequest.data:type_name -> domain.entity.v1.Session
+	12, // 11: domain.entity.v1.DeleteSessionResponse.error:type_name -> domain.common.v1.Error
+	13, // 12: domain.entity.v1.ListSessionsRequest.search:type_name -> domain.common.v1.SearchRequest
+	14, // 13: domain.entity.v1.ListSessionsRequest.filters:type_name -> domain.common.v1.FilterRequest
+	15, // 14: domain.entity.v1.ListSessionsRequest.sort:type_name -> domain.common.v1.SortRequest
+	16, // 15: domain.entity.v1.ListSessionsRequest.pagination:type_name -> domain.common.v1.PaginationRequest
+	0,  // 16: domain.entity.v1.ListSessionsResponse.data:type_name -> domain.entity.v1.Session
+	12, // 17: domain.entity.v1.ListSessionsResponse.error:type_name -> domain.common.v1.Error
+	1,  // 18: domain.entity.v1.SessionDomainService.CreateSession:input_type -> domain.entity.v1.CreateSessionRequest
+	3,  // 19: domain.entity.v1.SessionDomainService.ReadSession:input_type -> domain.entity.v1.ReadSessionRequest
+	5,  // 20: domain.entity.v1.SessionDomainService.UpdateSession:input_type -> domain.entity.v1.UpdateSessionRequest
+	7,  // 21: domain.entity.v1.SessionDomainService.DeleteSession:input_type -> domain.entity.v1.DeleteSessionRequest
+	9,  // 22: domain.entity.v1.SessionDomainService.ListSessions:input_type -> domain.entity.v1.ListSessionsRequest
+	2,  // 23: domain.entity.v1.SessionDomainService.CreateSession:output_type -> domain.entity.v1.CreateSessionResponse
+	4,  // 24: domain.entity.v1.SessionDomainService.ReadSession:output_type -> domain.entity.v1.ReadSessionResponse
+	6,  // 25: domain.entity.v1.SessionDomainService.UpdateSession:output_type -> domain.entity.v1.UpdateSessionResponse
+	8,  // 26: domain.entity.v1.SessionDomainService.DeleteSession:output_type -> domain.entity.v1.DeleteSessionResponse
+	10, // 27: domain.entity.v1.SessionDomainService.ListSessions:output_type -> domain.entity.v1.ListSessionsResponse
+	23, // [23:28] is the sub-list for method output_type
+	18, // [18:23] is the sub-list for method input_type
+	18, // [18:18] is the sub-list for extension type_name
+	18, // [18:18] is the sub-list for extension extendee
+	0,  // [0:18] is the sub-list for field type_name
 }
 
 func init() { file_domain_entity_session_session_proto_init() }

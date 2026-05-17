@@ -81,8 +81,12 @@ type Revenue struct {
 	BillingAmount       *int64  `protobuf:"varint,44,opt,name=billing_amount,json=billingAmount,proto3,oneof" json:"billing_amount,omitempty"`                       // Original amount in billing_currency centavos (before FX conversion)
 	ForexRateMicroUnits *int64  `protobuf:"varint,45,opt,name=forex_rate_micro_units,json=forexRateMicroUnits,proto3,oneof" json:"forex_rate_micro_units,omitempty"` // Snapshotted FX rate at recognition (functional per 1 billing unit * 1_000_000)
 	ForexRateSource     *string `protobuf:"bytes,46,opt,name=forex_rate_source,json=forexRateSource,proto3,oneof" json:"forex_rate_source,omitempty"`                // "operator", "bsp_ref:<date>" — source of the FX rate used
-	unknownFields       protoimpl.UnknownFields
-	sizeCache           protoimpl.SizeCache
+	// FK back-edge — Wave 4 self-domain plan (2026-05-17).
+	// Audit snapshot of the collection profile active at recognition time.
+	// Stored as string (no DB FK constraint) to survive profile edits — see architecture.md §3.5.
+	CollectionProfileIdSnapshot *string `protobuf:"bytes,47,opt,name=collection_profile_id_snapshot,json=collectionProfileIdSnapshot,proto3,oneof" json:"collection_profile_id_snapshot,omitempty"`
+	unknownFields               protoimpl.UnknownFields
+	sizeCache                   protoimpl.SizeCache
 }
 
 func (x *Revenue) Reset() {
@@ -412,6 +416,13 @@ func (x *Revenue) GetForexRateMicroUnits() int64 {
 func (x *Revenue) GetForexRateSource() string {
 	if x != nil && x.ForexRateSource != nil {
 		return *x.ForexRateSource
+	}
+	return ""
+}
+
+func (x *Revenue) GetCollectionProfileIdSnapshot() string {
+	if x != nil && x.CollectionProfileIdSnapshot != nil {
+		return *x.CollectionProfileIdSnapshot
 	}
 	return ""
 }
@@ -1741,7 +1752,7 @@ var File_domain_revenue_revenue_revenue_proto protoreflect.FileDescriptor
 
 const file_domain_revenue_revenue_revenue_proto_rawDesc = "" +
 	"\n" +
-	"$domain/revenue/revenue/revenue.proto\x12\x11domain.revenue.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/search.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a!domain/entity/client/client.proto\x1a%domain/entity/location/location.proto\x1a-domain/entity/payment_term/payment_term.proto\x1a\x10options/db.proto\"\xd5\x15\n" +
+	"$domain/revenue/revenue/revenue.proto\x12\x11domain.revenue.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/search.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a!domain/entity/client/client.proto\x1a%domain/entity/location/location.proto\x1a-domain/entity/payment_term/payment_term.proto\x1a\x10options/db.proto\"\xc2\x16\n" +
 	"\aRevenue\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12&\n" +
 	"\fdate_created\x18\x02 \x01(\x03H\x00R\vdateCreated\x88\x01\x01\x123\n" +
@@ -1792,7 +1803,8 @@ const file_domain_revenue_revenue_revenue_proto_rawDesc = "" +
 	"\x10billing_currency\x18+ \x01(\tH\x1fR\x0fbillingCurrency\x88\x01\x01\x12*\n" +
 	"\x0ebilling_amount\x18, \x01(\x03H R\rbillingAmount\x88\x01\x01\x128\n" +
 	"\x16forex_rate_micro_units\x18- \x01(\x03H!R\x13forexRateMicroUnits\x88\x01\x01\x12/\n" +
-	"\x11forex_rate_source\x18. \x01(\tH\"R\x0fforexRateSource\x88\x01\x01B\x0f\n" +
+	"\x11forex_rate_source\x18. \x01(\tH\"R\x0fforexRateSource\x88\x01\x01\x12H\n" +
+	"\x1ecollection_profile_id_snapshot\x18/ \x01(\tH#R\x1bcollectionProfileIdSnapshot\x88\x01\x01B\x0f\n" +
 	"\r_date_createdB\x16\n" +
 	"\x14_date_created_stringB\x10\n" +
 	"\x0e_date_modifiedB\x17\n" +
@@ -1827,7 +1839,8 @@ const file_domain_revenue_revenue_revenue_proto_rawDesc = "" +
 	"\x11_billing_currencyB\x11\n" +
 	"\x0f_billing_amountB\x19\n" +
 	"\x17_forex_rate_micro_unitsB\x14\n" +
-	"\x12_forex_rate_sourceJ\x04\b\v\x10\fJ\x04\b\x1e\x10\x1f\"\x91\x03\n" +
+	"\x12_forex_rate_sourceB!\n" +
+	"\x1f_collection_profile_id_snapshotJ\x04\b\v\x10\fJ\x04\b\x1e\x10\x1f\"\x91\x03\n" +
 	"\x0ePreviewTaxLine\x12\x1c\n" +
 	"\tdirection\x18\x01 \x01(\tR\tdirection\x12*\n" +
 	"\x11tax_kind_snapshot\x18\x02 \x01(\tR\x0ftaxKindSnapshot\x12;\n" +

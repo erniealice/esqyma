@@ -1,0 +1,142 @@
+syntax = "proto3";
+
+package domain.tenancy.v1;
+
+option go_package = "github.com/erniealice/esqyma/golang/v1/domain/tenancy/tenant_subscription";
+
+import "domain/common/error.proto";
+import "domain/common/search.proto";
+import "domain/common/filter.proto";
+import "domain/common/sort.proto";
+import "domain/common/pagination.proto";
+import "options/db.proto";
+
+// TenantSubscriptionStatus represents the billing lifecycle of a workspace's
+// Ichizen platform subscription. One active subscription per workspace enforced
+// by a partial unique index on (workspace_id) WHERE status IN (TRIAL, ACTIVE,
+// PAST_DUE, SUSPENDED).
+enum TenantSubscriptionStatus {
+  TENANT_SUBSCRIPTION_STATUS_UNSPECIFIED = 0;
+  TENANT_SUBSCRIPTION_STATUS_TRIAL       = 1;
+  TENANT_SUBSCRIPTION_STATUS_ACTIVE      = 2;
+  TENANT_SUBSCRIPTION_STATUS_PAST_DUE    = 3;
+  TENANT_SUBSCRIPTION_STATUS_SUSPENDED   = 4;
+  TENANT_SUBSCRIPTION_STATUS_CANCELLED   = 5;
+}
+
+message TenantSubscription {
+  option (options.v1.table).table = true;
+
+  string id                            = 1;
+  optional int64 date_created          = 2;
+  optional string date_created_string  = 3;
+  optional int64 date_modified         = 4;
+  optional string date_modified_string = 5;
+  bool active                          = 6 [(options.v1.db).default = "true"];
+
+  string workspace_id                  = 7 [(options.v1.db).references = "workspace", (options.v1.db).index = true];
+
+  string plan_code                     = 8;  // "starter" | "professional" | "scale" — opaque, set by Ichizen
+  string plan_display_name             = 9;  // denormed for UI
+
+  TenantSubscriptionStatus status      = 10;
+  string billing_cycle                 = 11; // "monthly" | "annual"
+  int64 cycle_amount                   = 12; // centavos
+  string currency                      = 13; // ISO 4217
+
+  string period_start                  = 14; // ISO 8601 date
+  string period_end                    = 15; // ISO 8601 date
+  optional string trial_end            = 16; // ISO 8601 date — null when not in trial
+  optional string cancelled_at         = 17;
+
+  optional string default_payment_method_id = 18 [(options.v1.db).references = "tenant_payment_method", (options.v1.db).index = true];
+
+  optional string external_ref         = 19; // Ichizen master billing system ref
+}
+
+service TenantSubscriptionDomainService {
+  rpc CreateTenantSubscription(CreateTenantSubscriptionRequest) returns (CreateTenantSubscriptionResponse);
+  rpc ReadTenantSubscription(ReadTenantSubscriptionRequest) returns (ReadTenantSubscriptionResponse);
+  rpc UpdateTenantSubscription(UpdateTenantSubscriptionRequest) returns (UpdateTenantSubscriptionResponse);
+  rpc DeleteTenantSubscription(DeleteTenantSubscriptionRequest) returns (DeleteTenantSubscriptionResponse);
+  rpc ListTenantSubscriptions(ListTenantSubscriptionsRequest) returns (ListTenantSubscriptionsResponse);
+  rpc GetTenantSubscriptionListPageData(GetTenantSubscriptionListPageDataRequest) returns (GetTenantSubscriptionListPageDataResponse);
+  rpc GetTenantSubscriptionItemPageData(GetTenantSubscriptionItemPageDataRequest) returns (GetTenantSubscriptionItemPageDataResponse);
+}
+
+message CreateTenantSubscriptionRequest {
+  TenantSubscription data = 1;
+}
+
+message CreateTenantSubscriptionResponse {
+  repeated TenantSubscription data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message ReadTenantSubscriptionRequest {
+  TenantSubscription data = 1;
+}
+
+message ReadTenantSubscriptionResponse {
+  repeated TenantSubscription data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message UpdateTenantSubscriptionRequest {
+  TenantSubscription data = 1;
+}
+
+message UpdateTenantSubscriptionResponse {
+  repeated TenantSubscription data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message DeleteTenantSubscriptionRequest {
+  TenantSubscription data = 1;
+}
+
+message DeleteTenantSubscriptionResponse {
+  bool success = 1;
+  optional domain.common.v1.Error error = 2;
+}
+
+message ListTenantSubscriptionsRequest {
+  optional domain.common.v1.SearchRequest search = 1;
+  optional domain.common.v1.FilterRequest filters = 2;
+  optional domain.common.v1.SortRequest sort = 3;
+  optional domain.common.v1.PaginationRequest pagination = 4;
+}
+
+message ListTenantSubscriptionsResponse {
+  repeated TenantSubscription data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message GetTenantSubscriptionListPageDataRequest {
+  optional domain.common.v1.PaginationRequest pagination = 1;
+  optional domain.common.v1.FilterRequest filters = 2;
+  optional domain.common.v1.SortRequest sort = 3;
+  optional domain.common.v1.SearchRequest search = 4;
+}
+
+message GetTenantSubscriptionListPageDataResponse {
+  repeated TenantSubscription tenant_subscription_list = 1;
+  optional domain.common.v1.PaginationResponse pagination = 2;
+  repeated domain.common.v1.SearchResult search_results = 3;
+  bool success = 4;
+  optional domain.common.v1.Error error = 5;
+}
+
+message GetTenantSubscriptionItemPageDataRequest {
+  string tenant_subscription_id = 1;
+}
+
+message GetTenantSubscriptionItemPageDataResponse {
+  optional TenantSubscription tenant_subscription = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}

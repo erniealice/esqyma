@@ -1,0 +1,212 @@
+syntax = "proto3";
+
+package domain.funding.v1;
+
+option go_package = "github.com/erniealice/esqyma/golang/v1/domain/funding/fund";
+
+import "domain/common/error.proto";
+import "domain/common/search.proto";
+import "domain/common/filter.proto";
+import "domain/common/sort.proto";
+import "domain/common/pagination.proto";
+import "options/db.proto";
+
+// FundStatus — lifecycle of a Fund row.
+enum FundStatus {
+  FUND_STATUS_UNSPECIFIED = 0;
+  FUND_STATUS_DRAFT       = 1;
+  FUND_STATUS_ACTIVE      = 2;
+  FUND_STATUS_SUSPENDED   = 3;
+  FUND_STATUS_ARCHIVED    = 4;
+}
+
+// FundKind — the physical or financial instrument type.
+enum FundKind {
+  FUND_KIND_UNSPECIFIED  = 0;
+  FUND_KIND_CASH_ON_HAND = 1;
+  FUND_KIND_BANK_ACCOUNT = 2;
+  FUND_KIND_PETTY_CASH   = 3;
+  FUND_KIND_CREDIT_LINE  = 4;
+  FUND_KIND_CREDIT_CARD  = 5;
+  FUND_KIND_PREPAID_CARD = 6;
+  FUND_KIND_MOBILE_MONEY = 7;  // GCash / Maya / M-Pesa-style wallet
+}
+
+// FundOwnerPartyType — polymorphic owner of a Fund.
+// A USER owns a personal card; a WORKSPACE owns a corporate card; ADMIN owns a
+// platform service-account-style source.
+enum FundOwnerPartyType {
+  FUND_OWNER_PARTY_TYPE_UNSPECIFIED = 0;
+  FUND_OWNER_PARTY_TYPE_USER        = 1;
+  FUND_OWNER_PARTY_TYPE_WORKSPACE   = 2;
+  FUND_OWNER_PARTY_TYPE_ADMIN       = 3;
+}
+
+// Fund — cross-workspace global primitive.
+//
+// INTENTIONALLY has NO workspace_id. This is the 6th global table alongside
+// user / workspace / workspace_user / workspace_user_role / admin.
+// Every workspace read of a Fund row must be mediated by the fund/access guard
+// (funding/fund/access.go in espyna-golang) which checks for an active
+// FundAllocation before granting visibility.
+//
+// INTENTIONALLY has NO balance fields. Balances are computed projections over
+// FundTransaction rows (event-sourced). See architecture.md §3.3.
+//
+// Partial unique index (enforced by migration):
+//   (owner_party_type, owner_party_id, name) WHERE status != 'ARCHIVED'
+message Fund {
+  option (options.v1.table).table = true;
+
+  string id = 1;
+  optional int64 date_created = 2;
+  optional string date_created_string = 3;
+  optional int64 date_modified = 4;
+  optional string date_modified_string = 5;
+  bool active = 6 [(options.v1.db).default = "true"];
+
+  // Identity
+  string name = 7;                    // "Personal Visa", "Acme Operating Account"
+  optional string description = 8;
+  FundKind kind = 9;
+
+  // Polymorphic owner — no FK constraint at DB level (by design).
+  // owner_party_id references user.id, workspace.id, or admin.id depending on owner_party_type.
+  FundOwnerPartyType owner_party_type = 10;
+  string owner_party_id = 11;
+
+  // Currency + limit
+  string currency = 12;               // ISO 4217, authoritative source currency
+  int64 authorized_limit = 13;        // centavos in source currency; meaningful for CREDIT_* kinds
+
+  // GL traceability — the CoA account this Fund backs
+  optional string gl_account_id = 14 [(options.v1.db).references = "account", (options.v1.db).index = true];
+
+  // Sharing flag — false: single-allocation expected; true: cross-workspace primitive
+  bool shared = 15 [(options.v1.db).default = "false"];
+
+  FundStatus status = 16;
+
+  // Audit + provider linkage
+  optional string external_ref = 17;                      // Plaid account_id, Stripe Issuing card id, etc.
+  optional string linked_by_user_id = 18 [(options.v1.db).references = "user", (options.v1.db).index = true];
+
+  // ── Kind-specific fields (flat columns — see entities.md §5.1 for rationale) ──
+  //
+  // Shared across BANK_ACCOUNT / CREDIT_LINE / CREDIT_CARD / PREPAID_CARD:
+  optional string institution_name = 20;      // "BPI" | "Chase" | "Wise" | "Travel Card Co"
+  optional string last_four = 21;             // last 4 digits of card or account identifier
+
+  // BANK_ACCOUNT-specific:
+  optional string bank_account_number = 22;   // partial or full; full requires field-level encryption in v2
+  optional string bank_swift = 23;
+  optional string bank_iban = 24;
+  optional string bank_branch = 25;
+
+  // PETTY_CASH-specific:
+  optional string petty_custodian_user_id = 26 [(options.v1.db).references = "user", (options.v1.db).index = true];
+  optional int64 petty_float_ceiling = 27;    // centavos; the "replenish-to" target
+  optional string petty_source_fund_id = 28 [(options.v1.db).references = "fund", (options.v1.db).index = true];
+
+  // CREDIT_LINE / CREDIT_CARD-specific:
+  optional string credit_agreement_reference = 29;  // for CREDIT_LINE
+  optional int32 statement_close_day = 30;           // 1-31; shared by both credit kinds
+
+  // CREDIT_CARD-specific:
+  optional string card_brand = 31;            // "Visa" | "Mastercard" | "Amex"
+  optional int32 card_expiry_month = 32;      // 1-12
+  optional int32 card_expiry_year = 33;       // 4-digit
+
+  // MOBILE_MONEY-specific:
+  optional string mobile_provider_name = 34;  // "GCash" | "Maya" | "M-Pesa"
+  optional string mobile_masked_phone = 35;   // "+63 9XX XXX 1234"
+
+  // CASH_ON_HAND has no kind-specific fields in v1.
+}
+
+service FundDomainService {
+  rpc CreateFund(CreateFundRequest) returns (CreateFundResponse);
+  rpc ReadFund(ReadFundRequest) returns (ReadFundResponse);
+  rpc UpdateFund(UpdateFundRequest) returns (UpdateFundResponse);
+  rpc DeleteFund(DeleteFundRequest) returns (DeleteFundResponse);
+  rpc ListFunds(ListFundsRequest) returns (ListFundsResponse);
+  rpc GetFundListPageData(GetFundListPageDataRequest) returns (GetFundListPageDataResponse);
+  rpc GetFundItemPageData(GetFundItemPageDataRequest) returns (GetFundItemPageDataResponse);
+}
+
+message CreateFundRequest {
+  Fund data = 1;
+}
+
+message CreateFundResponse {
+  repeated Fund data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message ReadFundRequest {
+  Fund data = 1;
+}
+
+message ReadFundResponse {
+  repeated Fund data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message UpdateFundRequest {
+  Fund data = 1;
+}
+
+message UpdateFundResponse {
+  repeated Fund data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message DeleteFundRequest {
+  Fund data = 1;
+}
+
+message DeleteFundResponse {
+  bool success = 1;
+  optional domain.common.v1.Error error = 2;
+}
+
+message ListFundsRequest {
+  optional domain.common.v1.SearchRequest search = 1;
+  optional domain.common.v1.FilterRequest filters = 2;
+  optional domain.common.v1.SortRequest sort = 3;
+  optional domain.common.v1.PaginationRequest pagination = 4;
+}
+
+message ListFundsResponse {
+  repeated Fund data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message GetFundListPageDataRequest {
+  optional domain.common.v1.SearchRequest search = 1;
+  optional domain.common.v1.FilterRequest filters = 2;
+  optional domain.common.v1.SortRequest sort = 3;
+  optional domain.common.v1.PaginationRequest pagination = 4;
+}
+
+message GetFundListPageDataResponse {
+  repeated Fund fund_list = 1;
+  optional domain.common.v1.PaginationResponse pagination = 2;
+  repeated domain.common.v1.SearchResult search_results = 3;
+  bool success = 4;
+  optional domain.common.v1.Error error = 5;
+}
+
+message GetFundItemPageDataRequest {
+  string fund_id = 1;
+}
+
+message GetFundItemPageDataResponse {
+  optional Fund fund = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}

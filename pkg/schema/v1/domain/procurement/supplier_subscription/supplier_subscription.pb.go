@@ -57,9 +57,13 @@ type SupplierSubscription struct {
 	// Operator-driven auto-renew flag. When date_time_end passes and auto_renew=true,
 	// an operator-clicked "Renew" extends date_time_end by default_term_value × default_term_unit
 	// from cost_plan. Nothing happens automatically in v1 (cron deferred to D2).
-	AutoRenew     bool `protobuf:"varint,32,opt,name=auto_renew,json=autoRenew,proto3" json:"auto_renew,omitempty"`
-	unknownFields protoimpl.UnknownFields
-	sizeCache     protoimpl.SizeCache
+	AutoRenew bool `protobuf:"varint,32,opt,name=auto_renew,json=autoRenew,proto3" json:"auto_renew,omitempty"`
+	// FK back-edge — Wave 4 self-domain plan (2026-05-17).
+	// Snapshot of the disbursement profile that remits this supplier subscription.
+	// Stored as string (no DB FK constraint) to survive profile edits — see architecture.md §3.5.
+	DisbursementProfileIdSnapshot *string `protobuf:"bytes,33,opt,name=disbursement_profile_id_snapshot,json=disbursementProfileIdSnapshot,proto3,oneof" json:"disbursement_profile_id_snapshot,omitempty"`
+	unknownFields                 protoimpl.UnknownFields
+	sizeCache                     protoimpl.SizeCache
 }
 
 func (x *SupplierSubscription) Reset() {
@@ -230,6 +234,13 @@ func (x *SupplierSubscription) GetAutoRenew() bool {
 		return x.AutoRenew
 	}
 	return false
+}
+
+func (x *SupplierSubscription) GetDisbursementProfileIdSnapshot() string {
+	if x != nil && x.DisbursementProfileIdSnapshot != nil {
+		return *x.DisbursementProfileIdSnapshot
+	}
+	return ""
 }
 
 type CreateSupplierSubscriptionRequest struct {
@@ -1252,7 +1263,7 @@ var File_domain_procurement_supplier_subscription_supplier_subscription_proto pr
 
 const file_domain_procurement_supplier_subscription_supplier_subscription_proto_rawDesc = "" +
 	"\n" +
-	"Ddomain/procurement/supplier_subscription/supplier_subscription.proto\x12\x15domain.procurement.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1adomain/common/search.proto\x1a,domain/procurement/cost_plan/cost_plan.proto\x1a%domain/entity/supplier/supplier.proto\x1a@domain/expenditure/procurement_request/procurement_request.proto\x1a\x10options/db.proto\x1a\x1fgoogle/protobuf/timestamp.proto\"\x9d\v\n" +
+	"Ddomain/procurement/supplier_subscription/supplier_subscription.proto\x12\x15domain.procurement.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1adomain/common/search.proto\x1a,domain/procurement/cost_plan/cost_plan.proto\x1a%domain/entity/supplier/supplier.proto\x1a@domain/expenditure/procurement_request/procurement_request.proto\x1a\x10options/db.proto\x1a\x1fgoogle/protobuf/timestamp.proto\"\x90\f\n" +
 	"\x14SupplierSubscription\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12&\n" +
 	"\fdate_created\x18\x02 \x01(\x03H\x00R\vdateCreated\x88\x01\x01\x123\n" +
@@ -1285,7 +1296,8 @@ const file_domain_procurement_supplier_subscription_supplier_subscription_proto_
 	"\blocation\x18\x01H\fR\n" +
 	"locationId\x88\x01\x01\x12*\n" +
 	"\n" +
-	"auto_renew\x18  \x01(\bB\v\x82\xb5\x18\a\"\x05falseR\tautoRenew\x1a;\n" +
+	"auto_renew\x18  \x01(\bB\v\x82\xb5\x18\a\"\x05falseR\tautoRenew\x12L\n" +
+	" disbursement_profile_id_snapshot\x18! \x01(\tH\rR\x1ddisbursementProfileIdSnapshot\x88\x01\x01\x1a;\n" +
 	"\rMetadataEntry\x12\x10\n" +
 	"\x03key\x18\x01 \x01(\tR\x03key\x12\x14\n" +
 	"\x05value\x18\x02 \x01(\tR\x05value:\x028\x01:\x06\x8a\xb5\x18\x02\b\x01B\x0f\n" +
@@ -1302,7 +1314,8 @@ const file_domain_procurement_supplier_subscription_supplier_subscription_proto_
 	"\r_workspace_idB\x19\n" +
 	"\x17_procurement_request_idB\x16\n" +
 	"\x14_procurement_requestB\x0e\n" +
-	"\f_location_idJ\x04\b\r\x10\x0eJ\x04\b\x0f\x10\x10\"d\n" +
+	"\f_location_idB#\n" +
+	"!_disbursement_profile_id_snapshotJ\x04\b\r\x10\x0eJ\x04\b\x0f\x10\x10\"d\n" +
 	"!CreateSupplierSubscriptionRequest\x12?\n" +
 	"\x04data\x18\x01 \x01(\v2+.domain.procurement.v1.SupplierSubscriptionR\x04data\"\xbd\x01\n" +
 	"\"CreateSupplierSubscriptionResponse\x12?\n" +

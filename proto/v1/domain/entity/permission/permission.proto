@@ -9,6 +9,7 @@ import "domain/common/pagination.proto";
 import "domain/common/filter.proto";
 import "domain/common/sort.proto";
 import "domain/common/search.proto";
+import "domain/entity/principal_type/principal_type.proto";
 import "options/db.proto";
 
 enum PermissionType {
@@ -33,6 +34,7 @@ message Permission {
   bool active = 11 [(options.v1.db).default = "true"];
   string name = 12;
   string description = 13;
+  repeated domain.entity.v1.PrincipalType applicable_principal_types = 14;
 }
 
 service PermissionDomainService {

@@ -26,6 +26,9 @@ message DelegateClient {
   optional int64 date_modified = 7;
   optional string date_modified_string = 8;
   bool active = 9 [(options.v1.db).default = "true"];
+  optional string role_id            = 10 [(options.v1.db).references = "role"];
+  optional string granted_by_user_id = 11 [(options.v1.db).references = "user"];
+  optional string workspace_id       = 12 [(options.v1.db).references = "workspace", (options.v1.db).index = true];
 }
 
 service DelegateClientDomainService {

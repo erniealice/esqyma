@@ -1,0 +1,121 @@
+syntax = "proto3";
+
+package domain.entity.v1;
+
+option go_package = "github.com/erniealice/esqyma/golang/v1/domain/entity/client_portal_grant";
+
+import "domain/common/error.proto";
+import "domain/common/search.proto";
+import "domain/common/filter.proto";
+import "domain/common/sort.proto";
+import "domain/common/pagination.proto";
+
+import "options/db.proto";
+
+// ClientPortalGrant anchors sessions for PRINCIPAL_TYPE_CLIENT.
+// A grant row means: user_id IS the client (identified by client_id) in workspace_id.
+// Unique constraint: (workspace_id, client_id, user_id) — one active grant per
+// (workspace, client, user) tuple; role change = revoke + re-grant.
+message ClientPortalGrant {
+  option (options.v1.table).table = true;
+  option (options.v1.table).unique_together = "workspace_id,client_id,user_id";
+
+  string id                            = 1;
+  string workspace_id                  = 2 [(options.v1.db).references = "workspace", (options.v1.db).index = true];
+  string user_id                       = 3 [(options.v1.db).references = "user",      (options.v1.db).index = true];
+  string client_id                     = 4 [(options.v1.db).references = "client",    (options.v1.db).index = true];
+  string role_id                       = 5 [(options.v1.db).references = "role",      (options.v1.db).index = true];
+  string granted_by_user_id            = 6 [(options.v1.db).references = "user"];
+  optional int64 date_created          = 7;
+  optional string date_created_string  = 8;
+  optional int64 date_modified         = 9;
+  optional string date_modified_string = 10;
+  bool active                          = 11 [(options.v1.db).default = "true"];
+}
+
+service ClientPortalGrantDomainService {
+  rpc CreateClientPortalGrant(CreateClientPortalGrantRequest) returns (CreateClientPortalGrantResponse);
+  rpc ReadClientPortalGrant(ReadClientPortalGrantRequest) returns (ReadClientPortalGrantResponse);
+  rpc UpdateClientPortalGrant(UpdateClientPortalGrantRequest) returns (UpdateClientPortalGrantResponse);
+  rpc DeleteClientPortalGrant(DeleteClientPortalGrantRequest) returns (DeleteClientPortalGrantResponse);
+  rpc ListClientPortalGrants(ListClientPortalGrantsRequest) returns (ListClientPortalGrantsResponse);
+  rpc GetClientPortalGrantListPageData(GetClientPortalGrantListPageDataRequest) returns (GetClientPortalGrantListPageDataResponse);
+  rpc GetClientPortalGrantItemPageData(GetClientPortalGrantItemPageDataRequest) returns (GetClientPortalGrantItemPageDataResponse);
+}
+
+message CreateClientPortalGrantRequest {
+  ClientPortalGrant data = 1;
+}
+
+message CreateClientPortalGrantResponse {
+  repeated ClientPortalGrant data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message ReadClientPortalGrantRequest {
+  ClientPortalGrant data = 1;
+}
+
+message ReadClientPortalGrantResponse {
+  repeated ClientPortalGrant data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message UpdateClientPortalGrantRequest {
+  ClientPortalGrant data = 1;
+}
+
+message UpdateClientPortalGrantResponse {
+  repeated ClientPortalGrant data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message DeleteClientPortalGrantRequest {
+  ClientPortalGrant data = 1;
+}
+
+message DeleteClientPortalGrantResponse {
+  bool success = 1;
+  optional domain.common.v1.Error error = 2;
+}
+
+message ListClientPortalGrantsRequest {
+  optional domain.common.v1.SearchRequest search = 1;
+  optional domain.common.v1.FilterRequest filters = 2;
+  optional domain.common.v1.SortRequest sort = 3;
+  optional domain.common.v1.PaginationRequest pagination = 4;
+}
+
+message ListClientPortalGrantsResponse {
+  repeated ClientPortalGrant data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message GetClientPortalGrantListPageDataRequest {
+  optional domain.common.v1.PaginationRequest pagination = 1;
+  optional domain.common.v1.FilterRequest filters = 2;
+  optional domain.common.v1.SortRequest sort = 3;
+  optional domain.common.v1.SearchRequest search = 4;
+}
+
+message GetClientPortalGrantListPageDataResponse {
+  repeated ClientPortalGrant client_portal_grant_list = 1;
+  optional domain.common.v1.PaginationResponse pagination = 2;
+  repeated domain.common.v1.SearchResult search_results = 3;
+  bool success = 4;
+  optional domain.common.v1.Error error = 5;
+}
+
+message GetClientPortalGrantItemPageDataRequest {
+  string client_portal_grant_id = 1;
+}
+
+message GetClientPortalGrantItemPageDataResponse {
+  optional ClientPortalGrant client_portal_grant = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}

@@ -1,0 +1,200 @@
+syntax = "proto3";
+
+package domain.funding.v1;
+
+option go_package = "github.com/erniealice/esqyma/golang/v1/domain/funding/fund_transaction";
+
+import "domain/common/error.proto";
+import "domain/common/search.proto";
+import "domain/common/filter.proto";
+import "domain/common/sort.proto";
+import "domain/common/pagination.proto";
+import "options/db.proto";
+
+// FundTransactionStatus — controls whether a row contributes to balance projections.
+// Only POSTED rows are summed by projection queries (via the fund_transaction_posted VIEW).
+enum FundTransactionStatus {
+  FUND_TRANSACTION_STATUS_UNSPECIFIED = 0;
+  FUND_TRANSACTION_STATUS_DRAFT       = 1;  // does NOT contribute to balance projections in v1
+  FUND_TRANSACTION_STATUS_POSTED      = 2;  // the only status counted toward SUM projections
+  FUND_TRANSACTION_STATUS_VOIDED      = 3;  // soft-delete; original row preserved for forensics
+}
+
+// FundTransactionKind — classifies each event in the append-only log.
+// Direction is encoded in the kind; `amount` is ALWAYS POSITIVE.
+enum FundTransactionKind {
+  FUND_TRANSACTION_KIND_UNSPECIFIED           = 0;
+  FUND_TRANSACTION_KIND_OPENING_BALANCE       = 1;   // initialization; sets starting position
+  FUND_TRANSACTION_KIND_CASH_IN               = 2;   // deposit (asset) or repayment (credit)
+  FUND_TRANSACTION_KIND_CASH_OUT              = 3;   // withdrawal (asset) or untracked spend
+  FUND_TRANSACTION_KIND_DRAW                  = 4;   // charge against an allocation; paired with Expenditure
+  FUND_TRANSACTION_KIND_SETTLEMENT            = 5;   // pay down outstanding draws; paired with Disbursement
+  FUND_TRANSACTION_KIND_DRAW_REVERSAL         = 6;   // unwind a DRAW; reverses_id → original row
+  FUND_TRANSACTION_KIND_SETTLEMENT_REVERSAL   = 7;   // unwind a SETTLEMENT; reverses_id → original row
+  FUND_TRANSACTION_KIND_LIMIT_INCREASE        = 8;   // audit event for authorized_limit change
+  FUND_TRANSACTION_KIND_LIMIT_DECREASE        = 9;   // audit event for authorized_limit change
+  FUND_TRANSACTION_KIND_ALLOCATION_ADJUSTMENT = 10;  // owner shifts an allocation's allocated_limit; audit
+  FUND_TRANSACTION_KIND_TRANSFER_OUT          = 11;  // source side of a fund-to-fund transfer
+  FUND_TRANSACTION_KIND_TRANSFER_IN           = 12;  // destination side; same transfer_id as OUT row
+}
+
+// FundTransaction — append-only event log for all money movements on a Fund.
+//
+// workspace_id is OPTIONAL here: fund-global events (OPENING_BALANCE,
+// LIMIT_INCREASE, LIMIT_DECREASE) have no workspace attribution; all
+// workspace-originated events (DRAW, SETTLEMENT, etc.) carry workspace_id.
+//
+// NEVER mutate existing rows. To correct an error, insert a *_REVERSAL row
+// with reverses_id pointing at the original, then insert a corrected row.
+//
+// Composite indexes beyond per-field declarations (enforced by migration):
+//   (idempotency_key)                                      UNIQUE
+//   (fund_id, status, posted_at)
+//   (allocation_id, status, posted_at) WHERE allocation_id IS NOT NULL
+//   (transfer_id)                      WHERE transfer_id IS NOT NULL
+//
+// A VIEW `fund_transaction_posted` (SELECT * WHERE status = 2) must be
+// created by the migration. All projection queries MUST target the view.
+message FundTransaction {
+  option (options.v1.table).table = true;
+
+  string id = 1;
+  optional int64 date_created = 2;
+  optional string date_created_string = 3;
+  optional int64 date_modified = 4;
+  optional string date_modified_string = 5;
+  bool active = 6 [(options.v1.db).default = "true"];
+
+  // Parent Fund — always present
+  string fund_id = 7 [(options.v1.db).references = "fund", (options.v1.db).index = true];
+
+  // Allocation — present for workspace-attributed events; NULL for fund-global events
+  optional string allocation_id = 8 [(options.v1.db).references = "fund_allocation", (options.v1.db).index = true];
+
+  // Workspace — present when a specific workspace caused this event; NULL for fund-global events
+  optional string workspace_id = 9 [(options.v1.db).references = "workspace", (options.v1.db).index = true];
+
+  // Event classification + amount
+  FundTransactionKind kind = 10;
+  int64 amount = 11;  // centavos, source currency, ALWAYS POSITIVE — direction encoded in kind
+
+  // Timestamps
+  int64 effective_at = 12;  // when the event happened (operator-supplied or paired-entity date)
+  int64 posted_at = 13;     // when the row was inserted (server time)
+
+  FundTransactionStatus status = 14;
+
+  // Reversal chain — set for *_REVERSAL kinds; NULL otherwise
+  optional string reverses_id = 15 [(options.v1.db).references = "fund_transaction"];
+
+  // Idempotency — UNIQUE; convention: "{caller_use_case}-{caller_entity_id}-{verb}"
+  string idempotency_key = 16;
+
+  // FX snapshot — present when source currency differs from workspace functional currency
+  optional double exchange_rate_snapshot = 17;
+  optional int64 amount_functional_currency = 18;  // centavos in workspace functional currency
+  optional string functional_currency = 19;         // ISO 4217, denormed for audit
+
+  // Optional back-edges to the entity that spawned this event
+  optional string expenditure_id = 20 [(options.v1.db).references = "expenditure"];
+  optional string disbursement_id = 21 [(options.v1.db).references = "disbursement"];
+  optional string collection_id = 22 [(options.v1.db).references = "collection"];
+  optional string transfer_id = 23;  // groups TRANSFER_OUT + TRANSFER_IN; NOT a FK (no transfer entity)
+
+  // GL traceability
+  optional string journal_entry_id = 24 [(options.v1.db).references = "journal_entry", (options.v1.db).index = true];
+
+  // Narrative
+  optional string description = 25;
+  optional string reference_number = 26;  // merchant ref, check #, statement ref
+
+  // Audit
+  optional string created_by_user_id = 27 [(options.v1.db).references = "user"];
+}
+
+service FundTransactionDomainService {
+  rpc CreateFundTransaction(CreateFundTransactionRequest) returns (CreateFundTransactionResponse);
+  rpc ReadFundTransaction(ReadFundTransactionRequest) returns (ReadFundTransactionResponse);
+  rpc UpdateFundTransaction(UpdateFundTransactionRequest) returns (UpdateFundTransactionResponse);
+  rpc DeleteFundTransaction(DeleteFundTransactionRequest) returns (DeleteFundTransactionResponse);
+  rpc ListFundTransactions(ListFundTransactionsRequest) returns (ListFundTransactionsResponse);
+  rpc GetFundTransactionListPageData(GetFundTransactionListPageDataRequest) returns (GetFundTransactionListPageDataResponse);
+  rpc GetFundTransactionItemPageData(GetFundTransactionItemPageDataRequest) returns (GetFundTransactionItemPageDataResponse);
+}
+
+message CreateFundTransactionRequest {
+  FundTransaction data = 1;
+}
+
+message CreateFundTransactionResponse {
+  repeated FundTransaction data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message ReadFundTransactionRequest {
+  FundTransaction data = 1;
+}
+
+message ReadFundTransactionResponse {
+  repeated FundTransaction data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message UpdateFundTransactionRequest {
+  FundTransaction data = 1;
+}
+
+message UpdateFundTransactionResponse {
+  repeated FundTransaction data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message DeleteFundTransactionRequest {
+  FundTransaction data = 1;
+}
+
+message DeleteFundTransactionResponse {
+  bool success = 1;
+  optional domain.common.v1.Error error = 2;
+}
+
+message ListFundTransactionsRequest {
+  optional domain.common.v1.SearchRequest search = 1;
+  optional domain.common.v1.FilterRequest filters = 2;
+  optional domain.common.v1.SortRequest sort = 3;
+  optional domain.common.v1.PaginationRequest pagination = 4;
+}
+
+message ListFundTransactionsResponse {
+  repeated FundTransaction data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message GetFundTransactionListPageDataRequest {
+  optional domain.common.v1.SearchRequest search = 1;
+  optional domain.common.v1.FilterRequest filters = 2;
+  optional domain.common.v1.SortRequest sort = 3;
+  optional domain.common.v1.PaginationRequest pagination = 4;
+}
+
+message GetFundTransactionListPageDataResponse {
+  repeated FundTransaction fund_transaction_list = 1;
+  optional domain.common.v1.PaginationResponse pagination = 2;
+  repeated domain.common.v1.SearchResult search_results = 3;
+  bool success = 4;
+  optional domain.common.v1.Error error = 5;
+}
+
+message GetFundTransactionItemPageDataRequest {
+  string fund_transaction_id = 1;
+}
+
+message GetFundTransactionItemPageDataResponse {
+  optional FundTransaction fund_transaction = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}

@@ -9,6 +9,7 @@ import "domain/common/search.proto";
 import "domain/common/filter.proto";
 import "domain/common/sort.proto";
 import "domain/common/pagination.proto";
+import "domain/entity/principal_type/principal_type.proto";
 import "options/db.proto";
 
 // Session represents an authenticated user's active session.
@@ -40,6 +41,14 @@ message Session {
   optional string date_created_string = 9;
   optional int64 date_modified = 10;
   optional string date_modified_string = 11;
+
+  // Multi-principal session context — populated at login time.
+  // All optional for migration safety (existing rows have NULL).
+  optional domain.entity.v1.PrincipalType principal_type        = 12;
+  optional string                          principal_id          = 13;
+  optional string                          acting_as_client_id   = 14;
+  optional string                          acting_as_supplier_id = 15;
+  optional string                          acting_as_workspace_id = 16 [(options.v1.db).references = "workspace"];
 }
 
 service SessionDomainService {

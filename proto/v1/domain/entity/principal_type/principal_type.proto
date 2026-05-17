@@ -1,0 +1,20 @@
+syntax = "proto3";
+
+package domain.entity.v1;
+
+option go_package = "github.com/erniealice/esqyma/golang/v1/domain/entity/principal_type";
+
+// PrincipalType identifies the kind of actor whose session is being authorized.
+// Values 1-2 are operator principals (WorkspaceUser-backed).
+// Values 3-6 are portal principals (party-grant-backed).
+// Reserved 7-15 for future platform-level principals (PLATFORM_ADMIN, INTEGRATION_AGENT, …).
+enum PrincipalType {
+  PRINCIPAL_TYPE_UNSPECIFIED       = 0;
+  PRINCIPAL_TYPE_OPERATOR_OWNER    = 1;  // workspace owner / top-level admin
+  PRINCIPAL_TYPE_OPERATOR_STAFF    = 2;  // workspace employee with narrower roles
+  PRINCIPAL_TYPE_CLIENT            = 3;  // external customer (patient, student, lessee…)
+  PRINCIPAL_TYPE_CLIENT_DELEGATE   = 4;  // acts ON BEHALF OF a specific Client
+  PRINCIPAL_TYPE_SUPPLIER          = 5;  // external vendor / contractor
+  PRINCIPAL_TYPE_SUPPLIER_DELEGATE = 6;  // acts ON BEHALF OF a specific Supplier
+  reserved 7 to 15;                      // future: PLATFORM_ADMIN, INTEGRATION_AGENT, AUDITOR, …
+}

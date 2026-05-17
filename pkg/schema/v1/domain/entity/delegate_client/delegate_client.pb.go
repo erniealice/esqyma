@@ -35,6 +35,9 @@ type DelegateClient struct {
 	DateModified       *int64                 `protobuf:"varint,7,opt,name=date_modified,json=dateModified,proto3,oneof" json:"date_modified,omitempty"`
 	DateModifiedString *string                `protobuf:"bytes,8,opt,name=date_modified_string,json=dateModifiedString,proto3,oneof" json:"date_modified_string,omitempty"`
 	Active             bool                   `protobuf:"varint,9,opt,name=active,proto3" json:"active,omitempty"`
+	RoleId             *string                `protobuf:"bytes,10,opt,name=role_id,json=roleId,proto3,oneof" json:"role_id,omitempty"`
+	GrantedByUserId    *string                `protobuf:"bytes,11,opt,name=granted_by_user_id,json=grantedByUserId,proto3,oneof" json:"granted_by_user_id,omitempty"`
+	WorkspaceId        *string                `protobuf:"bytes,12,opt,name=workspace_id,json=workspaceId,proto3,oneof" json:"workspace_id,omitempty"`
 	unknownFields      protoimpl.UnknownFields
 	sizeCache          protoimpl.SizeCache
 }
@@ -130,6 +133,27 @@ func (x *DelegateClient) GetActive() bool {
 		return x.Active
 	}
 	return false
+}
+
+func (x *DelegateClient) GetRoleId() string {
+	if x != nil && x.RoleId != nil {
+		return *x.RoleId
+	}
+	return ""
+}
+
+func (x *DelegateClient) GetGrantedByUserId() string {
+	if x != nil && x.GrantedByUserId != nil {
+		return *x.GrantedByUserId
+	}
+	return ""
+}
+
+func (x *DelegateClient) GetWorkspaceId() string {
+	if x != nil && x.WorkspaceId != nil {
+		return *x.WorkspaceId
+	}
+	return ""
 }
 
 type CreateDelegateClientRequest struct {
@@ -920,7 +944,7 @@ var File_domain_entity_delegate_client_delegate_client_proto protoreflect.FileDe
 
 const file_domain_entity_delegate_client_delegate_client_proto_rawDesc = "" +
 	"\n" +
-	"3domain/entity/delegate_client/delegate_client.proto\x12\x10domain.entity.v1\x1a\x19domain/common/error.proto\x1a\x1adomain/common/search.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1edomain/common/pagination.proto\x1a!domain/entity/client/client.proto\x1a\x10options/db.proto\"\x97\x04\n" +
+	"3domain/entity/delegate_client/delegate_client.proto\x12\x10domain.entity.v1\x1a\x19domain/common/error.proto\x1a\x1adomain/common/search.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1edomain/common/pagination.proto\x1a!domain/entity/client/client.proto\x1a\x10options/db.proto\"\xee\x05\n" +
 	"\x0eDelegateClient\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x121\n" +
 	"\vdelegate_id\x18\x02 \x01(\tB\x10\x82\xb5\x18\f\n" +
@@ -935,12 +959,25 @@ const file_domain_entity_delegate_client_delegate_client_proto_rawDesc = "" +
 	"\rdate_modified\x18\a \x01(\x03H\x03R\fdateModified\x88\x01\x01\x125\n" +
 	"\x14date_modified_string\x18\b \x01(\tH\x04R\x12dateModifiedString\x88\x01\x01\x12\"\n" +
 	"\x06active\x18\t \x01(\bB\n" +
-	"\x82\xb5\x18\x06\"\x04trueR\x06active:\x1d\x8a\xb5\x18\x19\b\x01\x1a\x15delegate_id,client_idB\t\n" +
+	"\x82\xb5\x18\x06\"\x04trueR\x06active\x12(\n" +
+	"\arole_id\x18\n" +
+	" \x01(\tB\n" +
+	"\x82\xb5\x18\x06\n" +
+	"\x04roleH\x05R\x06roleId\x88\x01\x01\x12<\n" +
+	"\x12granted_by_user_id\x18\v \x01(\tB\n" +
+	"\x82\xb5\x18\x06\n" +
+	"\x04userH\x06R\x0fgrantedByUserId\x88\x01\x01\x129\n" +
+	"\fworkspace_id\x18\f \x01(\tB\x11\x82\xb5\x18\r\n" +
+	"\tworkspace\x18\x01H\aR\vworkspaceId\x88\x01\x01:\x1d\x8a\xb5\x18\x19\b\x01\x1a\x15delegate_id,client_idB\t\n" +
 	"\a_clientB\x0f\n" +
 	"\r_date_createdB\x16\n" +
 	"\x14_date_created_stringB\x10\n" +
 	"\x0e_date_modifiedB\x17\n" +
-	"\x15_date_modified_string\"S\n" +
+	"\x15_date_modified_stringB\n" +
+	"\n" +
+	"\b_role_idB\x15\n" +
+	"\x13_granted_by_user_idB\x0f\n" +
+	"\r_workspace_id\"S\n" +
 	"\x1bCreateDelegateClientRequest\x124\n" +
 	"\x04data\x18\x01 \x01(\v2 .domain.entity.v1.DelegateClientR\x04data\"\xac\x01\n" +
 	"\x1cCreateDelegateClientResponse\x124\n" +

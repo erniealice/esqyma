@@ -9,6 +9,7 @@ package entityv1
 import (
 	common "github.com/erniealice/esqyma/pkg/schema/v1/domain/common"
 	delegate_client "github.com/erniealice/esqyma/pkg/schema/v1/domain/entity/delegate_client"
+	delegate_supplier "github.com/erniealice/esqyma/pkg/schema/v1/domain/entity/delegate_supplier"
 	user "github.com/erniealice/esqyma/pkg/schema/v1/domain/entity/user"
 	_ "github.com/erniealice/esqyma/pkg/schema/v1/options"
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
@@ -26,16 +27,17 @@ const (
 )
 
 type Delegate struct {
-	state              protoimpl.MessageState            `protogen:"open.v1"`
-	Id                 string                            `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
-	User               *user.User                        `protobuf:"bytes,2,opt,name=user,proto3,oneof" json:"user,omitempty"`
-	UserId             string                            `protobuf:"bytes,3,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty"`
-	DateCreated        *int64                            `protobuf:"varint,4,opt,name=date_created,json=dateCreated,proto3,oneof" json:"date_created,omitempty"`
-	DateCreatedString  *string                           `protobuf:"bytes,5,opt,name=date_created_string,json=dateCreatedString,proto3,oneof" json:"date_created_string,omitempty"`
-	DateModified       *int64                            `protobuf:"varint,6,opt,name=date_modified,json=dateModified,proto3,oneof" json:"date_modified,omitempty"`
-	DateModifiedString *string                           `protobuf:"bytes,7,opt,name=date_modified_string,json=dateModifiedString,proto3,oneof" json:"date_modified_string,omitempty"`
-	Active             bool                              `protobuf:"varint,8,opt,name=active,proto3" json:"active,omitempty"`
-	DelegateClients    []*delegate_client.DelegateClient `protobuf:"bytes,9,rep,name=delegate_clients,json=delegateClients,proto3" json:"delegate_clients,omitempty"`
+	state              protoimpl.MessageState                `protogen:"open.v1"`
+	Id                 string                                `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
+	User               *user.User                            `protobuf:"bytes,2,opt,name=user,proto3,oneof" json:"user,omitempty"`
+	UserId             string                                `protobuf:"bytes,3,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty"`
+	DateCreated        *int64                                `protobuf:"varint,4,opt,name=date_created,json=dateCreated,proto3,oneof" json:"date_created,omitempty"`
+	DateCreatedString  *string                               `protobuf:"bytes,5,opt,name=date_created_string,json=dateCreatedString,proto3,oneof" json:"date_created_string,omitempty"`
+	DateModified       *int64                                `protobuf:"varint,6,opt,name=date_modified,json=dateModified,proto3,oneof" json:"date_modified,omitempty"`
+	DateModifiedString *string                               `protobuf:"bytes,7,opt,name=date_modified_string,json=dateModifiedString,proto3,oneof" json:"date_modified_string,omitempty"`
+	Active             bool                                  `protobuf:"varint,8,opt,name=active,proto3" json:"active,omitempty"`
+	DelegateClients    []*delegate_client.DelegateClient     `protobuf:"bytes,9,rep,name=delegate_clients,json=delegateClients,proto3" json:"delegate_clients,omitempty"`
+	DelegateSuppliers  []*delegate_supplier.DelegateSupplier `protobuf:"bytes,10,rep,name=delegate_suppliers,json=delegateSuppliers,proto3" json:"delegate_suppliers,omitempty"`
 	unknownFields      protoimpl.UnknownFields
 	sizeCache          protoimpl.SizeCache
 }
@@ -129,6 +131,13 @@ func (x *Delegate) GetActive() bool {
 func (x *Delegate) GetDelegateClients() []*delegate_client.DelegateClient {
 	if x != nil {
 		return x.DelegateClients
+	}
+	return nil
+}
+
+func (x *Delegate) GetDelegateSuppliers() []*delegate_supplier.DelegateSupplier {
+	if x != nil {
+		return x.DelegateSuppliers
 	}
 	return nil
 }
@@ -921,7 +930,7 @@ var File_domain_entity_delegate_delegate_proto protoreflect.FileDescriptor
 
 const file_domain_entity_delegate_delegate_proto_rawDesc = "" +
 	"\n" +
-	"%domain/entity/delegate/delegate.proto\x12\x10domain.entity.v1\x1a\x19domain/common/error.proto\x1a\x1adomain/common/search.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1edomain/common/pagination.proto\x1a\x1ddomain/entity/user/user.proto\x1a3domain/entity/delegate_client/delegate_client.proto\x1a\x10options/db.proto\"\x86\x04\n" +
+	"%domain/entity/delegate/delegate.proto\x12\x10domain.entity.v1\x1a\x19domain/common/error.proto\x1a\x1adomain/common/search.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1edomain/common/pagination.proto\x1a\x1ddomain/entity/user/user.proto\x1a3domain/entity/delegate_client/delegate_client.proto\x1a7domain/entity/delegate_supplier/delegate_supplier.proto\x1a\x10options/db.proto\"\xd9\x04\n" +
 	"\bDelegate\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12/\n" +
 	"\x04user\x18\x02 \x01(\v2\x16.domain.entity.v1.UserH\x00R\x04user\x88\x01\x01\x12%\n" +
@@ -933,7 +942,9 @@ const file_domain_entity_delegate_delegate_proto_rawDesc = "" +
 	"\x14date_modified_string\x18\a \x01(\tH\x04R\x12dateModifiedString\x88\x01\x01\x12\"\n" +
 	"\x06active\x18\b \x01(\bB\n" +
 	"\x82\xb5\x18\x06\"\x04trueR\x06active\x12K\n" +
-	"\x10delegate_clients\x18\t \x03(\v2 .domain.entity.v1.DelegateClientR\x0fdelegateClients:\x06\x8a\xb5\x18\x02\b\x01B\a\n" +
+	"\x10delegate_clients\x18\t \x03(\v2 .domain.entity.v1.DelegateClientR\x0fdelegateClients\x12Q\n" +
+	"\x12delegate_suppliers\x18\n" +
+	" \x03(\v2\".domain.entity.v1.DelegateSupplierR\x11delegateSuppliers:\x06\x8a\xb5\x18\x02\b\x01B\a\n" +
 	"\x05_userB\x0f\n" +
 	"\r_date_createdB\x16\n" +
 	"\x14_date_created_stringB\x10\n" +
@@ -1038,80 +1049,82 @@ func file_domain_entity_delegate_delegate_proto_rawDescGZIP() []byte {
 
 var file_domain_entity_delegate_delegate_proto_msgTypes = make([]protoimpl.MessageInfo, 15)
 var file_domain_entity_delegate_delegate_proto_goTypes = []any{
-	(*Delegate)(nil),                        // 0: domain.entity.v1.Delegate
-	(*CreateDelegateRequest)(nil),           // 1: domain.entity.v1.CreateDelegateRequest
-	(*CreateDelegateResponse)(nil),          // 2: domain.entity.v1.CreateDelegateResponse
-	(*ReadDelegateRequest)(nil),             // 3: domain.entity.v1.ReadDelegateRequest
-	(*ReadDelegateResponse)(nil),            // 4: domain.entity.v1.ReadDelegateResponse
-	(*UpdateDelegateRequest)(nil),           // 5: domain.entity.v1.UpdateDelegateRequest
-	(*UpdateDelegateResponse)(nil),          // 6: domain.entity.v1.UpdateDelegateResponse
-	(*DeleteDelegateRequest)(nil),           // 7: domain.entity.v1.DeleteDelegateRequest
-	(*DeleteDelegateResponse)(nil),          // 8: domain.entity.v1.DeleteDelegateResponse
-	(*ListDelegatesRequest)(nil),            // 9: domain.entity.v1.ListDelegatesRequest
-	(*ListDelegatesResponse)(nil),           // 10: domain.entity.v1.ListDelegatesResponse
-	(*GetDelegateListPageDataRequest)(nil),  // 11: domain.entity.v1.GetDelegateListPageDataRequest
-	(*GetDelegateListPageDataResponse)(nil), // 12: domain.entity.v1.GetDelegateListPageDataResponse
-	(*GetDelegateItemPageDataRequest)(nil),  // 13: domain.entity.v1.GetDelegateItemPageDataRequest
-	(*GetDelegateItemPageDataResponse)(nil), // 14: domain.entity.v1.GetDelegateItemPageDataResponse
-	(*user.User)(nil),                       // 15: domain.entity.v1.User
-	(*delegate_client.DelegateClient)(nil),  // 16: domain.entity.v1.DelegateClient
-	(*common.Error)(nil),                    // 17: domain.common.v1.Error
-	(*common.SearchRequest)(nil),            // 18: domain.common.v1.SearchRequest
-	(*common.FilterRequest)(nil),            // 19: domain.common.v1.FilterRequest
-	(*common.SortRequest)(nil),              // 20: domain.common.v1.SortRequest
-	(*common.PaginationRequest)(nil),        // 21: domain.common.v1.PaginationRequest
-	(*common.PaginationResponse)(nil),       // 22: domain.common.v1.PaginationResponse
-	(*common.SearchResult)(nil),             // 23: domain.common.v1.SearchResult
+	(*Delegate)(nil),                           // 0: domain.entity.v1.Delegate
+	(*CreateDelegateRequest)(nil),              // 1: domain.entity.v1.CreateDelegateRequest
+	(*CreateDelegateResponse)(nil),             // 2: domain.entity.v1.CreateDelegateResponse
+	(*ReadDelegateRequest)(nil),                // 3: domain.entity.v1.ReadDelegateRequest
+	(*ReadDelegateResponse)(nil),               // 4: domain.entity.v1.ReadDelegateResponse
+	(*UpdateDelegateRequest)(nil),              // 5: domain.entity.v1.UpdateDelegateRequest
+	(*UpdateDelegateResponse)(nil),             // 6: domain.entity.v1.UpdateDelegateResponse
+	(*DeleteDelegateRequest)(nil),              // 7: domain.entity.v1.DeleteDelegateRequest
+	(*DeleteDelegateResponse)(nil),             // 8: domain.entity.v1.DeleteDelegateResponse
+	(*ListDelegatesRequest)(nil),               // 9: domain.entity.v1.ListDelegatesRequest
+	(*ListDelegatesResponse)(nil),              // 10: domain.entity.v1.ListDelegatesResponse
+	(*GetDelegateListPageDataRequest)(nil),     // 11: domain.entity.v1.GetDelegateListPageDataRequest
+	(*GetDelegateListPageDataResponse)(nil),    // 12: domain.entity.v1.GetDelegateListPageDataResponse
+	(*GetDelegateItemPageDataRequest)(nil),     // 13: domain.entity.v1.GetDelegateItemPageDataRequest
+	(*GetDelegateItemPageDataResponse)(nil),    // 14: domain.entity.v1.GetDelegateItemPageDataResponse
+	(*user.User)(nil),                          // 15: domain.entity.v1.User
+	(*delegate_client.DelegateClient)(nil),     // 16: domain.entity.v1.DelegateClient
+	(*delegate_supplier.DelegateSupplier)(nil), // 17: domain.entity.v1.DelegateSupplier
+	(*common.Error)(nil),                       // 18: domain.common.v1.Error
+	(*common.SearchRequest)(nil),               // 19: domain.common.v1.SearchRequest
+	(*common.FilterRequest)(nil),               // 20: domain.common.v1.FilterRequest
+	(*common.SortRequest)(nil),                 // 21: domain.common.v1.SortRequest
+	(*common.PaginationRequest)(nil),           // 22: domain.common.v1.PaginationRequest
+	(*common.PaginationResponse)(nil),          // 23: domain.common.v1.PaginationResponse
+	(*common.SearchResult)(nil),                // 24: domain.common.v1.SearchResult
 }
 var file_domain_entity_delegate_delegate_proto_depIdxs = []int32{
 	15, // 0: domain.entity.v1.Delegate.user:type_name -> domain.entity.v1.User
 	16, // 1: domain.entity.v1.Delegate.delegate_clients:type_name -> domain.entity.v1.DelegateClient
-	0,  // 2: domain.entity.v1.CreateDelegateRequest.data:type_name -> domain.entity.v1.Delegate
-	0,  // 3: domain.entity.v1.CreateDelegateResponse.data:type_name -> domain.entity.v1.Delegate
-	17, // 4: domain.entity.v1.CreateDelegateResponse.error:type_name -> domain.common.v1.Error
-	0,  // 5: domain.entity.v1.ReadDelegateRequest.data:type_name -> domain.entity.v1.Delegate
-	0,  // 6: domain.entity.v1.ReadDelegateResponse.data:type_name -> domain.entity.v1.Delegate
-	17, // 7: domain.entity.v1.ReadDelegateResponse.error:type_name -> domain.common.v1.Error
-	0,  // 8: domain.entity.v1.UpdateDelegateRequest.data:type_name -> domain.entity.v1.Delegate
-	0,  // 9: domain.entity.v1.UpdateDelegateResponse.data:type_name -> domain.entity.v1.Delegate
-	17, // 10: domain.entity.v1.UpdateDelegateResponse.error:type_name -> domain.common.v1.Error
-	0,  // 11: domain.entity.v1.DeleteDelegateRequest.data:type_name -> domain.entity.v1.Delegate
-	17, // 12: domain.entity.v1.DeleteDelegateResponse.error:type_name -> domain.common.v1.Error
-	18, // 13: domain.entity.v1.ListDelegatesRequest.search:type_name -> domain.common.v1.SearchRequest
-	19, // 14: domain.entity.v1.ListDelegatesRequest.filters:type_name -> domain.common.v1.FilterRequest
-	20, // 15: domain.entity.v1.ListDelegatesRequest.sort:type_name -> domain.common.v1.SortRequest
-	21, // 16: domain.entity.v1.ListDelegatesRequest.pagination:type_name -> domain.common.v1.PaginationRequest
-	0,  // 17: domain.entity.v1.ListDelegatesResponse.data:type_name -> domain.entity.v1.Delegate
-	17, // 18: domain.entity.v1.ListDelegatesResponse.error:type_name -> domain.common.v1.Error
-	18, // 19: domain.entity.v1.GetDelegateListPageDataRequest.search:type_name -> domain.common.v1.SearchRequest
-	19, // 20: domain.entity.v1.GetDelegateListPageDataRequest.filters:type_name -> domain.common.v1.FilterRequest
-	20, // 21: domain.entity.v1.GetDelegateListPageDataRequest.sort:type_name -> domain.common.v1.SortRequest
-	21, // 22: domain.entity.v1.GetDelegateListPageDataRequest.pagination:type_name -> domain.common.v1.PaginationRequest
-	0,  // 23: domain.entity.v1.GetDelegateListPageDataResponse.delegate_list:type_name -> domain.entity.v1.Delegate
-	22, // 24: domain.entity.v1.GetDelegateListPageDataResponse.pagination:type_name -> domain.common.v1.PaginationResponse
-	23, // 25: domain.entity.v1.GetDelegateListPageDataResponse.search_results:type_name -> domain.common.v1.SearchResult
-	17, // 26: domain.entity.v1.GetDelegateListPageDataResponse.error:type_name -> domain.common.v1.Error
-	0,  // 27: domain.entity.v1.GetDelegateItemPageDataResponse.delegate:type_name -> domain.entity.v1.Delegate
-	17, // 28: domain.entity.v1.GetDelegateItemPageDataResponse.error:type_name -> domain.common.v1.Error
-	1,  // 29: domain.entity.v1.DelegateDomainService.CreateDelegate:input_type -> domain.entity.v1.CreateDelegateRequest
-	3,  // 30: domain.entity.v1.DelegateDomainService.ReadDelegate:input_type -> domain.entity.v1.ReadDelegateRequest
-	5,  // 31: domain.entity.v1.DelegateDomainService.UpdateDelegate:input_type -> domain.entity.v1.UpdateDelegateRequest
-	7,  // 32: domain.entity.v1.DelegateDomainService.DeleteDelegate:input_type -> domain.entity.v1.DeleteDelegateRequest
-	9,  // 33: domain.entity.v1.DelegateDomainService.ListDelegates:input_type -> domain.entity.v1.ListDelegatesRequest
-	11, // 34: domain.entity.v1.DelegateDomainService.GetDelegateListPageData:input_type -> domain.entity.v1.GetDelegateListPageDataRequest
-	13, // 35: domain.entity.v1.DelegateDomainService.GetDelegateItemPageData:input_type -> domain.entity.v1.GetDelegateItemPageDataRequest
-	2,  // 36: domain.entity.v1.DelegateDomainService.CreateDelegate:output_type -> domain.entity.v1.CreateDelegateResponse
-	4,  // 37: domain.entity.v1.DelegateDomainService.ReadDelegate:output_type -> domain.entity.v1.ReadDelegateResponse
-	6,  // 38: domain.entity.v1.DelegateDomainService.UpdateDelegate:output_type -> domain.entity.v1.UpdateDelegateResponse
-	8,  // 39: domain.entity.v1.DelegateDomainService.DeleteDelegate:output_type -> domain.entity.v1.DeleteDelegateResponse
-	10, // 40: domain.entity.v1.DelegateDomainService.ListDelegates:output_type -> domain.entity.v1.ListDelegatesResponse
-	12, // 41: domain.entity.v1.DelegateDomainService.GetDelegateListPageData:output_type -> domain.entity.v1.GetDelegateListPageDataResponse
-	14, // 42: domain.entity.v1.DelegateDomainService.GetDelegateItemPageData:output_type -> domain.entity.v1.GetDelegateItemPageDataResponse
-	36, // [36:43] is the sub-list for method output_type
-	29, // [29:36] is the sub-list for method input_type
-	29, // [29:29] is the sub-list for extension type_name
-	29, // [29:29] is the sub-list for extension extendee
-	0,  // [0:29] is the sub-list for field type_name
+	17, // 2: domain.entity.v1.Delegate.delegate_suppliers:type_name -> domain.entity.v1.DelegateSupplier
+	0,  // 3: domain.entity.v1.CreateDelegateRequest.data:type_name -> domain.entity.v1.Delegate
+	0,  // 4: domain.entity.v1.CreateDelegateResponse.data:type_name -> domain.entity.v1.Delegate
+	18, // 5: domain.entity.v1.CreateDelegateResponse.error:type_name -> domain.common.v1.Error
+	0,  // 6: domain.entity.v1.ReadDelegateRequest.data:type_name -> domain.entity.v1.Delegate
+	0,  // 7: domain.entity.v1.ReadDelegateResponse.data:type_name -> domain.entity.v1.Delegate
+	18, // 8: domain.entity.v1.ReadDelegateResponse.error:type_name -> domain.common.v1.Error
+	0,  // 9: domain.entity.v1.UpdateDelegateRequest.data:type_name -> domain.entity.v1.Delegate
+	0,  // 10: domain.entity.v1.UpdateDelegateResponse.data:type_name -> domain.entity.v1.Delegate
+	18, // 11: domain.entity.v1.UpdateDelegateResponse.error:type_name -> domain.common.v1.Error
+	0,  // 12: domain.entity.v1.DeleteDelegateRequest.data:type_name -> domain.entity.v1.Delegate
+	18, // 13: domain.entity.v1.DeleteDelegateResponse.error:type_name -> domain.common.v1.Error
+	19, // 14: domain.entity.v1.ListDelegatesRequest.search:type_name -> domain.common.v1.SearchRequest
+	20, // 15: domain.entity.v1.ListDelegatesRequest.filters:type_name -> domain.common.v1.FilterRequest
+	21, // 16: domain.entity.v1.ListDelegatesRequest.sort:type_name -> domain.common.v1.SortRequest
+	22, // 17: domain.entity.v1.ListDelegatesRequest.pagination:type_name -> domain.common.v1.PaginationRequest
+	0,  // 18: domain.entity.v1.ListDelegatesResponse.data:type_name -> domain.entity.v1.Delegate
+	18, // 19: domain.entity.v1.ListDelegatesResponse.error:type_name -> domain.common.v1.Error
+	19, // 20: domain.entity.v1.GetDelegateListPageDataRequest.search:type_name -> domain.common.v1.SearchRequest
+	20, // 21: domain.entity.v1.GetDelegateListPageDataRequest.filters:type_name -> domain.common.v1.FilterRequest
+	21, // 22: domain.entity.v1.GetDelegateListPageDataRequest.sort:type_name -> domain.common.v1.SortRequest
+	22, // 23: domain.entity.v1.GetDelegateListPageDataRequest.pagination:type_name -> domain.common.v1.PaginationRequest
+	0,  // 24: domain.entity.v1.GetDelegateListPageDataResponse.delegate_list:type_name -> domain.entity.v1.Delegate
+	23, // 25: domain.entity.v1.GetDelegateListPageDataResponse.pagination:type_name -> domain.common.v1.PaginationResponse
+	24, // 26: domain.entity.v1.GetDelegateListPageDataResponse.search_results:type_name -> domain.common.v1.SearchResult
+	18, // 27: domain.entity.v1.GetDelegateListPageDataResponse.error:type_name -> domain.common.v1.Error
+	0,  // 28: domain.entity.v1.GetDelegateItemPageDataResponse.delegate:type_name -> domain.entity.v1.Delegate
+	18, // 29: domain.entity.v1.GetDelegateItemPageDataResponse.error:type_name -> domain.common.v1.Error
+	1,  // 30: domain.entity.v1.DelegateDomainService.CreateDelegate:input_type -> domain.entity.v1.CreateDelegateRequest
+	3,  // 31: domain.entity.v1.DelegateDomainService.ReadDelegate:input_type -> domain.entity.v1.ReadDelegateRequest
+	5,  // 32: domain.entity.v1.DelegateDomainService.UpdateDelegate:input_type -> domain.entity.v1.UpdateDelegateRequest
+	7,  // 33: domain.entity.v1.DelegateDomainService.DeleteDelegate:input_type -> domain.entity.v1.DeleteDelegateRequest
+	9,  // 34: domain.entity.v1.DelegateDomainService.ListDelegates:input_type -> domain.entity.v1.ListDelegatesRequest
+	11, // 35: domain.entity.v1.DelegateDomainService.GetDelegateListPageData:input_type -> domain.entity.v1.GetDelegateListPageDataRequest
+	13, // 36: domain.entity.v1.DelegateDomainService.GetDelegateItemPageData:input_type -> domain.entity.v1.GetDelegateItemPageDataRequest
+	2,  // 37: domain.entity.v1.DelegateDomainService.CreateDelegate:output_type -> domain.entity.v1.CreateDelegateResponse
+	4,  // 38: domain.entity.v1.DelegateDomainService.ReadDelegate:output_type -> domain.entity.v1.ReadDelegateResponse
+	6,  // 39: domain.entity.v1.DelegateDomainService.UpdateDelegate:output_type -> domain.entity.v1.UpdateDelegateResponse
+	8,  // 40: domain.entity.v1.DelegateDomainService.DeleteDelegate:output_type -> domain.entity.v1.DeleteDelegateResponse
+	10, // 41: domain.entity.v1.DelegateDomainService.ListDelegates:output_type -> domain.entity.v1.ListDelegatesResponse
+	12, // 42: domain.entity.v1.DelegateDomainService.GetDelegateListPageData:output_type -> domain.entity.v1.GetDelegateListPageDataResponse
+	14, // 43: domain.entity.v1.DelegateDomainService.GetDelegateItemPageData:output_type -> domain.entity.v1.GetDelegateItemPageDataResponse
+	37, // [37:44] is the sub-list for method output_type
+	30, // [30:37] is the sub-list for method input_type
+	30, // [30:30] is the sub-list for extension type_name
+	30, // [30:30] is the sub-list for extension extendee
+	0,  // [0:30] is the sub-list for field type_name
 }
 
 func init() { file_domain_entity_delegate_delegate_proto_init() }

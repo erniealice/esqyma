@@ -263,10 +263,14 @@ type SupplierContract struct {
 	PayFrequency    *string `protobuf:"bytes,130,opt,name=pay_frequency,json=payFrequency,proto3,oneof" json:"pay_frequency,omitempty"`          // "weekly" | "biweekly" | "semi_monthly" | "monthly"
 	EmploymentClass *string `protobuf:"bytes,131,opt,name=employment_class,json=employmentClass,proto3,oneof" json:"employment_class,omitempty"` // "regular" | "probationary" | "project_based" |
 	// "casual" | "fixed_term" | "agency_deployed"
-	Position      *string `protobuf:"bytes,132,opt,name=position,proto3,oneof" json:"position,omitempty"`
-	Department    *string `protobuf:"bytes,133,opt,name=department,proto3,oneof" json:"department,omitempty"`
-	unknownFields protoimpl.UnknownFields
-	sizeCache     protoimpl.SizeCache
+	Position   *string `protobuf:"bytes,132,opt,name=position,proto3,oneof" json:"position,omitempty"`
+	Department *string `protobuf:"bytes,133,opt,name=department,proto3,oneof" json:"department,omitempty"`
+	// FK back-edge — Wave 4 self-domain plan (2026-05-17).
+	// Snapshot of the disbursement profile that remits this contract.
+	// Stored as string (no DB FK constraint) to survive profile edits — see architecture.md §3.5.
+	DisbursementProfileIdSnapshot *string `protobuf:"bytes,134,opt,name=disbursement_profile_id_snapshot,json=disbursementProfileIdSnapshot,proto3,oneof" json:"disbursement_profile_id_snapshot,omitempty"`
+	unknownFields                 protoimpl.UnknownFields
+	sizeCache                     protoimpl.SizeCache
 }
 
 func (x *SupplierContract) Reset() {
@@ -652,6 +656,13 @@ func (x *SupplierContract) GetPosition() string {
 func (x *SupplierContract) GetDepartment() string {
 	if x != nil && x.Department != nil {
 		return *x.Department
+	}
+	return ""
+}
+
+func (x *SupplierContract) GetDisbursementProfileIdSnapshot() string {
+	if x != nil && x.DisbursementProfileIdSnapshot != nil {
+		return *x.DisbursementProfileIdSnapshot
 	}
 	return ""
 }
@@ -1815,7 +1826,7 @@ var File_domain_expenditure_supplier_contract_supplier_contract_proto protorefle
 
 const file_domain_expenditure_supplier_contract_supplier_contract_proto_rawDesc = "" +
 	"\n" +
-	"<domain/expenditure/supplier_contract/supplier_contract.proto\x12\x15domain.expenditure.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/search.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a%domain/entity/supplier/supplier.proto\x1a-domain/entity/payment_term/payment_term.proto\x1a\x10options/db.proto\"\xc4\x1a\n" +
+	"<domain/expenditure/supplier_contract/supplier_contract.proto\x12\x15domain.expenditure.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/search.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a%domain/entity/supplier/supplier.proto\x1a-domain/entity/payment_term/payment_term.proto\x1a\x10options/db.proto\"\xb8\x1b\n" +
 	"\x10SupplierContract\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x124\n" +
 	"\fworkspace_id\x18\x02 \x01(\tB\x11\x82\xb5\x18\r\n" +
@@ -1884,7 +1895,8 @@ const file_domain_expenditure_supplier_contract_supplier_contract_proto_rawDesc 
 	"\bposition\x18\x84\x01 \x01(\tH%R\bposition\x88\x01\x01\x12$\n" +
 	"\n" +
 	"department\x18\x85\x01 \x01(\tH&R\n" +
-	"department\x88\x01\x01\x1a;\n" +
+	"department\x88\x01\x01\x12M\n" +
+	" disbursement_profile_id_snapshot\x18\x86\x01 \x01(\tH'R\x1ddisbursementProfileIdSnapshot\x88\x01\x01\x1a;\n" +
 	"\rMetadataEntry\x12\x10\n" +
 	"\x03key\x18\x01 \x01(\tR\x03key\x12\x14\n" +
 	"\x05value\x18\x02 \x01(\tR\x05value:\x028\x01:\x06\x8a\xb5\x18\x02\b\x01B\x0f\n" +
@@ -1926,7 +1938,8 @@ const file_domain_expenditure_supplier_contract_supplier_contract_proto_rawDesc 
 	"\x0e_pay_frequencyB\x13\n" +
 	"\x11_employment_classB\v\n" +
 	"\t_positionB\r\n" +
-	"\v_department\"\\\n" +
+	"\v_departmentB#\n" +
+	"!_disbursement_profile_id_snapshot\"\\\n" +
 	"\x1dCreateSupplierContractRequest\x12;\n" +
 	"\x04data\x18\x01 \x01(\v2'.domain.expenditure.v1.SupplierContractR\x04data\"\xb5\x01\n" +
 	"\x1eCreateSupplierContractResponse\x12;\n" +

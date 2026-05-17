@@ -53,6 +53,12 @@ message Workspace {
   // When empty the UI falls back to the locale default for the compliance_region.
   optional string date_format = 19;                 // Preferred date display format (Go layout string)
   optional string time_format = 20;                 // Preferred time display format (Go layout string)
+
+  // FK back-edge — Wave 4 self-domain plan (2026-05-17).
+  // Convenience denorm: current Ichizen plan FK. The true source of truth is
+  // TenantSubscription.workspace_id — this field is a fast-path lookup for
+  // the /app/billing view. See architecture.md §3.5.
+  optional string tenant_subscription_id = 21 [(options.v1.db).references = "tenant_subscription", (options.v1.db).index = true];
 }
 
 service WorkspaceDomainService {

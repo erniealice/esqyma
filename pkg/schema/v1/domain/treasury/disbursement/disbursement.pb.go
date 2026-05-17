@@ -9,6 +9,7 @@ package treasuryv1
 import (
 	common "github.com/erniealice/esqyma/pkg/schema/v1/domain/common"
 	subscription "github.com/erniealice/esqyma/pkg/schema/v1/domain/subscription/subscription"
+	_ "github.com/erniealice/esqyma/pkg/schema/v1/options"
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
 	reflect "reflect"
@@ -46,8 +47,13 @@ type Disbursement struct {
 	ApprovedBy           string `protobuf:"bytes,26,opt,name=approved_by,json=approvedBy,proto3" json:"approved_by,omitempty"`    // who authorized the outflow
 	// GL traceability
 	JournalEntryId *string `protobuf:"bytes,28,opt,name=journal_entry_id,json=journalEntryId,proto3,oneof" json:"journal_entry_id,omitempty"` // FK to journal_entry — set when disbursement is posted to ledger
-	unknownFields  protoimpl.UnknownFields
-	sizeCache      protoimpl.SizeCache
+	// FK back-edge — FS-D shared-fund-sources plan (2026-05-17).
+	// Links this disbursement to the FundTransaction (kind=SETTLEMENT) that was inserted
+	// when outstanding draws were settled from this workspace's cash. NULL when the disbursement
+	// is a direct cash outflow with no shared-fund involvement.
+	FundTransactionId *string `protobuf:"bytes,29,opt,name=fund_transaction_id,json=fundTransactionId,proto3,oneof" json:"fund_transaction_id,omitempty"`
+	unknownFields     protoimpl.UnknownFields
+	sizeCache         protoimpl.SizeCache
 }
 
 func (x *Disbursement) Reset() {
@@ -209,6 +215,13 @@ func (x *Disbursement) GetApprovedBy() string {
 func (x *Disbursement) GetJournalEntryId() string {
 	if x != nil && x.JournalEntryId != nil {
 		return *x.JournalEntryId
+	}
+	return ""
+}
+
+func (x *Disbursement) GetFundTransactionId() string {
+	if x != nil && x.FundTransactionId != nil {
+		return *x.FundTransactionId
 	}
 	return ""
 }
@@ -1001,7 +1014,7 @@ var File_domain_treasury_disbursement_disbursement_proto protoreflect.FileDescri
 
 const file_domain_treasury_disbursement_disbursement_proto_rawDesc = "" +
 	"\n" +
-	"/domain/treasury/disbursement/disbursement.proto\x12\x12domain.treasury.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1adomain/common/search.proto\x1a3domain/subscription/subscription/subscription.proto\"\xf4\x06\n" +
+	"/domain/treasury/disbursement/disbursement.proto\x12\x12domain.treasury.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1adomain/common/search.proto\x1a3domain/subscription/subscription/subscription.proto\x1a\x10options/db.proto\"\xd9\a\n" +
 	"\fDisbursement\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12&\n" +
 	"\fdate_created\x18\x02 \x01(\x03H\x00R\vdateCreated\x88\x01\x01\x123\n" +
@@ -1023,13 +1036,16 @@ const file_domain_treasury_disbursement_disbursement_proto_rawDesc = "" +
 	"\fpayment_date\x18\x19 \x01(\tR\vpaymentDate\x12\x1f\n" +
 	"\vapproved_by\x18\x1a \x01(\tR\n" +
 	"approvedBy\x12-\n" +
-	"\x10journal_entry_id\x18\x1c \x01(\tH\x05R\x0ejournalEntryId\x88\x01\x01B\x0f\n" +
+	"\x10journal_entry_id\x18\x1c \x01(\tH\x05R\x0ejournalEntryId\x88\x01\x01\x12K\n" +
+	"\x13fund_transaction_id\x18\x1d \x01(\tB\x16\x82\xb5\x18\x12\n" +
+	"\x10fund_transactionH\x06R\x11fundTransactionId\x88\x01\x01B\x0f\n" +
 	"\r_date_createdB\x16\n" +
 	"\x14_date_created_stringB\x10\n" +
 	"\x0e_date_modifiedB\x17\n" +
 	"\x15_date_modified_stringB\x0f\n" +
 	"\r_subscriptionB\x13\n" +
-	"\x11_journal_entry_idJ\x04\b\x1b\x10\x1c\"Q\n" +
+	"\x11_journal_entry_idB\x16\n" +
+	"\x14_fund_transaction_idJ\x04\b\x1b\x10\x1c\"Q\n" +
 	"\x19CreateDisbursementRequest\x124\n" +
 	"\x04data\x18\x01 \x01(\v2 .domain.treasury.v1.DisbursementR\x04data\"\xaa\x01\n" +
 	"\x1aCreateDisbursementResponse\x124\n" +

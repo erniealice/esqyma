@@ -12,6 +12,7 @@ import "domain/common/search.proto";
 
 import "domain/entity/client/client.proto";
 import "domain/treasury/disbursement_method/disbursement_method.proto";
+import "options/db.proto";
 
 message DisbursementProfile {
   string id = 1;
@@ -24,6 +25,14 @@ message DisbursementProfile {
   string client_id = 8;
   optional DisbursementMethod disbursement_method = 9;
   string disbursement_method_id = 10;
+
+  // Wave 4 side-fix — architecture.md §3.6.
+  // Add supplier_id alongside the existing client_id. The client_id field on this
+  // entity was originally intended for buying-side use (supplier remittance) but
+  // incorrectly references the client table. supplier_id is the correct FK for the
+  // buying side. Both fields coexist during transition; client_id will be deprecated
+  // in the full Path A polymorphic-upgrade plan. Do NOT remove or rename client_id here.
+  optional string supplier_id = 11 [(options.v1.db).references = "supplier", (options.v1.db).index = true];
 }
 
 service DisbursementProfileDomainService {

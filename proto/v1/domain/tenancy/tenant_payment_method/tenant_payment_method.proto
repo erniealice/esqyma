@@ -1,0 +1,141 @@
+syntax = "proto3";
+
+package domain.tenancy.v1;
+
+option go_package = "github.com/erniealice/esqyma/golang/v1/domain/tenancy/tenant_payment_method";
+
+import "domain/common/error.proto";
+import "domain/common/search.proto";
+import "domain/common/filter.proto";
+import "domain/common/sort.proto";
+import "domain/common/pagination.proto";
+import "options/db.proto";
+
+// TenantPaymentCardDetails holds PCI-safe tokenized card metadata.
+message TenantPaymentCardDetails {
+  string card_brand   = 1; // "visa" | "mastercard" | "amex" | ...
+  string last_four    = 2;
+  int32 expiry_month  = 3;
+  int32 expiry_year   = 4;
+}
+
+// TenantPaymentBankAccountDetails holds bank account metadata (no account number stored).
+message TenantPaymentBankAccountDetails {
+  string bank_name = 1;
+  string last_four = 2;
+}
+
+// TenantPaymentMethod represents a workspace's stored payment instrument for
+// Ichizen platform billing. At most one default method per workspace is enforced
+// by a partial unique index on (workspace_id) WHERE is_default = true.
+message TenantPaymentMethod {
+  option (options.v1.table).table = true;
+
+  string id                            = 1;
+  optional int64 date_created          = 2;
+  optional string date_created_string  = 3;
+  optional int64 date_modified         = 4;
+  optional string date_modified_string = 5;
+  bool active                          = 6 [(options.v1.db).default = "true"];
+
+  string workspace_id                  = 7 [(options.v1.db).references = "workspace", (options.v1.db).index = true];
+
+  string display_label                 = 8; // "Visa ending 4242"
+
+  oneof method_details {
+    TenantPaymentCardDetails card           = 9;
+    TenantPaymentBankAccountDetails bank_account = 10;
+  }
+
+  optional string provider_name        = 11; // "stripe" | "paypal" | "bank_transfer"
+  optional string provider_token       = 12; // PCI-safe token; never the PAN
+
+  bool is_default                      = 13 [(options.v1.db).default = "false"];
+}
+
+service TenantPaymentMethodDomainService {
+  rpc CreateTenantPaymentMethod(CreateTenantPaymentMethodRequest) returns (CreateTenantPaymentMethodResponse);
+  rpc ReadTenantPaymentMethod(ReadTenantPaymentMethodRequest) returns (ReadTenantPaymentMethodResponse);
+  rpc UpdateTenantPaymentMethod(UpdateTenantPaymentMethodRequest) returns (UpdateTenantPaymentMethodResponse);
+  rpc DeleteTenantPaymentMethod(DeleteTenantPaymentMethodRequest) returns (DeleteTenantPaymentMethodResponse);
+  rpc ListTenantPaymentMethods(ListTenantPaymentMethodsRequest) returns (ListTenantPaymentMethodsResponse);
+  rpc GetTenantPaymentMethodListPageData(GetTenantPaymentMethodListPageDataRequest) returns (GetTenantPaymentMethodListPageDataResponse);
+  rpc GetTenantPaymentMethodItemPageData(GetTenantPaymentMethodItemPageDataRequest) returns (GetTenantPaymentMethodItemPageDataResponse);
+}
+
+message CreateTenantPaymentMethodRequest {
+  TenantPaymentMethod data = 1;
+}
+
+message CreateTenantPaymentMethodResponse {
+  repeated TenantPaymentMethod data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message ReadTenantPaymentMethodRequest {
+  TenantPaymentMethod data = 1;
+}
+
+message ReadTenantPaymentMethodResponse {
+  repeated TenantPaymentMethod data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message UpdateTenantPaymentMethodRequest {
+  TenantPaymentMethod data = 1;
+}
+
+message UpdateTenantPaymentMethodResponse {
+  repeated TenantPaymentMethod data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message DeleteTenantPaymentMethodRequest {
+  TenantPaymentMethod data = 1;
+}
+
+message DeleteTenantPaymentMethodResponse {
+  bool success = 1;
+  optional domain.common.v1.Error error = 2;
+}
+
+message ListTenantPaymentMethodsRequest {
+  optional domain.common.v1.SearchRequest search = 1;
+  optional domain.common.v1.FilterRequest filters = 2;
+  optional domain.common.v1.SortRequest sort = 3;
+  optional domain.common.v1.PaginationRequest pagination = 4;
+}
+
+message ListTenantPaymentMethodsResponse {
+  repeated TenantPaymentMethod data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message GetTenantPaymentMethodListPageDataRequest {
+  optional domain.common.v1.PaginationRequest pagination = 1;
+  optional domain.common.v1.FilterRequest filters = 2;
+  optional domain.common.v1.SortRequest sort = 3;
+  optional domain.common.v1.SearchRequest search = 4;
+}
+
+message GetTenantPaymentMethodListPageDataResponse {
+  repeated TenantPaymentMethod tenant_payment_method_list = 1;
+  optional domain.common.v1.PaginationResponse pagination = 2;
+  repeated domain.common.v1.SearchResult search_results = 3;
+  bool success = 4;
+  optional domain.common.v1.Error error = 5;
+}
+
+message GetTenantPaymentMethodItemPageDataRequest {
+  string tenant_payment_method_id = 1;
+}
+
+message GetTenantPaymentMethodItemPageDataResponse {
+  optional TenantPaymentMethod tenant_payment_method = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}

@@ -1,0 +1,155 @@
+syntax = "proto3";
+
+package domain.funding.v1;
+
+option go_package = "github.com/erniealice/esqyma/golang/v1/domain/funding/fund_allocation";
+
+import "domain/common/error.proto";
+import "domain/common/search.proto";
+import "domain/common/filter.proto";
+import "domain/common/sort.proto";
+import "domain/common/pagination.proto";
+import "options/db.proto";
+
+// FundAllocationStatus — lifecycle of a workspace's allocation against a Fund.
+enum FundAllocationStatus {
+  FUND_ALLOCATION_STATUS_UNSPECIFIED = 0;
+  FUND_ALLOCATION_STATUS_ACTIVE      = 1;
+  FUND_ALLOCATION_STATUS_SUSPENDED   = 2;
+  FUND_ALLOCATION_STATUS_CLOSED      = 3;
+}
+
+// FundAllocationMode — governs how limit enforcement behaves at draw time.
+enum FundAllocationMode {
+  FUND_ALLOCATION_MODE_UNSPECIFIED = 0;
+  FUND_ALLOCATION_MODE_HARD_LIMIT  = 1;  // v1 default — draw blocked when limit exceeded
+  FUND_ALLOCATION_MODE_SOFT_LIMIT  = 2;  // v2 — warn + log; allow overdraft up to fund headroom
+}
+
+// FundAllocation — workspace-scoped junction between a (global) Fund and a
+// specific workspace. This row is the cross-workspace boundary: it carries
+// workspace_id and FKs up across the boundary to Fund.
+//
+// INTENTIONALLY has NO balance fields. Outstanding is computed via
+// FundTransaction projection (SUM over fund_transaction rows for this
+// allocation_id). See architecture.md §3.3.
+//
+// Partial unique index (enforced by migration):
+//   (fund_id, workspace_id) WHERE status = 'ACTIVE'
+//   — one active allocation per (fund, workspace) pair.
+message FundAllocation {
+  option (options.v1.table).table = true;
+
+  string id = 1;
+  optional int64 date_created = 2;
+  optional string date_created_string = 3;
+  optional int64 date_modified = 4;
+  optional string date_modified_string = 5;
+  bool active = 6 [(options.v1.db).default = "true"];
+
+  // Cross-boundary FK: fund lives in the global tier (no workspace_id).
+  string fund_id = 7 [(options.v1.db).references = "fund", (options.v1.db).index = true];
+
+  // Workspace that holds this allocation.
+  string workspace_id = 8 [(options.v1.db).references = "workspace", (options.v1.db).index = true];
+
+  // Limit policy
+  FundAllocationMode mode = 9;
+  int64 allocated_limit = 10;  // centavos in source currency — a FACT, never mutated by transactions
+
+  // GL pointers — per-allocation (each WS may have its own CoA structure)
+  optional string payable_account_id = 11 [(options.v1.db).references = "account", (options.v1.db).index = true];         // liability account absorbing draws
+  optional string default_cash_account_id = 12 [(options.v1.db).references = "account", (options.v1.db).index = true];   // cash account pre-selected on Settle drawer
+
+  FundAllocationStatus status = 13;
+
+  // Audit — who granted this allocation
+  optional string approved_by_user_id = 14 [(options.v1.db).references = "user"];
+}
+
+service FundAllocationDomainService {
+  rpc CreateFundAllocation(CreateFundAllocationRequest) returns (CreateFundAllocationResponse);
+  rpc ReadFundAllocation(ReadFundAllocationRequest) returns (ReadFundAllocationResponse);
+  rpc UpdateFundAllocation(UpdateFundAllocationRequest) returns (UpdateFundAllocationResponse);
+  rpc DeleteFundAllocation(DeleteFundAllocationRequest) returns (DeleteFundAllocationResponse);
+  rpc ListFundAllocations(ListFundAllocationsRequest) returns (ListFundAllocationsResponse);
+  rpc GetFundAllocationListPageData(GetFundAllocationListPageDataRequest) returns (GetFundAllocationListPageDataResponse);
+  rpc GetFundAllocationItemPageData(GetFundAllocationItemPageDataRequest) returns (GetFundAllocationItemPageDataResponse);
+}
+
+message CreateFundAllocationRequest {
+  FundAllocation data = 1;
+}
+
+message CreateFundAllocationResponse {
+  repeated FundAllocation data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message ReadFundAllocationRequest {
+  FundAllocation data = 1;
+}
+
+message ReadFundAllocationResponse {
+  repeated FundAllocation data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message UpdateFundAllocationRequest {
+  FundAllocation data = 1;
+}
+
+message UpdateFundAllocationResponse {
+  repeated FundAllocation data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message DeleteFundAllocationRequest {
+  FundAllocation data = 1;
+}
+
+message DeleteFundAllocationResponse {
+  bool success = 1;
+  optional domain.common.v1.Error error = 2;
+}
+
+message ListFundAllocationsRequest {
+  optional domain.common.v1.SearchRequest search = 1;
+  optional domain.common.v1.FilterRequest filters = 2;
+  optional domain.common.v1.SortRequest sort = 3;
+  optional domain.common.v1.PaginationRequest pagination = 4;
+}
+
+message ListFundAllocationsResponse {
+  repeated FundAllocation data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message GetFundAllocationListPageDataRequest {
+  optional domain.common.v1.SearchRequest search = 1;
+  optional domain.common.v1.FilterRequest filters = 2;
+  optional domain.common.v1.SortRequest sort = 3;
+  optional domain.common.v1.PaginationRequest pagination = 4;
+}
+
+message GetFundAllocationListPageDataResponse {
+  repeated FundAllocation fund_allocation_list = 1;
+  optional domain.common.v1.PaginationResponse pagination = 2;
+  repeated domain.common.v1.SearchResult search_results = 3;
+  bool success = 4;
+  optional domain.common.v1.Error error = 5;
+}
+
+message GetFundAllocationItemPageDataRequest {
+  string fund_allocation_id = 1;
+}
+
+message GetFundAllocationItemPageDataResponse {
+  optional FundAllocation fund_allocation = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}

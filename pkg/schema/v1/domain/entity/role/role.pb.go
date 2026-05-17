@@ -8,6 +8,7 @@ package entityv1
 
 import (
 	common "github.com/erniealice/esqyma/pkg/schema/v1/domain/common"
+	principal_type "github.com/erniealice/esqyma/pkg/schema/v1/domain/entity/principal_type"
 	role_permission "github.com/erniealice/esqyma/pkg/schema/v1/domain/entity/role_permission"
 	workspace "github.com/erniealice/esqyma/pkg/schema/v1/domain/entity/workspace"
 	_ "github.com/erniealice/esqyma/pkg/schema/v1/options"
@@ -27,21 +28,22 @@ const (
 
 // FK References: workspace_user_role.role_id, role_permission.role_id
 type Role struct {
-	state              protoimpl.MessageState            `protogen:"open.v1"`
-	Id                 string                            `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
-	WorkspaceId        *string                           `protobuf:"bytes,2,opt,name=workspace_id,json=workspaceId,proto3,oneof" json:"workspace_id,omitempty"`
-	Workspace          *workspace.Workspace              `protobuf:"bytes,3,opt,name=workspace,proto3,oneof" json:"workspace,omitempty"`
-	Name               string                            `protobuf:"bytes,4,opt,name=name,proto3" json:"name,omitempty"`
-	Description        string                            `protobuf:"bytes,5,opt,name=description,proto3" json:"description,omitempty"`
-	Color              string                            `protobuf:"bytes,6,opt,name=color,proto3" json:"color,omitempty"`
-	DateCreated        *int64                            `protobuf:"varint,7,opt,name=date_created,json=dateCreated,proto3,oneof" json:"date_created,omitempty"`
-	DateCreatedString  *string                           `protobuf:"bytes,8,opt,name=date_created_string,json=dateCreatedString,proto3,oneof" json:"date_created_string,omitempty"`
-	DateModified       *int64                            `protobuf:"varint,9,opt,name=date_modified,json=dateModified,proto3,oneof" json:"date_modified,omitempty"`
-	DateModifiedString *string                           `protobuf:"bytes,10,opt,name=date_modified_string,json=dateModifiedString,proto3,oneof" json:"date_modified_string,omitempty"`
-	Active             bool                              `protobuf:"varint,11,opt,name=active,proto3" json:"active,omitempty"`
-	RolePermissions    []*role_permission.RolePermission `protobuf:"bytes,12,rep,name=role_permissions,json=rolePermissions,proto3" json:"role_permissions,omitempty"`
-	unknownFields      protoimpl.UnknownFields
-	sizeCache          protoimpl.SizeCache
+	state                    protoimpl.MessageState            `protogen:"open.v1"`
+	Id                       string                            `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
+	WorkspaceId              *string                           `protobuf:"bytes,2,opt,name=workspace_id,json=workspaceId,proto3,oneof" json:"workspace_id,omitempty"`
+	Workspace                *workspace.Workspace              `protobuf:"bytes,3,opt,name=workspace,proto3,oneof" json:"workspace,omitempty"`
+	Name                     string                            `protobuf:"bytes,4,opt,name=name,proto3" json:"name,omitempty"`
+	Description              string                            `protobuf:"bytes,5,opt,name=description,proto3" json:"description,omitempty"`
+	Color                    string                            `protobuf:"bytes,6,opt,name=color,proto3" json:"color,omitempty"`
+	DateCreated              *int64                            `protobuf:"varint,7,opt,name=date_created,json=dateCreated,proto3,oneof" json:"date_created,omitempty"`
+	DateCreatedString        *string                           `protobuf:"bytes,8,opt,name=date_created_string,json=dateCreatedString,proto3,oneof" json:"date_created_string,omitempty"`
+	DateModified             *int64                            `protobuf:"varint,9,opt,name=date_modified,json=dateModified,proto3,oneof" json:"date_modified,omitempty"`
+	DateModifiedString       *string                           `protobuf:"bytes,10,opt,name=date_modified_string,json=dateModifiedString,proto3,oneof" json:"date_modified_string,omitempty"`
+	Active                   bool                              `protobuf:"varint,11,opt,name=active,proto3" json:"active,omitempty"`
+	RolePermissions          []*role_permission.RolePermission `protobuf:"bytes,12,rep,name=role_permissions,json=rolePermissions,proto3" json:"role_permissions,omitempty"`
+	ApplicablePrincipalTypes []principal_type.PrincipalType    `protobuf:"varint,13,rep,packed,name=applicable_principal_types,json=applicablePrincipalTypes,proto3,enum=domain.entity.v1.PrincipalType" json:"applicable_principal_types,omitempty"`
+	unknownFields            protoimpl.UnknownFields
+	sizeCache                protoimpl.SizeCache
 }
 
 func (x *Role) Reset() {
@@ -154,6 +156,13 @@ func (x *Role) GetActive() bool {
 func (x *Role) GetRolePermissions() []*role_permission.RolePermission {
 	if x != nil {
 		return x.RolePermissions
+	}
+	return nil
+}
+
+func (x *Role) GetApplicablePrincipalTypes() []principal_type.PrincipalType {
+	if x != nil {
+		return x.ApplicablePrincipalTypes
 	}
 	return nil
 }
@@ -946,7 +955,7 @@ var File_domain_entity_role_role_proto protoreflect.FileDescriptor
 
 const file_domain_entity_role_role_proto_rawDesc = "" +
 	"\n" +
-	"\x1ddomain/entity/role/role.proto\x12\x10domain.entity.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1adomain/common/search.proto\x1a'domain/entity/workspace/workspace.proto\x1a3domain/entity/role_permission/role_permission.proto\x1a\x10options/db.proto\"\x87\x05\n" +
+	"\x1ddomain/entity/role/role.proto\x12\x10domain.entity.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1adomain/common/search.proto\x1a'domain/entity/workspace/workspace.proto\x1a3domain/entity/role_permission/role_permission.proto\x1a1domain/entity/principal_type/principal_type.proto\x1a\x10options/db.proto\"\xe6\x05\n" +
 	"\x04Role\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x129\n" +
 	"\fworkspace_id\x18\x02 \x01(\tB\x11\x82\xb5\x18\r\n" +
@@ -962,7 +971,8 @@ const file_domain_entity_role_role_proto_rawDesc = "" +
 	" \x01(\tH\x05R\x12dateModifiedString\x88\x01\x01\x12\"\n" +
 	"\x06active\x18\v \x01(\bB\n" +
 	"\x82\xb5\x18\x06\"\x04trueR\x06active\x12K\n" +
-	"\x10role_permissions\x18\f \x03(\v2 .domain.entity.v1.RolePermissionR\x0frolePermissions:\x06\x8a\xb5\x18\x02\b\x01B\x0f\n" +
+	"\x10role_permissions\x18\f \x03(\v2 .domain.entity.v1.RolePermissionR\x0frolePermissions\x12]\n" +
+	"\x1aapplicable_principal_types\x18\r \x03(\x0e2\x1f.domain.entity.v1.PrincipalTypeR\x18applicablePrincipalTypes:\x06\x8a\xb5\x18\x02\b\x01B\x0f\n" +
 	"\r_workspace_idB\f\n" +
 	"\n" +
 	"_workspaceB\x0f\n" +
@@ -1088,63 +1098,65 @@ var file_domain_entity_role_role_proto_goTypes = []any{
 	(*GetRoleItemPageDataResponse)(nil),    // 14: domain.entity.v1.GetRoleItemPageDataResponse
 	(*workspace.Workspace)(nil),            // 15: domain.entity.v1.Workspace
 	(*role_permission.RolePermission)(nil), // 16: domain.entity.v1.RolePermission
-	(*common.Error)(nil),                   // 17: domain.common.v1.Error
-	(*common.SearchRequest)(nil),           // 18: domain.common.v1.SearchRequest
-	(*common.FilterRequest)(nil),           // 19: domain.common.v1.FilterRequest
-	(*common.SortRequest)(nil),             // 20: domain.common.v1.SortRequest
-	(*common.PaginationRequest)(nil),       // 21: domain.common.v1.PaginationRequest
-	(*common.PaginationResponse)(nil),      // 22: domain.common.v1.PaginationResponse
-	(*common.SearchResult)(nil),            // 23: domain.common.v1.SearchResult
+	(principal_type.PrincipalType)(0),      // 17: domain.entity.v1.PrincipalType
+	(*common.Error)(nil),                   // 18: domain.common.v1.Error
+	(*common.SearchRequest)(nil),           // 19: domain.common.v1.SearchRequest
+	(*common.FilterRequest)(nil),           // 20: domain.common.v1.FilterRequest
+	(*common.SortRequest)(nil),             // 21: domain.common.v1.SortRequest
+	(*common.PaginationRequest)(nil),       // 22: domain.common.v1.PaginationRequest
+	(*common.PaginationResponse)(nil),      // 23: domain.common.v1.PaginationResponse
+	(*common.SearchResult)(nil),            // 24: domain.common.v1.SearchResult
 }
 var file_domain_entity_role_role_proto_depIdxs = []int32{
 	15, // 0: domain.entity.v1.Role.workspace:type_name -> domain.entity.v1.Workspace
 	16, // 1: domain.entity.v1.Role.role_permissions:type_name -> domain.entity.v1.RolePermission
-	0,  // 2: domain.entity.v1.CreateRoleRequest.data:type_name -> domain.entity.v1.Role
-	0,  // 3: domain.entity.v1.CreateRoleResponse.data:type_name -> domain.entity.v1.Role
-	17, // 4: domain.entity.v1.CreateRoleResponse.error:type_name -> domain.common.v1.Error
-	0,  // 5: domain.entity.v1.ReadRoleRequest.data:type_name -> domain.entity.v1.Role
-	0,  // 6: domain.entity.v1.ReadRoleResponse.data:type_name -> domain.entity.v1.Role
-	17, // 7: domain.entity.v1.ReadRoleResponse.error:type_name -> domain.common.v1.Error
-	0,  // 8: domain.entity.v1.UpdateRoleRequest.data:type_name -> domain.entity.v1.Role
-	0,  // 9: domain.entity.v1.UpdateRoleResponse.data:type_name -> domain.entity.v1.Role
-	17, // 10: domain.entity.v1.UpdateRoleResponse.error:type_name -> domain.common.v1.Error
-	0,  // 11: domain.entity.v1.DeleteRoleRequest.data:type_name -> domain.entity.v1.Role
-	17, // 12: domain.entity.v1.DeleteRoleResponse.error:type_name -> domain.common.v1.Error
-	18, // 13: domain.entity.v1.ListRolesRequest.search:type_name -> domain.common.v1.SearchRequest
-	19, // 14: domain.entity.v1.ListRolesRequest.filters:type_name -> domain.common.v1.FilterRequest
-	20, // 15: domain.entity.v1.ListRolesRequest.sort:type_name -> domain.common.v1.SortRequest
-	21, // 16: domain.entity.v1.ListRolesRequest.pagination:type_name -> domain.common.v1.PaginationRequest
-	0,  // 17: domain.entity.v1.ListRolesResponse.data:type_name -> domain.entity.v1.Role
-	17, // 18: domain.entity.v1.ListRolesResponse.error:type_name -> domain.common.v1.Error
-	18, // 19: domain.entity.v1.GetRoleListPageDataRequest.search:type_name -> domain.common.v1.SearchRequest
-	19, // 20: domain.entity.v1.GetRoleListPageDataRequest.filters:type_name -> domain.common.v1.FilterRequest
-	20, // 21: domain.entity.v1.GetRoleListPageDataRequest.sort:type_name -> domain.common.v1.SortRequest
-	21, // 22: domain.entity.v1.GetRoleListPageDataRequest.pagination:type_name -> domain.common.v1.PaginationRequest
-	0,  // 23: domain.entity.v1.GetRoleListPageDataResponse.role_list:type_name -> domain.entity.v1.Role
-	22, // 24: domain.entity.v1.GetRoleListPageDataResponse.pagination:type_name -> domain.common.v1.PaginationResponse
-	23, // 25: domain.entity.v1.GetRoleListPageDataResponse.search_results:type_name -> domain.common.v1.SearchResult
-	17, // 26: domain.entity.v1.GetRoleListPageDataResponse.error:type_name -> domain.common.v1.Error
-	0,  // 27: domain.entity.v1.GetRoleItemPageDataResponse.role:type_name -> domain.entity.v1.Role
-	17, // 28: domain.entity.v1.GetRoleItemPageDataResponse.error:type_name -> domain.common.v1.Error
-	1,  // 29: domain.entity.v1.RoleDomainService.CreateRole:input_type -> domain.entity.v1.CreateRoleRequest
-	3,  // 30: domain.entity.v1.RoleDomainService.ReadRole:input_type -> domain.entity.v1.ReadRoleRequest
-	5,  // 31: domain.entity.v1.RoleDomainService.UpdateRole:input_type -> domain.entity.v1.UpdateRoleRequest
-	7,  // 32: domain.entity.v1.RoleDomainService.DeleteRole:input_type -> domain.entity.v1.DeleteRoleRequest
-	9,  // 33: domain.entity.v1.RoleDomainService.ListRoles:input_type -> domain.entity.v1.ListRolesRequest
-	11, // 34: domain.entity.v1.RoleDomainService.GetRoleListPageData:input_type -> domain.entity.v1.GetRoleListPageDataRequest
-	13, // 35: domain.entity.v1.RoleDomainService.GetRoleItemPageData:input_type -> domain.entity.v1.GetRoleItemPageDataRequest
-	2,  // 36: domain.entity.v1.RoleDomainService.CreateRole:output_type -> domain.entity.v1.CreateRoleResponse
-	4,  // 37: domain.entity.v1.RoleDomainService.ReadRole:output_type -> domain.entity.v1.ReadRoleResponse
-	6,  // 38: domain.entity.v1.RoleDomainService.UpdateRole:output_type -> domain.entity.v1.UpdateRoleResponse
-	8,  // 39: domain.entity.v1.RoleDomainService.DeleteRole:output_type -> domain.entity.v1.DeleteRoleResponse
-	10, // 40: domain.entity.v1.RoleDomainService.ListRoles:output_type -> domain.entity.v1.ListRolesResponse
-	12, // 41: domain.entity.v1.RoleDomainService.GetRoleListPageData:output_type -> domain.entity.v1.GetRoleListPageDataResponse
-	14, // 42: domain.entity.v1.RoleDomainService.GetRoleItemPageData:output_type -> domain.entity.v1.GetRoleItemPageDataResponse
-	36, // [36:43] is the sub-list for method output_type
-	29, // [29:36] is the sub-list for method input_type
-	29, // [29:29] is the sub-list for extension type_name
-	29, // [29:29] is the sub-list for extension extendee
-	0,  // [0:29] is the sub-list for field type_name
+	17, // 2: domain.entity.v1.Role.applicable_principal_types:type_name -> domain.entity.v1.PrincipalType
+	0,  // 3: domain.entity.v1.CreateRoleRequest.data:type_name -> domain.entity.v1.Role
+	0,  // 4: domain.entity.v1.CreateRoleResponse.data:type_name -> domain.entity.v1.Role
+	18, // 5: domain.entity.v1.CreateRoleResponse.error:type_name -> domain.common.v1.Error
+	0,  // 6: domain.entity.v1.ReadRoleRequest.data:type_name -> domain.entity.v1.Role
+	0,  // 7: domain.entity.v1.ReadRoleResponse.data:type_name -> domain.entity.v1.Role
+	18, // 8: domain.entity.v1.ReadRoleResponse.error:type_name -> domain.common.v1.Error
+	0,  // 9: domain.entity.v1.UpdateRoleRequest.data:type_name -> domain.entity.v1.Role
+	0,  // 10: domain.entity.v1.UpdateRoleResponse.data:type_name -> domain.entity.v1.Role
+	18, // 11: domain.entity.v1.UpdateRoleResponse.error:type_name -> domain.common.v1.Error
+	0,  // 12: domain.entity.v1.DeleteRoleRequest.data:type_name -> domain.entity.v1.Role
+	18, // 13: domain.entity.v1.DeleteRoleResponse.error:type_name -> domain.common.v1.Error
+	19, // 14: domain.entity.v1.ListRolesRequest.search:type_name -> domain.common.v1.SearchRequest
+	20, // 15: domain.entity.v1.ListRolesRequest.filters:type_name -> domain.common.v1.FilterRequest
+	21, // 16: domain.entity.v1.ListRolesRequest.sort:type_name -> domain.common.v1.SortRequest
+	22, // 17: domain.entity.v1.ListRolesRequest.pagination:type_name -> domain.common.v1.PaginationRequest
+	0,  // 18: domain.entity.v1.ListRolesResponse.data:type_name -> domain.entity.v1.Role
+	18, // 19: domain.entity.v1.ListRolesResponse.error:type_name -> domain.common.v1.Error
+	19, // 20: domain.entity.v1.GetRoleListPageDataRequest.search:type_name -> domain.common.v1.SearchRequest
+	20, // 21: domain.entity.v1.GetRoleListPageDataRequest.filters:type_name -> domain.common.v1.FilterRequest
+	21, // 22: domain.entity.v1.GetRoleListPageDataRequest.sort:type_name -> domain.common.v1.SortRequest
+	22, // 23: domain.entity.v1.GetRoleListPageDataRequest.pagination:type_name -> domain.common.v1.PaginationRequest
+	0,  // 24: domain.entity.v1.GetRoleListPageDataResponse.role_list:type_name -> domain.entity.v1.Role
+	23, // 25: domain.entity.v1.GetRoleListPageDataResponse.pagination:type_name -> domain.common.v1.PaginationResponse
+	24, // 26: domain.entity.v1.GetRoleListPageDataResponse.search_results:type_name -> domain.common.v1.SearchResult
+	18, // 27: domain.entity.v1.GetRoleListPageDataResponse.error:type_name -> domain.common.v1.Error
+	0,  // 28: domain.entity.v1.GetRoleItemPageDataResponse.role:type_name -> domain.entity.v1.Role
+	18, // 29: domain.entity.v1.GetRoleItemPageDataResponse.error:type_name -> domain.common.v1.Error
+	1,  // 30: domain.entity.v1.RoleDomainService.CreateRole:input_type -> domain.entity.v1.CreateRoleRequest
+	3,  // 31: domain.entity.v1.RoleDomainService.ReadRole:input_type -> domain.entity.v1.ReadRoleRequest
+	5,  // 32: domain.entity.v1.RoleDomainService.UpdateRole:input_type -> domain.entity.v1.UpdateRoleRequest
+	7,  // 33: domain.entity.v1.RoleDomainService.DeleteRole:input_type -> domain.entity.v1.DeleteRoleRequest
+	9,  // 34: domain.entity.v1.RoleDomainService.ListRoles:input_type -> domain.entity.v1.ListRolesRequest
+	11, // 35: domain.entity.v1.RoleDomainService.GetRoleListPageData:input_type -> domain.entity.v1.GetRoleListPageDataRequest
+	13, // 36: domain.entity.v1.RoleDomainService.GetRoleItemPageData:input_type -> domain.entity.v1.GetRoleItemPageDataRequest
+	2,  // 37: domain.entity.v1.RoleDomainService.CreateRole:output_type -> domain.entity.v1.CreateRoleResponse
+	4,  // 38: domain.entity.v1.RoleDomainService.ReadRole:output_type -> domain.entity.v1.ReadRoleResponse
+	6,  // 39: domain.entity.v1.RoleDomainService.UpdateRole:output_type -> domain.entity.v1.UpdateRoleResponse
+	8,  // 40: domain.entity.v1.RoleDomainService.DeleteRole:output_type -> domain.entity.v1.DeleteRoleResponse
+	10, // 41: domain.entity.v1.RoleDomainService.ListRoles:output_type -> domain.entity.v1.ListRolesResponse
+	12, // 42: domain.entity.v1.RoleDomainService.GetRoleListPageData:output_type -> domain.entity.v1.GetRoleListPageDataResponse
+	14, // 43: domain.entity.v1.RoleDomainService.GetRoleItemPageData:output_type -> domain.entity.v1.GetRoleItemPageDataResponse
+	37, // [37:44] is the sub-list for method output_type
+	30, // [30:37] is the sub-list for method input_type
+	30, // [30:30] is the sub-list for extension type_name
+	30, // [30:30] is the sub-list for extension extendee
+	0,  // [0:30] is the sub-list for field type_name
 }
 
 func init() { file_domain_entity_role_role_proto_init() }

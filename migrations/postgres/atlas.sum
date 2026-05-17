@@ -1,4 +1,4 @@
-h1:et8Mf5UUOHUGIqpJ+edFByUpnEvcVPsfVDSVQZRl51M=
+h1:P3i9byLrhg45h5NqjLQkr6w+PadEb3q/duRcmDEUezE=
 20260502000000_baseline.sql h1:nSWEB4eB5Yt6qrCeg8crmwudHHCA0Gpps2L5h649wAU=
 20260505221625_restore_revenue_period_marker_idempotency.sql h1:mAF68zDv14QT18Vfybt+p1uiJ1xtMjDsh8sj6GpTBB8=
 20260505221626_recreate_revenue_period_marker_unique_index.sql h1:9Tm42g4YD+ipRQAiTcMgIHwltETorc0jifJQddi4i7s=
@@ -18,3 +18,5 @@ h1:et8Mf5UUOHUGIqpJ+edFByUpnEvcVPsfVDSVQZRl51M=
 20260510050000_add_mutual_fields.sql h1:35MC22kfXeDpL4iiM0dfR6JeIjnMPWuFbUQNj6dA7cs=
 20260511000000_add_workspace_display_formats.sql h1:hf6VRnji55sjTRxnaeIWFHUaBAddCa907yHr6e6w47k=
 20260511010000_fix_revenue_run_initiated_by_fkey.sql h1:8BPZ9x2TBzbFrotovfW4G7TMY7eCr7AhpZ7xpuQDFhU=
+20260517040201_portal_e2e_waves1to4.sql h1:lqztbHQ8A30h+R4SuuiRjli/xNwdbRhWptXHkJO+wx4=
+20260517120000_funding_waves1.sql h1:w1s/Io57XmRCA0gX1sCWTezeTsNqYJr3WjXoGZPT2/w=

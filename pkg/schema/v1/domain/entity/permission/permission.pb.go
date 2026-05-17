@@ -8,6 +8,7 @@ package entityv1
 
 import (
 	common "github.com/erniealice/esqyma/pkg/schema/v1/domain/common"
+	principal_type "github.com/erniealice/esqyma/pkg/schema/v1/domain/entity/principal_type"
 	_ "github.com/erniealice/esqyma/pkg/schema/v1/options"
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
@@ -73,22 +74,23 @@ func (PermissionType) EnumDescriptor() ([]byte, []int) {
 }
 
 type Permission struct {
-	state              protoimpl.MessageState `protogen:"open.v1"`
-	Id                 string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
-	WorkspaceId        string                 `protobuf:"bytes,2,opt,name=workspace_id,json=workspaceId,proto3" json:"workspace_id,omitempty"`
-	UserId             string                 `protobuf:"bytes,3,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty"`
-	GrantedByUserId    string                 `protobuf:"bytes,4,opt,name=granted_by_user_id,json=grantedByUserId,proto3" json:"granted_by_user_id,omitempty"`
-	PermissionCode     string                 `protobuf:"bytes,5,opt,name=permission_code,json=permissionCode,proto3" json:"permission_code,omitempty"`
-	PermissionType     PermissionType         `protobuf:"varint,6,opt,name=permission_type,json=permissionType,proto3,enum=domain.entity.v1.PermissionType" json:"permission_type,omitempty"`
-	DateCreated        *int64                 `protobuf:"varint,7,opt,name=date_created,json=dateCreated,proto3,oneof" json:"date_created,omitempty"`
-	DateCreatedString  *string                `protobuf:"bytes,8,opt,name=date_created_string,json=dateCreatedString,proto3,oneof" json:"date_created_string,omitempty"`
-	DateModified       *int64                 `protobuf:"varint,9,opt,name=date_modified,json=dateModified,proto3,oneof" json:"date_modified,omitempty"`
-	DateModifiedString *string                `protobuf:"bytes,10,opt,name=date_modified_string,json=dateModifiedString,proto3,oneof" json:"date_modified_string,omitempty"`
-	Active             bool                   `protobuf:"varint,11,opt,name=active,proto3" json:"active,omitempty"`
-	Name               string                 `protobuf:"bytes,12,opt,name=name,proto3" json:"name,omitempty"`
-	Description        string                 `protobuf:"bytes,13,opt,name=description,proto3" json:"description,omitempty"`
-	unknownFields      protoimpl.UnknownFields
-	sizeCache          protoimpl.SizeCache
+	state                    protoimpl.MessageState         `protogen:"open.v1"`
+	Id                       string                         `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
+	WorkspaceId              string                         `protobuf:"bytes,2,opt,name=workspace_id,json=workspaceId,proto3" json:"workspace_id,omitempty"`
+	UserId                   string                         `protobuf:"bytes,3,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty"`
+	GrantedByUserId          string                         `protobuf:"bytes,4,opt,name=granted_by_user_id,json=grantedByUserId,proto3" json:"granted_by_user_id,omitempty"`
+	PermissionCode           string                         `protobuf:"bytes,5,opt,name=permission_code,json=permissionCode,proto3" json:"permission_code,omitempty"`
+	PermissionType           PermissionType                 `protobuf:"varint,6,opt,name=permission_type,json=permissionType,proto3,enum=domain.entity.v1.PermissionType" json:"permission_type,omitempty"`
+	DateCreated              *int64                         `protobuf:"varint,7,opt,name=date_created,json=dateCreated,proto3,oneof" json:"date_created,omitempty"`
+	DateCreatedString        *string                        `protobuf:"bytes,8,opt,name=date_created_string,json=dateCreatedString,proto3,oneof" json:"date_created_string,omitempty"`
+	DateModified             *int64                         `protobuf:"varint,9,opt,name=date_modified,json=dateModified,proto3,oneof" json:"date_modified,omitempty"`
+	DateModifiedString       *string                        `protobuf:"bytes,10,opt,name=date_modified_string,json=dateModifiedString,proto3,oneof" json:"date_modified_string,omitempty"`
+	Active                   bool                           `protobuf:"varint,11,opt,name=active,proto3" json:"active,omitempty"`
+	Name                     string                         `protobuf:"bytes,12,opt,name=name,proto3" json:"name,omitempty"`
+	Description              string                         `protobuf:"bytes,13,opt,name=description,proto3" json:"description,omitempty"`
+	ApplicablePrincipalTypes []principal_type.PrincipalType `protobuf:"varint,14,rep,packed,name=applicable_principal_types,json=applicablePrincipalTypes,proto3,enum=domain.entity.v1.PrincipalType" json:"applicable_principal_types,omitempty"`
+	unknownFields            protoimpl.UnknownFields
+	sizeCache                protoimpl.SizeCache
 }
 
 func (x *Permission) Reset() {
@@ -210,6 +212,13 @@ func (x *Permission) GetDescription() string {
 		return x.Description
 	}
 	return ""
+}
+
+func (x *Permission) GetApplicablePrincipalTypes() []principal_type.PrincipalType {
+	if x != nil {
+		return x.ApplicablePrincipalTypes
+	}
+	return nil
 }
 
 type CreatePermissionRequest struct {
@@ -1015,7 +1024,7 @@ var File_domain_entity_permission_permission_proto protoreflect.FileDescriptor
 
 const file_domain_entity_permission_permission_proto_rawDesc = "" +
 	"\n" +
-	")domain/entity/permission/permission.proto\x12\x10domain.entity.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1adomain/common/search.proto\x1a\x10options/db.proto\"\x9c\x05\n" +
+	")domain/entity/permission/permission.proto\x12\x10domain.entity.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1adomain/common/search.proto\x1a1domain/entity/principal_type/principal_type.proto\x1a\x10options/db.proto\"\xfb\x05\n" +
 	"\n" +
 	"Permission\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x124\n" +
@@ -1035,7 +1044,8 @@ const file_domain_entity_permission_permission_proto_rawDesc = "" +
 	"\x06active\x18\v \x01(\bB\n" +
 	"\x82\xb5\x18\x06\"\x04trueR\x06active\x12\x12\n" +
 	"\x04name\x18\f \x01(\tR\x04name\x12 \n" +
-	"\vdescription\x18\r \x01(\tR\vdescription:\x06\x8a\xb5\x18\x02\b\x01B\x0f\n" +
+	"\vdescription\x18\r \x01(\tR\vdescription\x12]\n" +
+	"\x1aapplicable_principal_types\x18\x0e \x03(\x0e2\x1f.domain.entity.v1.PrincipalTypeR\x18applicablePrincipalTypes:\x06\x8a\xb5\x18\x02\b\x01B\x0f\n" +
 	"\r_date_createdB\x16\n" +
 	"\x14_date_created_stringB\x10\n" +
 	"\x0e_date_modifiedB\x17\n" +
@@ -1154,62 +1164,64 @@ var file_domain_entity_permission_permission_proto_goTypes = []any{
 	(*GetPermissionListPageDataResponse)(nil), // 13: domain.entity.v1.GetPermissionListPageDataResponse
 	(*GetPermissionItemPageDataRequest)(nil),  // 14: domain.entity.v1.GetPermissionItemPageDataRequest
 	(*GetPermissionItemPageDataResponse)(nil), // 15: domain.entity.v1.GetPermissionItemPageDataResponse
-	(*common.Error)(nil),                      // 16: domain.common.v1.Error
-	(*common.SearchRequest)(nil),              // 17: domain.common.v1.SearchRequest
-	(*common.FilterRequest)(nil),              // 18: domain.common.v1.FilterRequest
-	(*common.SortRequest)(nil),                // 19: domain.common.v1.SortRequest
-	(*common.PaginationRequest)(nil),          // 20: domain.common.v1.PaginationRequest
-	(*common.PaginationResponse)(nil),         // 21: domain.common.v1.PaginationResponse
-	(*common.SearchResult)(nil),               // 22: domain.common.v1.SearchResult
+	(principal_type.PrincipalType)(0),         // 16: domain.entity.v1.PrincipalType
+	(*common.Error)(nil),                      // 17: domain.common.v1.Error
+	(*common.SearchRequest)(nil),              // 18: domain.common.v1.SearchRequest
+	(*common.FilterRequest)(nil),              // 19: domain.common.v1.FilterRequest
+	(*common.SortRequest)(nil),                // 20: domain.common.v1.SortRequest
+	(*common.PaginationRequest)(nil),          // 21: domain.common.v1.PaginationRequest
+	(*common.PaginationResponse)(nil),         // 22: domain.common.v1.PaginationResponse
+	(*common.SearchResult)(nil),               // 23: domain.common.v1.SearchResult
 }
 var file_domain_entity_permission_permission_proto_depIdxs = []int32{
 	0,  // 0: domain.entity.v1.Permission.permission_type:type_name -> domain.entity.v1.PermissionType
-	1,  // 1: domain.entity.v1.CreatePermissionRequest.data:type_name -> domain.entity.v1.Permission
-	1,  // 2: domain.entity.v1.CreatePermissionResponse.data:type_name -> domain.entity.v1.Permission
-	16, // 3: domain.entity.v1.CreatePermissionResponse.error:type_name -> domain.common.v1.Error
-	1,  // 4: domain.entity.v1.ReadPermissionRequest.data:type_name -> domain.entity.v1.Permission
-	1,  // 5: domain.entity.v1.ReadPermissionResponse.data:type_name -> domain.entity.v1.Permission
-	16, // 6: domain.entity.v1.ReadPermissionResponse.error:type_name -> domain.common.v1.Error
-	1,  // 7: domain.entity.v1.UpdatePermissionRequest.data:type_name -> domain.entity.v1.Permission
-	1,  // 8: domain.entity.v1.UpdatePermissionResponse.data:type_name -> domain.entity.v1.Permission
-	16, // 9: domain.entity.v1.UpdatePermissionResponse.error:type_name -> domain.common.v1.Error
-	1,  // 10: domain.entity.v1.DeletePermissionRequest.data:type_name -> domain.entity.v1.Permission
-	16, // 11: domain.entity.v1.DeletePermissionResponse.error:type_name -> domain.common.v1.Error
-	17, // 12: domain.entity.v1.ListPermissionsRequest.search:type_name -> domain.common.v1.SearchRequest
-	18, // 13: domain.entity.v1.ListPermissionsRequest.filters:type_name -> domain.common.v1.FilterRequest
-	19, // 14: domain.entity.v1.ListPermissionsRequest.sort:type_name -> domain.common.v1.SortRequest
-	20, // 15: domain.entity.v1.ListPermissionsRequest.pagination:type_name -> domain.common.v1.PaginationRequest
-	1,  // 16: domain.entity.v1.ListPermissionsResponse.data:type_name -> domain.entity.v1.Permission
-	16, // 17: domain.entity.v1.ListPermissionsResponse.error:type_name -> domain.common.v1.Error
-	20, // 18: domain.entity.v1.GetPermissionListPageDataRequest.pagination:type_name -> domain.common.v1.PaginationRequest
-	18, // 19: domain.entity.v1.GetPermissionListPageDataRequest.filters:type_name -> domain.common.v1.FilterRequest
-	19, // 20: domain.entity.v1.GetPermissionListPageDataRequest.sort:type_name -> domain.common.v1.SortRequest
-	17, // 21: domain.entity.v1.GetPermissionListPageDataRequest.search:type_name -> domain.common.v1.SearchRequest
-	1,  // 22: domain.entity.v1.GetPermissionListPageDataResponse.permission_list:type_name -> domain.entity.v1.Permission
-	21, // 23: domain.entity.v1.GetPermissionListPageDataResponse.pagination:type_name -> domain.common.v1.PaginationResponse
-	22, // 24: domain.entity.v1.GetPermissionListPageDataResponse.search_results:type_name -> domain.common.v1.SearchResult
-	16, // 25: domain.entity.v1.GetPermissionListPageDataResponse.error:type_name -> domain.common.v1.Error
-	1,  // 26: domain.entity.v1.GetPermissionItemPageDataResponse.permission:type_name -> domain.entity.v1.Permission
-	16, // 27: domain.entity.v1.GetPermissionItemPageDataResponse.error:type_name -> domain.common.v1.Error
-	2,  // 28: domain.entity.v1.PermissionDomainService.CreatePermission:input_type -> domain.entity.v1.CreatePermissionRequest
-	4,  // 29: domain.entity.v1.PermissionDomainService.ReadPermission:input_type -> domain.entity.v1.ReadPermissionRequest
-	6,  // 30: domain.entity.v1.PermissionDomainService.UpdatePermission:input_type -> domain.entity.v1.UpdatePermissionRequest
-	8,  // 31: domain.entity.v1.PermissionDomainService.DeletePermission:input_type -> domain.entity.v1.DeletePermissionRequest
-	10, // 32: domain.entity.v1.PermissionDomainService.ListPermissions:input_type -> domain.entity.v1.ListPermissionsRequest
-	12, // 33: domain.entity.v1.PermissionDomainService.GetPermissionListPageData:input_type -> domain.entity.v1.GetPermissionListPageDataRequest
-	14, // 34: domain.entity.v1.PermissionDomainService.GetPermissionItemPageData:input_type -> domain.entity.v1.GetPermissionItemPageDataRequest
-	3,  // 35: domain.entity.v1.PermissionDomainService.CreatePermission:output_type -> domain.entity.v1.CreatePermissionResponse
-	5,  // 36: domain.entity.v1.PermissionDomainService.ReadPermission:output_type -> domain.entity.v1.ReadPermissionResponse
-	7,  // 37: domain.entity.v1.PermissionDomainService.UpdatePermission:output_type -> domain.entity.v1.UpdatePermissionResponse
-	9,  // 38: domain.entity.v1.PermissionDomainService.DeletePermission:output_type -> domain.entity.v1.DeletePermissionResponse
-	11, // 39: domain.entity.v1.PermissionDomainService.ListPermissions:output_type -> domain.entity.v1.ListPermissionsResponse
-	13, // 40: domain.entity.v1.PermissionDomainService.GetPermissionListPageData:output_type -> domain.entity.v1.GetPermissionListPageDataResponse
-	15, // 41: domain.entity.v1.PermissionDomainService.GetPermissionItemPageData:output_type -> domain.entity.v1.GetPermissionItemPageDataResponse
-	35, // [35:42] is the sub-list for method output_type
-	28, // [28:35] is the sub-list for method input_type
-	28, // [28:28] is the sub-list for extension type_name
-	28, // [28:28] is the sub-list for extension extendee
-	0,  // [0:28] is the sub-list for field type_name
+	16, // 1: domain.entity.v1.Permission.applicable_principal_types:type_name -> domain.entity.v1.PrincipalType
+	1,  // 2: domain.entity.v1.CreatePermissionRequest.data:type_name -> domain.entity.v1.Permission
+	1,  // 3: domain.entity.v1.CreatePermissionResponse.data:type_name -> domain.entity.v1.Permission
+	17, // 4: domain.entity.v1.CreatePermissionResponse.error:type_name -> domain.common.v1.Error
+	1,  // 5: domain.entity.v1.ReadPermissionRequest.data:type_name -> domain.entity.v1.Permission
+	1,  // 6: domain.entity.v1.ReadPermissionResponse.data:type_name -> domain.entity.v1.Permission
+	17, // 7: domain.entity.v1.ReadPermissionResponse.error:type_name -> domain.common.v1.Error
+	1,  // 8: domain.entity.v1.UpdatePermissionRequest.data:type_name -> domain.entity.v1.Permission
+	1,  // 9: domain.entity.v1.UpdatePermissionResponse.data:type_name -> domain.entity.v1.Permission
+	17, // 10: domain.entity.v1.UpdatePermissionResponse.error:type_name -> domain.common.v1.Error
+	1,  // 11: domain.entity.v1.DeletePermissionRequest.data:type_name -> domain.entity.v1.Permission
+	17, // 12: domain.entity.v1.DeletePermissionResponse.error:type_name -> domain.common.v1.Error
+	18, // 13: domain.entity.v1.ListPermissionsRequest.search:type_name -> domain.common.v1.SearchRequest
+	19, // 14: domain.entity.v1.ListPermissionsRequest.filters:type_name -> domain.common.v1.FilterRequest
+	20, // 15: domain.entity.v1.ListPermissionsRequest.sort:type_name -> domain.common.v1.SortRequest
+	21, // 16: domain.entity.v1.ListPermissionsRequest.pagination:type_name -> domain.common.v1.PaginationRequest
+	1,  // 17: domain.entity.v1.ListPermissionsResponse.data:type_name -> domain.entity.v1.Permission
+	17, // 18: domain.entity.v1.ListPermissionsResponse.error:type_name -> domain.common.v1.Error
+	21, // 19: domain.entity.v1.GetPermissionListPageDataRequest.pagination:type_name -> domain.common.v1.PaginationRequest
+	19, // 20: domain.entity.v1.GetPermissionListPageDataRequest.filters:type_name -> domain.common.v1.FilterRequest
+	20, // 21: domain.entity.v1.GetPermissionListPageDataRequest.sort:type_name -> domain.common.v1.SortRequest
+	18, // 22: domain.entity.v1.GetPermissionListPageDataRequest.search:type_name -> domain.common.v1.SearchRequest
+	1,  // 23: domain.entity.v1.GetPermissionListPageDataResponse.permission_list:type_name -> domain.entity.v1.Permission
+	22, // 24: domain.entity.v1.GetPermissionListPageDataResponse.pagination:type_name -> domain.common.v1.PaginationResponse
+	23, // 25: domain.entity.v1.GetPermissionListPageDataResponse.search_results:type_name -> domain.common.v1.SearchResult
+	17, // 26: domain.entity.v1.GetPermissionListPageDataResponse.error:type_name -> domain.common.v1.Error
+	1,  // 27: domain.entity.v1.GetPermissionItemPageDataResponse.permission:type_name -> domain.entity.v1.Permission
+	17, // 28: domain.entity.v1.GetPermissionItemPageDataResponse.error:type_name -> domain.common.v1.Error
+	2,  // 29: domain.entity.v1.PermissionDomainService.CreatePermission:input_type -> domain.entity.v1.CreatePermissionRequest
+	4,  // 30: domain.entity.v1.PermissionDomainService.ReadPermission:input_type -> domain.entity.v1.ReadPermissionRequest
+	6,  // 31: domain.entity.v1.PermissionDomainService.UpdatePermission:input_type -> domain.entity.v1.UpdatePermissionRequest
+	8,  // 32: domain.entity.v1.PermissionDomainService.DeletePermission:input_type -> domain.entity.v1.DeletePermissionRequest
+	10, // 33: domain.entity.v1.PermissionDomainService.ListPermissions:input_type -> domain.entity.v1.ListPermissionsRequest
+	12, // 34: domain.entity.v1.PermissionDomainService.GetPermissionListPageData:input_type -> domain.entity.v1.GetPermissionListPageDataRequest
+	14, // 35: domain.entity.v1.PermissionDomainService.GetPermissionItemPageData:input_type -> domain.entity.v1.GetPermissionItemPageDataRequest
+	3,  // 36: domain.entity.v1.PermissionDomainService.CreatePermission:output_type -> domain.entity.v1.CreatePermissionResponse
+	5,  // 37: domain.entity.v1.PermissionDomainService.ReadPermission:output_type -> domain.entity.v1.ReadPermissionResponse
+	7,  // 38: domain.entity.v1.PermissionDomainService.UpdatePermission:output_type -> domain.entity.v1.UpdatePermissionResponse
+	9,  // 39: domain.entity.v1.PermissionDomainService.DeletePermission:output_type -> domain.entity.v1.DeletePermissionResponse
+	11, // 40: domain.entity.v1.PermissionDomainService.ListPermissions:output_type -> domain.entity.v1.ListPermissionsResponse
+	13, // 41: domain.entity.v1.PermissionDomainService.GetPermissionListPageData:output_type -> domain.entity.v1.GetPermissionListPageDataResponse
+	15, // 42: domain.entity.v1.PermissionDomainService.GetPermissionItemPageData:output_type -> domain.entity.v1.GetPermissionItemPageDataResponse
+	36, // [36:43] is the sub-list for method output_type
+	29, // [29:36] is the sub-list for method input_type
+	29, // [29:29] is the sub-list for extension type_name
+	29, // [29:29] is the sub-list for extension extendee
+	0,  // [0:29] is the sub-list for field type_name
 }
 
 func init() { file_domain_entity_permission_permission_proto_init() }

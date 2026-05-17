@@ -11,6 +11,7 @@ import "domain/common/sort.proto";
 import "domain/common/search.proto";
 
 import "domain/subscription/subscription/subscription.proto";
+import "options/db.proto";
 
 message Disbursement {
   string id = 1;
@@ -37,6 +38,12 @@ message Disbursement {
 
   // GL traceability
   optional string journal_entry_id = 28;    // FK to journal_entry — set when disbursement is posted to ledger
+
+  // FK back-edge — FS-D shared-fund-sources plan (2026-05-17).
+  // Links this disbursement to the FundTransaction (kind=SETTLEMENT) that was inserted
+  // when outstanding draws were settled from this workspace's cash. NULL when the disbursement
+  // is a direct cash outflow with no shared-fund involvement.
+  optional string fund_transaction_id = 29 [(options.v1.db).references = "fund_transaction"];
 }
 
 service DisbursementDomainService {

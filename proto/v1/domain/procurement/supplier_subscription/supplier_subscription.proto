@@ -73,6 +73,11 @@ message SupplierSubscription {
   // an operator-clicked "Renew" extends date_time_end by default_term_value × default_term_unit
   // from cost_plan. Nothing happens automatically in v1 (cron deferred to D2).
   bool auto_renew = 32 [(options.v1.db).default = "false"];
+
+  // FK back-edge — Wave 4 self-domain plan (2026-05-17).
+  // Snapshot of the disbursement profile that remits this supplier subscription.
+  // Stored as string (no DB FK constraint) to survive profile edits — see architecture.md §3.5.
+  optional string disbursement_profile_id_snapshot = 33;
 }
 
 service SupplierSubscriptionDomainService {

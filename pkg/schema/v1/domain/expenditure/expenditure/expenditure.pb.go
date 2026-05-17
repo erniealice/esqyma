@@ -95,8 +95,17 @@ type Expenditure struct {
 	// Fields 30/31 were taken (expense_recognition_id, accrued_expense_id); using 34/35.
 	SupplierSubscriptionId *string `protobuf:"bytes,34,opt,name=supplier_subscription_id,json=supplierSubscriptionId,proto3,oneof" json:"supplier_subscription_id,omitempty"` // FK to SupplierSubscription (subscription-driven expenditure)
 	CostPlanId             *string `protobuf:"bytes,35,opt,name=cost_plan_id,json=costPlanId,proto3,oneof" json:"cost_plan_id,omitempty"`                                     // FK to CostPlan (denormalized for join-free reporting)
-	unknownFields          protoimpl.UnknownFields
-	sizeCache              protoimpl.SizeCache
+	// FK back-edge — Wave 4 self-domain plan (2026-05-17).
+	// Audit snapshot of the disbursement profile active at bill time.
+	// Stored as string (no DB FK constraint) to survive profile edits — see architecture.md §3.5.
+	DisbursementProfileIdSnapshot *string `protobuf:"bytes,36,opt,name=disbursement_profile_id_snapshot,json=disbursementProfileIdSnapshot,proto3,oneof" json:"disbursement_profile_id_snapshot,omitempty"`
+	// FK back-edge — FS-D shared-fund-sources plan (2026-05-17).
+	// Links this expenditure to the FundTransaction (kind=DRAW) that was inserted
+	// when this bill was charged to a shared fund source. NULL when the expenditure
+	// is funded from a regular cash account (no shared-fund involvement).
+	FundTransactionId *string `protobuf:"bytes,37,opt,name=fund_transaction_id,json=fundTransactionId,proto3,oneof" json:"fund_transaction_id,omitempty"`
+	unknownFields     protoimpl.UnknownFields
+	sizeCache         protoimpl.SizeCache
 }
 
 func (x *Expenditure) Reset() {
@@ -370,6 +379,20 @@ func (x *Expenditure) GetSupplierSubscriptionId() string {
 func (x *Expenditure) GetCostPlanId() string {
 	if x != nil && x.CostPlanId != nil {
 		return *x.CostPlanId
+	}
+	return ""
+}
+
+func (x *Expenditure) GetDisbursementProfileIdSnapshot() string {
+	if x != nil && x.DisbursementProfileIdSnapshot != nil {
+		return *x.DisbursementProfileIdSnapshot
+	}
+	return ""
+}
+
+func (x *Expenditure) GetFundTransactionId() string {
+	if x != nil && x.FundTransactionId != nil {
+		return *x.FundTransactionId
 	}
 	return ""
 }
@@ -1162,7 +1185,7 @@ var File_domain_expenditure_expenditure_expenditure_proto protoreflect.FileDescr
 
 const file_domain_expenditure_expenditure_expenditure_proto_rawDesc = "" +
 	"\n" +
-	"0domain/expenditure/expenditure/expenditure.proto\x12\x15domain.expenditure.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/search.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a!domain/entity/client/client.proto\x1a%domain/entity/location/location.proto\x1a-domain/entity/payment_term/payment_term.proto\x1a\x10options/db.proto\"\x9f\x11\n" +
+	"0domain/expenditure/expenditure/expenditure.proto\x12\x15domain.expenditure.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/search.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a!domain/entity/client/client.proto\x1a%domain/entity/location/location.proto\x1a-domain/entity/payment_term/payment_term.proto\x1a\x10options/db.proto\"\xf7\x12\n" +
 	"\vExpenditure\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12&\n" +
 	"\fdate_created\x18\x02 \x01(\x03H\x00R\vdateCreated\x88\x01\x01\x123\n" +
@@ -1214,7 +1237,10 @@ const file_domain_expenditure_expenditure_expenditure_proto_rawDesc = "" +
 	"\x15supplier_subscription\x18\x01H\x18R\x16supplierSubscriptionId\x88\x01\x01\x128\n" +
 	"\fcost_plan_id\x18# \x01(\tB\x11\x82\xb5\x18\r\n" +
 	"\tcost_plan\x18\x01H\x19R\n" +
-	"costPlanId\x88\x01\x01B\x0f\n" +
+	"costPlanId\x88\x01\x01\x12L\n" +
+	" disbursement_profile_id_snapshot\x18$ \x01(\tH\x1aR\x1ddisbursementProfileIdSnapshot\x88\x01\x01\x12K\n" +
+	"\x13fund_transaction_id\x18% \x01(\tB\x16\x82\xb5\x18\x12\n" +
+	"\x10fund_transactionH\x1bR\x11fundTransactionId\x88\x01\x01B\x0f\n" +
 	"\r_date_createdB\x16\n" +
 	"\x14_date_created_stringB\x10\n" +
 	"\x0e_date_modifiedB\x17\n" +
@@ -1240,7 +1266,9 @@ const file_domain_expenditure_expenditure_expenditure_proto_rawDesc = "" +
 	"\v_cycle_dateB\t\n" +
 	"\a_sourceB\x1b\n" +
 	"\x19_supplier_subscription_idB\x0f\n" +
-	"\r_cost_plan_id\"R\n" +
+	"\r_cost_plan_idB#\n" +
+	"!_disbursement_profile_id_snapshotB\x16\n" +
+	"\x14_fund_transaction_id\"R\n" +
 	"\x18CreateExpenditureRequest\x126\n" +
 	"\x04data\x18\x01 \x01(\v2\".domain.expenditure.v1.ExpenditureR\x04data\"\xab\x01\n" +
 	"\x19CreateExpenditureResponse\x126\n" +

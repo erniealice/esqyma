@@ -75,6 +75,11 @@ message Revenue {
   optional int64 billing_amount = 44;                // Original amount in billing_currency centavos (before FX conversion)
   optional int64 forex_rate_micro_units = 45;        // Snapshotted FX rate at recognition (functional per 1 billing unit * 1_000_000)
   optional string forex_rate_source = 46;            // "operator", "bsp_ref:<date>" — source of the FX rate used
+
+  // FK back-edge — Wave 4 self-domain plan (2026-05-17).
+  // Audit snapshot of the collection profile active at recognition time.
+  // Stored as string (no DB FK constraint) to survive profile edits — see architecture.md §3.5.
+  optional string collection_profile_id_snapshot = 47;
 }
 
 // PreviewTaxLine — ephemeral, dry-run only. Not persisted.

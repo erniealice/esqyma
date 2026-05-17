@@ -10,6 +10,7 @@ import (
 	common "github.com/erniealice/esqyma/pkg/schema/v1/domain/common"
 	client "github.com/erniealice/esqyma/pkg/schema/v1/domain/entity/client"
 	disbursement_method "github.com/erniealice/esqyma/pkg/schema/v1/domain/treasury/disbursement_method"
+	_ "github.com/erniealice/esqyma/pkg/schema/v1/options"
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
 	reflect "reflect"
@@ -36,8 +37,15 @@ type DisbursementProfile struct {
 	ClientId             string                                  `protobuf:"bytes,8,opt,name=client_id,json=clientId,proto3" json:"client_id,omitempty"`
 	DisbursementMethod   *disbursement_method.DisbursementMethod `protobuf:"bytes,9,opt,name=disbursement_method,json=disbursementMethod,proto3,oneof" json:"disbursement_method,omitempty"`
 	DisbursementMethodId string                                  `protobuf:"bytes,10,opt,name=disbursement_method_id,json=disbursementMethodId,proto3" json:"disbursement_method_id,omitempty"`
-	unknownFields        protoimpl.UnknownFields
-	sizeCache            protoimpl.SizeCache
+	// Wave 4 side-fix — architecture.md §3.6.
+	// Add supplier_id alongside the existing client_id. The client_id field on this
+	// entity was originally intended for buying-side use (supplier remittance) but
+	// incorrectly references the client table. supplier_id is the correct FK for the
+	// buying side. Both fields coexist during transition; client_id will be deprecated
+	// in the full Path A polymorphic-upgrade plan. Do NOT remove or rename client_id here.
+	SupplierId    *string `protobuf:"bytes,11,opt,name=supplier_id,json=supplierId,proto3,oneof" json:"supplier_id,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
 }
 
 func (x *DisbursementProfile) Reset() {
@@ -136,6 +144,13 @@ func (x *DisbursementProfile) GetDisbursementMethod() *disbursement_method.Disbu
 func (x *DisbursementProfile) GetDisbursementMethodId() string {
 	if x != nil {
 		return x.DisbursementMethodId
+	}
+	return ""
+}
+
+func (x *DisbursementProfile) GetSupplierId() string {
+	if x != nil && x.SupplierId != nil {
+		return *x.SupplierId
 	}
 	return ""
 }
@@ -936,7 +951,7 @@ var File_domain_treasury_disbursement_profile_disbursement_profile_proto protore
 
 const file_domain_treasury_disbursement_profile_disbursement_profile_proto_rawDesc = "" +
 	"\n" +
-	"?domain/treasury/disbursement_profile/disbursement_profile.proto\x12\x12domain.treasury.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1adomain/common/search.proto\x1a!domain/entity/client/client.proto\x1a=domain/treasury/disbursement_method/disbursement_method.proto\"\xda\x04\n" +
+	"?domain/treasury/disbursement_profile/disbursement_profile.proto\x12\x12domain.treasury.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1adomain/common/search.proto\x1a!domain/entity/client/client.proto\x1a=domain/treasury/disbursement_method/disbursement_method.proto\x1a\x10options/db.proto\"\xa2\x05\n" +
 	"\x13DisbursementProfile\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12&\n" +
 	"\fdate_created\x18\x02 \x01(\x03H\x00R\vdateCreated\x88\x01\x01\x123\n" +
@@ -948,13 +963,17 @@ const file_domain_treasury_disbursement_profile_disbursement_profile_proto_rawDe
 	"\tclient_id\x18\b \x01(\tR\bclientId\x12\\\n" +
 	"\x13disbursement_method\x18\t \x01(\v2&.domain.treasury.v1.DisbursementMethodH\x05R\x12disbursementMethod\x88\x01\x01\x124\n" +
 	"\x16disbursement_method_id\x18\n" +
-	" \x01(\tR\x14disbursementMethodIdB\x0f\n" +
+	" \x01(\tR\x14disbursementMethodId\x126\n" +
+	"\vsupplier_id\x18\v \x01(\tB\x10\x82\xb5\x18\f\n" +
+	"\bsupplier\x18\x01H\x06R\n" +
+	"supplierId\x88\x01\x01B\x0f\n" +
 	"\r_date_createdB\x16\n" +
 	"\x14_date_created_stringB\x10\n" +
 	"\x0e_date_modifiedB\x17\n" +
 	"\x15_date_modified_stringB\t\n" +
 	"\a_clientB\x16\n" +
-	"\x14_disbursement_method\"_\n" +
+	"\x14_disbursement_methodB\x0e\n" +
+	"\f_supplier_id\"_\n" +
 	" CreateDisbursementProfileRequest\x12;\n" +
 	"\x04data\x18\x01 \x01(\v2'.domain.treasury.v1.DisbursementProfileR\x04data\"\xb8\x01\n" +
 	"!CreateDisbursementProfileResponse\x12;\n" +
