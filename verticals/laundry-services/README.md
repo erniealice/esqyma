@@ -522,3 +522,33 @@ The `subscription.metadata` field distinguishes these: `{"model": "rental"}` vs.
 - **Par level management**: Hotels maintain 3-par linen levels (1 in room, 1 in transit, 1 at plant). The `subscription.metadata` could track par configuration, but a dedicated field might be cleaner.
 - **Damage claims**: When a garment is damaged during processing, the claim/replacement flow involves both `inventory_depreciation` (write-off) and a potential credit `RevenueLineItem` (refund to customer).
 - **Machine utilization**: IoT data from washers/dryers (cycles, energy, water) doesn't map naturally to the current proto. `InventoryTransaction` metadata could carry machine ID and cycle data, but a dedicated equipment model might be needed.
+
+---
+
+## Universal Job Model — applicability to laundry services
+
+The `operation/` proto domain is being generalised under `docs/plan/20260427-universal-job-model/` to handle service / project / maintenance / production work from one schema. Wave 1 (already complete locally) added the enum values `PLANNED`, `RELEASED`, `EQUIPMENT`, `SUBCONTRACT`, `HOLD`, `REWORK`, plus JobTemplate versioning and Job output-target fields. Waves 2–4 add nine new entities. Laundry-services is **moderate-to-high beneficiary** — the processing pipeline maps neatly onto the universal job model, with the per-cycle cost reporting being the most valuable new capability.
+
+| New entity (Wave) | Relevance to laundry services | Example |
+|---|---|---|
+| `job_template_input` (W2) | 🟡 Medium — per-cycle expected inputs | "Hotel daily linen run template expects 0.5h driver + 1.5h washer + 200g detergent + 50ml softener per 100 lbs." Cost-per-cycle reporting drops out of this. |
+| `job_template_input_alternate` (W2) | ⚪ Low | (rare — chemical equivalents exist but rarely swapped) |
+| `lot` (W2) | ⚪ Low–🟡 Medium | Chemical lots (detergent / pre-treat) — currently tracked loosely; would matter for healthcare-grade laundering. |
+| `job_input_plan` (W3) | 🟡 Medium — cycle baseline | Per-cycle frozen plan lets you say "this cycle used 240g detergent against a planned 200g" → 20% over. |
+| `task_interruption` (W3) | 🟢 High — machine breakdown tracking | Washer #4 broke at 10:30; cycle paused; resumed at 13:15 after repair. Drives OEE-style availability reporting on the plant floor. |
+| `job_output` (W4) | 🟢 High — delivery confirmation, damage report | Per-cycle: `output_kind=SERVICE_DELIVERY` for the laundered batch + `output_kind=DELIVERABLE` × N for damage photos / customer-signed delivery receipt. |
+| `job_cost_ledger_entry` (W4) | 🟡 Medium — per-cycle cost | Cycle cost rolls up labour + chemicals + machine time; drives unit economics per customer / per route. |
+| `job_cost_snapshot` (W4) | 🟡 Medium | Period-end open-cycle cost snapshot. |
+| `job_plan_deviation` (W4) | 🟡 Medium — yield variance | Lost or damaged garments per cycle, charge-back basis. |
+
+**Surface area for laundry UI:** the Processing Pipeline screen gains a "Plan vs Actual" panel per cycle; the Plant Manager dashboard gains "Downtime today" surfacing `task_interruption` rows; the Customer Statement reuses `job_output` rows to itemise damage / replacement claims.
+
+**Plant operations note:** `task_interruption` is the highest-value addition for laundry — machine breakdowns directly affect on-time delivery commitments. Pairing it with the existing `outcome_criteria` quality layer gives you full plant-floor instrumentation: did we run on time, did we hit quality targets, did we waste chemicals?
+
+**Lyngua tier-3 keys to author** (under `packages/lyngua/translations/en/service/` or a future `laundry-services/`):
+- `job_template_input.json` → "Cycle requirements" / "Cycle inputs"
+- `task_interruption.json` → "Downtime"
+- `job_output.json` → "Cycle delivery"
+- `job_plan_deviation.json` → "Yield variance"
+
+**See:** `packages/esqyma/verticals/manufacturing/README.md` for the canonical facade example. The same proto fields, rendered under `lyngua/translations/en/manufacturing/`, become BOM-and-Routing / WIP / Variance.

@@ -16,6 +16,8 @@ import type { SearchRequest, SearchResult } from "../../common/search_pb";
 import { file_domain_common_search } from "../../common/search_pb";
 import type { Subscription } from "../../subscription/subscription/subscription_pb";
 import { file_domain_subscription_subscription_subscription } from "../../subscription/subscription/subscription_pb";
+import type { AdvanceAmortizeOutcome, AdvanceKind, AdvanceProrationPolicy, AdvanceStatus } from "../../common/advance_kind/advance_kind_pb";
+import { file_domain_common_advance_kind_advance_kind } from "../../common/advance_kind/advance_kind_pb";
 import { file_options_db } from "../../../options/db_pb";
 import type { Message } from "@bufbuild/protobuf";
 
@@ -23,7 +25,7 @@ import type { Message } from "@bufbuild/protobuf";
  * Describes the file domain/treasury/disbursement/disbursement.proto.
  */
 export const file_domain_treasury_disbursement_disbursement: GenFile = /*@__PURE__*/
-  fileDesc("Ci9kb21haW4vdHJlYXN1cnkvZGlzYnVyc2VtZW50L2Rpc2J1cnNlbWVudC5wcm90bxISZG9tYWluLnRyZWFzdXJ5LnYxIskFCgxEaXNidXJzZW1lbnQSCgoCaWQYASABKAkSGQoMZGF0ZV9jcmVhdGVkGAIgASgDSACIAQESIAoTZGF0ZV9jcmVhdGVkX3N0cmluZxgDIAEoCUgBiAEBEhoKDWRhdGVfbW9kaWZpZWQYBCABKANIAogBARIhChRkYXRlX21vZGlmaWVkX3N0cmluZxgFIAEoCUgDiAEBEg4KBmFjdGl2ZRgGIAEoCBIMCgRuYW1lGAcgASgJEj8KDHN1YnNjcmlwdGlvbhgIIAEoCzIkLmRvbWFpbi5zdWJzY3JpcHRpb24udjEuU3Vic2NyaXB0aW9uSASIAQESFwoPc3Vic2NyaXB0aW9uX2lkGAkgASgJEg4KBmFtb3VudBgKIAEoAxIOCgZzdGF0dXMYCyABKAkSFgoOZXhwZW5kaXR1cmVfaWQYFCABKAkSGQoRZGlzYnVyc2VtZW50X3R5cGUYFSABKAkSHgoWZGlzYnVyc2VtZW50X21ldGhvZF9pZBgWIAEoCRIQCghjdXJyZW5jeRgXIAEoCRIYChByZWZlcmVuY2VfbnVtYmVyGBggASgJEhQKDHBheW1lbnRfZGF0ZRgZIAEoCRITCgthcHByb3ZlZF9ieRgaIAEoCRIdChBqb3VybmFsX2VudHJ5X2lkGBwgASgJSAWIAQESOAoTZnVuZF90cmFuc2FjdGlvbl9pZBgdIAEoCUIWgrUYEgoQZnVuZF90cmFuc2FjdGlvbkgGiAEBQg8KDV9kYXRlX2NyZWF0ZWRCFgoUX2RhdGVfY3JlYXRlZF9zdHJpbmdCEAoOX2RhdGVfbW9kaWZpZWRCFwoVX2RhdGVfbW9kaWZpZWRfc3RyaW5nQg8KDV9zdWJzY3JpcHRpb25CEwoRX2pvdXJuYWxfZW50cnlfaWRCFgoUX2Z1bmRfdHJhbnNhY3Rpb25faWRKBAgbEBwiSwoZQ3JlYXRlRGlzYnVyc2VtZW50UmVxdWVzdBIuCgRkYXRhGAEgASgLMiAuZG9tYWluLnRyZWFzdXJ5LnYxLkRpc2J1cnNlbWVudCKUAQoaQ3JlYXRlRGlzYnVyc2VtZW50UmVzcG9uc2USLgoEZGF0YRgBIAMoCzIgLmRvbWFpbi50cmVhc3VyeS52MS5EaXNidXJzZW1lbnQSDwoHc3VjY2VzcxgCIAEoCBIrCgVlcnJvchgDIAEoCzIXLmRvbWFpbi5jb21tb24udjEuRXJyb3JIAIgBAUIICgZfZXJyb3IiSQoXUmVhZERpc2J1cnNlbWVudFJlcXVlc3QSLgoEZGF0YRgBIAEoCzIgLmRvbWFpbi50cmVhc3VyeS52MS5EaXNidXJzZW1lbnQikgEKGFJlYWREaXNidXJzZW1lbnRSZXNwb25zZRIuCgRkYXRhGAEgAygLMiAuZG9tYWluLnRyZWFzdXJ5LnYxLkRpc2J1cnNlbWVudBIPCgdzdWNjZXNzGAIgASgIEisKBWVycm9yGAMgASgLMhcuZG9tYWluLmNvbW1vbi52MS5FcnJvckgAiAEBQggKBl9lcnJvciJLChlVcGRhdGVEaXNidXJzZW1lbnRSZXF1ZXN0Ei4KBGRhdGEYASABKAsyIC5kb21haW4udHJlYXN1cnkudjEuRGlzYnVyc2VtZW50IpQBChpVcGRhdGVEaXNidXJzZW1lbnRSZXNwb25zZRIuCgRkYXRhGAEgAygLMiAuZG9tYWluLnRyZWFzdXJ5LnYxLkRpc2J1cnNlbWVudBIPCgdzdWNjZXNzGAIgASgIEisKBWVycm9yGAMgASgLMhcuZG9tYWluLmNvbW1vbi52MS5FcnJvckgAiAEBQggKBl9lcnJvciJLChlEZWxldGVEaXNidXJzZW1lbnRSZXF1ZXN0Ei4KBGRhdGEYASABKAsyIC5kb21haW4udHJlYXN1cnkudjEuRGlzYnVyc2VtZW50ImQKGkRlbGV0ZURpc2J1cnNlbWVudFJlc3BvbnNlEg8KB3N1Y2Nlc3MYASABKAgSKwoFZXJyb3IYAiABKAsyFy5kb21haW4uY29tbW9uLnYxLkVycm9ySACIAQFCCAoGX2Vycm9yIqYCChhMaXN0RGlzYnVyc2VtZW50c1JlcXVlc3QSNAoGc2VhcmNoGAEgASgLMh8uZG9tYWluLmNvbW1vbi52MS5TZWFyY2hSZXF1ZXN0SACIAQESNQoHZmlsdGVycxgCIAEoCzIfLmRvbWFpbi5jb21tb24udjEuRmlsdGVyUmVxdWVzdEgBiAEBEjAKBHNvcnQYAyABKAsyHS5kb21haW4uY29tbW9uLnYxLlNvcnRSZXF1ZXN0SAKIAQESPAoKcGFnaW5hdGlvbhgEIAEoCzIjLmRvbWFpbi5jb21tb24udjEuUGFnaW5hdGlvblJlcXVlc3RIA4gBAUIJCgdfc2VhcmNoQgoKCF9maWx0ZXJzQgcKBV9zb3J0Qg0KC19wYWdpbmF0aW9uIpMBChlMaXN0RGlzYnVyc2VtZW50c1Jlc3BvbnNlEi4KBGRhdGEYASADKAsyIC5kb21haW4udHJlYXN1cnkudjEuRGlzYnVyc2VtZW50Eg8KB3N1Y2Nlc3MYAiABKAgSKwoFZXJyb3IYAyABKAsyFy5kb21haW4uY29tbW9uLnYxLkVycm9ySACIAQFCCAoGX2Vycm9yIrACCiJHZXREaXNidXJzZW1lbnRMaXN0UGFnZURhdGFSZXF1ZXN0EjwKCnBhZ2luYXRpb24YASABKAsyIy5kb21haW4uY29tbW9uLnYxLlBhZ2luYXRpb25SZXF1ZXN0SACIAQESNQoHZmlsdGVycxgCIAEoCzIfLmRvbWFpbi5jb21tb24udjEuRmlsdGVyUmVxdWVzdEgBiAEBEjAKBHNvcnQYAyABKAsyHS5kb21haW4uY29tbW9uLnYxLlNvcnRSZXF1ZXN0SAKIAQESNAoGc2VhcmNoGAQgASgLMh8uZG9tYWluLmNvbW1vbi52MS5TZWFyY2hSZXF1ZXN0SAOIAQFCDQoLX3BhZ2luYXRpb25CCgoIX2ZpbHRlcnNCBwoFX3NvcnRCCQoHX3NlYXJjaCKwAgojR2V0RGlzYnVyc2VtZW50TGlzdFBhZ2VEYXRhUmVzcG9uc2USOwoRZGlzYnVyc2VtZW50X2xpc3QYASADKAsyIC5kb21haW4udHJlYXN1cnkudjEuRGlzYnVyc2VtZW50Eg8KB3N1Y2Nlc3MYAiABKAgSKwoFZXJyb3IYAyABKAsyFy5kb21haW4uY29tbW9uLnYxLkVycm9ySACIAQESPQoKcGFnaW5hdGlvbhgEIAEoCzIkLmRvbWFpbi5jb21tb24udjEuUGFnaW5hdGlvblJlc3BvbnNlSAGIAQESNgoOc2VhcmNoX3Jlc3VsdHMYBSADKAsyHi5kb21haW4uY29tbW9uLnYxLlNlYXJjaFJlc3VsdEIICgZfZXJyb3JCDQoLX3BhZ2luYXRpb24iPQoiR2V0RGlzYnVyc2VtZW50SXRlbVBhZ2VEYXRhUmVxdWVzdBIXCg9kaXNidXJzZW1lbnRfaWQYASABKAkiuwEKI0dldERpc2J1cnNlbWVudEl0ZW1QYWdlRGF0YVJlc3BvbnNlEjsKDGRpc2J1cnNlbWVudBgBIAEoCzIgLmRvbWFpbi50cmVhc3VyeS52MS5EaXNidXJzZW1lbnRIAIgBARIPCgdzdWNjZXNzGAIgASgIEisKBWVycm9yGAMgASgLMhcuZG9tYWluLmNvbW1vbi52MS5FcnJvckgBiAEBQg8KDV9kaXNidXJzZW1lbnRCCAoGX2Vycm9yMv0GChlEaXNidXJzZW1lbnREb21haW5TZXJ2aWNlEnMKEkNyZWF0ZURpc2J1cnNlbWVudBItLmRvbWFpbi50cmVhc3VyeS52MS5DcmVhdGVEaXNidXJzZW1lbnRSZXF1ZXN0Gi4uZG9tYWluLnRyZWFzdXJ5LnYxLkNyZWF0ZURpc2J1cnNlbWVudFJlc3BvbnNlEm0KEFJlYWREaXNidXJzZW1lbnQSKy5kb21haW4udHJlYXN1cnkudjEuUmVhZERpc2J1cnNlbWVudFJlcXVlc3QaLC5kb21haW4udHJlYXN1cnkudjEuUmVhZERpc2J1cnNlbWVudFJlc3BvbnNlEnMKElVwZGF0ZURpc2J1cnNlbWVudBItLmRvbWFpbi50cmVhc3VyeS52MS5VcGRhdGVEaXNidXJzZW1lbnRSZXF1ZXN0Gi4uZG9tYWluLnRyZWFzdXJ5LnYxLlVwZGF0ZURpc2J1cnNlbWVudFJlc3BvbnNlEnMKEkRlbGV0ZURpc2J1cnNlbWVudBItLmRvbWFpbi50cmVhc3VyeS52MS5EZWxldGVEaXNidXJzZW1lbnRSZXF1ZXN0Gi4uZG9tYWluLnRyZWFzdXJ5LnYxLkRlbGV0ZURpc2J1cnNlbWVudFJlc3BvbnNlEnAKEUxpc3REaXNidXJzZW1lbnRzEiwuZG9tYWluLnRyZWFzdXJ5LnYxLkxpc3REaXNidXJzZW1lbnRzUmVxdWVzdBotLmRvbWFpbi50cmVhc3VyeS52MS5MaXN0RGlzYnVyc2VtZW50c1Jlc3BvbnNlEo4BChtHZXREaXNidXJzZW1lbnRMaXN0UGFnZURhdGESNi5kb21haW4udHJlYXN1cnkudjEuR2V0RGlzYnVyc2VtZW50TGlzdFBhZ2VEYXRhUmVxdWVzdBo3LmRvbWFpbi50cmVhc3VyeS52MS5HZXREaXNidXJzZW1lbnRMaXN0UGFnZURhdGFSZXNwb25zZRKOAQobR2V0RGlzYnVyc2VtZW50SXRlbVBhZ2VEYXRhEjYuZG9tYWluLnRyZWFzdXJ5LnYxLkdldERpc2J1cnNlbWVudEl0ZW1QYWdlRGF0YVJlcXVlc3QaNy5kb21haW4udHJlYXN1cnkudjEuR2V0RGlzYnVyc2VtZW50SXRlbVBhZ2VEYXRhUmVzcG9uc2VC6QEKFmNvbS5kb21haW4udHJlYXN1cnkudjFCEURpc2J1cnNlbWVudFByb3RvUAFaUmdpdGh1Yi5jb20vZXJuaWVhbGljZS9lc3F5bWEvcGtnL3NjaGVtYS92MS9kb21haW4vdHJlYXN1cnkvZGlzYnVyc2VtZW50O3RyZWFzdXJ5djGiAgNEVFiqAhJEb21haW4uVHJlYXN1cnkuVjHKAhJEb21haW5cVHJlYXN1cnlcVjHiAh5Eb21haW5cVHJlYXN1cnlcVjFcR1BCTWV0YWRhdGHqAhREb21haW46OlRyZWFzdXJ5OjpWMWIGcHJvdG8z", [file_domain_common_error, file_domain_common_pagination, file_domain_common_filter, file_domain_common_sort, file_domain_common_search, file_domain_subscription_subscription_subscription, file_options_db]);
+  fileDesc("Ci9kb21haW4vdHJlYXN1cnkvZGlzYnVyc2VtZW50L2Rpc2J1cnNlbWVudC5wcm90bxISZG9tYWluLnRyZWFzdXJ5LnYxIp0NCgxEaXNidXJzZW1lbnQSCgoCaWQYASABKAkSGQoMZGF0ZV9jcmVhdGVkGAIgASgDSACIAQESIAoTZGF0ZV9jcmVhdGVkX3N0cmluZxgDIAEoCUgBiAEBEhoKDWRhdGVfbW9kaWZpZWQYBCABKANIAogBARIhChRkYXRlX21vZGlmaWVkX3N0cmluZxgFIAEoCUgDiAEBEg4KBmFjdGl2ZRgGIAEoCBIMCgRuYW1lGAcgASgJEj8KDHN1YnNjcmlwdGlvbhgIIAEoCzIkLmRvbWFpbi5zdWJzY3JpcHRpb24udjEuU3Vic2NyaXB0aW9uSASIAQESFwoPc3Vic2NyaXB0aW9uX2lkGAkgASgJEg4KBmFtb3VudBgKIAEoAxIOCgZzdGF0dXMYCyABKAkSFgoOZXhwZW5kaXR1cmVfaWQYFCABKAkSGQoRZGlzYnVyc2VtZW50X3R5cGUYFSABKAkSHgoWZGlzYnVyc2VtZW50X21ldGhvZF9pZBgWIAEoCRIQCghjdXJyZW5jeRgXIAEoCRIYChByZWZlcmVuY2VfbnVtYmVyGBggASgJEhQKDHBheW1lbnRfZGF0ZRgZIAEoCRITCgthcHByb3ZlZF9ieRgaIAEoCRIdChBqb3VybmFsX2VudHJ5X2lkGBwgASgJSAWIAQESOAoTZnVuZF90cmFuc2FjdGlvbl9pZBgdIAEoCUIWgrUYEgoQZnVuZF90cmFuc2FjdGlvbkgGiAEBEjgKDGFkdmFuY2Vfa2luZBgeIAEoDjIdLmRvbWFpbi5jb21tb24udjEuQWR2YW5jZUtpbmRIB4gBARI8Cg5hZHZhbmNlX3N0YXR1cxgfIAEoDjIfLmRvbWFpbi5jb21tb24udjEuQWR2YW5jZVN0YXR1c0gIiAEBEh8KEmFkdmFuY2Vfc3RhcnRfZGF0ZRggIAEoCUgJiAEBEh0KEGFkdmFuY2VfZW5kX2RhdGUYISABKAlICogBARIhChRhZHZhbmNlX3BlcmlvZF9jb3VudBgiIAEoBUgLiAEBEiAKE2FkdmFuY2VfcGVyaW9kX3VuaXQYIyABKAlIDIgBARIhChRhZHZhbmNlX3RvdGFsX2Ftb3VudBgkIAEoA0gNiAEBEiUKGGFkdmFuY2VfcmVtYWluaW5nX2Ftb3VudBglIAEoA0gOiAEBEiYKGWFkdmFuY2VfcmVjb2duaXplZF9hbW91bnQYJiABKANID4gBARI2ChphZHZhbmNlX2JhbGFuY2VfYWNjb3VudF9pZBgnIAEoCUINgrUYCQoHYWNjb3VudEgQiAEBEjUKGWFkdmFuY2VfdGFyZ2V0X2FjY291bnRfaWQYKCABKAlCDYK1GAkKB2FjY291bnRIEYgBARIgChNhZHZhbmNlX2V4cGlyeV9kYXRlGCkgASgJSBKIAQESTwoYYWR2YW5jZV9wcm9yYXRpb25fcG9saWN5GCogASgOMiguZG9tYWluLmNvbW1vbi52MS5BZHZhbmNlUHJvcmF0aW9uUG9saWN5SBOIAQESKgoLc3VwcGxpZXJfaWQYKyABKAlCEIK1GAwKCHN1cHBsaWVyGAFIFIgBAUIPCg1fZGF0ZV9jcmVhdGVkQhYKFF9kYXRlX2NyZWF0ZWRfc3RyaW5nQhAKDl9kYXRlX21vZGlmaWVkQhcKFV9kYXRlX21vZGlmaWVkX3N0cmluZ0IPCg1fc3Vic2NyaXB0aW9uQhMKEV9qb3VybmFsX2VudHJ5X2lkQhYKFF9mdW5kX3RyYW5zYWN0aW9uX2lkQg8KDV9hZHZhbmNlX2tpbmRCEQoPX2FkdmFuY2Vfc3RhdHVzQhUKE19hZHZhbmNlX3N0YXJ0X2RhdGVCEwoRX2FkdmFuY2VfZW5kX2RhdGVCFwoVX2FkdmFuY2VfcGVyaW9kX2NvdW50QhYKFF9hZHZhbmNlX3BlcmlvZF91bml0QhcKFV9hZHZhbmNlX3RvdGFsX2Ftb3VudEIbChlfYWR2YW5jZV9yZW1haW5pbmdfYW1vdW50QhwKGl9hZHZhbmNlX3JlY29nbml6ZWRfYW1vdW50Qh0KG19hZHZhbmNlX2JhbGFuY2VfYWNjb3VudF9pZEIcChpfYWR2YW5jZV90YXJnZXRfYWNjb3VudF9pZEIWChRfYWR2YW5jZV9leHBpcnlfZGF0ZUIbChlfYWR2YW5jZV9wcm9yYXRpb25fcG9saWN5Qg4KDF9zdXBwbGllcl9pZEoECBsQHCLUAQoiQW1vcnRpemVBZHZhbmNlRGlzYnVyc2VtZW50UmVxdWVzdBIgChh0cmVhc3VyeV9kaXNidXJzZW1lbnRfaWQYASABKAkSEgoKYXNfb2ZfZGF0ZRgCIAEoCRIUCgx3b3Jrc3BhY2VfaWQYAyABKAkSEAoIYWN0b3JfaWQYBCABKAkSHAoPaWRlbXBvdGVuY3lfa2V5GAUgASgJSACIAQESEwoGcnVuX2lkGAYgASgJSAGIAQFCEgoQX2lkZW1wb3RlbmN5X2tleUIJCgdfcnVuX2lkIuUDCiNBbW9ydGl6ZUFkdmFuY2VEaXNidXJzZW1lbnRSZXNwb25zZRI5CgdvdXRjb21lGAEgASgOMiguZG9tYWluLmNvbW1vbi52MS5BZHZhbmNlQW1vcnRpemVPdXRjb21lEiMKFmV4cGVuc2VfcmVjb2duaXRpb25faWQYAiABKAlIAIgBARIvCiJjb25mbGljdGluZ19leHBlbnNlX3JlY29nbml0aW9uX2lkGAMgASgJSAGIAQESHAoUbmV3X3JlbWFpbmluZ19hbW91bnQYBCABKAMSHQoVbmV3X3JlY29nbml6ZWRfYW1vdW50GAUgASgDEjMKCm5ld19zdGF0dXMYBiABKA4yHy5kb21haW4uY29tbW9uLnYxLkFkdmFuY2VTdGF0dXMSFQoNdHJhbmNoZV9zdGFydBgHIAEoCRITCgt0cmFuY2hlX2VuZBgIIAEoCRIWCg50cmFuY2hlX2Ftb3VudBgJIAEoAxIrCgVlcnJvchgKIAEoCzIXLmRvbWFpbi5jb21tb24udjEuRXJyb3JIAogBAUIZChdfZXhwZW5zZV9yZWNvZ25pdGlvbl9pZEIlCiNfY29uZmxpY3RpbmdfZXhwZW5zZV9yZWNvZ25pdGlvbl9pZEIICgZfZXJyb3IisgEKK1NldHRsZVVuc2NoZWR1bGVkQWR2YW5jZURpc2J1cnNlbWVudFJlcXVlc3QSIAoYdHJlYXN1cnlfZGlzYnVyc2VtZW50X2lkGAEgASgJEg4KBmFtb3VudBgCIAEoAxIZChF0YXJnZXRfYWNjb3VudF9pZBgDIAEoCRIOCgZyZWFzb24YBCABKAkSFAoMd29ya3NwYWNlX2lkGAUgASgJEhAKCGFjdG9yX2lkGAYgASgJItcBCixTZXR0bGVVbnNjaGVkdWxlZEFkdmFuY2VEaXNidXJzZW1lbnRSZXNwb25zZRIcChRuZXdfcmVtYWluaW5nX2Ftb3VudBgBIAEoAxIdChVuZXdfcmVjb2duaXplZF9hbW91bnQYAiABKAMSMwoKbmV3X3N0YXR1cxgDIAEoDjIfLmRvbWFpbi5jb21tb24udjEuQWR2YW5jZVN0YXR1cxIrCgVlcnJvchgEIAEoCzIXLmRvbWFpbi5jb21tb24udjEuRXJyb3JIAIgBAUIICgZfZXJyb3IiwwEKK1JlZnVuZFVuc2NoZWR1bGVkQWR2YW5jZURpc2J1cnNlbWVudFJlcXVlc3QSIAoYdHJlYXN1cnlfZGlzYnVyc2VtZW50X2lkGAEgASgJEg4KBmFtb3VudBgCIAEoAxIVCg1yZWZ1bmRfbWV0aG9kGAMgASgJEhMKC2Rlc3RpbmF0aW9uGAQgASgJEg4KBnJlYXNvbhgFIAEoCRIUCgx3b3Jrc3BhY2VfaWQYBiABKAkSEAoIYWN0b3JfaWQYByABKAkiuAEKLFJlZnVuZFVuc2NoZWR1bGVkQWR2YW5jZURpc2J1cnNlbWVudFJlc3BvbnNlEhwKFG5ld19yZW1haW5pbmdfYW1vdW50GAEgASgDEjMKCm5ld19zdGF0dXMYAiABKA4yHy5kb21haW4uY29tbW9uLnYxLkFkdmFuY2VTdGF0dXMSKwoFZXJyb3IYAyABKAsyFy5kb21haW4uY29tbW9uLnYxLkVycm9ySACIAQFCCAoGX2Vycm9yInwKIENhbmNlbEFkdmFuY2VEaXNidXJzZW1lbnRSZXF1ZXN0EiAKGHRyZWFzdXJ5X2Rpc2J1cnNlbWVudF9pZBgBIAEoCRIOCgZyZWFzb24YAiABKAkSFAoMd29ya3NwYWNlX2lkGAMgASgJEhAKCGFjdG9yX2lkGAQgASgJIo8BCiFDYW5jZWxBZHZhbmNlRGlzYnVyc2VtZW50UmVzcG9uc2USMwoKbmV3X3N0YXR1cxgBIAEoDjIfLmRvbWFpbi5jb21tb24udjEuQWR2YW5jZVN0YXR1cxIrCgVlcnJvchgCIAEoCzIXLmRvbWFpbi5jb21tb24udjEuRXJyb3JIAIgBAUIICgZfZXJyb3IiuwEKLFJlY29nbml6ZU1pbGVzdG9uZUFkdmFuY2VEaXNidXJzZW1lbnRSZXF1ZXN0EiAKGHRyZWFzdXJ5X2Rpc2J1cnNlbWVudF9pZBgBIAEoCRIhChlzdXBwbGllcl9iaWxsaW5nX2V2ZW50X2lkGAIgASgJEhAKCGFjdG9yX2lkGAMgASgJEhQKDHdvcmtzcGFjZV9pZBgEIAEoCRITCgZydW5faWQYBSABKAlIAIgBAUIJCgdfcnVuX2lkIsMDCi1SZWNvZ25pemVNaWxlc3RvbmVBZHZhbmNlRGlzYnVyc2VtZW50UmVzcG9uc2USOQoHb3V0Y29tZRgBIAEoDjIoLmRvbWFpbi5jb21tb24udjEuQWR2YW5jZUFtb3J0aXplT3V0Y29tZRIjChZleHBlbnNlX3JlY29nbml0aW9uX2lkGAIgASgJSACIAQESLwoiY29uZmxpY3RpbmdfZXhwZW5zZV9yZWNvZ25pdGlvbl9pZBgDIAEoCUgBiAEBEhwKFG5ld19yZW1haW5pbmdfYW1vdW50GAQgASgDEh0KFW5ld19yZWNvZ25pemVkX2Ftb3VudBgFIAEoAxIzCgpuZXdfc3RhdHVzGAYgASgOMh8uZG9tYWluLmNvbW1vbi52MS5BZHZhbmNlU3RhdHVzEhYKDnRyYW5jaGVfYW1vdW50GAcgASgDEisKBWVycm9yGAggASgLMhcuZG9tYWluLmNvbW1vbi52MS5FcnJvckgCiAEBQhkKF19leHBlbnNlX3JlY29nbml0aW9uX2lkQiUKI19jb25mbGljdGluZ19leHBlbnNlX3JlY29nbml0aW9uX2lkQggKBl9lcnJvciJLChlDcmVhdGVEaXNidXJzZW1lbnRSZXF1ZXN0Ei4KBGRhdGEYASABKAsyIC5kb21haW4udHJlYXN1cnkudjEuRGlzYnVyc2VtZW50IpQBChpDcmVhdGVEaXNidXJzZW1lbnRSZXNwb25zZRIuCgRkYXRhGAEgAygLMiAuZG9tYWluLnRyZWFzdXJ5LnYxLkRpc2J1cnNlbWVudBIPCgdzdWNjZXNzGAIgASgIEisKBWVycm9yGAMgASgLMhcuZG9tYWluLmNvbW1vbi52MS5FcnJvckgAiAEBQggKBl9lcnJvciJJChdSZWFkRGlzYnVyc2VtZW50UmVxdWVzdBIuCgRkYXRhGAEgASgLMiAuZG9tYWluLnRyZWFzdXJ5LnYxLkRpc2J1cnNlbWVudCKSAQoYUmVhZERpc2J1cnNlbWVudFJlc3BvbnNlEi4KBGRhdGEYASADKAsyIC5kb21haW4udHJlYXN1cnkudjEuRGlzYnVyc2VtZW50Eg8KB3N1Y2Nlc3MYAiABKAgSKwoFZXJyb3IYAyABKAsyFy5kb21haW4uY29tbW9uLnYxLkVycm9ySACIAQFCCAoGX2Vycm9yIksKGVVwZGF0ZURpc2J1cnNlbWVudFJlcXVlc3QSLgoEZGF0YRgBIAEoCzIgLmRvbWFpbi50cmVhc3VyeS52MS5EaXNidXJzZW1lbnQilAEKGlVwZGF0ZURpc2J1cnNlbWVudFJlc3BvbnNlEi4KBGRhdGEYASADKAsyIC5kb21haW4udHJlYXN1cnkudjEuRGlzYnVyc2VtZW50Eg8KB3N1Y2Nlc3MYAiABKAgSKwoFZXJyb3IYAyABKAsyFy5kb21haW4uY29tbW9uLnYxLkVycm9ySACIAQFCCAoGX2Vycm9yIksKGURlbGV0ZURpc2J1cnNlbWVudFJlcXVlc3QSLgoEZGF0YRgBIAEoCzIgLmRvbWFpbi50cmVhc3VyeS52MS5EaXNidXJzZW1lbnQiZAoaRGVsZXRlRGlzYnVyc2VtZW50UmVzcG9uc2USDwoHc3VjY2VzcxgBIAEoCBIrCgVlcnJvchgCIAEoCzIXLmRvbWFpbi5jb21tb24udjEuRXJyb3JIAIgBAUIICgZfZXJyb3IipgIKGExpc3REaXNidXJzZW1lbnRzUmVxdWVzdBI0CgZzZWFyY2gYASABKAsyHy5kb21haW4uY29tbW9uLnYxLlNlYXJjaFJlcXVlc3RIAIgBARI1CgdmaWx0ZXJzGAIgASgLMh8uZG9tYWluLmNvbW1vbi52MS5GaWx0ZXJSZXF1ZXN0SAGIAQESMAoEc29ydBgDIAEoCzIdLmRvbWFpbi5jb21tb24udjEuU29ydFJlcXVlc3RIAogBARI8CgpwYWdpbmF0aW9uGAQgASgLMiMuZG9tYWluLmNvbW1vbi52MS5QYWdpbmF0aW9uUmVxdWVzdEgDiAEBQgkKB19zZWFyY2hCCgoIX2ZpbHRlcnNCBwoFX3NvcnRCDQoLX3BhZ2luYXRpb24ikwEKGUxpc3REaXNidXJzZW1lbnRzUmVzcG9uc2USLgoEZGF0YRgBIAMoCzIgLmRvbWFpbi50cmVhc3VyeS52MS5EaXNidXJzZW1lbnQSDwoHc3VjY2VzcxgCIAEoCBIrCgVlcnJvchgDIAEoCzIXLmRvbWFpbi5jb21tb24udjEuRXJyb3JIAIgBAUIICgZfZXJyb3IisAIKIkdldERpc2J1cnNlbWVudExpc3RQYWdlRGF0YVJlcXVlc3QSPAoKcGFnaW5hdGlvbhgBIAEoCzIjLmRvbWFpbi5jb21tb24udjEuUGFnaW5hdGlvblJlcXVlc3RIAIgBARI1CgdmaWx0ZXJzGAIgASgLMh8uZG9tYWluLmNvbW1vbi52MS5GaWx0ZXJSZXF1ZXN0SAGIAQESMAoEc29ydBgDIAEoCzIdLmRvbWFpbi5jb21tb24udjEuU29ydFJlcXVlc3RIAogBARI0CgZzZWFyY2gYBCABKAsyHy5kb21haW4uY29tbW9uLnYxLlNlYXJjaFJlcXVlc3RIA4gBAUINCgtfcGFnaW5hdGlvbkIKCghfZmlsdGVyc0IHCgVfc29ydEIJCgdfc2VhcmNoIrACCiNHZXREaXNidXJzZW1lbnRMaXN0UGFnZURhdGFSZXNwb25zZRI7ChFkaXNidXJzZW1lbnRfbGlzdBgBIAMoCzIgLmRvbWFpbi50cmVhc3VyeS52MS5EaXNidXJzZW1lbnQSDwoHc3VjY2VzcxgCIAEoCBIrCgVlcnJvchgDIAEoCzIXLmRvbWFpbi5jb21tb24udjEuRXJyb3JIAIgBARI9CgpwYWdpbmF0aW9uGAQgASgLMiQuZG9tYWluLmNvbW1vbi52MS5QYWdpbmF0aW9uUmVzcG9uc2VIAYgBARI2Cg5zZWFyY2hfcmVzdWx0cxgFIAMoCzIeLmRvbWFpbi5jb21tb24udjEuU2VhcmNoUmVzdWx0QggKBl9lcnJvckINCgtfcGFnaW5hdGlvbiI9CiJHZXREaXNidXJzZW1lbnRJdGVtUGFnZURhdGFSZXF1ZXN0EhcKD2Rpc2J1cnNlbWVudF9pZBgBIAEoCSK7AQojR2V0RGlzYnVyc2VtZW50SXRlbVBhZ2VEYXRhUmVzcG9uc2USOwoMZGlzYnVyc2VtZW50GAEgASgLMiAuZG9tYWluLnRyZWFzdXJ5LnYxLkRpc2J1cnNlbWVudEgAiAEBEg8KB3N1Y2Nlc3MYAiABKAgSKwoFZXJyb3IYAyABKAsyFy5kb21haW4uY29tbW9uLnYxLkVycm9ySAGIAQFCDwoNX2Rpc2J1cnNlbWVudEIICgZfZXJyb3Iy/QYKGURpc2J1cnNlbWVudERvbWFpblNlcnZpY2UScwoSQ3JlYXRlRGlzYnVyc2VtZW50Ei0uZG9tYWluLnRyZWFzdXJ5LnYxLkNyZWF0ZURpc2J1cnNlbWVudFJlcXVlc3QaLi5kb21haW4udHJlYXN1cnkudjEuQ3JlYXRlRGlzYnVyc2VtZW50UmVzcG9uc2USbQoQUmVhZERpc2J1cnNlbWVudBIrLmRvbWFpbi50cmVhc3VyeS52MS5SZWFkRGlzYnVyc2VtZW50UmVxdWVzdBosLmRvbWFpbi50cmVhc3VyeS52MS5SZWFkRGlzYnVyc2VtZW50UmVzcG9uc2UScwoSVXBkYXRlRGlzYnVyc2VtZW50Ei0uZG9tYWluLnRyZWFzdXJ5LnYxLlVwZGF0ZURpc2J1cnNlbWVudFJlcXVlc3QaLi5kb21haW4udHJlYXN1cnkudjEuVXBkYXRlRGlzYnVyc2VtZW50UmVzcG9uc2UScwoSRGVsZXRlRGlzYnVyc2VtZW50Ei0uZG9tYWluLnRyZWFzdXJ5LnYxLkRlbGV0ZURpc2J1cnNlbWVudFJlcXVlc3QaLi5kb21haW4udHJlYXN1cnkudjEuRGVsZXRlRGlzYnVyc2VtZW50UmVzcG9uc2UScAoRTGlzdERpc2J1cnNlbWVudHMSLC5kb21haW4udHJlYXN1cnkudjEuTGlzdERpc2J1cnNlbWVudHNSZXF1ZXN0Gi0uZG9tYWluLnRyZWFzdXJ5LnYxLkxpc3REaXNidXJzZW1lbnRzUmVzcG9uc2USjgEKG0dldERpc2J1cnNlbWVudExpc3RQYWdlRGF0YRI2LmRvbWFpbi50cmVhc3VyeS52MS5HZXREaXNidXJzZW1lbnRMaXN0UGFnZURhdGFSZXF1ZXN0GjcuZG9tYWluLnRyZWFzdXJ5LnYxLkdldERpc2J1cnNlbWVudExpc3RQYWdlRGF0YVJlc3BvbnNlEo4BChtHZXREaXNidXJzZW1lbnRJdGVtUGFnZURhdGESNi5kb21haW4udHJlYXN1cnkudjEuR2V0RGlzYnVyc2VtZW50SXRlbVBhZ2VEYXRhUmVxdWVzdBo3LmRvbWFpbi50cmVhc3VyeS52MS5HZXREaXNidXJzZW1lbnRJdGVtUGFnZURhdGFSZXNwb25zZULpAQoWY29tLmRvbWFpbi50cmVhc3VyeS52MUIRRGlzYnVyc2VtZW50UHJvdG9QAVpSZ2l0aHViLmNvbS9lcm5pZWFsaWNlL2VzcXltYS9wa2cvc2NoZW1hL3YxL2RvbWFpbi90cmVhc3VyeS9kaXNidXJzZW1lbnQ7dHJlYXN1cnl2MaICA0RUWKoCEkRvbWFpbi5UcmVhc3VyeS5WMcoCEkRvbWFpblxUcmVhc3VyeVxWMeICHkRvbWFpblxUcmVhc3VyeVxWMVxHUEJNZXRhZGF0YeoCFERvbWFpbjo6VHJlYXN1cnk6OlYxYgZwcm90bzM", [file_domain_common_error, file_domain_common_pagination, file_domain_common_filter, file_domain_common_sort, file_domain_common_search, file_domain_subscription_subscription_subscription, file_domain_common_advance_kind_advance_kind, file_options_db]);
 
 /**
  * @generated from message domain.treasury.v1.Disbursement
@@ -151,6 +153,100 @@ export type Disbursement = Message<"domain.treasury.v1.Disbursement"> & {
    * @generated from field: optional string fund_transaction_id = 29;
    */
   fundTransactionId?: string;
+
+  /**
+   * --- Advance Cash Events (Plan B, 20260517-advance-cash-events) ---
+   * When advance_kind != NONE, this TreasuryDisbursement IS the advance payment;
+   * ExpenseRecognition rows draining the advance back-ref via expense_recognition.advance_disbursement_id.
+   *
+   * @generated from field: optional domain.common.v1.AdvanceKind advance_kind = 30;
+   */
+  advanceKind?: AdvanceKind;
+
+  /**
+   * @generated from field: optional domain.common.v1.AdvanceStatus advance_status = 31;
+   */
+  advanceStatus?: AdvanceStatus;
+
+  /**
+   * ISO 8601 YYYY-MM-DD
+   *
+   * @generated from field: optional string advance_start_date = 32;
+   */
+  advanceStartDate?: string;
+
+  /**
+   * @generated from field: optional string advance_end_date = 33;
+   */
+  advanceEndDate?: string;
+
+  /**
+   * @generated from field: optional int32 advance_period_count = 34;
+   */
+  advancePeriodCount?: number;
+
+  /**
+   * "day" | "week" | "month" | "year"
+   *
+   * @generated from field: optional string advance_period_unit = 35;
+   */
+  advancePeriodUnit?: string;
+
+  /**
+   * centavos; snapshot of original advance amount
+   *
+   * @generated from field: optional int64 advance_total_amount = 36;
+   */
+  advanceTotalAmount?: bigint;
+
+  /**
+   * centavos; decremented by AmortizeAdvanceDisbursement
+   *
+   * @generated from field: optional int64 advance_remaining_amount = 37;
+   */
+  advanceRemainingAmount?: bigint;
+
+  /**
+   * centavos; SUM(linked expense_recognition.total_amount)
+   *
+   * @generated from field: optional int64 advance_recognized_amount = 38;
+   */
+  advanceRecognizedAmount?: bigint;
+
+  /**
+   * asset (prepaid)
+   *
+   * @generated from field: optional string advance_balance_account_id = 39;
+   */
+  advanceBalanceAccountId?: string;
+
+  /**
+   * expense account
+   *
+   * @generated from field: optional string advance_target_account_id = 40;
+   */
+  advanceTargetAccountId?: string;
+
+  /**
+   * optional, v2 — escheat / expiration
+   *
+   * @generated from field: optional string advance_expiry_date = 41;
+   */
+  advanceExpiryDate?: string;
+
+  /**
+   * TIME_BASED first-tranche; default FULL_TRANCHE
+   *
+   * @generated from field: optional domain.common.v1.AdvanceProrationPolicy advance_proration_policy = 42;
+   */
+  advanceProrationPolicy?: AdvanceProrationPolicy;
+
+  /**
+   * Plan B Decision B — counterparty FK; additive.
+   *
+   * @generated from field: optional string supplier_id = 43;
+   */
+  supplierId?: string;
 };
 
 /**
@@ -159,6 +255,419 @@ export type Disbursement = Message<"domain.treasury.v1.Disbursement"> & {
  */
 export const DisbursementSchema: GenMessage<Disbursement> = /*@__PURE__*/
   messageDesc(file_domain_treasury_disbursement_disbursement, 0);
+
+/**
+ * AmortizeAdvanceDisbursementRequest — buying-side Plan B Phase 2 amortize.
+ *
+ * @generated from message domain.treasury.v1.AmortizeAdvanceDisbursementRequest
+ */
+export type AmortizeAdvanceDisbursementRequest = Message<"domain.treasury.v1.AmortizeAdvanceDisbursementRequest"> & {
+  /**
+   * @generated from field: string treasury_disbursement_id = 1;
+   */
+  treasuryDisbursementId: string;
+
+  /**
+   * @generated from field: string as_of_date = 2;
+   */
+  asOfDate: string;
+
+  /**
+   * @generated from field: string workspace_id = 3;
+   */
+  workspaceId: string;
+
+  /**
+   * @generated from field: string actor_id = 4;
+   */
+  actorId: string;
+
+  /**
+   * @generated from field: optional string idempotency_key = 5;
+   */
+  idempotencyKey?: string;
+
+  /**
+   * set when invoked from an ExpenseRecognitionRun batch
+   *
+   * @generated from field: optional string run_id = 6;
+   */
+  runId?: string;
+};
+
+/**
+ * Describes the message domain.treasury.v1.AmortizeAdvanceDisbursementRequest.
+ * Use `create(AmortizeAdvanceDisbursementRequestSchema)` to create a new message.
+ */
+export const AmortizeAdvanceDisbursementRequestSchema: GenMessage<AmortizeAdvanceDisbursementRequest> = /*@__PURE__*/
+  messageDesc(file_domain_treasury_disbursement_disbursement, 1);
+
+/**
+ * @generated from message domain.treasury.v1.AmortizeAdvanceDisbursementResponse
+ */
+export type AmortizeAdvanceDisbursementResponse = Message<"domain.treasury.v1.AmortizeAdvanceDisbursementResponse"> & {
+  /**
+   * @generated from field: domain.common.v1.AdvanceAmortizeOutcome outcome = 1;
+   */
+  outcome: AdvanceAmortizeOutcome;
+
+  /**
+   * populated when outcome == CREATED
+   *
+   * @generated from field: optional string expense_recognition_id = 2;
+   */
+  expenseRecognitionId?: string;
+
+  /**
+   * populated when outcome == SKIPPED
+   *
+   * @generated from field: optional string conflicting_expense_recognition_id = 3;
+   */
+  conflictingExpenseRecognitionId?: string;
+
+  /**
+   * @generated from field: int64 new_remaining_amount = 4;
+   */
+  newRemainingAmount: bigint;
+
+  /**
+   * @generated from field: int64 new_recognized_amount = 5;
+   */
+  newRecognizedAmount: bigint;
+
+  /**
+   * @generated from field: domain.common.v1.AdvanceStatus new_status = 6;
+   */
+  newStatus: AdvanceStatus;
+
+  /**
+   * @generated from field: string tranche_start = 7;
+   */
+  trancheStart: string;
+
+  /**
+   * @generated from field: string tranche_end = 8;
+   */
+  trancheEnd: string;
+
+  /**
+   * @generated from field: int64 tranche_amount = 9;
+   */
+  trancheAmount: bigint;
+
+  /**
+   * @generated from field: optional domain.common.v1.Error error = 10;
+   */
+  error?: Error;
+};
+
+/**
+ * Describes the message domain.treasury.v1.AmortizeAdvanceDisbursementResponse.
+ * Use `create(AmortizeAdvanceDisbursementResponseSchema)` to create a new message.
+ */
+export const AmortizeAdvanceDisbursementResponseSchema: GenMessage<AmortizeAdvanceDisbursementResponse> = /*@__PURE__*/
+  messageDesc(file_domain_treasury_disbursement_disbursement, 2);
+
+/**
+ * SettleUnscheduledAdvanceDisbursementRequest — UNSCHEDULED settle (buying side).
+ *
+ * @generated from message domain.treasury.v1.SettleUnscheduledAdvanceDisbursementRequest
+ */
+export type SettleUnscheduledAdvanceDisbursementRequest = Message<"domain.treasury.v1.SettleUnscheduledAdvanceDisbursementRequest"> & {
+  /**
+   * @generated from field: string treasury_disbursement_id = 1;
+   */
+  treasuryDisbursementId: string;
+
+  /**
+   * @generated from field: int64 amount = 2;
+   */
+  amount: bigint;
+
+  /**
+   * @generated from field: string target_account_id = 3;
+   */
+  targetAccountId: string;
+
+  /**
+   * @generated from field: string reason = 4;
+   */
+  reason: string;
+
+  /**
+   * @generated from field: string workspace_id = 5;
+   */
+  workspaceId: string;
+
+  /**
+   * @generated from field: string actor_id = 6;
+   */
+  actorId: string;
+};
+
+/**
+ * Describes the message domain.treasury.v1.SettleUnscheduledAdvanceDisbursementRequest.
+ * Use `create(SettleUnscheduledAdvanceDisbursementRequestSchema)` to create a new message.
+ */
+export const SettleUnscheduledAdvanceDisbursementRequestSchema: GenMessage<SettleUnscheduledAdvanceDisbursementRequest> = /*@__PURE__*/
+  messageDesc(file_domain_treasury_disbursement_disbursement, 3);
+
+/**
+ * @generated from message domain.treasury.v1.SettleUnscheduledAdvanceDisbursementResponse
+ */
+export type SettleUnscheduledAdvanceDisbursementResponse = Message<"domain.treasury.v1.SettleUnscheduledAdvanceDisbursementResponse"> & {
+  /**
+   * @generated from field: int64 new_remaining_amount = 1;
+   */
+  newRemainingAmount: bigint;
+
+  /**
+   * @generated from field: int64 new_recognized_amount = 2;
+   */
+  newRecognizedAmount: bigint;
+
+  /**
+   * @generated from field: domain.common.v1.AdvanceStatus new_status = 3;
+   */
+  newStatus: AdvanceStatus;
+
+  /**
+   * @generated from field: optional domain.common.v1.Error error = 4;
+   */
+  error?: Error;
+};
+
+/**
+ * Describes the message domain.treasury.v1.SettleUnscheduledAdvanceDisbursementResponse.
+ * Use `create(SettleUnscheduledAdvanceDisbursementResponseSchema)` to create a new message.
+ */
+export const SettleUnscheduledAdvanceDisbursementResponseSchema: GenMessage<SettleUnscheduledAdvanceDisbursementResponse> = /*@__PURE__*/
+  messageDesc(file_domain_treasury_disbursement_disbursement, 4);
+
+/**
+ * RefundUnscheduledAdvanceDisbursementRequest — UNSCHEDULED refund (buying side).
+ *
+ * @generated from message domain.treasury.v1.RefundUnscheduledAdvanceDisbursementRequest
+ */
+export type RefundUnscheduledAdvanceDisbursementRequest = Message<"domain.treasury.v1.RefundUnscheduledAdvanceDisbursementRequest"> & {
+  /**
+   * @generated from field: string treasury_disbursement_id = 1;
+   */
+  treasuryDisbursementId: string;
+
+  /**
+   * @generated from field: int64 amount = 2;
+   */
+  amount: bigint;
+
+  /**
+   * @generated from field: string refund_method = 3;
+   */
+  refundMethod: string;
+
+  /**
+   * @generated from field: string destination = 4;
+   */
+  destination: string;
+
+  /**
+   * @generated from field: string reason = 5;
+   */
+  reason: string;
+
+  /**
+   * @generated from field: string workspace_id = 6;
+   */
+  workspaceId: string;
+
+  /**
+   * @generated from field: string actor_id = 7;
+   */
+  actorId: string;
+};
+
+/**
+ * Describes the message domain.treasury.v1.RefundUnscheduledAdvanceDisbursementRequest.
+ * Use `create(RefundUnscheduledAdvanceDisbursementRequestSchema)` to create a new message.
+ */
+export const RefundUnscheduledAdvanceDisbursementRequestSchema: GenMessage<RefundUnscheduledAdvanceDisbursementRequest> = /*@__PURE__*/
+  messageDesc(file_domain_treasury_disbursement_disbursement, 5);
+
+/**
+ * @generated from message domain.treasury.v1.RefundUnscheduledAdvanceDisbursementResponse
+ */
+export type RefundUnscheduledAdvanceDisbursementResponse = Message<"domain.treasury.v1.RefundUnscheduledAdvanceDisbursementResponse"> & {
+  /**
+   * @generated from field: int64 new_remaining_amount = 1;
+   */
+  newRemainingAmount: bigint;
+
+  /**
+   * @generated from field: domain.common.v1.AdvanceStatus new_status = 2;
+   */
+  newStatus: AdvanceStatus;
+
+  /**
+   * @generated from field: optional domain.common.v1.Error error = 3;
+   */
+  error?: Error;
+};
+
+/**
+ * Describes the message domain.treasury.v1.RefundUnscheduledAdvanceDisbursementResponse.
+ * Use `create(RefundUnscheduledAdvanceDisbursementResponseSchema)` to create a new message.
+ */
+export const RefundUnscheduledAdvanceDisbursementResponseSchema: GenMessage<RefundUnscheduledAdvanceDisbursementResponse> = /*@__PURE__*/
+  messageDesc(file_domain_treasury_disbursement_disbursement, 6);
+
+/**
+ * CancelAdvanceDisbursementRequest — flip advance_status to CANCELLED (buying side).
+ *
+ * @generated from message domain.treasury.v1.CancelAdvanceDisbursementRequest
+ */
+export type CancelAdvanceDisbursementRequest = Message<"domain.treasury.v1.CancelAdvanceDisbursementRequest"> & {
+  /**
+   * @generated from field: string treasury_disbursement_id = 1;
+   */
+  treasuryDisbursementId: string;
+
+  /**
+   * @generated from field: string reason = 2;
+   */
+  reason: string;
+
+  /**
+   * @generated from field: string workspace_id = 3;
+   */
+  workspaceId: string;
+
+  /**
+   * @generated from field: string actor_id = 4;
+   */
+  actorId: string;
+};
+
+/**
+ * Describes the message domain.treasury.v1.CancelAdvanceDisbursementRequest.
+ * Use `create(CancelAdvanceDisbursementRequestSchema)` to create a new message.
+ */
+export const CancelAdvanceDisbursementRequestSchema: GenMessage<CancelAdvanceDisbursementRequest> = /*@__PURE__*/
+  messageDesc(file_domain_treasury_disbursement_disbursement, 7);
+
+/**
+ * @generated from message domain.treasury.v1.CancelAdvanceDisbursementResponse
+ */
+export type CancelAdvanceDisbursementResponse = Message<"domain.treasury.v1.CancelAdvanceDisbursementResponse"> & {
+  /**
+   * @generated from field: domain.common.v1.AdvanceStatus new_status = 1;
+   */
+  newStatus: AdvanceStatus;
+
+  /**
+   * @generated from field: optional domain.common.v1.Error error = 2;
+   */
+  error?: Error;
+};
+
+/**
+ * Describes the message domain.treasury.v1.CancelAdvanceDisbursementResponse.
+ * Use `create(CancelAdvanceDisbursementResponseSchema)` to create a new message.
+ */
+export const CancelAdvanceDisbursementResponseSchema: GenMessage<CancelAdvanceDisbursementResponse> = /*@__PURE__*/
+  messageDesc(file_domain_treasury_disbursement_disbursement, 8);
+
+/**
+ * RecognizeMilestoneAdvanceDisbursementRequest — Plan B Phase 7 milestone
+ * recognition (buying side). Anchors on a
+ * (disbursement_id, supplier_billing_event_id) junction row.
+ *
+ * @generated from message domain.treasury.v1.RecognizeMilestoneAdvanceDisbursementRequest
+ */
+export type RecognizeMilestoneAdvanceDisbursementRequest = Message<"domain.treasury.v1.RecognizeMilestoneAdvanceDisbursementRequest"> & {
+  /**
+   * @generated from field: string treasury_disbursement_id = 1;
+   */
+  treasuryDisbursementId: string;
+
+  /**
+   * @generated from field: string supplier_billing_event_id = 2;
+   */
+  supplierBillingEventId: string;
+
+  /**
+   * @generated from field: string actor_id = 3;
+   */
+  actorId: string;
+
+  /**
+   * @generated from field: string workspace_id = 4;
+   */
+  workspaceId: string;
+
+  /**
+   * @generated from field: optional string run_id = 5;
+   */
+  runId?: string;
+};
+
+/**
+ * Describes the message domain.treasury.v1.RecognizeMilestoneAdvanceDisbursementRequest.
+ * Use `create(RecognizeMilestoneAdvanceDisbursementRequestSchema)` to create a new message.
+ */
+export const RecognizeMilestoneAdvanceDisbursementRequestSchema: GenMessage<RecognizeMilestoneAdvanceDisbursementRequest> = /*@__PURE__*/
+  messageDesc(file_domain_treasury_disbursement_disbursement, 9);
+
+/**
+ * @generated from message domain.treasury.v1.RecognizeMilestoneAdvanceDisbursementResponse
+ */
+export type RecognizeMilestoneAdvanceDisbursementResponse = Message<"domain.treasury.v1.RecognizeMilestoneAdvanceDisbursementResponse"> & {
+  /**
+   * @generated from field: domain.common.v1.AdvanceAmortizeOutcome outcome = 1;
+   */
+  outcome: AdvanceAmortizeOutcome;
+
+  /**
+   * @generated from field: optional string expense_recognition_id = 2;
+   */
+  expenseRecognitionId?: string;
+
+  /**
+   * @generated from field: optional string conflicting_expense_recognition_id = 3;
+   */
+  conflictingExpenseRecognitionId?: string;
+
+  /**
+   * @generated from field: int64 new_remaining_amount = 4;
+   */
+  newRemainingAmount: bigint;
+
+  /**
+   * @generated from field: int64 new_recognized_amount = 5;
+   */
+  newRecognizedAmount: bigint;
+
+  /**
+   * @generated from field: domain.common.v1.AdvanceStatus new_status = 6;
+   */
+  newStatus: AdvanceStatus;
+
+  /**
+   * @generated from field: int64 tranche_amount = 7;
+   */
+  trancheAmount: bigint;
+
+  /**
+   * @generated from field: optional domain.common.v1.Error error = 8;
+   */
+  error?: Error;
+};
+
+/**
+ * Describes the message domain.treasury.v1.RecognizeMilestoneAdvanceDisbursementResponse.
+ * Use `create(RecognizeMilestoneAdvanceDisbursementResponseSchema)` to create a new message.
+ */
+export const RecognizeMilestoneAdvanceDisbursementResponseSchema: GenMessage<RecognizeMilestoneAdvanceDisbursementResponse> = /*@__PURE__*/
+  messageDesc(file_domain_treasury_disbursement_disbursement, 10);
 
 /**
  * @generated from message domain.treasury.v1.CreateDisbursementRequest
@@ -175,7 +684,7 @@ export type CreateDisbursementRequest = Message<"domain.treasury.v1.CreateDisbur
  * Use `create(CreateDisbursementRequestSchema)` to create a new message.
  */
 export const CreateDisbursementRequestSchema: GenMessage<CreateDisbursementRequest> = /*@__PURE__*/
-  messageDesc(file_domain_treasury_disbursement_disbursement, 1);
+  messageDesc(file_domain_treasury_disbursement_disbursement, 11);
 
 /**
  * @generated from message domain.treasury.v1.CreateDisbursementResponse
@@ -202,7 +711,7 @@ export type CreateDisbursementResponse = Message<"domain.treasury.v1.CreateDisbu
  * Use `create(CreateDisbursementResponseSchema)` to create a new message.
  */
 export const CreateDisbursementResponseSchema: GenMessage<CreateDisbursementResponse> = /*@__PURE__*/
-  messageDesc(file_domain_treasury_disbursement_disbursement, 2);
+  messageDesc(file_domain_treasury_disbursement_disbursement, 12);
 
 /**
  * @generated from message domain.treasury.v1.ReadDisbursementRequest
@@ -219,7 +728,7 @@ export type ReadDisbursementRequest = Message<"domain.treasury.v1.ReadDisburseme
  * Use `create(ReadDisbursementRequestSchema)` to create a new message.
  */
 export const ReadDisbursementRequestSchema: GenMessage<ReadDisbursementRequest> = /*@__PURE__*/
-  messageDesc(file_domain_treasury_disbursement_disbursement, 3);
+  messageDesc(file_domain_treasury_disbursement_disbursement, 13);
 
 /**
  * @generated from message domain.treasury.v1.ReadDisbursementResponse
@@ -246,7 +755,7 @@ export type ReadDisbursementResponse = Message<"domain.treasury.v1.ReadDisbursem
  * Use `create(ReadDisbursementResponseSchema)` to create a new message.
  */
 export const ReadDisbursementResponseSchema: GenMessage<ReadDisbursementResponse> = /*@__PURE__*/
-  messageDesc(file_domain_treasury_disbursement_disbursement, 4);
+  messageDesc(file_domain_treasury_disbursement_disbursement, 14);
 
 /**
  * @generated from message domain.treasury.v1.UpdateDisbursementRequest
@@ -263,7 +772,7 @@ export type UpdateDisbursementRequest = Message<"domain.treasury.v1.UpdateDisbur
  * Use `create(UpdateDisbursementRequestSchema)` to create a new message.
  */
 export const UpdateDisbursementRequestSchema: GenMessage<UpdateDisbursementRequest> = /*@__PURE__*/
-  messageDesc(file_domain_treasury_disbursement_disbursement, 5);
+  messageDesc(file_domain_treasury_disbursement_disbursement, 15);
 
 /**
  * @generated from message domain.treasury.v1.UpdateDisbursementResponse
@@ -290,7 +799,7 @@ export type UpdateDisbursementResponse = Message<"domain.treasury.v1.UpdateDisbu
  * Use `create(UpdateDisbursementResponseSchema)` to create a new message.
  */
 export const UpdateDisbursementResponseSchema: GenMessage<UpdateDisbursementResponse> = /*@__PURE__*/
-  messageDesc(file_domain_treasury_disbursement_disbursement, 6);
+  messageDesc(file_domain_treasury_disbursement_disbursement, 16);
 
 /**
  * @generated from message domain.treasury.v1.DeleteDisbursementRequest
@@ -307,7 +816,7 @@ export type DeleteDisbursementRequest = Message<"domain.treasury.v1.DeleteDisbur
  * Use `create(DeleteDisbursementRequestSchema)` to create a new message.
  */
 export const DeleteDisbursementRequestSchema: GenMessage<DeleteDisbursementRequest> = /*@__PURE__*/
-  messageDesc(file_domain_treasury_disbursement_disbursement, 7);
+  messageDesc(file_domain_treasury_disbursement_disbursement, 17);
 
 /**
  * @generated from message domain.treasury.v1.DeleteDisbursementResponse
@@ -329,7 +838,7 @@ export type DeleteDisbursementResponse = Message<"domain.treasury.v1.DeleteDisbu
  * Use `create(DeleteDisbursementResponseSchema)` to create a new message.
  */
 export const DeleteDisbursementResponseSchema: GenMessage<DeleteDisbursementResponse> = /*@__PURE__*/
-  messageDesc(file_domain_treasury_disbursement_disbursement, 8);
+  messageDesc(file_domain_treasury_disbursement_disbursement, 18);
 
 /**
  * @generated from message domain.treasury.v1.ListDisbursementsRequest
@@ -361,7 +870,7 @@ export type ListDisbursementsRequest = Message<"domain.treasury.v1.ListDisbursem
  * Use `create(ListDisbursementsRequestSchema)` to create a new message.
  */
 export const ListDisbursementsRequestSchema: GenMessage<ListDisbursementsRequest> = /*@__PURE__*/
-  messageDesc(file_domain_treasury_disbursement_disbursement, 9);
+  messageDesc(file_domain_treasury_disbursement_disbursement, 19);
 
 /**
  * @generated from message domain.treasury.v1.ListDisbursementsResponse
@@ -388,7 +897,7 @@ export type ListDisbursementsResponse = Message<"domain.treasury.v1.ListDisburse
  * Use `create(ListDisbursementsResponseSchema)` to create a new message.
  */
 export const ListDisbursementsResponseSchema: GenMessage<ListDisbursementsResponse> = /*@__PURE__*/
-  messageDesc(file_domain_treasury_disbursement_disbursement, 10);
+  messageDesc(file_domain_treasury_disbursement_disbursement, 20);
 
 /**
  * @generated from message domain.treasury.v1.GetDisbursementListPageDataRequest
@@ -420,7 +929,7 @@ export type GetDisbursementListPageDataRequest = Message<"domain.treasury.v1.Get
  * Use `create(GetDisbursementListPageDataRequestSchema)` to create a new message.
  */
 export const GetDisbursementListPageDataRequestSchema: GenMessage<GetDisbursementListPageDataRequest> = /*@__PURE__*/
-  messageDesc(file_domain_treasury_disbursement_disbursement, 11);
+  messageDesc(file_domain_treasury_disbursement_disbursement, 21);
 
 /**
  * @generated from message domain.treasury.v1.GetDisbursementListPageDataResponse
@@ -457,7 +966,7 @@ export type GetDisbursementListPageDataResponse = Message<"domain.treasury.v1.Ge
  * Use `create(GetDisbursementListPageDataResponseSchema)` to create a new message.
  */
 export const GetDisbursementListPageDataResponseSchema: GenMessage<GetDisbursementListPageDataResponse> = /*@__PURE__*/
-  messageDesc(file_domain_treasury_disbursement_disbursement, 12);
+  messageDesc(file_domain_treasury_disbursement_disbursement, 22);
 
 /**
  * @generated from message domain.treasury.v1.GetDisbursementItemPageDataRequest
@@ -474,7 +983,7 @@ export type GetDisbursementItemPageDataRequest = Message<"domain.treasury.v1.Get
  * Use `create(GetDisbursementItemPageDataRequestSchema)` to create a new message.
  */
 export const GetDisbursementItemPageDataRequestSchema: GenMessage<GetDisbursementItemPageDataRequest> = /*@__PURE__*/
-  messageDesc(file_domain_treasury_disbursement_disbursement, 13);
+  messageDesc(file_domain_treasury_disbursement_disbursement, 23);
 
 /**
  * @generated from message domain.treasury.v1.GetDisbursementItemPageDataResponse
@@ -501,7 +1010,7 @@ export type GetDisbursementItemPageDataResponse = Message<"domain.treasury.v1.Ge
  * Use `create(GetDisbursementItemPageDataResponseSchema)` to create a new message.
  */
 export const GetDisbursementItemPageDataResponseSchema: GenMessage<GetDisbursementItemPageDataResponse> = /*@__PURE__*/
-  messageDesc(file_domain_treasury_disbursement_disbursement, 14);
+  messageDesc(file_domain_treasury_disbursement_disbursement, 24);
 
 /**
  * @generated from service domain.treasury.v1.DisbursementDomainService

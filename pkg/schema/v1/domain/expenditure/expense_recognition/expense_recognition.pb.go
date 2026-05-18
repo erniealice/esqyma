@@ -147,6 +147,15 @@ type ExpenseRecognition struct {
 	// Set when the ExpenseRecognition is generated from a SupplierSubscription
 	// (recurring-recognition path) rather than from a one-off Expenditure.
 	SupplierSubscriptionId *string `protobuf:"bytes,60,opt,name=supplier_subscription_id,json=supplierSubscriptionId,proto3,oneof" json:"supplier_subscription_id,omitempty"`
+	// Advance back-edge — Plan B (20260517-advance-cash-events).
+	// Set when the ExpenseRecognition was emitted by AmortizeAdvanceDisbursement
+	// (TIME_BASED) or RecognizeMilestoneAdvance (MILESTONE) consuming an advance
+	// TreasuryDisbursement. Symmetric with revenue.advance_collection_id (selling side).
+	AdvanceDisbursementId *string `protobuf:"bytes,61,opt,name=advance_disbursement_id,json=advanceDisbursementId,proto3,oneof" json:"advance_disbursement_id,omitempty"`
+	// Run back-edge — Plan A (20260517-expense-run).
+	// Set when this recognition was produced by an ExpenseRecognitionRun.
+	// Mirrors revenue.run_id (=35).
+	RunId *string `protobuf:"bytes,62,opt,name=run_id,json=runId,proto3,oneof" json:"run_id,omitempty"`
 	// Notes & metadata
 	Notes         *string           `protobuf:"bytes,90,opt,name=notes,proto3,oneof" json:"notes,omitempty"`
 	Metadata      map[string]string `protobuf:"bytes,91,rep,name=metadata,proto3" json:"metadata,omitempty" protobuf_key:"bytes,1,opt,name=key" protobuf_val:"bytes,2,opt,name=value"`
@@ -397,6 +406,20 @@ func (x *ExpenseRecognition) GetJobPhaseId() string {
 func (x *ExpenseRecognition) GetSupplierSubscriptionId() string {
 	if x != nil && x.SupplierSubscriptionId != nil {
 		return *x.SupplierSubscriptionId
+	}
+	return ""
+}
+
+func (x *ExpenseRecognition) GetAdvanceDisbursementId() string {
+	if x != nil && x.AdvanceDisbursementId != nil {
+		return *x.AdvanceDisbursementId
+	}
+	return ""
+}
+
+func (x *ExpenseRecognition) GetRunId() string {
+	if x != nil && x.RunId != nil {
+		return *x.RunId
 	}
 	return ""
 }
@@ -1733,7 +1756,7 @@ var File_domain_expenditure_expense_recognition_expense_recognition_proto protor
 
 const file_domain_expenditure_expense_recognition_expense_recognition_proto_rawDesc = "" +
 	"\n" +
-	"@domain/expenditure/expense_recognition/expense_recognition.proto\x12\x15domain.expenditure.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/search.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x10options/db.proto\x1a\x1fgoogle/protobuf/timestamp.proto\"\xc0\x12\n" +
+	"@domain/expenditure/expense_recognition/expense_recognition.proto\x12\x15domain.expenditure.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/search.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x10options/db.proto\x1a\x1fgoogle/protobuf/timestamp.proto\"\x80\x14\n" +
 	"\x12ExpenseRecognition\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x124\n" +
 	"\fworkspace_id\x18\x02 \x01(\tB\x11\x82\xb5\x18\r\n" +
@@ -1788,8 +1811,12 @@ const file_domain_expenditure_expense_recognition_expense_recognition_proto_rawD
 	"\tjob_phaseH\x13R\n" +
 	"jobPhaseId\x88\x01\x01\x12\\\n" +
 	"\x18supplier_subscription_id\x18< \x01(\tB\x1d\x82\xb5\x18\x19\n" +
-	"\x15supplier_subscription\x18\x01H\x14R\x16supplierSubscriptionId\x88\x01\x01\x12\x19\n" +
-	"\x05notes\x18Z \x01(\tH\x15R\x05notes\x88\x01\x01\x12S\n" +
+	"\x15supplier_subscription\x18\x01H\x14R\x16supplierSubscriptionId\x88\x01\x01\x12Z\n" +
+	"\x17advance_disbursement_id\x18= \x01(\tB\x1d\x82\xb5\x18\x19\n" +
+	"\x15treasury_disbursement\x18\x01H\x15R\x15advanceDisbursementId\x88\x01\x01\x12;\n" +
+	"\x06run_id\x18> \x01(\tB\x1f\x82\xb5\x18\x1b\n" +
+	"\x17expense_recognition_run\x18\x01H\x16R\x05runId\x88\x01\x01\x12\x19\n" +
+	"\x05notes\x18Z \x01(\tH\x17R\x05notes\x88\x01\x01\x12S\n" +
 	"\bmetadata\x18[ \x03(\v27.domain.expenditure.v1.ExpenseRecognition.MetadataEntryR\bmetadata\x1a;\n" +
 	"\rMetadataEntry\x12\x10\n" +
 	"\x03key\x18\x01 \x01(\tR\x03key\x12\x14\n" +
@@ -1814,7 +1841,9 @@ const file_domain_expenditure_expense_recognition_expense_recognition_proto_rawD
 	"\f_location_idB\x1a\n" +
 	"\x18_expenditure_category_idB\x0f\n" +
 	"\r_job_phase_idB\x1b\n" +
-	"\x19_supplier_subscription_idB\b\n" +
+	"\x19_supplier_subscription_idB\x1a\n" +
+	"\x18_advance_disbursement_idB\t\n" +
+	"\a_run_idB\b\n" +
 	"\x06_notes\"`\n" +
 	"\x1fCreateExpenseRecognitionRequest\x12=\n" +
 	"\x04data\x18\x01 \x01(\v2).domain.expenditure.v1.ExpenseRecognitionR\x04data\"\xb9\x01\n" +

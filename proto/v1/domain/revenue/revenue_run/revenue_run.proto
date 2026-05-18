@@ -31,6 +31,17 @@ enum RevenueRunAttemptOutcome {
   REVENUE_RUN_ATTEMPT_OUTCOME_ERRORED = 3;
 }
 
+// RevenueRunSourceKind discriminates the source row from which a candidate /
+// attempt was emitted. UNSPECIFIED is treated as SUBSCRIPTION_CYCLE for
+// backward compatibility with pre-Plan-B run rows.
+//
+// Added 2026-05-17 by Plan B Phase 5 (advance-cash-events / Revenue Run).
+enum RevenueRunSourceKind {
+  REVENUE_RUN_SOURCE_KIND_UNSPECIFIED = 0;
+  REVENUE_RUN_SOURCE_KIND_SUBSCRIPTION_CYCLE = 1;
+  REVENUE_RUN_SOURCE_KIND_ADVANCE_COLLECTION = 2;
+}
+
 message RevenueRun {
   string id = 1;
   string workspace_id = 2;
@@ -71,6 +82,12 @@ message RevenueRunAttempt {
   optional string date_created_string = 14;
   optional int64 date_modified = 15;
   optional string date_modified_string = 16;
+  // source_kind discriminates SUBSCRIPTION_CYCLE vs ADVANCE_COLLECTION origin.
+  // UNSPECIFIED is treated as SUBSCRIPTION_CYCLE so pre-Plan-B rows still
+  // satisfy schema invariants. Plan B Phase 5.
+  RevenueRunSourceKind source_kind = 17;
+  // advance_collection_id is set when source_kind == ADVANCE_COLLECTION.
+  optional string advance_collection_id = 18;
 }
 
 service RevenueRunDomainService {
@@ -174,6 +191,11 @@ message RevenueRunScope {
 
 // RevenueRunCandidate represents one billed period for one subscription that
 // has not yet been invoiced (or that has a blocker preventing invoicing).
+//
+// As of Plan B Phase 5 (2026-05-17), a candidate may also represent the
+// next-due tranche of an advance Collection (source_kind=ADVANCE_COLLECTION).
+// When that's the case, subscription_id/subscription_name are empty and
+// advance_collection_id is populated instead.
 message RevenueRunCandidate {
   string subscription_id = 1;
   string subscription_name = 2;
@@ -190,12 +212,26 @@ message RevenueRunCandidate {
   int32 line_item_count = 13;
   bool eligible = 14;
   string blocker_reason = 15;
+  // source_kind discriminates the origin of this candidate row.
+  // UNSPECIFIED is treated as SUBSCRIPTION_CYCLE by view code.
+  RevenueRunSourceKind source_kind = 16;
+  // advance_collection_id is set when source_kind == ADVANCE_COLLECTION.
+  optional string advance_collection_id = 17;
+  // suppressing_advance_collection_id is set when source_kind ==
+  // SUBSCRIPTION_CYCLE AND a TIME_BASED advance Collection overlaps this
+  // period for the same client. The cycle candidate is rendered as a greyed
+  // info-only row pointing at the advance.
+  optional string suppressing_advance_collection_id = 18;
 }
 
 message ListRevenueRunCandidatesRequest {
   RevenueRunScope scope = 1;
   optional string cursor = 2;
   optional int32 limit = 3;
+  // include_advance_collections opts-in to advance-Collection candidate
+  // emission (Plan B Phase 5a). Default false → existing surfaces continue to
+  // see subscription-only candidates. Surface commits flip this to true.
+  optional bool include_advance_collections = 4;
 }
 
 message ListRevenueRunCandidatesResponse {
@@ -206,11 +242,20 @@ message ListRevenueRunCandidatesResponse {
 }
 
 // SelectedRevenueRunCandidate is one operator-confirmed selection to invoice.
+//
+// As of Plan B Phase 5, the selection may target an advance Collection
+// (source_kind=ADVANCE_COLLECTION). When that's the case, subscription_id is
+// empty and advance_collection_id is populated. Default UNSPECIFIED is
+// treated as SUBSCRIPTION_CYCLE by GenerateRevenueRun for back-compat.
 message SelectedRevenueRunCandidate {
   string subscription_id = 1;
   string period_start = 2;  // YYYY-MM-DD
   string period_end = 3;    // YYYY-MM-DD
   string period_marker = 4; // canonical idempotency anchor
+  // source_kind discriminates the dispatcher branch in generate_revenue_run.
+  RevenueRunSourceKind source_kind = 5;
+  // advance_collection_id is set when source_kind == ADVANCE_COLLECTION.
+  optional string advance_collection_id = 6;
 }
 
 // RevenueRunSelections carries either an explicit list or a filter token.

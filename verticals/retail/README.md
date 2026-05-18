@@ -387,3 +387,30 @@ Construction                  ■■■■■■■■■■■■■■■■�
 | **Hospitality** | Room reserved / minibar consumed | Guest checkout |
 
 The longer the lifecycle, the more intermediate statuses matter, and the more important it is that the `InventoryTransaction` and `RevenueLineItem` are **separate events** rather than a single atomic operation.
+
+---
+
+## Universal Job Model — applicability to retail
+
+The `operation/` proto domain is being generalised under `docs/plan/20260427-universal-job-model/` to handle service / project / maintenance / production work from one schema. Wave 1 (already complete locally) added the enum values `PLANNED`, `RELEASED`, `EQUIPMENT`, `SUBCONTRACT`, `HOLD`, `REWORK`, plus JobTemplate versioning and Job output-target fields. Waves 2–4 add nine new entities. None of them are manufacturing-specific — manufacturing is just the heaviest tier-3 facade — and they buy retail concrete value wherever it does **service work**: install, assembly, repair, custom-build, or warranty exchange. Pure POS retail mostly skips Job, so most of these entities apply only to the service-work surface.
+
+| New entity (Wave) | Relevance to retail | Example |
+|---|---|---|
+| `job_template_input` (W2) | 🟡 Medium — for installable / assemble-on-site / custom-build orders | "Same-day install for refrigerator XR-440 expects 2h technician + 1 install kit + delivery van slot." |
+| `job_template_input_alternate` (W2) | ⚪ Low | (rare — most retail service uses fixed parts kits) |
+| `lot` (W2) | 🟡 Medium — food retail, dated cosmetics, pharmacy aisle, batteries | Pharmacy department's Lot L-2026-04-12 tied to expiry; consumer recall by lot becomes a single query. |
+| `job_input_plan` (W3) | 🟡 Medium — custom-build / install orders | When a custom kitchen-cabinet order is released, the planned panel inventory is frozen so substitutes show as deviations later. |
+| `task_interruption` (W3) | ⚪ Low | (occasional — "installer delayed waiting for customer access") |
+| `job_output` (W4) | 🟢 High — custom builds, installs, repairs, warranty exchange | Service order produces `output_kind=ASSET_REPAIR` for a fixed appliance, or `INVENTORY_RECEIPT` for a custom-built bookshelf entering FG. |
+| `job_cost_ledger_entry` (W4) | ⚪ Low | (retail margin lives in pricing, not WIP — only material for service-heavy retail) |
+| `job_cost_snapshot` (W4) | ⚪ Low | n/a for most retail |
+| `job_plan_deviation` (W4) | 🟡 Medium — for custom-build cost overruns | "Custom kitchen used 18% more hardwood than planned" surfaces as a deviation on the install Job. |
+
+**Surface area for retail UI:** the Service Work Orders surface (`Job` with `fulfillment_type=SERVICE`) is the only place these entities appear meaningfully. Pure POS / e-commerce sales should continue to use `inventory_transaction` + `revenue_line_item` directly without spawning a Job — the cost of running a Job for every receipt is not worth it. Where retail DOES run Jobs (white-glove install, custom build, repair-and-replace warranty), Wave 2–4 entities give parity with manufacturing in the cost / output / variance dimensions.
+
+**Lyngua tier-3 keys to author** (under `packages/lyngua/translations/en/retail/`):
+- `job_template_input.json` → "Service kit" / "Install kit"
+- `job_output.json` → "Completion" (with kind labels: "Installed", "Repaired", "Custom-built", "Replaced under warranty")
+- `task_interruption.json` → "Installer delay"
+
+**See:** `packages/esqyma/verticals/manufacturing/README.md` for the canonical facade example. The same proto fields, rendered under `lyngua/translations/en/manufacturing/`, become BOM-and-Routing / WIP / Variance.

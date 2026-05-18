@@ -479,3 +479,32 @@ These four gaps are **independent** — each can land separately. None block the
 2. Course capacity (prevents over-enrollment incidents)
 3. Prerequisite enforcement (structural; needs plan-graph design)
 4. Teacher fan-out (performance optimization; defer until volumes warrant)
+
+---
+
+## Universal Job Model — applicability to education
+
+The `operation/` proto domain is being generalised under `docs/plan/20260427-universal-job-model/` to handle service / project / maintenance / production work from one schema. Wave 1 (already complete locally) added the enum values `PLANNED`, `RELEASED`, `EQUIPMENT`, `SUBCONTRACT`, `HOLD`, `REWORK`, plus JobTemplate versioning and Job output-target fields. Waves 2–4 add nine new entities. Education is a **moderate beneficiary** — the per-(student × course × term) Job model uses the universal core; the new entities mainly improve cost-of-delivery analysis and credential issuance, not core enrolment flow.
+
+| New entity (Wave) | Relevance to education | Example |
+|---|---|---|
+| `job_template_input` (W2) | 🟡 Medium — "Course-term expected inputs" | "Chemistry Lab II — Spring 2026 expects 1 instructor × 60h + 1 lab kit per student + 1 chem-prep tech × 10h + 1 lab room × 90 sessions." Drives cost-of-delivery analysis per program. |
+| `job_template_input_alternate` (W2) | ⚪ Low | (occasional — substitute instructor pools) |
+| `lot` (W2) | ⚪ Low | (only for science-lab chemical inventory) |
+| `job_input_plan` (W3) | 🟡 Medium — term budget freeze at registration | When a student × course × term Job is RELEASED at registration, the planned material/instructor costs are frozen; variance reports support next-year budgeting. |
+| `task_interruption` (W3) | ⚪ Low | (rare — class cancellations) |
+| `job_output` (W4) | 🟢 High — grades, transcripts, certificates | `output_kind=DELIVERABLE` for graded artefacts; `output_kind=MILESTONE` for course completion; the eventual transcript is a roll-up across many term-Jobs. |
+| `job_cost_ledger_entry` (W4) | ⚪ Low | (tuition pre-billed; little WIP — would matter for cost-allocation studies but not financial close) |
+| `job_cost_snapshot` (W4) | ⚪ Low | (n/a — no significant WIP) |
+| `job_plan_deviation` (W4) | ⚪ Low | (mostly applicable to administrative cost analysis, not financial reporting) |
+
+**Surface area for education UI:** Course-term Job detail gains a "Resources expected" panel from `job_template_input`; Student Detail gains a "Term cost analysis" tab (administrative use only, not student-facing); the existing `task_outcome` → `job_outcome_summary` Quality-Report path becomes the natural home for the term report card and transcript (`SummaryType.ACADEMIC_RECORD` already exists in the enum).
+
+**Why financial close stays the same:** education is mostly pre-billed (tuition recognised over the term via the existing subscription / revenue-recognition path). Wave 4's WIP ledger doesn't add a financial-close capability that education needs. It does add an **academic-resource cost-allocation** capability that ministries-of-education and accreditation bodies often want (cost-per-credit by program). Whether to surface that depends on the customer.
+
+**Lyngua tier-3 keys to author** (under `packages/lyngua/translations/en/education/`):
+- `job_template_input.json` → "Course resources" / "Per-section requirements"
+- `job_output.json` → "Academic record" (kinds: "Grade", "Term Report", "Transcript", "Certificate")
+- `job_plan_deviation.json` → "Resource variance" (administrative)
+
+**See:** `packages/esqyma/verticals/manufacturing/README.md` for the canonical facade example. The same proto fields, rendered under `lyngua/translations/en/manufacturing/`, become BOM-and-Routing / WIP / Variance.

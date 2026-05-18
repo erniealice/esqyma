@@ -1,0 +1,232 @@
+syntax = "proto3";
+
+package domain.expenditure.v1;
+
+option go_package = "github.com/erniealice/esqyma/golang/v1/domain/expenditure/expense_recognition_run";
+
+import "domain/common/error.proto";
+import "domain/common/pagination.proto";
+import "domain/common/search.proto";
+import "domain/common/filter.proto";
+import "domain/common/sort.proto";
+
+// Buying-side mirror of selling-side RevenueRun. One operator-clicks-Generate
+// batch that scans active SupplierSubscription cycles AND advance
+// TreasuryDisbursement rows (AdvanceKind = TIME_BASED) for a given as-of date,
+// then emits draft Expenditure + ExpenseRecognition rows (subscription path)
+// OR ExpenseRecognition only (advance-disbursement path).
+//
+// See docs/plan/20260517-expense-run/ for the full design.
+
+enum ExpenseRecognitionRunScope {
+  EXPENSE_RECOGNITION_RUN_SCOPE_UNSPECIFIED  = 0;
+  EXPENSE_RECOGNITION_RUN_SCOPE_SUPPLIER     = 1;  // Surface A
+  EXPENSE_RECOGNITION_RUN_SCOPE_SUBSCRIPTION = 2;  // Surface C
+  EXPENSE_RECOGNITION_RUN_SCOPE_WORKSPACE    = 3;  // Surface B (queue)
+}
+
+enum ExpenseRecognitionRunStatus {
+  EXPENSE_RECOGNITION_RUN_STATUS_UNSPECIFIED = 0;
+  EXPENSE_RECOGNITION_RUN_STATUS_PENDING     = 1;
+  EXPENSE_RECOGNITION_RUN_STATUS_COMPLETE    = 2;
+  EXPENSE_RECOGNITION_RUN_STATUS_FAILED      = 3;
+}
+
+enum ExpenseRecognitionRunAttemptOutcome {
+  EXPENSE_RECOGNITION_RUN_ATTEMPT_OUTCOME_UNSPECIFIED = 0;
+  EXPENSE_RECOGNITION_RUN_ATTEMPT_OUTCOME_CREATED     = 1;
+  EXPENSE_RECOGNITION_RUN_ATTEMPT_OUTCOME_SKIPPED     = 2;  // period_marker / idempotency collision
+  EXPENSE_RECOGNITION_RUN_ATTEMPT_OUTCOME_ERRORED     = 3;
+}
+
+// Discriminates per-attempt origin. Subscription path emits Expenditure +
+// ExpenseRecognition (+ Line); advance-disbursement path emits ExpenseRecognition
+// only (composes Plan B's AmortizeAdvanceDisbursement use case).
+enum ExpenseRecognitionRunSourceKind {
+  EXPENSE_RECOGNITION_RUN_SOURCE_KIND_UNSPECIFIED         = 0;
+  EXPENSE_RECOGNITION_RUN_SOURCE_KIND_SUBSCRIPTION_CYCLE  = 1;
+  EXPENSE_RECOGNITION_RUN_SOURCE_KIND_ADVANCE_DISBURSEMENT = 2;
+}
+
+message ExpenseRecognitionRun {
+  string id = 1;
+  string workspace_id = 2;
+  optional string supplier_id = 3;
+  optional string supplier_subscription_id = 4;
+  ExpenseRecognitionRunScope scope = 5;
+  string as_of_date = 6;                          // YYYY-MM-DD
+  int32 selection_count = 7;
+  int32 created_count = 8;
+  int32 skipped_count = 9;
+  int32 errored_count = 10;
+  ExpenseRecognitionRunStatus status = 11;
+  string initiated_by = 12;
+  optional int64 initiated_at = 13;
+  optional int64 completed_at = 14;
+  optional string notes = 15;
+  bool active = 16;
+  optional int64 date_created = 17;
+  optional string date_created_string = 18;
+  optional int64 date_modified = 19;
+  optional string date_modified_string = 20;
+}
+
+service ExpenseRecognitionRunDomainService {
+  rpc CreateExpenseRecognitionRun(CreateExpenseRecognitionRunRequest) returns (CreateExpenseRecognitionRunResponse);
+  rpc ReadExpenseRecognitionRun(ReadExpenseRecognitionRunRequest) returns (ReadExpenseRecognitionRunResponse);
+  rpc UpdateExpenseRecognitionRun(UpdateExpenseRecognitionRunRequest) returns (UpdateExpenseRecognitionRunResponse);
+  rpc DeleteExpenseRecognitionRun(DeleteExpenseRecognitionRunRequest) returns (DeleteExpenseRecognitionRunResponse);
+  rpc ListExpenseRecognitionRuns(ListExpenseRecognitionRunsRequest) returns (ListExpenseRecognitionRunsResponse);
+  // Attempt RPCs — mirror selling-side RevenueRunDomainService.
+  rpc CreateExpenseRecognitionRunAttempt(CreateExpenseRecognitionRunAttemptRequest) returns (CreateExpenseRecognitionRunAttemptResponse);
+  rpc ListExpenseRecognitionRunAttempts(ListExpenseRecognitionRunAttemptsRequest) returns (ListExpenseRecognitionRunAttemptsResponse);
+}
+
+message CreateExpenseRecognitionRunRequest  { ExpenseRecognitionRun data = 1; }
+message CreateExpenseRecognitionRunResponse {
+  repeated ExpenseRecognitionRun data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+message ReadExpenseRecognitionRunRequest  { ExpenseRecognitionRun data = 1; }
+message ReadExpenseRecognitionRunResponse {
+  repeated ExpenseRecognitionRun data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+message UpdateExpenseRecognitionRunRequest  { ExpenseRecognitionRun data = 1; }
+message UpdateExpenseRecognitionRunResponse {
+  repeated ExpenseRecognitionRun data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+message DeleteExpenseRecognitionRunRequest  { ExpenseRecognitionRun data = 1; }
+message DeleteExpenseRecognitionRunResponse {
+  bool success = 1;
+  optional domain.common.v1.Error error = 2;
+}
+message ListExpenseRecognitionRunsRequest {
+  optional domain.common.v1.SearchRequest search = 1;
+  optional domain.common.v1.FilterRequest filters = 2;
+  optional domain.common.v1.SortRequest sort = 3;
+  optional domain.common.v1.PaginationRequest pagination = 4;
+}
+message ListExpenseRecognitionRunsResponse {
+  repeated ExpenseRecognitionRun data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+  optional domain.common.v1.PaginationResponse pagination = 4;
+}
+
+// ---------------------------------------------------------------------------
+// Use-case messages (consumed by espyna use cases, not bound to an RPC).
+// ---------------------------------------------------------------------------
+
+message ExpenseRecognitionRunScopeMsg {
+  optional string workspace_id = 1;
+  optional string supplier_id = 2;
+  optional string supplier_subscription_id = 3;
+  optional string as_of_date = 4;  // YYYY-MM-DD; defaults to today (workspace tz) when empty
+}
+
+// One candidate row — either a SupplierSubscription cycle or an advance
+// TreasuryDisbursement tranche due for amortization.
+message ExpenseRecognitionRunCandidate {
+  ExpenseRecognitionRunSourceKind source_kind = 1;
+  optional string supplier_subscription_id = 2;
+  optional string advance_disbursement_id = 3;
+  string supplier_id = 4;
+  string supplier_name = 5;
+  string source_label = 6;          // human-readable: "AWS Cloud Subscription" or "Office Insurance prepay"
+  string currency = 7;
+  string period_start = 8;          // YYYY-MM-DD
+  string period_end = 9;            // YYYY-MM-DD
+  string period_label = 10;
+  string period_marker = 11;        // deterministic per-source idempotency anchor
+  int64 amount = 12;
+  bool eligible = 13;
+  string blocker_reason = 14;
+  // Linked-advance suppression: when subscription cycle is suppressed by an
+  // overlapping advance Disbursement, eligible=false + blocker_reason set +
+  // suppressing_advance_disbursement_id populated for the explainer link.
+  optional string suppressing_advance_disbursement_id = 15;
+}
+
+message ListExpenseRunCandidatesRequest {
+  ExpenseRecognitionRunScopeMsg scope = 1;
+  optional string cursor = 2;
+  optional int32 limit = 3;
+}
+
+message ListExpenseRunCandidatesResponse {
+  repeated ExpenseRecognitionRunCandidate data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+  optional string next_cursor = 4;
+}
+
+message SelectedExpenseRunCandidate {
+  ExpenseRecognitionRunSourceKind source_kind = 1;
+  optional string supplier_subscription_id = 2;
+  optional string advance_disbursement_id = 3;
+  string period_start = 4;
+  string period_end = 5;
+  string period_marker = 6;
+}
+
+message ExpenseRunSelections {
+  repeated SelectedExpenseRunCandidate explicit_list = 1;
+  optional string filter_token = 2;  // signed server snapshot — deferred per plan v1
+}
+
+message GenerateExpenseRunRequest {
+  ExpenseRecognitionRunScopeMsg scope = 1;
+  ExpenseRunSelections selections = 2;
+}
+
+message GenerateExpenseRunResponse {
+  bool success = 1;
+  optional domain.common.v1.Error error = 2;
+  optional ExpenseRecognitionRun run = 3;
+  repeated ExpenseRecognitionRunAttempt attempts = 4;
+}
+
+message ExpenseRecognitionRunAttempt {
+  string id = 1;
+  string run_id = 2;
+  ExpenseRecognitionRunSourceKind source_kind = 3;
+  optional string supplier_subscription_id = 4;
+  optional string advance_disbursement_id = 5;
+  string period_start = 6;          // YYYY-MM-DD
+  string period_end = 7;            // YYYY-MM-DD
+  string period_marker = 8;
+  ExpenseRecognitionRunAttemptOutcome outcome = 9;
+  optional string expense_recognition_id = 10;
+  optional string expenditure_id = 11;
+  optional string error_code = 12;
+  optional string error_message = 13;
+  optional int64 attempted_at = 14;
+  bool active = 15;
+  optional int64 date_created = 16;
+  optional string date_created_string = 17;
+  optional int64 date_modified = 18;
+  optional string date_modified_string = 19;
+}
+
+message CreateExpenseRecognitionRunAttemptRequest  { ExpenseRecognitionRunAttempt data = 1; }
+message CreateExpenseRecognitionRunAttemptResponse {
+  repeated ExpenseRecognitionRunAttempt data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message ListExpenseRecognitionRunAttemptsRequest {
+  string run_id = 1;
+  optional domain.common.v1.FilterRequest filters = 2;
+  optional domain.common.v1.SortRequest sort = 3;
+}
+message ListExpenseRecognitionRunAttemptsResponse {
+  repeated ExpenseRecognitionRunAttempt data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}

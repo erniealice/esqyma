@@ -80,6 +80,13 @@ message Revenue {
   // Audit snapshot of the collection profile active at recognition time.
   // Stored as string (no DB FK constraint) to survive profile edits — see architecture.md §3.5.
   optional string collection_profile_id_snapshot = 47;
+
+  // Advance back-edge — Plan B (20260517-advance-cash-events).
+  // Set when the Revenue was emitted by AmortizeAdvanceCollection (TIME_BASED) or
+  // RecognizeMilestoneAdvance (MILESTONE) draining an advance TreasuryCollection.
+  // Symmetric with expense_recognition.advance_disbursement_id (buying side).
+  // Replaces the never-shipped Revenue.deferred_revenue_id concept (DeferredRevenue dropped in Phase 0).
+  optional string advance_collection_id = 48 [(options.v1.db).references = "treasury_collection", (options.v1.db).index = true];
 }
 
 // PreviewTaxLine — ephemeral, dry-run only. Not persisted.

@@ -104,8 +104,12 @@ type Expenditure struct {
 	// when this bill was charged to a shared fund source. NULL when the expenditure
 	// is funded from a regular cash account (no shared-fund involvement).
 	FundTransactionId *string `protobuf:"bytes,37,opt,name=fund_transaction_id,json=fundTransactionId,proto3,oneof" json:"fund_transaction_id,omitempty"`
-	unknownFields     protoimpl.UnknownFields
-	sizeCache         protoimpl.SizeCache
+	// Run back-edge — Plan A (20260517-expense-run).
+	// Set when this draft Expenditure was emitted by an ExpenseRecognitionRun
+	// (subscription path). AP edits/cancels the draft when the real vendor bill arrives.
+	RunId         *string `protobuf:"bytes,38,opt,name=run_id,json=runId,proto3,oneof" json:"run_id,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
 }
 
 func (x *Expenditure) Reset() {
@@ -393,6 +397,13 @@ func (x *Expenditure) GetDisbursementProfileIdSnapshot() string {
 func (x *Expenditure) GetFundTransactionId() string {
 	if x != nil && x.FundTransactionId != nil {
 		return *x.FundTransactionId
+	}
+	return ""
+}
+
+func (x *Expenditure) GetRunId() string {
+	if x != nil && x.RunId != nil {
+		return *x.RunId
 	}
 	return ""
 }
@@ -1185,7 +1196,7 @@ var File_domain_expenditure_expenditure_expenditure_proto protoreflect.FileDescr
 
 const file_domain_expenditure_expenditure_expenditure_proto_rawDesc = "" +
 	"\n" +
-	"0domain/expenditure/expenditure/expenditure.proto\x12\x15domain.expenditure.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/search.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a!domain/entity/client/client.proto\x1a%domain/entity/location/location.proto\x1a-domain/entity/payment_term/payment_term.proto\x1a\x10options/db.proto\"\xf7\x12\n" +
+	"0domain/expenditure/expenditure/expenditure.proto\x12\x15domain.expenditure.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/search.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a!domain/entity/client/client.proto\x1a%domain/entity/location/location.proto\x1a-domain/entity/payment_term/payment_term.proto\x1a\x10options/db.proto\"\xbf\x13\n" +
 	"\vExpenditure\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12&\n" +
 	"\fdate_created\x18\x02 \x01(\x03H\x00R\vdateCreated\x88\x01\x01\x123\n" +
@@ -1240,7 +1251,9 @@ const file_domain_expenditure_expenditure_expenditure_proto_rawDesc = "" +
 	"costPlanId\x88\x01\x01\x12L\n" +
 	" disbursement_profile_id_snapshot\x18$ \x01(\tH\x1aR\x1ddisbursementProfileIdSnapshot\x88\x01\x01\x12K\n" +
 	"\x13fund_transaction_id\x18% \x01(\tB\x16\x82\xb5\x18\x12\n" +
-	"\x10fund_transactionH\x1bR\x11fundTransactionId\x88\x01\x01B\x0f\n" +
+	"\x10fund_transactionH\x1bR\x11fundTransactionId\x88\x01\x01\x12;\n" +
+	"\x06run_id\x18& \x01(\tB\x1f\x82\xb5\x18\x1b\n" +
+	"\x17expense_recognition_run\x18\x01H\x1cR\x05runId\x88\x01\x01B\x0f\n" +
 	"\r_date_createdB\x16\n" +
 	"\x14_date_created_stringB\x10\n" +
 	"\x0e_date_modifiedB\x17\n" +
@@ -1268,7 +1281,8 @@ const file_domain_expenditure_expenditure_expenditure_proto_rawDesc = "" +
 	"\x19_supplier_subscription_idB\x0f\n" +
 	"\r_cost_plan_idB#\n" +
 	"!_disbursement_profile_id_snapshotB\x16\n" +
-	"\x14_fund_transaction_id\"R\n" +
+	"\x14_fund_transaction_idB\t\n" +
+	"\a_run_id\"R\n" +
 	"\x18CreateExpenditureRequest\x126\n" +
 	"\x04data\x18\x01 \x01(\v2\".domain.expenditure.v1.ExpenditureR\x04data\"\xab\x01\n" +
 	"\x19CreateExpenditureResponse\x126\n" +

@@ -1,0 +1,59 @@
+syntax = "proto3";
+
+package domain.common.v1;
+
+option go_package = "github.com/erniealice/esqyma/golang/v1/domain/common/advance_kind";
+
+// AdvanceKind classifies a TreasuryCollection / TreasuryDisbursement as an advance
+// cash event and determines how it amortizes into Revenue / ExpenseRecognition.
+//
+// v1 enables NONE + TIME_BASED + MILESTONE + UNSCHEDULED.
+// BURN_DOWN is declared but DISABLED in v1 — Create/Update setters MUST reject
+// this value with a v2-roadmap error. See docs/plan/20260517-advance-cash-events/.
+enum AdvanceKind {
+  ADVANCE_KIND_UNSPECIFIED = 0;  // same semantics as NONE for backwards compat
+  ADVANCE_KIND_NONE        = 1;
+  ADVANCE_KIND_TIME_BASED  = 2;
+  ADVANCE_KIND_BURN_DOWN   = 3;  // declared, DISABLED in v1
+  ADVANCE_KIND_MILESTONE   = 4;
+  ADVANCE_KIND_UNSCHEDULED = 5;
+}
+
+// AdvanceStatus tracks the lifecycle of an advance cash event.
+enum AdvanceStatus {
+  ADVANCE_STATUS_UNSPECIFIED          = 0;
+  ADVANCE_STATUS_ACTIVE               = 1;
+  ADVANCE_STATUS_FULLY_RECOGNIZED     = 2;  // selling-side terminal
+  ADVANCE_STATUS_FULLY_AMORTIZED      = 3;  // buying-side terminal
+  ADVANCE_STATUS_FULLY_DRAWN          = 4;  // BURN_DOWN terminal (v2)
+  ADVANCE_STATUS_SETTLED              = 5;
+  ADVANCE_STATUS_PARTIALLY_SETTLED    = 6;
+  ADVANCE_STATUS_REFUNDED             = 7;
+  ADVANCE_STATUS_CANCELLED            = 8;
+  ADVANCE_STATUS_EXPIRED              = 9;  // escheat path (v2)
+}
+
+// AdvanceProrationPolicy controls the first-tranche shape for TIME_BASED advances
+// whose start_date falls mid-period. Only meaningful when advance_kind = TIME_BASED;
+// server-side validation rejects non-UNSPECIFIED values on other kinds with a 400.
+enum AdvanceProrationPolicy {
+  ADVANCE_PRORATION_POLICY_UNSPECIFIED       = 0;  // falls back to default (FULL_TRANCHE)
+  ADVANCE_PRORATION_POLICY_DAY_PRORATED      = 1;
+  ADVANCE_PRORATION_POLICY_FULL_TRANCHE      = 2;  // DEFAULT for new TIME_BASED advances
+  ADVANCE_PRORATION_POLICY_NEXT_PERIOD_START = 3;
+}
+
+// AdvanceAmortizeOutcome enumerates the terminal states of one Amortize /
+// RecognizeMilestone use-case call. Mirrors RevenueRunAttemptOutcome in shape
+// so the upstream run engines can map outcomes 1:1 without translation tables.
+//
+// CREATED = a fresh Revenue / ExpenseRecognition row was inserted and the
+//           advance counters were decremented.
+// SKIPPED = the period was already recognized; no new row written.
+// ERRORED = validation / read / write failure; counters untouched.
+enum AdvanceAmortizeOutcome {
+  ADVANCE_AMORTIZE_OUTCOME_UNSPECIFIED = 0;
+  ADVANCE_AMORTIZE_OUTCOME_CREATED     = 1;
+  ADVANCE_AMORTIZE_OUTCOME_SKIPPED     = 2;
+  ADVANCE_AMORTIZE_OUTCOME_ERRORED     = 3;
+}

@@ -91,6 +91,11 @@ message Expenditure {
   // when this bill was charged to a shared fund source. NULL when the expenditure
   // is funded from a regular cash account (no shared-fund involvement).
   optional string fund_transaction_id = 37 [(options.v1.db).references = "fund_transaction"];
+
+  // Run back-edge — Plan A (20260517-expense-run).
+  // Set when this draft Expenditure was emitted by an ExpenseRecognitionRun
+  // (subscription path). AP edits/cancels the draft when the real vendor bill arrives.
+  optional string run_id = 38 [(options.v1.db).references = "expense_recognition_run", (options.v1.db).index = true];
 }
 
 service ExpenditureDomainService {

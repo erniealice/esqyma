@@ -370,3 +370,34 @@ Origination              Deployment             Operation             Terminatio
 4. **End-of-term damage flows through the standard revenue path.** Damage findings from inspection (`TaskOutcome` records on the return Job) drive `AssetTransaction.DAMAGE_FOUND` for the asset audit log and `JobSettlement` → `Revenue` for the financial path. The `revenue_category = "Damages"` tag distinguishes damage chargebacks from recurring lease fees in revenue reporting.
 
 5. **The `asset` domain record and the `inventory_serial` record are joined by `serial_number`.** The lessor's accounting system (Asset) and the fleet management system (InventorySerial) reference the same physical unit via the serial number natural key. This dual-model approach avoids adding a new FK between domains while keeping the accounting and operational views clean.
+
+---
+
+## Universal Job Model — applicability to leasing
+
+The `operation/` proto domain is being generalised under `docs/plan/20260427-universal-job-model/` to handle service / project / maintenance / production work from one schema. Wave 1 (already complete locally) added the enum values `PLANNED`, `RELEASED`, `EQUIPMENT`, `SUBCONTRACT`, `HOLD`, `REWORK`, plus JobTemplate versioning and Job output-target fields. Waves 2–4 add nine new entities. **Leasing is a heavy beneficiary** because the service-engagement side of a lease (deployment, maintenance, repair, return) is the most heterogeneous Job pattern in the system, and the new entities give it the same cost / output / variance fidelity that manufacturing gets.
+
+| New entity (Wave) | Relevance to leasing | Example |
+|---|---|---|
+| `job_template_input` (W2) | 🟡 Medium — per-Job-type expected inputs | "Cyclic maintenance template (excavator XJ-9000) expects 1h field tech + 1 oil-and-filter kit + 0.5h truck slot." |
+| `job_template_input_alternate` (W2) | 🟡 Medium — approved part substitutes per asset class | OEM oil filter ↔ approved aftermarket equivalent for low-priority maintenance, but OEM-only for warranty-covered units. |
+| `lot` (W2) | ⚪ Low | (occasional — fluids tracked by batch for warranty traceability) |
+| `job_input_plan` (W3) | 🟡 Medium — deployment / maintenance budget freeze | When a deployment Job is RELEASED, expected tech-hours + parts-kit cost are frozen; later replacements registered as deviations. |
+| `task_interruption` (W3) | 🟢 High — field-service blocked | "Tech on-site, waiting for replacement part to be delivered" — captured with reason and resumption ETA. Drives SLA tracking. |
+| `job_output` (W4) | 🟢 High — repair record, asset state change | `output_kind=ASSET_REPAIR` linking back to the leased asset; `output_kind=DELIVERABLE` for the customer-signed service report. |
+| `job_cost_ledger_entry` (W4) | 🟢 High — service-engagement cost flow (contract asset) | Each service Job accumulates its own cost ledger; rolls up into the parent lease's profitability. |
+| `job_cost_snapshot` (W4) | 🟢 High — period close | Open service-Job WIP at period close, separated by lease for revenue-recognition tagging. |
+| `job_plan_deviation` (W4) | 🟢 High — service overrun variance | "Repair Job consumed 4h tech-time vs planned 1h" — drives root-cause analysis on chronic-overrun asset models. |
+
+**Surface area for leasing UI:** the existing Service Engagements list per lease gains a "Cost summary" column (running cost from `job_cost_ledger_entry`); the Maintenance schedule view shows pending vs. planned inputs from `job_template_input`; the Asset Detail gains a "Service variance" tab summarising deviations across all Jobs touching this asset (drives the replace-vs-repair decision).
+
+**End-of-term chargebacks:** the existing return-Job flow uses `TaskOutcome` to capture damage findings; Wave 4's `job_output` formalises the customer-facing damage record (signed photos, signed acknowledgement). This neatens the damage-chargeback evidence chain without adding new entities outside the universal core.
+
+**Lyngua tier-3 keys to author** (under `packages/lyngua/translations/en/leasing/`):
+- `job_template_input.json` → "Service kit" / "Deployment kit" / "Maintenance kit"
+- `task_interruption.json` → "Service hold" / "Awaiting parts"
+- `job_output.json` → "Service completion" (kinds: "Deployed", "Maintained", "Repaired", "Returned")
+- `job_cost_ledger_entry.json` → "Service cost ledger"
+- `job_plan_deviation.json` → "Service variance"
+
+**See:** `packages/esqyma/verticals/manufacturing/README.md` for the canonical facade example. The same proto fields, rendered under `lyngua/translations/en/manufacturing/`, become BOM-and-Routing / WIP / Variance.

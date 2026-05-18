@@ -11,6 +11,7 @@ import "domain/common/sort.proto";
 import "domain/common/search.proto";
 
 import "domain/subscription/subscription/subscription.proto";
+import "domain/common/advance_kind/advance_kind.proto";
 import "options/db.proto";
 
 message Disbursement {
@@ -44,6 +45,125 @@ message Disbursement {
   // when outstanding draws were settled from this workspace's cash. NULL when the disbursement
   // is a direct cash outflow with no shared-fund involvement.
   optional string fund_transaction_id = 29 [(options.v1.db).references = "fund_transaction"];
+
+  // --- Advance Cash Events (Plan B, 20260517-advance-cash-events) ---
+  // When advance_kind != NONE, this TreasuryDisbursement IS the advance payment;
+  // ExpenseRecognition rows draining the advance back-ref via expense_recognition.advance_disbursement_id.
+  optional domain.common.v1.AdvanceKind advance_kind = 30;
+  optional domain.common.v1.AdvanceStatus advance_status = 31;
+  optional string advance_start_date = 32;             // ISO 8601 YYYY-MM-DD
+  optional string advance_end_date = 33;
+  optional int32 advance_period_count = 34;
+  optional string advance_period_unit = 35;            // "day" | "week" | "month" | "year"
+  optional int64 advance_total_amount = 36;            // centavos; snapshot of original advance amount
+  optional int64 advance_remaining_amount = 37;        // centavos; decremented by AmortizeAdvanceDisbursement
+  optional int64 advance_recognized_amount = 38;       // centavos; SUM(linked expense_recognition.total_amount)
+  optional string advance_balance_account_id = 39 [(options.v1.db).references = "account"];  // asset (prepaid)
+  optional string advance_target_account_id = 40  [(options.v1.db).references = "account"];  // expense account
+  optional string advance_expiry_date = 41;            // optional, v2 — escheat / expiration
+  optional domain.common.v1.AdvanceProrationPolicy advance_proration_policy = 42;  // TIME_BASED first-tranche; default FULL_TRANCHE
+
+  // Plan B Decision B — counterparty FK; additive.
+  optional string supplier_id = 43 [(options.v1.db).references = "supplier", (options.v1.db).index = true];
+}
+
+// ---------------------------------------------------------------------------
+// Use-case messages — Plan B Phase 2 + Phase 7 advance workflows (buying side).
+// Consumed by espyna internal use cases. NOT bound to any RPC; the consumer
+// adapter (consumer/adapter_treasury_advances.go) calls the use case directly
+// via the Container.
+// ---------------------------------------------------------------------------
+
+// AmortizeAdvanceDisbursementRequest — buying-side Plan B Phase 2 amortize.
+message AmortizeAdvanceDisbursementRequest {
+  string treasury_disbursement_id = 1;
+  string as_of_date = 2;
+  string workspace_id = 3;
+  string actor_id = 4;
+  optional string idempotency_key = 5;
+  optional string run_id = 6;       // set when invoked from an ExpenseRecognitionRun batch
+}
+
+message AmortizeAdvanceDisbursementResponse {
+  domain.common.v1.AdvanceAmortizeOutcome outcome = 1;
+  optional string expense_recognition_id = 2;             // populated when outcome == CREATED
+  optional string conflicting_expense_recognition_id = 3; // populated when outcome == SKIPPED
+  int64 new_remaining_amount = 4;
+  int64 new_recognized_amount = 5;
+  domain.common.v1.AdvanceStatus new_status = 6;
+  string tranche_start = 7;
+  string tranche_end = 8;
+  int64 tranche_amount = 9;
+  optional domain.common.v1.Error error = 10;
+}
+
+// SettleUnscheduledAdvanceDisbursementRequest — UNSCHEDULED settle (buying side).
+message SettleUnscheduledAdvanceDisbursementRequest {
+  string treasury_disbursement_id = 1;
+  int64 amount = 2;
+  string target_account_id = 3;
+  string reason = 4;
+  string workspace_id = 5;
+  string actor_id = 6;
+}
+
+message SettleUnscheduledAdvanceDisbursementResponse {
+  int64 new_remaining_amount = 1;
+  int64 new_recognized_amount = 2;
+  domain.common.v1.AdvanceStatus new_status = 3;
+  optional domain.common.v1.Error error = 4;
+}
+
+// RefundUnscheduledAdvanceDisbursementRequest — UNSCHEDULED refund (buying side).
+message RefundUnscheduledAdvanceDisbursementRequest {
+  string treasury_disbursement_id = 1;
+  int64 amount = 2;
+  string refund_method = 3;
+  string destination = 4;
+  string reason = 5;
+  string workspace_id = 6;
+  string actor_id = 7;
+}
+
+message RefundUnscheduledAdvanceDisbursementResponse {
+  int64 new_remaining_amount = 1;
+  domain.common.v1.AdvanceStatus new_status = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+// CancelAdvanceDisbursementRequest — flip advance_status to CANCELLED (buying side).
+message CancelAdvanceDisbursementRequest {
+  string treasury_disbursement_id = 1;
+  string reason = 2;
+  string workspace_id = 3;
+  string actor_id = 4;
+}
+
+message CancelAdvanceDisbursementResponse {
+  domain.common.v1.AdvanceStatus new_status = 1;
+  optional domain.common.v1.Error error = 2;
+}
+
+// RecognizeMilestoneAdvanceDisbursementRequest — Plan B Phase 7 milestone
+// recognition (buying side). Anchors on a
+// (disbursement_id, supplier_billing_event_id) junction row.
+message RecognizeMilestoneAdvanceDisbursementRequest {
+  string treasury_disbursement_id = 1;
+  string supplier_billing_event_id = 2;
+  string actor_id = 3;
+  string workspace_id = 4;
+  optional string run_id = 5;
+}
+
+message RecognizeMilestoneAdvanceDisbursementResponse {
+  domain.common.v1.AdvanceAmortizeOutcome outcome = 1;
+  optional string expense_recognition_id = 2;
+  optional string conflicting_expense_recognition_id = 3;
+  int64 new_remaining_amount = 4;
+  int64 new_recognized_amount = 5;
+  domain.common.v1.AdvanceStatus new_status = 6;
+  int64 tranche_amount = 7;
+  optional domain.common.v1.Error error = 8;
 }
 
 service DisbursementDomainService {

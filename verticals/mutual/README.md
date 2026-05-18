@@ -452,3 +452,32 @@ strict `client_id FK`. `EventAttendee` already has `workspace_user_id`, which co
 all stakeholder roles for one person in one workspace — exactly the one-member-one-vote
 invariant. The 4 new fields (`vote_choice`, `vote_weight`, `vote_cast_at`, `eligible_to_vote`)
 are only populated when `Event.kind = EVENT_KIND_GOVERNANCE_VOTE`.
+
+---
+
+## Universal Job Model — applicability to mutual / cooperatives
+
+The `operation/` proto domain is being generalised under `docs/plan/20260427-universal-job-model/` to handle service / project / maintenance / production work from one schema. Wave 1 (already complete locally) added the enum values `PLANNED`, `RELEASED`, `EQUIPMENT`, `SUBCONTRACT`, `HOLD`, `REWORK`, plus JobTemplate versioning and Job output-target fields. Waves 2–4 add nine new entities. **Mutual is orthogonal** — the applicability profile is inherited from whatever industry the co-op operates in (a worker co-op of accountants gets the professional-services profile; a consumer grocery co-op gets the retail profile). The mutual-specific additions are governance-and-patronage flows on top.
+
+| New entity (Wave) | Mutual-specific value (beyond underlying-industry inheritance) | Example |
+|---|---|---|
+| `job_template_input` (W2) | 🟡 Medium — operational-Job templates for co-op governance | "Annual patronage allocation template" expects N hours of treasurer time + audit-firm subcontract + member-statement printing. The annual-AGM template carries hall booking, secretarial hours, materials. |
+| `job_template_input_alternate` (W2) | ⚪ Low | (rare) |
+| `lot` (W2) | (inherited from underlying industry) | n/a for governance Jobs |
+| `job_input_plan` (W3) | 🟡 Medium — annual operational-Job budget freeze | Each year's AGM Job freezes the planned cost at the start of the fiscal year; deviations get reported at board level. |
+| `task_interruption` (W3) | ⚪ Low | (rare — "AGM postponed waiting for quorum") |
+| `job_output` (W4) | 🟢 High — patronage statements, AGM minutes, audit reports | `output_kind=DELIVERABLE` per member's patronage statement; `output_kind=MILESTONE` for "AGM held with quorum"; `output_kind=DELIVERABLE` for audit report PDF. |
+| `job_cost_ledger_entry` (W4) | 🟡 Medium — operational-cost transparency | Member-facing accountability ledger — "what did we spend on governance this year." |
+| `job_cost_snapshot` (W4) | 🟡 Medium | Fiscal-year operational-cost snapshot for the annual report. |
+| `job_plan_deviation` (W4) | 🟡 Medium — operational-cost variance | Drives the "AGM ran 22% over budget — why?" question for the next board. |
+
+**Patronage-allocation Job pattern:** the universal Job model handles co-op operational cycles cleanly. One Job per fiscal year, type "patronage allocation," with `JobTemplate` carrying the SOP. JobActivity rows capture treasurer hours and audit fees. JobOutput rows of `output_kind=DELIVERABLE` carry per-member patronage statements (one row per member or a single aggregate row referencing a member-statement bundle). The existing patronage equity flow (`EquityTransaction` with `PATRONAGE_RETENTION` / `PATRONAGE_DISTRIBUTION`) is **not** replaced — the Job-level outputs are the *operational evidence*, the equity transactions are the *accounting effect*.
+
+**Solidarity / multi-stakeholder co-ops:** the underlying-industry UJM profile may apply twice — a worker member submits hours via the professional-services profile of UJM; the same individual as a consumer member receives a job_output deliverable from the patronage-allocation governance Job. The two profiles compose cleanly because the universal core doesn't know about co-op governance — that knowledge lives in the WorkspaceUser admission state and the Equity ledger.
+
+**Lyngua tier-3 keys to author** (under `packages/lyngua/translations/en/mutual/`):
+- `job_template_input.json` → "Service requirements" (co-op-flavoured) / "Allocation inputs"
+- `job_output.json` → "Co-op outputs" (kinds include "Patronage statement", "AGM minutes", "Audit report")
+- `job_cost_ledger_entry.json` → "Operational cost ledger" (member-facing)
+
+**See:** `packages/esqyma/verticals/manufacturing/README.md` for the canonical facade example. The same proto fields, rendered under `lyngua/translations/en/manufacturing/`, become BOM-and-Routing / WIP / Variance. Mutual stacks on top of whatever industry profile the co-op operates in.

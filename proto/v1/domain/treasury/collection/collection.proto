@@ -12,6 +12,7 @@ import "domain/common/search.proto";
 
 import "domain/subscription/subscription/subscription.proto";
 import "domain/treasury/collection_profile_collection_method/collection_profile_collection_method.proto";
+import "domain/common/advance_kind/advance_kind.proto";
 import "options/db.proto";
 
 message Collection {
@@ -58,6 +59,127 @@ message Collection {
   // when this payment was deposited into a shared fund source. NULL when the collection
   // is deposited to a regular cash account (no shared-fund involvement).
   optional string fund_transaction_id = 31 [(options.v1.db).references = "fund_transaction"];
+
+  // --- Advance Cash Events (Plan B, 20260517-advance-cash-events) ---
+  // When advance_kind != NONE, this TreasuryCollection IS the advance receipt;
+  // Revenue rows draining the advance back-ref this row via revenue.advance_collection_id.
+  optional domain.common.v1.AdvanceKind advance_kind = 32;
+  optional domain.common.v1.AdvanceStatus advance_status = 33;
+  optional string advance_start_date = 34;             // ISO 8601 YYYY-MM-DD
+  optional string advance_end_date = 35;
+  optional int32 advance_period_count = 36;
+  optional string advance_period_unit = 37;            // "day" | "week" | "month" | "year"
+  optional int64 advance_total_amount = 38;            // centavos; snapshot of original advance amount
+  optional int64 advance_remaining_amount = 39;        // centavos; decremented by AmortizeAdvanceCollection
+  optional int64 advance_recognized_amount = 40;       // centavos; SUM(linked revenue.amount)
+  optional string advance_balance_account_id = 41 [(options.v1.db).references = "account"];  // liability (deferred-revenue contra)
+  optional string advance_target_account_id = 42  [(options.v1.db).references = "account"];  // revenue account
+  optional string advance_expiry_date = 43;            // optional, v2 — escheat / expiration
+  optional domain.common.v1.AdvanceProrationPolicy advance_proration_policy = 44;  // TIME_BASED first-tranche; default FULL_TRANCHE
+
+  // Plan B Decision B — counterparty FK. Plan-B label "customer_id"; references the
+  // existing entydad `client` table since the codebase uses `client` everywhere
+  // (revenue.client_id, etc.). NOT a rename — additive.
+  optional string client_id = 45 [(options.v1.db).references = "client", (options.v1.db).index = true];
+}
+
+// ---------------------------------------------------------------------------
+// Use-case messages — Plan B Phase 2 + Phase 7 advance workflows (selling side).
+// Consumed by espyna internal use cases. NOT bound to any RPC; the consumer
+// adapter (consumer/adapter_treasury_advances.go) calls the use case directly
+// via the Container.
+// ---------------------------------------------------------------------------
+
+// AmortizeAdvanceCollectionRequest — selling-side Plan B Phase 2 amortize.
+message AmortizeAdvanceCollectionRequest {
+  string treasury_collection_id = 1;
+  string as_of_date = 2;            // YYYY-MM-DD; defaults to today (UTC) when empty
+  string workspace_id = 3;
+  string actor_id = 4;
+  optional string idempotency_key = 5;
+  optional string run_id = 6;       // set when invoked from a RevenueRun batch
+}
+
+message AmortizeAdvanceCollectionResponse {
+  domain.common.v1.AdvanceAmortizeOutcome outcome = 1;
+  optional string revenue_id = 2;             // populated when outcome == CREATED
+  optional string conflicting_revenue_id = 3; // populated when outcome == SKIPPED
+  int64 new_remaining_amount = 4;
+  int64 new_recognized_amount = 5;
+  domain.common.v1.AdvanceStatus new_status = 6;
+  string tranche_start = 7;
+  string tranche_end = 8;
+  int64 tranche_amount = 9;
+  optional domain.common.v1.Error error = 10;
+}
+
+// SettleUnscheduledAdvanceCollectionRequest — UNSCHEDULED settle (selling side).
+message SettleUnscheduledAdvanceCollectionRequest {
+  string treasury_collection_id = 1;
+  int64 amount = 2;                 // centavos
+  string target_account_id = 3;
+  string reason = 4;
+  string workspace_id = 5;
+  string actor_id = 6;
+}
+
+message SettleUnscheduledAdvanceCollectionResponse {
+  int64 new_remaining_amount = 1;
+  int64 new_recognized_amount = 2;
+  domain.common.v1.AdvanceStatus new_status = 3;
+  optional domain.common.v1.Error error = 4;
+}
+
+// RefundUnscheduledAdvanceCollectionRequest — UNSCHEDULED refund (selling side).
+message RefundUnscheduledAdvanceCollectionRequest {
+  string treasury_collection_id = 1;
+  int64 amount = 2;
+  string refund_method = 3;
+  string destination = 4;
+  string reason = 5;
+  string workspace_id = 6;
+  string actor_id = 7;
+}
+
+message RefundUnscheduledAdvanceCollectionResponse {
+  int64 new_remaining_amount = 1;
+  domain.common.v1.AdvanceStatus new_status = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+// CancelAdvanceCollectionRequest — flip advance_status to CANCELLED (selling side).
+message CancelAdvanceCollectionRequest {
+  string treasury_collection_id = 1;
+  string reason = 2;
+  string workspace_id = 3;
+  string actor_id = 4;
+}
+
+message CancelAdvanceCollectionResponse {
+  domain.common.v1.AdvanceStatus new_status = 1;
+  optional domain.common.v1.Error error = 2;
+}
+
+// RecognizeMilestoneAdvanceCollectionRequest — Plan B Phase 7 milestone
+// recognition (selling side). Anchors on a (collection_id, billing_event_id)
+// junction row.
+message RecognizeMilestoneAdvanceCollectionRequest {
+  string treasury_collection_id = 1;
+  string billing_event_id = 2;
+  string actor_id = 3;
+  string workspace_id = 4;
+  optional string run_id = 5;
+}
+
+message RecognizeMilestoneAdvanceCollectionResponse {
+  domain.common.v1.AdvanceAmortizeOutcome outcome = 1;
+  optional string revenue_id = 2;
+  optional string conflicting_revenue_id = 3;
+  int64 new_remaining_amount = 4;
+  int64 new_recognized_amount = 5;
+  domain.common.v1.AdvanceStatus new_status = 6;
+  int64 tranche_amount = 7;
+  optional domain.common.v1.Error error = 8;
 }
 
 service CollectionDomainService {

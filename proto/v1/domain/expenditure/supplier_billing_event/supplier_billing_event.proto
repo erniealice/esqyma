@@ -1,0 +1,132 @@
+syntax = "proto3";
+
+package domain.expenditure.v1;
+
+option go_package = "github.com/erniealice/esqyma/golang/v1/domain/expenditure/supplier_billing_event";
+
+import "domain/common/error.proto";
+import "domain/common/pagination.proto";
+import "domain/common/search.proto";
+import "domain/common/filter.proto";
+import "domain/common/sort.proto";
+
+import "options/db.proto";
+
+// Buying-side mirror of selling-side BillingEvent
+// (domain/subscription/billing_event/billing_event.proto). Anchors MILESTONE advance
+// recognition on the buying side — Expense Run / RecognizeMilestoneAdvance use cases
+// consume SupplierBillingEvent rows once they flip to BILLED.
+//
+// v1 scope: no DEFERRED status (no partial-bill remainder reserved); no PHASE_COMPLETED
+// trigger (Job/JobPhase wiring deferred). v2 lifts both restrictions.
+enum SupplierBillingEventStatus {
+  SUPPLIER_BILLING_EVENT_STATUS_UNSPECIFIED = 0;
+  SUPPLIER_BILLING_EVENT_STATUS_READY       = 1;
+  SUPPLIER_BILLING_EVENT_STATUS_BILLED      = 2;
+  SUPPLIER_BILLING_EVENT_STATUS_WAIVED      = 3;
+  SUPPLIER_BILLING_EVENT_STATUS_CANCELLED   = 4;
+}
+
+enum SupplierBillingEventTrigger {
+  SUPPLIER_BILLING_EVENT_TRIGGER_UNSPECIFIED  = 0;
+  SUPPLIER_BILLING_EVENT_TRIGGER_MANUAL_EARLY = 1;
+  SUPPLIER_BILLING_EVENT_TRIGGER_MANUAL_LATE  = 2;
+}
+
+message SupplierBillingEvent {
+  option (options.v1.table).table = true;
+
+  string id = 1;
+  string workspace_id = 2 [(options.v1.db).index = true];
+
+  string supplier_subscription_id = 10 [(options.v1.db).references = "supplier_subscription", (options.v1.db).index = true];
+  optional string supplier_contract_id = 11 [(options.v1.db).references = "supplier_contract", (options.v1.db).index = true];
+
+  // Centavos in billing_currency
+  int64 billable_amount = 20;
+  string billing_currency = 21;
+
+  SupplierBillingEventStatus status = 30;
+  SupplierBillingEventTrigger trigger = 31;
+
+  // Back-edge — set when status flips to BILLED via RecognizeMilestoneAdvance.
+  optional string expense_recognition_id = 40 [(options.v1.db).references = "expense_recognition", (options.v1.db).index = true];
+
+  bool active = 90 [(options.v1.db).default = "true"];
+  optional int64 date_created = 91;
+  optional int64 date_modified = 92;
+}
+
+service SupplierBillingEventDomainService {
+  rpc CreateSupplierBillingEvent(CreateSupplierBillingEventRequest) returns (CreateSupplierBillingEventResponse);
+  rpc ReadSupplierBillingEvent(ReadSupplierBillingEventRequest) returns (ReadSupplierBillingEventResponse);
+  rpc UpdateSupplierBillingEvent(UpdateSupplierBillingEventRequest) returns (UpdateSupplierBillingEventResponse);
+  rpc DeleteSupplierBillingEvent(DeleteSupplierBillingEventRequest) returns (DeleteSupplierBillingEventResponse);
+  rpc ListSupplierBillingEvents(ListSupplierBillingEventsRequest) returns (ListSupplierBillingEventsResponse);
+  rpc GetSupplierBillingEventListPageData(GetSupplierBillingEventListPageDataRequest)
+    returns (GetSupplierBillingEventListPageDataResponse);
+  rpc GetSupplierBillingEventItemPageData(GetSupplierBillingEventItemPageDataRequest)
+    returns (GetSupplierBillingEventItemPageDataResponse);
+}
+
+message CreateSupplierBillingEventRequest  { SupplierBillingEvent data = 1; }
+message CreateSupplierBillingEventResponse {
+  repeated SupplierBillingEvent data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message ReadSupplierBillingEventRequest  { SupplierBillingEvent data = 1; }
+message ReadSupplierBillingEventResponse {
+  repeated SupplierBillingEvent data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message UpdateSupplierBillingEventRequest  { SupplierBillingEvent data = 1; }
+message UpdateSupplierBillingEventResponse {
+  repeated SupplierBillingEvent data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message DeleteSupplierBillingEventRequest  { SupplierBillingEvent data = 1; }
+message DeleteSupplierBillingEventResponse {
+  bool success = 1;
+  optional domain.common.v1.Error error = 2;
+}
+
+message ListSupplierBillingEventsRequest {
+  optional domain.common.v1.SearchRequest search = 1;
+  optional domain.common.v1.FilterRequest filters = 2;
+  optional domain.common.v1.SortRequest sort = 3;
+  optional domain.common.v1.PaginationRequest pagination = 4;
+}
+message ListSupplierBillingEventsResponse {
+  repeated SupplierBillingEvent data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message GetSupplierBillingEventListPageDataRequest {
+  optional domain.common.v1.PaginationRequest pagination = 1;
+  optional domain.common.v1.FilterRequest filters = 2;
+  optional domain.common.v1.SortRequest sort = 3;
+  optional domain.common.v1.SearchRequest search = 4;
+}
+message GetSupplierBillingEventListPageDataResponse {
+  repeated SupplierBillingEvent supplier_billing_event_list = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+  optional domain.common.v1.PaginationResponse pagination = 4;
+  repeated domain.common.v1.SearchResult search_results = 5;
+}
+
+message GetSupplierBillingEventItemPageDataRequest {
+  string supplier_billing_event_id = 1;
+}
+message GetSupplierBillingEventItemPageDataResponse {
+  optional SupplierBillingEvent supplier_billing_event = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}

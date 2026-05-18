@@ -178,6 +178,60 @@ func (RevenueRunAttemptOutcome) EnumDescriptor() ([]byte, []int) {
 	return file_domain_revenue_revenue_run_revenue_run_proto_rawDescGZIP(), []int{2}
 }
 
+// RevenueRunSourceKind discriminates the source row from which a candidate /
+// attempt was emitted. UNSPECIFIED is treated as SUBSCRIPTION_CYCLE for
+// backward compatibility with pre-Plan-B run rows.
+//
+// Added 2026-05-17 by Plan B Phase 5 (advance-cash-events / Revenue Run).
+type RevenueRunSourceKind int32
+
+const (
+	RevenueRunSourceKind_REVENUE_RUN_SOURCE_KIND_UNSPECIFIED        RevenueRunSourceKind = 0
+	RevenueRunSourceKind_REVENUE_RUN_SOURCE_KIND_SUBSCRIPTION_CYCLE RevenueRunSourceKind = 1
+	RevenueRunSourceKind_REVENUE_RUN_SOURCE_KIND_ADVANCE_COLLECTION RevenueRunSourceKind = 2
+)
+
+// Enum value maps for RevenueRunSourceKind.
+var (
+	RevenueRunSourceKind_name = map[int32]string{
+		0: "REVENUE_RUN_SOURCE_KIND_UNSPECIFIED",
+		1: "REVENUE_RUN_SOURCE_KIND_SUBSCRIPTION_CYCLE",
+		2: "REVENUE_RUN_SOURCE_KIND_ADVANCE_COLLECTION",
+	}
+	RevenueRunSourceKind_value = map[string]int32{
+		"REVENUE_RUN_SOURCE_KIND_UNSPECIFIED":        0,
+		"REVENUE_RUN_SOURCE_KIND_SUBSCRIPTION_CYCLE": 1,
+		"REVENUE_RUN_SOURCE_KIND_ADVANCE_COLLECTION": 2,
+	}
+)
+
+func (x RevenueRunSourceKind) Enum() *RevenueRunSourceKind {
+	p := new(RevenueRunSourceKind)
+	*p = x
+	return p
+}
+
+func (x RevenueRunSourceKind) String() string {
+	return protoimpl.X.EnumStringOf(x.Descriptor(), protoreflect.EnumNumber(x))
+}
+
+func (RevenueRunSourceKind) Descriptor() protoreflect.EnumDescriptor {
+	return file_domain_revenue_revenue_run_revenue_run_proto_enumTypes[3].Descriptor()
+}
+
+func (RevenueRunSourceKind) Type() protoreflect.EnumType {
+	return &file_domain_revenue_revenue_run_revenue_run_proto_enumTypes[3]
+}
+
+func (x RevenueRunSourceKind) Number() protoreflect.EnumNumber {
+	return protoreflect.EnumNumber(x)
+}
+
+// Deprecated: Use RevenueRunSourceKind.Descriptor instead.
+func (RevenueRunSourceKind) EnumDescriptor() ([]byte, []int) {
+	return file_domain_revenue_revenue_run_revenue_run_proto_rawDescGZIP(), []int{3}
+}
+
 type RevenueRun struct {
 	state              protoimpl.MessageState `protogen:"open.v1"`
 	Id                 string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
@@ -392,8 +446,14 @@ type RevenueRunAttempt struct {
 	DateCreatedString  *string                  `protobuf:"bytes,14,opt,name=date_created_string,json=dateCreatedString,proto3,oneof" json:"date_created_string,omitempty"`
 	DateModified       *int64                   `protobuf:"varint,15,opt,name=date_modified,json=dateModified,proto3,oneof" json:"date_modified,omitempty"`
 	DateModifiedString *string                  `protobuf:"bytes,16,opt,name=date_modified_string,json=dateModifiedString,proto3,oneof" json:"date_modified_string,omitempty"`
-	unknownFields      protoimpl.UnknownFields
-	sizeCache          protoimpl.SizeCache
+	// source_kind discriminates SUBSCRIPTION_CYCLE vs ADVANCE_COLLECTION origin.
+	// UNSPECIFIED is treated as SUBSCRIPTION_CYCLE so pre-Plan-B rows still
+	// satisfy schema invariants. Plan B Phase 5.
+	SourceKind RevenueRunSourceKind `protobuf:"varint,17,opt,name=source_kind,json=sourceKind,proto3,enum=domain.revenue.v1.RevenueRunSourceKind" json:"source_kind,omitempty"`
+	// advance_collection_id is set when source_kind == ADVANCE_COLLECTION.
+	AdvanceCollectionId *string `protobuf:"bytes,18,opt,name=advance_collection_id,json=advanceCollectionId,proto3,oneof" json:"advance_collection_id,omitempty"`
+	unknownFields       protoimpl.UnknownFields
+	sizeCache           protoimpl.SizeCache
 }
 
 func (x *RevenueRunAttempt) Reset() {
@@ -534,6 +594,20 @@ func (x *RevenueRunAttempt) GetDateModified() int64 {
 func (x *RevenueRunAttempt) GetDateModifiedString() string {
 	if x != nil && x.DateModifiedString != nil {
 		return *x.DateModifiedString
+	}
+	return ""
+}
+
+func (x *RevenueRunAttempt) GetSourceKind() RevenueRunSourceKind {
+	if x != nil {
+		return x.SourceKind
+	}
+	return RevenueRunSourceKind_REVENUE_RUN_SOURCE_KIND_UNSPECIFIED
+}
+
+func (x *RevenueRunAttempt) GetAdvanceCollectionId() string {
+	if x != nil && x.AdvanceCollectionId != nil {
+		return *x.AdvanceCollectionId
 	}
 	return ""
 }
@@ -1379,6 +1453,11 @@ func (x *RevenueRunScope) GetAsOfDate() string {
 
 // RevenueRunCandidate represents one billed period for one subscription that
 // has not yet been invoiced (or that has a blocker preventing invoicing).
+//
+// As of Plan B Phase 5 (2026-05-17), a candidate may also represent the
+// next-due tranche of an advance Collection (source_kind=ADVANCE_COLLECTION).
+// When that's the case, subscription_id/subscription_name are empty and
+// advance_collection_id is populated instead.
 type RevenueRunCandidate struct {
 	state             protoimpl.MessageState `protogen:"open.v1"`
 	SubscriptionId    string                 `protobuf:"bytes,1,opt,name=subscription_id,json=subscriptionId,proto3" json:"subscription_id,omitempty"`
@@ -1396,8 +1475,18 @@ type RevenueRunCandidate struct {
 	LineItemCount     int32                  `protobuf:"varint,13,opt,name=line_item_count,json=lineItemCount,proto3" json:"line_item_count,omitempty"`
 	Eligible          bool                   `protobuf:"varint,14,opt,name=eligible,proto3" json:"eligible,omitempty"`
 	BlockerReason     string                 `protobuf:"bytes,15,opt,name=blocker_reason,json=blockerReason,proto3" json:"blocker_reason,omitempty"`
-	unknownFields     protoimpl.UnknownFields
-	sizeCache         protoimpl.SizeCache
+	// source_kind discriminates the origin of this candidate row.
+	// UNSPECIFIED is treated as SUBSCRIPTION_CYCLE by view code.
+	SourceKind RevenueRunSourceKind `protobuf:"varint,16,opt,name=source_kind,json=sourceKind,proto3,enum=domain.revenue.v1.RevenueRunSourceKind" json:"source_kind,omitempty"`
+	// advance_collection_id is set when source_kind == ADVANCE_COLLECTION.
+	AdvanceCollectionId *string `protobuf:"bytes,17,opt,name=advance_collection_id,json=advanceCollectionId,proto3,oneof" json:"advance_collection_id,omitempty"`
+	// suppressing_advance_collection_id is set when source_kind ==
+	// SUBSCRIPTION_CYCLE AND a TIME_BASED advance Collection overlaps this
+	// period for the same client. The cycle candidate is rendered as a greyed
+	// info-only row pointing at the advance.
+	SuppressingAdvanceCollectionId *string `protobuf:"bytes,18,opt,name=suppressing_advance_collection_id,json=suppressingAdvanceCollectionId,proto3,oneof" json:"suppressing_advance_collection_id,omitempty"`
+	unknownFields                  protoimpl.UnknownFields
+	sizeCache                      protoimpl.SizeCache
 }
 
 func (x *RevenueRunCandidate) Reset() {
@@ -1535,13 +1624,38 @@ func (x *RevenueRunCandidate) GetBlockerReason() string {
 	return ""
 }
 
+func (x *RevenueRunCandidate) GetSourceKind() RevenueRunSourceKind {
+	if x != nil {
+		return x.SourceKind
+	}
+	return RevenueRunSourceKind_REVENUE_RUN_SOURCE_KIND_UNSPECIFIED
+}
+
+func (x *RevenueRunCandidate) GetAdvanceCollectionId() string {
+	if x != nil && x.AdvanceCollectionId != nil {
+		return *x.AdvanceCollectionId
+	}
+	return ""
+}
+
+func (x *RevenueRunCandidate) GetSuppressingAdvanceCollectionId() string {
+	if x != nil && x.SuppressingAdvanceCollectionId != nil {
+		return *x.SuppressingAdvanceCollectionId
+	}
+	return ""
+}
+
 type ListRevenueRunCandidatesRequest struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	Scope         *RevenueRunScope       `protobuf:"bytes,1,opt,name=scope,proto3" json:"scope,omitempty"`
-	Cursor        *string                `protobuf:"bytes,2,opt,name=cursor,proto3,oneof" json:"cursor,omitempty"`
-	Limit         *int32                 `protobuf:"varint,3,opt,name=limit,proto3,oneof" json:"limit,omitempty"`
-	unknownFields protoimpl.UnknownFields
-	sizeCache     protoimpl.SizeCache
+	state  protoimpl.MessageState `protogen:"open.v1"`
+	Scope  *RevenueRunScope       `protobuf:"bytes,1,opt,name=scope,proto3" json:"scope,omitempty"`
+	Cursor *string                `protobuf:"bytes,2,opt,name=cursor,proto3,oneof" json:"cursor,omitempty"`
+	Limit  *int32                 `protobuf:"varint,3,opt,name=limit,proto3,oneof" json:"limit,omitempty"`
+	// include_advance_collections opts-in to advance-Collection candidate
+	// emission (Plan B Phase 5a). Default false → existing surfaces continue to
+	// see subscription-only candidates. Surface commits flip this to true.
+	IncludeAdvanceCollections *bool `protobuf:"varint,4,opt,name=include_advance_collections,json=includeAdvanceCollections,proto3,oneof" json:"include_advance_collections,omitempty"`
+	unknownFields             protoimpl.UnknownFields
+	sizeCache                 protoimpl.SizeCache
 }
 
 func (x *ListRevenueRunCandidatesRequest) Reset() {
@@ -1593,6 +1707,13 @@ func (x *ListRevenueRunCandidatesRequest) GetLimit() int32 {
 		return *x.Limit
 	}
 	return 0
+}
+
+func (x *ListRevenueRunCandidatesRequest) GetIncludeAdvanceCollections() bool {
+	if x != nil && x.IncludeAdvanceCollections != nil {
+		return *x.IncludeAdvanceCollections
+	}
+	return false
 }
 
 type ListRevenueRunCandidatesResponse struct {
@@ -1664,14 +1785,23 @@ func (x *ListRevenueRunCandidatesResponse) GetNextCursor() string {
 }
 
 // SelectedRevenueRunCandidate is one operator-confirmed selection to invoice.
+//
+// As of Plan B Phase 5, the selection may target an advance Collection
+// (source_kind=ADVANCE_COLLECTION). When that's the case, subscription_id is
+// empty and advance_collection_id is populated. Default UNSPECIFIED is
+// treated as SUBSCRIPTION_CYCLE by GenerateRevenueRun for back-compat.
 type SelectedRevenueRunCandidate struct {
 	state          protoimpl.MessageState `protogen:"open.v1"`
 	SubscriptionId string                 `protobuf:"bytes,1,opt,name=subscription_id,json=subscriptionId,proto3" json:"subscription_id,omitempty"`
 	PeriodStart    string                 `protobuf:"bytes,2,opt,name=period_start,json=periodStart,proto3" json:"period_start,omitempty"`    // YYYY-MM-DD
 	PeriodEnd      string                 `protobuf:"bytes,3,opt,name=period_end,json=periodEnd,proto3" json:"period_end,omitempty"`          // YYYY-MM-DD
 	PeriodMarker   string                 `protobuf:"bytes,4,opt,name=period_marker,json=periodMarker,proto3" json:"period_marker,omitempty"` // canonical idempotency anchor
-	unknownFields  protoimpl.UnknownFields
-	sizeCache      protoimpl.SizeCache
+	// source_kind discriminates the dispatcher branch in generate_revenue_run.
+	SourceKind RevenueRunSourceKind `protobuf:"varint,5,opt,name=source_kind,json=sourceKind,proto3,enum=domain.revenue.v1.RevenueRunSourceKind" json:"source_kind,omitempty"`
+	// advance_collection_id is set when source_kind == ADVANCE_COLLECTION.
+	AdvanceCollectionId *string `protobuf:"bytes,6,opt,name=advance_collection_id,json=advanceCollectionId,proto3,oneof" json:"advance_collection_id,omitempty"`
+	unknownFields       protoimpl.UnknownFields
+	sizeCache           protoimpl.SizeCache
 }
 
 func (x *SelectedRevenueRunCandidate) Reset() {
@@ -1728,6 +1858,20 @@ func (x *SelectedRevenueRunCandidate) GetPeriodEnd() string {
 func (x *SelectedRevenueRunCandidate) GetPeriodMarker() string {
 	if x != nil {
 		return x.PeriodMarker
+	}
+	return ""
+}
+
+func (x *SelectedRevenueRunCandidate) GetSourceKind() RevenueRunSourceKind {
+	if x != nil {
+		return x.SourceKind
+	}
+	return RevenueRunSourceKind_REVENUE_RUN_SOURCE_KIND_UNSPECIFIED
+}
+
+func (x *SelectedRevenueRunCandidate) GetAdvanceCollectionId() string {
+	if x != nil && x.AdvanceCollectionId != nil {
+		return *x.AdvanceCollectionId
 	}
 	return ""
 }
@@ -1945,7 +2089,7 @@ const file_domain_revenue_revenue_run_revenue_run_proto_rawDesc = "" +
 	"\r_date_createdB\x16\n" +
 	"\x14_date_created_stringB\x10\n" +
 	"\x0e_date_modifiedB\x17\n" +
-	"\x15_date_modified_string\"\x96\x06\n" +
+	"\x15_date_modified_string\"\xb3\a\n" +
 	"\x11RevenueRunAttempt\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12\x15\n" +
 	"\x06run_id\x18\x02 \x01(\tR\x05runId\x12'\n" +
@@ -1966,7 +2110,10 @@ const file_domain_revenue_revenue_run_revenue_run_proto_rawDesc = "" +
 	"\fdate_created\x18\r \x01(\x03H\x04R\vdateCreated\x88\x01\x01\x123\n" +
 	"\x13date_created_string\x18\x0e \x01(\tH\x05R\x11dateCreatedString\x88\x01\x01\x12(\n" +
 	"\rdate_modified\x18\x0f \x01(\x03H\x06R\fdateModified\x88\x01\x01\x125\n" +
-	"\x14date_modified_string\x18\x10 \x01(\tH\aR\x12dateModifiedString\x88\x01\x01B\r\n" +
+	"\x14date_modified_string\x18\x10 \x01(\tH\aR\x12dateModifiedString\x88\x01\x01\x12H\n" +
+	"\vsource_kind\x18\x11 \x01(\x0e2'.domain.revenue.v1.RevenueRunSourceKindR\n" +
+	"sourceKind\x127\n" +
+	"\x15advance_collection_id\x18\x12 \x01(\tH\bR\x13advanceCollectionId\x88\x01\x01B\r\n" +
 	"\v_revenue_idB\r\n" +
 	"\v_error_codeB\x10\n" +
 	"\x0e_error_messageB\x0f\n" +
@@ -1974,7 +2121,8 @@ const file_domain_revenue_revenue_run_revenue_run_proto_rawDesc = "" +
 	"\r_date_createdB\x16\n" +
 	"\x14_date_created_stringB\x10\n" +
 	"\x0e_date_modifiedB\x17\n" +
-	"\x15_date_modified_string\"L\n" +
+	"\x15_date_modified_stringB\x18\n" +
+	"\x16_advance_collection_id\"L\n" +
 	"\x17CreateRevenueRunRequest\x121\n" +
 	"\x04data\x18\x01 \x01(\v2\x1d.domain.revenue.v1.RevenueRunR\x04data\"\xa5\x01\n" +
 	"\x18CreateRevenueRunResponse\x121\n" +
@@ -2052,7 +2200,7 @@ const file_domain_revenue_revenue_run_revenue_run_proto_rawDesc = "" +
 	"\n" +
 	"_client_idB\x12\n" +
 	"\x10_subscription_idB\r\n" +
-	"\v_as_of_date\"\x9f\x04\n" +
+	"\v_as_of_date\"\xb2\x06\n" +
 	"\x13RevenueRunCandidate\x12'\n" +
 	"\x0fsubscription_id\x18\x01 \x01(\tR\x0esubscriptionId\x12+\n" +
 	"\x11subscription_name\x18\x02 \x01(\tR\x10subscriptionName\x12\x1b\n" +
@@ -2071,13 +2219,21 @@ const file_domain_revenue_revenue_run_revenue_run_proto_rawDesc = "" +
 	"\x06amount\x18\f \x01(\x03R\x06amount\x12&\n" +
 	"\x0fline_item_count\x18\r \x01(\x05R\rlineItemCount\x12\x1a\n" +
 	"\beligible\x18\x0e \x01(\bR\beligible\x12%\n" +
-	"\x0eblocker_reason\x18\x0f \x01(\tR\rblockerReason\"\xa8\x01\n" +
+	"\x0eblocker_reason\x18\x0f \x01(\tR\rblockerReason\x12H\n" +
+	"\vsource_kind\x18\x10 \x01(\x0e2'.domain.revenue.v1.RevenueRunSourceKindR\n" +
+	"sourceKind\x127\n" +
+	"\x15advance_collection_id\x18\x11 \x01(\tH\x00R\x13advanceCollectionId\x88\x01\x01\x12N\n" +
+	"!suppressing_advance_collection_id\x18\x12 \x01(\tH\x01R\x1esuppressingAdvanceCollectionId\x88\x01\x01B\x18\n" +
+	"\x16_advance_collection_idB$\n" +
+	"\"_suppressing_advance_collection_id\"\x8d\x02\n" +
 	"\x1fListRevenueRunCandidatesRequest\x128\n" +
 	"\x05scope\x18\x01 \x01(\v2\".domain.revenue.v1.RevenueRunScopeR\x05scope\x12\x1b\n" +
 	"\x06cursor\x18\x02 \x01(\tH\x00R\x06cursor\x88\x01\x01\x12\x19\n" +
-	"\x05limit\x18\x03 \x01(\x05H\x01R\x05limit\x88\x01\x01B\t\n" +
+	"\x05limit\x18\x03 \x01(\x05H\x01R\x05limit\x88\x01\x01\x12C\n" +
+	"\x1binclude_advance_collections\x18\x04 \x01(\bH\x02R\x19includeAdvanceCollections\x88\x01\x01B\t\n" +
 	"\a_cursorB\b\n" +
-	"\x06_limit\"\xec\x01\n" +
+	"\x06_limitB\x1e\n" +
+	"\x1c_include_advance_collections\"\xec\x01\n" +
 	" ListRevenueRunCandidatesResponse\x12:\n" +
 	"\x04data\x18\x01 \x03(\v2&.domain.revenue.v1.RevenueRunCandidateR\x04data\x12\x18\n" +
 	"\asuccess\x18\x02 \x01(\bR\asuccess\x122\n" +
@@ -2085,13 +2241,17 @@ const file_domain_revenue_revenue_run_revenue_run_proto_rawDesc = "" +
 	"\vnext_cursor\x18\x04 \x01(\tH\x01R\n" +
 	"nextCursor\x88\x01\x01B\b\n" +
 	"\x06_errorB\x0e\n" +
-	"\f_next_cursor\"\xad\x01\n" +
+	"\f_next_cursor\"\xca\x02\n" +
 	"\x1bSelectedRevenueRunCandidate\x12'\n" +
 	"\x0fsubscription_id\x18\x01 \x01(\tR\x0esubscriptionId\x12!\n" +
 	"\fperiod_start\x18\x02 \x01(\tR\vperiodStart\x12\x1d\n" +
 	"\n" +
 	"period_end\x18\x03 \x01(\tR\tperiodEnd\x12#\n" +
-	"\rperiod_marker\x18\x04 \x01(\tR\fperiodMarker\"\xa4\x01\n" +
+	"\rperiod_marker\x18\x04 \x01(\tR\fperiodMarker\x12H\n" +
+	"\vsource_kind\x18\x05 \x01(\x0e2'.domain.revenue.v1.RevenueRunSourceKindR\n" +
+	"sourceKind\x127\n" +
+	"\x15advance_collection_id\x18\x06 \x01(\tH\x00R\x13advanceCollectionId\x88\x01\x01B\x18\n" +
+	"\x16_advance_collection_id\"\xa4\x01\n" +
 	"\x14RevenueRunSelections\x12S\n" +
 	"\rexplicit_list\x18\x01 \x03(\v2..domain.revenue.v1.SelectedRevenueRunCandidateR\fexplicitList\x12&\n" +
 	"\ffilter_token\x18\x02 \x01(\tH\x00R\vfilterToken\x88\x01\x01B\x0f\n" +
@@ -2122,7 +2282,11 @@ const file_domain_revenue_revenue_run_revenue_run_proto_rawDesc = "" +
 	"'REVENUE_RUN_ATTEMPT_OUTCOME_UNSPECIFIED\x10\x00\x12'\n" +
 	"#REVENUE_RUN_ATTEMPT_OUTCOME_CREATED\x10\x01\x12'\n" +
 	"#REVENUE_RUN_ATTEMPT_OUTCOME_SKIPPED\x10\x02\x12'\n" +
-	"#REVENUE_RUN_ATTEMPT_OUTCOME_ERRORED\x10\x032\xb3\x06\n" +
+	"#REVENUE_RUN_ATTEMPT_OUTCOME_ERRORED\x10\x03*\x9f\x01\n" +
+	"\x14RevenueRunSourceKind\x12'\n" +
+	"#REVENUE_RUN_SOURCE_KIND_UNSPECIFIED\x10\x00\x12.\n" +
+	"*REVENUE_RUN_SOURCE_KIND_SUBSCRIPTION_CYCLE\x10\x01\x12.\n" +
+	"*REVENUE_RUN_SOURCE_KIND_ADVANCE_COLLECTION\x10\x022\xb3\x06\n" +
 	"\x17RevenueRunDomainService\x12k\n" +
 	"\x10CreateRevenueRun\x12*.domain.revenue.v1.CreateRevenueRunRequest\x1a+.domain.revenue.v1.CreateRevenueRunResponse\x12e\n" +
 	"\x0eReadRevenueRun\x12(.domain.revenue.v1.ReadRevenueRunRequest\x1a).domain.revenue.v1.ReadRevenueRunResponse\x12k\n" +
@@ -2145,100 +2309,104 @@ func file_domain_revenue_revenue_run_revenue_run_proto_rawDescGZIP() []byte {
 	return file_domain_revenue_revenue_run_revenue_run_proto_rawDescData
 }
 
-var file_domain_revenue_revenue_run_revenue_run_proto_enumTypes = make([]protoimpl.EnumInfo, 3)
+var file_domain_revenue_revenue_run_revenue_run_proto_enumTypes = make([]protoimpl.EnumInfo, 4)
 var file_domain_revenue_revenue_run_revenue_run_proto_msgTypes = make([]protoimpl.MessageInfo, 24)
 var file_domain_revenue_revenue_run_revenue_run_proto_goTypes = []any{
 	(RevenueRunScopeKind)(0),                 // 0: domain.revenue.v1.RevenueRunScopeKind
 	(RevenueRunStatus)(0),                    // 1: domain.revenue.v1.RevenueRunStatus
 	(RevenueRunAttemptOutcome)(0),            // 2: domain.revenue.v1.RevenueRunAttemptOutcome
-	(*RevenueRun)(nil),                       // 3: domain.revenue.v1.RevenueRun
-	(*RevenueRunAttempt)(nil),                // 4: domain.revenue.v1.RevenueRunAttempt
-	(*CreateRevenueRunRequest)(nil),          // 5: domain.revenue.v1.CreateRevenueRunRequest
-	(*CreateRevenueRunResponse)(nil),         // 6: domain.revenue.v1.CreateRevenueRunResponse
-	(*ReadRevenueRunRequest)(nil),            // 7: domain.revenue.v1.ReadRevenueRunRequest
-	(*ReadRevenueRunResponse)(nil),           // 8: domain.revenue.v1.ReadRevenueRunResponse
-	(*UpdateRevenueRunRequest)(nil),          // 9: domain.revenue.v1.UpdateRevenueRunRequest
-	(*UpdateRevenueRunResponse)(nil),         // 10: domain.revenue.v1.UpdateRevenueRunResponse
-	(*DeleteRevenueRunRequest)(nil),          // 11: domain.revenue.v1.DeleteRevenueRunRequest
-	(*DeleteRevenueRunResponse)(nil),         // 12: domain.revenue.v1.DeleteRevenueRunResponse
-	(*ListRevenueRunsRequest)(nil),           // 13: domain.revenue.v1.ListRevenueRunsRequest
-	(*ListRevenueRunsResponse)(nil),          // 14: domain.revenue.v1.ListRevenueRunsResponse
-	(*CreateRevenueRunAttemptRequest)(nil),   // 15: domain.revenue.v1.CreateRevenueRunAttemptRequest
-	(*CreateRevenueRunAttemptResponse)(nil),  // 16: domain.revenue.v1.CreateRevenueRunAttemptResponse
-	(*ListRevenueRunAttemptsRequest)(nil),    // 17: domain.revenue.v1.ListRevenueRunAttemptsRequest
-	(*ListRevenueRunAttemptsResponse)(nil),   // 18: domain.revenue.v1.ListRevenueRunAttemptsResponse
-	(*RevenueRunScope)(nil),                  // 19: domain.revenue.v1.RevenueRunScope
-	(*RevenueRunCandidate)(nil),              // 20: domain.revenue.v1.RevenueRunCandidate
-	(*ListRevenueRunCandidatesRequest)(nil),  // 21: domain.revenue.v1.ListRevenueRunCandidatesRequest
-	(*ListRevenueRunCandidatesResponse)(nil), // 22: domain.revenue.v1.ListRevenueRunCandidatesResponse
-	(*SelectedRevenueRunCandidate)(nil),      // 23: domain.revenue.v1.SelectedRevenueRunCandidate
-	(*RevenueRunSelections)(nil),             // 24: domain.revenue.v1.RevenueRunSelections
-	(*GenerateRevenueRunRequest)(nil),        // 25: domain.revenue.v1.GenerateRevenueRunRequest
-	(*GenerateRevenueRunResponse)(nil),       // 26: domain.revenue.v1.GenerateRevenueRunResponse
-	(*common.Error)(nil),                     // 27: domain.common.v1.Error
-	(*common.SearchRequest)(nil),             // 28: domain.common.v1.SearchRequest
-	(*common.FilterRequest)(nil),             // 29: domain.common.v1.FilterRequest
-	(*common.SortRequest)(nil),               // 30: domain.common.v1.SortRequest
-	(*common.PaginationRequest)(nil),         // 31: domain.common.v1.PaginationRequest
-	(*common.PaginationResponse)(nil),        // 32: domain.common.v1.PaginationResponse
+	(RevenueRunSourceKind)(0),                // 3: domain.revenue.v1.RevenueRunSourceKind
+	(*RevenueRun)(nil),                       // 4: domain.revenue.v1.RevenueRun
+	(*RevenueRunAttempt)(nil),                // 5: domain.revenue.v1.RevenueRunAttempt
+	(*CreateRevenueRunRequest)(nil),          // 6: domain.revenue.v1.CreateRevenueRunRequest
+	(*CreateRevenueRunResponse)(nil),         // 7: domain.revenue.v1.CreateRevenueRunResponse
+	(*ReadRevenueRunRequest)(nil),            // 8: domain.revenue.v1.ReadRevenueRunRequest
+	(*ReadRevenueRunResponse)(nil),           // 9: domain.revenue.v1.ReadRevenueRunResponse
+	(*UpdateRevenueRunRequest)(nil),          // 10: domain.revenue.v1.UpdateRevenueRunRequest
+	(*UpdateRevenueRunResponse)(nil),         // 11: domain.revenue.v1.UpdateRevenueRunResponse
+	(*DeleteRevenueRunRequest)(nil),          // 12: domain.revenue.v1.DeleteRevenueRunRequest
+	(*DeleteRevenueRunResponse)(nil),         // 13: domain.revenue.v1.DeleteRevenueRunResponse
+	(*ListRevenueRunsRequest)(nil),           // 14: domain.revenue.v1.ListRevenueRunsRequest
+	(*ListRevenueRunsResponse)(nil),          // 15: domain.revenue.v1.ListRevenueRunsResponse
+	(*CreateRevenueRunAttemptRequest)(nil),   // 16: domain.revenue.v1.CreateRevenueRunAttemptRequest
+	(*CreateRevenueRunAttemptResponse)(nil),  // 17: domain.revenue.v1.CreateRevenueRunAttemptResponse
+	(*ListRevenueRunAttemptsRequest)(nil),    // 18: domain.revenue.v1.ListRevenueRunAttemptsRequest
+	(*ListRevenueRunAttemptsResponse)(nil),   // 19: domain.revenue.v1.ListRevenueRunAttemptsResponse
+	(*RevenueRunScope)(nil),                  // 20: domain.revenue.v1.RevenueRunScope
+	(*RevenueRunCandidate)(nil),              // 21: domain.revenue.v1.RevenueRunCandidate
+	(*ListRevenueRunCandidatesRequest)(nil),  // 22: domain.revenue.v1.ListRevenueRunCandidatesRequest
+	(*ListRevenueRunCandidatesResponse)(nil), // 23: domain.revenue.v1.ListRevenueRunCandidatesResponse
+	(*SelectedRevenueRunCandidate)(nil),      // 24: domain.revenue.v1.SelectedRevenueRunCandidate
+	(*RevenueRunSelections)(nil),             // 25: domain.revenue.v1.RevenueRunSelections
+	(*GenerateRevenueRunRequest)(nil),        // 26: domain.revenue.v1.GenerateRevenueRunRequest
+	(*GenerateRevenueRunResponse)(nil),       // 27: domain.revenue.v1.GenerateRevenueRunResponse
+	(*common.Error)(nil),                     // 28: domain.common.v1.Error
+	(*common.SearchRequest)(nil),             // 29: domain.common.v1.SearchRequest
+	(*common.FilterRequest)(nil),             // 30: domain.common.v1.FilterRequest
+	(*common.SortRequest)(nil),               // 31: domain.common.v1.SortRequest
+	(*common.PaginationRequest)(nil),         // 32: domain.common.v1.PaginationRequest
+	(*common.PaginationResponse)(nil),        // 33: domain.common.v1.PaginationResponse
 }
 var file_domain_revenue_revenue_run_revenue_run_proto_depIdxs = []int32{
 	0,  // 0: domain.revenue.v1.RevenueRun.scope_kind:type_name -> domain.revenue.v1.RevenueRunScopeKind
 	1,  // 1: domain.revenue.v1.RevenueRun.status:type_name -> domain.revenue.v1.RevenueRunStatus
 	2,  // 2: domain.revenue.v1.RevenueRunAttempt.outcome:type_name -> domain.revenue.v1.RevenueRunAttemptOutcome
-	3,  // 3: domain.revenue.v1.CreateRevenueRunRequest.data:type_name -> domain.revenue.v1.RevenueRun
-	3,  // 4: domain.revenue.v1.CreateRevenueRunResponse.data:type_name -> domain.revenue.v1.RevenueRun
-	27, // 5: domain.revenue.v1.CreateRevenueRunResponse.error:type_name -> domain.common.v1.Error
-	3,  // 6: domain.revenue.v1.ReadRevenueRunRequest.data:type_name -> domain.revenue.v1.RevenueRun
-	3,  // 7: domain.revenue.v1.ReadRevenueRunResponse.data:type_name -> domain.revenue.v1.RevenueRun
-	27, // 8: domain.revenue.v1.ReadRevenueRunResponse.error:type_name -> domain.common.v1.Error
-	3,  // 9: domain.revenue.v1.UpdateRevenueRunRequest.data:type_name -> domain.revenue.v1.RevenueRun
-	3,  // 10: domain.revenue.v1.UpdateRevenueRunResponse.data:type_name -> domain.revenue.v1.RevenueRun
-	27, // 11: domain.revenue.v1.UpdateRevenueRunResponse.error:type_name -> domain.common.v1.Error
-	3,  // 12: domain.revenue.v1.DeleteRevenueRunRequest.data:type_name -> domain.revenue.v1.RevenueRun
-	27, // 13: domain.revenue.v1.DeleteRevenueRunResponse.error:type_name -> domain.common.v1.Error
-	28, // 14: domain.revenue.v1.ListRevenueRunsRequest.search:type_name -> domain.common.v1.SearchRequest
-	29, // 15: domain.revenue.v1.ListRevenueRunsRequest.filters:type_name -> domain.common.v1.FilterRequest
-	30, // 16: domain.revenue.v1.ListRevenueRunsRequest.sort:type_name -> domain.common.v1.SortRequest
-	31, // 17: domain.revenue.v1.ListRevenueRunsRequest.pagination:type_name -> domain.common.v1.PaginationRequest
-	3,  // 18: domain.revenue.v1.ListRevenueRunsResponse.data:type_name -> domain.revenue.v1.RevenueRun
-	27, // 19: domain.revenue.v1.ListRevenueRunsResponse.error:type_name -> domain.common.v1.Error
-	32, // 20: domain.revenue.v1.ListRevenueRunsResponse.pagination:type_name -> domain.common.v1.PaginationResponse
-	4,  // 21: domain.revenue.v1.CreateRevenueRunAttemptRequest.data:type_name -> domain.revenue.v1.RevenueRunAttempt
-	4,  // 22: domain.revenue.v1.CreateRevenueRunAttemptResponse.data:type_name -> domain.revenue.v1.RevenueRunAttempt
-	27, // 23: domain.revenue.v1.CreateRevenueRunAttemptResponse.error:type_name -> domain.common.v1.Error
-	29, // 24: domain.revenue.v1.ListRevenueRunAttemptsRequest.filters:type_name -> domain.common.v1.FilterRequest
-	30, // 25: domain.revenue.v1.ListRevenueRunAttemptsRequest.sort:type_name -> domain.common.v1.SortRequest
-	4,  // 26: domain.revenue.v1.ListRevenueRunAttemptsResponse.data:type_name -> domain.revenue.v1.RevenueRunAttempt
-	27, // 27: domain.revenue.v1.ListRevenueRunAttemptsResponse.error:type_name -> domain.common.v1.Error
-	19, // 28: domain.revenue.v1.ListRevenueRunCandidatesRequest.scope:type_name -> domain.revenue.v1.RevenueRunScope
-	20, // 29: domain.revenue.v1.ListRevenueRunCandidatesResponse.data:type_name -> domain.revenue.v1.RevenueRunCandidate
-	27, // 30: domain.revenue.v1.ListRevenueRunCandidatesResponse.error:type_name -> domain.common.v1.Error
-	23, // 31: domain.revenue.v1.RevenueRunSelections.explicit_list:type_name -> domain.revenue.v1.SelectedRevenueRunCandidate
-	19, // 32: domain.revenue.v1.GenerateRevenueRunRequest.scope:type_name -> domain.revenue.v1.RevenueRunScope
-	24, // 33: domain.revenue.v1.GenerateRevenueRunRequest.selections:type_name -> domain.revenue.v1.RevenueRunSelections
-	27, // 34: domain.revenue.v1.GenerateRevenueRunResponse.error:type_name -> domain.common.v1.Error
-	3,  // 35: domain.revenue.v1.GenerateRevenueRunResponse.run:type_name -> domain.revenue.v1.RevenueRun
-	4,  // 36: domain.revenue.v1.GenerateRevenueRunResponse.attempts:type_name -> domain.revenue.v1.RevenueRunAttempt
-	5,  // 37: domain.revenue.v1.RevenueRunDomainService.CreateRevenueRun:input_type -> domain.revenue.v1.CreateRevenueRunRequest
-	7,  // 38: domain.revenue.v1.RevenueRunDomainService.ReadRevenueRun:input_type -> domain.revenue.v1.ReadRevenueRunRequest
-	9,  // 39: domain.revenue.v1.RevenueRunDomainService.UpdateRevenueRun:input_type -> domain.revenue.v1.UpdateRevenueRunRequest
-	11, // 40: domain.revenue.v1.RevenueRunDomainService.DeleteRevenueRun:input_type -> domain.revenue.v1.DeleteRevenueRunRequest
-	13, // 41: domain.revenue.v1.RevenueRunDomainService.ListRevenueRuns:input_type -> domain.revenue.v1.ListRevenueRunsRequest
-	15, // 42: domain.revenue.v1.RevenueRunDomainService.CreateRevenueRunAttempt:input_type -> domain.revenue.v1.CreateRevenueRunAttemptRequest
-	17, // 43: domain.revenue.v1.RevenueRunDomainService.ListRevenueRunAttempts:input_type -> domain.revenue.v1.ListRevenueRunAttemptsRequest
-	6,  // 44: domain.revenue.v1.RevenueRunDomainService.CreateRevenueRun:output_type -> domain.revenue.v1.CreateRevenueRunResponse
-	8,  // 45: domain.revenue.v1.RevenueRunDomainService.ReadRevenueRun:output_type -> domain.revenue.v1.ReadRevenueRunResponse
-	10, // 46: domain.revenue.v1.RevenueRunDomainService.UpdateRevenueRun:output_type -> domain.revenue.v1.UpdateRevenueRunResponse
-	12, // 47: domain.revenue.v1.RevenueRunDomainService.DeleteRevenueRun:output_type -> domain.revenue.v1.DeleteRevenueRunResponse
-	14, // 48: domain.revenue.v1.RevenueRunDomainService.ListRevenueRuns:output_type -> domain.revenue.v1.ListRevenueRunsResponse
-	16, // 49: domain.revenue.v1.RevenueRunDomainService.CreateRevenueRunAttempt:output_type -> domain.revenue.v1.CreateRevenueRunAttemptResponse
-	18, // 50: domain.revenue.v1.RevenueRunDomainService.ListRevenueRunAttempts:output_type -> domain.revenue.v1.ListRevenueRunAttemptsResponse
-	44, // [44:51] is the sub-list for method output_type
-	37, // [37:44] is the sub-list for method input_type
-	37, // [37:37] is the sub-list for extension type_name
-	37, // [37:37] is the sub-list for extension extendee
-	0,  // [0:37] is the sub-list for field type_name
+	3,  // 3: domain.revenue.v1.RevenueRunAttempt.source_kind:type_name -> domain.revenue.v1.RevenueRunSourceKind
+	4,  // 4: domain.revenue.v1.CreateRevenueRunRequest.data:type_name -> domain.revenue.v1.RevenueRun
+	4,  // 5: domain.revenue.v1.CreateRevenueRunResponse.data:type_name -> domain.revenue.v1.RevenueRun
+	28, // 6: domain.revenue.v1.CreateRevenueRunResponse.error:type_name -> domain.common.v1.Error
+	4,  // 7: domain.revenue.v1.ReadRevenueRunRequest.data:type_name -> domain.revenue.v1.RevenueRun
+	4,  // 8: domain.revenue.v1.ReadRevenueRunResponse.data:type_name -> domain.revenue.v1.RevenueRun
+	28, // 9: domain.revenue.v1.ReadRevenueRunResponse.error:type_name -> domain.common.v1.Error
+	4,  // 10: domain.revenue.v1.UpdateRevenueRunRequest.data:type_name -> domain.revenue.v1.RevenueRun
+	4,  // 11: domain.revenue.v1.UpdateRevenueRunResponse.data:type_name -> domain.revenue.v1.RevenueRun
+	28, // 12: domain.revenue.v1.UpdateRevenueRunResponse.error:type_name -> domain.common.v1.Error
+	4,  // 13: domain.revenue.v1.DeleteRevenueRunRequest.data:type_name -> domain.revenue.v1.RevenueRun
+	28, // 14: domain.revenue.v1.DeleteRevenueRunResponse.error:type_name -> domain.common.v1.Error
+	29, // 15: domain.revenue.v1.ListRevenueRunsRequest.search:type_name -> domain.common.v1.SearchRequest
+	30, // 16: domain.revenue.v1.ListRevenueRunsRequest.filters:type_name -> domain.common.v1.FilterRequest
+	31, // 17: domain.revenue.v1.ListRevenueRunsRequest.sort:type_name -> domain.common.v1.SortRequest
+	32, // 18: domain.revenue.v1.ListRevenueRunsRequest.pagination:type_name -> domain.common.v1.PaginationRequest
+	4,  // 19: domain.revenue.v1.ListRevenueRunsResponse.data:type_name -> domain.revenue.v1.RevenueRun
+	28, // 20: domain.revenue.v1.ListRevenueRunsResponse.error:type_name -> domain.common.v1.Error
+	33, // 21: domain.revenue.v1.ListRevenueRunsResponse.pagination:type_name -> domain.common.v1.PaginationResponse
+	5,  // 22: domain.revenue.v1.CreateRevenueRunAttemptRequest.data:type_name -> domain.revenue.v1.RevenueRunAttempt
+	5,  // 23: domain.revenue.v1.CreateRevenueRunAttemptResponse.data:type_name -> domain.revenue.v1.RevenueRunAttempt
+	28, // 24: domain.revenue.v1.CreateRevenueRunAttemptResponse.error:type_name -> domain.common.v1.Error
+	30, // 25: domain.revenue.v1.ListRevenueRunAttemptsRequest.filters:type_name -> domain.common.v1.FilterRequest
+	31, // 26: domain.revenue.v1.ListRevenueRunAttemptsRequest.sort:type_name -> domain.common.v1.SortRequest
+	5,  // 27: domain.revenue.v1.ListRevenueRunAttemptsResponse.data:type_name -> domain.revenue.v1.RevenueRunAttempt
+	28, // 28: domain.revenue.v1.ListRevenueRunAttemptsResponse.error:type_name -> domain.common.v1.Error
+	3,  // 29: domain.revenue.v1.RevenueRunCandidate.source_kind:type_name -> domain.revenue.v1.RevenueRunSourceKind
+	20, // 30: domain.revenue.v1.ListRevenueRunCandidatesRequest.scope:type_name -> domain.revenue.v1.RevenueRunScope
+	21, // 31: domain.revenue.v1.ListRevenueRunCandidatesResponse.data:type_name -> domain.revenue.v1.RevenueRunCandidate
+	28, // 32: domain.revenue.v1.ListRevenueRunCandidatesResponse.error:type_name -> domain.common.v1.Error
+	3,  // 33: domain.revenue.v1.SelectedRevenueRunCandidate.source_kind:type_name -> domain.revenue.v1.RevenueRunSourceKind
+	24, // 34: domain.revenue.v1.RevenueRunSelections.explicit_list:type_name -> domain.revenue.v1.SelectedRevenueRunCandidate
+	20, // 35: domain.revenue.v1.GenerateRevenueRunRequest.scope:type_name -> domain.revenue.v1.RevenueRunScope
+	25, // 36: domain.revenue.v1.GenerateRevenueRunRequest.selections:type_name -> domain.revenue.v1.RevenueRunSelections
+	28, // 37: domain.revenue.v1.GenerateRevenueRunResponse.error:type_name -> domain.common.v1.Error
+	4,  // 38: domain.revenue.v1.GenerateRevenueRunResponse.run:type_name -> domain.revenue.v1.RevenueRun
+	5,  // 39: domain.revenue.v1.GenerateRevenueRunResponse.attempts:type_name -> domain.revenue.v1.RevenueRunAttempt
+	6,  // 40: domain.revenue.v1.RevenueRunDomainService.CreateRevenueRun:input_type -> domain.revenue.v1.CreateRevenueRunRequest
+	8,  // 41: domain.revenue.v1.RevenueRunDomainService.ReadRevenueRun:input_type -> domain.revenue.v1.ReadRevenueRunRequest
+	10, // 42: domain.revenue.v1.RevenueRunDomainService.UpdateRevenueRun:input_type -> domain.revenue.v1.UpdateRevenueRunRequest
+	12, // 43: domain.revenue.v1.RevenueRunDomainService.DeleteRevenueRun:input_type -> domain.revenue.v1.DeleteRevenueRunRequest
+	14, // 44: domain.revenue.v1.RevenueRunDomainService.ListRevenueRuns:input_type -> domain.revenue.v1.ListRevenueRunsRequest
+	16, // 45: domain.revenue.v1.RevenueRunDomainService.CreateRevenueRunAttempt:input_type -> domain.revenue.v1.CreateRevenueRunAttemptRequest
+	18, // 46: domain.revenue.v1.RevenueRunDomainService.ListRevenueRunAttempts:input_type -> domain.revenue.v1.ListRevenueRunAttemptsRequest
+	7,  // 47: domain.revenue.v1.RevenueRunDomainService.CreateRevenueRun:output_type -> domain.revenue.v1.CreateRevenueRunResponse
+	9,  // 48: domain.revenue.v1.RevenueRunDomainService.ReadRevenueRun:output_type -> domain.revenue.v1.ReadRevenueRunResponse
+	11, // 49: domain.revenue.v1.RevenueRunDomainService.UpdateRevenueRun:output_type -> domain.revenue.v1.UpdateRevenueRunResponse
+	13, // 50: domain.revenue.v1.RevenueRunDomainService.DeleteRevenueRun:output_type -> domain.revenue.v1.DeleteRevenueRunResponse
+	15, // 51: domain.revenue.v1.RevenueRunDomainService.ListRevenueRuns:output_type -> domain.revenue.v1.ListRevenueRunsResponse
+	17, // 52: domain.revenue.v1.RevenueRunDomainService.CreateRevenueRunAttempt:output_type -> domain.revenue.v1.CreateRevenueRunAttemptResponse
+	19, // 53: domain.revenue.v1.RevenueRunDomainService.ListRevenueRunAttempts:output_type -> domain.revenue.v1.ListRevenueRunAttemptsResponse
+	47, // [47:54] is the sub-list for method output_type
+	40, // [40:47] is the sub-list for method input_type
+	40, // [40:40] is the sub-list for extension type_name
+	40, // [40:40] is the sub-list for extension extendee
+	0,  // [0:40] is the sub-list for field type_name
 }
 
 func init() { file_domain_revenue_revenue_run_revenue_run_proto_init() }
@@ -2258,8 +2426,10 @@ func file_domain_revenue_revenue_run_revenue_run_proto_init() {
 	file_domain_revenue_revenue_run_revenue_run_proto_msgTypes[14].OneofWrappers = []any{}
 	file_domain_revenue_revenue_run_revenue_run_proto_msgTypes[15].OneofWrappers = []any{}
 	file_domain_revenue_revenue_run_revenue_run_proto_msgTypes[16].OneofWrappers = []any{}
+	file_domain_revenue_revenue_run_revenue_run_proto_msgTypes[17].OneofWrappers = []any{}
 	file_domain_revenue_revenue_run_revenue_run_proto_msgTypes[18].OneofWrappers = []any{}
 	file_domain_revenue_revenue_run_revenue_run_proto_msgTypes[19].OneofWrappers = []any{}
+	file_domain_revenue_revenue_run_revenue_run_proto_msgTypes[20].OneofWrappers = []any{}
 	file_domain_revenue_revenue_run_revenue_run_proto_msgTypes[21].OneofWrappers = []any{}
 	file_domain_revenue_revenue_run_revenue_run_proto_msgTypes[23].OneofWrappers = []any{}
 	type x struct{}
@@ -2267,7 +2437,7 @@ func file_domain_revenue_revenue_run_revenue_run_proto_init() {
 		File: protoimpl.DescBuilder{
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_domain_revenue_revenue_run_revenue_run_proto_rawDesc), len(file_domain_revenue_revenue_run_revenue_run_proto_rawDesc)),
-			NumEnums:      3,
+			NumEnums:      4,
 			NumMessages:   24,
 			NumExtensions: 0,
 			NumServices:   1,

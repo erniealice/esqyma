@@ -465,3 +465,35 @@ of reconstitution window ──▶│  wasted  │ → inventory_depreciation
 - **Manufacturer loyalty programs**: Allergan's Alle and Galderma's Aspire programs create B2B2C reward flows. The `subscription` model could track patient enrollment in these external programs via `metadata`.
 - **Partial vial sharing**: When one Botox vial serves multiple patients in a day, the `InventoryTransaction` model needs to support multiple consumption records against the same `inventory_serial` (lot-tracked vial) until it's depleted.
 - **Financing**: CareCredit and Klarna "buy now, pay later" transactions may need a `payment` status flow (authorized → captured → installment) beyond simple card processing.
+
+---
+
+## Universal Job Model — applicability to medical aesthetics
+
+The `operation/` proto domain is being generalised under `docs/plan/20260427-universal-job-model/` to handle service / project / maintenance / production work from one schema. Wave 1 (already complete locally) added the enum values `PLANNED`, `RELEASED`, `EQUIPMENT`, `SUBCONTRACT`, `HOLD`, `REWORK`, plus JobTemplate versioning and Job output-target fields. Waves 2–4 add nine new entities. **Medical aesthetics is the second-heaviest beneficiary** after manufacturing — it's the vertical that most needs lot-tracked inventory, governed substitutes, and treatment-package immutability.
+
+| New entity (Wave) | Relevance to medical aesthetics | Example |
+|---|---|---|
+| `job_template_input` (W2) | 🟢 High — "Treatment kit" definition | "Botox 40-unit forehead template expects 2 Botox vials × 20 units + 0.5h injector time + 1 treatment room × 30 min." Drives per-treatment costing and inventory pre-check before booking confirms. |
+| `job_template_input_alternate` (W2) | 🔴 Critical — clinically-governed substitutes | Botox A ↔ Botox B when supply is short, but only with approval from a clinical supervisor. `substitution_reason_code` carries the clinical justification; unapproved swaps surface on the clinic-director's variance report. |
+| `lot` (W2) | 🔴 Critical — vial lots, reconstitution windows, expiries | Vial lot L-BTX-2026-04-12, reconstituted at 09:00, must be discarded by 09:00 + 24h. Any consumption against this lot after the window auto-flags. Recall-by-lot becomes a single query. |
+| `job_input_plan` (W3) | 🟢 High — multi-session treatment package peg | A 6-session laser package is RELEASED at consultation; the per-session expected units are frozen. Sessions 1–6 reconcile against the plan; package balance is auditable. |
+| `task_interruption` (W3) | ⚪ Low | (occasional — patient pauses mid-treatment) |
+| `job_output` (W4) | 🟢 High — treatment outcome + before/after + prescription | Per session: `output_kind=SERVICE_DELIVERY` (consumption record) + `output_kind=DELIVERABLE` × N (before-photo, after-photo, post-care instructions PDF, prescription PDF). |
+| `job_cost_ledger_entry` (W4) | 🟡 Medium — deferred-revenue multi-session packages | Package pre-paid up-front, recognised per session — the ledger entry per session matches the recognised revenue. |
+| `job_cost_snapshot` (W4) | 🟡 Medium — period close on packages | Unrecognised package balance at month-end. |
+| `job_plan_deviation` (W4) | 🟡 Medium — treatment variance | Patient required 1.5× the planned units; flagged as a deviation with practitioner reason. Useful for protocol calibration. |
+
+**Surface area for med-aesthetics UI:** clinic appointment screens gain a "Treatment kit" pre-check (does the right lot exist, within window?); the Patient Detail screen gains a "Package balance" / "Plan deviation" tab; the Quality / Outcomes tab uses existing `task_outcome` + new `job_output` to record before/after evidence.
+
+**Why this matters beyond manufacturing:** the substitution-with-approval lifecycle (W2's swap-event flow) is a *clinical-safety* mechanism here, not a supply-flexibility mechanism. The same proto state machine that manufacturing uses to govern raw-material swaps governs clinical Botox-A↔Botox-B swaps with a stricter approval requirement. Wave 2's `job_template_input_alternate` table plus `substitution_approved_by` field is exactly the audit trail med-aesthetics regulators expect.
+
+**Lyngua tier-3 keys to author** (under `packages/lyngua/translations/en/medical-aesthetics/` — note: tier folder name TBD vs. `service/`):
+- `job_template_input.json` → "Treatment kit" / "Treatment expected inventory"
+- `job_template_input_alternate.json` → "Clinically approved substitutes"
+- `lot.json` → "Lot / Vial" with fields rendered for reconstitution window
+- `job_input_plan.json` → "Treatment package plan"
+- `job_output.json` → "Treatment record" (kinds: "Consultation", "Treatment session", "Photo", "Prescription")
+- `job_plan_deviation.json` → "Treatment variance"
+
+**See:** `packages/esqyma/verticals/manufacturing/README.md` for the canonical facade example. The same proto fields, rendered under `lyngua/translations/en/manufacturing/`, become BOM-and-Routing / WIP / Variance.
