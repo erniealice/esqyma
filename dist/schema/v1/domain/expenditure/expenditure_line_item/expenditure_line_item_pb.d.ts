@@ -150,6 +150,15 @@ export type ExpenditureLineItem = Message<"domain.expenditure.v1.ExpenditureLine
      * @generated from field: optional string line_kind = 27;
      */
     lineKind?: string;
+    /**
+     * Supplier subscription back-edge (supplier-subscriptions plan).
+     * Field 22 was taken (rate_table_id); using 28.
+     *
+     * FK to SupplierProductCostPlan (line-level cost plan traceability)
+     *
+     * @generated from field: optional string supplier_product_cost_plan_id = 28;
+     */
+    supplierProductCostPlanId?: string;
 };
 /**
  * Describes the message domain.expenditure.v1.ExpenditureLineItem.

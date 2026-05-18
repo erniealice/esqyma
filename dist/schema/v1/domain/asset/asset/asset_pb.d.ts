@@ -5,6 +5,7 @@ import type { FilterRequest } from "../../common/filter_pb";
 import type { SortRequest } from "../../common/sort_pb";
 import type { SearchRequest, SearchResult } from "../../common/search_pb";
 import type { AssetCategory } from "../asset_category/asset_category_pb";
+import type { DepreciationSchedule } from "../depreciation/depreciation_pb";
 import type { Location } from "../../entity/location/location_pb";
 import type { Message } from "@bufbuild/protobuf";
 /**
@@ -221,6 +222,15 @@ export type Asset = Message<"domain.asset.v1.Asset"> & {
      * @generated from field: bool active = 44;
      */
     active: boolean;
+    /**
+     * Workspace tenancy (Phase 1 — 2026-05-10).
+     * Field 45 verified free at 2026-05-10 (proto used fields 1–44 only).
+     * Stored as nullable in the DB during the additive migration; a future
+     * 2-step migration tightens to NOT NULL after backfill is reconciled.
+     *
+     * @generated from field: optional string workspace_id = 45;
+     */
+    workspaceId?: string;
 };
 /**
  * Describes the message domain.asset.v1.Asset.
@@ -730,13 +740,16 @@ export type GetDepreciationScheduleRequest = Message<"domain.asset.v1.GetDepreci
  */
 export declare const GetDepreciationScheduleRequestSchema: GenMessage<GetDepreciationScheduleRequest>;
 /**
+ * Bug fix (2026-05-09): was `repeated Asset data` — incorrect return type.
+ * The rpc is unimplemented; no callers to break.
+ *
  * @generated from message domain.asset.v1.GetDepreciationScheduleResponse
  */
 export type GetDepreciationScheduleResponse = Message<"domain.asset.v1.GetDepreciationScheduleResponse"> & {
     /**
-     * @generated from field: repeated domain.asset.v1.Asset data = 1;
+     * @generated from field: repeated domain.asset.v1.DepreciationSchedule data = 1;
      */
-    data: Asset[];
+    data: DepreciationSchedule[];
     /**
      * @generated from field: bool success = 2;
      */
@@ -1118,6 +1131,8 @@ export declare const AssetDomainService: GenService<{
     };
     /**
      * Depreciation engine
+     * deprecated: use DepreciationRunDomainService.GenerateDepreciationRun instead.
+     * The adapter stub returns "not implemented". Removal targeted for v2.
      *
      * @generated from rpc domain.asset.v1.AssetDomainService.RunDepreciation
      */
@@ -1127,6 +1142,8 @@ export declare const AssetDomainService: GenService<{
         output: typeof RunDepreciationResponseSchema;
     };
     /**
+     * deprecated: use DepreciationDomainService.ListDepreciationSchedules instead.
+     *
      * @generated from rpc domain.asset.v1.AssetDomainService.GetDepreciationSchedule
      */
     getDepreciationSchedule: {

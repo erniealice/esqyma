@@ -400,6 +400,161 @@ export type GetAssetRevaluationItemPageDataResponse = Message<"domain.asset.v1.G
  */
 export declare const GetAssetRevaluationItemPageDataResponseSchema: GenMessage<GetAssetRevaluationItemPageDataResponse>;
 /**
+ * RevalueAssetUseCaseRequest is the input to the IAS 16 revaluation use case.
+ *
+ * @generated from message domain.asset.v1.RevalueAssetUseCaseRequest
+ */
+export type RevalueAssetUseCaseRequest = Message<"domain.asset.v1.RevalueAssetUseCaseRequest"> & {
+    /**
+     * @generated from field: string asset_id = 1;
+     */
+    assetId: string;
+    /**
+     * centavos
+     *
+     * @generated from field: int64 new_fair_value = 2;
+     */
+    newFairValue: bigint;
+    /**
+     * @generated from field: optional string appraiser_name = 3;
+     */
+    appraiserName?: string;
+    /**
+     * @generated from field: optional string valuation_method = 4;
+     */
+    valuationMethod?: string;
+    /**
+     * @generated from field: optional string notes = 5;
+     */
+    notes?: string;
+};
+/**
+ * Describes the message domain.asset.v1.RevalueAssetUseCaseRequest.
+ * Use `create(RevalueAssetUseCaseRequestSchema)` to create a new message.
+ */
+export declare const RevalueAssetUseCaseRequestSchema: GenMessage<RevalueAssetUseCaseRequest>;
+/**
+ * RevalueAssetUseCaseResponse is the output of the IAS 16 revaluation use case.
+ *
+ * @generated from message domain.asset.v1.RevalueAssetUseCaseResponse
+ */
+export type RevalueAssetUseCaseResponse = Message<"domain.asset.v1.RevalueAssetUseCaseResponse"> & {
+    /**
+     * @generated from field: bool success = 1;
+     */
+    success: boolean;
+    /**
+     * @generated from field: optional domain.common.v1.Error error = 2;
+     */
+    error?: Error;
+    /**
+     * @generated from field: optional domain.asset.v1.AssetRevaluation revaluation = 3;
+     */
+    revaluation?: AssetRevaluation;
+    /**
+     * asset_transaction_id surfaces the FK back-ref without requiring a
+     * cross-package import of asset_transaction.proto.
+     *
+     * @generated from field: optional string asset_transaction_id = 4;
+     */
+    assetTransactionId?: string;
+};
+/**
+ * Describes the message domain.asset.v1.RevalueAssetUseCaseResponse.
+ * Use `create(RevalueAssetUseCaseResponseSchema)` to create a new message.
+ */
+export declare const RevalueAssetUseCaseResponseSchema: GenMessage<RevalueAssetUseCaseResponse>;
+/**
+ * PreviewRevaluationUseCaseRequest is the input to the read-only preview use case.
+ *
+ * @generated from message domain.asset.v1.PreviewRevaluationUseCaseRequest
+ */
+export type PreviewRevaluationUseCaseRequest = Message<"domain.asset.v1.PreviewRevaluationUseCaseRequest"> & {
+    /**
+     * @generated from field: string asset_id = 1;
+     */
+    assetId: string;
+    /**
+     * centavos
+     *
+     * @generated from field: int64 new_fair_value = 2;
+     */
+    newFairValue: bigint;
+};
+/**
+ * Describes the message domain.asset.v1.PreviewRevaluationUseCaseRequest.
+ * Use `create(PreviewRevaluationUseCaseRequestSchema)` to create a new message.
+ */
+export declare const PreviewRevaluationUseCaseRequestSchema: GenMessage<PreviewRevaluationUseCaseRequest>;
+/**
+ * PreviewRevaluationUseCaseResponse is the predicted IAS 16.39-40 split.
+ *
+ * @generated from message domain.asset.v1.PreviewRevaluationUseCaseResponse
+ */
+export type PreviewRevaluationUseCaseResponse = Message<"domain.asset.v1.PreviewRevaluationUseCaseResponse"> & {
+    /**
+     * @generated from field: bool success = 1;
+     */
+    success: boolean;
+    /**
+     * @generated from field: optional domain.common.v1.Error error = 2;
+     */
+    error?: Error;
+    /**
+     * centavos
+     *
+     * @generated from field: int64 previous_carrying_amount = 3;
+     */
+    previousCarryingAmount: bigint;
+    /**
+     * centavos
+     *
+     * @generated from field: int64 new_fair_value = 4;
+     */
+    newFairValue: bigint;
+    /**
+     * signed; positive=up, negative=down
+     *
+     * @generated from field: int64 revaluation_amount = 5;
+     */
+    revaluationAmount: bigint;
+    /**
+     * @generated from field: bool is_increase = 6;
+     */
+    isIncrease: boolean;
+    /**
+     * signed centavos
+     *
+     * @generated from field: int64 recognized_in_pnl = 7;
+     */
+    recognizedInPnl: bigint;
+    /**
+     * signed centavos
+     *
+     * @generated from field: int64 recognized_in_oci = 8;
+     */
+    recognizedInOci: bigint;
+    /**
+     * centavos
+     *
+     * @generated from field: int64 new_surplus_balance = 9;
+     */
+    newSurplusBalance: bigint;
+    /**
+     * @generated from field: int64 prior_surplus_balance = 10;
+     */
+    priorSurplusBalance: bigint;
+    /**
+     * @generated from field: int64 prior_pnl_loss_balance = 11;
+     */
+    priorPnlLossBalance: bigint;
+};
+/**
+ * Describes the message domain.asset.v1.PreviewRevaluationUseCaseResponse.
+ * Use `create(PreviewRevaluationUseCaseResponseSchema)` to create a new message.
+ */
+export declare const PreviewRevaluationUseCaseResponseSchema: GenMessage<PreviewRevaluationUseCaseResponse>;
+/**
  * @generated from service domain.asset.v1.AssetRevaluationDomainService
  */
 export declare const AssetRevaluationDomainService: GenService<{

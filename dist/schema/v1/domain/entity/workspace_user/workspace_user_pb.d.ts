@@ -67,6 +67,33 @@ export type WorkspaceUser = Message<"domain.entity.v1.WorkspaceUser"> & {
      * @generated from field: bool active = 11;
      */
     active: boolean;
+    /**
+     * Member registry fields — cooperative / mutual vertical extension (2026-05-10)
+     * These fields turn WorkspaceUser into the member anchor for cooperatives, credit unions,
+     * mutual insurance companies, housing co-ops, DAOs, and professional partnerships.
+     * member_number: unique registry ID within this workspace (e.g. "M-00042")
+     *
+     * @generated from field: optional string member_number = 12;
+     */
+    memberNumber?: string;
+    /**
+     * member_status: admission lifecycle — "applicant" | "active" | "suspended" | "withdrawn" | "expelled"
+     *
+     * @generated from field: optional string member_status = 13;
+     */
+    memberStatus?: string;
+    /**
+     * member_since: admission date (epoch ms); NULL = not yet admitted
+     *
+     * @generated from field: optional int64 member_since = 14;
+     */
+    memberSince?: bigint;
+    /**
+     * member_until: withdrawal or termination date (epoch ms); NULL = still an active member
+     *
+     * @generated from field: optional int64 member_until = 15;
+     */
+    memberUntil?: bigint;
 };
 /**
  * Describes the message domain.entity.v1.WorkspaceUser.

@@ -71,6 +71,21 @@ export type EquityAccount = Message<"domain.ledger.v1.EquityAccount"> & {
      * @generated from field: optional string date_modified_string = 11;
      */
     dateModifiedString?: string;
+    /**
+     * Mutual / cooperative extension (2026-05-10)
+     * workspace_user_id: FK to the member this equity account belongs to (workspace-scoped;
+     *   membership is per co-op, not global — hence workspace_user_id not user_id)
+     *
+     * @generated from field: optional string workspace_user_id = 12;
+     */
+    workspaceUserId?: string;
+    /**
+     * patronage_basis: what activity drives patronage allocation
+     *   "PURCHASES" | "HOURS" | "DELIVERIES" | "DEPOSITS"
+     *
+     * @generated from field: optional string patronage_basis = 13;
+     */
+    patronageBasis?: string;
 };
 /**
  * Describes the message domain.ledger.v1.EquityAccount.

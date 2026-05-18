@@ -114,6 +114,13 @@ export type Event = Message<"domain.event.v1.Event"> & {
      * @generated from field: optional int64 original_occurrence_utc = 22;
      */
     originalOccurrenceUtc?: bigint;
+    /**
+     * Mutual / cooperative extension (2026-05-10)
+     * kind: classifies the event purpose; used for governance-vote branching
+     *
+     * @generated from field: optional domain.event.v1.EventKind kind = 23;
+     */
+    kind?: EventKind;
 };
 /**
  * Describes the message domain.event.v1.Event.
@@ -435,6 +442,36 @@ export declare enum EventStatus {
  * Describes the enum domain.event.v1.EventStatus.
  */
 export declare const EventStatusSchema: GenEnum<EventStatus>;
+/**
+ * EventKind classifies the purpose of an event.
+ * Added 2026-05-10 for mutual/cooperative vertical — governance votes need
+ * a distinct kind so vote tallying, quorum checks, and voting eligibility
+ * logic can branch on event type.
+ *
+ * @generated from enum domain.event.v1.EventKind
+ */
+export declare enum EventKind {
+    /**
+     * @generated from enum value: EVENT_KIND_UNSPECIFIED = 0;
+     */
+    UNSPECIFIED = 0,
+    /**
+     * General meeting (board meeting, team standup, etc.)
+     *
+     * @generated from enum value: EVENT_KIND_MEETING = 1;
+     */
+    MEETING = 1,
+    /**
+     * Formal vote / general assembly (mutual/cooperative governance)
+     *
+     * @generated from enum value: EVENT_KIND_GOVERNANCE_VOTE = 2;
+     */
+    GOVERNANCE_VOTE = 2
+}
+/**
+ * Describes the enum domain.event.v1.EventKind.
+ */
+export declare const EventKindSchema: GenEnum<EventKind>;
 /**
  * @generated from service domain.event.v1.EventDomainService
  */

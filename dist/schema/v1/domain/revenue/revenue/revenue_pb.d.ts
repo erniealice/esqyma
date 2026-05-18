@@ -170,12 +170,156 @@ export type Revenue = Message<"domain.revenue.v1.Revenue"> & {
      * @generated from field: optional string billing_event_id = 34;
      */
     billingEventId?: string;
+    /**
+     * @generated from field: optional string run_id = 35;
+     */
+    runId?: string;
+    /**
+     * Tax denorm fields — Phase 1 tax integration
+     * Populated by ComputeTaxesForRevenue; snapshotted at recognition time.
+     *
+     * centavos: total_amount + SUM(SURCHARGE) - SUM(WITHHOLDING)
+     *
+     * @generated from field: optional int64 cash_amount_expected = 36;
+     */
+    cashAmountExpected?: bigint;
+    /**
+     * centavos: SUM(WITHHOLDING) — expected from buyer
+     *
+     * @generated from field: optional int64 wht_amount_expected = 37;
+     */
+    whtAmountExpected?: bigint;
+    /**
+     * centavos: SUM(actual_amount) across non-void WithholdingCertificate rows
+     *
+     * @generated from field: optional int64 wht_amount_certified = 38;
+     */
+    whtAmountCertified?: bigint;
+    /**
+     * centavos: wht_amount_expected - wht_amount_certified
+     *
+     * @generated from field: optional int64 wht_amount_variance = 39;
+     */
+    whtAmountVariance?: bigint;
+    /**
+     * OPEN, CASH_RECEIVED_WHT_PENDING, FULLY_SETTLED, VARIANCE_OPEN
+     *
+     * @generated from field: optional string settlement_status = 40;
+     */
+    settlementStatus?: string;
+    /**
+     * Snapshotted from workspace.tax_inclusive_pricing at recognition
+     *
+     * @generated from field: optional bool tax_inclusive_pricing_snapshot = 41;
+     */
+    taxInclusivePricingSnapshot?: boolean;
+    /**
+     * Snapshotted from workspace.tax_computation_enabled (bool)
+     *
+     * @generated from field: optional bool tax_computation_enabled_snapshot = 42;
+     */
+    taxComputationEnabledSnapshot?: boolean;
+    /**
+     * Multi-currency / FX fields — Phase 1 tax integration
+     *
+     * ISO 4217 billing currency when different from functional_currency
+     *
+     * @generated from field: optional string billing_currency = 43;
+     */
+    billingCurrency?: string;
+    /**
+     * Original amount in billing_currency centavos (before FX conversion)
+     *
+     * @generated from field: optional int64 billing_amount = 44;
+     */
+    billingAmount?: bigint;
+    /**
+     * Snapshotted FX rate at recognition (functional per 1 billing unit * 1_000_000)
+     *
+     * @generated from field: optional int64 forex_rate_micro_units = 45;
+     */
+    forexRateMicroUnits?: bigint;
+    /**
+     * "operator", "bsp_ref:<date>" — source of the FX rate used
+     *
+     * @generated from field: optional string forex_rate_source = 46;
+     */
+    forexRateSource?: string;
+    /**
+     * FK back-edge — Wave 4 self-domain plan (2026-05-17).
+     * Audit snapshot of the collection profile active at recognition time.
+     * Stored as string (no DB FK constraint) to survive profile edits — see architecture.md §3.5.
+     *
+     * @generated from field: optional string collection_profile_id_snapshot = 47;
+     */
+    collectionProfileIdSnapshot?: string;
+    /**
+     * Advance back-edge — Plan B (20260517-advance-cash-events).
+     * Set when the Revenue was emitted by AmortizeAdvanceCollection (TIME_BASED) or
+     * RecognizeMilestoneAdvance (MILESTONE) draining an advance TreasuryCollection.
+     * Symmetric with expense_recognition.advance_disbursement_id (buying side).
+     * Replaces the never-shipped Revenue.deferred_revenue_id concept (DeferredRevenue dropped in Phase 0).
+     *
+     * @generated from field: optional string advance_collection_id = 48;
+     */
+    advanceCollectionId?: string;
 };
 /**
  * Describes the message domain.revenue.v1.Revenue.
  * Use `create(RevenueSchema)` to create a new message.
  */
 export declare const RevenueSchema: GenMessage<Revenue>;
+/**
+ * PreviewTaxLine — ephemeral, dry-run only. Not persisted.
+ * Populated in CreateRevenueWithLineItemsResponse when dry_run=true.
+ *
+ * @generated from message domain.revenue.v1.PreviewTaxLine
+ */
+export type PreviewTaxLine = Message<"domain.revenue.v1.PreviewTaxLine"> & {
+    /**
+     * "SURCHARGE" or "WITHHOLDING"
+     *
+     * @generated from field: string direction = 1;
+     */
+    direction: string;
+    /**
+     * @generated from field: string tax_kind_snapshot = 2;
+     */
+    taxKindSnapshot: string;
+    /**
+     * @generated from field: optional string regulator_code_snapshot = 3;
+     */
+    regulatorCodeSnapshot?: string;
+    /**
+     * @generated from field: string authority_code_snapshot = 4;
+     */
+    authorityCodeSnapshot: string;
+    /**
+     * centavos
+     *
+     * @generated from field: int64 taxable_base = 5;
+     */
+    taxableBase: bigint;
+    /**
+     * centavos
+     *
+     * @generated from field: int64 tax_amount = 6;
+     */
+    taxAmount: bigint;
+    /**
+     * @generated from field: int32 rate_basis_points = 7;
+     */
+    rateBasisPoints: number;
+    /**
+     * @generated from field: repeated string applied_to_line_item_ids = 8;
+     */
+    appliedToLineItemIds: string[];
+};
+/**
+ * Describes the message domain.revenue.v1.PreviewTaxLine.
+ * Use `create(PreviewTaxLineSchema)` to create a new message.
+ */
+export declare const PreviewTaxLineSchema: GenMessage<PreviewTaxLine>;
 /**
  * @generated from message domain.revenue.v1.CreateRevenueRequest
  */
@@ -622,6 +766,13 @@ export type CreateRevenueWithLineItemsResponse = Message<"domain.revenue.v1.Crea
      * @generated from field: optional string conflicting_revenue_id = 6;
      */
     conflictingRevenueId?: string;
+    /**
+     * Tax preview lines — populated when dry_run=true and tax_computation_enabled.
+     * Shows the computed RevenueTaxLine rows without persisting them.
+     *
+     * @generated from field: repeated domain.revenue.v1.PreviewTaxLine preview_tax_lines = 7;
+     */
+    previewTaxLines: PreviewTaxLine[];
 };
 /**
  * Describes the message domain.revenue.v1.CreateRevenueWithLineItemsResponse.

@@ -1174,6 +1174,266 @@ func (x *RecognizeMilestoneAdvanceCollectionResponse) GetError() *common.Error {
 	return nil
 }
 
+type ListAdvanceCollectionsForDashboardRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	WorkspaceId   string                 `protobuf:"bytes,1,opt,name=workspace_id,json=workspaceId,proto3" json:"workspace_id,omitempty"`
+	AsOfDate      string                 `protobuf:"bytes,2,opt,name=as_of_date,json=asOfDate,proto3" json:"as_of_date,omitempty"` // YYYY-MM-DD; reserved for future filtering
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *ListAdvanceCollectionsForDashboardRequest) Reset() {
+	*x = ListAdvanceCollectionsForDashboardRequest{}
+	mi := &file_domain_treasury_collection_collection_proto_msgTypes[11]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *ListAdvanceCollectionsForDashboardRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ListAdvanceCollectionsForDashboardRequest) ProtoMessage() {}
+
+func (x *ListAdvanceCollectionsForDashboardRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_domain_treasury_collection_collection_proto_msgTypes[11]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ListAdvanceCollectionsForDashboardRequest.ProtoReflect.Descriptor instead.
+func (*ListAdvanceCollectionsForDashboardRequest) Descriptor() ([]byte, []int) {
+	return file_domain_treasury_collection_collection_proto_rawDescGZIP(), []int{11}
+}
+
+func (x *ListAdvanceCollectionsForDashboardRequest) GetWorkspaceId() string {
+	if x != nil {
+		return x.WorkspaceId
+	}
+	return ""
+}
+
+func (x *ListAdvanceCollectionsForDashboardRequest) GetAsOfDate() string {
+	if x != nil {
+		return x.AsOfDate
+	}
+	return ""
+}
+
+type AdvanceCollectionDashboardRow struct {
+	state            protoimpl.MessageState     `protogen:"open.v1"`
+	AdvanceId        string                     `protobuf:"bytes,1,opt,name=advance_id,json=advanceId,proto3" json:"advance_id,omitempty"`
+	ReferenceNumber  string                     `protobuf:"bytes,2,opt,name=reference_number,json=referenceNumber,proto3" json:"reference_number,omitempty"`
+	CounterpartyName string                     `protobuf:"bytes,3,opt,name=counterparty_name,json=counterpartyName,proto3" json:"counterparty_name,omitempty"`
+	Kind             advance_kind.AdvanceKind   `protobuf:"varint,4,opt,name=kind,proto3,enum=domain.common.v1.AdvanceKind" json:"kind,omitempty"`
+	Status           advance_kind.AdvanceStatus `protobuf:"varint,5,opt,name=status,proto3,enum=domain.common.v1.AdvanceStatus" json:"status,omitempty"`
+	Currency         string                     `protobuf:"bytes,6,opt,name=currency,proto3" json:"currency,omitempty"`
+	TotalAmount      int64                      `protobuf:"varint,7,opt,name=total_amount,json=totalAmount,proto3" json:"total_amount,omitempty"`
+	RemainingAmount  int64                      `protobuf:"varint,8,opt,name=remaining_amount,json=remainingAmount,proto3" json:"remaining_amount,omitempty"`
+	RecognizedAmount int64                      `protobuf:"varint,9,opt,name=recognized_amount,json=recognizedAmount,proto3" json:"recognized_amount,omitempty"`
+	UtilizationPct   float32                    `protobuf:"fixed32,10,opt,name=utilization_pct,json=utilizationPct,proto3" json:"utilization_pct,omitempty"`
+	StartDate        string                     `protobuf:"bytes,11,opt,name=start_date,json=startDate,proto3" json:"start_date,omitempty"`
+	EndDate          string                     `protobuf:"bytes,12,opt,name=end_date,json=endDate,proto3" json:"end_date,omitempty"`
+	unknownFields    protoimpl.UnknownFields
+	sizeCache        protoimpl.SizeCache
+}
+
+func (x *AdvanceCollectionDashboardRow) Reset() {
+	*x = AdvanceCollectionDashboardRow{}
+	mi := &file_domain_treasury_collection_collection_proto_msgTypes[12]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *AdvanceCollectionDashboardRow) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*AdvanceCollectionDashboardRow) ProtoMessage() {}
+
+func (x *AdvanceCollectionDashboardRow) ProtoReflect() protoreflect.Message {
+	mi := &file_domain_treasury_collection_collection_proto_msgTypes[12]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use AdvanceCollectionDashboardRow.ProtoReflect.Descriptor instead.
+func (*AdvanceCollectionDashboardRow) Descriptor() ([]byte, []int) {
+	return file_domain_treasury_collection_collection_proto_rawDescGZIP(), []int{12}
+}
+
+func (x *AdvanceCollectionDashboardRow) GetAdvanceId() string {
+	if x != nil {
+		return x.AdvanceId
+	}
+	return ""
+}
+
+func (x *AdvanceCollectionDashboardRow) GetReferenceNumber() string {
+	if x != nil {
+		return x.ReferenceNumber
+	}
+	return ""
+}
+
+func (x *AdvanceCollectionDashboardRow) GetCounterpartyName() string {
+	if x != nil {
+		return x.CounterpartyName
+	}
+	return ""
+}
+
+func (x *AdvanceCollectionDashboardRow) GetKind() advance_kind.AdvanceKind {
+	if x != nil {
+		return x.Kind
+	}
+	return advance_kind.AdvanceKind(0)
+}
+
+func (x *AdvanceCollectionDashboardRow) GetStatus() advance_kind.AdvanceStatus {
+	if x != nil {
+		return x.Status
+	}
+	return advance_kind.AdvanceStatus(0)
+}
+
+func (x *AdvanceCollectionDashboardRow) GetCurrency() string {
+	if x != nil {
+		return x.Currency
+	}
+	return ""
+}
+
+func (x *AdvanceCollectionDashboardRow) GetTotalAmount() int64 {
+	if x != nil {
+		return x.TotalAmount
+	}
+	return 0
+}
+
+func (x *AdvanceCollectionDashboardRow) GetRemainingAmount() int64 {
+	if x != nil {
+		return x.RemainingAmount
+	}
+	return 0
+}
+
+func (x *AdvanceCollectionDashboardRow) GetRecognizedAmount() int64 {
+	if x != nil {
+		return x.RecognizedAmount
+	}
+	return 0
+}
+
+func (x *AdvanceCollectionDashboardRow) GetUtilizationPct() float32 {
+	if x != nil {
+		return x.UtilizationPct
+	}
+	return 0
+}
+
+func (x *AdvanceCollectionDashboardRow) GetStartDate() string {
+	if x != nil {
+		return x.StartDate
+	}
+	return ""
+}
+
+func (x *AdvanceCollectionDashboardRow) GetEndDate() string {
+	if x != nil {
+		return x.EndDate
+	}
+	return ""
+}
+
+type ListAdvanceCollectionsForDashboardResponse struct {
+	state                protoimpl.MessageState           `protogen:"open.v1"`
+	Rows                 []*AdvanceCollectionDashboardRow `protobuf:"bytes,1,rep,name=rows,proto3" json:"rows,omitempty"`
+	TotalRemaining       int64                            `protobuf:"varint,2,opt,name=total_remaining,json=totalRemaining,proto3" json:"total_remaining,omitempty"`
+	ActiveCount          int32                            `protobuf:"varint,3,opt,name=active_count,json=activeCount,proto3" json:"active_count,omitempty"`
+	FullyRecognizedCount int32                            `protobuf:"varint,4,opt,name=fully_recognized_count,json=fullyRecognizedCount,proto3" json:"fully_recognized_count,omitempty"`
+	Error                *common.Error                    `protobuf:"bytes,5,opt,name=error,proto3,oneof" json:"error,omitempty"`
+	unknownFields        protoimpl.UnknownFields
+	sizeCache            protoimpl.SizeCache
+}
+
+func (x *ListAdvanceCollectionsForDashboardResponse) Reset() {
+	*x = ListAdvanceCollectionsForDashboardResponse{}
+	mi := &file_domain_treasury_collection_collection_proto_msgTypes[13]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *ListAdvanceCollectionsForDashboardResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ListAdvanceCollectionsForDashboardResponse) ProtoMessage() {}
+
+func (x *ListAdvanceCollectionsForDashboardResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_domain_treasury_collection_collection_proto_msgTypes[13]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ListAdvanceCollectionsForDashboardResponse.ProtoReflect.Descriptor instead.
+func (*ListAdvanceCollectionsForDashboardResponse) Descriptor() ([]byte, []int) {
+	return file_domain_treasury_collection_collection_proto_rawDescGZIP(), []int{13}
+}
+
+func (x *ListAdvanceCollectionsForDashboardResponse) GetRows() []*AdvanceCollectionDashboardRow {
+	if x != nil {
+		return x.Rows
+	}
+	return nil
+}
+
+func (x *ListAdvanceCollectionsForDashboardResponse) GetTotalRemaining() int64 {
+	if x != nil {
+		return x.TotalRemaining
+	}
+	return 0
+}
+
+func (x *ListAdvanceCollectionsForDashboardResponse) GetActiveCount() int32 {
+	if x != nil {
+		return x.ActiveCount
+	}
+	return 0
+}
+
+func (x *ListAdvanceCollectionsForDashboardResponse) GetFullyRecognizedCount() int32 {
+	if x != nil {
+		return x.FullyRecognizedCount
+	}
+	return 0
+}
+
+func (x *ListAdvanceCollectionsForDashboardResponse) GetError() *common.Error {
+	if x != nil {
+		return x.Error
+	}
+	return nil
+}
+
 type CreateCollectionRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Data          *Collection            `protobuf:"bytes,1,opt,name=data,proto3" json:"data,omitempty"`
@@ -1183,7 +1443,7 @@ type CreateCollectionRequest struct {
 
 func (x *CreateCollectionRequest) Reset() {
 	*x = CreateCollectionRequest{}
-	mi := &file_domain_treasury_collection_collection_proto_msgTypes[11]
+	mi := &file_domain_treasury_collection_collection_proto_msgTypes[14]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1195,7 +1455,7 @@ func (x *CreateCollectionRequest) String() string {
 func (*CreateCollectionRequest) ProtoMessage() {}
 
 func (x *CreateCollectionRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_domain_treasury_collection_collection_proto_msgTypes[11]
+	mi := &file_domain_treasury_collection_collection_proto_msgTypes[14]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1208,7 +1468,7 @@ func (x *CreateCollectionRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use CreateCollectionRequest.ProtoReflect.Descriptor instead.
 func (*CreateCollectionRequest) Descriptor() ([]byte, []int) {
-	return file_domain_treasury_collection_collection_proto_rawDescGZIP(), []int{11}
+	return file_domain_treasury_collection_collection_proto_rawDescGZIP(), []int{14}
 }
 
 func (x *CreateCollectionRequest) GetData() *Collection {
@@ -1229,7 +1489,7 @@ type CreateCollectionResponse struct {
 
 func (x *CreateCollectionResponse) Reset() {
 	*x = CreateCollectionResponse{}
-	mi := &file_domain_treasury_collection_collection_proto_msgTypes[12]
+	mi := &file_domain_treasury_collection_collection_proto_msgTypes[15]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1241,7 +1501,7 @@ func (x *CreateCollectionResponse) String() string {
 func (*CreateCollectionResponse) ProtoMessage() {}
 
 func (x *CreateCollectionResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_domain_treasury_collection_collection_proto_msgTypes[12]
+	mi := &file_domain_treasury_collection_collection_proto_msgTypes[15]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1254,7 +1514,7 @@ func (x *CreateCollectionResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use CreateCollectionResponse.ProtoReflect.Descriptor instead.
 func (*CreateCollectionResponse) Descriptor() ([]byte, []int) {
-	return file_domain_treasury_collection_collection_proto_rawDescGZIP(), []int{12}
+	return file_domain_treasury_collection_collection_proto_rawDescGZIP(), []int{15}
 }
 
 func (x *CreateCollectionResponse) GetData() []*Collection {
@@ -1287,7 +1547,7 @@ type ReadCollectionRequest struct {
 
 func (x *ReadCollectionRequest) Reset() {
 	*x = ReadCollectionRequest{}
-	mi := &file_domain_treasury_collection_collection_proto_msgTypes[13]
+	mi := &file_domain_treasury_collection_collection_proto_msgTypes[16]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1299,7 +1559,7 @@ func (x *ReadCollectionRequest) String() string {
 func (*ReadCollectionRequest) ProtoMessage() {}
 
 func (x *ReadCollectionRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_domain_treasury_collection_collection_proto_msgTypes[13]
+	mi := &file_domain_treasury_collection_collection_proto_msgTypes[16]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1312,7 +1572,7 @@ func (x *ReadCollectionRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ReadCollectionRequest.ProtoReflect.Descriptor instead.
 func (*ReadCollectionRequest) Descriptor() ([]byte, []int) {
-	return file_domain_treasury_collection_collection_proto_rawDescGZIP(), []int{13}
+	return file_domain_treasury_collection_collection_proto_rawDescGZIP(), []int{16}
 }
 
 func (x *ReadCollectionRequest) GetData() *Collection {
@@ -1333,7 +1593,7 @@ type ReadCollectionResponse struct {
 
 func (x *ReadCollectionResponse) Reset() {
 	*x = ReadCollectionResponse{}
-	mi := &file_domain_treasury_collection_collection_proto_msgTypes[14]
+	mi := &file_domain_treasury_collection_collection_proto_msgTypes[17]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1345,7 +1605,7 @@ func (x *ReadCollectionResponse) String() string {
 func (*ReadCollectionResponse) ProtoMessage() {}
 
 func (x *ReadCollectionResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_domain_treasury_collection_collection_proto_msgTypes[14]
+	mi := &file_domain_treasury_collection_collection_proto_msgTypes[17]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1358,7 +1618,7 @@ func (x *ReadCollectionResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ReadCollectionResponse.ProtoReflect.Descriptor instead.
 func (*ReadCollectionResponse) Descriptor() ([]byte, []int) {
-	return file_domain_treasury_collection_collection_proto_rawDescGZIP(), []int{14}
+	return file_domain_treasury_collection_collection_proto_rawDescGZIP(), []int{17}
 }
 
 func (x *ReadCollectionResponse) GetData() []*Collection {
@@ -1391,7 +1651,7 @@ type UpdateCollectionRequest struct {
 
 func (x *UpdateCollectionRequest) Reset() {
 	*x = UpdateCollectionRequest{}
-	mi := &file_domain_treasury_collection_collection_proto_msgTypes[15]
+	mi := &file_domain_treasury_collection_collection_proto_msgTypes[18]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1403,7 +1663,7 @@ func (x *UpdateCollectionRequest) String() string {
 func (*UpdateCollectionRequest) ProtoMessage() {}
 
 func (x *UpdateCollectionRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_domain_treasury_collection_collection_proto_msgTypes[15]
+	mi := &file_domain_treasury_collection_collection_proto_msgTypes[18]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1416,7 +1676,7 @@ func (x *UpdateCollectionRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use UpdateCollectionRequest.ProtoReflect.Descriptor instead.
 func (*UpdateCollectionRequest) Descriptor() ([]byte, []int) {
-	return file_domain_treasury_collection_collection_proto_rawDescGZIP(), []int{15}
+	return file_domain_treasury_collection_collection_proto_rawDescGZIP(), []int{18}
 }
 
 func (x *UpdateCollectionRequest) GetData() *Collection {
@@ -1437,7 +1697,7 @@ type UpdateCollectionResponse struct {
 
 func (x *UpdateCollectionResponse) Reset() {
 	*x = UpdateCollectionResponse{}
-	mi := &file_domain_treasury_collection_collection_proto_msgTypes[16]
+	mi := &file_domain_treasury_collection_collection_proto_msgTypes[19]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1449,7 +1709,7 @@ func (x *UpdateCollectionResponse) String() string {
 func (*UpdateCollectionResponse) ProtoMessage() {}
 
 func (x *UpdateCollectionResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_domain_treasury_collection_collection_proto_msgTypes[16]
+	mi := &file_domain_treasury_collection_collection_proto_msgTypes[19]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1462,7 +1722,7 @@ func (x *UpdateCollectionResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use UpdateCollectionResponse.ProtoReflect.Descriptor instead.
 func (*UpdateCollectionResponse) Descriptor() ([]byte, []int) {
-	return file_domain_treasury_collection_collection_proto_rawDescGZIP(), []int{16}
+	return file_domain_treasury_collection_collection_proto_rawDescGZIP(), []int{19}
 }
 
 func (x *UpdateCollectionResponse) GetData() []*Collection {
@@ -1495,7 +1755,7 @@ type DeleteCollectionRequest struct {
 
 func (x *DeleteCollectionRequest) Reset() {
 	*x = DeleteCollectionRequest{}
-	mi := &file_domain_treasury_collection_collection_proto_msgTypes[17]
+	mi := &file_domain_treasury_collection_collection_proto_msgTypes[20]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1507,7 +1767,7 @@ func (x *DeleteCollectionRequest) String() string {
 func (*DeleteCollectionRequest) ProtoMessage() {}
 
 func (x *DeleteCollectionRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_domain_treasury_collection_collection_proto_msgTypes[17]
+	mi := &file_domain_treasury_collection_collection_proto_msgTypes[20]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1520,7 +1780,7 @@ func (x *DeleteCollectionRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use DeleteCollectionRequest.ProtoReflect.Descriptor instead.
 func (*DeleteCollectionRequest) Descriptor() ([]byte, []int) {
-	return file_domain_treasury_collection_collection_proto_rawDescGZIP(), []int{17}
+	return file_domain_treasury_collection_collection_proto_rawDescGZIP(), []int{20}
 }
 
 func (x *DeleteCollectionRequest) GetData() *Collection {
@@ -1540,7 +1800,7 @@ type DeleteCollectionResponse struct {
 
 func (x *DeleteCollectionResponse) Reset() {
 	*x = DeleteCollectionResponse{}
-	mi := &file_domain_treasury_collection_collection_proto_msgTypes[18]
+	mi := &file_domain_treasury_collection_collection_proto_msgTypes[21]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1552,7 +1812,7 @@ func (x *DeleteCollectionResponse) String() string {
 func (*DeleteCollectionResponse) ProtoMessage() {}
 
 func (x *DeleteCollectionResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_domain_treasury_collection_collection_proto_msgTypes[18]
+	mi := &file_domain_treasury_collection_collection_proto_msgTypes[21]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1565,7 +1825,7 @@ func (x *DeleteCollectionResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use DeleteCollectionResponse.ProtoReflect.Descriptor instead.
 func (*DeleteCollectionResponse) Descriptor() ([]byte, []int) {
-	return file_domain_treasury_collection_collection_proto_rawDescGZIP(), []int{18}
+	return file_domain_treasury_collection_collection_proto_rawDescGZIP(), []int{21}
 }
 
 func (x *DeleteCollectionResponse) GetSuccess() bool {
@@ -1594,7 +1854,7 @@ type ListCollectionsRequest struct {
 
 func (x *ListCollectionsRequest) Reset() {
 	*x = ListCollectionsRequest{}
-	mi := &file_domain_treasury_collection_collection_proto_msgTypes[19]
+	mi := &file_domain_treasury_collection_collection_proto_msgTypes[22]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1606,7 +1866,7 @@ func (x *ListCollectionsRequest) String() string {
 func (*ListCollectionsRequest) ProtoMessage() {}
 
 func (x *ListCollectionsRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_domain_treasury_collection_collection_proto_msgTypes[19]
+	mi := &file_domain_treasury_collection_collection_proto_msgTypes[22]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1619,7 +1879,7 @@ func (x *ListCollectionsRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ListCollectionsRequest.ProtoReflect.Descriptor instead.
 func (*ListCollectionsRequest) Descriptor() ([]byte, []int) {
-	return file_domain_treasury_collection_collection_proto_rawDescGZIP(), []int{19}
+	return file_domain_treasury_collection_collection_proto_rawDescGZIP(), []int{22}
 }
 
 func (x *ListCollectionsRequest) GetSearch() *common.SearchRequest {
@@ -1661,7 +1921,7 @@ type ListCollectionsResponse struct {
 
 func (x *ListCollectionsResponse) Reset() {
 	*x = ListCollectionsResponse{}
-	mi := &file_domain_treasury_collection_collection_proto_msgTypes[20]
+	mi := &file_domain_treasury_collection_collection_proto_msgTypes[23]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1673,7 +1933,7 @@ func (x *ListCollectionsResponse) String() string {
 func (*ListCollectionsResponse) ProtoMessage() {}
 
 func (x *ListCollectionsResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_domain_treasury_collection_collection_proto_msgTypes[20]
+	mi := &file_domain_treasury_collection_collection_proto_msgTypes[23]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1686,7 +1946,7 @@ func (x *ListCollectionsResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ListCollectionsResponse.ProtoReflect.Descriptor instead.
 func (*ListCollectionsResponse) Descriptor() ([]byte, []int) {
-	return file_domain_treasury_collection_collection_proto_rawDescGZIP(), []int{20}
+	return file_domain_treasury_collection_collection_proto_rawDescGZIP(), []int{23}
 }
 
 func (x *ListCollectionsResponse) GetData() []*Collection {
@@ -1722,7 +1982,7 @@ type GetCollectionListPageDataRequest struct {
 
 func (x *GetCollectionListPageDataRequest) Reset() {
 	*x = GetCollectionListPageDataRequest{}
-	mi := &file_domain_treasury_collection_collection_proto_msgTypes[21]
+	mi := &file_domain_treasury_collection_collection_proto_msgTypes[24]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1734,7 +1994,7 @@ func (x *GetCollectionListPageDataRequest) String() string {
 func (*GetCollectionListPageDataRequest) ProtoMessage() {}
 
 func (x *GetCollectionListPageDataRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_domain_treasury_collection_collection_proto_msgTypes[21]
+	mi := &file_domain_treasury_collection_collection_proto_msgTypes[24]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1747,7 +2007,7 @@ func (x *GetCollectionListPageDataRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetCollectionListPageDataRequest.ProtoReflect.Descriptor instead.
 func (*GetCollectionListPageDataRequest) Descriptor() ([]byte, []int) {
-	return file_domain_treasury_collection_collection_proto_rawDescGZIP(), []int{21}
+	return file_domain_treasury_collection_collection_proto_rawDescGZIP(), []int{24}
 }
 
 func (x *GetCollectionListPageDataRequest) GetPagination() *common.PaginationRequest {
@@ -1791,7 +2051,7 @@ type GetCollectionListPageDataResponse struct {
 
 func (x *GetCollectionListPageDataResponse) Reset() {
 	*x = GetCollectionListPageDataResponse{}
-	mi := &file_domain_treasury_collection_collection_proto_msgTypes[22]
+	mi := &file_domain_treasury_collection_collection_proto_msgTypes[25]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1803,7 +2063,7 @@ func (x *GetCollectionListPageDataResponse) String() string {
 func (*GetCollectionListPageDataResponse) ProtoMessage() {}
 
 func (x *GetCollectionListPageDataResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_domain_treasury_collection_collection_proto_msgTypes[22]
+	mi := &file_domain_treasury_collection_collection_proto_msgTypes[25]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1816,7 +2076,7 @@ func (x *GetCollectionListPageDataResponse) ProtoReflect() protoreflect.Message 
 
 // Deprecated: Use GetCollectionListPageDataResponse.ProtoReflect.Descriptor instead.
 func (*GetCollectionListPageDataResponse) Descriptor() ([]byte, []int) {
-	return file_domain_treasury_collection_collection_proto_rawDescGZIP(), []int{22}
+	return file_domain_treasury_collection_collection_proto_rawDescGZIP(), []int{25}
 }
 
 func (x *GetCollectionListPageDataResponse) GetCollectionList() []*Collection {
@@ -1863,7 +2123,7 @@ type GetCollectionItemPageDataRequest struct {
 
 func (x *GetCollectionItemPageDataRequest) Reset() {
 	*x = GetCollectionItemPageDataRequest{}
-	mi := &file_domain_treasury_collection_collection_proto_msgTypes[23]
+	mi := &file_domain_treasury_collection_collection_proto_msgTypes[26]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1875,7 +2135,7 @@ func (x *GetCollectionItemPageDataRequest) String() string {
 func (*GetCollectionItemPageDataRequest) ProtoMessage() {}
 
 func (x *GetCollectionItemPageDataRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_domain_treasury_collection_collection_proto_msgTypes[23]
+	mi := &file_domain_treasury_collection_collection_proto_msgTypes[26]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1888,7 +2148,7 @@ func (x *GetCollectionItemPageDataRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetCollectionItemPageDataRequest.ProtoReflect.Descriptor instead.
 func (*GetCollectionItemPageDataRequest) Descriptor() ([]byte, []int) {
-	return file_domain_treasury_collection_collection_proto_rawDescGZIP(), []int{23}
+	return file_domain_treasury_collection_collection_proto_rawDescGZIP(), []int{26}
 }
 
 func (x *GetCollectionItemPageDataRequest) GetCollectionId() string {
@@ -1909,7 +2169,7 @@ type GetCollectionItemPageDataResponse struct {
 
 func (x *GetCollectionItemPageDataResponse) Reset() {
 	*x = GetCollectionItemPageDataResponse{}
-	mi := &file_domain_treasury_collection_collection_proto_msgTypes[24]
+	mi := &file_domain_treasury_collection_collection_proto_msgTypes[27]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1921,7 +2181,7 @@ func (x *GetCollectionItemPageDataResponse) String() string {
 func (*GetCollectionItemPageDataResponse) ProtoMessage() {}
 
 func (x *GetCollectionItemPageDataResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_domain_treasury_collection_collection_proto_msgTypes[24]
+	mi := &file_domain_treasury_collection_collection_proto_msgTypes[27]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1934,7 +2194,7 @@ func (x *GetCollectionItemPageDataResponse) ProtoReflect() protoreflect.Message 
 
 // Deprecated: Use GetCollectionItemPageDataResponse.ProtoReflect.Descriptor instead.
 func (*GetCollectionItemPageDataResponse) Descriptor() ([]byte, []int) {
-	return file_domain_treasury_collection_collection_proto_rawDescGZIP(), []int{24}
+	return file_domain_treasury_collection_collection_proto_rawDescGZIP(), []int{27}
 }
 
 func (x *GetCollectionItemPageDataResponse) GetCollection() *Collection {
@@ -1967,7 +2227,7 @@ type ListByClientRequest struct {
 
 func (x *ListByClientRequest) Reset() {
 	*x = ListByClientRequest{}
-	mi := &file_domain_treasury_collection_collection_proto_msgTypes[25]
+	mi := &file_domain_treasury_collection_collection_proto_msgTypes[28]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1979,7 +2239,7 @@ func (x *ListByClientRequest) String() string {
 func (*ListByClientRequest) ProtoMessage() {}
 
 func (x *ListByClientRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_domain_treasury_collection_collection_proto_msgTypes[25]
+	mi := &file_domain_treasury_collection_collection_proto_msgTypes[28]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1992,7 +2252,7 @@ func (x *ListByClientRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ListByClientRequest.ProtoReflect.Descriptor instead.
 func (*ListByClientRequest) Descriptor() ([]byte, []int) {
-	return file_domain_treasury_collection_collection_proto_rawDescGZIP(), []int{25}
+	return file_domain_treasury_collection_collection_proto_rawDescGZIP(), []int{28}
 }
 
 func (x *ListByClientRequest) GetClientId() string {
@@ -2013,7 +2273,7 @@ type ListByClientResponse struct {
 
 func (x *ListByClientResponse) Reset() {
 	*x = ListByClientResponse{}
-	mi := &file_domain_treasury_collection_collection_proto_msgTypes[26]
+	mi := &file_domain_treasury_collection_collection_proto_msgTypes[29]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -2025,7 +2285,7 @@ func (x *ListByClientResponse) String() string {
 func (*ListByClientResponse) ProtoMessage() {}
 
 func (x *ListByClientResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_domain_treasury_collection_collection_proto_msgTypes[26]
+	mi := &file_domain_treasury_collection_collection_proto_msgTypes[29]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2038,7 +2298,7 @@ func (x *ListByClientResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ListByClientResponse.ProtoReflect.Descriptor instead.
 func (*ListByClientResponse) Descriptor() ([]byte, []int) {
-	return file_domain_treasury_collection_collection_proto_rawDescGZIP(), []int{26}
+	return file_domain_treasury_collection_collection_proto_rawDescGZIP(), []int{29}
 }
 
 func (x *ListByClientResponse) GetData() []*Collection {
@@ -2223,6 +2483,33 @@ const file_domain_treasury_collection_collection_proto_rawDesc = "" +
 	"\x05error\x18\b \x01(\v2\x17.domain.common.v1.ErrorH\x02R\x05error\x88\x01\x01B\r\n" +
 	"\v_revenue_idB\x19\n" +
 	"\x17_conflicting_revenue_idB\b\n" +
+	"\x06_error\"l\n" +
+	")ListAdvanceCollectionsForDashboardRequest\x12!\n" +
+	"\fworkspace_id\x18\x01 \x01(\tR\vworkspaceId\x12\x1c\n" +
+	"\n" +
+	"as_of_date\x18\x02 \x01(\tR\basOfDate\"\xfc\x03\n" +
+	"\x1dAdvanceCollectionDashboardRow\x12\x1d\n" +
+	"\n" +
+	"advance_id\x18\x01 \x01(\tR\tadvanceId\x12)\n" +
+	"\x10reference_number\x18\x02 \x01(\tR\x0freferenceNumber\x12+\n" +
+	"\x11counterparty_name\x18\x03 \x01(\tR\x10counterpartyName\x121\n" +
+	"\x04kind\x18\x04 \x01(\x0e2\x1d.domain.common.v1.AdvanceKindR\x04kind\x127\n" +
+	"\x06status\x18\x05 \x01(\x0e2\x1f.domain.common.v1.AdvanceStatusR\x06status\x12\x1a\n" +
+	"\bcurrency\x18\x06 \x01(\tR\bcurrency\x12!\n" +
+	"\ftotal_amount\x18\a \x01(\x03R\vtotalAmount\x12)\n" +
+	"\x10remaining_amount\x18\b \x01(\x03R\x0fremainingAmount\x12+\n" +
+	"\x11recognized_amount\x18\t \x01(\x03R\x10recognizedAmount\x12'\n" +
+	"\x0futilization_pct\x18\n" +
+	" \x01(\x02R\x0eutilizationPct\x12\x1d\n" +
+	"\n" +
+	"start_date\x18\v \x01(\tR\tstartDate\x12\x19\n" +
+	"\bend_date\x18\f \x01(\tR\aendDate\"\xb3\x02\n" +
+	"*ListAdvanceCollectionsForDashboardResponse\x12E\n" +
+	"\x04rows\x18\x01 \x03(\v21.domain.treasury.v1.AdvanceCollectionDashboardRowR\x04rows\x12'\n" +
+	"\x0ftotal_remaining\x18\x02 \x01(\x03R\x0etotalRemaining\x12!\n" +
+	"\factive_count\x18\x03 \x01(\x05R\vactiveCount\x124\n" +
+	"\x16fully_recognized_count\x18\x04 \x01(\x05R\x14fullyRecognizedCount\x122\n" +
+	"\x05error\x18\x05 \x01(\v2\x17.domain.common.v1.ErrorH\x00R\x05error\x88\x01\x01B\b\n" +
 	"\x06_error\"M\n" +
 	"\x17CreateCollectionRequest\x122\n" +
 	"\x04data\x18\x01 \x01(\v2\x1e.domain.treasury.v1.CollectionR\x04data\"\xa6\x01\n" +
@@ -2330,7 +2617,7 @@ func file_domain_treasury_collection_collection_proto_rawDescGZIP() []byte {
 	return file_domain_treasury_collection_collection_proto_rawDescData
 }
 
-var file_domain_treasury_collection_collection_proto_msgTypes = make([]protoimpl.MessageInfo, 27)
+var file_domain_treasury_collection_collection_proto_msgTypes = make([]protoimpl.MessageInfo, 30)
 var file_domain_treasury_collection_collection_proto_goTypes = []any{
 	(*Collection)(nil),                                                             // 0: domain.treasury.v1.Collection
 	(*AmortizeAdvanceCollectionRequest)(nil),                                       // 1: domain.treasury.v1.AmortizeAdvanceCollectionRequest
@@ -2343,104 +2630,111 @@ var file_domain_treasury_collection_collection_proto_goTypes = []any{
 	(*CancelAdvanceCollectionResponse)(nil),                                        // 8: domain.treasury.v1.CancelAdvanceCollectionResponse
 	(*RecognizeMilestoneAdvanceCollectionRequest)(nil),                             // 9: domain.treasury.v1.RecognizeMilestoneAdvanceCollectionRequest
 	(*RecognizeMilestoneAdvanceCollectionResponse)(nil),                            // 10: domain.treasury.v1.RecognizeMilestoneAdvanceCollectionResponse
-	(*CreateCollectionRequest)(nil),                                                // 11: domain.treasury.v1.CreateCollectionRequest
-	(*CreateCollectionResponse)(nil),                                               // 12: domain.treasury.v1.CreateCollectionResponse
-	(*ReadCollectionRequest)(nil),                                                  // 13: domain.treasury.v1.ReadCollectionRequest
-	(*ReadCollectionResponse)(nil),                                                 // 14: domain.treasury.v1.ReadCollectionResponse
-	(*UpdateCollectionRequest)(nil),                                                // 15: domain.treasury.v1.UpdateCollectionRequest
-	(*UpdateCollectionResponse)(nil),                                               // 16: domain.treasury.v1.UpdateCollectionResponse
-	(*DeleteCollectionRequest)(nil),                                                // 17: domain.treasury.v1.DeleteCollectionRequest
-	(*DeleteCollectionResponse)(nil),                                               // 18: domain.treasury.v1.DeleteCollectionResponse
-	(*ListCollectionsRequest)(nil),                                                 // 19: domain.treasury.v1.ListCollectionsRequest
-	(*ListCollectionsResponse)(nil),                                                // 20: domain.treasury.v1.ListCollectionsResponse
-	(*GetCollectionListPageDataRequest)(nil),                                       // 21: domain.treasury.v1.GetCollectionListPageDataRequest
-	(*GetCollectionListPageDataResponse)(nil),                                      // 22: domain.treasury.v1.GetCollectionListPageDataResponse
-	(*GetCollectionItemPageDataRequest)(nil),                                       // 23: domain.treasury.v1.GetCollectionItemPageDataRequest
-	(*GetCollectionItemPageDataResponse)(nil),                                      // 24: domain.treasury.v1.GetCollectionItemPageDataResponse
-	(*ListByClientRequest)(nil),                                                    // 25: domain.treasury.v1.ListByClientRequest
-	(*ListByClientResponse)(nil),                                                   // 26: domain.treasury.v1.ListByClientResponse
-	(*subscription.Subscription)(nil),                                              // 27: domain.subscription.v1.Subscription
-	(*collection_profile_collection_method.CollectionProfileCollectionMethod)(nil), // 28: domain.treasury.v1.CollectionProfileCollectionMethod
-	(advance_kind.AdvanceKind)(0),                                                  // 29: domain.common.v1.AdvanceKind
-	(advance_kind.AdvanceStatus)(0),                                                // 30: domain.common.v1.AdvanceStatus
-	(advance_kind.AdvanceProrationPolicy)(0),                                       // 31: domain.common.v1.AdvanceProrationPolicy
-	(advance_kind.AdvanceAmortizeOutcome)(0),                                       // 32: domain.common.v1.AdvanceAmortizeOutcome
-	(*common.Error)(nil),                                                           // 33: domain.common.v1.Error
-	(*common.SearchRequest)(nil),                                                   // 34: domain.common.v1.SearchRequest
-	(*common.FilterRequest)(nil),                                                   // 35: domain.common.v1.FilterRequest
-	(*common.SortRequest)(nil),                                                     // 36: domain.common.v1.SortRequest
-	(*common.PaginationRequest)(nil),                                               // 37: domain.common.v1.PaginationRequest
-	(*common.PaginationResponse)(nil),                                              // 38: domain.common.v1.PaginationResponse
-	(*common.SearchResult)(nil),                                                    // 39: domain.common.v1.SearchResult
+	(*ListAdvanceCollectionsForDashboardRequest)(nil),                              // 11: domain.treasury.v1.ListAdvanceCollectionsForDashboardRequest
+	(*AdvanceCollectionDashboardRow)(nil),                                          // 12: domain.treasury.v1.AdvanceCollectionDashboardRow
+	(*ListAdvanceCollectionsForDashboardResponse)(nil),                             // 13: domain.treasury.v1.ListAdvanceCollectionsForDashboardResponse
+	(*CreateCollectionRequest)(nil),                                                // 14: domain.treasury.v1.CreateCollectionRequest
+	(*CreateCollectionResponse)(nil),                                               // 15: domain.treasury.v1.CreateCollectionResponse
+	(*ReadCollectionRequest)(nil),                                                  // 16: domain.treasury.v1.ReadCollectionRequest
+	(*ReadCollectionResponse)(nil),                                                 // 17: domain.treasury.v1.ReadCollectionResponse
+	(*UpdateCollectionRequest)(nil),                                                // 18: domain.treasury.v1.UpdateCollectionRequest
+	(*UpdateCollectionResponse)(nil),                                               // 19: domain.treasury.v1.UpdateCollectionResponse
+	(*DeleteCollectionRequest)(nil),                                                // 20: domain.treasury.v1.DeleteCollectionRequest
+	(*DeleteCollectionResponse)(nil),                                               // 21: domain.treasury.v1.DeleteCollectionResponse
+	(*ListCollectionsRequest)(nil),                                                 // 22: domain.treasury.v1.ListCollectionsRequest
+	(*ListCollectionsResponse)(nil),                                                // 23: domain.treasury.v1.ListCollectionsResponse
+	(*GetCollectionListPageDataRequest)(nil),                                       // 24: domain.treasury.v1.GetCollectionListPageDataRequest
+	(*GetCollectionListPageDataResponse)(nil),                                      // 25: domain.treasury.v1.GetCollectionListPageDataResponse
+	(*GetCollectionItemPageDataRequest)(nil),                                       // 26: domain.treasury.v1.GetCollectionItemPageDataRequest
+	(*GetCollectionItemPageDataResponse)(nil),                                      // 27: domain.treasury.v1.GetCollectionItemPageDataResponse
+	(*ListByClientRequest)(nil),                                                    // 28: domain.treasury.v1.ListByClientRequest
+	(*ListByClientResponse)(nil),                                                   // 29: domain.treasury.v1.ListByClientResponse
+	(*subscription.Subscription)(nil),                                              // 30: domain.subscription.v1.Subscription
+	(*collection_profile_collection_method.CollectionProfileCollectionMethod)(nil), // 31: domain.treasury.v1.CollectionProfileCollectionMethod
+	(advance_kind.AdvanceKind)(0),                                                  // 32: domain.common.v1.AdvanceKind
+	(advance_kind.AdvanceStatus)(0),                                                // 33: domain.common.v1.AdvanceStatus
+	(advance_kind.AdvanceProrationPolicy)(0),                                       // 34: domain.common.v1.AdvanceProrationPolicy
+	(advance_kind.AdvanceAmortizeOutcome)(0),                                       // 35: domain.common.v1.AdvanceAmortizeOutcome
+	(*common.Error)(nil),                                                           // 36: domain.common.v1.Error
+	(*common.SearchRequest)(nil),                                                   // 37: domain.common.v1.SearchRequest
+	(*common.FilterRequest)(nil),                                                   // 38: domain.common.v1.FilterRequest
+	(*common.SortRequest)(nil),                                                     // 39: domain.common.v1.SortRequest
+	(*common.PaginationRequest)(nil),                                               // 40: domain.common.v1.PaginationRequest
+	(*common.PaginationResponse)(nil),                                              // 41: domain.common.v1.PaginationResponse
+	(*common.SearchResult)(nil),                                                    // 42: domain.common.v1.SearchResult
 }
 var file_domain_treasury_collection_collection_proto_depIdxs = []int32{
-	27, // 0: domain.treasury.v1.Collection.subscription:type_name -> domain.subscription.v1.Subscription
-	28, // 1: domain.treasury.v1.Collection.collection_method:type_name -> domain.treasury.v1.CollectionProfileCollectionMethod
-	29, // 2: domain.treasury.v1.Collection.advance_kind:type_name -> domain.common.v1.AdvanceKind
-	30, // 3: domain.treasury.v1.Collection.advance_status:type_name -> domain.common.v1.AdvanceStatus
-	31, // 4: domain.treasury.v1.Collection.advance_proration_policy:type_name -> domain.common.v1.AdvanceProrationPolicy
-	32, // 5: domain.treasury.v1.AmortizeAdvanceCollectionResponse.outcome:type_name -> domain.common.v1.AdvanceAmortizeOutcome
-	30, // 6: domain.treasury.v1.AmortizeAdvanceCollectionResponse.new_status:type_name -> domain.common.v1.AdvanceStatus
-	33, // 7: domain.treasury.v1.AmortizeAdvanceCollectionResponse.error:type_name -> domain.common.v1.Error
-	30, // 8: domain.treasury.v1.SettleUnscheduledAdvanceCollectionResponse.new_status:type_name -> domain.common.v1.AdvanceStatus
-	33, // 9: domain.treasury.v1.SettleUnscheduledAdvanceCollectionResponse.error:type_name -> domain.common.v1.Error
-	30, // 10: domain.treasury.v1.RefundUnscheduledAdvanceCollectionResponse.new_status:type_name -> domain.common.v1.AdvanceStatus
-	33, // 11: domain.treasury.v1.RefundUnscheduledAdvanceCollectionResponse.error:type_name -> domain.common.v1.Error
-	30, // 12: domain.treasury.v1.CancelAdvanceCollectionResponse.new_status:type_name -> domain.common.v1.AdvanceStatus
-	33, // 13: domain.treasury.v1.CancelAdvanceCollectionResponse.error:type_name -> domain.common.v1.Error
-	32, // 14: domain.treasury.v1.RecognizeMilestoneAdvanceCollectionResponse.outcome:type_name -> domain.common.v1.AdvanceAmortizeOutcome
-	30, // 15: domain.treasury.v1.RecognizeMilestoneAdvanceCollectionResponse.new_status:type_name -> domain.common.v1.AdvanceStatus
-	33, // 16: domain.treasury.v1.RecognizeMilestoneAdvanceCollectionResponse.error:type_name -> domain.common.v1.Error
-	0,  // 17: domain.treasury.v1.CreateCollectionRequest.data:type_name -> domain.treasury.v1.Collection
-	0,  // 18: domain.treasury.v1.CreateCollectionResponse.data:type_name -> domain.treasury.v1.Collection
-	33, // 19: domain.treasury.v1.CreateCollectionResponse.error:type_name -> domain.common.v1.Error
-	0,  // 20: domain.treasury.v1.ReadCollectionRequest.data:type_name -> domain.treasury.v1.Collection
-	0,  // 21: domain.treasury.v1.ReadCollectionResponse.data:type_name -> domain.treasury.v1.Collection
-	33, // 22: domain.treasury.v1.ReadCollectionResponse.error:type_name -> domain.common.v1.Error
-	0,  // 23: domain.treasury.v1.UpdateCollectionRequest.data:type_name -> domain.treasury.v1.Collection
-	0,  // 24: domain.treasury.v1.UpdateCollectionResponse.data:type_name -> domain.treasury.v1.Collection
-	33, // 25: domain.treasury.v1.UpdateCollectionResponse.error:type_name -> domain.common.v1.Error
-	0,  // 26: domain.treasury.v1.DeleteCollectionRequest.data:type_name -> domain.treasury.v1.Collection
-	33, // 27: domain.treasury.v1.DeleteCollectionResponse.error:type_name -> domain.common.v1.Error
-	34, // 28: domain.treasury.v1.ListCollectionsRequest.search:type_name -> domain.common.v1.SearchRequest
-	35, // 29: domain.treasury.v1.ListCollectionsRequest.filters:type_name -> domain.common.v1.FilterRequest
-	36, // 30: domain.treasury.v1.ListCollectionsRequest.sort:type_name -> domain.common.v1.SortRequest
-	37, // 31: domain.treasury.v1.ListCollectionsRequest.pagination:type_name -> domain.common.v1.PaginationRequest
-	0,  // 32: domain.treasury.v1.ListCollectionsResponse.data:type_name -> domain.treasury.v1.Collection
-	33, // 33: domain.treasury.v1.ListCollectionsResponse.error:type_name -> domain.common.v1.Error
-	37, // 34: domain.treasury.v1.GetCollectionListPageDataRequest.pagination:type_name -> domain.common.v1.PaginationRequest
-	35, // 35: domain.treasury.v1.GetCollectionListPageDataRequest.filters:type_name -> domain.common.v1.FilterRequest
-	36, // 36: domain.treasury.v1.GetCollectionListPageDataRequest.sort:type_name -> domain.common.v1.SortRequest
-	34, // 37: domain.treasury.v1.GetCollectionListPageDataRequest.search:type_name -> domain.common.v1.SearchRequest
-	0,  // 38: domain.treasury.v1.GetCollectionListPageDataResponse.collection_list:type_name -> domain.treasury.v1.Collection
-	33, // 39: domain.treasury.v1.GetCollectionListPageDataResponse.error:type_name -> domain.common.v1.Error
-	38, // 40: domain.treasury.v1.GetCollectionListPageDataResponse.pagination:type_name -> domain.common.v1.PaginationResponse
-	39, // 41: domain.treasury.v1.GetCollectionListPageDataResponse.search_results:type_name -> domain.common.v1.SearchResult
-	0,  // 42: domain.treasury.v1.GetCollectionItemPageDataResponse.collection:type_name -> domain.treasury.v1.Collection
-	33, // 43: domain.treasury.v1.GetCollectionItemPageDataResponse.error:type_name -> domain.common.v1.Error
-	0,  // 44: domain.treasury.v1.ListByClientResponse.data:type_name -> domain.treasury.v1.Collection
-	33, // 45: domain.treasury.v1.ListByClientResponse.error:type_name -> domain.common.v1.Error
-	11, // 46: domain.treasury.v1.CollectionDomainService.CreateCollection:input_type -> domain.treasury.v1.CreateCollectionRequest
-	13, // 47: domain.treasury.v1.CollectionDomainService.ReadCollection:input_type -> domain.treasury.v1.ReadCollectionRequest
-	15, // 48: domain.treasury.v1.CollectionDomainService.UpdateCollection:input_type -> domain.treasury.v1.UpdateCollectionRequest
-	17, // 49: domain.treasury.v1.CollectionDomainService.DeleteCollection:input_type -> domain.treasury.v1.DeleteCollectionRequest
-	19, // 50: domain.treasury.v1.CollectionDomainService.ListCollections:input_type -> domain.treasury.v1.ListCollectionsRequest
-	21, // 51: domain.treasury.v1.CollectionDomainService.GetCollectionListPageData:input_type -> domain.treasury.v1.GetCollectionListPageDataRequest
-	23, // 52: domain.treasury.v1.CollectionDomainService.GetCollectionItemPageData:input_type -> domain.treasury.v1.GetCollectionItemPageDataRequest
-	25, // 53: domain.treasury.v1.CollectionDomainService.ListByClient:input_type -> domain.treasury.v1.ListByClientRequest
-	12, // 54: domain.treasury.v1.CollectionDomainService.CreateCollection:output_type -> domain.treasury.v1.CreateCollectionResponse
-	14, // 55: domain.treasury.v1.CollectionDomainService.ReadCollection:output_type -> domain.treasury.v1.ReadCollectionResponse
-	16, // 56: domain.treasury.v1.CollectionDomainService.UpdateCollection:output_type -> domain.treasury.v1.UpdateCollectionResponse
-	18, // 57: domain.treasury.v1.CollectionDomainService.DeleteCollection:output_type -> domain.treasury.v1.DeleteCollectionResponse
-	20, // 58: domain.treasury.v1.CollectionDomainService.ListCollections:output_type -> domain.treasury.v1.ListCollectionsResponse
-	22, // 59: domain.treasury.v1.CollectionDomainService.GetCollectionListPageData:output_type -> domain.treasury.v1.GetCollectionListPageDataResponse
-	24, // 60: domain.treasury.v1.CollectionDomainService.GetCollectionItemPageData:output_type -> domain.treasury.v1.GetCollectionItemPageDataResponse
-	26, // 61: domain.treasury.v1.CollectionDomainService.ListByClient:output_type -> domain.treasury.v1.ListByClientResponse
-	54, // [54:62] is the sub-list for method output_type
-	46, // [46:54] is the sub-list for method input_type
-	46, // [46:46] is the sub-list for extension type_name
-	46, // [46:46] is the sub-list for extension extendee
-	0,  // [0:46] is the sub-list for field type_name
+	30, // 0: domain.treasury.v1.Collection.subscription:type_name -> domain.subscription.v1.Subscription
+	31, // 1: domain.treasury.v1.Collection.collection_method:type_name -> domain.treasury.v1.CollectionProfileCollectionMethod
+	32, // 2: domain.treasury.v1.Collection.advance_kind:type_name -> domain.common.v1.AdvanceKind
+	33, // 3: domain.treasury.v1.Collection.advance_status:type_name -> domain.common.v1.AdvanceStatus
+	34, // 4: domain.treasury.v1.Collection.advance_proration_policy:type_name -> domain.common.v1.AdvanceProrationPolicy
+	35, // 5: domain.treasury.v1.AmortizeAdvanceCollectionResponse.outcome:type_name -> domain.common.v1.AdvanceAmortizeOutcome
+	33, // 6: domain.treasury.v1.AmortizeAdvanceCollectionResponse.new_status:type_name -> domain.common.v1.AdvanceStatus
+	36, // 7: domain.treasury.v1.AmortizeAdvanceCollectionResponse.error:type_name -> domain.common.v1.Error
+	33, // 8: domain.treasury.v1.SettleUnscheduledAdvanceCollectionResponse.new_status:type_name -> domain.common.v1.AdvanceStatus
+	36, // 9: domain.treasury.v1.SettleUnscheduledAdvanceCollectionResponse.error:type_name -> domain.common.v1.Error
+	33, // 10: domain.treasury.v1.RefundUnscheduledAdvanceCollectionResponse.new_status:type_name -> domain.common.v1.AdvanceStatus
+	36, // 11: domain.treasury.v1.RefundUnscheduledAdvanceCollectionResponse.error:type_name -> domain.common.v1.Error
+	33, // 12: domain.treasury.v1.CancelAdvanceCollectionResponse.new_status:type_name -> domain.common.v1.AdvanceStatus
+	36, // 13: domain.treasury.v1.CancelAdvanceCollectionResponse.error:type_name -> domain.common.v1.Error
+	35, // 14: domain.treasury.v1.RecognizeMilestoneAdvanceCollectionResponse.outcome:type_name -> domain.common.v1.AdvanceAmortizeOutcome
+	33, // 15: domain.treasury.v1.RecognizeMilestoneAdvanceCollectionResponse.new_status:type_name -> domain.common.v1.AdvanceStatus
+	36, // 16: domain.treasury.v1.RecognizeMilestoneAdvanceCollectionResponse.error:type_name -> domain.common.v1.Error
+	32, // 17: domain.treasury.v1.AdvanceCollectionDashboardRow.kind:type_name -> domain.common.v1.AdvanceKind
+	33, // 18: domain.treasury.v1.AdvanceCollectionDashboardRow.status:type_name -> domain.common.v1.AdvanceStatus
+	12, // 19: domain.treasury.v1.ListAdvanceCollectionsForDashboardResponse.rows:type_name -> domain.treasury.v1.AdvanceCollectionDashboardRow
+	36, // 20: domain.treasury.v1.ListAdvanceCollectionsForDashboardResponse.error:type_name -> domain.common.v1.Error
+	0,  // 21: domain.treasury.v1.CreateCollectionRequest.data:type_name -> domain.treasury.v1.Collection
+	0,  // 22: domain.treasury.v1.CreateCollectionResponse.data:type_name -> domain.treasury.v1.Collection
+	36, // 23: domain.treasury.v1.CreateCollectionResponse.error:type_name -> domain.common.v1.Error
+	0,  // 24: domain.treasury.v1.ReadCollectionRequest.data:type_name -> domain.treasury.v1.Collection
+	0,  // 25: domain.treasury.v1.ReadCollectionResponse.data:type_name -> domain.treasury.v1.Collection
+	36, // 26: domain.treasury.v1.ReadCollectionResponse.error:type_name -> domain.common.v1.Error
+	0,  // 27: domain.treasury.v1.UpdateCollectionRequest.data:type_name -> domain.treasury.v1.Collection
+	0,  // 28: domain.treasury.v1.UpdateCollectionResponse.data:type_name -> domain.treasury.v1.Collection
+	36, // 29: domain.treasury.v1.UpdateCollectionResponse.error:type_name -> domain.common.v1.Error
+	0,  // 30: domain.treasury.v1.DeleteCollectionRequest.data:type_name -> domain.treasury.v1.Collection
+	36, // 31: domain.treasury.v1.DeleteCollectionResponse.error:type_name -> domain.common.v1.Error
+	37, // 32: domain.treasury.v1.ListCollectionsRequest.search:type_name -> domain.common.v1.SearchRequest
+	38, // 33: domain.treasury.v1.ListCollectionsRequest.filters:type_name -> domain.common.v1.FilterRequest
+	39, // 34: domain.treasury.v1.ListCollectionsRequest.sort:type_name -> domain.common.v1.SortRequest
+	40, // 35: domain.treasury.v1.ListCollectionsRequest.pagination:type_name -> domain.common.v1.PaginationRequest
+	0,  // 36: domain.treasury.v1.ListCollectionsResponse.data:type_name -> domain.treasury.v1.Collection
+	36, // 37: domain.treasury.v1.ListCollectionsResponse.error:type_name -> domain.common.v1.Error
+	40, // 38: domain.treasury.v1.GetCollectionListPageDataRequest.pagination:type_name -> domain.common.v1.PaginationRequest
+	38, // 39: domain.treasury.v1.GetCollectionListPageDataRequest.filters:type_name -> domain.common.v1.FilterRequest
+	39, // 40: domain.treasury.v1.GetCollectionListPageDataRequest.sort:type_name -> domain.common.v1.SortRequest
+	37, // 41: domain.treasury.v1.GetCollectionListPageDataRequest.search:type_name -> domain.common.v1.SearchRequest
+	0,  // 42: domain.treasury.v1.GetCollectionListPageDataResponse.collection_list:type_name -> domain.treasury.v1.Collection
+	36, // 43: domain.treasury.v1.GetCollectionListPageDataResponse.error:type_name -> domain.common.v1.Error
+	41, // 44: domain.treasury.v1.GetCollectionListPageDataResponse.pagination:type_name -> domain.common.v1.PaginationResponse
+	42, // 45: domain.treasury.v1.GetCollectionListPageDataResponse.search_results:type_name -> domain.common.v1.SearchResult
+	0,  // 46: domain.treasury.v1.GetCollectionItemPageDataResponse.collection:type_name -> domain.treasury.v1.Collection
+	36, // 47: domain.treasury.v1.GetCollectionItemPageDataResponse.error:type_name -> domain.common.v1.Error
+	0,  // 48: domain.treasury.v1.ListByClientResponse.data:type_name -> domain.treasury.v1.Collection
+	36, // 49: domain.treasury.v1.ListByClientResponse.error:type_name -> domain.common.v1.Error
+	14, // 50: domain.treasury.v1.CollectionDomainService.CreateCollection:input_type -> domain.treasury.v1.CreateCollectionRequest
+	16, // 51: domain.treasury.v1.CollectionDomainService.ReadCollection:input_type -> domain.treasury.v1.ReadCollectionRequest
+	18, // 52: domain.treasury.v1.CollectionDomainService.UpdateCollection:input_type -> domain.treasury.v1.UpdateCollectionRequest
+	20, // 53: domain.treasury.v1.CollectionDomainService.DeleteCollection:input_type -> domain.treasury.v1.DeleteCollectionRequest
+	22, // 54: domain.treasury.v1.CollectionDomainService.ListCollections:input_type -> domain.treasury.v1.ListCollectionsRequest
+	24, // 55: domain.treasury.v1.CollectionDomainService.GetCollectionListPageData:input_type -> domain.treasury.v1.GetCollectionListPageDataRequest
+	26, // 56: domain.treasury.v1.CollectionDomainService.GetCollectionItemPageData:input_type -> domain.treasury.v1.GetCollectionItemPageDataRequest
+	28, // 57: domain.treasury.v1.CollectionDomainService.ListByClient:input_type -> domain.treasury.v1.ListByClientRequest
+	15, // 58: domain.treasury.v1.CollectionDomainService.CreateCollection:output_type -> domain.treasury.v1.CreateCollectionResponse
+	17, // 59: domain.treasury.v1.CollectionDomainService.ReadCollection:output_type -> domain.treasury.v1.ReadCollectionResponse
+	19, // 60: domain.treasury.v1.CollectionDomainService.UpdateCollection:output_type -> domain.treasury.v1.UpdateCollectionResponse
+	21, // 61: domain.treasury.v1.CollectionDomainService.DeleteCollection:output_type -> domain.treasury.v1.DeleteCollectionResponse
+	23, // 62: domain.treasury.v1.CollectionDomainService.ListCollections:output_type -> domain.treasury.v1.ListCollectionsResponse
+	25, // 63: domain.treasury.v1.CollectionDomainService.GetCollectionListPageData:output_type -> domain.treasury.v1.GetCollectionListPageDataResponse
+	27, // 64: domain.treasury.v1.CollectionDomainService.GetCollectionItemPageData:output_type -> domain.treasury.v1.GetCollectionItemPageDataResponse
+	29, // 65: domain.treasury.v1.CollectionDomainService.ListByClient:output_type -> domain.treasury.v1.ListByClientResponse
+	58, // [58:66] is the sub-list for method output_type
+	50, // [50:58] is the sub-list for method input_type
+	50, // [50:50] is the sub-list for extension type_name
+	50, // [50:50] is the sub-list for extension extendee
+	0,  // [0:50] is the sub-list for field type_name
 }
 
 func init() { file_domain_treasury_collection_collection_proto_init() }
@@ -2456,23 +2750,24 @@ func file_domain_treasury_collection_collection_proto_init() {
 	file_domain_treasury_collection_collection_proto_msgTypes[8].OneofWrappers = []any{}
 	file_domain_treasury_collection_collection_proto_msgTypes[9].OneofWrappers = []any{}
 	file_domain_treasury_collection_collection_proto_msgTypes[10].OneofWrappers = []any{}
-	file_domain_treasury_collection_collection_proto_msgTypes[12].OneofWrappers = []any{}
-	file_domain_treasury_collection_collection_proto_msgTypes[14].OneofWrappers = []any{}
-	file_domain_treasury_collection_collection_proto_msgTypes[16].OneofWrappers = []any{}
-	file_domain_treasury_collection_collection_proto_msgTypes[18].OneofWrappers = []any{}
+	file_domain_treasury_collection_collection_proto_msgTypes[13].OneofWrappers = []any{}
+	file_domain_treasury_collection_collection_proto_msgTypes[15].OneofWrappers = []any{}
+	file_domain_treasury_collection_collection_proto_msgTypes[17].OneofWrappers = []any{}
 	file_domain_treasury_collection_collection_proto_msgTypes[19].OneofWrappers = []any{}
-	file_domain_treasury_collection_collection_proto_msgTypes[20].OneofWrappers = []any{}
 	file_domain_treasury_collection_collection_proto_msgTypes[21].OneofWrappers = []any{}
 	file_domain_treasury_collection_collection_proto_msgTypes[22].OneofWrappers = []any{}
+	file_domain_treasury_collection_collection_proto_msgTypes[23].OneofWrappers = []any{}
 	file_domain_treasury_collection_collection_proto_msgTypes[24].OneofWrappers = []any{}
-	file_domain_treasury_collection_collection_proto_msgTypes[26].OneofWrappers = []any{}
+	file_domain_treasury_collection_collection_proto_msgTypes[25].OneofWrappers = []any{}
+	file_domain_treasury_collection_collection_proto_msgTypes[27].OneofWrappers = []any{}
+	file_domain_treasury_collection_collection_proto_msgTypes[29].OneofWrappers = []any{}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
 		File: protoimpl.DescBuilder{
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_domain_treasury_collection_collection_proto_rawDesc), len(file_domain_treasury_collection_collection_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   27,
+			NumMessages:   30,
 			NumExtensions: 0,
 			NumServices:   1,
 		},

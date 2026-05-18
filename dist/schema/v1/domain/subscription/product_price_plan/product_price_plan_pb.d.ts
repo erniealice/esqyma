@@ -93,6 +93,19 @@ export type ProductPricePlan = Message<"domain.subscription.v1.ProductPricePlan"
      * @generated from field: optional string job_template_phase_id = 19;
      */
     jobTemplatePhaseId?: string;
+    /**
+     * Tax override fields — Phase 1 tax integration
+     * When set, overrides the parent product's tax_treatment_id for this specific price plan line.
+     *
+     * @generated from field: optional string tax_treatment_id = 20;
+     */
+    taxTreatmentId?: string;
+    /**
+     * When set, overrides the parent product's withholding_class_id for this specific price plan line.
+     *
+     * @generated from field: optional string withholding_class_id = 21;
+     */
+    withholdingClassId?: string;
 };
 /**
  * Describes the message domain.subscription.v1.ProductPricePlan.

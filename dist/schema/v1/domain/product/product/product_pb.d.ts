@@ -115,6 +115,19 @@ export type Product = Message<"domain.product.v1.Product"> & {
      * @generated from field: optional string workspace_id = 30;
      */
     workspaceId?: string;
+    /**
+     * Tax fields — Phase 1 tax integration
+     * FK to tax_treatment — jurisdiction-agnostic taxability category (STANDARD, REDUCED, ZERO_RATED, EXEMPT, OUT_OF_SCOPE)
+     *
+     * @generated from field: optional string tax_treatment_id = 31;
+     */
+    taxTreatmentId?: string;
+    /**
+     * FK to tax_class — withholding category (e.g. PROFESSIONAL_CORPORATE, RENTAL). Used in WITHHOLDING compute pass.
+     *
+     * @generated from field: optional string withholding_class_id = 32;
+     */
+    withholdingClassId?: string;
 };
 /**
  * Describes the message domain.product.v1.Product.

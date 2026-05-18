@@ -464,6 +464,94 @@ export type SearchPlanResult = Message<"domain.subscription.v1.SearchPlanResult"
  */
 export declare const SearchPlanResultSchema: GenMessage<SearchPlanResult>;
 /**
+ * CustomizePlanForClientRequest carries the inputs to clone a master Plan +
+ * PricePlan tree under a client's namespace.
+ *
+ * @generated from message domain.subscription.v1.CustomizePlanForClientRequest
+ */
+export type CustomizePlanForClientRequest = Message<"domain.subscription.v1.CustomizePlanForClientRequest"> & {
+    /**
+     * Plan to clone from
+     *
+     * @generated from field: string source_plan_id = 1;
+     */
+    sourcePlanId: string;
+    /**
+     * PricePlan to clone from
+     *
+     * @generated from field: string source_price_plan_id = 2;
+     */
+    sourcePricePlanId: string;
+    /**
+     * Target client_id stamped on every cloned row
+     *
+     * @generated from field: string client_id = 3;
+     */
+    clientId: string;
+    /**
+     * Optional: when set, repoint subscription.price_plan_id atomically
+     *
+     * @generated from field: optional string subscription_id = 4;
+     */
+    subscriptionId?: string;
+    /**
+     * Pre-built display name; falls back to "<Client> - Price Schedule" when empty
+     *
+     * @generated from field: optional string new_schedule_name = 5;
+     */
+    newScheduleName?: string;
+};
+/**
+ * Describes the message domain.subscription.v1.CustomizePlanForClientRequest.
+ * Use `create(CustomizePlanForClientRequestSchema)` to create a new message.
+ */
+export declare const CustomizePlanForClientRequestSchema: GenMessage<CustomizePlanForClientRequest>;
+/**
+ * CustomizePlanForClientResponse carries the resolved IDs produced by the
+ * flow. reused = true iff a matching client PriceSchedule was found and
+ * reused (no new schedule row was inserted). Full PricePlan/PriceSchedule
+ * records are intentionally omitted (cross-package proto imports would
+ * circle back through plan.proto); callers needing the full rows re-read by
+ * ID. The full Plan row is included since it is local to this proto.
+ *
+ * @generated from message domain.subscription.v1.CustomizePlanForClientResponse
+ */
+export type CustomizePlanForClientResponse = Message<"domain.subscription.v1.CustomizePlanForClientResponse"> & {
+    /**
+     * @generated from field: bool success = 1;
+     */
+    success: boolean;
+    /**
+     * @generated from field: optional domain.common.v1.Error error = 2;
+     */
+    error?: Error;
+    /**
+     * @generated from field: string new_plan_id = 3;
+     */
+    newPlanId: string;
+    /**
+     * @generated from field: string new_price_plan_id = 4;
+     */
+    newPricePlanId: string;
+    /**
+     * @generated from field: string new_price_schedule_id = 5;
+     */
+    newPriceScheduleId: string;
+    /**
+     * @generated from field: bool reused = 6;
+     */
+    reused: boolean;
+    /**
+     * @generated from field: optional domain.subscription.v1.Plan plan = 7;
+     */
+    plan?: Plan;
+};
+/**
+ * Describes the message domain.subscription.v1.CustomizePlanForClientResponse.
+ * Use `create(CustomizePlanForClientResponseSchema)` to create a new message.
+ */
+export declare const CustomizePlanForClientResponseSchema: GenMessage<CustomizePlanForClientResponse>;
+/**
  * @generated from service domain.subscription.v1.PlanDomainService
  */
 export declare const PlanDomainService: GenService<{

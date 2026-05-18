@@ -7,6 +7,7 @@ import type { SortRequest } from "../../common/sort_pb";
 import type { Supplier } from "../../entity/supplier/supplier_pb";
 import type { Location } from "../../entity/location/location_pb";
 import type { PaymentTerm } from "../../entity/payment_term/payment_term_pb";
+import type { CostPlanBillingKind } from "../../procurement/cost_plan/cost_plan_pb";
 import type { Message } from "@bufbuild/protobuf";
 /**
  * Describes the file domain/expenditure/purchase_order/purchase_order.proto.
@@ -204,6 +205,20 @@ export type PurchaseOrder = Message<"domain.expenditure.v1.PurchaseOrder"> & {
      * @generated from field: optional string procurement_request_id = 39;
      */
     procurementRequestId?: string;
+    /**
+     * Supplier subscription back-edges (supplier-subscriptions plan)
+     *
+     * FK to SupplierSubscription (subscription-driven PO)
+     *
+     * @generated from field: optional string supplier_subscription_id = 40;
+     */
+    supplierSubscriptionId?: string;
+    /**
+     * denormalized from cost_plan for operational filtering
+     *
+     * @generated from field: optional domain.procurement.v1.CostPlanBillingKind billing_kind = 41;
+     */
+    billingKind?: CostPlanBillingKind;
 };
 /**
  * Describes the message domain.expenditure.v1.PurchaseOrder.

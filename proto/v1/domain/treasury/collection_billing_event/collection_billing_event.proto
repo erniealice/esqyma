@@ -1,0 +1,80 @@
+syntax = "proto3";
+
+package domain.treasury.v1;
+
+option go_package = "github.com/erniealice/esqyma/golang/v1/domain/treasury/collection_billing_event";
+
+import "domain/common/error.proto";
+import "domain/common/pagination.proto";
+import "domain/common/search.proto";
+import "domain/common/filter.proto";
+import "domain/common/sort.proto";
+
+import "options/db.proto";
+
+// Junction entity linking a MILESTONE advance TreasuryCollection to one or more
+// BillingEvent rows. tranche_amount records the portion of the advance assigned
+// to each milestone; SUM(tranche_amount) <= TreasuryCollection.amount enforced
+// in application layer (no DB constraint v1).
+message TreasuryCollectionBillingEvent {
+  option (options.v1.table).table = true;
+
+  string id = 1;
+  string workspace_id = 2 [(options.v1.db).index = true];
+
+  string treasury_collection_id = 10 [(options.v1.db).references = "treasury_collection", (options.v1.db).index = true];
+  string billing_event_id       = 11 [(options.v1.db).references = "billing_event",       (options.v1.db).index = true];
+
+  // Centavos; portion of the advance assigned to this milestone.
+  int64 tranche_amount = 20;
+
+  // Set when this junction is consumed by RecognizeMilestoneAdvance.
+  optional string revenue_id = 30 [(options.v1.db).references = "revenue", (options.v1.db).index = true];
+
+  bool active = 90 [(options.v1.db).default = "true"];
+  optional int64 date_created = 91;
+  optional int64 date_modified = 92;
+}
+
+service TreasuryCollectionBillingEventDomainService {
+  rpc CreateTreasuryCollectionBillingEvent(CreateTreasuryCollectionBillingEventRequest) returns (CreateTreasuryCollectionBillingEventResponse);
+  rpc ReadTreasuryCollectionBillingEvent(ReadTreasuryCollectionBillingEventRequest) returns (ReadTreasuryCollectionBillingEventResponse);
+  rpc UpdateTreasuryCollectionBillingEvent(UpdateTreasuryCollectionBillingEventRequest) returns (UpdateTreasuryCollectionBillingEventResponse);
+  rpc DeleteTreasuryCollectionBillingEvent(DeleteTreasuryCollectionBillingEventRequest) returns (DeleteTreasuryCollectionBillingEventResponse);
+  rpc ListTreasuryCollectionBillingEvents(ListTreasuryCollectionBillingEventsRequest) returns (ListTreasuryCollectionBillingEventsResponse);
+}
+
+message CreateTreasuryCollectionBillingEventRequest  { TreasuryCollectionBillingEvent data = 1; }
+message CreateTreasuryCollectionBillingEventResponse {
+  repeated TreasuryCollectionBillingEvent data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+message ReadTreasuryCollectionBillingEventRequest  { TreasuryCollectionBillingEvent data = 1; }
+message ReadTreasuryCollectionBillingEventResponse {
+  repeated TreasuryCollectionBillingEvent data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+message UpdateTreasuryCollectionBillingEventRequest  { TreasuryCollectionBillingEvent data = 1; }
+message UpdateTreasuryCollectionBillingEventResponse {
+  repeated TreasuryCollectionBillingEvent data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+message DeleteTreasuryCollectionBillingEventRequest  { TreasuryCollectionBillingEvent data = 1; }
+message DeleteTreasuryCollectionBillingEventResponse {
+  bool success = 1;
+  optional domain.common.v1.Error error = 2;
+}
+message ListTreasuryCollectionBillingEventsRequest {
+  optional domain.common.v1.SearchRequest search = 1;
+  optional domain.common.v1.FilterRequest filters = 2;
+  optional domain.common.v1.SortRequest sort = 3;
+  optional domain.common.v1.PaginationRequest pagination = 4;
+}
+message ListTreasuryCollectionBillingEventsResponse {
+  repeated TreasuryCollectionBillingEvent data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}

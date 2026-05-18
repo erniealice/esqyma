@@ -1,0 +1,53 @@
+syntax = "proto3";
+
+package service.audit.v1;
+
+option go_package = "github.com/erniealice/esqyma/golang/v1/service/audit";
+
+import "domain/common/error.proto";
+
+// ---------------------------------------------------------------------------
+// Audit query — service-driven domain (Q7 anchor; see
+// docs/plan/20260518-hexagonal-strict-adherence/proto-service.md).
+//
+// Audit entries are append-only side-effects of state changes across many
+// entity domains; this proto defines the *read* surface (query for entries
+// on a specific entity). Owned by the espyna service-driven category, not
+// any single entity-driven domain.
+//
+// Consumed by internal/application/usecases/service/audit/list_audit_entries.go.
+// ---------------------------------------------------------------------------
+
+message ListAuditEntriesRequest {
+  string workspace_id = 1;
+  string entity_type = 2;   // e.g. "client", "treasury_collection"
+  string entity_id = 3;
+  int32 limit = 4;
+  string cursor_token = 5;
+}
+
+message AuditFieldChange {
+  string field_name = 1;
+  int32 field_type = 2;
+  string old_value = 3;
+  string new_value = 4;
+}
+
+message AuditEntry {
+  string id = 1;
+  string actor_id = 2;
+  int32 actor_type = 3;
+  int32 action = 4;
+  string permission_code = 5;
+  string use_case = 6;
+  int32 field_count = 7;
+  string occurred_at = 8;
+  repeated AuditFieldChange field_changes = 9;
+}
+
+message ListAuditEntriesResponse {
+  repeated AuditEntry entries = 1;
+  bool has_next = 2;
+  string next_cursor = 3;
+  optional domain.common.v1.Error error = 4;
+}

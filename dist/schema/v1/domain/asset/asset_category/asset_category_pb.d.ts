@@ -119,6 +119,15 @@ export type AssetCategory = Message<"domain.asset.v1.AssetCategory"> & {
      * @generated from field: optional int32 useful_life_months = 23;
      */
     usefulLifeMonths?: number;
+    /**
+     * Workspace tenancy (Phase 1 — 2026-05-10).
+     * Field 24 verified free at 2026-05-10 (proto used fields 1–23 only).
+     * Stored as nullable in the DB during the additive migration; a future
+     * 2-step migration tightens to NOT NULL after backfill is reconciled.
+     *
+     * @generated from field: optional string workspace_id = 24;
+     */
+    workspaceId?: string;
 };
 /**
  * Describes the message domain.asset.v1.AssetCategory.
@@ -405,6 +414,71 @@ export type GetAssetCategoryItemPageDataResponse = Message<"domain.asset.v1.GetA
  * Use `create(GetAssetCategoryItemPageDataResponseSchema)` to create a new message.
  */
 export declare const GetAssetCategoryItemPageDataResponseSchema: GenMessage<GetAssetCategoryItemPageDataResponse>;
+/**
+ * AssetCategoryWithPolicyRollup enriches an AssetCategory with per-policy
+ * aggregate counts derived from a single JOIN-aggregate query.
+ *
+ * @generated from message domain.asset.v1.AssetCategoryWithPolicyRollup
+ */
+export type AssetCategoryWithPolicyRollup = Message<"domain.asset.v1.AssetCategoryWithPolicyRollup"> & {
+    /**
+     * @generated from field: optional domain.asset.v1.AssetCategory category = 1;
+     */
+    category?: AssetCategory;
+    /**
+     * IN_SERVICE assets in this category
+     *
+     * @generated from field: int32 assets_in_policy = 2;
+     */
+    assetsInPolicy: number;
+    /**
+     * in-service assets deviating from category defaults
+     *
+     * @generated from field: int32 assets_deviating = 3;
+     */
+    assetsDeviating: number;
+};
+/**
+ * Describes the message domain.asset.v1.AssetCategoryWithPolicyRollup.
+ * Use `create(AssetCategoryWithPolicyRollupSchema)` to create a new message.
+ */
+export declare const AssetCategoryWithPolicyRollupSchema: GenMessage<AssetCategoryWithPolicyRollup>;
+/**
+ * ListAssetCategoriesWithPolicyRollupRequest — no required input fields;
+ * workspace_id is derived from the request context by the workspace-aware adapter.
+ *
+ * @generated from message domain.asset.v1.ListAssetCategoriesWithPolicyRollupRequest
+ */
+export type ListAssetCategoriesWithPolicyRollupRequest = Message<"domain.asset.v1.ListAssetCategoriesWithPolicyRollupRequest"> & {};
+/**
+ * Describes the message domain.asset.v1.ListAssetCategoriesWithPolicyRollupRequest.
+ * Use `create(ListAssetCategoriesWithPolicyRollupRequestSchema)` to create a new message.
+ */
+export declare const ListAssetCategoriesWithPolicyRollupRequestSchema: GenMessage<ListAssetCategoriesWithPolicyRollupRequest>;
+/**
+ * ListAssetCategoriesWithPolicyRollupResponse wraps the enriched category list.
+ *
+ * @generated from message domain.asset.v1.ListAssetCategoriesWithPolicyRollupResponse
+ */
+export type ListAssetCategoriesWithPolicyRollupResponse = Message<"domain.asset.v1.ListAssetCategoriesWithPolicyRollupResponse"> & {
+    /**
+     * @generated from field: repeated domain.asset.v1.AssetCategoryWithPolicyRollup data = 1;
+     */
+    data: AssetCategoryWithPolicyRollup[];
+    /**
+     * @generated from field: bool success = 2;
+     */
+    success: boolean;
+    /**
+     * @generated from field: optional domain.common.v1.Error error = 3;
+     */
+    error?: Error;
+};
+/**
+ * Describes the message domain.asset.v1.ListAssetCategoriesWithPolicyRollupResponse.
+ * Use `create(ListAssetCategoriesWithPolicyRollupResponseSchema)` to create a new message.
+ */
+export declare const ListAssetCategoriesWithPolicyRollupResponseSchema: GenMessage<ListAssetCategoriesWithPolicyRollupResponse>;
 /**
  * @generated from service domain.asset.v1.AssetCategoryDomainService
  */

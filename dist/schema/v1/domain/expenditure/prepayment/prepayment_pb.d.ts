@@ -117,6 +117,14 @@ export type Prepayment = Message<"domain.expenditure.v1.Prepayment"> & {
      * @generated from field: optional string expenditure_id = 20;
      */
     expenditureId?: string;
+    /**
+     * Supplier subscription back-edge (supplier-subscriptions plan)
+     *
+     * FK to SupplierSubscription (subscription-driven prepayment)
+     *
+     * @generated from field: optional string supplier_subscription_id = 21;
+     */
+    supplierSubscriptionId?: string;
 };
 /**
  * Describes the message domain.expenditure.v1.Prepayment.

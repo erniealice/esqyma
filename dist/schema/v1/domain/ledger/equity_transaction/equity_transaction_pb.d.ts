@@ -385,7 +385,21 @@ export declare enum EquityTransactionType {
      *
      * @generated from enum value: EQUITY_TRANSACTION_TYPE_TRANSFER = 4;
      */
-    TRANSFER = 4
+    TRANSFER = 4,
+    /**
+     * Mutual / cooperative extension (2026-05-10):
+     *
+     * Surplus retained as member equity (IRS Sub-T: non-cash patronage dividend)
+     *
+     * @generated from enum value: EQUITY_TRANSACTION_TYPE_PATRONAGE_RETENTION = 5;
+     */
+    PATRONAGE_RETENTION = 5,
+    /**
+     * Surplus distributed as cash refund (IRS Sub-T: cash patronage dividend)
+     *
+     * @generated from enum value: EQUITY_TRANSACTION_TYPE_PATRONAGE_DISTRIBUTION = 6;
+     */
+    PATRONAGE_DISTRIBUTION = 6
 }
 /**
  * Describes the enum domain.ledger.v1.EquityTransactionType.

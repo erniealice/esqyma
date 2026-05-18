@@ -296,6 +296,14 @@ export type SupplierContract = Message<"domain.expenditure.v1.SupplierContract">
      * @generated from field: optional string department = 133;
      */
     department?: string;
+    /**
+     * FK back-edge — Wave 4 self-domain plan (2026-05-17).
+     * Snapshot of the disbursement profile that remits this contract.
+     * Stored as string (no DB FK constraint) to survive profile edits — see architecture.md §3.5.
+     *
+     * @generated from field: optional string disbursement_profile_id_snapshot = 134;
+     */
+    disbursementProfileIdSnapshot?: string;
 };
 /**
  * Describes the message domain.expenditure.v1.SupplierContract.

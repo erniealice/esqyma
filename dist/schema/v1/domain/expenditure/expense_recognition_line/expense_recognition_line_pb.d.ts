@@ -67,6 +67,19 @@ export type ExpenseRecognitionLine = Message<"domain.expenditure.v1.ExpenseRecog
      */
     productId?: string;
     /**
+     * Pricing back-edges — mirrors revenue_line_item.proto:44 product_price_plan_id = 25
+     * and revenue_line_item.proto subscription_id = 29.
+     * supplier_product_cost_plan_id is the rate-card record (4-way join) for this line.
+     * supplier_subscription_id propagates from the parent ExpenseRecognition for fast filtering.
+     *
+     * @generated from field: optional string supplier_product_cost_plan_id = 14;
+     */
+    supplierProductCostPlanId?: string;
+    /**
+     * @generated from field: optional string supplier_subscription_id = 15;
+     */
+    supplierSubscriptionId?: string;
+    /**
      * Line details
      *
      * @generated from field: string description = 20;

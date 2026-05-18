@@ -4,6 +4,7 @@ import type { SearchRequest } from "../../common/search_pb";
 import type { FilterRequest } from "../../common/filter_pb";
 import type { SortRequest } from "../../common/sort_pb";
 import type { PaginationRequest } from "../../common/pagination_pb";
+import type { PrincipalType } from "../principal_type/principal_type_pb";
 import type { Message } from "@bufbuild/protobuf";
 /**
  * Describes the file domain/entity/session/session.proto.
@@ -72,6 +73,29 @@ export type Session = Message<"domain.entity.v1.Session"> & {
      * @generated from field: optional string date_modified_string = 11;
      */
     dateModifiedString?: string;
+    /**
+     * Multi-principal session context — populated at login time.
+     * All optional for migration safety (existing rows have NULL).
+     *
+     * @generated from field: optional domain.entity.v1.PrincipalType principal_type = 12;
+     */
+    principalType?: PrincipalType;
+    /**
+     * @generated from field: optional string principal_id = 13;
+     */
+    principalId?: string;
+    /**
+     * @generated from field: optional string acting_as_client_id = 14;
+     */
+    actingAsClientId?: string;
+    /**
+     * @generated from field: optional string acting_as_supplier_id = 15;
+     */
+    actingAsSupplierId?: string;
+    /**
+     * @generated from field: optional string acting_as_workspace_id = 16;
+     */
+    actingAsWorkspaceId?: string;
 };
 /**
  * Describes the message domain.entity.v1.Session.

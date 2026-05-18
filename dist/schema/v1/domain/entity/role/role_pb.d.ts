@@ -6,6 +6,7 @@ import type { SortRequest } from "../../common/sort_pb";
 import type { SearchRequest, SearchResult } from "../../common/search_pb";
 import type { Workspace } from "../workspace/workspace_pb";
 import type { RolePermission } from "../role_permission/role_permission_pb";
+import type { PrincipalType } from "../principal_type/principal_type_pb";
 import type { Message } from "@bufbuild/protobuf";
 /**
  * Describes the file domain/entity/role/role.proto.
@@ -65,6 +66,10 @@ export type Role = Message<"domain.entity.v1.Role"> & {
      * @generated from field: repeated domain.entity.v1.RolePermission role_permissions = 12;
      */
     rolePermissions: RolePermission[];
+    /**
+     * @generated from field: repeated domain.entity.v1.PrincipalType applicable_principal_types = 13;
+     */
+    applicablePrincipalTypes: PrincipalType[];
 };
 /**
  * Describes the message domain.entity.v1.Role.

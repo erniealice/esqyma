@@ -6,6 +6,7 @@ import type { SortRequest } from "../../common/sort_pb";
 import type { SearchRequest, SearchResult } from "../../common/search_pb";
 import type { PricePlan } from "../price_plan/price_plan_pb";
 import type { Client } from "../../entity/client/client_pb";
+import type { Job } from "../../operation/job/job_pb";
 import type { Timestamp } from "@bufbuild/protobuf/wkt";
 import type { Message } from "@bufbuild/protobuf";
 /**
@@ -133,6 +134,19 @@ export type Subscription = Message<"domain.subscription.v1.Subscription"> & {
      * @generated from field: optional string workspace_id = 24;
      */
     workspaceId?: string;
+    /**
+     * FK back-edges — Wave 4 self-domain plan (2026-05-17).
+     * Snapshot of the client billing profile / method that bills this subscription.
+     * Stored as strings (no DB FK constraint) so they survive profile edits without
+     * breaking history — see architecture.md §3.5 (tax-integration audit-primitive pattern).
+     *
+     * @generated from field: optional string collection_profile_id_snapshot = 25;
+     */
+    collectionProfileIdSnapshot?: string;
+    /**
+     * @generated from field: optional string collection_method_id_snapshot = 26;
+     */
+    collectionMethodIdSnapshot?: string;
 };
 /**
  * Describes the message domain.subscription.v1.Subscription.
@@ -485,6 +499,215 @@ export type CountActiveByClientIdsResponse = Message<"domain.subscription.v1.Cou
  */
 export declare const CountActiveByClientIdsResponseSchema: GenMessage<CountActiveByClientIdsResponse>;
 /**
+ * @generated from message domain.subscription.v1.ListSubscriptionsByPricePlanRequest
+ */
+export type ListSubscriptionsByPricePlanRequest = Message<"domain.subscription.v1.ListSubscriptionsByPricePlanRequest"> & {
+    /**
+     * @generated from field: string price_plan_id = 1;
+     */
+    pricePlanId: string;
+    /**
+     * When true (default), only active subscriptions are returned.
+     *
+     * @generated from field: optional bool active_only = 2;
+     */
+    activeOnly?: boolean;
+    /**
+     * Optional pagination — omit for "all rows" (typical use case: a tab
+     * listing engagements for one plan).
+     *
+     * @generated from field: optional domain.common.v1.PaginationRequest pagination = 3;
+     */
+    pagination?: PaginationRequest;
+    /**
+     * Optional sort — defaults to subscription name ascending when omitted.
+     *
+     * @generated from field: optional domain.common.v1.SortRequest sort = 4;
+     */
+    sort?: SortRequest;
+};
+/**
+ * Describes the message domain.subscription.v1.ListSubscriptionsByPricePlanRequest.
+ * Use `create(ListSubscriptionsByPricePlanRequestSchema)` to create a new message.
+ */
+export declare const ListSubscriptionsByPricePlanRequestSchema: GenMessage<ListSubscriptionsByPricePlanRequest>;
+/**
+ * @generated from message domain.subscription.v1.ListSubscriptionsByPricePlanResponse
+ */
+export type ListSubscriptionsByPricePlanResponse = Message<"domain.subscription.v1.ListSubscriptionsByPricePlanResponse"> & {
+    /**
+     * Subscriptions hydrated with Client, PricePlan, and PricePlan.Plan so the
+     * view layer can render Client name and Plan name without N+1 lookups.
+     *
+     * @generated from field: repeated domain.subscription.v1.Subscription subscription_list = 1;
+     */
+    subscriptionList: Subscription[];
+    /**
+     * @generated from field: optional domain.common.v1.PaginationResponse pagination = 2;
+     */
+    pagination?: PaginationResponse;
+    /**
+     * @generated from field: bool success = 3;
+     */
+    success: boolean;
+    /**
+     * @generated from field: optional domain.common.v1.Error error = 4;
+     */
+    error?: Error;
+};
+/**
+ * Describes the message domain.subscription.v1.ListSubscriptionsByPricePlanResponse.
+ * Use `create(ListSubscriptionsByPricePlanResponseSchema)` to create a new message.
+ */
+export declare const ListSubscriptionsByPricePlanResponseSchema: GenMessage<ListSubscriptionsByPricePlanResponse>;
+/**
+ * MaterializeJobsForSubscriptionRequest drives the auto-spawn-jobs-from-subscription
+ * use case (docs/plan/20260429-auto-spawn-jobs-from-subscription/plan.md §3).
+ *
+ * @generated from message domain.subscription.v1.MaterializeJobsForSubscriptionRequest
+ */
+export type MaterializeJobsForSubscriptionRequest = Message<"domain.subscription.v1.MaterializeJobsForSubscriptionRequest"> & {
+    /**
+     * @generated from field: string subscription_id = 1;
+     */
+    subscriptionId: string;
+    /**
+     * spawn_jobs is the operator-facing override. When false the use case
+     * returns immediately with skipped_reason="operator_opt_out".
+     *
+     * @generated from field: bool spawn_jobs = 2;
+     */
+    spawnJobs: boolean;
+};
+/**
+ * Describes the message domain.subscription.v1.MaterializeJobsForSubscriptionRequest.
+ * Use `create(MaterializeJobsForSubscriptionRequestSchema)` to create a new message.
+ */
+export declare const MaterializeJobsForSubscriptionRequestSchema: GenMessage<MaterializeJobsForSubscriptionRequest>;
+/**
+ * MaterializeJobsForSubscriptionResponse surfaces the spawned Jobs + skip reason.
+ *
+ * @generated from message domain.subscription.v1.MaterializeJobsForSubscriptionResponse
+ */
+export type MaterializeJobsForSubscriptionResponse = Message<"domain.subscription.v1.MaterializeJobsForSubscriptionResponse"> & {
+    /**
+     * @generated from field: bool success = 1;
+     */
+    success: boolean;
+    /**
+     * @generated from field: optional domain.common.v1.Error error = 2;
+     */
+    error?: Error;
+    /**
+     * @generated from field: repeated domain.operation.v1.Job spawned_jobs = 3;
+     */
+    spawnedJobs: Job[];
+    /**
+     * @generated from field: optional string skipped_reason = 4;
+     */
+    skippedReason?: string;
+};
+/**
+ * Describes the message domain.subscription.v1.MaterializeJobsForSubscriptionResponse.
+ * Use `create(MaterializeJobsForSubscriptionResponseSchema)` to create a new message.
+ */
+export declare const MaterializeJobsForSubscriptionResponseSchema: GenMessage<MaterializeJobsForSubscriptionResponse>;
+/**
+ * MaterializeInstanceJobsForSubscriptionRequest drives the cyclic-instance-Job
+ * spawn use case (docs/plan/20260501-cyclic-subscription-jobs/plan.md §3).
+ *
+ * @generated from message domain.subscription.v1.MaterializeInstanceJobsForSubscriptionRequest
+ */
+export type MaterializeInstanceJobsForSubscriptionRequest = Message<"domain.subscription.v1.MaterializeInstanceJobsForSubscriptionRequest"> & {
+    /**
+     * @generated from field: string subscription_id = 1;
+     */
+    subscriptionId: string;
+    /**
+     * cycle_period_start is optional. When empty, the use case picks the next
+     * un-spawned cycle. When non-empty, spawns exactly that one cycle (idempotent).
+     *
+     * @generated from field: optional string cycle_period_start = 2;
+     */
+    cyclePeriodStart?: string;
+    /**
+     * backfill, when true, walks the cycle window from sub.date_time_start up
+     * to today and spawns every missing cycle (capped at MaxBackfillCycles).
+     *
+     * @generated from field: bool backfill = 3;
+     */
+    backfill: boolean;
+    /**
+     * usage_request_date is the AD_HOC equivalent (ISO 8601 YYYY-MM-DD).
+     * Defaults to today UTC when empty. Ignored on cyclic plans.
+     *
+     * @generated from field: optional string usage_request_date = 4;
+     */
+    usageRequestDate?: string;
+};
+/**
+ * Describes the message domain.subscription.v1.MaterializeInstanceJobsForSubscriptionRequest.
+ * Use `create(MaterializeInstanceJobsForSubscriptionRequestSchema)` to create a new message.
+ */
+export declare const MaterializeInstanceJobsForSubscriptionRequestSchema: GenMessage<MaterializeInstanceJobsForSubscriptionRequest>;
+/**
+ * MaterializeInstanceJobsForSubscriptionResponse surfaces counts + skip reason.
+ * The full Job proto records are intentionally omitted (circular import constraint
+ * — same as MaterializeJobsForSubscriptionResponse above).
+ *
+ * @generated from message domain.subscription.v1.MaterializeInstanceJobsForSubscriptionResponse
+ */
+export type MaterializeInstanceJobsForSubscriptionResponse = Message<"domain.subscription.v1.MaterializeInstanceJobsForSubscriptionResponse"> & {
+    /**
+     * @generated from field: bool success = 1;
+     */
+    success: boolean;
+    /**
+     * @generated from field: optional domain.common.v1.Error error = 2;
+     */
+    error?: Error;
+    /**
+     * spawned_cycle_count is the number of cycle accordions materialised.
+     *
+     * @generated from field: int32 spawned_cycle_count = 3;
+     */
+    spawnedCycleCount: number;
+    /**
+     * spawned_job_count is the total cycle Job rows actually inserted.
+     *
+     * @generated from field: int32 spawned_job_count = 4;
+     */
+    spawnedJobCount: number;
+    /**
+     * once_at_start_job_count is how many ONCE_AT_ENGAGEMENT_START child Jobs fired.
+     *
+     * @generated from field: int32 once_at_start_job_count = 5;
+     */
+    onceAtStartJobCount: number;
+    /**
+     * engagement_was_newly_created reports whether this call created the
+     * engagement-shell Job.
+     *
+     * @generated from field: bool engagement_was_newly_created = 6;
+     */
+    engagementWasNewlyCreated: boolean;
+    /**
+     * @generated from field: optional string skipped_reason = 7;
+     */
+    skippedReason?: string;
+    /**
+     * backfill_capped_at > 0 when the backfill window exceeded the cap.
+     *
+     * @generated from field: int32 backfill_capped_at = 8;
+     */
+    backfillCappedAt: number;
+};
+/**
+ * Describes the message domain.subscription.v1.MaterializeInstanceJobsForSubscriptionResponse.
+ * Use `create(MaterializeInstanceJobsForSubscriptionResponseSchema)` to create a new message.
+ */
+export declare const MaterializeInstanceJobsForSubscriptionResponseSchema: GenMessage<MaterializeInstanceJobsForSubscriptionResponse>;
+/**
  * @generated from service domain.subscription.v1.SubscriptionDomainService
  */
 export declare const SubscriptionDomainService: GenService<{
@@ -555,5 +778,18 @@ export declare const SubscriptionDomainService: GenService<{
         methodKind: "unary";
         input: typeof CountActiveByClientIdsRequestSchema;
         output: typeof CountActiveByClientIdsResponseSchema;
+    };
+    /**
+     * Reverse index: subscriptions referencing a given price plan. Hydrates
+     * Client + PricePlan + PricePlan.Plan via the same JOIN path as
+     * GetSubscriptionListPageData. Used by the price-plan detail "Engagements"
+     * tab (centymo) — see docs/plan/20260504-price-plan-engagements-tab/.
+     *
+     * @generated from rpc domain.subscription.v1.SubscriptionDomainService.ListSubscriptionsByPricePlan
+     */
+    listSubscriptionsByPricePlan: {
+        methodKind: "unary";
+        input: typeof ListSubscriptionsByPricePlanRequestSchema;
+        output: typeof ListSubscriptionsByPricePlanResponseSchema;
     };
 }>;

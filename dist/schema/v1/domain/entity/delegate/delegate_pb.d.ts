@@ -6,6 +6,7 @@ import type { SortRequest } from "../../common/sort_pb";
 import type { PaginationRequest, PaginationResponse } from "../../common/pagination_pb";
 import type { User } from "../user/user_pb";
 import type { DelegateClient } from "../delegate_client/delegate_client_pb";
+import type { DelegateSupplier } from "../delegate_supplier/delegate_supplier_pb";
 import type { Message } from "@bufbuild/protobuf";
 /**
  * Describes the file domain/entity/delegate/delegate.proto.
@@ -51,6 +52,10 @@ export type Delegate = Message<"domain.entity.v1.Delegate"> & {
      * @generated from field: repeated domain.entity.v1.DelegateClient delegate_clients = 9;
      */
     delegateClients: DelegateClient[];
+    /**
+     * @generated from field: repeated domain.entity.v1.DelegateSupplier delegate_suppliers = 10;
+     */
+    delegateSuppliers: DelegateSupplier[];
 };
 /**
  * Describes the message domain.entity.v1.Delegate.

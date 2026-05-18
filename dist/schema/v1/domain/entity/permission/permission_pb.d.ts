@@ -4,6 +4,7 @@ import type { PaginationRequest, PaginationResponse } from "../../common/paginat
 import type { FilterRequest } from "../../common/filter_pb";
 import type { SortRequest } from "../../common/sort_pb";
 import type { SearchRequest, SearchResult } from "../../common/search_pb";
+import type { PrincipalType } from "../principal_type/principal_type_pb";
 import type { Message } from "@bufbuild/protobuf";
 /**
  * Describes the file domain/entity/permission/permission.proto.
@@ -65,6 +66,10 @@ export type Permission = Message<"domain.entity.v1.Permission"> & {
      * @generated from field: string description = 13;
      */
     description: string;
+    /**
+     * @generated from field: repeated domain.entity.v1.PrincipalType applicable_principal_types = 14;
+     */
+    applicablePrincipalTypes: PrincipalType[];
 };
 /**
  * Describes the message domain.entity.v1.Permission.

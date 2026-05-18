@@ -113,6 +113,35 @@ export type DepreciationSchedule = Message<"domain.asset.v1.DepreciationSchedule
      * @generated from field: bool active = 21;
      */
     active: boolean;
+    /**
+     * Depreciation run linkage (Phase 0 — 2026-05-09)
+     * depreciation_run_id is NULL for rows posted by the legacy RunDepreciation path.
+     *
+     * @generated from field: optional string depreciation_run_id = 22;
+     */
+    depreciationRunId?: string;
+    /**
+     * outcome records the per-entry result of the batch run (CREATED / SKIPPED / ERRORED).
+     * Stored as string matching DepreciationRunOutcome enum values.
+     *
+     * @generated from field: optional string outcome = 23;
+     */
+    outcome?: string;
+    /**
+     * error_message is populated only when outcome = ERRORED.
+     *
+     * @generated from field: optional string error_message = 24;
+     */
+    errorMessage?: string;
+    /**
+     * Workspace tenancy (Phase 1 — 2026-05-10).
+     * Field 25 verified free at 2026-05-10 (proto used fields 1–24 only).
+     * Stored as nullable in the DB during the additive migration; a future
+     * 2-step migration tightens to NOT NULL after backfill is reconciled.
+     *
+     * @generated from field: optional string workspace_id = 25;
+     */
+    workspaceId?: string;
 };
 /**
  * Describes the message domain.asset.v1.DepreciationSchedule.

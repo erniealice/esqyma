@@ -143,6 +143,14 @@ export type ProcurementRequest = Message<"domain.expenditure.v1.ProcurementReque
      */
     purchaseOrderId?: string;
     /**
+     * Field 22 was taken (needed_by_date); spawned subscription FK placed in the artifacts section at 41.
+     *
+     * FK to SupplierSubscription (set when operator picks "Spawn recurring SupplierSubscription" at approval)
+     *
+     * @generated from field: optional string spawned_supplier_subscription_id = 41;
+     */
+    spawnedSupplierSubscriptionId?: string;
+    /**
      * GL / categorization
      *
      * @generated from field: optional string expenditure_category_id = 50;

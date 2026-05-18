@@ -175,6 +175,20 @@ export type Client = Message<"domain.entity.v1.Client"> & {
      * @generated from field: optional int32 lead_time_days = 34;
      */
     leadTimeDays?: number;
+    /**
+     * Tax identity fields — Phase 1 tax integration
+     *
+     * Taxpayer Identification Number (TIN / VAT / EIN)
+     *
+     * @generated from field: optional string tin = 35;
+     */
+    tin?: string;
+    /**
+     * ISO 3166-1 alpha-2 (e.g. "PH"). NULL = same as workspace home jurisdiction. Used in v2 customer-jurisdiction lookup.
+     *
+     * @generated from field: optional string country_code = 36;
+     */
+    countryCode?: string;
 };
 /**
  * Describes the message domain.entity.v1.Client.

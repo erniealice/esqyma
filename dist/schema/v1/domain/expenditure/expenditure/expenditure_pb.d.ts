@@ -201,6 +201,46 @@ export type Expenditure = Message<"domain.expenditure.v1.Expenditure"> & {
      * @generated from field: optional string source = 33;
      */
     source?: string;
+    /**
+     * Supplier subscription back-edges (supplier-subscriptions plan).
+     * Fields 30/31 were taken (expense_recognition_id, accrued_expense_id); using 34/35.
+     *
+     * FK to SupplierSubscription (subscription-driven expenditure)
+     *
+     * @generated from field: optional string supplier_subscription_id = 34;
+     */
+    supplierSubscriptionId?: string;
+    /**
+     * FK to CostPlan (denormalized for join-free reporting)
+     *
+     * @generated from field: optional string cost_plan_id = 35;
+     */
+    costPlanId?: string;
+    /**
+     * FK back-edge — Wave 4 self-domain plan (2026-05-17).
+     * Audit snapshot of the disbursement profile active at bill time.
+     * Stored as string (no DB FK constraint) to survive profile edits — see architecture.md §3.5.
+     *
+     * @generated from field: optional string disbursement_profile_id_snapshot = 36;
+     */
+    disbursementProfileIdSnapshot?: string;
+    /**
+     * FK back-edge — FS-D shared-fund-sources plan (2026-05-17).
+     * Links this expenditure to the FundTransaction (kind=DRAW) that was inserted
+     * when this bill was charged to a shared fund source. NULL when the expenditure
+     * is funded from a regular cash account (no shared-fund involvement).
+     *
+     * @generated from field: optional string fund_transaction_id = 37;
+     */
+    fundTransactionId?: string;
+    /**
+     * Run back-edge — Plan A (20260517-expense-run).
+     * Set when this draft Expenditure was emitted by an ExpenseRecognitionRun
+     * (subscription path). AP edits/cancels the draft when the real vendor bill arrives.
+     *
+     * @generated from field: optional string run_id = 38;
+     */
+    runId?: string;
 };
 /**
  * Describes the message domain.expenditure.v1.Expenditure.

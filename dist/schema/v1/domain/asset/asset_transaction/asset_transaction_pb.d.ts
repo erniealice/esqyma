@@ -93,6 +93,42 @@ export type AssetTransaction = Message<"domain.asset.v1.AssetTransaction"> & {
      * @generated from field: bool active = 17;
      */
     active: boolean;
+    /**
+     * Depreciation run linkage (Phase 0 — 2026-05-09)
+     * Fields 18–19 verified free at 2026-05-09 (proto used fields 1–17 only).
+     * depreciation_run_id is NULL for transactions posted by the legacy RunDepreciation path.
+     *
+     * @generated from field: optional string depreciation_run_id = 18;
+     */
+    depreciationRunId?: string;
+    /**
+     * depreciation_period_start_date is set only on DEPRECIATION-type rows.
+     * This field (not transaction_date, which is the posting date) feeds the
+     * GENERATED period_marker column used for idempotency.
+     * DO NOT add period_marker to this proto — it is a DB-level GENERATED column only.
+     *
+     * ISO 8601 date (YYYY-MM-DD)
+     *
+     * @generated from field: optional string depreciation_period_start_date = 19;
+     */
+    depreciationPeriodStartDate?: string;
+    /**
+     * asset_revaluation_id is set only on REVALUATION_UP/REVALUATION_DOWN-type rows.
+     * Back-ref from the audit transaction to the immutable AssetRevaluation record
+     * (added Phase 2 — missed in Phase 0).
+     *
+     * @generated from field: optional string asset_revaluation_id = 20;
+     */
+    assetRevaluationId?: string;
+    /**
+     * Workspace tenancy (Phase 1 — 2026-05-10).
+     * Field 21 verified free at 2026-05-10 (proto used fields 1–20 only).
+     * Stored as nullable in the DB during the additive migration; a future
+     * 2-step migration tightens to NOT NULL after backfill is reconciled.
+     *
+     * @generated from field: optional string workspace_id = 21;
+     */
+    workspaceId?: string;
 };
 /**
  * Describes the message domain.asset.v1.AssetTransaction.
@@ -392,7 +428,29 @@ export declare enum AssetTransactionType {
     /**
      * @generated from enum value: ASSET_TRANSACTION_TYPE_WRITE_OFF = 17;
      */
-    WRITE_OFF = 17
+    WRITE_OFF = 17,
+    /**
+     * Leasing-specific lifecycle events (added 2026-05-10 — verticals expansion).
+     * These disambiguate the lease-out vs internal-transfer vs damage-finding paths
+     * that previously overloaded TRANSFER + ADJUSTMENT respectively.
+     *
+     * Asset deployed to lessee (asset leaves yard, custody = customer)
+     *
+     * @generated from enum value: ASSET_TRANSACTION_TYPE_LEASE_OUT = 18;
+     */
+    LEASE_OUT = 18,
+    /**
+     * Asset back from lessee (asset re-enters yard, custody = firm)
+     *
+     * @generated from enum value: ASSET_TRANSACTION_TYPE_LEASE_RETURN = 19;
+     */
+    LEASE_RETURN = 19,
+    /**
+     * Inspection finding post-return (drives chargeback Revenue line)
+     *
+     * @generated from enum value: ASSET_TRANSACTION_TYPE_DAMAGE_FOUND = 20;
+     */
+    DAMAGE_FOUND = 20
 }
 /**
  * Describes the enum domain.asset.v1.AssetTransactionType.

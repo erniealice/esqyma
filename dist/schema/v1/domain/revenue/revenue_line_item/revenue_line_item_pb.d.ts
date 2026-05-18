@@ -161,6 +161,31 @@ export type RevenueLineItem = Message<"domain.revenue.v1.RevenueLineItem"> & {
      * @generated from field: optional string workspace_id = 30;
      */
     workspaceId?: string;
+    /**
+     * Tax snapshot fields — Phase 1 tax integration
+     * Snapshotted at revenue recognition time from product / product_price_plan.
+     * Used by ComputeTaxesForRevenue as the authoritative treatment for this line.
+     *
+     * TaxTreatment.code at recognition (e.g. "STANDARD")
+     *
+     * @generated from field: optional string tax_treatment_snapshot = 31;
+     */
+    taxTreatmentSnapshot?: string;
+    /**
+     * TaxClass.code at recognition (e.g. "PROFESSIONAL_CORPORATE")
+     *
+     * @generated from field: optional string withholding_class_snapshot = 32;
+     */
+    withholdingClassSnapshot?: string;
+    /**
+     * Multi-currency: original billing amount for this line before FX conversion.
+     * NULL when billing_currency == functional_currency.
+     *
+     * centavos in billing_currency
+     *
+     * @generated from field: optional int64 billing_amount = 33;
+     */
+    billingAmount?: bigint;
 };
 /**
  * Describes the message domain.revenue.v1.RevenueLineItem.

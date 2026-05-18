@@ -181,6 +181,31 @@ export type ExpenseRecognition = Message<"domain.expenditure.v1.ExpenseRecogniti
      */
     jobPhaseId?: string;
     /**
+     * Subscription back-edge — mirrors revenue.proto:52 subscription_id = 32.
+     * Set when the ExpenseRecognition is generated from a SupplierSubscription
+     * (recurring-recognition path) rather than from a one-off Expenditure.
+     *
+     * @generated from field: optional string supplier_subscription_id = 60;
+     */
+    supplierSubscriptionId?: string;
+    /**
+     * Advance back-edge — Plan B (20260517-advance-cash-events).
+     * Set when the ExpenseRecognition was emitted by AmortizeAdvanceDisbursement
+     * (TIME_BASED) or RecognizeMilestoneAdvance (MILESTONE) consuming an advance
+     * TreasuryDisbursement. Symmetric with revenue.advance_collection_id (selling side).
+     *
+     * @generated from field: optional string advance_disbursement_id = 61;
+     */
+    advanceDisbursementId?: string;
+    /**
+     * Run back-edge — Plan A (20260517-expense-run).
+     * Set when this recognition was produced by an ExpenseRecognitionRun.
+     * Mirrors revenue.run_id (=35).
+     *
+     * @generated from field: optional string run_id = 62;
+     */
+    runId?: string;
+    /**
      * Notes & metadata
      *
      * @generated from field: optional string notes = 90;

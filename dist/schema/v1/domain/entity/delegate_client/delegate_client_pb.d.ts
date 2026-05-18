@@ -50,6 +50,18 @@ export type DelegateClient = Message<"domain.entity.v1.DelegateClient"> & {
      * @generated from field: bool active = 9;
      */
     active: boolean;
+    /**
+     * @generated from field: optional string role_id = 10;
+     */
+    roleId?: string;
+    /**
+     * @generated from field: optional string granted_by_user_id = 11;
+     */
+    grantedByUserId?: string;
+    /**
+     * @generated from field: optional string workspace_id = 12;
+     */
+    workspaceId?: string;
 };
 /**
  * Describes the message domain.entity.v1.DelegateClient.

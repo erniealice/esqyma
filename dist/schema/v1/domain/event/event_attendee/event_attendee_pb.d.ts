@@ -91,6 +91,32 @@ export type EventAttendee = Message<"domain.event.v1.EventAttendee"> & {
      * @generated from field: bool active = 14;
      */
     active: boolean;
+    /**
+     * Mutual / cooperative voting extension (2026-05-10)
+     * These fields are only populated when the parent Event.kind = GOVERNANCE_VOTE.
+     * vote_choice: the member's recorded vote — "yes" | "no" | "abstain"
+     *
+     * @generated from field: optional string vote_choice = 15;
+     */
+    voteChoice?: string;
+    /**
+     * vote_weight: multiplier for weighted voting (default 1; 0 = ineligible; >1 = bylaw-defined weighted vote)
+     *
+     * @generated from field: optional int32 vote_weight = 16;
+     */
+    voteWeight?: number;
+    /**
+     * vote_cast_at: epoch ms when the vote was recorded
+     *
+     * @generated from field: optional int64 vote_cast_at = 17;
+     */
+    voteCastAt?: bigint;
+    /**
+     * eligible_to_vote: pre-check result — was this attendee eligible to vote at the time of the event?
+     *
+     * @generated from field: optional bool eligible_to_vote = 18;
+     */
+    eligibleToVote?: boolean;
 };
 /**
  * Describes the message domain.event.v1.EventAttendee.

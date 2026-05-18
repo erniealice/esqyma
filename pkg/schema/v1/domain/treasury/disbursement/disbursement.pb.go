@@ -1150,6 +1150,266 @@ func (x *RecognizeMilestoneAdvanceDisbursementResponse) GetError() *common.Error
 	return nil
 }
 
+type ListAdvanceDisbursementsForDashboardRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	WorkspaceId   string                 `protobuf:"bytes,1,opt,name=workspace_id,json=workspaceId,proto3" json:"workspace_id,omitempty"`
+	AsOfDate      string                 `protobuf:"bytes,2,opt,name=as_of_date,json=asOfDate,proto3" json:"as_of_date,omitempty"` // YYYY-MM-DD; reserved for future filtering
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *ListAdvanceDisbursementsForDashboardRequest) Reset() {
+	*x = ListAdvanceDisbursementsForDashboardRequest{}
+	mi := &file_domain_treasury_disbursement_disbursement_proto_msgTypes[11]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *ListAdvanceDisbursementsForDashboardRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ListAdvanceDisbursementsForDashboardRequest) ProtoMessage() {}
+
+func (x *ListAdvanceDisbursementsForDashboardRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_domain_treasury_disbursement_disbursement_proto_msgTypes[11]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ListAdvanceDisbursementsForDashboardRequest.ProtoReflect.Descriptor instead.
+func (*ListAdvanceDisbursementsForDashboardRequest) Descriptor() ([]byte, []int) {
+	return file_domain_treasury_disbursement_disbursement_proto_rawDescGZIP(), []int{11}
+}
+
+func (x *ListAdvanceDisbursementsForDashboardRequest) GetWorkspaceId() string {
+	if x != nil {
+		return x.WorkspaceId
+	}
+	return ""
+}
+
+func (x *ListAdvanceDisbursementsForDashboardRequest) GetAsOfDate() string {
+	if x != nil {
+		return x.AsOfDate
+	}
+	return ""
+}
+
+type AdvanceDisbursementDashboardRow struct {
+	state            protoimpl.MessageState     `protogen:"open.v1"`
+	AdvanceId        string                     `protobuf:"bytes,1,opt,name=advance_id,json=advanceId,proto3" json:"advance_id,omitempty"`
+	ReferenceNumber  string                     `protobuf:"bytes,2,opt,name=reference_number,json=referenceNumber,proto3" json:"reference_number,omitempty"`
+	CounterpartyName string                     `protobuf:"bytes,3,opt,name=counterparty_name,json=counterpartyName,proto3" json:"counterparty_name,omitempty"`
+	Kind             advance_kind.AdvanceKind   `protobuf:"varint,4,opt,name=kind,proto3,enum=domain.common.v1.AdvanceKind" json:"kind,omitempty"`
+	Status           advance_kind.AdvanceStatus `protobuf:"varint,5,opt,name=status,proto3,enum=domain.common.v1.AdvanceStatus" json:"status,omitempty"`
+	Currency         string                     `protobuf:"bytes,6,opt,name=currency,proto3" json:"currency,omitempty"`
+	TotalAmount      int64                      `protobuf:"varint,7,opt,name=total_amount,json=totalAmount,proto3" json:"total_amount,omitempty"`
+	RemainingAmount  int64                      `protobuf:"varint,8,opt,name=remaining_amount,json=remainingAmount,proto3" json:"remaining_amount,omitempty"`
+	RecognizedAmount int64                      `protobuf:"varint,9,opt,name=recognized_amount,json=recognizedAmount,proto3" json:"recognized_amount,omitempty"`
+	UtilizationPct   float32                    `protobuf:"fixed32,10,opt,name=utilization_pct,json=utilizationPct,proto3" json:"utilization_pct,omitempty"`
+	StartDate        string                     `protobuf:"bytes,11,opt,name=start_date,json=startDate,proto3" json:"start_date,omitempty"`
+	EndDate          string                     `protobuf:"bytes,12,opt,name=end_date,json=endDate,proto3" json:"end_date,omitempty"`
+	unknownFields    protoimpl.UnknownFields
+	sizeCache        protoimpl.SizeCache
+}
+
+func (x *AdvanceDisbursementDashboardRow) Reset() {
+	*x = AdvanceDisbursementDashboardRow{}
+	mi := &file_domain_treasury_disbursement_disbursement_proto_msgTypes[12]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *AdvanceDisbursementDashboardRow) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*AdvanceDisbursementDashboardRow) ProtoMessage() {}
+
+func (x *AdvanceDisbursementDashboardRow) ProtoReflect() protoreflect.Message {
+	mi := &file_domain_treasury_disbursement_disbursement_proto_msgTypes[12]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use AdvanceDisbursementDashboardRow.ProtoReflect.Descriptor instead.
+func (*AdvanceDisbursementDashboardRow) Descriptor() ([]byte, []int) {
+	return file_domain_treasury_disbursement_disbursement_proto_rawDescGZIP(), []int{12}
+}
+
+func (x *AdvanceDisbursementDashboardRow) GetAdvanceId() string {
+	if x != nil {
+		return x.AdvanceId
+	}
+	return ""
+}
+
+func (x *AdvanceDisbursementDashboardRow) GetReferenceNumber() string {
+	if x != nil {
+		return x.ReferenceNumber
+	}
+	return ""
+}
+
+func (x *AdvanceDisbursementDashboardRow) GetCounterpartyName() string {
+	if x != nil {
+		return x.CounterpartyName
+	}
+	return ""
+}
+
+func (x *AdvanceDisbursementDashboardRow) GetKind() advance_kind.AdvanceKind {
+	if x != nil {
+		return x.Kind
+	}
+	return advance_kind.AdvanceKind(0)
+}
+
+func (x *AdvanceDisbursementDashboardRow) GetStatus() advance_kind.AdvanceStatus {
+	if x != nil {
+		return x.Status
+	}
+	return advance_kind.AdvanceStatus(0)
+}
+
+func (x *AdvanceDisbursementDashboardRow) GetCurrency() string {
+	if x != nil {
+		return x.Currency
+	}
+	return ""
+}
+
+func (x *AdvanceDisbursementDashboardRow) GetTotalAmount() int64 {
+	if x != nil {
+		return x.TotalAmount
+	}
+	return 0
+}
+
+func (x *AdvanceDisbursementDashboardRow) GetRemainingAmount() int64 {
+	if x != nil {
+		return x.RemainingAmount
+	}
+	return 0
+}
+
+func (x *AdvanceDisbursementDashboardRow) GetRecognizedAmount() int64 {
+	if x != nil {
+		return x.RecognizedAmount
+	}
+	return 0
+}
+
+func (x *AdvanceDisbursementDashboardRow) GetUtilizationPct() float32 {
+	if x != nil {
+		return x.UtilizationPct
+	}
+	return 0
+}
+
+func (x *AdvanceDisbursementDashboardRow) GetStartDate() string {
+	if x != nil {
+		return x.StartDate
+	}
+	return ""
+}
+
+func (x *AdvanceDisbursementDashboardRow) GetEndDate() string {
+	if x != nil {
+		return x.EndDate
+	}
+	return ""
+}
+
+type ListAdvanceDisbursementsForDashboardResponse struct {
+	state                protoimpl.MessageState             `protogen:"open.v1"`
+	Rows                 []*AdvanceDisbursementDashboardRow `protobuf:"bytes,1,rep,name=rows,proto3" json:"rows,omitempty"`
+	TotalRemaining       int64                              `protobuf:"varint,2,opt,name=total_remaining,json=totalRemaining,proto3" json:"total_remaining,omitempty"`
+	ActiveCount          int32                              `protobuf:"varint,3,opt,name=active_count,json=activeCount,proto3" json:"active_count,omitempty"`
+	FullyRecognizedCount int32                              `protobuf:"varint,4,opt,name=fully_recognized_count,json=fullyRecognizedCount,proto3" json:"fully_recognized_count,omitempty"`
+	Error                *common.Error                      `protobuf:"bytes,5,opt,name=error,proto3,oneof" json:"error,omitempty"`
+	unknownFields        protoimpl.UnknownFields
+	sizeCache            protoimpl.SizeCache
+}
+
+func (x *ListAdvanceDisbursementsForDashboardResponse) Reset() {
+	*x = ListAdvanceDisbursementsForDashboardResponse{}
+	mi := &file_domain_treasury_disbursement_disbursement_proto_msgTypes[13]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *ListAdvanceDisbursementsForDashboardResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ListAdvanceDisbursementsForDashboardResponse) ProtoMessage() {}
+
+func (x *ListAdvanceDisbursementsForDashboardResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_domain_treasury_disbursement_disbursement_proto_msgTypes[13]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ListAdvanceDisbursementsForDashboardResponse.ProtoReflect.Descriptor instead.
+func (*ListAdvanceDisbursementsForDashboardResponse) Descriptor() ([]byte, []int) {
+	return file_domain_treasury_disbursement_disbursement_proto_rawDescGZIP(), []int{13}
+}
+
+func (x *ListAdvanceDisbursementsForDashboardResponse) GetRows() []*AdvanceDisbursementDashboardRow {
+	if x != nil {
+		return x.Rows
+	}
+	return nil
+}
+
+func (x *ListAdvanceDisbursementsForDashboardResponse) GetTotalRemaining() int64 {
+	if x != nil {
+		return x.TotalRemaining
+	}
+	return 0
+}
+
+func (x *ListAdvanceDisbursementsForDashboardResponse) GetActiveCount() int32 {
+	if x != nil {
+		return x.ActiveCount
+	}
+	return 0
+}
+
+func (x *ListAdvanceDisbursementsForDashboardResponse) GetFullyRecognizedCount() int32 {
+	if x != nil {
+		return x.FullyRecognizedCount
+	}
+	return 0
+}
+
+func (x *ListAdvanceDisbursementsForDashboardResponse) GetError() *common.Error {
+	if x != nil {
+		return x.Error
+	}
+	return nil
+}
+
 type CreateDisbursementRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Data          *Disbursement          `protobuf:"bytes,1,opt,name=data,proto3" json:"data,omitempty"`
@@ -1159,7 +1419,7 @@ type CreateDisbursementRequest struct {
 
 func (x *CreateDisbursementRequest) Reset() {
 	*x = CreateDisbursementRequest{}
-	mi := &file_domain_treasury_disbursement_disbursement_proto_msgTypes[11]
+	mi := &file_domain_treasury_disbursement_disbursement_proto_msgTypes[14]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1171,7 +1431,7 @@ func (x *CreateDisbursementRequest) String() string {
 func (*CreateDisbursementRequest) ProtoMessage() {}
 
 func (x *CreateDisbursementRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_domain_treasury_disbursement_disbursement_proto_msgTypes[11]
+	mi := &file_domain_treasury_disbursement_disbursement_proto_msgTypes[14]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1184,7 +1444,7 @@ func (x *CreateDisbursementRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use CreateDisbursementRequest.ProtoReflect.Descriptor instead.
 func (*CreateDisbursementRequest) Descriptor() ([]byte, []int) {
-	return file_domain_treasury_disbursement_disbursement_proto_rawDescGZIP(), []int{11}
+	return file_domain_treasury_disbursement_disbursement_proto_rawDescGZIP(), []int{14}
 }
 
 func (x *CreateDisbursementRequest) GetData() *Disbursement {
@@ -1205,7 +1465,7 @@ type CreateDisbursementResponse struct {
 
 func (x *CreateDisbursementResponse) Reset() {
 	*x = CreateDisbursementResponse{}
-	mi := &file_domain_treasury_disbursement_disbursement_proto_msgTypes[12]
+	mi := &file_domain_treasury_disbursement_disbursement_proto_msgTypes[15]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1217,7 +1477,7 @@ func (x *CreateDisbursementResponse) String() string {
 func (*CreateDisbursementResponse) ProtoMessage() {}
 
 func (x *CreateDisbursementResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_domain_treasury_disbursement_disbursement_proto_msgTypes[12]
+	mi := &file_domain_treasury_disbursement_disbursement_proto_msgTypes[15]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1230,7 +1490,7 @@ func (x *CreateDisbursementResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use CreateDisbursementResponse.ProtoReflect.Descriptor instead.
 func (*CreateDisbursementResponse) Descriptor() ([]byte, []int) {
-	return file_domain_treasury_disbursement_disbursement_proto_rawDescGZIP(), []int{12}
+	return file_domain_treasury_disbursement_disbursement_proto_rawDescGZIP(), []int{15}
 }
 
 func (x *CreateDisbursementResponse) GetData() []*Disbursement {
@@ -1263,7 +1523,7 @@ type ReadDisbursementRequest struct {
 
 func (x *ReadDisbursementRequest) Reset() {
 	*x = ReadDisbursementRequest{}
-	mi := &file_domain_treasury_disbursement_disbursement_proto_msgTypes[13]
+	mi := &file_domain_treasury_disbursement_disbursement_proto_msgTypes[16]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1275,7 +1535,7 @@ func (x *ReadDisbursementRequest) String() string {
 func (*ReadDisbursementRequest) ProtoMessage() {}
 
 func (x *ReadDisbursementRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_domain_treasury_disbursement_disbursement_proto_msgTypes[13]
+	mi := &file_domain_treasury_disbursement_disbursement_proto_msgTypes[16]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1288,7 +1548,7 @@ func (x *ReadDisbursementRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ReadDisbursementRequest.ProtoReflect.Descriptor instead.
 func (*ReadDisbursementRequest) Descriptor() ([]byte, []int) {
-	return file_domain_treasury_disbursement_disbursement_proto_rawDescGZIP(), []int{13}
+	return file_domain_treasury_disbursement_disbursement_proto_rawDescGZIP(), []int{16}
 }
 
 func (x *ReadDisbursementRequest) GetData() *Disbursement {
@@ -1309,7 +1569,7 @@ type ReadDisbursementResponse struct {
 
 func (x *ReadDisbursementResponse) Reset() {
 	*x = ReadDisbursementResponse{}
-	mi := &file_domain_treasury_disbursement_disbursement_proto_msgTypes[14]
+	mi := &file_domain_treasury_disbursement_disbursement_proto_msgTypes[17]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1321,7 +1581,7 @@ func (x *ReadDisbursementResponse) String() string {
 func (*ReadDisbursementResponse) ProtoMessage() {}
 
 func (x *ReadDisbursementResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_domain_treasury_disbursement_disbursement_proto_msgTypes[14]
+	mi := &file_domain_treasury_disbursement_disbursement_proto_msgTypes[17]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1334,7 +1594,7 @@ func (x *ReadDisbursementResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ReadDisbursementResponse.ProtoReflect.Descriptor instead.
 func (*ReadDisbursementResponse) Descriptor() ([]byte, []int) {
-	return file_domain_treasury_disbursement_disbursement_proto_rawDescGZIP(), []int{14}
+	return file_domain_treasury_disbursement_disbursement_proto_rawDescGZIP(), []int{17}
 }
 
 func (x *ReadDisbursementResponse) GetData() []*Disbursement {
@@ -1367,7 +1627,7 @@ type UpdateDisbursementRequest struct {
 
 func (x *UpdateDisbursementRequest) Reset() {
 	*x = UpdateDisbursementRequest{}
-	mi := &file_domain_treasury_disbursement_disbursement_proto_msgTypes[15]
+	mi := &file_domain_treasury_disbursement_disbursement_proto_msgTypes[18]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1379,7 +1639,7 @@ func (x *UpdateDisbursementRequest) String() string {
 func (*UpdateDisbursementRequest) ProtoMessage() {}
 
 func (x *UpdateDisbursementRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_domain_treasury_disbursement_disbursement_proto_msgTypes[15]
+	mi := &file_domain_treasury_disbursement_disbursement_proto_msgTypes[18]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1392,7 +1652,7 @@ func (x *UpdateDisbursementRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use UpdateDisbursementRequest.ProtoReflect.Descriptor instead.
 func (*UpdateDisbursementRequest) Descriptor() ([]byte, []int) {
-	return file_domain_treasury_disbursement_disbursement_proto_rawDescGZIP(), []int{15}
+	return file_domain_treasury_disbursement_disbursement_proto_rawDescGZIP(), []int{18}
 }
 
 func (x *UpdateDisbursementRequest) GetData() *Disbursement {
@@ -1413,7 +1673,7 @@ type UpdateDisbursementResponse struct {
 
 func (x *UpdateDisbursementResponse) Reset() {
 	*x = UpdateDisbursementResponse{}
-	mi := &file_domain_treasury_disbursement_disbursement_proto_msgTypes[16]
+	mi := &file_domain_treasury_disbursement_disbursement_proto_msgTypes[19]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1425,7 +1685,7 @@ func (x *UpdateDisbursementResponse) String() string {
 func (*UpdateDisbursementResponse) ProtoMessage() {}
 
 func (x *UpdateDisbursementResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_domain_treasury_disbursement_disbursement_proto_msgTypes[16]
+	mi := &file_domain_treasury_disbursement_disbursement_proto_msgTypes[19]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1438,7 +1698,7 @@ func (x *UpdateDisbursementResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use UpdateDisbursementResponse.ProtoReflect.Descriptor instead.
 func (*UpdateDisbursementResponse) Descriptor() ([]byte, []int) {
-	return file_domain_treasury_disbursement_disbursement_proto_rawDescGZIP(), []int{16}
+	return file_domain_treasury_disbursement_disbursement_proto_rawDescGZIP(), []int{19}
 }
 
 func (x *UpdateDisbursementResponse) GetData() []*Disbursement {
@@ -1471,7 +1731,7 @@ type DeleteDisbursementRequest struct {
 
 func (x *DeleteDisbursementRequest) Reset() {
 	*x = DeleteDisbursementRequest{}
-	mi := &file_domain_treasury_disbursement_disbursement_proto_msgTypes[17]
+	mi := &file_domain_treasury_disbursement_disbursement_proto_msgTypes[20]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1483,7 +1743,7 @@ func (x *DeleteDisbursementRequest) String() string {
 func (*DeleteDisbursementRequest) ProtoMessage() {}
 
 func (x *DeleteDisbursementRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_domain_treasury_disbursement_disbursement_proto_msgTypes[17]
+	mi := &file_domain_treasury_disbursement_disbursement_proto_msgTypes[20]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1496,7 +1756,7 @@ func (x *DeleteDisbursementRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use DeleteDisbursementRequest.ProtoReflect.Descriptor instead.
 func (*DeleteDisbursementRequest) Descriptor() ([]byte, []int) {
-	return file_domain_treasury_disbursement_disbursement_proto_rawDescGZIP(), []int{17}
+	return file_domain_treasury_disbursement_disbursement_proto_rawDescGZIP(), []int{20}
 }
 
 func (x *DeleteDisbursementRequest) GetData() *Disbursement {
@@ -1516,7 +1776,7 @@ type DeleteDisbursementResponse struct {
 
 func (x *DeleteDisbursementResponse) Reset() {
 	*x = DeleteDisbursementResponse{}
-	mi := &file_domain_treasury_disbursement_disbursement_proto_msgTypes[18]
+	mi := &file_domain_treasury_disbursement_disbursement_proto_msgTypes[21]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1528,7 +1788,7 @@ func (x *DeleteDisbursementResponse) String() string {
 func (*DeleteDisbursementResponse) ProtoMessage() {}
 
 func (x *DeleteDisbursementResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_domain_treasury_disbursement_disbursement_proto_msgTypes[18]
+	mi := &file_domain_treasury_disbursement_disbursement_proto_msgTypes[21]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1541,7 +1801,7 @@ func (x *DeleteDisbursementResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use DeleteDisbursementResponse.ProtoReflect.Descriptor instead.
 func (*DeleteDisbursementResponse) Descriptor() ([]byte, []int) {
-	return file_domain_treasury_disbursement_disbursement_proto_rawDescGZIP(), []int{18}
+	return file_domain_treasury_disbursement_disbursement_proto_rawDescGZIP(), []int{21}
 }
 
 func (x *DeleteDisbursementResponse) GetSuccess() bool {
@@ -1570,7 +1830,7 @@ type ListDisbursementsRequest struct {
 
 func (x *ListDisbursementsRequest) Reset() {
 	*x = ListDisbursementsRequest{}
-	mi := &file_domain_treasury_disbursement_disbursement_proto_msgTypes[19]
+	mi := &file_domain_treasury_disbursement_disbursement_proto_msgTypes[22]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1582,7 +1842,7 @@ func (x *ListDisbursementsRequest) String() string {
 func (*ListDisbursementsRequest) ProtoMessage() {}
 
 func (x *ListDisbursementsRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_domain_treasury_disbursement_disbursement_proto_msgTypes[19]
+	mi := &file_domain_treasury_disbursement_disbursement_proto_msgTypes[22]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1595,7 +1855,7 @@ func (x *ListDisbursementsRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ListDisbursementsRequest.ProtoReflect.Descriptor instead.
 func (*ListDisbursementsRequest) Descriptor() ([]byte, []int) {
-	return file_domain_treasury_disbursement_disbursement_proto_rawDescGZIP(), []int{19}
+	return file_domain_treasury_disbursement_disbursement_proto_rawDescGZIP(), []int{22}
 }
 
 func (x *ListDisbursementsRequest) GetSearch() *common.SearchRequest {
@@ -1637,7 +1897,7 @@ type ListDisbursementsResponse struct {
 
 func (x *ListDisbursementsResponse) Reset() {
 	*x = ListDisbursementsResponse{}
-	mi := &file_domain_treasury_disbursement_disbursement_proto_msgTypes[20]
+	mi := &file_domain_treasury_disbursement_disbursement_proto_msgTypes[23]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1649,7 +1909,7 @@ func (x *ListDisbursementsResponse) String() string {
 func (*ListDisbursementsResponse) ProtoMessage() {}
 
 func (x *ListDisbursementsResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_domain_treasury_disbursement_disbursement_proto_msgTypes[20]
+	mi := &file_domain_treasury_disbursement_disbursement_proto_msgTypes[23]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1662,7 +1922,7 @@ func (x *ListDisbursementsResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ListDisbursementsResponse.ProtoReflect.Descriptor instead.
 func (*ListDisbursementsResponse) Descriptor() ([]byte, []int) {
-	return file_domain_treasury_disbursement_disbursement_proto_rawDescGZIP(), []int{20}
+	return file_domain_treasury_disbursement_disbursement_proto_rawDescGZIP(), []int{23}
 }
 
 func (x *ListDisbursementsResponse) GetData() []*Disbursement {
@@ -1698,7 +1958,7 @@ type GetDisbursementListPageDataRequest struct {
 
 func (x *GetDisbursementListPageDataRequest) Reset() {
 	*x = GetDisbursementListPageDataRequest{}
-	mi := &file_domain_treasury_disbursement_disbursement_proto_msgTypes[21]
+	mi := &file_domain_treasury_disbursement_disbursement_proto_msgTypes[24]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1710,7 +1970,7 @@ func (x *GetDisbursementListPageDataRequest) String() string {
 func (*GetDisbursementListPageDataRequest) ProtoMessage() {}
 
 func (x *GetDisbursementListPageDataRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_domain_treasury_disbursement_disbursement_proto_msgTypes[21]
+	mi := &file_domain_treasury_disbursement_disbursement_proto_msgTypes[24]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1723,7 +1983,7 @@ func (x *GetDisbursementListPageDataRequest) ProtoReflect() protoreflect.Message
 
 // Deprecated: Use GetDisbursementListPageDataRequest.ProtoReflect.Descriptor instead.
 func (*GetDisbursementListPageDataRequest) Descriptor() ([]byte, []int) {
-	return file_domain_treasury_disbursement_disbursement_proto_rawDescGZIP(), []int{21}
+	return file_domain_treasury_disbursement_disbursement_proto_rawDescGZIP(), []int{24}
 }
 
 func (x *GetDisbursementListPageDataRequest) GetPagination() *common.PaginationRequest {
@@ -1767,7 +2027,7 @@ type GetDisbursementListPageDataResponse struct {
 
 func (x *GetDisbursementListPageDataResponse) Reset() {
 	*x = GetDisbursementListPageDataResponse{}
-	mi := &file_domain_treasury_disbursement_disbursement_proto_msgTypes[22]
+	mi := &file_domain_treasury_disbursement_disbursement_proto_msgTypes[25]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1779,7 +2039,7 @@ func (x *GetDisbursementListPageDataResponse) String() string {
 func (*GetDisbursementListPageDataResponse) ProtoMessage() {}
 
 func (x *GetDisbursementListPageDataResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_domain_treasury_disbursement_disbursement_proto_msgTypes[22]
+	mi := &file_domain_treasury_disbursement_disbursement_proto_msgTypes[25]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1792,7 +2052,7 @@ func (x *GetDisbursementListPageDataResponse) ProtoReflect() protoreflect.Messag
 
 // Deprecated: Use GetDisbursementListPageDataResponse.ProtoReflect.Descriptor instead.
 func (*GetDisbursementListPageDataResponse) Descriptor() ([]byte, []int) {
-	return file_domain_treasury_disbursement_disbursement_proto_rawDescGZIP(), []int{22}
+	return file_domain_treasury_disbursement_disbursement_proto_rawDescGZIP(), []int{25}
 }
 
 func (x *GetDisbursementListPageDataResponse) GetDisbursementList() []*Disbursement {
@@ -1839,7 +2099,7 @@ type GetDisbursementItemPageDataRequest struct {
 
 func (x *GetDisbursementItemPageDataRequest) Reset() {
 	*x = GetDisbursementItemPageDataRequest{}
-	mi := &file_domain_treasury_disbursement_disbursement_proto_msgTypes[23]
+	mi := &file_domain_treasury_disbursement_disbursement_proto_msgTypes[26]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1851,7 +2111,7 @@ func (x *GetDisbursementItemPageDataRequest) String() string {
 func (*GetDisbursementItemPageDataRequest) ProtoMessage() {}
 
 func (x *GetDisbursementItemPageDataRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_domain_treasury_disbursement_disbursement_proto_msgTypes[23]
+	mi := &file_domain_treasury_disbursement_disbursement_proto_msgTypes[26]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1864,7 +2124,7 @@ func (x *GetDisbursementItemPageDataRequest) ProtoReflect() protoreflect.Message
 
 // Deprecated: Use GetDisbursementItemPageDataRequest.ProtoReflect.Descriptor instead.
 func (*GetDisbursementItemPageDataRequest) Descriptor() ([]byte, []int) {
-	return file_domain_treasury_disbursement_disbursement_proto_rawDescGZIP(), []int{23}
+	return file_domain_treasury_disbursement_disbursement_proto_rawDescGZIP(), []int{26}
 }
 
 func (x *GetDisbursementItemPageDataRequest) GetDisbursementId() string {
@@ -1885,7 +2145,7 @@ type GetDisbursementItemPageDataResponse struct {
 
 func (x *GetDisbursementItemPageDataResponse) Reset() {
 	*x = GetDisbursementItemPageDataResponse{}
-	mi := &file_domain_treasury_disbursement_disbursement_proto_msgTypes[24]
+	mi := &file_domain_treasury_disbursement_disbursement_proto_msgTypes[27]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1897,7 +2157,7 @@ func (x *GetDisbursementItemPageDataResponse) String() string {
 func (*GetDisbursementItemPageDataResponse) ProtoMessage() {}
 
 func (x *GetDisbursementItemPageDataResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_domain_treasury_disbursement_disbursement_proto_msgTypes[24]
+	mi := &file_domain_treasury_disbursement_disbursement_proto_msgTypes[27]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1910,7 +2170,7 @@ func (x *GetDisbursementItemPageDataResponse) ProtoReflect() protoreflect.Messag
 
 // Deprecated: Use GetDisbursementItemPageDataResponse.ProtoReflect.Descriptor instead.
 func (*GetDisbursementItemPageDataResponse) Descriptor() ([]byte, []int) {
-	return file_domain_treasury_disbursement_disbursement_proto_rawDescGZIP(), []int{24}
+	return file_domain_treasury_disbursement_disbursement_proto_rawDescGZIP(), []int{27}
 }
 
 func (x *GetDisbursementItemPageDataResponse) GetDisbursement() *Disbursement {
@@ -2087,6 +2347,33 @@ const file_domain_treasury_disbursement_disbursement_proto_rawDesc = "" +
 	"\x05error\x18\b \x01(\v2\x17.domain.common.v1.ErrorH\x02R\x05error\x88\x01\x01B\x19\n" +
 	"\x17_expense_recognition_idB%\n" +
 	"#_conflicting_expense_recognition_idB\b\n" +
+	"\x06_error\"n\n" +
+	"+ListAdvanceDisbursementsForDashboardRequest\x12!\n" +
+	"\fworkspace_id\x18\x01 \x01(\tR\vworkspaceId\x12\x1c\n" +
+	"\n" +
+	"as_of_date\x18\x02 \x01(\tR\basOfDate\"\xfe\x03\n" +
+	"\x1fAdvanceDisbursementDashboardRow\x12\x1d\n" +
+	"\n" +
+	"advance_id\x18\x01 \x01(\tR\tadvanceId\x12)\n" +
+	"\x10reference_number\x18\x02 \x01(\tR\x0freferenceNumber\x12+\n" +
+	"\x11counterparty_name\x18\x03 \x01(\tR\x10counterpartyName\x121\n" +
+	"\x04kind\x18\x04 \x01(\x0e2\x1d.domain.common.v1.AdvanceKindR\x04kind\x127\n" +
+	"\x06status\x18\x05 \x01(\x0e2\x1f.domain.common.v1.AdvanceStatusR\x06status\x12\x1a\n" +
+	"\bcurrency\x18\x06 \x01(\tR\bcurrency\x12!\n" +
+	"\ftotal_amount\x18\a \x01(\x03R\vtotalAmount\x12)\n" +
+	"\x10remaining_amount\x18\b \x01(\x03R\x0fremainingAmount\x12+\n" +
+	"\x11recognized_amount\x18\t \x01(\x03R\x10recognizedAmount\x12'\n" +
+	"\x0futilization_pct\x18\n" +
+	" \x01(\x02R\x0eutilizationPct\x12\x1d\n" +
+	"\n" +
+	"start_date\x18\v \x01(\tR\tstartDate\x12\x19\n" +
+	"\bend_date\x18\f \x01(\tR\aendDate\"\xb7\x02\n" +
+	",ListAdvanceDisbursementsForDashboardResponse\x12G\n" +
+	"\x04rows\x18\x01 \x03(\v23.domain.treasury.v1.AdvanceDisbursementDashboardRowR\x04rows\x12'\n" +
+	"\x0ftotal_remaining\x18\x02 \x01(\x03R\x0etotalRemaining\x12!\n" +
+	"\factive_count\x18\x03 \x01(\x05R\vactiveCount\x124\n" +
+	"\x16fully_recognized_count\x18\x04 \x01(\x05R\x14fullyRecognizedCount\x122\n" +
+	"\x05error\x18\x05 \x01(\v2\x17.domain.common.v1.ErrorH\x00R\x05error\x88\x01\x01B\b\n" +
 	"\x06_error\"Q\n" +
 	"\x19CreateDisbursementRequest\x124\n" +
 	"\x04data\x18\x01 \x01(\v2 .domain.treasury.v1.DisbursementR\x04data\"\xaa\x01\n" +
@@ -2184,7 +2471,7 @@ func file_domain_treasury_disbursement_disbursement_proto_rawDescGZIP() []byte {
 	return file_domain_treasury_disbursement_disbursement_proto_rawDescData
 }
 
-var file_domain_treasury_disbursement_disbursement_proto_msgTypes = make([]protoimpl.MessageInfo, 25)
+var file_domain_treasury_disbursement_disbursement_proto_msgTypes = make([]protoimpl.MessageInfo, 28)
 var file_domain_treasury_disbursement_disbursement_proto_goTypes = []any{
 	(*Disbursement)(nil),                                  // 0: domain.treasury.v1.Disbursement
 	(*AmortizeAdvanceDisbursementRequest)(nil),            // 1: domain.treasury.v1.AmortizeAdvanceDisbursementRequest
@@ -2197,96 +2484,103 @@ var file_domain_treasury_disbursement_disbursement_proto_goTypes = []any{
 	(*CancelAdvanceDisbursementResponse)(nil),             // 8: domain.treasury.v1.CancelAdvanceDisbursementResponse
 	(*RecognizeMilestoneAdvanceDisbursementRequest)(nil),  // 9: domain.treasury.v1.RecognizeMilestoneAdvanceDisbursementRequest
 	(*RecognizeMilestoneAdvanceDisbursementResponse)(nil), // 10: domain.treasury.v1.RecognizeMilestoneAdvanceDisbursementResponse
-	(*CreateDisbursementRequest)(nil),                     // 11: domain.treasury.v1.CreateDisbursementRequest
-	(*CreateDisbursementResponse)(nil),                    // 12: domain.treasury.v1.CreateDisbursementResponse
-	(*ReadDisbursementRequest)(nil),                       // 13: domain.treasury.v1.ReadDisbursementRequest
-	(*ReadDisbursementResponse)(nil),                      // 14: domain.treasury.v1.ReadDisbursementResponse
-	(*UpdateDisbursementRequest)(nil),                     // 15: domain.treasury.v1.UpdateDisbursementRequest
-	(*UpdateDisbursementResponse)(nil),                    // 16: domain.treasury.v1.UpdateDisbursementResponse
-	(*DeleteDisbursementRequest)(nil),                     // 17: domain.treasury.v1.DeleteDisbursementRequest
-	(*DeleteDisbursementResponse)(nil),                    // 18: domain.treasury.v1.DeleteDisbursementResponse
-	(*ListDisbursementsRequest)(nil),                      // 19: domain.treasury.v1.ListDisbursementsRequest
-	(*ListDisbursementsResponse)(nil),                     // 20: domain.treasury.v1.ListDisbursementsResponse
-	(*GetDisbursementListPageDataRequest)(nil),            // 21: domain.treasury.v1.GetDisbursementListPageDataRequest
-	(*GetDisbursementListPageDataResponse)(nil),           // 22: domain.treasury.v1.GetDisbursementListPageDataResponse
-	(*GetDisbursementItemPageDataRequest)(nil),            // 23: domain.treasury.v1.GetDisbursementItemPageDataRequest
-	(*GetDisbursementItemPageDataResponse)(nil),           // 24: domain.treasury.v1.GetDisbursementItemPageDataResponse
-	(*subscription.Subscription)(nil),                     // 25: domain.subscription.v1.Subscription
-	(advance_kind.AdvanceKind)(0),                         // 26: domain.common.v1.AdvanceKind
-	(advance_kind.AdvanceStatus)(0),                       // 27: domain.common.v1.AdvanceStatus
-	(advance_kind.AdvanceProrationPolicy)(0),              // 28: domain.common.v1.AdvanceProrationPolicy
-	(advance_kind.AdvanceAmortizeOutcome)(0),              // 29: domain.common.v1.AdvanceAmortizeOutcome
-	(*common.Error)(nil),                                  // 30: domain.common.v1.Error
-	(*common.SearchRequest)(nil),                          // 31: domain.common.v1.SearchRequest
-	(*common.FilterRequest)(nil),                          // 32: domain.common.v1.FilterRequest
-	(*common.SortRequest)(nil),                            // 33: domain.common.v1.SortRequest
-	(*common.PaginationRequest)(nil),                      // 34: domain.common.v1.PaginationRequest
-	(*common.PaginationResponse)(nil),                     // 35: domain.common.v1.PaginationResponse
-	(*common.SearchResult)(nil),                           // 36: domain.common.v1.SearchResult
+	(*ListAdvanceDisbursementsForDashboardRequest)(nil),   // 11: domain.treasury.v1.ListAdvanceDisbursementsForDashboardRequest
+	(*AdvanceDisbursementDashboardRow)(nil),               // 12: domain.treasury.v1.AdvanceDisbursementDashboardRow
+	(*ListAdvanceDisbursementsForDashboardResponse)(nil),  // 13: domain.treasury.v1.ListAdvanceDisbursementsForDashboardResponse
+	(*CreateDisbursementRequest)(nil),                     // 14: domain.treasury.v1.CreateDisbursementRequest
+	(*CreateDisbursementResponse)(nil),                    // 15: domain.treasury.v1.CreateDisbursementResponse
+	(*ReadDisbursementRequest)(nil),                       // 16: domain.treasury.v1.ReadDisbursementRequest
+	(*ReadDisbursementResponse)(nil),                      // 17: domain.treasury.v1.ReadDisbursementResponse
+	(*UpdateDisbursementRequest)(nil),                     // 18: domain.treasury.v1.UpdateDisbursementRequest
+	(*UpdateDisbursementResponse)(nil),                    // 19: domain.treasury.v1.UpdateDisbursementResponse
+	(*DeleteDisbursementRequest)(nil),                     // 20: domain.treasury.v1.DeleteDisbursementRequest
+	(*DeleteDisbursementResponse)(nil),                    // 21: domain.treasury.v1.DeleteDisbursementResponse
+	(*ListDisbursementsRequest)(nil),                      // 22: domain.treasury.v1.ListDisbursementsRequest
+	(*ListDisbursementsResponse)(nil),                     // 23: domain.treasury.v1.ListDisbursementsResponse
+	(*GetDisbursementListPageDataRequest)(nil),            // 24: domain.treasury.v1.GetDisbursementListPageDataRequest
+	(*GetDisbursementListPageDataResponse)(nil),           // 25: domain.treasury.v1.GetDisbursementListPageDataResponse
+	(*GetDisbursementItemPageDataRequest)(nil),            // 26: domain.treasury.v1.GetDisbursementItemPageDataRequest
+	(*GetDisbursementItemPageDataResponse)(nil),           // 27: domain.treasury.v1.GetDisbursementItemPageDataResponse
+	(*subscription.Subscription)(nil),                     // 28: domain.subscription.v1.Subscription
+	(advance_kind.AdvanceKind)(0),                         // 29: domain.common.v1.AdvanceKind
+	(advance_kind.AdvanceStatus)(0),                       // 30: domain.common.v1.AdvanceStatus
+	(advance_kind.AdvanceProrationPolicy)(0),              // 31: domain.common.v1.AdvanceProrationPolicy
+	(advance_kind.AdvanceAmortizeOutcome)(0),              // 32: domain.common.v1.AdvanceAmortizeOutcome
+	(*common.Error)(nil),                                  // 33: domain.common.v1.Error
+	(*common.SearchRequest)(nil),                          // 34: domain.common.v1.SearchRequest
+	(*common.FilterRequest)(nil),                          // 35: domain.common.v1.FilterRequest
+	(*common.SortRequest)(nil),                            // 36: domain.common.v1.SortRequest
+	(*common.PaginationRequest)(nil),                      // 37: domain.common.v1.PaginationRequest
+	(*common.PaginationResponse)(nil),                     // 38: domain.common.v1.PaginationResponse
+	(*common.SearchResult)(nil),                           // 39: domain.common.v1.SearchResult
 }
 var file_domain_treasury_disbursement_disbursement_proto_depIdxs = []int32{
-	25, // 0: domain.treasury.v1.Disbursement.subscription:type_name -> domain.subscription.v1.Subscription
-	26, // 1: domain.treasury.v1.Disbursement.advance_kind:type_name -> domain.common.v1.AdvanceKind
-	27, // 2: domain.treasury.v1.Disbursement.advance_status:type_name -> domain.common.v1.AdvanceStatus
-	28, // 3: domain.treasury.v1.Disbursement.advance_proration_policy:type_name -> domain.common.v1.AdvanceProrationPolicy
-	29, // 4: domain.treasury.v1.AmortizeAdvanceDisbursementResponse.outcome:type_name -> domain.common.v1.AdvanceAmortizeOutcome
-	27, // 5: domain.treasury.v1.AmortizeAdvanceDisbursementResponse.new_status:type_name -> domain.common.v1.AdvanceStatus
-	30, // 6: domain.treasury.v1.AmortizeAdvanceDisbursementResponse.error:type_name -> domain.common.v1.Error
-	27, // 7: domain.treasury.v1.SettleUnscheduledAdvanceDisbursementResponse.new_status:type_name -> domain.common.v1.AdvanceStatus
-	30, // 8: domain.treasury.v1.SettleUnscheduledAdvanceDisbursementResponse.error:type_name -> domain.common.v1.Error
-	27, // 9: domain.treasury.v1.RefundUnscheduledAdvanceDisbursementResponse.new_status:type_name -> domain.common.v1.AdvanceStatus
-	30, // 10: domain.treasury.v1.RefundUnscheduledAdvanceDisbursementResponse.error:type_name -> domain.common.v1.Error
-	27, // 11: domain.treasury.v1.CancelAdvanceDisbursementResponse.new_status:type_name -> domain.common.v1.AdvanceStatus
-	30, // 12: domain.treasury.v1.CancelAdvanceDisbursementResponse.error:type_name -> domain.common.v1.Error
-	29, // 13: domain.treasury.v1.RecognizeMilestoneAdvanceDisbursementResponse.outcome:type_name -> domain.common.v1.AdvanceAmortizeOutcome
-	27, // 14: domain.treasury.v1.RecognizeMilestoneAdvanceDisbursementResponse.new_status:type_name -> domain.common.v1.AdvanceStatus
-	30, // 15: domain.treasury.v1.RecognizeMilestoneAdvanceDisbursementResponse.error:type_name -> domain.common.v1.Error
-	0,  // 16: domain.treasury.v1.CreateDisbursementRequest.data:type_name -> domain.treasury.v1.Disbursement
-	0,  // 17: domain.treasury.v1.CreateDisbursementResponse.data:type_name -> domain.treasury.v1.Disbursement
-	30, // 18: domain.treasury.v1.CreateDisbursementResponse.error:type_name -> domain.common.v1.Error
-	0,  // 19: domain.treasury.v1.ReadDisbursementRequest.data:type_name -> domain.treasury.v1.Disbursement
-	0,  // 20: domain.treasury.v1.ReadDisbursementResponse.data:type_name -> domain.treasury.v1.Disbursement
-	30, // 21: domain.treasury.v1.ReadDisbursementResponse.error:type_name -> domain.common.v1.Error
-	0,  // 22: domain.treasury.v1.UpdateDisbursementRequest.data:type_name -> domain.treasury.v1.Disbursement
-	0,  // 23: domain.treasury.v1.UpdateDisbursementResponse.data:type_name -> domain.treasury.v1.Disbursement
-	30, // 24: domain.treasury.v1.UpdateDisbursementResponse.error:type_name -> domain.common.v1.Error
-	0,  // 25: domain.treasury.v1.DeleteDisbursementRequest.data:type_name -> domain.treasury.v1.Disbursement
-	30, // 26: domain.treasury.v1.DeleteDisbursementResponse.error:type_name -> domain.common.v1.Error
-	31, // 27: domain.treasury.v1.ListDisbursementsRequest.search:type_name -> domain.common.v1.SearchRequest
-	32, // 28: domain.treasury.v1.ListDisbursementsRequest.filters:type_name -> domain.common.v1.FilterRequest
-	33, // 29: domain.treasury.v1.ListDisbursementsRequest.sort:type_name -> domain.common.v1.SortRequest
-	34, // 30: domain.treasury.v1.ListDisbursementsRequest.pagination:type_name -> domain.common.v1.PaginationRequest
-	0,  // 31: domain.treasury.v1.ListDisbursementsResponse.data:type_name -> domain.treasury.v1.Disbursement
-	30, // 32: domain.treasury.v1.ListDisbursementsResponse.error:type_name -> domain.common.v1.Error
-	34, // 33: domain.treasury.v1.GetDisbursementListPageDataRequest.pagination:type_name -> domain.common.v1.PaginationRequest
-	32, // 34: domain.treasury.v1.GetDisbursementListPageDataRequest.filters:type_name -> domain.common.v1.FilterRequest
-	33, // 35: domain.treasury.v1.GetDisbursementListPageDataRequest.sort:type_name -> domain.common.v1.SortRequest
-	31, // 36: domain.treasury.v1.GetDisbursementListPageDataRequest.search:type_name -> domain.common.v1.SearchRequest
-	0,  // 37: domain.treasury.v1.GetDisbursementListPageDataResponse.disbursement_list:type_name -> domain.treasury.v1.Disbursement
-	30, // 38: domain.treasury.v1.GetDisbursementListPageDataResponse.error:type_name -> domain.common.v1.Error
-	35, // 39: domain.treasury.v1.GetDisbursementListPageDataResponse.pagination:type_name -> domain.common.v1.PaginationResponse
-	36, // 40: domain.treasury.v1.GetDisbursementListPageDataResponse.search_results:type_name -> domain.common.v1.SearchResult
-	0,  // 41: domain.treasury.v1.GetDisbursementItemPageDataResponse.disbursement:type_name -> domain.treasury.v1.Disbursement
-	30, // 42: domain.treasury.v1.GetDisbursementItemPageDataResponse.error:type_name -> domain.common.v1.Error
-	11, // 43: domain.treasury.v1.DisbursementDomainService.CreateDisbursement:input_type -> domain.treasury.v1.CreateDisbursementRequest
-	13, // 44: domain.treasury.v1.DisbursementDomainService.ReadDisbursement:input_type -> domain.treasury.v1.ReadDisbursementRequest
-	15, // 45: domain.treasury.v1.DisbursementDomainService.UpdateDisbursement:input_type -> domain.treasury.v1.UpdateDisbursementRequest
-	17, // 46: domain.treasury.v1.DisbursementDomainService.DeleteDisbursement:input_type -> domain.treasury.v1.DeleteDisbursementRequest
-	19, // 47: domain.treasury.v1.DisbursementDomainService.ListDisbursements:input_type -> domain.treasury.v1.ListDisbursementsRequest
-	21, // 48: domain.treasury.v1.DisbursementDomainService.GetDisbursementListPageData:input_type -> domain.treasury.v1.GetDisbursementListPageDataRequest
-	23, // 49: domain.treasury.v1.DisbursementDomainService.GetDisbursementItemPageData:input_type -> domain.treasury.v1.GetDisbursementItemPageDataRequest
-	12, // 50: domain.treasury.v1.DisbursementDomainService.CreateDisbursement:output_type -> domain.treasury.v1.CreateDisbursementResponse
-	14, // 51: domain.treasury.v1.DisbursementDomainService.ReadDisbursement:output_type -> domain.treasury.v1.ReadDisbursementResponse
-	16, // 52: domain.treasury.v1.DisbursementDomainService.UpdateDisbursement:output_type -> domain.treasury.v1.UpdateDisbursementResponse
-	18, // 53: domain.treasury.v1.DisbursementDomainService.DeleteDisbursement:output_type -> domain.treasury.v1.DeleteDisbursementResponse
-	20, // 54: domain.treasury.v1.DisbursementDomainService.ListDisbursements:output_type -> domain.treasury.v1.ListDisbursementsResponse
-	22, // 55: domain.treasury.v1.DisbursementDomainService.GetDisbursementListPageData:output_type -> domain.treasury.v1.GetDisbursementListPageDataResponse
-	24, // 56: domain.treasury.v1.DisbursementDomainService.GetDisbursementItemPageData:output_type -> domain.treasury.v1.GetDisbursementItemPageDataResponse
-	50, // [50:57] is the sub-list for method output_type
-	43, // [43:50] is the sub-list for method input_type
-	43, // [43:43] is the sub-list for extension type_name
-	43, // [43:43] is the sub-list for extension extendee
-	0,  // [0:43] is the sub-list for field type_name
+	28, // 0: domain.treasury.v1.Disbursement.subscription:type_name -> domain.subscription.v1.Subscription
+	29, // 1: domain.treasury.v1.Disbursement.advance_kind:type_name -> domain.common.v1.AdvanceKind
+	30, // 2: domain.treasury.v1.Disbursement.advance_status:type_name -> domain.common.v1.AdvanceStatus
+	31, // 3: domain.treasury.v1.Disbursement.advance_proration_policy:type_name -> domain.common.v1.AdvanceProrationPolicy
+	32, // 4: domain.treasury.v1.AmortizeAdvanceDisbursementResponse.outcome:type_name -> domain.common.v1.AdvanceAmortizeOutcome
+	30, // 5: domain.treasury.v1.AmortizeAdvanceDisbursementResponse.new_status:type_name -> domain.common.v1.AdvanceStatus
+	33, // 6: domain.treasury.v1.AmortizeAdvanceDisbursementResponse.error:type_name -> domain.common.v1.Error
+	30, // 7: domain.treasury.v1.SettleUnscheduledAdvanceDisbursementResponse.new_status:type_name -> domain.common.v1.AdvanceStatus
+	33, // 8: domain.treasury.v1.SettleUnscheduledAdvanceDisbursementResponse.error:type_name -> domain.common.v1.Error
+	30, // 9: domain.treasury.v1.RefundUnscheduledAdvanceDisbursementResponse.new_status:type_name -> domain.common.v1.AdvanceStatus
+	33, // 10: domain.treasury.v1.RefundUnscheduledAdvanceDisbursementResponse.error:type_name -> domain.common.v1.Error
+	30, // 11: domain.treasury.v1.CancelAdvanceDisbursementResponse.new_status:type_name -> domain.common.v1.AdvanceStatus
+	33, // 12: domain.treasury.v1.CancelAdvanceDisbursementResponse.error:type_name -> domain.common.v1.Error
+	32, // 13: domain.treasury.v1.RecognizeMilestoneAdvanceDisbursementResponse.outcome:type_name -> domain.common.v1.AdvanceAmortizeOutcome
+	30, // 14: domain.treasury.v1.RecognizeMilestoneAdvanceDisbursementResponse.new_status:type_name -> domain.common.v1.AdvanceStatus
+	33, // 15: domain.treasury.v1.RecognizeMilestoneAdvanceDisbursementResponse.error:type_name -> domain.common.v1.Error
+	29, // 16: domain.treasury.v1.AdvanceDisbursementDashboardRow.kind:type_name -> domain.common.v1.AdvanceKind
+	30, // 17: domain.treasury.v1.AdvanceDisbursementDashboardRow.status:type_name -> domain.common.v1.AdvanceStatus
+	12, // 18: domain.treasury.v1.ListAdvanceDisbursementsForDashboardResponse.rows:type_name -> domain.treasury.v1.AdvanceDisbursementDashboardRow
+	33, // 19: domain.treasury.v1.ListAdvanceDisbursementsForDashboardResponse.error:type_name -> domain.common.v1.Error
+	0,  // 20: domain.treasury.v1.CreateDisbursementRequest.data:type_name -> domain.treasury.v1.Disbursement
+	0,  // 21: domain.treasury.v1.CreateDisbursementResponse.data:type_name -> domain.treasury.v1.Disbursement
+	33, // 22: domain.treasury.v1.CreateDisbursementResponse.error:type_name -> domain.common.v1.Error
+	0,  // 23: domain.treasury.v1.ReadDisbursementRequest.data:type_name -> domain.treasury.v1.Disbursement
+	0,  // 24: domain.treasury.v1.ReadDisbursementResponse.data:type_name -> domain.treasury.v1.Disbursement
+	33, // 25: domain.treasury.v1.ReadDisbursementResponse.error:type_name -> domain.common.v1.Error
+	0,  // 26: domain.treasury.v1.UpdateDisbursementRequest.data:type_name -> domain.treasury.v1.Disbursement
+	0,  // 27: domain.treasury.v1.UpdateDisbursementResponse.data:type_name -> domain.treasury.v1.Disbursement
+	33, // 28: domain.treasury.v1.UpdateDisbursementResponse.error:type_name -> domain.common.v1.Error
+	0,  // 29: domain.treasury.v1.DeleteDisbursementRequest.data:type_name -> domain.treasury.v1.Disbursement
+	33, // 30: domain.treasury.v1.DeleteDisbursementResponse.error:type_name -> domain.common.v1.Error
+	34, // 31: domain.treasury.v1.ListDisbursementsRequest.search:type_name -> domain.common.v1.SearchRequest
+	35, // 32: domain.treasury.v1.ListDisbursementsRequest.filters:type_name -> domain.common.v1.FilterRequest
+	36, // 33: domain.treasury.v1.ListDisbursementsRequest.sort:type_name -> domain.common.v1.SortRequest
+	37, // 34: domain.treasury.v1.ListDisbursementsRequest.pagination:type_name -> domain.common.v1.PaginationRequest
+	0,  // 35: domain.treasury.v1.ListDisbursementsResponse.data:type_name -> domain.treasury.v1.Disbursement
+	33, // 36: domain.treasury.v1.ListDisbursementsResponse.error:type_name -> domain.common.v1.Error
+	37, // 37: domain.treasury.v1.GetDisbursementListPageDataRequest.pagination:type_name -> domain.common.v1.PaginationRequest
+	35, // 38: domain.treasury.v1.GetDisbursementListPageDataRequest.filters:type_name -> domain.common.v1.FilterRequest
+	36, // 39: domain.treasury.v1.GetDisbursementListPageDataRequest.sort:type_name -> domain.common.v1.SortRequest
+	34, // 40: domain.treasury.v1.GetDisbursementListPageDataRequest.search:type_name -> domain.common.v1.SearchRequest
+	0,  // 41: domain.treasury.v1.GetDisbursementListPageDataResponse.disbursement_list:type_name -> domain.treasury.v1.Disbursement
+	33, // 42: domain.treasury.v1.GetDisbursementListPageDataResponse.error:type_name -> domain.common.v1.Error
+	38, // 43: domain.treasury.v1.GetDisbursementListPageDataResponse.pagination:type_name -> domain.common.v1.PaginationResponse
+	39, // 44: domain.treasury.v1.GetDisbursementListPageDataResponse.search_results:type_name -> domain.common.v1.SearchResult
+	0,  // 45: domain.treasury.v1.GetDisbursementItemPageDataResponse.disbursement:type_name -> domain.treasury.v1.Disbursement
+	33, // 46: domain.treasury.v1.GetDisbursementItemPageDataResponse.error:type_name -> domain.common.v1.Error
+	14, // 47: domain.treasury.v1.DisbursementDomainService.CreateDisbursement:input_type -> domain.treasury.v1.CreateDisbursementRequest
+	16, // 48: domain.treasury.v1.DisbursementDomainService.ReadDisbursement:input_type -> domain.treasury.v1.ReadDisbursementRequest
+	18, // 49: domain.treasury.v1.DisbursementDomainService.UpdateDisbursement:input_type -> domain.treasury.v1.UpdateDisbursementRequest
+	20, // 50: domain.treasury.v1.DisbursementDomainService.DeleteDisbursement:input_type -> domain.treasury.v1.DeleteDisbursementRequest
+	22, // 51: domain.treasury.v1.DisbursementDomainService.ListDisbursements:input_type -> domain.treasury.v1.ListDisbursementsRequest
+	24, // 52: domain.treasury.v1.DisbursementDomainService.GetDisbursementListPageData:input_type -> domain.treasury.v1.GetDisbursementListPageDataRequest
+	26, // 53: domain.treasury.v1.DisbursementDomainService.GetDisbursementItemPageData:input_type -> domain.treasury.v1.GetDisbursementItemPageDataRequest
+	15, // 54: domain.treasury.v1.DisbursementDomainService.CreateDisbursement:output_type -> domain.treasury.v1.CreateDisbursementResponse
+	17, // 55: domain.treasury.v1.DisbursementDomainService.ReadDisbursement:output_type -> domain.treasury.v1.ReadDisbursementResponse
+	19, // 56: domain.treasury.v1.DisbursementDomainService.UpdateDisbursement:output_type -> domain.treasury.v1.UpdateDisbursementResponse
+	21, // 57: domain.treasury.v1.DisbursementDomainService.DeleteDisbursement:output_type -> domain.treasury.v1.DeleteDisbursementResponse
+	23, // 58: domain.treasury.v1.DisbursementDomainService.ListDisbursements:output_type -> domain.treasury.v1.ListDisbursementsResponse
+	25, // 59: domain.treasury.v1.DisbursementDomainService.GetDisbursementListPageData:output_type -> domain.treasury.v1.GetDisbursementListPageDataResponse
+	27, // 60: domain.treasury.v1.DisbursementDomainService.GetDisbursementItemPageData:output_type -> domain.treasury.v1.GetDisbursementItemPageDataResponse
+	54, // [54:61] is the sub-list for method output_type
+	47, // [47:54] is the sub-list for method input_type
+	47, // [47:47] is the sub-list for extension type_name
+	47, // [47:47] is the sub-list for extension extendee
+	0,  // [0:47] is the sub-list for field type_name
 }
 
 func init() { file_domain_treasury_disbursement_disbursement_proto_init() }
@@ -2302,22 +2596,23 @@ func file_domain_treasury_disbursement_disbursement_proto_init() {
 	file_domain_treasury_disbursement_disbursement_proto_msgTypes[8].OneofWrappers = []any{}
 	file_domain_treasury_disbursement_disbursement_proto_msgTypes[9].OneofWrappers = []any{}
 	file_domain_treasury_disbursement_disbursement_proto_msgTypes[10].OneofWrappers = []any{}
-	file_domain_treasury_disbursement_disbursement_proto_msgTypes[12].OneofWrappers = []any{}
-	file_domain_treasury_disbursement_disbursement_proto_msgTypes[14].OneofWrappers = []any{}
-	file_domain_treasury_disbursement_disbursement_proto_msgTypes[16].OneofWrappers = []any{}
-	file_domain_treasury_disbursement_disbursement_proto_msgTypes[18].OneofWrappers = []any{}
+	file_domain_treasury_disbursement_disbursement_proto_msgTypes[13].OneofWrappers = []any{}
+	file_domain_treasury_disbursement_disbursement_proto_msgTypes[15].OneofWrappers = []any{}
+	file_domain_treasury_disbursement_disbursement_proto_msgTypes[17].OneofWrappers = []any{}
 	file_domain_treasury_disbursement_disbursement_proto_msgTypes[19].OneofWrappers = []any{}
-	file_domain_treasury_disbursement_disbursement_proto_msgTypes[20].OneofWrappers = []any{}
 	file_domain_treasury_disbursement_disbursement_proto_msgTypes[21].OneofWrappers = []any{}
 	file_domain_treasury_disbursement_disbursement_proto_msgTypes[22].OneofWrappers = []any{}
+	file_domain_treasury_disbursement_disbursement_proto_msgTypes[23].OneofWrappers = []any{}
 	file_domain_treasury_disbursement_disbursement_proto_msgTypes[24].OneofWrappers = []any{}
+	file_domain_treasury_disbursement_disbursement_proto_msgTypes[25].OneofWrappers = []any{}
+	file_domain_treasury_disbursement_disbursement_proto_msgTypes[27].OneofWrappers = []any{}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
 		File: protoimpl.DescBuilder{
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_domain_treasury_disbursement_disbursement_proto_rawDesc), len(file_domain_treasury_disbursement_disbursement_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   25,
+			NumMessages:   28,
 			NumExtensions: 0,
 			NumServices:   1,
 		},

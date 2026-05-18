@@ -55,6 +55,17 @@ export type DisbursementProfile = Message<"domain.treasury.v1.DisbursementProfil
      * @generated from field: string disbursement_method_id = 10;
      */
     disbursementMethodId: string;
+    /**
+     * Wave 4 side-fix — architecture.md §3.6.
+     * Add supplier_id alongside the existing client_id. The client_id field on this
+     * entity was originally intended for buying-side use (supplier remittance) but
+     * incorrectly references the client table. supplier_id is the correct FK for the
+     * buying side. Both fields coexist during transition; client_id will be deprecated
+     * in the full Path A polymorphic-upgrade plan. Do NOT remove or rename client_id here.
+     *
+     * @generated from field: optional string supplier_id = 11;
+     */
+    supplierId?: string;
 };
 /**
  * Describes the message domain.treasury.v1.DisbursementProfile.

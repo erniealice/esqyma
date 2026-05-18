@@ -77,6 +77,67 @@ export type Workspace = Message<"domain.entity.v1.Workspace"> & {
      * @generated from field: optional string default_currency = 13;
      */
     defaultCurrency?: string;
+    /**
+     * IANA timezone name (e.g. "Asia/Manila", "America/Los_Angeles"). Source of
+     * truth for billing-cycle math, period boundaries, AR aging buckets, and
+     * any "what calendar day is this?" computation. Domain reads only — display
+     * (e.g. "edited 5 min ago") may still resolve via user/operator tz.
+     *
+     * @generated from field: optional string timezone = 14;
+     */
+    timezone?: string;
+    /**
+     * Tax identity fields — Phase 1 tax integration
+     *
+     * Taxpayer Identification Number
+     *
+     * @generated from field: optional string tin = 15;
+     */
+    tin?: string;
+    /**
+     * When true, PricePlan amounts are gross-of-SURCHARGE (extract). Default false (exclusive).
+     *
+     * @generated from field: optional bool tax_inclusive_pricing = 16;
+     */
+    taxInclusivePricing?: boolean;
+    /**
+     * Master gate: when false, ComputeTaxesForRevenue is a no-op. Default true.
+     *
+     * @generated from field: optional bool tax_computation_enabled = 17;
+     */
+    taxComputationEnabled?: boolean;
+    /**
+     * Jurisdiction scope for SURCHARGE lookups (e.g. "PH-NATIONAL"). Defaults to compliance_region for backward compat.
+     *
+     * @generated from field: optional string home_jurisdiction = 18;
+     */
+    homeJurisdiction?: string;
+    /**
+     * Display format preferences — drive UI date/time rendering across the workspace.
+     * Values are Go time-layout strings (e.g. "Jan 2, 2006" or "2006-01-02") for
+     * date_format, and "3:04 PM" / "15:04" etc. for time_format.
+     * When empty the UI falls back to the locale default for the compliance_region.
+     *
+     * Preferred date display format (Go layout string)
+     *
+     * @generated from field: optional string date_format = 19;
+     */
+    dateFormat?: string;
+    /**
+     * Preferred time display format (Go layout string)
+     *
+     * @generated from field: optional string time_format = 20;
+     */
+    timeFormat?: string;
+    /**
+     * FK back-edge — Wave 4 self-domain plan (2026-05-17).
+     * Convenience denorm: current Ichizen plan FK. The true source of truth is
+     * TenantSubscription.workspace_id — this field is a fast-path lookup for
+     * the /app/billing view. See architecture.md §3.5.
+     *
+     * @generated from field: optional string tenant_subscription_id = 21;
+     */
+    tenantSubscriptionId?: string;
 };
 /**
  * Describes the message domain.entity.v1.Workspace.
