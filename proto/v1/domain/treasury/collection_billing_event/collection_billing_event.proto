@@ -16,7 +16,7 @@ import "options/db.proto";
 // BillingEvent rows. tranche_amount records the portion of the advance assigned
 // to each milestone; SUM(tranche_amount) <= TreasuryCollection.amount enforced
 // in application layer (no DB constraint v1).
-message TreasuryCollectionBillingEvent {
+message CollectionBillingEvent {
   option (options.v1.table).table = true;
 
   string id = 1;
@@ -36,45 +36,45 @@ message TreasuryCollectionBillingEvent {
   optional int64 date_modified = 92;
 }
 
-service TreasuryCollectionBillingEventDomainService {
-  rpc CreateTreasuryCollectionBillingEvent(CreateTreasuryCollectionBillingEventRequest) returns (CreateTreasuryCollectionBillingEventResponse);
-  rpc ReadTreasuryCollectionBillingEvent(ReadTreasuryCollectionBillingEventRequest) returns (ReadTreasuryCollectionBillingEventResponse);
-  rpc UpdateTreasuryCollectionBillingEvent(UpdateTreasuryCollectionBillingEventRequest) returns (UpdateTreasuryCollectionBillingEventResponse);
-  rpc DeleteTreasuryCollectionBillingEvent(DeleteTreasuryCollectionBillingEventRequest) returns (DeleteTreasuryCollectionBillingEventResponse);
-  rpc ListTreasuryCollectionBillingEvents(ListTreasuryCollectionBillingEventsRequest) returns (ListTreasuryCollectionBillingEventsResponse);
+service CollectionBillingEventDomainService {
+  rpc CreateCollectionBillingEvent(CreateCollectionBillingEventRequest) returns (CreateCollectionBillingEventResponse);
+  rpc ReadCollectionBillingEvent(ReadCollectionBillingEventRequest) returns (ReadCollectionBillingEventResponse);
+  rpc UpdateCollectionBillingEvent(UpdateCollectionBillingEventRequest) returns (UpdateCollectionBillingEventResponse);
+  rpc DeleteCollectionBillingEvent(DeleteCollectionBillingEventRequest) returns (DeleteCollectionBillingEventResponse);
+  rpc ListCollectionBillingEvents(ListCollectionBillingEventsRequest) returns (ListCollectionBillingEventsResponse);
 }
 
-message CreateTreasuryCollectionBillingEventRequest  { TreasuryCollectionBillingEvent data = 1; }
-message CreateTreasuryCollectionBillingEventResponse {
-  repeated TreasuryCollectionBillingEvent data = 1;
+message CreateCollectionBillingEventRequest  { CollectionBillingEvent data = 1; }
+message CreateCollectionBillingEventResponse {
+  repeated CollectionBillingEvent data = 1;
   bool success = 2;
   optional domain.common.v1.Error error = 3;
 }
-message ReadTreasuryCollectionBillingEventRequest  { TreasuryCollectionBillingEvent data = 1; }
-message ReadTreasuryCollectionBillingEventResponse {
-  repeated TreasuryCollectionBillingEvent data = 1;
+message ReadCollectionBillingEventRequest  { CollectionBillingEvent data = 1; }
+message ReadCollectionBillingEventResponse {
+  repeated CollectionBillingEvent data = 1;
   bool success = 2;
   optional domain.common.v1.Error error = 3;
 }
-message UpdateTreasuryCollectionBillingEventRequest  { TreasuryCollectionBillingEvent data = 1; }
-message UpdateTreasuryCollectionBillingEventResponse {
-  repeated TreasuryCollectionBillingEvent data = 1;
+message UpdateCollectionBillingEventRequest  { CollectionBillingEvent data = 1; }
+message UpdateCollectionBillingEventResponse {
+  repeated CollectionBillingEvent data = 1;
   bool success = 2;
   optional domain.common.v1.Error error = 3;
 }
-message DeleteTreasuryCollectionBillingEventRequest  { TreasuryCollectionBillingEvent data = 1; }
-message DeleteTreasuryCollectionBillingEventResponse {
+message DeleteCollectionBillingEventRequest  { CollectionBillingEvent data = 1; }
+message DeleteCollectionBillingEventResponse {
   bool success = 1;
   optional domain.common.v1.Error error = 2;
 }
-message ListTreasuryCollectionBillingEventsRequest {
+message ListCollectionBillingEventsRequest {
   optional domain.common.v1.SearchRequest search = 1;
   optional domain.common.v1.FilterRequest filters = 2;
   optional domain.common.v1.SortRequest sort = 3;
   optional domain.common.v1.PaginationRequest pagination = 4;
 }
-message ListTreasuryCollectionBillingEventsResponse {
-  repeated TreasuryCollectionBillingEvent data = 1;
+message ListCollectionBillingEventsResponse {
+  repeated CollectionBillingEvent data = 1;
   bool success = 2;
   optional domain.common.v1.Error error = 3;
 }

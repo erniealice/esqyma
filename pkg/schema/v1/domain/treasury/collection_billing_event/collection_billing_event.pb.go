@@ -27,7 +27,7 @@ const (
 // BillingEvent rows. tranche_amount records the portion of the advance assigned
 // to each milestone; SUM(tranche_amount) <= TreasuryCollection.amount enforced
 // in application layer (no DB constraint v1).
-type TreasuryCollectionBillingEvent struct {
+type CollectionBillingEvent struct {
 	state                protoimpl.MessageState `protogen:"open.v1"`
 	Id                   string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
 	WorkspaceId          string                 `protobuf:"bytes,2,opt,name=workspace_id,json=workspaceId,proto3" json:"workspace_id,omitempty"`
@@ -44,20 +44,20 @@ type TreasuryCollectionBillingEvent struct {
 	sizeCache     protoimpl.SizeCache
 }
 
-func (x *TreasuryCollectionBillingEvent) Reset() {
-	*x = TreasuryCollectionBillingEvent{}
+func (x *CollectionBillingEvent) Reset() {
+	*x = CollectionBillingEvent{}
 	mi := &file_domain_treasury_collection_billing_event_collection_billing_event_proto_msgTypes[0]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
 
-func (x *TreasuryCollectionBillingEvent) String() string {
+func (x *CollectionBillingEvent) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*TreasuryCollectionBillingEvent) ProtoMessage() {}
+func (*CollectionBillingEvent) ProtoMessage() {}
 
-func (x *TreasuryCollectionBillingEvent) ProtoReflect() protoreflect.Message {
+func (x *CollectionBillingEvent) ProtoReflect() protoreflect.Message {
 	mi := &file_domain_treasury_collection_billing_event_collection_billing_event_proto_msgTypes[0]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -69,95 +69,95 @@ func (x *TreasuryCollectionBillingEvent) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use TreasuryCollectionBillingEvent.ProtoReflect.Descriptor instead.
-func (*TreasuryCollectionBillingEvent) Descriptor() ([]byte, []int) {
+// Deprecated: Use CollectionBillingEvent.ProtoReflect.Descriptor instead.
+func (*CollectionBillingEvent) Descriptor() ([]byte, []int) {
 	return file_domain_treasury_collection_billing_event_collection_billing_event_proto_rawDescGZIP(), []int{0}
 }
 
-func (x *TreasuryCollectionBillingEvent) GetId() string {
+func (x *CollectionBillingEvent) GetId() string {
 	if x != nil {
 		return x.Id
 	}
 	return ""
 }
 
-func (x *TreasuryCollectionBillingEvent) GetWorkspaceId() string {
+func (x *CollectionBillingEvent) GetWorkspaceId() string {
 	if x != nil {
 		return x.WorkspaceId
 	}
 	return ""
 }
 
-func (x *TreasuryCollectionBillingEvent) GetTreasuryCollectionId() string {
+func (x *CollectionBillingEvent) GetTreasuryCollectionId() string {
 	if x != nil {
 		return x.TreasuryCollectionId
 	}
 	return ""
 }
 
-func (x *TreasuryCollectionBillingEvent) GetBillingEventId() string {
+func (x *CollectionBillingEvent) GetBillingEventId() string {
 	if x != nil {
 		return x.BillingEventId
 	}
 	return ""
 }
 
-func (x *TreasuryCollectionBillingEvent) GetTrancheAmount() int64 {
+func (x *CollectionBillingEvent) GetTrancheAmount() int64 {
 	if x != nil {
 		return x.TrancheAmount
 	}
 	return 0
 }
 
-func (x *TreasuryCollectionBillingEvent) GetRevenueId() string {
+func (x *CollectionBillingEvent) GetRevenueId() string {
 	if x != nil && x.RevenueId != nil {
 		return *x.RevenueId
 	}
 	return ""
 }
 
-func (x *TreasuryCollectionBillingEvent) GetActive() bool {
+func (x *CollectionBillingEvent) GetActive() bool {
 	if x != nil {
 		return x.Active
 	}
 	return false
 }
 
-func (x *TreasuryCollectionBillingEvent) GetDateCreated() int64 {
+func (x *CollectionBillingEvent) GetDateCreated() int64 {
 	if x != nil && x.DateCreated != nil {
 		return *x.DateCreated
 	}
 	return 0
 }
 
-func (x *TreasuryCollectionBillingEvent) GetDateModified() int64 {
+func (x *CollectionBillingEvent) GetDateModified() int64 {
 	if x != nil && x.DateModified != nil {
 		return *x.DateModified
 	}
 	return 0
 }
 
-type CreateTreasuryCollectionBillingEventRequest struct {
-	state         protoimpl.MessageState          `protogen:"open.v1"`
-	Data          *TreasuryCollectionBillingEvent `protobuf:"bytes,1,opt,name=data,proto3" json:"data,omitempty"`
+type CreateCollectionBillingEventRequest struct {
+	state         protoimpl.MessageState  `protogen:"open.v1"`
+	Data          *CollectionBillingEvent `protobuf:"bytes,1,opt,name=data,proto3" json:"data,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
 
-func (x *CreateTreasuryCollectionBillingEventRequest) Reset() {
-	*x = CreateTreasuryCollectionBillingEventRequest{}
+func (x *CreateCollectionBillingEventRequest) Reset() {
+	*x = CreateCollectionBillingEventRequest{}
 	mi := &file_domain_treasury_collection_billing_event_collection_billing_event_proto_msgTypes[1]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
 
-func (x *CreateTreasuryCollectionBillingEventRequest) String() string {
+func (x *CreateCollectionBillingEventRequest) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*CreateTreasuryCollectionBillingEventRequest) ProtoMessage() {}
+func (*CreateCollectionBillingEventRequest) ProtoMessage() {}
 
-func (x *CreateTreasuryCollectionBillingEventRequest) ProtoReflect() protoreflect.Message {
+func (x *CreateCollectionBillingEventRequest) ProtoReflect() protoreflect.Message {
 	mi := &file_domain_treasury_collection_billing_event_collection_billing_event_proto_msgTypes[1]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -169,41 +169,41 @@ func (x *CreateTreasuryCollectionBillingEventRequest) ProtoReflect() protoreflec
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use CreateTreasuryCollectionBillingEventRequest.ProtoReflect.Descriptor instead.
-func (*CreateTreasuryCollectionBillingEventRequest) Descriptor() ([]byte, []int) {
+// Deprecated: Use CreateCollectionBillingEventRequest.ProtoReflect.Descriptor instead.
+func (*CreateCollectionBillingEventRequest) Descriptor() ([]byte, []int) {
 	return file_domain_treasury_collection_billing_event_collection_billing_event_proto_rawDescGZIP(), []int{1}
 }
 
-func (x *CreateTreasuryCollectionBillingEventRequest) GetData() *TreasuryCollectionBillingEvent {
+func (x *CreateCollectionBillingEventRequest) GetData() *CollectionBillingEvent {
 	if x != nil {
 		return x.Data
 	}
 	return nil
 }
 
-type CreateTreasuryCollectionBillingEventResponse struct {
-	state         protoimpl.MessageState            `protogen:"open.v1"`
-	Data          []*TreasuryCollectionBillingEvent `protobuf:"bytes,1,rep,name=data,proto3" json:"data,omitempty"`
-	Success       bool                              `protobuf:"varint,2,opt,name=success,proto3" json:"success,omitempty"`
-	Error         *common.Error                     `protobuf:"bytes,3,opt,name=error,proto3,oneof" json:"error,omitempty"`
+type CreateCollectionBillingEventResponse struct {
+	state         protoimpl.MessageState    `protogen:"open.v1"`
+	Data          []*CollectionBillingEvent `protobuf:"bytes,1,rep,name=data,proto3" json:"data,omitempty"`
+	Success       bool                      `protobuf:"varint,2,opt,name=success,proto3" json:"success,omitempty"`
+	Error         *common.Error             `protobuf:"bytes,3,opt,name=error,proto3,oneof" json:"error,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
 
-func (x *CreateTreasuryCollectionBillingEventResponse) Reset() {
-	*x = CreateTreasuryCollectionBillingEventResponse{}
+func (x *CreateCollectionBillingEventResponse) Reset() {
+	*x = CreateCollectionBillingEventResponse{}
 	mi := &file_domain_treasury_collection_billing_event_collection_billing_event_proto_msgTypes[2]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
 
-func (x *CreateTreasuryCollectionBillingEventResponse) String() string {
+func (x *CreateCollectionBillingEventResponse) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*CreateTreasuryCollectionBillingEventResponse) ProtoMessage() {}
+func (*CreateCollectionBillingEventResponse) ProtoMessage() {}
 
-func (x *CreateTreasuryCollectionBillingEventResponse) ProtoReflect() protoreflect.Message {
+func (x *CreateCollectionBillingEventResponse) ProtoReflect() protoreflect.Message {
 	mi := &file_domain_treasury_collection_billing_event_collection_billing_event_proto_msgTypes[2]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -215,53 +215,53 @@ func (x *CreateTreasuryCollectionBillingEventResponse) ProtoReflect() protorefle
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use CreateTreasuryCollectionBillingEventResponse.ProtoReflect.Descriptor instead.
-func (*CreateTreasuryCollectionBillingEventResponse) Descriptor() ([]byte, []int) {
+// Deprecated: Use CreateCollectionBillingEventResponse.ProtoReflect.Descriptor instead.
+func (*CreateCollectionBillingEventResponse) Descriptor() ([]byte, []int) {
 	return file_domain_treasury_collection_billing_event_collection_billing_event_proto_rawDescGZIP(), []int{2}
 }
 
-func (x *CreateTreasuryCollectionBillingEventResponse) GetData() []*TreasuryCollectionBillingEvent {
+func (x *CreateCollectionBillingEventResponse) GetData() []*CollectionBillingEvent {
 	if x != nil {
 		return x.Data
 	}
 	return nil
 }
 
-func (x *CreateTreasuryCollectionBillingEventResponse) GetSuccess() bool {
+func (x *CreateCollectionBillingEventResponse) GetSuccess() bool {
 	if x != nil {
 		return x.Success
 	}
 	return false
 }
 
-func (x *CreateTreasuryCollectionBillingEventResponse) GetError() *common.Error {
+func (x *CreateCollectionBillingEventResponse) GetError() *common.Error {
 	if x != nil {
 		return x.Error
 	}
 	return nil
 }
 
-type ReadTreasuryCollectionBillingEventRequest struct {
-	state         protoimpl.MessageState          `protogen:"open.v1"`
-	Data          *TreasuryCollectionBillingEvent `protobuf:"bytes,1,opt,name=data,proto3" json:"data,omitempty"`
+type ReadCollectionBillingEventRequest struct {
+	state         protoimpl.MessageState  `protogen:"open.v1"`
+	Data          *CollectionBillingEvent `protobuf:"bytes,1,opt,name=data,proto3" json:"data,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
 
-func (x *ReadTreasuryCollectionBillingEventRequest) Reset() {
-	*x = ReadTreasuryCollectionBillingEventRequest{}
+func (x *ReadCollectionBillingEventRequest) Reset() {
+	*x = ReadCollectionBillingEventRequest{}
 	mi := &file_domain_treasury_collection_billing_event_collection_billing_event_proto_msgTypes[3]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
 
-func (x *ReadTreasuryCollectionBillingEventRequest) String() string {
+func (x *ReadCollectionBillingEventRequest) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*ReadTreasuryCollectionBillingEventRequest) ProtoMessage() {}
+func (*ReadCollectionBillingEventRequest) ProtoMessage() {}
 
-func (x *ReadTreasuryCollectionBillingEventRequest) ProtoReflect() protoreflect.Message {
+func (x *ReadCollectionBillingEventRequest) ProtoReflect() protoreflect.Message {
 	mi := &file_domain_treasury_collection_billing_event_collection_billing_event_proto_msgTypes[3]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -273,41 +273,41 @@ func (x *ReadTreasuryCollectionBillingEventRequest) ProtoReflect() protoreflect.
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use ReadTreasuryCollectionBillingEventRequest.ProtoReflect.Descriptor instead.
-func (*ReadTreasuryCollectionBillingEventRequest) Descriptor() ([]byte, []int) {
+// Deprecated: Use ReadCollectionBillingEventRequest.ProtoReflect.Descriptor instead.
+func (*ReadCollectionBillingEventRequest) Descriptor() ([]byte, []int) {
 	return file_domain_treasury_collection_billing_event_collection_billing_event_proto_rawDescGZIP(), []int{3}
 }
 
-func (x *ReadTreasuryCollectionBillingEventRequest) GetData() *TreasuryCollectionBillingEvent {
+func (x *ReadCollectionBillingEventRequest) GetData() *CollectionBillingEvent {
 	if x != nil {
 		return x.Data
 	}
 	return nil
 }
 
-type ReadTreasuryCollectionBillingEventResponse struct {
-	state         protoimpl.MessageState            `protogen:"open.v1"`
-	Data          []*TreasuryCollectionBillingEvent `protobuf:"bytes,1,rep,name=data,proto3" json:"data,omitempty"`
-	Success       bool                              `protobuf:"varint,2,opt,name=success,proto3" json:"success,omitempty"`
-	Error         *common.Error                     `protobuf:"bytes,3,opt,name=error,proto3,oneof" json:"error,omitempty"`
+type ReadCollectionBillingEventResponse struct {
+	state         protoimpl.MessageState    `protogen:"open.v1"`
+	Data          []*CollectionBillingEvent `protobuf:"bytes,1,rep,name=data,proto3" json:"data,omitempty"`
+	Success       bool                      `protobuf:"varint,2,opt,name=success,proto3" json:"success,omitempty"`
+	Error         *common.Error             `protobuf:"bytes,3,opt,name=error,proto3,oneof" json:"error,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
 
-func (x *ReadTreasuryCollectionBillingEventResponse) Reset() {
-	*x = ReadTreasuryCollectionBillingEventResponse{}
+func (x *ReadCollectionBillingEventResponse) Reset() {
+	*x = ReadCollectionBillingEventResponse{}
 	mi := &file_domain_treasury_collection_billing_event_collection_billing_event_proto_msgTypes[4]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
 
-func (x *ReadTreasuryCollectionBillingEventResponse) String() string {
+func (x *ReadCollectionBillingEventResponse) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*ReadTreasuryCollectionBillingEventResponse) ProtoMessage() {}
+func (*ReadCollectionBillingEventResponse) ProtoMessage() {}
 
-func (x *ReadTreasuryCollectionBillingEventResponse) ProtoReflect() protoreflect.Message {
+func (x *ReadCollectionBillingEventResponse) ProtoReflect() protoreflect.Message {
 	mi := &file_domain_treasury_collection_billing_event_collection_billing_event_proto_msgTypes[4]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -319,53 +319,53 @@ func (x *ReadTreasuryCollectionBillingEventResponse) ProtoReflect() protoreflect
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use ReadTreasuryCollectionBillingEventResponse.ProtoReflect.Descriptor instead.
-func (*ReadTreasuryCollectionBillingEventResponse) Descriptor() ([]byte, []int) {
+// Deprecated: Use ReadCollectionBillingEventResponse.ProtoReflect.Descriptor instead.
+func (*ReadCollectionBillingEventResponse) Descriptor() ([]byte, []int) {
 	return file_domain_treasury_collection_billing_event_collection_billing_event_proto_rawDescGZIP(), []int{4}
 }
 
-func (x *ReadTreasuryCollectionBillingEventResponse) GetData() []*TreasuryCollectionBillingEvent {
+func (x *ReadCollectionBillingEventResponse) GetData() []*CollectionBillingEvent {
 	if x != nil {
 		return x.Data
 	}
 	return nil
 }
 
-func (x *ReadTreasuryCollectionBillingEventResponse) GetSuccess() bool {
+func (x *ReadCollectionBillingEventResponse) GetSuccess() bool {
 	if x != nil {
 		return x.Success
 	}
 	return false
 }
 
-func (x *ReadTreasuryCollectionBillingEventResponse) GetError() *common.Error {
+func (x *ReadCollectionBillingEventResponse) GetError() *common.Error {
 	if x != nil {
 		return x.Error
 	}
 	return nil
 }
 
-type UpdateTreasuryCollectionBillingEventRequest struct {
-	state         protoimpl.MessageState          `protogen:"open.v1"`
-	Data          *TreasuryCollectionBillingEvent `protobuf:"bytes,1,opt,name=data,proto3" json:"data,omitempty"`
+type UpdateCollectionBillingEventRequest struct {
+	state         protoimpl.MessageState  `protogen:"open.v1"`
+	Data          *CollectionBillingEvent `protobuf:"bytes,1,opt,name=data,proto3" json:"data,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
 
-func (x *UpdateTreasuryCollectionBillingEventRequest) Reset() {
-	*x = UpdateTreasuryCollectionBillingEventRequest{}
+func (x *UpdateCollectionBillingEventRequest) Reset() {
+	*x = UpdateCollectionBillingEventRequest{}
 	mi := &file_domain_treasury_collection_billing_event_collection_billing_event_proto_msgTypes[5]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
 
-func (x *UpdateTreasuryCollectionBillingEventRequest) String() string {
+func (x *UpdateCollectionBillingEventRequest) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*UpdateTreasuryCollectionBillingEventRequest) ProtoMessage() {}
+func (*UpdateCollectionBillingEventRequest) ProtoMessage() {}
 
-func (x *UpdateTreasuryCollectionBillingEventRequest) ProtoReflect() protoreflect.Message {
+func (x *UpdateCollectionBillingEventRequest) ProtoReflect() protoreflect.Message {
 	mi := &file_domain_treasury_collection_billing_event_collection_billing_event_proto_msgTypes[5]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -377,41 +377,41 @@ func (x *UpdateTreasuryCollectionBillingEventRequest) ProtoReflect() protoreflec
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use UpdateTreasuryCollectionBillingEventRequest.ProtoReflect.Descriptor instead.
-func (*UpdateTreasuryCollectionBillingEventRequest) Descriptor() ([]byte, []int) {
+// Deprecated: Use UpdateCollectionBillingEventRequest.ProtoReflect.Descriptor instead.
+func (*UpdateCollectionBillingEventRequest) Descriptor() ([]byte, []int) {
 	return file_domain_treasury_collection_billing_event_collection_billing_event_proto_rawDescGZIP(), []int{5}
 }
 
-func (x *UpdateTreasuryCollectionBillingEventRequest) GetData() *TreasuryCollectionBillingEvent {
+func (x *UpdateCollectionBillingEventRequest) GetData() *CollectionBillingEvent {
 	if x != nil {
 		return x.Data
 	}
 	return nil
 }
 
-type UpdateTreasuryCollectionBillingEventResponse struct {
-	state         protoimpl.MessageState            `protogen:"open.v1"`
-	Data          []*TreasuryCollectionBillingEvent `protobuf:"bytes,1,rep,name=data,proto3" json:"data,omitempty"`
-	Success       bool                              `protobuf:"varint,2,opt,name=success,proto3" json:"success,omitempty"`
-	Error         *common.Error                     `protobuf:"bytes,3,opt,name=error,proto3,oneof" json:"error,omitempty"`
+type UpdateCollectionBillingEventResponse struct {
+	state         protoimpl.MessageState    `protogen:"open.v1"`
+	Data          []*CollectionBillingEvent `protobuf:"bytes,1,rep,name=data,proto3" json:"data,omitempty"`
+	Success       bool                      `protobuf:"varint,2,opt,name=success,proto3" json:"success,omitempty"`
+	Error         *common.Error             `protobuf:"bytes,3,opt,name=error,proto3,oneof" json:"error,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
 
-func (x *UpdateTreasuryCollectionBillingEventResponse) Reset() {
-	*x = UpdateTreasuryCollectionBillingEventResponse{}
+func (x *UpdateCollectionBillingEventResponse) Reset() {
+	*x = UpdateCollectionBillingEventResponse{}
 	mi := &file_domain_treasury_collection_billing_event_collection_billing_event_proto_msgTypes[6]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
 
-func (x *UpdateTreasuryCollectionBillingEventResponse) String() string {
+func (x *UpdateCollectionBillingEventResponse) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*UpdateTreasuryCollectionBillingEventResponse) ProtoMessage() {}
+func (*UpdateCollectionBillingEventResponse) ProtoMessage() {}
 
-func (x *UpdateTreasuryCollectionBillingEventResponse) ProtoReflect() protoreflect.Message {
+func (x *UpdateCollectionBillingEventResponse) ProtoReflect() protoreflect.Message {
 	mi := &file_domain_treasury_collection_billing_event_collection_billing_event_proto_msgTypes[6]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -423,53 +423,53 @@ func (x *UpdateTreasuryCollectionBillingEventResponse) ProtoReflect() protorefle
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use UpdateTreasuryCollectionBillingEventResponse.ProtoReflect.Descriptor instead.
-func (*UpdateTreasuryCollectionBillingEventResponse) Descriptor() ([]byte, []int) {
+// Deprecated: Use UpdateCollectionBillingEventResponse.ProtoReflect.Descriptor instead.
+func (*UpdateCollectionBillingEventResponse) Descriptor() ([]byte, []int) {
 	return file_domain_treasury_collection_billing_event_collection_billing_event_proto_rawDescGZIP(), []int{6}
 }
 
-func (x *UpdateTreasuryCollectionBillingEventResponse) GetData() []*TreasuryCollectionBillingEvent {
+func (x *UpdateCollectionBillingEventResponse) GetData() []*CollectionBillingEvent {
 	if x != nil {
 		return x.Data
 	}
 	return nil
 }
 
-func (x *UpdateTreasuryCollectionBillingEventResponse) GetSuccess() bool {
+func (x *UpdateCollectionBillingEventResponse) GetSuccess() bool {
 	if x != nil {
 		return x.Success
 	}
 	return false
 }
 
-func (x *UpdateTreasuryCollectionBillingEventResponse) GetError() *common.Error {
+func (x *UpdateCollectionBillingEventResponse) GetError() *common.Error {
 	if x != nil {
 		return x.Error
 	}
 	return nil
 }
 
-type DeleteTreasuryCollectionBillingEventRequest struct {
-	state         protoimpl.MessageState          `protogen:"open.v1"`
-	Data          *TreasuryCollectionBillingEvent `protobuf:"bytes,1,opt,name=data,proto3" json:"data,omitempty"`
+type DeleteCollectionBillingEventRequest struct {
+	state         protoimpl.MessageState  `protogen:"open.v1"`
+	Data          *CollectionBillingEvent `protobuf:"bytes,1,opt,name=data,proto3" json:"data,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
 
-func (x *DeleteTreasuryCollectionBillingEventRequest) Reset() {
-	*x = DeleteTreasuryCollectionBillingEventRequest{}
+func (x *DeleteCollectionBillingEventRequest) Reset() {
+	*x = DeleteCollectionBillingEventRequest{}
 	mi := &file_domain_treasury_collection_billing_event_collection_billing_event_proto_msgTypes[7]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
 
-func (x *DeleteTreasuryCollectionBillingEventRequest) String() string {
+func (x *DeleteCollectionBillingEventRequest) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*DeleteTreasuryCollectionBillingEventRequest) ProtoMessage() {}
+func (*DeleteCollectionBillingEventRequest) ProtoMessage() {}
 
-func (x *DeleteTreasuryCollectionBillingEventRequest) ProtoReflect() protoreflect.Message {
+func (x *DeleteCollectionBillingEventRequest) ProtoReflect() protoreflect.Message {
 	mi := &file_domain_treasury_collection_billing_event_collection_billing_event_proto_msgTypes[7]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -481,19 +481,19 @@ func (x *DeleteTreasuryCollectionBillingEventRequest) ProtoReflect() protoreflec
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use DeleteTreasuryCollectionBillingEventRequest.ProtoReflect.Descriptor instead.
-func (*DeleteTreasuryCollectionBillingEventRequest) Descriptor() ([]byte, []int) {
+// Deprecated: Use DeleteCollectionBillingEventRequest.ProtoReflect.Descriptor instead.
+func (*DeleteCollectionBillingEventRequest) Descriptor() ([]byte, []int) {
 	return file_domain_treasury_collection_billing_event_collection_billing_event_proto_rawDescGZIP(), []int{7}
 }
 
-func (x *DeleteTreasuryCollectionBillingEventRequest) GetData() *TreasuryCollectionBillingEvent {
+func (x *DeleteCollectionBillingEventRequest) GetData() *CollectionBillingEvent {
 	if x != nil {
 		return x.Data
 	}
 	return nil
 }
 
-type DeleteTreasuryCollectionBillingEventResponse struct {
+type DeleteCollectionBillingEventResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Success       bool                   `protobuf:"varint,1,opt,name=success,proto3" json:"success,omitempty"`
 	Error         *common.Error          `protobuf:"bytes,2,opt,name=error,proto3,oneof" json:"error,omitempty"`
@@ -501,20 +501,20 @@ type DeleteTreasuryCollectionBillingEventResponse struct {
 	sizeCache     protoimpl.SizeCache
 }
 
-func (x *DeleteTreasuryCollectionBillingEventResponse) Reset() {
-	*x = DeleteTreasuryCollectionBillingEventResponse{}
+func (x *DeleteCollectionBillingEventResponse) Reset() {
+	*x = DeleteCollectionBillingEventResponse{}
 	mi := &file_domain_treasury_collection_billing_event_collection_billing_event_proto_msgTypes[8]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
 
-func (x *DeleteTreasuryCollectionBillingEventResponse) String() string {
+func (x *DeleteCollectionBillingEventResponse) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*DeleteTreasuryCollectionBillingEventResponse) ProtoMessage() {}
+func (*DeleteCollectionBillingEventResponse) ProtoMessage() {}
 
-func (x *DeleteTreasuryCollectionBillingEventResponse) ProtoReflect() protoreflect.Message {
+func (x *DeleteCollectionBillingEventResponse) ProtoReflect() protoreflect.Message {
 	mi := &file_domain_treasury_collection_billing_event_collection_billing_event_proto_msgTypes[8]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -526,26 +526,26 @@ func (x *DeleteTreasuryCollectionBillingEventResponse) ProtoReflect() protorefle
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use DeleteTreasuryCollectionBillingEventResponse.ProtoReflect.Descriptor instead.
-func (*DeleteTreasuryCollectionBillingEventResponse) Descriptor() ([]byte, []int) {
+// Deprecated: Use DeleteCollectionBillingEventResponse.ProtoReflect.Descriptor instead.
+func (*DeleteCollectionBillingEventResponse) Descriptor() ([]byte, []int) {
 	return file_domain_treasury_collection_billing_event_collection_billing_event_proto_rawDescGZIP(), []int{8}
 }
 
-func (x *DeleteTreasuryCollectionBillingEventResponse) GetSuccess() bool {
+func (x *DeleteCollectionBillingEventResponse) GetSuccess() bool {
 	if x != nil {
 		return x.Success
 	}
 	return false
 }
 
-func (x *DeleteTreasuryCollectionBillingEventResponse) GetError() *common.Error {
+func (x *DeleteCollectionBillingEventResponse) GetError() *common.Error {
 	if x != nil {
 		return x.Error
 	}
 	return nil
 }
 
-type ListTreasuryCollectionBillingEventsRequest struct {
+type ListCollectionBillingEventsRequest struct {
 	state         protoimpl.MessageState    `protogen:"open.v1"`
 	Search        *common.SearchRequest     `protobuf:"bytes,1,opt,name=search,proto3,oneof" json:"search,omitempty"`
 	Filters       *common.FilterRequest     `protobuf:"bytes,2,opt,name=filters,proto3,oneof" json:"filters,omitempty"`
@@ -555,20 +555,20 @@ type ListTreasuryCollectionBillingEventsRequest struct {
 	sizeCache     protoimpl.SizeCache
 }
 
-func (x *ListTreasuryCollectionBillingEventsRequest) Reset() {
-	*x = ListTreasuryCollectionBillingEventsRequest{}
+func (x *ListCollectionBillingEventsRequest) Reset() {
+	*x = ListCollectionBillingEventsRequest{}
 	mi := &file_domain_treasury_collection_billing_event_collection_billing_event_proto_msgTypes[9]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
 
-func (x *ListTreasuryCollectionBillingEventsRequest) String() string {
+func (x *ListCollectionBillingEventsRequest) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*ListTreasuryCollectionBillingEventsRequest) ProtoMessage() {}
+func (*ListCollectionBillingEventsRequest) ProtoMessage() {}
 
-func (x *ListTreasuryCollectionBillingEventsRequest) ProtoReflect() protoreflect.Message {
+func (x *ListCollectionBillingEventsRequest) ProtoReflect() protoreflect.Message {
 	mi := &file_domain_treasury_collection_billing_event_collection_billing_event_proto_msgTypes[9]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -580,62 +580,62 @@ func (x *ListTreasuryCollectionBillingEventsRequest) ProtoReflect() protoreflect
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use ListTreasuryCollectionBillingEventsRequest.ProtoReflect.Descriptor instead.
-func (*ListTreasuryCollectionBillingEventsRequest) Descriptor() ([]byte, []int) {
+// Deprecated: Use ListCollectionBillingEventsRequest.ProtoReflect.Descriptor instead.
+func (*ListCollectionBillingEventsRequest) Descriptor() ([]byte, []int) {
 	return file_domain_treasury_collection_billing_event_collection_billing_event_proto_rawDescGZIP(), []int{9}
 }
 
-func (x *ListTreasuryCollectionBillingEventsRequest) GetSearch() *common.SearchRequest {
+func (x *ListCollectionBillingEventsRequest) GetSearch() *common.SearchRequest {
 	if x != nil {
 		return x.Search
 	}
 	return nil
 }
 
-func (x *ListTreasuryCollectionBillingEventsRequest) GetFilters() *common.FilterRequest {
+func (x *ListCollectionBillingEventsRequest) GetFilters() *common.FilterRequest {
 	if x != nil {
 		return x.Filters
 	}
 	return nil
 }
 
-func (x *ListTreasuryCollectionBillingEventsRequest) GetSort() *common.SortRequest {
+func (x *ListCollectionBillingEventsRequest) GetSort() *common.SortRequest {
 	if x != nil {
 		return x.Sort
 	}
 	return nil
 }
 
-func (x *ListTreasuryCollectionBillingEventsRequest) GetPagination() *common.PaginationRequest {
+func (x *ListCollectionBillingEventsRequest) GetPagination() *common.PaginationRequest {
 	if x != nil {
 		return x.Pagination
 	}
 	return nil
 }
 
-type ListTreasuryCollectionBillingEventsResponse struct {
-	state         protoimpl.MessageState            `protogen:"open.v1"`
-	Data          []*TreasuryCollectionBillingEvent `protobuf:"bytes,1,rep,name=data,proto3" json:"data,omitempty"`
-	Success       bool                              `protobuf:"varint,2,opt,name=success,proto3" json:"success,omitempty"`
-	Error         *common.Error                     `protobuf:"bytes,3,opt,name=error,proto3,oneof" json:"error,omitempty"`
+type ListCollectionBillingEventsResponse struct {
+	state         protoimpl.MessageState    `protogen:"open.v1"`
+	Data          []*CollectionBillingEvent `protobuf:"bytes,1,rep,name=data,proto3" json:"data,omitempty"`
+	Success       bool                      `protobuf:"varint,2,opt,name=success,proto3" json:"success,omitempty"`
+	Error         *common.Error             `protobuf:"bytes,3,opt,name=error,proto3,oneof" json:"error,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
 
-func (x *ListTreasuryCollectionBillingEventsResponse) Reset() {
-	*x = ListTreasuryCollectionBillingEventsResponse{}
+func (x *ListCollectionBillingEventsResponse) Reset() {
+	*x = ListCollectionBillingEventsResponse{}
 	mi := &file_domain_treasury_collection_billing_event_collection_billing_event_proto_msgTypes[10]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
 
-func (x *ListTreasuryCollectionBillingEventsResponse) String() string {
+func (x *ListCollectionBillingEventsResponse) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*ListTreasuryCollectionBillingEventsResponse) ProtoMessage() {}
+func (*ListCollectionBillingEventsResponse) ProtoMessage() {}
 
-func (x *ListTreasuryCollectionBillingEventsResponse) ProtoReflect() protoreflect.Message {
+func (x *ListCollectionBillingEventsResponse) ProtoReflect() protoreflect.Message {
 	mi := &file_domain_treasury_collection_billing_event_collection_billing_event_proto_msgTypes[10]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -647,26 +647,26 @@ func (x *ListTreasuryCollectionBillingEventsResponse) ProtoReflect() protoreflec
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use ListTreasuryCollectionBillingEventsResponse.ProtoReflect.Descriptor instead.
-func (*ListTreasuryCollectionBillingEventsResponse) Descriptor() ([]byte, []int) {
+// Deprecated: Use ListCollectionBillingEventsResponse.ProtoReflect.Descriptor instead.
+func (*ListCollectionBillingEventsResponse) Descriptor() ([]byte, []int) {
 	return file_domain_treasury_collection_billing_event_collection_billing_event_proto_rawDescGZIP(), []int{10}
 }
 
-func (x *ListTreasuryCollectionBillingEventsResponse) GetData() []*TreasuryCollectionBillingEvent {
+func (x *ListCollectionBillingEventsResponse) GetData() []*CollectionBillingEvent {
 	if x != nil {
 		return x.Data
 	}
 	return nil
 }
 
-func (x *ListTreasuryCollectionBillingEventsResponse) GetSuccess() bool {
+func (x *ListCollectionBillingEventsResponse) GetSuccess() bool {
 	if x != nil {
 		return x.Success
 	}
 	return false
 }
 
-func (x *ListTreasuryCollectionBillingEventsResponse) GetError() *common.Error {
+func (x *ListCollectionBillingEventsResponse) GetError() *common.Error {
 	if x != nil {
 		return x.Error
 	}
@@ -677,8 +677,8 @@ var File_domain_treasury_collection_billing_event_collection_billing_event_proto
 
 const file_domain_treasury_collection_billing_event_collection_billing_event_proto_rawDesc = "" +
 	"\n" +
-	"Gdomain/treasury/collection_billing_event/collection_billing_event.proto\x12\x12domain.treasury.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/search.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x10options/db.proto\"\xfb\x03\n" +
-	"\x1eTreasuryCollectionBillingEvent\x12\x0e\n" +
+	"Gdomain/treasury/collection_billing_event/collection_billing_event.proto\x12\x12domain.treasury.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/search.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x10options/db.proto\"\xf3\x03\n" +
+	"\x16CollectionBillingEvent\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12)\n" +
 	"\fworkspace_id\x18\x02 \x01(\tB\x06\x82\xb5\x18\x02\x18\x01R\vworkspaceId\x12Q\n" +
 	"\x16treasury_collection_id\x18\n" +
@@ -696,35 +696,35 @@ const file_domain_treasury_collection_billing_event_collection_billing_event_pro
 	"\rdate_modified\x18\\ \x01(\x03H\x02R\fdateModified\x88\x01\x01:\x06\x8a\xb5\x18\x02\b\x01B\r\n" +
 	"\v_revenue_idB\x0f\n" +
 	"\r_date_createdB\x10\n" +
-	"\x0e_date_modified\"u\n" +
-	"+CreateTreasuryCollectionBillingEventRequest\x12F\n" +
-	"\x04data\x18\x01 \x01(\v22.domain.treasury.v1.TreasuryCollectionBillingEventR\x04data\"\xce\x01\n" +
-	",CreateTreasuryCollectionBillingEventResponse\x12F\n" +
-	"\x04data\x18\x01 \x03(\v22.domain.treasury.v1.TreasuryCollectionBillingEventR\x04data\x12\x18\n" +
+	"\x0e_date_modified\"e\n" +
+	"#CreateCollectionBillingEventRequest\x12>\n" +
+	"\x04data\x18\x01 \x01(\v2*.domain.treasury.v1.CollectionBillingEventR\x04data\"\xbe\x01\n" +
+	"$CreateCollectionBillingEventResponse\x12>\n" +
+	"\x04data\x18\x01 \x03(\v2*.domain.treasury.v1.CollectionBillingEventR\x04data\x12\x18\n" +
 	"\asuccess\x18\x02 \x01(\bR\asuccess\x122\n" +
 	"\x05error\x18\x03 \x01(\v2\x17.domain.common.v1.ErrorH\x00R\x05error\x88\x01\x01B\b\n" +
-	"\x06_error\"s\n" +
-	")ReadTreasuryCollectionBillingEventRequest\x12F\n" +
-	"\x04data\x18\x01 \x01(\v22.domain.treasury.v1.TreasuryCollectionBillingEventR\x04data\"\xcc\x01\n" +
-	"*ReadTreasuryCollectionBillingEventResponse\x12F\n" +
-	"\x04data\x18\x01 \x03(\v22.domain.treasury.v1.TreasuryCollectionBillingEventR\x04data\x12\x18\n" +
+	"\x06_error\"c\n" +
+	"!ReadCollectionBillingEventRequest\x12>\n" +
+	"\x04data\x18\x01 \x01(\v2*.domain.treasury.v1.CollectionBillingEventR\x04data\"\xbc\x01\n" +
+	"\"ReadCollectionBillingEventResponse\x12>\n" +
+	"\x04data\x18\x01 \x03(\v2*.domain.treasury.v1.CollectionBillingEventR\x04data\x12\x18\n" +
 	"\asuccess\x18\x02 \x01(\bR\asuccess\x122\n" +
 	"\x05error\x18\x03 \x01(\v2\x17.domain.common.v1.ErrorH\x00R\x05error\x88\x01\x01B\b\n" +
-	"\x06_error\"u\n" +
-	"+UpdateTreasuryCollectionBillingEventRequest\x12F\n" +
-	"\x04data\x18\x01 \x01(\v22.domain.treasury.v1.TreasuryCollectionBillingEventR\x04data\"\xce\x01\n" +
-	",UpdateTreasuryCollectionBillingEventResponse\x12F\n" +
-	"\x04data\x18\x01 \x03(\v22.domain.treasury.v1.TreasuryCollectionBillingEventR\x04data\x12\x18\n" +
+	"\x06_error\"e\n" +
+	"#UpdateCollectionBillingEventRequest\x12>\n" +
+	"\x04data\x18\x01 \x01(\v2*.domain.treasury.v1.CollectionBillingEventR\x04data\"\xbe\x01\n" +
+	"$UpdateCollectionBillingEventResponse\x12>\n" +
+	"\x04data\x18\x01 \x03(\v2*.domain.treasury.v1.CollectionBillingEventR\x04data\x12\x18\n" +
 	"\asuccess\x18\x02 \x01(\bR\asuccess\x122\n" +
 	"\x05error\x18\x03 \x01(\v2\x17.domain.common.v1.ErrorH\x00R\x05error\x88\x01\x01B\b\n" +
-	"\x06_error\"u\n" +
-	"+DeleteTreasuryCollectionBillingEventRequest\x12F\n" +
-	"\x04data\x18\x01 \x01(\v22.domain.treasury.v1.TreasuryCollectionBillingEventR\x04data\"\x86\x01\n" +
-	",DeleteTreasuryCollectionBillingEventResponse\x12\x18\n" +
+	"\x06_error\"e\n" +
+	"#DeleteCollectionBillingEventRequest\x12>\n" +
+	"\x04data\x18\x01 \x01(\v2*.domain.treasury.v1.CollectionBillingEventR\x04data\"~\n" +
+	"$DeleteCollectionBillingEventResponse\x12\x18\n" +
 	"\asuccess\x18\x01 \x01(\bR\asuccess\x122\n" +
 	"\x05error\x18\x02 \x01(\v2\x17.domain.common.v1.ErrorH\x00R\x05error\x88\x01\x01B\b\n" +
-	"\x06_error\"\xdb\x02\n" +
-	"*ListTreasuryCollectionBillingEventsRequest\x12<\n" +
+	"\x06_error\"\xd3\x02\n" +
+	"\"ListCollectionBillingEventsRequest\x12<\n" +
 	"\x06search\x18\x01 \x01(\v2\x1f.domain.common.v1.SearchRequestH\x00R\x06search\x88\x01\x01\x12>\n" +
 	"\afilters\x18\x02 \x01(\v2\x1f.domain.common.v1.FilterRequestH\x01R\afilters\x88\x01\x01\x126\n" +
 	"\x04sort\x18\x03 \x01(\v2\x1d.domain.common.v1.SortRequestH\x02R\x04sort\x88\x01\x01\x12H\n" +
@@ -735,18 +735,18 @@ const file_domain_treasury_collection_billing_event_collection_billing_event_pro
 	"\n" +
 	"\b_filtersB\a\n" +
 	"\x05_sortB\r\n" +
-	"\v_pagination\"\xcd\x01\n" +
-	"+ListTreasuryCollectionBillingEventsResponse\x12F\n" +
-	"\x04data\x18\x01 \x03(\v22.domain.treasury.v1.TreasuryCollectionBillingEventR\x04data\x12\x18\n" +
+	"\v_pagination\"\xbd\x01\n" +
+	"#ListCollectionBillingEventsResponse\x12>\n" +
+	"\x04data\x18\x01 \x03(\v2*.domain.treasury.v1.CollectionBillingEventR\x04data\x12\x18\n" +
 	"\asuccess\x18\x02 \x01(\bR\asuccess\x122\n" +
 	"\x05error\x18\x03 \x01(\v2\x17.domain.common.v1.ErrorH\x00R\x05error\x88\x01\x01B\b\n" +
-	"\x06_error2\x80\a\n" +
-	"+TreasuryCollectionBillingEventDomainService\x12\xa9\x01\n" +
-	"$CreateTreasuryCollectionBillingEvent\x12?.domain.treasury.v1.CreateTreasuryCollectionBillingEventRequest\x1a@.domain.treasury.v1.CreateTreasuryCollectionBillingEventResponse\x12\xa3\x01\n" +
-	"\"ReadTreasuryCollectionBillingEvent\x12=.domain.treasury.v1.ReadTreasuryCollectionBillingEventRequest\x1a>.domain.treasury.v1.ReadTreasuryCollectionBillingEventResponse\x12\xa9\x01\n" +
-	"$UpdateTreasuryCollectionBillingEvent\x12?.domain.treasury.v1.UpdateTreasuryCollectionBillingEventRequest\x1a@.domain.treasury.v1.UpdateTreasuryCollectionBillingEventResponse\x12\xa9\x01\n" +
-	"$DeleteTreasuryCollectionBillingEvent\x12?.domain.treasury.v1.DeleteTreasuryCollectionBillingEventRequest\x1a@.domain.treasury.v1.DeleteTreasuryCollectionBillingEventResponse\x12\xa6\x01\n" +
-	"#ListTreasuryCollectionBillingEvents\x12>.domain.treasury.v1.ListTreasuryCollectionBillingEventsRequest\x1a?.domain.treasury.v1.ListTreasuryCollectionBillingEventsResponseB\xff\x01\n" +
+	"\x06_error2\x80\x06\n" +
+	"#CollectionBillingEventDomainService\x12\x91\x01\n" +
+	"\x1cCreateCollectionBillingEvent\x127.domain.treasury.v1.CreateCollectionBillingEventRequest\x1a8.domain.treasury.v1.CreateCollectionBillingEventResponse\x12\x8b\x01\n" +
+	"\x1aReadCollectionBillingEvent\x125.domain.treasury.v1.ReadCollectionBillingEventRequest\x1a6.domain.treasury.v1.ReadCollectionBillingEventResponse\x12\x91\x01\n" +
+	"\x1cUpdateCollectionBillingEvent\x127.domain.treasury.v1.UpdateCollectionBillingEventRequest\x1a8.domain.treasury.v1.UpdateCollectionBillingEventResponse\x12\x91\x01\n" +
+	"\x1cDeleteCollectionBillingEvent\x127.domain.treasury.v1.DeleteCollectionBillingEventRequest\x1a8.domain.treasury.v1.DeleteCollectionBillingEventResponse\x12\x8e\x01\n" +
+	"\x1bListCollectionBillingEvents\x126.domain.treasury.v1.ListCollectionBillingEventsRequest\x1a7.domain.treasury.v1.ListCollectionBillingEventsResponseB\xff\x01\n" +
 	"\x16com.domain.treasury.v1B\x1bCollectionBillingEventProtoP\x01Z^github.com/erniealice/esqyma/pkg/schema/v1/domain/treasury/collection_billing_event;treasuryv1\xa2\x02\x03DTX\xaa\x02\x12Domain.Treasury.V1\xca\x02\x12Domain\\Treasury\\V1\xe2\x02\x1eDomain\\Treasury\\V1\\GPBMetadata\xea\x02\x14Domain::Treasury::V1b\x06proto3"
 
 var (
@@ -763,51 +763,51 @@ func file_domain_treasury_collection_billing_event_collection_billing_event_prot
 
 var file_domain_treasury_collection_billing_event_collection_billing_event_proto_msgTypes = make([]protoimpl.MessageInfo, 11)
 var file_domain_treasury_collection_billing_event_collection_billing_event_proto_goTypes = []any{
-	(*TreasuryCollectionBillingEvent)(nil),               // 0: domain.treasury.v1.TreasuryCollectionBillingEvent
-	(*CreateTreasuryCollectionBillingEventRequest)(nil),  // 1: domain.treasury.v1.CreateTreasuryCollectionBillingEventRequest
-	(*CreateTreasuryCollectionBillingEventResponse)(nil), // 2: domain.treasury.v1.CreateTreasuryCollectionBillingEventResponse
-	(*ReadTreasuryCollectionBillingEventRequest)(nil),    // 3: domain.treasury.v1.ReadTreasuryCollectionBillingEventRequest
-	(*ReadTreasuryCollectionBillingEventResponse)(nil),   // 4: domain.treasury.v1.ReadTreasuryCollectionBillingEventResponse
-	(*UpdateTreasuryCollectionBillingEventRequest)(nil),  // 5: domain.treasury.v1.UpdateTreasuryCollectionBillingEventRequest
-	(*UpdateTreasuryCollectionBillingEventResponse)(nil), // 6: domain.treasury.v1.UpdateTreasuryCollectionBillingEventResponse
-	(*DeleteTreasuryCollectionBillingEventRequest)(nil),  // 7: domain.treasury.v1.DeleteTreasuryCollectionBillingEventRequest
-	(*DeleteTreasuryCollectionBillingEventResponse)(nil), // 8: domain.treasury.v1.DeleteTreasuryCollectionBillingEventResponse
-	(*ListTreasuryCollectionBillingEventsRequest)(nil),   // 9: domain.treasury.v1.ListTreasuryCollectionBillingEventsRequest
-	(*ListTreasuryCollectionBillingEventsResponse)(nil),  // 10: domain.treasury.v1.ListTreasuryCollectionBillingEventsResponse
-	(*common.Error)(nil),                                 // 11: domain.common.v1.Error
-	(*common.SearchRequest)(nil),                         // 12: domain.common.v1.SearchRequest
-	(*common.FilterRequest)(nil),                         // 13: domain.common.v1.FilterRequest
-	(*common.SortRequest)(nil),                           // 14: domain.common.v1.SortRequest
-	(*common.PaginationRequest)(nil),                     // 15: domain.common.v1.PaginationRequest
+	(*CollectionBillingEvent)(nil),               // 0: domain.treasury.v1.CollectionBillingEvent
+	(*CreateCollectionBillingEventRequest)(nil),  // 1: domain.treasury.v1.CreateCollectionBillingEventRequest
+	(*CreateCollectionBillingEventResponse)(nil), // 2: domain.treasury.v1.CreateCollectionBillingEventResponse
+	(*ReadCollectionBillingEventRequest)(nil),    // 3: domain.treasury.v1.ReadCollectionBillingEventRequest
+	(*ReadCollectionBillingEventResponse)(nil),   // 4: domain.treasury.v1.ReadCollectionBillingEventResponse
+	(*UpdateCollectionBillingEventRequest)(nil),  // 5: domain.treasury.v1.UpdateCollectionBillingEventRequest
+	(*UpdateCollectionBillingEventResponse)(nil), // 6: domain.treasury.v1.UpdateCollectionBillingEventResponse
+	(*DeleteCollectionBillingEventRequest)(nil),  // 7: domain.treasury.v1.DeleteCollectionBillingEventRequest
+	(*DeleteCollectionBillingEventResponse)(nil), // 8: domain.treasury.v1.DeleteCollectionBillingEventResponse
+	(*ListCollectionBillingEventsRequest)(nil),   // 9: domain.treasury.v1.ListCollectionBillingEventsRequest
+	(*ListCollectionBillingEventsResponse)(nil),  // 10: domain.treasury.v1.ListCollectionBillingEventsResponse
+	(*common.Error)(nil),                         // 11: domain.common.v1.Error
+	(*common.SearchRequest)(nil),                 // 12: domain.common.v1.SearchRequest
+	(*common.FilterRequest)(nil),                 // 13: domain.common.v1.FilterRequest
+	(*common.SortRequest)(nil),                   // 14: domain.common.v1.SortRequest
+	(*common.PaginationRequest)(nil),             // 15: domain.common.v1.PaginationRequest
 }
 var file_domain_treasury_collection_billing_event_collection_billing_event_proto_depIdxs = []int32{
-	0,  // 0: domain.treasury.v1.CreateTreasuryCollectionBillingEventRequest.data:type_name -> domain.treasury.v1.TreasuryCollectionBillingEvent
-	0,  // 1: domain.treasury.v1.CreateTreasuryCollectionBillingEventResponse.data:type_name -> domain.treasury.v1.TreasuryCollectionBillingEvent
-	11, // 2: domain.treasury.v1.CreateTreasuryCollectionBillingEventResponse.error:type_name -> domain.common.v1.Error
-	0,  // 3: domain.treasury.v1.ReadTreasuryCollectionBillingEventRequest.data:type_name -> domain.treasury.v1.TreasuryCollectionBillingEvent
-	0,  // 4: domain.treasury.v1.ReadTreasuryCollectionBillingEventResponse.data:type_name -> domain.treasury.v1.TreasuryCollectionBillingEvent
-	11, // 5: domain.treasury.v1.ReadTreasuryCollectionBillingEventResponse.error:type_name -> domain.common.v1.Error
-	0,  // 6: domain.treasury.v1.UpdateTreasuryCollectionBillingEventRequest.data:type_name -> domain.treasury.v1.TreasuryCollectionBillingEvent
-	0,  // 7: domain.treasury.v1.UpdateTreasuryCollectionBillingEventResponse.data:type_name -> domain.treasury.v1.TreasuryCollectionBillingEvent
-	11, // 8: domain.treasury.v1.UpdateTreasuryCollectionBillingEventResponse.error:type_name -> domain.common.v1.Error
-	0,  // 9: domain.treasury.v1.DeleteTreasuryCollectionBillingEventRequest.data:type_name -> domain.treasury.v1.TreasuryCollectionBillingEvent
-	11, // 10: domain.treasury.v1.DeleteTreasuryCollectionBillingEventResponse.error:type_name -> domain.common.v1.Error
-	12, // 11: domain.treasury.v1.ListTreasuryCollectionBillingEventsRequest.search:type_name -> domain.common.v1.SearchRequest
-	13, // 12: domain.treasury.v1.ListTreasuryCollectionBillingEventsRequest.filters:type_name -> domain.common.v1.FilterRequest
-	14, // 13: domain.treasury.v1.ListTreasuryCollectionBillingEventsRequest.sort:type_name -> domain.common.v1.SortRequest
-	15, // 14: domain.treasury.v1.ListTreasuryCollectionBillingEventsRequest.pagination:type_name -> domain.common.v1.PaginationRequest
-	0,  // 15: domain.treasury.v1.ListTreasuryCollectionBillingEventsResponse.data:type_name -> domain.treasury.v1.TreasuryCollectionBillingEvent
-	11, // 16: domain.treasury.v1.ListTreasuryCollectionBillingEventsResponse.error:type_name -> domain.common.v1.Error
-	1,  // 17: domain.treasury.v1.TreasuryCollectionBillingEventDomainService.CreateTreasuryCollectionBillingEvent:input_type -> domain.treasury.v1.CreateTreasuryCollectionBillingEventRequest
-	3,  // 18: domain.treasury.v1.TreasuryCollectionBillingEventDomainService.ReadTreasuryCollectionBillingEvent:input_type -> domain.treasury.v1.ReadTreasuryCollectionBillingEventRequest
-	5,  // 19: domain.treasury.v1.TreasuryCollectionBillingEventDomainService.UpdateTreasuryCollectionBillingEvent:input_type -> domain.treasury.v1.UpdateTreasuryCollectionBillingEventRequest
-	7,  // 20: domain.treasury.v1.TreasuryCollectionBillingEventDomainService.DeleteTreasuryCollectionBillingEvent:input_type -> domain.treasury.v1.DeleteTreasuryCollectionBillingEventRequest
-	9,  // 21: domain.treasury.v1.TreasuryCollectionBillingEventDomainService.ListTreasuryCollectionBillingEvents:input_type -> domain.treasury.v1.ListTreasuryCollectionBillingEventsRequest
-	2,  // 22: domain.treasury.v1.TreasuryCollectionBillingEventDomainService.CreateTreasuryCollectionBillingEvent:output_type -> domain.treasury.v1.CreateTreasuryCollectionBillingEventResponse
-	4,  // 23: domain.treasury.v1.TreasuryCollectionBillingEventDomainService.ReadTreasuryCollectionBillingEvent:output_type -> domain.treasury.v1.ReadTreasuryCollectionBillingEventResponse
-	6,  // 24: domain.treasury.v1.TreasuryCollectionBillingEventDomainService.UpdateTreasuryCollectionBillingEvent:output_type -> domain.treasury.v1.UpdateTreasuryCollectionBillingEventResponse
-	8,  // 25: domain.treasury.v1.TreasuryCollectionBillingEventDomainService.DeleteTreasuryCollectionBillingEvent:output_type -> domain.treasury.v1.DeleteTreasuryCollectionBillingEventResponse
-	10, // 26: domain.treasury.v1.TreasuryCollectionBillingEventDomainService.ListTreasuryCollectionBillingEvents:output_type -> domain.treasury.v1.ListTreasuryCollectionBillingEventsResponse
+	0,  // 0: domain.treasury.v1.CreateCollectionBillingEventRequest.data:type_name -> domain.treasury.v1.CollectionBillingEvent
+	0,  // 1: domain.treasury.v1.CreateCollectionBillingEventResponse.data:type_name -> domain.treasury.v1.CollectionBillingEvent
+	11, // 2: domain.treasury.v1.CreateCollectionBillingEventResponse.error:type_name -> domain.common.v1.Error
+	0,  // 3: domain.treasury.v1.ReadCollectionBillingEventRequest.data:type_name -> domain.treasury.v1.CollectionBillingEvent
+	0,  // 4: domain.treasury.v1.ReadCollectionBillingEventResponse.data:type_name -> domain.treasury.v1.CollectionBillingEvent
+	11, // 5: domain.treasury.v1.ReadCollectionBillingEventResponse.error:type_name -> domain.common.v1.Error
+	0,  // 6: domain.treasury.v1.UpdateCollectionBillingEventRequest.data:type_name -> domain.treasury.v1.CollectionBillingEvent
+	0,  // 7: domain.treasury.v1.UpdateCollectionBillingEventResponse.data:type_name -> domain.treasury.v1.CollectionBillingEvent
+	11, // 8: domain.treasury.v1.UpdateCollectionBillingEventResponse.error:type_name -> domain.common.v1.Error
+	0,  // 9: domain.treasury.v1.DeleteCollectionBillingEventRequest.data:type_name -> domain.treasury.v1.CollectionBillingEvent
+	11, // 10: domain.treasury.v1.DeleteCollectionBillingEventResponse.error:type_name -> domain.common.v1.Error
+	12, // 11: domain.treasury.v1.ListCollectionBillingEventsRequest.search:type_name -> domain.common.v1.SearchRequest
+	13, // 12: domain.treasury.v1.ListCollectionBillingEventsRequest.filters:type_name -> domain.common.v1.FilterRequest
+	14, // 13: domain.treasury.v1.ListCollectionBillingEventsRequest.sort:type_name -> domain.common.v1.SortRequest
+	15, // 14: domain.treasury.v1.ListCollectionBillingEventsRequest.pagination:type_name -> domain.common.v1.PaginationRequest
+	0,  // 15: domain.treasury.v1.ListCollectionBillingEventsResponse.data:type_name -> domain.treasury.v1.CollectionBillingEvent
+	11, // 16: domain.treasury.v1.ListCollectionBillingEventsResponse.error:type_name -> domain.common.v1.Error
+	1,  // 17: domain.treasury.v1.CollectionBillingEventDomainService.CreateCollectionBillingEvent:input_type -> domain.treasury.v1.CreateCollectionBillingEventRequest
+	3,  // 18: domain.treasury.v1.CollectionBillingEventDomainService.ReadCollectionBillingEvent:input_type -> domain.treasury.v1.ReadCollectionBillingEventRequest
+	5,  // 19: domain.treasury.v1.CollectionBillingEventDomainService.UpdateCollectionBillingEvent:input_type -> domain.treasury.v1.UpdateCollectionBillingEventRequest
+	7,  // 20: domain.treasury.v1.CollectionBillingEventDomainService.DeleteCollectionBillingEvent:input_type -> domain.treasury.v1.DeleteCollectionBillingEventRequest
+	9,  // 21: domain.treasury.v1.CollectionBillingEventDomainService.ListCollectionBillingEvents:input_type -> domain.treasury.v1.ListCollectionBillingEventsRequest
+	2,  // 22: domain.treasury.v1.CollectionBillingEventDomainService.CreateCollectionBillingEvent:output_type -> domain.treasury.v1.CreateCollectionBillingEventResponse
+	4,  // 23: domain.treasury.v1.CollectionBillingEventDomainService.ReadCollectionBillingEvent:output_type -> domain.treasury.v1.ReadCollectionBillingEventResponse
+	6,  // 24: domain.treasury.v1.CollectionBillingEventDomainService.UpdateCollectionBillingEvent:output_type -> domain.treasury.v1.UpdateCollectionBillingEventResponse
+	8,  // 25: domain.treasury.v1.CollectionBillingEventDomainService.DeleteCollectionBillingEvent:output_type -> domain.treasury.v1.DeleteCollectionBillingEventResponse
+	10, // 26: domain.treasury.v1.CollectionBillingEventDomainService.ListCollectionBillingEvents:output_type -> domain.treasury.v1.ListCollectionBillingEventsResponse
 	22, // [22:27] is the sub-list for method output_type
 	17, // [17:22] is the sub-list for method input_type
 	17, // [17:17] is the sub-list for extension type_name

@@ -15,9 +15,9 @@ export declare const file_domain_treasury_collection_billing_event_collection_bi
  * to each milestone; SUM(tranche_amount) <= TreasuryCollection.amount enforced
  * in application layer (no DB constraint v1).
  *
- * @generated from message domain.treasury.v1.TreasuryCollectionBillingEvent
+ * @generated from message domain.treasury.v1.CollectionBillingEvent
  */
-export type TreasuryCollectionBillingEvent = Message<"domain.treasury.v1.TreasuryCollectionBillingEvent"> & {
+export type CollectionBillingEvent = Message<"domain.treasury.v1.CollectionBillingEvent"> & {
     /**
      * @generated from field: string id = 1;
      */
@@ -60,32 +60,32 @@ export type TreasuryCollectionBillingEvent = Message<"domain.treasury.v1.Treasur
     dateModified?: bigint;
 };
 /**
- * Describes the message domain.treasury.v1.TreasuryCollectionBillingEvent.
- * Use `create(TreasuryCollectionBillingEventSchema)` to create a new message.
+ * Describes the message domain.treasury.v1.CollectionBillingEvent.
+ * Use `create(CollectionBillingEventSchema)` to create a new message.
  */
-export declare const TreasuryCollectionBillingEventSchema: GenMessage<TreasuryCollectionBillingEvent>;
+export declare const CollectionBillingEventSchema: GenMessage<CollectionBillingEvent>;
 /**
- * @generated from message domain.treasury.v1.CreateTreasuryCollectionBillingEventRequest
+ * @generated from message domain.treasury.v1.CreateCollectionBillingEventRequest
  */
-export type CreateTreasuryCollectionBillingEventRequest = Message<"domain.treasury.v1.CreateTreasuryCollectionBillingEventRequest"> & {
+export type CreateCollectionBillingEventRequest = Message<"domain.treasury.v1.CreateCollectionBillingEventRequest"> & {
     /**
-     * @generated from field: domain.treasury.v1.TreasuryCollectionBillingEvent data = 1;
+     * @generated from field: domain.treasury.v1.CollectionBillingEvent data = 1;
      */
-    data?: TreasuryCollectionBillingEvent;
+    data?: CollectionBillingEvent;
 };
 /**
- * Describes the message domain.treasury.v1.CreateTreasuryCollectionBillingEventRequest.
- * Use `create(CreateTreasuryCollectionBillingEventRequestSchema)` to create a new message.
+ * Describes the message domain.treasury.v1.CreateCollectionBillingEventRequest.
+ * Use `create(CreateCollectionBillingEventRequestSchema)` to create a new message.
  */
-export declare const CreateTreasuryCollectionBillingEventRequestSchema: GenMessage<CreateTreasuryCollectionBillingEventRequest>;
+export declare const CreateCollectionBillingEventRequestSchema: GenMessage<CreateCollectionBillingEventRequest>;
 /**
- * @generated from message domain.treasury.v1.CreateTreasuryCollectionBillingEventResponse
+ * @generated from message domain.treasury.v1.CreateCollectionBillingEventResponse
  */
-export type CreateTreasuryCollectionBillingEventResponse = Message<"domain.treasury.v1.CreateTreasuryCollectionBillingEventResponse"> & {
+export type CreateCollectionBillingEventResponse = Message<"domain.treasury.v1.CreateCollectionBillingEventResponse"> & {
     /**
-     * @generated from field: repeated domain.treasury.v1.TreasuryCollectionBillingEvent data = 1;
+     * @generated from field: repeated domain.treasury.v1.CollectionBillingEvent data = 1;
      */
-    data: TreasuryCollectionBillingEvent[];
+    data: CollectionBillingEvent[];
     /**
      * @generated from field: bool success = 2;
      */
@@ -96,32 +96,32 @@ export type CreateTreasuryCollectionBillingEventResponse = Message<"domain.treas
     error?: Error;
 };
 /**
- * Describes the message domain.treasury.v1.CreateTreasuryCollectionBillingEventResponse.
- * Use `create(CreateTreasuryCollectionBillingEventResponseSchema)` to create a new message.
+ * Describes the message domain.treasury.v1.CreateCollectionBillingEventResponse.
+ * Use `create(CreateCollectionBillingEventResponseSchema)` to create a new message.
  */
-export declare const CreateTreasuryCollectionBillingEventResponseSchema: GenMessage<CreateTreasuryCollectionBillingEventResponse>;
+export declare const CreateCollectionBillingEventResponseSchema: GenMessage<CreateCollectionBillingEventResponse>;
 /**
- * @generated from message domain.treasury.v1.ReadTreasuryCollectionBillingEventRequest
+ * @generated from message domain.treasury.v1.ReadCollectionBillingEventRequest
  */
-export type ReadTreasuryCollectionBillingEventRequest = Message<"domain.treasury.v1.ReadTreasuryCollectionBillingEventRequest"> & {
+export type ReadCollectionBillingEventRequest = Message<"domain.treasury.v1.ReadCollectionBillingEventRequest"> & {
     /**
-     * @generated from field: domain.treasury.v1.TreasuryCollectionBillingEvent data = 1;
+     * @generated from field: domain.treasury.v1.CollectionBillingEvent data = 1;
      */
-    data?: TreasuryCollectionBillingEvent;
+    data?: CollectionBillingEvent;
 };
 /**
- * Describes the message domain.treasury.v1.ReadTreasuryCollectionBillingEventRequest.
- * Use `create(ReadTreasuryCollectionBillingEventRequestSchema)` to create a new message.
+ * Describes the message domain.treasury.v1.ReadCollectionBillingEventRequest.
+ * Use `create(ReadCollectionBillingEventRequestSchema)` to create a new message.
  */
-export declare const ReadTreasuryCollectionBillingEventRequestSchema: GenMessage<ReadTreasuryCollectionBillingEventRequest>;
+export declare const ReadCollectionBillingEventRequestSchema: GenMessage<ReadCollectionBillingEventRequest>;
 /**
- * @generated from message domain.treasury.v1.ReadTreasuryCollectionBillingEventResponse
+ * @generated from message domain.treasury.v1.ReadCollectionBillingEventResponse
  */
-export type ReadTreasuryCollectionBillingEventResponse = Message<"domain.treasury.v1.ReadTreasuryCollectionBillingEventResponse"> & {
+export type ReadCollectionBillingEventResponse = Message<"domain.treasury.v1.ReadCollectionBillingEventResponse"> & {
     /**
-     * @generated from field: repeated domain.treasury.v1.TreasuryCollectionBillingEvent data = 1;
+     * @generated from field: repeated domain.treasury.v1.CollectionBillingEvent data = 1;
      */
-    data: TreasuryCollectionBillingEvent[];
+    data: CollectionBillingEvent[];
     /**
      * @generated from field: bool success = 2;
      */
@@ -132,32 +132,32 @@ export type ReadTreasuryCollectionBillingEventResponse = Message<"domain.treasur
     error?: Error;
 };
 /**
- * Describes the message domain.treasury.v1.ReadTreasuryCollectionBillingEventResponse.
- * Use `create(ReadTreasuryCollectionBillingEventResponseSchema)` to create a new message.
+ * Describes the message domain.treasury.v1.ReadCollectionBillingEventResponse.
+ * Use `create(ReadCollectionBillingEventResponseSchema)` to create a new message.
  */
-export declare const ReadTreasuryCollectionBillingEventResponseSchema: GenMessage<ReadTreasuryCollectionBillingEventResponse>;
+export declare const ReadCollectionBillingEventResponseSchema: GenMessage<ReadCollectionBillingEventResponse>;
 /**
- * @generated from message domain.treasury.v1.UpdateTreasuryCollectionBillingEventRequest
+ * @generated from message domain.treasury.v1.UpdateCollectionBillingEventRequest
  */
-export type UpdateTreasuryCollectionBillingEventRequest = Message<"domain.treasury.v1.UpdateTreasuryCollectionBillingEventRequest"> & {
+export type UpdateCollectionBillingEventRequest = Message<"domain.treasury.v1.UpdateCollectionBillingEventRequest"> & {
     /**
-     * @generated from field: domain.treasury.v1.TreasuryCollectionBillingEvent data = 1;
+     * @generated from field: domain.treasury.v1.CollectionBillingEvent data = 1;
      */
-    data?: TreasuryCollectionBillingEvent;
+    data?: CollectionBillingEvent;
 };
 /**
- * Describes the message domain.treasury.v1.UpdateTreasuryCollectionBillingEventRequest.
- * Use `create(UpdateTreasuryCollectionBillingEventRequestSchema)` to create a new message.
+ * Describes the message domain.treasury.v1.UpdateCollectionBillingEventRequest.
+ * Use `create(UpdateCollectionBillingEventRequestSchema)` to create a new message.
  */
-export declare const UpdateTreasuryCollectionBillingEventRequestSchema: GenMessage<UpdateTreasuryCollectionBillingEventRequest>;
+export declare const UpdateCollectionBillingEventRequestSchema: GenMessage<UpdateCollectionBillingEventRequest>;
 /**
- * @generated from message domain.treasury.v1.UpdateTreasuryCollectionBillingEventResponse
+ * @generated from message domain.treasury.v1.UpdateCollectionBillingEventResponse
  */
-export type UpdateTreasuryCollectionBillingEventResponse = Message<"domain.treasury.v1.UpdateTreasuryCollectionBillingEventResponse"> & {
+export type UpdateCollectionBillingEventResponse = Message<"domain.treasury.v1.UpdateCollectionBillingEventResponse"> & {
     /**
-     * @generated from field: repeated domain.treasury.v1.TreasuryCollectionBillingEvent data = 1;
+     * @generated from field: repeated domain.treasury.v1.CollectionBillingEvent data = 1;
      */
-    data: TreasuryCollectionBillingEvent[];
+    data: CollectionBillingEvent[];
     /**
      * @generated from field: bool success = 2;
      */
@@ -168,28 +168,28 @@ export type UpdateTreasuryCollectionBillingEventResponse = Message<"domain.treas
     error?: Error;
 };
 /**
- * Describes the message domain.treasury.v1.UpdateTreasuryCollectionBillingEventResponse.
- * Use `create(UpdateTreasuryCollectionBillingEventResponseSchema)` to create a new message.
+ * Describes the message domain.treasury.v1.UpdateCollectionBillingEventResponse.
+ * Use `create(UpdateCollectionBillingEventResponseSchema)` to create a new message.
  */
-export declare const UpdateTreasuryCollectionBillingEventResponseSchema: GenMessage<UpdateTreasuryCollectionBillingEventResponse>;
+export declare const UpdateCollectionBillingEventResponseSchema: GenMessage<UpdateCollectionBillingEventResponse>;
 /**
- * @generated from message domain.treasury.v1.DeleteTreasuryCollectionBillingEventRequest
+ * @generated from message domain.treasury.v1.DeleteCollectionBillingEventRequest
  */
-export type DeleteTreasuryCollectionBillingEventRequest = Message<"domain.treasury.v1.DeleteTreasuryCollectionBillingEventRequest"> & {
+export type DeleteCollectionBillingEventRequest = Message<"domain.treasury.v1.DeleteCollectionBillingEventRequest"> & {
     /**
-     * @generated from field: domain.treasury.v1.TreasuryCollectionBillingEvent data = 1;
+     * @generated from field: domain.treasury.v1.CollectionBillingEvent data = 1;
      */
-    data?: TreasuryCollectionBillingEvent;
+    data?: CollectionBillingEvent;
 };
 /**
- * Describes the message domain.treasury.v1.DeleteTreasuryCollectionBillingEventRequest.
- * Use `create(DeleteTreasuryCollectionBillingEventRequestSchema)` to create a new message.
+ * Describes the message domain.treasury.v1.DeleteCollectionBillingEventRequest.
+ * Use `create(DeleteCollectionBillingEventRequestSchema)` to create a new message.
  */
-export declare const DeleteTreasuryCollectionBillingEventRequestSchema: GenMessage<DeleteTreasuryCollectionBillingEventRequest>;
+export declare const DeleteCollectionBillingEventRequestSchema: GenMessage<DeleteCollectionBillingEventRequest>;
 /**
- * @generated from message domain.treasury.v1.DeleteTreasuryCollectionBillingEventResponse
+ * @generated from message domain.treasury.v1.DeleteCollectionBillingEventResponse
  */
-export type DeleteTreasuryCollectionBillingEventResponse = Message<"domain.treasury.v1.DeleteTreasuryCollectionBillingEventResponse"> & {
+export type DeleteCollectionBillingEventResponse = Message<"domain.treasury.v1.DeleteCollectionBillingEventResponse"> & {
     /**
      * @generated from field: bool success = 1;
      */
@@ -200,14 +200,14 @@ export type DeleteTreasuryCollectionBillingEventResponse = Message<"domain.treas
     error?: Error;
 };
 /**
- * Describes the message domain.treasury.v1.DeleteTreasuryCollectionBillingEventResponse.
- * Use `create(DeleteTreasuryCollectionBillingEventResponseSchema)` to create a new message.
+ * Describes the message domain.treasury.v1.DeleteCollectionBillingEventResponse.
+ * Use `create(DeleteCollectionBillingEventResponseSchema)` to create a new message.
  */
-export declare const DeleteTreasuryCollectionBillingEventResponseSchema: GenMessage<DeleteTreasuryCollectionBillingEventResponse>;
+export declare const DeleteCollectionBillingEventResponseSchema: GenMessage<DeleteCollectionBillingEventResponse>;
 /**
- * @generated from message domain.treasury.v1.ListTreasuryCollectionBillingEventsRequest
+ * @generated from message domain.treasury.v1.ListCollectionBillingEventsRequest
  */
-export type ListTreasuryCollectionBillingEventsRequest = Message<"domain.treasury.v1.ListTreasuryCollectionBillingEventsRequest"> & {
+export type ListCollectionBillingEventsRequest = Message<"domain.treasury.v1.ListCollectionBillingEventsRequest"> & {
     /**
      * @generated from field: optional domain.common.v1.SearchRequest search = 1;
      */
@@ -226,18 +226,18 @@ export type ListTreasuryCollectionBillingEventsRequest = Message<"domain.treasur
     pagination?: PaginationRequest;
 };
 /**
- * Describes the message domain.treasury.v1.ListTreasuryCollectionBillingEventsRequest.
- * Use `create(ListTreasuryCollectionBillingEventsRequestSchema)` to create a new message.
+ * Describes the message domain.treasury.v1.ListCollectionBillingEventsRequest.
+ * Use `create(ListCollectionBillingEventsRequestSchema)` to create a new message.
  */
-export declare const ListTreasuryCollectionBillingEventsRequestSchema: GenMessage<ListTreasuryCollectionBillingEventsRequest>;
+export declare const ListCollectionBillingEventsRequestSchema: GenMessage<ListCollectionBillingEventsRequest>;
 /**
- * @generated from message domain.treasury.v1.ListTreasuryCollectionBillingEventsResponse
+ * @generated from message domain.treasury.v1.ListCollectionBillingEventsResponse
  */
-export type ListTreasuryCollectionBillingEventsResponse = Message<"domain.treasury.v1.ListTreasuryCollectionBillingEventsResponse"> & {
+export type ListCollectionBillingEventsResponse = Message<"domain.treasury.v1.ListCollectionBillingEventsResponse"> & {
     /**
-     * @generated from field: repeated domain.treasury.v1.TreasuryCollectionBillingEvent data = 1;
+     * @generated from field: repeated domain.treasury.v1.CollectionBillingEvent data = 1;
      */
-    data: TreasuryCollectionBillingEvent[];
+    data: CollectionBillingEvent[];
     /**
      * @generated from field: bool success = 2;
      */
@@ -248,52 +248,52 @@ export type ListTreasuryCollectionBillingEventsResponse = Message<"domain.treasu
     error?: Error;
 };
 /**
- * Describes the message domain.treasury.v1.ListTreasuryCollectionBillingEventsResponse.
- * Use `create(ListTreasuryCollectionBillingEventsResponseSchema)` to create a new message.
+ * Describes the message domain.treasury.v1.ListCollectionBillingEventsResponse.
+ * Use `create(ListCollectionBillingEventsResponseSchema)` to create a new message.
  */
-export declare const ListTreasuryCollectionBillingEventsResponseSchema: GenMessage<ListTreasuryCollectionBillingEventsResponse>;
+export declare const ListCollectionBillingEventsResponseSchema: GenMessage<ListCollectionBillingEventsResponse>;
 /**
- * @generated from service domain.treasury.v1.TreasuryCollectionBillingEventDomainService
+ * @generated from service domain.treasury.v1.CollectionBillingEventDomainService
  */
-export declare const TreasuryCollectionBillingEventDomainService: GenService<{
+export declare const CollectionBillingEventDomainService: GenService<{
     /**
-     * @generated from rpc domain.treasury.v1.TreasuryCollectionBillingEventDomainService.CreateTreasuryCollectionBillingEvent
+     * @generated from rpc domain.treasury.v1.CollectionBillingEventDomainService.CreateCollectionBillingEvent
      */
-    createTreasuryCollectionBillingEvent: {
+    createCollectionBillingEvent: {
         methodKind: "unary";
-        input: typeof CreateTreasuryCollectionBillingEventRequestSchema;
-        output: typeof CreateTreasuryCollectionBillingEventResponseSchema;
+        input: typeof CreateCollectionBillingEventRequestSchema;
+        output: typeof CreateCollectionBillingEventResponseSchema;
     };
     /**
-     * @generated from rpc domain.treasury.v1.TreasuryCollectionBillingEventDomainService.ReadTreasuryCollectionBillingEvent
+     * @generated from rpc domain.treasury.v1.CollectionBillingEventDomainService.ReadCollectionBillingEvent
      */
-    readTreasuryCollectionBillingEvent: {
+    readCollectionBillingEvent: {
         methodKind: "unary";
-        input: typeof ReadTreasuryCollectionBillingEventRequestSchema;
-        output: typeof ReadTreasuryCollectionBillingEventResponseSchema;
+        input: typeof ReadCollectionBillingEventRequestSchema;
+        output: typeof ReadCollectionBillingEventResponseSchema;
     };
     /**
-     * @generated from rpc domain.treasury.v1.TreasuryCollectionBillingEventDomainService.UpdateTreasuryCollectionBillingEvent
+     * @generated from rpc domain.treasury.v1.CollectionBillingEventDomainService.UpdateCollectionBillingEvent
      */
-    updateTreasuryCollectionBillingEvent: {
+    updateCollectionBillingEvent: {
         methodKind: "unary";
-        input: typeof UpdateTreasuryCollectionBillingEventRequestSchema;
-        output: typeof UpdateTreasuryCollectionBillingEventResponseSchema;
+        input: typeof UpdateCollectionBillingEventRequestSchema;
+        output: typeof UpdateCollectionBillingEventResponseSchema;
     };
     /**
-     * @generated from rpc domain.treasury.v1.TreasuryCollectionBillingEventDomainService.DeleteTreasuryCollectionBillingEvent
+     * @generated from rpc domain.treasury.v1.CollectionBillingEventDomainService.DeleteCollectionBillingEvent
      */
-    deleteTreasuryCollectionBillingEvent: {
+    deleteCollectionBillingEvent: {
         methodKind: "unary";
-        input: typeof DeleteTreasuryCollectionBillingEventRequestSchema;
-        output: typeof DeleteTreasuryCollectionBillingEventResponseSchema;
+        input: typeof DeleteCollectionBillingEventRequestSchema;
+        output: typeof DeleteCollectionBillingEventResponseSchema;
     };
     /**
-     * @generated from rpc domain.treasury.v1.TreasuryCollectionBillingEventDomainService.ListTreasuryCollectionBillingEvents
+     * @generated from rpc domain.treasury.v1.CollectionBillingEventDomainService.ListCollectionBillingEvents
      */
-    listTreasuryCollectionBillingEvents: {
+    listCollectionBillingEvents: {
         methodKind: "unary";
-        input: typeof ListTreasuryCollectionBillingEventsRequestSchema;
-        output: typeof ListTreasuryCollectionBillingEventsResponseSchema;
+        input: typeof ListCollectionBillingEventsRequestSchema;
+        output: typeof ListCollectionBillingEventsResponseSchema;
     };
 }>;

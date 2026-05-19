@@ -13,9 +13,9 @@ export declare const file_domain_treasury_disbursement_supplier_billing_event_di
  * Junction entity linking a MILESTONE advance TreasuryDisbursement to one or more
  * SupplierBillingEvent rows (buying-side mirror of TreasuryCollectionBillingEvent).
  *
- * @generated from message domain.treasury.v1.TreasuryDisbursementSupplierBillingEvent
+ * @generated from message domain.treasury.v1.DisbursementSupplierBillingEvent
  */
-export type TreasuryDisbursementSupplierBillingEvent = Message<"domain.treasury.v1.TreasuryDisbursementSupplierBillingEvent"> & {
+export type DisbursementSupplierBillingEvent = Message<"domain.treasury.v1.DisbursementSupplierBillingEvent"> & {
     /**
      * @generated from field: string id = 1;
      */
@@ -58,32 +58,32 @@ export type TreasuryDisbursementSupplierBillingEvent = Message<"domain.treasury.
     dateModified?: bigint;
 };
 /**
- * Describes the message domain.treasury.v1.TreasuryDisbursementSupplierBillingEvent.
- * Use `create(TreasuryDisbursementSupplierBillingEventSchema)` to create a new message.
+ * Describes the message domain.treasury.v1.DisbursementSupplierBillingEvent.
+ * Use `create(DisbursementSupplierBillingEventSchema)` to create a new message.
  */
-export declare const TreasuryDisbursementSupplierBillingEventSchema: GenMessage<TreasuryDisbursementSupplierBillingEvent>;
+export declare const DisbursementSupplierBillingEventSchema: GenMessage<DisbursementSupplierBillingEvent>;
 /**
- * @generated from message domain.treasury.v1.CreateTreasuryDisbursementSupplierBillingEventRequest
+ * @generated from message domain.treasury.v1.CreateDisbursementSupplierBillingEventRequest
  */
-export type CreateTreasuryDisbursementSupplierBillingEventRequest = Message<"domain.treasury.v1.CreateTreasuryDisbursementSupplierBillingEventRequest"> & {
+export type CreateDisbursementSupplierBillingEventRequest = Message<"domain.treasury.v1.CreateDisbursementSupplierBillingEventRequest"> & {
     /**
-     * @generated from field: domain.treasury.v1.TreasuryDisbursementSupplierBillingEvent data = 1;
+     * @generated from field: domain.treasury.v1.DisbursementSupplierBillingEvent data = 1;
      */
-    data?: TreasuryDisbursementSupplierBillingEvent;
+    data?: DisbursementSupplierBillingEvent;
 };
 /**
- * Describes the message domain.treasury.v1.CreateTreasuryDisbursementSupplierBillingEventRequest.
- * Use `create(CreateTreasuryDisbursementSupplierBillingEventRequestSchema)` to create a new message.
+ * Describes the message domain.treasury.v1.CreateDisbursementSupplierBillingEventRequest.
+ * Use `create(CreateDisbursementSupplierBillingEventRequestSchema)` to create a new message.
  */
-export declare const CreateTreasuryDisbursementSupplierBillingEventRequestSchema: GenMessage<CreateTreasuryDisbursementSupplierBillingEventRequest>;
+export declare const CreateDisbursementSupplierBillingEventRequestSchema: GenMessage<CreateDisbursementSupplierBillingEventRequest>;
 /**
- * @generated from message domain.treasury.v1.CreateTreasuryDisbursementSupplierBillingEventResponse
+ * @generated from message domain.treasury.v1.CreateDisbursementSupplierBillingEventResponse
  */
-export type CreateTreasuryDisbursementSupplierBillingEventResponse = Message<"domain.treasury.v1.CreateTreasuryDisbursementSupplierBillingEventResponse"> & {
+export type CreateDisbursementSupplierBillingEventResponse = Message<"domain.treasury.v1.CreateDisbursementSupplierBillingEventResponse"> & {
     /**
-     * @generated from field: repeated domain.treasury.v1.TreasuryDisbursementSupplierBillingEvent data = 1;
+     * @generated from field: repeated domain.treasury.v1.DisbursementSupplierBillingEvent data = 1;
      */
-    data: TreasuryDisbursementSupplierBillingEvent[];
+    data: DisbursementSupplierBillingEvent[];
     /**
      * @generated from field: bool success = 2;
      */
@@ -94,32 +94,32 @@ export type CreateTreasuryDisbursementSupplierBillingEventResponse = Message<"do
     error?: Error;
 };
 /**
- * Describes the message domain.treasury.v1.CreateTreasuryDisbursementSupplierBillingEventResponse.
- * Use `create(CreateTreasuryDisbursementSupplierBillingEventResponseSchema)` to create a new message.
+ * Describes the message domain.treasury.v1.CreateDisbursementSupplierBillingEventResponse.
+ * Use `create(CreateDisbursementSupplierBillingEventResponseSchema)` to create a new message.
  */
-export declare const CreateTreasuryDisbursementSupplierBillingEventResponseSchema: GenMessage<CreateTreasuryDisbursementSupplierBillingEventResponse>;
+export declare const CreateDisbursementSupplierBillingEventResponseSchema: GenMessage<CreateDisbursementSupplierBillingEventResponse>;
 /**
- * @generated from message domain.treasury.v1.ReadTreasuryDisbursementSupplierBillingEventRequest
+ * @generated from message domain.treasury.v1.ReadDisbursementSupplierBillingEventRequest
  */
-export type ReadTreasuryDisbursementSupplierBillingEventRequest = Message<"domain.treasury.v1.ReadTreasuryDisbursementSupplierBillingEventRequest"> & {
+export type ReadDisbursementSupplierBillingEventRequest = Message<"domain.treasury.v1.ReadDisbursementSupplierBillingEventRequest"> & {
     /**
-     * @generated from field: domain.treasury.v1.TreasuryDisbursementSupplierBillingEvent data = 1;
+     * @generated from field: domain.treasury.v1.DisbursementSupplierBillingEvent data = 1;
      */
-    data?: TreasuryDisbursementSupplierBillingEvent;
+    data?: DisbursementSupplierBillingEvent;
 };
 /**
- * Describes the message domain.treasury.v1.ReadTreasuryDisbursementSupplierBillingEventRequest.
- * Use `create(ReadTreasuryDisbursementSupplierBillingEventRequestSchema)` to create a new message.
+ * Describes the message domain.treasury.v1.ReadDisbursementSupplierBillingEventRequest.
+ * Use `create(ReadDisbursementSupplierBillingEventRequestSchema)` to create a new message.
  */
-export declare const ReadTreasuryDisbursementSupplierBillingEventRequestSchema: GenMessage<ReadTreasuryDisbursementSupplierBillingEventRequest>;
+export declare const ReadDisbursementSupplierBillingEventRequestSchema: GenMessage<ReadDisbursementSupplierBillingEventRequest>;
 /**
- * @generated from message domain.treasury.v1.ReadTreasuryDisbursementSupplierBillingEventResponse
+ * @generated from message domain.treasury.v1.ReadDisbursementSupplierBillingEventResponse
  */
-export type ReadTreasuryDisbursementSupplierBillingEventResponse = Message<"domain.treasury.v1.ReadTreasuryDisbursementSupplierBillingEventResponse"> & {
+export type ReadDisbursementSupplierBillingEventResponse = Message<"domain.treasury.v1.ReadDisbursementSupplierBillingEventResponse"> & {
     /**
-     * @generated from field: repeated domain.treasury.v1.TreasuryDisbursementSupplierBillingEvent data = 1;
+     * @generated from field: repeated domain.treasury.v1.DisbursementSupplierBillingEvent data = 1;
      */
-    data: TreasuryDisbursementSupplierBillingEvent[];
+    data: DisbursementSupplierBillingEvent[];
     /**
      * @generated from field: bool success = 2;
      */
@@ -130,32 +130,32 @@ export type ReadTreasuryDisbursementSupplierBillingEventResponse = Message<"doma
     error?: Error;
 };
 /**
- * Describes the message domain.treasury.v1.ReadTreasuryDisbursementSupplierBillingEventResponse.
- * Use `create(ReadTreasuryDisbursementSupplierBillingEventResponseSchema)` to create a new message.
+ * Describes the message domain.treasury.v1.ReadDisbursementSupplierBillingEventResponse.
+ * Use `create(ReadDisbursementSupplierBillingEventResponseSchema)` to create a new message.
  */
-export declare const ReadTreasuryDisbursementSupplierBillingEventResponseSchema: GenMessage<ReadTreasuryDisbursementSupplierBillingEventResponse>;
+export declare const ReadDisbursementSupplierBillingEventResponseSchema: GenMessage<ReadDisbursementSupplierBillingEventResponse>;
 /**
- * @generated from message domain.treasury.v1.UpdateTreasuryDisbursementSupplierBillingEventRequest
+ * @generated from message domain.treasury.v1.UpdateDisbursementSupplierBillingEventRequest
  */
-export type UpdateTreasuryDisbursementSupplierBillingEventRequest = Message<"domain.treasury.v1.UpdateTreasuryDisbursementSupplierBillingEventRequest"> & {
+export type UpdateDisbursementSupplierBillingEventRequest = Message<"domain.treasury.v1.UpdateDisbursementSupplierBillingEventRequest"> & {
     /**
-     * @generated from field: domain.treasury.v1.TreasuryDisbursementSupplierBillingEvent data = 1;
+     * @generated from field: domain.treasury.v1.DisbursementSupplierBillingEvent data = 1;
      */
-    data?: TreasuryDisbursementSupplierBillingEvent;
+    data?: DisbursementSupplierBillingEvent;
 };
 /**
- * Describes the message domain.treasury.v1.UpdateTreasuryDisbursementSupplierBillingEventRequest.
- * Use `create(UpdateTreasuryDisbursementSupplierBillingEventRequestSchema)` to create a new message.
+ * Describes the message domain.treasury.v1.UpdateDisbursementSupplierBillingEventRequest.
+ * Use `create(UpdateDisbursementSupplierBillingEventRequestSchema)` to create a new message.
  */
-export declare const UpdateTreasuryDisbursementSupplierBillingEventRequestSchema: GenMessage<UpdateTreasuryDisbursementSupplierBillingEventRequest>;
+export declare const UpdateDisbursementSupplierBillingEventRequestSchema: GenMessage<UpdateDisbursementSupplierBillingEventRequest>;
 /**
- * @generated from message domain.treasury.v1.UpdateTreasuryDisbursementSupplierBillingEventResponse
+ * @generated from message domain.treasury.v1.UpdateDisbursementSupplierBillingEventResponse
  */
-export type UpdateTreasuryDisbursementSupplierBillingEventResponse = Message<"domain.treasury.v1.UpdateTreasuryDisbursementSupplierBillingEventResponse"> & {
+export type UpdateDisbursementSupplierBillingEventResponse = Message<"domain.treasury.v1.UpdateDisbursementSupplierBillingEventResponse"> & {
     /**
-     * @generated from field: repeated domain.treasury.v1.TreasuryDisbursementSupplierBillingEvent data = 1;
+     * @generated from field: repeated domain.treasury.v1.DisbursementSupplierBillingEvent data = 1;
      */
-    data: TreasuryDisbursementSupplierBillingEvent[];
+    data: DisbursementSupplierBillingEvent[];
     /**
      * @generated from field: bool success = 2;
      */
@@ -166,28 +166,28 @@ export type UpdateTreasuryDisbursementSupplierBillingEventResponse = Message<"do
     error?: Error;
 };
 /**
- * Describes the message domain.treasury.v1.UpdateTreasuryDisbursementSupplierBillingEventResponse.
- * Use `create(UpdateTreasuryDisbursementSupplierBillingEventResponseSchema)` to create a new message.
+ * Describes the message domain.treasury.v1.UpdateDisbursementSupplierBillingEventResponse.
+ * Use `create(UpdateDisbursementSupplierBillingEventResponseSchema)` to create a new message.
  */
-export declare const UpdateTreasuryDisbursementSupplierBillingEventResponseSchema: GenMessage<UpdateTreasuryDisbursementSupplierBillingEventResponse>;
+export declare const UpdateDisbursementSupplierBillingEventResponseSchema: GenMessage<UpdateDisbursementSupplierBillingEventResponse>;
 /**
- * @generated from message domain.treasury.v1.DeleteTreasuryDisbursementSupplierBillingEventRequest
+ * @generated from message domain.treasury.v1.DeleteDisbursementSupplierBillingEventRequest
  */
-export type DeleteTreasuryDisbursementSupplierBillingEventRequest = Message<"domain.treasury.v1.DeleteTreasuryDisbursementSupplierBillingEventRequest"> & {
+export type DeleteDisbursementSupplierBillingEventRequest = Message<"domain.treasury.v1.DeleteDisbursementSupplierBillingEventRequest"> & {
     /**
-     * @generated from field: domain.treasury.v1.TreasuryDisbursementSupplierBillingEvent data = 1;
+     * @generated from field: domain.treasury.v1.DisbursementSupplierBillingEvent data = 1;
      */
-    data?: TreasuryDisbursementSupplierBillingEvent;
+    data?: DisbursementSupplierBillingEvent;
 };
 /**
- * Describes the message domain.treasury.v1.DeleteTreasuryDisbursementSupplierBillingEventRequest.
- * Use `create(DeleteTreasuryDisbursementSupplierBillingEventRequestSchema)` to create a new message.
+ * Describes the message domain.treasury.v1.DeleteDisbursementSupplierBillingEventRequest.
+ * Use `create(DeleteDisbursementSupplierBillingEventRequestSchema)` to create a new message.
  */
-export declare const DeleteTreasuryDisbursementSupplierBillingEventRequestSchema: GenMessage<DeleteTreasuryDisbursementSupplierBillingEventRequest>;
+export declare const DeleteDisbursementSupplierBillingEventRequestSchema: GenMessage<DeleteDisbursementSupplierBillingEventRequest>;
 /**
- * @generated from message domain.treasury.v1.DeleteTreasuryDisbursementSupplierBillingEventResponse
+ * @generated from message domain.treasury.v1.DeleteDisbursementSupplierBillingEventResponse
  */
-export type DeleteTreasuryDisbursementSupplierBillingEventResponse = Message<"domain.treasury.v1.DeleteTreasuryDisbursementSupplierBillingEventResponse"> & {
+export type DeleteDisbursementSupplierBillingEventResponse = Message<"domain.treasury.v1.DeleteDisbursementSupplierBillingEventResponse"> & {
     /**
      * @generated from field: bool success = 1;
      */
@@ -198,14 +198,14 @@ export type DeleteTreasuryDisbursementSupplierBillingEventResponse = Message<"do
     error?: Error;
 };
 /**
- * Describes the message domain.treasury.v1.DeleteTreasuryDisbursementSupplierBillingEventResponse.
- * Use `create(DeleteTreasuryDisbursementSupplierBillingEventResponseSchema)` to create a new message.
+ * Describes the message domain.treasury.v1.DeleteDisbursementSupplierBillingEventResponse.
+ * Use `create(DeleteDisbursementSupplierBillingEventResponseSchema)` to create a new message.
  */
-export declare const DeleteTreasuryDisbursementSupplierBillingEventResponseSchema: GenMessage<DeleteTreasuryDisbursementSupplierBillingEventResponse>;
+export declare const DeleteDisbursementSupplierBillingEventResponseSchema: GenMessage<DeleteDisbursementSupplierBillingEventResponse>;
 /**
- * @generated from message domain.treasury.v1.ListTreasuryDisbursementSupplierBillingEventsRequest
+ * @generated from message domain.treasury.v1.ListDisbursementSupplierBillingEventsRequest
  */
-export type ListTreasuryDisbursementSupplierBillingEventsRequest = Message<"domain.treasury.v1.ListTreasuryDisbursementSupplierBillingEventsRequest"> & {
+export type ListDisbursementSupplierBillingEventsRequest = Message<"domain.treasury.v1.ListDisbursementSupplierBillingEventsRequest"> & {
     /**
      * @generated from field: optional domain.common.v1.SearchRequest search = 1;
      */
@@ -224,18 +224,18 @@ export type ListTreasuryDisbursementSupplierBillingEventsRequest = Message<"doma
     pagination?: PaginationRequest;
 };
 /**
- * Describes the message domain.treasury.v1.ListTreasuryDisbursementSupplierBillingEventsRequest.
- * Use `create(ListTreasuryDisbursementSupplierBillingEventsRequestSchema)` to create a new message.
+ * Describes the message domain.treasury.v1.ListDisbursementSupplierBillingEventsRequest.
+ * Use `create(ListDisbursementSupplierBillingEventsRequestSchema)` to create a new message.
  */
-export declare const ListTreasuryDisbursementSupplierBillingEventsRequestSchema: GenMessage<ListTreasuryDisbursementSupplierBillingEventsRequest>;
+export declare const ListDisbursementSupplierBillingEventsRequestSchema: GenMessage<ListDisbursementSupplierBillingEventsRequest>;
 /**
- * @generated from message domain.treasury.v1.ListTreasuryDisbursementSupplierBillingEventsResponse
+ * @generated from message domain.treasury.v1.ListDisbursementSupplierBillingEventsResponse
  */
-export type ListTreasuryDisbursementSupplierBillingEventsResponse = Message<"domain.treasury.v1.ListTreasuryDisbursementSupplierBillingEventsResponse"> & {
+export type ListDisbursementSupplierBillingEventsResponse = Message<"domain.treasury.v1.ListDisbursementSupplierBillingEventsResponse"> & {
     /**
-     * @generated from field: repeated domain.treasury.v1.TreasuryDisbursementSupplierBillingEvent data = 1;
+     * @generated from field: repeated domain.treasury.v1.DisbursementSupplierBillingEvent data = 1;
      */
-    data: TreasuryDisbursementSupplierBillingEvent[];
+    data: DisbursementSupplierBillingEvent[];
     /**
      * @generated from field: bool success = 2;
      */
@@ -246,52 +246,52 @@ export type ListTreasuryDisbursementSupplierBillingEventsResponse = Message<"dom
     error?: Error;
 };
 /**
- * Describes the message domain.treasury.v1.ListTreasuryDisbursementSupplierBillingEventsResponse.
- * Use `create(ListTreasuryDisbursementSupplierBillingEventsResponseSchema)` to create a new message.
+ * Describes the message domain.treasury.v1.ListDisbursementSupplierBillingEventsResponse.
+ * Use `create(ListDisbursementSupplierBillingEventsResponseSchema)` to create a new message.
  */
-export declare const ListTreasuryDisbursementSupplierBillingEventsResponseSchema: GenMessage<ListTreasuryDisbursementSupplierBillingEventsResponse>;
+export declare const ListDisbursementSupplierBillingEventsResponseSchema: GenMessage<ListDisbursementSupplierBillingEventsResponse>;
 /**
- * @generated from service domain.treasury.v1.TreasuryDisbursementSupplierBillingEventDomainService
+ * @generated from service domain.treasury.v1.DisbursementSupplierBillingEventDomainService
  */
-export declare const TreasuryDisbursementSupplierBillingEventDomainService: GenService<{
+export declare const DisbursementSupplierBillingEventDomainService: GenService<{
     /**
-     * @generated from rpc domain.treasury.v1.TreasuryDisbursementSupplierBillingEventDomainService.CreateTreasuryDisbursementSupplierBillingEvent
+     * @generated from rpc domain.treasury.v1.DisbursementSupplierBillingEventDomainService.CreateDisbursementSupplierBillingEvent
      */
-    createTreasuryDisbursementSupplierBillingEvent: {
+    createDisbursementSupplierBillingEvent: {
         methodKind: "unary";
-        input: typeof CreateTreasuryDisbursementSupplierBillingEventRequestSchema;
-        output: typeof CreateTreasuryDisbursementSupplierBillingEventResponseSchema;
+        input: typeof CreateDisbursementSupplierBillingEventRequestSchema;
+        output: typeof CreateDisbursementSupplierBillingEventResponseSchema;
     };
     /**
-     * @generated from rpc domain.treasury.v1.TreasuryDisbursementSupplierBillingEventDomainService.ReadTreasuryDisbursementSupplierBillingEvent
+     * @generated from rpc domain.treasury.v1.DisbursementSupplierBillingEventDomainService.ReadDisbursementSupplierBillingEvent
      */
-    readTreasuryDisbursementSupplierBillingEvent: {
+    readDisbursementSupplierBillingEvent: {
         methodKind: "unary";
-        input: typeof ReadTreasuryDisbursementSupplierBillingEventRequestSchema;
-        output: typeof ReadTreasuryDisbursementSupplierBillingEventResponseSchema;
+        input: typeof ReadDisbursementSupplierBillingEventRequestSchema;
+        output: typeof ReadDisbursementSupplierBillingEventResponseSchema;
     };
     /**
-     * @generated from rpc domain.treasury.v1.TreasuryDisbursementSupplierBillingEventDomainService.UpdateTreasuryDisbursementSupplierBillingEvent
+     * @generated from rpc domain.treasury.v1.DisbursementSupplierBillingEventDomainService.UpdateDisbursementSupplierBillingEvent
      */
-    updateTreasuryDisbursementSupplierBillingEvent: {
+    updateDisbursementSupplierBillingEvent: {
         methodKind: "unary";
-        input: typeof UpdateTreasuryDisbursementSupplierBillingEventRequestSchema;
-        output: typeof UpdateTreasuryDisbursementSupplierBillingEventResponseSchema;
+        input: typeof UpdateDisbursementSupplierBillingEventRequestSchema;
+        output: typeof UpdateDisbursementSupplierBillingEventResponseSchema;
     };
     /**
-     * @generated from rpc domain.treasury.v1.TreasuryDisbursementSupplierBillingEventDomainService.DeleteTreasuryDisbursementSupplierBillingEvent
+     * @generated from rpc domain.treasury.v1.DisbursementSupplierBillingEventDomainService.DeleteDisbursementSupplierBillingEvent
      */
-    deleteTreasuryDisbursementSupplierBillingEvent: {
+    deleteDisbursementSupplierBillingEvent: {
         methodKind: "unary";
-        input: typeof DeleteTreasuryDisbursementSupplierBillingEventRequestSchema;
-        output: typeof DeleteTreasuryDisbursementSupplierBillingEventResponseSchema;
+        input: typeof DeleteDisbursementSupplierBillingEventRequestSchema;
+        output: typeof DeleteDisbursementSupplierBillingEventResponseSchema;
     };
     /**
-     * @generated from rpc domain.treasury.v1.TreasuryDisbursementSupplierBillingEventDomainService.ListTreasuryDisbursementSupplierBillingEvents
+     * @generated from rpc domain.treasury.v1.DisbursementSupplierBillingEventDomainService.ListDisbursementSupplierBillingEvents
      */
-    listTreasuryDisbursementSupplierBillingEvents: {
+    listDisbursementSupplierBillingEvents: {
         methodKind: "unary";
-        input: typeof ListTreasuryDisbursementSupplierBillingEventsRequestSchema;
-        output: typeof ListTreasuryDisbursementSupplierBillingEventsResponseSchema;
+        input: typeof ListDisbursementSupplierBillingEventsRequestSchema;
+        output: typeof ListDisbursementSupplierBillingEventsResponseSchema;
     };
 }>;

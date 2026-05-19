@@ -24,8 +24,8 @@ const (
 )
 
 // Junction entity linking a MILESTONE advance TreasuryDisbursement to one or more
-// SupplierBillingEvent rows (buying-side mirror of TreasuryCollectionBillingEvent).
-type TreasuryDisbursementSupplierBillingEvent struct {
+// SupplierBillingEvent rows (buying-side mirror of CollectionBillingEvent).
+type DisbursementSupplierBillingEvent struct {
 	state                  protoimpl.MessageState `protogen:"open.v1"`
 	Id                     string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
 	WorkspaceId            string                 `protobuf:"bytes,2,opt,name=workspace_id,json=workspaceId,proto3" json:"workspace_id,omitempty"`
@@ -42,20 +42,20 @@ type TreasuryDisbursementSupplierBillingEvent struct {
 	sizeCache            protoimpl.SizeCache
 }
 
-func (x *TreasuryDisbursementSupplierBillingEvent) Reset() {
-	*x = TreasuryDisbursementSupplierBillingEvent{}
+func (x *DisbursementSupplierBillingEvent) Reset() {
+	*x = DisbursementSupplierBillingEvent{}
 	mi := &file_domain_treasury_disbursement_supplier_billing_event_disbursement_supplier_billing_event_proto_msgTypes[0]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
 
-func (x *TreasuryDisbursementSupplierBillingEvent) String() string {
+func (x *DisbursementSupplierBillingEvent) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*TreasuryDisbursementSupplierBillingEvent) ProtoMessage() {}
+func (*DisbursementSupplierBillingEvent) ProtoMessage() {}
 
-func (x *TreasuryDisbursementSupplierBillingEvent) ProtoReflect() protoreflect.Message {
+func (x *DisbursementSupplierBillingEvent) ProtoReflect() protoreflect.Message {
 	mi := &file_domain_treasury_disbursement_supplier_billing_event_disbursement_supplier_billing_event_proto_msgTypes[0]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -67,95 +67,95 @@ func (x *TreasuryDisbursementSupplierBillingEvent) ProtoReflect() protoreflect.M
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use TreasuryDisbursementSupplierBillingEvent.ProtoReflect.Descriptor instead.
-func (*TreasuryDisbursementSupplierBillingEvent) Descriptor() ([]byte, []int) {
+// Deprecated: Use DisbursementSupplierBillingEvent.ProtoReflect.Descriptor instead.
+func (*DisbursementSupplierBillingEvent) Descriptor() ([]byte, []int) {
 	return file_domain_treasury_disbursement_supplier_billing_event_disbursement_supplier_billing_event_proto_rawDescGZIP(), []int{0}
 }
 
-func (x *TreasuryDisbursementSupplierBillingEvent) GetId() string {
+func (x *DisbursementSupplierBillingEvent) GetId() string {
 	if x != nil {
 		return x.Id
 	}
 	return ""
 }
 
-func (x *TreasuryDisbursementSupplierBillingEvent) GetWorkspaceId() string {
+func (x *DisbursementSupplierBillingEvent) GetWorkspaceId() string {
 	if x != nil {
 		return x.WorkspaceId
 	}
 	return ""
 }
 
-func (x *TreasuryDisbursementSupplierBillingEvent) GetTreasuryDisbursementId() string {
+func (x *DisbursementSupplierBillingEvent) GetTreasuryDisbursementId() string {
 	if x != nil {
 		return x.TreasuryDisbursementId
 	}
 	return ""
 }
 
-func (x *TreasuryDisbursementSupplierBillingEvent) GetSupplierBillingEventId() string {
+func (x *DisbursementSupplierBillingEvent) GetSupplierBillingEventId() string {
 	if x != nil {
 		return x.SupplierBillingEventId
 	}
 	return ""
 }
 
-func (x *TreasuryDisbursementSupplierBillingEvent) GetTrancheAmount() int64 {
+func (x *DisbursementSupplierBillingEvent) GetTrancheAmount() int64 {
 	if x != nil {
 		return x.TrancheAmount
 	}
 	return 0
 }
 
-func (x *TreasuryDisbursementSupplierBillingEvent) GetExpenseRecognitionId() string {
+func (x *DisbursementSupplierBillingEvent) GetExpenseRecognitionId() string {
 	if x != nil && x.ExpenseRecognitionId != nil {
 		return *x.ExpenseRecognitionId
 	}
 	return ""
 }
 
-func (x *TreasuryDisbursementSupplierBillingEvent) GetActive() bool {
+func (x *DisbursementSupplierBillingEvent) GetActive() bool {
 	if x != nil {
 		return x.Active
 	}
 	return false
 }
 
-func (x *TreasuryDisbursementSupplierBillingEvent) GetDateCreated() int64 {
+func (x *DisbursementSupplierBillingEvent) GetDateCreated() int64 {
 	if x != nil && x.DateCreated != nil {
 		return *x.DateCreated
 	}
 	return 0
 }
 
-func (x *TreasuryDisbursementSupplierBillingEvent) GetDateModified() int64 {
+func (x *DisbursementSupplierBillingEvent) GetDateModified() int64 {
 	if x != nil && x.DateModified != nil {
 		return *x.DateModified
 	}
 	return 0
 }
 
-type CreateTreasuryDisbursementSupplierBillingEventRequest struct {
-	state         protoimpl.MessageState                    `protogen:"open.v1"`
-	Data          *TreasuryDisbursementSupplierBillingEvent `protobuf:"bytes,1,opt,name=data,proto3" json:"data,omitempty"`
+type CreateDisbursementSupplierBillingEventRequest struct {
+	state         protoimpl.MessageState            `protogen:"open.v1"`
+	Data          *DisbursementSupplierBillingEvent `protobuf:"bytes,1,opt,name=data,proto3" json:"data,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
 
-func (x *CreateTreasuryDisbursementSupplierBillingEventRequest) Reset() {
-	*x = CreateTreasuryDisbursementSupplierBillingEventRequest{}
+func (x *CreateDisbursementSupplierBillingEventRequest) Reset() {
+	*x = CreateDisbursementSupplierBillingEventRequest{}
 	mi := &file_domain_treasury_disbursement_supplier_billing_event_disbursement_supplier_billing_event_proto_msgTypes[1]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
 
-func (x *CreateTreasuryDisbursementSupplierBillingEventRequest) String() string {
+func (x *CreateDisbursementSupplierBillingEventRequest) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*CreateTreasuryDisbursementSupplierBillingEventRequest) ProtoMessage() {}
+func (*CreateDisbursementSupplierBillingEventRequest) ProtoMessage() {}
 
-func (x *CreateTreasuryDisbursementSupplierBillingEventRequest) ProtoReflect() protoreflect.Message {
+func (x *CreateDisbursementSupplierBillingEventRequest) ProtoReflect() protoreflect.Message {
 	mi := &file_domain_treasury_disbursement_supplier_billing_event_disbursement_supplier_billing_event_proto_msgTypes[1]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -167,41 +167,41 @@ func (x *CreateTreasuryDisbursementSupplierBillingEventRequest) ProtoReflect() p
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use CreateTreasuryDisbursementSupplierBillingEventRequest.ProtoReflect.Descriptor instead.
-func (*CreateTreasuryDisbursementSupplierBillingEventRequest) Descriptor() ([]byte, []int) {
+// Deprecated: Use CreateDisbursementSupplierBillingEventRequest.ProtoReflect.Descriptor instead.
+func (*CreateDisbursementSupplierBillingEventRequest) Descriptor() ([]byte, []int) {
 	return file_domain_treasury_disbursement_supplier_billing_event_disbursement_supplier_billing_event_proto_rawDescGZIP(), []int{1}
 }
 
-func (x *CreateTreasuryDisbursementSupplierBillingEventRequest) GetData() *TreasuryDisbursementSupplierBillingEvent {
+func (x *CreateDisbursementSupplierBillingEventRequest) GetData() *DisbursementSupplierBillingEvent {
 	if x != nil {
 		return x.Data
 	}
 	return nil
 }
 
-type CreateTreasuryDisbursementSupplierBillingEventResponse struct {
-	state         protoimpl.MessageState                      `protogen:"open.v1"`
-	Data          []*TreasuryDisbursementSupplierBillingEvent `protobuf:"bytes,1,rep,name=data,proto3" json:"data,omitempty"`
-	Success       bool                                        `protobuf:"varint,2,opt,name=success,proto3" json:"success,omitempty"`
-	Error         *common.Error                               `protobuf:"bytes,3,opt,name=error,proto3,oneof" json:"error,omitempty"`
+type CreateDisbursementSupplierBillingEventResponse struct {
+	state         protoimpl.MessageState              `protogen:"open.v1"`
+	Data          []*DisbursementSupplierBillingEvent `protobuf:"bytes,1,rep,name=data,proto3" json:"data,omitempty"`
+	Success       bool                                `protobuf:"varint,2,opt,name=success,proto3" json:"success,omitempty"`
+	Error         *common.Error                       `protobuf:"bytes,3,opt,name=error,proto3,oneof" json:"error,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
 
-func (x *CreateTreasuryDisbursementSupplierBillingEventResponse) Reset() {
-	*x = CreateTreasuryDisbursementSupplierBillingEventResponse{}
+func (x *CreateDisbursementSupplierBillingEventResponse) Reset() {
+	*x = CreateDisbursementSupplierBillingEventResponse{}
 	mi := &file_domain_treasury_disbursement_supplier_billing_event_disbursement_supplier_billing_event_proto_msgTypes[2]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
 
-func (x *CreateTreasuryDisbursementSupplierBillingEventResponse) String() string {
+func (x *CreateDisbursementSupplierBillingEventResponse) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*CreateTreasuryDisbursementSupplierBillingEventResponse) ProtoMessage() {}
+func (*CreateDisbursementSupplierBillingEventResponse) ProtoMessage() {}
 
-func (x *CreateTreasuryDisbursementSupplierBillingEventResponse) ProtoReflect() protoreflect.Message {
+func (x *CreateDisbursementSupplierBillingEventResponse) ProtoReflect() protoreflect.Message {
 	mi := &file_domain_treasury_disbursement_supplier_billing_event_disbursement_supplier_billing_event_proto_msgTypes[2]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -213,53 +213,53 @@ func (x *CreateTreasuryDisbursementSupplierBillingEventResponse) ProtoReflect() 
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use CreateTreasuryDisbursementSupplierBillingEventResponse.ProtoReflect.Descriptor instead.
-func (*CreateTreasuryDisbursementSupplierBillingEventResponse) Descriptor() ([]byte, []int) {
+// Deprecated: Use CreateDisbursementSupplierBillingEventResponse.ProtoReflect.Descriptor instead.
+func (*CreateDisbursementSupplierBillingEventResponse) Descriptor() ([]byte, []int) {
 	return file_domain_treasury_disbursement_supplier_billing_event_disbursement_supplier_billing_event_proto_rawDescGZIP(), []int{2}
 }
 
-func (x *CreateTreasuryDisbursementSupplierBillingEventResponse) GetData() []*TreasuryDisbursementSupplierBillingEvent {
+func (x *CreateDisbursementSupplierBillingEventResponse) GetData() []*DisbursementSupplierBillingEvent {
 	if x != nil {
 		return x.Data
 	}
 	return nil
 }
 
-func (x *CreateTreasuryDisbursementSupplierBillingEventResponse) GetSuccess() bool {
+func (x *CreateDisbursementSupplierBillingEventResponse) GetSuccess() bool {
 	if x != nil {
 		return x.Success
 	}
 	return false
 }
 
-func (x *CreateTreasuryDisbursementSupplierBillingEventResponse) GetError() *common.Error {
+func (x *CreateDisbursementSupplierBillingEventResponse) GetError() *common.Error {
 	if x != nil {
 		return x.Error
 	}
 	return nil
 }
 
-type ReadTreasuryDisbursementSupplierBillingEventRequest struct {
-	state         protoimpl.MessageState                    `protogen:"open.v1"`
-	Data          *TreasuryDisbursementSupplierBillingEvent `protobuf:"bytes,1,opt,name=data,proto3" json:"data,omitempty"`
+type ReadDisbursementSupplierBillingEventRequest struct {
+	state         protoimpl.MessageState            `protogen:"open.v1"`
+	Data          *DisbursementSupplierBillingEvent `protobuf:"bytes,1,opt,name=data,proto3" json:"data,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
 
-func (x *ReadTreasuryDisbursementSupplierBillingEventRequest) Reset() {
-	*x = ReadTreasuryDisbursementSupplierBillingEventRequest{}
+func (x *ReadDisbursementSupplierBillingEventRequest) Reset() {
+	*x = ReadDisbursementSupplierBillingEventRequest{}
 	mi := &file_domain_treasury_disbursement_supplier_billing_event_disbursement_supplier_billing_event_proto_msgTypes[3]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
 
-func (x *ReadTreasuryDisbursementSupplierBillingEventRequest) String() string {
+func (x *ReadDisbursementSupplierBillingEventRequest) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*ReadTreasuryDisbursementSupplierBillingEventRequest) ProtoMessage() {}
+func (*ReadDisbursementSupplierBillingEventRequest) ProtoMessage() {}
 
-func (x *ReadTreasuryDisbursementSupplierBillingEventRequest) ProtoReflect() protoreflect.Message {
+func (x *ReadDisbursementSupplierBillingEventRequest) ProtoReflect() protoreflect.Message {
 	mi := &file_domain_treasury_disbursement_supplier_billing_event_disbursement_supplier_billing_event_proto_msgTypes[3]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -271,41 +271,41 @@ func (x *ReadTreasuryDisbursementSupplierBillingEventRequest) ProtoReflect() pro
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use ReadTreasuryDisbursementSupplierBillingEventRequest.ProtoReflect.Descriptor instead.
-func (*ReadTreasuryDisbursementSupplierBillingEventRequest) Descriptor() ([]byte, []int) {
+// Deprecated: Use ReadDisbursementSupplierBillingEventRequest.ProtoReflect.Descriptor instead.
+func (*ReadDisbursementSupplierBillingEventRequest) Descriptor() ([]byte, []int) {
 	return file_domain_treasury_disbursement_supplier_billing_event_disbursement_supplier_billing_event_proto_rawDescGZIP(), []int{3}
 }
 
-func (x *ReadTreasuryDisbursementSupplierBillingEventRequest) GetData() *TreasuryDisbursementSupplierBillingEvent {
+func (x *ReadDisbursementSupplierBillingEventRequest) GetData() *DisbursementSupplierBillingEvent {
 	if x != nil {
 		return x.Data
 	}
 	return nil
 }
 
-type ReadTreasuryDisbursementSupplierBillingEventResponse struct {
-	state         protoimpl.MessageState                      `protogen:"open.v1"`
-	Data          []*TreasuryDisbursementSupplierBillingEvent `protobuf:"bytes,1,rep,name=data,proto3" json:"data,omitempty"`
-	Success       bool                                        `protobuf:"varint,2,opt,name=success,proto3" json:"success,omitempty"`
-	Error         *common.Error                               `protobuf:"bytes,3,opt,name=error,proto3,oneof" json:"error,omitempty"`
+type ReadDisbursementSupplierBillingEventResponse struct {
+	state         protoimpl.MessageState              `protogen:"open.v1"`
+	Data          []*DisbursementSupplierBillingEvent `protobuf:"bytes,1,rep,name=data,proto3" json:"data,omitempty"`
+	Success       bool                                `protobuf:"varint,2,opt,name=success,proto3" json:"success,omitempty"`
+	Error         *common.Error                       `protobuf:"bytes,3,opt,name=error,proto3,oneof" json:"error,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
 
-func (x *ReadTreasuryDisbursementSupplierBillingEventResponse) Reset() {
-	*x = ReadTreasuryDisbursementSupplierBillingEventResponse{}
+func (x *ReadDisbursementSupplierBillingEventResponse) Reset() {
+	*x = ReadDisbursementSupplierBillingEventResponse{}
 	mi := &file_domain_treasury_disbursement_supplier_billing_event_disbursement_supplier_billing_event_proto_msgTypes[4]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
 
-func (x *ReadTreasuryDisbursementSupplierBillingEventResponse) String() string {
+func (x *ReadDisbursementSupplierBillingEventResponse) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*ReadTreasuryDisbursementSupplierBillingEventResponse) ProtoMessage() {}
+func (*ReadDisbursementSupplierBillingEventResponse) ProtoMessage() {}
 
-func (x *ReadTreasuryDisbursementSupplierBillingEventResponse) ProtoReflect() protoreflect.Message {
+func (x *ReadDisbursementSupplierBillingEventResponse) ProtoReflect() protoreflect.Message {
 	mi := &file_domain_treasury_disbursement_supplier_billing_event_disbursement_supplier_billing_event_proto_msgTypes[4]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -317,53 +317,53 @@ func (x *ReadTreasuryDisbursementSupplierBillingEventResponse) ProtoReflect() pr
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use ReadTreasuryDisbursementSupplierBillingEventResponse.ProtoReflect.Descriptor instead.
-func (*ReadTreasuryDisbursementSupplierBillingEventResponse) Descriptor() ([]byte, []int) {
+// Deprecated: Use ReadDisbursementSupplierBillingEventResponse.ProtoReflect.Descriptor instead.
+func (*ReadDisbursementSupplierBillingEventResponse) Descriptor() ([]byte, []int) {
 	return file_domain_treasury_disbursement_supplier_billing_event_disbursement_supplier_billing_event_proto_rawDescGZIP(), []int{4}
 }
 
-func (x *ReadTreasuryDisbursementSupplierBillingEventResponse) GetData() []*TreasuryDisbursementSupplierBillingEvent {
+func (x *ReadDisbursementSupplierBillingEventResponse) GetData() []*DisbursementSupplierBillingEvent {
 	if x != nil {
 		return x.Data
 	}
 	return nil
 }
 
-func (x *ReadTreasuryDisbursementSupplierBillingEventResponse) GetSuccess() bool {
+func (x *ReadDisbursementSupplierBillingEventResponse) GetSuccess() bool {
 	if x != nil {
 		return x.Success
 	}
 	return false
 }
 
-func (x *ReadTreasuryDisbursementSupplierBillingEventResponse) GetError() *common.Error {
+func (x *ReadDisbursementSupplierBillingEventResponse) GetError() *common.Error {
 	if x != nil {
 		return x.Error
 	}
 	return nil
 }
 
-type UpdateTreasuryDisbursementSupplierBillingEventRequest struct {
-	state         protoimpl.MessageState                    `protogen:"open.v1"`
-	Data          *TreasuryDisbursementSupplierBillingEvent `protobuf:"bytes,1,opt,name=data,proto3" json:"data,omitempty"`
+type UpdateDisbursementSupplierBillingEventRequest struct {
+	state         protoimpl.MessageState            `protogen:"open.v1"`
+	Data          *DisbursementSupplierBillingEvent `protobuf:"bytes,1,opt,name=data,proto3" json:"data,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
 
-func (x *UpdateTreasuryDisbursementSupplierBillingEventRequest) Reset() {
-	*x = UpdateTreasuryDisbursementSupplierBillingEventRequest{}
+func (x *UpdateDisbursementSupplierBillingEventRequest) Reset() {
+	*x = UpdateDisbursementSupplierBillingEventRequest{}
 	mi := &file_domain_treasury_disbursement_supplier_billing_event_disbursement_supplier_billing_event_proto_msgTypes[5]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
 
-func (x *UpdateTreasuryDisbursementSupplierBillingEventRequest) String() string {
+func (x *UpdateDisbursementSupplierBillingEventRequest) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*UpdateTreasuryDisbursementSupplierBillingEventRequest) ProtoMessage() {}
+func (*UpdateDisbursementSupplierBillingEventRequest) ProtoMessage() {}
 
-func (x *UpdateTreasuryDisbursementSupplierBillingEventRequest) ProtoReflect() protoreflect.Message {
+func (x *UpdateDisbursementSupplierBillingEventRequest) ProtoReflect() protoreflect.Message {
 	mi := &file_domain_treasury_disbursement_supplier_billing_event_disbursement_supplier_billing_event_proto_msgTypes[5]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -375,41 +375,41 @@ func (x *UpdateTreasuryDisbursementSupplierBillingEventRequest) ProtoReflect() p
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use UpdateTreasuryDisbursementSupplierBillingEventRequest.ProtoReflect.Descriptor instead.
-func (*UpdateTreasuryDisbursementSupplierBillingEventRequest) Descriptor() ([]byte, []int) {
+// Deprecated: Use UpdateDisbursementSupplierBillingEventRequest.ProtoReflect.Descriptor instead.
+func (*UpdateDisbursementSupplierBillingEventRequest) Descriptor() ([]byte, []int) {
 	return file_domain_treasury_disbursement_supplier_billing_event_disbursement_supplier_billing_event_proto_rawDescGZIP(), []int{5}
 }
 
-func (x *UpdateTreasuryDisbursementSupplierBillingEventRequest) GetData() *TreasuryDisbursementSupplierBillingEvent {
+func (x *UpdateDisbursementSupplierBillingEventRequest) GetData() *DisbursementSupplierBillingEvent {
 	if x != nil {
 		return x.Data
 	}
 	return nil
 }
 
-type UpdateTreasuryDisbursementSupplierBillingEventResponse struct {
-	state         protoimpl.MessageState                      `protogen:"open.v1"`
-	Data          []*TreasuryDisbursementSupplierBillingEvent `protobuf:"bytes,1,rep,name=data,proto3" json:"data,omitempty"`
-	Success       bool                                        `protobuf:"varint,2,opt,name=success,proto3" json:"success,omitempty"`
-	Error         *common.Error                               `protobuf:"bytes,3,opt,name=error,proto3,oneof" json:"error,omitempty"`
+type UpdateDisbursementSupplierBillingEventResponse struct {
+	state         protoimpl.MessageState              `protogen:"open.v1"`
+	Data          []*DisbursementSupplierBillingEvent `protobuf:"bytes,1,rep,name=data,proto3" json:"data,omitempty"`
+	Success       bool                                `protobuf:"varint,2,opt,name=success,proto3" json:"success,omitempty"`
+	Error         *common.Error                       `protobuf:"bytes,3,opt,name=error,proto3,oneof" json:"error,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
 
-func (x *UpdateTreasuryDisbursementSupplierBillingEventResponse) Reset() {
-	*x = UpdateTreasuryDisbursementSupplierBillingEventResponse{}
+func (x *UpdateDisbursementSupplierBillingEventResponse) Reset() {
+	*x = UpdateDisbursementSupplierBillingEventResponse{}
 	mi := &file_domain_treasury_disbursement_supplier_billing_event_disbursement_supplier_billing_event_proto_msgTypes[6]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
 
-func (x *UpdateTreasuryDisbursementSupplierBillingEventResponse) String() string {
+func (x *UpdateDisbursementSupplierBillingEventResponse) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*UpdateTreasuryDisbursementSupplierBillingEventResponse) ProtoMessage() {}
+func (*UpdateDisbursementSupplierBillingEventResponse) ProtoMessage() {}
 
-func (x *UpdateTreasuryDisbursementSupplierBillingEventResponse) ProtoReflect() protoreflect.Message {
+func (x *UpdateDisbursementSupplierBillingEventResponse) ProtoReflect() protoreflect.Message {
 	mi := &file_domain_treasury_disbursement_supplier_billing_event_disbursement_supplier_billing_event_proto_msgTypes[6]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -421,53 +421,53 @@ func (x *UpdateTreasuryDisbursementSupplierBillingEventResponse) ProtoReflect() 
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use UpdateTreasuryDisbursementSupplierBillingEventResponse.ProtoReflect.Descriptor instead.
-func (*UpdateTreasuryDisbursementSupplierBillingEventResponse) Descriptor() ([]byte, []int) {
+// Deprecated: Use UpdateDisbursementSupplierBillingEventResponse.ProtoReflect.Descriptor instead.
+func (*UpdateDisbursementSupplierBillingEventResponse) Descriptor() ([]byte, []int) {
 	return file_domain_treasury_disbursement_supplier_billing_event_disbursement_supplier_billing_event_proto_rawDescGZIP(), []int{6}
 }
 
-func (x *UpdateTreasuryDisbursementSupplierBillingEventResponse) GetData() []*TreasuryDisbursementSupplierBillingEvent {
+func (x *UpdateDisbursementSupplierBillingEventResponse) GetData() []*DisbursementSupplierBillingEvent {
 	if x != nil {
 		return x.Data
 	}
 	return nil
 }
 
-func (x *UpdateTreasuryDisbursementSupplierBillingEventResponse) GetSuccess() bool {
+func (x *UpdateDisbursementSupplierBillingEventResponse) GetSuccess() bool {
 	if x != nil {
 		return x.Success
 	}
 	return false
 }
 
-func (x *UpdateTreasuryDisbursementSupplierBillingEventResponse) GetError() *common.Error {
+func (x *UpdateDisbursementSupplierBillingEventResponse) GetError() *common.Error {
 	if x != nil {
 		return x.Error
 	}
 	return nil
 }
 
-type DeleteTreasuryDisbursementSupplierBillingEventRequest struct {
-	state         protoimpl.MessageState                    `protogen:"open.v1"`
-	Data          *TreasuryDisbursementSupplierBillingEvent `protobuf:"bytes,1,opt,name=data,proto3" json:"data,omitempty"`
+type DeleteDisbursementSupplierBillingEventRequest struct {
+	state         protoimpl.MessageState            `protogen:"open.v1"`
+	Data          *DisbursementSupplierBillingEvent `protobuf:"bytes,1,opt,name=data,proto3" json:"data,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
 
-func (x *DeleteTreasuryDisbursementSupplierBillingEventRequest) Reset() {
-	*x = DeleteTreasuryDisbursementSupplierBillingEventRequest{}
+func (x *DeleteDisbursementSupplierBillingEventRequest) Reset() {
+	*x = DeleteDisbursementSupplierBillingEventRequest{}
 	mi := &file_domain_treasury_disbursement_supplier_billing_event_disbursement_supplier_billing_event_proto_msgTypes[7]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
 
-func (x *DeleteTreasuryDisbursementSupplierBillingEventRequest) String() string {
+func (x *DeleteDisbursementSupplierBillingEventRequest) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*DeleteTreasuryDisbursementSupplierBillingEventRequest) ProtoMessage() {}
+func (*DeleteDisbursementSupplierBillingEventRequest) ProtoMessage() {}
 
-func (x *DeleteTreasuryDisbursementSupplierBillingEventRequest) ProtoReflect() protoreflect.Message {
+func (x *DeleteDisbursementSupplierBillingEventRequest) ProtoReflect() protoreflect.Message {
 	mi := &file_domain_treasury_disbursement_supplier_billing_event_disbursement_supplier_billing_event_proto_msgTypes[7]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -479,19 +479,19 @@ func (x *DeleteTreasuryDisbursementSupplierBillingEventRequest) ProtoReflect() p
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use DeleteTreasuryDisbursementSupplierBillingEventRequest.ProtoReflect.Descriptor instead.
-func (*DeleteTreasuryDisbursementSupplierBillingEventRequest) Descriptor() ([]byte, []int) {
+// Deprecated: Use DeleteDisbursementSupplierBillingEventRequest.ProtoReflect.Descriptor instead.
+func (*DeleteDisbursementSupplierBillingEventRequest) Descriptor() ([]byte, []int) {
 	return file_domain_treasury_disbursement_supplier_billing_event_disbursement_supplier_billing_event_proto_rawDescGZIP(), []int{7}
 }
 
-func (x *DeleteTreasuryDisbursementSupplierBillingEventRequest) GetData() *TreasuryDisbursementSupplierBillingEvent {
+func (x *DeleteDisbursementSupplierBillingEventRequest) GetData() *DisbursementSupplierBillingEvent {
 	if x != nil {
 		return x.Data
 	}
 	return nil
 }
 
-type DeleteTreasuryDisbursementSupplierBillingEventResponse struct {
+type DeleteDisbursementSupplierBillingEventResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Success       bool                   `protobuf:"varint,1,opt,name=success,proto3" json:"success,omitempty"`
 	Error         *common.Error          `protobuf:"bytes,2,opt,name=error,proto3,oneof" json:"error,omitempty"`
@@ -499,20 +499,20 @@ type DeleteTreasuryDisbursementSupplierBillingEventResponse struct {
 	sizeCache     protoimpl.SizeCache
 }
 
-func (x *DeleteTreasuryDisbursementSupplierBillingEventResponse) Reset() {
-	*x = DeleteTreasuryDisbursementSupplierBillingEventResponse{}
+func (x *DeleteDisbursementSupplierBillingEventResponse) Reset() {
+	*x = DeleteDisbursementSupplierBillingEventResponse{}
 	mi := &file_domain_treasury_disbursement_supplier_billing_event_disbursement_supplier_billing_event_proto_msgTypes[8]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
 
-func (x *DeleteTreasuryDisbursementSupplierBillingEventResponse) String() string {
+func (x *DeleteDisbursementSupplierBillingEventResponse) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*DeleteTreasuryDisbursementSupplierBillingEventResponse) ProtoMessage() {}
+func (*DeleteDisbursementSupplierBillingEventResponse) ProtoMessage() {}
 
-func (x *DeleteTreasuryDisbursementSupplierBillingEventResponse) ProtoReflect() protoreflect.Message {
+func (x *DeleteDisbursementSupplierBillingEventResponse) ProtoReflect() protoreflect.Message {
 	mi := &file_domain_treasury_disbursement_supplier_billing_event_disbursement_supplier_billing_event_proto_msgTypes[8]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -524,26 +524,26 @@ func (x *DeleteTreasuryDisbursementSupplierBillingEventResponse) ProtoReflect() 
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use DeleteTreasuryDisbursementSupplierBillingEventResponse.ProtoReflect.Descriptor instead.
-func (*DeleteTreasuryDisbursementSupplierBillingEventResponse) Descriptor() ([]byte, []int) {
+// Deprecated: Use DeleteDisbursementSupplierBillingEventResponse.ProtoReflect.Descriptor instead.
+func (*DeleteDisbursementSupplierBillingEventResponse) Descriptor() ([]byte, []int) {
 	return file_domain_treasury_disbursement_supplier_billing_event_disbursement_supplier_billing_event_proto_rawDescGZIP(), []int{8}
 }
 
-func (x *DeleteTreasuryDisbursementSupplierBillingEventResponse) GetSuccess() bool {
+func (x *DeleteDisbursementSupplierBillingEventResponse) GetSuccess() bool {
 	if x != nil {
 		return x.Success
 	}
 	return false
 }
 
-func (x *DeleteTreasuryDisbursementSupplierBillingEventResponse) GetError() *common.Error {
+func (x *DeleteDisbursementSupplierBillingEventResponse) GetError() *common.Error {
 	if x != nil {
 		return x.Error
 	}
 	return nil
 }
 
-type ListTreasuryDisbursementSupplierBillingEventsRequest struct {
+type ListDisbursementSupplierBillingEventsRequest struct {
 	state         protoimpl.MessageState    `protogen:"open.v1"`
 	Search        *common.SearchRequest     `protobuf:"bytes,1,opt,name=search,proto3,oneof" json:"search,omitempty"`
 	Filters       *common.FilterRequest     `protobuf:"bytes,2,opt,name=filters,proto3,oneof" json:"filters,omitempty"`
@@ -553,20 +553,20 @@ type ListTreasuryDisbursementSupplierBillingEventsRequest struct {
 	sizeCache     protoimpl.SizeCache
 }
 
-func (x *ListTreasuryDisbursementSupplierBillingEventsRequest) Reset() {
-	*x = ListTreasuryDisbursementSupplierBillingEventsRequest{}
+func (x *ListDisbursementSupplierBillingEventsRequest) Reset() {
+	*x = ListDisbursementSupplierBillingEventsRequest{}
 	mi := &file_domain_treasury_disbursement_supplier_billing_event_disbursement_supplier_billing_event_proto_msgTypes[9]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
 
-func (x *ListTreasuryDisbursementSupplierBillingEventsRequest) String() string {
+func (x *ListDisbursementSupplierBillingEventsRequest) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*ListTreasuryDisbursementSupplierBillingEventsRequest) ProtoMessage() {}
+func (*ListDisbursementSupplierBillingEventsRequest) ProtoMessage() {}
 
-func (x *ListTreasuryDisbursementSupplierBillingEventsRequest) ProtoReflect() protoreflect.Message {
+func (x *ListDisbursementSupplierBillingEventsRequest) ProtoReflect() protoreflect.Message {
 	mi := &file_domain_treasury_disbursement_supplier_billing_event_disbursement_supplier_billing_event_proto_msgTypes[9]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -578,62 +578,62 @@ func (x *ListTreasuryDisbursementSupplierBillingEventsRequest) ProtoReflect() pr
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use ListTreasuryDisbursementSupplierBillingEventsRequest.ProtoReflect.Descriptor instead.
-func (*ListTreasuryDisbursementSupplierBillingEventsRequest) Descriptor() ([]byte, []int) {
+// Deprecated: Use ListDisbursementSupplierBillingEventsRequest.ProtoReflect.Descriptor instead.
+func (*ListDisbursementSupplierBillingEventsRequest) Descriptor() ([]byte, []int) {
 	return file_domain_treasury_disbursement_supplier_billing_event_disbursement_supplier_billing_event_proto_rawDescGZIP(), []int{9}
 }
 
-func (x *ListTreasuryDisbursementSupplierBillingEventsRequest) GetSearch() *common.SearchRequest {
+func (x *ListDisbursementSupplierBillingEventsRequest) GetSearch() *common.SearchRequest {
 	if x != nil {
 		return x.Search
 	}
 	return nil
 }
 
-func (x *ListTreasuryDisbursementSupplierBillingEventsRequest) GetFilters() *common.FilterRequest {
+func (x *ListDisbursementSupplierBillingEventsRequest) GetFilters() *common.FilterRequest {
 	if x != nil {
 		return x.Filters
 	}
 	return nil
 }
 
-func (x *ListTreasuryDisbursementSupplierBillingEventsRequest) GetSort() *common.SortRequest {
+func (x *ListDisbursementSupplierBillingEventsRequest) GetSort() *common.SortRequest {
 	if x != nil {
 		return x.Sort
 	}
 	return nil
 }
 
-func (x *ListTreasuryDisbursementSupplierBillingEventsRequest) GetPagination() *common.PaginationRequest {
+func (x *ListDisbursementSupplierBillingEventsRequest) GetPagination() *common.PaginationRequest {
 	if x != nil {
 		return x.Pagination
 	}
 	return nil
 }
 
-type ListTreasuryDisbursementSupplierBillingEventsResponse struct {
-	state         protoimpl.MessageState                      `protogen:"open.v1"`
-	Data          []*TreasuryDisbursementSupplierBillingEvent `protobuf:"bytes,1,rep,name=data,proto3" json:"data,omitempty"`
-	Success       bool                                        `protobuf:"varint,2,opt,name=success,proto3" json:"success,omitempty"`
-	Error         *common.Error                               `protobuf:"bytes,3,opt,name=error,proto3,oneof" json:"error,omitempty"`
+type ListDisbursementSupplierBillingEventsResponse struct {
+	state         protoimpl.MessageState              `protogen:"open.v1"`
+	Data          []*DisbursementSupplierBillingEvent `protobuf:"bytes,1,rep,name=data,proto3" json:"data,omitempty"`
+	Success       bool                                `protobuf:"varint,2,opt,name=success,proto3" json:"success,omitempty"`
+	Error         *common.Error                       `protobuf:"bytes,3,opt,name=error,proto3,oneof" json:"error,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
 
-func (x *ListTreasuryDisbursementSupplierBillingEventsResponse) Reset() {
-	*x = ListTreasuryDisbursementSupplierBillingEventsResponse{}
+func (x *ListDisbursementSupplierBillingEventsResponse) Reset() {
+	*x = ListDisbursementSupplierBillingEventsResponse{}
 	mi := &file_domain_treasury_disbursement_supplier_billing_event_disbursement_supplier_billing_event_proto_msgTypes[10]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
 
-func (x *ListTreasuryDisbursementSupplierBillingEventsResponse) String() string {
+func (x *ListDisbursementSupplierBillingEventsResponse) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*ListTreasuryDisbursementSupplierBillingEventsResponse) ProtoMessage() {}
+func (*ListDisbursementSupplierBillingEventsResponse) ProtoMessage() {}
 
-func (x *ListTreasuryDisbursementSupplierBillingEventsResponse) ProtoReflect() protoreflect.Message {
+func (x *ListDisbursementSupplierBillingEventsResponse) ProtoReflect() protoreflect.Message {
 	mi := &file_domain_treasury_disbursement_supplier_billing_event_disbursement_supplier_billing_event_proto_msgTypes[10]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -645,26 +645,26 @@ func (x *ListTreasuryDisbursementSupplierBillingEventsResponse) ProtoReflect() p
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use ListTreasuryDisbursementSupplierBillingEventsResponse.ProtoReflect.Descriptor instead.
-func (*ListTreasuryDisbursementSupplierBillingEventsResponse) Descriptor() ([]byte, []int) {
+// Deprecated: Use ListDisbursementSupplierBillingEventsResponse.ProtoReflect.Descriptor instead.
+func (*ListDisbursementSupplierBillingEventsResponse) Descriptor() ([]byte, []int) {
 	return file_domain_treasury_disbursement_supplier_billing_event_disbursement_supplier_billing_event_proto_rawDescGZIP(), []int{10}
 }
 
-func (x *ListTreasuryDisbursementSupplierBillingEventsResponse) GetData() []*TreasuryDisbursementSupplierBillingEvent {
+func (x *ListDisbursementSupplierBillingEventsResponse) GetData() []*DisbursementSupplierBillingEvent {
 	if x != nil {
 		return x.Data
 	}
 	return nil
 }
 
-func (x *ListTreasuryDisbursementSupplierBillingEventsResponse) GetSuccess() bool {
+func (x *ListDisbursementSupplierBillingEventsResponse) GetSuccess() bool {
 	if x != nil {
 		return x.Success
 	}
 	return false
 }
 
-func (x *ListTreasuryDisbursementSupplierBillingEventsResponse) GetError() *common.Error {
+func (x *ListDisbursementSupplierBillingEventsResponse) GetError() *common.Error {
 	if x != nil {
 		return x.Error
 	}
@@ -675,8 +675,8 @@ var File_domain_treasury_disbursement_supplier_billing_event_disbursement_suppli
 
 const file_domain_treasury_disbursement_supplier_billing_event_disbursement_supplier_billing_event_proto_rawDesc = "" +
 	"\n" +
-	"]domain/treasury/disbursement_supplier_billing_event/disbursement_supplier_billing_event.proto\x12\x12domain.treasury.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/search.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x10options/db.proto\"\xd4\x04\n" +
-	"(TreasuryDisbursementSupplierBillingEvent\x12\x0e\n" +
+	"]domain/treasury/disbursement_supplier_billing_event/disbursement_supplier_billing_event.proto\x12\x12domain.treasury.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/search.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x10options/db.proto\"\xcc\x04\n" +
+	" DisbursementSupplierBillingEvent\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12)\n" +
 	"\fworkspace_id\x18\x02 \x01(\tB\x06\x82\xb5\x18\x02\x18\x01R\vworkspaceId\x12W\n" +
 	"\x18treasury_disbursement_id\x18\n" +
@@ -693,35 +693,35 @@ const file_domain_treasury_disbursement_supplier_billing_event_disbursement_supp
 	"\rdate_modified\x18\\ \x01(\x03H\x02R\fdateModified\x88\x01\x01:\x06\x8a\xb5\x18\x02\b\x01B\x19\n" +
 	"\x17_expense_recognition_idB\x0f\n" +
 	"\r_date_createdB\x10\n" +
-	"\x0e_date_modified\"\x89\x01\n" +
-	"5CreateTreasuryDisbursementSupplierBillingEventRequest\x12P\n" +
-	"\x04data\x18\x01 \x01(\v2<.domain.treasury.v1.TreasuryDisbursementSupplierBillingEventR\x04data\"\xe2\x01\n" +
-	"6CreateTreasuryDisbursementSupplierBillingEventResponse\x12P\n" +
-	"\x04data\x18\x01 \x03(\v2<.domain.treasury.v1.TreasuryDisbursementSupplierBillingEventR\x04data\x12\x18\n" +
+	"\x0e_date_modified\"y\n" +
+	"-CreateDisbursementSupplierBillingEventRequest\x12H\n" +
+	"\x04data\x18\x01 \x01(\v24.domain.treasury.v1.DisbursementSupplierBillingEventR\x04data\"\xd2\x01\n" +
+	".CreateDisbursementSupplierBillingEventResponse\x12H\n" +
+	"\x04data\x18\x01 \x03(\v24.domain.treasury.v1.DisbursementSupplierBillingEventR\x04data\x12\x18\n" +
 	"\asuccess\x18\x02 \x01(\bR\asuccess\x122\n" +
 	"\x05error\x18\x03 \x01(\v2\x17.domain.common.v1.ErrorH\x00R\x05error\x88\x01\x01B\b\n" +
-	"\x06_error\"\x87\x01\n" +
-	"3ReadTreasuryDisbursementSupplierBillingEventRequest\x12P\n" +
-	"\x04data\x18\x01 \x01(\v2<.domain.treasury.v1.TreasuryDisbursementSupplierBillingEventR\x04data\"\xe0\x01\n" +
-	"4ReadTreasuryDisbursementSupplierBillingEventResponse\x12P\n" +
-	"\x04data\x18\x01 \x03(\v2<.domain.treasury.v1.TreasuryDisbursementSupplierBillingEventR\x04data\x12\x18\n" +
+	"\x06_error\"w\n" +
+	"+ReadDisbursementSupplierBillingEventRequest\x12H\n" +
+	"\x04data\x18\x01 \x01(\v24.domain.treasury.v1.DisbursementSupplierBillingEventR\x04data\"\xd0\x01\n" +
+	",ReadDisbursementSupplierBillingEventResponse\x12H\n" +
+	"\x04data\x18\x01 \x03(\v24.domain.treasury.v1.DisbursementSupplierBillingEventR\x04data\x12\x18\n" +
 	"\asuccess\x18\x02 \x01(\bR\asuccess\x122\n" +
 	"\x05error\x18\x03 \x01(\v2\x17.domain.common.v1.ErrorH\x00R\x05error\x88\x01\x01B\b\n" +
-	"\x06_error\"\x89\x01\n" +
-	"5UpdateTreasuryDisbursementSupplierBillingEventRequest\x12P\n" +
-	"\x04data\x18\x01 \x01(\v2<.domain.treasury.v1.TreasuryDisbursementSupplierBillingEventR\x04data\"\xe2\x01\n" +
-	"6UpdateTreasuryDisbursementSupplierBillingEventResponse\x12P\n" +
-	"\x04data\x18\x01 \x03(\v2<.domain.treasury.v1.TreasuryDisbursementSupplierBillingEventR\x04data\x12\x18\n" +
+	"\x06_error\"y\n" +
+	"-UpdateDisbursementSupplierBillingEventRequest\x12H\n" +
+	"\x04data\x18\x01 \x01(\v24.domain.treasury.v1.DisbursementSupplierBillingEventR\x04data\"\xd2\x01\n" +
+	".UpdateDisbursementSupplierBillingEventResponse\x12H\n" +
+	"\x04data\x18\x01 \x03(\v24.domain.treasury.v1.DisbursementSupplierBillingEventR\x04data\x12\x18\n" +
 	"\asuccess\x18\x02 \x01(\bR\asuccess\x122\n" +
 	"\x05error\x18\x03 \x01(\v2\x17.domain.common.v1.ErrorH\x00R\x05error\x88\x01\x01B\b\n" +
-	"\x06_error\"\x89\x01\n" +
-	"5DeleteTreasuryDisbursementSupplierBillingEventRequest\x12P\n" +
-	"\x04data\x18\x01 \x01(\v2<.domain.treasury.v1.TreasuryDisbursementSupplierBillingEventR\x04data\"\x90\x01\n" +
-	"6DeleteTreasuryDisbursementSupplierBillingEventResponse\x12\x18\n" +
+	"\x06_error\"y\n" +
+	"-DeleteDisbursementSupplierBillingEventRequest\x12H\n" +
+	"\x04data\x18\x01 \x01(\v24.domain.treasury.v1.DisbursementSupplierBillingEventR\x04data\"\x88\x01\n" +
+	".DeleteDisbursementSupplierBillingEventResponse\x12\x18\n" +
 	"\asuccess\x18\x01 \x01(\bR\asuccess\x122\n" +
 	"\x05error\x18\x02 \x01(\v2\x17.domain.common.v1.ErrorH\x00R\x05error\x88\x01\x01B\b\n" +
-	"\x06_error\"\xe5\x02\n" +
-	"4ListTreasuryDisbursementSupplierBillingEventsRequest\x12<\n" +
+	"\x06_error\"\xdd\x02\n" +
+	",ListDisbursementSupplierBillingEventsRequest\x12<\n" +
 	"\x06search\x18\x01 \x01(\v2\x1f.domain.common.v1.SearchRequestH\x00R\x06search\x88\x01\x01\x12>\n" +
 	"\afilters\x18\x02 \x01(\v2\x1f.domain.common.v1.FilterRequestH\x01R\afilters\x88\x01\x01\x126\n" +
 	"\x04sort\x18\x03 \x01(\v2\x1d.domain.common.v1.SortRequestH\x02R\x04sort\x88\x01\x01\x12H\n" +
@@ -732,18 +732,18 @@ const file_domain_treasury_disbursement_supplier_billing_event_disbursement_supp
 	"\n" +
 	"\b_filtersB\a\n" +
 	"\x05_sortB\r\n" +
-	"\v_pagination\"\xe1\x01\n" +
-	"5ListTreasuryDisbursementSupplierBillingEventsResponse\x12P\n" +
-	"\x04data\x18\x01 \x03(\v2<.domain.treasury.v1.TreasuryDisbursementSupplierBillingEventR\x04data\x12\x18\n" +
+	"\v_pagination\"\xd1\x01\n" +
+	"-ListDisbursementSupplierBillingEventsResponse\x12H\n" +
+	"\x04data\x18\x01 \x03(\v24.domain.treasury.v1.DisbursementSupplierBillingEventR\x04data\x12\x18\n" +
 	"\asuccess\x18\x02 \x01(\bR\asuccess\x122\n" +
 	"\x05error\x18\x03 \x01(\v2\x17.domain.common.v1.ErrorH\x00R\x05error\x88\x01\x01B\b\n" +
-	"\x06_error2\xa0\b\n" +
-	"5TreasuryDisbursementSupplierBillingEventDomainService\x12\xc7\x01\n" +
-	".CreateTreasuryDisbursementSupplierBillingEvent\x12I.domain.treasury.v1.CreateTreasuryDisbursementSupplierBillingEventRequest\x1aJ.domain.treasury.v1.CreateTreasuryDisbursementSupplierBillingEventResponse\x12\xc1\x01\n" +
-	",ReadTreasuryDisbursementSupplierBillingEvent\x12G.domain.treasury.v1.ReadTreasuryDisbursementSupplierBillingEventRequest\x1aH.domain.treasury.v1.ReadTreasuryDisbursementSupplierBillingEventResponse\x12\xc7\x01\n" +
-	".UpdateTreasuryDisbursementSupplierBillingEvent\x12I.domain.treasury.v1.UpdateTreasuryDisbursementSupplierBillingEventRequest\x1aJ.domain.treasury.v1.UpdateTreasuryDisbursementSupplierBillingEventResponse\x12\xc7\x01\n" +
-	".DeleteTreasuryDisbursementSupplierBillingEvent\x12I.domain.treasury.v1.DeleteTreasuryDisbursementSupplierBillingEventRequest\x1aJ.domain.treasury.v1.DeleteTreasuryDisbursementSupplierBillingEventResponse\x12\xc4\x01\n" +
-	"-ListTreasuryDisbursementSupplierBillingEvents\x12H.domain.treasury.v1.ListTreasuryDisbursementSupplierBillingEventsRequest\x1aI.domain.treasury.v1.ListTreasuryDisbursementSupplierBillingEventsResponseB\x94\x02\n" +
+	"\x06_error2\xa0\a\n" +
+	"-DisbursementSupplierBillingEventDomainService\x12\xaf\x01\n" +
+	"&CreateDisbursementSupplierBillingEvent\x12A.domain.treasury.v1.CreateDisbursementSupplierBillingEventRequest\x1aB.domain.treasury.v1.CreateDisbursementSupplierBillingEventResponse\x12\xa9\x01\n" +
+	"$ReadDisbursementSupplierBillingEvent\x12?.domain.treasury.v1.ReadDisbursementSupplierBillingEventRequest\x1a@.domain.treasury.v1.ReadDisbursementSupplierBillingEventResponse\x12\xaf\x01\n" +
+	"&UpdateDisbursementSupplierBillingEvent\x12A.domain.treasury.v1.UpdateDisbursementSupplierBillingEventRequest\x1aB.domain.treasury.v1.UpdateDisbursementSupplierBillingEventResponse\x12\xaf\x01\n" +
+	"&DeleteDisbursementSupplierBillingEvent\x12A.domain.treasury.v1.DeleteDisbursementSupplierBillingEventRequest\x1aB.domain.treasury.v1.DeleteDisbursementSupplierBillingEventResponse\x12\xac\x01\n" +
+	"%ListDisbursementSupplierBillingEvents\x12@.domain.treasury.v1.ListDisbursementSupplierBillingEventsRequest\x1aA.domain.treasury.v1.ListDisbursementSupplierBillingEventsResponseB\x94\x02\n" +
 	"\x16com.domain.treasury.v1B%DisbursementSupplierBillingEventProtoP\x01Zigithub.com/erniealice/esqyma/pkg/schema/v1/domain/treasury/disbursement_supplier_billing_event;treasuryv1\xa2\x02\x03DTX\xaa\x02\x12Domain.Treasury.V1\xca\x02\x12Domain\\Treasury\\V1\xe2\x02\x1eDomain\\Treasury\\V1\\GPBMetadata\xea\x02\x14Domain::Treasury::V1b\x06proto3"
 
 var (
@@ -760,17 +760,17 @@ func file_domain_treasury_disbursement_supplier_billing_event_disbursement_suppl
 
 var file_domain_treasury_disbursement_supplier_billing_event_disbursement_supplier_billing_event_proto_msgTypes = make([]protoimpl.MessageInfo, 11)
 var file_domain_treasury_disbursement_supplier_billing_event_disbursement_supplier_billing_event_proto_goTypes = []any{
-	(*TreasuryDisbursementSupplierBillingEvent)(nil),               // 0: domain.treasury.v1.TreasuryDisbursementSupplierBillingEvent
-	(*CreateTreasuryDisbursementSupplierBillingEventRequest)(nil),  // 1: domain.treasury.v1.CreateTreasuryDisbursementSupplierBillingEventRequest
-	(*CreateTreasuryDisbursementSupplierBillingEventResponse)(nil), // 2: domain.treasury.v1.CreateTreasuryDisbursementSupplierBillingEventResponse
-	(*ReadTreasuryDisbursementSupplierBillingEventRequest)(nil),    // 3: domain.treasury.v1.ReadTreasuryDisbursementSupplierBillingEventRequest
-	(*ReadTreasuryDisbursementSupplierBillingEventResponse)(nil),   // 4: domain.treasury.v1.ReadTreasuryDisbursementSupplierBillingEventResponse
-	(*UpdateTreasuryDisbursementSupplierBillingEventRequest)(nil),  // 5: domain.treasury.v1.UpdateTreasuryDisbursementSupplierBillingEventRequest
-	(*UpdateTreasuryDisbursementSupplierBillingEventResponse)(nil), // 6: domain.treasury.v1.UpdateTreasuryDisbursementSupplierBillingEventResponse
-	(*DeleteTreasuryDisbursementSupplierBillingEventRequest)(nil),  // 7: domain.treasury.v1.DeleteTreasuryDisbursementSupplierBillingEventRequest
-	(*DeleteTreasuryDisbursementSupplierBillingEventResponse)(nil), // 8: domain.treasury.v1.DeleteTreasuryDisbursementSupplierBillingEventResponse
-	(*ListTreasuryDisbursementSupplierBillingEventsRequest)(nil),   // 9: domain.treasury.v1.ListTreasuryDisbursementSupplierBillingEventsRequest
-	(*ListTreasuryDisbursementSupplierBillingEventsResponse)(nil),  // 10: domain.treasury.v1.ListTreasuryDisbursementSupplierBillingEventsResponse
+	(*DisbursementSupplierBillingEvent)(nil),               // 0: domain.treasury.v1.DisbursementSupplierBillingEvent
+	(*CreateDisbursementSupplierBillingEventRequest)(nil),  // 1: domain.treasury.v1.CreateDisbursementSupplierBillingEventRequest
+	(*CreateDisbursementSupplierBillingEventResponse)(nil), // 2: domain.treasury.v1.CreateDisbursementSupplierBillingEventResponse
+	(*ReadDisbursementSupplierBillingEventRequest)(nil),    // 3: domain.treasury.v1.ReadDisbursementSupplierBillingEventRequest
+	(*ReadDisbursementSupplierBillingEventResponse)(nil),   // 4: domain.treasury.v1.ReadDisbursementSupplierBillingEventResponse
+	(*UpdateDisbursementSupplierBillingEventRequest)(nil),  // 5: domain.treasury.v1.UpdateDisbursementSupplierBillingEventRequest
+	(*UpdateDisbursementSupplierBillingEventResponse)(nil), // 6: domain.treasury.v1.UpdateDisbursementSupplierBillingEventResponse
+	(*DeleteDisbursementSupplierBillingEventRequest)(nil),  // 7: domain.treasury.v1.DeleteDisbursementSupplierBillingEventRequest
+	(*DeleteDisbursementSupplierBillingEventResponse)(nil), // 8: domain.treasury.v1.DeleteDisbursementSupplierBillingEventResponse
+	(*ListDisbursementSupplierBillingEventsRequest)(nil),   // 9: domain.treasury.v1.ListDisbursementSupplierBillingEventsRequest
+	(*ListDisbursementSupplierBillingEventsResponse)(nil),  // 10: domain.treasury.v1.ListDisbursementSupplierBillingEventsResponse
 	(*common.Error)(nil),             // 11: domain.common.v1.Error
 	(*common.SearchRequest)(nil),     // 12: domain.common.v1.SearchRequest
 	(*common.FilterRequest)(nil),     // 13: domain.common.v1.FilterRequest
@@ -778,33 +778,33 @@ var file_domain_treasury_disbursement_supplier_billing_event_disbursement_suppli
 	(*common.PaginationRequest)(nil), // 15: domain.common.v1.PaginationRequest
 }
 var file_domain_treasury_disbursement_supplier_billing_event_disbursement_supplier_billing_event_proto_depIdxs = []int32{
-	0,  // 0: domain.treasury.v1.CreateTreasuryDisbursementSupplierBillingEventRequest.data:type_name -> domain.treasury.v1.TreasuryDisbursementSupplierBillingEvent
-	0,  // 1: domain.treasury.v1.CreateTreasuryDisbursementSupplierBillingEventResponse.data:type_name -> domain.treasury.v1.TreasuryDisbursementSupplierBillingEvent
-	11, // 2: domain.treasury.v1.CreateTreasuryDisbursementSupplierBillingEventResponse.error:type_name -> domain.common.v1.Error
-	0,  // 3: domain.treasury.v1.ReadTreasuryDisbursementSupplierBillingEventRequest.data:type_name -> domain.treasury.v1.TreasuryDisbursementSupplierBillingEvent
-	0,  // 4: domain.treasury.v1.ReadTreasuryDisbursementSupplierBillingEventResponse.data:type_name -> domain.treasury.v1.TreasuryDisbursementSupplierBillingEvent
-	11, // 5: domain.treasury.v1.ReadTreasuryDisbursementSupplierBillingEventResponse.error:type_name -> domain.common.v1.Error
-	0,  // 6: domain.treasury.v1.UpdateTreasuryDisbursementSupplierBillingEventRequest.data:type_name -> domain.treasury.v1.TreasuryDisbursementSupplierBillingEvent
-	0,  // 7: domain.treasury.v1.UpdateTreasuryDisbursementSupplierBillingEventResponse.data:type_name -> domain.treasury.v1.TreasuryDisbursementSupplierBillingEvent
-	11, // 8: domain.treasury.v1.UpdateTreasuryDisbursementSupplierBillingEventResponse.error:type_name -> domain.common.v1.Error
-	0,  // 9: domain.treasury.v1.DeleteTreasuryDisbursementSupplierBillingEventRequest.data:type_name -> domain.treasury.v1.TreasuryDisbursementSupplierBillingEvent
-	11, // 10: domain.treasury.v1.DeleteTreasuryDisbursementSupplierBillingEventResponse.error:type_name -> domain.common.v1.Error
-	12, // 11: domain.treasury.v1.ListTreasuryDisbursementSupplierBillingEventsRequest.search:type_name -> domain.common.v1.SearchRequest
-	13, // 12: domain.treasury.v1.ListTreasuryDisbursementSupplierBillingEventsRequest.filters:type_name -> domain.common.v1.FilterRequest
-	14, // 13: domain.treasury.v1.ListTreasuryDisbursementSupplierBillingEventsRequest.sort:type_name -> domain.common.v1.SortRequest
-	15, // 14: domain.treasury.v1.ListTreasuryDisbursementSupplierBillingEventsRequest.pagination:type_name -> domain.common.v1.PaginationRequest
-	0,  // 15: domain.treasury.v1.ListTreasuryDisbursementSupplierBillingEventsResponse.data:type_name -> domain.treasury.v1.TreasuryDisbursementSupplierBillingEvent
-	11, // 16: domain.treasury.v1.ListTreasuryDisbursementSupplierBillingEventsResponse.error:type_name -> domain.common.v1.Error
-	1,  // 17: domain.treasury.v1.TreasuryDisbursementSupplierBillingEventDomainService.CreateTreasuryDisbursementSupplierBillingEvent:input_type -> domain.treasury.v1.CreateTreasuryDisbursementSupplierBillingEventRequest
-	3,  // 18: domain.treasury.v1.TreasuryDisbursementSupplierBillingEventDomainService.ReadTreasuryDisbursementSupplierBillingEvent:input_type -> domain.treasury.v1.ReadTreasuryDisbursementSupplierBillingEventRequest
-	5,  // 19: domain.treasury.v1.TreasuryDisbursementSupplierBillingEventDomainService.UpdateTreasuryDisbursementSupplierBillingEvent:input_type -> domain.treasury.v1.UpdateTreasuryDisbursementSupplierBillingEventRequest
-	7,  // 20: domain.treasury.v1.TreasuryDisbursementSupplierBillingEventDomainService.DeleteTreasuryDisbursementSupplierBillingEvent:input_type -> domain.treasury.v1.DeleteTreasuryDisbursementSupplierBillingEventRequest
-	9,  // 21: domain.treasury.v1.TreasuryDisbursementSupplierBillingEventDomainService.ListTreasuryDisbursementSupplierBillingEvents:input_type -> domain.treasury.v1.ListTreasuryDisbursementSupplierBillingEventsRequest
-	2,  // 22: domain.treasury.v1.TreasuryDisbursementSupplierBillingEventDomainService.CreateTreasuryDisbursementSupplierBillingEvent:output_type -> domain.treasury.v1.CreateTreasuryDisbursementSupplierBillingEventResponse
-	4,  // 23: domain.treasury.v1.TreasuryDisbursementSupplierBillingEventDomainService.ReadTreasuryDisbursementSupplierBillingEvent:output_type -> domain.treasury.v1.ReadTreasuryDisbursementSupplierBillingEventResponse
-	6,  // 24: domain.treasury.v1.TreasuryDisbursementSupplierBillingEventDomainService.UpdateTreasuryDisbursementSupplierBillingEvent:output_type -> domain.treasury.v1.UpdateTreasuryDisbursementSupplierBillingEventResponse
-	8,  // 25: domain.treasury.v1.TreasuryDisbursementSupplierBillingEventDomainService.DeleteTreasuryDisbursementSupplierBillingEvent:output_type -> domain.treasury.v1.DeleteTreasuryDisbursementSupplierBillingEventResponse
-	10, // 26: domain.treasury.v1.TreasuryDisbursementSupplierBillingEventDomainService.ListTreasuryDisbursementSupplierBillingEvents:output_type -> domain.treasury.v1.ListTreasuryDisbursementSupplierBillingEventsResponse
+	0,  // 0: domain.treasury.v1.CreateDisbursementSupplierBillingEventRequest.data:type_name -> domain.treasury.v1.DisbursementSupplierBillingEvent
+	0,  // 1: domain.treasury.v1.CreateDisbursementSupplierBillingEventResponse.data:type_name -> domain.treasury.v1.DisbursementSupplierBillingEvent
+	11, // 2: domain.treasury.v1.CreateDisbursementSupplierBillingEventResponse.error:type_name -> domain.common.v1.Error
+	0,  // 3: domain.treasury.v1.ReadDisbursementSupplierBillingEventRequest.data:type_name -> domain.treasury.v1.DisbursementSupplierBillingEvent
+	0,  // 4: domain.treasury.v1.ReadDisbursementSupplierBillingEventResponse.data:type_name -> domain.treasury.v1.DisbursementSupplierBillingEvent
+	11, // 5: domain.treasury.v1.ReadDisbursementSupplierBillingEventResponse.error:type_name -> domain.common.v1.Error
+	0,  // 6: domain.treasury.v1.UpdateDisbursementSupplierBillingEventRequest.data:type_name -> domain.treasury.v1.DisbursementSupplierBillingEvent
+	0,  // 7: domain.treasury.v1.UpdateDisbursementSupplierBillingEventResponse.data:type_name -> domain.treasury.v1.DisbursementSupplierBillingEvent
+	11, // 8: domain.treasury.v1.UpdateDisbursementSupplierBillingEventResponse.error:type_name -> domain.common.v1.Error
+	0,  // 9: domain.treasury.v1.DeleteDisbursementSupplierBillingEventRequest.data:type_name -> domain.treasury.v1.DisbursementSupplierBillingEvent
+	11, // 10: domain.treasury.v1.DeleteDisbursementSupplierBillingEventResponse.error:type_name -> domain.common.v1.Error
+	12, // 11: domain.treasury.v1.ListDisbursementSupplierBillingEventsRequest.search:type_name -> domain.common.v1.SearchRequest
+	13, // 12: domain.treasury.v1.ListDisbursementSupplierBillingEventsRequest.filters:type_name -> domain.common.v1.FilterRequest
+	14, // 13: domain.treasury.v1.ListDisbursementSupplierBillingEventsRequest.sort:type_name -> domain.common.v1.SortRequest
+	15, // 14: domain.treasury.v1.ListDisbursementSupplierBillingEventsRequest.pagination:type_name -> domain.common.v1.PaginationRequest
+	0,  // 15: domain.treasury.v1.ListDisbursementSupplierBillingEventsResponse.data:type_name -> domain.treasury.v1.DisbursementSupplierBillingEvent
+	11, // 16: domain.treasury.v1.ListDisbursementSupplierBillingEventsResponse.error:type_name -> domain.common.v1.Error
+	1,  // 17: domain.treasury.v1.DisbursementSupplierBillingEventDomainService.CreateDisbursementSupplierBillingEvent:input_type -> domain.treasury.v1.CreateDisbursementSupplierBillingEventRequest
+	3,  // 18: domain.treasury.v1.DisbursementSupplierBillingEventDomainService.ReadDisbursementSupplierBillingEvent:input_type -> domain.treasury.v1.ReadDisbursementSupplierBillingEventRequest
+	5,  // 19: domain.treasury.v1.DisbursementSupplierBillingEventDomainService.UpdateDisbursementSupplierBillingEvent:input_type -> domain.treasury.v1.UpdateDisbursementSupplierBillingEventRequest
+	7,  // 20: domain.treasury.v1.DisbursementSupplierBillingEventDomainService.DeleteDisbursementSupplierBillingEvent:input_type -> domain.treasury.v1.DeleteDisbursementSupplierBillingEventRequest
+	9,  // 21: domain.treasury.v1.DisbursementSupplierBillingEventDomainService.ListDisbursementSupplierBillingEvents:input_type -> domain.treasury.v1.ListDisbursementSupplierBillingEventsRequest
+	2,  // 22: domain.treasury.v1.DisbursementSupplierBillingEventDomainService.CreateDisbursementSupplierBillingEvent:output_type -> domain.treasury.v1.CreateDisbursementSupplierBillingEventResponse
+	4,  // 23: domain.treasury.v1.DisbursementSupplierBillingEventDomainService.ReadDisbursementSupplierBillingEvent:output_type -> domain.treasury.v1.ReadDisbursementSupplierBillingEventResponse
+	6,  // 24: domain.treasury.v1.DisbursementSupplierBillingEventDomainService.UpdateDisbursementSupplierBillingEvent:output_type -> domain.treasury.v1.UpdateDisbursementSupplierBillingEventResponse
+	8,  // 25: domain.treasury.v1.DisbursementSupplierBillingEventDomainService.DeleteDisbursementSupplierBillingEvent:output_type -> domain.treasury.v1.DeleteDisbursementSupplierBillingEventResponse
+	10, // 26: domain.treasury.v1.DisbursementSupplierBillingEventDomainService.ListDisbursementSupplierBillingEvents:output_type -> domain.treasury.v1.ListDisbursementSupplierBillingEventsResponse
 	22, // [22:27] is the sub-list for method output_type
 	17, // [17:22] is the sub-list for method input_type
 	17, // [17:17] is the sub-list for extension type_name

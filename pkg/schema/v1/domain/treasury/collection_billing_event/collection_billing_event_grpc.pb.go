@@ -19,254 +19,254 @@ import (
 const _ = grpc.SupportPackageIsVersion9
 
 const (
-	TreasuryCollectionBillingEventDomainService_CreateTreasuryCollectionBillingEvent_FullMethodName = "/domain.treasury.v1.TreasuryCollectionBillingEventDomainService/CreateTreasuryCollectionBillingEvent"
-	TreasuryCollectionBillingEventDomainService_ReadTreasuryCollectionBillingEvent_FullMethodName   = "/domain.treasury.v1.TreasuryCollectionBillingEventDomainService/ReadTreasuryCollectionBillingEvent"
-	TreasuryCollectionBillingEventDomainService_UpdateTreasuryCollectionBillingEvent_FullMethodName = "/domain.treasury.v1.TreasuryCollectionBillingEventDomainService/UpdateTreasuryCollectionBillingEvent"
-	TreasuryCollectionBillingEventDomainService_DeleteTreasuryCollectionBillingEvent_FullMethodName = "/domain.treasury.v1.TreasuryCollectionBillingEventDomainService/DeleteTreasuryCollectionBillingEvent"
-	TreasuryCollectionBillingEventDomainService_ListTreasuryCollectionBillingEvents_FullMethodName  = "/domain.treasury.v1.TreasuryCollectionBillingEventDomainService/ListTreasuryCollectionBillingEvents"
+	CollectionBillingEventDomainService_CreateCollectionBillingEvent_FullMethodName = "/domain.treasury.v1.CollectionBillingEventDomainService/CreateCollectionBillingEvent"
+	CollectionBillingEventDomainService_ReadCollectionBillingEvent_FullMethodName   = "/domain.treasury.v1.CollectionBillingEventDomainService/ReadCollectionBillingEvent"
+	CollectionBillingEventDomainService_UpdateCollectionBillingEvent_FullMethodName = "/domain.treasury.v1.CollectionBillingEventDomainService/UpdateCollectionBillingEvent"
+	CollectionBillingEventDomainService_DeleteCollectionBillingEvent_FullMethodName = "/domain.treasury.v1.CollectionBillingEventDomainService/DeleteCollectionBillingEvent"
+	CollectionBillingEventDomainService_ListCollectionBillingEvents_FullMethodName  = "/domain.treasury.v1.CollectionBillingEventDomainService/ListCollectionBillingEvents"
 )
 
-// TreasuryCollectionBillingEventDomainServiceClient is the client API for TreasuryCollectionBillingEventDomainService service.
+// CollectionBillingEventDomainServiceClient is the client API for CollectionBillingEventDomainService service.
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
-type TreasuryCollectionBillingEventDomainServiceClient interface {
-	CreateTreasuryCollectionBillingEvent(ctx context.Context, in *CreateTreasuryCollectionBillingEventRequest, opts ...grpc.CallOption) (*CreateTreasuryCollectionBillingEventResponse, error)
-	ReadTreasuryCollectionBillingEvent(ctx context.Context, in *ReadTreasuryCollectionBillingEventRequest, opts ...grpc.CallOption) (*ReadTreasuryCollectionBillingEventResponse, error)
-	UpdateTreasuryCollectionBillingEvent(ctx context.Context, in *UpdateTreasuryCollectionBillingEventRequest, opts ...grpc.CallOption) (*UpdateTreasuryCollectionBillingEventResponse, error)
-	DeleteTreasuryCollectionBillingEvent(ctx context.Context, in *DeleteTreasuryCollectionBillingEventRequest, opts ...grpc.CallOption) (*DeleteTreasuryCollectionBillingEventResponse, error)
-	ListTreasuryCollectionBillingEvents(ctx context.Context, in *ListTreasuryCollectionBillingEventsRequest, opts ...grpc.CallOption) (*ListTreasuryCollectionBillingEventsResponse, error)
+type CollectionBillingEventDomainServiceClient interface {
+	CreateCollectionBillingEvent(ctx context.Context, in *CreateCollectionBillingEventRequest, opts ...grpc.CallOption) (*CreateCollectionBillingEventResponse, error)
+	ReadCollectionBillingEvent(ctx context.Context, in *ReadCollectionBillingEventRequest, opts ...grpc.CallOption) (*ReadCollectionBillingEventResponse, error)
+	UpdateCollectionBillingEvent(ctx context.Context, in *UpdateCollectionBillingEventRequest, opts ...grpc.CallOption) (*UpdateCollectionBillingEventResponse, error)
+	DeleteCollectionBillingEvent(ctx context.Context, in *DeleteCollectionBillingEventRequest, opts ...grpc.CallOption) (*DeleteCollectionBillingEventResponse, error)
+	ListCollectionBillingEvents(ctx context.Context, in *ListCollectionBillingEventsRequest, opts ...grpc.CallOption) (*ListCollectionBillingEventsResponse, error)
 }
 
-type treasuryCollectionBillingEventDomainServiceClient struct {
+type collectionBillingEventDomainServiceClient struct {
 	cc grpc.ClientConnInterface
 }
 
-func NewTreasuryCollectionBillingEventDomainServiceClient(cc grpc.ClientConnInterface) TreasuryCollectionBillingEventDomainServiceClient {
-	return &treasuryCollectionBillingEventDomainServiceClient{cc}
+func NewCollectionBillingEventDomainServiceClient(cc grpc.ClientConnInterface) CollectionBillingEventDomainServiceClient {
+	return &collectionBillingEventDomainServiceClient{cc}
 }
 
-func (c *treasuryCollectionBillingEventDomainServiceClient) CreateTreasuryCollectionBillingEvent(ctx context.Context, in *CreateTreasuryCollectionBillingEventRequest, opts ...grpc.CallOption) (*CreateTreasuryCollectionBillingEventResponse, error) {
+func (c *collectionBillingEventDomainServiceClient) CreateCollectionBillingEvent(ctx context.Context, in *CreateCollectionBillingEventRequest, opts ...grpc.CallOption) (*CreateCollectionBillingEventResponse, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(CreateTreasuryCollectionBillingEventResponse)
-	err := c.cc.Invoke(ctx, TreasuryCollectionBillingEventDomainService_CreateTreasuryCollectionBillingEvent_FullMethodName, in, out, cOpts...)
+	out := new(CreateCollectionBillingEventResponse)
+	err := c.cc.Invoke(ctx, CollectionBillingEventDomainService_CreateCollectionBillingEvent_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *treasuryCollectionBillingEventDomainServiceClient) ReadTreasuryCollectionBillingEvent(ctx context.Context, in *ReadTreasuryCollectionBillingEventRequest, opts ...grpc.CallOption) (*ReadTreasuryCollectionBillingEventResponse, error) {
+func (c *collectionBillingEventDomainServiceClient) ReadCollectionBillingEvent(ctx context.Context, in *ReadCollectionBillingEventRequest, opts ...grpc.CallOption) (*ReadCollectionBillingEventResponse, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(ReadTreasuryCollectionBillingEventResponse)
-	err := c.cc.Invoke(ctx, TreasuryCollectionBillingEventDomainService_ReadTreasuryCollectionBillingEvent_FullMethodName, in, out, cOpts...)
+	out := new(ReadCollectionBillingEventResponse)
+	err := c.cc.Invoke(ctx, CollectionBillingEventDomainService_ReadCollectionBillingEvent_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *treasuryCollectionBillingEventDomainServiceClient) UpdateTreasuryCollectionBillingEvent(ctx context.Context, in *UpdateTreasuryCollectionBillingEventRequest, opts ...grpc.CallOption) (*UpdateTreasuryCollectionBillingEventResponse, error) {
+func (c *collectionBillingEventDomainServiceClient) UpdateCollectionBillingEvent(ctx context.Context, in *UpdateCollectionBillingEventRequest, opts ...grpc.CallOption) (*UpdateCollectionBillingEventResponse, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(UpdateTreasuryCollectionBillingEventResponse)
-	err := c.cc.Invoke(ctx, TreasuryCollectionBillingEventDomainService_UpdateTreasuryCollectionBillingEvent_FullMethodName, in, out, cOpts...)
+	out := new(UpdateCollectionBillingEventResponse)
+	err := c.cc.Invoke(ctx, CollectionBillingEventDomainService_UpdateCollectionBillingEvent_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *treasuryCollectionBillingEventDomainServiceClient) DeleteTreasuryCollectionBillingEvent(ctx context.Context, in *DeleteTreasuryCollectionBillingEventRequest, opts ...grpc.CallOption) (*DeleteTreasuryCollectionBillingEventResponse, error) {
+func (c *collectionBillingEventDomainServiceClient) DeleteCollectionBillingEvent(ctx context.Context, in *DeleteCollectionBillingEventRequest, opts ...grpc.CallOption) (*DeleteCollectionBillingEventResponse, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(DeleteTreasuryCollectionBillingEventResponse)
-	err := c.cc.Invoke(ctx, TreasuryCollectionBillingEventDomainService_DeleteTreasuryCollectionBillingEvent_FullMethodName, in, out, cOpts...)
+	out := new(DeleteCollectionBillingEventResponse)
+	err := c.cc.Invoke(ctx, CollectionBillingEventDomainService_DeleteCollectionBillingEvent_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *treasuryCollectionBillingEventDomainServiceClient) ListTreasuryCollectionBillingEvents(ctx context.Context, in *ListTreasuryCollectionBillingEventsRequest, opts ...grpc.CallOption) (*ListTreasuryCollectionBillingEventsResponse, error) {
+func (c *collectionBillingEventDomainServiceClient) ListCollectionBillingEvents(ctx context.Context, in *ListCollectionBillingEventsRequest, opts ...grpc.CallOption) (*ListCollectionBillingEventsResponse, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(ListTreasuryCollectionBillingEventsResponse)
-	err := c.cc.Invoke(ctx, TreasuryCollectionBillingEventDomainService_ListTreasuryCollectionBillingEvents_FullMethodName, in, out, cOpts...)
+	out := new(ListCollectionBillingEventsResponse)
+	err := c.cc.Invoke(ctx, CollectionBillingEventDomainService_ListCollectionBillingEvents_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-// TreasuryCollectionBillingEventDomainServiceServer is the server API for TreasuryCollectionBillingEventDomainService service.
-// All implementations must embed UnimplementedTreasuryCollectionBillingEventDomainServiceServer
+// CollectionBillingEventDomainServiceServer is the server API for CollectionBillingEventDomainService service.
+// All implementations must embed UnimplementedCollectionBillingEventDomainServiceServer
 // for forward compatibility.
-type TreasuryCollectionBillingEventDomainServiceServer interface {
-	CreateTreasuryCollectionBillingEvent(context.Context, *CreateTreasuryCollectionBillingEventRequest) (*CreateTreasuryCollectionBillingEventResponse, error)
-	ReadTreasuryCollectionBillingEvent(context.Context, *ReadTreasuryCollectionBillingEventRequest) (*ReadTreasuryCollectionBillingEventResponse, error)
-	UpdateTreasuryCollectionBillingEvent(context.Context, *UpdateTreasuryCollectionBillingEventRequest) (*UpdateTreasuryCollectionBillingEventResponse, error)
-	DeleteTreasuryCollectionBillingEvent(context.Context, *DeleteTreasuryCollectionBillingEventRequest) (*DeleteTreasuryCollectionBillingEventResponse, error)
-	ListTreasuryCollectionBillingEvents(context.Context, *ListTreasuryCollectionBillingEventsRequest) (*ListTreasuryCollectionBillingEventsResponse, error)
-	mustEmbedUnimplementedTreasuryCollectionBillingEventDomainServiceServer()
+type CollectionBillingEventDomainServiceServer interface {
+	CreateCollectionBillingEvent(context.Context, *CreateCollectionBillingEventRequest) (*CreateCollectionBillingEventResponse, error)
+	ReadCollectionBillingEvent(context.Context, *ReadCollectionBillingEventRequest) (*ReadCollectionBillingEventResponse, error)
+	UpdateCollectionBillingEvent(context.Context, *UpdateCollectionBillingEventRequest) (*UpdateCollectionBillingEventResponse, error)
+	DeleteCollectionBillingEvent(context.Context, *DeleteCollectionBillingEventRequest) (*DeleteCollectionBillingEventResponse, error)
+	ListCollectionBillingEvents(context.Context, *ListCollectionBillingEventsRequest) (*ListCollectionBillingEventsResponse, error)
+	mustEmbedUnimplementedCollectionBillingEventDomainServiceServer()
 }
 
-// UnimplementedTreasuryCollectionBillingEventDomainServiceServer must be embedded to have
+// UnimplementedCollectionBillingEventDomainServiceServer must be embedded to have
 // forward compatible implementations.
 //
 // NOTE: this should be embedded by value instead of pointer to avoid a nil
 // pointer dereference when methods are called.
-type UnimplementedTreasuryCollectionBillingEventDomainServiceServer struct{}
+type UnimplementedCollectionBillingEventDomainServiceServer struct{}
 
-func (UnimplementedTreasuryCollectionBillingEventDomainServiceServer) CreateTreasuryCollectionBillingEvent(context.Context, *CreateTreasuryCollectionBillingEventRequest) (*CreateTreasuryCollectionBillingEventResponse, error) {
-	return nil, status.Error(codes.Unimplemented, "method CreateTreasuryCollectionBillingEvent not implemented")
+func (UnimplementedCollectionBillingEventDomainServiceServer) CreateCollectionBillingEvent(context.Context, *CreateCollectionBillingEventRequest) (*CreateCollectionBillingEventResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method CreateCollectionBillingEvent not implemented")
 }
-func (UnimplementedTreasuryCollectionBillingEventDomainServiceServer) ReadTreasuryCollectionBillingEvent(context.Context, *ReadTreasuryCollectionBillingEventRequest) (*ReadTreasuryCollectionBillingEventResponse, error) {
-	return nil, status.Error(codes.Unimplemented, "method ReadTreasuryCollectionBillingEvent not implemented")
+func (UnimplementedCollectionBillingEventDomainServiceServer) ReadCollectionBillingEvent(context.Context, *ReadCollectionBillingEventRequest) (*ReadCollectionBillingEventResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method ReadCollectionBillingEvent not implemented")
 }
-func (UnimplementedTreasuryCollectionBillingEventDomainServiceServer) UpdateTreasuryCollectionBillingEvent(context.Context, *UpdateTreasuryCollectionBillingEventRequest) (*UpdateTreasuryCollectionBillingEventResponse, error) {
-	return nil, status.Error(codes.Unimplemented, "method UpdateTreasuryCollectionBillingEvent not implemented")
+func (UnimplementedCollectionBillingEventDomainServiceServer) UpdateCollectionBillingEvent(context.Context, *UpdateCollectionBillingEventRequest) (*UpdateCollectionBillingEventResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method UpdateCollectionBillingEvent not implemented")
 }
-func (UnimplementedTreasuryCollectionBillingEventDomainServiceServer) DeleteTreasuryCollectionBillingEvent(context.Context, *DeleteTreasuryCollectionBillingEventRequest) (*DeleteTreasuryCollectionBillingEventResponse, error) {
-	return nil, status.Error(codes.Unimplemented, "method DeleteTreasuryCollectionBillingEvent not implemented")
+func (UnimplementedCollectionBillingEventDomainServiceServer) DeleteCollectionBillingEvent(context.Context, *DeleteCollectionBillingEventRequest) (*DeleteCollectionBillingEventResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method DeleteCollectionBillingEvent not implemented")
 }
-func (UnimplementedTreasuryCollectionBillingEventDomainServiceServer) ListTreasuryCollectionBillingEvents(context.Context, *ListTreasuryCollectionBillingEventsRequest) (*ListTreasuryCollectionBillingEventsResponse, error) {
-	return nil, status.Error(codes.Unimplemented, "method ListTreasuryCollectionBillingEvents not implemented")
+func (UnimplementedCollectionBillingEventDomainServiceServer) ListCollectionBillingEvents(context.Context, *ListCollectionBillingEventsRequest) (*ListCollectionBillingEventsResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method ListCollectionBillingEvents not implemented")
 }
-func (UnimplementedTreasuryCollectionBillingEventDomainServiceServer) mustEmbedUnimplementedTreasuryCollectionBillingEventDomainServiceServer() {
+func (UnimplementedCollectionBillingEventDomainServiceServer) mustEmbedUnimplementedCollectionBillingEventDomainServiceServer() {
 }
-func (UnimplementedTreasuryCollectionBillingEventDomainServiceServer) testEmbeddedByValue() {}
+func (UnimplementedCollectionBillingEventDomainServiceServer) testEmbeddedByValue() {}
 
-// UnsafeTreasuryCollectionBillingEventDomainServiceServer may be embedded to opt out of forward compatibility for this service.
-// Use of this interface is not recommended, as added methods to TreasuryCollectionBillingEventDomainServiceServer will
+// UnsafeCollectionBillingEventDomainServiceServer may be embedded to opt out of forward compatibility for this service.
+// Use of this interface is not recommended, as added methods to CollectionBillingEventDomainServiceServer will
 // result in compilation errors.
-type UnsafeTreasuryCollectionBillingEventDomainServiceServer interface {
-	mustEmbedUnimplementedTreasuryCollectionBillingEventDomainServiceServer()
+type UnsafeCollectionBillingEventDomainServiceServer interface {
+	mustEmbedUnimplementedCollectionBillingEventDomainServiceServer()
 }
 
-func RegisterTreasuryCollectionBillingEventDomainServiceServer(s grpc.ServiceRegistrar, srv TreasuryCollectionBillingEventDomainServiceServer) {
-	// If the following call panics, it indicates UnimplementedTreasuryCollectionBillingEventDomainServiceServer was
+func RegisterCollectionBillingEventDomainServiceServer(s grpc.ServiceRegistrar, srv CollectionBillingEventDomainServiceServer) {
+	// If the following call panics, it indicates UnimplementedCollectionBillingEventDomainServiceServer was
 	// embedded by pointer and is nil.  This will cause panics if an
 	// unimplemented method is ever invoked, so we test this at initialization
 	// time to prevent it from happening at runtime later due to I/O.
 	if t, ok := srv.(interface{ testEmbeddedByValue() }); ok {
 		t.testEmbeddedByValue()
 	}
-	s.RegisterService(&TreasuryCollectionBillingEventDomainService_ServiceDesc, srv)
+	s.RegisterService(&CollectionBillingEventDomainService_ServiceDesc, srv)
 }
 
-func _TreasuryCollectionBillingEventDomainService_CreateTreasuryCollectionBillingEvent_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(CreateTreasuryCollectionBillingEventRequest)
+func _CollectionBillingEventDomainService_CreateCollectionBillingEvent_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(CreateCollectionBillingEventRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(TreasuryCollectionBillingEventDomainServiceServer).CreateTreasuryCollectionBillingEvent(ctx, in)
+		return srv.(CollectionBillingEventDomainServiceServer).CreateCollectionBillingEvent(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: TreasuryCollectionBillingEventDomainService_CreateTreasuryCollectionBillingEvent_FullMethodName,
+		FullMethod: CollectionBillingEventDomainService_CreateCollectionBillingEvent_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(TreasuryCollectionBillingEventDomainServiceServer).CreateTreasuryCollectionBillingEvent(ctx, req.(*CreateTreasuryCollectionBillingEventRequest))
+		return srv.(CollectionBillingEventDomainServiceServer).CreateCollectionBillingEvent(ctx, req.(*CreateCollectionBillingEventRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _TreasuryCollectionBillingEventDomainService_ReadTreasuryCollectionBillingEvent_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(ReadTreasuryCollectionBillingEventRequest)
+func _CollectionBillingEventDomainService_ReadCollectionBillingEvent_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ReadCollectionBillingEventRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(TreasuryCollectionBillingEventDomainServiceServer).ReadTreasuryCollectionBillingEvent(ctx, in)
+		return srv.(CollectionBillingEventDomainServiceServer).ReadCollectionBillingEvent(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: TreasuryCollectionBillingEventDomainService_ReadTreasuryCollectionBillingEvent_FullMethodName,
+		FullMethod: CollectionBillingEventDomainService_ReadCollectionBillingEvent_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(TreasuryCollectionBillingEventDomainServiceServer).ReadTreasuryCollectionBillingEvent(ctx, req.(*ReadTreasuryCollectionBillingEventRequest))
+		return srv.(CollectionBillingEventDomainServiceServer).ReadCollectionBillingEvent(ctx, req.(*ReadCollectionBillingEventRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _TreasuryCollectionBillingEventDomainService_UpdateTreasuryCollectionBillingEvent_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(UpdateTreasuryCollectionBillingEventRequest)
+func _CollectionBillingEventDomainService_UpdateCollectionBillingEvent_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(UpdateCollectionBillingEventRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(TreasuryCollectionBillingEventDomainServiceServer).UpdateTreasuryCollectionBillingEvent(ctx, in)
+		return srv.(CollectionBillingEventDomainServiceServer).UpdateCollectionBillingEvent(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: TreasuryCollectionBillingEventDomainService_UpdateTreasuryCollectionBillingEvent_FullMethodName,
+		FullMethod: CollectionBillingEventDomainService_UpdateCollectionBillingEvent_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(TreasuryCollectionBillingEventDomainServiceServer).UpdateTreasuryCollectionBillingEvent(ctx, req.(*UpdateTreasuryCollectionBillingEventRequest))
+		return srv.(CollectionBillingEventDomainServiceServer).UpdateCollectionBillingEvent(ctx, req.(*UpdateCollectionBillingEventRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _TreasuryCollectionBillingEventDomainService_DeleteTreasuryCollectionBillingEvent_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(DeleteTreasuryCollectionBillingEventRequest)
+func _CollectionBillingEventDomainService_DeleteCollectionBillingEvent_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(DeleteCollectionBillingEventRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(TreasuryCollectionBillingEventDomainServiceServer).DeleteTreasuryCollectionBillingEvent(ctx, in)
+		return srv.(CollectionBillingEventDomainServiceServer).DeleteCollectionBillingEvent(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: TreasuryCollectionBillingEventDomainService_DeleteTreasuryCollectionBillingEvent_FullMethodName,
+		FullMethod: CollectionBillingEventDomainService_DeleteCollectionBillingEvent_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(TreasuryCollectionBillingEventDomainServiceServer).DeleteTreasuryCollectionBillingEvent(ctx, req.(*DeleteTreasuryCollectionBillingEventRequest))
+		return srv.(CollectionBillingEventDomainServiceServer).DeleteCollectionBillingEvent(ctx, req.(*DeleteCollectionBillingEventRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _TreasuryCollectionBillingEventDomainService_ListTreasuryCollectionBillingEvents_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(ListTreasuryCollectionBillingEventsRequest)
+func _CollectionBillingEventDomainService_ListCollectionBillingEvents_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ListCollectionBillingEventsRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(TreasuryCollectionBillingEventDomainServiceServer).ListTreasuryCollectionBillingEvents(ctx, in)
+		return srv.(CollectionBillingEventDomainServiceServer).ListCollectionBillingEvents(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: TreasuryCollectionBillingEventDomainService_ListTreasuryCollectionBillingEvents_FullMethodName,
+		FullMethod: CollectionBillingEventDomainService_ListCollectionBillingEvents_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(TreasuryCollectionBillingEventDomainServiceServer).ListTreasuryCollectionBillingEvents(ctx, req.(*ListTreasuryCollectionBillingEventsRequest))
+		return srv.(CollectionBillingEventDomainServiceServer).ListCollectionBillingEvents(ctx, req.(*ListCollectionBillingEventsRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-// TreasuryCollectionBillingEventDomainService_ServiceDesc is the grpc.ServiceDesc for TreasuryCollectionBillingEventDomainService service.
+// CollectionBillingEventDomainService_ServiceDesc is the grpc.ServiceDesc for CollectionBillingEventDomainService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
-var TreasuryCollectionBillingEventDomainService_ServiceDesc = grpc.ServiceDesc{
-	ServiceName: "domain.treasury.v1.TreasuryCollectionBillingEventDomainService",
-	HandlerType: (*TreasuryCollectionBillingEventDomainServiceServer)(nil),
+var CollectionBillingEventDomainService_ServiceDesc = grpc.ServiceDesc{
+	ServiceName: "domain.treasury.v1.CollectionBillingEventDomainService",
+	HandlerType: (*CollectionBillingEventDomainServiceServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
-			MethodName: "CreateTreasuryCollectionBillingEvent",
-			Handler:    _TreasuryCollectionBillingEventDomainService_CreateTreasuryCollectionBillingEvent_Handler,
+			MethodName: "CreateCollectionBillingEvent",
+			Handler:    _CollectionBillingEventDomainService_CreateCollectionBillingEvent_Handler,
 		},
 		{
-			MethodName: "ReadTreasuryCollectionBillingEvent",
-			Handler:    _TreasuryCollectionBillingEventDomainService_ReadTreasuryCollectionBillingEvent_Handler,
+			MethodName: "ReadCollectionBillingEvent",
+			Handler:    _CollectionBillingEventDomainService_ReadCollectionBillingEvent_Handler,
 		},
 		{
-			MethodName: "UpdateTreasuryCollectionBillingEvent",
-			Handler:    _TreasuryCollectionBillingEventDomainService_UpdateTreasuryCollectionBillingEvent_Handler,
+			MethodName: "UpdateCollectionBillingEvent",
+			Handler:    _CollectionBillingEventDomainService_UpdateCollectionBillingEvent_Handler,
 		},
 		{
-			MethodName: "DeleteTreasuryCollectionBillingEvent",
-			Handler:    _TreasuryCollectionBillingEventDomainService_DeleteTreasuryCollectionBillingEvent_Handler,
+			MethodName: "DeleteCollectionBillingEvent",
+			Handler:    _CollectionBillingEventDomainService_DeleteCollectionBillingEvent_Handler,
 		},
 		{
-			MethodName: "ListTreasuryCollectionBillingEvents",
-			Handler:    _TreasuryCollectionBillingEventDomainService_ListTreasuryCollectionBillingEvents_Handler,
+			MethodName: "ListCollectionBillingEvents",
+			Handler:    _CollectionBillingEventDomainService_ListCollectionBillingEvents_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

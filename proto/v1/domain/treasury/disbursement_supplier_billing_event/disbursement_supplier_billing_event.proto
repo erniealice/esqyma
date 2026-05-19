@@ -13,8 +13,8 @@ import "domain/common/sort.proto";
 import "options/db.proto";
 
 // Junction entity linking a MILESTONE advance TreasuryDisbursement to one or more
-// SupplierBillingEvent rows (buying-side mirror of TreasuryCollectionBillingEvent).
-message TreasuryDisbursementSupplierBillingEvent {
+// SupplierBillingEvent rows (buying-side mirror of CollectionBillingEvent).
+message DisbursementSupplierBillingEvent {
   option (options.v1.table).table = true;
 
   string id = 1;
@@ -34,45 +34,45 @@ message TreasuryDisbursementSupplierBillingEvent {
   optional int64 date_modified = 92;
 }
 
-service TreasuryDisbursementSupplierBillingEventDomainService {
-  rpc CreateTreasuryDisbursementSupplierBillingEvent(CreateTreasuryDisbursementSupplierBillingEventRequest) returns (CreateTreasuryDisbursementSupplierBillingEventResponse);
-  rpc ReadTreasuryDisbursementSupplierBillingEvent(ReadTreasuryDisbursementSupplierBillingEventRequest) returns (ReadTreasuryDisbursementSupplierBillingEventResponse);
-  rpc UpdateTreasuryDisbursementSupplierBillingEvent(UpdateTreasuryDisbursementSupplierBillingEventRequest) returns (UpdateTreasuryDisbursementSupplierBillingEventResponse);
-  rpc DeleteTreasuryDisbursementSupplierBillingEvent(DeleteTreasuryDisbursementSupplierBillingEventRequest) returns (DeleteTreasuryDisbursementSupplierBillingEventResponse);
-  rpc ListTreasuryDisbursementSupplierBillingEvents(ListTreasuryDisbursementSupplierBillingEventsRequest) returns (ListTreasuryDisbursementSupplierBillingEventsResponse);
+service DisbursementSupplierBillingEventDomainService {
+  rpc CreateDisbursementSupplierBillingEvent(CreateDisbursementSupplierBillingEventRequest) returns (CreateDisbursementSupplierBillingEventResponse);
+  rpc ReadDisbursementSupplierBillingEvent(ReadDisbursementSupplierBillingEventRequest) returns (ReadDisbursementSupplierBillingEventResponse);
+  rpc UpdateDisbursementSupplierBillingEvent(UpdateDisbursementSupplierBillingEventRequest) returns (UpdateDisbursementSupplierBillingEventResponse);
+  rpc DeleteDisbursementSupplierBillingEvent(DeleteDisbursementSupplierBillingEventRequest) returns (DeleteDisbursementSupplierBillingEventResponse);
+  rpc ListDisbursementSupplierBillingEvents(ListDisbursementSupplierBillingEventsRequest) returns (ListDisbursementSupplierBillingEventsResponse);
 }
 
-message CreateTreasuryDisbursementSupplierBillingEventRequest  { TreasuryDisbursementSupplierBillingEvent data = 1; }
-message CreateTreasuryDisbursementSupplierBillingEventResponse {
-  repeated TreasuryDisbursementSupplierBillingEvent data = 1;
+message CreateDisbursementSupplierBillingEventRequest  { DisbursementSupplierBillingEvent data = 1; }
+message CreateDisbursementSupplierBillingEventResponse {
+  repeated DisbursementSupplierBillingEvent data = 1;
   bool success = 2;
   optional domain.common.v1.Error error = 3;
 }
-message ReadTreasuryDisbursementSupplierBillingEventRequest  { TreasuryDisbursementSupplierBillingEvent data = 1; }
-message ReadTreasuryDisbursementSupplierBillingEventResponse {
-  repeated TreasuryDisbursementSupplierBillingEvent data = 1;
+message ReadDisbursementSupplierBillingEventRequest  { DisbursementSupplierBillingEvent data = 1; }
+message ReadDisbursementSupplierBillingEventResponse {
+  repeated DisbursementSupplierBillingEvent data = 1;
   bool success = 2;
   optional domain.common.v1.Error error = 3;
 }
-message UpdateTreasuryDisbursementSupplierBillingEventRequest  { TreasuryDisbursementSupplierBillingEvent data = 1; }
-message UpdateTreasuryDisbursementSupplierBillingEventResponse {
-  repeated TreasuryDisbursementSupplierBillingEvent data = 1;
+message UpdateDisbursementSupplierBillingEventRequest  { DisbursementSupplierBillingEvent data = 1; }
+message UpdateDisbursementSupplierBillingEventResponse {
+  repeated DisbursementSupplierBillingEvent data = 1;
   bool success = 2;
   optional domain.common.v1.Error error = 3;
 }
-message DeleteTreasuryDisbursementSupplierBillingEventRequest  { TreasuryDisbursementSupplierBillingEvent data = 1; }
-message DeleteTreasuryDisbursementSupplierBillingEventResponse {
+message DeleteDisbursementSupplierBillingEventRequest  { DisbursementSupplierBillingEvent data = 1; }
+message DeleteDisbursementSupplierBillingEventResponse {
   bool success = 1;
   optional domain.common.v1.Error error = 2;
 }
-message ListTreasuryDisbursementSupplierBillingEventsRequest {
+message ListDisbursementSupplierBillingEventsRequest {
   optional domain.common.v1.SearchRequest search = 1;
   optional domain.common.v1.FilterRequest filters = 2;
   optional domain.common.v1.SortRequest sort = 3;
   optional domain.common.v1.PaginationRequest pagination = 4;
 }
-message ListTreasuryDisbursementSupplierBillingEventsResponse {
-  repeated TreasuryDisbursementSupplierBillingEvent data = 1;
+message ListDisbursementSupplierBillingEventsResponse {
+  repeated DisbursementSupplierBillingEvent data = 1;
   bool success = 2;
   optional domain.common.v1.Error error = 3;
 }

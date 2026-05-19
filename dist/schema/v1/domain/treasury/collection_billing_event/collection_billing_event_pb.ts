@@ -21,7 +21,7 @@ import type { Message } from "@bufbuild/protobuf";
  * Describes the file domain/treasury/collection_billing_event/collection_billing_event.proto.
  */
 export const file_domain_treasury_collection_billing_event_collection_billing_event: GenFile = /*@__PURE__*/
-  fileDesc("Ckdkb21haW4vdHJlYXN1cnkvY29sbGVjdGlvbl9iaWxsaW5nX2V2ZW50L2NvbGxlY3Rpb25fYmlsbGluZ19ldmVudC5wcm90bxISZG9tYWluLnRyZWFzdXJ5LnYxIocDCh5UcmVhc3VyeUNvbGxlY3Rpb25CaWxsaW5nRXZlbnQSCgoCaWQYASABKAkSHAoMd29ya3NwYWNlX2lkGAIgASgJQgaCtRgCGAESOwoWdHJlYXN1cnlfY29sbGVjdGlvbl9pZBgKIAEoCUIbgrUYFwoTdHJlYXN1cnlfY29sbGVjdGlvbhgBEi8KEGJpbGxpbmdfZXZlbnRfaWQYCyABKAlCFYK1GBEKDWJpbGxpbmdfZXZlbnQYARIWCg50cmFuY2hlX2Ftb3VudBgUIAEoAxIoCgpyZXZlbnVlX2lkGB4gASgJQg+CtRgLCgdyZXZlbnVlGAFIAIgBARIaCgZhY3RpdmUYWiABKAhCCoK1GAYiBHRydWUSGQoMZGF0ZV9jcmVhdGVkGFsgASgDSAGIAQESGgoNZGF0ZV9tb2RpZmllZBhcIAEoA0gCiAEBOgaKtRgCCAFCDQoLX3JldmVudWVfaWRCDwoNX2RhdGVfY3JlYXRlZEIQCg5fZGF0ZV9tb2RpZmllZCJvCitDcmVhdGVUcmVhc3VyeUNvbGxlY3Rpb25CaWxsaW5nRXZlbnRSZXF1ZXN0EkAKBGRhdGEYASABKAsyMi5kb21haW4udHJlYXN1cnkudjEuVHJlYXN1cnlDb2xsZWN0aW9uQmlsbGluZ0V2ZW50IrgBCixDcmVhdGVUcmVhc3VyeUNvbGxlY3Rpb25CaWxsaW5nRXZlbnRSZXNwb25zZRJACgRkYXRhGAEgAygLMjIuZG9tYWluLnRyZWFzdXJ5LnYxLlRyZWFzdXJ5Q29sbGVjdGlvbkJpbGxpbmdFdmVudBIPCgdzdWNjZXNzGAIgASgIEisKBWVycm9yGAMgASgLMhcuZG9tYWluLmNvbW1vbi52MS5FcnJvckgAiAEBQggKBl9lcnJvciJtCilSZWFkVHJlYXN1cnlDb2xsZWN0aW9uQmlsbGluZ0V2ZW50UmVxdWVzdBJACgRkYXRhGAEgASgLMjIuZG9tYWluLnRyZWFzdXJ5LnYxLlRyZWFzdXJ5Q29sbGVjdGlvbkJpbGxpbmdFdmVudCK2AQoqUmVhZFRyZWFzdXJ5Q29sbGVjdGlvbkJpbGxpbmdFdmVudFJlc3BvbnNlEkAKBGRhdGEYASADKAsyMi5kb21haW4udHJlYXN1cnkudjEuVHJlYXN1cnlDb2xsZWN0aW9uQmlsbGluZ0V2ZW50Eg8KB3N1Y2Nlc3MYAiABKAgSKwoFZXJyb3IYAyABKAsyFy5kb21haW4uY29tbW9uLnYxLkVycm9ySACIAQFCCAoGX2Vycm9yIm8KK1VwZGF0ZVRyZWFzdXJ5Q29sbGVjdGlvbkJpbGxpbmdFdmVudFJlcXVlc3QSQAoEZGF0YRgBIAEoCzIyLmRvbWFpbi50cmVhc3VyeS52MS5UcmVhc3VyeUNvbGxlY3Rpb25CaWxsaW5nRXZlbnQiuAEKLFVwZGF0ZVRyZWFzdXJ5Q29sbGVjdGlvbkJpbGxpbmdFdmVudFJlc3BvbnNlEkAKBGRhdGEYASADKAsyMi5kb21haW4udHJlYXN1cnkudjEuVHJlYXN1cnlDb2xsZWN0aW9uQmlsbGluZ0V2ZW50Eg8KB3N1Y2Nlc3MYAiABKAgSKwoFZXJyb3IYAyABKAsyFy5kb21haW4uY29tbW9uLnYxLkVycm9ySACIAQFCCAoGX2Vycm9yIm8KK0RlbGV0ZVRyZWFzdXJ5Q29sbGVjdGlvbkJpbGxpbmdFdmVudFJlcXVlc3QSQAoEZGF0YRgBIAEoCzIyLmRvbWFpbi50cmVhc3VyeS52MS5UcmVhc3VyeUNvbGxlY3Rpb25CaWxsaW5nRXZlbnQidgosRGVsZXRlVHJlYXN1cnlDb2xsZWN0aW9uQmlsbGluZ0V2ZW50UmVzcG9uc2USDwoHc3VjY2VzcxgBIAEoCBIrCgVlcnJvchgCIAEoCzIXLmRvbWFpbi5jb21tb24udjEuRXJyb3JIAIgBAUIICgZfZXJyb3IiuAIKKkxpc3RUcmVhc3VyeUNvbGxlY3Rpb25CaWxsaW5nRXZlbnRzUmVxdWVzdBI0CgZzZWFyY2gYASABKAsyHy5kb21haW4uY29tbW9uLnYxLlNlYXJjaFJlcXVlc3RIAIgBARI1CgdmaWx0ZXJzGAIgASgLMh8uZG9tYWluLmNvbW1vbi52MS5GaWx0ZXJSZXF1ZXN0SAGIAQESMAoEc29ydBgDIAEoCzIdLmRvbWFpbi5jb21tb24udjEuU29ydFJlcXVlc3RIAogBARI8CgpwYWdpbmF0aW9uGAQgASgLMiMuZG9tYWluLmNvbW1vbi52MS5QYWdpbmF0aW9uUmVxdWVzdEgDiAEBQgkKB19zZWFyY2hCCgoIX2ZpbHRlcnNCBwoFX3NvcnRCDQoLX3BhZ2luYXRpb24itwEKK0xpc3RUcmVhc3VyeUNvbGxlY3Rpb25CaWxsaW5nRXZlbnRzUmVzcG9uc2USQAoEZGF0YRgBIAMoCzIyLmRvbWFpbi50cmVhc3VyeS52MS5UcmVhc3VyeUNvbGxlY3Rpb25CaWxsaW5nRXZlbnQSDwoHc3VjY2VzcxgCIAEoCBIrCgVlcnJvchgDIAEoCzIXLmRvbWFpbi5jb21tb24udjEuRXJyb3JIAIgBAUIICgZfZXJyb3IygAcKK1RyZWFzdXJ5Q29sbGVjdGlvbkJpbGxpbmdFdmVudERvbWFpblNlcnZpY2USqQEKJENyZWF0ZVRyZWFzdXJ5Q29sbGVjdGlvbkJpbGxpbmdFdmVudBI/LmRvbWFpbi50cmVhc3VyeS52MS5DcmVhdGVUcmVhc3VyeUNvbGxlY3Rpb25CaWxsaW5nRXZlbnRSZXF1ZXN0GkAuZG9tYWluLnRyZWFzdXJ5LnYxLkNyZWF0ZVRyZWFzdXJ5Q29sbGVjdGlvbkJpbGxpbmdFdmVudFJlc3BvbnNlEqMBCiJSZWFkVHJlYXN1cnlDb2xsZWN0aW9uQmlsbGluZ0V2ZW50Ej0uZG9tYWluLnRyZWFzdXJ5LnYxLlJlYWRUcmVhc3VyeUNvbGxlY3Rpb25CaWxsaW5nRXZlbnRSZXF1ZXN0Gj4uZG9tYWluLnRyZWFzdXJ5LnYxLlJlYWRUcmVhc3VyeUNvbGxlY3Rpb25CaWxsaW5nRXZlbnRSZXNwb25zZRKpAQokVXBkYXRlVHJlYXN1cnlDb2xsZWN0aW9uQmlsbGluZ0V2ZW50Ej8uZG9tYWluLnRyZWFzdXJ5LnYxLlVwZGF0ZVRyZWFzdXJ5Q29sbGVjdGlvbkJpbGxpbmdFdmVudFJlcXVlc3QaQC5kb21haW4udHJlYXN1cnkudjEuVXBkYXRlVHJlYXN1cnlDb2xsZWN0aW9uQmlsbGluZ0V2ZW50UmVzcG9uc2USqQEKJERlbGV0ZVRyZWFzdXJ5Q29sbGVjdGlvbkJpbGxpbmdFdmVudBI/LmRvbWFpbi50cmVhc3VyeS52MS5EZWxldGVUcmVhc3VyeUNvbGxlY3Rpb25CaWxsaW5nRXZlbnRSZXF1ZXN0GkAuZG9tYWluLnRyZWFzdXJ5LnYxLkRlbGV0ZVRyZWFzdXJ5Q29sbGVjdGlvbkJpbGxpbmdFdmVudFJlc3BvbnNlEqYBCiNMaXN0VHJlYXN1cnlDb2xsZWN0aW9uQmlsbGluZ0V2ZW50cxI+LmRvbWFpbi50cmVhc3VyeS52MS5MaXN0VHJlYXN1cnlDb2xsZWN0aW9uQmlsbGluZ0V2ZW50c1JlcXVlc3QaPy5kb21haW4udHJlYXN1cnkudjEuTGlzdFRyZWFzdXJ5Q29sbGVjdGlvbkJpbGxpbmdFdmVudHNSZXNwb25zZUL/AQoWY29tLmRvbWFpbi50cmVhc3VyeS52MUIbQ29sbGVjdGlvbkJpbGxpbmdFdmVudFByb3RvUAFaXmdpdGh1Yi5jb20vZXJuaWVhbGljZS9lc3F5bWEvcGtnL3NjaGVtYS92MS9kb21haW4vdHJlYXN1cnkvY29sbGVjdGlvbl9iaWxsaW5nX2V2ZW50O3RyZWFzdXJ5djGiAgNEVFiqAhJEb21haW4uVHJlYXN1cnkuVjHKAhJEb21haW5cVHJlYXN1cnlcVjHiAh5Eb21haW5cVHJlYXN1cnlcVjFcR1BCTWV0YWRhdGHqAhREb21haW46OlRyZWFzdXJ5OjpWMWIGcHJvdG8z", [file_domain_common_error, file_domain_common_pagination, file_domain_common_search, file_domain_common_filter, file_domain_common_sort, file_options_db]);
+  fileDesc("Ckdkb21haW4vdHJlYXN1cnkvY29sbGVjdGlvbl9iaWxsaW5nX2V2ZW50L2NvbGxlY3Rpb25fYmlsbGluZ19ldmVudC5wcm90bxISZG9tYWluLnRyZWFzdXJ5LnYxIv8CChZDb2xsZWN0aW9uQmlsbGluZ0V2ZW50EgoKAmlkGAEgASgJEhwKDHdvcmtzcGFjZV9pZBgCIAEoCUIGgrUYAhgBEjsKFnRyZWFzdXJ5X2NvbGxlY3Rpb25faWQYCiABKAlCG4K1GBcKE3RyZWFzdXJ5X2NvbGxlY3Rpb24YARIvChBiaWxsaW5nX2V2ZW50X2lkGAsgASgJQhWCtRgRCg1iaWxsaW5nX2V2ZW50GAESFgoOdHJhbmNoZV9hbW91bnQYFCABKAMSKAoKcmV2ZW51ZV9pZBgeIAEoCUIPgrUYCwoHcmV2ZW51ZRgBSACIAQESGgoGYWN0aXZlGFogASgIQgqCtRgGIgR0cnVlEhkKDGRhdGVfY3JlYXRlZBhbIAEoA0gBiAEBEhoKDWRhdGVfbW9kaWZpZWQYXCABKANIAogBAToGirUYAggBQg0KC19yZXZlbnVlX2lkQg8KDV9kYXRlX2NyZWF0ZWRCEAoOX2RhdGVfbW9kaWZpZWQiXwojQ3JlYXRlQ29sbGVjdGlvbkJpbGxpbmdFdmVudFJlcXVlc3QSOAoEZGF0YRgBIAEoCzIqLmRvbWFpbi50cmVhc3VyeS52MS5Db2xsZWN0aW9uQmlsbGluZ0V2ZW50IqgBCiRDcmVhdGVDb2xsZWN0aW9uQmlsbGluZ0V2ZW50UmVzcG9uc2USOAoEZGF0YRgBIAMoCzIqLmRvbWFpbi50cmVhc3VyeS52MS5Db2xsZWN0aW9uQmlsbGluZ0V2ZW50Eg8KB3N1Y2Nlc3MYAiABKAgSKwoFZXJyb3IYAyABKAsyFy5kb21haW4uY29tbW9uLnYxLkVycm9ySACIAQFCCAoGX2Vycm9yIl0KIVJlYWRDb2xsZWN0aW9uQmlsbGluZ0V2ZW50UmVxdWVzdBI4CgRkYXRhGAEgASgLMiouZG9tYWluLnRyZWFzdXJ5LnYxLkNvbGxlY3Rpb25CaWxsaW5nRXZlbnQipgEKIlJlYWRDb2xsZWN0aW9uQmlsbGluZ0V2ZW50UmVzcG9uc2USOAoEZGF0YRgBIAMoCzIqLmRvbWFpbi50cmVhc3VyeS52MS5Db2xsZWN0aW9uQmlsbGluZ0V2ZW50Eg8KB3N1Y2Nlc3MYAiABKAgSKwoFZXJyb3IYAyABKAsyFy5kb21haW4uY29tbW9uLnYxLkVycm9ySACIAQFCCAoGX2Vycm9yIl8KI1VwZGF0ZUNvbGxlY3Rpb25CaWxsaW5nRXZlbnRSZXF1ZXN0EjgKBGRhdGEYASABKAsyKi5kb21haW4udHJlYXN1cnkudjEuQ29sbGVjdGlvbkJpbGxpbmdFdmVudCKoAQokVXBkYXRlQ29sbGVjdGlvbkJpbGxpbmdFdmVudFJlc3BvbnNlEjgKBGRhdGEYASADKAsyKi5kb21haW4udHJlYXN1cnkudjEuQ29sbGVjdGlvbkJpbGxpbmdFdmVudBIPCgdzdWNjZXNzGAIgASgIEisKBWVycm9yGAMgASgLMhcuZG9tYWluLmNvbW1vbi52MS5FcnJvckgAiAEBQggKBl9lcnJvciJfCiNEZWxldGVDb2xsZWN0aW9uQmlsbGluZ0V2ZW50UmVxdWVzdBI4CgRkYXRhGAEgASgLMiouZG9tYWluLnRyZWFzdXJ5LnYxLkNvbGxlY3Rpb25CaWxsaW5nRXZlbnQibgokRGVsZXRlQ29sbGVjdGlvbkJpbGxpbmdFdmVudFJlc3BvbnNlEg8KB3N1Y2Nlc3MYASABKAgSKwoFZXJyb3IYAiABKAsyFy5kb21haW4uY29tbW9uLnYxLkVycm9ySACIAQFCCAoGX2Vycm9yIrACCiJMaXN0Q29sbGVjdGlvbkJpbGxpbmdFdmVudHNSZXF1ZXN0EjQKBnNlYXJjaBgBIAEoCzIfLmRvbWFpbi5jb21tb24udjEuU2VhcmNoUmVxdWVzdEgAiAEBEjUKB2ZpbHRlcnMYAiABKAsyHy5kb21haW4uY29tbW9uLnYxLkZpbHRlclJlcXVlc3RIAYgBARIwCgRzb3J0GAMgASgLMh0uZG9tYWluLmNvbW1vbi52MS5Tb3J0UmVxdWVzdEgCiAEBEjwKCnBhZ2luYXRpb24YBCABKAsyIy5kb21haW4uY29tbW9uLnYxLlBhZ2luYXRpb25SZXF1ZXN0SAOIAQFCCQoHX3NlYXJjaEIKCghfZmlsdGVyc0IHCgVfc29ydEINCgtfcGFnaW5hdGlvbiKnAQojTGlzdENvbGxlY3Rpb25CaWxsaW5nRXZlbnRzUmVzcG9uc2USOAoEZGF0YRgBIAMoCzIqLmRvbWFpbi50cmVhc3VyeS52MS5Db2xsZWN0aW9uQmlsbGluZ0V2ZW50Eg8KB3N1Y2Nlc3MYAiABKAgSKwoFZXJyb3IYAyABKAsyFy5kb21haW4uY29tbW9uLnYxLkVycm9ySACIAQFCCAoGX2Vycm9yMoAGCiNDb2xsZWN0aW9uQmlsbGluZ0V2ZW50RG9tYWluU2VydmljZRKRAQocQ3JlYXRlQ29sbGVjdGlvbkJpbGxpbmdFdmVudBI3LmRvbWFpbi50cmVhc3VyeS52MS5DcmVhdGVDb2xsZWN0aW9uQmlsbGluZ0V2ZW50UmVxdWVzdBo4LmRvbWFpbi50cmVhc3VyeS52MS5DcmVhdGVDb2xsZWN0aW9uQmlsbGluZ0V2ZW50UmVzcG9uc2USiwEKGlJlYWRDb2xsZWN0aW9uQmlsbGluZ0V2ZW50EjUuZG9tYWluLnRyZWFzdXJ5LnYxLlJlYWRDb2xsZWN0aW9uQmlsbGluZ0V2ZW50UmVxdWVzdBo2LmRvbWFpbi50cmVhc3VyeS52MS5SZWFkQ29sbGVjdGlvbkJpbGxpbmdFdmVudFJlc3BvbnNlEpEBChxVcGRhdGVDb2xsZWN0aW9uQmlsbGluZ0V2ZW50EjcuZG9tYWluLnRyZWFzdXJ5LnYxLlVwZGF0ZUNvbGxlY3Rpb25CaWxsaW5nRXZlbnRSZXF1ZXN0GjguZG9tYWluLnRyZWFzdXJ5LnYxLlVwZGF0ZUNvbGxlY3Rpb25CaWxsaW5nRXZlbnRSZXNwb25zZRKRAQocRGVsZXRlQ29sbGVjdGlvbkJpbGxpbmdFdmVudBI3LmRvbWFpbi50cmVhc3VyeS52MS5EZWxldGVDb2xsZWN0aW9uQmlsbGluZ0V2ZW50UmVxdWVzdBo4LmRvbWFpbi50cmVhc3VyeS52MS5EZWxldGVDb2xsZWN0aW9uQmlsbGluZ0V2ZW50UmVzcG9uc2USjgEKG0xpc3RDb2xsZWN0aW9uQmlsbGluZ0V2ZW50cxI2LmRvbWFpbi50cmVhc3VyeS52MS5MaXN0Q29sbGVjdGlvbkJpbGxpbmdFdmVudHNSZXF1ZXN0GjcuZG9tYWluLnRyZWFzdXJ5LnYxLkxpc3RDb2xsZWN0aW9uQmlsbGluZ0V2ZW50c1Jlc3BvbnNlQv8BChZjb20uZG9tYWluLnRyZWFzdXJ5LnYxQhtDb2xsZWN0aW9uQmlsbGluZ0V2ZW50UHJvdG9QAVpeZ2l0aHViLmNvbS9lcm5pZWFsaWNlL2VzcXltYS9wa2cvc2NoZW1hL3YxL2RvbWFpbi90cmVhc3VyeS9jb2xsZWN0aW9uX2JpbGxpbmdfZXZlbnQ7dHJlYXN1cnl2MaICA0RUWKoCEkRvbWFpbi5UcmVhc3VyeS5WMcoCEkRvbWFpblxUcmVhc3VyeVxWMeICHkRvbWFpblxUcmVhc3VyeVxWMVxHUEJNZXRhZGF0YeoCFERvbWFpbjo6VHJlYXN1cnk6OlYxYgZwcm90bzM", [file_domain_common_error, file_domain_common_pagination, file_domain_common_search, file_domain_common_filter, file_domain_common_sort, file_options_db]);
 
 /**
  * Junction entity linking a MILESTONE advance TreasuryCollection to one or more
@@ -29,9 +29,9 @@ export const file_domain_treasury_collection_billing_event_collection_billing_ev
  * to each milestone; SUM(tranche_amount) <= TreasuryCollection.amount enforced
  * in application layer (no DB constraint v1).
  *
- * @generated from message domain.treasury.v1.TreasuryCollectionBillingEvent
+ * @generated from message domain.treasury.v1.CollectionBillingEvent
  */
-export type TreasuryCollectionBillingEvent = Message<"domain.treasury.v1.TreasuryCollectionBillingEvent"> & {
+export type CollectionBillingEvent = Message<"domain.treasury.v1.CollectionBillingEvent"> & {
   /**
    * @generated from field: string id = 1;
    */
@@ -83,37 +83,37 @@ export type TreasuryCollectionBillingEvent = Message<"domain.treasury.v1.Treasur
 };
 
 /**
- * Describes the message domain.treasury.v1.TreasuryCollectionBillingEvent.
- * Use `create(TreasuryCollectionBillingEventSchema)` to create a new message.
+ * Describes the message domain.treasury.v1.CollectionBillingEvent.
+ * Use `create(CollectionBillingEventSchema)` to create a new message.
  */
-export const TreasuryCollectionBillingEventSchema: GenMessage<TreasuryCollectionBillingEvent> = /*@__PURE__*/
+export const CollectionBillingEventSchema: GenMessage<CollectionBillingEvent> = /*@__PURE__*/
   messageDesc(file_domain_treasury_collection_billing_event_collection_billing_event, 0);
 
 /**
- * @generated from message domain.treasury.v1.CreateTreasuryCollectionBillingEventRequest
+ * @generated from message domain.treasury.v1.CreateCollectionBillingEventRequest
  */
-export type CreateTreasuryCollectionBillingEventRequest = Message<"domain.treasury.v1.CreateTreasuryCollectionBillingEventRequest"> & {
+export type CreateCollectionBillingEventRequest = Message<"domain.treasury.v1.CreateCollectionBillingEventRequest"> & {
   /**
-   * @generated from field: domain.treasury.v1.TreasuryCollectionBillingEvent data = 1;
+   * @generated from field: domain.treasury.v1.CollectionBillingEvent data = 1;
    */
-  data?: TreasuryCollectionBillingEvent;
+  data?: CollectionBillingEvent;
 };
 
 /**
- * Describes the message domain.treasury.v1.CreateTreasuryCollectionBillingEventRequest.
- * Use `create(CreateTreasuryCollectionBillingEventRequestSchema)` to create a new message.
+ * Describes the message domain.treasury.v1.CreateCollectionBillingEventRequest.
+ * Use `create(CreateCollectionBillingEventRequestSchema)` to create a new message.
  */
-export const CreateTreasuryCollectionBillingEventRequestSchema: GenMessage<CreateTreasuryCollectionBillingEventRequest> = /*@__PURE__*/
+export const CreateCollectionBillingEventRequestSchema: GenMessage<CreateCollectionBillingEventRequest> = /*@__PURE__*/
   messageDesc(file_domain_treasury_collection_billing_event_collection_billing_event, 1);
 
 /**
- * @generated from message domain.treasury.v1.CreateTreasuryCollectionBillingEventResponse
+ * @generated from message domain.treasury.v1.CreateCollectionBillingEventResponse
  */
-export type CreateTreasuryCollectionBillingEventResponse = Message<"domain.treasury.v1.CreateTreasuryCollectionBillingEventResponse"> & {
+export type CreateCollectionBillingEventResponse = Message<"domain.treasury.v1.CreateCollectionBillingEventResponse"> & {
   /**
-   * @generated from field: repeated domain.treasury.v1.TreasuryCollectionBillingEvent data = 1;
+   * @generated from field: repeated domain.treasury.v1.CollectionBillingEvent data = 1;
    */
-  data: TreasuryCollectionBillingEvent[];
+  data: CollectionBillingEvent[];
 
   /**
    * @generated from field: bool success = 2;
@@ -127,37 +127,37 @@ export type CreateTreasuryCollectionBillingEventResponse = Message<"domain.treas
 };
 
 /**
- * Describes the message domain.treasury.v1.CreateTreasuryCollectionBillingEventResponse.
- * Use `create(CreateTreasuryCollectionBillingEventResponseSchema)` to create a new message.
+ * Describes the message domain.treasury.v1.CreateCollectionBillingEventResponse.
+ * Use `create(CreateCollectionBillingEventResponseSchema)` to create a new message.
  */
-export const CreateTreasuryCollectionBillingEventResponseSchema: GenMessage<CreateTreasuryCollectionBillingEventResponse> = /*@__PURE__*/
+export const CreateCollectionBillingEventResponseSchema: GenMessage<CreateCollectionBillingEventResponse> = /*@__PURE__*/
   messageDesc(file_domain_treasury_collection_billing_event_collection_billing_event, 2);
 
 /**
- * @generated from message domain.treasury.v1.ReadTreasuryCollectionBillingEventRequest
+ * @generated from message domain.treasury.v1.ReadCollectionBillingEventRequest
  */
-export type ReadTreasuryCollectionBillingEventRequest = Message<"domain.treasury.v1.ReadTreasuryCollectionBillingEventRequest"> & {
+export type ReadCollectionBillingEventRequest = Message<"domain.treasury.v1.ReadCollectionBillingEventRequest"> & {
   /**
-   * @generated from field: domain.treasury.v1.TreasuryCollectionBillingEvent data = 1;
+   * @generated from field: domain.treasury.v1.CollectionBillingEvent data = 1;
    */
-  data?: TreasuryCollectionBillingEvent;
+  data?: CollectionBillingEvent;
 };
 
 /**
- * Describes the message domain.treasury.v1.ReadTreasuryCollectionBillingEventRequest.
- * Use `create(ReadTreasuryCollectionBillingEventRequestSchema)` to create a new message.
+ * Describes the message domain.treasury.v1.ReadCollectionBillingEventRequest.
+ * Use `create(ReadCollectionBillingEventRequestSchema)` to create a new message.
  */
-export const ReadTreasuryCollectionBillingEventRequestSchema: GenMessage<ReadTreasuryCollectionBillingEventRequest> = /*@__PURE__*/
+export const ReadCollectionBillingEventRequestSchema: GenMessage<ReadCollectionBillingEventRequest> = /*@__PURE__*/
   messageDesc(file_domain_treasury_collection_billing_event_collection_billing_event, 3);
 
 /**
- * @generated from message domain.treasury.v1.ReadTreasuryCollectionBillingEventResponse
+ * @generated from message domain.treasury.v1.ReadCollectionBillingEventResponse
  */
-export type ReadTreasuryCollectionBillingEventResponse = Message<"domain.treasury.v1.ReadTreasuryCollectionBillingEventResponse"> & {
+export type ReadCollectionBillingEventResponse = Message<"domain.treasury.v1.ReadCollectionBillingEventResponse"> & {
   /**
-   * @generated from field: repeated domain.treasury.v1.TreasuryCollectionBillingEvent data = 1;
+   * @generated from field: repeated domain.treasury.v1.CollectionBillingEvent data = 1;
    */
-  data: TreasuryCollectionBillingEvent[];
+  data: CollectionBillingEvent[];
 
   /**
    * @generated from field: bool success = 2;
@@ -171,37 +171,37 @@ export type ReadTreasuryCollectionBillingEventResponse = Message<"domain.treasur
 };
 
 /**
- * Describes the message domain.treasury.v1.ReadTreasuryCollectionBillingEventResponse.
- * Use `create(ReadTreasuryCollectionBillingEventResponseSchema)` to create a new message.
+ * Describes the message domain.treasury.v1.ReadCollectionBillingEventResponse.
+ * Use `create(ReadCollectionBillingEventResponseSchema)` to create a new message.
  */
-export const ReadTreasuryCollectionBillingEventResponseSchema: GenMessage<ReadTreasuryCollectionBillingEventResponse> = /*@__PURE__*/
+export const ReadCollectionBillingEventResponseSchema: GenMessage<ReadCollectionBillingEventResponse> = /*@__PURE__*/
   messageDesc(file_domain_treasury_collection_billing_event_collection_billing_event, 4);
 
 /**
- * @generated from message domain.treasury.v1.UpdateTreasuryCollectionBillingEventRequest
+ * @generated from message domain.treasury.v1.UpdateCollectionBillingEventRequest
  */
-export type UpdateTreasuryCollectionBillingEventRequest = Message<"domain.treasury.v1.UpdateTreasuryCollectionBillingEventRequest"> & {
+export type UpdateCollectionBillingEventRequest = Message<"domain.treasury.v1.UpdateCollectionBillingEventRequest"> & {
   /**
-   * @generated from field: domain.treasury.v1.TreasuryCollectionBillingEvent data = 1;
+   * @generated from field: domain.treasury.v1.CollectionBillingEvent data = 1;
    */
-  data?: TreasuryCollectionBillingEvent;
+  data?: CollectionBillingEvent;
 };
 
 /**
- * Describes the message domain.treasury.v1.UpdateTreasuryCollectionBillingEventRequest.
- * Use `create(UpdateTreasuryCollectionBillingEventRequestSchema)` to create a new message.
+ * Describes the message domain.treasury.v1.UpdateCollectionBillingEventRequest.
+ * Use `create(UpdateCollectionBillingEventRequestSchema)` to create a new message.
  */
-export const UpdateTreasuryCollectionBillingEventRequestSchema: GenMessage<UpdateTreasuryCollectionBillingEventRequest> = /*@__PURE__*/
+export const UpdateCollectionBillingEventRequestSchema: GenMessage<UpdateCollectionBillingEventRequest> = /*@__PURE__*/
   messageDesc(file_domain_treasury_collection_billing_event_collection_billing_event, 5);
 
 /**
- * @generated from message domain.treasury.v1.UpdateTreasuryCollectionBillingEventResponse
+ * @generated from message domain.treasury.v1.UpdateCollectionBillingEventResponse
  */
-export type UpdateTreasuryCollectionBillingEventResponse = Message<"domain.treasury.v1.UpdateTreasuryCollectionBillingEventResponse"> & {
+export type UpdateCollectionBillingEventResponse = Message<"domain.treasury.v1.UpdateCollectionBillingEventResponse"> & {
   /**
-   * @generated from field: repeated domain.treasury.v1.TreasuryCollectionBillingEvent data = 1;
+   * @generated from field: repeated domain.treasury.v1.CollectionBillingEvent data = 1;
    */
-  data: TreasuryCollectionBillingEvent[];
+  data: CollectionBillingEvent[];
 
   /**
    * @generated from field: bool success = 2;
@@ -215,33 +215,33 @@ export type UpdateTreasuryCollectionBillingEventResponse = Message<"domain.treas
 };
 
 /**
- * Describes the message domain.treasury.v1.UpdateTreasuryCollectionBillingEventResponse.
- * Use `create(UpdateTreasuryCollectionBillingEventResponseSchema)` to create a new message.
+ * Describes the message domain.treasury.v1.UpdateCollectionBillingEventResponse.
+ * Use `create(UpdateCollectionBillingEventResponseSchema)` to create a new message.
  */
-export const UpdateTreasuryCollectionBillingEventResponseSchema: GenMessage<UpdateTreasuryCollectionBillingEventResponse> = /*@__PURE__*/
+export const UpdateCollectionBillingEventResponseSchema: GenMessage<UpdateCollectionBillingEventResponse> = /*@__PURE__*/
   messageDesc(file_domain_treasury_collection_billing_event_collection_billing_event, 6);
 
 /**
- * @generated from message domain.treasury.v1.DeleteTreasuryCollectionBillingEventRequest
+ * @generated from message domain.treasury.v1.DeleteCollectionBillingEventRequest
  */
-export type DeleteTreasuryCollectionBillingEventRequest = Message<"domain.treasury.v1.DeleteTreasuryCollectionBillingEventRequest"> & {
+export type DeleteCollectionBillingEventRequest = Message<"domain.treasury.v1.DeleteCollectionBillingEventRequest"> & {
   /**
-   * @generated from field: domain.treasury.v1.TreasuryCollectionBillingEvent data = 1;
+   * @generated from field: domain.treasury.v1.CollectionBillingEvent data = 1;
    */
-  data?: TreasuryCollectionBillingEvent;
+  data?: CollectionBillingEvent;
 };
 
 /**
- * Describes the message domain.treasury.v1.DeleteTreasuryCollectionBillingEventRequest.
- * Use `create(DeleteTreasuryCollectionBillingEventRequestSchema)` to create a new message.
+ * Describes the message domain.treasury.v1.DeleteCollectionBillingEventRequest.
+ * Use `create(DeleteCollectionBillingEventRequestSchema)` to create a new message.
  */
-export const DeleteTreasuryCollectionBillingEventRequestSchema: GenMessage<DeleteTreasuryCollectionBillingEventRequest> = /*@__PURE__*/
+export const DeleteCollectionBillingEventRequestSchema: GenMessage<DeleteCollectionBillingEventRequest> = /*@__PURE__*/
   messageDesc(file_domain_treasury_collection_billing_event_collection_billing_event, 7);
 
 /**
- * @generated from message domain.treasury.v1.DeleteTreasuryCollectionBillingEventResponse
+ * @generated from message domain.treasury.v1.DeleteCollectionBillingEventResponse
  */
-export type DeleteTreasuryCollectionBillingEventResponse = Message<"domain.treasury.v1.DeleteTreasuryCollectionBillingEventResponse"> & {
+export type DeleteCollectionBillingEventResponse = Message<"domain.treasury.v1.DeleteCollectionBillingEventResponse"> & {
   /**
    * @generated from field: bool success = 1;
    */
@@ -254,16 +254,16 @@ export type DeleteTreasuryCollectionBillingEventResponse = Message<"domain.treas
 };
 
 /**
- * Describes the message domain.treasury.v1.DeleteTreasuryCollectionBillingEventResponse.
- * Use `create(DeleteTreasuryCollectionBillingEventResponseSchema)` to create a new message.
+ * Describes the message domain.treasury.v1.DeleteCollectionBillingEventResponse.
+ * Use `create(DeleteCollectionBillingEventResponseSchema)` to create a new message.
  */
-export const DeleteTreasuryCollectionBillingEventResponseSchema: GenMessage<DeleteTreasuryCollectionBillingEventResponse> = /*@__PURE__*/
+export const DeleteCollectionBillingEventResponseSchema: GenMessage<DeleteCollectionBillingEventResponse> = /*@__PURE__*/
   messageDesc(file_domain_treasury_collection_billing_event_collection_billing_event, 8);
 
 /**
- * @generated from message domain.treasury.v1.ListTreasuryCollectionBillingEventsRequest
+ * @generated from message domain.treasury.v1.ListCollectionBillingEventsRequest
  */
-export type ListTreasuryCollectionBillingEventsRequest = Message<"domain.treasury.v1.ListTreasuryCollectionBillingEventsRequest"> & {
+export type ListCollectionBillingEventsRequest = Message<"domain.treasury.v1.ListCollectionBillingEventsRequest"> & {
   /**
    * @generated from field: optional domain.common.v1.SearchRequest search = 1;
    */
@@ -286,20 +286,20 @@ export type ListTreasuryCollectionBillingEventsRequest = Message<"domain.treasur
 };
 
 /**
- * Describes the message domain.treasury.v1.ListTreasuryCollectionBillingEventsRequest.
- * Use `create(ListTreasuryCollectionBillingEventsRequestSchema)` to create a new message.
+ * Describes the message domain.treasury.v1.ListCollectionBillingEventsRequest.
+ * Use `create(ListCollectionBillingEventsRequestSchema)` to create a new message.
  */
-export const ListTreasuryCollectionBillingEventsRequestSchema: GenMessage<ListTreasuryCollectionBillingEventsRequest> = /*@__PURE__*/
+export const ListCollectionBillingEventsRequestSchema: GenMessage<ListCollectionBillingEventsRequest> = /*@__PURE__*/
   messageDesc(file_domain_treasury_collection_billing_event_collection_billing_event, 9);
 
 /**
- * @generated from message domain.treasury.v1.ListTreasuryCollectionBillingEventsResponse
+ * @generated from message domain.treasury.v1.ListCollectionBillingEventsResponse
  */
-export type ListTreasuryCollectionBillingEventsResponse = Message<"domain.treasury.v1.ListTreasuryCollectionBillingEventsResponse"> & {
+export type ListCollectionBillingEventsResponse = Message<"domain.treasury.v1.ListCollectionBillingEventsResponse"> & {
   /**
-   * @generated from field: repeated domain.treasury.v1.TreasuryCollectionBillingEvent data = 1;
+   * @generated from field: repeated domain.treasury.v1.CollectionBillingEvent data = 1;
    */
-  data: TreasuryCollectionBillingEvent[];
+  data: CollectionBillingEvent[];
 
   /**
    * @generated from field: bool success = 2;
@@ -313,55 +313,55 @@ export type ListTreasuryCollectionBillingEventsResponse = Message<"domain.treasu
 };
 
 /**
- * Describes the message domain.treasury.v1.ListTreasuryCollectionBillingEventsResponse.
- * Use `create(ListTreasuryCollectionBillingEventsResponseSchema)` to create a new message.
+ * Describes the message domain.treasury.v1.ListCollectionBillingEventsResponse.
+ * Use `create(ListCollectionBillingEventsResponseSchema)` to create a new message.
  */
-export const ListTreasuryCollectionBillingEventsResponseSchema: GenMessage<ListTreasuryCollectionBillingEventsResponse> = /*@__PURE__*/
+export const ListCollectionBillingEventsResponseSchema: GenMessage<ListCollectionBillingEventsResponse> = /*@__PURE__*/
   messageDesc(file_domain_treasury_collection_billing_event_collection_billing_event, 10);
 
 /**
- * @generated from service domain.treasury.v1.TreasuryCollectionBillingEventDomainService
+ * @generated from service domain.treasury.v1.CollectionBillingEventDomainService
  */
-export const TreasuryCollectionBillingEventDomainService: GenService<{
+export const CollectionBillingEventDomainService: GenService<{
   /**
-   * @generated from rpc domain.treasury.v1.TreasuryCollectionBillingEventDomainService.CreateTreasuryCollectionBillingEvent
+   * @generated from rpc domain.treasury.v1.CollectionBillingEventDomainService.CreateCollectionBillingEvent
    */
-  createTreasuryCollectionBillingEvent: {
+  createCollectionBillingEvent: {
     methodKind: "unary";
-    input: typeof CreateTreasuryCollectionBillingEventRequestSchema;
-    output: typeof CreateTreasuryCollectionBillingEventResponseSchema;
+    input: typeof CreateCollectionBillingEventRequestSchema;
+    output: typeof CreateCollectionBillingEventResponseSchema;
   },
   /**
-   * @generated from rpc domain.treasury.v1.TreasuryCollectionBillingEventDomainService.ReadTreasuryCollectionBillingEvent
+   * @generated from rpc domain.treasury.v1.CollectionBillingEventDomainService.ReadCollectionBillingEvent
    */
-  readTreasuryCollectionBillingEvent: {
+  readCollectionBillingEvent: {
     methodKind: "unary";
-    input: typeof ReadTreasuryCollectionBillingEventRequestSchema;
-    output: typeof ReadTreasuryCollectionBillingEventResponseSchema;
+    input: typeof ReadCollectionBillingEventRequestSchema;
+    output: typeof ReadCollectionBillingEventResponseSchema;
   },
   /**
-   * @generated from rpc domain.treasury.v1.TreasuryCollectionBillingEventDomainService.UpdateTreasuryCollectionBillingEvent
+   * @generated from rpc domain.treasury.v1.CollectionBillingEventDomainService.UpdateCollectionBillingEvent
    */
-  updateTreasuryCollectionBillingEvent: {
+  updateCollectionBillingEvent: {
     methodKind: "unary";
-    input: typeof UpdateTreasuryCollectionBillingEventRequestSchema;
-    output: typeof UpdateTreasuryCollectionBillingEventResponseSchema;
+    input: typeof UpdateCollectionBillingEventRequestSchema;
+    output: typeof UpdateCollectionBillingEventResponseSchema;
   },
   /**
-   * @generated from rpc domain.treasury.v1.TreasuryCollectionBillingEventDomainService.DeleteTreasuryCollectionBillingEvent
+   * @generated from rpc domain.treasury.v1.CollectionBillingEventDomainService.DeleteCollectionBillingEvent
    */
-  deleteTreasuryCollectionBillingEvent: {
+  deleteCollectionBillingEvent: {
     methodKind: "unary";
-    input: typeof DeleteTreasuryCollectionBillingEventRequestSchema;
-    output: typeof DeleteTreasuryCollectionBillingEventResponseSchema;
+    input: typeof DeleteCollectionBillingEventRequestSchema;
+    output: typeof DeleteCollectionBillingEventResponseSchema;
   },
   /**
-   * @generated from rpc domain.treasury.v1.TreasuryCollectionBillingEventDomainService.ListTreasuryCollectionBillingEvents
+   * @generated from rpc domain.treasury.v1.CollectionBillingEventDomainService.ListCollectionBillingEvents
    */
-  listTreasuryCollectionBillingEvents: {
+  listCollectionBillingEvents: {
     methodKind: "unary";
-    input: typeof ListTreasuryCollectionBillingEventsRequestSchema;
-    output: typeof ListTreasuryCollectionBillingEventsResponseSchema;
+    input: typeof ListCollectionBillingEventsRequestSchema;
+    output: typeof ListCollectionBillingEventsResponseSchema;
   },
 }> = /*@__PURE__*/
   serviceDesc(file_domain_treasury_collection_billing_event_collection_billing_event, 0);

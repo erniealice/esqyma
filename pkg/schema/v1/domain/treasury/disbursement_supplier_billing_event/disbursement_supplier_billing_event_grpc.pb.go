@@ -19,255 +19,254 @@ import (
 const _ = grpc.SupportPackageIsVersion9
 
 const (
-	TreasuryDisbursementSupplierBillingEventDomainService_CreateTreasuryDisbursementSupplierBillingEvent_FullMethodName = "/domain.treasury.v1.TreasuryDisbursementSupplierBillingEventDomainService/CreateTreasuryDisbursementSupplierBillingEvent"
-	TreasuryDisbursementSupplierBillingEventDomainService_ReadTreasuryDisbursementSupplierBillingEvent_FullMethodName   = "/domain.treasury.v1.TreasuryDisbursementSupplierBillingEventDomainService/ReadTreasuryDisbursementSupplierBillingEvent"
-	TreasuryDisbursementSupplierBillingEventDomainService_UpdateTreasuryDisbursementSupplierBillingEvent_FullMethodName = "/domain.treasury.v1.TreasuryDisbursementSupplierBillingEventDomainService/UpdateTreasuryDisbursementSupplierBillingEvent"
-	TreasuryDisbursementSupplierBillingEventDomainService_DeleteTreasuryDisbursementSupplierBillingEvent_FullMethodName = "/domain.treasury.v1.TreasuryDisbursementSupplierBillingEventDomainService/DeleteTreasuryDisbursementSupplierBillingEvent"
-	TreasuryDisbursementSupplierBillingEventDomainService_ListTreasuryDisbursementSupplierBillingEvents_FullMethodName  = "/domain.treasury.v1.TreasuryDisbursementSupplierBillingEventDomainService/ListTreasuryDisbursementSupplierBillingEvents"
+	DisbursementSupplierBillingEventDomainService_CreateDisbursementSupplierBillingEvent_FullMethodName = "/domain.treasury.v1.DisbursementSupplierBillingEventDomainService/CreateDisbursementSupplierBillingEvent"
+	DisbursementSupplierBillingEventDomainService_ReadDisbursementSupplierBillingEvent_FullMethodName   = "/domain.treasury.v1.DisbursementSupplierBillingEventDomainService/ReadDisbursementSupplierBillingEvent"
+	DisbursementSupplierBillingEventDomainService_UpdateDisbursementSupplierBillingEvent_FullMethodName = "/domain.treasury.v1.DisbursementSupplierBillingEventDomainService/UpdateDisbursementSupplierBillingEvent"
+	DisbursementSupplierBillingEventDomainService_DeleteDisbursementSupplierBillingEvent_FullMethodName = "/domain.treasury.v1.DisbursementSupplierBillingEventDomainService/DeleteDisbursementSupplierBillingEvent"
+	DisbursementSupplierBillingEventDomainService_ListDisbursementSupplierBillingEvents_FullMethodName  = "/domain.treasury.v1.DisbursementSupplierBillingEventDomainService/ListDisbursementSupplierBillingEvents"
 )
 
-// TreasuryDisbursementSupplierBillingEventDomainServiceClient is the client API for TreasuryDisbursementSupplierBillingEventDomainService service.
+// DisbursementSupplierBillingEventDomainServiceClient is the client API for DisbursementSupplierBillingEventDomainService service.
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
-type TreasuryDisbursementSupplierBillingEventDomainServiceClient interface {
-	CreateTreasuryDisbursementSupplierBillingEvent(ctx context.Context, in *CreateTreasuryDisbursementSupplierBillingEventRequest, opts ...grpc.CallOption) (*CreateTreasuryDisbursementSupplierBillingEventResponse, error)
-	ReadTreasuryDisbursementSupplierBillingEvent(ctx context.Context, in *ReadTreasuryDisbursementSupplierBillingEventRequest, opts ...grpc.CallOption) (*ReadTreasuryDisbursementSupplierBillingEventResponse, error)
-	UpdateTreasuryDisbursementSupplierBillingEvent(ctx context.Context, in *UpdateTreasuryDisbursementSupplierBillingEventRequest, opts ...grpc.CallOption) (*UpdateTreasuryDisbursementSupplierBillingEventResponse, error)
-	DeleteTreasuryDisbursementSupplierBillingEvent(ctx context.Context, in *DeleteTreasuryDisbursementSupplierBillingEventRequest, opts ...grpc.CallOption) (*DeleteTreasuryDisbursementSupplierBillingEventResponse, error)
-	ListTreasuryDisbursementSupplierBillingEvents(ctx context.Context, in *ListTreasuryDisbursementSupplierBillingEventsRequest, opts ...grpc.CallOption) (*ListTreasuryDisbursementSupplierBillingEventsResponse, error)
+type DisbursementSupplierBillingEventDomainServiceClient interface {
+	CreateDisbursementSupplierBillingEvent(ctx context.Context, in *CreateDisbursementSupplierBillingEventRequest, opts ...grpc.CallOption) (*CreateDisbursementSupplierBillingEventResponse, error)
+	ReadDisbursementSupplierBillingEvent(ctx context.Context, in *ReadDisbursementSupplierBillingEventRequest, opts ...grpc.CallOption) (*ReadDisbursementSupplierBillingEventResponse, error)
+	UpdateDisbursementSupplierBillingEvent(ctx context.Context, in *UpdateDisbursementSupplierBillingEventRequest, opts ...grpc.CallOption) (*UpdateDisbursementSupplierBillingEventResponse, error)
+	DeleteDisbursementSupplierBillingEvent(ctx context.Context, in *DeleteDisbursementSupplierBillingEventRequest, opts ...grpc.CallOption) (*DeleteDisbursementSupplierBillingEventResponse, error)
+	ListDisbursementSupplierBillingEvents(ctx context.Context, in *ListDisbursementSupplierBillingEventsRequest, opts ...grpc.CallOption) (*ListDisbursementSupplierBillingEventsResponse, error)
 }
 
-type treasuryDisbursementSupplierBillingEventDomainServiceClient struct {
+type disbursementSupplierBillingEventDomainServiceClient struct {
 	cc grpc.ClientConnInterface
 }
 
-func NewTreasuryDisbursementSupplierBillingEventDomainServiceClient(cc grpc.ClientConnInterface) TreasuryDisbursementSupplierBillingEventDomainServiceClient {
-	return &treasuryDisbursementSupplierBillingEventDomainServiceClient{cc}
+func NewDisbursementSupplierBillingEventDomainServiceClient(cc grpc.ClientConnInterface) DisbursementSupplierBillingEventDomainServiceClient {
+	return &disbursementSupplierBillingEventDomainServiceClient{cc}
 }
 
-func (c *treasuryDisbursementSupplierBillingEventDomainServiceClient) CreateTreasuryDisbursementSupplierBillingEvent(ctx context.Context, in *CreateTreasuryDisbursementSupplierBillingEventRequest, opts ...grpc.CallOption) (*CreateTreasuryDisbursementSupplierBillingEventResponse, error) {
+func (c *disbursementSupplierBillingEventDomainServiceClient) CreateDisbursementSupplierBillingEvent(ctx context.Context, in *CreateDisbursementSupplierBillingEventRequest, opts ...grpc.CallOption) (*CreateDisbursementSupplierBillingEventResponse, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(CreateTreasuryDisbursementSupplierBillingEventResponse)
-	err := c.cc.Invoke(ctx, TreasuryDisbursementSupplierBillingEventDomainService_CreateTreasuryDisbursementSupplierBillingEvent_FullMethodName, in, out, cOpts...)
+	out := new(CreateDisbursementSupplierBillingEventResponse)
+	err := c.cc.Invoke(ctx, DisbursementSupplierBillingEventDomainService_CreateDisbursementSupplierBillingEvent_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *treasuryDisbursementSupplierBillingEventDomainServiceClient) ReadTreasuryDisbursementSupplierBillingEvent(ctx context.Context, in *ReadTreasuryDisbursementSupplierBillingEventRequest, opts ...grpc.CallOption) (*ReadTreasuryDisbursementSupplierBillingEventResponse, error) {
+func (c *disbursementSupplierBillingEventDomainServiceClient) ReadDisbursementSupplierBillingEvent(ctx context.Context, in *ReadDisbursementSupplierBillingEventRequest, opts ...grpc.CallOption) (*ReadDisbursementSupplierBillingEventResponse, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(ReadTreasuryDisbursementSupplierBillingEventResponse)
-	err := c.cc.Invoke(ctx, TreasuryDisbursementSupplierBillingEventDomainService_ReadTreasuryDisbursementSupplierBillingEvent_FullMethodName, in, out, cOpts...)
+	out := new(ReadDisbursementSupplierBillingEventResponse)
+	err := c.cc.Invoke(ctx, DisbursementSupplierBillingEventDomainService_ReadDisbursementSupplierBillingEvent_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *treasuryDisbursementSupplierBillingEventDomainServiceClient) UpdateTreasuryDisbursementSupplierBillingEvent(ctx context.Context, in *UpdateTreasuryDisbursementSupplierBillingEventRequest, opts ...grpc.CallOption) (*UpdateTreasuryDisbursementSupplierBillingEventResponse, error) {
+func (c *disbursementSupplierBillingEventDomainServiceClient) UpdateDisbursementSupplierBillingEvent(ctx context.Context, in *UpdateDisbursementSupplierBillingEventRequest, opts ...grpc.CallOption) (*UpdateDisbursementSupplierBillingEventResponse, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(UpdateTreasuryDisbursementSupplierBillingEventResponse)
-	err := c.cc.Invoke(ctx, TreasuryDisbursementSupplierBillingEventDomainService_UpdateTreasuryDisbursementSupplierBillingEvent_FullMethodName, in, out, cOpts...)
+	out := new(UpdateDisbursementSupplierBillingEventResponse)
+	err := c.cc.Invoke(ctx, DisbursementSupplierBillingEventDomainService_UpdateDisbursementSupplierBillingEvent_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *treasuryDisbursementSupplierBillingEventDomainServiceClient) DeleteTreasuryDisbursementSupplierBillingEvent(ctx context.Context, in *DeleteTreasuryDisbursementSupplierBillingEventRequest, opts ...grpc.CallOption) (*DeleteTreasuryDisbursementSupplierBillingEventResponse, error) {
+func (c *disbursementSupplierBillingEventDomainServiceClient) DeleteDisbursementSupplierBillingEvent(ctx context.Context, in *DeleteDisbursementSupplierBillingEventRequest, opts ...grpc.CallOption) (*DeleteDisbursementSupplierBillingEventResponse, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(DeleteTreasuryDisbursementSupplierBillingEventResponse)
-	err := c.cc.Invoke(ctx, TreasuryDisbursementSupplierBillingEventDomainService_DeleteTreasuryDisbursementSupplierBillingEvent_FullMethodName, in, out, cOpts...)
+	out := new(DeleteDisbursementSupplierBillingEventResponse)
+	err := c.cc.Invoke(ctx, DisbursementSupplierBillingEventDomainService_DeleteDisbursementSupplierBillingEvent_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *treasuryDisbursementSupplierBillingEventDomainServiceClient) ListTreasuryDisbursementSupplierBillingEvents(ctx context.Context, in *ListTreasuryDisbursementSupplierBillingEventsRequest, opts ...grpc.CallOption) (*ListTreasuryDisbursementSupplierBillingEventsResponse, error) {
+func (c *disbursementSupplierBillingEventDomainServiceClient) ListDisbursementSupplierBillingEvents(ctx context.Context, in *ListDisbursementSupplierBillingEventsRequest, opts ...grpc.CallOption) (*ListDisbursementSupplierBillingEventsResponse, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(ListTreasuryDisbursementSupplierBillingEventsResponse)
-	err := c.cc.Invoke(ctx, TreasuryDisbursementSupplierBillingEventDomainService_ListTreasuryDisbursementSupplierBillingEvents_FullMethodName, in, out, cOpts...)
+	out := new(ListDisbursementSupplierBillingEventsResponse)
+	err := c.cc.Invoke(ctx, DisbursementSupplierBillingEventDomainService_ListDisbursementSupplierBillingEvents_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-// TreasuryDisbursementSupplierBillingEventDomainServiceServer is the server API for TreasuryDisbursementSupplierBillingEventDomainService service.
-// All implementations must embed UnimplementedTreasuryDisbursementSupplierBillingEventDomainServiceServer
+// DisbursementSupplierBillingEventDomainServiceServer is the server API for DisbursementSupplierBillingEventDomainService service.
+// All implementations must embed UnimplementedDisbursementSupplierBillingEventDomainServiceServer
 // for forward compatibility.
-type TreasuryDisbursementSupplierBillingEventDomainServiceServer interface {
-	CreateTreasuryDisbursementSupplierBillingEvent(context.Context, *CreateTreasuryDisbursementSupplierBillingEventRequest) (*CreateTreasuryDisbursementSupplierBillingEventResponse, error)
-	ReadTreasuryDisbursementSupplierBillingEvent(context.Context, *ReadTreasuryDisbursementSupplierBillingEventRequest) (*ReadTreasuryDisbursementSupplierBillingEventResponse, error)
-	UpdateTreasuryDisbursementSupplierBillingEvent(context.Context, *UpdateTreasuryDisbursementSupplierBillingEventRequest) (*UpdateTreasuryDisbursementSupplierBillingEventResponse, error)
-	DeleteTreasuryDisbursementSupplierBillingEvent(context.Context, *DeleteTreasuryDisbursementSupplierBillingEventRequest) (*DeleteTreasuryDisbursementSupplierBillingEventResponse, error)
-	ListTreasuryDisbursementSupplierBillingEvents(context.Context, *ListTreasuryDisbursementSupplierBillingEventsRequest) (*ListTreasuryDisbursementSupplierBillingEventsResponse, error)
-	mustEmbedUnimplementedTreasuryDisbursementSupplierBillingEventDomainServiceServer()
+type DisbursementSupplierBillingEventDomainServiceServer interface {
+	CreateDisbursementSupplierBillingEvent(context.Context, *CreateDisbursementSupplierBillingEventRequest) (*CreateDisbursementSupplierBillingEventResponse, error)
+	ReadDisbursementSupplierBillingEvent(context.Context, *ReadDisbursementSupplierBillingEventRequest) (*ReadDisbursementSupplierBillingEventResponse, error)
+	UpdateDisbursementSupplierBillingEvent(context.Context, *UpdateDisbursementSupplierBillingEventRequest) (*UpdateDisbursementSupplierBillingEventResponse, error)
+	DeleteDisbursementSupplierBillingEvent(context.Context, *DeleteDisbursementSupplierBillingEventRequest) (*DeleteDisbursementSupplierBillingEventResponse, error)
+	ListDisbursementSupplierBillingEvents(context.Context, *ListDisbursementSupplierBillingEventsRequest) (*ListDisbursementSupplierBillingEventsResponse, error)
+	mustEmbedUnimplementedDisbursementSupplierBillingEventDomainServiceServer()
 }
 
-// UnimplementedTreasuryDisbursementSupplierBillingEventDomainServiceServer must be embedded to have
+// UnimplementedDisbursementSupplierBillingEventDomainServiceServer must be embedded to have
 // forward compatible implementations.
 //
 // NOTE: this should be embedded by value instead of pointer to avoid a nil
 // pointer dereference when methods are called.
-type UnimplementedTreasuryDisbursementSupplierBillingEventDomainServiceServer struct{}
+type UnimplementedDisbursementSupplierBillingEventDomainServiceServer struct{}
 
-func (UnimplementedTreasuryDisbursementSupplierBillingEventDomainServiceServer) CreateTreasuryDisbursementSupplierBillingEvent(context.Context, *CreateTreasuryDisbursementSupplierBillingEventRequest) (*CreateTreasuryDisbursementSupplierBillingEventResponse, error) {
-	return nil, status.Error(codes.Unimplemented, "method CreateTreasuryDisbursementSupplierBillingEvent not implemented")
+func (UnimplementedDisbursementSupplierBillingEventDomainServiceServer) CreateDisbursementSupplierBillingEvent(context.Context, *CreateDisbursementSupplierBillingEventRequest) (*CreateDisbursementSupplierBillingEventResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method CreateDisbursementSupplierBillingEvent not implemented")
 }
-func (UnimplementedTreasuryDisbursementSupplierBillingEventDomainServiceServer) ReadTreasuryDisbursementSupplierBillingEvent(context.Context, *ReadTreasuryDisbursementSupplierBillingEventRequest) (*ReadTreasuryDisbursementSupplierBillingEventResponse, error) {
-	return nil, status.Error(codes.Unimplemented, "method ReadTreasuryDisbursementSupplierBillingEvent not implemented")
+func (UnimplementedDisbursementSupplierBillingEventDomainServiceServer) ReadDisbursementSupplierBillingEvent(context.Context, *ReadDisbursementSupplierBillingEventRequest) (*ReadDisbursementSupplierBillingEventResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method ReadDisbursementSupplierBillingEvent not implemented")
 }
-func (UnimplementedTreasuryDisbursementSupplierBillingEventDomainServiceServer) UpdateTreasuryDisbursementSupplierBillingEvent(context.Context, *UpdateTreasuryDisbursementSupplierBillingEventRequest) (*UpdateTreasuryDisbursementSupplierBillingEventResponse, error) {
-	return nil, status.Error(codes.Unimplemented, "method UpdateTreasuryDisbursementSupplierBillingEvent not implemented")
+func (UnimplementedDisbursementSupplierBillingEventDomainServiceServer) UpdateDisbursementSupplierBillingEvent(context.Context, *UpdateDisbursementSupplierBillingEventRequest) (*UpdateDisbursementSupplierBillingEventResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method UpdateDisbursementSupplierBillingEvent not implemented")
 }
-func (UnimplementedTreasuryDisbursementSupplierBillingEventDomainServiceServer) DeleteTreasuryDisbursementSupplierBillingEvent(context.Context, *DeleteTreasuryDisbursementSupplierBillingEventRequest) (*DeleteTreasuryDisbursementSupplierBillingEventResponse, error) {
-	return nil, status.Error(codes.Unimplemented, "method DeleteTreasuryDisbursementSupplierBillingEvent not implemented")
+func (UnimplementedDisbursementSupplierBillingEventDomainServiceServer) DeleteDisbursementSupplierBillingEvent(context.Context, *DeleteDisbursementSupplierBillingEventRequest) (*DeleteDisbursementSupplierBillingEventResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method DeleteDisbursementSupplierBillingEvent not implemented")
 }
-func (UnimplementedTreasuryDisbursementSupplierBillingEventDomainServiceServer) ListTreasuryDisbursementSupplierBillingEvents(context.Context, *ListTreasuryDisbursementSupplierBillingEventsRequest) (*ListTreasuryDisbursementSupplierBillingEventsResponse, error) {
-	return nil, status.Error(codes.Unimplemented, "method ListTreasuryDisbursementSupplierBillingEvents not implemented")
+func (UnimplementedDisbursementSupplierBillingEventDomainServiceServer) ListDisbursementSupplierBillingEvents(context.Context, *ListDisbursementSupplierBillingEventsRequest) (*ListDisbursementSupplierBillingEventsResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method ListDisbursementSupplierBillingEvents not implemented")
 }
-func (UnimplementedTreasuryDisbursementSupplierBillingEventDomainServiceServer) mustEmbedUnimplementedTreasuryDisbursementSupplierBillingEventDomainServiceServer() {
+func (UnimplementedDisbursementSupplierBillingEventDomainServiceServer) mustEmbedUnimplementedDisbursementSupplierBillingEventDomainServiceServer() {
 }
-func (UnimplementedTreasuryDisbursementSupplierBillingEventDomainServiceServer) testEmbeddedByValue() {
-}
+func (UnimplementedDisbursementSupplierBillingEventDomainServiceServer) testEmbeddedByValue() {}
 
-// UnsafeTreasuryDisbursementSupplierBillingEventDomainServiceServer may be embedded to opt out of forward compatibility for this service.
-// Use of this interface is not recommended, as added methods to TreasuryDisbursementSupplierBillingEventDomainServiceServer will
+// UnsafeDisbursementSupplierBillingEventDomainServiceServer may be embedded to opt out of forward compatibility for this service.
+// Use of this interface is not recommended, as added methods to DisbursementSupplierBillingEventDomainServiceServer will
 // result in compilation errors.
-type UnsafeTreasuryDisbursementSupplierBillingEventDomainServiceServer interface {
-	mustEmbedUnimplementedTreasuryDisbursementSupplierBillingEventDomainServiceServer()
+type UnsafeDisbursementSupplierBillingEventDomainServiceServer interface {
+	mustEmbedUnimplementedDisbursementSupplierBillingEventDomainServiceServer()
 }
 
-func RegisterTreasuryDisbursementSupplierBillingEventDomainServiceServer(s grpc.ServiceRegistrar, srv TreasuryDisbursementSupplierBillingEventDomainServiceServer) {
-	// If the following call panics, it indicates UnimplementedTreasuryDisbursementSupplierBillingEventDomainServiceServer was
+func RegisterDisbursementSupplierBillingEventDomainServiceServer(s grpc.ServiceRegistrar, srv DisbursementSupplierBillingEventDomainServiceServer) {
+	// If the following call panics, it indicates UnimplementedDisbursementSupplierBillingEventDomainServiceServer was
 	// embedded by pointer and is nil.  This will cause panics if an
 	// unimplemented method is ever invoked, so we test this at initialization
 	// time to prevent it from happening at runtime later due to I/O.
 	if t, ok := srv.(interface{ testEmbeddedByValue() }); ok {
 		t.testEmbeddedByValue()
 	}
-	s.RegisterService(&TreasuryDisbursementSupplierBillingEventDomainService_ServiceDesc, srv)
+	s.RegisterService(&DisbursementSupplierBillingEventDomainService_ServiceDesc, srv)
 }
 
-func _TreasuryDisbursementSupplierBillingEventDomainService_CreateTreasuryDisbursementSupplierBillingEvent_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(CreateTreasuryDisbursementSupplierBillingEventRequest)
+func _DisbursementSupplierBillingEventDomainService_CreateDisbursementSupplierBillingEvent_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(CreateDisbursementSupplierBillingEventRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(TreasuryDisbursementSupplierBillingEventDomainServiceServer).CreateTreasuryDisbursementSupplierBillingEvent(ctx, in)
+		return srv.(DisbursementSupplierBillingEventDomainServiceServer).CreateDisbursementSupplierBillingEvent(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: TreasuryDisbursementSupplierBillingEventDomainService_CreateTreasuryDisbursementSupplierBillingEvent_FullMethodName,
+		FullMethod: DisbursementSupplierBillingEventDomainService_CreateDisbursementSupplierBillingEvent_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(TreasuryDisbursementSupplierBillingEventDomainServiceServer).CreateTreasuryDisbursementSupplierBillingEvent(ctx, req.(*CreateTreasuryDisbursementSupplierBillingEventRequest))
+		return srv.(DisbursementSupplierBillingEventDomainServiceServer).CreateDisbursementSupplierBillingEvent(ctx, req.(*CreateDisbursementSupplierBillingEventRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _TreasuryDisbursementSupplierBillingEventDomainService_ReadTreasuryDisbursementSupplierBillingEvent_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(ReadTreasuryDisbursementSupplierBillingEventRequest)
+func _DisbursementSupplierBillingEventDomainService_ReadDisbursementSupplierBillingEvent_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ReadDisbursementSupplierBillingEventRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(TreasuryDisbursementSupplierBillingEventDomainServiceServer).ReadTreasuryDisbursementSupplierBillingEvent(ctx, in)
+		return srv.(DisbursementSupplierBillingEventDomainServiceServer).ReadDisbursementSupplierBillingEvent(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: TreasuryDisbursementSupplierBillingEventDomainService_ReadTreasuryDisbursementSupplierBillingEvent_FullMethodName,
+		FullMethod: DisbursementSupplierBillingEventDomainService_ReadDisbursementSupplierBillingEvent_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(TreasuryDisbursementSupplierBillingEventDomainServiceServer).ReadTreasuryDisbursementSupplierBillingEvent(ctx, req.(*ReadTreasuryDisbursementSupplierBillingEventRequest))
+		return srv.(DisbursementSupplierBillingEventDomainServiceServer).ReadDisbursementSupplierBillingEvent(ctx, req.(*ReadDisbursementSupplierBillingEventRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _TreasuryDisbursementSupplierBillingEventDomainService_UpdateTreasuryDisbursementSupplierBillingEvent_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(UpdateTreasuryDisbursementSupplierBillingEventRequest)
+func _DisbursementSupplierBillingEventDomainService_UpdateDisbursementSupplierBillingEvent_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(UpdateDisbursementSupplierBillingEventRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(TreasuryDisbursementSupplierBillingEventDomainServiceServer).UpdateTreasuryDisbursementSupplierBillingEvent(ctx, in)
+		return srv.(DisbursementSupplierBillingEventDomainServiceServer).UpdateDisbursementSupplierBillingEvent(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: TreasuryDisbursementSupplierBillingEventDomainService_UpdateTreasuryDisbursementSupplierBillingEvent_FullMethodName,
+		FullMethod: DisbursementSupplierBillingEventDomainService_UpdateDisbursementSupplierBillingEvent_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(TreasuryDisbursementSupplierBillingEventDomainServiceServer).UpdateTreasuryDisbursementSupplierBillingEvent(ctx, req.(*UpdateTreasuryDisbursementSupplierBillingEventRequest))
+		return srv.(DisbursementSupplierBillingEventDomainServiceServer).UpdateDisbursementSupplierBillingEvent(ctx, req.(*UpdateDisbursementSupplierBillingEventRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _TreasuryDisbursementSupplierBillingEventDomainService_DeleteTreasuryDisbursementSupplierBillingEvent_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(DeleteTreasuryDisbursementSupplierBillingEventRequest)
+func _DisbursementSupplierBillingEventDomainService_DeleteDisbursementSupplierBillingEvent_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(DeleteDisbursementSupplierBillingEventRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(TreasuryDisbursementSupplierBillingEventDomainServiceServer).DeleteTreasuryDisbursementSupplierBillingEvent(ctx, in)
+		return srv.(DisbursementSupplierBillingEventDomainServiceServer).DeleteDisbursementSupplierBillingEvent(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: TreasuryDisbursementSupplierBillingEventDomainService_DeleteTreasuryDisbursementSupplierBillingEvent_FullMethodName,
+		FullMethod: DisbursementSupplierBillingEventDomainService_DeleteDisbursementSupplierBillingEvent_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(TreasuryDisbursementSupplierBillingEventDomainServiceServer).DeleteTreasuryDisbursementSupplierBillingEvent(ctx, req.(*DeleteTreasuryDisbursementSupplierBillingEventRequest))
+		return srv.(DisbursementSupplierBillingEventDomainServiceServer).DeleteDisbursementSupplierBillingEvent(ctx, req.(*DeleteDisbursementSupplierBillingEventRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _TreasuryDisbursementSupplierBillingEventDomainService_ListTreasuryDisbursementSupplierBillingEvents_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(ListTreasuryDisbursementSupplierBillingEventsRequest)
+func _DisbursementSupplierBillingEventDomainService_ListDisbursementSupplierBillingEvents_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ListDisbursementSupplierBillingEventsRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(TreasuryDisbursementSupplierBillingEventDomainServiceServer).ListTreasuryDisbursementSupplierBillingEvents(ctx, in)
+		return srv.(DisbursementSupplierBillingEventDomainServiceServer).ListDisbursementSupplierBillingEvents(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: TreasuryDisbursementSupplierBillingEventDomainService_ListTreasuryDisbursementSupplierBillingEvents_FullMethodName,
+		FullMethod: DisbursementSupplierBillingEventDomainService_ListDisbursementSupplierBillingEvents_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(TreasuryDisbursementSupplierBillingEventDomainServiceServer).ListTreasuryDisbursementSupplierBillingEvents(ctx, req.(*ListTreasuryDisbursementSupplierBillingEventsRequest))
+		return srv.(DisbursementSupplierBillingEventDomainServiceServer).ListDisbursementSupplierBillingEvents(ctx, req.(*ListDisbursementSupplierBillingEventsRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-// TreasuryDisbursementSupplierBillingEventDomainService_ServiceDesc is the grpc.ServiceDesc for TreasuryDisbursementSupplierBillingEventDomainService service.
+// DisbursementSupplierBillingEventDomainService_ServiceDesc is the grpc.ServiceDesc for DisbursementSupplierBillingEventDomainService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
-var TreasuryDisbursementSupplierBillingEventDomainService_ServiceDesc = grpc.ServiceDesc{
-	ServiceName: "domain.treasury.v1.TreasuryDisbursementSupplierBillingEventDomainService",
-	HandlerType: (*TreasuryDisbursementSupplierBillingEventDomainServiceServer)(nil),
+var DisbursementSupplierBillingEventDomainService_ServiceDesc = grpc.ServiceDesc{
+	ServiceName: "domain.treasury.v1.DisbursementSupplierBillingEventDomainService",
+	HandlerType: (*DisbursementSupplierBillingEventDomainServiceServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
-			MethodName: "CreateTreasuryDisbursementSupplierBillingEvent",
-			Handler:    _TreasuryDisbursementSupplierBillingEventDomainService_CreateTreasuryDisbursementSupplierBillingEvent_Handler,
+			MethodName: "CreateDisbursementSupplierBillingEvent",
+			Handler:    _DisbursementSupplierBillingEventDomainService_CreateDisbursementSupplierBillingEvent_Handler,
 		},
 		{
-			MethodName: "ReadTreasuryDisbursementSupplierBillingEvent",
-			Handler:    _TreasuryDisbursementSupplierBillingEventDomainService_ReadTreasuryDisbursementSupplierBillingEvent_Handler,
+			MethodName: "ReadDisbursementSupplierBillingEvent",
+			Handler:    _DisbursementSupplierBillingEventDomainService_ReadDisbursementSupplierBillingEvent_Handler,
 		},
 		{
-			MethodName: "UpdateTreasuryDisbursementSupplierBillingEvent",
-			Handler:    _TreasuryDisbursementSupplierBillingEventDomainService_UpdateTreasuryDisbursementSupplierBillingEvent_Handler,
+			MethodName: "UpdateDisbursementSupplierBillingEvent",
+			Handler:    _DisbursementSupplierBillingEventDomainService_UpdateDisbursementSupplierBillingEvent_Handler,
 		},
 		{
-			MethodName: "DeleteTreasuryDisbursementSupplierBillingEvent",
-			Handler:    _TreasuryDisbursementSupplierBillingEventDomainService_DeleteTreasuryDisbursementSupplierBillingEvent_Handler,
+			MethodName: "DeleteDisbursementSupplierBillingEvent",
+			Handler:    _DisbursementSupplierBillingEventDomainService_DeleteDisbursementSupplierBillingEvent_Handler,
 		},
 		{
-			MethodName: "ListTreasuryDisbursementSupplierBillingEvents",
-			Handler:    _TreasuryDisbursementSupplierBillingEventDomainService_ListTreasuryDisbursementSupplierBillingEvents_Handler,
+			MethodName: "ListDisbursementSupplierBillingEvents",
+			Handler:    _DisbursementSupplierBillingEventDomainService_ListDisbursementSupplierBillingEvents_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
