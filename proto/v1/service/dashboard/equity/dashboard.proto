@@ -1,0 +1,71 @@
+syntax = "proto3";
+
+package service.dashboard.equity.v1;
+
+option go_package = "github.com/erniealice/esqyma/pkg/schema/v1/service/dashboard/equity";
+
+import "domain/common/error.proto";
+import "domain/ledger/equity_transaction/equity_transaction.proto";
+
+// ---------------------------------------------------------------------------
+// Equity dashboard — service-driven domain (Q7 signal 3: cross-entity
+// projection reading across equity_account + equity_transaction).
+//
+// See docs/plan/20260520-service-domain-migration/wave-b-surface-map.md
+// §P1.C.4 (Equity) and the Q-ORCH-2-REFINEMENT lock at
+// docs/plan/20260520-orchestration/decisions.md.
+//
+// Owned by the espyna service-driven category (relocated from
+// `proto/v1/domain/ledger/equity_dashboard/dashboard.proto` per
+// Q-SDM-DASHBOARD-LAYOUT LOCKED 2026-05-20: subdir-per-dashboard under
+// `proto/v1/service/dashboard/<X>/`).
+//
+// Per Q-SDM-DASHBOARD-SHARED-TYPES (LOCKED 2026-05-20), this file owns its
+// own messages — there is no `service/dashboard/common.proto`. Each dashboard
+// proto package defines its own *Stats / *Row / *Slice shapes. Equity's
+// `*Stats` envelope carries TotalContributed/ActiveOwners/DistributionsYtd/
+// NetMovementYtd (different from Admin's WorkspaceUsers/Roles/Permissions/
+// RecentRoleChanges7d and from Ledger's TotalAssets/TotalLiabilities/...).
+//
+// Equity is a DISTINCT dashboard from Ledger (sibling P1.C.3) — both live
+// under `proto/v1/service/dashboard/` but in their own subdirs.
+//
+// Consumed by
+// internal/application/usecases/service/dashboard/equity/get_equity_dashboard.go.
+// ---------------------------------------------------------------------------
+
+// EquityStats are the four stat values for the dashboard. Centavos.
+message EquityStats {
+  int64 total_contributed  = 1;
+  int64 active_owners      = 2;
+  int64 distributions_ytd  = 3;
+  int64 net_movement_ytd   = 4;
+}
+
+// EquityAccountSlice mirrors the equity_account row shape for dashboard widgets.
+message EquityAccountSlice {
+  string id           = 1;
+  string name         = 2;
+  string owner_name   = 3;
+  string account_type = 4;
+  int64  balance      = 5; // centavos
+}
+
+// GetEquityDashboardRequest is the request shape.
+message GetEquityDashboardRequest {
+  string workspace_id = 1;
+  // now_millis — unix milliseconds used for YTD calculations.
+  // Zero means "use server time".
+  optional int64 now_millis = 2;
+}
+
+// GetEquityDashboardResponse is the view-layer projection.
+message GetEquityDashboardResponse {
+  bool success                          = 1;
+  optional domain.common.v1.Error error = 2;
+  EquityStats stats                     = 3;
+  // by_type_ytd keys: contribution / withdrawal / distribution / transfer
+  map<string, int64> by_type_ytd                                      = 4;
+  repeated EquityAccountSlice top_contributors                         = 5;
+  repeated domain.ledger.v1.EquityTransaction recent                   = 6;
+}

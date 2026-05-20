@@ -1,0 +1,76 @@
+syntax = "proto3";
+
+package service.auth.v1;
+
+option go_package = "github.com/erniealice/esqyma/golang/v1/service/auth";
+
+// ---------------------------------------------------------------------------
+// Auth/session lifecycle — service-driven domain (Q7 anchor; see
+// docs/plan/20260518-hexagonal-strict-adherence/proto-service.md, and the
+// follow-up migration plan docs/plan/20260520-service-domain-migration/
+// Wave 3 / Plan 2 candidate).
+//
+// Session validation, issuance, and invalidation are service-shape
+// operations: they operate over the existing `domain.entity.v1.Session`
+// aggregate (proto/v1/domain/entity/session/session.proto) but own no
+// aggregate root themselves. Per Q-SDM3 (LOCKED) the session ENTITY
+// remains under `proto/v1/domain/entity/session/`; this file houses only
+// the service-shape OPERATIONS.
+//
+// Consumed by:
+//   - internal/application/usecases/service/auth/authenticate_session.go
+//   - internal/application/usecases/service/auth/issue_session.go
+//   - internal/application/usecases/service/auth/invalidate_session.go
+//
+// The previous `consumer.AuthenticateSessionRequest` /
+// `consumer.IssueSessionRequest` / `consumer.InvalidateSessionRequest` Go
+// type aliases (`consumer/auth_aliases.go`) are retired by this migration
+// in favor of the proto-shaped Request/Response messages below.
+// ---------------------------------------------------------------------------
+
+// AuthenticateSession --------------------------------------------------------
+
+message AuthenticateSessionRequest {
+  string token = 1;
+}
+
+message AuthIdentity {
+  string user_id = 1;
+  string email = 2;
+  string workspace_user_id = 3;
+  string workspace_id = 4;
+  string token = 5;
+  int64 expires_at_unix_ms = 6;
+}
+
+message AuthenticateSessionResponse {
+  AuthIdentity identity = 1;
+}
+
+// IssueSession ---------------------------------------------------------------
+
+message IssueSessionRequest {
+  string user_id = 1;
+  string workspace_user_id = 2;
+  string workspace_id = 3;
+}
+
+message IssueSessionResponse {
+  string token = 1;
+  string session_id = 2;
+  int64 expires_at_unix_ms = 3;
+  string workspace_user_id = 4;
+  string workspace_id = 5;
+}
+
+// InvalidateSession ----------------------------------------------------------
+
+message InvalidateSessionRequest {
+  // Exactly one of token or session_id must be populated.
+  string token = 1;
+  string session_id = 2;
+}
+
+message InvalidateSessionResponse {
+  bool invalidated = 1;
+}

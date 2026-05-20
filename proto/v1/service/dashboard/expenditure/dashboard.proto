@@ -1,0 +1,91 @@
+syntax = "proto3";
+
+package service.dashboard.expenditure.v1;
+
+option go_package = "github.com/erniealice/esqyma/pkg/schema/v1/service/dashboard/expenditure";
+
+import "domain/common/error.proto";
+import "domain/expenditure/expenditure/expenditure.proto";
+
+// ---------------------------------------------------------------------------
+// Expenditure dashboard — service-driven domain (Q7 signal 3: cross-aggregate
+// projection over the expenditure aggregate, scoped by Kind="purchase"|
+// "expense" discriminator).
+//
+// See docs/plan/20260520-service-domain-migration/wave-b-surface-map.md
+// §P1.C.8 (Expenditure) and the Q-ORCH-2-REFINEMENT lock at
+// docs/plan/20260520-orchestration/decisions.md.
+//
+// Owned by the espyna service-driven category. NEW-PROTO-NEEDED candidate —
+// the pre-migration shape lived as Go-only Request/Response types at
+// `usecases/expenditure/dashboard/get_page_data.go:44,62`, exposed via the
+// flat field `expenditure.Dashboard *GetExpenditureDashboardPageDataUseCase`
+// at `usecases/expenditure/usecases.go:127`. This proto formalizes the wire
+// contract.
+//
+// Per Q-SDM-DASHBOARD-SHARED-TYPES (LOCKED 2026-05-20), this file owns its
+// own messages — there is no `service/dashboard/common.proto`. Each dashboard
+// proto package defines its own *Stats / *Row / *Slice shapes.
+//
+// Consumed by
+// internal/application/usecases/service/dashboard/expenditure/get_expenditure_dashboard.go.
+// ---------------------------------------------------------------------------
+
+// ExpenditureStats are the stat-card values shared across both purchase and
+// expense surfaces. The view layer picks which fields to surface based on
+// Kind. Monetary values are centavos.
+message ExpenditureStats {
+  // open_count — pending_approval + draft + approved (count, not centavos).
+  int64 open_count          = 1;
+  // awaiting_count — approved (count). For purchase surface this is
+  // "Awaiting Receipt"; for expense surface this is the "Approved" tile.
+  int64 awaiting_count      = 2;
+  // total_mtd — sum of total_amount for current month (centavos).
+  int64 total_mtd           = 3;
+  // reimbursable_mtd — populated only for expense surface (centavos).
+  int64 reimbursable_mtd    = 4;
+  // top_supplier_name — name of the supplier with the highest total spend.
+  string top_supplier_name  = 5;
+  // top_supplier_total — centavos.
+  int64 top_supplier_total  = 6;
+  // category_count — distinct categories used in the period (expense surface).
+  int64 category_count      = 7;
+}
+
+// TopSupplierRow is one row of the "top suppliers by spend" widget. Centavos.
+message TopSupplierRow {
+  string supplier_id   = 1;
+  string supplier_name = 2;
+  int64  total         = 3;
+}
+
+// GetExpenditureDashboardRequest is the request shape. Carries the Kind
+// discriminator so one use case serves both purchase and expense surfaces.
+message GetExpenditureDashboardRequest {
+  string workspace_id = 1;
+  // kind — "purchase" | "expense". Empty defaults to "purchase".
+  string kind         = 2;
+  // now_millis — unix milliseconds used for month-bucket and MTD windows.
+  // Zero means "use server time".
+  optional int64 now_millis = 3;
+}
+
+// GetExpenditureDashboardResponse is the projection the view layer reads.
+//
+// Parallel label/value series for the month trend and category breakdown keep
+// the proto shape stable across language clients without committing to an
+// ordered map (Q-SDM-DASHBOARD-SHARED-TYPES — proto3 maps are unordered).
+message GetExpenditureDashboardResponse {
+  bool success                          = 1;
+  optional domain.common.v1.Error error = 2;
+  ExpenditureStats stats                = 3;
+  // Spend per month (12 months) for chart-bar.
+  repeated string month_labels          = 4;
+  repeated double month_values          = 5; // centavos
+  repeated TopSupplierRow top_suppliers = 6;
+  repeated domain.expenditure.v1.Expenditure recent = 7;
+  // Category breakdown (current month) — populated for both surfaces; the
+  // purchase view ignores the field.
+  repeated string category_labels       = 8;
+  repeated double category_values       = 9; // centavos
+}

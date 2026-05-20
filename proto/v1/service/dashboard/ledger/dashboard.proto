@@ -1,0 +1,60 @@
+syntax = "proto3";
+
+package service.dashboard.ledger.v1;
+
+option go_package = "github.com/erniealice/esqyma/pkg/schema/v1/service/dashboard/ledger";
+
+import "domain/common/error.proto";
+import "domain/ledger/journal_entry/journal_entry.proto";
+
+// ---------------------------------------------------------------------------
+// Ledger dashboard — service-driven domain (Q7 signal 3: cross-entity
+// projection reading across account + journal_entry).
+//
+// See docs/plan/20260520-service-domain-migration/wave-b-surface-map.md
+// §P1.C.3 (Ledger) and the Q-ORCH-2-REFINEMENT lock at
+// docs/plan/20260520-orchestration/decisions.md.
+//
+// Owned by the espyna service-driven category (relocated from
+// `proto/v1/domain/ledger/dashboard/dashboard.proto` per
+// Q-SDM-DASHBOARD-LAYOUT LOCKED 2026-05-20: subdir-per-dashboard under
+// `proto/v1/service/dashboard/<X>/`).
+//
+// Per Q-SDM-DASHBOARD-SHARED-TYPES (LOCKED 2026-05-20), this file owns its
+// own messages — there is no `service/dashboard/common.proto`. Each dashboard
+// proto package defines its own *Stats / *Slice shapes. Ledger's `*Stats`
+// envelope carries TotalAssets/TotalLiabilities/TotalEquity/NetIncomeMtd/
+// UnpostedJournals/PostedRecentCount (different from sibling Equity).
+//
+// Consumed by
+// internal/application/usecases/service/dashboard/ledger/get_ledger_dashboard.go.
+// ---------------------------------------------------------------------------
+
+// LedgerStats is the typed stat-card payload. Centavos for monetary values.
+message LedgerStats {
+  int64 total_assets        = 1;
+  int64 total_liabilities   = 2;
+  int64 total_equity        = 3;
+  int64 net_income_mtd      = 4;
+  int64 unposted_journals   = 5;
+  int64 posted_recent_count = 6;
+}
+
+// GetLedgerDashboardRequest is the request shape.
+message GetLedgerDashboardRequest {
+  string workspace_id = 1;
+  // now_millis — unix milliseconds used for time-range stats (e.g. last 30 days).
+  // Zero means "use server time".
+  optional int64 now_millis = 2;
+}
+
+// GetLedgerDashboardResponse is the projection the view layer reads.
+message GetLedgerDashboardResponse {
+  bool success                          = 1;
+  optional domain.common.v1.Error error = 2;
+  LedgerStats stats                     = 3;
+  // balance_by_type keys: asset / liability / equity / revenue / expense
+  map<string, int64> balance_by_type    = 4;
+  repeated domain.ledger.v1.JournalEntry unposted_top    = 5;
+  repeated domain.ledger.v1.JournalEntry recent_entries  = 6;
+}

@@ -1,0 +1,82 @@
+syntax = "proto3";
+
+package service.dashboard.job.v1;
+
+option go_package = "github.com/erniealice/esqyma/pkg/schema/v1/service/dashboard/job";
+
+import "domain/common/error.proto";
+import "domain/operation/job/job.proto";
+import "domain/operation/job_activity/job_activity.proto";
+
+// ---------------------------------------------------------------------------
+// Job dashboard — service-driven domain (Q7 signal 3: cross-aggregate
+// projection reading across job + job_activity in the operation domain).
+//
+// See docs/plan/20260520-service-domain-migration/wave-b-surface-map.md
+// §P1.C.9 (Operation/Job) and the Q-ORCH-2-REFINEMENT lock at
+// docs/plan/20260520-orchestration/decisions.md.
+//
+// Owned by the espyna service-driven category. NEW-PROTO-NEEDED candidate —
+// the pre-migration shape lived as Go-only Request/Response types at
+// `usecases/operation/dashboard/get_page_data.go`, exposed via the flat field
+// `operation.UseCases.Dashboard` at `usecases/operation/usecases.go:115`.
+// This proto formalizes the wire contract.
+//
+// **Candidate naming note:** the source aggregate is `operation`, but per the
+// wave-b-surface-map §P1.C.9 the umbrella exposes this dashboard under
+// `Service.Dashboard.Job` since the dashboard is job-centric (the view-side
+// is fayna's job dashboard). The proto package name follows the umbrella
+// field name (`job`) rather than the source aggregate name (`operation`).
+//
+// Per Q-SDM-DASHBOARD-SHARED-TYPES (LOCKED 2026-05-20), this file owns its
+// own messages — there is no `service/dashboard/common.proto`. Each dashboard
+// proto package defines its own *Stats / *Row / *Slice shapes.
+//
+// Consumed by
+// internal/application/usecases/service/dashboard/job/get_job_dashboard.go.
+// ---------------------------------------------------------------------------
+
+// JobStats are the four stat-card values shown at the top of the dashboard.
+// hours_this_week is a fractional value (already divided ÷100 from the
+// centi-hours integer representation the adapter returns).
+message JobStats {
+  int64  active_jobs     = 1;
+  int64  done_this_month = 2;
+  int64  overdue_jobs    = 3;
+  double hours_this_week = 4;
+}
+
+// JobRiskRow is one row of the "completion risk" widget. CompletionPct is
+// 0..100. DateEndMillis is unix-milli; zero means "no planned end".
+message JobRiskRow {
+  string job_id              = 1;
+  string code                = 2;
+  string name                = 3;
+  double completion_pct      = 4;
+  int64  date_end_millis     = 5;
+}
+
+// GetJobDashboardRequest is the request shape.
+message GetJobDashboardRequest {
+  string workspace_id = 1;
+  // now_millis — unix milliseconds used for month/week boundary computations.
+  // Zero means "use server time".
+  optional int64 now_millis = 2;
+}
+
+// GetJobDashboardResponse is the projection the view layer reads.
+//
+// Parallel label/value series for the hours-per-week trend keep the proto
+// shape stable across language clients without committing to an ordered map
+// (Q-SDM-DASHBOARD-SHARED-TYPES — proto3 maps are unordered).
+message GetJobDashboardResponse {
+  bool success                          = 1;
+  optional domain.common.v1.Error error = 2;
+  JobStats stats                        = 3;
+  // 8-week hours-per-week trend.
+  repeated string trend_labels          = 4;
+  repeated double trend_values          = 5; // hours (already ÷100)
+  repeated domain.operation.v1.Job upcoming_deadlines = 6;
+  repeated JobRiskRow risk_top_rows     = 7;
+  repeated domain.operation.v1.JobActivity recent_activity = 8;
+}

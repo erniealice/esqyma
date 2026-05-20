@@ -11,7 +11,7 @@ import type { Message } from "@bufbuild/protobuf";
 export declare const file_domain_treasury_disbursement_supplier_billing_event_disbursement_supplier_billing_event: GenFile;
 /**
  * Junction entity linking a MILESTONE advance TreasuryDisbursement to one or more
- * SupplierBillingEvent rows (buying-side mirror of TreasuryCollectionBillingEvent).
+ * SupplierBillingEvent rows (buying-side mirror of CollectionBillingEvent).
  *
  * @generated from message domain.treasury.v1.DisbursementSupplierBillingEvent
  */

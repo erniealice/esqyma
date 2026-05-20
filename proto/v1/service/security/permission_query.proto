@@ -1,0 +1,34 @@
+syntax = "proto3";
+
+package service.security.v1;
+
+option go_package = "github.com/erniealice/esqyma/golang/v1/service/security";
+
+// ---------------------------------------------------------------------------
+// Permission query — service-driven domain (per Q7 in
+// docs/plan/20260518-hexagonal-strict-adherence/proto-service.md, and the
+// follow-up migration plan docs/plan/20260520-service-domain-migration/).
+//
+// PermissionQuery is the narrow RBAC permission-code lookup surface, distinct
+// from AuthorizationService (which answers boolean "may user X do action Y on
+// entity Z?" questions). The service synthesizes ALLOW codes net of DENYs
+// across role + workspace_user_role + permission rows — a cross-domain read,
+// no aggregate root of its own. That makes it a service-driven domain.
+//
+// DENY-wins semantics: if the user holds both an ALLOW and a DENY grant for
+// a given permission code, it is treated as denied and omitted from the
+// returned set. The empty slice (not nil) is returned when the user has no
+// permissions in the workspace.
+//
+// Consumed by
+// internal/application/usecases/service/security/get_user_permission_codes.go.
+// ---------------------------------------------------------------------------
+
+message GetUserPermissionCodesRequest {
+  string user_id = 1;
+  string workspace_id = 2;
+}
+
+message GetUserPermissionCodesResponse {
+  repeated string permission_codes = 1;
+}

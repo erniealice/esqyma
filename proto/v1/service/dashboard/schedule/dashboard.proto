@@ -1,0 +1,89 @@
+syntax = "proto3";
+
+package service.dashboard.schedule.v1;
+
+option go_package = "github.com/erniealice/esqyma/pkg/schema/v1/service/dashboard/schedule";
+
+import "domain/common/error.proto";
+import "domain/event/event/event.proto";
+
+// ---------------------------------------------------------------------------
+// Schedule dashboard — service-driven domain (Q7 signal 3: service-shape
+// projection over the `event` entity domain). See docs/plan/20260520-service-
+// domain-migration/wave-b-surface-map.md §P1.C.7 and the Q-ORCH-2-REFINEMENT
+// lock at docs/plan/20260520-orchestration/decisions.md.
+//
+// This proto is **authored from scratch** for the Schedule (event) dashboard
+// candidate — there was no prior proto for this surface. The pre-migration
+// shape lived as Go-only Request/Response at
+// packages/espyna-golang/internal/application/usecases/event/dashboard/
+// get_page_data.go:33,47 and was wired via the flat `Dashboard` field at
+// packages/espyna-golang/internal/application/usecases/event/usecases.go:49.
+// This file formalizes those shapes as a versioned wire-contract so the
+// service-driven domain has a proto-canonical surface, matching the other
+// Wave B "new-proto-needed" dashboards (Expenditure, Job, Integration,
+// Product, Fulfillment).
+//
+// Per Q-SDM-DASHBOARD-SHARED-TYPES (LOCKED 2026-05-20), this file owns its
+// own messages — there is no `service/dashboard/common.proto`. Each dashboard
+// proto package defines its own *Stats / *Row / *Slice shapes. Schedule's
+// `*Stats` envelope carries `Today/ThisWeek/ByTag/UtilizationPct` (different
+// from other dashboards' Outstanding/InterestAccruedYTD/OpenCount etc.).
+//
+// Consumed by
+// internal/application/usecases/service/dashboard/schedule/get_schedule_dashboard.go.
+// ---------------------------------------------------------------------------
+
+// ScheduleStats holds the four stat-card values for the schedule dashboard.
+// UtilizationPct is a placeholder proxy: it currently mirrors `this_week`
+// counts until a real capacity metric is wired (see the Go-side use case
+// doc comment for history).
+message ScheduleStats {
+  int64 today           = 1;
+  int64 this_week       = 2;
+  // ByTag is the distinct count of tags in use this period.
+  int64 by_tag          = 3;
+  // UtilizationPct is a proxy until a real capacity metric exists.
+  int64 utilization_pct = 4;
+}
+
+// ScheduleTagSlice is one entry of the "events by tag" widget — the existing
+// Go shape returns map[string]int64 keyed by tag name; the proto uses a
+// repeated `*Slice` for proto3-map ordering stability across clients.
+message ScheduleTagSlice {
+  string tag   = 1;
+  int64  count = 2;
+}
+
+// GetScheduleDashboardRequest is the input for the schedule dashboard
+// service-layer use case.
+message GetScheduleDashboardRequest {
+  string workspace_id = 1;
+  // NowMillis is unix milliseconds used as the reference point for "today"
+  // and "this week" computations, plus the 14-day trend window. Zero means
+  // "use server time".
+  optional int64 now_millis = 2;
+}
+
+// GetScheduleDashboardResponse is the projection the view layer reads.
+// All fields are populated unconditionally — when the underlying repo is
+// unavailable the response degrades to a zero-valued Stats envelope, empty
+// repeated fields, and the view renders empty state.
+message GetScheduleDashboardResponse {
+  bool success                          = 1;
+  optional domain.common.v1.Error error = 2;
+  ScheduleStats stats                   = 3;
+  // 14-day events-by-day trend, parallel label/value series (so the view
+  // renders without proto-coupling on a TimeBucket message; Q-SDM-DASHBOARD-
+  // SHARED-TYPES LOCKED — TimeBucket stays a Go-internal query-interface
+  // type per dashboard package).
+  repeated string by_day_labels         = 4;
+  repeated double by_day_values         = 5;
+  // ByTag carries the distinct tag → count mapping for the period. Kept as
+  // an ordered repeated *Slice to make output stable for cross-language
+  // clients; consumers convert to map[string]int64 as needed.
+  repeated ScheduleTagSlice by_tag      = 6;
+  // Upcoming is the next-N events by start_date_time_utc (limit applied
+  // server-side; current implementation pulls 5).
+  repeated domain.event.v1.Event upcoming = 7;
+}

@@ -1,0 +1,197 @@
+syntax = "proto3";
+
+package service.reporting.v1;
+
+option go_package = "github.com/erniealice/esqyma/pkg/schema/v1/service/reporting/statements";
+
+import "domain/common/error.proto";
+import "domain/common/pagination.proto";
+
+// ---------------------------------------------------------------------------
+// Counterparty statements + balances reporting — service-driven domain
+// (Q7 + Q-SDM-LEDGER-INTERFACE).
+//
+// Hosts the four statement / balance reads previously declared on the
+// 15-method `ledgerReportingInner` duck interface at
+// `apps/service-admin/internal/composition/ledger_reporting.go:65-81`:
+//
+//   - GetClientStatement    — chronological invoice + collection ledger per client
+//   - GetSupplierStatement  — chronological bill + disbursement ledger per supplier
+//   - ListClientBalances    — outstanding centavo balance per client
+//   - ListSupplierBalances  — outstanding centavo balance per supplier
+//
+// Per Q-SDM-LEDGER-DECOMP this is sub-candidate P1.E.4 (fourth decomp slice
+// after AR aging P1.E.1 + AP aging P1.E.2 + gross/cashflow P1.E.3).
+// Q-SDM-LEDGER-INTERFACE locks "no Go interface; per-group proto contracts
+// directly".
+//
+// **Map-shape enforcement (Q-SDM-MAP-SHAPES LOCKED 2026-05-20):**
+// `GetClientBalances`/`GetSupplierBalances` originally returned
+// `map[string]int64` (counterparty_id → centavo balance). Q-SDM-MAP-SHAPES
+// REJECTS `google.protobuf.Struct` as a primary contract and locks "typed
+// proto where possible". Two options were enumerated: native
+// `map<string, int64>` OR `repeated BalanceRow{counterparty_id, name,
+// amount_centavos}`. **Decision:** `repeated BalanceRow` — name lookups
+// are needed by the entydad client + supplier list views (see
+// `packages/entydad-golang/views/client/list/page.go:182` and
+// `packages/entydad-golang/views/supplier/list/page.go:189`), and a
+// row-shaped response keeps the wire format symmetric with the other
+// statement responses.
+//
+// The future `income_statement`/`balance_sheet`/`equity_changes` reports
+// named in Q-SDM-LEDGER-DECOMP don't exist yet — they will join this
+// group's proto when authored. The `statements` directory name is
+// forward-compatible.
+// ---------------------------------------------------------------------------
+
+// =============================================================================
+// Client statement (chronological invoice + collection ledger)
+// =============================================================================
+
+// StatementEntry represents a single line item in a client statement
+// (invoice or collection).
+message StatementEntry {
+  string date = 1;              // ISO 8601 YYYY-MM-DD (revenue_date or payment_date)
+  string type = 2;              // "invoice" or "collection"
+  string reference_number = 3;
+  string description = 4;
+  int64 billed = 5;             // centavos — revenue.total_amount (0 for collections)
+  int64 received = 6;           // centavos — collection.amount (0 for invoices)
+  int64 balance = 7;            // centavos — running balance
+  string entity_id = 8;         // revenue.id or collection.id
+  string status = 9;            // revenue.status or collection.status
+}
+
+// GetClientStatementRequest defines parameters for generating a client
+// statement.
+message GetClientStatementRequest {
+  string client_id = 1;                                          // Required
+  optional string start_date = 2;                                // ISO 8601 date (YYYY-MM-DD)
+  optional string end_date = 3;                                  // ISO 8601 date (YYYY-MM-DD)
+  optional string currency = 4;                                  // Filter by currency
+  optional domain.common.v1.PaginationRequest pagination = 5;
+}
+
+// ClientStatementSummary provides report-level totals for the client
+// statement.
+message ClientStatementSummary {
+  int64 total_billed = 1;        // centavos — SUM of all invoices
+  int64 total_received = 2;      // centavos — SUM of all collections
+  int64 outstanding_balance = 3; // centavos — total_billed - total_received
+  int32 invoice_count = 4;
+  int32 collection_count = 5;
+  string currency = 6;
+  optional string start_date = 7;  // ISO 8601 date (YYYY-MM-DD)
+  optional string end_date = 8;    // ISO 8601 date (YYYY-MM-DD)
+  string client_name = 9;
+}
+
+// GetClientStatementResponse returns the generated client statement.
+message GetClientStatementResponse {
+  repeated StatementEntry entries = 1;
+  optional ClientStatementSummary summary = 2;
+  optional domain.common.v1.PaginationResponse pagination = 3;
+  bool success = 4;
+  optional domain.common.v1.Error error = 5;
+}
+
+// =============================================================================
+// Supplier statement (chronological bill + disbursement ledger)
+// =============================================================================
+
+// SupplierStatementEntry represents a single line item in a supplier
+// statement (bill or payment).
+message SupplierStatementEntry {
+  string date = 1;              // ISO 8601 YYYY-MM-DD (expenditure_date or payment_date)
+  string type = 2;              // "bill" or "payment"
+  string reference_number = 3;
+  string description = 4;
+  int64 billed = 5;             // centavos — expenditure.total_amount (0 for disbursements)
+  int64 paid = 6;               // centavos — disbursement.amount (0 for bills)
+  int64 balance = 7;            // centavos — running balance
+  string entity_id = 8;         // expenditure.id or disbursement.id
+  string status = 9;            // expenditure.status or disbursement.status
+}
+
+// GetSupplierStatementRequest defines parameters for generating a supplier
+// statement.
+message GetSupplierStatementRequest {
+  string supplier_id = 1;                                          // Required
+  optional string start_date = 2;                                  // ISO 8601 date (YYYY-MM-DD)
+  optional string end_date = 3;                                    // ISO 8601 date (YYYY-MM-DD)
+  optional string currency = 4;                                    // Filter by currency
+  optional domain.common.v1.PaginationRequest pagination = 5;
+}
+
+// SupplierStatementSummary provides report-level totals for the supplier
+// statement.
+message SupplierStatementSummary {
+  int64 total_billed = 1;        // centavos — SUM of all bills
+  int64 total_paid = 2;          // centavos — SUM of all payments
+  int64 outstanding_balance = 3; // centavos — total_billed - total_paid
+  int32 bill_count = 4;
+  int32 payment_count = 5;
+  string currency = 6;
+  optional string start_date = 7;  // ISO 8601 date (YYYY-MM-DD)
+  optional string end_date = 8;    // ISO 8601 date (YYYY-MM-DD)
+  string supplier_name = 9;
+}
+
+// GetSupplierStatementResponse returns the generated supplier statement.
+message GetSupplierStatementResponse {
+  repeated SupplierStatementEntry entries = 1;
+  optional SupplierStatementSummary summary = 2;
+  optional domain.common.v1.PaginationResponse pagination = 3;
+  bool success = 4;
+  optional domain.common.v1.Error error = 5;
+}
+
+// =============================================================================
+// Counterparty balances (typed proto rows — Q-SDM-MAP-SHAPES)
+// =============================================================================
+
+// BalanceRow represents one counterparty's outstanding balance.
+// Used by both ListClientBalances and ListSupplierBalances responses.
+message BalanceRow {
+  string counterparty_id = 1;   // client.id or supplier.id
+  int64 amount_centavos = 2;    // Outstanding centavo balance
+}
+
+// ListClientBalancesRequest defines parameters for the per-client
+// outstanding-balance lookup. The underlying adapter takes no parameters
+// — the empty request shape preserves room for future workspace/currency
+// filters without a breaking change.
+message ListClientBalancesRequest {}
+
+// ListClientBalancesResponse returns one row per client with an
+// outstanding balance.
+message ListClientBalancesResponse {
+  repeated BalanceRow balances = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+// ListSupplierBalancesRequest defines parameters for the per-supplier
+// outstanding-balance lookup. Empty for the same reason as
+// ListClientBalancesRequest.
+message ListSupplierBalancesRequest {}
+
+// ListSupplierBalancesResponse returns one row per supplier with an
+// outstanding balance.
+message ListSupplierBalancesResponse {
+  repeated BalanceRow balances = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+// =============================================================================
+// Service definition
+// =============================================================================
+
+// StatementsService defines counterparty statement + balance reads.
+service StatementsService {
+  rpc GetClientStatement(GetClientStatementRequest) returns (GetClientStatementResponse);
+  rpc GetSupplierStatement(GetSupplierStatementRequest) returns (GetSupplierStatementResponse);
+  rpc ListClientBalances(ListClientBalancesRequest) returns (ListClientBalancesResponse);
+  rpc ListSupplierBalances(ListSupplierBalancesRequest) returns (ListSupplierBalancesResponse);
+}

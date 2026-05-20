@@ -1,0 +1,69 @@
+syntax = "proto3";
+
+package service.dashboard.fulfillment.v1;
+
+option go_package = "github.com/erniealice/esqyma/pkg/schema/v1/service/dashboard/fulfillment";
+
+import "domain/common/error.proto";
+import "domain/fulfillment/fulfillment.proto";
+
+// ---------------------------------------------------------------------------
+// Fulfillment dashboard — service-driven domain (Q7 signal 3: cross-aggregate
+// projection over fulfillment + fulfillment_status_event).
+//
+// See docs/plan/20260520-service-domain-migration/wave-b-surface-map.md
+// §P1.C.12 (Fulfillment) and the Q-ORCH-2-REFINEMENT lock at
+// docs/plan/20260520-orchestration/decisions.md.
+//
+// Owned by the espyna service-driven category. NEW-PROTO-NEEDED candidate —
+// the pre-migration shape lived as Go-only Request/Response types at
+// `usecases/fulfillment/dashboard/get_page_data.go`, exposed via the flat
+// field `fulfillment.UseCases.Dashboard` at
+// `usecases/fulfillment/usecases.go:35`. This proto formalizes the wire
+// contract.
+//
+// Per Q-SDM-DASHBOARD-SHARED-TYPES (LOCKED 2026-05-20), this file owns its
+// own messages — there is no `service/dashboard/common.proto`. Each dashboard
+// proto package defines its own *Stats / *Row / *Slice shapes.
+//
+// Consumed by
+// internal/application/usecases/service/dashboard/fulfillment/get_fulfillment_dashboard.go.
+// ---------------------------------------------------------------------------
+
+// FulfillmentStats are the stat-card values shown at the top of the
+// dashboard. avg_fulfill_days is a fractional value (trailing 30 days).
+message FulfillmentStats {
+  int64  pending          = 1;
+  int64  in_transit       = 2;
+  int64  delivered_today  = 3;
+  int64  exceptions       = 4;
+  double avg_fulfill_days = 5;
+}
+
+// GetFulfillmentDashboardRequest is the request shape.
+message GetFulfillmentDashboardRequest {
+  string workspace_id = 1;
+  // now_millis — unix milliseconds used for "delivered today" and 30-day
+  // trend windows. Zero means "use server time".
+  optional int64 now_millis = 2;
+}
+
+// GetFulfillmentDashboardResponse is the projection the view layer reads.
+//
+// Parallel label/value series for the status-mix donut and 30-day daily-
+// delivered trend keep the proto shape stable across language clients
+// without committing to an ordered map (Q-SDM-DASHBOARD-SHARED-TYPES —
+// proto3 maps are unordered).
+message GetFulfillmentDashboardResponse {
+  bool success                          = 1;
+  optional domain.common.v1.Error error = 2;
+  FulfillmentStats stats                = 3;
+  // Status-mix donut: parallel slices in canonical status order.
+  repeated string status_mix_labels     = 4;
+  repeated double status_mix_values     = 5; // counts per status
+  // 30-day daily-delivered chart-line.
+  repeated string trend_labels          = 6;
+  repeated double trend_values          = 7;
+  // Recent exceptions (top 5).
+  repeated domain.fulfillment.v1.Fulfillment recent_exceptions = 8;
+}

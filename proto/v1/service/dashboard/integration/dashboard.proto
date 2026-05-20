@@ -1,0 +1,98 @@
+syntax = "proto3";
+
+package service.dashboard.integration.v1;
+
+option go_package = "github.com/erniealice/esqyma/pkg/schema/v1/service/dashboard/integration";
+
+import "domain/common/error.proto";
+
+// ---------------------------------------------------------------------------
+// Integration dashboard — service-driven domain (Q7 signal 3: service-shape
+// projection with no aggregate root). See docs/plan/20260520-service-domain-
+// migration/wave-b-surface-map.md §P1.C.10 and the Q-ORCH-2-REFINEMENT lock
+// at docs/plan/20260520-orchestration/decisions.md.
+//
+// Integration owns no proto entity in cyta or centymo, and there is no
+// dedicated `integration` table. Aggregates today live per-provider (payment,
+// email, scheduler, tabular). The dashboard pulls cross-provider counts /
+// trends / recent errors via a nil-safe queries port wired at the entity
+// layer; the service-layer wrapper here translates that Go-shaped response
+// into the proto contract below.
+//
+// Per Q-SDM-DASHBOARD-SHARED-TYPES (LOCKED 2026-05-20), this file owns its
+// own messages — there is no `service/dashboard/common.proto`. Each dashboard
+// proto package defines its own *Stats / *Row / *Entry shapes.
+//
+// **Registry path:** P1.C.10 Integration is the Wave B exemplar for the
+// dynamic-registry path (Q-ORCH-2). Verified zero `apps/service-admin`
+// callsites for `GetIntegrationDashboardPageData`; only `hybra-golang/
+// views/integration/module.go` consumes the use case. **Future hybra
+// rewire requires an espyna-internal adapter shim, NOT a direct
+// `integration.From()` call** (codex review P1 2026-05-20): hybra
+// cannot import `espyna-golang/internal/...` paths because Go's
+// `internal/` visibility rule restricts those to importers rooted
+// at `espyna-golang/`. The rewire MUST go through a
+// `composition/dashboard/integration/wrapper.go`-style shim exposing
+// non-internal types (mirroring `composition/auth/wrapper.go`).
+//
+// Consumed by
+// internal/application/usecases/service/dashboard/integration/get_integration_dashboard.go.
+// ---------------------------------------------------------------------------
+
+// IntegrationStats are the four stat-card values for the integration
+// dashboard.
+message IntegrationStats {
+  int64 total_integrations  = 1;
+  int64 active_integrations = 2;
+  int64 errors_last_24h     = 3;
+  int64 disconnected        = 4;
+}
+
+// IntegrationProviderRow is one row of the "By provider" table widget.
+message IntegrationProviderRow {
+  string id              = 1;
+  string name            = 2;
+  // Status is "active" | "error" | "disconnected" — view-side renders a
+  // badge class derived from this value.
+  string status          = 3;
+  // LastSyncMillis is unix milliseconds for the last sync; the view layer
+  // formats it human-readably ("2 minutes ago", "Yesterday").
+  int64  last_sync_millis = 4;
+  int64  events_last_7d   = 5;
+}
+
+// IntegrationErrorEntry is a single recent-error row for the "Recent errors"
+// list widget.
+message IntegrationErrorEntry {
+  string id                  = 1;
+  string provider            = 2;
+  string message             = 3;
+  // OccurredAtMillis is unix milliseconds; the view layer renders it
+  // human-readably.
+  int64  occurred_at_millis  = 4;
+}
+
+// GetIntegrationDashboardRequest is the input for the integration dashboard
+// service-layer use case.
+message GetIntegrationDashboardRequest {
+  string workspace_id = 1;
+  // NowMillis is unix milliseconds used for the 24h-errors window and the
+  // 7-day trend window. Zero means "use server time".
+  optional int64 now_millis = 2;
+}
+
+// GetIntegrationDashboardResponse is the projection the view layer reads.
+// All fields are populated unconditionally — when no provider stats hooks
+// are wired, the response degrades to a zero-valued Stats envelope, empty
+// repeated fields, and the view renders empty state.
+message GetIntegrationDashboardResponse {
+  bool success                          = 1;
+  optional domain.common.v1.Error error = 2;
+  IntegrationStats stats                = 3;
+  // 7-day sync events trend, parallel label/value series so the view
+  // renders without proto-coupling on a TimeBucket message.
+  repeated string trend_labels          = 4;
+  repeated double trend_values          = 5;
+  repeated IntegrationProviderRow providers      = 6;
+  repeated IntegrationErrorEntry  recent_errors  = 7;
+}

@@ -1,0 +1,62 @@
+syntax = "proto3";
+
+package service.dashboard.admin.v1;
+
+option go_package = "github.com/erniealice/esqyma/pkg/schema/v1/service/dashboard/admin";
+
+import "domain/common/error.proto";
+import "domain/entity/workspace_user_role/workspace_user_role.proto";
+
+// ---------------------------------------------------------------------------
+// Admin dashboard — service-driven domain (Q7 signal 3: cross-entity projection
+// reading across permission + role + workspace_user + workspace_user_role).
+//
+// See docs/plan/20260520-service-domain-migration/wave-b-surface-map.md
+// §P1.C.1 (Admin) and the Q-ORCH-2-REFINEMENT lock at
+// docs/plan/20260520-orchestration/decisions.md.
+//
+// Owned by the espyna service-driven category (relocated from
+// `proto/v1/domain/entity/admin/dashboard/dashboard.proto` per Q-SDM-DASHBOARD-LAYOUT
+// LOCKED 2026-05-20: subdir-per-dashboard under `proto/v1/service/dashboard/<X>/`).
+//
+// Per Q-SDM-DASHBOARD-SHARED-TYPES (LOCKED 2026-05-20), this file owns its
+// own messages — there is no `service/dashboard/common.proto`. Each dashboard
+// proto package defines its own *Stats / *Row / *Slice shapes.
+//
+// Consumed by
+// internal/application/usecases/service/dashboard/admin/get_admin_dashboard.go.
+// ---------------------------------------------------------------------------
+
+// AdminStats are the four stat cards: Workspace Users / Roles / Permissions
+// / Recent Role Changes (7d).
+message AdminStats {
+  int64 workspace_users       = 1;
+  int64 roles                 = 2;
+  int64 permissions           = 3;
+  int64 recent_role_changes7d = 4;
+}
+
+// RolePermissionCount is one row of the "roles by permission count" table widget.
+message RolePermissionCount {
+  string role_id          = 1;
+  string role_name        = 2;
+  int64  permission_count = 3;
+}
+
+// GetAdminDashboardRequest is the input for the admin dashboard use case.
+message GetAdminDashboardRequest {
+  string workspace_id = 1;
+  // now_millis is used for time-relative stats (e.g. 7-day activity counts).
+  // Zero means "use server time".
+  optional int64 now_millis = 2;
+}
+
+// GetAdminDashboardResponse is the projected aggregate set the view layer renders.
+message GetAdminDashboardResponse {
+  bool success                          = 1;
+  optional domain.common.v1.Error error = 2;
+  AdminStats stats                      = 3;
+  map<string, int64> users_per_role     = 4;
+  repeated RolePermissionCount top_roles_by_perms                     = 5;
+  repeated domain.entity.v1.WorkspaceUserRole recent_assignments       = 6;
+}

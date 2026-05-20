@@ -1,0 +1,121 @@
+syntax = "proto3";
+
+package service.dashboard.treasury.v1;
+
+option go_package = "github.com/erniealice/esqyma/pkg/schema/v1/service/dashboard/treasury";
+
+import "domain/common/error.proto";
+import "domain/treasury/loan_payment/loan_payment.proto";
+import "domain/treasury/collection/collection.proto";
+
+// ---------------------------------------------------------------------------
+// Treasury dashboard — service-driven domain (Q7 signal 3 cross-entity
+// projection). This subdir hosts BOTH the Loan dashboard and the Cash
+// (collection) dashboard as a unified candidate per Q-SDM-DASHBOARD-COUNT
+// (LOCKED 2026-05-20: "treasury.LoanDashboard + treasury.CashDashboard count
+// as two separate flat fields … but fold into ONE Treasury-unified sub-commit
+// group").
+//
+// See docs/plan/20260520-service-domain-migration/wave-b-surface-map.md §P1.C.5
+// (Treasury, unified Loan + Cash).
+//
+// Owned by the espyna service-driven category:
+//   - Loan messages: relocated from `proto/v1/domain/treasury/dashboard/dashboard.proto`
+//   - Cash messages: AUTHORED FROM SCRATCH (the entity-layer use case at
+//     `usecases/treasury/collection/dashboard/get_page_data.go` previously
+//     carried Go-only Request/Response/CashStats — this proto formalizes
+//     them as a versioned wire-contract for the first time).
+//
+// Per Q-SDM-DASHBOARD-SHARED-TYPES (LOCKED 2026-05-20), this file owns its
+// own messages — there is no `service/dashboard/common.proto`. The two
+// dashboard surfaces inside this proto package are siblings — they share a
+// proto package but not message shapes (Loan tracks outstanding/interest;
+// Cash tracks pending/overdue/collected).
+//
+// Consumed by
+// internal/application/usecases/service/dashboard/treasury/{get_loan_dashboard.go,get_cash_dashboard.go}.
+// ---------------------------------------------------------------------------
+
+// =============================================================================
+// Loan dashboard messages (P1.C.5 Loan slice — proto-anchored relocation)
+// =============================================================================
+
+// LoanStats holds the six stat-card values for the loan dashboard. Centavos.
+message LoanStats {
+  int64 total_outstanding = 1;
+  int64 interest_ytd      = 2;
+  // payments_due30 — sum (in centavos) of remaining balance for loans
+  // maturing in 30d.
+  int64 payments_due30    = 3;
+  int64 defaulted_count   = 4;
+  int64 active_count      = 5;
+  int64 completed_count   = 6;
+}
+
+// LoanSlice mirrors the loan row shape for dashboard widgets.
+message LoanSlice {
+  string id                = 1;
+  string loan_number       = 2;
+  string lender_name       = 3;
+  int64  remaining_balance = 4; // centavos
+  int64  principal_amount  = 5; // centavos
+  string status            = 6;
+}
+
+// GetLoanDashboardRequest is the request shape.
+message GetLoanDashboardRequest {
+  string workspace_id = 1;
+  // now_millis — unix milliseconds used for YTD and trend calculations.
+  // Zero means "use server time".
+  optional int64 now_millis = 2;
+}
+
+// GetLoanDashboardResponse is the projection the view layer reads.
+message GetLoanDashboardResponse {
+  bool success                          = 1;
+  optional domain.common.v1.Error error = 2;
+  LoanStats stats                       = 3;
+  repeated string trend_labels          = 4;
+  repeated double trend_values          = 5;
+  repeated LoanSlice top_loans          = 6;
+  repeated domain.treasury.v1.LoanPayment recent_payments = 7;
+}
+
+// =============================================================================
+// Cash (collection) dashboard messages (P1.C.5 Cash slice — new-proto-needed)
+// =============================================================================
+
+// CashStats holds the four stat-card values for the cash dashboard. Centavos.
+message CashStats {
+  int64 pending             = 1;
+  int64 overdue             = 2;
+  int64 collected_today     = 3;
+  int64 collected_this_week = 4;
+}
+
+// GetCashDashboardRequest is the request shape.
+message GetCashDashboardRequest {
+  string workspace_id = 1;
+  // now_millis — unix milliseconds used for daily/weekly bucket computations.
+  // Zero means "use server time".
+  optional int64 now_millis = 2;
+}
+
+// GetCashDashboardResponse is the projection the view layer reads.
+//
+// Parallel label/value series for daily and mode breakdowns keep the proto
+// shape stable across language clients without committing to an ordered map
+// (Q-SDM-DASHBOARD-SHARED-TYPES — proto3 maps are unordered).
+message GetCashDashboardResponse {
+  bool success                          = 1;
+  optional domain.common.v1.Error error = 2;
+  CashStats stats                       = 3;
+  // Daily series (last 30 days) for chart-line.
+  repeated string daily_labels          = 4;
+  repeated double daily_values          = 5; // centavos
+  // Payment-mode mix (this week) for chart-pie.
+  repeated string mode_labels           = 6;
+  repeated double mode_values           = 7; // centavos
+  // Recent collections.
+  repeated domain.treasury.v1.Collection recent = 8;
+}

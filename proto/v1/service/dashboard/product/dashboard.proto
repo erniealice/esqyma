@@ -1,0 +1,86 @@
+syntax = "proto3";
+
+package service.dashboard.product.v1;
+
+option go_package = "github.com/erniealice/esqyma/pkg/schema/v1/service/dashboard/product";
+
+import "domain/common/error.proto";
+import "domain/product/product/product.proto";
+
+// ---------------------------------------------------------------------------
+// Product dashboard — service-driven domain (Q7 signal 3: cross-aggregate
+// projection over product + product_line, scoped by product_kind="service").
+//
+// See docs/plan/20260520-service-domain-migration/wave-b-surface-map.md
+// §P1.C.11 (Product) and the Q-ORCH-2-REFINEMENT lock at
+// docs/plan/20260520-orchestration/decisions.md.
+//
+// Owned by the espyna service-driven category. NEW-PROTO-NEEDED candidate —
+// the pre-migration shape lived as Go-only Request/Response types at
+// `usecases/product/dashboard/get_page_data.go`, exposed via the flat field
+// `product.UseCases.Dashboard *GetServiceDashboardPageDataUseCase` at
+// `usecases/product/usecases.go:78`. This proto formalizes the wire contract.
+//
+// **Candidate naming note:** the source struct is `GetServiceDashboardPageDataUseCase`
+// (the dashboard is filtered to product_kind="service"), but per the
+// wave-b-surface-map §P1.C.11 the umbrella exposes this dashboard under
+// `Service.Dashboard.Product` for clarity (the dashboard surfaces a slice of
+// the product catalog, scoped by Kind="service"). The proto package name
+// follows the umbrella field name (`product`).
+//
+// Per Q-SDM-DASHBOARD-SHARED-TYPES (LOCKED 2026-05-20), this file owns its
+// own messages — there is no `service/dashboard/common.proto`. Each dashboard
+// proto package defines its own *Stats / *Row / *Slice shapes.
+//
+// Consumed by
+// internal/application/usecases/service/dashboard/product/get_product_dashboard.go.
+// ---------------------------------------------------------------------------
+
+// ProductStats are the five stat-card values shown at the top of the
+// dashboard. top_revenue_value is centavos.
+message ProductStats {
+  int64  total_active        = 1;
+  string top_revenue_name    = 2;
+  int64  top_revenue_value   = 3; // centavos
+  int64  line_count          = 4;
+  int64  recently_added_cnt  = 5;
+}
+
+// TopRevenueRow is one row of the "top revenue products" widget. Total is
+// centavos; the current implementation populates total=0 as a placeholder
+// until a line-item revenue join is implemented.
+message TopRevenueRow {
+  string product_id   = 1;
+  string product_name = 2;
+  int64  total        = 3; // centavos
+}
+
+// GetProductDashboardRequest is the request shape. Carries the Kind
+// discriminator so the use case scopes to product_kind="service" by default
+// but can be retargeted (e.g. "good") without a new method.
+message GetProductDashboardRequest {
+  string workspace_id = 1;
+  // kind — defaults to "service" when empty.
+  string kind         = 2;
+  // now_millis — unix milliseconds reserved for future time-range filtering.
+  // Zero means "use server time".
+  optional int64 now_millis = 3;
+}
+
+// GetProductDashboardResponse is the projection the view layer reads.
+//
+// Parallel label/value series for the by-line chart keep the proto shape
+// stable across language clients without committing to an ordered map
+// (Q-SDM-DASHBOARD-SHARED-TYPES — proto3 maps are unordered).
+message GetProductDashboardResponse {
+  bool success                          = 1;
+  optional domain.common.v1.Error error = 2;
+  ProductStats stats                    = 3;
+  // Products-by-line for chart-bar (parallel slices, sorted by count desc).
+  repeated string line_labels           = 4;
+  repeated double line_values           = 5;
+  // Top revenue (placeholder — top-by-recency until revenue join lands).
+  repeated TopRevenueRow top_revenue    = 6;
+  // Recent additions (newest-first).
+  repeated domain.product.v1.Product recent = 7;
+}
