@@ -12,23 +12,22 @@ import "domain/common/pagination.proto";
 // (Q7 + Q-SDM-LEDGER-INTERFACE).
 //
 // Hosts the three pivot reports previously declared on the 15-method
-// `ledgerReportingInner` duck interface at
-// `apps/service-admin/internal/composition/ledger_reporting.go:65-81`:
+// `ledgerReportingInner` duck interface (formerly in
+// `apps/service-admin/internal/composition/ledger_reporting.go`, FILE DELETED
+// 2026-05-21 per composition-reshape Q-SDM-LEDGER-RETIRE-PYEZA):
 //
 //   - GetRevenueReport      — two-axis revenue pivot
 //   - GetExpenditureReport  — two-axis expenditure pivot
 //   - GetDisbursementReport — two-axis disbursement pivot
 //
 // Per Q-SDM-LEDGER-DECOMP this is sub-candidate P1.E.5 — the LAST decomp
-// slice. Its commit (LANDED 2026-05-21) also retired the
-// `*ledgerReporting` wrapper + `ledgerReportingInner` duck interface +
-// `newLedgerReporting` factory in
-// `apps/service-admin/internal/composition/ledger_reporting.go` (the file
-// is reduced to the `ledgerReportingTableConfig` struct, which the
-// postgres adapter factory still consumes via reflection), and removed
-// the `pyeza.AppContext.LedgerReportingSvc any` field per
-// Q-SDM-LEDGER-RETIRE-PYEZA — all 13 non-AR-aging methods are absorbed by
-// P1.E.2-P1.E.5 at that point.
+// slice. Its commit (LANDED 2026-05-21) also retired the `*ledgerReporting`
+// wrapper + `ledgerReportingInner` duck interface + `newLedgerReporting`
+// factory; the entire `ledger_reporting.go` file was then DELETED with its
+// logic inlined into `apps/service-admin/internal/composition/container.go`
+// (20260521-composition-reshape). The `pyeza.AppContext.LedgerReportingSvc
+// any` field was removed per Q-SDM-LEDGER-RETIRE-PYEZA — all 13 non-AR-aging
+// methods are absorbed by P1.E.2-P1.E.5 at that point.
 //
 // **`ListRevenue` and `ListExpenses` stay Go-only** per Q-SDM-MAP-SHAPES.
 // They return `[]map[string]any` because they walk operational entities

@@ -12,8 +12,10 @@ import "domain/common/pagination.proto";
 // (Q7 + Q-SDM-LEDGER-INTERFACE).
 //
 // Hosts the two gross-margin / cash-flow ledger reporting reads previously
-// declared on the 15-method `ledgerReportingInner` duck interface at
-// `apps/service-admin/internal/composition/ledger_reporting.go:65-81`:
+// declared on the 15-method `ledgerReportingInner` duck interface (formerly
+// in `apps/service-admin/internal/composition/ledger_reporting.go`, FILE
+// DELETED 2026-05-21 per composition-reshape Q-SDM-LEDGER-RETIRE-PYEZA;
+// logic inlined into `container.go`):
 //
 //   - GetGrossProfitReport — grouped P&L data (revenue, COGS, gross profit)
 //   - GetCashBookReport    — chronological cash movements (receipts + expenses)

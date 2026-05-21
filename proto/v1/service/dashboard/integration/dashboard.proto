@@ -33,7 +33,9 @@ import "domain/common/error.proto";
 // `internal/` visibility rule restricts those to importers rooted
 // at `espyna-golang/`. The rewire MUST go through a
 // `composition/dashboard/integration/wrapper.go`-style shim exposing
-// non-internal types (mirroring `composition/auth/wrapper.go`).
+// non-internal types (mirroring the pattern of `composition/core/initializers/
+// service/auth.go`; the former `composition/auth/wrapper.go` is DELETED per
+// 20260521-composition-reshape).
 //
 // Consumed by
 // internal/application/usecases/service/dashboard/integration/get_integration_dashboard.go.
