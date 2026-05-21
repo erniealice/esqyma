@@ -188,7 +188,7 @@ message RecognizeMilestoneAdvanceCollectionResponse {
 // the entity-side replacement for the deleted cross-entity grouping package
 // domain/treasury/advances_dashboard/. Consumed by the
 // ListAdvanceCollectionsForDashboard use case under
-// internal/application/usecases/treasury/collection/.
+// internal/application/usecases/domain/treasury/collection/.
 // ---------------------------------------------------------------------------
 
 message ListAdvanceCollectionsForDashboardRequest {

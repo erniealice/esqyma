@@ -172,7 +172,7 @@ message RecognizeMilestoneAdvanceDisbursementResponse {
 // the entity-side replacement for the deleted cross-entity grouping package
 // domain/treasury/advances_dashboard/. Consumed by the
 // ListAdvanceDisbursementsForDashboard use case under
-// internal/application/usecases/treasury/disbursement/.
+// internal/application/usecases/domain/treasury/disbursement/.
 // ---------------------------------------------------------------------------
 
 message ListAdvanceDisbursementsForDashboardRequest {
