@@ -66,8 +66,14 @@ type Workspace struct {
 	// TenantSubscription.workspace_id — this field is a fast-path lookup for
 	// the /app/billing view. See architecture.md §3.5.
 	TenantSubscriptionId *string `protobuf:"bytes,21,opt,name=tenant_subscription_id,json=tenantSubscriptionId,proto3,oneof" json:"tenant_subscription_id,omitempty"`
-	unknownFields        protoimpl.UnknownFields
-	sizeCache            protoimpl.SizeCache
+	// URL-canonical workspace slug — the human-readable identifier in /w/{slug}/* URLs
+	// per Q-WS-1 → A locked 2026-05-21. Format: lowercase alphanumeric + hyphens,
+	// 3-30 chars, regex ^[a-z0-9]+(?:-[a-z0-9]+)*$. UNIQUE across workspaces.
+	// Validation includes a reserved-word list (see workspace_slug_reserved.go).
+	// Added 2026-05-22 per Phase P-1 of docs/plan/20260521-workspace-keyed-routing.
+	Slug          *string `protobuf:"bytes,22,opt,name=slug,proto3,oneof" json:"slug,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
 }
 
 func (x *Workspace) Reset() {
@@ -243,6 +249,13 @@ func (x *Workspace) GetTimeFormat() string {
 func (x *Workspace) GetTenantSubscriptionId() string {
 	if x != nil && x.TenantSubscriptionId != nil {
 		return *x.TenantSubscriptionId
+	}
+	return ""
+}
+
+func (x *Workspace) GetSlug() string {
+	if x != nil && x.Slug != nil {
+		return *x.Slug
 	}
 	return ""
 }
@@ -1329,7 +1342,7 @@ var File_domain_entity_workspace_workspace_proto protoreflect.FileDescriptor
 
 const file_domain_entity_workspace_workspace_proto_rawDesc = "" +
 	"\n" +
-	"'domain/entity/workspace/workspace.proto\x12\x10domain.entity.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1adomain/common/search.proto\x1a\x10options/db.proto\"\x8f\n" +
+	"'domain/entity/workspace/workspace.proto\x12\x10domain.entity.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1adomain/common/search.proto\x1a\x10options/db.proto\"\xb9\n" +
 	"\n" +
 	"\tWorkspace\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12\x12\n" +
@@ -1359,7 +1372,8 @@ const file_domain_entity_workspace_workspace_proto_rawDesc = "" +
 	"\vtime_format\x18\x14 \x01(\tH\x0eR\n" +
 	"timeFormat\x88\x01\x01\x12V\n" +
 	"\x16tenant_subscription_id\x18\x15 \x01(\tB\x1b\x82\xb5\x18\x17\n" +
-	"\x13tenant_subscription\x18\x01H\x0fR\x14tenantSubscriptionId\x88\x01\x01:\x06\x8a\xb5\x18\x02\b\x01B\x17\n" +
+	"\x13tenant_subscription\x18\x01H\x0fR\x14tenantSubscriptionId\x88\x01\x01\x12\x1f\n" +
+	"\x04slug\x18\x16 \x01(\tB\x06\x82\xb5\x18\x02\x10\x01H\x10R\x04slug\x88\x01\x01:\x06\x8a\xb5\x18\x02\b\x01B\x17\n" +
 	"\x15_workflow_template_idB\x0f\n" +
 	"\r_date_createdB\x16\n" +
 	"\x14_date_created_stringB\x10\n" +
@@ -1375,7 +1389,8 @@ const file_domain_entity_workspace_workspace_proto_rawDesc = "" +
 	"\x12_home_jurisdictionB\x0e\n" +
 	"\f_date_formatB\x0e\n" +
 	"\f_time_formatB\x19\n" +
-	"\x17_tenant_subscription_id\"I\n" +
+	"\x17_tenant_subscription_idB\a\n" +
+	"\x05_slug\"I\n" +
 	"\x16CreateWorkspaceRequest\x12/\n" +
 	"\x04data\x18\x01 \x01(\v2\x1b.domain.entity.v1.WorkspaceR\x04data\"\xa2\x01\n" +
 	"\x17CreateWorkspaceResponse\x12/\n" +

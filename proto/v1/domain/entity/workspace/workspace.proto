@@ -59,6 +59,13 @@ message Workspace {
   // TenantSubscription.workspace_id — this field is a fast-path lookup for
   // the /app/billing view. See architecture.md §3.5.
   optional string tenant_subscription_id = 21 [(options.v1.db).references = "tenant_subscription", (options.v1.db).index = true];
+
+  // URL-canonical workspace slug — the human-readable identifier in /w/{slug}/* URLs
+  // per Q-WS-1 → A locked 2026-05-21. Format: lowercase alphanumeric + hyphens,
+  // 3-30 chars, regex ^[a-z0-9]+(?:-[a-z0-9]+)*$. UNIQUE across workspaces.
+  // Validation includes a reserved-word list (see workspace_slug_reserved.go).
+  // Added 2026-05-22 per Phase P-1 of docs/plan/20260521-workspace-keyed-routing.
+  optional string slug = 22 [(options.v1.db).unique = true];
 }
 
 service WorkspaceDomainService {

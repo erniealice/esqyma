@@ -1,4 +1,4 @@
-h1:AYOGsbbBxOZ+8O4XAZCK8cKj++aAlay/Ez+GOQp2b30=
+h1:xVLlHXFFU4M2S3htxUzbmrIWyqUOuM+TywP9loLP7zI=
 20260502000000_baseline.sql h1:nSWEB4eB5Yt6qrCeg8crmwudHHCA0Gpps2L5h649wAU=
 20260505221625_restore_revenue_period_marker_idempotency.sql h1:mAF68zDv14QT18Vfybt+p1uiJ1xtMjDsh8sj6GpTBB8=
 20260505221626_recreate_revenue_period_marker_unique_index.sql h1:9Tm42g4YD+ipRQAiTcMgIHwltETorc0jifJQddi4i7s=
@@ -26,3 +26,4 @@ h1:AYOGsbbBxOZ+8O4XAZCK8cKj++aAlay/Ez+GOQp2b30=
 20260517180000_revenue_advance_period_marker_unique.sql h1:XjiCdHtc/BQhUOfe4UEWnsQruRgfqZFMQjBD4DFy8dI=
 20260519000000_rename_treasury_billing_event_tables.sql h1:x6Zqvegkh+ntJGgN+NuKRbC8JagZFRugltxTK1Ex5Dc=
 20260519010000_audit_entry_workspace_id_nullable.sql h1:GRoyoibJT1+1eeIDNk9A8gH78qQuIC0jsSSfPsjLCNI=
+20260522000000_workspace_slug.sql h1:kgYkLG3BdsHcSD1y6/mcaZwdOT5SmbB99ZW4aLZNW8Y=
