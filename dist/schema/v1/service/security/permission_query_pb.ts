@@ -4,13 +4,15 @@
 
 import type { GenFile, GenMessage } from "@bufbuild/protobuf/codegenv2";
 import { fileDesc, messageDesc } from "@bufbuild/protobuf/codegenv2";
+import type { PrincipalType } from "../../domain/entity/principal_type/principal_type_pb";
+import { file_domain_entity_principal_type_principal_type } from "../../domain/entity/principal_type/principal_type_pb";
 import type { Message } from "@bufbuild/protobuf";
 
 /**
  * Describes the file service/security/permission_query.proto.
  */
 export const file_service_security_permission_query: GenFile = /*@__PURE__*/
-  fileDesc("CidzZXJ2aWNlL3NlY3VyaXR5L3Blcm1pc3Npb25fcXVlcnkucHJvdG8SE3NlcnZpY2Uuc2VjdXJpdHkudjEiRgodR2V0VXNlclBlcm1pc3Npb25Db2Rlc1JlcXVlc3QSDwoHdXNlcl9pZBgBIAEoCRIUCgx3b3Jrc3BhY2VfaWQYAiABKAkiOgoeR2V0VXNlclBlcm1pc3Npb25Db2Rlc1Jlc3BvbnNlEhgKEHBlcm1pc3Npb25fY29kZXMYASADKAlC5QEKF2NvbS5zZXJ2aWNlLnNlY3VyaXR5LnYxQhRQZXJtaXNzaW9uUXVlcnlQcm90b1ABWkZnaXRodWIuY29tL2VybmllYWxpY2UvZXNxeW1hL3BrZy9zY2hlbWEvdjEvc2VydmljZS9zZWN1cml0eTtzZWN1cml0eXYxogIDU1NYqgITU2VydmljZS5TZWN1cml0eS5WMcoCE1NlcnZpY2VcU2VjdXJpdHlcVjHiAh9TZXJ2aWNlXFNlY3VyaXR5XFYxXEdQQk1ldGFkYXRh6gIVU2VydmljZTo6U2VjdXJpdHk6OlYxYgZwcm90bzM");
+  fileDesc("CidzZXJ2aWNlL3NlY3VyaXR5L3Blcm1pc3Npb25fcXVlcnkucHJvdG8SE3NlcnZpY2Uuc2VjdXJpdHkudjEikQEKHUdldFVzZXJQZXJtaXNzaW9uQ29kZXNSZXF1ZXN0Eg8KB3VzZXJfaWQYASABKAkSFAoMd29ya3NwYWNlX2lkGAIgASgJEjUKDGJpbmRpbmdfa2luZBgDIAEoDjIfLmRvbWFpbi5lbnRpdHkudjEuUHJpbmNpcGFsVHlwZRISCgpiaW5kaW5nX2lkGAQgASgJIjoKHkdldFVzZXJQZXJtaXNzaW9uQ29kZXNSZXNwb25zZRIYChBwZXJtaXNzaW9uX2NvZGVzGAEgAygJQuUBChdjb20uc2VydmljZS5zZWN1cml0eS52MUIUUGVybWlzc2lvblF1ZXJ5UHJvdG9QAVpGZ2l0aHViLmNvbS9lcm5pZWFsaWNlL2VzcXltYS9wa2cvc2NoZW1hL3YxL3NlcnZpY2Uvc2VjdXJpdHk7c2VjdXJpdHl2MaICA1NTWKoCE1NlcnZpY2UuU2VjdXJpdHkuVjHKAhNTZXJ2aWNlXFNlY3VyaXR5XFYx4gIfU2VydmljZVxTZWN1cml0eVxWMVxHUEJNZXRhZGF0YeoCFVNlcnZpY2U6OlNlY3VyaXR5OjpWMWIGcHJvdG8z", [file_domain_entity_principal_type_principal_type]);
 
 /**
  * @generated from message service.security.v1.GetUserPermissionCodesRequest
@@ -25,6 +27,27 @@ export type GetUserPermissionCodesRequest = Message<"service.security.v1.GetUser
    * @generated from field: string workspace_id = 2;
    */
   workspaceId: string;
+
+  /**
+   * BindingKind — which kind of binding the session is currently active as
+   * (OPERATOR_OWNER / OPERATOR_STAFF / CLIENT / CLIENT_DELEGATE / SUPPLIER /
+   * SUPPLIER_DELEGATE). Sourced from session.principal_type. When
+   * UNSPECIFIED the adapter falls back to legacy union-across-all-bindings
+   * behaviour for backwards compatibility.
+   *
+   * @generated from field: domain.entity.v1.PrincipalType binding_kind = 3;
+   */
+  bindingKind: PrincipalType;
+
+  /**
+   * BindingId — the row id of the underlying grant (workspace_user.id /
+   * client_portal_grant.id / supplier_portal_grant.id / delegate.id).
+   * Sourced from session.principal_id. When empty the adapter falls back
+   * to legacy union behaviour.
+   *
+   * @generated from field: string binding_id = 4;
+   */
+  bindingId: string;
 };
 
 /**

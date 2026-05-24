@@ -2,6 +2,8 @@ syntax = "proto3";
 
 package service.security.v1;
 
+import "domain/entity/principal_type/principal_type.proto";
+
 option go_package = "github.com/erniealice/esqyma/golang/v1/service/security";
 
 // ---------------------------------------------------------------------------
@@ -22,11 +24,45 @@ option go_package = "github.com/erniealice/esqyma/golang/v1/service/security";
 //
 // Consumed by
 // internal/application/usecases/service/security/get_user_permission_codes.go.
+//
+// ---------------------------------------------------------------------------
+// Vocabulary note — `binding_kind` + `binding_id` (added 2026-05-24 for A2 /
+// WKR-P0-2 — silent privilege-elevation fix).
+//
+// These fields constrain the permission lookup to a SINGLE selected binding
+// (the User × Workspace × role-grant join row from the session) so a user
+// holding multiple bindings in one workspace (e.g. CLIENT + OPERATOR_STAFF)
+// no longer receives the UNION of permissions across all bindings.
+//
+// Field-name vocabulary is `binding_*` per Q-BR-1 lock 2026-05-24 (see
+// docs/plan/20260522-principal-to-binding-rename/decisions.md §Lock
+// rationale). The enum still imports `domain.entity.v1.PrincipalType`
+// because the proto rename to `BindingKind` is owned by PTB plan's P1
+// sweep (~3 weeks). Acceptable temporary inconsistency vs. avoiding a
+// redundant rename pass; the field NAMES are the locked vocabulary
+// beachhead.
+//
+// Compatibility: both fields are OPTIONAL on the wire. A caller that
+// supplies the zero values (BindingKind=UNSPECIFIED, BindingId="") gets
+// the legacy UNION behaviour preserved (no filtering). Production callers
+// MUST supply both; the silent-elevation fix only applies when both are
+// non-zero.
 // ---------------------------------------------------------------------------
 
 message GetUserPermissionCodesRequest {
   string user_id = 1;
   string workspace_id = 2;
+  // BindingKind — which kind of binding the session is currently active as
+  // (OPERATOR_OWNER / OPERATOR_STAFF / CLIENT / CLIENT_DELEGATE / SUPPLIER /
+  // SUPPLIER_DELEGATE). Sourced from session.principal_type. When
+  // UNSPECIFIED the adapter falls back to legacy union-across-all-bindings
+  // behaviour for backwards compatibility.
+  domain.entity.v1.PrincipalType binding_kind = 3;
+  // BindingId — the row id of the underlying grant (workspace_user.id /
+  // client_portal_grant.id / supplier_portal_grant.id / delegate.id).
+  // Sourced from session.principal_id. When empty the adapter falls back
+  // to legacy union behaviour.
+  string binding_id = 4;
 }
 
 message GetUserPermissionCodesResponse {

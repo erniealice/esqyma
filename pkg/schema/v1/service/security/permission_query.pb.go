@@ -7,6 +7,7 @@
 package securityv1
 
 import (
+	principal_type "github.com/erniealice/esqyma/pkg/schema/v1/domain/entity/principal_type"
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
 	reflect "reflect"
@@ -22,9 +23,20 @@ const (
 )
 
 type GetUserPermissionCodesRequest struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	UserId        string                 `protobuf:"bytes,1,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty"`
-	WorkspaceId   string                 `protobuf:"bytes,2,opt,name=workspace_id,json=workspaceId,proto3" json:"workspace_id,omitempty"`
+	state       protoimpl.MessageState `protogen:"open.v1"`
+	UserId      string                 `protobuf:"bytes,1,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty"`
+	WorkspaceId string                 `protobuf:"bytes,2,opt,name=workspace_id,json=workspaceId,proto3" json:"workspace_id,omitempty"`
+	// BindingKind — which kind of binding the session is currently active as
+	// (OPERATOR_OWNER / OPERATOR_STAFF / CLIENT / CLIENT_DELEGATE / SUPPLIER /
+	// SUPPLIER_DELEGATE). Sourced from session.principal_type. When
+	// UNSPECIFIED the adapter falls back to legacy union-across-all-bindings
+	// behaviour for backwards compatibility.
+	BindingKind principal_type.PrincipalType `protobuf:"varint,3,opt,name=binding_kind,json=bindingKind,proto3,enum=domain.entity.v1.PrincipalType" json:"binding_kind,omitempty"`
+	// BindingId — the row id of the underlying grant (workspace_user.id /
+	// client_portal_grant.id / supplier_portal_grant.id / delegate.id).
+	// Sourced from session.principal_id. When empty the adapter falls back
+	// to legacy union behaviour.
+	BindingId     string `protobuf:"bytes,4,opt,name=binding_id,json=bindingId,proto3" json:"binding_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -69,6 +81,20 @@ func (x *GetUserPermissionCodesRequest) GetUserId() string {
 func (x *GetUserPermissionCodesRequest) GetWorkspaceId() string {
 	if x != nil {
 		return x.WorkspaceId
+	}
+	return ""
+}
+
+func (x *GetUserPermissionCodesRequest) GetBindingKind() principal_type.PrincipalType {
+	if x != nil {
+		return x.BindingKind
+	}
+	return principal_type.PrincipalType(0)
+}
+
+func (x *GetUserPermissionCodesRequest) GetBindingId() string {
+	if x != nil {
+		return x.BindingId
 	}
 	return ""
 }
@@ -121,10 +147,13 @@ var File_service_security_permission_query_proto protoreflect.FileDescriptor
 
 const file_service_security_permission_query_proto_rawDesc = "" +
 	"\n" +
-	"'service/security/permission_query.proto\x12\x13service.security.v1\"[\n" +
+	"'service/security/permission_query.proto\x12\x13service.security.v1\x1a1domain/entity/principal_type/principal_type.proto\"\xbe\x01\n" +
 	"\x1dGetUserPermissionCodesRequest\x12\x17\n" +
 	"\auser_id\x18\x01 \x01(\tR\x06userId\x12!\n" +
-	"\fworkspace_id\x18\x02 \x01(\tR\vworkspaceId\"K\n" +
+	"\fworkspace_id\x18\x02 \x01(\tR\vworkspaceId\x12B\n" +
+	"\fbinding_kind\x18\x03 \x01(\x0e2\x1f.domain.entity.v1.PrincipalTypeR\vbindingKind\x12\x1d\n" +
+	"\n" +
+	"binding_id\x18\x04 \x01(\tR\tbindingId\"K\n" +
 	"\x1eGetUserPermissionCodesResponse\x12)\n" +
 	"\x10permission_codes\x18\x01 \x03(\tR\x0fpermissionCodesB\xe5\x01\n" +
 	"\x17com.service.security.v1B\x14PermissionQueryProtoP\x01ZFgithub.com/erniealice/esqyma/pkg/schema/v1/service/security;securityv1\xa2\x02\x03SSX\xaa\x02\x13Service.Security.V1\xca\x02\x13Service\\Security\\V1\xe2\x02\x1fService\\Security\\V1\\GPBMetadata\xea\x02\x15Service::Security::V1b\x06proto3"
@@ -145,13 +174,15 @@ var file_service_security_permission_query_proto_msgTypes = make([]protoimpl.Mes
 var file_service_security_permission_query_proto_goTypes = []any{
 	(*GetUserPermissionCodesRequest)(nil),  // 0: service.security.v1.GetUserPermissionCodesRequest
 	(*GetUserPermissionCodesResponse)(nil), // 1: service.security.v1.GetUserPermissionCodesResponse
+	(principal_type.PrincipalType)(0),      // 2: domain.entity.v1.PrincipalType
 }
 var file_service_security_permission_query_proto_depIdxs = []int32{
-	0, // [0:0] is the sub-list for method output_type
-	0, // [0:0] is the sub-list for method input_type
-	0, // [0:0] is the sub-list for extension type_name
-	0, // [0:0] is the sub-list for extension extendee
-	0, // [0:0] is the sub-list for field type_name
+	2, // 0: service.security.v1.GetUserPermissionCodesRequest.binding_kind:type_name -> domain.entity.v1.PrincipalType
+	1, // [1:1] is the sub-list for method output_type
+	1, // [1:1] is the sub-list for method input_type
+	1, // [1:1] is the sub-list for extension type_name
+	1, // [1:1] is the sub-list for extension extendee
+	0, // [0:1] is the sub-list for field type_name
 }
 
 func init() { file_service_security_permission_query_proto_init() }
