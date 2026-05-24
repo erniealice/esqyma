@@ -63,6 +63,40 @@ message GetUserPermissionCodesRequest {
   // Sourced from session.principal_id. When empty the adapter falls back
   // to legacy union behaviour.
   string binding_id = 4;
+  // ActingAsClientId — for delegate principals only, the underlying
+  // client_id the delegate is currently acting on behalf of (the
+  // delegate_client.client_id row that owns the grant). Sourced from the
+  // session row's acting_as_client_id column.
+  //
+  // REQUIRED when binding_kind == CLIENT_DELEGATE: the adapter scopes
+  // grant resolution to the per-target delegate_client row identified by
+  // (delegate_id = binding_id, client_id = acting_as_client_id). When
+  // empty for a CLIENT_DELEGATE lookup the adapter FAILS CLOSED (returns
+  // empty permission set) rather than unioning across all targets — this
+  // closes the silent privilege-elevation hole where a delegate with
+  // multiple clients in one workspace would receive the union of all
+  // per-target grants.
+  //
+  // IGNORED for non-delegate binding kinds. The acting-as target boundary
+  // is the same row that principal_switch.lockTargetBinding locks during
+  // session rotation (see apps/service-admin/internal/composition/
+  // principal_switch.go), making permission resolution consistent with
+  // the existing lock semantics.
+  //
+  // Added 2026-05-24 per A2-followup (codex red-team A2-P0-1 fix).
+  string acting_as_client_id = 5;
+  // ActingAsSupplierId — symmetric counterpart of acting_as_client_id for
+  // SUPPLIER_DELEGATE principals. Sourced from the session row's
+  // acting_as_supplier_id column.
+  //
+  // REQUIRED when binding_kind == SUPPLIER_DELEGATE; absent →
+  // fail-closed empty permission set. IGNORED for non-delegate binding
+  // kinds. The acting-as target boundary matches
+  // principal_switch.lockTargetBinding for SUPPLIER_DELEGATE rotation
+  // locking.
+  //
+  // Added 2026-05-24 per A2-followup (codex red-team A2-P0-1 fix).
+  string acting_as_supplier_id = 6;
 }
 
 message GetUserPermissionCodesResponse {

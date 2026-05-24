@@ -12,7 +12,7 @@ import type { Message } from "@bufbuild/protobuf";
  * Describes the file service/security/permission_query.proto.
  */
 export const file_service_security_permission_query: GenFile = /*@__PURE__*/
-  fileDesc("CidzZXJ2aWNlL3NlY3VyaXR5L3Blcm1pc3Npb25fcXVlcnkucHJvdG8SE3NlcnZpY2Uuc2VjdXJpdHkudjEikQEKHUdldFVzZXJQZXJtaXNzaW9uQ29kZXNSZXF1ZXN0Eg8KB3VzZXJfaWQYASABKAkSFAoMd29ya3NwYWNlX2lkGAIgASgJEjUKDGJpbmRpbmdfa2luZBgDIAEoDjIfLmRvbWFpbi5lbnRpdHkudjEuUHJpbmNpcGFsVHlwZRISCgpiaW5kaW5nX2lkGAQgASgJIjoKHkdldFVzZXJQZXJtaXNzaW9uQ29kZXNSZXNwb25zZRIYChBwZXJtaXNzaW9uX2NvZGVzGAEgAygJQuUBChdjb20uc2VydmljZS5zZWN1cml0eS52MUIUUGVybWlzc2lvblF1ZXJ5UHJvdG9QAVpGZ2l0aHViLmNvbS9lcm5pZWFsaWNlL2VzcXltYS9wa2cvc2NoZW1hL3YxL3NlcnZpY2Uvc2VjdXJpdHk7c2VjdXJpdHl2MaICA1NTWKoCE1NlcnZpY2UuU2VjdXJpdHkuVjHKAhNTZXJ2aWNlXFNlY3VyaXR5XFYx4gIfU2VydmljZVxTZWN1cml0eVxWMVxHUEJNZXRhZGF0YeoCFVNlcnZpY2U6OlNlY3VyaXR5OjpWMWIGcHJvdG8z", [file_domain_entity_principal_type_principal_type]);
+  fileDesc("CidzZXJ2aWNlL3NlY3VyaXR5L3Blcm1pc3Npb25fcXVlcnkucHJvdG8SE3NlcnZpY2Uuc2VjdXJpdHkudjEizQEKHUdldFVzZXJQZXJtaXNzaW9uQ29kZXNSZXF1ZXN0Eg8KB3VzZXJfaWQYASABKAkSFAoMd29ya3NwYWNlX2lkGAIgASgJEjUKDGJpbmRpbmdfa2luZBgDIAEoDjIfLmRvbWFpbi5lbnRpdHkudjEuUHJpbmNpcGFsVHlwZRISCgpiaW5kaW5nX2lkGAQgASgJEhsKE2FjdGluZ19hc19jbGllbnRfaWQYBSABKAkSHQoVYWN0aW5nX2FzX3N1cHBsaWVyX2lkGAYgASgJIjoKHkdldFVzZXJQZXJtaXNzaW9uQ29kZXNSZXNwb25zZRIYChBwZXJtaXNzaW9uX2NvZGVzGAEgAygJQuUBChdjb20uc2VydmljZS5zZWN1cml0eS52MUIUUGVybWlzc2lvblF1ZXJ5UHJvdG9QAVpGZ2l0aHViLmNvbS9lcm5pZWFsaWNlL2VzcXltYS9wa2cvc2NoZW1hL3YxL3NlcnZpY2Uvc2VjdXJpdHk7c2VjdXJpdHl2MaICA1NTWKoCE1NlcnZpY2UuU2VjdXJpdHkuVjHKAhNTZXJ2aWNlXFNlY3VyaXR5XFYx4gIfU2VydmljZVxTZWN1cml0eVxWMVxHUEJNZXRhZGF0YeoCFVNlcnZpY2U6OlNlY3VyaXR5OjpWMWIGcHJvdG8z", [file_domain_entity_principal_type_principal_type]);
 
 /**
  * @generated from message service.security.v1.GetUserPermissionCodesRequest
@@ -48,6 +48,50 @@ export type GetUserPermissionCodesRequest = Message<"service.security.v1.GetUser
    * @generated from field: string binding_id = 4;
    */
   bindingId: string;
+
+  /**
+   * ActingAsClientId — for delegate principals only, the underlying
+   * client_id the delegate is currently acting on behalf of (the
+   * delegate_client.client_id row that owns the grant). Sourced from the
+   * session row's acting_as_client_id column.
+   *
+   * REQUIRED when binding_kind == CLIENT_DELEGATE: the adapter scopes
+   * grant resolution to the per-target delegate_client row identified by
+   * (delegate_id = binding_id, client_id = acting_as_client_id). When
+   * empty for a CLIENT_DELEGATE lookup the adapter FAILS CLOSED (returns
+   * empty permission set) rather than unioning across all targets — this
+   * closes the silent privilege-elevation hole where a delegate with
+   * multiple clients in one workspace would receive the union of all
+   * per-target grants.
+   *
+   * IGNORED for non-delegate binding kinds. The acting-as target boundary
+   * is the same row that principal_switch.lockTargetBinding locks during
+   * session rotation (see apps/service-admin/internal/composition/
+   * principal_switch.go), making permission resolution consistent with
+   * the existing lock semantics.
+   *
+   * Added 2026-05-24 per A2-followup (codex red-team A2-P0-1 fix).
+   *
+   * @generated from field: string acting_as_client_id = 5;
+   */
+  actingAsClientId: string;
+
+  /**
+   * ActingAsSupplierId — symmetric counterpart of acting_as_client_id for
+   * SUPPLIER_DELEGATE principals. Sourced from the session row's
+   * acting_as_supplier_id column.
+   *
+   * REQUIRED when binding_kind == SUPPLIER_DELEGATE; absent →
+   * fail-closed empty permission set. IGNORED for non-delegate binding
+   * kinds. The acting-as target boundary matches
+   * principal_switch.lockTargetBinding for SUPPLIER_DELEGATE rotation
+   * locking.
+   *
+   * Added 2026-05-24 per A2-followup (codex red-team A2-P0-1 fix).
+   *
+   * @generated from field: string acting_as_supplier_id = 6;
+   */
+  actingAsSupplierId: string;
 };
 
 /**

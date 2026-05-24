@@ -36,9 +36,43 @@ type GetUserPermissionCodesRequest struct {
 	// client_portal_grant.id / supplier_portal_grant.id / delegate.id).
 	// Sourced from session.principal_id. When empty the adapter falls back
 	// to legacy union behaviour.
-	BindingId     string `protobuf:"bytes,4,opt,name=binding_id,json=bindingId,proto3" json:"binding_id,omitempty"`
-	unknownFields protoimpl.UnknownFields
-	sizeCache     protoimpl.SizeCache
+	BindingId string `protobuf:"bytes,4,opt,name=binding_id,json=bindingId,proto3" json:"binding_id,omitempty"`
+	// ActingAsClientId — for delegate principals only, the underlying
+	// client_id the delegate is currently acting on behalf of (the
+	// delegate_client.client_id row that owns the grant). Sourced from the
+	// session row's acting_as_client_id column.
+	//
+	// REQUIRED when binding_kind == CLIENT_DELEGATE: the adapter scopes
+	// grant resolution to the per-target delegate_client row identified by
+	// (delegate_id = binding_id, client_id = acting_as_client_id). When
+	// empty for a CLIENT_DELEGATE lookup the adapter FAILS CLOSED (returns
+	// empty permission set) rather than unioning across all targets — this
+	// closes the silent privilege-elevation hole where a delegate with
+	// multiple clients in one workspace would receive the union of all
+	// per-target grants.
+	//
+	// IGNORED for non-delegate binding kinds. The acting-as target boundary
+	// is the same row that principal_switch.lockTargetBinding locks during
+	// session rotation (see apps/service-admin/internal/composition/
+	// principal_switch.go), making permission resolution consistent with
+	// the existing lock semantics.
+	//
+	// Added 2026-05-24 per A2-followup (codex red-team A2-P0-1 fix).
+	ActingAsClientId string `protobuf:"bytes,5,opt,name=acting_as_client_id,json=actingAsClientId,proto3" json:"acting_as_client_id,omitempty"`
+	// ActingAsSupplierId — symmetric counterpart of acting_as_client_id for
+	// SUPPLIER_DELEGATE principals. Sourced from the session row's
+	// acting_as_supplier_id column.
+	//
+	// REQUIRED when binding_kind == SUPPLIER_DELEGATE; absent →
+	// fail-closed empty permission set. IGNORED for non-delegate binding
+	// kinds. The acting-as target boundary matches
+	// principal_switch.lockTargetBinding for SUPPLIER_DELEGATE rotation
+	// locking.
+	//
+	// Added 2026-05-24 per A2-followup (codex red-team A2-P0-1 fix).
+	ActingAsSupplierId string `protobuf:"bytes,6,opt,name=acting_as_supplier_id,json=actingAsSupplierId,proto3" json:"acting_as_supplier_id,omitempty"`
+	unknownFields      protoimpl.UnknownFields
+	sizeCache          protoimpl.SizeCache
 }
 
 func (x *GetUserPermissionCodesRequest) Reset() {
@@ -99,6 +133,20 @@ func (x *GetUserPermissionCodesRequest) GetBindingId() string {
 	return ""
 }
 
+func (x *GetUserPermissionCodesRequest) GetActingAsClientId() string {
+	if x != nil {
+		return x.ActingAsClientId
+	}
+	return ""
+}
+
+func (x *GetUserPermissionCodesRequest) GetActingAsSupplierId() string {
+	if x != nil {
+		return x.ActingAsSupplierId
+	}
+	return ""
+}
+
 type GetUserPermissionCodesResponse struct {
 	state           protoimpl.MessageState `protogen:"open.v1"`
 	PermissionCodes []string               `protobuf:"bytes,1,rep,name=permission_codes,json=permissionCodes,proto3" json:"permission_codes,omitempty"`
@@ -147,13 +195,15 @@ var File_service_security_permission_query_proto protoreflect.FileDescriptor
 
 const file_service_security_permission_query_proto_rawDesc = "" +
 	"\n" +
-	"'service/security/permission_query.proto\x12\x13service.security.v1\x1a1domain/entity/principal_type/principal_type.proto\"\xbe\x01\n" +
+	"'service/security/permission_query.proto\x12\x13service.security.v1\x1a1domain/entity/principal_type/principal_type.proto\"\xa0\x02\n" +
 	"\x1dGetUserPermissionCodesRequest\x12\x17\n" +
 	"\auser_id\x18\x01 \x01(\tR\x06userId\x12!\n" +
 	"\fworkspace_id\x18\x02 \x01(\tR\vworkspaceId\x12B\n" +
 	"\fbinding_kind\x18\x03 \x01(\x0e2\x1f.domain.entity.v1.PrincipalTypeR\vbindingKind\x12\x1d\n" +
 	"\n" +
-	"binding_id\x18\x04 \x01(\tR\tbindingId\"K\n" +
+	"binding_id\x18\x04 \x01(\tR\tbindingId\x12-\n" +
+	"\x13acting_as_client_id\x18\x05 \x01(\tR\x10actingAsClientId\x121\n" +
+	"\x15acting_as_supplier_id\x18\x06 \x01(\tR\x12actingAsSupplierId\"K\n" +
 	"\x1eGetUserPermissionCodesResponse\x12)\n" +
 	"\x10permission_codes\x18\x01 \x03(\tR\x0fpermissionCodesB\xe5\x01\n" +
 	"\x17com.service.security.v1B\x14PermissionQueryProtoP\x01ZFgithub.com/erniealice/esqyma/pkg/schema/v1/service/security;securityv1\xa2\x02\x03SSX\xaa\x02\x13Service.Security.V1\xca\x02\x13Service\\Security\\V1\xe2\x02\x1fService\\Security\\V1\\GPBMetadata\xea\x02\x15Service::Security::V1b\x06proto3"
