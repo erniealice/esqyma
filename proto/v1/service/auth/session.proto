@@ -2,6 +2,8 @@ syntax = "proto3";
 
 package service.auth.v1;
 
+import "domain/entity/principal_type/principal_type.proto";
+
 option go_package = "github.com/erniealice/esqyma/golang/v1/service/auth";
 
 // ---------------------------------------------------------------------------
@@ -73,4 +75,65 @@ message InvalidateSessionRequest {
 
 message InvalidateSessionResponse {
   bool invalidated = 1;
+}
+
+// ============================================================================
+// SwitchPrincipal — added 2026-05-24 by docs/plan/20260524-principal-switch-typed-stack/
+//
+// Replaces apps/service-admin/internal/composition/principal_switch.go's
+// in-composition direct-SQL rotation primitive (no-direct-sql-rule violation).
+// The proto-shaped use case lives at
+// internal/application/usecases/service/auth/switch_principal.go; the postgres
+// adapter owns the in-tx coordination at
+// contrib/postgres/internal/adapter/entity/session.go (extended in Phase 2).
+// ============================================================================
+
+message ActingAsTarget {
+  string id = 1;             // underlying party id (client_id or supplier_id)
+  string workspace_id = 2;   // workspace the party lives in
+  string display_name = 3;
+}
+
+message Principal {
+  domain.entity.v1.PrincipalType type = 1;
+  string principal_id = 2;
+  string workspace_id = 3;
+  string display_name = 4;
+  repeated ActingAsTarget acting_as_targets = 5;
+}
+
+enum SwitchUseCase {
+  SWITCH_USE_CASE_UNSPECIFIED              = 0;
+  SWITCH_USE_CASE_URL_ROTATE               = 1;  // URL-driven cross-workspace rotation (Q-WS-13)
+  SWITCH_USE_CASE_URL_ACTING_AS_INPLACE    = 2;  // URL-driven same-workspace acting-as change
+  SWITCH_USE_CASE_URL_PRINCIPAL_INPLACE    = 3;  // URL-driven same-workspace principal_type change (rare)
+  SWITCH_USE_CASE_EXPLICIT_ROTATE          = 4;  // Form-driven cross-workspace via /action/auth/switch-principal
+  SWITCH_USE_CASE_EXPLICIT_INPLACE         = 5;  // Form-driven same-workspace principal_type change (Mutual co-op)
+  SWITCH_USE_CASE_EXPLICIT_ACTING_AS       = 6;  // Form-driven same-workspace acting-as change
+}
+
+message SwitchPrincipalRequest {
+  string user_id = 1;
+  string token = 2;                          // current cookie token; empty at first-login
+  Principal target_principal = 3;
+  string acting_as_client_id = 4;            // optional override for delegate-of-N>1
+  string acting_as_supplier_id = 5;          // optional override
+  SwitchUseCase use_case = 6;                // audit row use_case tag
+  // Forensic metadata (folded into audit reason text — A5 red-team finding X-2)
+  string request_url = 7;
+  string referer = 8;
+  string sec_fetch_site = 9;
+  string user_agent = 10;
+  // URL-driven vs explicit-form. Used by deriveSwitchUseCase when use_case is UNSPECIFIED.
+  bool url_driven = 11;
+  // RequireAudit: rolls back the rotation if audit insert fails (red-team A-4).
+  bool require_audit = 12;
+}
+
+message SwitchPrincipalResponse {
+  // NewToken is non-empty when rotation occurred and the handler must
+  // SetSessionCookie. Empty means in-place mutation (cookie unchanged).
+  string new_token = 1;
+  // RedirectURL the handler should redirect to.
+  string redirect_url = 2;
 }

@@ -2,15 +2,17 @@
 // @generated from file service/auth/session.proto (package service.auth.v1, syntax proto3)
 /* eslint-disable */
 
-import type { GenFile, GenMessage } from "@bufbuild/protobuf/codegenv2";
-import { fileDesc, messageDesc } from "@bufbuild/protobuf/codegenv2";
+import type { GenEnum, GenFile, GenMessage } from "@bufbuild/protobuf/codegenv2";
+import { enumDesc, fileDesc, messageDesc } from "@bufbuild/protobuf/codegenv2";
+import type { PrincipalType } from "../../domain/entity/principal_type/principal_type_pb";
+import { file_domain_entity_principal_type_principal_type } from "../../domain/entity/principal_type/principal_type_pb";
 import type { Message } from "@bufbuild/protobuf";
 
 /**
  * Describes the file service/auth/session.proto.
  */
 export const file_service_auth_session: GenFile = /*@__PURE__*/
-  fileDesc("ChpzZXJ2aWNlL2F1dGgvc2Vzc2lvbi5wcm90bxIPc2VydmljZS5hdXRoLnYxIisKGkF1dGhlbnRpY2F0ZVNlc3Npb25SZXF1ZXN0Eg0KBXRva2VuGAEgASgJIooBCgxBdXRoSWRlbnRpdHkSDwoHdXNlcl9pZBgBIAEoCRINCgVlbWFpbBgCIAEoCRIZChF3b3Jrc3BhY2VfdXNlcl9pZBgDIAEoCRIUCgx3b3Jrc3BhY2VfaWQYBCABKAkSDQoFdG9rZW4YBSABKAkSGgoSZXhwaXJlc19hdF91bml4X21zGAYgASgDIk4KG0F1dGhlbnRpY2F0ZVNlc3Npb25SZXNwb25zZRIvCghpZGVudGl0eRgBIAEoCzIdLnNlcnZpY2UuYXV0aC52MS5BdXRoSWRlbnRpdHkiVwoTSXNzdWVTZXNzaW9uUmVxdWVzdBIPCgd1c2VyX2lkGAEgASgJEhkKEXdvcmtzcGFjZV91c2VyX2lkGAIgASgJEhQKDHdvcmtzcGFjZV9pZBgDIAEoCSKGAQoUSXNzdWVTZXNzaW9uUmVzcG9uc2USDQoFdG9rZW4YASABKAkSEgoKc2Vzc2lvbl9pZBgCIAEoCRIaChJleHBpcmVzX2F0X3VuaXhfbXMYAyABKAMSGQoRd29ya3NwYWNlX3VzZXJfaWQYBCABKAkSFAoMd29ya3NwYWNlX2lkGAUgASgJIj0KGEludmFsaWRhdGVTZXNzaW9uUmVxdWVzdBINCgV0b2tlbhgBIAEoCRISCgpzZXNzaW9uX2lkGAIgASgJIjAKGUludmFsaWRhdGVTZXNzaW9uUmVzcG9uc2USEwoLaW52YWxpZGF0ZWQYASABKAhCwQEKE2NvbS5zZXJ2aWNlLmF1dGgudjFCDFNlc3Npb25Qcm90b1ABWj5naXRodWIuY29tL2VybmllYWxpY2UvZXNxeW1hL3BrZy9zY2hlbWEvdjEvc2VydmljZS9hdXRoO2F1dGh2MaICA1NBWKoCD1NlcnZpY2UuQXV0aC5WMcoCD1NlcnZpY2VcQXV0aFxWMeICG1NlcnZpY2VcQXV0aFxWMVxHUEJNZXRhZGF0YeoCEVNlcnZpY2U6OkF1dGg6OlYxYgZwcm90bzM");
+  fileDesc("ChpzZXJ2aWNlL2F1dGgvc2Vzc2lvbi5wcm90bxIPc2VydmljZS5hdXRoLnYxIisKGkF1dGhlbnRpY2F0ZVNlc3Npb25SZXF1ZXN0Eg0KBXRva2VuGAEgASgJIooBCgxBdXRoSWRlbnRpdHkSDwoHdXNlcl9pZBgBIAEoCRINCgVlbWFpbBgCIAEoCRIZChF3b3Jrc3BhY2VfdXNlcl9pZBgDIAEoCRIUCgx3b3Jrc3BhY2VfaWQYBCABKAkSDQoFdG9rZW4YBSABKAkSGgoSZXhwaXJlc19hdF91bml4X21zGAYgASgDIk4KG0F1dGhlbnRpY2F0ZVNlc3Npb25SZXNwb25zZRIvCghpZGVudGl0eRgBIAEoCzIdLnNlcnZpY2UuYXV0aC52MS5BdXRoSWRlbnRpdHkiVwoTSXNzdWVTZXNzaW9uUmVxdWVzdBIPCgd1c2VyX2lkGAEgASgJEhkKEXdvcmtzcGFjZV91c2VyX2lkGAIgASgJEhQKDHdvcmtzcGFjZV9pZBgDIAEoCSKGAQoUSXNzdWVTZXNzaW9uUmVzcG9uc2USDQoFdG9rZW4YASABKAkSEgoKc2Vzc2lvbl9pZBgCIAEoCRIaChJleHBpcmVzX2F0X3VuaXhfbXMYAyABKAMSGQoRd29ya3NwYWNlX3VzZXJfaWQYBCABKAkSFAoMd29ya3NwYWNlX2lkGAUgASgJIj0KGEludmFsaWRhdGVTZXNzaW9uUmVxdWVzdBINCgV0b2tlbhgBIAEoCRISCgpzZXNzaW9uX2lkGAIgASgJIjAKGUludmFsaWRhdGVTZXNzaW9uUmVzcG9uc2USEwoLaW52YWxpZGF0ZWQYASABKAgiSAoOQWN0aW5nQXNUYXJnZXQSCgoCaWQYASABKAkSFAoMd29ya3NwYWNlX2lkGAIgASgJEhQKDGRpc3BsYXlfbmFtZRgDIAEoCSK4AQoJUHJpbmNpcGFsEi0KBHR5cGUYASABKA4yHy5kb21haW4uZW50aXR5LnYxLlByaW5jaXBhbFR5cGUSFAoMcHJpbmNpcGFsX2lkGAIgASgJEhQKDHdvcmtzcGFjZV9pZBgDIAEoCRIUCgxkaXNwbGF5X25hbWUYBCABKAkSOgoRYWN0aW5nX2FzX3RhcmdldHMYBSADKAsyHy5zZXJ2aWNlLmF1dGgudjEuQWN0aW5nQXNUYXJnZXQi2QIKFlN3aXRjaFByaW5jaXBhbFJlcXVlc3QSDwoHdXNlcl9pZBgBIAEoCRINCgV0b2tlbhgCIAEoCRI0ChB0YXJnZXRfcHJpbmNpcGFsGAMgASgLMhouc2VydmljZS5hdXRoLnYxLlByaW5jaXBhbBIbChNhY3RpbmdfYXNfY2xpZW50X2lkGAQgASgJEh0KFWFjdGluZ19hc19zdXBwbGllcl9pZBgFIAEoCRIwCgh1c2VfY2FzZRgGIAEoDjIeLnNlcnZpY2UuYXV0aC52MS5Td2l0Y2hVc2VDYXNlEhMKC3JlcXVlc3RfdXJsGAcgASgJEg8KB3JlZmVyZXIYCCABKAkSFgoOc2VjX2ZldGNoX3NpdGUYCSABKAkSEgoKdXNlcl9hZ2VudBgKIAEoCRISCgp1cmxfZHJpdmVuGAsgASgIEhUKDXJlcXVpcmVfYXVkaXQYDCABKAgiQgoXU3dpdGNoUHJpbmNpcGFsUmVzcG9uc2USEQoJbmV3X3Rva2VuGAEgASgJEhQKDHJlZGlyZWN0X3VybBgCIAEoCSqZAgoNU3dpdGNoVXNlQ2FzZRIfChtTV0lUQ0hfVVNFX0NBU0VfVU5TUEVDSUZJRUQQABIeChpTV0lUQ0hfVVNFX0NBU0VfVVJMX1JPVEFURRABEikKJVNXSVRDSF9VU0VfQ0FTRV9VUkxfQUNUSU5HX0FTX0lOUExBQ0UQAhIpCiVTV0lUQ0hfVVNFX0NBU0VfVVJMX1BSSU5DSVBBTF9JTlBMQUNFEAMSIwofU1dJVENIX1VTRV9DQVNFX0VYUExJQ0lUX1JPVEFURRAEEiQKIFNXSVRDSF9VU0VfQ0FTRV9FWFBMSUNJVF9JTlBMQUNFEAUSJgoiU1dJVENIX1VTRV9DQVNFX0VYUExJQ0lUX0FDVElOR19BUxAGQsEBChNjb20uc2VydmljZS5hdXRoLnYxQgxTZXNzaW9uUHJvdG9QAVo+Z2l0aHViLmNvbS9lcm5pZWFsaWNlL2VzcXltYS9wa2cvc2NoZW1hL3YxL3NlcnZpY2UvYXV0aDthdXRodjGiAgNTQViqAg9TZXJ2aWNlLkF1dGguVjHKAg9TZXJ2aWNlXEF1dGhcVjHiAhtTZXJ2aWNlXEF1dGhcVjFcR1BCTWV0YWRhdGHqAhFTZXJ2aWNlOjpBdXRoOjpWMWIGcHJvdG8z", [file_domain_entity_principal_type_principal_type]);
 
 /**
  * @generated from message service.auth.v1.AuthenticateSessionRequest
@@ -192,4 +194,243 @@ export type InvalidateSessionResponse = Message<"service.auth.v1.InvalidateSessi
  */
 export const InvalidateSessionResponseSchema: GenMessage<InvalidateSessionResponse> = /*@__PURE__*/
   messageDesc(file_service_auth_session, 6);
+
+/**
+ * @generated from message service.auth.v1.ActingAsTarget
+ */
+export type ActingAsTarget = Message<"service.auth.v1.ActingAsTarget"> & {
+  /**
+   * underlying party id (client_id or supplier_id)
+   *
+   * @generated from field: string id = 1;
+   */
+  id: string;
+
+  /**
+   * workspace the party lives in
+   *
+   * @generated from field: string workspace_id = 2;
+   */
+  workspaceId: string;
+
+  /**
+   * @generated from field: string display_name = 3;
+   */
+  displayName: string;
+};
+
+/**
+ * Describes the message service.auth.v1.ActingAsTarget.
+ * Use `create(ActingAsTargetSchema)` to create a new message.
+ */
+export const ActingAsTargetSchema: GenMessage<ActingAsTarget> = /*@__PURE__*/
+  messageDesc(file_service_auth_session, 7);
+
+/**
+ * @generated from message service.auth.v1.Principal
+ */
+export type Principal = Message<"service.auth.v1.Principal"> & {
+  /**
+   * @generated from field: domain.entity.v1.PrincipalType type = 1;
+   */
+  type: PrincipalType;
+
+  /**
+   * @generated from field: string principal_id = 2;
+   */
+  principalId: string;
+
+  /**
+   * @generated from field: string workspace_id = 3;
+   */
+  workspaceId: string;
+
+  /**
+   * @generated from field: string display_name = 4;
+   */
+  displayName: string;
+
+  /**
+   * @generated from field: repeated service.auth.v1.ActingAsTarget acting_as_targets = 5;
+   */
+  actingAsTargets: ActingAsTarget[];
+};
+
+/**
+ * Describes the message service.auth.v1.Principal.
+ * Use `create(PrincipalSchema)` to create a new message.
+ */
+export const PrincipalSchema: GenMessage<Principal> = /*@__PURE__*/
+  messageDesc(file_service_auth_session, 8);
+
+/**
+ * @generated from message service.auth.v1.SwitchPrincipalRequest
+ */
+export type SwitchPrincipalRequest = Message<"service.auth.v1.SwitchPrincipalRequest"> & {
+  /**
+   * @generated from field: string user_id = 1;
+   */
+  userId: string;
+
+  /**
+   * current cookie token; empty at first-login
+   *
+   * @generated from field: string token = 2;
+   */
+  token: string;
+
+  /**
+   * @generated from field: service.auth.v1.Principal target_principal = 3;
+   */
+  targetPrincipal?: Principal;
+
+  /**
+   * optional override for delegate-of-N>1
+   *
+   * @generated from field: string acting_as_client_id = 4;
+   */
+  actingAsClientId: string;
+
+  /**
+   * optional override
+   *
+   * @generated from field: string acting_as_supplier_id = 5;
+   */
+  actingAsSupplierId: string;
+
+  /**
+   * audit row use_case tag
+   *
+   * @generated from field: service.auth.v1.SwitchUseCase use_case = 6;
+   */
+  useCase: SwitchUseCase;
+
+  /**
+   * Forensic metadata (folded into audit reason text — A5 red-team finding X-2)
+   *
+   * @generated from field: string request_url = 7;
+   */
+  requestUrl: string;
+
+  /**
+   * @generated from field: string referer = 8;
+   */
+  referer: string;
+
+  /**
+   * @generated from field: string sec_fetch_site = 9;
+   */
+  secFetchSite: string;
+
+  /**
+   * @generated from field: string user_agent = 10;
+   */
+  userAgent: string;
+
+  /**
+   * URL-driven vs explicit-form. Used by deriveSwitchUseCase when use_case is UNSPECIFIED.
+   *
+   * @generated from field: bool url_driven = 11;
+   */
+  urlDriven: boolean;
+
+  /**
+   * RequireAudit: rolls back the rotation if audit insert fails (red-team A-4).
+   *
+   * @generated from field: bool require_audit = 12;
+   */
+  requireAudit: boolean;
+};
+
+/**
+ * Describes the message service.auth.v1.SwitchPrincipalRequest.
+ * Use `create(SwitchPrincipalRequestSchema)` to create a new message.
+ */
+export const SwitchPrincipalRequestSchema: GenMessage<SwitchPrincipalRequest> = /*@__PURE__*/
+  messageDesc(file_service_auth_session, 9);
+
+/**
+ * @generated from message service.auth.v1.SwitchPrincipalResponse
+ */
+export type SwitchPrincipalResponse = Message<"service.auth.v1.SwitchPrincipalResponse"> & {
+  /**
+   * NewToken is non-empty when rotation occurred and the handler must
+   * SetSessionCookie. Empty means in-place mutation (cookie unchanged).
+   *
+   * @generated from field: string new_token = 1;
+   */
+  newToken: string;
+
+  /**
+   * RedirectURL the handler should redirect to.
+   *
+   * @generated from field: string redirect_url = 2;
+   */
+  redirectUrl: string;
+};
+
+/**
+ * Describes the message service.auth.v1.SwitchPrincipalResponse.
+ * Use `create(SwitchPrincipalResponseSchema)` to create a new message.
+ */
+export const SwitchPrincipalResponseSchema: GenMessage<SwitchPrincipalResponse> = /*@__PURE__*/
+  messageDesc(file_service_auth_session, 10);
+
+/**
+ * @generated from enum service.auth.v1.SwitchUseCase
+ */
+export enum SwitchUseCase {
+  /**
+   * @generated from enum value: SWITCH_USE_CASE_UNSPECIFIED = 0;
+   */
+  UNSPECIFIED = 0,
+
+  /**
+   * URL-driven cross-workspace rotation (Q-WS-13)
+   *
+   * @generated from enum value: SWITCH_USE_CASE_URL_ROTATE = 1;
+   */
+  URL_ROTATE = 1,
+
+  /**
+   * URL-driven same-workspace acting-as change
+   *
+   * @generated from enum value: SWITCH_USE_CASE_URL_ACTING_AS_INPLACE = 2;
+   */
+  URL_ACTING_AS_INPLACE = 2,
+
+  /**
+   * URL-driven same-workspace principal_type change (rare)
+   *
+   * @generated from enum value: SWITCH_USE_CASE_URL_PRINCIPAL_INPLACE = 3;
+   */
+  URL_PRINCIPAL_INPLACE = 3,
+
+  /**
+   * Form-driven cross-workspace via /action/auth/switch-principal
+   *
+   * @generated from enum value: SWITCH_USE_CASE_EXPLICIT_ROTATE = 4;
+   */
+  EXPLICIT_ROTATE = 4,
+
+  /**
+   * Form-driven same-workspace principal_type change (Mutual co-op)
+   *
+   * @generated from enum value: SWITCH_USE_CASE_EXPLICIT_INPLACE = 5;
+   */
+  EXPLICIT_INPLACE = 5,
+
+  /**
+   * Form-driven same-workspace acting-as change
+   *
+   * @generated from enum value: SWITCH_USE_CASE_EXPLICIT_ACTING_AS = 6;
+   */
+  EXPLICIT_ACTING_AS = 6,
+}
+
+/**
+ * Describes the enum service.auth.v1.SwitchUseCase.
+ */
+export const SwitchUseCaseSchema: GenEnum<SwitchUseCase> = /*@__PURE__*/
+  enumDesc(file_service_auth_session, 0);
 

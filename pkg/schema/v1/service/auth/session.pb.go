@@ -7,6 +7,7 @@
 package authv1
 
 import (
+	principal_type "github.com/erniealice/esqyma/pkg/schema/v1/domain/entity/principal_type"
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
 	reflect "reflect"
@@ -20,6 +21,67 @@ const (
 	// Verify that runtime/protoimpl is sufficiently up-to-date.
 	_ = protoimpl.EnforceVersion(protoimpl.MaxVersion - 20)
 )
+
+type SwitchUseCase int32
+
+const (
+	SwitchUseCase_SWITCH_USE_CASE_UNSPECIFIED           SwitchUseCase = 0
+	SwitchUseCase_SWITCH_USE_CASE_URL_ROTATE            SwitchUseCase = 1 // URL-driven cross-workspace rotation (Q-WS-13)
+	SwitchUseCase_SWITCH_USE_CASE_URL_ACTING_AS_INPLACE SwitchUseCase = 2 // URL-driven same-workspace acting-as change
+	SwitchUseCase_SWITCH_USE_CASE_URL_PRINCIPAL_INPLACE SwitchUseCase = 3 // URL-driven same-workspace principal_type change (rare)
+	SwitchUseCase_SWITCH_USE_CASE_EXPLICIT_ROTATE       SwitchUseCase = 4 // Form-driven cross-workspace via /action/auth/switch-principal
+	SwitchUseCase_SWITCH_USE_CASE_EXPLICIT_INPLACE      SwitchUseCase = 5 // Form-driven same-workspace principal_type change (Mutual co-op)
+	SwitchUseCase_SWITCH_USE_CASE_EXPLICIT_ACTING_AS    SwitchUseCase = 6 // Form-driven same-workspace acting-as change
+)
+
+// Enum value maps for SwitchUseCase.
+var (
+	SwitchUseCase_name = map[int32]string{
+		0: "SWITCH_USE_CASE_UNSPECIFIED",
+		1: "SWITCH_USE_CASE_URL_ROTATE",
+		2: "SWITCH_USE_CASE_URL_ACTING_AS_INPLACE",
+		3: "SWITCH_USE_CASE_URL_PRINCIPAL_INPLACE",
+		4: "SWITCH_USE_CASE_EXPLICIT_ROTATE",
+		5: "SWITCH_USE_CASE_EXPLICIT_INPLACE",
+		6: "SWITCH_USE_CASE_EXPLICIT_ACTING_AS",
+	}
+	SwitchUseCase_value = map[string]int32{
+		"SWITCH_USE_CASE_UNSPECIFIED":           0,
+		"SWITCH_USE_CASE_URL_ROTATE":            1,
+		"SWITCH_USE_CASE_URL_ACTING_AS_INPLACE": 2,
+		"SWITCH_USE_CASE_URL_PRINCIPAL_INPLACE": 3,
+		"SWITCH_USE_CASE_EXPLICIT_ROTATE":       4,
+		"SWITCH_USE_CASE_EXPLICIT_INPLACE":      5,
+		"SWITCH_USE_CASE_EXPLICIT_ACTING_AS":    6,
+	}
+)
+
+func (x SwitchUseCase) Enum() *SwitchUseCase {
+	p := new(SwitchUseCase)
+	*p = x
+	return p
+}
+
+func (x SwitchUseCase) String() string {
+	return protoimpl.X.EnumStringOf(x.Descriptor(), protoreflect.EnumNumber(x))
+}
+
+func (SwitchUseCase) Descriptor() protoreflect.EnumDescriptor {
+	return file_service_auth_session_proto_enumTypes[0].Descriptor()
+}
+
+func (SwitchUseCase) Type() protoreflect.EnumType {
+	return &file_service_auth_session_proto_enumTypes[0]
+}
+
+func (x SwitchUseCase) Number() protoreflect.EnumNumber {
+	return protoreflect.EnumNumber(x)
+}
+
+// Deprecated: Use SwitchUseCase.Descriptor instead.
+func (SwitchUseCase) EnumDescriptor() ([]byte, []int) {
+	return file_service_auth_session_proto_rawDescGZIP(), []int{0}
+}
 
 type AuthenticateSessionRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
@@ -426,11 +488,337 @@ func (x *InvalidateSessionResponse) GetInvalidated() bool {
 	return false
 }
 
+type ActingAsTarget struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Id            string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`                                      // underlying party id (client_id or supplier_id)
+	WorkspaceId   string                 `protobuf:"bytes,2,opt,name=workspace_id,json=workspaceId,proto3" json:"workspace_id,omitempty"` // workspace the party lives in
+	DisplayName   string                 `protobuf:"bytes,3,opt,name=display_name,json=displayName,proto3" json:"display_name,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *ActingAsTarget) Reset() {
+	*x = ActingAsTarget{}
+	mi := &file_service_auth_session_proto_msgTypes[7]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *ActingAsTarget) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ActingAsTarget) ProtoMessage() {}
+
+func (x *ActingAsTarget) ProtoReflect() protoreflect.Message {
+	mi := &file_service_auth_session_proto_msgTypes[7]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ActingAsTarget.ProtoReflect.Descriptor instead.
+func (*ActingAsTarget) Descriptor() ([]byte, []int) {
+	return file_service_auth_session_proto_rawDescGZIP(), []int{7}
+}
+
+func (x *ActingAsTarget) GetId() string {
+	if x != nil {
+		return x.Id
+	}
+	return ""
+}
+
+func (x *ActingAsTarget) GetWorkspaceId() string {
+	if x != nil {
+		return x.WorkspaceId
+	}
+	return ""
+}
+
+func (x *ActingAsTarget) GetDisplayName() string {
+	if x != nil {
+		return x.DisplayName
+	}
+	return ""
+}
+
+type Principal struct {
+	state           protoimpl.MessageState       `protogen:"open.v1"`
+	Type            principal_type.PrincipalType `protobuf:"varint,1,opt,name=type,proto3,enum=domain.entity.v1.PrincipalType" json:"type,omitempty"`
+	PrincipalId     string                       `protobuf:"bytes,2,opt,name=principal_id,json=principalId,proto3" json:"principal_id,omitempty"`
+	WorkspaceId     string                       `protobuf:"bytes,3,opt,name=workspace_id,json=workspaceId,proto3" json:"workspace_id,omitempty"`
+	DisplayName     string                       `protobuf:"bytes,4,opt,name=display_name,json=displayName,proto3" json:"display_name,omitempty"`
+	ActingAsTargets []*ActingAsTarget            `protobuf:"bytes,5,rep,name=acting_as_targets,json=actingAsTargets,proto3" json:"acting_as_targets,omitempty"`
+	unknownFields   protoimpl.UnknownFields
+	sizeCache       protoimpl.SizeCache
+}
+
+func (x *Principal) Reset() {
+	*x = Principal{}
+	mi := &file_service_auth_session_proto_msgTypes[8]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *Principal) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*Principal) ProtoMessage() {}
+
+func (x *Principal) ProtoReflect() protoreflect.Message {
+	mi := &file_service_auth_session_proto_msgTypes[8]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use Principal.ProtoReflect.Descriptor instead.
+func (*Principal) Descriptor() ([]byte, []int) {
+	return file_service_auth_session_proto_rawDescGZIP(), []int{8}
+}
+
+func (x *Principal) GetType() principal_type.PrincipalType {
+	if x != nil {
+		return x.Type
+	}
+	return principal_type.PrincipalType(0)
+}
+
+func (x *Principal) GetPrincipalId() string {
+	if x != nil {
+		return x.PrincipalId
+	}
+	return ""
+}
+
+func (x *Principal) GetWorkspaceId() string {
+	if x != nil {
+		return x.WorkspaceId
+	}
+	return ""
+}
+
+func (x *Principal) GetDisplayName() string {
+	if x != nil {
+		return x.DisplayName
+	}
+	return ""
+}
+
+func (x *Principal) GetActingAsTargets() []*ActingAsTarget {
+	if x != nil {
+		return x.ActingAsTargets
+	}
+	return nil
+}
+
+type SwitchPrincipalRequest struct {
+	state              protoimpl.MessageState `protogen:"open.v1"`
+	UserId             string                 `protobuf:"bytes,1,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty"`
+	Token              string                 `protobuf:"bytes,2,opt,name=token,proto3" json:"token,omitempty"` // current cookie token; empty at first-login
+	TargetPrincipal    *Principal             `protobuf:"bytes,3,opt,name=target_principal,json=targetPrincipal,proto3" json:"target_principal,omitempty"`
+	ActingAsClientId   string                 `protobuf:"bytes,4,opt,name=acting_as_client_id,json=actingAsClientId,proto3" json:"acting_as_client_id,omitempty"`       // optional override for delegate-of-N>1
+	ActingAsSupplierId string                 `protobuf:"bytes,5,opt,name=acting_as_supplier_id,json=actingAsSupplierId,proto3" json:"acting_as_supplier_id,omitempty"` // optional override
+	UseCase            SwitchUseCase          `protobuf:"varint,6,opt,name=use_case,json=useCase,proto3,enum=service.auth.v1.SwitchUseCase" json:"use_case,omitempty"`  // audit row use_case tag
+	// Forensic metadata (folded into audit reason text — A5 red-team finding X-2)
+	RequestUrl   string `protobuf:"bytes,7,opt,name=request_url,json=requestUrl,proto3" json:"request_url,omitempty"`
+	Referer      string `protobuf:"bytes,8,opt,name=referer,proto3" json:"referer,omitempty"`
+	SecFetchSite string `protobuf:"bytes,9,opt,name=sec_fetch_site,json=secFetchSite,proto3" json:"sec_fetch_site,omitempty"`
+	UserAgent    string `protobuf:"bytes,10,opt,name=user_agent,json=userAgent,proto3" json:"user_agent,omitempty"`
+	// URL-driven vs explicit-form. Used by deriveSwitchUseCase when use_case is UNSPECIFIED.
+	UrlDriven bool `protobuf:"varint,11,opt,name=url_driven,json=urlDriven,proto3" json:"url_driven,omitempty"`
+	// RequireAudit: rolls back the rotation if audit insert fails (red-team A-4).
+	RequireAudit  bool `protobuf:"varint,12,opt,name=require_audit,json=requireAudit,proto3" json:"require_audit,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *SwitchPrincipalRequest) Reset() {
+	*x = SwitchPrincipalRequest{}
+	mi := &file_service_auth_session_proto_msgTypes[9]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *SwitchPrincipalRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*SwitchPrincipalRequest) ProtoMessage() {}
+
+func (x *SwitchPrincipalRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_service_auth_session_proto_msgTypes[9]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use SwitchPrincipalRequest.ProtoReflect.Descriptor instead.
+func (*SwitchPrincipalRequest) Descriptor() ([]byte, []int) {
+	return file_service_auth_session_proto_rawDescGZIP(), []int{9}
+}
+
+func (x *SwitchPrincipalRequest) GetUserId() string {
+	if x != nil {
+		return x.UserId
+	}
+	return ""
+}
+
+func (x *SwitchPrincipalRequest) GetToken() string {
+	if x != nil {
+		return x.Token
+	}
+	return ""
+}
+
+func (x *SwitchPrincipalRequest) GetTargetPrincipal() *Principal {
+	if x != nil {
+		return x.TargetPrincipal
+	}
+	return nil
+}
+
+func (x *SwitchPrincipalRequest) GetActingAsClientId() string {
+	if x != nil {
+		return x.ActingAsClientId
+	}
+	return ""
+}
+
+func (x *SwitchPrincipalRequest) GetActingAsSupplierId() string {
+	if x != nil {
+		return x.ActingAsSupplierId
+	}
+	return ""
+}
+
+func (x *SwitchPrincipalRequest) GetUseCase() SwitchUseCase {
+	if x != nil {
+		return x.UseCase
+	}
+	return SwitchUseCase_SWITCH_USE_CASE_UNSPECIFIED
+}
+
+func (x *SwitchPrincipalRequest) GetRequestUrl() string {
+	if x != nil {
+		return x.RequestUrl
+	}
+	return ""
+}
+
+func (x *SwitchPrincipalRequest) GetReferer() string {
+	if x != nil {
+		return x.Referer
+	}
+	return ""
+}
+
+func (x *SwitchPrincipalRequest) GetSecFetchSite() string {
+	if x != nil {
+		return x.SecFetchSite
+	}
+	return ""
+}
+
+func (x *SwitchPrincipalRequest) GetUserAgent() string {
+	if x != nil {
+		return x.UserAgent
+	}
+	return ""
+}
+
+func (x *SwitchPrincipalRequest) GetUrlDriven() bool {
+	if x != nil {
+		return x.UrlDriven
+	}
+	return false
+}
+
+func (x *SwitchPrincipalRequest) GetRequireAudit() bool {
+	if x != nil {
+		return x.RequireAudit
+	}
+	return false
+}
+
+type SwitchPrincipalResponse struct {
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// NewToken is non-empty when rotation occurred and the handler must
+	// SetSessionCookie. Empty means in-place mutation (cookie unchanged).
+	NewToken string `protobuf:"bytes,1,opt,name=new_token,json=newToken,proto3" json:"new_token,omitempty"`
+	// RedirectURL the handler should redirect to.
+	RedirectUrl   string `protobuf:"bytes,2,opt,name=redirect_url,json=redirectUrl,proto3" json:"redirect_url,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *SwitchPrincipalResponse) Reset() {
+	*x = SwitchPrincipalResponse{}
+	mi := &file_service_auth_session_proto_msgTypes[10]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *SwitchPrincipalResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*SwitchPrincipalResponse) ProtoMessage() {}
+
+func (x *SwitchPrincipalResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_service_auth_session_proto_msgTypes[10]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use SwitchPrincipalResponse.ProtoReflect.Descriptor instead.
+func (*SwitchPrincipalResponse) Descriptor() ([]byte, []int) {
+	return file_service_auth_session_proto_rawDescGZIP(), []int{10}
+}
+
+func (x *SwitchPrincipalResponse) GetNewToken() string {
+	if x != nil {
+		return x.NewToken
+	}
+	return ""
+}
+
+func (x *SwitchPrincipalResponse) GetRedirectUrl() string {
+	if x != nil {
+		return x.RedirectUrl
+	}
+	return ""
+}
+
 var File_service_auth_session_proto protoreflect.FileDescriptor
 
 const file_service_auth_session_proto_rawDesc = "" +
 	"\n" +
-	"\x1aservice/auth/session.proto\x12\x0fservice.auth.v1\"2\n" +
+	"\x1aservice/auth/session.proto\x12\x0fservice.auth.v1\x1a1domain/entity/principal_type/principal_type.proto\"2\n" +
 	"\x1aAuthenticateSessionRequest\x12\x14\n" +
 	"\x05token\x18\x01 \x01(\tR\x05token\"\xcf\x01\n" +
 	"\fAuthIdentity\x12\x17\n" +
@@ -458,7 +846,45 @@ const file_service_auth_session_proto_rawDesc = "" +
 	"\n" +
 	"session_id\x18\x02 \x01(\tR\tsessionId\"=\n" +
 	"\x19InvalidateSessionResponse\x12 \n" +
-	"\vinvalidated\x18\x01 \x01(\bR\vinvalidatedB\xc1\x01\n" +
+	"\vinvalidated\x18\x01 \x01(\bR\vinvalidated\"f\n" +
+	"\x0eActingAsTarget\x12\x0e\n" +
+	"\x02id\x18\x01 \x01(\tR\x02id\x12!\n" +
+	"\fworkspace_id\x18\x02 \x01(\tR\vworkspaceId\x12!\n" +
+	"\fdisplay_name\x18\x03 \x01(\tR\vdisplayName\"\xf6\x01\n" +
+	"\tPrincipal\x123\n" +
+	"\x04type\x18\x01 \x01(\x0e2\x1f.domain.entity.v1.PrincipalTypeR\x04type\x12!\n" +
+	"\fprincipal_id\x18\x02 \x01(\tR\vprincipalId\x12!\n" +
+	"\fworkspace_id\x18\x03 \x01(\tR\vworkspaceId\x12!\n" +
+	"\fdisplay_name\x18\x04 \x01(\tR\vdisplayName\x12K\n" +
+	"\x11acting_as_targets\x18\x05 \x03(\v2\x1f.service.auth.v1.ActingAsTargetR\x0factingAsTargets\"\xef\x03\n" +
+	"\x16SwitchPrincipalRequest\x12\x17\n" +
+	"\auser_id\x18\x01 \x01(\tR\x06userId\x12\x14\n" +
+	"\x05token\x18\x02 \x01(\tR\x05token\x12E\n" +
+	"\x10target_principal\x18\x03 \x01(\v2\x1a.service.auth.v1.PrincipalR\x0ftargetPrincipal\x12-\n" +
+	"\x13acting_as_client_id\x18\x04 \x01(\tR\x10actingAsClientId\x121\n" +
+	"\x15acting_as_supplier_id\x18\x05 \x01(\tR\x12actingAsSupplierId\x129\n" +
+	"\buse_case\x18\x06 \x01(\x0e2\x1e.service.auth.v1.SwitchUseCaseR\auseCase\x12\x1f\n" +
+	"\vrequest_url\x18\a \x01(\tR\n" +
+	"requestUrl\x12\x18\n" +
+	"\areferer\x18\b \x01(\tR\areferer\x12$\n" +
+	"\x0esec_fetch_site\x18\t \x01(\tR\fsecFetchSite\x12\x1d\n" +
+	"\n" +
+	"user_agent\x18\n" +
+	" \x01(\tR\tuserAgent\x12\x1d\n" +
+	"\n" +
+	"url_driven\x18\v \x01(\bR\turlDriven\x12#\n" +
+	"\rrequire_audit\x18\f \x01(\bR\frequireAudit\"Y\n" +
+	"\x17SwitchPrincipalResponse\x12\x1b\n" +
+	"\tnew_token\x18\x01 \x01(\tR\bnewToken\x12!\n" +
+	"\fredirect_url\x18\x02 \x01(\tR\vredirectUrl*\x99\x02\n" +
+	"\rSwitchUseCase\x12\x1f\n" +
+	"\x1bSWITCH_USE_CASE_UNSPECIFIED\x10\x00\x12\x1e\n" +
+	"\x1aSWITCH_USE_CASE_URL_ROTATE\x10\x01\x12)\n" +
+	"%SWITCH_USE_CASE_URL_ACTING_AS_INPLACE\x10\x02\x12)\n" +
+	"%SWITCH_USE_CASE_URL_PRINCIPAL_INPLACE\x10\x03\x12#\n" +
+	"\x1fSWITCH_USE_CASE_EXPLICIT_ROTATE\x10\x04\x12$\n" +
+	" SWITCH_USE_CASE_EXPLICIT_INPLACE\x10\x05\x12&\n" +
+	"\"SWITCH_USE_CASE_EXPLICIT_ACTING_AS\x10\x06B\xc1\x01\n" +
 	"\x13com.service.auth.v1B\fSessionProtoP\x01Z>github.com/erniealice/esqyma/pkg/schema/v1/service/auth;authv1\xa2\x02\x03SAX\xaa\x02\x0fService.Auth.V1\xca\x02\x0fService\\Auth\\V1\xe2\x02\x1bService\\Auth\\V1\\GPBMetadata\xea\x02\x11Service::Auth::V1b\x06proto3"
 
 var (
@@ -473,23 +899,34 @@ func file_service_auth_session_proto_rawDescGZIP() []byte {
 	return file_service_auth_session_proto_rawDescData
 }
 
-var file_service_auth_session_proto_msgTypes = make([]protoimpl.MessageInfo, 7)
+var file_service_auth_session_proto_enumTypes = make([]protoimpl.EnumInfo, 1)
+var file_service_auth_session_proto_msgTypes = make([]protoimpl.MessageInfo, 11)
 var file_service_auth_session_proto_goTypes = []any{
-	(*AuthenticateSessionRequest)(nil),  // 0: service.auth.v1.AuthenticateSessionRequest
-	(*AuthIdentity)(nil),                // 1: service.auth.v1.AuthIdentity
-	(*AuthenticateSessionResponse)(nil), // 2: service.auth.v1.AuthenticateSessionResponse
-	(*IssueSessionRequest)(nil),         // 3: service.auth.v1.IssueSessionRequest
-	(*IssueSessionResponse)(nil),        // 4: service.auth.v1.IssueSessionResponse
-	(*InvalidateSessionRequest)(nil),    // 5: service.auth.v1.InvalidateSessionRequest
-	(*InvalidateSessionResponse)(nil),   // 6: service.auth.v1.InvalidateSessionResponse
+	(SwitchUseCase)(0),                  // 0: service.auth.v1.SwitchUseCase
+	(*AuthenticateSessionRequest)(nil),  // 1: service.auth.v1.AuthenticateSessionRequest
+	(*AuthIdentity)(nil),                // 2: service.auth.v1.AuthIdentity
+	(*AuthenticateSessionResponse)(nil), // 3: service.auth.v1.AuthenticateSessionResponse
+	(*IssueSessionRequest)(nil),         // 4: service.auth.v1.IssueSessionRequest
+	(*IssueSessionResponse)(nil),        // 5: service.auth.v1.IssueSessionResponse
+	(*InvalidateSessionRequest)(nil),    // 6: service.auth.v1.InvalidateSessionRequest
+	(*InvalidateSessionResponse)(nil),   // 7: service.auth.v1.InvalidateSessionResponse
+	(*ActingAsTarget)(nil),              // 8: service.auth.v1.ActingAsTarget
+	(*Principal)(nil),                   // 9: service.auth.v1.Principal
+	(*SwitchPrincipalRequest)(nil),      // 10: service.auth.v1.SwitchPrincipalRequest
+	(*SwitchPrincipalResponse)(nil),     // 11: service.auth.v1.SwitchPrincipalResponse
+	(principal_type.PrincipalType)(0),   // 12: domain.entity.v1.PrincipalType
 }
 var file_service_auth_session_proto_depIdxs = []int32{
-	1, // 0: service.auth.v1.AuthenticateSessionResponse.identity:type_name -> service.auth.v1.AuthIdentity
-	1, // [1:1] is the sub-list for method output_type
-	1, // [1:1] is the sub-list for method input_type
-	1, // [1:1] is the sub-list for extension type_name
-	1, // [1:1] is the sub-list for extension extendee
-	0, // [0:1] is the sub-list for field type_name
+	2,  // 0: service.auth.v1.AuthenticateSessionResponse.identity:type_name -> service.auth.v1.AuthIdentity
+	12, // 1: service.auth.v1.Principal.type:type_name -> domain.entity.v1.PrincipalType
+	8,  // 2: service.auth.v1.Principal.acting_as_targets:type_name -> service.auth.v1.ActingAsTarget
+	9,  // 3: service.auth.v1.SwitchPrincipalRequest.target_principal:type_name -> service.auth.v1.Principal
+	0,  // 4: service.auth.v1.SwitchPrincipalRequest.use_case:type_name -> service.auth.v1.SwitchUseCase
+	5,  // [5:5] is the sub-list for method output_type
+	5,  // [5:5] is the sub-list for method input_type
+	5,  // [5:5] is the sub-list for extension type_name
+	5,  // [5:5] is the sub-list for extension extendee
+	0,  // [0:5] is the sub-list for field type_name
 }
 
 func init() { file_service_auth_session_proto_init() }
@@ -502,13 +939,14 @@ func file_service_auth_session_proto_init() {
 		File: protoimpl.DescBuilder{
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_service_auth_session_proto_rawDesc), len(file_service_auth_session_proto_rawDesc)),
-			NumEnums:      0,
-			NumMessages:   7,
+			NumEnums:      1,
+			NumMessages:   11,
 			NumExtensions: 0,
 			NumServices:   0,
 		},
 		GoTypes:           file_service_auth_session_proto_goTypes,
 		DependencyIndexes: file_service_auth_session_proto_depIdxs,
+		EnumInfos:         file_service_auth_session_proto_enumTypes,
 		MessageInfos:      file_service_auth_session_proto_msgTypes,
 	}.Build()
 	File_service_auth_session_proto = out.File
