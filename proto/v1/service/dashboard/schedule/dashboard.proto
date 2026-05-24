@@ -16,9 +16,9 @@ import "domain/event/event/event.proto";
 // This proto is **authored from scratch** for the Schedule (event) dashboard
 // candidate — there was no prior proto for this surface. The pre-migration
 // shape lived as Go-only Request/Response at
-// packages/espyna-golang/internal/application/usecases/event/dashboard/
+// packages/espyna-golang/internal/application/usecases/domain/event/dashboard/
 // get_page_data.go:33,47 and was wired via the flat `Dashboard` field at
-// packages/espyna-golang/internal/application/usecases/event/usecases.go:49.
+// packages/espyna-golang/internal/application/usecases/domain/event/usecases.go.
 // This file formalizes those shapes as a versioned wire-contract so the
 // service-driven domain has a proto-canonical surface, matching the other
 // Wave B "new-proto-needed" dashboards (Expenditure, Job, Integration,
