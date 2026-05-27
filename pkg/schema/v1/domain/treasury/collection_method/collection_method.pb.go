@@ -8,6 +8,7 @@ package treasuryv1
 
 import (
 	common "github.com/erniealice/esqyma/pkg/schema/v1/domain/common"
+	advance_kind "github.com/erniealice/esqyma/pkg/schema/v1/domain/common/advance_kind"
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
 	reflect "reflect"
@@ -22,23 +23,485 @@ const (
 	_ = protoimpl.EnforceVersion(protoimpl.MaxVersion - 20)
 )
 
+// CollectionMethodPostingKind determines how collections through this method post
+// to the ledger. Per alignment.md / decisions.md.
+type CollectionMethodPostingKind int32
+
+const (
+	CollectionMethodPostingKind_COLLECTION_METHOD_POSTING_KIND_UNSPECIFIED         CollectionMethodPostingKind = 0
+	CollectionMethodPostingKind_COLLECTION_METHOD_POSTING_KIND_CASH                CollectionMethodPostingKind = 1
+	CollectionMethodPostingKind_COLLECTION_METHOD_POSTING_KIND_ADVANCE_DRAWDOWN    CollectionMethodPostingKind = 2
+	CollectionMethodPostingKind_COLLECTION_METHOD_POSTING_KIND_CLAIM_AR            CollectionMethodPostingKind = 3
+	CollectionMethodPostingKind_COLLECTION_METHOD_POSTING_KIND_DEFERRED_RECEIVABLE CollectionMethodPostingKind = 4
+)
+
+// Enum value maps for CollectionMethodPostingKind.
+var (
+	CollectionMethodPostingKind_name = map[int32]string{
+		0: "COLLECTION_METHOD_POSTING_KIND_UNSPECIFIED",
+		1: "COLLECTION_METHOD_POSTING_KIND_CASH",
+		2: "COLLECTION_METHOD_POSTING_KIND_ADVANCE_DRAWDOWN",
+		3: "COLLECTION_METHOD_POSTING_KIND_CLAIM_AR",
+		4: "COLLECTION_METHOD_POSTING_KIND_DEFERRED_RECEIVABLE",
+	}
+	CollectionMethodPostingKind_value = map[string]int32{
+		"COLLECTION_METHOD_POSTING_KIND_UNSPECIFIED":         0,
+		"COLLECTION_METHOD_POSTING_KIND_CASH":                1,
+		"COLLECTION_METHOD_POSTING_KIND_ADVANCE_DRAWDOWN":    2,
+		"COLLECTION_METHOD_POSTING_KIND_CLAIM_AR":            3,
+		"COLLECTION_METHOD_POSTING_KIND_DEFERRED_RECEIVABLE": 4,
+	}
+)
+
+func (x CollectionMethodPostingKind) Enum() *CollectionMethodPostingKind {
+	p := new(CollectionMethodPostingKind)
+	*p = x
+	return p
+}
+
+func (x CollectionMethodPostingKind) String() string {
+	return protoimpl.X.EnumStringOf(x.Descriptor(), protoreflect.EnumNumber(x))
+}
+
+func (CollectionMethodPostingKind) Descriptor() protoreflect.EnumDescriptor {
+	return file_domain_treasury_collection_method_collection_method_proto_enumTypes[0].Descriptor()
+}
+
+func (CollectionMethodPostingKind) Type() protoreflect.EnumType {
+	return &file_domain_treasury_collection_method_collection_method_proto_enumTypes[0]
+}
+
+func (x CollectionMethodPostingKind) Number() protoreflect.EnumNumber {
+	return protoreflect.EnumNumber(x)
+}
+
+// Deprecated: Use CollectionMethodPostingKind.Descriptor instead.
+func (CollectionMethodPostingKind) EnumDescriptor() ([]byte, []int) {
+	return file_domain_treasury_collection_method_collection_method_proto_rawDescGZIP(), []int{0}
+}
+
+// CollectionMethodCategory classifies the template's business intent.
+type CollectionMethodCategory int32
+
+const (
+	CollectionMethodCategory_COLLECTION_METHOD_CATEGORY_UNSPECIFIED CollectionMethodCategory = 0
+	CollectionMethodCategory_COLLECTION_METHOD_CATEGORY_STANDARD    CollectionMethodCategory = 1
+	CollectionMethodCategory_COLLECTION_METHOD_CATEGORY_VOUCHER     CollectionMethodCategory = 2
+	CollectionMethodCategory_COLLECTION_METHOD_CATEGORY_ADVANCE     CollectionMethodCategory = 3
+	CollectionMethodCategory_COLLECTION_METHOD_CATEGORY_CARD        CollectionMethodCategory = 4
+)
+
+// Enum value maps for CollectionMethodCategory.
+var (
+	CollectionMethodCategory_name = map[int32]string{
+		0: "COLLECTION_METHOD_CATEGORY_UNSPECIFIED",
+		1: "COLLECTION_METHOD_CATEGORY_STANDARD",
+		2: "COLLECTION_METHOD_CATEGORY_VOUCHER",
+		3: "COLLECTION_METHOD_CATEGORY_ADVANCE",
+		4: "COLLECTION_METHOD_CATEGORY_CARD",
+	}
+	CollectionMethodCategory_value = map[string]int32{
+		"COLLECTION_METHOD_CATEGORY_UNSPECIFIED": 0,
+		"COLLECTION_METHOD_CATEGORY_STANDARD":    1,
+		"COLLECTION_METHOD_CATEGORY_VOUCHER":     2,
+		"COLLECTION_METHOD_CATEGORY_ADVANCE":     3,
+		"COLLECTION_METHOD_CATEGORY_CARD":        4,
+	}
+)
+
+func (x CollectionMethodCategory) Enum() *CollectionMethodCategory {
+	p := new(CollectionMethodCategory)
+	*p = x
+	return p
+}
+
+func (x CollectionMethodCategory) String() string {
+	return protoimpl.X.EnumStringOf(x.Descriptor(), protoreflect.EnumNumber(x))
+}
+
+func (CollectionMethodCategory) Descriptor() protoreflect.EnumDescriptor {
+	return file_domain_treasury_collection_method_collection_method_proto_enumTypes[1].Descriptor()
+}
+
+func (CollectionMethodCategory) Type() protoreflect.EnumType {
+	return &file_domain_treasury_collection_method_collection_method_proto_enumTypes[1]
+}
+
+func (x CollectionMethodCategory) Number() protoreflect.EnumNumber {
+	return protoreflect.EnumNumber(x)
+}
+
+// Deprecated: Use CollectionMethodCategory.Descriptor instead.
+func (CollectionMethodCategory) EnumDescriptor() ([]byte, []int) {
+	return file_domain_treasury_collection_method_collection_method_proto_rawDescGZIP(), []int{1}
+}
+
+// CollectionMethodAudienceMode controls who may transact through this method.
+// SEGMENT_SCOPED is reserved for v2 (declared, not enabled).
+type CollectionMethodAudienceMode int32
+
+const (
+	CollectionMethodAudienceMode_COLLECTION_METHOD_AUDIENCE_MODE_UNSPECIFIED    CollectionMethodAudienceMode = 0
+	CollectionMethodAudienceMode_COLLECTION_METHOD_AUDIENCE_MODE_OPEN           CollectionMethodAudienceMode = 1
+	CollectionMethodAudienceMode_COLLECTION_METHOD_AUDIENCE_MODE_RESTRICTED     CollectionMethodAudienceMode = 2
+	CollectionMethodAudienceMode_COLLECTION_METHOD_AUDIENCE_MODE_SINGLE_CLIENT  CollectionMethodAudienceMode = 3
+	CollectionMethodAudienceMode_COLLECTION_METHOD_AUDIENCE_MODE_SEGMENT_SCOPED CollectionMethodAudienceMode = 4 // reserved v2
+)
+
+// Enum value maps for CollectionMethodAudienceMode.
+var (
+	CollectionMethodAudienceMode_name = map[int32]string{
+		0: "COLLECTION_METHOD_AUDIENCE_MODE_UNSPECIFIED",
+		1: "COLLECTION_METHOD_AUDIENCE_MODE_OPEN",
+		2: "COLLECTION_METHOD_AUDIENCE_MODE_RESTRICTED",
+		3: "COLLECTION_METHOD_AUDIENCE_MODE_SINGLE_CLIENT",
+		4: "COLLECTION_METHOD_AUDIENCE_MODE_SEGMENT_SCOPED",
+	}
+	CollectionMethodAudienceMode_value = map[string]int32{
+		"COLLECTION_METHOD_AUDIENCE_MODE_UNSPECIFIED":    0,
+		"COLLECTION_METHOD_AUDIENCE_MODE_OPEN":           1,
+		"COLLECTION_METHOD_AUDIENCE_MODE_RESTRICTED":     2,
+		"COLLECTION_METHOD_AUDIENCE_MODE_SINGLE_CLIENT":  3,
+		"COLLECTION_METHOD_AUDIENCE_MODE_SEGMENT_SCOPED": 4,
+	}
+)
+
+func (x CollectionMethodAudienceMode) Enum() *CollectionMethodAudienceMode {
+	p := new(CollectionMethodAudienceMode)
+	*p = x
+	return p
+}
+
+func (x CollectionMethodAudienceMode) String() string {
+	return protoimpl.X.EnumStringOf(x.Descriptor(), protoreflect.EnumNumber(x))
+}
+
+func (CollectionMethodAudienceMode) Descriptor() protoreflect.EnumDescriptor {
+	return file_domain_treasury_collection_method_collection_method_proto_enumTypes[2].Descriptor()
+}
+
+func (CollectionMethodAudienceMode) Type() protoreflect.EnumType {
+	return &file_domain_treasury_collection_method_collection_method_proto_enumTypes[2]
+}
+
+func (x CollectionMethodAudienceMode) Number() protoreflect.EnumNumber {
+	return protoreflect.EnumNumber(x)
+}
+
+// Deprecated: Use CollectionMethodAudienceMode.Descriptor instead.
+func (CollectionMethodAudienceMode) EnumDescriptor() ([]byte, []int) {
+	return file_domain_treasury_collection_method_collection_method_proto_rawDescGZIP(), []int{2}
+}
+
+// CollectionMethodTaxEffectKind — REQUIRED + STRICT per Q3.
+type CollectionMethodTaxEffectKind int32
+
+const (
+	CollectionMethodTaxEffectKind_COLLECTION_METHOD_TAX_EFFECT_KIND_UNSPECIFIED CollectionMethodTaxEffectKind = 0
+	CollectionMethodTaxEffectKind_COLLECTION_METHOD_TAX_EFFECT_KIND_NONE        CollectionMethodTaxEffectKind = 1
+	CollectionMethodTaxEffectKind_COLLECTION_METHOD_TAX_EFFECT_KIND_INCLUSIVE   CollectionMethodTaxEffectKind = 2
+	CollectionMethodTaxEffectKind_COLLECTION_METHOD_TAX_EFFECT_KIND_EXCLUSIVE   CollectionMethodTaxEffectKind = 3
+)
+
+// Enum value maps for CollectionMethodTaxEffectKind.
+var (
+	CollectionMethodTaxEffectKind_name = map[int32]string{
+		0: "COLLECTION_METHOD_TAX_EFFECT_KIND_UNSPECIFIED",
+		1: "COLLECTION_METHOD_TAX_EFFECT_KIND_NONE",
+		2: "COLLECTION_METHOD_TAX_EFFECT_KIND_INCLUSIVE",
+		3: "COLLECTION_METHOD_TAX_EFFECT_KIND_EXCLUSIVE",
+	}
+	CollectionMethodTaxEffectKind_value = map[string]int32{
+		"COLLECTION_METHOD_TAX_EFFECT_KIND_UNSPECIFIED": 0,
+		"COLLECTION_METHOD_TAX_EFFECT_KIND_NONE":        1,
+		"COLLECTION_METHOD_TAX_EFFECT_KIND_INCLUSIVE":   2,
+		"COLLECTION_METHOD_TAX_EFFECT_KIND_EXCLUSIVE":   3,
+	}
+)
+
+func (x CollectionMethodTaxEffectKind) Enum() *CollectionMethodTaxEffectKind {
+	p := new(CollectionMethodTaxEffectKind)
+	*p = x
+	return p
+}
+
+func (x CollectionMethodTaxEffectKind) String() string {
+	return protoimpl.X.EnumStringOf(x.Descriptor(), protoreflect.EnumNumber(x))
+}
+
+func (CollectionMethodTaxEffectKind) Descriptor() protoreflect.EnumDescriptor {
+	return file_domain_treasury_collection_method_collection_method_proto_enumTypes[3].Descriptor()
+}
+
+func (CollectionMethodTaxEffectKind) Type() protoreflect.EnumType {
+	return &file_domain_treasury_collection_method_collection_method_proto_enumTypes[3]
+}
+
+func (x CollectionMethodTaxEffectKind) Number() protoreflect.EnumNumber {
+	return protoreflect.EnumNumber(x)
+}
+
+// Deprecated: Use CollectionMethodTaxEffectKind.Descriptor instead.
+func (CollectionMethodTaxEffectKind) EnumDescriptor() ([]byte, []int) {
+	return file_domain_treasury_collection_method_collection_method_proto_rawDescGZIP(), []int{3}
+}
+
+// CollectionMethodLifecycle — template publish lifecycle per Q7.
+type CollectionMethodLifecycle int32
+
+const (
+	CollectionMethodLifecycle_COLLECTION_METHOD_LIFECYCLE_UNSPECIFIED CollectionMethodLifecycle = 0
+	CollectionMethodLifecycle_COLLECTION_METHOD_LIFECYCLE_DRAFT       CollectionMethodLifecycle = 1
+	CollectionMethodLifecycle_COLLECTION_METHOD_LIFECYCLE_ACTIVE      CollectionMethodLifecycle = 2
+	CollectionMethodLifecycle_COLLECTION_METHOD_LIFECYCLE_CLOSED      CollectionMethodLifecycle = 3
+	CollectionMethodLifecycle_COLLECTION_METHOD_LIFECYCLE_ARCHIVED    CollectionMethodLifecycle = 4
+)
+
+// Enum value maps for CollectionMethodLifecycle.
+var (
+	CollectionMethodLifecycle_name = map[int32]string{
+		0: "COLLECTION_METHOD_LIFECYCLE_UNSPECIFIED",
+		1: "COLLECTION_METHOD_LIFECYCLE_DRAFT",
+		2: "COLLECTION_METHOD_LIFECYCLE_ACTIVE",
+		3: "COLLECTION_METHOD_LIFECYCLE_CLOSED",
+		4: "COLLECTION_METHOD_LIFECYCLE_ARCHIVED",
+	}
+	CollectionMethodLifecycle_value = map[string]int32{
+		"COLLECTION_METHOD_LIFECYCLE_UNSPECIFIED": 0,
+		"COLLECTION_METHOD_LIFECYCLE_DRAFT":       1,
+		"COLLECTION_METHOD_LIFECYCLE_ACTIVE":      2,
+		"COLLECTION_METHOD_LIFECYCLE_CLOSED":      3,
+		"COLLECTION_METHOD_LIFECYCLE_ARCHIVED":    4,
+	}
+)
+
+func (x CollectionMethodLifecycle) Enum() *CollectionMethodLifecycle {
+	p := new(CollectionMethodLifecycle)
+	*p = x
+	return p
+}
+
+func (x CollectionMethodLifecycle) String() string {
+	return protoimpl.X.EnumStringOf(x.Descriptor(), protoreflect.EnumNumber(x))
+}
+
+func (CollectionMethodLifecycle) Descriptor() protoreflect.EnumDescriptor {
+	return file_domain_treasury_collection_method_collection_method_proto_enumTypes[4].Descriptor()
+}
+
+func (CollectionMethodLifecycle) Type() protoreflect.EnumType {
+	return &file_domain_treasury_collection_method_collection_method_proto_enumTypes[4]
+}
+
+func (x CollectionMethodLifecycle) Number() protoreflect.EnumNumber {
+	return protoreflect.EnumNumber(x)
+}
+
+// Deprecated: Use CollectionMethodLifecycle.Descriptor instead.
+func (CollectionMethodLifecycle) EnumDescriptor() ([]byte, []int) {
+	return file_domain_treasury_collection_method_collection_method_proto_rawDescGZIP(), []int{4}
+}
+
+// CollectionMethodSource — where the template originated.
+type CollectionMethodSource int32
+
+const (
+	CollectionMethodSource_COLLECTION_METHOD_SOURCE_UNSPECIFIED     CollectionMethodSource = 0
+	CollectionMethodSource_COLLECTION_METHOD_SOURCE_SYSTEM          CollectionMethodSource = 1
+	CollectionMethodSource_COLLECTION_METHOD_SOURCE_WORKSPACE       CollectionMethodSource = 2
+	CollectionMethodSource_COLLECTION_METHOD_SOURCE_VENDOR_TEMPLATE CollectionMethodSource = 3
+)
+
+// Enum value maps for CollectionMethodSource.
+var (
+	CollectionMethodSource_name = map[int32]string{
+		0: "COLLECTION_METHOD_SOURCE_UNSPECIFIED",
+		1: "COLLECTION_METHOD_SOURCE_SYSTEM",
+		2: "COLLECTION_METHOD_SOURCE_WORKSPACE",
+		3: "COLLECTION_METHOD_SOURCE_VENDOR_TEMPLATE",
+	}
+	CollectionMethodSource_value = map[string]int32{
+		"COLLECTION_METHOD_SOURCE_UNSPECIFIED":     0,
+		"COLLECTION_METHOD_SOURCE_SYSTEM":          1,
+		"COLLECTION_METHOD_SOURCE_WORKSPACE":       2,
+		"COLLECTION_METHOD_SOURCE_VENDOR_TEMPLATE": 3,
+	}
+)
+
+func (x CollectionMethodSource) Enum() *CollectionMethodSource {
+	p := new(CollectionMethodSource)
+	*p = x
+	return p
+}
+
+func (x CollectionMethodSource) String() string {
+	return protoimpl.X.EnumStringOf(x.Descriptor(), protoreflect.EnumNumber(x))
+}
+
+func (CollectionMethodSource) Descriptor() protoreflect.EnumDescriptor {
+	return file_domain_treasury_collection_method_collection_method_proto_enumTypes[5].Descriptor()
+}
+
+func (CollectionMethodSource) Type() protoreflect.EnumType {
+	return &file_domain_treasury_collection_method_collection_method_proto_enumTypes[5]
+}
+
+func (x CollectionMethodSource) Number() protoreflect.EnumNumber {
+	return protoreflect.EnumNumber(x)
+}
+
+// Deprecated: Use CollectionMethodSource.Descriptor instead.
+func (CollectionMethodSource) EnumDescriptor() ([]byte, []int) {
+	return file_domain_treasury_collection_method_collection_method_proto_rawDescGZIP(), []int{5}
+}
+
+// CollectionMethodVersionStatus — revision status within a template_code lineage.
+type CollectionMethodVersionStatus int32
+
+const (
+	CollectionMethodVersionStatus_COLLECTION_METHOD_VERSION_STATUS_UNSPECIFIED CollectionMethodVersionStatus = 0
+	CollectionMethodVersionStatus_COLLECTION_METHOD_VERSION_STATUS_DRAFT       CollectionMethodVersionStatus = 1
+	CollectionMethodVersionStatus_COLLECTION_METHOD_VERSION_STATUS_PUBLISHED   CollectionMethodVersionStatus = 2
+	CollectionMethodVersionStatus_COLLECTION_METHOD_VERSION_STATUS_SUPERSEDED  CollectionMethodVersionStatus = 3
+)
+
+// Enum value maps for CollectionMethodVersionStatus.
+var (
+	CollectionMethodVersionStatus_name = map[int32]string{
+		0: "COLLECTION_METHOD_VERSION_STATUS_UNSPECIFIED",
+		1: "COLLECTION_METHOD_VERSION_STATUS_DRAFT",
+		2: "COLLECTION_METHOD_VERSION_STATUS_PUBLISHED",
+		3: "COLLECTION_METHOD_VERSION_STATUS_SUPERSEDED",
+	}
+	CollectionMethodVersionStatus_value = map[string]int32{
+		"COLLECTION_METHOD_VERSION_STATUS_UNSPECIFIED": 0,
+		"COLLECTION_METHOD_VERSION_STATUS_DRAFT":       1,
+		"COLLECTION_METHOD_VERSION_STATUS_PUBLISHED":   2,
+		"COLLECTION_METHOD_VERSION_STATUS_SUPERSEDED":  3,
+	}
+)
+
+func (x CollectionMethodVersionStatus) Enum() *CollectionMethodVersionStatus {
+	p := new(CollectionMethodVersionStatus)
+	*p = x
+	return p
+}
+
+func (x CollectionMethodVersionStatus) String() string {
+	return protoimpl.X.EnumStringOf(x.Descriptor(), protoreflect.EnumNumber(x))
+}
+
+func (CollectionMethodVersionStatus) Descriptor() protoreflect.EnumDescriptor {
+	return file_domain_treasury_collection_method_collection_method_proto_enumTypes[6].Descriptor()
+}
+
+func (CollectionMethodVersionStatus) Type() protoreflect.EnumType {
+	return &file_domain_treasury_collection_method_collection_method_proto_enumTypes[6]
+}
+
+func (x CollectionMethodVersionStatus) Number() protoreflect.EnumNumber {
+	return protoreflect.EnumNumber(x)
+}
+
+// Deprecated: Use CollectionMethodVersionStatus.Descriptor instead.
+func (CollectionMethodVersionStatus) EnumDescriptor() ([]byte, []int) {
+	return file_domain_treasury_collection_method_collection_method_proto_rawDescGZIP(), []int{6}
+}
+
+// CollectionMethodBearerMode — voucher bearer rule. BURN_DOWN-style reserved v2 (D-5.6).
+type CollectionMethodBearerMode int32
+
+const (
+	CollectionMethodBearerMode_COLLECTION_METHOD_BEARER_MODE_UNSPECIFIED CollectionMethodBearerMode = 0
+	CollectionMethodBearerMode_COLLECTION_METHOD_BEARER_MODE_BEARER      CollectionMethodBearerMode = 1
+	CollectionMethodBearerMode_COLLECTION_METHOD_BEARER_MODE_REGISTERED  CollectionMethodBearerMode = 2
+)
+
+// Enum value maps for CollectionMethodBearerMode.
+var (
+	CollectionMethodBearerMode_name = map[int32]string{
+		0: "COLLECTION_METHOD_BEARER_MODE_UNSPECIFIED",
+		1: "COLLECTION_METHOD_BEARER_MODE_BEARER",
+		2: "COLLECTION_METHOD_BEARER_MODE_REGISTERED",
+	}
+	CollectionMethodBearerMode_value = map[string]int32{
+		"COLLECTION_METHOD_BEARER_MODE_UNSPECIFIED": 0,
+		"COLLECTION_METHOD_BEARER_MODE_BEARER":      1,
+		"COLLECTION_METHOD_BEARER_MODE_REGISTERED":  2,
+	}
+)
+
+func (x CollectionMethodBearerMode) Enum() *CollectionMethodBearerMode {
+	p := new(CollectionMethodBearerMode)
+	*p = x
+	return p
+}
+
+func (x CollectionMethodBearerMode) String() string {
+	return protoimpl.X.EnumStringOf(x.Descriptor(), protoreflect.EnumNumber(x))
+}
+
+func (CollectionMethodBearerMode) Descriptor() protoreflect.EnumDescriptor {
+	return file_domain_treasury_collection_method_collection_method_proto_enumTypes[7].Descriptor()
+}
+
+func (CollectionMethodBearerMode) Type() protoreflect.EnumType {
+	return &file_domain_treasury_collection_method_collection_method_proto_enumTypes[7]
+}
+
+func (x CollectionMethodBearerMode) Number() protoreflect.EnumNumber {
+	return protoreflect.EnumNumber(x)
+}
+
+// Deprecated: Use CollectionMethodBearerMode.Descriptor instead.
+func (CollectionMethodBearerMode) EnumDescriptor() ([]byte, []int) {
+	return file_domain_treasury_collection_method_collection_method_proto_rawDescGZIP(), []int{7}
+}
+
 type CollectionMethod struct {
-	state              protoimpl.MessageState `protogen:"open.v1"`
-	Id                 string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
-	DateCreated        *int64                 `protobuf:"varint,2,opt,name=date_created,json=dateCreated,proto3,oneof" json:"date_created,omitempty"`
-	DateCreatedString  *string                `protobuf:"bytes,3,opt,name=date_created_string,json=dateCreatedString,proto3,oneof" json:"date_created_string,omitempty"`
-	DateModified       *int64                 `protobuf:"varint,4,opt,name=date_modified,json=dateModified,proto3,oneof" json:"date_modified,omitempty"`
-	DateModifiedString *string                `protobuf:"bytes,5,opt,name=date_modified_string,json=dateModifiedString,proto3,oneof" json:"date_modified_string,omitempty"`
-	Active             bool                   `protobuf:"varint,6,opt,name=active,proto3" json:"active,omitempty"`
-	Name               string                 `protobuf:"bytes,7,opt,name=name,proto3" json:"name,omitempty"`
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// ----- existing (UNCHANGED — additive only) -----
+	Id                 string  `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
+	DateCreated        *int64  `protobuf:"varint,2,opt,name=date_created,json=dateCreated,proto3,oneof" json:"date_created,omitempty"`
+	DateCreatedString  *string `protobuf:"bytes,3,opt,name=date_created_string,json=dateCreatedString,proto3,oneof" json:"date_created_string,omitempty"`
+	DateModified       *int64  `protobuf:"varint,4,opt,name=date_modified,json=dateModified,proto3,oneof" json:"date_modified,omitempty"`
+	DateModifiedString *string `protobuf:"bytes,5,opt,name=date_modified_string,json=dateModifiedString,proto3,oneof" json:"date_modified_string,omitempty"`
+	Active             bool    `protobuf:"varint,6,opt,name=active,proto3" json:"active,omitempty"`
+	Name               string  `protobuf:"bytes,7,opt,name=name,proto3" json:"name,omitempty"`
+	// method_details oneof: CARD details (field 8) REMAIN in Stage 1 for wire compat;
+	// CollectionCardDetails moves out to CPCMCardInstance in Stage 4 (not this wave).
+	//
 	// Types that are valid to be assigned to MethodDetails:
 	//
 	//	*CollectionMethod_Card
 	//	*CollectionMethod_BankAccount
 	MethodDetails isCollectionMethod_MethodDetails `protobuf_oneof:"method_details"`
 	ProviderName  *string                          `protobuf:"bytes,10,opt,name=provider_name,json=providerName,proto3,oneof" json:"provider_name,omitempty"`
-	unknownFields protoimpl.UnknownFields
-	sizeCache     protoimpl.SizeCache
+	// ----- NEW Stage 1 template-level config -----
+	WorkspaceId                  string                        `protobuf:"bytes,11,opt,name=workspace_id,json=workspaceId,proto3" json:"workspace_id,omitempty"`                                                                // FK to workspace
+	PostingKind                  CollectionMethodPostingKind   `protobuf:"varint,12,opt,name=posting_kind,json=postingKind,proto3,enum=domain.treasury.v1.CollectionMethodPostingKind" json:"posting_kind,omitempty"`           // CASH / ADVANCE_DRAWDOWN / CLAIM_AR / DEFERRED_RECEIVABLE
+	Category                     CollectionMethodCategory      `protobuf:"varint,13,opt,name=category,proto3,enum=domain.treasury.v1.CollectionMethodCategory" json:"category,omitempty"`                                       // STANDARD / VOUCHER / ADVANCE / CARD
+	AudienceMode                 CollectionMethodAudienceMode  `protobuf:"varint,14,opt,name=audience_mode,json=audienceMode,proto3,enum=domain.treasury.v1.CollectionMethodAudienceMode" json:"audience_mode,omitempty"`       // OPEN / RESTRICTED / SINGLE_CLIENT (SEGMENT_SCOPED reserved v2)
+	TaxEffectKind                CollectionMethodTaxEffectKind `protobuf:"varint,15,opt,name=tax_effect_kind,json=taxEffectKind,proto3,enum=domain.treasury.v1.CollectionMethodTaxEffectKind" json:"tax_effect_kind,omitempty"` // REQUIRED + STRICT per Q3
+	DefaultEligibilityRuleId     *string                       `protobuf:"bytes,16,opt,name=default_eligibility_rule_id,json=defaultEligibilityRuleId,proto3,oneof" json:"default_eligibility_rule_id,omitempty"`               // FK to collection_method_eligibility_rule
+	BalanceAccountId             *string                       `protobuf:"bytes,17,opt,name=balance_account_id,json=balanceAccountId,proto3,oneof" json:"balance_account_id,omitempty"`                                         // GL liability default
+	TargetAccountId              *string                       `protobuf:"bytes,18,opt,name=target_account_id,json=targetAccountId,proto3,oneof" json:"target_account_id,omitempty"`                                            // GL revenue default
+	Lifecycle                    CollectionMethodLifecycle     `protobuf:"varint,19,opt,name=lifecycle,proto3,enum=domain.treasury.v1.CollectionMethodLifecycle" json:"lifecycle,omitempty"`                                    // DRAFT / ACTIVE / CLOSED / ARCHIVED per Q7
+	Source                       CollectionMethodSource        `protobuf:"varint,20,opt,name=source,proto3,enum=domain.treasury.v1.CollectionMethodSource" json:"source,omitempty"`                                             // SYSTEM / WORKSPACE / VENDOR_TEMPLATE
+	TemplateCode                 string                        `protobuf:"bytes,21,opt,name=template_code,json=templateCode,proto3" json:"template_code,omitempty"`                                                             // for versioning
+	Revision                     int32                         `protobuf:"varint,22,opt,name=revision,proto3" json:"revision,omitempty"`
+	VersionStatus                CollectionMethodVersionStatus `protobuf:"varint,23,opt,name=version_status,json=versionStatus,proto3,enum=domain.treasury.v1.CollectionMethodVersionStatus" json:"version_status,omitempty"`
+	SupersedesCollectionMethodId *string                       `protobuf:"bytes,24,opt,name=supersedes_collection_method_id,json=supersedesCollectionMethodId,proto3,oneof" json:"supersedes_collection_method_id,omitempty"` // FK to predecessor revision
+	// ----- NEW Stage 1 template-level detail config -----
+	//
+	// Types that are valid to be assigned to TemplateDetails:
+	//
+	//	*CollectionMethod_CardType
+	//	*CollectionMethod_VoucherProgram
+	//	*CollectionMethod_AdvanceProgram
+	TemplateDetails isCollectionMethod_TemplateDetails `protobuf_oneof:"template_details"`
+	unknownFields   protoimpl.UnknownFields
+	sizeCache       protoimpl.SizeCache
 }
 
 func (x *CollectionMethod) Reset() {
@@ -152,6 +615,138 @@ func (x *CollectionMethod) GetProviderName() string {
 	return ""
 }
 
+func (x *CollectionMethod) GetWorkspaceId() string {
+	if x != nil {
+		return x.WorkspaceId
+	}
+	return ""
+}
+
+func (x *CollectionMethod) GetPostingKind() CollectionMethodPostingKind {
+	if x != nil {
+		return x.PostingKind
+	}
+	return CollectionMethodPostingKind_COLLECTION_METHOD_POSTING_KIND_UNSPECIFIED
+}
+
+func (x *CollectionMethod) GetCategory() CollectionMethodCategory {
+	if x != nil {
+		return x.Category
+	}
+	return CollectionMethodCategory_COLLECTION_METHOD_CATEGORY_UNSPECIFIED
+}
+
+func (x *CollectionMethod) GetAudienceMode() CollectionMethodAudienceMode {
+	if x != nil {
+		return x.AudienceMode
+	}
+	return CollectionMethodAudienceMode_COLLECTION_METHOD_AUDIENCE_MODE_UNSPECIFIED
+}
+
+func (x *CollectionMethod) GetTaxEffectKind() CollectionMethodTaxEffectKind {
+	if x != nil {
+		return x.TaxEffectKind
+	}
+	return CollectionMethodTaxEffectKind_COLLECTION_METHOD_TAX_EFFECT_KIND_UNSPECIFIED
+}
+
+func (x *CollectionMethod) GetDefaultEligibilityRuleId() string {
+	if x != nil && x.DefaultEligibilityRuleId != nil {
+		return *x.DefaultEligibilityRuleId
+	}
+	return ""
+}
+
+func (x *CollectionMethod) GetBalanceAccountId() string {
+	if x != nil && x.BalanceAccountId != nil {
+		return *x.BalanceAccountId
+	}
+	return ""
+}
+
+func (x *CollectionMethod) GetTargetAccountId() string {
+	if x != nil && x.TargetAccountId != nil {
+		return *x.TargetAccountId
+	}
+	return ""
+}
+
+func (x *CollectionMethod) GetLifecycle() CollectionMethodLifecycle {
+	if x != nil {
+		return x.Lifecycle
+	}
+	return CollectionMethodLifecycle_COLLECTION_METHOD_LIFECYCLE_UNSPECIFIED
+}
+
+func (x *CollectionMethod) GetSource() CollectionMethodSource {
+	if x != nil {
+		return x.Source
+	}
+	return CollectionMethodSource_COLLECTION_METHOD_SOURCE_UNSPECIFIED
+}
+
+func (x *CollectionMethod) GetTemplateCode() string {
+	if x != nil {
+		return x.TemplateCode
+	}
+	return ""
+}
+
+func (x *CollectionMethod) GetRevision() int32 {
+	if x != nil {
+		return x.Revision
+	}
+	return 0
+}
+
+func (x *CollectionMethod) GetVersionStatus() CollectionMethodVersionStatus {
+	if x != nil {
+		return x.VersionStatus
+	}
+	return CollectionMethodVersionStatus_COLLECTION_METHOD_VERSION_STATUS_UNSPECIFIED
+}
+
+func (x *CollectionMethod) GetSupersedesCollectionMethodId() string {
+	if x != nil && x.SupersedesCollectionMethodId != nil {
+		return *x.SupersedesCollectionMethodId
+	}
+	return ""
+}
+
+func (x *CollectionMethod) GetTemplateDetails() isCollectionMethod_TemplateDetails {
+	if x != nil {
+		return x.TemplateDetails
+	}
+	return nil
+}
+
+func (x *CollectionMethod) GetCardType() *CollectionMethodCardTypeDetails {
+	if x != nil {
+		if x, ok := x.TemplateDetails.(*CollectionMethod_CardType); ok {
+			return x.CardType
+		}
+	}
+	return nil
+}
+
+func (x *CollectionMethod) GetVoucherProgram() *CollectionMethodVoucherProgramDetails {
+	if x != nil {
+		if x, ok := x.TemplateDetails.(*CollectionMethod_VoucherProgram); ok {
+			return x.VoucherProgram
+		}
+	}
+	return nil
+}
+
+func (x *CollectionMethod) GetAdvanceProgram() *CollectionMethodAdvanceProgramDetails {
+	if x != nil {
+		if x, ok := x.TemplateDetails.(*CollectionMethod_AdvanceProgram); ok {
+			return x.AdvanceProgram
+		}
+	}
+	return nil
+}
+
 type isCollectionMethod_MethodDetails interface {
 	isCollectionMethod_MethodDetails()
 }
@@ -167,6 +762,28 @@ type CollectionMethod_BankAccount struct {
 func (*CollectionMethod_Card) isCollectionMethod_MethodDetails() {}
 
 func (*CollectionMethod_BankAccount) isCollectionMethod_MethodDetails() {}
+
+type isCollectionMethod_TemplateDetails interface {
+	isCollectionMethod_TemplateDetails()
+}
+
+type CollectionMethod_CardType struct {
+	CardType *CollectionMethodCardTypeDetails `protobuf:"bytes,30,opt,name=card_type,json=cardType,proto3,oneof"` // template-only kind marker; carries NO brand (D-4.26)
+}
+
+type CollectionMethod_VoucherProgram struct {
+	VoucherProgram *CollectionMethodVoucherProgramDetails `protobuf:"bytes,31,opt,name=voucher_program,json=voucherProgram,proto3,oneof"` // template: face_value default, expiry policy, bearer modes
+}
+
+type CollectionMethod_AdvanceProgram struct {
+	AdvanceProgram *CollectionMethodAdvanceProgramDetails `protobuf:"bytes,32,opt,name=advance_program,json=advanceProgram,proto3,oneof"` // template: advance_kind, default schedule shape, GL defaults
+}
+
+func (*CollectionMethod_CardType) isCollectionMethod_TemplateDetails() {}
+
+func (*CollectionMethod_VoucherProgram) isCollectionMethod_TemplateDetails() {}
+
+func (*CollectionMethod_AdvanceProgram) isCollectionMethod_TemplateDetails() {}
 
 type CollectionCardDetails struct {
 	state          protoimpl.MessageState `protogen:"open.v1"`
@@ -288,6 +905,191 @@ func (x *CollectionBankAccountDetails) GetLastFourDigits() string {
 	return ""
 }
 
+// CollectionMethodCardTypeDetails — D-4.26 LOCKED: one Card method, grouped by kind.
+// NO brand string and NO allowed_card_types at the template level — card brand lives
+// solely on CardInstance.card_brand (free per-card attribute). No last_four_digits,
+// expiry_month, expiry_year here — those are instance-level (CPCMCardInstance).
+// Template marker only in v1.
+type CollectionMethodCardTypeDetails struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *CollectionMethodCardTypeDetails) Reset() {
+	*x = CollectionMethodCardTypeDetails{}
+	mi := &file_domain_treasury_collection_method_collection_method_proto_msgTypes[3]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *CollectionMethodCardTypeDetails) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*CollectionMethodCardTypeDetails) ProtoMessage() {}
+
+func (x *CollectionMethodCardTypeDetails) ProtoReflect() protoreflect.Message {
+	mi := &file_domain_treasury_collection_method_collection_method_proto_msgTypes[3]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use CollectionMethodCardTypeDetails.ProtoReflect.Descriptor instead.
+func (*CollectionMethodCardTypeDetails) Descriptor() ([]byte, []int) {
+	return file_domain_treasury_collection_method_collection_method_proto_rawDescGZIP(), []int{3}
+}
+
+type CollectionMethodVoucherProgramDetails struct {
+	state                    protoimpl.MessageState     `protogen:"open.v1"`
+	DefaultFaceValueCentavos *int64                     `protobuf:"varint,1,opt,name=default_face_value_centavos,json=defaultFaceValueCentavos,proto3,oneof" json:"default_face_value_centavos,omitempty"` // default; instance may override per eligibility rule
+	DefaultExpiryDays        *int32                     `protobuf:"varint,2,opt,name=default_expiry_days,json=defaultExpiryDays,proto3,oneof" json:"default_expiry_days,omitempty"`
+	AllowedBearerModes       CollectionMethodBearerMode `protobuf:"varint,3,opt,name=allowed_bearer_modes,json=allowedBearerModes,proto3,enum=domain.treasury.v1.CollectionMethodBearerMode" json:"allowed_bearer_modes,omitempty"` // BURN_DOWN-style reserved v2 (D-5.6)
+	unknownFields            protoimpl.UnknownFields
+	sizeCache                protoimpl.SizeCache
+}
+
+func (x *CollectionMethodVoucherProgramDetails) Reset() {
+	*x = CollectionMethodVoucherProgramDetails{}
+	mi := &file_domain_treasury_collection_method_collection_method_proto_msgTypes[4]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *CollectionMethodVoucherProgramDetails) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*CollectionMethodVoucherProgramDetails) ProtoMessage() {}
+
+func (x *CollectionMethodVoucherProgramDetails) ProtoReflect() protoreflect.Message {
+	mi := &file_domain_treasury_collection_method_collection_method_proto_msgTypes[4]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use CollectionMethodVoucherProgramDetails.ProtoReflect.Descriptor instead.
+func (*CollectionMethodVoucherProgramDetails) Descriptor() ([]byte, []int) {
+	return file_domain_treasury_collection_method_collection_method_proto_rawDescGZIP(), []int{4}
+}
+
+func (x *CollectionMethodVoucherProgramDetails) GetDefaultFaceValueCentavos() int64 {
+	if x != nil && x.DefaultFaceValueCentavos != nil {
+		return *x.DefaultFaceValueCentavos
+	}
+	return 0
+}
+
+func (x *CollectionMethodVoucherProgramDetails) GetDefaultExpiryDays() int32 {
+	if x != nil && x.DefaultExpiryDays != nil {
+		return *x.DefaultExpiryDays
+	}
+	return 0
+}
+
+func (x *CollectionMethodVoucherProgramDetails) GetAllowedBearerModes() CollectionMethodBearerMode {
+	if x != nil {
+		return x.AllowedBearerModes
+	}
+	return CollectionMethodBearerMode_COLLECTION_METHOD_BEARER_MODE_UNSPECIFIED
+}
+
+type CollectionMethodAdvanceProgramDetails struct {
+	state                   protoimpl.MessageState               `protogen:"open.v1"`
+	AdvanceKind             advance_kind.AdvanceKind             `protobuf:"varint,1,opt,name=advance_kind,json=advanceKind,proto3,enum=domain.common.v1.AdvanceKind" json:"advance_kind,omitempty"` // TIME_BASED / MILESTONE / UNSCHEDULED (BURN_DOWN reserved v2)
+	DefaultBalanceAccountId *string                              `protobuf:"bytes,2,opt,name=default_balance_account_id,json=defaultBalanceAccountId,proto3,oneof" json:"default_balance_account_id,omitempty"`
+	DefaultTargetAccountId  *string                              `protobuf:"bytes,3,opt,name=default_target_account_id,json=defaultTargetAccountId,proto3,oneof" json:"default_target_account_id,omitempty"`
+	DefaultPeriodCount      *int32                               `protobuf:"varint,4,opt,name=default_period_count,json=defaultPeriodCount,proto3,oneof" json:"default_period_count,omitempty"` // schedule default for TIME_BASED
+	DefaultPeriodUnit       *string                              `protobuf:"bytes,5,opt,name=default_period_unit,json=defaultPeriodUnit,proto3,oneof" json:"default_period_unit,omitempty"`
+	DefaultProrationPolicy  *advance_kind.AdvanceProrationPolicy `protobuf:"varint,6,opt,name=default_proration_policy,json=defaultProrationPolicy,proto3,enum=domain.common.v1.AdvanceProrationPolicy,oneof" json:"default_proration_policy,omitempty"`
+	unknownFields           protoimpl.UnknownFields
+	sizeCache               protoimpl.SizeCache
+}
+
+func (x *CollectionMethodAdvanceProgramDetails) Reset() {
+	*x = CollectionMethodAdvanceProgramDetails{}
+	mi := &file_domain_treasury_collection_method_collection_method_proto_msgTypes[5]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *CollectionMethodAdvanceProgramDetails) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*CollectionMethodAdvanceProgramDetails) ProtoMessage() {}
+
+func (x *CollectionMethodAdvanceProgramDetails) ProtoReflect() protoreflect.Message {
+	mi := &file_domain_treasury_collection_method_collection_method_proto_msgTypes[5]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use CollectionMethodAdvanceProgramDetails.ProtoReflect.Descriptor instead.
+func (*CollectionMethodAdvanceProgramDetails) Descriptor() ([]byte, []int) {
+	return file_domain_treasury_collection_method_collection_method_proto_rawDescGZIP(), []int{5}
+}
+
+func (x *CollectionMethodAdvanceProgramDetails) GetAdvanceKind() advance_kind.AdvanceKind {
+	if x != nil {
+		return x.AdvanceKind
+	}
+	return advance_kind.AdvanceKind(0)
+}
+
+func (x *CollectionMethodAdvanceProgramDetails) GetDefaultBalanceAccountId() string {
+	if x != nil && x.DefaultBalanceAccountId != nil {
+		return *x.DefaultBalanceAccountId
+	}
+	return ""
+}
+
+func (x *CollectionMethodAdvanceProgramDetails) GetDefaultTargetAccountId() string {
+	if x != nil && x.DefaultTargetAccountId != nil {
+		return *x.DefaultTargetAccountId
+	}
+	return ""
+}
+
+func (x *CollectionMethodAdvanceProgramDetails) GetDefaultPeriodCount() int32 {
+	if x != nil && x.DefaultPeriodCount != nil {
+		return *x.DefaultPeriodCount
+	}
+	return 0
+}
+
+func (x *CollectionMethodAdvanceProgramDetails) GetDefaultPeriodUnit() string {
+	if x != nil && x.DefaultPeriodUnit != nil {
+		return *x.DefaultPeriodUnit
+	}
+	return ""
+}
+
+func (x *CollectionMethodAdvanceProgramDetails) GetDefaultProrationPolicy() advance_kind.AdvanceProrationPolicy {
+	if x != nil && x.DefaultProrationPolicy != nil {
+		return *x.DefaultProrationPolicy
+	}
+	return advance_kind.AdvanceProrationPolicy(0)
+}
+
 type CreateCollectionMethodRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Data          *CollectionMethod      `protobuf:"bytes,1,opt,name=data,proto3" json:"data,omitempty"`
@@ -297,7 +1099,7 @@ type CreateCollectionMethodRequest struct {
 
 func (x *CreateCollectionMethodRequest) Reset() {
 	*x = CreateCollectionMethodRequest{}
-	mi := &file_domain_treasury_collection_method_collection_method_proto_msgTypes[3]
+	mi := &file_domain_treasury_collection_method_collection_method_proto_msgTypes[6]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -309,7 +1111,7 @@ func (x *CreateCollectionMethodRequest) String() string {
 func (*CreateCollectionMethodRequest) ProtoMessage() {}
 
 func (x *CreateCollectionMethodRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_domain_treasury_collection_method_collection_method_proto_msgTypes[3]
+	mi := &file_domain_treasury_collection_method_collection_method_proto_msgTypes[6]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -322,7 +1124,7 @@ func (x *CreateCollectionMethodRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use CreateCollectionMethodRequest.ProtoReflect.Descriptor instead.
 func (*CreateCollectionMethodRequest) Descriptor() ([]byte, []int) {
-	return file_domain_treasury_collection_method_collection_method_proto_rawDescGZIP(), []int{3}
+	return file_domain_treasury_collection_method_collection_method_proto_rawDescGZIP(), []int{6}
 }
 
 func (x *CreateCollectionMethodRequest) GetData() *CollectionMethod {
@@ -343,7 +1145,7 @@ type CreateCollectionMethodResponse struct {
 
 func (x *CreateCollectionMethodResponse) Reset() {
 	*x = CreateCollectionMethodResponse{}
-	mi := &file_domain_treasury_collection_method_collection_method_proto_msgTypes[4]
+	mi := &file_domain_treasury_collection_method_collection_method_proto_msgTypes[7]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -355,7 +1157,7 @@ func (x *CreateCollectionMethodResponse) String() string {
 func (*CreateCollectionMethodResponse) ProtoMessage() {}
 
 func (x *CreateCollectionMethodResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_domain_treasury_collection_method_collection_method_proto_msgTypes[4]
+	mi := &file_domain_treasury_collection_method_collection_method_proto_msgTypes[7]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -368,7 +1170,7 @@ func (x *CreateCollectionMethodResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use CreateCollectionMethodResponse.ProtoReflect.Descriptor instead.
 func (*CreateCollectionMethodResponse) Descriptor() ([]byte, []int) {
-	return file_domain_treasury_collection_method_collection_method_proto_rawDescGZIP(), []int{4}
+	return file_domain_treasury_collection_method_collection_method_proto_rawDescGZIP(), []int{7}
 }
 
 func (x *CreateCollectionMethodResponse) GetData() []*CollectionMethod {
@@ -401,7 +1203,7 @@ type ReadCollectionMethodRequest struct {
 
 func (x *ReadCollectionMethodRequest) Reset() {
 	*x = ReadCollectionMethodRequest{}
-	mi := &file_domain_treasury_collection_method_collection_method_proto_msgTypes[5]
+	mi := &file_domain_treasury_collection_method_collection_method_proto_msgTypes[8]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -413,7 +1215,7 @@ func (x *ReadCollectionMethodRequest) String() string {
 func (*ReadCollectionMethodRequest) ProtoMessage() {}
 
 func (x *ReadCollectionMethodRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_domain_treasury_collection_method_collection_method_proto_msgTypes[5]
+	mi := &file_domain_treasury_collection_method_collection_method_proto_msgTypes[8]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -426,7 +1228,7 @@ func (x *ReadCollectionMethodRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ReadCollectionMethodRequest.ProtoReflect.Descriptor instead.
 func (*ReadCollectionMethodRequest) Descriptor() ([]byte, []int) {
-	return file_domain_treasury_collection_method_collection_method_proto_rawDescGZIP(), []int{5}
+	return file_domain_treasury_collection_method_collection_method_proto_rawDescGZIP(), []int{8}
 }
 
 func (x *ReadCollectionMethodRequest) GetData() *CollectionMethod {
@@ -447,7 +1249,7 @@ type ReadCollectionMethodResponse struct {
 
 func (x *ReadCollectionMethodResponse) Reset() {
 	*x = ReadCollectionMethodResponse{}
-	mi := &file_domain_treasury_collection_method_collection_method_proto_msgTypes[6]
+	mi := &file_domain_treasury_collection_method_collection_method_proto_msgTypes[9]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -459,7 +1261,7 @@ func (x *ReadCollectionMethodResponse) String() string {
 func (*ReadCollectionMethodResponse) ProtoMessage() {}
 
 func (x *ReadCollectionMethodResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_domain_treasury_collection_method_collection_method_proto_msgTypes[6]
+	mi := &file_domain_treasury_collection_method_collection_method_proto_msgTypes[9]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -472,7 +1274,7 @@ func (x *ReadCollectionMethodResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ReadCollectionMethodResponse.ProtoReflect.Descriptor instead.
 func (*ReadCollectionMethodResponse) Descriptor() ([]byte, []int) {
-	return file_domain_treasury_collection_method_collection_method_proto_rawDescGZIP(), []int{6}
+	return file_domain_treasury_collection_method_collection_method_proto_rawDescGZIP(), []int{9}
 }
 
 func (x *ReadCollectionMethodResponse) GetData() []*CollectionMethod {
@@ -505,7 +1307,7 @@ type UpdateCollectionMethodRequest struct {
 
 func (x *UpdateCollectionMethodRequest) Reset() {
 	*x = UpdateCollectionMethodRequest{}
-	mi := &file_domain_treasury_collection_method_collection_method_proto_msgTypes[7]
+	mi := &file_domain_treasury_collection_method_collection_method_proto_msgTypes[10]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -517,7 +1319,7 @@ func (x *UpdateCollectionMethodRequest) String() string {
 func (*UpdateCollectionMethodRequest) ProtoMessage() {}
 
 func (x *UpdateCollectionMethodRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_domain_treasury_collection_method_collection_method_proto_msgTypes[7]
+	mi := &file_domain_treasury_collection_method_collection_method_proto_msgTypes[10]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -530,7 +1332,7 @@ func (x *UpdateCollectionMethodRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use UpdateCollectionMethodRequest.ProtoReflect.Descriptor instead.
 func (*UpdateCollectionMethodRequest) Descriptor() ([]byte, []int) {
-	return file_domain_treasury_collection_method_collection_method_proto_rawDescGZIP(), []int{7}
+	return file_domain_treasury_collection_method_collection_method_proto_rawDescGZIP(), []int{10}
 }
 
 func (x *UpdateCollectionMethodRequest) GetData() *CollectionMethod {
@@ -551,7 +1353,7 @@ type UpdateCollectionMethodResponse struct {
 
 func (x *UpdateCollectionMethodResponse) Reset() {
 	*x = UpdateCollectionMethodResponse{}
-	mi := &file_domain_treasury_collection_method_collection_method_proto_msgTypes[8]
+	mi := &file_domain_treasury_collection_method_collection_method_proto_msgTypes[11]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -563,7 +1365,7 @@ func (x *UpdateCollectionMethodResponse) String() string {
 func (*UpdateCollectionMethodResponse) ProtoMessage() {}
 
 func (x *UpdateCollectionMethodResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_domain_treasury_collection_method_collection_method_proto_msgTypes[8]
+	mi := &file_domain_treasury_collection_method_collection_method_proto_msgTypes[11]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -576,7 +1378,7 @@ func (x *UpdateCollectionMethodResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use UpdateCollectionMethodResponse.ProtoReflect.Descriptor instead.
 func (*UpdateCollectionMethodResponse) Descriptor() ([]byte, []int) {
-	return file_domain_treasury_collection_method_collection_method_proto_rawDescGZIP(), []int{8}
+	return file_domain_treasury_collection_method_collection_method_proto_rawDescGZIP(), []int{11}
 }
 
 func (x *UpdateCollectionMethodResponse) GetData() []*CollectionMethod {
@@ -609,7 +1411,7 @@ type DeleteCollectionMethodRequest struct {
 
 func (x *DeleteCollectionMethodRequest) Reset() {
 	*x = DeleteCollectionMethodRequest{}
-	mi := &file_domain_treasury_collection_method_collection_method_proto_msgTypes[9]
+	mi := &file_domain_treasury_collection_method_collection_method_proto_msgTypes[12]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -621,7 +1423,7 @@ func (x *DeleteCollectionMethodRequest) String() string {
 func (*DeleteCollectionMethodRequest) ProtoMessage() {}
 
 func (x *DeleteCollectionMethodRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_domain_treasury_collection_method_collection_method_proto_msgTypes[9]
+	mi := &file_domain_treasury_collection_method_collection_method_proto_msgTypes[12]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -634,7 +1436,7 @@ func (x *DeleteCollectionMethodRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use DeleteCollectionMethodRequest.ProtoReflect.Descriptor instead.
 func (*DeleteCollectionMethodRequest) Descriptor() ([]byte, []int) {
-	return file_domain_treasury_collection_method_collection_method_proto_rawDescGZIP(), []int{9}
+	return file_domain_treasury_collection_method_collection_method_proto_rawDescGZIP(), []int{12}
 }
 
 func (x *DeleteCollectionMethodRequest) GetData() *CollectionMethod {
@@ -654,7 +1456,7 @@ type DeleteCollectionMethodResponse struct {
 
 func (x *DeleteCollectionMethodResponse) Reset() {
 	*x = DeleteCollectionMethodResponse{}
-	mi := &file_domain_treasury_collection_method_collection_method_proto_msgTypes[10]
+	mi := &file_domain_treasury_collection_method_collection_method_proto_msgTypes[13]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -666,7 +1468,7 @@ func (x *DeleteCollectionMethodResponse) String() string {
 func (*DeleteCollectionMethodResponse) ProtoMessage() {}
 
 func (x *DeleteCollectionMethodResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_domain_treasury_collection_method_collection_method_proto_msgTypes[10]
+	mi := &file_domain_treasury_collection_method_collection_method_proto_msgTypes[13]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -679,7 +1481,7 @@ func (x *DeleteCollectionMethodResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use DeleteCollectionMethodResponse.ProtoReflect.Descriptor instead.
 func (*DeleteCollectionMethodResponse) Descriptor() ([]byte, []int) {
-	return file_domain_treasury_collection_method_collection_method_proto_rawDescGZIP(), []int{10}
+	return file_domain_treasury_collection_method_collection_method_proto_rawDescGZIP(), []int{13}
 }
 
 func (x *DeleteCollectionMethodResponse) GetSuccess() bool {
@@ -708,7 +1510,7 @@ type ListCollectionMethodsRequest struct {
 
 func (x *ListCollectionMethodsRequest) Reset() {
 	*x = ListCollectionMethodsRequest{}
-	mi := &file_domain_treasury_collection_method_collection_method_proto_msgTypes[11]
+	mi := &file_domain_treasury_collection_method_collection_method_proto_msgTypes[14]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -720,7 +1522,7 @@ func (x *ListCollectionMethodsRequest) String() string {
 func (*ListCollectionMethodsRequest) ProtoMessage() {}
 
 func (x *ListCollectionMethodsRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_domain_treasury_collection_method_collection_method_proto_msgTypes[11]
+	mi := &file_domain_treasury_collection_method_collection_method_proto_msgTypes[14]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -733,7 +1535,7 @@ func (x *ListCollectionMethodsRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ListCollectionMethodsRequest.ProtoReflect.Descriptor instead.
 func (*ListCollectionMethodsRequest) Descriptor() ([]byte, []int) {
-	return file_domain_treasury_collection_method_collection_method_proto_rawDescGZIP(), []int{11}
+	return file_domain_treasury_collection_method_collection_method_proto_rawDescGZIP(), []int{14}
 }
 
 func (x *ListCollectionMethodsRequest) GetSearch() *common.SearchRequest {
@@ -775,7 +1577,7 @@ type ListCollectionMethodsResponse struct {
 
 func (x *ListCollectionMethodsResponse) Reset() {
 	*x = ListCollectionMethodsResponse{}
-	mi := &file_domain_treasury_collection_method_collection_method_proto_msgTypes[12]
+	mi := &file_domain_treasury_collection_method_collection_method_proto_msgTypes[15]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -787,7 +1589,7 @@ func (x *ListCollectionMethodsResponse) String() string {
 func (*ListCollectionMethodsResponse) ProtoMessage() {}
 
 func (x *ListCollectionMethodsResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_domain_treasury_collection_method_collection_method_proto_msgTypes[12]
+	mi := &file_domain_treasury_collection_method_collection_method_proto_msgTypes[15]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -800,7 +1602,7 @@ func (x *ListCollectionMethodsResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ListCollectionMethodsResponse.ProtoReflect.Descriptor instead.
 func (*ListCollectionMethodsResponse) Descriptor() ([]byte, []int) {
-	return file_domain_treasury_collection_method_collection_method_proto_rawDescGZIP(), []int{12}
+	return file_domain_treasury_collection_method_collection_method_proto_rawDescGZIP(), []int{15}
 }
 
 func (x *ListCollectionMethodsResponse) GetData() []*CollectionMethod {
@@ -836,7 +1638,7 @@ type GetCollectionMethodListPageDataRequest struct {
 
 func (x *GetCollectionMethodListPageDataRequest) Reset() {
 	*x = GetCollectionMethodListPageDataRequest{}
-	mi := &file_domain_treasury_collection_method_collection_method_proto_msgTypes[13]
+	mi := &file_domain_treasury_collection_method_collection_method_proto_msgTypes[16]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -848,7 +1650,7 @@ func (x *GetCollectionMethodListPageDataRequest) String() string {
 func (*GetCollectionMethodListPageDataRequest) ProtoMessage() {}
 
 func (x *GetCollectionMethodListPageDataRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_domain_treasury_collection_method_collection_method_proto_msgTypes[13]
+	mi := &file_domain_treasury_collection_method_collection_method_proto_msgTypes[16]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -861,7 +1663,7 @@ func (x *GetCollectionMethodListPageDataRequest) ProtoReflect() protoreflect.Mes
 
 // Deprecated: Use GetCollectionMethodListPageDataRequest.ProtoReflect.Descriptor instead.
 func (*GetCollectionMethodListPageDataRequest) Descriptor() ([]byte, []int) {
-	return file_domain_treasury_collection_method_collection_method_proto_rawDescGZIP(), []int{13}
+	return file_domain_treasury_collection_method_collection_method_proto_rawDescGZIP(), []int{16}
 }
 
 func (x *GetCollectionMethodListPageDataRequest) GetPagination() *common.PaginationRequest {
@@ -905,7 +1707,7 @@ type GetCollectionMethodListPageDataResponse struct {
 
 func (x *GetCollectionMethodListPageDataResponse) Reset() {
 	*x = GetCollectionMethodListPageDataResponse{}
-	mi := &file_domain_treasury_collection_method_collection_method_proto_msgTypes[14]
+	mi := &file_domain_treasury_collection_method_collection_method_proto_msgTypes[17]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -917,7 +1719,7 @@ func (x *GetCollectionMethodListPageDataResponse) String() string {
 func (*GetCollectionMethodListPageDataResponse) ProtoMessage() {}
 
 func (x *GetCollectionMethodListPageDataResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_domain_treasury_collection_method_collection_method_proto_msgTypes[14]
+	mi := &file_domain_treasury_collection_method_collection_method_proto_msgTypes[17]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -930,7 +1732,7 @@ func (x *GetCollectionMethodListPageDataResponse) ProtoReflect() protoreflect.Me
 
 // Deprecated: Use GetCollectionMethodListPageDataResponse.ProtoReflect.Descriptor instead.
 func (*GetCollectionMethodListPageDataResponse) Descriptor() ([]byte, []int) {
-	return file_domain_treasury_collection_method_collection_method_proto_rawDescGZIP(), []int{14}
+	return file_domain_treasury_collection_method_collection_method_proto_rawDescGZIP(), []int{17}
 }
 
 func (x *GetCollectionMethodListPageDataResponse) GetCollectionMethodList() []*CollectionMethod {
@@ -977,7 +1779,7 @@ type GetCollectionMethodItemPageDataRequest struct {
 
 func (x *GetCollectionMethodItemPageDataRequest) Reset() {
 	*x = GetCollectionMethodItemPageDataRequest{}
-	mi := &file_domain_treasury_collection_method_collection_method_proto_msgTypes[15]
+	mi := &file_domain_treasury_collection_method_collection_method_proto_msgTypes[18]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -989,7 +1791,7 @@ func (x *GetCollectionMethodItemPageDataRequest) String() string {
 func (*GetCollectionMethodItemPageDataRequest) ProtoMessage() {}
 
 func (x *GetCollectionMethodItemPageDataRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_domain_treasury_collection_method_collection_method_proto_msgTypes[15]
+	mi := &file_domain_treasury_collection_method_collection_method_proto_msgTypes[18]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1002,7 +1804,7 @@ func (x *GetCollectionMethodItemPageDataRequest) ProtoReflect() protoreflect.Mes
 
 // Deprecated: Use GetCollectionMethodItemPageDataRequest.ProtoReflect.Descriptor instead.
 func (*GetCollectionMethodItemPageDataRequest) Descriptor() ([]byte, []int) {
-	return file_domain_treasury_collection_method_collection_method_proto_rawDescGZIP(), []int{15}
+	return file_domain_treasury_collection_method_collection_method_proto_rawDescGZIP(), []int{18}
 }
 
 func (x *GetCollectionMethodItemPageDataRequest) GetCollectionMethodId() string {
@@ -1023,7 +1825,7 @@ type GetCollectionMethodItemPageDataResponse struct {
 
 func (x *GetCollectionMethodItemPageDataResponse) Reset() {
 	*x = GetCollectionMethodItemPageDataResponse{}
-	mi := &file_domain_treasury_collection_method_collection_method_proto_msgTypes[16]
+	mi := &file_domain_treasury_collection_method_collection_method_proto_msgTypes[19]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1035,7 +1837,7 @@ func (x *GetCollectionMethodItemPageDataResponse) String() string {
 func (*GetCollectionMethodItemPageDataResponse) ProtoMessage() {}
 
 func (x *GetCollectionMethodItemPageDataResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_domain_treasury_collection_method_collection_method_proto_msgTypes[16]
+	mi := &file_domain_treasury_collection_method_collection_method_proto_msgTypes[19]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1048,7 +1850,7 @@ func (x *GetCollectionMethodItemPageDataResponse) ProtoReflect() protoreflect.Me
 
 // Deprecated: Use GetCollectionMethodItemPageDataResponse.ProtoReflect.Descriptor instead.
 func (*GetCollectionMethodItemPageDataResponse) Descriptor() ([]byte, []int) {
-	return file_domain_treasury_collection_method_collection_method_proto_rawDescGZIP(), []int{16}
+	return file_domain_treasury_collection_method_collection_method_proto_rawDescGZIP(), []int{19}
 }
 
 func (x *GetCollectionMethodItemPageDataResponse) GetCollectionMethod() *CollectionMethod {
@@ -1076,25 +1878,48 @@ var File_domain_treasury_collection_method_collection_method_proto protoreflect.
 
 const file_domain_treasury_collection_method_collection_method_proto_rawDesc = "" +
 	"\n" +
-	"9domain/treasury/collection_method/collection_method.proto\x12\x12domain.treasury.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1adomain/common/search.proto\"\xc6\x04\n" +
+	"9domain/treasury/collection_method/collection_method.proto\x12\x12domain.treasury.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1adomain/common/search.proto\x1a-domain/common/advance_kind/advance_kind.proto\"\xfe\x0e\n" +
 	"\x10CollectionMethod\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12&\n" +
-	"\fdate_created\x18\x02 \x01(\x03H\x01R\vdateCreated\x88\x01\x01\x123\n" +
-	"\x13date_created_string\x18\x03 \x01(\tH\x02R\x11dateCreatedString\x88\x01\x01\x12(\n" +
-	"\rdate_modified\x18\x04 \x01(\x03H\x03R\fdateModified\x88\x01\x01\x125\n" +
-	"\x14date_modified_string\x18\x05 \x01(\tH\x04R\x12dateModifiedString\x88\x01\x01\x12\x16\n" +
+	"\fdate_created\x18\x02 \x01(\x03H\x02R\vdateCreated\x88\x01\x01\x123\n" +
+	"\x13date_created_string\x18\x03 \x01(\tH\x03R\x11dateCreatedString\x88\x01\x01\x12(\n" +
+	"\rdate_modified\x18\x04 \x01(\x03H\x04R\fdateModified\x88\x01\x01\x125\n" +
+	"\x14date_modified_string\x18\x05 \x01(\tH\x05R\x12dateModifiedString\x88\x01\x01\x12\x16\n" +
 	"\x06active\x18\x06 \x01(\bR\x06active\x12\x12\n" +
 	"\x04name\x18\a \x01(\tR\x04name\x12?\n" +
 	"\x04card\x18\b \x01(\v2).domain.treasury.v1.CollectionCardDetailsH\x00R\x04card\x12U\n" +
 	"\fbank_account\x18\t \x01(\v20.domain.treasury.v1.CollectionBankAccountDetailsH\x00R\vbankAccount\x12(\n" +
 	"\rprovider_name\x18\n" +
-	" \x01(\tH\x05R\fproviderName\x88\x01\x01B\x10\n" +
-	"\x0emethod_detailsB\x0f\n" +
+	" \x01(\tH\x06R\fproviderName\x88\x01\x01\x12!\n" +
+	"\fworkspace_id\x18\v \x01(\tR\vworkspaceId\x12R\n" +
+	"\fposting_kind\x18\f \x01(\x0e2/.domain.treasury.v1.CollectionMethodPostingKindR\vpostingKind\x12H\n" +
+	"\bcategory\x18\r \x01(\x0e2,.domain.treasury.v1.CollectionMethodCategoryR\bcategory\x12U\n" +
+	"\raudience_mode\x18\x0e \x01(\x0e20.domain.treasury.v1.CollectionMethodAudienceModeR\faudienceMode\x12Y\n" +
+	"\x0ftax_effect_kind\x18\x0f \x01(\x0e21.domain.treasury.v1.CollectionMethodTaxEffectKindR\rtaxEffectKind\x12B\n" +
+	"\x1bdefault_eligibility_rule_id\x18\x10 \x01(\tH\aR\x18defaultEligibilityRuleId\x88\x01\x01\x121\n" +
+	"\x12balance_account_id\x18\x11 \x01(\tH\bR\x10balanceAccountId\x88\x01\x01\x12/\n" +
+	"\x11target_account_id\x18\x12 \x01(\tH\tR\x0ftargetAccountId\x88\x01\x01\x12K\n" +
+	"\tlifecycle\x18\x13 \x01(\x0e2-.domain.treasury.v1.CollectionMethodLifecycleR\tlifecycle\x12B\n" +
+	"\x06source\x18\x14 \x01(\x0e2*.domain.treasury.v1.CollectionMethodSourceR\x06source\x12#\n" +
+	"\rtemplate_code\x18\x15 \x01(\tR\ftemplateCode\x12\x1a\n" +
+	"\brevision\x18\x16 \x01(\x05R\brevision\x12X\n" +
+	"\x0eversion_status\x18\x17 \x01(\x0e21.domain.treasury.v1.CollectionMethodVersionStatusR\rversionStatus\x12J\n" +
+	"\x1fsupersedes_collection_method_id\x18\x18 \x01(\tH\n" +
+	"R\x1csupersedesCollectionMethodId\x88\x01\x01\x12R\n" +
+	"\tcard_type\x18\x1e \x01(\v23.domain.treasury.v1.CollectionMethodCardTypeDetailsH\x01R\bcardType\x12d\n" +
+	"\x0fvoucher_program\x18\x1f \x01(\v29.domain.treasury.v1.CollectionMethodVoucherProgramDetailsH\x01R\x0evoucherProgram\x12d\n" +
+	"\x0fadvance_program\x18  \x01(\v29.domain.treasury.v1.CollectionMethodAdvanceProgramDetailsH\x01R\x0eadvanceProgramB\x10\n" +
+	"\x0emethod_detailsB\x12\n" +
+	"\x10template_detailsB\x0f\n" +
 	"\r_date_createdB\x16\n" +
 	"\x14_date_created_stringB\x10\n" +
 	"\x0e_date_modifiedB\x17\n" +
 	"\x15_date_modified_stringB\x10\n" +
-	"\x0e_provider_name\"\xa2\x01\n" +
+	"\x0e_provider_nameB\x1e\n" +
+	"\x1c_default_eligibility_rule_idB\x15\n" +
+	"\x13_balance_account_idB\x14\n" +
+	"\x12_target_account_idB\"\n" +
+	" _supersedes_collection_method_id\"\xa2\x01\n" +
 	"\x15CollectionCardDetails\x12\x1b\n" +
 	"\tcard_type\x18\x01 \x01(\tR\bcardType\x12(\n" +
 	"\x10last_four_digits\x18\x02 \x01(\tR\x0elastFourDigits\x12!\n" +
@@ -1103,7 +1928,26 @@ const file_domain_treasury_collection_method_collection_method_proto_rawDesc = "
 	"expiryYear\"e\n" +
 	"\x1cCollectionBankAccountDetails\x12\x1b\n" +
 	"\tbank_name\x18\x01 \x01(\tR\bbankName\x12(\n" +
-	"\x10last_four_digits\x18\x02 \x01(\tR\x0elastFourDigits\"Y\n" +
+	"\x10last_four_digits\x18\x02 \x01(\tR\x0elastFourDigits\"!\n" +
+	"\x1fCollectionMethodCardTypeDetails\"\xba\x02\n" +
+	"%CollectionMethodVoucherProgramDetails\x12B\n" +
+	"\x1bdefault_face_value_centavos\x18\x01 \x01(\x03H\x00R\x18defaultFaceValueCentavos\x88\x01\x01\x123\n" +
+	"\x13default_expiry_days\x18\x02 \x01(\x05H\x01R\x11defaultExpiryDays\x88\x01\x01\x12`\n" +
+	"\x14allowed_bearer_modes\x18\x03 \x01(\x0e2..domain.treasury.v1.CollectionMethodBearerModeR\x12allowedBearerModesB\x1e\n" +
+	"\x1c_default_face_value_centavosB\x16\n" +
+	"\x14_default_expiry_days\"\xcb\x04\n" +
+	"%CollectionMethodAdvanceProgramDetails\x12@\n" +
+	"\fadvance_kind\x18\x01 \x01(\x0e2\x1d.domain.common.v1.AdvanceKindR\vadvanceKind\x12@\n" +
+	"\x1adefault_balance_account_id\x18\x02 \x01(\tH\x00R\x17defaultBalanceAccountId\x88\x01\x01\x12>\n" +
+	"\x19default_target_account_id\x18\x03 \x01(\tH\x01R\x16defaultTargetAccountId\x88\x01\x01\x125\n" +
+	"\x14default_period_count\x18\x04 \x01(\x05H\x02R\x12defaultPeriodCount\x88\x01\x01\x123\n" +
+	"\x13default_period_unit\x18\x05 \x01(\tH\x03R\x11defaultPeriodUnit\x88\x01\x01\x12g\n" +
+	"\x18default_proration_policy\x18\x06 \x01(\x0e2(.domain.common.v1.AdvanceProrationPolicyH\x04R\x16defaultProrationPolicy\x88\x01\x01B\x1d\n" +
+	"\x1b_default_balance_account_idB\x1c\n" +
+	"\x1a_default_target_account_idB\x17\n" +
+	"\x15_default_period_countB\x16\n" +
+	"\x14_default_period_unitB\x1b\n" +
+	"\x19_default_proration_policy\"Y\n" +
 	"\x1dCreateCollectionMethodRequest\x128\n" +
 	"\x04data\x18\x01 \x01(\v2$.domain.treasury.v1.CollectionMethodR\x04data\"\xb2\x01\n" +
 	"\x1eCreateCollectionMethodResponse\x128\n" +
@@ -1177,7 +2021,50 @@ const file_domain_treasury_collection_method_collection_method_proto_rawDesc = "
 	"\asuccess\x18\x02 \x01(\bR\asuccess\x122\n" +
 	"\x05error\x18\x03 \x01(\v2\x17.domain.common.v1.ErrorH\x01R\x05error\x88\x01\x01B\x14\n" +
 	"\x12_collection_methodB\b\n" +
-	"\x06_error2\xd5\a\n" +
+	"\x06_error*\x90\x02\n" +
+	"\x1bCollectionMethodPostingKind\x12.\n" +
+	"*COLLECTION_METHOD_POSTING_KIND_UNSPECIFIED\x10\x00\x12'\n" +
+	"#COLLECTION_METHOD_POSTING_KIND_CASH\x10\x01\x123\n" +
+	"/COLLECTION_METHOD_POSTING_KIND_ADVANCE_DRAWDOWN\x10\x02\x12+\n" +
+	"'COLLECTION_METHOD_POSTING_KIND_CLAIM_AR\x10\x03\x126\n" +
+	"2COLLECTION_METHOD_POSTING_KIND_DEFERRED_RECEIVABLE\x10\x04*\xe4\x01\n" +
+	"\x18CollectionMethodCategory\x12*\n" +
+	"&COLLECTION_METHOD_CATEGORY_UNSPECIFIED\x10\x00\x12'\n" +
+	"#COLLECTION_METHOD_CATEGORY_STANDARD\x10\x01\x12&\n" +
+	"\"COLLECTION_METHOD_CATEGORY_VOUCHER\x10\x02\x12&\n" +
+	"\"COLLECTION_METHOD_CATEGORY_ADVANCE\x10\x03\x12#\n" +
+	"\x1fCOLLECTION_METHOD_CATEGORY_CARD\x10\x04*\x90\x02\n" +
+	"\x1cCollectionMethodAudienceMode\x12/\n" +
+	"+COLLECTION_METHOD_AUDIENCE_MODE_UNSPECIFIED\x10\x00\x12(\n" +
+	"$COLLECTION_METHOD_AUDIENCE_MODE_OPEN\x10\x01\x12.\n" +
+	"*COLLECTION_METHOD_AUDIENCE_MODE_RESTRICTED\x10\x02\x121\n" +
+	"-COLLECTION_METHOD_AUDIENCE_MODE_SINGLE_CLIENT\x10\x03\x122\n" +
+	".COLLECTION_METHOD_AUDIENCE_MODE_SEGMENT_SCOPED\x10\x04*\xe0\x01\n" +
+	"\x1dCollectionMethodTaxEffectKind\x121\n" +
+	"-COLLECTION_METHOD_TAX_EFFECT_KIND_UNSPECIFIED\x10\x00\x12*\n" +
+	"&COLLECTION_METHOD_TAX_EFFECT_KIND_NONE\x10\x01\x12/\n" +
+	"+COLLECTION_METHOD_TAX_EFFECT_KIND_INCLUSIVE\x10\x02\x12/\n" +
+	"+COLLECTION_METHOD_TAX_EFFECT_KIND_EXCLUSIVE\x10\x03*\xe9\x01\n" +
+	"\x19CollectionMethodLifecycle\x12+\n" +
+	"'COLLECTION_METHOD_LIFECYCLE_UNSPECIFIED\x10\x00\x12%\n" +
+	"!COLLECTION_METHOD_LIFECYCLE_DRAFT\x10\x01\x12&\n" +
+	"\"COLLECTION_METHOD_LIFECYCLE_ACTIVE\x10\x02\x12&\n" +
+	"\"COLLECTION_METHOD_LIFECYCLE_CLOSED\x10\x03\x12(\n" +
+	"$COLLECTION_METHOD_LIFECYCLE_ARCHIVED\x10\x04*\xbd\x01\n" +
+	"\x16CollectionMethodSource\x12(\n" +
+	"$COLLECTION_METHOD_SOURCE_UNSPECIFIED\x10\x00\x12#\n" +
+	"\x1fCOLLECTION_METHOD_SOURCE_SYSTEM\x10\x01\x12&\n" +
+	"\"COLLECTION_METHOD_SOURCE_WORKSPACE\x10\x02\x12,\n" +
+	"(COLLECTION_METHOD_SOURCE_VENDOR_TEMPLATE\x10\x03*\xde\x01\n" +
+	"\x1dCollectionMethodVersionStatus\x120\n" +
+	",COLLECTION_METHOD_VERSION_STATUS_UNSPECIFIED\x10\x00\x12*\n" +
+	"&COLLECTION_METHOD_VERSION_STATUS_DRAFT\x10\x01\x12.\n" +
+	"*COLLECTION_METHOD_VERSION_STATUS_PUBLISHED\x10\x02\x12/\n" +
+	"+COLLECTION_METHOD_VERSION_STATUS_SUPERSEDED\x10\x03*\xa3\x01\n" +
+	"\x1aCollectionMethodBearerMode\x12-\n" +
+	")COLLECTION_METHOD_BEARER_MODE_UNSPECIFIED\x10\x00\x12(\n" +
+	"$COLLECTION_METHOD_BEARER_MODE_BEARER\x10\x01\x12,\n" +
+	"(COLLECTION_METHOD_BEARER_MODE_REGISTERED\x10\x022\xd5\a\n" +
 	"\x1dCollectionMethodDomainService\x12\x7f\n" +
 	"\x16CreateCollectionMethod\x121.domain.treasury.v1.CreateCollectionMethodRequest\x1a2.domain.treasury.v1.CreateCollectionMethodResponse\x12y\n" +
 	"\x14ReadCollectionMethod\x12/.domain.treasury.v1.ReadCollectionMethodRequest\x1a0.domain.treasury.v1.ReadCollectionMethodResponse\x12\x7f\n" +
@@ -1200,82 +2087,109 @@ func file_domain_treasury_collection_method_collection_method_proto_rawDescGZIP(
 	return file_domain_treasury_collection_method_collection_method_proto_rawDescData
 }
 
-var file_domain_treasury_collection_method_collection_method_proto_msgTypes = make([]protoimpl.MessageInfo, 17)
+var file_domain_treasury_collection_method_collection_method_proto_enumTypes = make([]protoimpl.EnumInfo, 8)
+var file_domain_treasury_collection_method_collection_method_proto_msgTypes = make([]protoimpl.MessageInfo, 20)
 var file_domain_treasury_collection_method_collection_method_proto_goTypes = []any{
-	(*CollectionMethod)(nil),                        // 0: domain.treasury.v1.CollectionMethod
-	(*CollectionCardDetails)(nil),                   // 1: domain.treasury.v1.CollectionCardDetails
-	(*CollectionBankAccountDetails)(nil),            // 2: domain.treasury.v1.CollectionBankAccountDetails
-	(*CreateCollectionMethodRequest)(nil),           // 3: domain.treasury.v1.CreateCollectionMethodRequest
-	(*CreateCollectionMethodResponse)(nil),          // 4: domain.treasury.v1.CreateCollectionMethodResponse
-	(*ReadCollectionMethodRequest)(nil),             // 5: domain.treasury.v1.ReadCollectionMethodRequest
-	(*ReadCollectionMethodResponse)(nil),            // 6: domain.treasury.v1.ReadCollectionMethodResponse
-	(*UpdateCollectionMethodRequest)(nil),           // 7: domain.treasury.v1.UpdateCollectionMethodRequest
-	(*UpdateCollectionMethodResponse)(nil),          // 8: domain.treasury.v1.UpdateCollectionMethodResponse
-	(*DeleteCollectionMethodRequest)(nil),           // 9: domain.treasury.v1.DeleteCollectionMethodRequest
-	(*DeleteCollectionMethodResponse)(nil),          // 10: domain.treasury.v1.DeleteCollectionMethodResponse
-	(*ListCollectionMethodsRequest)(nil),            // 11: domain.treasury.v1.ListCollectionMethodsRequest
-	(*ListCollectionMethodsResponse)(nil),           // 12: domain.treasury.v1.ListCollectionMethodsResponse
-	(*GetCollectionMethodListPageDataRequest)(nil),  // 13: domain.treasury.v1.GetCollectionMethodListPageDataRequest
-	(*GetCollectionMethodListPageDataResponse)(nil), // 14: domain.treasury.v1.GetCollectionMethodListPageDataResponse
-	(*GetCollectionMethodItemPageDataRequest)(nil),  // 15: domain.treasury.v1.GetCollectionMethodItemPageDataRequest
-	(*GetCollectionMethodItemPageDataResponse)(nil), // 16: domain.treasury.v1.GetCollectionMethodItemPageDataResponse
-	(*common.Error)(nil),                            // 17: domain.common.v1.Error
-	(*common.SearchRequest)(nil),                    // 18: domain.common.v1.SearchRequest
-	(*common.FilterRequest)(nil),                    // 19: domain.common.v1.FilterRequest
-	(*common.SortRequest)(nil),                      // 20: domain.common.v1.SortRequest
-	(*common.PaginationRequest)(nil),                // 21: domain.common.v1.PaginationRequest
-	(*common.PaginationResponse)(nil),               // 22: domain.common.v1.PaginationResponse
-	(*common.SearchResult)(nil),                     // 23: domain.common.v1.SearchResult
+	(CollectionMethodPostingKind)(0),                // 0: domain.treasury.v1.CollectionMethodPostingKind
+	(CollectionMethodCategory)(0),                   // 1: domain.treasury.v1.CollectionMethodCategory
+	(CollectionMethodAudienceMode)(0),               // 2: domain.treasury.v1.CollectionMethodAudienceMode
+	(CollectionMethodTaxEffectKind)(0),              // 3: domain.treasury.v1.CollectionMethodTaxEffectKind
+	(CollectionMethodLifecycle)(0),                  // 4: domain.treasury.v1.CollectionMethodLifecycle
+	(CollectionMethodSource)(0),                     // 5: domain.treasury.v1.CollectionMethodSource
+	(CollectionMethodVersionStatus)(0),              // 6: domain.treasury.v1.CollectionMethodVersionStatus
+	(CollectionMethodBearerMode)(0),                 // 7: domain.treasury.v1.CollectionMethodBearerMode
+	(*CollectionMethod)(nil),                        // 8: domain.treasury.v1.CollectionMethod
+	(*CollectionCardDetails)(nil),                   // 9: domain.treasury.v1.CollectionCardDetails
+	(*CollectionBankAccountDetails)(nil),            // 10: domain.treasury.v1.CollectionBankAccountDetails
+	(*CollectionMethodCardTypeDetails)(nil),         // 11: domain.treasury.v1.CollectionMethodCardTypeDetails
+	(*CollectionMethodVoucherProgramDetails)(nil),   // 12: domain.treasury.v1.CollectionMethodVoucherProgramDetails
+	(*CollectionMethodAdvanceProgramDetails)(nil),   // 13: domain.treasury.v1.CollectionMethodAdvanceProgramDetails
+	(*CreateCollectionMethodRequest)(nil),           // 14: domain.treasury.v1.CreateCollectionMethodRequest
+	(*CreateCollectionMethodResponse)(nil),          // 15: domain.treasury.v1.CreateCollectionMethodResponse
+	(*ReadCollectionMethodRequest)(nil),             // 16: domain.treasury.v1.ReadCollectionMethodRequest
+	(*ReadCollectionMethodResponse)(nil),            // 17: domain.treasury.v1.ReadCollectionMethodResponse
+	(*UpdateCollectionMethodRequest)(nil),           // 18: domain.treasury.v1.UpdateCollectionMethodRequest
+	(*UpdateCollectionMethodResponse)(nil),          // 19: domain.treasury.v1.UpdateCollectionMethodResponse
+	(*DeleteCollectionMethodRequest)(nil),           // 20: domain.treasury.v1.DeleteCollectionMethodRequest
+	(*DeleteCollectionMethodResponse)(nil),          // 21: domain.treasury.v1.DeleteCollectionMethodResponse
+	(*ListCollectionMethodsRequest)(nil),            // 22: domain.treasury.v1.ListCollectionMethodsRequest
+	(*ListCollectionMethodsResponse)(nil),           // 23: domain.treasury.v1.ListCollectionMethodsResponse
+	(*GetCollectionMethodListPageDataRequest)(nil),  // 24: domain.treasury.v1.GetCollectionMethodListPageDataRequest
+	(*GetCollectionMethodListPageDataResponse)(nil), // 25: domain.treasury.v1.GetCollectionMethodListPageDataResponse
+	(*GetCollectionMethodItemPageDataRequest)(nil),  // 26: domain.treasury.v1.GetCollectionMethodItemPageDataRequest
+	(*GetCollectionMethodItemPageDataResponse)(nil), // 27: domain.treasury.v1.GetCollectionMethodItemPageDataResponse
+	(advance_kind.AdvanceKind)(0),                   // 28: domain.common.v1.AdvanceKind
+	(advance_kind.AdvanceProrationPolicy)(0),        // 29: domain.common.v1.AdvanceProrationPolicy
+	(*common.Error)(nil),                            // 30: domain.common.v1.Error
+	(*common.SearchRequest)(nil),                    // 31: domain.common.v1.SearchRequest
+	(*common.FilterRequest)(nil),                    // 32: domain.common.v1.FilterRequest
+	(*common.SortRequest)(nil),                      // 33: domain.common.v1.SortRequest
+	(*common.PaginationRequest)(nil),                // 34: domain.common.v1.PaginationRequest
+	(*common.PaginationResponse)(nil),               // 35: domain.common.v1.PaginationResponse
+	(*common.SearchResult)(nil),                     // 36: domain.common.v1.SearchResult
 }
 var file_domain_treasury_collection_method_collection_method_proto_depIdxs = []int32{
-	1,  // 0: domain.treasury.v1.CollectionMethod.card:type_name -> domain.treasury.v1.CollectionCardDetails
-	2,  // 1: domain.treasury.v1.CollectionMethod.bank_account:type_name -> domain.treasury.v1.CollectionBankAccountDetails
-	0,  // 2: domain.treasury.v1.CreateCollectionMethodRequest.data:type_name -> domain.treasury.v1.CollectionMethod
-	0,  // 3: domain.treasury.v1.CreateCollectionMethodResponse.data:type_name -> domain.treasury.v1.CollectionMethod
-	17, // 4: domain.treasury.v1.CreateCollectionMethodResponse.error:type_name -> domain.common.v1.Error
-	0,  // 5: domain.treasury.v1.ReadCollectionMethodRequest.data:type_name -> domain.treasury.v1.CollectionMethod
-	0,  // 6: domain.treasury.v1.ReadCollectionMethodResponse.data:type_name -> domain.treasury.v1.CollectionMethod
-	17, // 7: domain.treasury.v1.ReadCollectionMethodResponse.error:type_name -> domain.common.v1.Error
-	0,  // 8: domain.treasury.v1.UpdateCollectionMethodRequest.data:type_name -> domain.treasury.v1.CollectionMethod
-	0,  // 9: domain.treasury.v1.UpdateCollectionMethodResponse.data:type_name -> domain.treasury.v1.CollectionMethod
-	17, // 10: domain.treasury.v1.UpdateCollectionMethodResponse.error:type_name -> domain.common.v1.Error
-	0,  // 11: domain.treasury.v1.DeleteCollectionMethodRequest.data:type_name -> domain.treasury.v1.CollectionMethod
-	17, // 12: domain.treasury.v1.DeleteCollectionMethodResponse.error:type_name -> domain.common.v1.Error
-	18, // 13: domain.treasury.v1.ListCollectionMethodsRequest.search:type_name -> domain.common.v1.SearchRequest
-	19, // 14: domain.treasury.v1.ListCollectionMethodsRequest.filters:type_name -> domain.common.v1.FilterRequest
-	20, // 15: domain.treasury.v1.ListCollectionMethodsRequest.sort:type_name -> domain.common.v1.SortRequest
-	21, // 16: domain.treasury.v1.ListCollectionMethodsRequest.pagination:type_name -> domain.common.v1.PaginationRequest
-	0,  // 17: domain.treasury.v1.ListCollectionMethodsResponse.data:type_name -> domain.treasury.v1.CollectionMethod
-	17, // 18: domain.treasury.v1.ListCollectionMethodsResponse.error:type_name -> domain.common.v1.Error
-	21, // 19: domain.treasury.v1.GetCollectionMethodListPageDataRequest.pagination:type_name -> domain.common.v1.PaginationRequest
-	19, // 20: domain.treasury.v1.GetCollectionMethodListPageDataRequest.filters:type_name -> domain.common.v1.FilterRequest
-	20, // 21: domain.treasury.v1.GetCollectionMethodListPageDataRequest.sort:type_name -> domain.common.v1.SortRequest
-	18, // 22: domain.treasury.v1.GetCollectionMethodListPageDataRequest.search:type_name -> domain.common.v1.SearchRequest
-	0,  // 23: domain.treasury.v1.GetCollectionMethodListPageDataResponse.collection_method_list:type_name -> domain.treasury.v1.CollectionMethod
-	17, // 24: domain.treasury.v1.GetCollectionMethodListPageDataResponse.error:type_name -> domain.common.v1.Error
-	22, // 25: domain.treasury.v1.GetCollectionMethodListPageDataResponse.pagination:type_name -> domain.common.v1.PaginationResponse
-	23, // 26: domain.treasury.v1.GetCollectionMethodListPageDataResponse.search_results:type_name -> domain.common.v1.SearchResult
-	0,  // 27: domain.treasury.v1.GetCollectionMethodItemPageDataResponse.collection_method:type_name -> domain.treasury.v1.CollectionMethod
-	17, // 28: domain.treasury.v1.GetCollectionMethodItemPageDataResponse.error:type_name -> domain.common.v1.Error
-	3,  // 29: domain.treasury.v1.CollectionMethodDomainService.CreateCollectionMethod:input_type -> domain.treasury.v1.CreateCollectionMethodRequest
-	5,  // 30: domain.treasury.v1.CollectionMethodDomainService.ReadCollectionMethod:input_type -> domain.treasury.v1.ReadCollectionMethodRequest
-	7,  // 31: domain.treasury.v1.CollectionMethodDomainService.UpdateCollectionMethod:input_type -> domain.treasury.v1.UpdateCollectionMethodRequest
-	9,  // 32: domain.treasury.v1.CollectionMethodDomainService.DeleteCollectionMethod:input_type -> domain.treasury.v1.DeleteCollectionMethodRequest
-	11, // 33: domain.treasury.v1.CollectionMethodDomainService.ListCollectionMethods:input_type -> domain.treasury.v1.ListCollectionMethodsRequest
-	13, // 34: domain.treasury.v1.CollectionMethodDomainService.GetCollectionMethodListPageData:input_type -> domain.treasury.v1.GetCollectionMethodListPageDataRequest
-	15, // 35: domain.treasury.v1.CollectionMethodDomainService.GetCollectionMethodItemPageData:input_type -> domain.treasury.v1.GetCollectionMethodItemPageDataRequest
-	4,  // 36: domain.treasury.v1.CollectionMethodDomainService.CreateCollectionMethod:output_type -> domain.treasury.v1.CreateCollectionMethodResponse
-	6,  // 37: domain.treasury.v1.CollectionMethodDomainService.ReadCollectionMethod:output_type -> domain.treasury.v1.ReadCollectionMethodResponse
-	8,  // 38: domain.treasury.v1.CollectionMethodDomainService.UpdateCollectionMethod:output_type -> domain.treasury.v1.UpdateCollectionMethodResponse
-	10, // 39: domain.treasury.v1.CollectionMethodDomainService.DeleteCollectionMethod:output_type -> domain.treasury.v1.DeleteCollectionMethodResponse
-	12, // 40: domain.treasury.v1.CollectionMethodDomainService.ListCollectionMethods:output_type -> domain.treasury.v1.ListCollectionMethodsResponse
-	14, // 41: domain.treasury.v1.CollectionMethodDomainService.GetCollectionMethodListPageData:output_type -> domain.treasury.v1.GetCollectionMethodListPageDataResponse
-	16, // 42: domain.treasury.v1.CollectionMethodDomainService.GetCollectionMethodItemPageData:output_type -> domain.treasury.v1.GetCollectionMethodItemPageDataResponse
-	36, // [36:43] is the sub-list for method output_type
-	29, // [29:36] is the sub-list for method input_type
-	29, // [29:29] is the sub-list for extension type_name
-	29, // [29:29] is the sub-list for extension extendee
-	0,  // [0:29] is the sub-list for field type_name
+	9,  // 0: domain.treasury.v1.CollectionMethod.card:type_name -> domain.treasury.v1.CollectionCardDetails
+	10, // 1: domain.treasury.v1.CollectionMethod.bank_account:type_name -> domain.treasury.v1.CollectionBankAccountDetails
+	0,  // 2: domain.treasury.v1.CollectionMethod.posting_kind:type_name -> domain.treasury.v1.CollectionMethodPostingKind
+	1,  // 3: domain.treasury.v1.CollectionMethod.category:type_name -> domain.treasury.v1.CollectionMethodCategory
+	2,  // 4: domain.treasury.v1.CollectionMethod.audience_mode:type_name -> domain.treasury.v1.CollectionMethodAudienceMode
+	3,  // 5: domain.treasury.v1.CollectionMethod.tax_effect_kind:type_name -> domain.treasury.v1.CollectionMethodTaxEffectKind
+	4,  // 6: domain.treasury.v1.CollectionMethod.lifecycle:type_name -> domain.treasury.v1.CollectionMethodLifecycle
+	5,  // 7: domain.treasury.v1.CollectionMethod.source:type_name -> domain.treasury.v1.CollectionMethodSource
+	6,  // 8: domain.treasury.v1.CollectionMethod.version_status:type_name -> domain.treasury.v1.CollectionMethodVersionStatus
+	11, // 9: domain.treasury.v1.CollectionMethod.card_type:type_name -> domain.treasury.v1.CollectionMethodCardTypeDetails
+	12, // 10: domain.treasury.v1.CollectionMethod.voucher_program:type_name -> domain.treasury.v1.CollectionMethodVoucherProgramDetails
+	13, // 11: domain.treasury.v1.CollectionMethod.advance_program:type_name -> domain.treasury.v1.CollectionMethodAdvanceProgramDetails
+	7,  // 12: domain.treasury.v1.CollectionMethodVoucherProgramDetails.allowed_bearer_modes:type_name -> domain.treasury.v1.CollectionMethodBearerMode
+	28, // 13: domain.treasury.v1.CollectionMethodAdvanceProgramDetails.advance_kind:type_name -> domain.common.v1.AdvanceKind
+	29, // 14: domain.treasury.v1.CollectionMethodAdvanceProgramDetails.default_proration_policy:type_name -> domain.common.v1.AdvanceProrationPolicy
+	8,  // 15: domain.treasury.v1.CreateCollectionMethodRequest.data:type_name -> domain.treasury.v1.CollectionMethod
+	8,  // 16: domain.treasury.v1.CreateCollectionMethodResponse.data:type_name -> domain.treasury.v1.CollectionMethod
+	30, // 17: domain.treasury.v1.CreateCollectionMethodResponse.error:type_name -> domain.common.v1.Error
+	8,  // 18: domain.treasury.v1.ReadCollectionMethodRequest.data:type_name -> domain.treasury.v1.CollectionMethod
+	8,  // 19: domain.treasury.v1.ReadCollectionMethodResponse.data:type_name -> domain.treasury.v1.CollectionMethod
+	30, // 20: domain.treasury.v1.ReadCollectionMethodResponse.error:type_name -> domain.common.v1.Error
+	8,  // 21: domain.treasury.v1.UpdateCollectionMethodRequest.data:type_name -> domain.treasury.v1.CollectionMethod
+	8,  // 22: domain.treasury.v1.UpdateCollectionMethodResponse.data:type_name -> domain.treasury.v1.CollectionMethod
+	30, // 23: domain.treasury.v1.UpdateCollectionMethodResponse.error:type_name -> domain.common.v1.Error
+	8,  // 24: domain.treasury.v1.DeleteCollectionMethodRequest.data:type_name -> domain.treasury.v1.CollectionMethod
+	30, // 25: domain.treasury.v1.DeleteCollectionMethodResponse.error:type_name -> domain.common.v1.Error
+	31, // 26: domain.treasury.v1.ListCollectionMethodsRequest.search:type_name -> domain.common.v1.SearchRequest
+	32, // 27: domain.treasury.v1.ListCollectionMethodsRequest.filters:type_name -> domain.common.v1.FilterRequest
+	33, // 28: domain.treasury.v1.ListCollectionMethodsRequest.sort:type_name -> domain.common.v1.SortRequest
+	34, // 29: domain.treasury.v1.ListCollectionMethodsRequest.pagination:type_name -> domain.common.v1.PaginationRequest
+	8,  // 30: domain.treasury.v1.ListCollectionMethodsResponse.data:type_name -> domain.treasury.v1.CollectionMethod
+	30, // 31: domain.treasury.v1.ListCollectionMethodsResponse.error:type_name -> domain.common.v1.Error
+	34, // 32: domain.treasury.v1.GetCollectionMethodListPageDataRequest.pagination:type_name -> domain.common.v1.PaginationRequest
+	32, // 33: domain.treasury.v1.GetCollectionMethodListPageDataRequest.filters:type_name -> domain.common.v1.FilterRequest
+	33, // 34: domain.treasury.v1.GetCollectionMethodListPageDataRequest.sort:type_name -> domain.common.v1.SortRequest
+	31, // 35: domain.treasury.v1.GetCollectionMethodListPageDataRequest.search:type_name -> domain.common.v1.SearchRequest
+	8,  // 36: domain.treasury.v1.GetCollectionMethodListPageDataResponse.collection_method_list:type_name -> domain.treasury.v1.CollectionMethod
+	30, // 37: domain.treasury.v1.GetCollectionMethodListPageDataResponse.error:type_name -> domain.common.v1.Error
+	35, // 38: domain.treasury.v1.GetCollectionMethodListPageDataResponse.pagination:type_name -> domain.common.v1.PaginationResponse
+	36, // 39: domain.treasury.v1.GetCollectionMethodListPageDataResponse.search_results:type_name -> domain.common.v1.SearchResult
+	8,  // 40: domain.treasury.v1.GetCollectionMethodItemPageDataResponse.collection_method:type_name -> domain.treasury.v1.CollectionMethod
+	30, // 41: domain.treasury.v1.GetCollectionMethodItemPageDataResponse.error:type_name -> domain.common.v1.Error
+	14, // 42: domain.treasury.v1.CollectionMethodDomainService.CreateCollectionMethod:input_type -> domain.treasury.v1.CreateCollectionMethodRequest
+	16, // 43: domain.treasury.v1.CollectionMethodDomainService.ReadCollectionMethod:input_type -> domain.treasury.v1.ReadCollectionMethodRequest
+	18, // 44: domain.treasury.v1.CollectionMethodDomainService.UpdateCollectionMethod:input_type -> domain.treasury.v1.UpdateCollectionMethodRequest
+	20, // 45: domain.treasury.v1.CollectionMethodDomainService.DeleteCollectionMethod:input_type -> domain.treasury.v1.DeleteCollectionMethodRequest
+	22, // 46: domain.treasury.v1.CollectionMethodDomainService.ListCollectionMethods:input_type -> domain.treasury.v1.ListCollectionMethodsRequest
+	24, // 47: domain.treasury.v1.CollectionMethodDomainService.GetCollectionMethodListPageData:input_type -> domain.treasury.v1.GetCollectionMethodListPageDataRequest
+	26, // 48: domain.treasury.v1.CollectionMethodDomainService.GetCollectionMethodItemPageData:input_type -> domain.treasury.v1.GetCollectionMethodItemPageDataRequest
+	15, // 49: domain.treasury.v1.CollectionMethodDomainService.CreateCollectionMethod:output_type -> domain.treasury.v1.CreateCollectionMethodResponse
+	17, // 50: domain.treasury.v1.CollectionMethodDomainService.ReadCollectionMethod:output_type -> domain.treasury.v1.ReadCollectionMethodResponse
+	19, // 51: domain.treasury.v1.CollectionMethodDomainService.UpdateCollectionMethod:output_type -> domain.treasury.v1.UpdateCollectionMethodResponse
+	21, // 52: domain.treasury.v1.CollectionMethodDomainService.DeleteCollectionMethod:output_type -> domain.treasury.v1.DeleteCollectionMethodResponse
+	23, // 53: domain.treasury.v1.CollectionMethodDomainService.ListCollectionMethods:output_type -> domain.treasury.v1.ListCollectionMethodsResponse
+	25, // 54: domain.treasury.v1.CollectionMethodDomainService.GetCollectionMethodListPageData:output_type -> domain.treasury.v1.GetCollectionMethodListPageDataResponse
+	27, // 55: domain.treasury.v1.CollectionMethodDomainService.GetCollectionMethodItemPageData:output_type -> domain.treasury.v1.GetCollectionMethodItemPageDataResponse
+	49, // [49:56] is the sub-list for method output_type
+	42, // [42:49] is the sub-list for method input_type
+	42, // [42:42] is the sub-list for extension type_name
+	42, // [42:42] is the sub-list for extension extendee
+	0,  // [0:42] is the sub-list for field type_name
 }
 
 func init() { file_domain_treasury_collection_method_collection_method_proto_init() }
@@ -1286,28 +2200,34 @@ func file_domain_treasury_collection_method_collection_method_proto_init() {
 	file_domain_treasury_collection_method_collection_method_proto_msgTypes[0].OneofWrappers = []any{
 		(*CollectionMethod_Card)(nil),
 		(*CollectionMethod_BankAccount)(nil),
+		(*CollectionMethod_CardType)(nil),
+		(*CollectionMethod_VoucherProgram)(nil),
+		(*CollectionMethod_AdvanceProgram)(nil),
 	}
 	file_domain_treasury_collection_method_collection_method_proto_msgTypes[4].OneofWrappers = []any{}
-	file_domain_treasury_collection_method_collection_method_proto_msgTypes[6].OneofWrappers = []any{}
-	file_domain_treasury_collection_method_collection_method_proto_msgTypes[8].OneofWrappers = []any{}
-	file_domain_treasury_collection_method_collection_method_proto_msgTypes[10].OneofWrappers = []any{}
+	file_domain_treasury_collection_method_collection_method_proto_msgTypes[5].OneofWrappers = []any{}
+	file_domain_treasury_collection_method_collection_method_proto_msgTypes[7].OneofWrappers = []any{}
+	file_domain_treasury_collection_method_collection_method_proto_msgTypes[9].OneofWrappers = []any{}
 	file_domain_treasury_collection_method_collection_method_proto_msgTypes[11].OneofWrappers = []any{}
-	file_domain_treasury_collection_method_collection_method_proto_msgTypes[12].OneofWrappers = []any{}
 	file_domain_treasury_collection_method_collection_method_proto_msgTypes[13].OneofWrappers = []any{}
 	file_domain_treasury_collection_method_collection_method_proto_msgTypes[14].OneofWrappers = []any{}
+	file_domain_treasury_collection_method_collection_method_proto_msgTypes[15].OneofWrappers = []any{}
 	file_domain_treasury_collection_method_collection_method_proto_msgTypes[16].OneofWrappers = []any{}
+	file_domain_treasury_collection_method_collection_method_proto_msgTypes[17].OneofWrappers = []any{}
+	file_domain_treasury_collection_method_collection_method_proto_msgTypes[19].OneofWrappers = []any{}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
 		File: protoimpl.DescBuilder{
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_domain_treasury_collection_method_collection_method_proto_rawDesc), len(file_domain_treasury_collection_method_collection_method_proto_rawDesc)),
-			NumEnums:      0,
-			NumMessages:   17,
+			NumEnums:      8,
+			NumMessages:   20,
 			NumExtensions: 0,
 			NumServices:   1,
 		},
 		GoTypes:           file_domain_treasury_collection_method_collection_method_proto_goTypes,
 		DependencyIndexes: file_domain_treasury_collection_method_collection_method_proto_depIdxs,
+		EnumInfos:         file_domain_treasury_collection_method_collection_method_proto_enumTypes,
 		MessageInfos:      file_domain_treasury_collection_method_collection_method_proto_msgTypes,
 	}.Build()
 	File_domain_treasury_collection_method_collection_method_proto = out.File

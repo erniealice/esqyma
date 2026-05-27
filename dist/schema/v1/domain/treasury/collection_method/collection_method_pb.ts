@@ -2,8 +2,8 @@
 // @generated from file domain/treasury/collection_method/collection_method.proto (package domain.treasury.v1, syntax proto3)
 /* eslint-disable */
 
-import type { GenFile, GenMessage, GenService } from "@bufbuild/protobuf/codegenv2";
-import { fileDesc, messageDesc, serviceDesc } from "@bufbuild/protobuf/codegenv2";
+import type { GenEnum, GenFile, GenMessage, GenService } from "@bufbuild/protobuf/codegenv2";
+import { enumDesc, fileDesc, messageDesc, serviceDesc } from "@bufbuild/protobuf/codegenv2";
 import type { Error } from "../../common/error_pb";
 import { file_domain_common_error } from "../../common/error_pb";
 import type { PaginationRequest, PaginationResponse } from "../../common/pagination_pb";
@@ -14,19 +14,23 @@ import type { SortRequest } from "../../common/sort_pb";
 import { file_domain_common_sort } from "../../common/sort_pb";
 import type { SearchRequest, SearchResult } from "../../common/search_pb";
 import { file_domain_common_search } from "../../common/search_pb";
+import type { AdvanceKind, AdvanceProrationPolicy } from "../../common/advance_kind/advance_kind_pb";
+import { file_domain_common_advance_kind_advance_kind } from "../../common/advance_kind/advance_kind_pb";
 import type { Message } from "@bufbuild/protobuf";
 
 /**
  * Describes the file domain/treasury/collection_method/collection_method.proto.
  */
 export const file_domain_treasury_collection_method_collection_method: GenFile = /*@__PURE__*/
-  fileDesc("Cjlkb21haW4vdHJlYXN1cnkvY29sbGVjdGlvbl9tZXRob2QvY29sbGVjdGlvbl9tZXRob2QucHJvdG8SEmRvbWFpbi50cmVhc3VyeS52MSLRAwoQQ29sbGVjdGlvbk1ldGhvZBIKCgJpZBgBIAEoCRIZCgxkYXRlX2NyZWF0ZWQYAiABKANIAYgBARIgChNkYXRlX2NyZWF0ZWRfc3RyaW5nGAMgASgJSAKIAQESGgoNZGF0ZV9tb2RpZmllZBgEIAEoA0gDiAEBEiEKFGRhdGVfbW9kaWZpZWRfc3RyaW5nGAUgASgJSASIAQESDgoGYWN0aXZlGAYgASgIEgwKBG5hbWUYByABKAkSOQoEY2FyZBgIIAEoCzIpLmRvbWFpbi50cmVhc3VyeS52MS5Db2xsZWN0aW9uQ2FyZERldGFpbHNIABJICgxiYW5rX2FjY291bnQYCSABKAsyMC5kb21haW4udHJlYXN1cnkudjEuQ29sbGVjdGlvbkJhbmtBY2NvdW50RGV0YWlsc0gAEhoKDXByb3ZpZGVyX25hbWUYCiABKAlIBYgBAUIQCg5tZXRob2RfZGV0YWlsc0IPCg1fZGF0ZV9jcmVhdGVkQhYKFF9kYXRlX2NyZWF0ZWRfc3RyaW5nQhAKDl9kYXRlX21vZGlmaWVkQhcKFV9kYXRlX21vZGlmaWVkX3N0cmluZ0IQCg5fcHJvdmlkZXJfbmFtZSJvChVDb2xsZWN0aW9uQ2FyZERldGFpbHMSEQoJY2FyZF90eXBlGAEgASgJEhgKEGxhc3RfZm91cl9kaWdpdHMYAiABKAkSFAoMZXhwaXJ5X21vbnRoGAMgASgFEhMKC2V4cGlyeV95ZWFyGAQgASgFIksKHENvbGxlY3Rpb25CYW5rQWNjb3VudERldGFpbHMSEQoJYmFua19uYW1lGAEgASgJEhgKEGxhc3RfZm91cl9kaWdpdHMYAiABKAkiUwodQ3JlYXRlQ29sbGVjdGlvbk1ldGhvZFJlcXVlc3QSMgoEZGF0YRgBIAEoCzIkLmRvbWFpbi50cmVhc3VyeS52MS5Db2xsZWN0aW9uTWV0aG9kIpwBCh5DcmVhdGVDb2xsZWN0aW9uTWV0aG9kUmVzcG9uc2USMgoEZGF0YRgBIAMoCzIkLmRvbWFpbi50cmVhc3VyeS52MS5Db2xsZWN0aW9uTWV0aG9kEg8KB3N1Y2Nlc3MYAiABKAgSKwoFZXJyb3IYAyABKAsyFy5kb21haW4uY29tbW9uLnYxLkVycm9ySACIAQFCCAoGX2Vycm9yIlEKG1JlYWRDb2xsZWN0aW9uTWV0aG9kUmVxdWVzdBIyCgRkYXRhGAEgASgLMiQuZG9tYWluLnRyZWFzdXJ5LnYxLkNvbGxlY3Rpb25NZXRob2QimgEKHFJlYWRDb2xsZWN0aW9uTWV0aG9kUmVzcG9uc2USMgoEZGF0YRgBIAMoCzIkLmRvbWFpbi50cmVhc3VyeS52MS5Db2xsZWN0aW9uTWV0aG9kEg8KB3N1Y2Nlc3MYAiABKAgSKwoFZXJyb3IYAyABKAsyFy5kb21haW4uY29tbW9uLnYxLkVycm9ySACIAQFCCAoGX2Vycm9yIlMKHVVwZGF0ZUNvbGxlY3Rpb25NZXRob2RSZXF1ZXN0EjIKBGRhdGEYASABKAsyJC5kb21haW4udHJlYXN1cnkudjEuQ29sbGVjdGlvbk1ldGhvZCKcAQoeVXBkYXRlQ29sbGVjdGlvbk1ldGhvZFJlc3BvbnNlEjIKBGRhdGEYASADKAsyJC5kb21haW4udHJlYXN1cnkudjEuQ29sbGVjdGlvbk1ldGhvZBIPCgdzdWNjZXNzGAIgASgIEisKBWVycm9yGAMgASgLMhcuZG9tYWluLmNvbW1vbi52MS5FcnJvckgAiAEBQggKBl9lcnJvciJTCh1EZWxldGVDb2xsZWN0aW9uTWV0aG9kUmVxdWVzdBIyCgRkYXRhGAEgASgLMiQuZG9tYWluLnRyZWFzdXJ5LnYxLkNvbGxlY3Rpb25NZXRob2QiaAoeRGVsZXRlQ29sbGVjdGlvbk1ldGhvZFJlc3BvbnNlEg8KB3N1Y2Nlc3MYASABKAgSKwoFZXJyb3IYAiABKAsyFy5kb21haW4uY29tbW9uLnYxLkVycm9ySACIAQFCCAoGX2Vycm9yIqoCChxMaXN0Q29sbGVjdGlvbk1ldGhvZHNSZXF1ZXN0EjQKBnNlYXJjaBgBIAEoCzIfLmRvbWFpbi5jb21tb24udjEuU2VhcmNoUmVxdWVzdEgAiAEBEjUKB2ZpbHRlcnMYAiABKAsyHy5kb21haW4uY29tbW9uLnYxLkZpbHRlclJlcXVlc3RIAYgBARIwCgRzb3J0GAMgASgLMh0uZG9tYWluLmNvbW1vbi52MS5Tb3J0UmVxdWVzdEgCiAEBEjwKCnBhZ2luYXRpb24YBCABKAsyIy5kb21haW4uY29tbW9uLnYxLlBhZ2luYXRpb25SZXF1ZXN0SAOIAQFCCQoHX3NlYXJjaEIKCghfZmlsdGVyc0IHCgVfc29ydEINCgtfcGFnaW5hdGlvbiKbAQodTGlzdENvbGxlY3Rpb25NZXRob2RzUmVzcG9uc2USMgoEZGF0YRgBIAMoCzIkLmRvbWFpbi50cmVhc3VyeS52MS5Db2xsZWN0aW9uTWV0aG9kEg8KB3N1Y2Nlc3MYAiABKAgSKwoFZXJyb3IYAyABKAsyFy5kb21haW4uY29tbW9uLnYxLkVycm9ySACIAQFCCAoGX2Vycm9yIrQCCiZHZXRDb2xsZWN0aW9uTWV0aG9kTGlzdFBhZ2VEYXRhUmVxdWVzdBI8CgpwYWdpbmF0aW9uGAEgASgLMiMuZG9tYWluLmNvbW1vbi52MS5QYWdpbmF0aW9uUmVxdWVzdEgAiAEBEjUKB2ZpbHRlcnMYAiABKAsyHy5kb21haW4uY29tbW9uLnYxLkZpbHRlclJlcXVlc3RIAYgBARIwCgRzb3J0GAMgASgLMh0uZG9tYWluLmNvbW1vbi52MS5Tb3J0UmVxdWVzdEgCiAEBEjQKBnNlYXJjaBgEIAEoCzIfLmRvbWFpbi5jb21tb24udjEuU2VhcmNoUmVxdWVzdEgDiAEBQg0KC19wYWdpbmF0aW9uQgoKCF9maWx0ZXJzQgcKBV9zb3J0QgkKB19zZWFyY2givQIKJ0dldENvbGxlY3Rpb25NZXRob2RMaXN0UGFnZURhdGFSZXNwb25zZRJEChZjb2xsZWN0aW9uX21ldGhvZF9saXN0GAEgAygLMiQuZG9tYWluLnRyZWFzdXJ5LnYxLkNvbGxlY3Rpb25NZXRob2QSDwoHc3VjY2VzcxgCIAEoCBIrCgVlcnJvchgDIAEoCzIXLmRvbWFpbi5jb21tb24udjEuRXJyb3JIAIgBARI9CgpwYWdpbmF0aW9uGAQgASgLMiQuZG9tYWluLmNvbW1vbi52MS5QYWdpbmF0aW9uUmVzcG9uc2VIAYgBARI2Cg5zZWFyY2hfcmVzdWx0cxgFIAMoCzIeLmRvbWFpbi5jb21tb24udjEuU2VhcmNoUmVzdWx0QggKBl9lcnJvckINCgtfcGFnaW5hdGlvbiJGCiZHZXRDb2xsZWN0aW9uTWV0aG9kSXRlbVBhZ2VEYXRhUmVxdWVzdBIcChRjb2xsZWN0aW9uX21ldGhvZF9pZBgBIAEoCSLNAQonR2V0Q29sbGVjdGlvbk1ldGhvZEl0ZW1QYWdlRGF0YVJlc3BvbnNlEkQKEWNvbGxlY3Rpb25fbWV0aG9kGAEgASgLMiQuZG9tYWluLnRyZWFzdXJ5LnYxLkNvbGxlY3Rpb25NZXRob2RIAIgBARIPCgdzdWNjZXNzGAIgASgIEisKBWVycm9yGAMgASgLMhcuZG9tYWluLmNvbW1vbi52MS5FcnJvckgBiAEBQhQKEl9jb2xsZWN0aW9uX21ldGhvZEIICgZfZXJyb3Iy1QcKHUNvbGxlY3Rpb25NZXRob2REb21haW5TZXJ2aWNlEn8KFkNyZWF0ZUNvbGxlY3Rpb25NZXRob2QSMS5kb21haW4udHJlYXN1cnkudjEuQ3JlYXRlQ29sbGVjdGlvbk1ldGhvZFJlcXVlc3QaMi5kb21haW4udHJlYXN1cnkudjEuQ3JlYXRlQ29sbGVjdGlvbk1ldGhvZFJlc3BvbnNlEnkKFFJlYWRDb2xsZWN0aW9uTWV0aG9kEi8uZG9tYWluLnRyZWFzdXJ5LnYxLlJlYWRDb2xsZWN0aW9uTWV0aG9kUmVxdWVzdBowLmRvbWFpbi50cmVhc3VyeS52MS5SZWFkQ29sbGVjdGlvbk1ldGhvZFJlc3BvbnNlEn8KFlVwZGF0ZUNvbGxlY3Rpb25NZXRob2QSMS5kb21haW4udHJlYXN1cnkudjEuVXBkYXRlQ29sbGVjdGlvbk1ldGhvZFJlcXVlc3QaMi5kb21haW4udHJlYXN1cnkudjEuVXBkYXRlQ29sbGVjdGlvbk1ldGhvZFJlc3BvbnNlEn8KFkRlbGV0ZUNvbGxlY3Rpb25NZXRob2QSMS5kb21haW4udHJlYXN1cnkudjEuRGVsZXRlQ29sbGVjdGlvbk1ldGhvZFJlcXVlc3QaMi5kb21haW4udHJlYXN1cnkudjEuRGVsZXRlQ29sbGVjdGlvbk1ldGhvZFJlc3BvbnNlEnwKFUxpc3RDb2xsZWN0aW9uTWV0aG9kcxIwLmRvbWFpbi50cmVhc3VyeS52MS5MaXN0Q29sbGVjdGlvbk1ldGhvZHNSZXF1ZXN0GjEuZG9tYWluLnRyZWFzdXJ5LnYxLkxpc3RDb2xsZWN0aW9uTWV0aG9kc1Jlc3BvbnNlEpoBCh9HZXRDb2xsZWN0aW9uTWV0aG9kTGlzdFBhZ2VEYXRhEjouZG9tYWluLnRyZWFzdXJ5LnYxLkdldENvbGxlY3Rpb25NZXRob2RMaXN0UGFnZURhdGFSZXF1ZXN0GjsuZG9tYWluLnRyZWFzdXJ5LnYxLkdldENvbGxlY3Rpb25NZXRob2RMaXN0UGFnZURhdGFSZXNwb25zZRKaAQofR2V0Q29sbGVjdGlvbk1ldGhvZEl0ZW1QYWdlRGF0YRI6LmRvbWFpbi50cmVhc3VyeS52MS5HZXRDb2xsZWN0aW9uTWV0aG9kSXRlbVBhZ2VEYXRhUmVxdWVzdBo7LmRvbWFpbi50cmVhc3VyeS52MS5HZXRDb2xsZWN0aW9uTWV0aG9kSXRlbVBhZ2VEYXRhUmVzcG9uc2VC8gEKFmNvbS5kb21haW4udHJlYXN1cnkudjFCFUNvbGxlY3Rpb25NZXRob2RQcm90b1ABWldnaXRodWIuY29tL2VybmllYWxpY2UvZXNxeW1hL3BrZy9zY2hlbWEvdjEvZG9tYWluL3RyZWFzdXJ5L2NvbGxlY3Rpb25fbWV0aG9kO3RyZWFzdXJ5djGiAgNEVFiqAhJEb21haW4uVHJlYXN1cnkuVjHKAhJEb21haW5cVHJlYXN1cnlcVjHiAh5Eb21haW5cVHJlYXN1cnlcVjFcR1BCTWV0YWRhdGHqAhREb21haW46OlRyZWFzdXJ5OjpWMWIGcHJvdG8z", [file_domain_common_error, file_domain_common_pagination, file_domain_common_filter, file_domain_common_sort, file_domain_common_search]);
+  fileDesc("Cjlkb21haW4vdHJlYXN1cnkvY29sbGVjdGlvbl9tZXRob2QvY29sbGVjdGlvbl9tZXRob2QucHJvdG8SEmRvbWFpbi50cmVhc3VyeS52MSKJDAoQQ29sbGVjdGlvbk1ldGhvZBIKCgJpZBgBIAEoCRIZCgxkYXRlX2NyZWF0ZWQYAiABKANIAogBARIgChNkYXRlX2NyZWF0ZWRfc3RyaW5nGAMgASgJSAOIAQESGgoNZGF0ZV9tb2RpZmllZBgEIAEoA0gEiAEBEiEKFGRhdGVfbW9kaWZpZWRfc3RyaW5nGAUgASgJSAWIAQESDgoGYWN0aXZlGAYgASgIEgwKBG5hbWUYByABKAkSOQoEY2FyZBgIIAEoCzIpLmRvbWFpbi50cmVhc3VyeS52MS5Db2xsZWN0aW9uQ2FyZERldGFpbHNIABJICgxiYW5rX2FjY291bnQYCSABKAsyMC5kb21haW4udHJlYXN1cnkudjEuQ29sbGVjdGlvbkJhbmtBY2NvdW50RGV0YWlsc0gAEhoKDXByb3ZpZGVyX25hbWUYCiABKAlIBogBARIUCgx3b3Jrc3BhY2VfaWQYCyABKAkSRQoMcG9zdGluZ19raW5kGAwgASgOMi8uZG9tYWluLnRyZWFzdXJ5LnYxLkNvbGxlY3Rpb25NZXRob2RQb3N0aW5nS2luZBI+CghjYXRlZ29yeRgNIAEoDjIsLmRvbWFpbi50cmVhc3VyeS52MS5Db2xsZWN0aW9uTWV0aG9kQ2F0ZWdvcnkSRwoNYXVkaWVuY2VfbW9kZRgOIAEoDjIwLmRvbWFpbi50cmVhc3VyeS52MS5Db2xsZWN0aW9uTWV0aG9kQXVkaWVuY2VNb2RlEkoKD3RheF9lZmZlY3Rfa2luZBgPIAEoDjIxLmRvbWFpbi50cmVhc3VyeS52MS5Db2xsZWN0aW9uTWV0aG9kVGF4RWZmZWN0S2luZBIoChtkZWZhdWx0X2VsaWdpYmlsaXR5X3J1bGVfaWQYECABKAlIB4gBARIfChJiYWxhbmNlX2FjY291bnRfaWQYESABKAlICIgBARIeChF0YXJnZXRfYWNjb3VudF9pZBgSIAEoCUgJiAEBEkAKCWxpZmVjeWNsZRgTIAEoDjItLmRvbWFpbi50cmVhc3VyeS52MS5Db2xsZWN0aW9uTWV0aG9kTGlmZWN5Y2xlEjoKBnNvdXJjZRgUIAEoDjIqLmRvbWFpbi50cmVhc3VyeS52MS5Db2xsZWN0aW9uTWV0aG9kU291cmNlEhUKDXRlbXBsYXRlX2NvZGUYFSABKAkSEAoIcmV2aXNpb24YFiABKAUSSQoOdmVyc2lvbl9zdGF0dXMYFyABKA4yMS5kb21haW4udHJlYXN1cnkudjEuQ29sbGVjdGlvbk1ldGhvZFZlcnNpb25TdGF0dXMSLAofc3VwZXJzZWRlc19jb2xsZWN0aW9uX21ldGhvZF9pZBgYIAEoCUgKiAEBEkgKCWNhcmRfdHlwZRgeIAEoCzIzLmRvbWFpbi50cmVhc3VyeS52MS5Db2xsZWN0aW9uTWV0aG9kQ2FyZFR5cGVEZXRhaWxzSAESVAoPdm91Y2hlcl9wcm9ncmFtGB8gASgLMjkuZG9tYWluLnRyZWFzdXJ5LnYxLkNvbGxlY3Rpb25NZXRob2RWb3VjaGVyUHJvZ3JhbURldGFpbHNIARJUCg9hZHZhbmNlX3Byb2dyYW0YICABKAsyOS5kb21haW4udHJlYXN1cnkudjEuQ29sbGVjdGlvbk1ldGhvZEFkdmFuY2VQcm9ncmFtRGV0YWlsc0gBQhAKDm1ldGhvZF9kZXRhaWxzQhIKEHRlbXBsYXRlX2RldGFpbHNCDwoNX2RhdGVfY3JlYXRlZEIWChRfZGF0ZV9jcmVhdGVkX3N0cmluZ0IQCg5fZGF0ZV9tb2RpZmllZEIXChVfZGF0ZV9tb2RpZmllZF9zdHJpbmdCEAoOX3Byb3ZpZGVyX25hbWVCHgocX2RlZmF1bHRfZWxpZ2liaWxpdHlfcnVsZV9pZEIVChNfYmFsYW5jZV9hY2NvdW50X2lkQhQKEl90YXJnZXRfYWNjb3VudF9pZEIiCiBfc3VwZXJzZWRlc19jb2xsZWN0aW9uX21ldGhvZF9pZCJvChVDb2xsZWN0aW9uQ2FyZERldGFpbHMSEQoJY2FyZF90eXBlGAEgASgJEhgKEGxhc3RfZm91cl9kaWdpdHMYAiABKAkSFAoMZXhwaXJ5X21vbnRoGAMgASgFEhMKC2V4cGlyeV95ZWFyGAQgASgFIksKHENvbGxlY3Rpb25CYW5rQWNjb3VudERldGFpbHMSEQoJYmFua19uYW1lGAEgASgJEhgKEGxhc3RfZm91cl9kaWdpdHMYAiABKAkiIQofQ29sbGVjdGlvbk1ldGhvZENhcmRUeXBlRGV0YWlscyL5AQolQ29sbGVjdGlvbk1ldGhvZFZvdWNoZXJQcm9ncmFtRGV0YWlscxIoChtkZWZhdWx0X2ZhY2VfdmFsdWVfY2VudGF2b3MYASABKANIAIgBARIgChNkZWZhdWx0X2V4cGlyeV9kYXlzGAIgASgFSAGIAQESTAoUYWxsb3dlZF9iZWFyZXJfbW9kZXMYAyABKA4yLi5kb21haW4udHJlYXN1cnkudjEuQ29sbGVjdGlvbk1ldGhvZEJlYXJlck1vZGVCHgocX2RlZmF1bHRfZmFjZV92YWx1ZV9jZW50YXZvc0IWChRfZGVmYXVsdF9leHBpcnlfZGF5cyLOAwolQ29sbGVjdGlvbk1ldGhvZEFkdmFuY2VQcm9ncmFtRGV0YWlscxIzCgxhZHZhbmNlX2tpbmQYASABKA4yHS5kb21haW4uY29tbW9uLnYxLkFkdmFuY2VLaW5kEicKGmRlZmF1bHRfYmFsYW5jZV9hY2NvdW50X2lkGAIgASgJSACIAQESJgoZZGVmYXVsdF90YXJnZXRfYWNjb3VudF9pZBgDIAEoCUgBiAEBEiEKFGRlZmF1bHRfcGVyaW9kX2NvdW50GAQgASgFSAKIAQESIAoTZGVmYXVsdF9wZXJpb2RfdW5pdBgFIAEoCUgDiAEBEk8KGGRlZmF1bHRfcHJvcmF0aW9uX3BvbGljeRgGIAEoDjIoLmRvbWFpbi5jb21tb24udjEuQWR2YW5jZVByb3JhdGlvblBvbGljeUgEiAEBQh0KG19kZWZhdWx0X2JhbGFuY2VfYWNjb3VudF9pZEIcChpfZGVmYXVsdF90YXJnZXRfYWNjb3VudF9pZEIXChVfZGVmYXVsdF9wZXJpb2RfY291bnRCFgoUX2RlZmF1bHRfcGVyaW9kX3VuaXRCGwoZX2RlZmF1bHRfcHJvcmF0aW9uX3BvbGljeSJTCh1DcmVhdGVDb2xsZWN0aW9uTWV0aG9kUmVxdWVzdBIyCgRkYXRhGAEgASgLMiQuZG9tYWluLnRyZWFzdXJ5LnYxLkNvbGxlY3Rpb25NZXRob2QinAEKHkNyZWF0ZUNvbGxlY3Rpb25NZXRob2RSZXNwb25zZRIyCgRkYXRhGAEgAygLMiQuZG9tYWluLnRyZWFzdXJ5LnYxLkNvbGxlY3Rpb25NZXRob2QSDwoHc3VjY2VzcxgCIAEoCBIrCgVlcnJvchgDIAEoCzIXLmRvbWFpbi5jb21tb24udjEuRXJyb3JIAIgBAUIICgZfZXJyb3IiUQobUmVhZENvbGxlY3Rpb25NZXRob2RSZXF1ZXN0EjIKBGRhdGEYASABKAsyJC5kb21haW4udHJlYXN1cnkudjEuQ29sbGVjdGlvbk1ldGhvZCKaAQocUmVhZENvbGxlY3Rpb25NZXRob2RSZXNwb25zZRIyCgRkYXRhGAEgAygLMiQuZG9tYWluLnRyZWFzdXJ5LnYxLkNvbGxlY3Rpb25NZXRob2QSDwoHc3VjY2VzcxgCIAEoCBIrCgVlcnJvchgDIAEoCzIXLmRvbWFpbi5jb21tb24udjEuRXJyb3JIAIgBAUIICgZfZXJyb3IiUwodVXBkYXRlQ29sbGVjdGlvbk1ldGhvZFJlcXVlc3QSMgoEZGF0YRgBIAEoCzIkLmRvbWFpbi50cmVhc3VyeS52MS5Db2xsZWN0aW9uTWV0aG9kIpwBCh5VcGRhdGVDb2xsZWN0aW9uTWV0aG9kUmVzcG9uc2USMgoEZGF0YRgBIAMoCzIkLmRvbWFpbi50cmVhc3VyeS52MS5Db2xsZWN0aW9uTWV0aG9kEg8KB3N1Y2Nlc3MYAiABKAgSKwoFZXJyb3IYAyABKAsyFy5kb21haW4uY29tbW9uLnYxLkVycm9ySACIAQFCCAoGX2Vycm9yIlMKHURlbGV0ZUNvbGxlY3Rpb25NZXRob2RSZXF1ZXN0EjIKBGRhdGEYASABKAsyJC5kb21haW4udHJlYXN1cnkudjEuQ29sbGVjdGlvbk1ldGhvZCJoCh5EZWxldGVDb2xsZWN0aW9uTWV0aG9kUmVzcG9uc2USDwoHc3VjY2VzcxgBIAEoCBIrCgVlcnJvchgCIAEoCzIXLmRvbWFpbi5jb21tb24udjEuRXJyb3JIAIgBAUIICgZfZXJyb3IiqgIKHExpc3RDb2xsZWN0aW9uTWV0aG9kc1JlcXVlc3QSNAoGc2VhcmNoGAEgASgLMh8uZG9tYWluLmNvbW1vbi52MS5TZWFyY2hSZXF1ZXN0SACIAQESNQoHZmlsdGVycxgCIAEoCzIfLmRvbWFpbi5jb21tb24udjEuRmlsdGVyUmVxdWVzdEgBiAEBEjAKBHNvcnQYAyABKAsyHS5kb21haW4uY29tbW9uLnYxLlNvcnRSZXF1ZXN0SAKIAQESPAoKcGFnaW5hdGlvbhgEIAEoCzIjLmRvbWFpbi5jb21tb24udjEuUGFnaW5hdGlvblJlcXVlc3RIA4gBAUIJCgdfc2VhcmNoQgoKCF9maWx0ZXJzQgcKBV9zb3J0Qg0KC19wYWdpbmF0aW9uIpsBCh1MaXN0Q29sbGVjdGlvbk1ldGhvZHNSZXNwb25zZRIyCgRkYXRhGAEgAygLMiQuZG9tYWluLnRyZWFzdXJ5LnYxLkNvbGxlY3Rpb25NZXRob2QSDwoHc3VjY2VzcxgCIAEoCBIrCgVlcnJvchgDIAEoCzIXLmRvbWFpbi5jb21tb24udjEuRXJyb3JIAIgBAUIICgZfZXJyb3IitAIKJkdldENvbGxlY3Rpb25NZXRob2RMaXN0UGFnZURhdGFSZXF1ZXN0EjwKCnBhZ2luYXRpb24YASABKAsyIy5kb21haW4uY29tbW9uLnYxLlBhZ2luYXRpb25SZXF1ZXN0SACIAQESNQoHZmlsdGVycxgCIAEoCzIfLmRvbWFpbi5jb21tb24udjEuRmlsdGVyUmVxdWVzdEgBiAEBEjAKBHNvcnQYAyABKAsyHS5kb21haW4uY29tbW9uLnYxLlNvcnRSZXF1ZXN0SAKIAQESNAoGc2VhcmNoGAQgASgLMh8uZG9tYWluLmNvbW1vbi52MS5TZWFyY2hSZXF1ZXN0SAOIAQFCDQoLX3BhZ2luYXRpb25CCgoIX2ZpbHRlcnNCBwoFX3NvcnRCCQoHX3NlYXJjaCK9AgonR2V0Q29sbGVjdGlvbk1ldGhvZExpc3RQYWdlRGF0YVJlc3BvbnNlEkQKFmNvbGxlY3Rpb25fbWV0aG9kX2xpc3QYASADKAsyJC5kb21haW4udHJlYXN1cnkudjEuQ29sbGVjdGlvbk1ldGhvZBIPCgdzdWNjZXNzGAIgASgIEisKBWVycm9yGAMgASgLMhcuZG9tYWluLmNvbW1vbi52MS5FcnJvckgAiAEBEj0KCnBhZ2luYXRpb24YBCABKAsyJC5kb21haW4uY29tbW9uLnYxLlBhZ2luYXRpb25SZXNwb25zZUgBiAEBEjYKDnNlYXJjaF9yZXN1bHRzGAUgAygLMh4uZG9tYWluLmNvbW1vbi52MS5TZWFyY2hSZXN1bHRCCAoGX2Vycm9yQg0KC19wYWdpbmF0aW9uIkYKJkdldENvbGxlY3Rpb25NZXRob2RJdGVtUGFnZURhdGFSZXF1ZXN0EhwKFGNvbGxlY3Rpb25fbWV0aG9kX2lkGAEgASgJIs0BCidHZXRDb2xsZWN0aW9uTWV0aG9kSXRlbVBhZ2VEYXRhUmVzcG9uc2USRAoRY29sbGVjdGlvbl9tZXRob2QYASABKAsyJC5kb21haW4udHJlYXN1cnkudjEuQ29sbGVjdGlvbk1ldGhvZEgAiAEBEg8KB3N1Y2Nlc3MYAiABKAgSKwoFZXJyb3IYAyABKAsyFy5kb21haW4uY29tbW9uLnYxLkVycm9ySAGIAQFCFAoSX2NvbGxlY3Rpb25fbWV0aG9kQggKBl9lcnJvciqQAgobQ29sbGVjdGlvbk1ldGhvZFBvc3RpbmdLaW5kEi4KKkNPTExFQ1RJT05fTUVUSE9EX1BPU1RJTkdfS0lORF9VTlNQRUNJRklFRBAAEicKI0NPTExFQ1RJT05fTUVUSE9EX1BPU1RJTkdfS0lORF9DQVNIEAESMwovQ09MTEVDVElPTl9NRVRIT0RfUE9TVElOR19LSU5EX0FEVkFOQ0VfRFJBV0RPV04QAhIrCidDT0xMRUNUSU9OX01FVEhPRF9QT1NUSU5HX0tJTkRfQ0xBSU1fQVIQAxI2CjJDT0xMRUNUSU9OX01FVEhPRF9QT1NUSU5HX0tJTkRfREVGRVJSRURfUkVDRUlWQUJMRRAEKuQBChhDb2xsZWN0aW9uTWV0aG9kQ2F0ZWdvcnkSKgomQ09MTEVDVElPTl9NRVRIT0RfQ0FURUdPUllfVU5TUEVDSUZJRUQQABInCiNDT0xMRUNUSU9OX01FVEhPRF9DQVRFR09SWV9TVEFOREFSRBABEiYKIkNPTExFQ1RJT05fTUVUSE9EX0NBVEVHT1JZX1ZPVUNIRVIQAhImCiJDT0xMRUNUSU9OX01FVEhPRF9DQVRFR09SWV9BRFZBTkNFEAMSIwofQ09MTEVDVElPTl9NRVRIT0RfQ0FURUdPUllfQ0FSRBAEKpACChxDb2xsZWN0aW9uTWV0aG9kQXVkaWVuY2VNb2RlEi8KK0NPTExFQ1RJT05fTUVUSE9EX0FVRElFTkNFX01PREVfVU5TUEVDSUZJRUQQABIoCiRDT0xMRUNUSU9OX01FVEhPRF9BVURJRU5DRV9NT0RFX09QRU4QARIuCipDT0xMRUNUSU9OX01FVEhPRF9BVURJRU5DRV9NT0RFX1JFU1RSSUNURUQQAhIxCi1DT0xMRUNUSU9OX01FVEhPRF9BVURJRU5DRV9NT0RFX1NJTkdMRV9DTElFTlQQAxIyCi5DT0xMRUNUSU9OX01FVEhPRF9BVURJRU5DRV9NT0RFX1NFR01FTlRfU0NPUEVEEAQq4AEKHUNvbGxlY3Rpb25NZXRob2RUYXhFZmZlY3RLaW5kEjEKLUNPTExFQ1RJT05fTUVUSE9EX1RBWF9FRkZFQ1RfS0lORF9VTlNQRUNJRklFRBAAEioKJkNPTExFQ1RJT05fTUVUSE9EX1RBWF9FRkZFQ1RfS0lORF9OT05FEAESLworQ09MTEVDVElPTl9NRVRIT0RfVEFYX0VGRkVDVF9LSU5EX0lOQ0xVU0lWRRACEi8KK0NPTExFQ1RJT05fTUVUSE9EX1RBWF9FRkZFQ1RfS0lORF9FWENMVVNJVkUQAyrpAQoZQ29sbGVjdGlvbk1ldGhvZExpZmVjeWNsZRIrCidDT0xMRUNUSU9OX01FVEhPRF9MSUZFQ1lDTEVfVU5TUEVDSUZJRUQQABIlCiFDT0xMRUNUSU9OX01FVEhPRF9MSUZFQ1lDTEVfRFJBRlQQARImCiJDT0xMRUNUSU9OX01FVEhPRF9MSUZFQ1lDTEVfQUNUSVZFEAISJgoiQ09MTEVDVElPTl9NRVRIT0RfTElGRUNZQ0xFX0NMT1NFRBADEigKJENPTExFQ1RJT05fTUVUSE9EX0xJRkVDWUNMRV9BUkNISVZFRBAEKr0BChZDb2xsZWN0aW9uTWV0aG9kU291cmNlEigKJENPTExFQ1RJT05fTUVUSE9EX1NPVVJDRV9VTlNQRUNJRklFRBAAEiMKH0NPTExFQ1RJT05fTUVUSE9EX1NPVVJDRV9TWVNURU0QARImCiJDT0xMRUNUSU9OX01FVEhPRF9TT1VSQ0VfV09SS1NQQUNFEAISLAooQ09MTEVDVElPTl9NRVRIT0RfU09VUkNFX1ZFTkRPUl9URU1QTEFURRADKt4BCh1Db2xsZWN0aW9uTWV0aG9kVmVyc2lvblN0YXR1cxIwCixDT0xMRUNUSU9OX01FVEhPRF9WRVJTSU9OX1NUQVRVU19VTlNQRUNJRklFRBAAEioKJkNPTExFQ1RJT05fTUVUSE9EX1ZFUlNJT05fU1RBVFVTX0RSQUZUEAESLgoqQ09MTEVDVElPTl9NRVRIT0RfVkVSU0lPTl9TVEFUVVNfUFVCTElTSEVEEAISLworQ09MTEVDVElPTl9NRVRIT0RfVkVSU0lPTl9TVEFUVVNfU1VQRVJTRURFRBADKqMBChpDb2xsZWN0aW9uTWV0aG9kQmVhcmVyTW9kZRItCilDT0xMRUNUSU9OX01FVEhPRF9CRUFSRVJfTU9ERV9VTlNQRUNJRklFRBAAEigKJENPTExFQ1RJT05fTUVUSE9EX0JFQVJFUl9NT0RFX0JFQVJFUhABEiwKKENPTExFQ1RJT05fTUVUSE9EX0JFQVJFUl9NT0RFX1JFR0lTVEVSRUQQAjLVBwodQ29sbGVjdGlvbk1ldGhvZERvbWFpblNlcnZpY2USfwoWQ3JlYXRlQ29sbGVjdGlvbk1ldGhvZBIxLmRvbWFpbi50cmVhc3VyeS52MS5DcmVhdGVDb2xsZWN0aW9uTWV0aG9kUmVxdWVzdBoyLmRvbWFpbi50cmVhc3VyeS52MS5DcmVhdGVDb2xsZWN0aW9uTWV0aG9kUmVzcG9uc2USeQoUUmVhZENvbGxlY3Rpb25NZXRob2QSLy5kb21haW4udHJlYXN1cnkudjEuUmVhZENvbGxlY3Rpb25NZXRob2RSZXF1ZXN0GjAuZG9tYWluLnRyZWFzdXJ5LnYxLlJlYWRDb2xsZWN0aW9uTWV0aG9kUmVzcG9uc2USfwoWVXBkYXRlQ29sbGVjdGlvbk1ldGhvZBIxLmRvbWFpbi50cmVhc3VyeS52MS5VcGRhdGVDb2xsZWN0aW9uTWV0aG9kUmVxdWVzdBoyLmRvbWFpbi50cmVhc3VyeS52MS5VcGRhdGVDb2xsZWN0aW9uTWV0aG9kUmVzcG9uc2USfwoWRGVsZXRlQ29sbGVjdGlvbk1ldGhvZBIxLmRvbWFpbi50cmVhc3VyeS52MS5EZWxldGVDb2xsZWN0aW9uTWV0aG9kUmVxdWVzdBoyLmRvbWFpbi50cmVhc3VyeS52MS5EZWxldGVDb2xsZWN0aW9uTWV0aG9kUmVzcG9uc2USfAoVTGlzdENvbGxlY3Rpb25NZXRob2RzEjAuZG9tYWluLnRyZWFzdXJ5LnYxLkxpc3RDb2xsZWN0aW9uTWV0aG9kc1JlcXVlc3QaMS5kb21haW4udHJlYXN1cnkudjEuTGlzdENvbGxlY3Rpb25NZXRob2RzUmVzcG9uc2USmgEKH0dldENvbGxlY3Rpb25NZXRob2RMaXN0UGFnZURhdGESOi5kb21haW4udHJlYXN1cnkudjEuR2V0Q29sbGVjdGlvbk1ldGhvZExpc3RQYWdlRGF0YVJlcXVlc3QaOy5kb21haW4udHJlYXN1cnkudjEuR2V0Q29sbGVjdGlvbk1ldGhvZExpc3RQYWdlRGF0YVJlc3BvbnNlEpoBCh9HZXRDb2xsZWN0aW9uTWV0aG9kSXRlbVBhZ2VEYXRhEjouZG9tYWluLnRyZWFzdXJ5LnYxLkdldENvbGxlY3Rpb25NZXRob2RJdGVtUGFnZURhdGFSZXF1ZXN0GjsuZG9tYWluLnRyZWFzdXJ5LnYxLkdldENvbGxlY3Rpb25NZXRob2RJdGVtUGFnZURhdGFSZXNwb25zZULyAQoWY29tLmRvbWFpbi50cmVhc3VyeS52MUIVQ29sbGVjdGlvbk1ldGhvZFByb3RvUAFaV2dpdGh1Yi5jb20vZXJuaWVhbGljZS9lc3F5bWEvcGtnL3NjaGVtYS92MS9kb21haW4vdHJlYXN1cnkvY29sbGVjdGlvbl9tZXRob2Q7dHJlYXN1cnl2MaICA0RUWKoCEkRvbWFpbi5UcmVhc3VyeS5WMcoCEkRvbWFpblxUcmVhc3VyeVxWMeICHkRvbWFpblxUcmVhc3VyeVxWMVxHUEJNZXRhZGF0YeoCFERvbWFpbjo6VHJlYXN1cnk6OlYxYgZwcm90bzM", [file_domain_common_error, file_domain_common_pagination, file_domain_common_filter, file_domain_common_sort, file_domain_common_search, file_domain_common_advance_kind_advance_kind]);
 
 /**
  * @generated from message domain.treasury.v1.CollectionMethod
  */
 export type CollectionMethod = Message<"domain.treasury.v1.CollectionMethod"> & {
   /**
+   * ----- existing (UNCHANGED — additive only) -----
+   *
    * @generated from field: string id = 1;
    */
   id: string;
@@ -62,6 +66,9 @@ export type CollectionMethod = Message<"domain.treasury.v1.CollectionMethod"> & 
   name: string;
 
   /**
+   * method_details oneof: CARD details (field 8) REMAIN in Stage 1 for wire compat;
+   * CollectionCardDetails moves out to CPCMCardInstance in Stage 4 (not this wave).
+   *
    * @generated from oneof domain.treasury.v1.CollectionMethod.method_details
    */
   methodDetails: {
@@ -82,6 +89,133 @@ export type CollectionMethod = Message<"domain.treasury.v1.CollectionMethod"> & 
    * @generated from field: optional string provider_name = 10;
    */
   providerName?: string;
+
+  /**
+   * ----- NEW Stage 1 template-level config -----
+   *
+   * FK to workspace
+   *
+   * @generated from field: string workspace_id = 11;
+   */
+  workspaceId: string;
+
+  /**
+   * CASH / ADVANCE_DRAWDOWN / CLAIM_AR / DEFERRED_RECEIVABLE
+   *
+   * @generated from field: domain.treasury.v1.CollectionMethodPostingKind posting_kind = 12;
+   */
+  postingKind: CollectionMethodPostingKind;
+
+  /**
+   * STANDARD / VOUCHER / ADVANCE / CARD
+   *
+   * @generated from field: domain.treasury.v1.CollectionMethodCategory category = 13;
+   */
+  category: CollectionMethodCategory;
+
+  /**
+   * OPEN / RESTRICTED / SINGLE_CLIENT (SEGMENT_SCOPED reserved v2)
+   *
+   * @generated from field: domain.treasury.v1.CollectionMethodAudienceMode audience_mode = 14;
+   */
+  audienceMode: CollectionMethodAudienceMode;
+
+  /**
+   * REQUIRED + STRICT per Q3
+   *
+   * @generated from field: domain.treasury.v1.CollectionMethodTaxEffectKind tax_effect_kind = 15;
+   */
+  taxEffectKind: CollectionMethodTaxEffectKind;
+
+  /**
+   * FK to collection_method_eligibility_rule
+   *
+   * @generated from field: optional string default_eligibility_rule_id = 16;
+   */
+  defaultEligibilityRuleId?: string;
+
+  /**
+   * GL liability default
+   *
+   * @generated from field: optional string balance_account_id = 17;
+   */
+  balanceAccountId?: string;
+
+  /**
+   * GL revenue default
+   *
+   * @generated from field: optional string target_account_id = 18;
+   */
+  targetAccountId?: string;
+
+  /**
+   * DRAFT / ACTIVE / CLOSED / ARCHIVED per Q7
+   *
+   * @generated from field: domain.treasury.v1.CollectionMethodLifecycle lifecycle = 19;
+   */
+  lifecycle: CollectionMethodLifecycle;
+
+  /**
+   * SYSTEM / WORKSPACE / VENDOR_TEMPLATE
+   *
+   * @generated from field: domain.treasury.v1.CollectionMethodSource source = 20;
+   */
+  source: CollectionMethodSource;
+
+  /**
+   * for versioning
+   *
+   * @generated from field: string template_code = 21;
+   */
+  templateCode: string;
+
+  /**
+   * @generated from field: int32 revision = 22;
+   */
+  revision: number;
+
+  /**
+   * @generated from field: domain.treasury.v1.CollectionMethodVersionStatus version_status = 23;
+   */
+  versionStatus: CollectionMethodVersionStatus;
+
+  /**
+   * FK to predecessor revision
+   *
+   * @generated from field: optional string supersedes_collection_method_id = 24;
+   */
+  supersedesCollectionMethodId?: string;
+
+  /**
+   * ----- NEW Stage 1 template-level detail config -----
+   *
+   * @generated from oneof domain.treasury.v1.CollectionMethod.template_details
+   */
+  templateDetails: {
+    /**
+     * template-only kind marker; carries NO brand (D-4.26)
+     *
+     * @generated from field: domain.treasury.v1.CollectionMethodCardTypeDetails card_type = 30;
+     */
+    value: CollectionMethodCardTypeDetails;
+    case: "cardType";
+  } | {
+    /**
+     * template: face_value default, expiry policy, bearer modes
+     *
+     * @generated from field: domain.treasury.v1.CollectionMethodVoucherProgramDetails voucher_program = 31;
+     */
+    value: CollectionMethodVoucherProgramDetails;
+    case: "voucherProgram";
+  } | {
+    /**
+     * template: advance_kind, default schedule shape, GL defaults
+     *
+     * @generated from field: domain.treasury.v1.CollectionMethodAdvanceProgramDetails advance_program = 32;
+     */
+    value: CollectionMethodAdvanceProgramDetails;
+    case: "advanceProgram";
+  } | { case: undefined; value?: undefined };
 };
 
 /**
@@ -146,6 +280,102 @@ export const CollectionBankAccountDetailsSchema: GenMessage<CollectionBankAccoun
   messageDesc(file_domain_treasury_collection_method_collection_method, 2);
 
 /**
+ * CollectionMethodCardTypeDetails — D-4.26 LOCKED: one Card method, grouped by kind.
+ * NO brand string and NO allowed_card_types at the template level — card brand lives
+ * solely on CardInstance.card_brand (free per-card attribute). No last_four_digits,
+ * expiry_month, expiry_year here — those are instance-level (CPCMCardInstance).
+ * Template marker only in v1.
+ *
+ * @generated from message domain.treasury.v1.CollectionMethodCardTypeDetails
+ */
+export type CollectionMethodCardTypeDetails = Message<"domain.treasury.v1.CollectionMethodCardTypeDetails"> & {
+};
+
+/**
+ * Describes the message domain.treasury.v1.CollectionMethodCardTypeDetails.
+ * Use `create(CollectionMethodCardTypeDetailsSchema)` to create a new message.
+ */
+export const CollectionMethodCardTypeDetailsSchema: GenMessage<CollectionMethodCardTypeDetails> = /*@__PURE__*/
+  messageDesc(file_domain_treasury_collection_method_collection_method, 3);
+
+/**
+ * @generated from message domain.treasury.v1.CollectionMethodVoucherProgramDetails
+ */
+export type CollectionMethodVoucherProgramDetails = Message<"domain.treasury.v1.CollectionMethodVoucherProgramDetails"> & {
+  /**
+   * default; instance may override per eligibility rule
+   *
+   * @generated from field: optional int64 default_face_value_centavos = 1;
+   */
+  defaultFaceValueCentavos?: bigint;
+
+  /**
+   * @generated from field: optional int32 default_expiry_days = 2;
+   */
+  defaultExpiryDays?: number;
+
+  /**
+   * BURN_DOWN-style reserved v2 (D-5.6)
+   *
+   * @generated from field: domain.treasury.v1.CollectionMethodBearerMode allowed_bearer_modes = 3;
+   */
+  allowedBearerModes: CollectionMethodBearerMode;
+};
+
+/**
+ * Describes the message domain.treasury.v1.CollectionMethodVoucherProgramDetails.
+ * Use `create(CollectionMethodVoucherProgramDetailsSchema)` to create a new message.
+ */
+export const CollectionMethodVoucherProgramDetailsSchema: GenMessage<CollectionMethodVoucherProgramDetails> = /*@__PURE__*/
+  messageDesc(file_domain_treasury_collection_method_collection_method, 4);
+
+/**
+ * @generated from message domain.treasury.v1.CollectionMethodAdvanceProgramDetails
+ */
+export type CollectionMethodAdvanceProgramDetails = Message<"domain.treasury.v1.CollectionMethodAdvanceProgramDetails"> & {
+  /**
+   * TIME_BASED / MILESTONE / UNSCHEDULED (BURN_DOWN reserved v2)
+   *
+   * @generated from field: domain.common.v1.AdvanceKind advance_kind = 1;
+   */
+  advanceKind: AdvanceKind;
+
+  /**
+   * @generated from field: optional string default_balance_account_id = 2;
+   */
+  defaultBalanceAccountId?: string;
+
+  /**
+   * @generated from field: optional string default_target_account_id = 3;
+   */
+  defaultTargetAccountId?: string;
+
+  /**
+   * schedule default for TIME_BASED
+   *
+   * @generated from field: optional int32 default_period_count = 4;
+   */
+  defaultPeriodCount?: number;
+
+  /**
+   * @generated from field: optional string default_period_unit = 5;
+   */
+  defaultPeriodUnit?: string;
+
+  /**
+   * @generated from field: optional domain.common.v1.AdvanceProrationPolicy default_proration_policy = 6;
+   */
+  defaultProrationPolicy?: AdvanceProrationPolicy;
+};
+
+/**
+ * Describes the message domain.treasury.v1.CollectionMethodAdvanceProgramDetails.
+ * Use `create(CollectionMethodAdvanceProgramDetailsSchema)` to create a new message.
+ */
+export const CollectionMethodAdvanceProgramDetailsSchema: GenMessage<CollectionMethodAdvanceProgramDetails> = /*@__PURE__*/
+  messageDesc(file_domain_treasury_collection_method_collection_method, 5);
+
+/**
  * @generated from message domain.treasury.v1.CreateCollectionMethodRequest
  */
 export type CreateCollectionMethodRequest = Message<"domain.treasury.v1.CreateCollectionMethodRequest"> & {
@@ -160,7 +390,7 @@ export type CreateCollectionMethodRequest = Message<"domain.treasury.v1.CreateCo
  * Use `create(CreateCollectionMethodRequestSchema)` to create a new message.
  */
 export const CreateCollectionMethodRequestSchema: GenMessage<CreateCollectionMethodRequest> = /*@__PURE__*/
-  messageDesc(file_domain_treasury_collection_method_collection_method, 3);
+  messageDesc(file_domain_treasury_collection_method_collection_method, 6);
 
 /**
  * @generated from message domain.treasury.v1.CreateCollectionMethodResponse
@@ -187,7 +417,7 @@ export type CreateCollectionMethodResponse = Message<"domain.treasury.v1.CreateC
  * Use `create(CreateCollectionMethodResponseSchema)` to create a new message.
  */
 export const CreateCollectionMethodResponseSchema: GenMessage<CreateCollectionMethodResponse> = /*@__PURE__*/
-  messageDesc(file_domain_treasury_collection_method_collection_method, 4);
+  messageDesc(file_domain_treasury_collection_method_collection_method, 7);
 
 /**
  * @generated from message domain.treasury.v1.ReadCollectionMethodRequest
@@ -204,7 +434,7 @@ export type ReadCollectionMethodRequest = Message<"domain.treasury.v1.ReadCollec
  * Use `create(ReadCollectionMethodRequestSchema)` to create a new message.
  */
 export const ReadCollectionMethodRequestSchema: GenMessage<ReadCollectionMethodRequest> = /*@__PURE__*/
-  messageDesc(file_domain_treasury_collection_method_collection_method, 5);
+  messageDesc(file_domain_treasury_collection_method_collection_method, 8);
 
 /**
  * @generated from message domain.treasury.v1.ReadCollectionMethodResponse
@@ -231,7 +461,7 @@ export type ReadCollectionMethodResponse = Message<"domain.treasury.v1.ReadColle
  * Use `create(ReadCollectionMethodResponseSchema)` to create a new message.
  */
 export const ReadCollectionMethodResponseSchema: GenMessage<ReadCollectionMethodResponse> = /*@__PURE__*/
-  messageDesc(file_domain_treasury_collection_method_collection_method, 6);
+  messageDesc(file_domain_treasury_collection_method_collection_method, 9);
 
 /**
  * @generated from message domain.treasury.v1.UpdateCollectionMethodRequest
@@ -248,7 +478,7 @@ export type UpdateCollectionMethodRequest = Message<"domain.treasury.v1.UpdateCo
  * Use `create(UpdateCollectionMethodRequestSchema)` to create a new message.
  */
 export const UpdateCollectionMethodRequestSchema: GenMessage<UpdateCollectionMethodRequest> = /*@__PURE__*/
-  messageDesc(file_domain_treasury_collection_method_collection_method, 7);
+  messageDesc(file_domain_treasury_collection_method_collection_method, 10);
 
 /**
  * @generated from message domain.treasury.v1.UpdateCollectionMethodResponse
@@ -275,7 +505,7 @@ export type UpdateCollectionMethodResponse = Message<"domain.treasury.v1.UpdateC
  * Use `create(UpdateCollectionMethodResponseSchema)` to create a new message.
  */
 export const UpdateCollectionMethodResponseSchema: GenMessage<UpdateCollectionMethodResponse> = /*@__PURE__*/
-  messageDesc(file_domain_treasury_collection_method_collection_method, 8);
+  messageDesc(file_domain_treasury_collection_method_collection_method, 11);
 
 /**
  * @generated from message domain.treasury.v1.DeleteCollectionMethodRequest
@@ -292,7 +522,7 @@ export type DeleteCollectionMethodRequest = Message<"domain.treasury.v1.DeleteCo
  * Use `create(DeleteCollectionMethodRequestSchema)` to create a new message.
  */
 export const DeleteCollectionMethodRequestSchema: GenMessage<DeleteCollectionMethodRequest> = /*@__PURE__*/
-  messageDesc(file_domain_treasury_collection_method_collection_method, 9);
+  messageDesc(file_domain_treasury_collection_method_collection_method, 12);
 
 /**
  * @generated from message domain.treasury.v1.DeleteCollectionMethodResponse
@@ -314,7 +544,7 @@ export type DeleteCollectionMethodResponse = Message<"domain.treasury.v1.DeleteC
  * Use `create(DeleteCollectionMethodResponseSchema)` to create a new message.
  */
 export const DeleteCollectionMethodResponseSchema: GenMessage<DeleteCollectionMethodResponse> = /*@__PURE__*/
-  messageDesc(file_domain_treasury_collection_method_collection_method, 10);
+  messageDesc(file_domain_treasury_collection_method_collection_method, 13);
 
 /**
  * @generated from message domain.treasury.v1.ListCollectionMethodsRequest
@@ -346,7 +576,7 @@ export type ListCollectionMethodsRequest = Message<"domain.treasury.v1.ListColle
  * Use `create(ListCollectionMethodsRequestSchema)` to create a new message.
  */
 export const ListCollectionMethodsRequestSchema: GenMessage<ListCollectionMethodsRequest> = /*@__PURE__*/
-  messageDesc(file_domain_treasury_collection_method_collection_method, 11);
+  messageDesc(file_domain_treasury_collection_method_collection_method, 14);
 
 /**
  * @generated from message domain.treasury.v1.ListCollectionMethodsResponse
@@ -373,7 +603,7 @@ export type ListCollectionMethodsResponse = Message<"domain.treasury.v1.ListColl
  * Use `create(ListCollectionMethodsResponseSchema)` to create a new message.
  */
 export const ListCollectionMethodsResponseSchema: GenMessage<ListCollectionMethodsResponse> = /*@__PURE__*/
-  messageDesc(file_domain_treasury_collection_method_collection_method, 12);
+  messageDesc(file_domain_treasury_collection_method_collection_method, 15);
 
 /**
  * @generated from message domain.treasury.v1.GetCollectionMethodListPageDataRequest
@@ -405,7 +635,7 @@ export type GetCollectionMethodListPageDataRequest = Message<"domain.treasury.v1
  * Use `create(GetCollectionMethodListPageDataRequestSchema)` to create a new message.
  */
 export const GetCollectionMethodListPageDataRequestSchema: GenMessage<GetCollectionMethodListPageDataRequest> = /*@__PURE__*/
-  messageDesc(file_domain_treasury_collection_method_collection_method, 13);
+  messageDesc(file_domain_treasury_collection_method_collection_method, 16);
 
 /**
  * @generated from message domain.treasury.v1.GetCollectionMethodListPageDataResponse
@@ -442,7 +672,7 @@ export type GetCollectionMethodListPageDataResponse = Message<"domain.treasury.v
  * Use `create(GetCollectionMethodListPageDataResponseSchema)` to create a new message.
  */
 export const GetCollectionMethodListPageDataResponseSchema: GenMessage<GetCollectionMethodListPageDataResponse> = /*@__PURE__*/
-  messageDesc(file_domain_treasury_collection_method_collection_method, 14);
+  messageDesc(file_domain_treasury_collection_method_collection_method, 17);
 
 /**
  * @generated from message domain.treasury.v1.GetCollectionMethodItemPageDataRequest
@@ -459,7 +689,7 @@ export type GetCollectionMethodItemPageDataRequest = Message<"domain.treasury.v1
  * Use `create(GetCollectionMethodItemPageDataRequestSchema)` to create a new message.
  */
 export const GetCollectionMethodItemPageDataRequestSchema: GenMessage<GetCollectionMethodItemPageDataRequest> = /*@__PURE__*/
-  messageDesc(file_domain_treasury_collection_method_collection_method, 15);
+  messageDesc(file_domain_treasury_collection_method_collection_method, 18);
 
 /**
  * @generated from message domain.treasury.v1.GetCollectionMethodItemPageDataResponse
@@ -486,7 +716,290 @@ export type GetCollectionMethodItemPageDataResponse = Message<"domain.treasury.v
  * Use `create(GetCollectionMethodItemPageDataResponseSchema)` to create a new message.
  */
 export const GetCollectionMethodItemPageDataResponseSchema: GenMessage<GetCollectionMethodItemPageDataResponse> = /*@__PURE__*/
-  messageDesc(file_domain_treasury_collection_method_collection_method, 16);
+  messageDesc(file_domain_treasury_collection_method_collection_method, 19);
+
+/**
+ * CollectionMethodPostingKind determines how collections through this method post
+ * to the ledger. Per alignment.md / decisions.md.
+ *
+ * @generated from enum domain.treasury.v1.CollectionMethodPostingKind
+ */
+export enum CollectionMethodPostingKind {
+  /**
+   * @generated from enum value: COLLECTION_METHOD_POSTING_KIND_UNSPECIFIED = 0;
+   */
+  UNSPECIFIED = 0,
+
+  /**
+   * @generated from enum value: COLLECTION_METHOD_POSTING_KIND_CASH = 1;
+   */
+  CASH = 1,
+
+  /**
+   * @generated from enum value: COLLECTION_METHOD_POSTING_KIND_ADVANCE_DRAWDOWN = 2;
+   */
+  ADVANCE_DRAWDOWN = 2,
+
+  /**
+   * @generated from enum value: COLLECTION_METHOD_POSTING_KIND_CLAIM_AR = 3;
+   */
+  CLAIM_AR = 3,
+
+  /**
+   * @generated from enum value: COLLECTION_METHOD_POSTING_KIND_DEFERRED_RECEIVABLE = 4;
+   */
+  DEFERRED_RECEIVABLE = 4,
+}
+
+/**
+ * Describes the enum domain.treasury.v1.CollectionMethodPostingKind.
+ */
+export const CollectionMethodPostingKindSchema: GenEnum<CollectionMethodPostingKind> = /*@__PURE__*/
+  enumDesc(file_domain_treasury_collection_method_collection_method, 0);
+
+/**
+ * CollectionMethodCategory classifies the template's business intent.
+ *
+ * @generated from enum domain.treasury.v1.CollectionMethodCategory
+ */
+export enum CollectionMethodCategory {
+  /**
+   * @generated from enum value: COLLECTION_METHOD_CATEGORY_UNSPECIFIED = 0;
+   */
+  UNSPECIFIED = 0,
+
+  /**
+   * @generated from enum value: COLLECTION_METHOD_CATEGORY_STANDARD = 1;
+   */
+  STANDARD = 1,
+
+  /**
+   * @generated from enum value: COLLECTION_METHOD_CATEGORY_VOUCHER = 2;
+   */
+  VOUCHER = 2,
+
+  /**
+   * @generated from enum value: COLLECTION_METHOD_CATEGORY_ADVANCE = 3;
+   */
+  ADVANCE = 3,
+
+  /**
+   * @generated from enum value: COLLECTION_METHOD_CATEGORY_CARD = 4;
+   */
+  CARD = 4,
+}
+
+/**
+ * Describes the enum domain.treasury.v1.CollectionMethodCategory.
+ */
+export const CollectionMethodCategorySchema: GenEnum<CollectionMethodCategory> = /*@__PURE__*/
+  enumDesc(file_domain_treasury_collection_method_collection_method, 1);
+
+/**
+ * CollectionMethodAudienceMode controls who may transact through this method.
+ * SEGMENT_SCOPED is reserved for v2 (declared, not enabled).
+ *
+ * @generated from enum domain.treasury.v1.CollectionMethodAudienceMode
+ */
+export enum CollectionMethodAudienceMode {
+  /**
+   * @generated from enum value: COLLECTION_METHOD_AUDIENCE_MODE_UNSPECIFIED = 0;
+   */
+  UNSPECIFIED = 0,
+
+  /**
+   * @generated from enum value: COLLECTION_METHOD_AUDIENCE_MODE_OPEN = 1;
+   */
+  OPEN = 1,
+
+  /**
+   * @generated from enum value: COLLECTION_METHOD_AUDIENCE_MODE_RESTRICTED = 2;
+   */
+  RESTRICTED = 2,
+
+  /**
+   * @generated from enum value: COLLECTION_METHOD_AUDIENCE_MODE_SINGLE_CLIENT = 3;
+   */
+  SINGLE_CLIENT = 3,
+
+  /**
+   * reserved v2
+   *
+   * @generated from enum value: COLLECTION_METHOD_AUDIENCE_MODE_SEGMENT_SCOPED = 4;
+   */
+  SEGMENT_SCOPED = 4,
+}
+
+/**
+ * Describes the enum domain.treasury.v1.CollectionMethodAudienceMode.
+ */
+export const CollectionMethodAudienceModeSchema: GenEnum<CollectionMethodAudienceMode> = /*@__PURE__*/
+  enumDesc(file_domain_treasury_collection_method_collection_method, 2);
+
+/**
+ * CollectionMethodTaxEffectKind — REQUIRED + STRICT per Q3.
+ *
+ * @generated from enum domain.treasury.v1.CollectionMethodTaxEffectKind
+ */
+export enum CollectionMethodTaxEffectKind {
+  /**
+   * @generated from enum value: COLLECTION_METHOD_TAX_EFFECT_KIND_UNSPECIFIED = 0;
+   */
+  UNSPECIFIED = 0,
+
+  /**
+   * @generated from enum value: COLLECTION_METHOD_TAX_EFFECT_KIND_NONE = 1;
+   */
+  NONE = 1,
+
+  /**
+   * @generated from enum value: COLLECTION_METHOD_TAX_EFFECT_KIND_INCLUSIVE = 2;
+   */
+  INCLUSIVE = 2,
+
+  /**
+   * @generated from enum value: COLLECTION_METHOD_TAX_EFFECT_KIND_EXCLUSIVE = 3;
+   */
+  EXCLUSIVE = 3,
+}
+
+/**
+ * Describes the enum domain.treasury.v1.CollectionMethodTaxEffectKind.
+ */
+export const CollectionMethodTaxEffectKindSchema: GenEnum<CollectionMethodTaxEffectKind> = /*@__PURE__*/
+  enumDesc(file_domain_treasury_collection_method_collection_method, 3);
+
+/**
+ * CollectionMethodLifecycle — template publish lifecycle per Q7.
+ *
+ * @generated from enum domain.treasury.v1.CollectionMethodLifecycle
+ */
+export enum CollectionMethodLifecycle {
+  /**
+   * @generated from enum value: COLLECTION_METHOD_LIFECYCLE_UNSPECIFIED = 0;
+   */
+  UNSPECIFIED = 0,
+
+  /**
+   * @generated from enum value: COLLECTION_METHOD_LIFECYCLE_DRAFT = 1;
+   */
+  DRAFT = 1,
+
+  /**
+   * @generated from enum value: COLLECTION_METHOD_LIFECYCLE_ACTIVE = 2;
+   */
+  ACTIVE = 2,
+
+  /**
+   * @generated from enum value: COLLECTION_METHOD_LIFECYCLE_CLOSED = 3;
+   */
+  CLOSED = 3,
+
+  /**
+   * @generated from enum value: COLLECTION_METHOD_LIFECYCLE_ARCHIVED = 4;
+   */
+  ARCHIVED = 4,
+}
+
+/**
+ * Describes the enum domain.treasury.v1.CollectionMethodLifecycle.
+ */
+export const CollectionMethodLifecycleSchema: GenEnum<CollectionMethodLifecycle> = /*@__PURE__*/
+  enumDesc(file_domain_treasury_collection_method_collection_method, 4);
+
+/**
+ * CollectionMethodSource — where the template originated.
+ *
+ * @generated from enum domain.treasury.v1.CollectionMethodSource
+ */
+export enum CollectionMethodSource {
+  /**
+   * @generated from enum value: COLLECTION_METHOD_SOURCE_UNSPECIFIED = 0;
+   */
+  UNSPECIFIED = 0,
+
+  /**
+   * @generated from enum value: COLLECTION_METHOD_SOURCE_SYSTEM = 1;
+   */
+  SYSTEM = 1,
+
+  /**
+   * @generated from enum value: COLLECTION_METHOD_SOURCE_WORKSPACE = 2;
+   */
+  WORKSPACE = 2,
+
+  /**
+   * @generated from enum value: COLLECTION_METHOD_SOURCE_VENDOR_TEMPLATE = 3;
+   */
+  VENDOR_TEMPLATE = 3,
+}
+
+/**
+ * Describes the enum domain.treasury.v1.CollectionMethodSource.
+ */
+export const CollectionMethodSourceSchema: GenEnum<CollectionMethodSource> = /*@__PURE__*/
+  enumDesc(file_domain_treasury_collection_method_collection_method, 5);
+
+/**
+ * CollectionMethodVersionStatus — revision status within a template_code lineage.
+ *
+ * @generated from enum domain.treasury.v1.CollectionMethodVersionStatus
+ */
+export enum CollectionMethodVersionStatus {
+  /**
+   * @generated from enum value: COLLECTION_METHOD_VERSION_STATUS_UNSPECIFIED = 0;
+   */
+  UNSPECIFIED = 0,
+
+  /**
+   * @generated from enum value: COLLECTION_METHOD_VERSION_STATUS_DRAFT = 1;
+   */
+  DRAFT = 1,
+
+  /**
+   * @generated from enum value: COLLECTION_METHOD_VERSION_STATUS_PUBLISHED = 2;
+   */
+  PUBLISHED = 2,
+
+  /**
+   * @generated from enum value: COLLECTION_METHOD_VERSION_STATUS_SUPERSEDED = 3;
+   */
+  SUPERSEDED = 3,
+}
+
+/**
+ * Describes the enum domain.treasury.v1.CollectionMethodVersionStatus.
+ */
+export const CollectionMethodVersionStatusSchema: GenEnum<CollectionMethodVersionStatus> = /*@__PURE__*/
+  enumDesc(file_domain_treasury_collection_method_collection_method, 6);
+
+/**
+ * CollectionMethodBearerMode — voucher bearer rule. BURN_DOWN-style reserved v2 (D-5.6).
+ *
+ * @generated from enum domain.treasury.v1.CollectionMethodBearerMode
+ */
+export enum CollectionMethodBearerMode {
+  /**
+   * @generated from enum value: COLLECTION_METHOD_BEARER_MODE_UNSPECIFIED = 0;
+   */
+  UNSPECIFIED = 0,
+
+  /**
+   * @generated from enum value: COLLECTION_METHOD_BEARER_MODE_BEARER = 1;
+   */
+  BEARER = 1,
+
+  /**
+   * @generated from enum value: COLLECTION_METHOD_BEARER_MODE_REGISTERED = 2;
+   */
+  REGISTERED = 2,
+}
+
+/**
+ * Describes the enum domain.treasury.v1.CollectionMethodBearerMode.
+ */
+export const CollectionMethodBearerModeSchema: GenEnum<CollectionMethodBearerMode> = /*@__PURE__*/
+  enumDesc(file_domain_treasury_collection_method_collection_method, 7);
 
 /**
  * @generated from service domain.treasury.v1.CollectionMethodDomainService

@@ -9,8 +9,81 @@ import "domain/common/pagination.proto";
 import "domain/common/filter.proto";
 import "domain/common/sort.proto";
 import "domain/common/search.proto";
+import "domain/common/advance_kind/advance_kind.proto";
+
+// ----- Stage 1 template-level enums (treasury-domain-rebuild §E-1) -----
+
+// CollectionMethodPostingKind determines how collections through this method post
+// to the ledger. Per alignment.md / decisions.md.
+enum CollectionMethodPostingKind {
+  COLLECTION_METHOD_POSTING_KIND_UNSPECIFIED         = 0;
+  COLLECTION_METHOD_POSTING_KIND_CASH                = 1;
+  COLLECTION_METHOD_POSTING_KIND_ADVANCE_DRAWDOWN    = 2;
+  COLLECTION_METHOD_POSTING_KIND_CLAIM_AR            = 3;
+  COLLECTION_METHOD_POSTING_KIND_DEFERRED_RECEIVABLE = 4;
+}
+
+// CollectionMethodCategory classifies the template's business intent.
+enum CollectionMethodCategory {
+  COLLECTION_METHOD_CATEGORY_UNSPECIFIED = 0;
+  COLLECTION_METHOD_CATEGORY_STANDARD    = 1;
+  COLLECTION_METHOD_CATEGORY_VOUCHER     = 2;
+  COLLECTION_METHOD_CATEGORY_ADVANCE     = 3;
+  COLLECTION_METHOD_CATEGORY_CARD        = 4;
+}
+
+// CollectionMethodAudienceMode controls who may transact through this method.
+// SEGMENT_SCOPED is reserved for v2 (declared, not enabled).
+enum CollectionMethodAudienceMode {
+  COLLECTION_METHOD_AUDIENCE_MODE_UNSPECIFIED   = 0;
+  COLLECTION_METHOD_AUDIENCE_MODE_OPEN          = 1;
+  COLLECTION_METHOD_AUDIENCE_MODE_RESTRICTED    = 2;
+  COLLECTION_METHOD_AUDIENCE_MODE_SINGLE_CLIENT = 3;
+  COLLECTION_METHOD_AUDIENCE_MODE_SEGMENT_SCOPED = 4; // reserved v2
+}
+
+// CollectionMethodTaxEffectKind — REQUIRED + STRICT per Q3.
+enum CollectionMethodTaxEffectKind {
+  COLLECTION_METHOD_TAX_EFFECT_KIND_UNSPECIFIED = 0;
+  COLLECTION_METHOD_TAX_EFFECT_KIND_NONE        = 1;
+  COLLECTION_METHOD_TAX_EFFECT_KIND_INCLUSIVE   = 2;
+  COLLECTION_METHOD_TAX_EFFECT_KIND_EXCLUSIVE   = 3;
+}
+
+// CollectionMethodLifecycle — template publish lifecycle per Q7.
+enum CollectionMethodLifecycle {
+  COLLECTION_METHOD_LIFECYCLE_UNSPECIFIED = 0;
+  COLLECTION_METHOD_LIFECYCLE_DRAFT       = 1;
+  COLLECTION_METHOD_LIFECYCLE_ACTIVE      = 2;
+  COLLECTION_METHOD_LIFECYCLE_CLOSED      = 3;
+  COLLECTION_METHOD_LIFECYCLE_ARCHIVED    = 4;
+}
+
+// CollectionMethodSource — where the template originated.
+enum CollectionMethodSource {
+  COLLECTION_METHOD_SOURCE_UNSPECIFIED     = 0;
+  COLLECTION_METHOD_SOURCE_SYSTEM          = 1;
+  COLLECTION_METHOD_SOURCE_WORKSPACE       = 2;
+  COLLECTION_METHOD_SOURCE_VENDOR_TEMPLATE = 3;
+}
+
+// CollectionMethodVersionStatus — revision status within a template_code lineage.
+enum CollectionMethodVersionStatus {
+  COLLECTION_METHOD_VERSION_STATUS_UNSPECIFIED = 0;
+  COLLECTION_METHOD_VERSION_STATUS_DRAFT       = 1;
+  COLLECTION_METHOD_VERSION_STATUS_PUBLISHED   = 2;
+  COLLECTION_METHOD_VERSION_STATUS_SUPERSEDED  = 3;
+}
+
+// CollectionMethodBearerMode — voucher bearer rule. BURN_DOWN-style reserved v2 (D-5.6).
+enum CollectionMethodBearerMode {
+  COLLECTION_METHOD_BEARER_MODE_UNSPECIFIED = 0;
+  COLLECTION_METHOD_BEARER_MODE_BEARER      = 1;
+  COLLECTION_METHOD_BEARER_MODE_REGISTERED  = 2;
+}
 
 message CollectionMethod {
+  // ----- existing (UNCHANGED — additive only) -----
   string id = 1;
   optional int64 date_created = 2;
   optional string date_created_string = 3;
@@ -18,11 +91,36 @@ message CollectionMethod {
   optional string date_modified_string = 5;
   bool active = 6;
   string name = 7;
+  // method_details oneof: CARD details (field 8) REMAIN in Stage 1 for wire compat;
+  // CollectionCardDetails moves out to CPCMCardInstance in Stage 4 (not this wave).
   oneof method_details {
     CollectionCardDetails card = 8;
     CollectionBankAccountDetails bank_account = 9;
   }
   optional string provider_name = 10;
+
+  // ----- NEW Stage 1 template-level config -----
+  string workspace_id = 11;                                    // FK to workspace
+  CollectionMethodPostingKind posting_kind = 12;               // CASH / ADVANCE_DRAWDOWN / CLAIM_AR / DEFERRED_RECEIVABLE
+  CollectionMethodCategory category = 13;                      // STANDARD / VOUCHER / ADVANCE / CARD
+  CollectionMethodAudienceMode audience_mode = 14;             // OPEN / RESTRICTED / SINGLE_CLIENT (SEGMENT_SCOPED reserved v2)
+  CollectionMethodTaxEffectKind tax_effect_kind = 15;          // REQUIRED + STRICT per Q3
+  optional string default_eligibility_rule_id = 16;            // FK to collection_method_eligibility_rule
+  optional string balance_account_id = 17;                     // GL liability default
+  optional string target_account_id = 18;                      // GL revenue default
+  CollectionMethodLifecycle lifecycle = 19;                    // DRAFT / ACTIVE / CLOSED / ARCHIVED per Q7
+  CollectionMethodSource source = 20;                          // SYSTEM / WORKSPACE / VENDOR_TEMPLATE
+  string template_code = 21;                                   // for versioning
+  int32 revision = 22;
+  CollectionMethodVersionStatus version_status = 23;
+  optional string supersedes_collection_method_id = 24;        // FK to predecessor revision
+
+  // ----- NEW Stage 1 template-level detail config -----
+  oneof template_details {
+    CollectionMethodCardTypeDetails card_type = 30;             // template-only kind marker; carries NO brand (D-4.26)
+    CollectionMethodVoucherProgramDetails voucher_program = 31; // template: face_value default, expiry policy, bearer modes
+    CollectionMethodAdvanceProgramDetails advance_program = 32; // template: advance_kind, default schedule shape, GL defaults
+  }
 }
 
 message CollectionCardDetails {
@@ -35,6 +133,29 @@ message CollectionCardDetails {
 message CollectionBankAccountDetails {
   string bank_name = 1;
   string last_four_digits = 2;
+}
+
+// CollectionMethodCardTypeDetails — D-4.26 LOCKED: one Card method, grouped by kind.
+// NO brand string and NO allowed_card_types at the template level — card brand lives
+// solely on CardInstance.card_brand (free per-card attribute). No last_four_digits,
+// expiry_month, expiry_year here — those are instance-level (CPCMCardInstance).
+// Template marker only in v1.
+message CollectionMethodCardTypeDetails {
+}
+
+message CollectionMethodVoucherProgramDetails {
+  optional int64 default_face_value_centavos = 1;              // default; instance may override per eligibility rule
+  optional int32 default_expiry_days = 2;
+  CollectionMethodBearerMode allowed_bearer_modes = 3;         // BURN_DOWN-style reserved v2 (D-5.6)
+}
+
+message CollectionMethodAdvanceProgramDetails {
+  domain.common.v1.AdvanceKind advance_kind = 1;               // TIME_BASED / MILESTONE / UNSCHEDULED (BURN_DOWN reserved v2)
+  optional string default_balance_account_id = 2;
+  optional string default_target_account_id = 3;
+  optional int32 default_period_count = 4;                     // schedule default for TIME_BASED
+  optional string default_period_unit = 5;
+  optional domain.common.v1.AdvanceProrationPolicy default_proration_policy = 6;
 }
 
 service CollectionMethodDomainService {

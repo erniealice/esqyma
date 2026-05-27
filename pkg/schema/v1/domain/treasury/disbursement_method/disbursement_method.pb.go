@@ -8,6 +8,7 @@ package treasuryv1
 
 import (
 	common "github.com/erniealice/esqyma/pkg/schema/v1/domain/common"
+	advance_kind "github.com/erniealice/esqyma/pkg/schema/v1/domain/common/advance_kind"
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
 	reflect "reflect"
@@ -22,23 +23,373 @@ const (
 	_ = protoimpl.EnforceVersion(protoimpl.MaxVersion - 20)
 )
 
+// DisbursementMethodPostingKind determines how disbursements through this method
+// post to the ledger.
+type DisbursementMethodPostingKind int32
+
+const (
+	DisbursementMethodPostingKind_DISBURSEMENT_METHOD_POSTING_KIND_UNSPECIFIED         DisbursementMethodPostingKind = 0
+	DisbursementMethodPostingKind_DISBURSEMENT_METHOD_POSTING_KIND_CASH                DisbursementMethodPostingKind = 1
+	DisbursementMethodPostingKind_DISBURSEMENT_METHOD_POSTING_KIND_ADVANCE_DRAWDOWN    DisbursementMethodPostingKind = 2
+	DisbursementMethodPostingKind_DISBURSEMENT_METHOD_POSTING_KIND_CLAIM_AR            DisbursementMethodPostingKind = 3
+	DisbursementMethodPostingKind_DISBURSEMENT_METHOD_POSTING_KIND_DEFERRED_RECEIVABLE DisbursementMethodPostingKind = 4
+)
+
+// Enum value maps for DisbursementMethodPostingKind.
+var (
+	DisbursementMethodPostingKind_name = map[int32]string{
+		0: "DISBURSEMENT_METHOD_POSTING_KIND_UNSPECIFIED",
+		1: "DISBURSEMENT_METHOD_POSTING_KIND_CASH",
+		2: "DISBURSEMENT_METHOD_POSTING_KIND_ADVANCE_DRAWDOWN",
+		3: "DISBURSEMENT_METHOD_POSTING_KIND_CLAIM_AR",
+		4: "DISBURSEMENT_METHOD_POSTING_KIND_DEFERRED_RECEIVABLE",
+	}
+	DisbursementMethodPostingKind_value = map[string]int32{
+		"DISBURSEMENT_METHOD_POSTING_KIND_UNSPECIFIED":         0,
+		"DISBURSEMENT_METHOD_POSTING_KIND_CASH":                1,
+		"DISBURSEMENT_METHOD_POSTING_KIND_ADVANCE_DRAWDOWN":    2,
+		"DISBURSEMENT_METHOD_POSTING_KIND_CLAIM_AR":            3,
+		"DISBURSEMENT_METHOD_POSTING_KIND_DEFERRED_RECEIVABLE": 4,
+	}
+)
+
+func (x DisbursementMethodPostingKind) Enum() *DisbursementMethodPostingKind {
+	p := new(DisbursementMethodPostingKind)
+	*p = x
+	return p
+}
+
+func (x DisbursementMethodPostingKind) String() string {
+	return protoimpl.X.EnumStringOf(x.Descriptor(), protoreflect.EnumNumber(x))
+}
+
+func (DisbursementMethodPostingKind) Descriptor() protoreflect.EnumDescriptor {
+	return file_domain_treasury_disbursement_method_disbursement_method_proto_enumTypes[0].Descriptor()
+}
+
+func (DisbursementMethodPostingKind) Type() protoreflect.EnumType {
+	return &file_domain_treasury_disbursement_method_disbursement_method_proto_enumTypes[0]
+}
+
+func (x DisbursementMethodPostingKind) Number() protoreflect.EnumNumber {
+	return protoreflect.EnumNumber(x)
+}
+
+// Deprecated: Use DisbursementMethodPostingKind.Descriptor instead.
+func (DisbursementMethodPostingKind) EnumDescriptor() ([]byte, []int) {
+	return file_domain_treasury_disbursement_method_disbursement_method_proto_rawDescGZIP(), []int{0}
+}
+
+// DisbursementMethodCategory classifies the template's business intent.
+type DisbursementMethodCategory int32
+
+const (
+	DisbursementMethodCategory_DISBURSEMENT_METHOD_CATEGORY_UNSPECIFIED DisbursementMethodCategory = 0
+	DisbursementMethodCategory_DISBURSEMENT_METHOD_CATEGORY_STANDARD    DisbursementMethodCategory = 1
+	DisbursementMethodCategory_DISBURSEMENT_METHOD_CATEGORY_VOUCHER     DisbursementMethodCategory = 2
+	DisbursementMethodCategory_DISBURSEMENT_METHOD_CATEGORY_ADVANCE     DisbursementMethodCategory = 3
+	DisbursementMethodCategory_DISBURSEMENT_METHOD_CATEGORY_CARD        DisbursementMethodCategory = 4
+)
+
+// Enum value maps for DisbursementMethodCategory.
+var (
+	DisbursementMethodCategory_name = map[int32]string{
+		0: "DISBURSEMENT_METHOD_CATEGORY_UNSPECIFIED",
+		1: "DISBURSEMENT_METHOD_CATEGORY_STANDARD",
+		2: "DISBURSEMENT_METHOD_CATEGORY_VOUCHER",
+		3: "DISBURSEMENT_METHOD_CATEGORY_ADVANCE",
+		4: "DISBURSEMENT_METHOD_CATEGORY_CARD",
+	}
+	DisbursementMethodCategory_value = map[string]int32{
+		"DISBURSEMENT_METHOD_CATEGORY_UNSPECIFIED": 0,
+		"DISBURSEMENT_METHOD_CATEGORY_STANDARD":    1,
+		"DISBURSEMENT_METHOD_CATEGORY_VOUCHER":     2,
+		"DISBURSEMENT_METHOD_CATEGORY_ADVANCE":     3,
+		"DISBURSEMENT_METHOD_CATEGORY_CARD":        4,
+	}
+)
+
+func (x DisbursementMethodCategory) Enum() *DisbursementMethodCategory {
+	p := new(DisbursementMethodCategory)
+	*p = x
+	return p
+}
+
+func (x DisbursementMethodCategory) String() string {
+	return protoimpl.X.EnumStringOf(x.Descriptor(), protoreflect.EnumNumber(x))
+}
+
+func (DisbursementMethodCategory) Descriptor() protoreflect.EnumDescriptor {
+	return file_domain_treasury_disbursement_method_disbursement_method_proto_enumTypes[1].Descriptor()
+}
+
+func (DisbursementMethodCategory) Type() protoreflect.EnumType {
+	return &file_domain_treasury_disbursement_method_disbursement_method_proto_enumTypes[1]
+}
+
+func (x DisbursementMethodCategory) Number() protoreflect.EnumNumber {
+	return protoreflect.EnumNumber(x)
+}
+
+// Deprecated: Use DisbursementMethodCategory.Descriptor instead.
+func (DisbursementMethodCategory) EnumDescriptor() ([]byte, []int) {
+	return file_domain_treasury_disbursement_method_disbursement_method_proto_rawDescGZIP(), []int{1}
+}
+
+// DisbursementMethodTaxEffectKind — REQUIRED + STRICT per Q3.
+type DisbursementMethodTaxEffectKind int32
+
+const (
+	DisbursementMethodTaxEffectKind_DISBURSEMENT_METHOD_TAX_EFFECT_KIND_UNSPECIFIED DisbursementMethodTaxEffectKind = 0
+	DisbursementMethodTaxEffectKind_DISBURSEMENT_METHOD_TAX_EFFECT_KIND_NONE        DisbursementMethodTaxEffectKind = 1
+	DisbursementMethodTaxEffectKind_DISBURSEMENT_METHOD_TAX_EFFECT_KIND_INCLUSIVE   DisbursementMethodTaxEffectKind = 2
+	DisbursementMethodTaxEffectKind_DISBURSEMENT_METHOD_TAX_EFFECT_KIND_EXCLUSIVE   DisbursementMethodTaxEffectKind = 3
+)
+
+// Enum value maps for DisbursementMethodTaxEffectKind.
+var (
+	DisbursementMethodTaxEffectKind_name = map[int32]string{
+		0: "DISBURSEMENT_METHOD_TAX_EFFECT_KIND_UNSPECIFIED",
+		1: "DISBURSEMENT_METHOD_TAX_EFFECT_KIND_NONE",
+		2: "DISBURSEMENT_METHOD_TAX_EFFECT_KIND_INCLUSIVE",
+		3: "DISBURSEMENT_METHOD_TAX_EFFECT_KIND_EXCLUSIVE",
+	}
+	DisbursementMethodTaxEffectKind_value = map[string]int32{
+		"DISBURSEMENT_METHOD_TAX_EFFECT_KIND_UNSPECIFIED": 0,
+		"DISBURSEMENT_METHOD_TAX_EFFECT_KIND_NONE":        1,
+		"DISBURSEMENT_METHOD_TAX_EFFECT_KIND_INCLUSIVE":   2,
+		"DISBURSEMENT_METHOD_TAX_EFFECT_KIND_EXCLUSIVE":   3,
+	}
+)
+
+func (x DisbursementMethodTaxEffectKind) Enum() *DisbursementMethodTaxEffectKind {
+	p := new(DisbursementMethodTaxEffectKind)
+	*p = x
+	return p
+}
+
+func (x DisbursementMethodTaxEffectKind) String() string {
+	return protoimpl.X.EnumStringOf(x.Descriptor(), protoreflect.EnumNumber(x))
+}
+
+func (DisbursementMethodTaxEffectKind) Descriptor() protoreflect.EnumDescriptor {
+	return file_domain_treasury_disbursement_method_disbursement_method_proto_enumTypes[2].Descriptor()
+}
+
+func (DisbursementMethodTaxEffectKind) Type() protoreflect.EnumType {
+	return &file_domain_treasury_disbursement_method_disbursement_method_proto_enumTypes[2]
+}
+
+func (x DisbursementMethodTaxEffectKind) Number() protoreflect.EnumNumber {
+	return protoreflect.EnumNumber(x)
+}
+
+// Deprecated: Use DisbursementMethodTaxEffectKind.Descriptor instead.
+func (DisbursementMethodTaxEffectKind) EnumDescriptor() ([]byte, []int) {
+	return file_domain_treasury_disbursement_method_disbursement_method_proto_rawDescGZIP(), []int{2}
+}
+
+// DisbursementMethodLifecycle — template publish lifecycle per Q7.
+type DisbursementMethodLifecycle int32
+
+const (
+	DisbursementMethodLifecycle_DISBURSEMENT_METHOD_LIFECYCLE_UNSPECIFIED DisbursementMethodLifecycle = 0
+	DisbursementMethodLifecycle_DISBURSEMENT_METHOD_LIFECYCLE_DRAFT       DisbursementMethodLifecycle = 1
+	DisbursementMethodLifecycle_DISBURSEMENT_METHOD_LIFECYCLE_ACTIVE      DisbursementMethodLifecycle = 2
+	DisbursementMethodLifecycle_DISBURSEMENT_METHOD_LIFECYCLE_CLOSED      DisbursementMethodLifecycle = 3
+	DisbursementMethodLifecycle_DISBURSEMENT_METHOD_LIFECYCLE_ARCHIVED    DisbursementMethodLifecycle = 4
+)
+
+// Enum value maps for DisbursementMethodLifecycle.
+var (
+	DisbursementMethodLifecycle_name = map[int32]string{
+		0: "DISBURSEMENT_METHOD_LIFECYCLE_UNSPECIFIED",
+		1: "DISBURSEMENT_METHOD_LIFECYCLE_DRAFT",
+		2: "DISBURSEMENT_METHOD_LIFECYCLE_ACTIVE",
+		3: "DISBURSEMENT_METHOD_LIFECYCLE_CLOSED",
+		4: "DISBURSEMENT_METHOD_LIFECYCLE_ARCHIVED",
+	}
+	DisbursementMethodLifecycle_value = map[string]int32{
+		"DISBURSEMENT_METHOD_LIFECYCLE_UNSPECIFIED": 0,
+		"DISBURSEMENT_METHOD_LIFECYCLE_DRAFT":       1,
+		"DISBURSEMENT_METHOD_LIFECYCLE_ACTIVE":      2,
+		"DISBURSEMENT_METHOD_LIFECYCLE_CLOSED":      3,
+		"DISBURSEMENT_METHOD_LIFECYCLE_ARCHIVED":    4,
+	}
+)
+
+func (x DisbursementMethodLifecycle) Enum() *DisbursementMethodLifecycle {
+	p := new(DisbursementMethodLifecycle)
+	*p = x
+	return p
+}
+
+func (x DisbursementMethodLifecycle) String() string {
+	return protoimpl.X.EnumStringOf(x.Descriptor(), protoreflect.EnumNumber(x))
+}
+
+func (DisbursementMethodLifecycle) Descriptor() protoreflect.EnumDescriptor {
+	return file_domain_treasury_disbursement_method_disbursement_method_proto_enumTypes[3].Descriptor()
+}
+
+func (DisbursementMethodLifecycle) Type() protoreflect.EnumType {
+	return &file_domain_treasury_disbursement_method_disbursement_method_proto_enumTypes[3]
+}
+
+func (x DisbursementMethodLifecycle) Number() protoreflect.EnumNumber {
+	return protoreflect.EnumNumber(x)
+}
+
+// Deprecated: Use DisbursementMethodLifecycle.Descriptor instead.
+func (DisbursementMethodLifecycle) EnumDescriptor() ([]byte, []int) {
+	return file_domain_treasury_disbursement_method_disbursement_method_proto_rawDescGZIP(), []int{3}
+}
+
+// DisbursementMethodSource — where the template originated.
+type DisbursementMethodSource int32
+
+const (
+	DisbursementMethodSource_DISBURSEMENT_METHOD_SOURCE_UNSPECIFIED     DisbursementMethodSource = 0
+	DisbursementMethodSource_DISBURSEMENT_METHOD_SOURCE_SYSTEM          DisbursementMethodSource = 1
+	DisbursementMethodSource_DISBURSEMENT_METHOD_SOURCE_WORKSPACE       DisbursementMethodSource = 2
+	DisbursementMethodSource_DISBURSEMENT_METHOD_SOURCE_VENDOR_TEMPLATE DisbursementMethodSource = 3
+)
+
+// Enum value maps for DisbursementMethodSource.
+var (
+	DisbursementMethodSource_name = map[int32]string{
+		0: "DISBURSEMENT_METHOD_SOURCE_UNSPECIFIED",
+		1: "DISBURSEMENT_METHOD_SOURCE_SYSTEM",
+		2: "DISBURSEMENT_METHOD_SOURCE_WORKSPACE",
+		3: "DISBURSEMENT_METHOD_SOURCE_VENDOR_TEMPLATE",
+	}
+	DisbursementMethodSource_value = map[string]int32{
+		"DISBURSEMENT_METHOD_SOURCE_UNSPECIFIED":     0,
+		"DISBURSEMENT_METHOD_SOURCE_SYSTEM":          1,
+		"DISBURSEMENT_METHOD_SOURCE_WORKSPACE":       2,
+		"DISBURSEMENT_METHOD_SOURCE_VENDOR_TEMPLATE": 3,
+	}
+)
+
+func (x DisbursementMethodSource) Enum() *DisbursementMethodSource {
+	p := new(DisbursementMethodSource)
+	*p = x
+	return p
+}
+
+func (x DisbursementMethodSource) String() string {
+	return protoimpl.X.EnumStringOf(x.Descriptor(), protoreflect.EnumNumber(x))
+}
+
+func (DisbursementMethodSource) Descriptor() protoreflect.EnumDescriptor {
+	return file_domain_treasury_disbursement_method_disbursement_method_proto_enumTypes[4].Descriptor()
+}
+
+func (DisbursementMethodSource) Type() protoreflect.EnumType {
+	return &file_domain_treasury_disbursement_method_disbursement_method_proto_enumTypes[4]
+}
+
+func (x DisbursementMethodSource) Number() protoreflect.EnumNumber {
+	return protoreflect.EnumNumber(x)
+}
+
+// Deprecated: Use DisbursementMethodSource.Descriptor instead.
+func (DisbursementMethodSource) EnumDescriptor() ([]byte, []int) {
+	return file_domain_treasury_disbursement_method_disbursement_method_proto_rawDescGZIP(), []int{4}
+}
+
+// DisbursementMethodVersionStatus — revision status within a template_code lineage.
+type DisbursementMethodVersionStatus int32
+
+const (
+	DisbursementMethodVersionStatus_DISBURSEMENT_METHOD_VERSION_STATUS_UNSPECIFIED DisbursementMethodVersionStatus = 0
+	DisbursementMethodVersionStatus_DISBURSEMENT_METHOD_VERSION_STATUS_DRAFT       DisbursementMethodVersionStatus = 1
+	DisbursementMethodVersionStatus_DISBURSEMENT_METHOD_VERSION_STATUS_PUBLISHED   DisbursementMethodVersionStatus = 2
+	DisbursementMethodVersionStatus_DISBURSEMENT_METHOD_VERSION_STATUS_SUPERSEDED  DisbursementMethodVersionStatus = 3
+)
+
+// Enum value maps for DisbursementMethodVersionStatus.
+var (
+	DisbursementMethodVersionStatus_name = map[int32]string{
+		0: "DISBURSEMENT_METHOD_VERSION_STATUS_UNSPECIFIED",
+		1: "DISBURSEMENT_METHOD_VERSION_STATUS_DRAFT",
+		2: "DISBURSEMENT_METHOD_VERSION_STATUS_PUBLISHED",
+		3: "DISBURSEMENT_METHOD_VERSION_STATUS_SUPERSEDED",
+	}
+	DisbursementMethodVersionStatus_value = map[string]int32{
+		"DISBURSEMENT_METHOD_VERSION_STATUS_UNSPECIFIED": 0,
+		"DISBURSEMENT_METHOD_VERSION_STATUS_DRAFT":       1,
+		"DISBURSEMENT_METHOD_VERSION_STATUS_PUBLISHED":   2,
+		"DISBURSEMENT_METHOD_VERSION_STATUS_SUPERSEDED":  3,
+	}
+)
+
+func (x DisbursementMethodVersionStatus) Enum() *DisbursementMethodVersionStatus {
+	p := new(DisbursementMethodVersionStatus)
+	*p = x
+	return p
+}
+
+func (x DisbursementMethodVersionStatus) String() string {
+	return protoimpl.X.EnumStringOf(x.Descriptor(), protoreflect.EnumNumber(x))
+}
+
+func (DisbursementMethodVersionStatus) Descriptor() protoreflect.EnumDescriptor {
+	return file_domain_treasury_disbursement_method_disbursement_method_proto_enumTypes[5].Descriptor()
+}
+
+func (DisbursementMethodVersionStatus) Type() protoreflect.EnumType {
+	return &file_domain_treasury_disbursement_method_disbursement_method_proto_enumTypes[5]
+}
+
+func (x DisbursementMethodVersionStatus) Number() protoreflect.EnumNumber {
+	return protoreflect.EnumNumber(x)
+}
+
+// Deprecated: Use DisbursementMethodVersionStatus.Descriptor instead.
+func (DisbursementMethodVersionStatus) EnumDescriptor() ([]byte, []int) {
+	return file_domain_treasury_disbursement_method_disbursement_method_proto_rawDescGZIP(), []int{5}
+}
+
 type DisbursementMethod struct {
-	state              protoimpl.MessageState `protogen:"open.v1"`
-	Id                 string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
-	DateCreated        *int64                 `protobuf:"varint,2,opt,name=date_created,json=dateCreated,proto3,oneof" json:"date_created,omitempty"`
-	DateCreatedString  *string                `protobuf:"bytes,3,opt,name=date_created_string,json=dateCreatedString,proto3,oneof" json:"date_created_string,omitempty"`
-	DateModified       *int64                 `protobuf:"varint,4,opt,name=date_modified,json=dateModified,proto3,oneof" json:"date_modified,omitempty"`
-	DateModifiedString *string                `protobuf:"bytes,5,opt,name=date_modified_string,json=dateModifiedString,proto3,oneof" json:"date_modified_string,omitempty"`
-	Active             bool                   `protobuf:"varint,6,opt,name=active,proto3" json:"active,omitempty"`
-	Name               string                 `protobuf:"bytes,7,opt,name=name,proto3" json:"name,omitempty"`
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// ----- existing (UNCHANGED — additive only) -----
+	Id                 string  `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
+	DateCreated        *int64  `protobuf:"varint,2,opt,name=date_created,json=dateCreated,proto3,oneof" json:"date_created,omitempty"`
+	DateCreatedString  *string `protobuf:"bytes,3,opt,name=date_created_string,json=dateCreatedString,proto3,oneof" json:"date_created_string,omitempty"`
+	DateModified       *int64  `protobuf:"varint,4,opt,name=date_modified,json=dateModified,proto3,oneof" json:"date_modified,omitempty"`
+	DateModifiedString *string `protobuf:"bytes,5,opt,name=date_modified_string,json=dateModifiedString,proto3,oneof" json:"date_modified_string,omitempty"`
+	Active             bool    `protobuf:"varint,6,opt,name=active,proto3" json:"active,omitempty"`
+	Name               string  `protobuf:"bytes,7,opt,name=name,proto3" json:"name,omitempty"`
 	// Types that are valid to be assigned to MethodDetails:
 	//
 	//	*DisbursementMethod_Card
 	//	*DisbursementMethod_BankAccount
 	MethodDetails isDisbursementMethod_MethodDetails `protobuf_oneof:"method_details"`
 	ProviderName  *string                            `protobuf:"bytes,10,opt,name=provider_name,json=providerName,proto3,oneof" json:"provider_name,omitempty"`
-	unknownFields protoimpl.UnknownFields
-	sizeCache     protoimpl.SizeCache
+	// ----- NEW Stage 1 template-level config (mirror of CM minus audience_mode) -----
+	WorkspaceId string                        `protobuf:"bytes,11,opt,name=workspace_id,json=workspaceId,proto3" json:"workspace_id,omitempty"`                                                        // FK to workspace
+	PostingKind DisbursementMethodPostingKind `protobuf:"varint,12,opt,name=posting_kind,json=postingKind,proto3,enum=domain.treasury.v1.DisbursementMethodPostingKind" json:"posting_kind,omitempty"` // CASH / ADVANCE_DRAWDOWN / CLAIM_AR / DEFERRED_RECEIVABLE
+	Category    DisbursementMethodCategory    `protobuf:"varint,13,opt,name=category,proto3,enum=domain.treasury.v1.DisbursementMethodCategory" json:"category,omitempty"`                             // STANDARD / VOUCHER / ADVANCE / CARD
+	// field 14 intentionally skipped — CM uses 14 for audience_mode; DM has none (D-4.9)
+	TaxEffectKind                  DisbursementMethodTaxEffectKind `protobuf:"varint,15,opt,name=tax_effect_kind,json=taxEffectKind,proto3,enum=domain.treasury.v1.DisbursementMethodTaxEffectKind" json:"tax_effect_kind,omitempty"` // REQUIRED + STRICT per Q3
+	DefaultEligibilityRuleId       *string                         `protobuf:"bytes,16,opt,name=default_eligibility_rule_id,json=defaultEligibilityRuleId,proto3,oneof" json:"default_eligibility_rule_id,omitempty"`                 // FK; likely NULL for v1 (DM has no eligibility rule)
+	BalanceAccountId               *string                         `protobuf:"bytes,17,opt,name=balance_account_id,json=balanceAccountId,proto3,oneof" json:"balance_account_id,omitempty"`                                           // GL default
+	TargetAccountId                *string                         `protobuf:"bytes,18,opt,name=target_account_id,json=targetAccountId,proto3,oneof" json:"target_account_id,omitempty"`                                              // GL default
+	Lifecycle                      DisbursementMethodLifecycle     `protobuf:"varint,19,opt,name=lifecycle,proto3,enum=domain.treasury.v1.DisbursementMethodLifecycle" json:"lifecycle,omitempty"`                                    // DRAFT / ACTIVE / CLOSED / ARCHIVED per Q7
+	Source                         DisbursementMethodSource        `protobuf:"varint,20,opt,name=source,proto3,enum=domain.treasury.v1.DisbursementMethodSource" json:"source,omitempty"`                                             // SYSTEM / WORKSPACE / VENDOR_TEMPLATE
+	TemplateCode                   string                          `protobuf:"bytes,21,opt,name=template_code,json=templateCode,proto3" json:"template_code,omitempty"`                                                               // for versioning
+	Revision                       int32                           `protobuf:"varint,22,opt,name=revision,proto3" json:"revision,omitempty"`
+	VersionStatus                  DisbursementMethodVersionStatus `protobuf:"varint,23,opt,name=version_status,json=versionStatus,proto3,enum=domain.treasury.v1.DisbursementMethodVersionStatus" json:"version_status,omitempty"`
+	SupersedesDisbursementMethodId *string                         `protobuf:"bytes,24,opt,name=supersedes_disbursement_method_id,json=supersedesDisbursementMethodId,proto3,oneof" json:"supersedes_disbursement_method_id,omitempty"` // FK to predecessor revision
+	// ----- NEW Stage 1 template-level detail config -----
+	//
+	// Types that are valid to be assigned to TemplateDetails:
+	//
+	//	*DisbursementMethod_AdvanceProgram
+	TemplateDetails isDisbursementMethod_TemplateDetails `protobuf_oneof:"template_details"`
+	unknownFields   protoimpl.UnknownFields
+	sizeCache       protoimpl.SizeCache
 }
 
 func (x *DisbursementMethod) Reset() {
@@ -152,6 +503,113 @@ func (x *DisbursementMethod) GetProviderName() string {
 	return ""
 }
 
+func (x *DisbursementMethod) GetWorkspaceId() string {
+	if x != nil {
+		return x.WorkspaceId
+	}
+	return ""
+}
+
+func (x *DisbursementMethod) GetPostingKind() DisbursementMethodPostingKind {
+	if x != nil {
+		return x.PostingKind
+	}
+	return DisbursementMethodPostingKind_DISBURSEMENT_METHOD_POSTING_KIND_UNSPECIFIED
+}
+
+func (x *DisbursementMethod) GetCategory() DisbursementMethodCategory {
+	if x != nil {
+		return x.Category
+	}
+	return DisbursementMethodCategory_DISBURSEMENT_METHOD_CATEGORY_UNSPECIFIED
+}
+
+func (x *DisbursementMethod) GetTaxEffectKind() DisbursementMethodTaxEffectKind {
+	if x != nil {
+		return x.TaxEffectKind
+	}
+	return DisbursementMethodTaxEffectKind_DISBURSEMENT_METHOD_TAX_EFFECT_KIND_UNSPECIFIED
+}
+
+func (x *DisbursementMethod) GetDefaultEligibilityRuleId() string {
+	if x != nil && x.DefaultEligibilityRuleId != nil {
+		return *x.DefaultEligibilityRuleId
+	}
+	return ""
+}
+
+func (x *DisbursementMethod) GetBalanceAccountId() string {
+	if x != nil && x.BalanceAccountId != nil {
+		return *x.BalanceAccountId
+	}
+	return ""
+}
+
+func (x *DisbursementMethod) GetTargetAccountId() string {
+	if x != nil && x.TargetAccountId != nil {
+		return *x.TargetAccountId
+	}
+	return ""
+}
+
+func (x *DisbursementMethod) GetLifecycle() DisbursementMethodLifecycle {
+	if x != nil {
+		return x.Lifecycle
+	}
+	return DisbursementMethodLifecycle_DISBURSEMENT_METHOD_LIFECYCLE_UNSPECIFIED
+}
+
+func (x *DisbursementMethod) GetSource() DisbursementMethodSource {
+	if x != nil {
+		return x.Source
+	}
+	return DisbursementMethodSource_DISBURSEMENT_METHOD_SOURCE_UNSPECIFIED
+}
+
+func (x *DisbursementMethod) GetTemplateCode() string {
+	if x != nil {
+		return x.TemplateCode
+	}
+	return ""
+}
+
+func (x *DisbursementMethod) GetRevision() int32 {
+	if x != nil {
+		return x.Revision
+	}
+	return 0
+}
+
+func (x *DisbursementMethod) GetVersionStatus() DisbursementMethodVersionStatus {
+	if x != nil {
+		return x.VersionStatus
+	}
+	return DisbursementMethodVersionStatus_DISBURSEMENT_METHOD_VERSION_STATUS_UNSPECIFIED
+}
+
+func (x *DisbursementMethod) GetSupersedesDisbursementMethodId() string {
+	if x != nil && x.SupersedesDisbursementMethodId != nil {
+		return *x.SupersedesDisbursementMethodId
+	}
+	return ""
+}
+
+func (x *DisbursementMethod) GetTemplateDetails() isDisbursementMethod_TemplateDetails {
+	if x != nil {
+		return x.TemplateDetails
+	}
+	return nil
+}
+
+func (x *DisbursementMethod) GetAdvanceProgram() *DisbursementMethodAdvanceProgramDetails {
+	if x != nil {
+		if x, ok := x.TemplateDetails.(*DisbursementMethod_AdvanceProgram); ok {
+			return x.AdvanceProgram
+		}
+	}
+	return nil
+}
+
 type isDisbursementMethod_MethodDetails interface {
 	isDisbursementMethod_MethodDetails()
 }
@@ -167,6 +625,16 @@ type DisbursementMethod_BankAccount struct {
 func (*DisbursementMethod_Card) isDisbursementMethod_MethodDetails() {}
 
 func (*DisbursementMethod_BankAccount) isDisbursementMethod_MethodDetails() {}
+
+type isDisbursementMethod_TemplateDetails interface {
+	isDisbursementMethod_TemplateDetails()
+}
+
+type DisbursementMethod_AdvanceProgram struct {
+	AdvanceProgram *DisbursementMethodAdvanceProgramDetails `protobuf:"bytes,32,opt,name=advance_program,json=advanceProgram,proto3,oneof"` // template: advance_kind, default schedule shape, GL defaults
+}
+
+func (*DisbursementMethod_AdvanceProgram) isDisbursementMethod_TemplateDetails() {}
 
 type DisbursementCardDetails struct {
 	state          protoimpl.MessageState `protogen:"open.v1"`
@@ -288,6 +756,90 @@ func (x *DisbursementBankAccountDetails) GetLastFourDigits() string {
 	return ""
 }
 
+type DisbursementMethodAdvanceProgramDetails struct {
+	state                   protoimpl.MessageState               `protogen:"open.v1"`
+	AdvanceKind             advance_kind.AdvanceKind             `protobuf:"varint,1,opt,name=advance_kind,json=advanceKind,proto3,enum=domain.common.v1.AdvanceKind" json:"advance_kind,omitempty"` // TIME_BASED / MILESTONE / UNSCHEDULED (BURN_DOWN reserved v2)
+	DefaultBalanceAccountId *string                              `protobuf:"bytes,2,opt,name=default_balance_account_id,json=defaultBalanceAccountId,proto3,oneof" json:"default_balance_account_id,omitempty"`
+	DefaultTargetAccountId  *string                              `protobuf:"bytes,3,opt,name=default_target_account_id,json=defaultTargetAccountId,proto3,oneof" json:"default_target_account_id,omitempty"`
+	DefaultPeriodCount      *int32                               `protobuf:"varint,4,opt,name=default_period_count,json=defaultPeriodCount,proto3,oneof" json:"default_period_count,omitempty"` // schedule default for TIME_BASED
+	DefaultPeriodUnit       *string                              `protobuf:"bytes,5,opt,name=default_period_unit,json=defaultPeriodUnit,proto3,oneof" json:"default_period_unit,omitempty"`
+	DefaultProrationPolicy  *advance_kind.AdvanceProrationPolicy `protobuf:"varint,6,opt,name=default_proration_policy,json=defaultProrationPolicy,proto3,enum=domain.common.v1.AdvanceProrationPolicy,oneof" json:"default_proration_policy,omitempty"`
+	unknownFields           protoimpl.UnknownFields
+	sizeCache               protoimpl.SizeCache
+}
+
+func (x *DisbursementMethodAdvanceProgramDetails) Reset() {
+	*x = DisbursementMethodAdvanceProgramDetails{}
+	mi := &file_domain_treasury_disbursement_method_disbursement_method_proto_msgTypes[3]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *DisbursementMethodAdvanceProgramDetails) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*DisbursementMethodAdvanceProgramDetails) ProtoMessage() {}
+
+func (x *DisbursementMethodAdvanceProgramDetails) ProtoReflect() protoreflect.Message {
+	mi := &file_domain_treasury_disbursement_method_disbursement_method_proto_msgTypes[3]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use DisbursementMethodAdvanceProgramDetails.ProtoReflect.Descriptor instead.
+func (*DisbursementMethodAdvanceProgramDetails) Descriptor() ([]byte, []int) {
+	return file_domain_treasury_disbursement_method_disbursement_method_proto_rawDescGZIP(), []int{3}
+}
+
+func (x *DisbursementMethodAdvanceProgramDetails) GetAdvanceKind() advance_kind.AdvanceKind {
+	if x != nil {
+		return x.AdvanceKind
+	}
+	return advance_kind.AdvanceKind(0)
+}
+
+func (x *DisbursementMethodAdvanceProgramDetails) GetDefaultBalanceAccountId() string {
+	if x != nil && x.DefaultBalanceAccountId != nil {
+		return *x.DefaultBalanceAccountId
+	}
+	return ""
+}
+
+func (x *DisbursementMethodAdvanceProgramDetails) GetDefaultTargetAccountId() string {
+	if x != nil && x.DefaultTargetAccountId != nil {
+		return *x.DefaultTargetAccountId
+	}
+	return ""
+}
+
+func (x *DisbursementMethodAdvanceProgramDetails) GetDefaultPeriodCount() int32 {
+	if x != nil && x.DefaultPeriodCount != nil {
+		return *x.DefaultPeriodCount
+	}
+	return 0
+}
+
+func (x *DisbursementMethodAdvanceProgramDetails) GetDefaultPeriodUnit() string {
+	if x != nil && x.DefaultPeriodUnit != nil {
+		return *x.DefaultPeriodUnit
+	}
+	return ""
+}
+
+func (x *DisbursementMethodAdvanceProgramDetails) GetDefaultProrationPolicy() advance_kind.AdvanceProrationPolicy {
+	if x != nil && x.DefaultProrationPolicy != nil {
+		return *x.DefaultProrationPolicy
+	}
+	return advance_kind.AdvanceProrationPolicy(0)
+}
+
 type CreateDisbursementMethodRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Data          *DisbursementMethod    `protobuf:"bytes,1,opt,name=data,proto3" json:"data,omitempty"`
@@ -297,7 +849,7 @@ type CreateDisbursementMethodRequest struct {
 
 func (x *CreateDisbursementMethodRequest) Reset() {
 	*x = CreateDisbursementMethodRequest{}
-	mi := &file_domain_treasury_disbursement_method_disbursement_method_proto_msgTypes[3]
+	mi := &file_domain_treasury_disbursement_method_disbursement_method_proto_msgTypes[4]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -309,7 +861,7 @@ func (x *CreateDisbursementMethodRequest) String() string {
 func (*CreateDisbursementMethodRequest) ProtoMessage() {}
 
 func (x *CreateDisbursementMethodRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_domain_treasury_disbursement_method_disbursement_method_proto_msgTypes[3]
+	mi := &file_domain_treasury_disbursement_method_disbursement_method_proto_msgTypes[4]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -322,7 +874,7 @@ func (x *CreateDisbursementMethodRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use CreateDisbursementMethodRequest.ProtoReflect.Descriptor instead.
 func (*CreateDisbursementMethodRequest) Descriptor() ([]byte, []int) {
-	return file_domain_treasury_disbursement_method_disbursement_method_proto_rawDescGZIP(), []int{3}
+	return file_domain_treasury_disbursement_method_disbursement_method_proto_rawDescGZIP(), []int{4}
 }
 
 func (x *CreateDisbursementMethodRequest) GetData() *DisbursementMethod {
@@ -343,7 +895,7 @@ type CreateDisbursementMethodResponse struct {
 
 func (x *CreateDisbursementMethodResponse) Reset() {
 	*x = CreateDisbursementMethodResponse{}
-	mi := &file_domain_treasury_disbursement_method_disbursement_method_proto_msgTypes[4]
+	mi := &file_domain_treasury_disbursement_method_disbursement_method_proto_msgTypes[5]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -355,7 +907,7 @@ func (x *CreateDisbursementMethodResponse) String() string {
 func (*CreateDisbursementMethodResponse) ProtoMessage() {}
 
 func (x *CreateDisbursementMethodResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_domain_treasury_disbursement_method_disbursement_method_proto_msgTypes[4]
+	mi := &file_domain_treasury_disbursement_method_disbursement_method_proto_msgTypes[5]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -368,7 +920,7 @@ func (x *CreateDisbursementMethodResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use CreateDisbursementMethodResponse.ProtoReflect.Descriptor instead.
 func (*CreateDisbursementMethodResponse) Descriptor() ([]byte, []int) {
-	return file_domain_treasury_disbursement_method_disbursement_method_proto_rawDescGZIP(), []int{4}
+	return file_domain_treasury_disbursement_method_disbursement_method_proto_rawDescGZIP(), []int{5}
 }
 
 func (x *CreateDisbursementMethodResponse) GetData() []*DisbursementMethod {
@@ -401,7 +953,7 @@ type ReadDisbursementMethodRequest struct {
 
 func (x *ReadDisbursementMethodRequest) Reset() {
 	*x = ReadDisbursementMethodRequest{}
-	mi := &file_domain_treasury_disbursement_method_disbursement_method_proto_msgTypes[5]
+	mi := &file_domain_treasury_disbursement_method_disbursement_method_proto_msgTypes[6]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -413,7 +965,7 @@ func (x *ReadDisbursementMethodRequest) String() string {
 func (*ReadDisbursementMethodRequest) ProtoMessage() {}
 
 func (x *ReadDisbursementMethodRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_domain_treasury_disbursement_method_disbursement_method_proto_msgTypes[5]
+	mi := &file_domain_treasury_disbursement_method_disbursement_method_proto_msgTypes[6]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -426,7 +978,7 @@ func (x *ReadDisbursementMethodRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ReadDisbursementMethodRequest.ProtoReflect.Descriptor instead.
 func (*ReadDisbursementMethodRequest) Descriptor() ([]byte, []int) {
-	return file_domain_treasury_disbursement_method_disbursement_method_proto_rawDescGZIP(), []int{5}
+	return file_domain_treasury_disbursement_method_disbursement_method_proto_rawDescGZIP(), []int{6}
 }
 
 func (x *ReadDisbursementMethodRequest) GetData() *DisbursementMethod {
@@ -447,7 +999,7 @@ type ReadDisbursementMethodResponse struct {
 
 func (x *ReadDisbursementMethodResponse) Reset() {
 	*x = ReadDisbursementMethodResponse{}
-	mi := &file_domain_treasury_disbursement_method_disbursement_method_proto_msgTypes[6]
+	mi := &file_domain_treasury_disbursement_method_disbursement_method_proto_msgTypes[7]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -459,7 +1011,7 @@ func (x *ReadDisbursementMethodResponse) String() string {
 func (*ReadDisbursementMethodResponse) ProtoMessage() {}
 
 func (x *ReadDisbursementMethodResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_domain_treasury_disbursement_method_disbursement_method_proto_msgTypes[6]
+	mi := &file_domain_treasury_disbursement_method_disbursement_method_proto_msgTypes[7]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -472,7 +1024,7 @@ func (x *ReadDisbursementMethodResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ReadDisbursementMethodResponse.ProtoReflect.Descriptor instead.
 func (*ReadDisbursementMethodResponse) Descriptor() ([]byte, []int) {
-	return file_domain_treasury_disbursement_method_disbursement_method_proto_rawDescGZIP(), []int{6}
+	return file_domain_treasury_disbursement_method_disbursement_method_proto_rawDescGZIP(), []int{7}
 }
 
 func (x *ReadDisbursementMethodResponse) GetData() []*DisbursementMethod {
@@ -505,7 +1057,7 @@ type UpdateDisbursementMethodRequest struct {
 
 func (x *UpdateDisbursementMethodRequest) Reset() {
 	*x = UpdateDisbursementMethodRequest{}
-	mi := &file_domain_treasury_disbursement_method_disbursement_method_proto_msgTypes[7]
+	mi := &file_domain_treasury_disbursement_method_disbursement_method_proto_msgTypes[8]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -517,7 +1069,7 @@ func (x *UpdateDisbursementMethodRequest) String() string {
 func (*UpdateDisbursementMethodRequest) ProtoMessage() {}
 
 func (x *UpdateDisbursementMethodRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_domain_treasury_disbursement_method_disbursement_method_proto_msgTypes[7]
+	mi := &file_domain_treasury_disbursement_method_disbursement_method_proto_msgTypes[8]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -530,7 +1082,7 @@ func (x *UpdateDisbursementMethodRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use UpdateDisbursementMethodRequest.ProtoReflect.Descriptor instead.
 func (*UpdateDisbursementMethodRequest) Descriptor() ([]byte, []int) {
-	return file_domain_treasury_disbursement_method_disbursement_method_proto_rawDescGZIP(), []int{7}
+	return file_domain_treasury_disbursement_method_disbursement_method_proto_rawDescGZIP(), []int{8}
 }
 
 func (x *UpdateDisbursementMethodRequest) GetData() *DisbursementMethod {
@@ -551,7 +1103,7 @@ type UpdateDisbursementMethodResponse struct {
 
 func (x *UpdateDisbursementMethodResponse) Reset() {
 	*x = UpdateDisbursementMethodResponse{}
-	mi := &file_domain_treasury_disbursement_method_disbursement_method_proto_msgTypes[8]
+	mi := &file_domain_treasury_disbursement_method_disbursement_method_proto_msgTypes[9]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -563,7 +1115,7 @@ func (x *UpdateDisbursementMethodResponse) String() string {
 func (*UpdateDisbursementMethodResponse) ProtoMessage() {}
 
 func (x *UpdateDisbursementMethodResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_domain_treasury_disbursement_method_disbursement_method_proto_msgTypes[8]
+	mi := &file_domain_treasury_disbursement_method_disbursement_method_proto_msgTypes[9]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -576,7 +1128,7 @@ func (x *UpdateDisbursementMethodResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use UpdateDisbursementMethodResponse.ProtoReflect.Descriptor instead.
 func (*UpdateDisbursementMethodResponse) Descriptor() ([]byte, []int) {
-	return file_domain_treasury_disbursement_method_disbursement_method_proto_rawDescGZIP(), []int{8}
+	return file_domain_treasury_disbursement_method_disbursement_method_proto_rawDescGZIP(), []int{9}
 }
 
 func (x *UpdateDisbursementMethodResponse) GetData() []*DisbursementMethod {
@@ -609,7 +1161,7 @@ type DeleteDisbursementMethodRequest struct {
 
 func (x *DeleteDisbursementMethodRequest) Reset() {
 	*x = DeleteDisbursementMethodRequest{}
-	mi := &file_domain_treasury_disbursement_method_disbursement_method_proto_msgTypes[9]
+	mi := &file_domain_treasury_disbursement_method_disbursement_method_proto_msgTypes[10]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -621,7 +1173,7 @@ func (x *DeleteDisbursementMethodRequest) String() string {
 func (*DeleteDisbursementMethodRequest) ProtoMessage() {}
 
 func (x *DeleteDisbursementMethodRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_domain_treasury_disbursement_method_disbursement_method_proto_msgTypes[9]
+	mi := &file_domain_treasury_disbursement_method_disbursement_method_proto_msgTypes[10]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -634,7 +1186,7 @@ func (x *DeleteDisbursementMethodRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use DeleteDisbursementMethodRequest.ProtoReflect.Descriptor instead.
 func (*DeleteDisbursementMethodRequest) Descriptor() ([]byte, []int) {
-	return file_domain_treasury_disbursement_method_disbursement_method_proto_rawDescGZIP(), []int{9}
+	return file_domain_treasury_disbursement_method_disbursement_method_proto_rawDescGZIP(), []int{10}
 }
 
 func (x *DeleteDisbursementMethodRequest) GetData() *DisbursementMethod {
@@ -654,7 +1206,7 @@ type DeleteDisbursementMethodResponse struct {
 
 func (x *DeleteDisbursementMethodResponse) Reset() {
 	*x = DeleteDisbursementMethodResponse{}
-	mi := &file_domain_treasury_disbursement_method_disbursement_method_proto_msgTypes[10]
+	mi := &file_domain_treasury_disbursement_method_disbursement_method_proto_msgTypes[11]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -666,7 +1218,7 @@ func (x *DeleteDisbursementMethodResponse) String() string {
 func (*DeleteDisbursementMethodResponse) ProtoMessage() {}
 
 func (x *DeleteDisbursementMethodResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_domain_treasury_disbursement_method_disbursement_method_proto_msgTypes[10]
+	mi := &file_domain_treasury_disbursement_method_disbursement_method_proto_msgTypes[11]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -679,7 +1231,7 @@ func (x *DeleteDisbursementMethodResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use DeleteDisbursementMethodResponse.ProtoReflect.Descriptor instead.
 func (*DeleteDisbursementMethodResponse) Descriptor() ([]byte, []int) {
-	return file_domain_treasury_disbursement_method_disbursement_method_proto_rawDescGZIP(), []int{10}
+	return file_domain_treasury_disbursement_method_disbursement_method_proto_rawDescGZIP(), []int{11}
 }
 
 func (x *DeleteDisbursementMethodResponse) GetSuccess() bool {
@@ -708,7 +1260,7 @@ type ListDisbursementMethodsRequest struct {
 
 func (x *ListDisbursementMethodsRequest) Reset() {
 	*x = ListDisbursementMethodsRequest{}
-	mi := &file_domain_treasury_disbursement_method_disbursement_method_proto_msgTypes[11]
+	mi := &file_domain_treasury_disbursement_method_disbursement_method_proto_msgTypes[12]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -720,7 +1272,7 @@ func (x *ListDisbursementMethodsRequest) String() string {
 func (*ListDisbursementMethodsRequest) ProtoMessage() {}
 
 func (x *ListDisbursementMethodsRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_domain_treasury_disbursement_method_disbursement_method_proto_msgTypes[11]
+	mi := &file_domain_treasury_disbursement_method_disbursement_method_proto_msgTypes[12]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -733,7 +1285,7 @@ func (x *ListDisbursementMethodsRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ListDisbursementMethodsRequest.ProtoReflect.Descriptor instead.
 func (*ListDisbursementMethodsRequest) Descriptor() ([]byte, []int) {
-	return file_domain_treasury_disbursement_method_disbursement_method_proto_rawDescGZIP(), []int{11}
+	return file_domain_treasury_disbursement_method_disbursement_method_proto_rawDescGZIP(), []int{12}
 }
 
 func (x *ListDisbursementMethodsRequest) GetSearch() *common.SearchRequest {
@@ -775,7 +1327,7 @@ type ListDisbursementMethodsResponse struct {
 
 func (x *ListDisbursementMethodsResponse) Reset() {
 	*x = ListDisbursementMethodsResponse{}
-	mi := &file_domain_treasury_disbursement_method_disbursement_method_proto_msgTypes[12]
+	mi := &file_domain_treasury_disbursement_method_disbursement_method_proto_msgTypes[13]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -787,7 +1339,7 @@ func (x *ListDisbursementMethodsResponse) String() string {
 func (*ListDisbursementMethodsResponse) ProtoMessage() {}
 
 func (x *ListDisbursementMethodsResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_domain_treasury_disbursement_method_disbursement_method_proto_msgTypes[12]
+	mi := &file_domain_treasury_disbursement_method_disbursement_method_proto_msgTypes[13]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -800,7 +1352,7 @@ func (x *ListDisbursementMethodsResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ListDisbursementMethodsResponse.ProtoReflect.Descriptor instead.
 func (*ListDisbursementMethodsResponse) Descriptor() ([]byte, []int) {
-	return file_domain_treasury_disbursement_method_disbursement_method_proto_rawDescGZIP(), []int{12}
+	return file_domain_treasury_disbursement_method_disbursement_method_proto_rawDescGZIP(), []int{13}
 }
 
 func (x *ListDisbursementMethodsResponse) GetData() []*DisbursementMethod {
@@ -836,7 +1388,7 @@ type GetDisbursementMethodListPageDataRequest struct {
 
 func (x *GetDisbursementMethodListPageDataRequest) Reset() {
 	*x = GetDisbursementMethodListPageDataRequest{}
-	mi := &file_domain_treasury_disbursement_method_disbursement_method_proto_msgTypes[13]
+	mi := &file_domain_treasury_disbursement_method_disbursement_method_proto_msgTypes[14]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -848,7 +1400,7 @@ func (x *GetDisbursementMethodListPageDataRequest) String() string {
 func (*GetDisbursementMethodListPageDataRequest) ProtoMessage() {}
 
 func (x *GetDisbursementMethodListPageDataRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_domain_treasury_disbursement_method_disbursement_method_proto_msgTypes[13]
+	mi := &file_domain_treasury_disbursement_method_disbursement_method_proto_msgTypes[14]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -861,7 +1413,7 @@ func (x *GetDisbursementMethodListPageDataRequest) ProtoReflect() protoreflect.M
 
 // Deprecated: Use GetDisbursementMethodListPageDataRequest.ProtoReflect.Descriptor instead.
 func (*GetDisbursementMethodListPageDataRequest) Descriptor() ([]byte, []int) {
-	return file_domain_treasury_disbursement_method_disbursement_method_proto_rawDescGZIP(), []int{13}
+	return file_domain_treasury_disbursement_method_disbursement_method_proto_rawDescGZIP(), []int{14}
 }
 
 func (x *GetDisbursementMethodListPageDataRequest) GetPagination() *common.PaginationRequest {
@@ -905,7 +1457,7 @@ type GetDisbursementMethodListPageDataResponse struct {
 
 func (x *GetDisbursementMethodListPageDataResponse) Reset() {
 	*x = GetDisbursementMethodListPageDataResponse{}
-	mi := &file_domain_treasury_disbursement_method_disbursement_method_proto_msgTypes[14]
+	mi := &file_domain_treasury_disbursement_method_disbursement_method_proto_msgTypes[15]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -917,7 +1469,7 @@ func (x *GetDisbursementMethodListPageDataResponse) String() string {
 func (*GetDisbursementMethodListPageDataResponse) ProtoMessage() {}
 
 func (x *GetDisbursementMethodListPageDataResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_domain_treasury_disbursement_method_disbursement_method_proto_msgTypes[14]
+	mi := &file_domain_treasury_disbursement_method_disbursement_method_proto_msgTypes[15]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -930,7 +1482,7 @@ func (x *GetDisbursementMethodListPageDataResponse) ProtoReflect() protoreflect.
 
 // Deprecated: Use GetDisbursementMethodListPageDataResponse.ProtoReflect.Descriptor instead.
 func (*GetDisbursementMethodListPageDataResponse) Descriptor() ([]byte, []int) {
-	return file_domain_treasury_disbursement_method_disbursement_method_proto_rawDescGZIP(), []int{14}
+	return file_domain_treasury_disbursement_method_disbursement_method_proto_rawDescGZIP(), []int{15}
 }
 
 func (x *GetDisbursementMethodListPageDataResponse) GetDisbursementMethodList() []*DisbursementMethod {
@@ -977,7 +1529,7 @@ type GetDisbursementMethodItemPageDataRequest struct {
 
 func (x *GetDisbursementMethodItemPageDataRequest) Reset() {
 	*x = GetDisbursementMethodItemPageDataRequest{}
-	mi := &file_domain_treasury_disbursement_method_disbursement_method_proto_msgTypes[15]
+	mi := &file_domain_treasury_disbursement_method_disbursement_method_proto_msgTypes[16]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -989,7 +1541,7 @@ func (x *GetDisbursementMethodItemPageDataRequest) String() string {
 func (*GetDisbursementMethodItemPageDataRequest) ProtoMessage() {}
 
 func (x *GetDisbursementMethodItemPageDataRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_domain_treasury_disbursement_method_disbursement_method_proto_msgTypes[15]
+	mi := &file_domain_treasury_disbursement_method_disbursement_method_proto_msgTypes[16]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1002,7 +1554,7 @@ func (x *GetDisbursementMethodItemPageDataRequest) ProtoReflect() protoreflect.M
 
 // Deprecated: Use GetDisbursementMethodItemPageDataRequest.ProtoReflect.Descriptor instead.
 func (*GetDisbursementMethodItemPageDataRequest) Descriptor() ([]byte, []int) {
-	return file_domain_treasury_disbursement_method_disbursement_method_proto_rawDescGZIP(), []int{15}
+	return file_domain_treasury_disbursement_method_disbursement_method_proto_rawDescGZIP(), []int{16}
 }
 
 func (x *GetDisbursementMethodItemPageDataRequest) GetDisbursementMethodId() string {
@@ -1023,7 +1575,7 @@ type GetDisbursementMethodItemPageDataResponse struct {
 
 func (x *GetDisbursementMethodItemPageDataResponse) Reset() {
 	*x = GetDisbursementMethodItemPageDataResponse{}
-	mi := &file_domain_treasury_disbursement_method_disbursement_method_proto_msgTypes[16]
+	mi := &file_domain_treasury_disbursement_method_disbursement_method_proto_msgTypes[17]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1035,7 +1587,7 @@ func (x *GetDisbursementMethodItemPageDataResponse) String() string {
 func (*GetDisbursementMethodItemPageDataResponse) ProtoMessage() {}
 
 func (x *GetDisbursementMethodItemPageDataResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_domain_treasury_disbursement_method_disbursement_method_proto_msgTypes[16]
+	mi := &file_domain_treasury_disbursement_method_disbursement_method_proto_msgTypes[17]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1048,7 +1600,7 @@ func (x *GetDisbursementMethodItemPageDataResponse) ProtoReflect() protoreflect.
 
 // Deprecated: Use GetDisbursementMethodItemPageDataResponse.ProtoReflect.Descriptor instead.
 func (*GetDisbursementMethodItemPageDataResponse) Descriptor() ([]byte, []int) {
-	return file_domain_treasury_disbursement_method_disbursement_method_proto_rawDescGZIP(), []int{16}
+	return file_domain_treasury_disbursement_method_disbursement_method_proto_rawDescGZIP(), []int{17}
 }
 
 func (x *GetDisbursementMethodItemPageDataResponse) GetDisbursementMethod() *DisbursementMethod {
@@ -1076,25 +1628,45 @@ var File_domain_treasury_disbursement_method_disbursement_method_proto protorefl
 
 const file_domain_treasury_disbursement_method_disbursement_method_proto_rawDesc = "" +
 	"\n" +
-	"=domain/treasury/disbursement_method/disbursement_method.proto\x12\x12domain.treasury.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1adomain/common/search.proto\"\xcc\x04\n" +
+	"=domain/treasury/disbursement_method/disbursement_method.proto\x12\x12domain.treasury.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1adomain/common/search.proto\x1a-domain/common/advance_kind/advance_kind.proto\"\x87\r\n" +
 	"\x12DisbursementMethod\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12&\n" +
-	"\fdate_created\x18\x02 \x01(\x03H\x01R\vdateCreated\x88\x01\x01\x123\n" +
-	"\x13date_created_string\x18\x03 \x01(\tH\x02R\x11dateCreatedString\x88\x01\x01\x12(\n" +
-	"\rdate_modified\x18\x04 \x01(\x03H\x03R\fdateModified\x88\x01\x01\x125\n" +
-	"\x14date_modified_string\x18\x05 \x01(\tH\x04R\x12dateModifiedString\x88\x01\x01\x12\x16\n" +
+	"\fdate_created\x18\x02 \x01(\x03H\x02R\vdateCreated\x88\x01\x01\x123\n" +
+	"\x13date_created_string\x18\x03 \x01(\tH\x03R\x11dateCreatedString\x88\x01\x01\x12(\n" +
+	"\rdate_modified\x18\x04 \x01(\x03H\x04R\fdateModified\x88\x01\x01\x125\n" +
+	"\x14date_modified_string\x18\x05 \x01(\tH\x05R\x12dateModifiedString\x88\x01\x01\x12\x16\n" +
 	"\x06active\x18\x06 \x01(\bR\x06active\x12\x12\n" +
 	"\x04name\x18\a \x01(\tR\x04name\x12A\n" +
 	"\x04card\x18\b \x01(\v2+.domain.treasury.v1.DisbursementCardDetailsH\x00R\x04card\x12W\n" +
 	"\fbank_account\x18\t \x01(\v22.domain.treasury.v1.DisbursementBankAccountDetailsH\x00R\vbankAccount\x12(\n" +
 	"\rprovider_name\x18\n" +
-	" \x01(\tH\x05R\fproviderName\x88\x01\x01B\x10\n" +
-	"\x0emethod_detailsB\x0f\n" +
+	" \x01(\tH\x06R\fproviderName\x88\x01\x01\x12!\n" +
+	"\fworkspace_id\x18\v \x01(\tR\vworkspaceId\x12T\n" +
+	"\fposting_kind\x18\f \x01(\x0e21.domain.treasury.v1.DisbursementMethodPostingKindR\vpostingKind\x12J\n" +
+	"\bcategory\x18\r \x01(\x0e2..domain.treasury.v1.DisbursementMethodCategoryR\bcategory\x12[\n" +
+	"\x0ftax_effect_kind\x18\x0f \x01(\x0e23.domain.treasury.v1.DisbursementMethodTaxEffectKindR\rtaxEffectKind\x12B\n" +
+	"\x1bdefault_eligibility_rule_id\x18\x10 \x01(\tH\aR\x18defaultEligibilityRuleId\x88\x01\x01\x121\n" +
+	"\x12balance_account_id\x18\x11 \x01(\tH\bR\x10balanceAccountId\x88\x01\x01\x12/\n" +
+	"\x11target_account_id\x18\x12 \x01(\tH\tR\x0ftargetAccountId\x88\x01\x01\x12M\n" +
+	"\tlifecycle\x18\x13 \x01(\x0e2/.domain.treasury.v1.DisbursementMethodLifecycleR\tlifecycle\x12D\n" +
+	"\x06source\x18\x14 \x01(\x0e2,.domain.treasury.v1.DisbursementMethodSourceR\x06source\x12#\n" +
+	"\rtemplate_code\x18\x15 \x01(\tR\ftemplateCode\x12\x1a\n" +
+	"\brevision\x18\x16 \x01(\x05R\brevision\x12Z\n" +
+	"\x0eversion_status\x18\x17 \x01(\x0e23.domain.treasury.v1.DisbursementMethodVersionStatusR\rversionStatus\x12N\n" +
+	"!supersedes_disbursement_method_id\x18\x18 \x01(\tH\n" +
+	"R\x1esupersedesDisbursementMethodId\x88\x01\x01\x12f\n" +
+	"\x0fadvance_program\x18  \x01(\v2;.domain.treasury.v1.DisbursementMethodAdvanceProgramDetailsH\x01R\x0eadvanceProgramB\x10\n" +
+	"\x0emethod_detailsB\x12\n" +
+	"\x10template_detailsB\x0f\n" +
 	"\r_date_createdB\x16\n" +
 	"\x14_date_created_stringB\x10\n" +
 	"\x0e_date_modifiedB\x17\n" +
 	"\x15_date_modified_stringB\x10\n" +
-	"\x0e_provider_name\"\xa4\x01\n" +
+	"\x0e_provider_nameB\x1e\n" +
+	"\x1c_default_eligibility_rule_idB\x15\n" +
+	"\x13_balance_account_idB\x14\n" +
+	"\x12_target_account_idB$\n" +
+	"\"_supersedes_disbursement_method_id\"\xa4\x01\n" +
 	"\x17DisbursementCardDetails\x12\x1b\n" +
 	"\tcard_type\x18\x01 \x01(\tR\bcardType\x12(\n" +
 	"\x10last_four_digits\x18\x02 \x01(\tR\x0elastFourDigits\x12!\n" +
@@ -1103,7 +1675,19 @@ const file_domain_treasury_disbursement_method_disbursement_method_proto_rawDesc
 	"expiryYear\"g\n" +
 	"\x1eDisbursementBankAccountDetails\x12\x1b\n" +
 	"\tbank_name\x18\x01 \x01(\tR\bbankName\x12(\n" +
-	"\x10last_four_digits\x18\x02 \x01(\tR\x0elastFourDigits\"]\n" +
+	"\x10last_four_digits\x18\x02 \x01(\tR\x0elastFourDigits\"\xcd\x04\n" +
+	"'DisbursementMethodAdvanceProgramDetails\x12@\n" +
+	"\fadvance_kind\x18\x01 \x01(\x0e2\x1d.domain.common.v1.AdvanceKindR\vadvanceKind\x12@\n" +
+	"\x1adefault_balance_account_id\x18\x02 \x01(\tH\x00R\x17defaultBalanceAccountId\x88\x01\x01\x12>\n" +
+	"\x19default_target_account_id\x18\x03 \x01(\tH\x01R\x16defaultTargetAccountId\x88\x01\x01\x125\n" +
+	"\x14default_period_count\x18\x04 \x01(\x05H\x02R\x12defaultPeriodCount\x88\x01\x01\x123\n" +
+	"\x13default_period_unit\x18\x05 \x01(\tH\x03R\x11defaultPeriodUnit\x88\x01\x01\x12g\n" +
+	"\x18default_proration_policy\x18\x06 \x01(\x0e2(.domain.common.v1.AdvanceProrationPolicyH\x04R\x16defaultProrationPolicy\x88\x01\x01B\x1d\n" +
+	"\x1b_default_balance_account_idB\x1c\n" +
+	"\x1a_default_target_account_idB\x17\n" +
+	"\x15_default_period_countB\x16\n" +
+	"\x14_default_period_unitB\x1b\n" +
+	"\x19_default_proration_policy\"]\n" +
 	"\x1fCreateDisbursementMethodRequest\x12:\n" +
 	"\x04data\x18\x01 \x01(\v2&.domain.treasury.v1.DisbursementMethodR\x04data\"\xb6\x01\n" +
 	" CreateDisbursementMethodResponse\x12:\n" +
@@ -1176,7 +1760,40 @@ const file_domain_treasury_disbursement_method_disbursement_method_proto_rawDesc
 	"\x13disbursement_method\x18\x01 \x01(\v2&.domain.treasury.v1.DisbursementMethodR\x12disbursementMethod\x12\x18\n" +
 	"\asuccess\x18\x02 \x01(\bR\asuccess\x122\n" +
 	"\x05error\x18\x03 \x01(\v2\x17.domain.common.v1.ErrorH\x00R\x05error\x88\x01\x01B\b\n" +
-	"\x06_error2\x85\b\n" +
+	"\x06_error*\x9c\x02\n" +
+	"\x1dDisbursementMethodPostingKind\x120\n" +
+	",DISBURSEMENT_METHOD_POSTING_KIND_UNSPECIFIED\x10\x00\x12)\n" +
+	"%DISBURSEMENT_METHOD_POSTING_KIND_CASH\x10\x01\x125\n" +
+	"1DISBURSEMENT_METHOD_POSTING_KIND_ADVANCE_DRAWDOWN\x10\x02\x12-\n" +
+	")DISBURSEMENT_METHOD_POSTING_KIND_CLAIM_AR\x10\x03\x128\n" +
+	"4DISBURSEMENT_METHOD_POSTING_KIND_DEFERRED_RECEIVABLE\x10\x04*\xf0\x01\n" +
+	"\x1aDisbursementMethodCategory\x12,\n" +
+	"(DISBURSEMENT_METHOD_CATEGORY_UNSPECIFIED\x10\x00\x12)\n" +
+	"%DISBURSEMENT_METHOD_CATEGORY_STANDARD\x10\x01\x12(\n" +
+	"$DISBURSEMENT_METHOD_CATEGORY_VOUCHER\x10\x02\x12(\n" +
+	"$DISBURSEMENT_METHOD_CATEGORY_ADVANCE\x10\x03\x12%\n" +
+	"!DISBURSEMENT_METHOD_CATEGORY_CARD\x10\x04*\xea\x01\n" +
+	"\x1fDisbursementMethodTaxEffectKind\x123\n" +
+	"/DISBURSEMENT_METHOD_TAX_EFFECT_KIND_UNSPECIFIED\x10\x00\x12,\n" +
+	"(DISBURSEMENT_METHOD_TAX_EFFECT_KIND_NONE\x10\x01\x121\n" +
+	"-DISBURSEMENT_METHOD_TAX_EFFECT_KIND_INCLUSIVE\x10\x02\x121\n" +
+	"-DISBURSEMENT_METHOD_TAX_EFFECT_KIND_EXCLUSIVE\x10\x03*\xf5\x01\n" +
+	"\x1bDisbursementMethodLifecycle\x12-\n" +
+	")DISBURSEMENT_METHOD_LIFECYCLE_UNSPECIFIED\x10\x00\x12'\n" +
+	"#DISBURSEMENT_METHOD_LIFECYCLE_DRAFT\x10\x01\x12(\n" +
+	"$DISBURSEMENT_METHOD_LIFECYCLE_ACTIVE\x10\x02\x12(\n" +
+	"$DISBURSEMENT_METHOD_LIFECYCLE_CLOSED\x10\x03\x12*\n" +
+	"&DISBURSEMENT_METHOD_LIFECYCLE_ARCHIVED\x10\x04*\xc7\x01\n" +
+	"\x18DisbursementMethodSource\x12*\n" +
+	"&DISBURSEMENT_METHOD_SOURCE_UNSPECIFIED\x10\x00\x12%\n" +
+	"!DISBURSEMENT_METHOD_SOURCE_SYSTEM\x10\x01\x12(\n" +
+	"$DISBURSEMENT_METHOD_SOURCE_WORKSPACE\x10\x02\x12.\n" +
+	"*DISBURSEMENT_METHOD_SOURCE_VENDOR_TEMPLATE\x10\x03*\xe8\x01\n" +
+	"\x1fDisbursementMethodVersionStatus\x122\n" +
+	".DISBURSEMENT_METHOD_VERSION_STATUS_UNSPECIFIED\x10\x00\x12,\n" +
+	"(DISBURSEMENT_METHOD_VERSION_STATUS_DRAFT\x10\x01\x120\n" +
+	",DISBURSEMENT_METHOD_VERSION_STATUS_PUBLISHED\x10\x02\x121\n" +
+	"-DISBURSEMENT_METHOD_VERSION_STATUS_SUPERSEDED\x10\x032\x85\b\n" +
 	"\x1fDisbursementMethodDomainService\x12\x85\x01\n" +
 	"\x18CreateDisbursementMethod\x123.domain.treasury.v1.CreateDisbursementMethodRequest\x1a4.domain.treasury.v1.CreateDisbursementMethodResponse\x12\x7f\n" +
 	"\x16ReadDisbursementMethod\x121.domain.treasury.v1.ReadDisbursementMethodRequest\x1a2.domain.treasury.v1.ReadDisbursementMethodResponse\x12\x85\x01\n" +
@@ -1199,82 +1816,101 @@ func file_domain_treasury_disbursement_method_disbursement_method_proto_rawDescG
 	return file_domain_treasury_disbursement_method_disbursement_method_proto_rawDescData
 }
 
-var file_domain_treasury_disbursement_method_disbursement_method_proto_msgTypes = make([]protoimpl.MessageInfo, 17)
+var file_domain_treasury_disbursement_method_disbursement_method_proto_enumTypes = make([]protoimpl.EnumInfo, 6)
+var file_domain_treasury_disbursement_method_disbursement_method_proto_msgTypes = make([]protoimpl.MessageInfo, 18)
 var file_domain_treasury_disbursement_method_disbursement_method_proto_goTypes = []any{
-	(*DisbursementMethod)(nil),                        // 0: domain.treasury.v1.DisbursementMethod
-	(*DisbursementCardDetails)(nil),                   // 1: domain.treasury.v1.DisbursementCardDetails
-	(*DisbursementBankAccountDetails)(nil),            // 2: domain.treasury.v1.DisbursementBankAccountDetails
-	(*CreateDisbursementMethodRequest)(nil),           // 3: domain.treasury.v1.CreateDisbursementMethodRequest
-	(*CreateDisbursementMethodResponse)(nil),          // 4: domain.treasury.v1.CreateDisbursementMethodResponse
-	(*ReadDisbursementMethodRequest)(nil),             // 5: domain.treasury.v1.ReadDisbursementMethodRequest
-	(*ReadDisbursementMethodResponse)(nil),            // 6: domain.treasury.v1.ReadDisbursementMethodResponse
-	(*UpdateDisbursementMethodRequest)(nil),           // 7: domain.treasury.v1.UpdateDisbursementMethodRequest
-	(*UpdateDisbursementMethodResponse)(nil),          // 8: domain.treasury.v1.UpdateDisbursementMethodResponse
-	(*DeleteDisbursementMethodRequest)(nil),           // 9: domain.treasury.v1.DeleteDisbursementMethodRequest
-	(*DeleteDisbursementMethodResponse)(nil),          // 10: domain.treasury.v1.DeleteDisbursementMethodResponse
-	(*ListDisbursementMethodsRequest)(nil),            // 11: domain.treasury.v1.ListDisbursementMethodsRequest
-	(*ListDisbursementMethodsResponse)(nil),           // 12: domain.treasury.v1.ListDisbursementMethodsResponse
-	(*GetDisbursementMethodListPageDataRequest)(nil),  // 13: domain.treasury.v1.GetDisbursementMethodListPageDataRequest
-	(*GetDisbursementMethodListPageDataResponse)(nil), // 14: domain.treasury.v1.GetDisbursementMethodListPageDataResponse
-	(*GetDisbursementMethodItemPageDataRequest)(nil),  // 15: domain.treasury.v1.GetDisbursementMethodItemPageDataRequest
-	(*GetDisbursementMethodItemPageDataResponse)(nil), // 16: domain.treasury.v1.GetDisbursementMethodItemPageDataResponse
-	(*common.Error)(nil),                              // 17: domain.common.v1.Error
-	(*common.SearchRequest)(nil),                      // 18: domain.common.v1.SearchRequest
-	(*common.FilterRequest)(nil),                      // 19: domain.common.v1.FilterRequest
-	(*common.SortRequest)(nil),                        // 20: domain.common.v1.SortRequest
-	(*common.PaginationRequest)(nil),                  // 21: domain.common.v1.PaginationRequest
-	(*common.PaginationResponse)(nil),                 // 22: domain.common.v1.PaginationResponse
-	(*common.SearchResult)(nil),                       // 23: domain.common.v1.SearchResult
+	(DisbursementMethodPostingKind)(0),                // 0: domain.treasury.v1.DisbursementMethodPostingKind
+	(DisbursementMethodCategory)(0),                   // 1: domain.treasury.v1.DisbursementMethodCategory
+	(DisbursementMethodTaxEffectKind)(0),              // 2: domain.treasury.v1.DisbursementMethodTaxEffectKind
+	(DisbursementMethodLifecycle)(0),                  // 3: domain.treasury.v1.DisbursementMethodLifecycle
+	(DisbursementMethodSource)(0),                     // 4: domain.treasury.v1.DisbursementMethodSource
+	(DisbursementMethodVersionStatus)(0),              // 5: domain.treasury.v1.DisbursementMethodVersionStatus
+	(*DisbursementMethod)(nil),                        // 6: domain.treasury.v1.DisbursementMethod
+	(*DisbursementCardDetails)(nil),                   // 7: domain.treasury.v1.DisbursementCardDetails
+	(*DisbursementBankAccountDetails)(nil),            // 8: domain.treasury.v1.DisbursementBankAccountDetails
+	(*DisbursementMethodAdvanceProgramDetails)(nil),   // 9: domain.treasury.v1.DisbursementMethodAdvanceProgramDetails
+	(*CreateDisbursementMethodRequest)(nil),           // 10: domain.treasury.v1.CreateDisbursementMethodRequest
+	(*CreateDisbursementMethodResponse)(nil),          // 11: domain.treasury.v1.CreateDisbursementMethodResponse
+	(*ReadDisbursementMethodRequest)(nil),             // 12: domain.treasury.v1.ReadDisbursementMethodRequest
+	(*ReadDisbursementMethodResponse)(nil),            // 13: domain.treasury.v1.ReadDisbursementMethodResponse
+	(*UpdateDisbursementMethodRequest)(nil),           // 14: domain.treasury.v1.UpdateDisbursementMethodRequest
+	(*UpdateDisbursementMethodResponse)(nil),          // 15: domain.treasury.v1.UpdateDisbursementMethodResponse
+	(*DeleteDisbursementMethodRequest)(nil),           // 16: domain.treasury.v1.DeleteDisbursementMethodRequest
+	(*DeleteDisbursementMethodResponse)(nil),          // 17: domain.treasury.v1.DeleteDisbursementMethodResponse
+	(*ListDisbursementMethodsRequest)(nil),            // 18: domain.treasury.v1.ListDisbursementMethodsRequest
+	(*ListDisbursementMethodsResponse)(nil),           // 19: domain.treasury.v1.ListDisbursementMethodsResponse
+	(*GetDisbursementMethodListPageDataRequest)(nil),  // 20: domain.treasury.v1.GetDisbursementMethodListPageDataRequest
+	(*GetDisbursementMethodListPageDataResponse)(nil), // 21: domain.treasury.v1.GetDisbursementMethodListPageDataResponse
+	(*GetDisbursementMethodItemPageDataRequest)(nil),  // 22: domain.treasury.v1.GetDisbursementMethodItemPageDataRequest
+	(*GetDisbursementMethodItemPageDataResponse)(nil), // 23: domain.treasury.v1.GetDisbursementMethodItemPageDataResponse
+	(advance_kind.AdvanceKind)(0),                     // 24: domain.common.v1.AdvanceKind
+	(advance_kind.AdvanceProrationPolicy)(0),          // 25: domain.common.v1.AdvanceProrationPolicy
+	(*common.Error)(nil),                              // 26: domain.common.v1.Error
+	(*common.SearchRequest)(nil),                      // 27: domain.common.v1.SearchRequest
+	(*common.FilterRequest)(nil),                      // 28: domain.common.v1.FilterRequest
+	(*common.SortRequest)(nil),                        // 29: domain.common.v1.SortRequest
+	(*common.PaginationRequest)(nil),                  // 30: domain.common.v1.PaginationRequest
+	(*common.PaginationResponse)(nil),                 // 31: domain.common.v1.PaginationResponse
+	(*common.SearchResult)(nil),                       // 32: domain.common.v1.SearchResult
 }
 var file_domain_treasury_disbursement_method_disbursement_method_proto_depIdxs = []int32{
-	1,  // 0: domain.treasury.v1.DisbursementMethod.card:type_name -> domain.treasury.v1.DisbursementCardDetails
-	2,  // 1: domain.treasury.v1.DisbursementMethod.bank_account:type_name -> domain.treasury.v1.DisbursementBankAccountDetails
-	0,  // 2: domain.treasury.v1.CreateDisbursementMethodRequest.data:type_name -> domain.treasury.v1.DisbursementMethod
-	0,  // 3: domain.treasury.v1.CreateDisbursementMethodResponse.data:type_name -> domain.treasury.v1.DisbursementMethod
-	17, // 4: domain.treasury.v1.CreateDisbursementMethodResponse.error:type_name -> domain.common.v1.Error
-	0,  // 5: domain.treasury.v1.ReadDisbursementMethodRequest.data:type_name -> domain.treasury.v1.DisbursementMethod
-	0,  // 6: domain.treasury.v1.ReadDisbursementMethodResponse.data:type_name -> domain.treasury.v1.DisbursementMethod
-	17, // 7: domain.treasury.v1.ReadDisbursementMethodResponse.error:type_name -> domain.common.v1.Error
-	0,  // 8: domain.treasury.v1.UpdateDisbursementMethodRequest.data:type_name -> domain.treasury.v1.DisbursementMethod
-	0,  // 9: domain.treasury.v1.UpdateDisbursementMethodResponse.data:type_name -> domain.treasury.v1.DisbursementMethod
-	17, // 10: domain.treasury.v1.UpdateDisbursementMethodResponse.error:type_name -> domain.common.v1.Error
-	0,  // 11: domain.treasury.v1.DeleteDisbursementMethodRequest.data:type_name -> domain.treasury.v1.DisbursementMethod
-	17, // 12: domain.treasury.v1.DeleteDisbursementMethodResponse.error:type_name -> domain.common.v1.Error
-	18, // 13: domain.treasury.v1.ListDisbursementMethodsRequest.search:type_name -> domain.common.v1.SearchRequest
-	19, // 14: domain.treasury.v1.ListDisbursementMethodsRequest.filters:type_name -> domain.common.v1.FilterRequest
-	20, // 15: domain.treasury.v1.ListDisbursementMethodsRequest.sort:type_name -> domain.common.v1.SortRequest
-	21, // 16: domain.treasury.v1.ListDisbursementMethodsRequest.pagination:type_name -> domain.common.v1.PaginationRequest
-	0,  // 17: domain.treasury.v1.ListDisbursementMethodsResponse.data:type_name -> domain.treasury.v1.DisbursementMethod
-	17, // 18: domain.treasury.v1.ListDisbursementMethodsResponse.error:type_name -> domain.common.v1.Error
-	21, // 19: domain.treasury.v1.GetDisbursementMethodListPageDataRequest.pagination:type_name -> domain.common.v1.PaginationRequest
-	19, // 20: domain.treasury.v1.GetDisbursementMethodListPageDataRequest.filters:type_name -> domain.common.v1.FilterRequest
-	20, // 21: domain.treasury.v1.GetDisbursementMethodListPageDataRequest.sort:type_name -> domain.common.v1.SortRequest
-	18, // 22: domain.treasury.v1.GetDisbursementMethodListPageDataRequest.search:type_name -> domain.common.v1.SearchRequest
-	0,  // 23: domain.treasury.v1.GetDisbursementMethodListPageDataResponse.disbursement_method_list:type_name -> domain.treasury.v1.DisbursementMethod
-	22, // 24: domain.treasury.v1.GetDisbursementMethodListPageDataResponse.pagination:type_name -> domain.common.v1.PaginationResponse
-	23, // 25: domain.treasury.v1.GetDisbursementMethodListPageDataResponse.search_results:type_name -> domain.common.v1.SearchResult
-	17, // 26: domain.treasury.v1.GetDisbursementMethodListPageDataResponse.error:type_name -> domain.common.v1.Error
-	0,  // 27: domain.treasury.v1.GetDisbursementMethodItemPageDataResponse.disbursement_method:type_name -> domain.treasury.v1.DisbursementMethod
-	17, // 28: domain.treasury.v1.GetDisbursementMethodItemPageDataResponse.error:type_name -> domain.common.v1.Error
-	3,  // 29: domain.treasury.v1.DisbursementMethodDomainService.CreateDisbursementMethod:input_type -> domain.treasury.v1.CreateDisbursementMethodRequest
-	5,  // 30: domain.treasury.v1.DisbursementMethodDomainService.ReadDisbursementMethod:input_type -> domain.treasury.v1.ReadDisbursementMethodRequest
-	7,  // 31: domain.treasury.v1.DisbursementMethodDomainService.UpdateDisbursementMethod:input_type -> domain.treasury.v1.UpdateDisbursementMethodRequest
-	9,  // 32: domain.treasury.v1.DisbursementMethodDomainService.DeleteDisbursementMethod:input_type -> domain.treasury.v1.DeleteDisbursementMethodRequest
-	11, // 33: domain.treasury.v1.DisbursementMethodDomainService.ListDisbursementMethods:input_type -> domain.treasury.v1.ListDisbursementMethodsRequest
-	13, // 34: domain.treasury.v1.DisbursementMethodDomainService.GetDisbursementMethodListPageData:input_type -> domain.treasury.v1.GetDisbursementMethodListPageDataRequest
-	15, // 35: domain.treasury.v1.DisbursementMethodDomainService.GetDisbursementMethodItemPageData:input_type -> domain.treasury.v1.GetDisbursementMethodItemPageDataRequest
-	4,  // 36: domain.treasury.v1.DisbursementMethodDomainService.CreateDisbursementMethod:output_type -> domain.treasury.v1.CreateDisbursementMethodResponse
-	6,  // 37: domain.treasury.v1.DisbursementMethodDomainService.ReadDisbursementMethod:output_type -> domain.treasury.v1.ReadDisbursementMethodResponse
-	8,  // 38: domain.treasury.v1.DisbursementMethodDomainService.UpdateDisbursementMethod:output_type -> domain.treasury.v1.UpdateDisbursementMethodResponse
-	10, // 39: domain.treasury.v1.DisbursementMethodDomainService.DeleteDisbursementMethod:output_type -> domain.treasury.v1.DeleteDisbursementMethodResponse
-	12, // 40: domain.treasury.v1.DisbursementMethodDomainService.ListDisbursementMethods:output_type -> domain.treasury.v1.ListDisbursementMethodsResponse
-	14, // 41: domain.treasury.v1.DisbursementMethodDomainService.GetDisbursementMethodListPageData:output_type -> domain.treasury.v1.GetDisbursementMethodListPageDataResponse
-	16, // 42: domain.treasury.v1.DisbursementMethodDomainService.GetDisbursementMethodItemPageData:output_type -> domain.treasury.v1.GetDisbursementMethodItemPageDataResponse
-	36, // [36:43] is the sub-list for method output_type
-	29, // [29:36] is the sub-list for method input_type
-	29, // [29:29] is the sub-list for extension type_name
-	29, // [29:29] is the sub-list for extension extendee
-	0,  // [0:29] is the sub-list for field type_name
+	7,  // 0: domain.treasury.v1.DisbursementMethod.card:type_name -> domain.treasury.v1.DisbursementCardDetails
+	8,  // 1: domain.treasury.v1.DisbursementMethod.bank_account:type_name -> domain.treasury.v1.DisbursementBankAccountDetails
+	0,  // 2: domain.treasury.v1.DisbursementMethod.posting_kind:type_name -> domain.treasury.v1.DisbursementMethodPostingKind
+	1,  // 3: domain.treasury.v1.DisbursementMethod.category:type_name -> domain.treasury.v1.DisbursementMethodCategory
+	2,  // 4: domain.treasury.v1.DisbursementMethod.tax_effect_kind:type_name -> domain.treasury.v1.DisbursementMethodTaxEffectKind
+	3,  // 5: domain.treasury.v1.DisbursementMethod.lifecycle:type_name -> domain.treasury.v1.DisbursementMethodLifecycle
+	4,  // 6: domain.treasury.v1.DisbursementMethod.source:type_name -> domain.treasury.v1.DisbursementMethodSource
+	5,  // 7: domain.treasury.v1.DisbursementMethod.version_status:type_name -> domain.treasury.v1.DisbursementMethodVersionStatus
+	9,  // 8: domain.treasury.v1.DisbursementMethod.advance_program:type_name -> domain.treasury.v1.DisbursementMethodAdvanceProgramDetails
+	24, // 9: domain.treasury.v1.DisbursementMethodAdvanceProgramDetails.advance_kind:type_name -> domain.common.v1.AdvanceKind
+	25, // 10: domain.treasury.v1.DisbursementMethodAdvanceProgramDetails.default_proration_policy:type_name -> domain.common.v1.AdvanceProrationPolicy
+	6,  // 11: domain.treasury.v1.CreateDisbursementMethodRequest.data:type_name -> domain.treasury.v1.DisbursementMethod
+	6,  // 12: domain.treasury.v1.CreateDisbursementMethodResponse.data:type_name -> domain.treasury.v1.DisbursementMethod
+	26, // 13: domain.treasury.v1.CreateDisbursementMethodResponse.error:type_name -> domain.common.v1.Error
+	6,  // 14: domain.treasury.v1.ReadDisbursementMethodRequest.data:type_name -> domain.treasury.v1.DisbursementMethod
+	6,  // 15: domain.treasury.v1.ReadDisbursementMethodResponse.data:type_name -> domain.treasury.v1.DisbursementMethod
+	26, // 16: domain.treasury.v1.ReadDisbursementMethodResponse.error:type_name -> domain.common.v1.Error
+	6,  // 17: domain.treasury.v1.UpdateDisbursementMethodRequest.data:type_name -> domain.treasury.v1.DisbursementMethod
+	6,  // 18: domain.treasury.v1.UpdateDisbursementMethodResponse.data:type_name -> domain.treasury.v1.DisbursementMethod
+	26, // 19: domain.treasury.v1.UpdateDisbursementMethodResponse.error:type_name -> domain.common.v1.Error
+	6,  // 20: domain.treasury.v1.DeleteDisbursementMethodRequest.data:type_name -> domain.treasury.v1.DisbursementMethod
+	26, // 21: domain.treasury.v1.DeleteDisbursementMethodResponse.error:type_name -> domain.common.v1.Error
+	27, // 22: domain.treasury.v1.ListDisbursementMethodsRequest.search:type_name -> domain.common.v1.SearchRequest
+	28, // 23: domain.treasury.v1.ListDisbursementMethodsRequest.filters:type_name -> domain.common.v1.FilterRequest
+	29, // 24: domain.treasury.v1.ListDisbursementMethodsRequest.sort:type_name -> domain.common.v1.SortRequest
+	30, // 25: domain.treasury.v1.ListDisbursementMethodsRequest.pagination:type_name -> domain.common.v1.PaginationRequest
+	6,  // 26: domain.treasury.v1.ListDisbursementMethodsResponse.data:type_name -> domain.treasury.v1.DisbursementMethod
+	26, // 27: domain.treasury.v1.ListDisbursementMethodsResponse.error:type_name -> domain.common.v1.Error
+	30, // 28: domain.treasury.v1.GetDisbursementMethodListPageDataRequest.pagination:type_name -> domain.common.v1.PaginationRequest
+	28, // 29: domain.treasury.v1.GetDisbursementMethodListPageDataRequest.filters:type_name -> domain.common.v1.FilterRequest
+	29, // 30: domain.treasury.v1.GetDisbursementMethodListPageDataRequest.sort:type_name -> domain.common.v1.SortRequest
+	27, // 31: domain.treasury.v1.GetDisbursementMethodListPageDataRequest.search:type_name -> domain.common.v1.SearchRequest
+	6,  // 32: domain.treasury.v1.GetDisbursementMethodListPageDataResponse.disbursement_method_list:type_name -> domain.treasury.v1.DisbursementMethod
+	31, // 33: domain.treasury.v1.GetDisbursementMethodListPageDataResponse.pagination:type_name -> domain.common.v1.PaginationResponse
+	32, // 34: domain.treasury.v1.GetDisbursementMethodListPageDataResponse.search_results:type_name -> domain.common.v1.SearchResult
+	26, // 35: domain.treasury.v1.GetDisbursementMethodListPageDataResponse.error:type_name -> domain.common.v1.Error
+	6,  // 36: domain.treasury.v1.GetDisbursementMethodItemPageDataResponse.disbursement_method:type_name -> domain.treasury.v1.DisbursementMethod
+	26, // 37: domain.treasury.v1.GetDisbursementMethodItemPageDataResponse.error:type_name -> domain.common.v1.Error
+	10, // 38: domain.treasury.v1.DisbursementMethodDomainService.CreateDisbursementMethod:input_type -> domain.treasury.v1.CreateDisbursementMethodRequest
+	12, // 39: domain.treasury.v1.DisbursementMethodDomainService.ReadDisbursementMethod:input_type -> domain.treasury.v1.ReadDisbursementMethodRequest
+	14, // 40: domain.treasury.v1.DisbursementMethodDomainService.UpdateDisbursementMethod:input_type -> domain.treasury.v1.UpdateDisbursementMethodRequest
+	16, // 41: domain.treasury.v1.DisbursementMethodDomainService.DeleteDisbursementMethod:input_type -> domain.treasury.v1.DeleteDisbursementMethodRequest
+	18, // 42: domain.treasury.v1.DisbursementMethodDomainService.ListDisbursementMethods:input_type -> domain.treasury.v1.ListDisbursementMethodsRequest
+	20, // 43: domain.treasury.v1.DisbursementMethodDomainService.GetDisbursementMethodListPageData:input_type -> domain.treasury.v1.GetDisbursementMethodListPageDataRequest
+	22, // 44: domain.treasury.v1.DisbursementMethodDomainService.GetDisbursementMethodItemPageData:input_type -> domain.treasury.v1.GetDisbursementMethodItemPageDataRequest
+	11, // 45: domain.treasury.v1.DisbursementMethodDomainService.CreateDisbursementMethod:output_type -> domain.treasury.v1.CreateDisbursementMethodResponse
+	13, // 46: domain.treasury.v1.DisbursementMethodDomainService.ReadDisbursementMethod:output_type -> domain.treasury.v1.ReadDisbursementMethodResponse
+	15, // 47: domain.treasury.v1.DisbursementMethodDomainService.UpdateDisbursementMethod:output_type -> domain.treasury.v1.UpdateDisbursementMethodResponse
+	17, // 48: domain.treasury.v1.DisbursementMethodDomainService.DeleteDisbursementMethod:output_type -> domain.treasury.v1.DeleteDisbursementMethodResponse
+	19, // 49: domain.treasury.v1.DisbursementMethodDomainService.ListDisbursementMethods:output_type -> domain.treasury.v1.ListDisbursementMethodsResponse
+	21, // 50: domain.treasury.v1.DisbursementMethodDomainService.GetDisbursementMethodListPageData:output_type -> domain.treasury.v1.GetDisbursementMethodListPageDataResponse
+	23, // 51: domain.treasury.v1.DisbursementMethodDomainService.GetDisbursementMethodItemPageData:output_type -> domain.treasury.v1.GetDisbursementMethodItemPageDataResponse
+	45, // [45:52] is the sub-list for method output_type
+	38, // [38:45] is the sub-list for method input_type
+	38, // [38:38] is the sub-list for extension type_name
+	38, // [38:38] is the sub-list for extension extendee
+	0,  // [0:38] is the sub-list for field type_name
 }
 
 func init() { file_domain_treasury_disbursement_method_disbursement_method_proto_init() }
@@ -1285,28 +1921,31 @@ func file_domain_treasury_disbursement_method_disbursement_method_proto_init() {
 	file_domain_treasury_disbursement_method_disbursement_method_proto_msgTypes[0].OneofWrappers = []any{
 		(*DisbursementMethod_Card)(nil),
 		(*DisbursementMethod_BankAccount)(nil),
+		(*DisbursementMethod_AdvanceProgram)(nil),
 	}
-	file_domain_treasury_disbursement_method_disbursement_method_proto_msgTypes[4].OneofWrappers = []any{}
-	file_domain_treasury_disbursement_method_disbursement_method_proto_msgTypes[6].OneofWrappers = []any{}
-	file_domain_treasury_disbursement_method_disbursement_method_proto_msgTypes[8].OneofWrappers = []any{}
-	file_domain_treasury_disbursement_method_disbursement_method_proto_msgTypes[10].OneofWrappers = []any{}
+	file_domain_treasury_disbursement_method_disbursement_method_proto_msgTypes[3].OneofWrappers = []any{}
+	file_domain_treasury_disbursement_method_disbursement_method_proto_msgTypes[5].OneofWrappers = []any{}
+	file_domain_treasury_disbursement_method_disbursement_method_proto_msgTypes[7].OneofWrappers = []any{}
+	file_domain_treasury_disbursement_method_disbursement_method_proto_msgTypes[9].OneofWrappers = []any{}
 	file_domain_treasury_disbursement_method_disbursement_method_proto_msgTypes[11].OneofWrappers = []any{}
 	file_domain_treasury_disbursement_method_disbursement_method_proto_msgTypes[12].OneofWrappers = []any{}
 	file_domain_treasury_disbursement_method_disbursement_method_proto_msgTypes[13].OneofWrappers = []any{}
 	file_domain_treasury_disbursement_method_disbursement_method_proto_msgTypes[14].OneofWrappers = []any{}
-	file_domain_treasury_disbursement_method_disbursement_method_proto_msgTypes[16].OneofWrappers = []any{}
+	file_domain_treasury_disbursement_method_disbursement_method_proto_msgTypes[15].OneofWrappers = []any{}
+	file_domain_treasury_disbursement_method_disbursement_method_proto_msgTypes[17].OneofWrappers = []any{}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
 		File: protoimpl.DescBuilder{
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_domain_treasury_disbursement_method_disbursement_method_proto_rawDesc), len(file_domain_treasury_disbursement_method_disbursement_method_proto_rawDesc)),
-			NumEnums:      0,
-			NumMessages:   17,
+			NumEnums:      6,
+			NumMessages:   18,
 			NumExtensions: 0,
 			NumServices:   1,
 		},
 		GoTypes:           file_domain_treasury_disbursement_method_disbursement_method_proto_goTypes,
 		DependencyIndexes: file_domain_treasury_disbursement_method_disbursement_method_proto_depIdxs,
+		EnumInfos:         file_domain_treasury_disbursement_method_disbursement_method_proto_enumTypes,
 		MessageInfos:      file_domain_treasury_disbursement_method_disbursement_method_proto_msgTypes,
 	}.Build()
 	File_domain_treasury_disbursement_method_disbursement_method_proto = out.File

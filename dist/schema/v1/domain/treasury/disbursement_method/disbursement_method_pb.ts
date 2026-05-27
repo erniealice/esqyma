@@ -2,8 +2,8 @@
 // @generated from file domain/treasury/disbursement_method/disbursement_method.proto (package domain.treasury.v1, syntax proto3)
 /* eslint-disable */
 
-import type { GenFile, GenMessage, GenService } from "@bufbuild/protobuf/codegenv2";
-import { fileDesc, messageDesc, serviceDesc } from "@bufbuild/protobuf/codegenv2";
+import type { GenEnum, GenFile, GenMessage, GenService } from "@bufbuild/protobuf/codegenv2";
+import { enumDesc, fileDesc, messageDesc, serviceDesc } from "@bufbuild/protobuf/codegenv2";
 import type { Error } from "../../common/error_pb";
 import { file_domain_common_error } from "../../common/error_pb";
 import type { PaginationRequest, PaginationResponse } from "../../common/pagination_pb";
@@ -14,19 +14,23 @@ import type { SortRequest } from "../../common/sort_pb";
 import { file_domain_common_sort } from "../../common/sort_pb";
 import type { SearchRequest, SearchResult } from "../../common/search_pb";
 import { file_domain_common_search } from "../../common/search_pb";
+import type { AdvanceKind, AdvanceProrationPolicy } from "../../common/advance_kind/advance_kind_pb";
+import { file_domain_common_advance_kind_advance_kind } from "../../common/advance_kind/advance_kind_pb";
 import type { Message } from "@bufbuild/protobuf";
 
 /**
  * Describes the file domain/treasury/disbursement_method/disbursement_method.proto.
  */
 export const file_domain_treasury_disbursement_method_disbursement_method: GenFile = /*@__PURE__*/
-  fileDesc("Cj1kb21haW4vdHJlYXN1cnkvZGlzYnVyc2VtZW50X21ldGhvZC9kaXNidXJzZW1lbnRfbWV0aG9kLnByb3RvEhJkb21haW4udHJlYXN1cnkudjEi1wMKEkRpc2J1cnNlbWVudE1ldGhvZBIKCgJpZBgBIAEoCRIZCgxkYXRlX2NyZWF0ZWQYAiABKANIAYgBARIgChNkYXRlX2NyZWF0ZWRfc3RyaW5nGAMgASgJSAKIAQESGgoNZGF0ZV9tb2RpZmllZBgEIAEoA0gDiAEBEiEKFGRhdGVfbW9kaWZpZWRfc3RyaW5nGAUgASgJSASIAQESDgoGYWN0aXZlGAYgASgIEgwKBG5hbWUYByABKAkSOwoEY2FyZBgIIAEoCzIrLmRvbWFpbi50cmVhc3VyeS52MS5EaXNidXJzZW1lbnRDYXJkRGV0YWlsc0gAEkoKDGJhbmtfYWNjb3VudBgJIAEoCzIyLmRvbWFpbi50cmVhc3VyeS52MS5EaXNidXJzZW1lbnRCYW5rQWNjb3VudERldGFpbHNIABIaCg1wcm92aWRlcl9uYW1lGAogASgJSAWIAQFCEAoObWV0aG9kX2RldGFpbHNCDwoNX2RhdGVfY3JlYXRlZEIWChRfZGF0ZV9jcmVhdGVkX3N0cmluZ0IQCg5fZGF0ZV9tb2RpZmllZEIXChVfZGF0ZV9tb2RpZmllZF9zdHJpbmdCEAoOX3Byb3ZpZGVyX25hbWUicQoXRGlzYnVyc2VtZW50Q2FyZERldGFpbHMSEQoJY2FyZF90eXBlGAEgASgJEhgKEGxhc3RfZm91cl9kaWdpdHMYAiABKAkSFAoMZXhwaXJ5X21vbnRoGAMgASgFEhMKC2V4cGlyeV95ZWFyGAQgASgFIk0KHkRpc2J1cnNlbWVudEJhbmtBY2NvdW50RGV0YWlscxIRCgliYW5rX25hbWUYASABKAkSGAoQbGFzdF9mb3VyX2RpZ2l0cxgCIAEoCSJXCh9DcmVhdGVEaXNidXJzZW1lbnRNZXRob2RSZXF1ZXN0EjQKBGRhdGEYASABKAsyJi5kb21haW4udHJlYXN1cnkudjEuRGlzYnVyc2VtZW50TWV0aG9kIqABCiBDcmVhdGVEaXNidXJzZW1lbnRNZXRob2RSZXNwb25zZRI0CgRkYXRhGAEgAygLMiYuZG9tYWluLnRyZWFzdXJ5LnYxLkRpc2J1cnNlbWVudE1ldGhvZBIPCgdzdWNjZXNzGAIgASgIEisKBWVycm9yGAMgASgLMhcuZG9tYWluLmNvbW1vbi52MS5FcnJvckgAiAEBQggKBl9lcnJvciJVCh1SZWFkRGlzYnVyc2VtZW50TWV0aG9kUmVxdWVzdBI0CgRkYXRhGAEgASgLMiYuZG9tYWluLnRyZWFzdXJ5LnYxLkRpc2J1cnNlbWVudE1ldGhvZCKeAQoeUmVhZERpc2J1cnNlbWVudE1ldGhvZFJlc3BvbnNlEjQKBGRhdGEYASADKAsyJi5kb21haW4udHJlYXN1cnkudjEuRGlzYnVyc2VtZW50TWV0aG9kEg8KB3N1Y2Nlc3MYAiABKAgSKwoFZXJyb3IYAyABKAsyFy5kb21haW4uY29tbW9uLnYxLkVycm9ySACIAQFCCAoGX2Vycm9yIlcKH1VwZGF0ZURpc2J1cnNlbWVudE1ldGhvZFJlcXVlc3QSNAoEZGF0YRgBIAEoCzImLmRvbWFpbi50cmVhc3VyeS52MS5EaXNidXJzZW1lbnRNZXRob2QioAEKIFVwZGF0ZURpc2J1cnNlbWVudE1ldGhvZFJlc3BvbnNlEjQKBGRhdGEYASADKAsyJi5kb21haW4udHJlYXN1cnkudjEuRGlzYnVyc2VtZW50TWV0aG9kEg8KB3N1Y2Nlc3MYAiABKAgSKwoFZXJyb3IYAyABKAsyFy5kb21haW4uY29tbW9uLnYxLkVycm9ySACIAQFCCAoGX2Vycm9yIlcKH0RlbGV0ZURpc2J1cnNlbWVudE1ldGhvZFJlcXVlc3QSNAoEZGF0YRgBIAEoCzImLmRvbWFpbi50cmVhc3VyeS52MS5EaXNidXJzZW1lbnRNZXRob2QiagogRGVsZXRlRGlzYnVyc2VtZW50TWV0aG9kUmVzcG9uc2USDwoHc3VjY2VzcxgBIAEoCBIrCgVlcnJvchgCIAEoCzIXLmRvbWFpbi5jb21tb24udjEuRXJyb3JIAIgBAUIICgZfZXJyb3IirAIKHkxpc3REaXNidXJzZW1lbnRNZXRob2RzUmVxdWVzdBI0CgZzZWFyY2gYASABKAsyHy5kb21haW4uY29tbW9uLnYxLlNlYXJjaFJlcXVlc3RIAIgBARI1CgdmaWx0ZXJzGAIgASgLMh8uZG9tYWluLmNvbW1vbi52MS5GaWx0ZXJSZXF1ZXN0SAGIAQESMAoEc29ydBgDIAEoCzIdLmRvbWFpbi5jb21tb24udjEuU29ydFJlcXVlc3RIAogBARI8CgpwYWdpbmF0aW9uGAQgASgLMiMuZG9tYWluLmNvbW1vbi52MS5QYWdpbmF0aW9uUmVxdWVzdEgDiAEBQgkKB19zZWFyY2hCCgoIX2ZpbHRlcnNCBwoFX3NvcnRCDQoLX3BhZ2luYXRpb24inwEKH0xpc3REaXNidXJzZW1lbnRNZXRob2RzUmVzcG9uc2USNAoEZGF0YRgBIAMoCzImLmRvbWFpbi50cmVhc3VyeS52MS5EaXNidXJzZW1lbnRNZXRob2QSDwoHc3VjY2VzcxgCIAEoCBIrCgVlcnJvchgDIAEoCzIXLmRvbWFpbi5jb21tb24udjEuRXJyb3JIAIgBAUIICgZfZXJyb3IitgIKKEdldERpc2J1cnNlbWVudE1ldGhvZExpc3RQYWdlRGF0YVJlcXVlc3QSPAoKcGFnaW5hdGlvbhgBIAEoCzIjLmRvbWFpbi5jb21tb24udjEuUGFnaW5hdGlvblJlcXVlc3RIAIgBARI1CgdmaWx0ZXJzGAIgASgLMh8uZG9tYWluLmNvbW1vbi52MS5GaWx0ZXJSZXF1ZXN0SAGIAQESMAoEc29ydBgDIAEoCzIdLmRvbWFpbi5jb21tb24udjEuU29ydFJlcXVlc3RIAogBARI0CgZzZWFyY2gYBCABKAsyHy5kb21haW4uY29tbW9uLnYxLlNlYXJjaFJlcXVlc3RIA4gBAUINCgtfcGFnaW5hdGlvbkIKCghfZmlsdGVyc0IHCgVfc29ydEIJCgdfc2VhcmNoIsMCCilHZXREaXNidXJzZW1lbnRNZXRob2RMaXN0UGFnZURhdGFSZXNwb25zZRJIChhkaXNidXJzZW1lbnRfbWV0aG9kX2xpc3QYASADKAsyJi5kb21haW4udHJlYXN1cnkudjEuRGlzYnVyc2VtZW50TWV0aG9kEj0KCnBhZ2luYXRpb24YAiABKAsyJC5kb21haW4uY29tbW9uLnYxLlBhZ2luYXRpb25SZXNwb25zZUgAiAEBEjYKDnNlYXJjaF9yZXN1bHRzGAMgAygLMh4uZG9tYWluLmNvbW1vbi52MS5TZWFyY2hSZXN1bHQSDwoHc3VjY2VzcxgEIAEoCBIrCgVlcnJvchgFIAEoCzIXLmRvbWFpbi5jb21tb24udjEuRXJyb3JIAYgBAUINCgtfcGFnaW5hdGlvbkIICgZfZXJyb3IiSgooR2V0RGlzYnVyc2VtZW50TWV0aG9kSXRlbVBhZ2VEYXRhUmVxdWVzdBIeChZkaXNidXJzZW1lbnRfbWV0aG9kX2lkGAEgASgJIrgBCilHZXREaXNidXJzZW1lbnRNZXRob2RJdGVtUGFnZURhdGFSZXNwb25zZRJDChNkaXNidXJzZW1lbnRfbWV0aG9kGAEgASgLMiYuZG9tYWluLnRyZWFzdXJ5LnYxLkRpc2J1cnNlbWVudE1ldGhvZBIPCgdzdWNjZXNzGAIgASgIEisKBWVycm9yGAMgASgLMhcuZG9tYWluLmNvbW1vbi52MS5FcnJvckgAiAEBQggKBl9lcnJvcjKFCAofRGlzYnVyc2VtZW50TWV0aG9kRG9tYWluU2VydmljZRKFAQoYQ3JlYXRlRGlzYnVyc2VtZW50TWV0aG9kEjMuZG9tYWluLnRyZWFzdXJ5LnYxLkNyZWF0ZURpc2J1cnNlbWVudE1ldGhvZFJlcXVlc3QaNC5kb21haW4udHJlYXN1cnkudjEuQ3JlYXRlRGlzYnVyc2VtZW50TWV0aG9kUmVzcG9uc2USfwoWUmVhZERpc2J1cnNlbWVudE1ldGhvZBIxLmRvbWFpbi50cmVhc3VyeS52MS5SZWFkRGlzYnVyc2VtZW50TWV0aG9kUmVxdWVzdBoyLmRvbWFpbi50cmVhc3VyeS52MS5SZWFkRGlzYnVyc2VtZW50TWV0aG9kUmVzcG9uc2UShQEKGFVwZGF0ZURpc2J1cnNlbWVudE1ldGhvZBIzLmRvbWFpbi50cmVhc3VyeS52MS5VcGRhdGVEaXNidXJzZW1lbnRNZXRob2RSZXF1ZXN0GjQuZG9tYWluLnRyZWFzdXJ5LnYxLlVwZGF0ZURpc2J1cnNlbWVudE1ldGhvZFJlc3BvbnNlEoUBChhEZWxldGVEaXNidXJzZW1lbnRNZXRob2QSMy5kb21haW4udHJlYXN1cnkudjEuRGVsZXRlRGlzYnVyc2VtZW50TWV0aG9kUmVxdWVzdBo0LmRvbWFpbi50cmVhc3VyeS52MS5EZWxldGVEaXNidXJzZW1lbnRNZXRob2RSZXNwb25zZRKCAQoXTGlzdERpc2J1cnNlbWVudE1ldGhvZHMSMi5kb21haW4udHJlYXN1cnkudjEuTGlzdERpc2J1cnNlbWVudE1ldGhvZHNSZXF1ZXN0GjMuZG9tYWluLnRyZWFzdXJ5LnYxLkxpc3REaXNidXJzZW1lbnRNZXRob2RzUmVzcG9uc2USoAEKIUdldERpc2J1cnNlbWVudE1ldGhvZExpc3RQYWdlRGF0YRI8LmRvbWFpbi50cmVhc3VyeS52MS5HZXREaXNidXJzZW1lbnRNZXRob2RMaXN0UGFnZURhdGFSZXF1ZXN0Gj0uZG9tYWluLnRyZWFzdXJ5LnYxLkdldERpc2J1cnNlbWVudE1ldGhvZExpc3RQYWdlRGF0YVJlc3BvbnNlEqABCiFHZXREaXNidXJzZW1lbnRNZXRob2RJdGVtUGFnZURhdGESPC5kb21haW4udHJlYXN1cnkudjEuR2V0RGlzYnVyc2VtZW50TWV0aG9kSXRlbVBhZ2VEYXRhUmVxdWVzdBo9LmRvbWFpbi50cmVhc3VyeS52MS5HZXREaXNidXJzZW1lbnRNZXRob2RJdGVtUGFnZURhdGFSZXNwb25zZUL2AQoWY29tLmRvbWFpbi50cmVhc3VyeS52MUIXRGlzYnVyc2VtZW50TWV0aG9kUHJvdG9QAVpZZ2l0aHViLmNvbS9lcm5pZWFsaWNlL2VzcXltYS9wa2cvc2NoZW1hL3YxL2RvbWFpbi90cmVhc3VyeS9kaXNidXJzZW1lbnRfbWV0aG9kO3RyZWFzdXJ5djGiAgNEVFiqAhJEb21haW4uVHJlYXN1cnkuVjHKAhJEb21haW5cVHJlYXN1cnlcVjHiAh5Eb21haW5cVHJlYXN1cnlcVjFcR1BCTWV0YWRhdGHqAhREb21haW46OlRyZWFzdXJ5OjpWMWIGcHJvdG8z", [file_domain_common_error, file_domain_common_pagination, file_domain_common_filter, file_domain_common_sort, file_domain_common_search]);
+  fileDesc("Cj1kb21haW4vdHJlYXN1cnkvZGlzYnVyc2VtZW50X21ldGhvZC9kaXNidXJzZW1lbnRfbWV0aG9kLnByb3RvEhJkb21haW4udHJlYXN1cnkudjEiuAoKEkRpc2J1cnNlbWVudE1ldGhvZBIKCgJpZBgBIAEoCRIZCgxkYXRlX2NyZWF0ZWQYAiABKANIAogBARIgChNkYXRlX2NyZWF0ZWRfc3RyaW5nGAMgASgJSAOIAQESGgoNZGF0ZV9tb2RpZmllZBgEIAEoA0gEiAEBEiEKFGRhdGVfbW9kaWZpZWRfc3RyaW5nGAUgASgJSAWIAQESDgoGYWN0aXZlGAYgASgIEgwKBG5hbWUYByABKAkSOwoEY2FyZBgIIAEoCzIrLmRvbWFpbi50cmVhc3VyeS52MS5EaXNidXJzZW1lbnRDYXJkRGV0YWlsc0gAEkoKDGJhbmtfYWNjb3VudBgJIAEoCzIyLmRvbWFpbi50cmVhc3VyeS52MS5EaXNidXJzZW1lbnRCYW5rQWNjb3VudERldGFpbHNIABIaCg1wcm92aWRlcl9uYW1lGAogASgJSAaIAQESFAoMd29ya3NwYWNlX2lkGAsgASgJEkcKDHBvc3Rpbmdfa2luZBgMIAEoDjIxLmRvbWFpbi50cmVhc3VyeS52MS5EaXNidXJzZW1lbnRNZXRob2RQb3N0aW5nS2luZBJACghjYXRlZ29yeRgNIAEoDjIuLmRvbWFpbi50cmVhc3VyeS52MS5EaXNidXJzZW1lbnRNZXRob2RDYXRlZ29yeRJMCg90YXhfZWZmZWN0X2tpbmQYDyABKA4yMy5kb21haW4udHJlYXN1cnkudjEuRGlzYnVyc2VtZW50TWV0aG9kVGF4RWZmZWN0S2luZBIoChtkZWZhdWx0X2VsaWdpYmlsaXR5X3J1bGVfaWQYECABKAlIB4gBARIfChJiYWxhbmNlX2FjY291bnRfaWQYESABKAlICIgBARIeChF0YXJnZXRfYWNjb3VudF9pZBgSIAEoCUgJiAEBEkIKCWxpZmVjeWNsZRgTIAEoDjIvLmRvbWFpbi50cmVhc3VyeS52MS5EaXNidXJzZW1lbnRNZXRob2RMaWZlY3ljbGUSPAoGc291cmNlGBQgASgOMiwuZG9tYWluLnRyZWFzdXJ5LnYxLkRpc2J1cnNlbWVudE1ldGhvZFNvdXJjZRIVCg10ZW1wbGF0ZV9jb2RlGBUgASgJEhAKCHJldmlzaW9uGBYgASgFEksKDnZlcnNpb25fc3RhdHVzGBcgASgOMjMuZG9tYWluLnRyZWFzdXJ5LnYxLkRpc2J1cnNlbWVudE1ldGhvZFZlcnNpb25TdGF0dXMSLgohc3VwZXJzZWRlc19kaXNidXJzZW1lbnRfbWV0aG9kX2lkGBggASgJSAqIAQESVgoPYWR2YW5jZV9wcm9ncmFtGCAgASgLMjsuZG9tYWluLnRyZWFzdXJ5LnYxLkRpc2J1cnNlbWVudE1ldGhvZEFkdmFuY2VQcm9ncmFtRGV0YWlsc0gBQhAKDm1ldGhvZF9kZXRhaWxzQhIKEHRlbXBsYXRlX2RldGFpbHNCDwoNX2RhdGVfY3JlYXRlZEIWChRfZGF0ZV9jcmVhdGVkX3N0cmluZ0IQCg5fZGF0ZV9tb2RpZmllZEIXChVfZGF0ZV9tb2RpZmllZF9zdHJpbmdCEAoOX3Byb3ZpZGVyX25hbWVCHgocX2RlZmF1bHRfZWxpZ2liaWxpdHlfcnVsZV9pZEIVChNfYmFsYW5jZV9hY2NvdW50X2lkQhQKEl90YXJnZXRfYWNjb3VudF9pZEIkCiJfc3VwZXJzZWRlc19kaXNidXJzZW1lbnRfbWV0aG9kX2lkInEKF0Rpc2J1cnNlbWVudENhcmREZXRhaWxzEhEKCWNhcmRfdHlwZRgBIAEoCRIYChBsYXN0X2ZvdXJfZGlnaXRzGAIgASgJEhQKDGV4cGlyeV9tb250aBgDIAEoBRITCgtleHBpcnlfeWVhchgEIAEoBSJNCh5EaXNidXJzZW1lbnRCYW5rQWNjb3VudERldGFpbHMSEQoJYmFua19uYW1lGAEgASgJEhgKEGxhc3RfZm91cl9kaWdpdHMYAiABKAki0AMKJ0Rpc2J1cnNlbWVudE1ldGhvZEFkdmFuY2VQcm9ncmFtRGV0YWlscxIzCgxhZHZhbmNlX2tpbmQYASABKA4yHS5kb21haW4uY29tbW9uLnYxLkFkdmFuY2VLaW5kEicKGmRlZmF1bHRfYmFsYW5jZV9hY2NvdW50X2lkGAIgASgJSACIAQESJgoZZGVmYXVsdF90YXJnZXRfYWNjb3VudF9pZBgDIAEoCUgBiAEBEiEKFGRlZmF1bHRfcGVyaW9kX2NvdW50GAQgASgFSAKIAQESIAoTZGVmYXVsdF9wZXJpb2RfdW5pdBgFIAEoCUgDiAEBEk8KGGRlZmF1bHRfcHJvcmF0aW9uX3BvbGljeRgGIAEoDjIoLmRvbWFpbi5jb21tb24udjEuQWR2YW5jZVByb3JhdGlvblBvbGljeUgEiAEBQh0KG19kZWZhdWx0X2JhbGFuY2VfYWNjb3VudF9pZEIcChpfZGVmYXVsdF90YXJnZXRfYWNjb3VudF9pZEIXChVfZGVmYXVsdF9wZXJpb2RfY291bnRCFgoUX2RlZmF1bHRfcGVyaW9kX3VuaXRCGwoZX2RlZmF1bHRfcHJvcmF0aW9uX3BvbGljeSJXCh9DcmVhdGVEaXNidXJzZW1lbnRNZXRob2RSZXF1ZXN0EjQKBGRhdGEYASABKAsyJi5kb21haW4udHJlYXN1cnkudjEuRGlzYnVyc2VtZW50TWV0aG9kIqABCiBDcmVhdGVEaXNidXJzZW1lbnRNZXRob2RSZXNwb25zZRI0CgRkYXRhGAEgAygLMiYuZG9tYWluLnRyZWFzdXJ5LnYxLkRpc2J1cnNlbWVudE1ldGhvZBIPCgdzdWNjZXNzGAIgASgIEisKBWVycm9yGAMgASgLMhcuZG9tYWluLmNvbW1vbi52MS5FcnJvckgAiAEBQggKBl9lcnJvciJVCh1SZWFkRGlzYnVyc2VtZW50TWV0aG9kUmVxdWVzdBI0CgRkYXRhGAEgASgLMiYuZG9tYWluLnRyZWFzdXJ5LnYxLkRpc2J1cnNlbWVudE1ldGhvZCKeAQoeUmVhZERpc2J1cnNlbWVudE1ldGhvZFJlc3BvbnNlEjQKBGRhdGEYASADKAsyJi5kb21haW4udHJlYXN1cnkudjEuRGlzYnVyc2VtZW50TWV0aG9kEg8KB3N1Y2Nlc3MYAiABKAgSKwoFZXJyb3IYAyABKAsyFy5kb21haW4uY29tbW9uLnYxLkVycm9ySACIAQFCCAoGX2Vycm9yIlcKH1VwZGF0ZURpc2J1cnNlbWVudE1ldGhvZFJlcXVlc3QSNAoEZGF0YRgBIAEoCzImLmRvbWFpbi50cmVhc3VyeS52MS5EaXNidXJzZW1lbnRNZXRob2QioAEKIFVwZGF0ZURpc2J1cnNlbWVudE1ldGhvZFJlc3BvbnNlEjQKBGRhdGEYASADKAsyJi5kb21haW4udHJlYXN1cnkudjEuRGlzYnVyc2VtZW50TWV0aG9kEg8KB3N1Y2Nlc3MYAiABKAgSKwoFZXJyb3IYAyABKAsyFy5kb21haW4uY29tbW9uLnYxLkVycm9ySACIAQFCCAoGX2Vycm9yIlcKH0RlbGV0ZURpc2J1cnNlbWVudE1ldGhvZFJlcXVlc3QSNAoEZGF0YRgBIAEoCzImLmRvbWFpbi50cmVhc3VyeS52MS5EaXNidXJzZW1lbnRNZXRob2QiagogRGVsZXRlRGlzYnVyc2VtZW50TWV0aG9kUmVzcG9uc2USDwoHc3VjY2VzcxgBIAEoCBIrCgVlcnJvchgCIAEoCzIXLmRvbWFpbi5jb21tb24udjEuRXJyb3JIAIgBAUIICgZfZXJyb3IirAIKHkxpc3REaXNidXJzZW1lbnRNZXRob2RzUmVxdWVzdBI0CgZzZWFyY2gYASABKAsyHy5kb21haW4uY29tbW9uLnYxLlNlYXJjaFJlcXVlc3RIAIgBARI1CgdmaWx0ZXJzGAIgASgLMh8uZG9tYWluLmNvbW1vbi52MS5GaWx0ZXJSZXF1ZXN0SAGIAQESMAoEc29ydBgDIAEoCzIdLmRvbWFpbi5jb21tb24udjEuU29ydFJlcXVlc3RIAogBARI8CgpwYWdpbmF0aW9uGAQgASgLMiMuZG9tYWluLmNvbW1vbi52MS5QYWdpbmF0aW9uUmVxdWVzdEgDiAEBQgkKB19zZWFyY2hCCgoIX2ZpbHRlcnNCBwoFX3NvcnRCDQoLX3BhZ2luYXRpb24inwEKH0xpc3REaXNidXJzZW1lbnRNZXRob2RzUmVzcG9uc2USNAoEZGF0YRgBIAMoCzImLmRvbWFpbi50cmVhc3VyeS52MS5EaXNidXJzZW1lbnRNZXRob2QSDwoHc3VjY2VzcxgCIAEoCBIrCgVlcnJvchgDIAEoCzIXLmRvbWFpbi5jb21tb24udjEuRXJyb3JIAIgBAUIICgZfZXJyb3IitgIKKEdldERpc2J1cnNlbWVudE1ldGhvZExpc3RQYWdlRGF0YVJlcXVlc3QSPAoKcGFnaW5hdGlvbhgBIAEoCzIjLmRvbWFpbi5jb21tb24udjEuUGFnaW5hdGlvblJlcXVlc3RIAIgBARI1CgdmaWx0ZXJzGAIgASgLMh8uZG9tYWluLmNvbW1vbi52MS5GaWx0ZXJSZXF1ZXN0SAGIAQESMAoEc29ydBgDIAEoCzIdLmRvbWFpbi5jb21tb24udjEuU29ydFJlcXVlc3RIAogBARI0CgZzZWFyY2gYBCABKAsyHy5kb21haW4uY29tbW9uLnYxLlNlYXJjaFJlcXVlc3RIA4gBAUINCgtfcGFnaW5hdGlvbkIKCghfZmlsdGVyc0IHCgVfc29ydEIJCgdfc2VhcmNoIsMCCilHZXREaXNidXJzZW1lbnRNZXRob2RMaXN0UGFnZURhdGFSZXNwb25zZRJIChhkaXNidXJzZW1lbnRfbWV0aG9kX2xpc3QYASADKAsyJi5kb21haW4udHJlYXN1cnkudjEuRGlzYnVyc2VtZW50TWV0aG9kEj0KCnBhZ2luYXRpb24YAiABKAsyJC5kb21haW4uY29tbW9uLnYxLlBhZ2luYXRpb25SZXNwb25zZUgAiAEBEjYKDnNlYXJjaF9yZXN1bHRzGAMgAygLMh4uZG9tYWluLmNvbW1vbi52MS5TZWFyY2hSZXN1bHQSDwoHc3VjY2VzcxgEIAEoCBIrCgVlcnJvchgFIAEoCzIXLmRvbWFpbi5jb21tb24udjEuRXJyb3JIAYgBAUINCgtfcGFnaW5hdGlvbkIICgZfZXJyb3IiSgooR2V0RGlzYnVyc2VtZW50TWV0aG9kSXRlbVBhZ2VEYXRhUmVxdWVzdBIeChZkaXNidXJzZW1lbnRfbWV0aG9kX2lkGAEgASgJIrgBCilHZXREaXNidXJzZW1lbnRNZXRob2RJdGVtUGFnZURhdGFSZXNwb25zZRJDChNkaXNidXJzZW1lbnRfbWV0aG9kGAEgASgLMiYuZG9tYWluLnRyZWFzdXJ5LnYxLkRpc2J1cnNlbWVudE1ldGhvZBIPCgdzdWNjZXNzGAIgASgIEisKBWVycm9yGAMgASgLMhcuZG9tYWluLmNvbW1vbi52MS5FcnJvckgAiAEBQggKBl9lcnJvciqcAgodRGlzYnVyc2VtZW50TWV0aG9kUG9zdGluZ0tpbmQSMAosRElTQlVSU0VNRU5UX01FVEhPRF9QT1NUSU5HX0tJTkRfVU5TUEVDSUZJRUQQABIpCiVESVNCVVJTRU1FTlRfTUVUSE9EX1BPU1RJTkdfS0lORF9DQVNIEAESNQoxRElTQlVSU0VNRU5UX01FVEhPRF9QT1NUSU5HX0tJTkRfQURWQU5DRV9EUkFXRE9XThACEi0KKURJU0JVUlNFTUVOVF9NRVRIT0RfUE9TVElOR19LSU5EX0NMQUlNX0FSEAMSOAo0RElTQlVSU0VNRU5UX01FVEhPRF9QT1NUSU5HX0tJTkRfREVGRVJSRURfUkVDRUlWQUJMRRAEKvABChpEaXNidXJzZW1lbnRNZXRob2RDYXRlZ29yeRIsCihESVNCVVJTRU1FTlRfTUVUSE9EX0NBVEVHT1JZX1VOU1BFQ0lGSUVEEAASKQolRElTQlVSU0VNRU5UX01FVEhPRF9DQVRFR09SWV9TVEFOREFSRBABEigKJERJU0JVUlNFTUVOVF9NRVRIT0RfQ0FURUdPUllfVk9VQ0hFUhACEigKJERJU0JVUlNFTUVOVF9NRVRIT0RfQ0FURUdPUllfQURWQU5DRRADEiUKIURJU0JVUlNFTUVOVF9NRVRIT0RfQ0FURUdPUllfQ0FSRBAEKuoBCh9EaXNidXJzZW1lbnRNZXRob2RUYXhFZmZlY3RLaW5kEjMKL0RJU0JVUlNFTUVOVF9NRVRIT0RfVEFYX0VGRkVDVF9LSU5EX1VOU1BFQ0lGSUVEEAASLAooRElTQlVSU0VNRU5UX01FVEhPRF9UQVhfRUZGRUNUX0tJTkRfTk9ORRABEjEKLURJU0JVUlNFTUVOVF9NRVRIT0RfVEFYX0VGRkVDVF9LSU5EX0lOQ0xVU0lWRRACEjEKLURJU0JVUlNFTUVOVF9NRVRIT0RfVEFYX0VGRkVDVF9LSU5EX0VYQ0xVU0lWRRADKvUBChtEaXNidXJzZW1lbnRNZXRob2RMaWZlY3ljbGUSLQopRElTQlVSU0VNRU5UX01FVEhPRF9MSUZFQ1lDTEVfVU5TUEVDSUZJRUQQABInCiNESVNCVVJTRU1FTlRfTUVUSE9EX0xJRkVDWUNMRV9EUkFGVBABEigKJERJU0JVUlNFTUVOVF9NRVRIT0RfTElGRUNZQ0xFX0FDVElWRRACEigKJERJU0JVUlNFTUVOVF9NRVRIT0RfTElGRUNZQ0xFX0NMT1NFRBADEioKJkRJU0JVUlNFTUVOVF9NRVRIT0RfTElGRUNZQ0xFX0FSQ0hJVkVEEAQqxwEKGERpc2J1cnNlbWVudE1ldGhvZFNvdXJjZRIqCiZESVNCVVJTRU1FTlRfTUVUSE9EX1NPVVJDRV9VTlNQRUNJRklFRBAAEiUKIURJU0JVUlNFTUVOVF9NRVRIT0RfU09VUkNFX1NZU1RFTRABEigKJERJU0JVUlNFTUVOVF9NRVRIT0RfU09VUkNFX1dPUktTUEFDRRACEi4KKkRJU0JVUlNFTUVOVF9NRVRIT0RfU09VUkNFX1ZFTkRPUl9URU1QTEFURRADKugBCh9EaXNidXJzZW1lbnRNZXRob2RWZXJzaW9uU3RhdHVzEjIKLkRJU0JVUlNFTUVOVF9NRVRIT0RfVkVSU0lPTl9TVEFUVVNfVU5TUEVDSUZJRUQQABIsCihESVNCVVJTRU1FTlRfTUVUSE9EX1ZFUlNJT05fU1RBVFVTX0RSQUZUEAESMAosRElTQlVSU0VNRU5UX01FVEhPRF9WRVJTSU9OX1NUQVRVU19QVUJMSVNIRUQQAhIxCi1ESVNCVVJTRU1FTlRfTUVUSE9EX1ZFUlNJT05fU1RBVFVTX1NVUEVSU0VERUQQAzKFCAofRGlzYnVyc2VtZW50TWV0aG9kRG9tYWluU2VydmljZRKFAQoYQ3JlYXRlRGlzYnVyc2VtZW50TWV0aG9kEjMuZG9tYWluLnRyZWFzdXJ5LnYxLkNyZWF0ZURpc2J1cnNlbWVudE1ldGhvZFJlcXVlc3QaNC5kb21haW4udHJlYXN1cnkudjEuQ3JlYXRlRGlzYnVyc2VtZW50TWV0aG9kUmVzcG9uc2USfwoWUmVhZERpc2J1cnNlbWVudE1ldGhvZBIxLmRvbWFpbi50cmVhc3VyeS52MS5SZWFkRGlzYnVyc2VtZW50TWV0aG9kUmVxdWVzdBoyLmRvbWFpbi50cmVhc3VyeS52MS5SZWFkRGlzYnVyc2VtZW50TWV0aG9kUmVzcG9uc2UShQEKGFVwZGF0ZURpc2J1cnNlbWVudE1ldGhvZBIzLmRvbWFpbi50cmVhc3VyeS52MS5VcGRhdGVEaXNidXJzZW1lbnRNZXRob2RSZXF1ZXN0GjQuZG9tYWluLnRyZWFzdXJ5LnYxLlVwZGF0ZURpc2J1cnNlbWVudE1ldGhvZFJlc3BvbnNlEoUBChhEZWxldGVEaXNidXJzZW1lbnRNZXRob2QSMy5kb21haW4udHJlYXN1cnkudjEuRGVsZXRlRGlzYnVyc2VtZW50TWV0aG9kUmVxdWVzdBo0LmRvbWFpbi50cmVhc3VyeS52MS5EZWxldGVEaXNidXJzZW1lbnRNZXRob2RSZXNwb25zZRKCAQoXTGlzdERpc2J1cnNlbWVudE1ldGhvZHMSMi5kb21haW4udHJlYXN1cnkudjEuTGlzdERpc2J1cnNlbWVudE1ldGhvZHNSZXF1ZXN0GjMuZG9tYWluLnRyZWFzdXJ5LnYxLkxpc3REaXNidXJzZW1lbnRNZXRob2RzUmVzcG9uc2USoAEKIUdldERpc2J1cnNlbWVudE1ldGhvZExpc3RQYWdlRGF0YRI8LmRvbWFpbi50cmVhc3VyeS52MS5HZXREaXNidXJzZW1lbnRNZXRob2RMaXN0UGFnZURhdGFSZXF1ZXN0Gj0uZG9tYWluLnRyZWFzdXJ5LnYxLkdldERpc2J1cnNlbWVudE1ldGhvZExpc3RQYWdlRGF0YVJlc3BvbnNlEqABCiFHZXREaXNidXJzZW1lbnRNZXRob2RJdGVtUGFnZURhdGESPC5kb21haW4udHJlYXN1cnkudjEuR2V0RGlzYnVyc2VtZW50TWV0aG9kSXRlbVBhZ2VEYXRhUmVxdWVzdBo9LmRvbWFpbi50cmVhc3VyeS52MS5HZXREaXNidXJzZW1lbnRNZXRob2RJdGVtUGFnZURhdGFSZXNwb25zZUL2AQoWY29tLmRvbWFpbi50cmVhc3VyeS52MUIXRGlzYnVyc2VtZW50TWV0aG9kUHJvdG9QAVpZZ2l0aHViLmNvbS9lcm5pZWFsaWNlL2VzcXltYS9wa2cvc2NoZW1hL3YxL2RvbWFpbi90cmVhc3VyeS9kaXNidXJzZW1lbnRfbWV0aG9kO3RyZWFzdXJ5djGiAgNEVFiqAhJEb21haW4uVHJlYXN1cnkuVjHKAhJEb21haW5cVHJlYXN1cnlcVjHiAh5Eb21haW5cVHJlYXN1cnlcVjFcR1BCTWV0YWRhdGHqAhREb21haW46OlRyZWFzdXJ5OjpWMWIGcHJvdG8z", [file_domain_common_error, file_domain_common_pagination, file_domain_common_filter, file_domain_common_sort, file_domain_common_search, file_domain_common_advance_kind_advance_kind]);
 
 /**
  * @generated from message domain.treasury.v1.DisbursementMethod
  */
 export type DisbursementMethod = Message<"domain.treasury.v1.DisbursementMethod"> & {
   /**
+   * ----- existing (UNCHANGED — additive only) -----
+   *
    * @generated from field: string id = 1;
    */
   id: string;
@@ -82,6 +86,112 @@ export type DisbursementMethod = Message<"domain.treasury.v1.DisbursementMethod"
    * @generated from field: optional string provider_name = 10;
    */
   providerName?: string;
+
+  /**
+   * ----- NEW Stage 1 template-level config (mirror of CM minus audience_mode) -----
+   *
+   * FK to workspace
+   *
+   * @generated from field: string workspace_id = 11;
+   */
+  workspaceId: string;
+
+  /**
+   * CASH / ADVANCE_DRAWDOWN / CLAIM_AR / DEFERRED_RECEIVABLE
+   *
+   * @generated from field: domain.treasury.v1.DisbursementMethodPostingKind posting_kind = 12;
+   */
+  postingKind: DisbursementMethodPostingKind;
+
+  /**
+   * STANDARD / VOUCHER / ADVANCE / CARD
+   *
+   * @generated from field: domain.treasury.v1.DisbursementMethodCategory category = 13;
+   */
+  category: DisbursementMethodCategory;
+
+  /**
+   * field 14 intentionally skipped — CM uses 14 for audience_mode; DM has none (D-4.9)
+   *
+   * REQUIRED + STRICT per Q3
+   *
+   * @generated from field: domain.treasury.v1.DisbursementMethodTaxEffectKind tax_effect_kind = 15;
+   */
+  taxEffectKind: DisbursementMethodTaxEffectKind;
+
+  /**
+   * FK; likely NULL for v1 (DM has no eligibility rule)
+   *
+   * @generated from field: optional string default_eligibility_rule_id = 16;
+   */
+  defaultEligibilityRuleId?: string;
+
+  /**
+   * GL default
+   *
+   * @generated from field: optional string balance_account_id = 17;
+   */
+  balanceAccountId?: string;
+
+  /**
+   * GL default
+   *
+   * @generated from field: optional string target_account_id = 18;
+   */
+  targetAccountId?: string;
+
+  /**
+   * DRAFT / ACTIVE / CLOSED / ARCHIVED per Q7
+   *
+   * @generated from field: domain.treasury.v1.DisbursementMethodLifecycle lifecycle = 19;
+   */
+  lifecycle: DisbursementMethodLifecycle;
+
+  /**
+   * SYSTEM / WORKSPACE / VENDOR_TEMPLATE
+   *
+   * @generated from field: domain.treasury.v1.DisbursementMethodSource source = 20;
+   */
+  source: DisbursementMethodSource;
+
+  /**
+   * for versioning
+   *
+   * @generated from field: string template_code = 21;
+   */
+  templateCode: string;
+
+  /**
+   * @generated from field: int32 revision = 22;
+   */
+  revision: number;
+
+  /**
+   * @generated from field: domain.treasury.v1.DisbursementMethodVersionStatus version_status = 23;
+   */
+  versionStatus: DisbursementMethodVersionStatus;
+
+  /**
+   * FK to predecessor revision
+   *
+   * @generated from field: optional string supersedes_disbursement_method_id = 24;
+   */
+  supersedesDisbursementMethodId?: string;
+
+  /**
+   * ----- NEW Stage 1 template-level detail config -----
+   *
+   * @generated from oneof domain.treasury.v1.DisbursementMethod.template_details
+   */
+  templateDetails: {
+    /**
+     * template: advance_kind, default schedule shape, GL defaults
+     *
+     * @generated from field: domain.treasury.v1.DisbursementMethodAdvanceProgramDetails advance_program = 32;
+     */
+    value: DisbursementMethodAdvanceProgramDetails;
+    case: "advanceProgram";
+  } | { case: undefined; value?: undefined };
 };
 
 /**
@@ -146,6 +256,52 @@ export const DisbursementBankAccountDetailsSchema: GenMessage<DisbursementBankAc
   messageDesc(file_domain_treasury_disbursement_method_disbursement_method, 2);
 
 /**
+ * @generated from message domain.treasury.v1.DisbursementMethodAdvanceProgramDetails
+ */
+export type DisbursementMethodAdvanceProgramDetails = Message<"domain.treasury.v1.DisbursementMethodAdvanceProgramDetails"> & {
+  /**
+   * TIME_BASED / MILESTONE / UNSCHEDULED (BURN_DOWN reserved v2)
+   *
+   * @generated from field: domain.common.v1.AdvanceKind advance_kind = 1;
+   */
+  advanceKind: AdvanceKind;
+
+  /**
+   * @generated from field: optional string default_balance_account_id = 2;
+   */
+  defaultBalanceAccountId?: string;
+
+  /**
+   * @generated from field: optional string default_target_account_id = 3;
+   */
+  defaultTargetAccountId?: string;
+
+  /**
+   * schedule default for TIME_BASED
+   *
+   * @generated from field: optional int32 default_period_count = 4;
+   */
+  defaultPeriodCount?: number;
+
+  /**
+   * @generated from field: optional string default_period_unit = 5;
+   */
+  defaultPeriodUnit?: string;
+
+  /**
+   * @generated from field: optional domain.common.v1.AdvanceProrationPolicy default_proration_policy = 6;
+   */
+  defaultProrationPolicy?: AdvanceProrationPolicy;
+};
+
+/**
+ * Describes the message domain.treasury.v1.DisbursementMethodAdvanceProgramDetails.
+ * Use `create(DisbursementMethodAdvanceProgramDetailsSchema)` to create a new message.
+ */
+export const DisbursementMethodAdvanceProgramDetailsSchema: GenMessage<DisbursementMethodAdvanceProgramDetails> = /*@__PURE__*/
+  messageDesc(file_domain_treasury_disbursement_method_disbursement_method, 3);
+
+/**
  * @generated from message domain.treasury.v1.CreateDisbursementMethodRequest
  */
 export type CreateDisbursementMethodRequest = Message<"domain.treasury.v1.CreateDisbursementMethodRequest"> & {
@@ -160,7 +316,7 @@ export type CreateDisbursementMethodRequest = Message<"domain.treasury.v1.Create
  * Use `create(CreateDisbursementMethodRequestSchema)` to create a new message.
  */
 export const CreateDisbursementMethodRequestSchema: GenMessage<CreateDisbursementMethodRequest> = /*@__PURE__*/
-  messageDesc(file_domain_treasury_disbursement_method_disbursement_method, 3);
+  messageDesc(file_domain_treasury_disbursement_method_disbursement_method, 4);
 
 /**
  * @generated from message domain.treasury.v1.CreateDisbursementMethodResponse
@@ -187,7 +343,7 @@ export type CreateDisbursementMethodResponse = Message<"domain.treasury.v1.Creat
  * Use `create(CreateDisbursementMethodResponseSchema)` to create a new message.
  */
 export const CreateDisbursementMethodResponseSchema: GenMessage<CreateDisbursementMethodResponse> = /*@__PURE__*/
-  messageDesc(file_domain_treasury_disbursement_method_disbursement_method, 4);
+  messageDesc(file_domain_treasury_disbursement_method_disbursement_method, 5);
 
 /**
  * @generated from message domain.treasury.v1.ReadDisbursementMethodRequest
@@ -204,7 +360,7 @@ export type ReadDisbursementMethodRequest = Message<"domain.treasury.v1.ReadDisb
  * Use `create(ReadDisbursementMethodRequestSchema)` to create a new message.
  */
 export const ReadDisbursementMethodRequestSchema: GenMessage<ReadDisbursementMethodRequest> = /*@__PURE__*/
-  messageDesc(file_domain_treasury_disbursement_method_disbursement_method, 5);
+  messageDesc(file_domain_treasury_disbursement_method_disbursement_method, 6);
 
 /**
  * @generated from message domain.treasury.v1.ReadDisbursementMethodResponse
@@ -231,7 +387,7 @@ export type ReadDisbursementMethodResponse = Message<"domain.treasury.v1.ReadDis
  * Use `create(ReadDisbursementMethodResponseSchema)` to create a new message.
  */
 export const ReadDisbursementMethodResponseSchema: GenMessage<ReadDisbursementMethodResponse> = /*@__PURE__*/
-  messageDesc(file_domain_treasury_disbursement_method_disbursement_method, 6);
+  messageDesc(file_domain_treasury_disbursement_method_disbursement_method, 7);
 
 /**
  * @generated from message domain.treasury.v1.UpdateDisbursementMethodRequest
@@ -248,7 +404,7 @@ export type UpdateDisbursementMethodRequest = Message<"domain.treasury.v1.Update
  * Use `create(UpdateDisbursementMethodRequestSchema)` to create a new message.
  */
 export const UpdateDisbursementMethodRequestSchema: GenMessage<UpdateDisbursementMethodRequest> = /*@__PURE__*/
-  messageDesc(file_domain_treasury_disbursement_method_disbursement_method, 7);
+  messageDesc(file_domain_treasury_disbursement_method_disbursement_method, 8);
 
 /**
  * @generated from message domain.treasury.v1.UpdateDisbursementMethodResponse
@@ -275,7 +431,7 @@ export type UpdateDisbursementMethodResponse = Message<"domain.treasury.v1.Updat
  * Use `create(UpdateDisbursementMethodResponseSchema)` to create a new message.
  */
 export const UpdateDisbursementMethodResponseSchema: GenMessage<UpdateDisbursementMethodResponse> = /*@__PURE__*/
-  messageDesc(file_domain_treasury_disbursement_method_disbursement_method, 8);
+  messageDesc(file_domain_treasury_disbursement_method_disbursement_method, 9);
 
 /**
  * @generated from message domain.treasury.v1.DeleteDisbursementMethodRequest
@@ -292,7 +448,7 @@ export type DeleteDisbursementMethodRequest = Message<"domain.treasury.v1.Delete
  * Use `create(DeleteDisbursementMethodRequestSchema)` to create a new message.
  */
 export const DeleteDisbursementMethodRequestSchema: GenMessage<DeleteDisbursementMethodRequest> = /*@__PURE__*/
-  messageDesc(file_domain_treasury_disbursement_method_disbursement_method, 9);
+  messageDesc(file_domain_treasury_disbursement_method_disbursement_method, 10);
 
 /**
  * @generated from message domain.treasury.v1.DeleteDisbursementMethodResponse
@@ -314,7 +470,7 @@ export type DeleteDisbursementMethodResponse = Message<"domain.treasury.v1.Delet
  * Use `create(DeleteDisbursementMethodResponseSchema)` to create a new message.
  */
 export const DeleteDisbursementMethodResponseSchema: GenMessage<DeleteDisbursementMethodResponse> = /*@__PURE__*/
-  messageDesc(file_domain_treasury_disbursement_method_disbursement_method, 10);
+  messageDesc(file_domain_treasury_disbursement_method_disbursement_method, 11);
 
 /**
  * @generated from message domain.treasury.v1.ListDisbursementMethodsRequest
@@ -346,7 +502,7 @@ export type ListDisbursementMethodsRequest = Message<"domain.treasury.v1.ListDis
  * Use `create(ListDisbursementMethodsRequestSchema)` to create a new message.
  */
 export const ListDisbursementMethodsRequestSchema: GenMessage<ListDisbursementMethodsRequest> = /*@__PURE__*/
-  messageDesc(file_domain_treasury_disbursement_method_disbursement_method, 11);
+  messageDesc(file_domain_treasury_disbursement_method_disbursement_method, 12);
 
 /**
  * @generated from message domain.treasury.v1.ListDisbursementMethodsResponse
@@ -373,7 +529,7 @@ export type ListDisbursementMethodsResponse = Message<"domain.treasury.v1.ListDi
  * Use `create(ListDisbursementMethodsResponseSchema)` to create a new message.
  */
 export const ListDisbursementMethodsResponseSchema: GenMessage<ListDisbursementMethodsResponse> = /*@__PURE__*/
-  messageDesc(file_domain_treasury_disbursement_method_disbursement_method, 12);
+  messageDesc(file_domain_treasury_disbursement_method_disbursement_method, 13);
 
 /**
  * @generated from message domain.treasury.v1.GetDisbursementMethodListPageDataRequest
@@ -405,7 +561,7 @@ export type GetDisbursementMethodListPageDataRequest = Message<"domain.treasury.
  * Use `create(GetDisbursementMethodListPageDataRequestSchema)` to create a new message.
  */
 export const GetDisbursementMethodListPageDataRequestSchema: GenMessage<GetDisbursementMethodListPageDataRequest> = /*@__PURE__*/
-  messageDesc(file_domain_treasury_disbursement_method_disbursement_method, 13);
+  messageDesc(file_domain_treasury_disbursement_method_disbursement_method, 14);
 
 /**
  * @generated from message domain.treasury.v1.GetDisbursementMethodListPageDataResponse
@@ -442,7 +598,7 @@ export type GetDisbursementMethodListPageDataResponse = Message<"domain.treasury
  * Use `create(GetDisbursementMethodListPageDataResponseSchema)` to create a new message.
  */
 export const GetDisbursementMethodListPageDataResponseSchema: GenMessage<GetDisbursementMethodListPageDataResponse> = /*@__PURE__*/
-  messageDesc(file_domain_treasury_disbursement_method_disbursement_method, 14);
+  messageDesc(file_domain_treasury_disbursement_method_disbursement_method, 15);
 
 /**
  * @generated from message domain.treasury.v1.GetDisbursementMethodItemPageDataRequest
@@ -459,7 +615,7 @@ export type GetDisbursementMethodItemPageDataRequest = Message<"domain.treasury.
  * Use `create(GetDisbursementMethodItemPageDataRequestSchema)` to create a new message.
  */
 export const GetDisbursementMethodItemPageDataRequestSchema: GenMessage<GetDisbursementMethodItemPageDataRequest> = /*@__PURE__*/
-  messageDesc(file_domain_treasury_disbursement_method_disbursement_method, 15);
+  messageDesc(file_domain_treasury_disbursement_method_disbursement_method, 16);
 
 /**
  * @generated from message domain.treasury.v1.GetDisbursementMethodItemPageDataResponse
@@ -486,7 +642,221 @@ export type GetDisbursementMethodItemPageDataResponse = Message<"domain.treasury
  * Use `create(GetDisbursementMethodItemPageDataResponseSchema)` to create a new message.
  */
 export const GetDisbursementMethodItemPageDataResponseSchema: GenMessage<GetDisbursementMethodItemPageDataResponse> = /*@__PURE__*/
-  messageDesc(file_domain_treasury_disbursement_method_disbursement_method, 16);
+  messageDesc(file_domain_treasury_disbursement_method_disbursement_method, 17);
+
+/**
+ * DisbursementMethodPostingKind determines how disbursements through this method
+ * post to the ledger.
+ *
+ * @generated from enum domain.treasury.v1.DisbursementMethodPostingKind
+ */
+export enum DisbursementMethodPostingKind {
+  /**
+   * @generated from enum value: DISBURSEMENT_METHOD_POSTING_KIND_UNSPECIFIED = 0;
+   */
+  UNSPECIFIED = 0,
+
+  /**
+   * @generated from enum value: DISBURSEMENT_METHOD_POSTING_KIND_CASH = 1;
+   */
+  CASH = 1,
+
+  /**
+   * @generated from enum value: DISBURSEMENT_METHOD_POSTING_KIND_ADVANCE_DRAWDOWN = 2;
+   */
+  ADVANCE_DRAWDOWN = 2,
+
+  /**
+   * @generated from enum value: DISBURSEMENT_METHOD_POSTING_KIND_CLAIM_AR = 3;
+   */
+  CLAIM_AR = 3,
+
+  /**
+   * @generated from enum value: DISBURSEMENT_METHOD_POSTING_KIND_DEFERRED_RECEIVABLE = 4;
+   */
+  DEFERRED_RECEIVABLE = 4,
+}
+
+/**
+ * Describes the enum domain.treasury.v1.DisbursementMethodPostingKind.
+ */
+export const DisbursementMethodPostingKindSchema: GenEnum<DisbursementMethodPostingKind> = /*@__PURE__*/
+  enumDesc(file_domain_treasury_disbursement_method_disbursement_method, 0);
+
+/**
+ * DisbursementMethodCategory classifies the template's business intent.
+ *
+ * @generated from enum domain.treasury.v1.DisbursementMethodCategory
+ */
+export enum DisbursementMethodCategory {
+  /**
+   * @generated from enum value: DISBURSEMENT_METHOD_CATEGORY_UNSPECIFIED = 0;
+   */
+  UNSPECIFIED = 0,
+
+  /**
+   * @generated from enum value: DISBURSEMENT_METHOD_CATEGORY_STANDARD = 1;
+   */
+  STANDARD = 1,
+
+  /**
+   * @generated from enum value: DISBURSEMENT_METHOD_CATEGORY_VOUCHER = 2;
+   */
+  VOUCHER = 2,
+
+  /**
+   * @generated from enum value: DISBURSEMENT_METHOD_CATEGORY_ADVANCE = 3;
+   */
+  ADVANCE = 3,
+
+  /**
+   * @generated from enum value: DISBURSEMENT_METHOD_CATEGORY_CARD = 4;
+   */
+  CARD = 4,
+}
+
+/**
+ * Describes the enum domain.treasury.v1.DisbursementMethodCategory.
+ */
+export const DisbursementMethodCategorySchema: GenEnum<DisbursementMethodCategory> = /*@__PURE__*/
+  enumDesc(file_domain_treasury_disbursement_method_disbursement_method, 1);
+
+/**
+ * DisbursementMethodTaxEffectKind — REQUIRED + STRICT per Q3.
+ *
+ * @generated from enum domain.treasury.v1.DisbursementMethodTaxEffectKind
+ */
+export enum DisbursementMethodTaxEffectKind {
+  /**
+   * @generated from enum value: DISBURSEMENT_METHOD_TAX_EFFECT_KIND_UNSPECIFIED = 0;
+   */
+  UNSPECIFIED = 0,
+
+  /**
+   * @generated from enum value: DISBURSEMENT_METHOD_TAX_EFFECT_KIND_NONE = 1;
+   */
+  NONE = 1,
+
+  /**
+   * @generated from enum value: DISBURSEMENT_METHOD_TAX_EFFECT_KIND_INCLUSIVE = 2;
+   */
+  INCLUSIVE = 2,
+
+  /**
+   * @generated from enum value: DISBURSEMENT_METHOD_TAX_EFFECT_KIND_EXCLUSIVE = 3;
+   */
+  EXCLUSIVE = 3,
+}
+
+/**
+ * Describes the enum domain.treasury.v1.DisbursementMethodTaxEffectKind.
+ */
+export const DisbursementMethodTaxEffectKindSchema: GenEnum<DisbursementMethodTaxEffectKind> = /*@__PURE__*/
+  enumDesc(file_domain_treasury_disbursement_method_disbursement_method, 2);
+
+/**
+ * DisbursementMethodLifecycle — template publish lifecycle per Q7.
+ *
+ * @generated from enum domain.treasury.v1.DisbursementMethodLifecycle
+ */
+export enum DisbursementMethodLifecycle {
+  /**
+   * @generated from enum value: DISBURSEMENT_METHOD_LIFECYCLE_UNSPECIFIED = 0;
+   */
+  UNSPECIFIED = 0,
+
+  /**
+   * @generated from enum value: DISBURSEMENT_METHOD_LIFECYCLE_DRAFT = 1;
+   */
+  DRAFT = 1,
+
+  /**
+   * @generated from enum value: DISBURSEMENT_METHOD_LIFECYCLE_ACTIVE = 2;
+   */
+  ACTIVE = 2,
+
+  /**
+   * @generated from enum value: DISBURSEMENT_METHOD_LIFECYCLE_CLOSED = 3;
+   */
+  CLOSED = 3,
+
+  /**
+   * @generated from enum value: DISBURSEMENT_METHOD_LIFECYCLE_ARCHIVED = 4;
+   */
+  ARCHIVED = 4,
+}
+
+/**
+ * Describes the enum domain.treasury.v1.DisbursementMethodLifecycle.
+ */
+export const DisbursementMethodLifecycleSchema: GenEnum<DisbursementMethodLifecycle> = /*@__PURE__*/
+  enumDesc(file_domain_treasury_disbursement_method_disbursement_method, 3);
+
+/**
+ * DisbursementMethodSource — where the template originated.
+ *
+ * @generated from enum domain.treasury.v1.DisbursementMethodSource
+ */
+export enum DisbursementMethodSource {
+  /**
+   * @generated from enum value: DISBURSEMENT_METHOD_SOURCE_UNSPECIFIED = 0;
+   */
+  UNSPECIFIED = 0,
+
+  /**
+   * @generated from enum value: DISBURSEMENT_METHOD_SOURCE_SYSTEM = 1;
+   */
+  SYSTEM = 1,
+
+  /**
+   * @generated from enum value: DISBURSEMENT_METHOD_SOURCE_WORKSPACE = 2;
+   */
+  WORKSPACE = 2,
+
+  /**
+   * @generated from enum value: DISBURSEMENT_METHOD_SOURCE_VENDOR_TEMPLATE = 3;
+   */
+  VENDOR_TEMPLATE = 3,
+}
+
+/**
+ * Describes the enum domain.treasury.v1.DisbursementMethodSource.
+ */
+export const DisbursementMethodSourceSchema: GenEnum<DisbursementMethodSource> = /*@__PURE__*/
+  enumDesc(file_domain_treasury_disbursement_method_disbursement_method, 4);
+
+/**
+ * DisbursementMethodVersionStatus — revision status within a template_code lineage.
+ *
+ * @generated from enum domain.treasury.v1.DisbursementMethodVersionStatus
+ */
+export enum DisbursementMethodVersionStatus {
+  /**
+   * @generated from enum value: DISBURSEMENT_METHOD_VERSION_STATUS_UNSPECIFIED = 0;
+   */
+  UNSPECIFIED = 0,
+
+  /**
+   * @generated from enum value: DISBURSEMENT_METHOD_VERSION_STATUS_DRAFT = 1;
+   */
+  DRAFT = 1,
+
+  /**
+   * @generated from enum value: DISBURSEMENT_METHOD_VERSION_STATUS_PUBLISHED = 2;
+   */
+  PUBLISHED = 2,
+
+  /**
+   * @generated from enum value: DISBURSEMENT_METHOD_VERSION_STATUS_SUPERSEDED = 3;
+   */
+  SUPERSEDED = 3,
+}
+
+/**
+ * Describes the enum domain.treasury.v1.DisbursementMethodVersionStatus.
+ */
+export const DisbursementMethodVersionStatusSchema: GenEnum<DisbursementMethodVersionStatus> = /*@__PURE__*/
+  enumDesc(file_domain_treasury_disbursement_method_disbursement_method, 5);
 
 /**
  * @generated from service domain.treasury.v1.DisbursementMethodDomainService

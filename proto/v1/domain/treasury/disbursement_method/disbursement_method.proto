@@ -9,8 +9,65 @@ import "domain/common/pagination.proto";
 import "domain/common/filter.proto";
 import "domain/common/sort.proto";
 import "domain/common/search.proto";
+import "domain/common/advance_kind/advance_kind.proto";
+
+// ----- Stage 1 template-level enums (treasury-domain-rebuild §E-2, mirror of §E-1) -----
+// NOTE: DM has NO audience_mode (D-4.9: buying-side has no audience grant model in v1).
+
+// DisbursementMethodPostingKind determines how disbursements through this method
+// post to the ledger.
+enum DisbursementMethodPostingKind {
+  DISBURSEMENT_METHOD_POSTING_KIND_UNSPECIFIED         = 0;
+  DISBURSEMENT_METHOD_POSTING_KIND_CASH                = 1;
+  DISBURSEMENT_METHOD_POSTING_KIND_ADVANCE_DRAWDOWN    = 2;
+  DISBURSEMENT_METHOD_POSTING_KIND_CLAIM_AR            = 3;
+  DISBURSEMENT_METHOD_POSTING_KIND_DEFERRED_RECEIVABLE = 4;
+}
+
+// DisbursementMethodCategory classifies the template's business intent.
+enum DisbursementMethodCategory {
+  DISBURSEMENT_METHOD_CATEGORY_UNSPECIFIED = 0;
+  DISBURSEMENT_METHOD_CATEGORY_STANDARD    = 1;
+  DISBURSEMENT_METHOD_CATEGORY_VOUCHER     = 2;
+  DISBURSEMENT_METHOD_CATEGORY_ADVANCE     = 3;
+  DISBURSEMENT_METHOD_CATEGORY_CARD        = 4;
+}
+
+// DisbursementMethodTaxEffectKind — REQUIRED + STRICT per Q3.
+enum DisbursementMethodTaxEffectKind {
+  DISBURSEMENT_METHOD_TAX_EFFECT_KIND_UNSPECIFIED = 0;
+  DISBURSEMENT_METHOD_TAX_EFFECT_KIND_NONE        = 1;
+  DISBURSEMENT_METHOD_TAX_EFFECT_KIND_INCLUSIVE   = 2;
+  DISBURSEMENT_METHOD_TAX_EFFECT_KIND_EXCLUSIVE   = 3;
+}
+
+// DisbursementMethodLifecycle — template publish lifecycle per Q7.
+enum DisbursementMethodLifecycle {
+  DISBURSEMENT_METHOD_LIFECYCLE_UNSPECIFIED = 0;
+  DISBURSEMENT_METHOD_LIFECYCLE_DRAFT       = 1;
+  DISBURSEMENT_METHOD_LIFECYCLE_ACTIVE      = 2;
+  DISBURSEMENT_METHOD_LIFECYCLE_CLOSED      = 3;
+  DISBURSEMENT_METHOD_LIFECYCLE_ARCHIVED    = 4;
+}
+
+// DisbursementMethodSource — where the template originated.
+enum DisbursementMethodSource {
+  DISBURSEMENT_METHOD_SOURCE_UNSPECIFIED     = 0;
+  DISBURSEMENT_METHOD_SOURCE_SYSTEM          = 1;
+  DISBURSEMENT_METHOD_SOURCE_WORKSPACE       = 2;
+  DISBURSEMENT_METHOD_SOURCE_VENDOR_TEMPLATE = 3;
+}
+
+// DisbursementMethodVersionStatus — revision status within a template_code lineage.
+enum DisbursementMethodVersionStatus {
+  DISBURSEMENT_METHOD_VERSION_STATUS_UNSPECIFIED = 0;
+  DISBURSEMENT_METHOD_VERSION_STATUS_DRAFT       = 1;
+  DISBURSEMENT_METHOD_VERSION_STATUS_PUBLISHED   = 2;
+  DISBURSEMENT_METHOD_VERSION_STATUS_SUPERSEDED  = 3;
+}
 
 message DisbursementMethod {
+  // ----- existing (UNCHANGED — additive only) -----
   string id = 1;
   optional int64 date_created = 2;
   optional string date_created_string = 3;
@@ -23,6 +80,27 @@ message DisbursementMethod {
     DisbursementBankAccountDetails bank_account = 9;
   }
   optional string provider_name = 10;
+
+  // ----- NEW Stage 1 template-level config (mirror of CM minus audience_mode) -----
+  string workspace_id = 11;                                       // FK to workspace
+  DisbursementMethodPostingKind posting_kind = 12;                // CASH / ADVANCE_DRAWDOWN / CLAIM_AR / DEFERRED_RECEIVABLE
+  DisbursementMethodCategory category = 13;                       // STANDARD / VOUCHER / ADVANCE / CARD
+  // field 14 intentionally skipped — CM uses 14 for audience_mode; DM has none (D-4.9)
+  DisbursementMethodTaxEffectKind tax_effect_kind = 15;           // REQUIRED + STRICT per Q3
+  optional string default_eligibility_rule_id = 16;               // FK; likely NULL for v1 (DM has no eligibility rule)
+  optional string balance_account_id = 17;                        // GL default
+  optional string target_account_id = 18;                         // GL default
+  DisbursementMethodLifecycle lifecycle = 19;                     // DRAFT / ACTIVE / CLOSED / ARCHIVED per Q7
+  DisbursementMethodSource source = 20;                           // SYSTEM / WORKSPACE / VENDOR_TEMPLATE
+  string template_code = 21;                                      // for versioning
+  int32 revision = 22;
+  DisbursementMethodVersionStatus version_status = 23;
+  optional string supersedes_disbursement_method_id = 24;         // FK to predecessor revision
+
+  // ----- NEW Stage 1 template-level detail config -----
+  oneof template_details {
+    DisbursementMethodAdvanceProgramDetails advance_program = 32; // template: advance_kind, default schedule shape, GL defaults
+  }
 }
 
 message DisbursementCardDetails {
@@ -35,6 +113,15 @@ message DisbursementCardDetails {
 message DisbursementBankAccountDetails {
   string bank_name = 1;
   string last_four_digits = 2;
+}
+
+message DisbursementMethodAdvanceProgramDetails {
+  domain.common.v1.AdvanceKind advance_kind = 1;                  // TIME_BASED / MILESTONE / UNSCHEDULED (BURN_DOWN reserved v2)
+  optional string default_balance_account_id = 2;
+  optional string default_target_account_id = 3;
+  optional int32 default_period_count = 4;                        // schedule default for TIME_BASED
+  optional string default_period_unit = 5;
+  optional domain.common.v1.AdvanceProrationPolicy default_proration_policy = 6;
 }
 
 service DisbursementMethodDomainService {
