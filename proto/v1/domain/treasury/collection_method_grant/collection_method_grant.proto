@@ -1,0 +1,168 @@
+syntax = "proto3";
+
+package domain.treasury.v1;
+
+option go_package = "github.com/erniealice/esqyma/golang/v1/domain/treasury/collection_method_grant";
+
+import "domain/common/error.proto";
+import "domain/common/pagination.proto";
+import "domain/common/filter.proto";
+import "domain/common/sort.proto";
+import "domain/common/search.proto";
+
+// ----- Stage 3 grant enums (treasury-domain-rebuild §E-4) -----
+//
+// CONFIG-only entity (Q6 LOCKED): a CollectionMethodGrant records that an
+// audience subject (a client) is ELIGIBLE to transact through a CollectionMethod
+// TEMPLATE. It is never an EVENT — it carries NO usage_count, NO last_used_at,
+// NO redemption_count, and NO event-shaped counter of any kind. Usage events live
+// on treasury_collection / revenue, never here. Grants do not mutate: the only
+// state change is ACTIVE → REVOKED (there is NO Update RPC).
+
+// CollectionMethodGrantSubject — the kind of audience subject a grant targets.
+// v1 supports CLIENT only (SEGMENT reserved v2, alongside CM audience_mode
+// SEGMENT_SCOPED).
+enum CollectionMethodGrantSubject {
+  COLLECTION_METHOD_GRANT_SUBJECT_UNSPECIFIED = 0;
+  COLLECTION_METHOD_GRANT_SUBJECT_CLIENT      = 1;
+  // COLLECTION_METHOD_GRANT_SUBJECT_SEGMENT reserved v2 (declared, not enabled).
+  COLLECTION_METHOD_GRANT_SUBJECT_SEGMENT     = 2;
+}
+
+// CollectionMethodGrantStatus — grant lifecycle. Grants do not mutate; the only
+// transition is ACTIVE → REVOKED (handled by the Revoke RPC, never Update).
+enum CollectionMethodGrantStatus {
+  COLLECTION_METHOD_GRANT_STATUS_UNSPECIFIED = 0;
+  COLLECTION_METHOD_GRANT_STATUS_ACTIVE      = 1;
+  COLLECTION_METHOD_GRANT_STATUS_REVOKED     = 2;
+}
+
+// CollectionMethodGrant — audience-eligibility CONFIG row binding a client to a
+// CollectionMethod TEMPLATE (never an instance). Per §E-4. The audience-mode
+// guardrail (espyna _validate_audience_mode_guardrail.go) validates the count of
+// ACTIVE grants for a method against the method's audience_mode at grant/issuance
+// time: OPEN allows zero, RESTRICTED requires >=1, SINGLE_CLIENT requires exactly 1.
+//
+// Q6: NO event-shaped fields permitted. The field set below is exhaustive — there
+// is intentionally no usage_count / last_used_at / redemption_count.
+message CollectionMethodGrant {
+  string id = 1;
+  optional int64 date_created = 2;
+  optional string date_created_string = 3;
+  optional int64 date_modified = 4;
+  optional string date_modified_string = 5;
+  bool active = 6;
+  string workspace_id = 7;                                          // FK to workspace
+
+  string collection_method_id = 10;                                 // FK to the CollectionMethod TEMPLATE (never an instance)
+  CollectionMethodGrantSubject subject = 11;                        // CLIENT audience scope (SEGMENT reserved v2)
+  string client_id = 12;                                            // FK to entydad client; required if subject=CLIENT
+
+  CollectionMethodGrantStatus status = 20;                          // ACTIVE / REVOKED
+  optional string granted_by_user_id = 21;
+  optional string revoked_by_user_id = 22;
+  optional string revoke_reason = 23;
+}
+
+service CollectionMethodGrantDomainService {
+  // CONFIG lifecycle: create / revoke / list / bulk-grant. There is deliberately
+  // NO Update RPC — grants do not mutate; the only state change is ACTIVE → REVOKED.
+  rpc CreateCollectionMethodGrant(CreateCollectionMethodGrantRequest)
+    returns (CreateCollectionMethodGrantResponse);
+  rpc ReadCollectionMethodGrant(ReadCollectionMethodGrantRequest)
+    returns (ReadCollectionMethodGrantResponse);
+  rpc RevokeCollectionMethodGrant(RevokeCollectionMethodGrantRequest)
+    returns (RevokeCollectionMethodGrantResponse);
+  rpc ListCollectionMethodGrants(ListCollectionMethodGrantsRequest)
+    returns (ListCollectionMethodGrantsResponse);
+  rpc BulkGrantCollectionMethodGrants(BulkGrantCollectionMethodGrantsRequest)
+    returns (BulkGrantCollectionMethodGrantsResponse);
+  rpc GetCollectionMethodGrantListPageData(GetCollectionMethodGrantListPageDataRequest)
+    returns (GetCollectionMethodGrantListPageDataResponse);
+  rpc GetCollectionMethodGrantItemPageData(GetCollectionMethodGrantItemPageDataRequest)
+    returns (GetCollectionMethodGrantItemPageDataResponse);
+}
+
+message CreateCollectionMethodGrantRequest {
+  CollectionMethodGrant data = 1;
+}
+
+message CreateCollectionMethodGrantResponse {
+  repeated CollectionMethodGrant data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message ReadCollectionMethodGrantRequest {
+  CollectionMethodGrant data = 1;
+}
+
+message ReadCollectionMethodGrantResponse {
+  repeated CollectionMethodGrant data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+// RevokeCollectionMethodGrant flips status ACTIVE → REVOKED on an existing grant.
+// data.id identifies the grant; revoked_by_user_id + revoke_reason are optional
+// audit fields. This is the ONLY mutation a grant ever undergoes.
+message RevokeCollectionMethodGrantRequest {
+  CollectionMethodGrant data = 1;
+}
+
+message RevokeCollectionMethodGrantResponse {
+  repeated CollectionMethodGrant data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message ListCollectionMethodGrantsRequest {
+  optional domain.common.v1.SearchRequest search = 1;
+  optional domain.common.v1.FilterRequest filters = 2;
+  optional domain.common.v1.SortRequest sort = 3;
+  optional domain.common.v1.PaginationRequest pagination = 4;
+}
+
+message ListCollectionMethodGrantsResponse {
+  repeated CollectionMethodGrant data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+// BulkGrantCollectionMethodGrants creates many grants in one call (one CM template,
+// many clients). The audience-mode guardrail is evaluated once against the final
+// ACTIVE grant count for the method.
+message BulkGrantCollectionMethodGrantsRequest {
+  repeated CollectionMethodGrant data = 1;
+}
+
+message BulkGrantCollectionMethodGrantsResponse {
+  repeated CollectionMethodGrant data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message GetCollectionMethodGrantListPageDataRequest {
+  optional domain.common.v1.PaginationRequest pagination = 1;
+  optional domain.common.v1.FilterRequest filters = 2;
+  optional domain.common.v1.SortRequest sort = 3;
+  optional domain.common.v1.SearchRequest search = 4;
+}
+
+message GetCollectionMethodGrantListPageDataResponse {
+  repeated CollectionMethodGrant collection_method_grant_list = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+  optional domain.common.v1.PaginationResponse pagination = 4;
+  repeated domain.common.v1.SearchResult search_results = 5;
+}
+
+message GetCollectionMethodGrantItemPageDataRequest {
+  string collection_method_grant_id = 1;
+}
+
+message GetCollectionMethodGrantItemPageDataResponse {
+  optional CollectionMethodGrant collection_method_grant = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
