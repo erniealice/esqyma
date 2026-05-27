@@ -1,0 +1,172 @@
+syntax = "proto3";
+
+package domain.treasury.v1;
+
+option go_package = "github.com/erniealice/esqyma/golang/v1/domain/treasury/collection_method_eligibility_rule";
+
+import "domain/common/error.proto";
+import "domain/common/pagination.proto";
+import "domain/common/filter.proto";
+import "domain/common/sort.proto";
+import "domain/common/search.proto";
+
+// ----- Stage 2 eligibility-rule enums (treasury-domain-rebuild §E-3) -----
+
+// CollectionMethodEligibilityRuleBearerMode — the bearer-mode DEFAULT the rule
+// stamps onto an issued instance (snapshot lineage §E-19). BEARER is reserved v2.
+enum CollectionMethodEligibilityRuleBearerMode {
+  COLLECTION_METHOD_ELIGIBILITY_RULE_BEARER_MODE_UNSPECIFIED          = 0;
+  COLLECTION_METHOD_ELIGIBILITY_RULE_BEARER_MODE_HOLDER_BOUND         = 1;
+  COLLECTION_METHOD_ELIGIBILITY_RULE_BEARER_MODE_HOLDER_TRANSFERABLE  = 2;
+  // BEARER reserved v2 (declared, not enabled).
+  COLLECTION_METHOD_ELIGIBILITY_RULE_BEARER_MODE_BEARER              = 3;
+}
+
+// CollectionMethodEligibilityRuleStackingPolicy — how this rule's instruments
+// combine with others at redemption time.
+enum CollectionMethodEligibilityRuleStackingPolicy {
+  COLLECTION_METHOD_ELIGIBILITY_RULE_STACKING_POLICY_UNSPECIFIED = 0;
+  COLLECTION_METHOD_ELIGIBILITY_RULE_STACKING_POLICY_EXCLUSIVE   = 1;
+  COLLECTION_METHOD_ELIGIBILITY_RULE_STACKING_POLICY_STACKABLE   = 2;
+  COLLECTION_METHOD_ELIGIBILITY_RULE_STACKING_POLICY_FIRST_ONLY  = 3;
+}
+
+// CollectionMethodEligibilityRule — rule policy referenced by a CollectionMethod
+// template via default_eligibility_rule_id. Carries the bearer-mode default,
+// temporal/amount/product scope, stacking + jurisdiction, redemption limits, and
+// terms. Renamed from CommerceEligibilityRule per D-1.18. Fields are SNAPSHOTTED
+// onto voucher/advance instances at issuance (§E-19); modifying the rule later
+// does not affect already-issued instances.
+message CollectionMethodEligibilityRule {
+  string id = 1;
+  optional int64 date_created = 2;
+  optional string date_created_string = 3;
+  optional int64 date_modified = 4;
+  optional string date_modified_string = 5;
+  bool active = 6;
+  string workspace_id = 7;                                          // FK to workspace
+  string name = 8;
+
+  // ----- Bearer mode default -----
+  CollectionMethodEligibilityRuleBearerMode bearer_mode = 10;       // HOLDER_BOUND / HOLDER_TRANSFERABLE (BEARER reserved v2)
+
+  // ----- Temporal scope -----
+  optional string valid_from_date = 20;
+  optional string valid_until_date = 21;
+  optional int32 expiry_days_after_issuance = 22;                   // alternative to valid_until_date for relative expiry
+
+  // ----- Amount scope -----
+  optional int64 min_amount_centavos = 30;
+  optional int64 max_amount_centavos = 31;
+
+  // ----- Product / category scope -----
+  repeated string applicable_product_ids = 40;                      // empty = all
+  repeated string applicable_category_ids = 41;
+  // (B3 deferred: client_segment_id NOT included v1)
+
+  // ----- Stacking + jurisdiction -----
+  CollectionMethodEligibilityRuleStackingPolicy stacking_policy = 50; // EXCLUSIVE / STACKABLE / FIRST_ONLY
+  optional string jurisdiction_code = 51;                           // ISO 3166-2 (e.g., "PH", "US-CA")
+
+  // ----- Redemption limits -----
+  optional int32 max_redemptions_per_instance = 60;                 // null = unlimited
+  optional int32 max_redemptions_per_client = 61;
+
+  // ----- Terms -----
+  optional string terms_url = 70;
+  optional string terms_summary = 71;
+}
+
+service CollectionMethodEligibilityRuleDomainService {
+  rpc CreateCollectionMethodEligibilityRule(CreateCollectionMethodEligibilityRuleRequest)
+    returns (CreateCollectionMethodEligibilityRuleResponse);
+  rpc ReadCollectionMethodEligibilityRule(ReadCollectionMethodEligibilityRuleRequest)
+    returns (ReadCollectionMethodEligibilityRuleResponse);
+  rpc UpdateCollectionMethodEligibilityRule(UpdateCollectionMethodEligibilityRuleRequest)
+    returns (UpdateCollectionMethodEligibilityRuleResponse);
+  rpc DeleteCollectionMethodEligibilityRule(DeleteCollectionMethodEligibilityRuleRequest)
+    returns (DeleteCollectionMethodEligibilityRuleResponse);
+  rpc ListCollectionMethodEligibilityRules(ListCollectionMethodEligibilityRulesRequest)
+    returns (ListCollectionMethodEligibilityRulesResponse);
+  rpc GetCollectionMethodEligibilityRuleListPageData(GetCollectionMethodEligibilityRuleListPageDataRequest)
+    returns (GetCollectionMethodEligibilityRuleListPageDataResponse);
+  rpc GetCollectionMethodEligibilityRuleItemPageData(GetCollectionMethodEligibilityRuleItemPageDataRequest)
+    returns (GetCollectionMethodEligibilityRuleItemPageDataResponse);
+}
+
+message CreateCollectionMethodEligibilityRuleRequest {
+  CollectionMethodEligibilityRule data = 1;
+}
+
+message CreateCollectionMethodEligibilityRuleResponse {
+  repeated CollectionMethodEligibilityRule data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message ReadCollectionMethodEligibilityRuleRequest {
+  CollectionMethodEligibilityRule data = 1;
+}
+
+message ReadCollectionMethodEligibilityRuleResponse {
+  repeated CollectionMethodEligibilityRule data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message UpdateCollectionMethodEligibilityRuleRequest {
+  CollectionMethodEligibilityRule data = 1;
+}
+
+message UpdateCollectionMethodEligibilityRuleResponse {
+  repeated CollectionMethodEligibilityRule data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message DeleteCollectionMethodEligibilityRuleRequest {
+  CollectionMethodEligibilityRule data = 1;
+}
+
+message DeleteCollectionMethodEligibilityRuleResponse {
+  bool success = 1;
+  optional domain.common.v1.Error error = 2;
+}
+
+message ListCollectionMethodEligibilityRulesRequest {
+  optional domain.common.v1.SearchRequest search = 1;
+  optional domain.common.v1.FilterRequest filters = 2;
+  optional domain.common.v1.SortRequest sort = 3;
+  optional domain.common.v1.PaginationRequest pagination = 4;
+}
+
+message ListCollectionMethodEligibilityRulesResponse {
+  repeated CollectionMethodEligibilityRule data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message GetCollectionMethodEligibilityRuleListPageDataRequest {
+  optional domain.common.v1.PaginationRequest pagination = 1;
+  optional domain.common.v1.FilterRequest filters = 2;
+  optional domain.common.v1.SortRequest sort = 3;
+  optional domain.common.v1.SearchRequest search = 4;
+}
+
+message GetCollectionMethodEligibilityRuleListPageDataResponse {
+  repeated CollectionMethodEligibilityRule collection_method_eligibility_rule_list = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+  optional domain.common.v1.PaginationResponse pagination = 4;
+  repeated domain.common.v1.SearchResult search_results = 5;
+}
+
+message GetCollectionMethodEligibilityRuleItemPageDataRequest {
+  string collection_method_eligibility_rule_id = 1;
+}
+
+message GetCollectionMethodEligibilityRuleItemPageDataResponse {
+  optional CollectionMethodEligibilityRule collection_method_eligibility_rule = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
