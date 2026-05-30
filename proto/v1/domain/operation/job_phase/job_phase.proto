@@ -29,9 +29,9 @@ message JobPhase {
 
   string id = 1;
   optional int64 date_created = 2;
-  optional string date_created_string = 3;
+  optional string date_created_string = 3 [(options.v1.db).ignore = true];
   optional int64 date_modified = 4;
-  optional string date_modified_string = 5;
+  optional string date_modified_string = 5 [(options.v1.db).ignore = true];
   bool active = 6;
   string job_id = 7 [(options.v1.db).references = "job", (options.v1.db).index = true];
   optional Job job = 8;
@@ -41,13 +41,13 @@ message JobPhase {
   optional string template_phase_id = 12 [(options.v1.db).references = "job_template_phase", (options.v1.db).index = true];
   optional string resource_id = 13 [(options.v1.db).references = "resource", (options.v1.db).index = true];
   optional int64 planned_start = 14;
-  optional string planned_start_string = 15;
+  optional string planned_start_string = 15 [(options.v1.db).ignore = true];
   optional int64 planned_end = 16;
-  optional string planned_end_string = 17;
+  optional string planned_end_string = 17 [(options.v1.db).ignore = true];
   optional int64 actual_start = 18;
-  optional string actual_start_string = 19;
+  optional string actual_start_string = 19 [(options.v1.db).ignore = true];
   optional int64 actual_end = 20;
-  optional string actual_end_string = 21;
+  optional string actual_end_string = 21 [(options.v1.db).ignore = true];
   optional int32 setup_minutes = 22;
   optional double run_minutes_per_unit = 23;
   optional string predecessor_phase_id = 24 [(options.v1.db).references = "job_phase"];

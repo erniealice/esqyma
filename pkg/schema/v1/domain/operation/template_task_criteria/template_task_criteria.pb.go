@@ -1154,7 +1154,7 @@ var File_domain_operation_template_task_criteria_template_task_criteria_proto pr
 
 const file_domain_operation_template_task_criteria_template_task_criteria_proto_rawDesc = "" +
 	"\n" +
-	"Ddomain/operation/template_task_criteria/template_task_criteria.proto\x12\x13domain.operation.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1adomain/common/search.proto\x1a\"domain/operation/enums/enums.proto\x1a8domain/operation/outcome_criteria/outcome_criteria.proto\x1a:domain/operation/job_template_task/job_template_task.proto\x1a\x10options/db.proto\"\x84\a\n" +
+	"Ddomain/operation/template_task_criteria/template_task_criteria.proto\x12\x13domain.operation.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1adomain/common/search.proto\x1a\"domain/operation/enums/enums.proto\x1a8domain/operation/outcome_criteria/outcome_criteria.proto\x1a:domain/operation/job_template_task/job_template_task.proto\x1a\x10options/db.proto\"\x8c\a\n" +
 	"\x14TemplateTaskCriteria\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12J\n" +
 	"\x14job_template_task_id\x18\x02 \x01(\tB\x19\x82\xb5\x18\x15\n" +
@@ -1170,8 +1170,8 @@ const file_domain_operation_template_task_criteria_template_task_criteria_proto_
 	"\x06active\x18\n" +
 	" \x01(\bB\n" +
 	"\x82\xb5\x18\x06\"\x04trueR\x06active\x12&\n" +
-	"\fdate_created\x18\v \x01(\x03H\x05R\vdateCreated\x88\x01\x01\x123\n" +
-	"\x13date_created_string\x18\f \x01(\tH\x06R\x11dateCreatedString\x88\x01\x01:\x06\x8a\xb5\x18\x02\b\x01B\x14\n" +
+	"\fdate_created\x18\v \x01(\x03H\x05R\vdateCreated\x88\x01\x01\x12;\n" +
+	"\x13date_created_string\x18\f \x01(\tB\x06\x82\xb5\x18\x028\x01H\x06R\x11dateCreatedString\x88\x01\x01:\x06\x8a\xb5\x18\x02\b\x01B\x14\n" +
 	"\x12_job_template_taskB\x13\n" +
 	"\x11_outcome_criteriaB\x14\n" +
 	"\x12_required_overrideB\x12\n" +

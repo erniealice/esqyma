@@ -964,15 +964,15 @@ var File_domain_entity_location_location_proto protoreflect.FileDescriptor
 
 const file_domain_entity_location_location_proto_rawDesc = "" +
 	"\n" +
-	"%domain/entity/location/location.proto\x12\x10domain.entity.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1adomain/common/search.proto\x1a\x10options/db.proto\"\xa5\x05\n" +
+	"%domain/entity/location/location.proto\x12\x10domain.entity.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1adomain/common/search.proto\x1a\x10options/db.proto\"\xb5\x05\n" +
 	"\bLocation\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12\x12\n" +
 	"\x04name\x18\x02 \x01(\tR\x04name\x12\x18\n" +
 	"\aaddress\x18\x03 \x01(\tR\aaddress\x12&\n" +
-	"\fdate_created\x18\x04 \x01(\x03H\x00R\vdateCreated\x88\x01\x01\x123\n" +
-	"\x13date_created_string\x18\x05 \x01(\tH\x01R\x11dateCreatedString\x88\x01\x01\x12(\n" +
-	"\rdate_modified\x18\x06 \x01(\x03H\x02R\fdateModified\x88\x01\x01\x125\n" +
-	"\x14date_modified_string\x18\a \x01(\tH\x03R\x12dateModifiedString\x88\x01\x01\x12\"\n" +
+	"\fdate_created\x18\x04 \x01(\x03H\x00R\vdateCreated\x88\x01\x01\x12;\n" +
+	"\x13date_created_string\x18\x05 \x01(\tB\x06\x82\xb5\x18\x028\x01H\x01R\x11dateCreatedString\x88\x01\x01\x12(\n" +
+	"\rdate_modified\x18\x06 \x01(\x03H\x02R\fdateModified\x88\x01\x01\x12=\n" +
+	"\x14date_modified_string\x18\a \x01(\tB\x06\x82\xb5\x18\x028\x01H\x03R\x12dateModifiedString\x88\x01\x01\x12\"\n" +
 	"\x06active\x18\b \x01(\bB\n" +
 	"\x82\xb5\x18\x06\"\x04trueR\x06active\x12%\n" +
 	"\vdescription\x18\t \x01(\tH\x04R\vdescription\x88\x01\x01\x122\n" +

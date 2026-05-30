@@ -1173,7 +1173,7 @@ var File_domain_procurement_cost_plan_cost_plan_proto protoreflect.FileDescripto
 
 const file_domain_procurement_cost_plan_cost_plan_proto_rawDesc = "" +
 	"\n" +
-	",domain/procurement/cost_plan/cost_plan.proto\x12\x15domain.procurement.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/search.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a4domain/procurement/supplier_plan/supplier_plan.proto\x1a4domain/procurement/cost_schedule/cost_schedule.proto\x1a\x10options/db.proto\"\xee\f\n" +
+	",domain/procurement/cost_plan/cost_plan.proto\x12\x15domain.procurement.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/search.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a4domain/procurement/supplier_plan/supplier_plan.proto\x1a4domain/procurement/cost_schedule/cost_schedule.proto\x1a\x10options/db.proto\"\xfe\f\n" +
 	"\bCostPlan\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12M\n" +
 	"\rsupplier_plan\x18\x02 \x01(\v2#.domain.procurement.v1.SupplierPlanH\x00R\fsupplierPlan\x88\x01\x01\x12?\n" +
@@ -1181,10 +1181,10 @@ const file_domain_procurement_cost_plan_cost_plan_proto_rawDesc = "" +
 	"\rsupplier_plan\x18\x01R\x0esupplierPlanId\x12\x17\n" +
 	"\x04name\x18\x04 \x01(\tH\x01R\x04name\x88\x01\x01\x12%\n" +
 	"\vdescription\x18\x05 \x01(\tH\x02R\vdescription\x88\x01\x01\x12&\n" +
-	"\fdate_created\x18\x06 \x01(\x03H\x03R\vdateCreated\x88\x01\x01\x123\n" +
-	"\x13date_created_string\x18\a \x01(\tH\x04R\x11dateCreatedString\x88\x01\x01\x12(\n" +
-	"\rdate_modified\x18\b \x01(\x03H\x05R\fdateModified\x88\x01\x01\x125\n" +
-	"\x14date_modified_string\x18\t \x01(\tH\x06R\x12dateModifiedString\x88\x01\x01\x12\"\n" +
+	"\fdate_created\x18\x06 \x01(\x03H\x03R\vdateCreated\x88\x01\x01\x12;\n" +
+	"\x13date_created_string\x18\a \x01(\tB\x06\x82\xb5\x18\x028\x01H\x04R\x11dateCreatedString\x88\x01\x01\x12(\n" +
+	"\rdate_modified\x18\b \x01(\x03H\x05R\fdateModified\x88\x01\x01\x12=\n" +
+	"\x14date_modified_string\x18\t \x01(\tB\x06\x82\xb5\x18\x028\x01H\x06R\x12dateModifiedString\x88\x01\x01\x12\"\n" +
 	"\x06active\x18\n" +
 	" \x01(\bB\n" +
 	"\x82\xb5\x18\x06\"\x04trueR\x06active\x12%\n" +

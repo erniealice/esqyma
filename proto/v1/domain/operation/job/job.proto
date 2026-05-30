@@ -23,9 +23,9 @@ message Job {
   // Identity
   string id = 1;
   optional int64 date_created = 2;
-  optional string date_created_string = 3;
+  optional string date_created_string = 3 [(options.v1.db).ignore = true];
   optional int64 date_modified = 4;
-  optional string date_modified_string = 5;
+  optional string date_modified_string = 5 [(options.v1.db).ignore = true];
   bool active = 6 [(options.v1.db).default = "true"];
   string name = 7;
   optional string job_template_id = 8 [(options.v1.db).references = "job_template", (options.v1.db).index = true];
@@ -66,17 +66,17 @@ message Job {
 
   // Dates
   optional int64 due_date = 30;
-  optional string due_date_string = 31;
+  optional string due_date_string = 31 [(options.v1.db).ignore = true];
   optional int64 release_date = 32;
-  optional string release_date_string = 33;
+  optional string release_date_string = 33 [(options.v1.db).ignore = true];
   optional int64 planned_start = 34;
-  optional string planned_start_string = 35;
+  optional string planned_start_string = 35 [(options.v1.db).ignore = true];
   optional int64 planned_end = 36;
-  optional string planned_end_string = 37;
+  optional string planned_end_string = 37 [(options.v1.db).ignore = true];
   optional int64 actual_start = 38;
-  optional string actual_start_string = 39;
+  optional string actual_start_string = 39 [(options.v1.db).ignore = true];
   optional int64 actual_end = 40;
-  optional string actual_end_string = 41;
+  optional string actual_end_string = 41 [(options.v1.db).ignore = true];
 
   // Scheduling
   optional int32 priority = 42;

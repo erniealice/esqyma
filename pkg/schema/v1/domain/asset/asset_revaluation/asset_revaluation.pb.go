@@ -1334,7 +1334,7 @@ var File_domain_asset_asset_revaluation_asset_revaluation_proto protoreflect.Fil
 
 const file_domain_asset_asset_revaluation_asset_revaluation_proto_rawDesc = "" +
 	"\n" +
-	"6domain/asset/asset_revaluation/asset_revaluation.proto\x12\x0fdomain.asset.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1adomain/common/search.proto\x1a\x10options/db.proto\"\xf0\a\n" +
+	"6domain/asset/asset_revaluation/asset_revaluation.proto\x12\x0fdomain.asset.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1adomain/common/search.proto\x1a\x10options/db.proto\"\x80\b\n" +
 	"\x10AssetRevaluation\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12(\n" +
 	"\basset_id\x18\x02 \x01(\tB\r\x82\xb5\x18\t\n" +
@@ -1353,10 +1353,10 @@ const file_domain_asset_asset_revaluation_asset_revaluation_proto_rawDesc = "" +
 	"\x10valuation_method\x18\r \x01(\tH\x01R\x0fvaluationMethod\x88\x01\x01\x12-\n" +
 	"\x10journal_entry_id\x18\x0e \x01(\tH\x02R\x0ejournalEntryId\x88\x01\x01\x12\x19\n" +
 	"\x05notes\x18\x0f \x01(\tH\x03R\x05notes\x88\x01\x01\x12&\n" +
-	"\fdate_created\x18\x10 \x01(\x03H\x04R\vdateCreated\x88\x01\x01\x123\n" +
-	"\x13date_created_string\x18\x11 \x01(\tH\x05R\x11dateCreatedString\x88\x01\x01\x12(\n" +
-	"\rdate_modified\x18\x12 \x01(\x03H\x06R\fdateModified\x88\x01\x01\x125\n" +
-	"\x14date_modified_string\x18\x13 \x01(\tH\aR\x12dateModifiedString\x88\x01\x01\x12\"\n" +
+	"\fdate_created\x18\x10 \x01(\x03H\x04R\vdateCreated\x88\x01\x01\x12;\n" +
+	"\x13date_created_string\x18\x11 \x01(\tB\x06\x82\xb5\x18\x028\x01H\x05R\x11dateCreatedString\x88\x01\x01\x12(\n" +
+	"\rdate_modified\x18\x12 \x01(\x03H\x06R\fdateModified\x88\x01\x01\x12=\n" +
+	"\x14date_modified_string\x18\x13 \x01(\tB\x06\x82\xb5\x18\x028\x01H\aR\x12dateModifiedString\x88\x01\x01\x12\"\n" +
 	"\x06active\x18\x14 \x01(\bB\n" +
 	"\x82\xb5\x18\x06\"\x04trueR\x06active:\x06\x8a\xb5\x18\x02\b\x01B\x11\n" +
 	"\x0f_appraiser_nameB\x13\n" +

@@ -58,7 +58,7 @@ message LicenseHistory {
 
   // Timestamps
   int64 date_created = 16;
-  string date_created_string = 17;
+  string date_created_string = 17 [(options.v1.db).ignore = true];
   bool active = 18 [(options.v1.db).default = "true"];
 }
 

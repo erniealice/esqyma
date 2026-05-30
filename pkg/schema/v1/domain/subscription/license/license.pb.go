@@ -2298,7 +2298,7 @@ const file_domain_subscription_license_license_proto_rawDesc = "" +
 	"\v_content_idB\x0e\n" +
 	"\f_usage_limitB\x0e\n" +
 	"\f_usage_countB\x0f\n" +
-	"\r_usage_period\"\xfa\r\n" +
+	"\r_usage_period\"\xa2\x0e\n" +
 	"\aLicense\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12=\n" +
 	"\x0fsubscription_id\x18\x02 \x01(\tB\x14\x82\xb5\x18\x10\n" +
@@ -2313,10 +2313,10 @@ const file_domain_subscription_license_license_proto_rawDesc = "" +
 	"\flicense_type\x18\b \x01(\x0e2#.domain.subscription.v1.LicenseTypeR\vlicenseType\x12=\n" +
 	"\x06status\x18\t \x01(\x0e2%.domain.subscription.v1.LicenseStatusR\x06status\x12+\n" +
 	"\x0fdate_valid_from\x18\n" +
-	" \x01(\x03H\x03R\rdateValidFrom\x88\x01\x01\x128\n" +
-	"\x16date_valid_from_string\x18\v \x01(\tH\x04R\x13dateValidFromString\x88\x01\x01\x12-\n" +
-	"\x10date_valid_until\x18\f \x01(\x03H\x05R\x0edateValidUntil\x88\x01\x01\x12:\n" +
-	"\x17date_valid_until_string\x18\r \x01(\tH\x06R\x14dateValidUntilString\x88\x01\x01\x12$\n" +
+	" \x01(\x03H\x03R\rdateValidFrom\x88\x01\x01\x12@\n" +
+	"\x16date_valid_from_string\x18\v \x01(\tB\x06\x82\xb5\x18\x028\x01H\x04R\x13dateValidFromString\x88\x01\x01\x12-\n" +
+	"\x10date_valid_until\x18\f \x01(\x03H\x05R\x0edateValidUntil\x88\x01\x01\x12B\n" +
+	"\x17date_valid_until_string\x18\r \x01(\tB\x06\x82\xb5\x18\x028\x01H\x06R\x14dateValidUntilString\x88\x01\x01\x12$\n" +
 	"\vassignee_id\x18\x0e \x01(\tH\aR\n" +
 	"assigneeId\x88\x01\x01\x12(\n" +
 	"\rassignee_type\x18\x0f \x01(\tH\bR\fassigneeType\x88\x01\x01\x12(\n" +
@@ -2324,15 +2324,15 @@ const file_domain_subscription_license_license_proto_rawDesc = "" +
 	"\vassigned_by\x18\x11 \x01(\tH\n" +
 	"R\n" +
 	"assignedBy\x88\x01\x01\x12(\n" +
-	"\rdate_assigned\x18\x12 \x01(\x03H\vR\fdateAssigned\x88\x01\x01\x125\n" +
-	"\x14date_assigned_string\x18\x13 \x01(\tH\fR\x12dateAssignedString\x88\x01\x01\x12,\n" +
+	"\rdate_assigned\x18\x12 \x01(\x03H\vR\fdateAssigned\x88\x01\x01\x12=\n" +
+	"\x14date_assigned_string\x18\x13 \x01(\tB\x06\x82\xb5\x18\x028\x01H\fR\x12dateAssignedString\x88\x01\x01\x12,\n" +
 	"\x0fsequence_number\x18\x14 \x01(\x05H\rR\x0esequenceNumber\x88\x01\x01\x12I\n" +
 	"\bmetadata\x18\x15 \x03(\v2-.domain.subscription.v1.License.MetadataEntryR\bmetadata\x12N\n" +
 	"\fentitlements\x18\x16 \x03(\v2*.domain.subscription.v1.LicenseEntitlementR\fentitlements\x12&\n" +
-	"\fdate_created\x18\x17 \x01(\x03H\x0eR\vdateCreated\x88\x01\x01\x123\n" +
-	"\x13date_created_string\x18\x18 \x01(\tH\x0fR\x11dateCreatedString\x88\x01\x01\x12(\n" +
-	"\rdate_modified\x18\x19 \x01(\x03H\x10R\fdateModified\x88\x01\x01\x125\n" +
-	"\x14date_modified_string\x18\x1a \x01(\tH\x11R\x12dateModifiedString\x88\x01\x01\x12\"\n" +
+	"\fdate_created\x18\x17 \x01(\x03H\x0eR\vdateCreated\x88\x01\x01\x12;\n" +
+	"\x13date_created_string\x18\x18 \x01(\tB\x06\x82\xb5\x18\x028\x01H\x0fR\x11dateCreatedString\x88\x01\x01\x12(\n" +
+	"\rdate_modified\x18\x19 \x01(\x03H\x10R\fdateModified\x88\x01\x01\x12=\n" +
+	"\x14date_modified_string\x18\x1a \x01(\tB\x06\x82\xb5\x18\x028\x01H\x11R\x12dateModifiedString\x88\x01\x01\x12\"\n" +
 	"\x06active\x18\x1b \x01(\bB\n" +
 	"\x82\xb5\x18\x06\"\x04trueR\x06active\x1a;\n" +
 	"\rMetadataEntry\x12\x10\n" +

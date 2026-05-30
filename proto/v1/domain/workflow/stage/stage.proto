@@ -27,18 +27,18 @@ message Stage {
   optional string assigned_to = 9;
   optional string completed_by = 10;
   optional int64 date_started = 11;
-  optional string date_started_string = 12;
+  optional string date_started_string = 12 [(options.v1.db).ignore = true];
   optional int64 date_completed = 13;
-  optional string date_completed_string = 14;
+  optional string date_completed_string = 14 [(options.v1.db).ignore = true];
   optional int64 date_due = 15;
-  optional string date_due_string = 16;
+  optional string date_due_string = 16 [(options.v1.db).ignore = true];
   optional string result_json = 17;
   optional string error_message = 18;
   optional string created_by = 19;
   optional int64 date_created = 20;
-  optional string date_created_string = 21;
+  optional string date_created_string = 21 [(options.v1.db).ignore = true];
   optional int64 date_modified = 22;
-  optional string date_modified_string = 23;
+  optional string date_modified_string = 23 [(options.v1.db).ignore = true];
   bool active = 24 [(options.v1.db).default = "true"];
   optional int32 completion_percentage = 25;
 }

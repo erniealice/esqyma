@@ -1206,7 +1206,7 @@ var File_domain_asset_asset_maintenance_asset_maintenance_proto protoreflect.Fil
 
 const file_domain_asset_asset_maintenance_asset_maintenance_proto_rawDesc = "" +
 	"\n" +
-	"6domain/asset/asset_maintenance/asset_maintenance.proto\x12\x0fdomain.asset.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1adomain/common/search.proto\x1a\x10options/db.proto\"\xa5\n" +
+	"6domain/asset/asset_maintenance/asset_maintenance.proto\x12\x0fdomain.asset.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1adomain/common/search.proto\x1a\x10options/db.proto\"\xb5\n" +
 	"\n" +
 	"\x10AssetMaintenance\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12(\n" +
@@ -1230,10 +1230,10 @@ const file_domain_asset_asset_maintenance_asset_maintenance_proto_rawDesc = "" +
 	"\x18recurrence_interval_days\x18\x14 \x01(\x05H\tR\x16recurrenceIntervalDays\x88\x01\x01\x12\x19\n" +
 	"\x05notes\x18\x15 \x01(\tH\n" +
 	"R\x05notes\x88\x01\x01\x12&\n" +
-	"\fdate_created\x18\x16 \x01(\x03H\vR\vdateCreated\x88\x01\x01\x123\n" +
-	"\x13date_created_string\x18\x17 \x01(\tH\fR\x11dateCreatedString\x88\x01\x01\x12(\n" +
-	"\rdate_modified\x18\x18 \x01(\x03H\rR\fdateModified\x88\x01\x01\x125\n" +
-	"\x14date_modified_string\x18\x19 \x01(\tH\x0eR\x12dateModifiedString\x88\x01\x01\x12\"\n" +
+	"\fdate_created\x18\x16 \x01(\x03H\vR\vdateCreated\x88\x01\x01\x12;\n" +
+	"\x13date_created_string\x18\x17 \x01(\tB\x06\x82\xb5\x18\x028\x01H\fR\x11dateCreatedString\x88\x01\x01\x12(\n" +
+	"\rdate_modified\x18\x18 \x01(\x03H\rR\fdateModified\x88\x01\x01\x12=\n" +
+	"\x14date_modified_string\x18\x19 \x01(\tB\x06\x82\xb5\x18\x028\x01H\x0eR\x12dateModifiedString\x88\x01\x01\x12\"\n" +
 	"\x06active\x18\x1a \x01(\bB\n" +
 	"\x82\xb5\x18\x06\"\x04trueR\x06active:\x06\x8a\xb5\x18\x02\b\x01B\x11\n" +
 	"\x0f_scheduled_dateB\r\n" +

@@ -1317,13 +1317,13 @@ var File_domain_operation_job_task_job_task_proto protoreflect.FileDescriptor
 
 const file_domain_operation_job_task_job_task_proto_rawDesc = "" +
 	"\n" +
-	"(domain/operation/job_task/job_task.proto\x12\x13domain.operation.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1adomain/common/search.proto\x1a*domain/operation/job_phase/job_phase.proto\x1a\x10options/db.proto\"\xe8\v\n" +
+	"(domain/operation/job_task/job_task.proto\x12\x13domain.operation.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1adomain/common/search.proto\x1a*domain/operation/job_phase/job_phase.proto\x1a\x10options/db.proto\"\x88\f\n" +
 	"\aJobTask\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12&\n" +
-	"\fdate_created\x18\x02 \x01(\x03H\x00R\vdateCreated\x88\x01\x01\x123\n" +
-	"\x13date_created_string\x18\x03 \x01(\tH\x01R\x11dateCreatedString\x88\x01\x01\x12(\n" +
-	"\rdate_modified\x18\x04 \x01(\x03H\x02R\fdateModified\x88\x01\x01\x125\n" +
-	"\x14date_modified_string\x18\x05 \x01(\tH\x03R\x12dateModifiedString\x88\x01\x01\x12\x16\n" +
+	"\fdate_created\x18\x02 \x01(\x03H\x00R\vdateCreated\x88\x01\x01\x12;\n" +
+	"\x13date_created_string\x18\x03 \x01(\tB\x06\x82\xb5\x18\x028\x01H\x01R\x11dateCreatedString\x88\x01\x01\x12(\n" +
+	"\rdate_modified\x18\x04 \x01(\x03H\x02R\fdateModified\x88\x01\x01\x12=\n" +
+	"\x14date_modified_string\x18\x05 \x01(\tB\x06\x82\xb5\x18\x028\x01H\x03R\x12dateModifiedString\x88\x01\x01\x12\x16\n" +
 	"\x06active\x18\x06 \x01(\bR\x06active\x123\n" +
 	"\fjob_phase_id\x18\a \x01(\tB\x11\x82\xb5\x18\r\n" +
 	"\tjob_phase\x18\x01R\n" +
@@ -1347,11 +1347,11 @@ const file_domain_operation_job_task_job_task_proto_rawDesc = "" +
 	"\x12completed_quantity\x18\x11 \x01(\x01H\tR\x11completedQuantity\x88\x01\x01\x12.\n" +
 	"\x10percent_complete\x18\x12 \x01(\x01H\n" +
 	"R\x0fpercentComplete\x88\x01\x01\x12&\n" +
-	"\factual_start\x18\x13 \x01(\x03H\vR\vactualStart\x88\x01\x01\x123\n" +
-	"\x13actual_start_string\x18\x14 \x01(\tH\fR\x11actualStartString\x88\x01\x01\x12\"\n" +
+	"\factual_start\x18\x13 \x01(\x03H\vR\vactualStart\x88\x01\x01\x12;\n" +
+	"\x13actual_start_string\x18\x14 \x01(\tB\x06\x82\xb5\x18\x028\x01H\fR\x11actualStartString\x88\x01\x01\x12\"\n" +
 	"\n" +
-	"actual_end\x18\x15 \x01(\x03H\rR\tactualEnd\x88\x01\x01\x12/\n" +
-	"\x11actual_end_string\x18\x16 \x01(\tH\x0eR\x0factualEndString\x88\x01\x01\x120\n" +
+	"actual_end\x18\x15 \x01(\x03H\rR\tactualEnd\x88\x01\x01\x127\n" +
+	"\x11actual_end_string\x18\x16 \x01(\tB\x06\x82\xb5\x18\x028\x01H\x0eR\x0factualEndString\x88\x01\x01\x120\n" +
 	"\x14predecessor_task_ids\x18\x17 \x03(\tR\x12predecessorTaskIds\x127\n" +
 	"\x0eallow_parallel\x18\x18 \x01(\bB\v\x82\xb5\x18\a\"\x05falseH\x0fR\rallowParallel\x88\x01\x01\x125\n" +
 	"\x10workflow_step_id\x18\x19 \x01(\tB\x06\x82\xb5\x18\x02\x18\x01H\x10R\x0eworkflowStepId\x88\x01\x01:\x06\x8a\xb5\x18\x02\b\x01B\x0f\n" +

@@ -25,6 +25,9 @@ message FieldOptions {
 
   // Override the SQL type (e.g., "VARCHAR(255)" instead of "TEXT")
   string sql_type = 6;
+
+  // Exclude from the persisted column set: computed/display-only mirror of another field.
+  bool ignore = 7;
 }
 
 // Message-level database options

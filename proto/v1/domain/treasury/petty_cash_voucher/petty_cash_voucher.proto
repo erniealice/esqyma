@@ -39,11 +39,11 @@ message PettyCashVoucher {
   // Approval
   optional string approved_by = 8;   // FK to entity.User
   optional int64 approved_at = 9;
-  optional string approved_at_string = 10;
+  optional string approved_at_string = 10 [(options.v1.db).ignore = true];
 
   // Audit fields
   optional int64 date_created = 11;
-  optional string date_created_string = 12;
+  optional string date_created_string = 12 [(options.v1.db).ignore = true];
 }
 
 service PettyCashVoucherDomainService {

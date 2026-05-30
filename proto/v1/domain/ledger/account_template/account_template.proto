@@ -29,7 +29,7 @@ message AccountTemplate {
   // Audit fields
   bool active = 6 [(options.v1.db).default = "true"];
   optional int64 date_created = 7;
-  optional string date_created_string = 8;
+  optional string date_created_string = 8 [(options.v1.db).ignore = true];
 }
 
 service AccountTemplateDomainService {

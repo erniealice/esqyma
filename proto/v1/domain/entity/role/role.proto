@@ -26,9 +26,9 @@ message Role {
   string description = 5;
   string color = 6;
   optional int64 date_created = 7;
-  optional string date_created_string = 8;
+  optional string date_created_string = 8 [(options.v1.db).ignore = true];
   optional int64 date_modified = 9;
-  optional string date_modified_string = 10;
+  optional string date_modified_string = 10 [(options.v1.db).ignore = true];
   bool active = 11 [(options.v1.db).default = "true"];
   repeated RolePermission role_permissions = 12;
   repeated domain.entity.v1.PrincipalType applicable_principal_types = 13;

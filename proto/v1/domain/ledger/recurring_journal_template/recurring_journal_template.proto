@@ -44,7 +44,7 @@ message RecurringJournalTemplate {
 
   // Schedule — next_run_date is updated after each successful generation
   int64 next_run_date = 5;
-  optional string next_run_date_string = 6;
+  optional string next_run_date_string = 6 [(options.v1.db).ignore = true];
   optional string end_date = 7;             // ISO 8601 date (YYYY-MM-DD) — Null = runs indefinitely
   reserved 8; // was end_date_string
 
@@ -57,9 +57,9 @@ message RecurringJournalTemplate {
   // Audit fields
   bool active = 11 [(options.v1.db).default = "true"];
   optional int64 date_created = 12;
-  optional string date_created_string = 13;
+  optional string date_created_string = 13 [(options.v1.db).ignore = true];
   optional int64 date_modified = 14;
-  optional string date_modified_string = 15;
+  optional string date_modified_string = 15 [(options.v1.db).ignore = true];
 }
 
 service RecurringJournalTemplateDomainService {

@@ -36,7 +36,9 @@ type FieldOptions struct {
 	// Check constraint expression
 	Check string `protobuf:"bytes,5,opt,name=check,proto3" json:"check,omitempty"`
 	// Override the SQL type (e.g., "VARCHAR(255)" instead of "TEXT")
-	SqlType       string `protobuf:"bytes,6,opt,name=sql_type,json=sqlType,proto3" json:"sql_type,omitempty"`
+	SqlType string `protobuf:"bytes,6,opt,name=sql_type,json=sqlType,proto3" json:"sql_type,omitempty"`
+	// Exclude from the persisted column set: computed/display-only mirror of another field.
+	Ignore        bool `protobuf:"varint,7,opt,name=ignore,proto3" json:"ignore,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -111,6 +113,13 @@ func (x *FieldOptions) GetSqlType() string {
 		return x.SqlType
 	}
 	return ""
+}
+
+func (x *FieldOptions) GetIgnore() bool {
+	if x != nil {
+		return x.Ignore
+	}
+	return false
 }
 
 // Message-level database options
@@ -222,7 +231,7 @@ var File_options_db_proto protoreflect.FileDescriptor
 const file_options_db_proto_rawDesc = "" +
 	"\n" +
 	"\x10options/db.proto\x12\n" +
-	"options.v1\x1a google/protobuf/descriptor.proto\"\xa7\x01\n" +
+	"options.v1\x1a google/protobuf/descriptor.proto\"\xbf\x01\n" +
 	"\fFieldOptions\x12\x1e\n" +
 	"\n" +
 	"references\x18\x01 \x01(\tR\n" +
@@ -231,7 +240,8 @@ const file_options_db_proto_rawDesc = "" +
 	"\x05index\x18\x03 \x01(\bR\x05index\x12\x18\n" +
 	"\adefault\x18\x04 \x01(\tR\adefault\x12\x14\n" +
 	"\x05check\x18\x05 \x01(\tR\x05check\x12\x19\n" +
-	"\bsql_type\x18\x06 \x01(\tR\asqlType\"\x95\x01\n" +
+	"\bsql_type\x18\x06 \x01(\tR\asqlType\x12\x16\n" +
+	"\x06ignore\x18\a \x01(\bR\x06ignore\"\x95\x01\n" +
 	"\x0eMessageOptions\x12\x14\n" +
 	"\x05table\x18\x01 \x01(\bR\x05table\x12\x1d\n" +
 	"\n" +

@@ -41,7 +41,7 @@ message PurchaseOrderLineItem {
 
   // Delivery
   optional int64 required_by_date = 15;
-  optional string required_by_date_string = 16;
+  optional string required_by_date_string = 16 [(options.v1.db).ignore = true];
 
   // Notes
   optional string notes = 17;
@@ -50,9 +50,9 @@ message PurchaseOrderLineItem {
   // Audit
   bool active = 19 [(options.v1.db).default = "true"];
   optional int64 date_created = 20;
-  optional string date_created_string = 21;
+  optional string date_created_string = 21 [(options.v1.db).ignore = true];
   optional int64 date_modified = 22;
-  optional string date_modified_string = 23;
+  optional string date_modified_string = 23 [(options.v1.db).ignore = true];
 
   // Supplier commitment back-edges
   optional string supplier_contract_line_id = 24;   // FK to supplier_contract_line (no DB constraint)

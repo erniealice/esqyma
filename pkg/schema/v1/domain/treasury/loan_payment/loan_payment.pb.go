@@ -952,7 +952,7 @@ var File_domain_treasury_loan_payment_loan_payment_proto protoreflect.FileDescri
 
 const file_domain_treasury_loan_payment_loan_payment_proto_rawDesc = "" +
 	"\n" +
-	"/domain/treasury/loan_payment/loan_payment.proto\x12\x12domain.treasury.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1adomain/common/search.proto\x1a\x10options/db.proto\"\x9d\x04\n" +
+	"/domain/treasury/loan_payment/loan_payment.proto\x12\x12domain.treasury.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1adomain/common/search.proto\x1a\x10options/db.proto\"\xa5\x04\n" +
 	"\vLoanPayment\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12%\n" +
 	"\aloan_id\x18\x02 \x01(\tB\f\x82\xb5\x18\b\n" +
@@ -967,8 +967,8 @@ const file_domain_treasury_loan_payment_loan_payment_proto_rawDesc = "" +
 	"\x11remaining_balance\x18\n" +
 	" \x01(\x03R\x10remainingBalance\x12\x19\n" +
 	"\x05notes\x18\v \x01(\tH\x00R\x05notes\x88\x01\x01\x12&\n" +
-	"\fdate_created\x18\f \x01(\x03H\x01R\vdateCreated\x88\x01\x01\x123\n" +
-	"\x13date_created_string\x18\r \x01(\tH\x02R\x11dateCreatedString\x88\x01\x01:\x06\x8a\xb5\x18\x02\b\x01B\b\n" +
+	"\fdate_created\x18\f \x01(\x03H\x01R\vdateCreated\x88\x01\x01\x12;\n" +
+	"\x13date_created_string\x18\r \x01(\tB\x06\x82\xb5\x18\x028\x01H\x02R\x11dateCreatedString\x88\x01\x01:\x06\x8a\xb5\x18\x02\b\x01B\b\n" +
 	"\x06_notesB\x0f\n" +
 	"\r_date_createdB\x16\n" +
 	"\x14_date_created_stringJ\x04\b\x05\x10\x06\"O\n" +

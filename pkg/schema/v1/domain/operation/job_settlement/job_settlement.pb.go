@@ -1490,7 +1490,7 @@ var File_domain_operation_job_settlement_job_settlement_proto protoreflect.FileD
 
 const file_domain_operation_job_settlement_job_settlement_proto_rawDesc = "" +
 	"\n" +
-	"4domain/operation/job_settlement/job_settlement.proto\x12\x13domain.operation.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1adomain/common/search.proto\x1a0domain/operation/job_activity/job_activity.proto\x1a\x10options/db.proto\"\xd9\b\n" +
+	"4domain/operation/job_settlement/job_settlement.proto\x12\x13domain.operation.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1adomain/common/search.proto\x1a0domain/operation/job_activity/job_activity.proto\x1a\x10options/db.proto\"\xe9\b\n" +
 	"\rJobSettlement\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12<\n" +
 	"\x0fjob_activity_id\x18\x02 \x01(\tB\x14\x82\xb5\x18\x10\n" +
@@ -1501,16 +1501,16 @@ const file_domain_operation_job_settlement_job_settlement_proto_rawDesc = "" +
 	"\ttarget_id\x18\x05 \x01(\tR\btargetId\x12)\n" +
 	"\x10allocated_amount\x18\x06 \x01(\x03R\x0fallocatedAmount\x12*\n" +
 	"\x0eallocation_pct\x18\a \x01(\x01H\x01R\rallocationPct\x88\x01\x01\x12,\n" +
-	"\x0fsettlement_date\x18\b \x01(\x03H\x02R\x0esettlementDate\x88\x01\x01\x129\n" +
-	"\x16settlement_date_string\x18\t \x01(\tH\x03R\x14settlementDateString\x88\x01\x01\x12=\n" +
+	"\x0fsettlement_date\x18\b \x01(\x03H\x02R\x0esettlementDate\x88\x01\x01\x12A\n" +
+	"\x16settlement_date_string\x18\t \x01(\tB\x06\x82\xb5\x18\x028\x01H\x03R\x14settlementDateString\x88\x01\x01\x12=\n" +
 	"\x06status\x18\n" +
 	" \x01(\x0e2%.domain.operation.v1.SettlementStatusR\x06status\x12?\n" +
 	"\x0ereversal_of_id\x18\v \x01(\tB\x14\x82\xb5\x18\x10\n" +
 	"\x0ejob_settlementH\x04R\freversalOfId\x88\x01\x01\x12\"\n" +
 	"\n" +
 	"created_by\x18\f \x01(\tH\x05R\tcreatedBy\x88\x01\x01\x12&\n" +
-	"\fdate_created\x18\r \x01(\x03H\x06R\vdateCreated\x88\x01\x01\x123\n" +
-	"\x13date_created_string\x18\x0e \x01(\tH\aR\x11dateCreatedString\x88\x01\x01\x12\x16\n" +
+	"\fdate_created\x18\r \x01(\x03H\x06R\vdateCreated\x88\x01\x01\x12;\n" +
+	"\x13date_created_string\x18\x0e \x01(\tB\x06\x82\xb5\x18\x028\x01H\aR\x11dateCreatedString\x88\x01\x01\x12\x16\n" +
 	"\x06active\x18\x0f \x01(\bR\x06active\x129\n" +
 	"\fworkspace_id\x18\x10 \x01(\tB\x11\x82\xb5\x18\r\n" +
 	"\tworkspace\x18\x01H\bR\vworkspaceId\x88\x01\x01\x12,\n" +

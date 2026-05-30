@@ -1320,7 +1320,7 @@ var File_domain_payroll_payroll_run_payroll_run_proto protoreflect.FileDescripto
 
 const file_domain_payroll_payroll_run_payroll_run_proto_rawDesc = "" +
 	"\n" +
-	",domain/payroll/payroll_run/payroll_run.proto\x12\x11domain.payroll.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1adomain/common/search.proto\x1a\x10options/db.proto\"\xe9\b\n" +
+	",domain/payroll/payroll_run/payroll_run.proto\x12\x11domain.payroll.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1adomain/common/search.proto\x1a\x10options/db.proto\"\x81\t\n" +
 	"\n" +
 	"PayrollRun\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12'\n" +
@@ -1337,12 +1337,12 @@ const file_domain_payroll_payroll_run_payroll_run_proto_rawDesc = "" +
 	"\x06status\x18\v \x01(\x0e2#.domain.payroll.v1.PayrollRunStatusR\x06status\x12$\n" +
 	"\vapproved_by\x18\f \x01(\tH\x00R\n" +
 	"approvedBy\x88\x01\x01\x12 \n" +
-	"\tposted_at\x18\r \x01(\x03H\x01R\bpostedAt\x88\x01\x01\x12-\n" +
-	"\x10posted_at_string\x18\x0e \x01(\tH\x02R\x0epostedAtString\x88\x01\x01\x12&\n" +
-	"\fdate_created\x18\x0f \x01(\x03H\x03R\vdateCreated\x88\x01\x01\x123\n" +
-	"\x13date_created_string\x18\x10 \x01(\tH\x04R\x11dateCreatedString\x88\x01\x01\x12(\n" +
-	"\rdate_modified\x18\x11 \x01(\x03H\x05R\fdateModified\x88\x01\x01\x125\n" +
-	"\x14date_modified_string\x18\x12 \x01(\tH\x06R\x12dateModifiedString\x88\x01\x01\x120\n" +
+	"\tposted_at\x18\r \x01(\x03H\x01R\bpostedAt\x88\x01\x01\x125\n" +
+	"\x10posted_at_string\x18\x0e \x01(\tB\x06\x82\xb5\x18\x028\x01H\x02R\x0epostedAtString\x88\x01\x01\x12&\n" +
+	"\fdate_created\x18\x0f \x01(\x03H\x03R\vdateCreated\x88\x01\x01\x12;\n" +
+	"\x13date_created_string\x18\x10 \x01(\tB\x06\x82\xb5\x18\x028\x01H\x04R\x11dateCreatedString\x88\x01\x01\x12(\n" +
+	"\rdate_modified\x18\x11 \x01(\x03H\x05R\fdateModified\x88\x01\x01\x12=\n" +
+	"\x14date_modified_string\x18\x12 \x01(\tB\x06\x82\xb5\x18\x028\x01H\x06R\x12dateModifiedString\x88\x01\x01\x120\n" +
 	"\x11compliance_region\x18\x13 \x01(\tH\aR\x10complianceRegion\x88\x01\x01\x122\n" +
 	"\x12calculator_version\x18\x14 \x01(\tH\bR\x11calculatorVersion\x88\x01\x01\x129\n" +
 	"\fworkspace_id\x18\x15 \x01(\tB\x11\x82\xb5\x18\r\n" +

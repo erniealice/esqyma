@@ -760,7 +760,7 @@ var File_domain_entity_supplier_lifecycle_event_supplier_lifecycle_event_proto p
 
 const file_domain_entity_supplier_lifecycle_event_supplier_lifecycle_event_proto_rawDesc = "" +
 	"\n" +
-	"Edomain/entity/supplier_lifecycle_event/supplier_lifecycle_event.proto\x12\x10domain.entity.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1adomain/common/search.proto\x1a\x10options/db.proto\"\x83\x05\n" +
+	"Edomain/entity/supplier_lifecycle_event/supplier_lifecycle_event.proto\x12\x10domain.entity.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1adomain/common/search.proto\x1a\x10options/db.proto\"\x8b\x05\n" +
 	"\x16SupplierLifecycleEvent\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x124\n" +
 	"\fworkspace_id\x18\x02 \x01(\tB\x11\x82\xb5\x18\r\n" +
@@ -779,8 +779,8 @@ const file_domain_entity_supplier_lifecycle_event_supplier_lifecycle_event_proto
 	" \x01(\tH\x03R\bmetadata\x88\x01\x01\x12\"\n" +
 	"\x06active\x18\v \x01(\bB\n" +
 	"\x82\xb5\x18\x06\"\x04trueR\x06active\x12&\n" +
-	"\fdate_created\x18\f \x01(\x03H\x04R\vdateCreated\x88\x01\x01\x123\n" +
-	"\x13date_created_string\x18\r \x01(\tH\x05R\x11dateCreatedString\x88\x01\x01:\x06\x8a\xb5\x18\x02\b\x01B\x17\n" +
+	"\fdate_created\x18\f \x01(\x03H\x04R\vdateCreated\x88\x01\x01\x12;\n" +
+	"\x13date_created_string\x18\r \x01(\tB\x06\x82\xb5\x18\x028\x01H\x05R\x11dateCreatedString\x88\x01\x01:\x06\x8a\xb5\x18\x02\b\x01B\x17\n" +
 	"\x15_supplier_contract_idB\x10\n" +
 	"\x0e_actor_user_idB\t\n" +
 	"\a_reasonB\v\n" +

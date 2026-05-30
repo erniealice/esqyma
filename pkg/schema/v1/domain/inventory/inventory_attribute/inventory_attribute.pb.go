@@ -9,6 +9,7 @@ package inventoryv1
 import (
 	common "github.com/erniealice/esqyma/pkg/schema/v1/domain/common"
 	inventory_item "github.com/erniealice/esqyma/pkg/schema/v1/domain/inventory/inventory_item"
+	_ "github.com/erniealice/esqyma/pkg/schema/v1/options"
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
 	reflect "reflect"
@@ -1212,7 +1213,7 @@ var File_domain_inventory_inventory_attribute_inventory_attribute_proto protoref
 
 const file_domain_inventory_inventory_attribute_inventory_attribute_proto_rawDesc = "" +
 	"\n" +
-	">domain/inventory/inventory_attribute/inventory_attribute.proto\x12\x13domain.inventory.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1adomain/common/search.proto\x1a4domain/inventory/inventory_item/inventory_item.proto\x1a\x1ddomain/common/attribute.proto\"\xb9\x04\n" +
+	">domain/inventory/inventory_attribute/inventory_attribute.proto\x12\x13domain.inventory.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1adomain/common/search.proto\x1a4domain/inventory/inventory_item/inventory_item.proto\x1a\x1ddomain/common/attribute.proto\x1a\x10options/db.proto\"\xc9\x04\n" +
 	"\x12InventoryAttribute\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12*\n" +
 	"\x11inventory_item_id\x18\x02 \x01(\tR\x0finventoryItemId\x12!\n" +
@@ -1220,11 +1221,11 @@ const file_domain_inventory_inventory_attribute_inventory_attribute_proto_rawDes
 	"\x05value\x18\x04 \x01(\tR\x05value\x12I\n" +
 	"\x0einventory_item\x18\x05 \x01(\v2\".domain.inventory.v1.InventoryItemR\rinventoryItem\x129\n" +
 	"\tattribute\x18\x06 \x01(\v2\x1b.domain.common.v1.AttributeR\tattribute\x12&\n" +
-	"\fdate_created\x18\a \x01(\x03H\x00R\vdateCreated\x88\x01\x01\x123\n" +
-	"\x13date_created_string\x18\b \x01(\tH\x01R\x11dateCreatedString\x88\x01\x01\x12(\n" +
-	"\rdate_modified\x18\t \x01(\x03H\x02R\fdateModified\x88\x01\x01\x125\n" +
+	"\fdate_created\x18\a \x01(\x03H\x00R\vdateCreated\x88\x01\x01\x12;\n" +
+	"\x13date_created_string\x18\b \x01(\tB\x06\x82\xb5\x18\x028\x01H\x01R\x11dateCreatedString\x88\x01\x01\x12(\n" +
+	"\rdate_modified\x18\t \x01(\x03H\x02R\fdateModified\x88\x01\x01\x12=\n" +
 	"\x14date_modified_string\x18\n" +
-	" \x01(\tH\x03R\x12dateModifiedString\x88\x01\x01\x12\x16\n" +
+	" \x01(\tB\x06\x82\xb5\x18\x028\x01H\x03R\x12dateModifiedString\x88\x01\x01\x12\x16\n" +
 	"\x06active\x18\v \x01(\bR\x06activeB\x0f\n" +
 	"\r_date_createdB\x16\n" +
 	"\x14_date_created_stringB\x10\n" +

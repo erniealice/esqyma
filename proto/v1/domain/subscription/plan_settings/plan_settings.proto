@@ -18,9 +18,9 @@ message PlanSettings {
   string name = 3;
   string description = 4;
   optional int64 date_created = 5;
-  optional string date_created_string = 6;
+  optional string date_created_string = 6 [(options.v1.db).ignore = true];
   optional int64 date_modified = 7;
-  optional string date_modified_string = 8;
+  optional string date_modified_string = 8 [(options.v1.db).ignore = true];
   bool active = 9 [(options.v1.db).default = "true"];
 }
 

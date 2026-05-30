@@ -19,9 +19,9 @@ message Invoice {
   string invoice_number = 2;
   int64 amount = 3; // centavos
   optional int64 date_created = 4;
-  optional string date_created_string = 5;
+  optional string date_created_string = 5 [(options.v1.db).ignore = true];
   optional int64 date_modified = 6;
-  optional string date_modified_string = 7;
+  optional string date_modified_string = 7 [(options.v1.db).ignore = true];
   bool active = 8 [(options.v1.db).default = "true"];
   optional Subscription subscription = 9;
   string subscription_id = 10 [(options.v1.db).references = "subscription", (options.v1.db).index = true];

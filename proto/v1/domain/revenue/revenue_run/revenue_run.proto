@@ -9,6 +9,7 @@ import "domain/common/pagination.proto";
 import "domain/common/search.proto";
 import "domain/common/filter.proto";
 import "domain/common/sort.proto";
+import "options/db.proto";
 
 enum RevenueRunScopeKind {
   REVENUE_RUN_SCOPE_KIND_UNSPECIFIED = 0;
@@ -60,9 +61,9 @@ message RevenueRun {
   optional string notes = 15;
   bool active = 16;
   optional int64 date_created = 17;
-  optional string date_created_string = 18;
+  optional string date_created_string = 18 [(options.v1.db).ignore = true];
   optional int64 date_modified = 19;
-  optional string date_modified_string = 20;
+  optional string date_modified_string = 20 [(options.v1.db).ignore = true];
 }
 
 message RevenueRunAttempt {
@@ -79,9 +80,9 @@ message RevenueRunAttempt {
   optional int64 attempted_at = 11;
   bool active = 12;
   optional int64 date_created = 13;
-  optional string date_created_string = 14;
+  optional string date_created_string = 14 [(options.v1.db).ignore = true];
   optional int64 date_modified = 15;
-  optional string date_modified_string = 16;
+  optional string date_modified_string = 16 [(options.v1.db).ignore = true];
   // source_kind discriminates SUBSCRIPTION_CYCLE vs ADVANCE_COLLECTION origin.
   // UNSPECIFIED is treated as SUBSCRIPTION_CYCLE so pre-Plan-B rows still
   // satisfy schema invariants. Plan B Phase 5.

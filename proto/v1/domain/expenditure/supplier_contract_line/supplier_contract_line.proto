@@ -83,9 +83,9 @@ message SupplierContractLine {
   // Audit
   bool active = 18 [(options.v1.db).default = "true"];
   optional int64 date_created = 19;
-  optional string date_created_string = 20;
+  optional string date_created_string = 20 [(options.v1.db).ignore = true];
   optional int64 date_modified = 21;
-  optional string date_modified_string = 22;
+  optional string date_modified_string = 22 [(options.v1.db).ignore = true];
 
   // Discriminator for line role (drives payroll calculator routing for employment
   // contract lines; ignored for vendor contracts where line_type is sufficient).

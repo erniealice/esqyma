@@ -43,9 +43,9 @@ message CostPlan {
   optional string name = 4;
   optional string description = 5;
   optional int64 date_created = 6;
-  optional string date_created_string = 7;
+  optional string date_created_string = 7 [(options.v1.db).ignore = true];
   optional int64 date_modified = 8;
-  optional string date_modified_string = 9;
+  optional string date_modified_string = 9 [(options.v1.db).ignore = true];
   bool active = 10 [(options.v1.db).default = "true"];
   int64 billing_amount = 11;    // centavos — charged by the supplier in billing_currency
   string billing_currency = 12; // ISO 4217 currency code

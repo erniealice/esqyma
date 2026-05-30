@@ -87,7 +87,7 @@ message Asset {
   optional string acquisition_date = 19; // ISO 8601 date (YYYY-MM-DD)
   reserved 20; // was acquisition_date_string
   optional int64 date_placed_in_service = 21;
-  optional string date_placed_in_service_string = 22;
+  optional string date_placed_in_service_string = 22 [(options.v1.db).ignore = true];
 
   // Cost and value
   int64 acquisition_cost = 23; // centavos
@@ -111,14 +111,14 @@ message Asset {
   // Status and lifecycle
   AssetStatus status = 36;
   optional int64 warranty_expiry_date = 37;
-  optional string warranty_expiry_date_string = 38;
+  optional string warranty_expiry_date_string = 38 [(options.v1.db).ignore = true];
   optional string notes = 39;
 
   // Audit fields
   optional int64 date_created = 40;
-  optional string date_created_string = 41;
+  optional string date_created_string = 41 [(options.v1.db).ignore = true];
   optional int64 date_modified = 42;
-  optional string date_modified_string = 43;
+  optional string date_modified_string = 43 [(options.v1.db).ignore = true];
   bool active = 44 [(options.v1.db).default = "true"];
 
   // Workspace tenancy (Phase 1 — 2026-05-10).

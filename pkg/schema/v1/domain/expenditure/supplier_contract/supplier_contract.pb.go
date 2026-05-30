@@ -1826,15 +1826,15 @@ var File_domain_expenditure_supplier_contract_supplier_contract_proto protorefle
 
 const file_domain_expenditure_supplier_contract_supplier_contract_proto_rawDesc = "" +
 	"\n" +
-	"<domain/expenditure/supplier_contract/supplier_contract.proto\x12\x15domain.expenditure.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/search.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a%domain/entity/supplier/supplier.proto\x1a-domain/entity/payment_term/payment_term.proto\x1a\x10options/db.proto\"\xb8\x1b\n" +
+	"<domain/expenditure/supplier_contract/supplier_contract.proto\x12\x15domain.expenditure.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/search.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a%domain/entity/supplier/supplier.proto\x1a-domain/entity/payment_term/payment_term.proto\x1a\x10options/db.proto\"\xd8\x1b\n" +
 	"\x10SupplierContract\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x124\n" +
 	"\fworkspace_id\x18\x02 \x01(\tB\x11\x82\xb5\x18\r\n" +
 	"\tworkspace\x18\x01R\vworkspaceId\x12&\n" +
-	"\fdate_created\x18\x03 \x01(\x03H\x00R\vdateCreated\x88\x01\x01\x123\n" +
-	"\x13date_created_string\x18\x04 \x01(\tH\x01R\x11dateCreatedString\x88\x01\x01\x12(\n" +
-	"\rdate_modified\x18\x05 \x01(\x03H\x02R\fdateModified\x88\x01\x01\x125\n" +
-	"\x14date_modified_string\x18\x06 \x01(\tH\x03R\x12dateModifiedString\x88\x01\x01\x12\"\n" +
+	"\fdate_created\x18\x03 \x01(\x03H\x00R\vdateCreated\x88\x01\x01\x12;\n" +
+	"\x13date_created_string\x18\x04 \x01(\tB\x06\x82\xb5\x18\x028\x01H\x01R\x11dateCreatedString\x88\x01\x01\x12(\n" +
+	"\rdate_modified\x18\x05 \x01(\x03H\x02R\fdateModified\x88\x01\x01\x12=\n" +
+	"\x14date_modified_string\x18\x06 \x01(\tB\x06\x82\xb5\x18\x028\x01H\x03R\x12dateModifiedString\x88\x01\x01\x12\"\n" +
 	"\x06active\x18\a \x01(\bB\n" +
 	"\x82\xb5\x18\x06\"\x04trueR\x06active\x12'\n" +
 	"\vinternal_id\x18\b \x01(\tB\x06\x82\xb5\x18\x02\x10\x01R\n" +
@@ -1872,12 +1872,12 @@ const file_domain_expenditure_supplier_contract_supplier_contract_proto_rawDesc 
 	"\x13commitment_quantity\x18F \x01(\x01H\x15R\x12commitmentQuantity\x88\x01\x01\x129\n" +
 	"\x11released_quantity\x18G \x01(\x01B\a\x82\xb5\x18\x03\"\x010H\x16R\x10releasedQuantity\x88\x01\x01\x12&\n" +
 	"\frequested_by\x18P \x01(\tH\x17R\vrequestedBy\x88\x01\x01\x12*\n" +
-	"\x0erequested_date\x18Q \x01(\x03H\x18R\rrequestedDate\x88\x01\x01\x127\n" +
-	"\x15requested_date_string\x18R \x01(\tH\x19R\x13requestedDateString\x88\x01\x01\x12$\n" +
+	"\x0erequested_date\x18Q \x01(\x03H\x18R\rrequestedDate\x88\x01\x01\x12?\n" +
+	"\x15requested_date_string\x18R \x01(\tB\x06\x82\xb5\x18\x028\x01H\x19R\x13requestedDateString\x88\x01\x01\x12$\n" +
 	"\vapproved_by\x18S \x01(\tH\x1aR\n" +
 	"approvedBy\x88\x01\x01\x12(\n" +
-	"\rapproved_date\x18T \x01(\x03H\x1bR\fapprovedDate\x88\x01\x01\x125\n" +
-	"\x14approved_date_string\x18U \x01(\tH\x1cR\x12approvedDateString\x88\x01\x01\x12.\n" +
+	"\rapproved_date\x18T \x01(\x03H\x1bR\fapprovedDate\x88\x01\x01\x12=\n" +
+	"\x14approved_date_string\x18U \x01(\tB\x06\x82\xb5\x18\x028\x01H\x1cR\x12approvedDateString\x88\x01\x01\x12.\n" +
 	"\x10rejection_reason\x18V \x01(\tH\x1dR\x0frejectionReason\x88\x01\x01\x126\n" +
 	"\vlocation_id\x18Z \x01(\tB\x10\x82\xb5\x18\f\n" +
 	"\blocation\x18\x01H\x1eR\n" +

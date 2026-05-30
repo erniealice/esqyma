@@ -1033,7 +1033,7 @@ var File_domain_asset_asset_location_asset_location_proto protoreflect.FileDescr
 
 const file_domain_asset_asset_location_asset_location_proto_rawDesc = "" +
 	"\n" +
-	"0domain/asset/asset_location/asset_location.proto\x12\x0fdomain.asset.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1adomain/common/search.proto\x1a%domain/entity/location/location.proto\x1a\x10options/db.proto\"\xd1\a\n" +
+	"0domain/asset/asset_location/asset_location.proto\x12\x0fdomain.asset.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1adomain/common/search.proto\x1a%domain/entity/location/location.proto\x1a\x10options/db.proto\"\xf1\a\n" +
 	"\rAssetLocation\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12(\n" +
 	"\basset_id\x18\x02 \x01(\tB\r\x82\xb5\x18\t\n" +
@@ -1045,16 +1045,16 @@ const file_domain_asset_asset_location_asset_location_proto_rawDesc = "" +
 	"\n" +
 	"is_primary\x18\x05 \x01(\bR\tisPrimary\x12M\n" +
 	"\x0fassignment_type\x18\x06 \x01(\x0e2$.domain.asset.v1.AssetAssignmentTypeR\x0eassignmentType\x12(\n" +
-	"\rdate_assigned\x18\a \x01(\x03H\x01R\fdateAssigned\x88\x01\x01\x125\n" +
-	"\x14date_assigned_string\x18\b \x01(\tH\x02R\x12dateAssignedString\x88\x01\x01\x12,\n" +
-	"\x0fdate_unassigned\x18\t \x01(\x03H\x03R\x0edateUnassigned\x88\x01\x01\x129\n" +
+	"\rdate_assigned\x18\a \x01(\x03H\x01R\fdateAssigned\x88\x01\x01\x12=\n" +
+	"\x14date_assigned_string\x18\b \x01(\tB\x06\x82\xb5\x18\x028\x01H\x02R\x12dateAssignedString\x88\x01\x01\x12,\n" +
+	"\x0fdate_unassigned\x18\t \x01(\x03H\x03R\x0edateUnassigned\x88\x01\x01\x12A\n" +
 	"\x16date_unassigned_string\x18\n" +
-	" \x01(\tH\x04R\x14dateUnassignedString\x88\x01\x01\x12\x19\n" +
+	" \x01(\tB\x06\x82\xb5\x18\x028\x01H\x04R\x14dateUnassignedString\x88\x01\x01\x12\x19\n" +
 	"\x05notes\x18\v \x01(\tH\x05R\x05notes\x88\x01\x01\x12&\n" +
-	"\fdate_created\x18\f \x01(\x03H\x06R\vdateCreated\x88\x01\x01\x123\n" +
-	"\x13date_created_string\x18\r \x01(\tH\aR\x11dateCreatedString\x88\x01\x01\x12(\n" +
-	"\rdate_modified\x18\x0e \x01(\x03H\bR\fdateModified\x88\x01\x01\x125\n" +
-	"\x14date_modified_string\x18\x0f \x01(\tH\tR\x12dateModifiedString\x88\x01\x01\x12\"\n" +
+	"\fdate_created\x18\f \x01(\x03H\x06R\vdateCreated\x88\x01\x01\x12;\n" +
+	"\x13date_created_string\x18\r \x01(\tB\x06\x82\xb5\x18\x028\x01H\aR\x11dateCreatedString\x88\x01\x01\x12(\n" +
+	"\rdate_modified\x18\x0e \x01(\x03H\bR\fdateModified\x88\x01\x01\x12=\n" +
+	"\x14date_modified_string\x18\x0f \x01(\tB\x06\x82\xb5\x18\x028\x01H\tR\x12dateModifiedString\x88\x01\x01\x12\"\n" +
 	"\x06active\x18\x10 \x01(\bB\n" +
 	"\x82\xb5\x18\x06\"\x04trueR\x06active:\x1c\x8a\xb5\x18\x18\b\x01\x1a\x14asset_id,location_idB\v\n" +
 	"\t_locationB\x10\n" +

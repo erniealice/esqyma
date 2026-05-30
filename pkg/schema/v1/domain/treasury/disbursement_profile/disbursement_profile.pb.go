@@ -951,13 +951,13 @@ var File_domain_treasury_disbursement_profile_disbursement_profile_proto protore
 
 const file_domain_treasury_disbursement_profile_disbursement_profile_proto_rawDesc = "" +
 	"\n" +
-	"?domain/treasury/disbursement_profile/disbursement_profile.proto\x12\x12domain.treasury.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1adomain/common/search.proto\x1a!domain/entity/client/client.proto\x1a=domain/treasury/disbursement_method/disbursement_method.proto\x1a\x10options/db.proto\"\xa2\x05\n" +
+	"?domain/treasury/disbursement_profile/disbursement_profile.proto\x12\x12domain.treasury.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1adomain/common/search.proto\x1a!domain/entity/client/client.proto\x1a=domain/treasury/disbursement_method/disbursement_method.proto\x1a\x10options/db.proto\"\xb2\x05\n" +
 	"\x13DisbursementProfile\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12&\n" +
-	"\fdate_created\x18\x02 \x01(\x03H\x00R\vdateCreated\x88\x01\x01\x123\n" +
-	"\x13date_created_string\x18\x03 \x01(\tH\x01R\x11dateCreatedString\x88\x01\x01\x12(\n" +
-	"\rdate_modified\x18\x04 \x01(\x03H\x02R\fdateModified\x88\x01\x01\x125\n" +
-	"\x14date_modified_string\x18\x05 \x01(\tH\x03R\x12dateModifiedString\x88\x01\x01\x12\x16\n" +
+	"\fdate_created\x18\x02 \x01(\x03H\x00R\vdateCreated\x88\x01\x01\x12;\n" +
+	"\x13date_created_string\x18\x03 \x01(\tB\x06\x82\xb5\x18\x028\x01H\x01R\x11dateCreatedString\x88\x01\x01\x12(\n" +
+	"\rdate_modified\x18\x04 \x01(\x03H\x02R\fdateModified\x88\x01\x01\x12=\n" +
+	"\x14date_modified_string\x18\x05 \x01(\tB\x06\x82\xb5\x18\x028\x01H\x03R\x12dateModifiedString\x88\x01\x01\x12\x16\n" +
 	"\x06active\x18\x06 \x01(\bR\x06active\x125\n" +
 	"\x06client\x18\a \x01(\v2\x18.domain.entity.v1.ClientH\x04R\x06client\x88\x01\x01\x12\x1b\n" +
 	"\tclient_id\x18\b \x01(\tR\bclientId\x12\\\n" +

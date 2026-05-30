@@ -39,7 +39,7 @@ message JournalLine {
   // Audit fields
   bool active = 8 [(options.v1.db).default = "true"];
   optional int64 date_created = 9;
-  optional string date_created_string = 10;
+  optional string date_created_string = 10 [(options.v1.db).ignore = true];
 }
 
 service JournalLineDomainService {

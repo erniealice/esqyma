@@ -9,6 +9,7 @@ package inventoryv1
 import (
 	common "github.com/erniealice/esqyma/pkg/schema/v1/domain/common"
 	inventory_item "github.com/erniealice/esqyma/pkg/schema/v1/domain/inventory/inventory_item"
+	_ "github.com/erniealice/esqyma/pkg/schema/v1/options"
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
 	reflect "reflect"
@@ -1315,21 +1316,21 @@ var File_domain_inventory_inventory_transaction_inventory_transaction_proto prot
 
 const file_domain_inventory_inventory_transaction_inventory_transaction_proto_rawDesc = "" +
 	"\n" +
-	"Bdomain/inventory/inventory_transaction/inventory_transaction.proto\x12\x13domain.inventory.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1adomain/common/search.proto\x1a4domain/inventory/inventory_item/inventory_item.proto\"\xf0\b\n" +
+	"Bdomain/inventory/inventory_transaction/inventory_transaction.proto\x12\x13domain.inventory.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1adomain/common/search.proto\x1a4domain/inventory/inventory_item/inventory_item.proto\x1a\x10options/db.proto\"\x88\t\n" +
 	"\x14InventoryTransaction\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12&\n" +
-	"\fdate_created\x18\x02 \x01(\x03H\x00R\vdateCreated\x88\x01\x01\x123\n" +
-	"\x13date_created_string\x18\x03 \x01(\tH\x01R\x11dateCreatedString\x88\x01\x01\x12(\n" +
-	"\rdate_modified\x18\x04 \x01(\x03H\x02R\fdateModified\x88\x01\x01\x125\n" +
-	"\x14date_modified_string\x18\x05 \x01(\tH\x03R\x12dateModifiedString\x88\x01\x01\x12\x16\n" +
+	"\fdate_created\x18\x02 \x01(\x03H\x00R\vdateCreated\x88\x01\x01\x12;\n" +
+	"\x13date_created_string\x18\x03 \x01(\tB\x06\x82\xb5\x18\x028\x01H\x01R\x11dateCreatedString\x88\x01\x01\x12(\n" +
+	"\rdate_modified\x18\x04 \x01(\x03H\x02R\fdateModified\x88\x01\x01\x12=\n" +
+	"\x14date_modified_string\x18\x05 \x01(\tB\x06\x82\xb5\x18\x028\x01H\x03R\x12dateModifiedString\x88\x01\x01\x12\x16\n" +
 	"\x06active\x18\x06 \x01(\bR\x06active\x12N\n" +
 	"\x0einventory_item\x18\a \x01(\v2\".domain.inventory.v1.InventoryItemH\x04R\rinventoryItem\x88\x01\x01\x12*\n" +
 	"\x11inventory_item_id\x18\b \x01(\tR\x0finventoryItemId\x12)\n" +
 	"\x10transaction_type\x18\t \x01(\tR\x0ftransactionType\x12\x1a\n" +
 	"\bquantity\x18\n" +
 	" \x01(\x01R\bquantity\x12.\n" +
-	"\x10transaction_date\x18\v \x01(\x03H\x05R\x0ftransactionDate\x88\x01\x01\x12;\n" +
-	"\x17transaction_date_string\x18\f \x01(\tH\x06R\x15transactionDateString\x88\x01\x01\x12*\n" +
+	"\x10transaction_date\x18\v \x01(\x03H\x05R\x0ftransactionDate\x88\x01\x01\x12C\n" +
+	"\x17transaction_date_string\x18\f \x01(\tB\x06\x82\xb5\x18\x028\x01H\x06R\x15transactionDateString\x88\x01\x01\x12*\n" +
 	"\x0ereference_type\x18\r \x01(\tH\aR\rreferenceType\x88\x01\x01\x12&\n" +
 	"\freference_id\x18\x0e \x01(\tH\bR\vreferenceId\x88\x01\x01\x12-\n" +
 	"\x10from_location_id\x18\x0f \x01(\tH\tR\x0efromLocationId\x88\x01\x01\x12)\n" +

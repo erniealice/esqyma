@@ -9,6 +9,7 @@ import "domain/common/pagination.proto";
 import "domain/common/search.proto";
 import "domain/common/filter.proto";
 import "domain/common/sort.proto";
+import "options/db.proto";
 
 // Buying-side mirror of selling-side RevenueRun. One operator-clicks-Generate
 // batch that scans active SupplierSubscription cycles AND advance
@@ -66,9 +67,9 @@ message ExpenseRecognitionRun {
   optional string notes = 15;
   bool active = 16;
   optional int64 date_created = 17;
-  optional string date_created_string = 18;
+  optional string date_created_string = 18 [(options.v1.db).ignore = true];
   optional int64 date_modified = 19;
-  optional string date_modified_string = 20;
+  optional string date_modified_string = 20 [(options.v1.db).ignore = true];
 }
 
 service ExpenseRecognitionRunDomainService {
@@ -208,9 +209,9 @@ message ExpenseRecognitionRunAttempt {
   optional int64 attempted_at = 14;
   bool active = 15;
   optional int64 date_created = 16;
-  optional string date_created_string = 17;
+  optional string date_created_string = 17 [(options.v1.db).ignore = true];
   optional int64 date_modified = 18;
-  optional string date_modified_string = 19;
+  optional string date_modified_string = 19 [(options.v1.db).ignore = true];
 }
 
 message CreateExpenseRecognitionRunAttemptRequest  { ExpenseRecognitionRunAttempt data = 1; }

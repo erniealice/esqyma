@@ -12,6 +12,7 @@ import "domain/common/search.proto";
 
 import "domain/asset/asset/asset.proto";
 import "domain/common/attribute.proto";
+import "options/db.proto";
 
 message AssetAttribute {
   string id = 1;
@@ -21,9 +22,9 @@ message AssetAttribute {
   Asset asset = 5;
   domain.common.v1.Attribute attribute = 6;
   optional int64 date_created = 7;
-  optional string date_created_string = 8;
+  optional string date_created_string = 8 [(options.v1.db).ignore = true];
   optional int64 date_modified = 9;
-  optional string date_modified_string = 10;
+  optional string date_modified_string = 10 [(options.v1.db).ignore = true];
   bool active = 11;
 }
 

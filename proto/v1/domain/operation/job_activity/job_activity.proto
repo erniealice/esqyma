@@ -63,18 +63,18 @@ message JobActivity {
   int64 total_cost = 8; // centavos
   string currency = 9;
   optional int64 entry_date = 10;
-  optional string entry_date_string = 11;
+  optional string entry_date_string = 11 [(options.v1.db).ignore = true];
   optional string description = 12;
   BillableStatus billable_status = 13;
   ActivityApprovalStatus approval_status = 14;
   ActivityPostingStatus posting_status = 15;
   optional string posted_by = 16;
   optional int64 date_posted = 17;
-  optional string date_posted_string = 18;
+  optional string date_posted_string = 18 [(options.v1.db).ignore = true];
   optional string reversal_of_id = 19 [(options.v1.db).references = "job_activity"];
   optional string created_by = 20;
   optional int64 date_created = 21;
-  optional string date_created_string = 22;
+  optional string date_created_string = 22 [(options.v1.db).ignore = true];
   bool active = 23;
   optional string workspace_id = 24 [(options.v1.db).references = "workspace", (options.v1.db).index = true];
   optional string resource_id = 25 [(options.v1.db).references = "resource", (options.v1.db).index = true];

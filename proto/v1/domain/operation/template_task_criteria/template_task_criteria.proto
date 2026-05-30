@@ -31,7 +31,7 @@ message TemplateTaskCriteria {
   optional domain.operation.v1.AggregationMethod aggregation_method_override = 9;
   bool active = 10 [(options.v1.db).default = "true"];
   optional int64 date_created = 11;
-  optional string date_created_string = 12;
+  optional string date_created_string = 12 [(options.v1.db).ignore = true];
 }
 
 // --- Service ---

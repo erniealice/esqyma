@@ -8,6 +8,7 @@ package treasuryv1
 
 import (
 	common "github.com/erniealice/esqyma/pkg/schema/v1/domain/common"
+	_ "github.com/erniealice/esqyma/pkg/schema/v1/options"
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
 	reflect "reflect"
@@ -1076,13 +1077,13 @@ var File_domain_treasury_disbursement_method_disbursement_method_proto protorefl
 
 const file_domain_treasury_disbursement_method_disbursement_method_proto_rawDesc = "" +
 	"\n" +
-	"=domain/treasury/disbursement_method/disbursement_method.proto\x12\x12domain.treasury.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1adomain/common/search.proto\"\xcc\x04\n" +
+	"=domain/treasury/disbursement_method/disbursement_method.proto\x12\x12domain.treasury.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1adomain/common/search.proto\x1a\x10options/db.proto\"\xdc\x04\n" +
 	"\x12DisbursementMethod\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12&\n" +
-	"\fdate_created\x18\x02 \x01(\x03H\x01R\vdateCreated\x88\x01\x01\x123\n" +
-	"\x13date_created_string\x18\x03 \x01(\tH\x02R\x11dateCreatedString\x88\x01\x01\x12(\n" +
-	"\rdate_modified\x18\x04 \x01(\x03H\x03R\fdateModified\x88\x01\x01\x125\n" +
-	"\x14date_modified_string\x18\x05 \x01(\tH\x04R\x12dateModifiedString\x88\x01\x01\x12\x16\n" +
+	"\fdate_created\x18\x02 \x01(\x03H\x01R\vdateCreated\x88\x01\x01\x12;\n" +
+	"\x13date_created_string\x18\x03 \x01(\tB\x06\x82\xb5\x18\x028\x01H\x02R\x11dateCreatedString\x88\x01\x01\x12(\n" +
+	"\rdate_modified\x18\x04 \x01(\x03H\x03R\fdateModified\x88\x01\x01\x12=\n" +
+	"\x14date_modified_string\x18\x05 \x01(\tB\x06\x82\xb5\x18\x028\x01H\x04R\x12dateModifiedString\x88\x01\x01\x12\x16\n" +
 	"\x06active\x18\x06 \x01(\bR\x06active\x12\x12\n" +
 	"\x04name\x18\a \x01(\tR\x04name\x12A\n" +
 	"\x04card\x18\b \x01(\v2+.domain.treasury.v1.DisbursementCardDetailsH\x00R\x04card\x12W\n" +

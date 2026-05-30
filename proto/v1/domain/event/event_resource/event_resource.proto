@@ -54,9 +54,9 @@ message EventResource {
 
   // Audit fields
   optional int64 date_created = 8;
-  optional string date_created_string = 9;
+  optional string date_created_string = 9 [(options.v1.db).ignore = true];
   optional int64 date_modified = 10;
-  optional string date_modified_string = 11;
+  optional string date_modified_string = 11 [(options.v1.db).ignore = true];
   bool active = 12 [(options.v1.db).default = "true"];
 }
 

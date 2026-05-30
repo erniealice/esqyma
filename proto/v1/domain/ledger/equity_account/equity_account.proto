@@ -41,9 +41,9 @@ message EquityAccount {
   // Audit fields
   bool active = 7 [(options.v1.db).default = "true"];
   optional int64 date_created = 8;
-  optional string date_created_string = 9;
+  optional string date_created_string = 9 [(options.v1.db).ignore = true];
   optional int64 date_modified = 10;
-  optional string date_modified_string = 11;
+  optional string date_modified_string = 11 [(options.v1.db).ignore = true];
 
   // Mutual / cooperative extension (2026-05-10)
   // workspace_user_id: FK to the member this equity account belongs to (workspace-scoped;

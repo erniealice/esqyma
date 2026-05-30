@@ -39,13 +39,13 @@ message Category {
   optional int64 date_created = 7;
 
   // Creation timestamp as human-readable string
-  optional string date_created_string = 8;
+  optional string date_created_string = 8 [(options.v1.db).ignore = true];
 
   // Last modification timestamp as Unix epoch (milliseconds)
   optional int64 date_modified = 9;
 
   // Last modification timestamp as human-readable string
-  optional string date_modified_string = 10;
+  optional string date_modified_string = 10 [(options.v1.db).ignore = true];
 
   // Whether the category is currently active
   bool active = 11 [(options.v1.db).default = "true"];

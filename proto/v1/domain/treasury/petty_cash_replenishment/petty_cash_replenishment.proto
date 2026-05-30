@@ -26,7 +26,7 @@ message PettyCashReplenishment {
   int64 amount = 4; // centavos                         // Total cash returned to fund (sum of vouchers)
 
   int64 replenishment_date = 5;
-  optional string replenishment_date_string = 6;
+  optional string replenishment_date_string = 6 [(options.v1.db).ignore = true];
 
   // Vouchers covered by this replenishment
   repeated string voucher_ids = 7;           // FK to petty_cash_voucher (repeated)
@@ -36,7 +36,7 @@ message PettyCashReplenishment {
 
   // Audit fields
   optional int64 date_created = 10;
-  optional string date_created_string = 11;
+  optional string date_created_string = 11 [(options.v1.db).ignore = true];
 }
 
 service PettyCashReplenishmentDomainService {

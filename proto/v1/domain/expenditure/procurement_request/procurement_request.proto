@@ -58,9 +58,9 @@ message ProcurementRequest {
 
   // Audit
   optional int64 date_created = 3;
-  optional string date_created_string = 4;
+  optional string date_created_string = 4 [(options.v1.db).ignore = true];
   optional int64 date_modified = 5;
-  optional string date_modified_string = 6;
+  optional string date_modified_string = 6 [(options.v1.db).ignore = true];
   bool active = 7 [(options.v1.db).default = "true"];
   string request_number = 8 [(options.v1.db).unique = true];  // human-readable ID
 
@@ -91,7 +91,7 @@ message ProcurementRequest {
   // Approval
   optional string approved_by = 30;
   optional int64 approved_at = 31;
-  optional string approved_at_string = 32;
+  optional string approved_at_string = 32 [(options.v1.db).ignore = true];
   optional string rejection_reason = 33;
 
   // Spawned artifacts (set after approval)

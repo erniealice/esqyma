@@ -18,9 +18,9 @@ message JobTemplate {
 
   string id = 1;
   optional int64 date_created = 2;
-  optional string date_created_string = 3;
+  optional string date_created_string = 3 [(options.v1.db).ignore = true];
   optional int64 date_modified = 4;
-  optional string date_modified_string = 5;
+  optional string date_modified_string = 5 [(options.v1.db).ignore = true];
   bool active = 6 [(options.v1.db).default = "true"];
   string name = 7;
   optional string description = 8;
@@ -34,14 +34,14 @@ message JobTemplate {
   optional int32 revision = 14;
   optional VersionStatus version_status = 15;
   optional int64 effective_from = 16;
-  optional string effective_from_string = 17;
+  optional string effective_from_string = 17 [(options.v1.db).ignore = true];
   optional int64 effective_to = 18;
-  optional string effective_to_string = 19;
+  optional string effective_to_string = 19 [(options.v1.db).ignore = true];
   optional string supersedes_template_id = 20 [(options.v1.db).references = "job_template"];
   optional string change_request_id = 21 [(options.v1.db).index = true];
   optional bool is_default = 22 [(options.v1.db).default = "false"];
   optional int64 published_at = 23;
-  optional string published_at_string = 24;
+  optional string published_at_string = 24 [(options.v1.db).ignore = true];
   optional string published_by = 25;
 
   // reserved 26: BackflushPolicy enum imported from job_template_input/ in Wave 2

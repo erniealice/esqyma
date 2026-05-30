@@ -31,9 +31,9 @@ message LeaveBalance {
   // Audit
   bool active = 10 [(options.v1.db).default = "true"];
   optional int64 date_created = 11;
-  optional string date_created_string = 12;
+  optional string date_created_string = 12 [(options.v1.db).ignore = true];
   optional int64 date_modified = 13;
-  optional string date_modified_string = 14;
+  optional string date_modified_string = 14 [(options.v1.db).ignore = true];
 }
 
 service LeaveBalanceDomainService {

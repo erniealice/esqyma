@@ -1196,13 +1196,13 @@ var File_domain_operation_job_phase_job_phase_proto protoreflect.FileDescriptor
 
 const file_domain_operation_job_phase_job_phase_proto_rawDesc = "" +
 	"\n" +
-	"*domain/operation/job_phase/job_phase.proto\x12\x13domain.operation.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1adomain/common/search.proto\x1a\x1edomain/operation/job/job.proto\x1a\x10options/db.proto\"\xc1\v\n" +
+	"*domain/operation/job_phase/job_phase.proto\x12\x13domain.operation.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1adomain/common/search.proto\x1a\x1edomain/operation/job/job.proto\x1a\x10options/db.proto\"\xf1\v\n" +
 	"\bJobPhase\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12&\n" +
-	"\fdate_created\x18\x02 \x01(\x03H\x00R\vdateCreated\x88\x01\x01\x123\n" +
-	"\x13date_created_string\x18\x03 \x01(\tH\x01R\x11dateCreatedString\x88\x01\x01\x12(\n" +
-	"\rdate_modified\x18\x04 \x01(\x03H\x02R\fdateModified\x88\x01\x01\x125\n" +
-	"\x14date_modified_string\x18\x05 \x01(\tH\x03R\x12dateModifiedString\x88\x01\x01\x12\x16\n" +
+	"\fdate_created\x18\x02 \x01(\x03H\x00R\vdateCreated\x88\x01\x01\x12;\n" +
+	"\x13date_created_string\x18\x03 \x01(\tB\x06\x82\xb5\x18\x028\x01H\x01R\x11dateCreatedString\x88\x01\x01\x12(\n" +
+	"\rdate_modified\x18\x04 \x01(\x03H\x02R\fdateModified\x88\x01\x01\x12=\n" +
+	"\x14date_modified_string\x18\x05 \x01(\tB\x06\x82\xb5\x18\x028\x01H\x03R\x12dateModifiedString\x88\x01\x01\x12\x16\n" +
 	"\x06active\x18\x06 \x01(\bR\x06active\x12\"\n" +
 	"\x06job_id\x18\a \x01(\tB\v\x82\xb5\x18\a\n" +
 	"\x03job\x18\x01R\x05jobId\x12/\n" +
@@ -1217,17 +1217,17 @@ const file_domain_operation_job_phase_job_phase_proto_rawDesc = "" +
 	"\vresource_id\x18\r \x01(\tB\x10\x82\xb5\x18\f\n" +
 	"\bresource\x18\x01H\x06R\n" +
 	"resourceId\x88\x01\x01\x12(\n" +
-	"\rplanned_start\x18\x0e \x01(\x03H\aR\fplannedStart\x88\x01\x01\x125\n" +
-	"\x14planned_start_string\x18\x0f \x01(\tH\bR\x12plannedStartString\x88\x01\x01\x12$\n" +
+	"\rplanned_start\x18\x0e \x01(\x03H\aR\fplannedStart\x88\x01\x01\x12=\n" +
+	"\x14planned_start_string\x18\x0f \x01(\tB\x06\x82\xb5\x18\x028\x01H\bR\x12plannedStartString\x88\x01\x01\x12$\n" +
 	"\vplanned_end\x18\x10 \x01(\x03H\tR\n" +
-	"plannedEnd\x88\x01\x01\x121\n" +
-	"\x12planned_end_string\x18\x11 \x01(\tH\n" +
+	"plannedEnd\x88\x01\x01\x129\n" +
+	"\x12planned_end_string\x18\x11 \x01(\tB\x06\x82\xb5\x18\x028\x01H\n" +
 	"R\x10plannedEndString\x88\x01\x01\x12&\n" +
-	"\factual_start\x18\x12 \x01(\x03H\vR\vactualStart\x88\x01\x01\x123\n" +
-	"\x13actual_start_string\x18\x13 \x01(\tH\fR\x11actualStartString\x88\x01\x01\x12\"\n" +
+	"\factual_start\x18\x12 \x01(\x03H\vR\vactualStart\x88\x01\x01\x12;\n" +
+	"\x13actual_start_string\x18\x13 \x01(\tB\x06\x82\xb5\x18\x028\x01H\fR\x11actualStartString\x88\x01\x01\x12\"\n" +
 	"\n" +
-	"actual_end\x18\x14 \x01(\x03H\rR\tactualEnd\x88\x01\x01\x12/\n" +
-	"\x11actual_end_string\x18\x15 \x01(\tH\x0eR\x0factualEndString\x88\x01\x01\x12(\n" +
+	"actual_end\x18\x14 \x01(\x03H\rR\tactualEnd\x88\x01\x01\x127\n" +
+	"\x11actual_end_string\x18\x15 \x01(\tB\x06\x82\xb5\x18\x028\x01H\x0eR\x0factualEndString\x88\x01\x01\x12(\n" +
 	"\rsetup_minutes\x18\x16 \x01(\x05H\x0fR\fsetupMinutes\x88\x01\x01\x124\n" +
 	"\x14run_minutes_per_unit\x18\x17 \x01(\x01H\x10R\x11runMinutesPerUnit\x88\x01\x01\x12F\n" +
 	"\x14predecessor_phase_id\x18\x18 \x01(\tB\x0f\x82\xb5\x18\v\n" +

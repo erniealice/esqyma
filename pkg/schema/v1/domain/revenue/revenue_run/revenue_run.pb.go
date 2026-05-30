@@ -8,6 +8,7 @@ package revenuev1
 
 import (
 	common "github.com/erniealice/esqyma/pkg/schema/v1/domain/common"
+	_ "github.com/erniealice/esqyma/pkg/schema/v1/options"
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
 	reflect "reflect"
@@ -2054,7 +2055,7 @@ var File_domain_revenue_revenue_run_revenue_run_proto protoreflect.FileDescripto
 
 const file_domain_revenue_revenue_run_revenue_run_proto_rawDesc = "" +
 	"\n" +
-	",domain/revenue/revenue_run/revenue_run.proto\x12\x11domain.revenue.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/search.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\"\xcf\a\n" +
+	",domain/revenue/revenue_run/revenue_run.proto\x12\x11domain.revenue.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/search.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x10options/db.proto\"\xdf\a\n" +
 	"\n" +
 	"RevenueRun\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12!\n" +
@@ -2076,10 +2077,10 @@ const file_domain_revenue_revenue_run_revenue_run_proto_rawDesc = "" +
 	"\fcompleted_at\x18\x0e \x01(\x03H\x03R\vcompletedAt\x88\x01\x01\x12\x19\n" +
 	"\x05notes\x18\x0f \x01(\tH\x04R\x05notes\x88\x01\x01\x12\x16\n" +
 	"\x06active\x18\x10 \x01(\bR\x06active\x12&\n" +
-	"\fdate_created\x18\x11 \x01(\x03H\x05R\vdateCreated\x88\x01\x01\x123\n" +
-	"\x13date_created_string\x18\x12 \x01(\tH\x06R\x11dateCreatedString\x88\x01\x01\x12(\n" +
-	"\rdate_modified\x18\x13 \x01(\x03H\aR\fdateModified\x88\x01\x01\x125\n" +
-	"\x14date_modified_string\x18\x14 \x01(\tH\bR\x12dateModifiedString\x88\x01\x01B\f\n" +
+	"\fdate_created\x18\x11 \x01(\x03H\x05R\vdateCreated\x88\x01\x01\x12;\n" +
+	"\x13date_created_string\x18\x12 \x01(\tB\x06\x82\xb5\x18\x028\x01H\x06R\x11dateCreatedString\x88\x01\x01\x12(\n" +
+	"\rdate_modified\x18\x13 \x01(\x03H\aR\fdateModified\x88\x01\x01\x12=\n" +
+	"\x14date_modified_string\x18\x14 \x01(\tB\x06\x82\xb5\x18\x028\x01H\bR\x12dateModifiedString\x88\x01\x01B\f\n" +
 	"\n" +
 	"_client_idB\x12\n" +
 	"\x10_subscription_idB\x0f\n" +
@@ -2089,7 +2090,7 @@ const file_domain_revenue_revenue_run_revenue_run_proto_rawDesc = "" +
 	"\r_date_createdB\x16\n" +
 	"\x14_date_created_stringB\x10\n" +
 	"\x0e_date_modifiedB\x17\n" +
-	"\x15_date_modified_string\"\xb3\a\n" +
+	"\x15_date_modified_string\"\xc3\a\n" +
 	"\x11RevenueRunAttempt\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12\x15\n" +
 	"\x06run_id\x18\x02 \x01(\tR\x05runId\x12'\n" +
@@ -2107,10 +2108,10 @@ const file_domain_revenue_revenue_run_revenue_run_proto_rawDesc = "" +
 	" \x01(\tH\x02R\ferrorMessage\x88\x01\x01\x12&\n" +
 	"\fattempted_at\x18\v \x01(\x03H\x03R\vattemptedAt\x88\x01\x01\x12\x16\n" +
 	"\x06active\x18\f \x01(\bR\x06active\x12&\n" +
-	"\fdate_created\x18\r \x01(\x03H\x04R\vdateCreated\x88\x01\x01\x123\n" +
-	"\x13date_created_string\x18\x0e \x01(\tH\x05R\x11dateCreatedString\x88\x01\x01\x12(\n" +
-	"\rdate_modified\x18\x0f \x01(\x03H\x06R\fdateModified\x88\x01\x01\x125\n" +
-	"\x14date_modified_string\x18\x10 \x01(\tH\aR\x12dateModifiedString\x88\x01\x01\x12H\n" +
+	"\fdate_created\x18\r \x01(\x03H\x04R\vdateCreated\x88\x01\x01\x12;\n" +
+	"\x13date_created_string\x18\x0e \x01(\tB\x06\x82\xb5\x18\x028\x01H\x05R\x11dateCreatedString\x88\x01\x01\x12(\n" +
+	"\rdate_modified\x18\x0f \x01(\x03H\x06R\fdateModified\x88\x01\x01\x12=\n" +
+	"\x14date_modified_string\x18\x10 \x01(\tB\x06\x82\xb5\x18\x028\x01H\aR\x12dateModifiedString\x88\x01\x01\x12H\n" +
 	"\vsource_kind\x18\x11 \x01(\x0e2'.domain.revenue.v1.RevenueRunSourceKindR\n" +
 	"sourceKind\x127\n" +
 	"\x15advance_collection_id\x18\x12 \x01(\tH\bR\x13advanceCollectionId\x88\x01\x01B\r\n" +

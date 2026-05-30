@@ -887,11 +887,11 @@ var File_domain_inventory_serial_history_inventory_serial_history_proto protoref
 
 const file_domain_inventory_serial_history_inventory_serial_history_proto_rawDesc = "" +
 	"\n" +
-	">domain/inventory/serial_history/inventory_serial_history.proto\x12\x13domain.inventory.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1adomain/common/search.proto\x1a4domain/inventory/inventory_item/inventory_item.proto\x1a8domain/inventory/inventory_serial/inventory_serial.proto\x1a\x10options/db.proto\"\xda\x05\n" +
+	">domain/inventory/serial_history/inventory_serial_history.proto\x12\x13domain.inventory.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1adomain/common/search.proto\x1a4domain/inventory/inventory_item/inventory_item.proto\x1a8domain/inventory/inventory_serial/inventory_serial.proto\x1a\x10options/db.proto\"\xe2\x05\n" +
 	"\x16InventorySerialHistory\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12&\n" +
-	"\fdate_created\x18\x02 \x01(\x03H\x00R\vdateCreated\x88\x01\x01\x123\n" +
-	"\x13date_created_string\x18\x03 \x01(\tH\x01R\x11dateCreatedString\x88\x01\x01\x12A\n" +
+	"\fdate_created\x18\x02 \x01(\x03H\x00R\vdateCreated\x88\x01\x01\x12;\n" +
+	"\x13date_created_string\x18\x03 \x01(\tB\x06\x82\xb5\x18\x028\x01H\x01R\x11dateCreatedString\x88\x01\x01\x12A\n" +
 	"\x06serial\x18\x04 \x01(\v2$.domain.inventory.v1.InventorySerialH\x02R\x06serial\x88\x01\x01\x12H\n" +
 	"\x13inventory_serial_id\x18\x05 \x01(\tB\x18\x82\xb5\x18\x14\n" +
 	"\x10inventory_serial\x18\x01R\x11inventorySerialId\x12N\n" +

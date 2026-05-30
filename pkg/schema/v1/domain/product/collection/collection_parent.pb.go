@@ -663,7 +663,7 @@ var File_domain_product_collection_collection_parent_proto protoreflect.FileDesc
 
 const file_domain_product_collection_collection_parent_proto_rawDesc = "" +
 	"\n" +
-	"1domain/product/collection/collection_parent.proto\x12\x11domain.product.v1\x1a\x19domain/common/error.proto\x1a\x1adomain/common/search.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1edomain/common/pagination.proto\x1a\x10options/db.proto\"\x83\x04\n" +
+	"1domain/product/collection/collection_parent.proto\x12\x11domain.product.v1\x1a\x19domain/common/error.proto\x1a\x1adomain/common/search.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1edomain/common/pagination.proto\x1a\x10options/db.proto\"\x93\x04\n" +
 	"\x10CollectionParent\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12D\n" +
 	"\x14collection_parent_id\x18\x02 \x01(\tB\x12\x82\xb5\x18\x0e\n" +
@@ -672,10 +672,10 @@ const file_domain_product_collection_collection_parent_proto_rawDesc = "" +
 	"\rcollection_id\x18\x03 \x01(\tB\x12\x82\xb5\x18\x0e\n" +
 	"\n" +
 	"collection\x18\x01R\fcollectionId\x12&\n" +
-	"\fdate_created\x18\x04 \x01(\x03H\x00R\vdateCreated\x88\x01\x01\x123\n" +
-	"\x13date_created_string\x18\x05 \x01(\tH\x01R\x11dateCreatedString\x88\x01\x01\x12(\n" +
-	"\rdate_modified\x18\x06 \x01(\x03H\x02R\fdateModified\x88\x01\x01\x125\n" +
-	"\x14date_modified_string\x18\a \x01(\tH\x03R\x12dateModifiedString\x88\x01\x01\x12\"\n" +
+	"\fdate_created\x18\x04 \x01(\x03H\x00R\vdateCreated\x88\x01\x01\x12;\n" +
+	"\x13date_created_string\x18\x05 \x01(\tB\x06\x82\xb5\x18\x028\x01H\x01R\x11dateCreatedString\x88\x01\x01\x12(\n" +
+	"\rdate_modified\x18\x06 \x01(\x03H\x02R\fdateModified\x88\x01\x01\x12=\n" +
+	"\x14date_modified_string\x18\a \x01(\tB\x06\x82\xb5\x18\x028\x01H\x03R\x12dateModifiedString\x88\x01\x01\x12\"\n" +
 	"\x06active\x18\b \x01(\bB\n" +
 	"\x82\xb5\x18\x06\"\x04trueR\x06active:*\x8a\xb5\x18&\b\x01\x1a\"collection_parent_id,collection_idB\x0f\n" +
 	"\r_date_createdB\x16\n" +

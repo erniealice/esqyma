@@ -1208,7 +1208,7 @@ var File_domain_asset_asset_category_asset_category_proto protoreflect.FileDescr
 
 const file_domain_asset_asset_category_asset_category_proto_rawDesc = "" +
 	"\n" +
-	"0domain/asset/asset_category/asset_category.proto\x12\x0fdomain.asset.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1adomain/common/search.proto\x1a\x10options/db.proto\"\x9a\r\n" +
+	"0domain/asset/asset_category/asset_category.proto\x12\x0fdomain.asset.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1adomain/common/search.proto\x1a\x10options/db.proto\"\xaa\r\n" +
 	"\rAssetCategory\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12\x1a\n" +
 	"\x04code\x18\x02 \x01(\tB\x06\x82\xb5\x18\x02\x10\x01R\x04code\x12\x12\n" +
@@ -1227,11 +1227,11 @@ const file_domain_asset_asset_category_asset_category_proto_rawDesc = "" +
 	"\x18loss_on_disposal_account\x18\r \x01(\tH\x06R\x15lossOnDisposalAccount\x88\x01\x01\x12;\n" +
 	"\x17impairment_loss_account\x18\x0e \x01(\tH\aR\x15impairmentLossAccount\x88\x01\x01\x12C\n" +
 	"\x1brevaluation_surplus_account\x18\x0f \x01(\tH\bR\x19revaluationSurplusAccount\x88\x01\x01\x12&\n" +
-	"\fdate_created\x18\x10 \x01(\x03H\tR\vdateCreated\x88\x01\x01\x123\n" +
-	"\x13date_created_string\x18\x11 \x01(\tH\n" +
+	"\fdate_created\x18\x10 \x01(\x03H\tR\vdateCreated\x88\x01\x01\x12;\n" +
+	"\x13date_created_string\x18\x11 \x01(\tB\x06\x82\xb5\x18\x028\x01H\n" +
 	"R\x11dateCreatedString\x88\x01\x01\x12(\n" +
-	"\rdate_modified\x18\x12 \x01(\x03H\vR\fdateModified\x88\x01\x01\x125\n" +
-	"\x14date_modified_string\x18\x13 \x01(\tH\fR\x12dateModifiedString\x88\x01\x01\x12\"\n" +
+	"\rdate_modified\x18\x12 \x01(\x03H\vR\fdateModified\x88\x01\x01\x12=\n" +
+	"\x14date_modified_string\x18\x13 \x01(\tB\x06\x82\xb5\x18\x028\x01H\fR\x12dateModifiedString\x88\x01\x01\x12\"\n" +
 	"\x06active\x18\x14 \x01(\bB\n" +
 	"\x82\xb5\x18\x06\"\x04trueR\x06active\x124\n" +
 	"\x13depreciation_method\x18\x15 \x01(\tH\rR\x12depreciationMethod\x88\x01\x01\x12$\n" +

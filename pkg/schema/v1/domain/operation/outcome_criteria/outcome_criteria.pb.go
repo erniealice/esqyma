@@ -1464,7 +1464,7 @@ var File_domain_operation_outcome_criteria_outcome_criteria_proto protoreflect.F
 
 const file_domain_operation_outcome_criteria_outcome_criteria_proto_rawDesc = "" +
 	"\n" +
-	"8domain/operation/outcome_criteria/outcome_criteria.proto\x12\x13domain.operation.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1adomain/common/search.proto\x1a\"domain/operation/enums/enums.proto\x1a\x10options/db.proto\"\xfc\x0f\n" +
+	"8domain/operation/outcome_criteria/outcome_criteria.proto\x12\x13domain.operation.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1adomain/common/search.proto\x1a\"domain/operation/enums/enums.proto\x1a\x10options/db.proto\"\x8c\x10\n" +
 	"\x0fOutcomeCriteria\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12*\n" +
 	"\x11criteria_group_id\x18\x02 \x01(\tR\x0fcriteriaGroupId\x12\x18\n" +
@@ -1508,10 +1508,10 @@ const file_domain_operation_outcome_criteria_outcome_criteria_proto_rawDesc = ""
 	"\x82\xb5\x18\x06\"\x04trueR\x06active\x12\x1d\n" +
 	"\n" +
 	"created_by\x18  \x01(\tR\tcreatedBy\x12&\n" +
-	"\fdate_created\x18! \x01(\x03H\x11R\vdateCreated\x88\x01\x01\x123\n" +
-	"\x13date_created_string\x18\" \x01(\tH\x12R\x11dateCreatedString\x88\x01\x01\x12(\n" +
-	"\rdate_modified\x18# \x01(\x03H\x13R\fdateModified\x88\x01\x01\x125\n" +
-	"\x14date_modified_string\x18$ \x01(\tH\x14R\x12dateModifiedString\x88\x01\x01:\x06\x8a\xb5\x18\x02\b\x01B\x10\n" +
+	"\fdate_created\x18! \x01(\x03H\x11R\vdateCreated\x88\x01\x01\x12;\n" +
+	"\x13date_created_string\x18\" \x01(\tB\x06\x82\xb5\x18\x028\x01H\x12R\x11dateCreatedString\x88\x01\x01\x12(\n" +
+	"\rdate_modified\x18# \x01(\x03H\x13R\fdateModified\x88\x01\x01\x12=\n" +
+	"\x14date_modified_string\x18$ \x01(\tB\x06\x82\xb5\x18\x028\x01H\x14R\x12dateModifiedString\x88\x01\x01:\x06\x8a\xb5\x18\x02\b\x01B\x10\n" +
 	"\x0e_supersedes_idB\x10\n" +
 	"\x0e_industry_codeB\x0f\n" +
 	"\r_workspace_idB\x0f\n" +

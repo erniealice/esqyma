@@ -11,20 +11,21 @@ import "domain/common/sort.proto";
 import "domain/common/search.proto";
 
 import "domain/inventory/inventory_item/inventory_item.proto";
+import "options/db.proto";
 
 message InventoryTransaction {
   string id = 1;
   optional int64 date_created = 2;
-  optional string date_created_string = 3;
+  optional string date_created_string = 3 [(options.v1.db).ignore = true];
   optional int64 date_modified = 4;
-  optional string date_modified_string = 5;
+  optional string date_modified_string = 5 [(options.v1.db).ignore = true];
   bool active = 6;
   optional InventoryItem inventory_item = 7;
   string inventory_item_id = 8;
   string transaction_type = 9;
   double quantity = 10;
   optional int64 transaction_date = 11;
-  optional string transaction_date_string = 12;
+  optional string transaction_date_string = 12 [(options.v1.db).ignore = true];
   optional string reference_type = 13;
   optional string reference_id = 14;
   optional string from_location_id = 15;

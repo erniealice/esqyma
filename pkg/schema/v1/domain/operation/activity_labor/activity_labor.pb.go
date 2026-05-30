@@ -1189,7 +1189,7 @@ var File_domain_operation_activity_labor_activity_labor_proto protoreflect.FileD
 
 const file_domain_operation_activity_labor_activity_labor_proto_rawDesc = "" +
 	"\n" +
-	"4domain/operation/activity_labor/activity_labor.proto\x12\x13domain.operation.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1adomain/common/search.proto\x1a0domain/operation/job_activity/job_activity.proto\x1a\x1fdomain/entity/staff/staff.proto\x1a\x10options/db.proto\"\xc9\x04\n" +
+	"4domain/operation/activity_labor/activity_labor.proto\x12\x13domain.operation.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1adomain/common/search.proto\x1a0domain/operation/job_activity/job_activity.proto\x1a\x1fdomain/entity/staff/staff.proto\x1a\x10options/db.proto\"\xd9\x04\n" +
 	"\rActivityLabor\x123\n" +
 	"\vactivity_id\x18\x01 \x01(\tB\x12\x82\xb5\x18\x0e\n" +
 	"\fjob_activityR\n" +
@@ -1201,11 +1201,11 @@ const file_domain_operation_activity_labor_activity_labor_proto_rawDesc = "" +
 	"\x05hours\x18\x05 \x01(\x01R\x05hours\x12:\n" +
 	"\trate_type\x18\x06 \x01(\x0e2\x1d.domain.operation.v1.RateTypeR\brateType\x12\"\n" +
 	"\n" +
-	"time_start\x18\a \x01(\x03H\x02R\ttimeStart\x88\x01\x01\x12/\n" +
-	"\x11time_start_string\x18\b \x01(\tH\x03R\x0ftimeStartString\x88\x01\x01\x12\x1e\n" +
-	"\btime_end\x18\t \x01(\x03H\x04R\atimeEnd\x88\x01\x01\x12+\n" +
+	"time_start\x18\a \x01(\x03H\x02R\ttimeStart\x88\x01\x01\x127\n" +
+	"\x11time_start_string\x18\b \x01(\tB\x06\x82\xb5\x18\x028\x01H\x03R\x0ftimeStartString\x88\x01\x01\x12\x1e\n" +
+	"\btime_end\x18\t \x01(\x03H\x04R\atimeEnd\x88\x01\x01\x123\n" +
 	"\x0ftime_end_string\x18\n" +
-	" \x01(\tH\x05R\rtimeEndString\x88\x01\x01:\x06\x8a\xb5\x18\x02\b\x01B\x0f\n" +
+	" \x01(\tB\x06\x82\xb5\x18\x028\x01H\x05R\rtimeEndString\x88\x01\x01:\x06\x8a\xb5\x18\x02\b\x01B\x0f\n" +
 	"\r_job_activityB\b\n" +
 	"\x06_staffB\r\n" +
 	"\v_time_startB\x14\n" +

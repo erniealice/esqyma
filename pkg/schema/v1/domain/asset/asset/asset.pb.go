@@ -2325,7 +2325,7 @@ var File_domain_asset_asset_asset_proto protoreflect.FileDescriptor
 
 const file_domain_asset_asset_asset_proto_rawDesc = "" +
 	"\n" +
-	"\x1edomain/asset/asset/asset.proto\x12\x0fdomain.asset.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1adomain/common/search.proto\x1a0domain/asset/asset_category/asset_category.proto\x1a,domain/asset/depreciation/depreciation.proto\x1a%domain/entity/location/location.proto\x1a\x10options/db.proto\"\xd6\x14\n" +
+	"\x1edomain/asset/asset/asset.proto\x12\x0fdomain.asset.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1adomain/common/search.proto\x1a0domain/asset/asset_category/asset_category.proto\x1a,domain/asset/depreciation/depreciation.proto\x1a%domain/entity/location/location.proto\x1a\x10options/db.proto\"\xf6\x14\n" +
 	"\x05Asset\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12)\n" +
 	"\fasset_number\x18\x02 \x01(\tB\x06\x82\xb5\x18\x02\x10\x01R\vassetNumber\x12\x12\n" +
@@ -2354,8 +2354,8 @@ const file_domain_asset_asset_asset_proto_rawDesc = "" +
 	"\x15purchase_order_number\x18\x11 \x01(\tH\vR\x13purchaseOrderNumber\x88\x01\x01\x12*\n" +
 	"\x0einvoice_number\x18\x12 \x01(\tH\fR\rinvoiceNumber\x88\x01\x01\x12.\n" +
 	"\x10acquisition_date\x18\x13 \x01(\tH\rR\x0facquisitionDate\x88\x01\x01\x128\n" +
-	"\x16date_placed_in_service\x18\x15 \x01(\x03H\x0eR\x13datePlacedInService\x88\x01\x01\x12E\n" +
-	"\x1ddate_placed_in_service_string\x18\x16 \x01(\tH\x0fR\x19datePlacedInServiceString\x88\x01\x01\x12)\n" +
+	"\x16date_placed_in_service\x18\x15 \x01(\x03H\x0eR\x13datePlacedInService\x88\x01\x01\x12M\n" +
+	"\x1ddate_placed_in_service_string\x18\x16 \x01(\tB\x06\x82\xb5\x18\x028\x01H\x0fR\x19datePlacedInServiceString\x88\x01\x01\x12)\n" +
 	"\x10acquisition_cost\x18\x17 \x01(\x03R\x0facquisitionCost\x12\x1a\n" +
 	"\bcurrency\x18\x18 \x01(\tR\bcurrency\x12#\n" +
 	"\rsalvage_value\x18\x19 \x01(\x03R\fsalvageValue\x12\x1d\n" +
@@ -2371,13 +2371,13 @@ const file_domain_asset_asset_asset_proto_rawDesc = "" +
 	"\x18accumulated_depreciation\x18\" \x01(\x03R\x17accumulatedDepreciation\x12N\n" +
 	"\x11measurement_model\x18# \x01(\x0e2!.domain.asset.v1.MeasurementModelR\x10measurementModel\x124\n" +
 	"\x06status\x18$ \x01(\x0e2\x1c.domain.asset.v1.AssetStatusR\x06status\x125\n" +
-	"\x14warranty_expiry_date\x18% \x01(\x03H\x14R\x12warrantyExpiryDate\x88\x01\x01\x12B\n" +
-	"\x1bwarranty_expiry_date_string\x18& \x01(\tH\x15R\x18warrantyExpiryDateString\x88\x01\x01\x12\x19\n" +
+	"\x14warranty_expiry_date\x18% \x01(\x03H\x14R\x12warrantyExpiryDate\x88\x01\x01\x12J\n" +
+	"\x1bwarranty_expiry_date_string\x18& \x01(\tB\x06\x82\xb5\x18\x028\x01H\x15R\x18warrantyExpiryDateString\x88\x01\x01\x12\x19\n" +
 	"\x05notes\x18' \x01(\tH\x16R\x05notes\x88\x01\x01\x12&\n" +
-	"\fdate_created\x18( \x01(\x03H\x17R\vdateCreated\x88\x01\x01\x123\n" +
-	"\x13date_created_string\x18) \x01(\tH\x18R\x11dateCreatedString\x88\x01\x01\x12(\n" +
-	"\rdate_modified\x18* \x01(\x03H\x19R\fdateModified\x88\x01\x01\x125\n" +
-	"\x14date_modified_string\x18+ \x01(\tH\x1aR\x12dateModifiedString\x88\x01\x01\x12\"\n" +
+	"\fdate_created\x18( \x01(\x03H\x17R\vdateCreated\x88\x01\x01\x12;\n" +
+	"\x13date_created_string\x18) \x01(\tB\x06\x82\xb5\x18\x028\x01H\x18R\x11dateCreatedString\x88\x01\x01\x12(\n" +
+	"\rdate_modified\x18* \x01(\x03H\x19R\fdateModified\x88\x01\x01\x12=\n" +
+	"\x14date_modified_string\x18+ \x01(\tB\x06\x82\xb5\x18\x028\x01H\x1aR\x12dateModifiedString\x88\x01\x01\x12\"\n" +
 	"\x06active\x18, \x01(\bB\n" +
 	"\x82\xb5\x18\x06\"\x04trueR\x06active\x129\n" +
 	"\fworkspace_id\x18- \x01(\tB\x11\x82\xb5\x18\r\n" +

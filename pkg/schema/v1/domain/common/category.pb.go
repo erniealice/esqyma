@@ -766,7 +766,7 @@ var File_domain_common_category_proto protoreflect.FileDescriptor
 
 const file_domain_common_category_proto_rawDesc = "" +
 	"\n" +
-	"\x1cdomain/common/category.proto\x12\x10domain.common.v1\x1a\x19domain/common/error.proto\x1a\x1adomain/common/filter.proto\x1a\x1edomain/common/pagination.proto\x1a\x10options/db.proto\"\x84\x05\n" +
+	"\x1cdomain/common/category.proto\x12\x10domain.common.v1\x1a\x19domain/common/error.proto\x1a\x1adomain/common/filter.proto\x1a\x1edomain/common/pagination.proto\x1a\x10options/db.proto\"\x94\x05\n" +
 	"\bCategory\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12\x12\n" +
 	"\x04name\x18\x02 \x01(\tR\x04name\x12 \n" +
@@ -775,11 +775,11 @@ const file_domain_common_category_proto_rawDesc = "" +
 	"\x06module\x18\x05 \x01(\tR\x06module\x122\n" +
 	"\tparent_id\x18\x06 \x01(\tB\x10\x82\xb5\x18\f\n" +
 	"\bcategory\x18\x01H\x00R\bparentId\x88\x01\x01\x12&\n" +
-	"\fdate_created\x18\a \x01(\x03H\x01R\vdateCreated\x88\x01\x01\x123\n" +
-	"\x13date_created_string\x18\b \x01(\tH\x02R\x11dateCreatedString\x88\x01\x01\x12(\n" +
-	"\rdate_modified\x18\t \x01(\x03H\x03R\fdateModified\x88\x01\x01\x125\n" +
+	"\fdate_created\x18\a \x01(\x03H\x01R\vdateCreated\x88\x01\x01\x12;\n" +
+	"\x13date_created_string\x18\b \x01(\tB\x06\x82\xb5\x18\x028\x01H\x02R\x11dateCreatedString\x88\x01\x01\x12(\n" +
+	"\rdate_modified\x18\t \x01(\x03H\x03R\fdateModified\x88\x01\x01\x12=\n" +
 	"\x14date_modified_string\x18\n" +
-	" \x01(\tH\x04R\x12dateModifiedString\x88\x01\x01\x12\"\n" +
+	" \x01(\tB\x06\x82\xb5\x18\x028\x01H\x04R\x12dateModifiedString\x88\x01\x01\x12\"\n" +
 	"\x06active\x18\v \x01(\bB\n" +
 	"\x82\xb5\x18\x06\"\x04trueR\x06active\x12(\n" +
 	"\rdisplay_order\x18\f \x01(\x05H\x05R\fdisplayOrder\x88\x01\x01\x129\n" +

@@ -21,9 +21,9 @@ message User {
   string mobile_number = 10 [(options.v1.db).index = true];
   string password_hash = 11;
   optional int64 date_created = 5;
-  optional string date_created_string = 6;
+  optional string date_created_string = 6 [(options.v1.db).ignore = true];
   optional int64 date_modified = 7;
-  optional string date_modified_string = 8;
+  optional string date_modified_string = 8 [(options.v1.db).ignore = true];
   bool active = 9 [(options.v1.db).default = "true"];
   optional string timezone = 12 [(options.v1.db).default = "Asia/Manila"];
   optional string password_reset_token = 13;

@@ -32,9 +32,9 @@ message ActivityTemplate {
   optional string validation_rules_json = 14;
   optional string created_by = 15;
   optional int64 date_created = 16;
-  optional string date_created_string = 17;
+  optional string date_created_string = 17 [(options.v1.db).ignore = true];
   optional int64 date_modified = 18;
-  optional string date_modified_string = 19;
+  optional string date_modified_string = 19 [(options.v1.db).ignore = true];
   bool active = 20 [(options.v1.db).default = "true"];
   optional string input_schema_json = 21;
   optional string output_schema_json = 22;

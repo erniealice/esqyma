@@ -780,7 +780,7 @@ var File_domain_subscription_license_history_license_history_proto protoreflect.
 
 const file_domain_subscription_license_history_license_history_proto_rawDesc = "" +
 	"\n" +
-	"9domain/subscription/license_history/license_history.proto\x12\x16domain.subscription.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1adomain/common/search.proto\x1a)domain/subscription/license/license.proto\x1a\x10options/db.proto\"\xaf\b\n" +
+	"9domain/subscription/license_history/license_history.proto\x12\x16domain.subscription.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1adomain/common/search.proto\x1a)domain/subscription/license/license.proto\x1a\x10options/db.proto\"\xb7\b\n" +
 	"\x0eLicenseHistory\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12.\n" +
 	"\n" +
@@ -801,8 +801,8 @@ const file_domain_subscription_license_history_license_history_proto_rawDesc = "
 	"\x05notes\x18\r \x01(\tH\bR\x05notes\x88\x01\x01\x12Y\n" +
 	"\x15license_status_before\x18\x0e \x01(\x0e2%.domain.subscription.v1.LicenseStatusR\x13licenseStatusBefore\x12W\n" +
 	"\x14license_status_after\x18\x0f \x01(\x0e2%.domain.subscription.v1.LicenseStatusR\x12licenseStatusAfter\x12!\n" +
-	"\fdate_created\x18\x10 \x01(\x03R\vdateCreated\x12.\n" +
-	"\x13date_created_string\x18\x11 \x01(\tR\x11dateCreatedString\x12\"\n" +
+	"\fdate_created\x18\x10 \x01(\x03R\vdateCreated\x126\n" +
+	"\x13date_created_string\x18\x11 \x01(\tB\x06\x82\xb5\x18\x028\x01R\x11dateCreatedString\x12\"\n" +
 	"\x06active\x18\x12 \x01(\bB\n" +
 	"\x82\xb5\x18\x06\"\x04trueR\x06active:\x06\x8a\xb5\x18\x02\b\x01B\n" +
 	"\n" +

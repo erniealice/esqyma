@@ -1066,14 +1066,14 @@ var File_domain_treasury_security_deposit_security_deposit_proto protoreflect.Fi
 
 const file_domain_treasury_security_deposit_security_deposit_proto_rawDesc = "" +
 	"\n" +
-	"7domain/treasury/security_deposit/security_deposit.proto\x12\x12domain.treasury.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1adomain/common/search.proto\x1a\x10options/db.proto\"\xfc\x05\n" +
+	"7domain/treasury/security_deposit/security_deposit.proto\x12\x12domain.treasury.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1adomain/common/search.proto\x1a\x10options/db.proto\"\x94\x06\n" +
 	"\x0fSecurityDeposit\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12B\n" +
 	"\tdirection\x18\x02 \x01(\x0e2$.domain.treasury.v1.DepositDirectionR\tdirection\x12+\n" +
 	"\x11counterparty_name\x18\x03 \x01(\tR\x10counterpartyName\x12\x16\n" +
 	"\x06amount\x18\x04 \x01(\x03R\x06amount\x12!\n" +
-	"\fdeposit_date\x18\x05 \x01(\x03R\vdepositDate\x123\n" +
-	"\x13deposit_date_string\x18\x06 \x01(\tH\x00R\x11depositDateString\x88\x01\x01\x129\n" +
+	"\fdeposit_date\x18\x05 \x01(\x03R\vdepositDate\x12;\n" +
+	"\x13deposit_date_string\x18\x06 \x01(\tB\x06\x82\xb5\x18\x028\x01H\x00R\x11depositDateString\x88\x01\x01\x129\n" +
 	"\x06status\x18\a \x01(\x0e2!.domain.treasury.v1.DepositStatusR\x06status\x123\n" +
 	"\n" +
 	"account_id\x18\b \x01(\tB\x0f\x82\xb5\x18\v\n" +
@@ -1082,10 +1082,10 @@ const file_domain_treasury_security_deposit_security_deposit_proto_rawDesc = "" 
 	"\x06active\x18\n" +
 	" \x01(\bB\n" +
 	"\x82\xb5\x18\x06\"\x04trueR\x06active\x12&\n" +
-	"\fdate_created\x18\v \x01(\x03H\x03R\vdateCreated\x88\x01\x01\x123\n" +
-	"\x13date_created_string\x18\f \x01(\tH\x04R\x11dateCreatedString\x88\x01\x01\x12(\n" +
-	"\rdate_modified\x18\r \x01(\x03H\x05R\fdateModified\x88\x01\x01\x125\n" +
-	"\x14date_modified_string\x18\x0e \x01(\tH\x06R\x12dateModifiedString\x88\x01\x01:\x06\x8a\xb5\x18\x02\b\x01B\x16\n" +
+	"\fdate_created\x18\v \x01(\x03H\x03R\vdateCreated\x88\x01\x01\x12;\n" +
+	"\x13date_created_string\x18\f \x01(\tB\x06\x82\xb5\x18\x028\x01H\x04R\x11dateCreatedString\x88\x01\x01\x12(\n" +
+	"\rdate_modified\x18\r \x01(\x03H\x05R\fdateModified\x88\x01\x01\x12=\n" +
+	"\x14date_modified_string\x18\x0e \x01(\tB\x06\x82\xb5\x18\x028\x01H\x06R\x12dateModifiedString\x88\x01\x01:\x06\x8a\xb5\x18\x02\b\x01B\x16\n" +
 	"\x14_deposit_date_stringB\r\n" +
 	"\v_account_idB\b\n" +
 	"\x06_notesB\x0f\n" +

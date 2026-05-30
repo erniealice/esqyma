@@ -1664,13 +1664,13 @@ var File_domain_operation_job_job_proto protoreflect.FileDescriptor
 
 const file_domain_operation_job_job_proto_rawDesc = "" +
 	"\n" +
-	"\x1edomain/operation/job/job.proto\x12\x13domain.operation.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1adomain/common/search.proto\x1a!domain/entity/client/client.proto\x1a%domain/entity/location/location.proto\x1a\"domain/operation/enums/enums.proto\x1a\x10options/db.proto\"\xdd\x1d\n" +
+	"\x1edomain/operation/job/job.proto\x12\x13domain.operation.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1adomain/common/search.proto\x1a!domain/entity/client/client.proto\x1a%domain/entity/location/location.proto\x1a\"domain/operation/enums/enums.proto\x1a\x10options/db.proto\"\x9d\x1e\n" +
 	"\x03Job\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12&\n" +
-	"\fdate_created\x18\x02 \x01(\x03H\x00R\vdateCreated\x88\x01\x01\x123\n" +
-	"\x13date_created_string\x18\x03 \x01(\tH\x01R\x11dateCreatedString\x88\x01\x01\x12(\n" +
-	"\rdate_modified\x18\x04 \x01(\x03H\x02R\fdateModified\x88\x01\x01\x125\n" +
-	"\x14date_modified_string\x18\x05 \x01(\tH\x03R\x12dateModifiedString\x88\x01\x01\x12\"\n" +
+	"\fdate_created\x18\x02 \x01(\x03H\x00R\vdateCreated\x88\x01\x01\x12;\n" +
+	"\x13date_created_string\x18\x03 \x01(\tB\x06\x82\xb5\x18\x028\x01H\x01R\x11dateCreatedString\x88\x01\x01\x12(\n" +
+	"\rdate_modified\x18\x04 \x01(\x03H\x02R\fdateModified\x88\x01\x01\x12=\n" +
+	"\x14date_modified_string\x18\x05 \x01(\tB\x06\x82\xb5\x18\x028\x01H\x03R\x12dateModifiedString\x88\x01\x01\x12\"\n" +
 	"\x06active\x18\x06 \x01(\bB\n" +
 	"\x82\xb5\x18\x06\"\x04trueR\x06active\x12\x12\n" +
 	"\x04name\x18\a \x01(\tR\x04name\x12A\n" +
@@ -1709,20 +1709,20 @@ const file_domain_operation_job_job_proto_rawDesc = "" +
 	"\x10planned_quantity\x18\x1c \x01(\x01H\x0eR\x0fplannedQuantity\x88\x01\x01\x12\"\n" +
 	"\n" +
 	"output_uom\x18\x1d \x01(\tH\x0fR\toutputUom\x88\x01\x01\x12\x1e\n" +
-	"\bdue_date\x18\x1e \x01(\x03H\x10R\adueDate\x88\x01\x01\x12+\n" +
-	"\x0fdue_date_string\x18\x1f \x01(\tH\x11R\rdueDateString\x88\x01\x01\x12&\n" +
-	"\frelease_date\x18  \x01(\x03H\x12R\vreleaseDate\x88\x01\x01\x123\n" +
-	"\x13release_date_string\x18! \x01(\tH\x13R\x11releaseDateString\x88\x01\x01\x12(\n" +
-	"\rplanned_start\x18\" \x01(\x03H\x14R\fplannedStart\x88\x01\x01\x125\n" +
-	"\x14planned_start_string\x18# \x01(\tH\x15R\x12plannedStartString\x88\x01\x01\x12$\n" +
+	"\bdue_date\x18\x1e \x01(\x03H\x10R\adueDate\x88\x01\x01\x123\n" +
+	"\x0fdue_date_string\x18\x1f \x01(\tB\x06\x82\xb5\x18\x028\x01H\x11R\rdueDateString\x88\x01\x01\x12&\n" +
+	"\frelease_date\x18  \x01(\x03H\x12R\vreleaseDate\x88\x01\x01\x12;\n" +
+	"\x13release_date_string\x18! \x01(\tB\x06\x82\xb5\x18\x028\x01H\x13R\x11releaseDateString\x88\x01\x01\x12(\n" +
+	"\rplanned_start\x18\" \x01(\x03H\x14R\fplannedStart\x88\x01\x01\x12=\n" +
+	"\x14planned_start_string\x18# \x01(\tB\x06\x82\xb5\x18\x028\x01H\x15R\x12plannedStartString\x88\x01\x01\x12$\n" +
 	"\vplanned_end\x18$ \x01(\x03H\x16R\n" +
-	"plannedEnd\x88\x01\x01\x121\n" +
-	"\x12planned_end_string\x18% \x01(\tH\x17R\x10plannedEndString\x88\x01\x01\x12&\n" +
-	"\factual_start\x18& \x01(\x03H\x18R\vactualStart\x88\x01\x01\x123\n" +
-	"\x13actual_start_string\x18' \x01(\tH\x19R\x11actualStartString\x88\x01\x01\x12\"\n" +
+	"plannedEnd\x88\x01\x01\x129\n" +
+	"\x12planned_end_string\x18% \x01(\tB\x06\x82\xb5\x18\x028\x01H\x17R\x10plannedEndString\x88\x01\x01\x12&\n" +
+	"\factual_start\x18& \x01(\x03H\x18R\vactualStart\x88\x01\x01\x12;\n" +
+	"\x13actual_start_string\x18' \x01(\tB\x06\x82\xb5\x18\x028\x01H\x19R\x11actualStartString\x88\x01\x01\x12\"\n" +
 	"\n" +
-	"actual_end\x18( \x01(\x03H\x1aR\tactualEnd\x88\x01\x01\x12/\n" +
-	"\x11actual_end_string\x18) \x01(\tH\x1bR\x0factualEndString\x88\x01\x01\x12\x1f\n" +
+	"actual_end\x18( \x01(\x03H\x1aR\tactualEnd\x88\x01\x01\x127\n" +
+	"\x11actual_end_string\x18) \x01(\tB\x06\x82\xb5\x18\x028\x01H\x1bR\x0factualEndString\x88\x01\x01\x12\x1f\n" +
 	"\bpriority\x18* \x01(\x05H\x1cR\bpriority\x88\x01\x01\x124\n" +
 	"\rparent_job_id\x18+ \x01(\tB\v\x82\xb5\x18\a\n" +
 	"\x03job\x18\x01H\x1dR\vparentJobId\x88\x01\x01\x12.\n" +

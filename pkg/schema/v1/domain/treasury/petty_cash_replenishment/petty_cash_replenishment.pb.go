@@ -940,22 +940,22 @@ var File_domain_treasury_petty_cash_replenishment_petty_cash_replenishment_proto
 
 const file_domain_treasury_petty_cash_replenishment_petty_cash_replenishment_proto_rawDesc = "" +
 	"\n" +
-	"Gdomain/treasury/petty_cash_replenishment/petty_cash_replenishment.proto\x12\x12domain.treasury.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1adomain/common/search.proto\x1a\x10options/db.proto\"\xc1\x04\n" +
+	"Gdomain/treasury/petty_cash_replenishment/petty_cash_replenishment.proto\x12\x12domain.treasury.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1adomain/common/search.proto\x1a\x10options/db.proto\"\xd1\x04\n" +
 	"\x16PettyCashReplenishment\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x120\n" +
 	"\afund_id\x18\x02 \x01(\tB\x17\x82\xb5\x18\x13\n" +
 	"\x0fpetty_cash_fund\x18\x01R\x06fundId\x12;\n" +
 	"\x14replenishment_number\x18\x03 \x01(\tB\b\x82\xb5\x18\x04\x10\x01\x18\x01R\x13replenishmentNumber\x12\x16\n" +
 	"\x06amount\x18\x04 \x01(\x03R\x06amount\x12-\n" +
-	"\x12replenishment_date\x18\x05 \x01(\x03R\x11replenishmentDate\x12?\n" +
-	"\x19replenishment_date_string\x18\x06 \x01(\tH\x00R\x17replenishmentDateString\x88\x01\x01\x12\x1f\n" +
+	"\x12replenishment_date\x18\x05 \x01(\x03R\x11replenishmentDate\x12G\n" +
+	"\x19replenishment_date_string\x18\x06 \x01(\tB\x06\x82\xb5\x18\x028\x01H\x00R\x17replenishmentDateString\x88\x01\x01\x12\x1f\n" +
 	"\vvoucher_ids\x18\a \x03(\tR\n" +
 	"voucherIds\x12 \n" +
 	"\tposted_by\x18\b \x01(\tH\x01R\bpostedBy\x88\x01\x01\x12\x19\n" +
 	"\x05notes\x18\t \x01(\tH\x02R\x05notes\x88\x01\x01\x12&\n" +
 	"\fdate_created\x18\n" +
-	" \x01(\x03H\x03R\vdateCreated\x88\x01\x01\x123\n" +
-	"\x13date_created_string\x18\v \x01(\tH\x04R\x11dateCreatedString\x88\x01\x01:\x06\x8a\xb5\x18\x02\b\x01B\x1c\n" +
+	" \x01(\x03H\x03R\vdateCreated\x88\x01\x01\x12;\n" +
+	"\x13date_created_string\x18\v \x01(\tB\x06\x82\xb5\x18\x028\x01H\x04R\x11dateCreatedString\x88\x01\x01:\x06\x8a\xb5\x18\x02\b\x01B\x1c\n" +
 	"\x1a_replenishment_date_stringB\f\n" +
 	"\n" +
 	"_posted_byB\b\n" +

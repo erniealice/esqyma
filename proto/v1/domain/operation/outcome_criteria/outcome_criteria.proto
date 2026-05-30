@@ -49,9 +49,9 @@ message OutcomeCriteria {
   bool active = 31 [(options.v1.db).default = "true"];
   string created_by = 32;
   optional int64 date_created = 33;
-  optional string date_created_string = 34;
+  optional string date_created_string = 34 [(options.v1.db).ignore = true];
   optional int64 date_modified = 35;
-  optional string date_modified_string = 36;
+  optional string date_modified_string = 36 [(options.v1.db).ignore = true];
 }
 
 service OutcomeCriteriaDomainService {

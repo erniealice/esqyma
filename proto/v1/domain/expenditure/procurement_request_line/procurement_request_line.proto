@@ -75,9 +75,9 @@ message ProcurementRequestLine {
   // Audit
   bool active = 16 [(options.v1.db).default = "true"];
   optional int64 date_created = 17;
-  optional string date_created_string = 18;
+  optional string date_created_string = 18 [(options.v1.db).ignore = true];
   optional int64 date_modified = 19;
-  optional string date_modified_string = 20;
+  optional string date_modified_string = 20 [(options.v1.db).ignore = true];
 
   // F1 (round-6): per-line fulfillment mode. Drives the approval cascade
   // dispatch (which Spawn helper to run).

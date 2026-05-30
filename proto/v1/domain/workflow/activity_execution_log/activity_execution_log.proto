@@ -29,9 +29,9 @@ message ActivityExecutionLog {
   // Standard audit fields
   string created_by = 11;
   int64 date_created = 12;
-  string date_created_string = 13;
+  string date_created_string = 13 [(options.v1.db).ignore = true];
   int64 date_modified = 14;
-  string date_modified_string = 15;
+  string date_modified_string = 15 [(options.v1.db).ignore = true];
   bool active = 16 [(options.v1.db).default = "true"];
   string workspace_id = 17 [(options.v1.db).references = "workspace", (options.v1.db).index = true];
 }

@@ -21,9 +21,9 @@ message PlanLocation {
   optional domain.entity.v1.Location location = 4;
   string location_id = 5 [(options.v1.db).references = "location", (options.v1.db).index = true];
   optional int64 date_created = 6;
-  optional string date_created_string = 7;
+  optional string date_created_string = 7 [(options.v1.db).ignore = true];
   optional int64 date_modified = 8;
-  optional string date_modified_string = 9;
+  optional string date_modified_string = 9 [(options.v1.db).ignore = true];
   bool active = 10 [(options.v1.db).default = "true"];
 }
 

@@ -1001,7 +1001,7 @@ var File_domain_treasury_petty_cash_voucher_petty_cash_voucher_proto protoreflec
 
 const file_domain_treasury_petty_cash_voucher_petty_cash_voucher_proto_rawDesc = "" +
 	"\n" +
-	";domain/treasury/petty_cash_voucher/petty_cash_voucher.proto\x12\x12domain.treasury.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1adomain/common/search.proto\x1a\x10options/db.proto\"\xee\x04\n" +
+	";domain/treasury/petty_cash_voucher/petty_cash_voucher.proto\x12\x12domain.treasury.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1adomain/common/search.proto\x1a\x10options/db.proto\"\xfe\x04\n" +
 	"\x10PettyCashVoucher\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x120\n" +
 	"\afund_id\x18\x02 \x01(\tB\x17\x82\xb5\x18\x13\n" +
@@ -1014,11 +1014,11 @@ const file_domain_treasury_petty_cash_voucher_petty_cash_voucher_proto_rawDesc =
 	"\vapproved_by\x18\b \x01(\tH\x01R\n" +
 	"approvedBy\x88\x01\x01\x12$\n" +
 	"\vapproved_at\x18\t \x01(\x03H\x02R\n" +
-	"approvedAt\x88\x01\x01\x121\n" +
+	"approvedAt\x88\x01\x01\x129\n" +
 	"\x12approved_at_string\x18\n" +
-	" \x01(\tH\x03R\x10approvedAtString\x88\x01\x01\x12&\n" +
-	"\fdate_created\x18\v \x01(\x03H\x04R\vdateCreated\x88\x01\x01\x123\n" +
-	"\x13date_created_string\x18\f \x01(\tH\x05R\x11dateCreatedString\x88\x01\x01:\x06\x8a\xb5\x18\x02\b\x01B\b\n" +
+	" \x01(\tB\x06\x82\xb5\x18\x028\x01H\x03R\x10approvedAtString\x88\x01\x01\x12&\n" +
+	"\fdate_created\x18\v \x01(\x03H\x04R\vdateCreated\x88\x01\x01\x12;\n" +
+	"\x13date_created_string\x18\f \x01(\tB\x06\x82\xb5\x18\x028\x01H\x05R\x11dateCreatedString\x88\x01\x01:\x06\x8a\xb5\x18\x02\b\x01B\b\n" +
 	"\x06_payeeB\x0e\n" +
 	"\f_approved_byB\x0e\n" +
 	"\f_approved_atB\x15\n" +

@@ -19,9 +19,9 @@ message Workspace {
   bool private = 4;
   optional string workflow_template_id = 5 [(options.v1.db).references = "workflow_template", (options.v1.db).index = true];
   optional int64 date_created = 6;
-  optional string date_created_string = 7;
+  optional string date_created_string = 7 [(options.v1.db).ignore = true];
   optional int64 date_modified = 8;
-  optional string date_modified_string = 9;
+  optional string date_modified_string = 9 [(options.v1.db).ignore = true];
   bool active = 10 [(options.v1.db).default = "true"];
   // ISO-4217 reporting-currency code for this workspace (e.g. "PHP", "USD"). This
   // is the accounting functional currency: books are kept and reports produced

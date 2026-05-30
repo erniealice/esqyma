@@ -721,7 +721,7 @@ var File_domain_event_event_product_event_product_proto protoreflect.FileDescrip
 
 const file_domain_event_event_product_event_product_proto_rawDesc = "" +
 	"\n" +
-	".domain/event/event_product/event_product.proto\x12\x0fdomain.event.v1\x1a\x19domain/common/error.proto\x1a\x1adomain/common/search.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1edomain/common/pagination.proto\x1a\x1edomain/event/event/event.proto\x1a$domain/product/product/product.proto\x1a\x10options/db.proto\"\xb9\x06\n" +
+	".domain/event/event_product/event_product.proto\x12\x0fdomain.event.v1\x1a\x19domain/common/error.proto\x1a\x1adomain/common/search.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1edomain/common/pagination.proto\x1a\x1edomain/event/event/event.proto\x1a$domain/product/product/product.proto\x1a\x10options/db.proto\"\xc9\x06\n" +
 	"\fEventProduct\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x121\n" +
 	"\x05event\x18\x02 \x01(\v2\x16.domain.event.v1.EventH\x00R\x05event\x88\x01\x01\x12(\n" +
@@ -731,10 +731,10 @@ const file_domain_event_event_product_event_product_proto_rawDesc = "" +
 	"\n" +
 	"product_id\x18\x05 \x01(\tB\x0f\x82\xb5\x18\v\n" +
 	"\aproduct\x18\x01R\tproductId\x12&\n" +
-	"\fdate_created\x18\x06 \x01(\x03H\x02R\vdateCreated\x88\x01\x01\x123\n" +
-	"\x13date_created_string\x18\a \x01(\tH\x03R\x11dateCreatedString\x88\x01\x01\x12(\n" +
-	"\rdate_modified\x18\b \x01(\x03H\x04R\fdateModified\x88\x01\x01\x125\n" +
-	"\x14date_modified_string\x18\t \x01(\tH\x05R\x12dateModifiedString\x88\x01\x01\x12\"\n" +
+	"\fdate_created\x18\x06 \x01(\x03H\x02R\vdateCreated\x88\x01\x01\x12;\n" +
+	"\x13date_created_string\x18\a \x01(\tB\x06\x82\xb5\x18\x028\x01H\x03R\x11dateCreatedString\x88\x01\x01\x12(\n" +
+	"\rdate_modified\x18\b \x01(\x03H\x04R\fdateModified\x88\x01\x01\x12=\n" +
+	"\x14date_modified_string\x18\t \x01(\tB\x06\x82\xb5\x18\x028\x01H\x05R\x12dateModifiedString\x88\x01\x01\x12\"\n" +
 	"\x06active\x18\n" +
 	" \x01(\bB\n" +
 	"\x82\xb5\x18\x06\"\x04trueR\x06active\x12\x1f\n" +

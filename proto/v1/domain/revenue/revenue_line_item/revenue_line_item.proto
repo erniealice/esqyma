@@ -20,9 +20,9 @@ message RevenueLineItem {
 
   string id = 1;
   optional int64 date_created = 2;
-  optional string date_created_string = 3;
+  optional string date_created_string = 3 [(options.v1.db).ignore = true];
   optional int64 date_modified = 4;
-  optional string date_modified_string = 5;
+  optional string date_modified_string = 5 [(options.v1.db).ignore = true];
   bool active = 6;
   optional Revenue revenue = 7;
   string revenue_id = 8;

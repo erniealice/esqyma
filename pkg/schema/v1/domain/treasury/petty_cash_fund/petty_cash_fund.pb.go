@@ -941,7 +941,7 @@ var File_domain_treasury_petty_cash_fund_petty_cash_fund_proto protoreflect.File
 
 const file_domain_treasury_petty_cash_fund_petty_cash_fund_proto_rawDesc = "" +
 	"\n" +
-	"5domain/treasury/petty_cash_fund/petty_cash_fund.proto\x12\x12domain.treasury.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1adomain/common/search.proto\x1a\x10options/db.proto\"\xd9\x04\n" +
+	"5domain/treasury/petty_cash_fund/petty_cash_fund.proto\x12\x12domain.treasury.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1adomain/common/search.proto\x1a\x10options/db.proto\"\xe9\x04\n" +
 	"\rPettyCashFund\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12\x12\n" +
 	"\x04name\x18\x02 \x01(\tR\x04name\x12+\n" +
@@ -953,11 +953,11 @@ const file_domain_treasury_petty_cash_fund_petty_cash_fund_proto_rawDesc = "" +
 	"locationId\x88\x01\x01\x12\"\n" +
 	"\x06active\x18\a \x01(\bB\n" +
 	"\x82\xb5\x18\x06\"\x04trueR\x06active\x12&\n" +
-	"\fdate_created\x18\b \x01(\x03H\x02R\vdateCreated\x88\x01\x01\x123\n" +
-	"\x13date_created_string\x18\t \x01(\tH\x03R\x11dateCreatedString\x88\x01\x01\x12(\n" +
+	"\fdate_created\x18\b \x01(\x03H\x02R\vdateCreated\x88\x01\x01\x12;\n" +
+	"\x13date_created_string\x18\t \x01(\tB\x06\x82\xb5\x18\x028\x01H\x03R\x11dateCreatedString\x88\x01\x01\x12(\n" +
 	"\rdate_modified\x18\n" +
-	" \x01(\x03H\x04R\fdateModified\x88\x01\x01\x125\n" +
-	"\x14date_modified_string\x18\v \x01(\tH\x05R\x12dateModifiedString\x88\x01\x01:\x06\x8a\xb5\x18\x02\b\x01B\x0f\n" +
+	" \x01(\x03H\x04R\fdateModified\x88\x01\x01\x12=\n" +
+	"\x14date_modified_string\x18\v \x01(\tB\x06\x82\xb5\x18\x028\x01H\x05R\x12dateModifiedString\x88\x01\x01:\x06\x8a\xb5\x18\x02\b\x01B\x0f\n" +
 	"\r_custodian_idB\x0e\n" +
 	"\f_location_idB\x0f\n" +
 	"\r_date_createdB\x16\n" +

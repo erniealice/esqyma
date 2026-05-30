@@ -1691,15 +1691,15 @@ var File_domain_expenditure_procurement_request_procurement_request_proto protor
 
 const file_domain_expenditure_procurement_request_procurement_request_proto_rawDesc = "" +
 	"\n" +
-	"@domain/expenditure/procurement_request/procurement_request.proto\x12\x15domain.expenditure.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/search.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a%domain/entity/supplier/supplier.proto\x1a\x10options/db.proto\"\xac\x0f\n" +
+	"@domain/expenditure/procurement_request/procurement_request.proto\x12\x15domain.expenditure.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/search.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a%domain/entity/supplier/supplier.proto\x1a\x10options/db.proto\"\xc4\x0f\n" +
 	"\x12ProcurementRequest\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x124\n" +
 	"\fworkspace_id\x18\x02 \x01(\tB\x11\x82\xb5\x18\r\n" +
 	"\tworkspace\x18\x01R\vworkspaceId\x12&\n" +
-	"\fdate_created\x18\x03 \x01(\x03H\x00R\vdateCreated\x88\x01\x01\x123\n" +
-	"\x13date_created_string\x18\x04 \x01(\tH\x01R\x11dateCreatedString\x88\x01\x01\x12(\n" +
-	"\rdate_modified\x18\x05 \x01(\x03H\x02R\fdateModified\x88\x01\x01\x125\n" +
-	"\x14date_modified_string\x18\x06 \x01(\tH\x03R\x12dateModifiedString\x88\x01\x01\x12\"\n" +
+	"\fdate_created\x18\x03 \x01(\x03H\x00R\vdateCreated\x88\x01\x01\x12;\n" +
+	"\x13date_created_string\x18\x04 \x01(\tB\x06\x82\xb5\x18\x028\x01H\x01R\x11dateCreatedString\x88\x01\x01\x12(\n" +
+	"\rdate_modified\x18\x05 \x01(\x03H\x02R\fdateModified\x88\x01\x01\x12=\n" +
+	"\x14date_modified_string\x18\x06 \x01(\tB\x06\x82\xb5\x18\x028\x01H\x03R\x12dateModifiedString\x88\x01\x01\x12\"\n" +
 	"\x06active\x18\a \x01(\bB\n" +
 	"\x82\xb5\x18\x06\"\x04trueR\x06active\x12-\n" +
 	"\x0erequest_number\x18\b \x01(\tB\x06\x82\xb5\x18\x02\x10\x01R\rrequestNumber\x12O\n" +
@@ -1722,8 +1722,8 @@ const file_domain_expenditure_procurement_request_procurement_request_proto_rawD
 	"R\n" +
 	"approvedBy\x88\x01\x01\x12$\n" +
 	"\vapproved_at\x18\x1f \x01(\x03H\vR\n" +
-	"approvedAt\x88\x01\x01\x121\n" +
-	"\x12approved_at_string\x18  \x01(\tH\fR\x10approvedAtString\x88\x01\x01\x12.\n" +
+	"approvedAt\x88\x01\x01\x129\n" +
+	"\x12approved_at_string\x18  \x01(\tB\x06\x82\xb5\x18\x028\x01H\fR\x10approvedAtString\x88\x01\x01\x12.\n" +
 	"\x10rejection_reason\x18! \x01(\tH\rR\x0frejectionReason\x88\x01\x01\x12E\n" +
 	"\x11purchase_order_id\x18( \x01(\tB\x14\x82\xb5\x18\x10\n" +
 	"\x0epurchase_orderH\x0eR\x0fpurchaseOrderId\x88\x01\x01\x12k\n" +

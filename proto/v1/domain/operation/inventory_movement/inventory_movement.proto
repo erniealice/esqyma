@@ -31,10 +31,10 @@ message InventoryMovement {
   optional string to_location_id = 11 [(options.v1.db).references = "location"];
   optional domain.entity.v1.Location to_location = 12;
   optional int64 movement_date = 13;
-  optional string movement_date_string = 14;
+  optional string movement_date_string = 14 [(options.v1.db).ignore = true];
   optional string created_by = 15;
   optional int64 date_created = 16;
-  optional string date_created_string = 17;
+  optional string date_created_string = 17 [(options.v1.db).ignore = true];
 
   // New fields: job linkage
   optional string job_id = 18 [(options.v1.db).references = "job", (options.v1.db).index = true];

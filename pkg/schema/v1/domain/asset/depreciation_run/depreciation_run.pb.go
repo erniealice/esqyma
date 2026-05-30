@@ -1636,7 +1636,7 @@ var File_domain_asset_depreciation_run_depreciation_run_proto protoreflect.FileD
 
 const file_domain_asset_depreciation_run_depreciation_run_proto_rawDesc = "" +
 	"\n" +
-	"4domain/asset/depreciation_run/depreciation_run.proto\x12\x0fdomain.asset.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1adomain/common/search.proto\x1a\x10options/db.proto\"\xa6\a\n" +
+	"4domain/asset/depreciation_run/depreciation_run.proto\x12\x0fdomain.asset.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1adomain/common/search.proto\x1a\x10options/db.proto\"\xb6\a\n" +
 	"\x0fDepreciationRun\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12)\n" +
 	"\fworkspace_id\x18\x02 \x01(\tB\x06\x82\xb5\x18\x02\x18\x01R\vworkspaceId\x12H\n" +
@@ -1658,11 +1658,11 @@ const file_domain_asset_depreciation_run_depreciation_run_proto_rawDesc = "" +
 	"\x06active\x18\x0f \x01(\bB\n" +
 	"\x82\xb5\x18\x06\"\x04trueR\x06active\x12\"\n" +
 	"\n" +
-	"created_at\x18\x10 \x01(\x03H\x05R\tcreatedAt\x88\x01\x01\x12/\n" +
-	"\x11created_at_string\x18\x11 \x01(\tH\x06R\x0fcreatedAtString\x88\x01\x01\x12\"\n" +
+	"created_at\x18\x10 \x01(\x03H\x05R\tcreatedAt\x88\x01\x01\x127\n" +
+	"\x11created_at_string\x18\x11 \x01(\tB\x06\x82\xb5\x18\x028\x01H\x06R\x0fcreatedAtString\x88\x01\x01\x12\"\n" +
 	"\n" +
-	"updated_at\x18\x12 \x01(\x03H\aR\tupdatedAt\x88\x01\x01\x12/\n" +
-	"\x11updated_at_string\x18\x13 \x01(\tH\bR\x0fupdatedAtString\x88\x01\x01:\x06\x8a\xb5\x18\x02\b\x01B\v\n" +
+	"updated_at\x18\x12 \x01(\x03H\aR\tupdatedAt\x88\x01\x01\x127\n" +
+	"\x11updated_at_string\x18\x13 \x01(\tB\x06\x82\xb5\x18\x028\x01H\bR\x0fupdatedAtString\x88\x01\x01:\x06\x8a\xb5\x18\x02\b\x01B\v\n" +
 	"\t_scope_idB\x0f\n" +
 	"\r_initiated_atB\x0f\n" +
 	"\r_completed_atB\x10\n" +

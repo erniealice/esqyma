@@ -1000,7 +1000,7 @@ var File_domain_workflow_activity_execution_log_activity_execution_log_proto pro
 
 const file_domain_workflow_activity_execution_log_activity_execution_log_proto_rawDesc = "" +
 	"\n" +
-	"Cdomain/workflow/activity_execution_log/activity_execution_log.proto\x12\x12domain.workflow.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1adomain/common/search.proto\x1a\x10options/db.proto\"\xdd\x05\n" +
+	"Cdomain/workflow/activity_execution_log/activity_execution_log.proto\x12\x12domain.workflow.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1adomain/common/search.proto\x1a\x10options/db.proto\"\xed\x05\n" +
 	"\x14ActivityExecutionLog\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x121\n" +
 	"\vworkflow_id\x18\x02 \x01(\tB\x10\x82\xb5\x18\f\n" +
@@ -1021,10 +1021,10 @@ const file_domain_workflow_activity_execution_log_activity_execution_log_proto_r
 	" \x01(\tR\ferrorMessage\x12\x1d\n" +
 	"\n" +
 	"created_by\x18\v \x01(\tR\tcreatedBy\x12!\n" +
-	"\fdate_created\x18\f \x01(\x03R\vdateCreated\x12.\n" +
-	"\x13date_created_string\x18\r \x01(\tR\x11dateCreatedString\x12#\n" +
-	"\rdate_modified\x18\x0e \x01(\x03R\fdateModified\x120\n" +
-	"\x14date_modified_string\x18\x0f \x01(\tR\x12dateModifiedString\x12\"\n" +
+	"\fdate_created\x18\f \x01(\x03R\vdateCreated\x126\n" +
+	"\x13date_created_string\x18\r \x01(\tB\x06\x82\xb5\x18\x028\x01R\x11dateCreatedString\x12#\n" +
+	"\rdate_modified\x18\x0e \x01(\x03R\fdateModified\x128\n" +
+	"\x14date_modified_string\x18\x0f \x01(\tB\x06\x82\xb5\x18\x028\x01R\x12dateModifiedString\x12\"\n" +
 	"\x06active\x18\x10 \x01(\bB\n" +
 	"\x82\xb5\x18\x06\"\x04trueR\x06active\x124\n" +
 	"\fworkspace_id\x18\x11 \x01(\tB\x11\x82\xb5\x18\r\n" +

@@ -50,9 +50,9 @@ message Prepayment {
   // Audit fields
   bool active = 14 [(options.v1.db).default = "true"];
   optional int64 date_created = 15;
-  optional string date_created_string = 16;
+  optional string date_created_string = 16 [(options.v1.db).ignore = true];
   optional int64 date_modified = 17;
-  optional string date_modified_string = 18;
+  optional string date_modified_string = 18 [(options.v1.db).ignore = true];
 
   // Supplier commitment back-edges (plan §11.5 — adopted, not deferred)
   optional string supplier_contract_id = 19 [(options.v1.db).references = "supplier_contract"]; // FK to SupplierContract

@@ -39,9 +39,9 @@ message PhaseOutcomeSummary {
   optional string supersedes_id = 18 [(options.v1.db).references = "phase_outcome_summary"];
   bool active = 19 [(options.v1.db).default = "true"];
   optional int64 date_created = 20;
-  optional string date_created_string = 21;
+  optional string date_created_string = 21 [(options.v1.db).ignore = true];
   optional int64 date_modified = 22;
-  optional string date_modified_string = 23;
+  optional string date_modified_string = 23 [(options.v1.db).ignore = true];
 }
 
 // --- Service ---

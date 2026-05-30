@@ -1271,7 +1271,7 @@ var File_domain_operation_inventory_movement_inventory_movement_proto protorefle
 
 const file_domain_operation_inventory_movement_inventory_movement_proto_rawDesc = "" +
 	"\n" +
-	"<domain/operation/inventory_movement/inventory_movement.proto\x12\x13domain.operation.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1adomain/common/search.proto\x1a\"domain/operation/enums/enums.proto\x1a$domain/product/product/product.proto\x1a%domain/entity/location/location.proto\x1a\x10options/db.proto\"\xf3\f\n" +
+	"<domain/operation/inventory_movement/inventory_movement.proto\x12\x13domain.operation.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1adomain/common/search.proto\x1a\"domain/operation/enums/enums.proto\x1a$domain/product/product/product.proto\x1a%domain/entity/location/location.proto\x1a\x10options/db.proto\"\x83\r\n" +
 	"\x11InventoryMovement\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12F\n" +
 	"\rmovement_type\x18\x04 \x01(\x0e2!.domain.operation.v1.MovementTypeR\fmovementType\x12.\n" +
@@ -1291,12 +1291,12 @@ const file_domain_operation_inventory_movement_inventory_movement_proto_rawDesc 
 	"\blocationH\x03R\ftoLocationId\x88\x01\x01\x12@\n" +
 	"\vto_location\x18\f \x01(\v2\x1a.domain.entity.v1.LocationH\x04R\n" +
 	"toLocation\x88\x01\x01\x12(\n" +
-	"\rmovement_date\x18\r \x01(\x03H\x05R\fmovementDate\x88\x01\x01\x125\n" +
-	"\x14movement_date_string\x18\x0e \x01(\tH\x06R\x12movementDateString\x88\x01\x01\x12\"\n" +
+	"\rmovement_date\x18\r \x01(\x03H\x05R\fmovementDate\x88\x01\x01\x12=\n" +
+	"\x14movement_date_string\x18\x0e \x01(\tB\x06\x82\xb5\x18\x028\x01H\x06R\x12movementDateString\x88\x01\x01\x12\"\n" +
 	"\n" +
 	"created_by\x18\x0f \x01(\tH\aR\tcreatedBy\x88\x01\x01\x12&\n" +
-	"\fdate_created\x18\x10 \x01(\x03H\bR\vdateCreated\x88\x01\x01\x123\n" +
-	"\x13date_created_string\x18\x11 \x01(\tH\tR\x11dateCreatedString\x88\x01\x01\x12'\n" +
+	"\fdate_created\x18\x10 \x01(\x03H\bR\vdateCreated\x88\x01\x01\x12;\n" +
+	"\x13date_created_string\x18\x11 \x01(\tB\x06\x82\xb5\x18\x028\x01H\tR\x11dateCreatedString\x88\x01\x01\x12'\n" +
 	"\x06job_id\x18\x12 \x01(\tB\v\x82\xb5\x18\a\n" +
 	"\x03job\x18\x01H\n" +
 	"R\x05jobId\x88\x01\x01\x12A\n" +

@@ -40,14 +40,14 @@ message EquityTransaction {
 
   // Transaction date
   int64 transaction_date = 6;
-  optional string transaction_date_string = 7;
+  optional string transaction_date_string = 7 [(options.v1.db).ignore = true];
 
   // GL traceability — FK to the auto-generated JournalEntry
   optional string journal_entry_id = 8 [(options.v1.db).references = "journal_entry", (options.v1.db).index = true];
 
   // Audit fields
   optional int64 date_created = 9;
-  optional string date_created_string = 10;
+  optional string date_created_string = 10 [(options.v1.db).ignore = true];
 }
 
 service EquityTransactionDomainService {

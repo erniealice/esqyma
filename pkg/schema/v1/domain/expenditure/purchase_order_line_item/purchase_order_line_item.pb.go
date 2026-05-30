@@ -1065,7 +1065,7 @@ var File_domain_expenditure_purchase_order_line_item_purchase_order_line_item_pr
 
 const file_domain_expenditure_purchase_order_line_item_purchase_order_line_item_proto_rawDesc = "" +
 	"\n" +
-	"Jdomain/expenditure/purchase_order_line_item/purchase_order_line_item.proto\x12\x15domain.expenditure.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/search.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a6domain/expenditure/purchase_order/purchase_order.proto\x1a$domain/product/product/product.proto\x1a\x10options/db.proto\"\xe0\v\n" +
+	"Jdomain/expenditure/purchase_order_line_item/purchase_order_line_item.proto\x12\x15domain.expenditure.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/search.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a6domain/expenditure/purchase_order/purchase_order.proto\x1a$domain/product/product/product.proto\x1a\x10options/db.proto\"\xf8\v\n" +
 	"\x15PurchaseOrderLineItem\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12P\n" +
 	"\x0epurchase_order\x18\x02 \x01(\v2$.domain.expenditure.v1.PurchaseOrderH\x00R\rpurchaseOrder\x88\x01\x01\x12B\n" +
@@ -1091,18 +1091,18 @@ const file_domain_expenditure_purchase_order_line_item_purchase_order_line_item_
 	"locationId\x88\x01\x01\x12E\n" +
 	"\x11inventory_item_id\x18\x0e \x01(\tB\x14\x82\xb5\x18\x10\n" +
 	"\x0einventory_itemH\x04R\x0finventoryItemId\x88\x01\x01\x12-\n" +
-	"\x10required_by_date\x18\x0f \x01(\x03H\x05R\x0erequiredByDate\x88\x01\x01\x12:\n" +
-	"\x17required_by_date_string\x18\x10 \x01(\tH\x06R\x14requiredByDateString\x88\x01\x01\x12\x19\n" +
+	"\x10required_by_date\x18\x0f \x01(\x03H\x05R\x0erequiredByDate\x88\x01\x01\x12B\n" +
+	"\x17required_by_date_string\x18\x10 \x01(\tB\x06\x82\xb5\x18\x028\x01H\x06R\x14requiredByDateString\x88\x01\x01\x12\x19\n" +
 	"\x05notes\x18\x11 \x01(\tH\aR\x05notes\x88\x01\x01\x12\x1f\n" +
 	"\vline_number\x18\x12 \x01(\x05R\n" +
 	"lineNumber\x12\"\n" +
 	"\x06active\x18\x13 \x01(\bB\n" +
 	"\x82\xb5\x18\x06\"\x04trueR\x06active\x12&\n" +
-	"\fdate_created\x18\x14 \x01(\x03H\bR\vdateCreated\x88\x01\x01\x123\n" +
-	"\x13date_created_string\x18\x15 \x01(\tH\tR\x11dateCreatedString\x88\x01\x01\x12(\n" +
+	"\fdate_created\x18\x14 \x01(\x03H\bR\vdateCreated\x88\x01\x01\x12;\n" +
+	"\x13date_created_string\x18\x15 \x01(\tB\x06\x82\xb5\x18\x028\x01H\tR\x11dateCreatedString\x88\x01\x01\x12(\n" +
 	"\rdate_modified\x18\x16 \x01(\x03H\n" +
-	"R\fdateModified\x88\x01\x01\x125\n" +
-	"\x14date_modified_string\x18\x17 \x01(\tH\vR\x12dateModifiedString\x88\x01\x01\x12>\n" +
+	"R\fdateModified\x88\x01\x01\x12=\n" +
+	"\x14date_modified_string\x18\x17 \x01(\tB\x06\x82\xb5\x18\x028\x01H\vR\x12dateModifiedString\x88\x01\x01\x12>\n" +
 	"\x19supplier_contract_line_id\x18\x18 \x01(\tH\fR\x16supplierContractLineId\x88\x01\x01\x12B\n" +
 	"\x1bprocurement_request_line_id\x18\x19 \x01(\tH\rR\x18procurementRequestLineId\x88\x01\x01:\x06\x8a\xb5\x18\x02\b\x01B\x11\n" +
 	"\x0f_purchase_orderB\n" +

@@ -63,9 +63,9 @@ message SupplierContract {
 
   // Audit
   optional int64 date_created = 3;
-  optional string date_created_string = 4;
+  optional string date_created_string = 4 [(options.v1.db).ignore = true];
   optional int64 date_modified = 5;
-  optional string date_modified_string = 6;
+  optional string date_modified_string = 6 [(options.v1.db).ignore = true];
   bool active = 7 [(options.v1.db).default = "true"];
   string internal_id = 8 [(options.v1.db).unique = true];
 
@@ -119,10 +119,10 @@ message SupplierContract {
   // Approval workflow
   optional string requested_by = 80;         // user_id of requester
   optional int64  requested_date = 81;
-  optional string requested_date_string = 82;
+  optional string requested_date_string = 82 [(options.v1.db).ignore = true];
   optional string approved_by = 83;
   optional int64  approved_date = 84;
-  optional string approved_date_string = 85;
+  optional string approved_date_string = 85 [(options.v1.db).ignore = true];
   optional string rejection_reason = 86;
 
   // Location scoping

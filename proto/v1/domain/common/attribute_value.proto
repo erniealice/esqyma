@@ -21,9 +21,9 @@ message AttributeValue {
   int32 sort_order = 4;
   bool active = 5 [(options.v1.db).default = "true"];
   optional int64 date_created = 6;
-  optional string date_created_string = 7;
+  optional string date_created_string = 7 [(options.v1.db).ignore = true];
   optional int64 date_modified = 8;
-  optional string date_modified_string = 9;
+  optional string date_modified_string = 9 [(options.v1.db).ignore = true];
   Attribute attribute = 10;
 }
 

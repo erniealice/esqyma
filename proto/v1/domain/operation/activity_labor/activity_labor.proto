@@ -35,9 +35,9 @@ message ActivityLabor {
   double hours = 5;
   RateType rate_type = 6;
   optional int64 time_start = 7;
-  optional string time_start_string = 8;
+  optional string time_start_string = 8 [(options.v1.db).ignore = true];
   optional int64 time_end = 9;
-  optional string time_end_string = 10;
+  optional string time_end_string = 10 [(options.v1.db).ignore = true];
 }
 
 // --- Service ---

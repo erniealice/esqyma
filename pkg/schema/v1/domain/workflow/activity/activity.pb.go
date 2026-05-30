@@ -1996,7 +1996,7 @@ var File_domain_workflow_activity_activity_proto protoreflect.FileDescriptor
 
 const file_domain_workflow_activity_activity_proto_rawDesc = "" +
 	"\n" +
-	"'domain/workflow/activity/activity.proto\x12\x12domain.workflow.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1adomain/common/search.proto\x1a\x10options/db.proto\"\xb9\x10\n" +
+	"'domain/workflow/activity/activity.proto\x12\x12domain.workflow.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1adomain/common/search.proto\x1a\x10options/db.proto\"\xe9\x10\n" +
 	"\bActivity\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12(\n" +
 	"\bstage_id\x18\x02 \x01(\tB\r\x82\xb5\x18\t\n" +
@@ -2011,14 +2011,14 @@ const file_domain_workflow_activity_activity_proto_rawDesc = "" +
 	"assignedTo\x88\x01\x01\x12&\n" +
 	"\fcompleted_by\x18\t \x01(\tH\x02R\vcompletedBy\x88\x01\x01\x12(\n" +
 	"\rdate_assigned\x18\n" +
-	" \x01(\x03H\x03R\fdateAssigned\x88\x01\x01\x125\n" +
-	"\x14date_assigned_string\x18\v \x01(\tH\x04R\x12dateAssignedString\x88\x01\x01\x12&\n" +
-	"\fdate_started\x18\f \x01(\x03H\x05R\vdateStarted\x88\x01\x01\x123\n" +
-	"\x13date_started_string\x18\r \x01(\tH\x06R\x11dateStartedString\x88\x01\x01\x12*\n" +
-	"\x0edate_completed\x18\x0e \x01(\x03H\aR\rdateCompleted\x88\x01\x01\x127\n" +
-	"\x15date_completed_string\x18\x0f \x01(\tH\bR\x13dateCompletedString\x88\x01\x01\x12\x1e\n" +
-	"\bdate_due\x18\x10 \x01(\x03H\tR\adateDue\x88\x01\x01\x12+\n" +
-	"\x0fdate_due_string\x18\x11 \x01(\tH\n" +
+	" \x01(\x03H\x03R\fdateAssigned\x88\x01\x01\x12=\n" +
+	"\x14date_assigned_string\x18\v \x01(\tB\x06\x82\xb5\x18\x028\x01H\x04R\x12dateAssignedString\x88\x01\x01\x12&\n" +
+	"\fdate_started\x18\f \x01(\x03H\x05R\vdateStarted\x88\x01\x01\x12;\n" +
+	"\x13date_started_string\x18\r \x01(\tB\x06\x82\xb5\x18\x028\x01H\x06R\x11dateStartedString\x88\x01\x01\x12*\n" +
+	"\x0edate_completed\x18\x0e \x01(\x03H\aR\rdateCompleted\x88\x01\x01\x12?\n" +
+	"\x15date_completed_string\x18\x0f \x01(\tB\x06\x82\xb5\x18\x028\x01H\bR\x13dateCompletedString\x88\x01\x01\x12\x1e\n" +
+	"\bdate_due\x18\x10 \x01(\x03H\tR\adateDue\x88\x01\x01\x123\n" +
+	"\x0fdate_due_string\x18\x11 \x01(\tB\x06\x82\xb5\x18\x028\x01H\n" +
 	"R\rdateDueString\x88\x01\x01\x12+\n" +
 	"\x0finput_data_json\x18\x12 \x01(\tH\vR\rinputDataJson\x88\x01\x01\x12-\n" +
 	"\x10output_data_json\x18\x13 \x01(\tH\fR\x0eoutputDataJson\x88\x01\x01\x12$\n" +
@@ -2031,10 +2031,10 @@ const file_domain_workflow_activity_activity_proto_rawDesc = "" +
 	"\x17actual_duration_minutes\x18\x19 \x01(\x05H\x12R\x15actualDurationMinutes\x88\x01\x01\x12\"\n" +
 	"\n" +
 	"created_by\x18\x1a \x01(\tH\x13R\tcreatedBy\x88\x01\x01\x12&\n" +
-	"\fdate_created\x18\x1b \x01(\x03H\x14R\vdateCreated\x88\x01\x01\x123\n" +
-	"\x13date_created_string\x18\x1c \x01(\tH\x15R\x11dateCreatedString\x88\x01\x01\x12(\n" +
-	"\rdate_modified\x18\x1d \x01(\x03H\x16R\fdateModified\x88\x01\x01\x125\n" +
-	"\x14date_modified_string\x18\x1e \x01(\tH\x17R\x12dateModifiedString\x88\x01\x01\x12\"\n" +
+	"\fdate_created\x18\x1b \x01(\x03H\x14R\vdateCreated\x88\x01\x01\x12;\n" +
+	"\x13date_created_string\x18\x1c \x01(\tB\x06\x82\xb5\x18\x028\x01H\x15R\x11dateCreatedString\x88\x01\x01\x12(\n" +
+	"\rdate_modified\x18\x1d \x01(\x03H\x16R\fdateModified\x88\x01\x01\x12=\n" +
+	"\x14date_modified_string\x18\x1e \x01(\tB\x06\x82\xb5\x18\x028\x01H\x17R\x12dateModifiedString\x88\x01\x01\x12\"\n" +
 	"\x06active\x18\x1f \x01(\bB\n" +
 	"\x82\xb5\x18\x06\"\x04trueR\x06active\x128\n" +
 	"\x15completion_percentage\x18  \x01(\x05H\x18R\x14completionPercentage\x88\x01\x01\x12%\n" +

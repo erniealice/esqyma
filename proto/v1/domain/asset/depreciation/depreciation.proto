@@ -41,9 +41,9 @@ message DepreciationSchedule {
 
   // Audit fields
   optional int64 date_created = 17;
-  optional string date_created_string = 18;
+  optional string date_created_string = 18 [(options.v1.db).ignore = true];
   optional int64 date_modified = 19;
-  optional string date_modified_string = 20;
+  optional string date_modified_string = 20 [(options.v1.db).ignore = true];
   bool active = 21 [(options.v1.db).default = "true"];
 
   // Depreciation run linkage (Phase 0 — 2026-05-09)

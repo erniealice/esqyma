@@ -63,7 +63,7 @@ message JournalEntry {
 
   // Date — unix timestamp + display string
   int64 entry_date = 4;
-  optional string entry_date_string = 5;
+  optional string entry_date_string = 5 [(options.v1.db).ignore = true];
 
   // Status and source traceability
   JournalEntryStatus status = 6;
@@ -80,12 +80,12 @@ message JournalEntry {
   // Posting audit
   optional string posted_by = 12;   // FK to entity.User
   optional int64 posted_at = 13;
-  optional string posted_at_string = 14;
+  optional string posted_at_string = 14 [(options.v1.db).ignore = true];
 
   // Reversal
   optional string reversed_by = 15;  // FK to entity.User
   optional int64 reversed_at = 16;
-  optional string reversed_at_string = 17;
+  optional string reversed_at_string = 17 [(options.v1.db).ignore = true];
   optional string reversal_entry_id = 18 [(options.v1.db).references = "journal_entry", (options.v1.db).index = true];
 
   optional string notes = 19;
@@ -93,9 +93,9 @@ message JournalEntry {
   // Audit fields
   bool active = 20 [(options.v1.db).default = "true"];
   optional int64 date_created = 21;
-  optional string date_created_string = 22;
+  optional string date_created_string = 22 [(options.v1.db).ignore = true];
   optional int64 date_modified = 23;
-  optional string date_modified_string = 24;
+  optional string date_modified_string = 24 [(options.v1.db).ignore = true];
 }
 
 service JournalEntryDomainService {

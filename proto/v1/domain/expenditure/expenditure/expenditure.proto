@@ -18,9 +18,9 @@ import "options/db.proto";
 message Expenditure {
   string id = 1;
   optional int64 date_created = 2;
-  optional string date_created_string = 3;
+  optional string date_created_string = 3 [(options.v1.db).ignore = true];
   optional int64 date_modified = 4;
-  optional string date_modified_string = 5;
+  optional string date_modified_string = 5 [(options.v1.db).ignore = true];
   bool active = 6;
   string name = 7;
   // expenditure_type — free-text discriminator (legacy entity, not promoted to enum
@@ -37,7 +37,7 @@ message Expenditure {
   optional domain.entity.v1.Client vendor = 9;    // counterparty (vendor/supplier)
   string vendor_id = 10;                          // FK to entity/client (vendors are clients you buy from)
   optional int64 expenditure_date = 11;
-  optional string expenditure_date_string = 12;
+  optional string expenditure_date_string = 12 [(options.v1.db).ignore = true];
   int64 total_amount = 13; // centavos
   string currency = 14;
   string status = 15;

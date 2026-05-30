@@ -33,9 +33,9 @@ message PurchaseOrder {
 
   // Dates
   int64 order_date = 9;
-  optional string order_date_string = 10;
+  optional string order_date_string = 10 [(options.v1.db).ignore = true];
   optional int64 expected_delivery_date = 11;
-  optional string expected_delivery_date_string = 12;
+  optional string expected_delivery_date_string = 12 [(options.v1.db).ignore = true];
 
   // Amounts
   string currency = 13;
@@ -50,7 +50,7 @@ message PurchaseOrder {
   // Approval
   optional string approved_by = 19;
   optional int64 approved_date = 20;
-  optional string approved_date_string = 21;
+  optional string approved_date_string = 21 [(options.v1.db).ignore = true];
 
   // Blanket order fields
   optional string parent_po_id = 22 [(options.v1.db).references = "purchase_order"];
@@ -68,9 +68,9 @@ message PurchaseOrder {
   // Audit
   bool active = 31 [(options.v1.db).default = "true"];
   optional int64 date_created = 32;
-  optional string date_created_string = 33;
+  optional string date_created_string = 33 [(options.v1.db).ignore = true];
   optional int64 date_modified = 34;
-  optional string date_modified_string = 35;
+  optional string date_modified_string = 35 [(options.v1.db).ignore = true];
   optional string payment_term_id = 36 [(options.v1.db).references = "payment_term"];
   optional domain.entity.v1.PaymentTerm payment_term = 37;
 
