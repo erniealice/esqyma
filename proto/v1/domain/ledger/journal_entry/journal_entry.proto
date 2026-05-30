@@ -96,6 +96,12 @@ message JournalEntry {
   optional string date_created_string = 22 [(options.v1.db).ignore = true];
   optional int64 date_modified = 23;
   optional string date_modified_string = 24 [(options.v1.db).ignore = true];
+
+  // Tenancy scope. Added by 20260530000000_add_workspace_id_to_ledger_financials.sql
+  // to back the workspace_id filter the postgres adapter already issues
+  // (journal_entry.go:281). Documentation-only annotation today; keeps proto/DB
+  // aligned. NULLABLE until the deferred NOT NULL migration tightens it.
+  optional string workspace_id = 25 [(options.v1.db).references = "workspace", (options.v1.db).index = true];
 }
 
 service JournalEntryDomainService {
