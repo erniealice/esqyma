@@ -1032,7 +1032,7 @@ var File_domain_inventory_inventory_item_inventory_item_proto protoreflect.FileD
 
 const file_domain_inventory_inventory_item_inventory_item_proto_rawDesc = "" +
 	"\n" +
-	"4domain/inventory/inventory_item/inventory_item.proto\x12\x13domain.inventory.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1adomain/common/search.proto\x1a$domain/product/product/product.proto\x1a%domain/entity/location/location.proto\x1a\x10options/db.proto\"\xe5\a\n" +
+	"4domain/inventory/inventory_item/inventory_item.proto\x12\x13domain.inventory.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1adomain/common/search.proto\x1a$domain/product/product/product.proto\x1a%domain/entity/location/location.proto\x1a\x10options/db.proto\"\xed\a\n" +
 	"\rInventoryItem\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12&\n" +
 	"\fdate_created\x18\x02 \x01(\x03H\x00R\vdateCreated\x88\x01\x01\x12;\n" +
@@ -1056,7 +1056,7 @@ const file_domain_inventory_inventory_item_inventory_item_proto_rawDesc = "" +
 	"\x0funit_of_measure\x18\x11 \x01(\tR\runitOfMeasure\x12\x19\n" +
 	"\x05notes\x18\x12 \x01(\tH\n" +
 	"R\x05notes\x88\x01\x01\x121\n" +
-	"\x12product_variant_id\x18\x14 \x01(\tH\vR\x10productVariantId\x88\x01\x01B\x0f\n" +
+	"\x12product_variant_id\x18\x14 \x01(\tH\vR\x10productVariantId\x88\x01\x01:\x06\x8a\xb5\x18\x02\b\x01B\x0f\n" +
 	"\r_date_createdB\x16\n" +
 	"\x14_date_created_stringB\x10\n" +
 	"\x0e_date_modifiedB\x17\n" +

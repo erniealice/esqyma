@@ -355,8 +355,13 @@ type Account struct {
 	DateCreatedString  *string `protobuf:"bytes,17,opt,name=date_created_string,json=dateCreatedString,proto3,oneof" json:"date_created_string,omitempty"`
 	DateModified       *int64  `protobuf:"varint,18,opt,name=date_modified,json=dateModified,proto3,oneof" json:"date_modified,omitempty"`
 	DateModifiedString *string `protobuf:"bytes,19,opt,name=date_modified_string,json=dateModifiedString,proto3,oneof" json:"date_modified_string,omitempty"`
-	unknownFields      protoimpl.UnknownFields
-	sizeCache          protoimpl.SizeCache
+	// Tenancy scope. Added by 20260530000000_add_workspace_id_to_ledger_financials.sql
+	// to back the workspace_id filter the postgres adapter already issues
+	// (account.go:131/341/527). Documentation-only annotation today; keeps proto/DB
+	// aligned. NULLABLE until the deferred NOT NULL migration tightens it.
+	WorkspaceId   *string `protobuf:"bytes,20,opt,name=workspace_id,json=workspaceId,proto3,oneof" json:"workspace_id,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
 }
 
 func (x *Account) Reset() {
@@ -518,6 +523,13 @@ func (x *Account) GetDateModified() int64 {
 func (x *Account) GetDateModifiedString() string {
 	if x != nil && x.DateModifiedString != nil {
 		return *x.DateModifiedString
+	}
+	return ""
+}
+
+func (x *Account) GetWorkspaceId() string {
+	if x != nil && x.WorkspaceId != nil {
+		return *x.WorkspaceId
 	}
 	return ""
 }
@@ -1432,7 +1444,7 @@ var File_domain_ledger_account_account_proto protoreflect.FileDescriptor
 
 const file_domain_ledger_account_account_proto_rawDesc = "" +
 	"\n" +
-	"#domain/ledger/account/account.proto\x12\x10domain.ledger.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1adomain/common/search.proto\x1a\x10options/db.proto\"\xbd\b\n" +
+	"#domain/ledger/account/account.proto\x12\x10domain.ledger.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1adomain/common/search.proto\x1a\x10options/db.proto\"\x89\t\n" +
 	"\aAccount\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12\x1c\n" +
 	"\x04code\x18\x02 \x01(\tB\b\x82\xb5\x18\x04\x10\x01\x18\x01R\x04code\x12\x12\n" +
@@ -1456,7 +1468,9 @@ const file_domain_ledger_account_account_proto_rawDesc = "" +
 	"\fdate_created\x18\x10 \x01(\x03H\x04R\vdateCreated\x88\x01\x01\x12;\n" +
 	"\x13date_created_string\x18\x11 \x01(\tB\x06\x82\xb5\x18\x028\x01H\x05R\x11dateCreatedString\x88\x01\x01\x12(\n" +
 	"\rdate_modified\x18\x12 \x01(\x03H\x06R\fdateModified\x88\x01\x01\x12=\n" +
-	"\x14date_modified_string\x18\x13 \x01(\tB\x06\x82\xb5\x18\x028\x01H\aR\x12dateModifiedString\x88\x01\x01:\x06\x8a\xb5\x18\x02\b\x01B\x0e\n" +
+	"\x14date_modified_string\x18\x13 \x01(\tB\x06\x82\xb5\x18\x028\x01H\aR\x12dateModifiedString\x88\x01\x01\x129\n" +
+	"\fworkspace_id\x18\x14 \x01(\tB\x11\x82\xb5\x18\r\n" +
+	"\tworkspace\x18\x01H\bR\vworkspaceId\x88\x01\x01:\x06\x8a\xb5\x18\x02\b\x01B\x0e\n" +
 	"\f_descriptionB\v\n" +
 	"\t_group_idB\f\n" +
 	"\n" +
@@ -1465,7 +1479,8 @@ const file_domain_ledger_account_account_proto_rawDesc = "" +
 	"\r_date_createdB\x16\n" +
 	"\x14_date_created_stringB\x10\n" +
 	"\x0e_date_modifiedB\x17\n" +
-	"\x15_date_modified_string\"E\n" +
+	"\x15_date_modified_stringB\x0f\n" +
+	"\r_workspace_id\"E\n" +
 	"\x14CreateAccountRequest\x12-\n" +
 	"\x04data\x18\x01 \x01(\v2\x19.domain.ledger.v1.AccountR\x04data\"\x9e\x01\n" +
 	"\x15CreateAccountResponse\x12-\n" +

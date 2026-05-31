@@ -50,6 +50,7 @@ enum ExpenseRecognitionRunSourceKind {
 }
 
 message ExpenseRecognitionRun {
+  option (options.v1.table).table = true;
   string id = 1;
   string workspace_id = 2;
   optional string supplier_id = 3;
@@ -193,6 +194,7 @@ message GenerateExpenseRunResponse {
 }
 
 message ExpenseRecognitionRunAttempt {
+  option (options.v1.table).table = true;
   string id = 1;
   string run_id = 2;
   ExpenseRecognitionRunSourceKind source_kind = 3;

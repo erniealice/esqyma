@@ -15,6 +15,7 @@ import "domain/common/attribute.proto";
 import "options/db.proto";
 
 message InventoryAttribute {
+  option (options.v1.table).table = true;
   string id = 1;
   string inventory_item_id = 2;
   string attribute_id = 3;

@@ -2055,7 +2055,7 @@ var File_domain_revenue_revenue_run_revenue_run_proto protoreflect.FileDescripto
 
 const file_domain_revenue_revenue_run_revenue_run_proto_rawDesc = "" +
 	"\n" +
-	",domain/revenue/revenue_run/revenue_run.proto\x12\x11domain.revenue.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/search.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x10options/db.proto\"\xdf\a\n" +
+	",domain/revenue/revenue_run/revenue_run.proto\x12\x11domain.revenue.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/search.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x10options/db.proto\"\xe7\a\n" +
 	"\n" +
 	"RevenueRun\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12!\n" +
@@ -2080,7 +2080,7 @@ const file_domain_revenue_revenue_run_revenue_run_proto_rawDesc = "" +
 	"\fdate_created\x18\x11 \x01(\x03H\x05R\vdateCreated\x88\x01\x01\x12;\n" +
 	"\x13date_created_string\x18\x12 \x01(\tB\x06\x82\xb5\x18\x028\x01H\x06R\x11dateCreatedString\x88\x01\x01\x12(\n" +
 	"\rdate_modified\x18\x13 \x01(\x03H\aR\fdateModified\x88\x01\x01\x12=\n" +
-	"\x14date_modified_string\x18\x14 \x01(\tB\x06\x82\xb5\x18\x028\x01H\bR\x12dateModifiedString\x88\x01\x01B\f\n" +
+	"\x14date_modified_string\x18\x14 \x01(\tB\x06\x82\xb5\x18\x028\x01H\bR\x12dateModifiedString\x88\x01\x01:\x06\x8a\xb5\x18\x02\b\x01B\f\n" +
 	"\n" +
 	"_client_idB\x12\n" +
 	"\x10_subscription_idB\x0f\n" +
@@ -2090,7 +2090,7 @@ const file_domain_revenue_revenue_run_revenue_run_proto_rawDesc = "" +
 	"\r_date_createdB\x16\n" +
 	"\x14_date_created_stringB\x10\n" +
 	"\x0e_date_modifiedB\x17\n" +
-	"\x15_date_modified_string\"\xc3\a\n" +
+	"\x15_date_modified_string\"\xcb\a\n" +
 	"\x11RevenueRunAttempt\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12\x15\n" +
 	"\x06run_id\x18\x02 \x01(\tR\x05runId\x12'\n" +
@@ -2114,7 +2114,7 @@ const file_domain_revenue_revenue_run_revenue_run_proto_rawDesc = "" +
 	"\x14date_modified_string\x18\x10 \x01(\tB\x06\x82\xb5\x18\x028\x01H\aR\x12dateModifiedString\x88\x01\x01\x12H\n" +
 	"\vsource_kind\x18\x11 \x01(\x0e2'.domain.revenue.v1.RevenueRunSourceKindR\n" +
 	"sourceKind\x127\n" +
-	"\x15advance_collection_id\x18\x12 \x01(\tH\bR\x13advanceCollectionId\x88\x01\x01B\r\n" +
+	"\x15advance_collection_id\x18\x12 \x01(\tH\bR\x13advanceCollectionId\x88\x01\x01:\x06\x8a\xb5\x18\x02\b\x01B\r\n" +
 	"\v_revenue_idB\r\n" +
 	"\v_error_codeB\x10\n" +
 	"\x0e_error_messageB\x0f\n" +

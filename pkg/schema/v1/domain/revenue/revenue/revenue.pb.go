@@ -1765,7 +1765,7 @@ var File_domain_revenue_revenue_revenue_proto protoreflect.FileDescriptor
 
 const file_domain_revenue_revenue_revenue_proto_rawDesc = "" +
 	"\n" +
-	"$domain/revenue/revenue/revenue.proto\x12\x11domain.revenue.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/search.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a!domain/entity/client/client.proto\x1a%domain/entity/location/location.proto\x1a-domain/entity/payment_term/payment_term.proto\x1a\x10options/db.proto\"\xc2\x17\n" +
+	"$domain/revenue/revenue/revenue.proto\x12\x11domain.revenue.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/search.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a!domain/entity/client/client.proto\x1a%domain/entity/location/location.proto\x1a-domain/entity/payment_term/payment_term.proto\x1a\x10options/db.proto\"\xca\x17\n" +
 	"\aRevenue\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12&\n" +
 	"\fdate_created\x18\x02 \x01(\x03H\x00R\vdateCreated\x88\x01\x01\x12;\n" +
@@ -1819,7 +1819,7 @@ const file_domain_revenue_revenue_revenue_proto_rawDesc = "" +
 	"\x11forex_rate_source\x18. \x01(\tH\"R\x0fforexRateSource\x88\x01\x01\x12H\n" +
 	"\x1ecollection_profile_id_snapshot\x18/ \x01(\tH#R\x1bcollectionProfileIdSnapshot\x88\x01\x01\x12T\n" +
 	"\x15advance_collection_id\x180 \x01(\tB\x1b\x82\xb5\x18\x17\n" +
-	"\x13treasury_collection\x18\x01H$R\x13advanceCollectionId\x88\x01\x01B\x0f\n" +
+	"\x13treasury_collection\x18\x01H$R\x13advanceCollectionId\x88\x01\x01:\x06\x8a\xb5\x18\x02\b\x01B\x0f\n" +
 	"\r_date_createdB\x16\n" +
 	"\x14_date_created_stringB\x10\n" +
 	"\x0e_date_modifiedB\x17\n" +

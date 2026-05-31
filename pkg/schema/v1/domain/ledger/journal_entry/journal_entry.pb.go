@@ -232,8 +232,13 @@ type JournalEntry struct {
 	DateCreatedString  *string `protobuf:"bytes,22,opt,name=date_created_string,json=dateCreatedString,proto3,oneof" json:"date_created_string,omitempty"`
 	DateModified       *int64  `protobuf:"varint,23,opt,name=date_modified,json=dateModified,proto3,oneof" json:"date_modified,omitempty"`
 	DateModifiedString *string `protobuf:"bytes,24,opt,name=date_modified_string,json=dateModifiedString,proto3,oneof" json:"date_modified_string,omitempty"`
-	unknownFields      protoimpl.UnknownFields
-	sizeCache          protoimpl.SizeCache
+	// Tenancy scope. Added by 20260530000000_add_workspace_id_to_ledger_financials.sql
+	// to back the workspace_id filter the postgres adapter already issues
+	// (journal_entry.go:281). Documentation-only annotation today; keeps proto/DB
+	// aligned. NULLABLE until the deferred NOT NULL migration tightens it.
+	WorkspaceId   *string `protobuf:"bytes,25,opt,name=workspace_id,json=workspaceId,proto3,oneof" json:"workspace_id,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
 }
 
 func (x *JournalEntry) Reset() {
@@ -430,6 +435,13 @@ func (x *JournalEntry) GetDateModified() int64 {
 func (x *JournalEntry) GetDateModifiedString() string {
 	if x != nil && x.DateModifiedString != nil {
 		return *x.DateModifiedString
+	}
+	return ""
+}
+
+func (x *JournalEntry) GetWorkspaceId() string {
+	if x != nil && x.WorkspaceId != nil {
+		return *x.WorkspaceId
 	}
 	return ""
 }
@@ -1464,8 +1476,7 @@ var File_domain_ledger_journal_entry_journal_entry_proto protoreflect.FileDescri
 
 const file_domain_ledger_journal_entry_journal_entry_proto_rawDesc = "" +
 	"\n" +
-	"/domain/ledger/journal_entry/journal_entry.proto\x12\x10domain.ledger.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1adomain/common/search.proto\x1a\x10options/db.proto\"\xf1\n" +
-	"\n" +
+	"/domain/ledger/journal_entry/journal_entry.proto\x12\x10domain.ledger.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1adomain/common/search.proto\x1a\x10options/db.proto\"\xbd\v\n" +
 	"\fJournalEntry\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12+\n" +
 	"\fentry_number\x18\x02 \x01(\tB\b\x82\xb5\x18\x04\x10\x01\x18\x01R\ventryNumber\x12 \n" +
@@ -1500,7 +1511,9 @@ const file_domain_ledger_journal_entry_journal_entry_proto_rawDesc = "" +
 	"\fdate_created\x18\x15 \x01(\x03H\vR\vdateCreated\x88\x01\x01\x12;\n" +
 	"\x13date_created_string\x18\x16 \x01(\tB\x06\x82\xb5\x18\x028\x01H\fR\x11dateCreatedString\x88\x01\x01\x12(\n" +
 	"\rdate_modified\x18\x17 \x01(\x03H\rR\fdateModified\x88\x01\x01\x12=\n" +
-	"\x14date_modified_string\x18\x18 \x01(\tB\x06\x82\xb5\x18\x028\x01H\x0eR\x12dateModifiedString\x88\x01\x01:\x06\x8a\xb5\x18\x02\b\x01B\x14\n" +
+	"\x14date_modified_string\x18\x18 \x01(\tB\x06\x82\xb5\x18\x028\x01H\x0eR\x12dateModifiedString\x88\x01\x01\x129\n" +
+	"\fworkspace_id\x18\x19 \x01(\tB\x11\x82\xb5\x18\r\n" +
+	"\tworkspace\x18\x01H\x0fR\vworkspaceId\x88\x01\x01:\x06\x8a\xb5\x18\x02\b\x01B\x14\n" +
 	"\x12_entry_date_stringB\f\n" +
 	"\n" +
 	"_source_idB\x13\n" +
@@ -1518,7 +1531,8 @@ const file_domain_ledger_journal_entry_journal_entry_proto_rawDesc = "" +
 	"\r_date_createdB\x16\n" +
 	"\x14_date_created_stringB\x10\n" +
 	"\x0e_date_modifiedB\x17\n" +
-	"\x15_date_modified_string\"O\n" +
+	"\x15_date_modified_stringB\x0f\n" +
+	"\r_workspace_id\"O\n" +
 	"\x19CreateJournalEntryRequest\x122\n" +
 	"\x04data\x18\x01 \x01(\v2\x1e.domain.ledger.v1.JournalEntryR\x04data\"\xa8\x01\n" +
 	"\x1aCreateJournalEntryResponse\x122\n" +

@@ -44,6 +44,7 @@ enum RevenueRunSourceKind {
 }
 
 message RevenueRun {
+  option (options.v1.table).table = true;
   string id = 1;
   string workspace_id = 2;
   optional string client_id = 3;
@@ -67,6 +68,7 @@ message RevenueRun {
 }
 
 message RevenueRunAttempt {
+  option (options.v1.table).table = true;
   string id = 1;
   string run_id = 2;
   string subscription_id = 3;

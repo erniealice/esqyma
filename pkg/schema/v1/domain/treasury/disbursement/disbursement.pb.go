@@ -2198,7 +2198,7 @@ var File_domain_treasury_disbursement_disbursement_proto protoreflect.FileDescri
 
 const file_domain_treasury_disbursement_disbursement_proto_rawDesc = "" +
 	"\n" +
-	"/domain/treasury/disbursement/disbursement.proto\x12\x12domain.treasury.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1adomain/common/search.proto\x1a3domain/subscription/subscription/subscription.proto\x1a-domain/common/advance_kind/advance_kind.proto\x1a\x10options/db.proto\"\xcf\x11\n" +
+	"/domain/treasury/disbursement/disbursement.proto\x12\x12domain.treasury.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1adomain/common/search.proto\x1a3domain/subscription/subscription/subscription.proto\x1a-domain/common/advance_kind/advance_kind.proto\x1a\x10options/db.proto\"\xee\x11\n" +
 	"\fDisbursement\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12&\n" +
 	"\fdate_created\x18\x02 \x01(\x03H\x00R\vdateCreated\x88\x01\x01\x12;\n" +
@@ -2241,7 +2241,7 @@ const file_domain_treasury_disbursement_disbursement_proto_rawDesc = "" +
 	"\x18advance_proration_policy\x18* \x01(\x0e2(.domain.common.v1.AdvanceProrationPolicyH\x13R\x16advanceProrationPolicy\x88\x01\x01\x126\n" +
 	"\vsupplier_id\x18+ \x01(\tB\x10\x82\xb5\x18\f\n" +
 	"\bsupplier\x18\x01H\x14R\n" +
-	"supplierId\x88\x01\x01B\x0f\n" +
+	"supplierId\x88\x01\x01:\x1d\x8a\xb5\x18\x19\b\x01\x12\x15treasury_disbursementB\x0f\n" +
 	"\r_date_createdB\x16\n" +
 	"\x14_date_created_stringB\x10\n" +
 	"\x0e_date_modifiedB\x17\n" +

@@ -1213,7 +1213,7 @@ var File_domain_inventory_inventory_attribute_inventory_attribute_proto protoref
 
 const file_domain_inventory_inventory_attribute_inventory_attribute_proto_rawDesc = "" +
 	"\n" +
-	">domain/inventory/inventory_attribute/inventory_attribute.proto\x12\x13domain.inventory.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1adomain/common/search.proto\x1a4domain/inventory/inventory_item/inventory_item.proto\x1a\x1ddomain/common/attribute.proto\x1a\x10options/db.proto\"\xc9\x04\n" +
+	">domain/inventory/inventory_attribute/inventory_attribute.proto\x12\x13domain.inventory.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1adomain/common/search.proto\x1a4domain/inventory/inventory_item/inventory_item.proto\x1a\x1ddomain/common/attribute.proto\x1a\x10options/db.proto\"\xd1\x04\n" +
 	"\x12InventoryAttribute\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12*\n" +
 	"\x11inventory_item_id\x18\x02 \x01(\tR\x0finventoryItemId\x12!\n" +
@@ -1226,7 +1226,7 @@ const file_domain_inventory_inventory_attribute_inventory_attribute_proto_rawDes
 	"\rdate_modified\x18\t \x01(\x03H\x02R\fdateModified\x88\x01\x01\x12=\n" +
 	"\x14date_modified_string\x18\n" +
 	" \x01(\tB\x06\x82\xb5\x18\x028\x01H\x03R\x12dateModifiedString\x88\x01\x01\x12\x16\n" +
-	"\x06active\x18\v \x01(\bR\x06activeB\x0f\n" +
+	"\x06active\x18\v \x01(\bR\x06active:\x06\x8a\xb5\x18\x02\b\x01B\x0f\n" +
 	"\r_date_createdB\x16\n" +
 	"\x14_date_created_stringB\x10\n" +
 	"\x0e_date_modifiedB\x17\n" +

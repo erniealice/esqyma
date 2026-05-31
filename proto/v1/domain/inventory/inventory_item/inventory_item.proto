@@ -15,6 +15,7 @@ import "domain/entity/location/location.proto";
 import "options/db.proto";
 
 message InventoryItem {
+  option (options.v1.table).table = true;
   string id = 1;
   optional int64 date_created = 2;
   optional string date_created_string = 3 [(options.v1.db).ignore = true];

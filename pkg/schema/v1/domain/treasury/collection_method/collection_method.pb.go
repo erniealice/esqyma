@@ -1077,7 +1077,7 @@ var File_domain_treasury_collection_method_collection_method_proto protoreflect.
 
 const file_domain_treasury_collection_method_collection_method_proto_rawDesc = "" +
 	"\n" +
-	"9domain/treasury/collection_method/collection_method.proto\x12\x12domain.treasury.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1adomain/common/search.proto\x1a\x10options/db.proto\"\xd6\x04\n" +
+	"9domain/treasury/collection_method/collection_method.proto\x12\x12domain.treasury.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1adomain/common/search.proto\x1a\x10options/db.proto\"\xde\x04\n" +
 	"\x10CollectionMethod\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12&\n" +
 	"\fdate_created\x18\x02 \x01(\x03H\x01R\vdateCreated\x88\x01\x01\x12;\n" +
@@ -1089,7 +1089,7 @@ const file_domain_treasury_collection_method_collection_method_proto_rawDesc = "
 	"\x04card\x18\b \x01(\v2).domain.treasury.v1.CollectionCardDetailsH\x00R\x04card\x12U\n" +
 	"\fbank_account\x18\t \x01(\v20.domain.treasury.v1.CollectionBankAccountDetailsH\x00R\vbankAccount\x12(\n" +
 	"\rprovider_name\x18\n" +
-	" \x01(\tH\x05R\fproviderName\x88\x01\x01B\x10\n" +
+	" \x01(\tH\x05R\fproviderName\x88\x01\x01:\x06\x8a\xb5\x18\x02\b\x01B\x10\n" +
 	"\x0emethod_detailsB\x0f\n" +
 	"\r_date_createdB\x16\n" +
 	"\x14_date_created_stringB\x10\n" +

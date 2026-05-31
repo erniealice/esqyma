@@ -959,7 +959,7 @@ var File_domain_expenditure_expenditure_category_expenditure_category_proto prot
 
 const file_domain_expenditure_expenditure_category_expenditure_category_proto_rawDesc = "" +
 	"\n" +
-	"Bdomain/expenditure/expenditure_category/expenditure_category.proto\x12\x15domain.expenditure.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/search.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x10options/db.proto\"\xfa\x05\n" +
+	"Bdomain/expenditure/expenditure_category/expenditure_category.proto\x12\x15domain.expenditure.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/search.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x10options/db.proto\"\x82\x06\n" +
 	"\x13ExpenditureCategory\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12&\n" +
 	"\fdate_created\x18\x02 \x01(\x03H\x00R\vdateCreated\x88\x01\x01\x12;\n" +
@@ -976,7 +976,7 @@ const file_domain_expenditure_expenditure_category_expenditure_category_proto_ra
 	"\n" +
 	"markup_pct\x18\f \x01(\x01H\aR\tmarkupPct\x88\x01\x01\x12&\n" +
 	"\fdefault_rate\x18\r \x01(\x03H\bR\vdefaultRate\x88\x01\x01\x123\n" +
-	"\x13billable_by_default\x18\x0e \x01(\bH\tR\x11billableByDefault\x88\x01\x01B\x0f\n" +
+	"\x13billable_by_default\x18\x0e \x01(\bH\tR\x11billableByDefault\x88\x01\x01:\x06\x8a\xb5\x18\x02\b\x01B\x0f\n" +
 	"\r_date_createdB\x16\n" +
 	"\x14_date_created_stringB\x10\n" +
 	"\x0e_date_modifiedB\x17\n" +

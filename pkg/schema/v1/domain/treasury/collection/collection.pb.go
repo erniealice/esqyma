@@ -2326,7 +2326,7 @@ var File_domain_treasury_collection_collection_proto protoreflect.FileDescriptor
 
 const file_domain_treasury_collection_collection_proto_rawDesc = "" +
 	"\n" +
-	"+domain/treasury/collection/collection.proto\x12\x12domain.treasury.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1adomain/common/search.proto\x1a3domain/subscription/subscription/subscription.proto\x1a_domain/treasury/collection_profile_collection_method/collection_profile_collection_method.proto\x1a-domain/common/advance_kind/advance_kind.proto\x1a\x10options/db.proto\"\xd9\x12\n" +
+	"+domain/treasury/collection/collection.proto\x12\x12domain.treasury.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1adomain/common/search.proto\x1a3domain/subscription/subscription/subscription.proto\x1a_domain/treasury/collection_profile_collection_method/collection_profile_collection_method.proto\x1a-domain/common/advance_kind/advance_kind.proto\x1a\x10options/db.proto\"\xf6\x12\n" +
 	"\n" +
 	"Collection\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12&\n" +
@@ -2373,7 +2373,7 @@ const file_domain_treasury_collection_collection_proto_rawDesc = "" +
 	"\x18advance_proration_policy\x18, \x01(\x0e2(.domain.common.v1.AdvanceProrationPolicyH\x14R\x16advanceProrationPolicy\x88\x01\x01\x120\n" +
 	"\tclient_id\x18- \x01(\tB\x0e\x82\xb5\x18\n" +
 	"\n" +
-	"\x06client\x18\x01H\x15R\bclientId\x88\x01\x01B\x0f\n" +
+	"\x06client\x18\x01H\x15R\bclientId\x88\x01\x01:\x1b\x8a\xb5\x18\x17\b\x01\x12\x13treasury_collectionB\x0f\n" +
 	"\r_date_createdB\x16\n" +
 	"\x14_date_created_stringB\x10\n" +
 	"\x0e_date_modifiedB\x17\n" +

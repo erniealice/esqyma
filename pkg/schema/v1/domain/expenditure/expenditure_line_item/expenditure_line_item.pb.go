@@ -1078,7 +1078,7 @@ var File_domain_expenditure_expenditure_line_item_expenditure_line_item_proto pr
 
 const file_domain_expenditure_expenditure_line_item_expenditure_line_item_proto_rawDesc = "" +
 	"\n" +
-	"Ddomain/expenditure/expenditure_line_item/expenditure_line_item.proto\x12\x15domain.expenditure.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/search.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a0domain/expenditure/expenditure/expenditure.proto\x1a$domain/product/product/product.proto\x1a\x10options/db.proto\"\xa9\r\n" +
+	"Ddomain/expenditure/expenditure_line_item/expenditure_line_item.proto\x12\x15domain.expenditure.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/search.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a0domain/expenditure/expenditure/expenditure.proto\x1a$domain/product/product/product.proto\x1a\x10options/db.proto\"\xb1\r\n" +
 	"\x13ExpenditureLineItem\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12&\n" +
 	"\fdate_created\x18\x02 \x01(\x03H\x00R\vdateCreated\x88\x01\x01\x12;\n" +
@@ -1118,7 +1118,7 @@ const file_domain_expenditure_expenditure_line_item_expenditure_line_item_proto_
 	"\rcalc_metadata\x18\x1a \x01(\tH\x10R\fcalcMetadata\x88\x01\x01\x12 \n" +
 	"\tline_kind\x18\x1b \x01(\tH\x11R\blineKind\x88\x01\x01\x12i\n" +
 	"\x1dsupplier_product_cost_plan_id\x18\x1c \x01(\tB\"\x82\xb5\x18\x1e\n" +
-	"\x1asupplier_product_cost_plan\x18\x01H\x12R\x19supplierProductCostPlanId\x88\x01\x01B\x0f\n" +
+	"\x1asupplier_product_cost_plan\x18\x01H\x12R\x19supplierProductCostPlanId\x88\x01\x01:\x06\x8a\xb5\x18\x02\b\x01B\x0f\n" +
 	"\r_date_createdB\x16\n" +
 	"\x14_date_created_stringB\x10\n" +
 	"\x0e_date_modifiedB\x17\n" +
