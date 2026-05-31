@@ -3,99 +3,147 @@
 -- Plan: docs/plan/20260530-authz-workspace-hardening (Q-AWS3-A migration leg, Plan 1 hotfix)
 -- Follows: 20260530000000_add_workspace_id_to_ledger_financials.sql
 --
--- Purpose: Backfill workspace_id on account, expenditure, and journal_entry with
--- the flat literal 'default-workspace'. Unlike the asset-graph backfill
--- (20260510040000_backfill_workspace_id_on_asset_graph.sql), these three tables
--- carry NO workspace-bearing parent FK from which workspace_id can be derived by
--- JOIN, so the backfill is a flat constant rather than a JOIN.
+-- Purpose: Backfill workspace_id on expenditure, journal_entry, and account by
+-- PER-ROW DERIVATION from each table's structural parent — NOT a flat
+-- 'default-workspace' literal. The prior revision of this file flat-collapsed all
+-- rows to 'default-workspace' behind a single-workspace self-guard; that approach
+-- is SUPERSEDED here. This DB is multi-tenant (4 active workspaces), so workspace_id
+-- must be DERIVED from the tenant link on each row. (It happens that every ledger
+-- row on THIS DB resolves to one workspace — default-workspace — but we arrive at
+-- that by derivation, never by assumption.)
 --
--- ⚠️ SINGLE-WORKSPACE GUARD — READ BEFORE APPLYING
---   The flat 'default-workspace' literal is correct ONLY because current deploys
---   are effectively single-workspace. Before applying this migration, confirm the
---   guard holds against the target DB:
+-- Derivation idiom (every join-derive block is re-runnable):
+--     UPDATE child c SET workspace_id = p.workspace_id
+--       FROM <parent> p
+--      WHERE c.<fk> = p.id
+--        AND c.workspace_id IS NULL          -- re-runnable: only fills NULLs
+--        AND p.workspace_id IS NOT NULL;     -- never overwrite with a NULL parent
 --
---       SELECT COUNT(DISTINCT workspace_id) FROM workspace_user WHERE active;
---       -- expected: 1
+-- Apply order (PARENTS BEFORE CHILDREN — order is load-bearing):
+--   1. expenditure              <- supplier
+--   2. journal_entry REVENUE    <- revenue.client_id -> client   (client is authoritative)
+--   3. journal_entry EXPENDITURE<- expenditure (now populated by step 1)
+--   4. account                  <- GUARDED single-tenant fallback (no structural parent)
 --
---   If the count is > 1, DO NOT apply this flat backfill. The correct posture for
---   a multi-workspace DB is to LEAVE workspace_id NULL and derive it per row from
---   a tenant link in a follow-up plan (the fail-closed NULL excludes legacy rows
---   from "WHERE workspace_id = $X" predicates, which is audit-safe — see the
---   header of 20260510040000_backfill_workspace_id_on_asset_graph.sql). A flat
---   'default-workspace' on a multi-tenant DB would wrongly collapse every tenant's
---   ledger/financial rows into one workspace.
+-- NOTE: journal_line is OUT OF SCOPE for this migration. The ADD leg
+-- (20260530000000) only adds workspace_id to account/expenditure/journal_entry —
+-- journal_line has NO workspace_id column, and the espyna adapter does NOT filter
+-- journal_line by workspace_id. journal_line is scoped as a separate follow-up.
+-- The account self-guard below (step 4) reaches workspace via
+-- journal_line.account_id -> journal_entry.workspace_id, which needs no
+-- journal_line.workspace_id column.
+--
+-- Orphans intentionally LEFT NULL (fail-closed; a NULL workspace_id is excluded
+-- from every "WHERE workspace_id = $X" predicate, which is audit-safe):
+--   * 3 NULL-supplier expenditure rows (step 1 cannot resolve a parent).
+--   * 2 EXPENDITURE journal_entry rows (step 3) whose source expenditures are
+--     those NULL-supplier orphans.
+--   These remaining NULLs are why the NOT NULL tightening (20260530000002) is
+--   DEFERRED and carries a 0-NULL precheck — it must not be applied until the
+--   orphans are resolved.
 --
 -- Safety contract:
---   * Every UPDATE uses WHERE workspace_id IS NULL — re-applying is a no-op.
---   * Wrapped in DO $$ BEGIN ... END $$ for cleaner audit logs.
---   * Each block is independent; a failure in one does not affect the others.
---   * 'default-workspace' is the canonical default workspace id used elsewhere in
---     the single-workspace deploy model.
---   * NOT NULL tightening is NOT performed here; that is the third step per
---     docs/wiki/articles/schema-migrations.md "Strict rules now that users exist"
---     (see 20260530000002_ledger_financials_workspace_id_not_null.sql).
+--   * Every block is idempotent (WHERE workspace_id IS NULL) — re-applying is a no-op.
+--   * Each block is wrapped in DO $$ BEGIN ... END $$ for cleaner audit logs.
+--   * Each block is independent; a failure in one does not corrupt the others.
+--   * Step 4 (account) SELF-GUARDS: it derives the set of workspaces that actually
+--     touch accounts and RAISEs rather than guess if that set is multi-workspace.
+--   * NOT NULL tightening is NOT performed here — see 20260530000002 (deferred).
 --
 -- Idempotency: applying this migration twice produces no changes.
 
 SET search_path TO public;
 
 -- ---------------------------------------------------------------------------
--- 0. SELF-GUARD (2026-05-31): the header's single-workspace guard, ENFORCED.
---    If ANY of the three tables has a NULL workspace_id row AND the deploy is
---    multi-workspace, RAISE and abort — do NOT flat-collapse 26 accounts / 8
---    expenditures / 8 journal entries across tenants. Passes (no-op) only when
---    single-workspace or 0 NULL rows. A multi-tenant DB must derive workspace_id
---    per row from the tenant link before this migration can apply.
+-- 1. expenditure.workspace_id <- supplier.workspace_id
+--    Resolves 5/8 rows on this DB. The 3 NULL-supplier expenditures have no
+--    parent to derive from and stay NULL (fail-closed orphans).
+-- ---------------------------------------------------------------------------
+DO $$
+BEGIN
+    UPDATE expenditure e
+    SET workspace_id = s.workspace_id
+    FROM supplier s
+    WHERE e.supplier_id = s.id
+      AND e.workspace_id IS NULL
+      AND s.workspace_id IS NOT NULL;
+END;
+$$;
+
+-- ---------------------------------------------------------------------------
+-- 2. journal_entry (source_type='REVENUE') <- revenue.client_id -> client.workspace_id
+--    Derive THROUGH revenue to client. We deliberately do NOT shortcut via
+--    revenue.workspace_id: that column is only PARTIALLY populated on this DB,
+--    so client is the authoritative tenant link for revenue-sourced entries.
+-- ---------------------------------------------------------------------------
+DO $$
+BEGIN
+    UPDATE journal_entry je
+    SET workspace_id = c.workspace_id
+    FROM revenue r
+    JOIN client c ON r.client_id = c.id
+    WHERE je.source_type = 'REVENUE'
+      AND je.source_id = r.id
+      AND je.workspace_id IS NULL
+      AND c.workspace_id IS NOT NULL;
+END;
+$$;
+
+-- ---------------------------------------------------------------------------
+-- 3. journal_entry (source_type='EXPENDITURE') <- expenditure.workspace_id
+--    expenditure is now populated by step 1. The 2 EXPENDITURE entries whose
+--    source expenditures are NULL-supplier orphans (step 1) stay NULL here.
+-- ---------------------------------------------------------------------------
+DO $$
+BEGIN
+    UPDATE journal_entry je
+    SET workspace_id = e.workspace_id
+    FROM expenditure e
+    WHERE je.source_type = 'EXPENDITURE'
+      AND je.source_id = e.id
+      AND je.workspace_id IS NULL
+      AND e.workspace_id IS NOT NULL;
+END;
+$$;
+
+-- ---------------------------------------------------------------------------
+-- 4. account.workspace_id <- GUARDED single-tenant fallback
+--    account has NO structural workspace parent (no FK to workspace/client/user/
+--    supplier). On a DB whose ledger is single-tenant, fill every account so the
+--    Chart-of-Accounts list works under the workspace_id filter.
+--
+--    SELF-GUARD: derive the set of workspaces that actually touch accounts, via
+--    journal_line.account_id -> journal_entry.workspace_id (journal_entry is now
+--    populated by steps 2-3). IF that set contains >1 workspace, RAISE and abort —
+--    accounts genuinely span tenants and we must NOT guess a single fallback.
+--    ELSE fill every NULL account.workspace_id to that single workspace.
+--    Idempotent: WHERE workspace_id IS NULL.
 -- ---------------------------------------------------------------------------
 DO $$
 DECLARE
-    null_rows bigint;
-    ws_count  int;
+    ws_count      int;
+    target_ws     text;
 BEGIN
-    SELECT (SELECT COUNT(*) FROM account       WHERE workspace_id IS NULL)
-         + (SELECT COUNT(*) FROM expenditure   WHERE workspace_id IS NULL)
-         + (SELECT COUNT(*) FROM journal_entry WHERE workspace_id IS NULL)
-      INTO null_rows;
-    IF null_rows > 0 THEN
-        SELECT COUNT(DISTINCT workspace_id) INTO ws_count FROM workspace_user WHERE active;
-        IF ws_count > 1 THEN
-            RAISE EXCEPTION
-                'workspace_id self-guard: % NULL ledger-financial row(s) in a MULTI-workspace deploy (% active workspaces). Refusing flat ''default-workspace'' backfill — derive workspace_id per row from the tenant link first.',
-                null_rows, ws_count;
-        END IF;
+    -- Distinct workspaces reachable from accounts through the journal graph.
+    SELECT COUNT(DISTINCT je.workspace_id),
+           MIN(je.workspace_id)
+      INTO ws_count, target_ws
+      FROM journal_line jl
+      JOIN journal_entry je ON jl.journal_entry_id = je.id
+     WHERE je.workspace_id IS NOT NULL;
+
+    IF ws_count > 1 THEN
+        RAISE EXCEPTION
+            'account workspace_id self-guard: accounts are touched by % distinct workspaces via the journal graph. Refusing the single-tenant fallback — account has no structural workspace parent, so a per-row derivation must be designed before backfilling.',
+            ws_count;
     END IF;
-END;
-$$;
 
--- ---------------------------------------------------------------------------
--- 1. account.workspace_id ← 'default-workspace' (flat literal; no parent FK)
--- ---------------------------------------------------------------------------
-DO $$
-BEGIN
-    UPDATE account
-    SET workspace_id = 'default-workspace'
-    WHERE workspace_id IS NULL;
-END;
-$$;
-
--- ---------------------------------------------------------------------------
--- 2. expenditure.workspace_id ← 'default-workspace' (flat literal; no parent FK)
--- ---------------------------------------------------------------------------
-DO $$
-BEGIN
-    UPDATE expenditure
-    SET workspace_id = 'default-workspace'
-    WHERE workspace_id IS NULL;
-END;
-$$;
-
--- ---------------------------------------------------------------------------
--- 3. journal_entry.workspace_id ← 'default-workspace' (flat literal; no parent FK)
--- ---------------------------------------------------------------------------
-DO $$
-BEGIN
-    UPDATE journal_entry
-    SET workspace_id = 'default-workspace'
-    WHERE workspace_id IS NULL;
+    -- ws_count is 0 (no journal coverage) or 1. Only fill when we have a single
+    -- authoritative target workspace; if 0, leave accounts NULL (nothing to derive).
+    IF target_ws IS NOT NULL THEN
+        UPDATE account
+        SET workspace_id = target_ws
+        WHERE workspace_id IS NULL;
+    END IF;
 END;
 $$;

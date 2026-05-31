@@ -13,28 +13,34 @@
 --       partial index — neither of which exists on attachment today.
 --
 -- Backfill source decision (2026-05-31):
---   attachment carries NO workspace-bearing parent FK from which workspace_id
---   could be derived by JOIN. Its module_key / foreign_key pair is a POLYMORPHIC
---   text reference (it can point at any module's row), NOT a typed FK, so there
---   is no single parent table to JOIN against. The backfill is therefore a flat
---   constant 'default-workspace' — this mirrors the ledger-financials flat-literal
---   case (20260530000001), NOT the asset-graph JOIN case
---   (20260510040000_backfill_workspace_id_on_asset_graph.sql).
+--   attachment's module_key / foreign_key pair is a POLYMORPHIC text reference
+--   (foreign_key holds the id of a row in the module named by module_key), NOT a
+--   typed FK — so there is no single parent table to JOIN against. The backfill is
+--   therefore a PER-ROW POLYMORPHIC DERIVATION: a CASE on module_key routes each
+--   row to the correct parent table and copies that parent's workspace_id. This
+--   mirrors the asset-graph JOIN case (20260510040000) generalized over a polymorphic
+--   key — NOT the flat 'default-workspace' literal the prior revision used (that
+--   approach is SUPERSEDED: attachments span 2 workspaces on this DB, so a flat
+--   literal would wrongly collapse leapfor's attachments into default-workspace).
 --
--- ⚠️ SINGLE-WORKSPACE GUARD — READ BEFORE APPLYING
---   The flat 'default-workspace' literal is correct ONLY because current deploys
---   are effectively single-workspace. Before applying this migration, confirm the
---   guard holds against the target DB:
+--   module_key branches enumerate every value PRESENT on this DB:
+--       'product'      -> product.workspace_id      (via foreign_key = product.id)
+--       'subscription' -> subscription.workspace_id (via foreign_key = subscription.id)
+--   A module_key with no branch (e.g. a future module) leaves workspace_id NULL —
+--   fail-closed, audit-safe, and surfaced by the deferred STEP 2's 0-NULL precheck.
+--   Both parent tables are fully workspace_id-populated, so all present rows resolve.
 --
---       SELECT COUNT(DISTINCT workspace_id) FROM workspace_user WHERE active;
---       -- expected: 1
+--   NOTE: attachment.workspace_id is ALREADY 0-NULL on this DB (it was previously
+--   flat-backfilled), so this polymorphic UPDATE is a correctness RE-COMPUTE that
+--   is a no-op here (WHERE workspace_id IS NULL matches nothing). It exists so a
+--   fresh/re-seeded DB derives the right tenant per row instead of a flat literal.
 --
---   STOP if the count is > 1: DO NOT apply this flat backfill. The correct posture
---   for a multi-workspace DB is to LEAVE workspace_id NULL (fail-closed: a NULL
---   workspace_id is excluded from every "WHERE workspace_id = $X" predicate, which
---   is audit-safe) and derive it per row from a tenant link in a follow-up plan. A
---   flat 'default-workspace' on a multi-tenant DB would wrongly collapse every
---   tenant's attachments into one workspace.
+-- ⚠️ MULTI-WORKSPACE SELF-GUARD — retained from the prior revision
+--   The polymorphic derivation is tenant-correct on a multi-workspace DB, so it does
+--   NOT need a single-workspace precondition. The self-guard below is kept as a
+--   defensive backstop: it RAISEs only if a NULL row REMAINS unresolved after the
+--   CASE derivation AND the deploy is multi-workspace — i.e. a module_key with no
+--   branch was hit on a multi-tenant DB, which must be designed for, not flat-filled.
 --
 -- Safety contract (mirrors 20260530000000 + 20260530000001):
 --   * The UPDATE uses WHERE workspace_id IS NULL — re-applying is a no-op.
@@ -47,36 +53,52 @@
 --   * Column stays NULLABLE in this migration. The 2-step pattern documented in
 --     docs/wiki/articles/schema-migrations.md "Strict rules now that users exist"
 --     tightens to NOT NULL only in STEP 2, after this backfill is reconciled.
---   * 'default-workspace' is the canonical default workspace id used elsewhere in
---     the single-workspace deploy model (see 20260530000001 / 20260510040000).
 --
 -- Idempotency: applying this migration twice produces no changes.
 
 SET search_path TO public;
 
 -- ---------------------------------------------------------------------------
--- 1. attachment.workspace_id ← 'default-workspace' (SELF-GUARDED flat backfill)
---    The single-workspace guard from the header is now ENFORCED in-SQL: if any
---    NULL row exists AND the deploy is multi-workspace, this RAISEs and aborts
---    the migration instead of silently collapsing tenants. Flat-backfills only
---    when single-workspace; a no-op when 0 NULLs (the current attachment state).
+-- 1. attachment.workspace_id ← POLYMORPHIC PER-ROW DERIVATION
+--    CASE on module_key routes each row to its parent table and copies that
+--    parent's workspace_id. Branches enumerate every module_key PRESENT on this
+--    DB ('product', 'subscription'); a missing branch leaves the row NULL.
+--    Idempotent (WHERE workspace_id IS NULL); no-op here (attachment is 0-NULL).
+--
+--    The trailing self-guard is the retained MULTI-WORKSPACE backstop: it RAISEs
+--    only if a NULL row REMAINS after the CASE AND the deploy is multi-workspace
+--    (an un-branched module_key on a multi-tenant DB), instead of leaving an
+--    unresolved tenant silently NULL where a per-row derivation was expected.
 -- ---------------------------------------------------------------------------
 DO $$
 DECLARE
     null_rows bigint;
     ws_count  int;
 BEGIN
+    UPDATE attachment a
+    SET workspace_id = CASE a.module_key
+        WHEN 'product'      THEN (SELECT p.workspace_id FROM product      p WHERE p.id = a.foreign_key)
+        WHEN 'subscription' THEN (SELECT s.workspace_id FROM subscription s WHERE s.id = a.foreign_key)
+        ELSE NULL
+    END
+    WHERE a.workspace_id IS NULL
+      AND CASE a.module_key
+            WHEN 'product'      THEN (SELECT p.workspace_id FROM product      p WHERE p.id = a.foreign_key)
+            WHEN 'subscription' THEN (SELECT s.workspace_id FROM subscription s WHERE s.id = a.foreign_key)
+            ELSE NULL
+          END IS NOT NULL;
+
+    -- Backstop: any NULL still remaining on a multi-workspace deploy means a
+    -- module_key with no CASE branch (or an unresolvable foreign_key) was hit —
+    -- that must be designed for, not silently left ambiguous.
     SELECT COUNT(*) INTO null_rows FROM attachment WHERE workspace_id IS NULL;
     IF null_rows > 0 THEN
         SELECT COUNT(DISTINCT workspace_id) INTO ws_count FROM workspace_user WHERE active;
         IF ws_count > 1 THEN
             RAISE EXCEPTION
-                'workspace_id self-guard: % NULL attachment.workspace_id row(s) in a MULTI-workspace deploy (% active workspaces). Refusing flat ''default-workspace'' backfill — derive workspace_id per row (module_key/foreign_key -> parent) first.',
+                'workspace_id self-guard: % NULL attachment.workspace_id row(s) remain after polymorphic derivation in a MULTI-workspace deploy (% active workspaces). Add a module_key branch (or resolve the orphan foreign_key) before backfilling.',
                 null_rows, ws_count;
         END IF;
-        UPDATE attachment
-        SET workspace_id = 'default-workspace'
-        WHERE workspace_id IS NULL;
     END IF;
 END;
 $$;
