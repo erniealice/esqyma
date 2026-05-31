@@ -40,6 +40,34 @@
 SET search_path TO public;
 
 -- ---------------------------------------------------------------------------
+-- 0. SELF-GUARD (2026-05-31): the header's single-workspace guard, ENFORCED.
+--    If ANY of the three tables has a NULL workspace_id row AND the deploy is
+--    multi-workspace, RAISE and abort — do NOT flat-collapse 26 accounts / 8
+--    expenditures / 8 journal entries across tenants. Passes (no-op) only when
+--    single-workspace or 0 NULL rows. A multi-tenant DB must derive workspace_id
+--    per row from the tenant link before this migration can apply.
+-- ---------------------------------------------------------------------------
+DO $$
+DECLARE
+    null_rows bigint;
+    ws_count  int;
+BEGIN
+    SELECT (SELECT COUNT(*) FROM account       WHERE workspace_id IS NULL)
+         + (SELECT COUNT(*) FROM expenditure   WHERE workspace_id IS NULL)
+         + (SELECT COUNT(*) FROM journal_entry WHERE workspace_id IS NULL)
+      INTO null_rows;
+    IF null_rows > 0 THEN
+        SELECT COUNT(DISTINCT workspace_id) INTO ws_count FROM workspace_user WHERE active;
+        IF ws_count > 1 THEN
+            RAISE EXCEPTION
+                'workspace_id self-guard: % NULL ledger-financial row(s) in a MULTI-workspace deploy (% active workspaces). Refusing flat ''default-workspace'' backfill — derive workspace_id per row from the tenant link first.',
+                null_rows, ws_count;
+        END IF;
+    END IF;
+END;
+$$;
+
+-- ---------------------------------------------------------------------------
 -- 1. account.workspace_id ← 'default-workspace' (flat literal; no parent FK)
 -- ---------------------------------------------------------------------------
 DO $$
