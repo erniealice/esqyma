@@ -117,6 +117,21 @@ The Operations domain is the **most actively evolving** — see the [Universal J
 | `job_outcome_summary` | Order QA Score | Matter Scorecard | Treatment Outcome Report | Service Quality Score | **Certificate of Conformance / Quality Report** (`SummaryType.QC_CERTIFICATE`) | Course Report Card | Service Engagement Quality Report | Operational job report (general assembly outcome / audit result) |
 | `job_settlement` | Order Final Settlement | Matter Final Bill | Course Final Settlement | Customer Order Settlement | Cost Settlement (WIP relief → FG inventory + variance) | Tuition Reconciliation | Damage / Overage Chargebacks | Patronage settlement / member equity adjustment |
 
+### Communication Domain
+
+The **Communication** domain is net-new (no prior domain exists for threaded two-way dialogue). It is a **cross-vertical primitive for the verticals where a CLIENT-shaped portal principal genuinely exists** — CORE in outsourcing, professional services, and leasing. It is NOT an "any vertical" primitive: counter-facing / short-cycle verticals (laundry) and supplier/member/patient/customer portals (different principal scope) are PARTIAL, PERIPHERAL, or N/A and need an explicit principal-scope extension before reuse. The schema as built is client-principal-scoped (`conversation.client_id = acting_as_client_id`). Child entity is `ConversationPost` (NEVER `Message` — protobuf reserved word; Q-MSG-2). See `docs/plan/20260603-secure-messaging-ticketing/verticals.md` for the full applicability matrix and cross-vertical-primitive note.
+
+| Proto Schema | Retail | Professional Services | Medical Aesthetics | Laundry Services | Manufacturing | Education | Leasing | Mutual |
+|---|---|---|---|---|---|---|---|---|
+| `conversation` | Customer Support Thread (PARTIAL — customer principal ≠ client scope; most retail support is email-only) | **Case Thread / Matter Query** (CORE — Open→Closed mirrors matter open/close) | Patient Support Thread (PARTIAL — patient is a different principal scope; needs principal-scope review) | N/A (counter-facing / short-cycle; no async-thread portal) | Subcontractor / Supplier Query Thread (PERIPHERAL — supplier principal, not client scope) | Student Support Message (PARTIAL — only if a learner portal exists) | **Support Request / Maintenance Ticket** (CORE — links to a lease via `reference_entity_type`) | Member↔society support thread (PARTIAL — member is a distinct principal scope) |
+| `conversation_post` | Customer Message | **Message in a Case Thread** | Patient Message | N/A | Supplier Message | Student Message | Maintenance-Request Message | Member Message |
+| `conversation_read_receipt` | Unread Marker (per-reader-principal high-water mark; `last_read_post_id` single cursor) | Unread Marker | Unread Marker | N/A | Unread Marker | Unread Marker | Unread Marker | Unread Marker |
+| `conversation_participant` | Team Inbox Member (v2 seam — table shipped v1, queried v2) | Team Inbox Member (v2) | Team Inbox Member (v2) | N/A | Team Inbox Member (v2) | Team Inbox Member (v2) | Team Inbox Member (v2) | Team Inbox Member (v2) |
+| `document.Attachment` (reused; `module_key="conversation_post"`) | File on a Message | File on a Message (contract / brief) | File on a Message | N/A | File on a Message (drawing / spec) | File on a Message | File on a Message (statement / amendment) | File on a Message |
+| `integration/email` (reused) | New-Message Notification Email | New-Message Notification Email | New-Message Notification Email | N/A | New-Message Notification Email | New-Message Notification Email | New-Message Notification Email | New-Message Notification Email |
+
+> **Applicability legend (honest, not aspirational):** **CORE** = primary deployment surface, full lifecycle + client-principal IDOR scope (Outsourcing / BPO, Professional Services, Leasing). **PARTIAL** = applies only if a portal of the right principal scope is in scope; lower priority. **PERIPHERAL** = narrow/edge use; not a headline surface. **N/A** = the primitive does not fit this vertical's operating model. The CORE verticals are exactly those whose counterparty is a client-shaped principal; PARTIAL/PERIPHERAL verticals with supplier/member/patient/customer principals need a deliberate principal-scope extension (not label-only) before reuse.
+
 ---
 
 ## Universal Job Model Expansion (Waves 2–4)

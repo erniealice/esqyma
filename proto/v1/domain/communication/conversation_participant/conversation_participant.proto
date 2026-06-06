@@ -1,0 +1,130 @@
+syntax = "proto3";
+
+package domain.communication.v1;
+
+option go_package = "github.com/erniealice/esqyma/pkg/schema/v1/domain/communication/conversation_participant";
+
+import "domain/common/error.proto";
+import "domain/common/pagination.proto";
+import "domain/common/filter.proto";
+import "domain/common/sort.proto";
+import "domain/common/search.proto";
+import "options/db.proto";
+
+// ConversationParticipantType classifies a participant row
+// (proto ENUM — directive G — NOT string). v2 fan-out seam.
+enum ConversationParticipantType {
+  CONVERSATION_PARTICIPANT_TYPE_UNSPECIFIED = 0;
+  CONVERSATION_PARTICIPANT_TYPE_NAMED_STAFF = 1;
+  CONVERSATION_PARTICIPANT_TYPE_TEAM_INBOX = 2;  // v2 fan-out
+}
+
+// ConversationParticipant is the v2 seam (table shipped v1, queried v2) for team inboxes.
+message ConversationParticipant {
+  option (options.v1.table).table = true;
+
+  string id = 1;
+  optional int64 date_created = 2;
+  bool active = 6 [(options.v1.db).default = "true"];
+
+  string conversation_id = 7 [(options.v1.db).references = "conversation", (options.v1.db).index = true];
+  string workspace_id = 8 [(options.v1.db).index = true];   // directive H — copied from parent at create
+  optional string user_id = 9 [(options.v1.db).references = "user"];  // NULL for a pure team label
+  optional string participant_principal_type = 10;          // principal binding (codex H1) — for a named-staff participant
+  optional string participant_principal_id = 11;
+  ConversationParticipantType participant_type = 12;        // proto ENUM (directive G — NOT string)
+  optional string team_label = 13;  // "Finance team", "Compliance team" (v2)
+}
+
+service ConversationParticipantDomainService {
+  rpc CreateConversationParticipant(CreateConversationParticipantRequest) returns (CreateConversationParticipantResponse);
+  rpc ReadConversationParticipant(ReadConversationParticipantRequest) returns (ReadConversationParticipantResponse);
+  rpc UpdateConversationParticipant(UpdateConversationParticipantRequest) returns (UpdateConversationParticipantResponse);
+  rpc DeleteConversationParticipant(DeleteConversationParticipantRequest) returns (DeleteConversationParticipantResponse);
+  rpc ListConversationParticipants(ListConversationParticipantsRequest) returns (ListConversationParticipantsResponse);
+
+  // Enhanced list with pagination, filtering, sorting, search
+  rpc GetConversationParticipantListPageData(GetConversationParticipantListPageDataRequest)
+    returns (GetConversationParticipantListPageDataResponse);
+
+  // Enhanced item view
+  rpc GetConversationParticipantItemPageData(GetConversationParticipantItemPageDataRequest)
+    returns (GetConversationParticipantItemPageDataResponse);
+}
+
+message CreateConversationParticipantRequest {
+  ConversationParticipant data = 1;
+}
+
+message CreateConversationParticipantResponse {
+  repeated ConversationParticipant data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message ReadConversationParticipantRequest {
+  ConversationParticipant data = 1;
+}
+
+message ReadConversationParticipantResponse {
+  repeated ConversationParticipant data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message UpdateConversationParticipantRequest {
+  ConversationParticipant data = 1;
+}
+
+message UpdateConversationParticipantResponse {
+  repeated ConversationParticipant data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message DeleteConversationParticipantRequest {
+  ConversationParticipant data = 1;
+}
+
+message DeleteConversationParticipantResponse {
+  bool success = 1;
+  optional domain.common.v1.Error error = 2;
+}
+
+message ListConversationParticipantsRequest {
+  optional domain.common.v1.SearchRequest search = 1;
+  optional domain.common.v1.FilterRequest filters = 2;
+  optional domain.common.v1.SortRequest sort = 3;
+  optional domain.common.v1.PaginationRequest pagination = 4;
+}
+
+message ListConversationParticipantsResponse {
+  repeated ConversationParticipant data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message GetConversationParticipantListPageDataRequest {
+  optional domain.common.v1.PaginationRequest pagination = 1;
+  optional domain.common.v1.FilterRequest filters = 2;
+  optional domain.common.v1.SortRequest sort = 3;
+  optional domain.common.v1.SearchRequest search = 4;
+}
+
+message GetConversationParticipantListPageDataResponse {
+  repeated ConversationParticipant conversation_participant_list = 1;
+  domain.common.v1.PaginationResponse pagination = 2;
+  repeated domain.common.v1.SearchResult search_results = 3;
+  bool success = 4;
+  optional domain.common.v1.Error error = 5;
+}
+
+message GetConversationParticipantItemPageDataRequest {
+  string conversation_participant_id = 1;
+}
+
+message GetConversationParticipantItemPageDataResponse {
+  ConversationParticipant conversation_participant = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
