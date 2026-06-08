@@ -24,6 +24,71 @@ const (
 	_ = protoimpl.EnforceVersion(protoimpl.MaxVersion - 20)
 )
 
+// EmploymentType is the EMPLOYMENT model on entity/staff (Performance Evaluation §E2;
+// Q-EMPLOYMENT-TYPE-1). It is ORTHOGONAL to Staff.status (availability) and is never
+// overloaded onto status. The Staff.employment_type column stays `string` (existing-entity
+// convention, pairs with `active`); this enum is the canonical value vocabulary.
+type EmploymentType int32
+
+const (
+	EmploymentType_EMPLOYMENT_TYPE_UNSPECIFIED   EmploymentType = 0
+	EmploymentType_EMPLOYMENT_TYPE_EMPLOYED      EmploymentType = 1
+	EmploymentType_EMPLOYMENT_TYPE_CONTRACTOR    EmploymentType = 2
+	EmploymentType_EMPLOYMENT_TYPE_EXTERNAL      EmploymentType = 3
+	EmploymentType_EMPLOYMENT_TYPE_PARTNER       EmploymentType = 4
+	EmploymentType_EMPLOYMENT_TYPE_RETAINED      EmploymentType = 5
+	EmploymentType_EMPLOYMENT_TYPE_SUBCONTRACTOR EmploymentType = 6
+)
+
+// Enum value maps for EmploymentType.
+var (
+	EmploymentType_name = map[int32]string{
+		0: "EMPLOYMENT_TYPE_UNSPECIFIED",
+		1: "EMPLOYMENT_TYPE_EMPLOYED",
+		2: "EMPLOYMENT_TYPE_CONTRACTOR",
+		3: "EMPLOYMENT_TYPE_EXTERNAL",
+		4: "EMPLOYMENT_TYPE_PARTNER",
+		5: "EMPLOYMENT_TYPE_RETAINED",
+		6: "EMPLOYMENT_TYPE_SUBCONTRACTOR",
+	}
+	EmploymentType_value = map[string]int32{
+		"EMPLOYMENT_TYPE_UNSPECIFIED":   0,
+		"EMPLOYMENT_TYPE_EMPLOYED":      1,
+		"EMPLOYMENT_TYPE_CONTRACTOR":    2,
+		"EMPLOYMENT_TYPE_EXTERNAL":      3,
+		"EMPLOYMENT_TYPE_PARTNER":       4,
+		"EMPLOYMENT_TYPE_RETAINED":      5,
+		"EMPLOYMENT_TYPE_SUBCONTRACTOR": 6,
+	}
+)
+
+func (x EmploymentType) Enum() *EmploymentType {
+	p := new(EmploymentType)
+	*p = x
+	return p
+}
+
+func (x EmploymentType) String() string {
+	return protoimpl.X.EnumStringOf(x.Descriptor(), protoreflect.EnumNumber(x))
+}
+
+func (EmploymentType) Descriptor() protoreflect.EnumDescriptor {
+	return file_domain_entity_staff_staff_proto_enumTypes[0].Descriptor()
+}
+
+func (EmploymentType) Type() protoreflect.EnumType {
+	return &file_domain_entity_staff_staff_proto_enumTypes[0]
+}
+
+func (x EmploymentType) Number() protoreflect.EnumNumber {
+	return protoreflect.EnumNumber(x)
+}
+
+// Deprecated: Use EmploymentType.Descriptor instead.
+func (EmploymentType) EnumDescriptor() ([]byte, []int) {
+	return file_domain_entity_staff_staff_proto_rawDescGZIP(), []int{0}
+}
+
 type Staff struct {
 	state              protoimpl.MessageState `protogen:"open.v1"`
 	Id                 string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
@@ -34,8 +99,18 @@ type Staff struct {
 	DateModified       *int64                 `protobuf:"varint,6,opt,name=date_modified,json=dateModified,proto3,oneof" json:"date_modified,omitempty"`
 	DateModifiedString *string                `protobuf:"bytes,7,opt,name=date_modified_string,json=dateModifiedString,proto3,oneof" json:"date_modified_string,omitempty"`
 	Active             bool                   `protobuf:"varint,8,opt,name=active,proto3" json:"active,omitempty"`
-	unknownFields      protoimpl.UnknownFields
-	sizeCache          protoimpl.SizeCache
+	// Performance Evaluation §E1 — the leased human = Identity. All ADDITIVE + optional
+	// (entity/staff is a POPULATED live table; no NOT NULL here). Two orthogonal axes:
+	//   - status (existing string) carries AVAILABILITY (available|assigned|bench|offboarded)
+	//   - employment_type carries the EMPLOYMENT model (see EmploymentType enum) — never overloaded onto status
+	WorkspaceId     *string `protobuf:"bytes,9,opt,name=workspace_id,json=workspaceId,proto3,oneof" json:"workspace_id,omitempty"`              // multi-tenant scope
+	Status          *string `protobuf:"bytes,10,opt,name=status,proto3,oneof" json:"status,omitempty"`                                          // AVAILABILITY: available|assigned|bench|offboarded (active = status NOT IN {offboarded})
+	EmploymentType  *string `protobuf:"bytes,11,opt,name=employment_type,json=employmentType,proto3,oneof" json:"employment_type,omitempty"`    // EMPLOYMENT model (string; values from EmploymentType): EMPLOYED|CONTRACTOR|EXTERNAL|PARTNER|RETAINED|SUBCONTRACTOR
+	Seniority       *string `protobuf:"bytes,12,opt,name=seniority,proto3,oneof" json:"seniority,omitempty"`                                    // display snapshot; canonical rank = ProductVariant/ProductOption
+	EmploymentStart *string `protobuf:"bytes,13,opt,name=employment_start,json=employmentStart,proto3,oneof" json:"employment_start,omitempty"` // ISO 8601
+	EmploymentEnd   *string `protobuf:"bytes,14,opt,name=employment_end,json=employmentEnd,proto3,oneof" json:"employment_end,omitempty"`       // ISO 8601 (nil = active)
+	unknownFields   protoimpl.UnknownFields
+	sizeCache       protoimpl.SizeCache
 }
 
 func (x *Staff) Reset() {
@@ -122,6 +197,48 @@ func (x *Staff) GetActive() bool {
 		return x.Active
 	}
 	return false
+}
+
+func (x *Staff) GetWorkspaceId() string {
+	if x != nil && x.WorkspaceId != nil {
+		return *x.WorkspaceId
+	}
+	return ""
+}
+
+func (x *Staff) GetStatus() string {
+	if x != nil && x.Status != nil {
+		return *x.Status
+	}
+	return ""
+}
+
+func (x *Staff) GetEmploymentType() string {
+	if x != nil && x.EmploymentType != nil {
+		return *x.EmploymentType
+	}
+	return ""
+}
+
+func (x *Staff) GetSeniority() string {
+	if x != nil && x.Seniority != nil {
+		return *x.Seniority
+	}
+	return ""
+}
+
+func (x *Staff) GetEmploymentStart() string {
+	if x != nil && x.EmploymentStart != nil {
+		return *x.EmploymentStart
+	}
+	return ""
+}
+
+func (x *Staff) GetEmploymentEnd() string {
+	if x != nil && x.EmploymentEnd != nil {
+		return *x.EmploymentEnd
+	}
+	return ""
 }
 
 type CreateStaffRequest struct {
@@ -912,7 +1029,7 @@ var File_domain_entity_staff_staff_proto protoreflect.FileDescriptor
 
 const file_domain_entity_staff_staff_proto_rawDesc = "" +
 	"\n" +
-	"\x1fdomain/entity/staff/staff.proto\x12\x10domain.entity.v1\x1a\x19domain/common/error.proto\x1a\x1adomain/common/search.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1edomain/common/pagination.proto\x1a\x1ddomain/entity/user/user.proto\x1a\x10options/db.proto\"\xc6\x03\n" +
+	"\x1fdomain/entity/staff/staff.proto\x12\x10domain.entity.v1\x1a\x19domain/common/error.proto\x1a\x1adomain/common/search.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1edomain/common/pagination.proto\x1a\x1ddomain/entity/user/user.proto\x1a\x10options/db.proto\"\xb1\x06\n" +
 	"\x05Staff\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12/\n" +
 	"\x04user\x18\x02 \x01(\v2\x16.domain.entity.v1.UserH\x00R\x04user\x88\x01\x01\x12%\n" +
@@ -923,12 +1040,28 @@ const file_domain_entity_staff_staff_proto_rawDesc = "" +
 	"\rdate_modified\x18\x06 \x01(\x03H\x03R\fdateModified\x88\x01\x01\x12=\n" +
 	"\x14date_modified_string\x18\a \x01(\tB\x06\x82\xb5\x18\x028\x01H\x04R\x12dateModifiedString\x88\x01\x01\x12\"\n" +
 	"\x06active\x18\b \x01(\bB\n" +
-	"\x82\xb5\x18\x06\"\x04trueR\x06active:\x06\x8a\xb5\x18\x02\b\x01B\a\n" +
+	"\x82\xb5\x18\x06\"\x04trueR\x06active\x129\n" +
+	"\fworkspace_id\x18\t \x01(\tB\x11\x82\xb5\x18\r\n" +
+	"\tworkspace\x18\x01H\x05R\vworkspaceId\x88\x01\x01\x12\x1b\n" +
+	"\x06status\x18\n" +
+	" \x01(\tH\x06R\x06status\x88\x01\x01\x12,\n" +
+	"\x0femployment_type\x18\v \x01(\tH\aR\x0eemploymentType\x88\x01\x01\x12!\n" +
+	"\tseniority\x18\f \x01(\tH\bR\tseniority\x88\x01\x01\x12.\n" +
+	"\x10employment_start\x18\r \x01(\tH\tR\x0femploymentStart\x88\x01\x01\x12*\n" +
+	"\x0eemployment_end\x18\x0e \x01(\tH\n" +
+	"R\remploymentEnd\x88\x01\x01:\x06\x8a\xb5\x18\x02\b\x01B\a\n" +
 	"\x05_userB\x0f\n" +
 	"\r_date_createdB\x16\n" +
 	"\x14_date_created_stringB\x10\n" +
 	"\x0e_date_modifiedB\x17\n" +
-	"\x15_date_modified_string\"A\n" +
+	"\x15_date_modified_stringB\x0f\n" +
+	"\r_workspace_idB\t\n" +
+	"\a_statusB\x12\n" +
+	"\x10_employment_typeB\f\n" +
+	"\n" +
+	"_seniorityB\x13\n" +
+	"\x11_employment_startB\x11\n" +
+	"\x0f_employment_end\"A\n" +
 	"\x12CreateStaffRequest\x12+\n" +
 	"\x04data\x18\x01 \x01(\v2\x17.domain.entity.v1.StaffR\x04data\"\x9a\x01\n" +
 	"\x13CreateStaffResponse\x12+\n" +
@@ -1003,7 +1136,15 @@ const file_domain_entity_staff_staff_proto_rawDesc = "" +
 	"\asuccess\x18\x02 \x01(\bR\asuccess\x122\n" +
 	"\x05error\x18\x03 \x01(\v2\x17.domain.common.v1.ErrorH\x01R\x05error\x88\x01\x01B\b\n" +
 	"\x06_staffB\b\n" +
-	"\x06_error2\xc5\x05\n" +
+	"\x06_error*\xeb\x01\n" +
+	"\x0eEmploymentType\x12\x1f\n" +
+	"\x1bEMPLOYMENT_TYPE_UNSPECIFIED\x10\x00\x12\x1c\n" +
+	"\x18EMPLOYMENT_TYPE_EMPLOYED\x10\x01\x12\x1e\n" +
+	"\x1aEMPLOYMENT_TYPE_CONTRACTOR\x10\x02\x12\x1c\n" +
+	"\x18EMPLOYMENT_TYPE_EXTERNAL\x10\x03\x12\x1b\n" +
+	"\x17EMPLOYMENT_TYPE_PARTNER\x10\x04\x12\x1c\n" +
+	"\x18EMPLOYMENT_TYPE_RETAINED\x10\x05\x12!\n" +
+	"\x1dEMPLOYMENT_TYPE_SUBCONTRACTOR\x10\x062\xc5\x05\n" +
 	"\x12StaffDomainService\x12Z\n" +
 	"\vCreateStaff\x12$.domain.entity.v1.CreateStaffRequest\x1a%.domain.entity.v1.CreateStaffResponse\x12T\n" +
 	"\tReadStaff\x12\".domain.entity.v1.ReadStaffRequest\x1a#.domain.entity.v1.ReadStaffResponse\x12Z\n" +
@@ -1028,75 +1169,77 @@ func file_domain_entity_staff_staff_proto_rawDescGZIP() []byte {
 	return file_domain_entity_staff_staff_proto_rawDescData
 }
 
+var file_domain_entity_staff_staff_proto_enumTypes = make([]protoimpl.EnumInfo, 1)
 var file_domain_entity_staff_staff_proto_msgTypes = make([]protoimpl.MessageInfo, 15)
 var file_domain_entity_staff_staff_proto_goTypes = []any{
-	(*Staff)(nil),                        // 0: domain.entity.v1.Staff
-	(*CreateStaffRequest)(nil),           // 1: domain.entity.v1.CreateStaffRequest
-	(*CreateStaffResponse)(nil),          // 2: domain.entity.v1.CreateStaffResponse
-	(*ReadStaffRequest)(nil),             // 3: domain.entity.v1.ReadStaffRequest
-	(*ReadStaffResponse)(nil),            // 4: domain.entity.v1.ReadStaffResponse
-	(*UpdateStaffRequest)(nil),           // 5: domain.entity.v1.UpdateStaffRequest
-	(*UpdateStaffResponse)(nil),          // 6: domain.entity.v1.UpdateStaffResponse
-	(*DeleteStaffRequest)(nil),           // 7: domain.entity.v1.DeleteStaffRequest
-	(*DeleteStaffResponse)(nil),          // 8: domain.entity.v1.DeleteStaffResponse
-	(*ListStaffsRequest)(nil),            // 9: domain.entity.v1.ListStaffsRequest
-	(*ListStaffsResponse)(nil),           // 10: domain.entity.v1.ListStaffsResponse
-	(*GetStaffListPageDataRequest)(nil),  // 11: domain.entity.v1.GetStaffListPageDataRequest
-	(*GetStaffListPageDataResponse)(nil), // 12: domain.entity.v1.GetStaffListPageDataResponse
-	(*GetStaffItemPageDataRequest)(nil),  // 13: domain.entity.v1.GetStaffItemPageDataRequest
-	(*GetStaffItemPageDataResponse)(nil), // 14: domain.entity.v1.GetStaffItemPageDataResponse
-	(*user.User)(nil),                    // 15: domain.entity.v1.User
-	(*common.Error)(nil),                 // 16: domain.common.v1.Error
-	(*common.SearchRequest)(nil),         // 17: domain.common.v1.SearchRequest
-	(*common.FilterRequest)(nil),         // 18: domain.common.v1.FilterRequest
-	(*common.SortRequest)(nil),           // 19: domain.common.v1.SortRequest
-	(*common.PaginationRequest)(nil),     // 20: domain.common.v1.PaginationRequest
-	(*common.PaginationResponse)(nil),    // 21: domain.common.v1.PaginationResponse
-	(*common.SearchResult)(nil),          // 22: domain.common.v1.SearchResult
+	(EmploymentType)(0),                  // 0: domain.entity.v1.EmploymentType
+	(*Staff)(nil),                        // 1: domain.entity.v1.Staff
+	(*CreateStaffRequest)(nil),           // 2: domain.entity.v1.CreateStaffRequest
+	(*CreateStaffResponse)(nil),          // 3: domain.entity.v1.CreateStaffResponse
+	(*ReadStaffRequest)(nil),             // 4: domain.entity.v1.ReadStaffRequest
+	(*ReadStaffResponse)(nil),            // 5: domain.entity.v1.ReadStaffResponse
+	(*UpdateStaffRequest)(nil),           // 6: domain.entity.v1.UpdateStaffRequest
+	(*UpdateStaffResponse)(nil),          // 7: domain.entity.v1.UpdateStaffResponse
+	(*DeleteStaffRequest)(nil),           // 8: domain.entity.v1.DeleteStaffRequest
+	(*DeleteStaffResponse)(nil),          // 9: domain.entity.v1.DeleteStaffResponse
+	(*ListStaffsRequest)(nil),            // 10: domain.entity.v1.ListStaffsRequest
+	(*ListStaffsResponse)(nil),           // 11: domain.entity.v1.ListStaffsResponse
+	(*GetStaffListPageDataRequest)(nil),  // 12: domain.entity.v1.GetStaffListPageDataRequest
+	(*GetStaffListPageDataResponse)(nil), // 13: domain.entity.v1.GetStaffListPageDataResponse
+	(*GetStaffItemPageDataRequest)(nil),  // 14: domain.entity.v1.GetStaffItemPageDataRequest
+	(*GetStaffItemPageDataResponse)(nil), // 15: domain.entity.v1.GetStaffItemPageDataResponse
+	(*user.User)(nil),                    // 16: domain.entity.v1.User
+	(*common.Error)(nil),                 // 17: domain.common.v1.Error
+	(*common.SearchRequest)(nil),         // 18: domain.common.v1.SearchRequest
+	(*common.FilterRequest)(nil),         // 19: domain.common.v1.FilterRequest
+	(*common.SortRequest)(nil),           // 20: domain.common.v1.SortRequest
+	(*common.PaginationRequest)(nil),     // 21: domain.common.v1.PaginationRequest
+	(*common.PaginationResponse)(nil),    // 22: domain.common.v1.PaginationResponse
+	(*common.SearchResult)(nil),          // 23: domain.common.v1.SearchResult
 }
 var file_domain_entity_staff_staff_proto_depIdxs = []int32{
-	15, // 0: domain.entity.v1.Staff.user:type_name -> domain.entity.v1.User
-	0,  // 1: domain.entity.v1.CreateStaffRequest.data:type_name -> domain.entity.v1.Staff
-	0,  // 2: domain.entity.v1.CreateStaffResponse.data:type_name -> domain.entity.v1.Staff
-	16, // 3: domain.entity.v1.CreateStaffResponse.error:type_name -> domain.common.v1.Error
-	0,  // 4: domain.entity.v1.ReadStaffRequest.data:type_name -> domain.entity.v1.Staff
-	0,  // 5: domain.entity.v1.ReadStaffResponse.data:type_name -> domain.entity.v1.Staff
-	16, // 6: domain.entity.v1.ReadStaffResponse.error:type_name -> domain.common.v1.Error
-	0,  // 7: domain.entity.v1.UpdateStaffRequest.data:type_name -> domain.entity.v1.Staff
-	0,  // 8: domain.entity.v1.UpdateStaffResponse.data:type_name -> domain.entity.v1.Staff
-	16, // 9: domain.entity.v1.UpdateStaffResponse.error:type_name -> domain.common.v1.Error
-	0,  // 10: domain.entity.v1.DeleteStaffRequest.data:type_name -> domain.entity.v1.Staff
-	16, // 11: domain.entity.v1.DeleteStaffResponse.error:type_name -> domain.common.v1.Error
-	17, // 12: domain.entity.v1.ListStaffsRequest.search:type_name -> domain.common.v1.SearchRequest
-	18, // 13: domain.entity.v1.ListStaffsRequest.filters:type_name -> domain.common.v1.FilterRequest
-	19, // 14: domain.entity.v1.ListStaffsRequest.sort:type_name -> domain.common.v1.SortRequest
-	20, // 15: domain.entity.v1.ListStaffsRequest.pagination:type_name -> domain.common.v1.PaginationRequest
-	0,  // 16: domain.entity.v1.ListStaffsResponse.data:type_name -> domain.entity.v1.Staff
-	16, // 17: domain.entity.v1.ListStaffsResponse.error:type_name -> domain.common.v1.Error
-	17, // 18: domain.entity.v1.GetStaffListPageDataRequest.search:type_name -> domain.common.v1.SearchRequest
-	18, // 19: domain.entity.v1.GetStaffListPageDataRequest.filters:type_name -> domain.common.v1.FilterRequest
-	19, // 20: domain.entity.v1.GetStaffListPageDataRequest.sort:type_name -> domain.common.v1.SortRequest
-	20, // 21: domain.entity.v1.GetStaffListPageDataRequest.pagination:type_name -> domain.common.v1.PaginationRequest
-	0,  // 22: domain.entity.v1.GetStaffListPageDataResponse.staff_list:type_name -> domain.entity.v1.Staff
-	21, // 23: domain.entity.v1.GetStaffListPageDataResponse.pagination:type_name -> domain.common.v1.PaginationResponse
-	22, // 24: domain.entity.v1.GetStaffListPageDataResponse.search_results:type_name -> domain.common.v1.SearchResult
-	16, // 25: domain.entity.v1.GetStaffListPageDataResponse.error:type_name -> domain.common.v1.Error
-	0,  // 26: domain.entity.v1.GetStaffItemPageDataResponse.staff:type_name -> domain.entity.v1.Staff
-	16, // 27: domain.entity.v1.GetStaffItemPageDataResponse.error:type_name -> domain.common.v1.Error
-	1,  // 28: domain.entity.v1.StaffDomainService.CreateStaff:input_type -> domain.entity.v1.CreateStaffRequest
-	3,  // 29: domain.entity.v1.StaffDomainService.ReadStaff:input_type -> domain.entity.v1.ReadStaffRequest
-	5,  // 30: domain.entity.v1.StaffDomainService.UpdateStaff:input_type -> domain.entity.v1.UpdateStaffRequest
-	7,  // 31: domain.entity.v1.StaffDomainService.DeleteStaff:input_type -> domain.entity.v1.DeleteStaffRequest
-	9,  // 32: domain.entity.v1.StaffDomainService.ListStaffs:input_type -> domain.entity.v1.ListStaffsRequest
-	11, // 33: domain.entity.v1.StaffDomainService.GetStaffListPageData:input_type -> domain.entity.v1.GetStaffListPageDataRequest
-	13, // 34: domain.entity.v1.StaffDomainService.GetStaffItemPageData:input_type -> domain.entity.v1.GetStaffItemPageDataRequest
-	2,  // 35: domain.entity.v1.StaffDomainService.CreateStaff:output_type -> domain.entity.v1.CreateStaffResponse
-	4,  // 36: domain.entity.v1.StaffDomainService.ReadStaff:output_type -> domain.entity.v1.ReadStaffResponse
-	6,  // 37: domain.entity.v1.StaffDomainService.UpdateStaff:output_type -> domain.entity.v1.UpdateStaffResponse
-	8,  // 38: domain.entity.v1.StaffDomainService.DeleteStaff:output_type -> domain.entity.v1.DeleteStaffResponse
-	10, // 39: domain.entity.v1.StaffDomainService.ListStaffs:output_type -> domain.entity.v1.ListStaffsResponse
-	12, // 40: domain.entity.v1.StaffDomainService.GetStaffListPageData:output_type -> domain.entity.v1.GetStaffListPageDataResponse
-	14, // 41: domain.entity.v1.StaffDomainService.GetStaffItemPageData:output_type -> domain.entity.v1.GetStaffItemPageDataResponse
+	16, // 0: domain.entity.v1.Staff.user:type_name -> domain.entity.v1.User
+	1,  // 1: domain.entity.v1.CreateStaffRequest.data:type_name -> domain.entity.v1.Staff
+	1,  // 2: domain.entity.v1.CreateStaffResponse.data:type_name -> domain.entity.v1.Staff
+	17, // 3: domain.entity.v1.CreateStaffResponse.error:type_name -> domain.common.v1.Error
+	1,  // 4: domain.entity.v1.ReadStaffRequest.data:type_name -> domain.entity.v1.Staff
+	1,  // 5: domain.entity.v1.ReadStaffResponse.data:type_name -> domain.entity.v1.Staff
+	17, // 6: domain.entity.v1.ReadStaffResponse.error:type_name -> domain.common.v1.Error
+	1,  // 7: domain.entity.v1.UpdateStaffRequest.data:type_name -> domain.entity.v1.Staff
+	1,  // 8: domain.entity.v1.UpdateStaffResponse.data:type_name -> domain.entity.v1.Staff
+	17, // 9: domain.entity.v1.UpdateStaffResponse.error:type_name -> domain.common.v1.Error
+	1,  // 10: domain.entity.v1.DeleteStaffRequest.data:type_name -> domain.entity.v1.Staff
+	17, // 11: domain.entity.v1.DeleteStaffResponse.error:type_name -> domain.common.v1.Error
+	18, // 12: domain.entity.v1.ListStaffsRequest.search:type_name -> domain.common.v1.SearchRequest
+	19, // 13: domain.entity.v1.ListStaffsRequest.filters:type_name -> domain.common.v1.FilterRequest
+	20, // 14: domain.entity.v1.ListStaffsRequest.sort:type_name -> domain.common.v1.SortRequest
+	21, // 15: domain.entity.v1.ListStaffsRequest.pagination:type_name -> domain.common.v1.PaginationRequest
+	1,  // 16: domain.entity.v1.ListStaffsResponse.data:type_name -> domain.entity.v1.Staff
+	17, // 17: domain.entity.v1.ListStaffsResponse.error:type_name -> domain.common.v1.Error
+	18, // 18: domain.entity.v1.GetStaffListPageDataRequest.search:type_name -> domain.common.v1.SearchRequest
+	19, // 19: domain.entity.v1.GetStaffListPageDataRequest.filters:type_name -> domain.common.v1.FilterRequest
+	20, // 20: domain.entity.v1.GetStaffListPageDataRequest.sort:type_name -> domain.common.v1.SortRequest
+	21, // 21: domain.entity.v1.GetStaffListPageDataRequest.pagination:type_name -> domain.common.v1.PaginationRequest
+	1,  // 22: domain.entity.v1.GetStaffListPageDataResponse.staff_list:type_name -> domain.entity.v1.Staff
+	22, // 23: domain.entity.v1.GetStaffListPageDataResponse.pagination:type_name -> domain.common.v1.PaginationResponse
+	23, // 24: domain.entity.v1.GetStaffListPageDataResponse.search_results:type_name -> domain.common.v1.SearchResult
+	17, // 25: domain.entity.v1.GetStaffListPageDataResponse.error:type_name -> domain.common.v1.Error
+	1,  // 26: domain.entity.v1.GetStaffItemPageDataResponse.staff:type_name -> domain.entity.v1.Staff
+	17, // 27: domain.entity.v1.GetStaffItemPageDataResponse.error:type_name -> domain.common.v1.Error
+	2,  // 28: domain.entity.v1.StaffDomainService.CreateStaff:input_type -> domain.entity.v1.CreateStaffRequest
+	4,  // 29: domain.entity.v1.StaffDomainService.ReadStaff:input_type -> domain.entity.v1.ReadStaffRequest
+	6,  // 30: domain.entity.v1.StaffDomainService.UpdateStaff:input_type -> domain.entity.v1.UpdateStaffRequest
+	8,  // 31: domain.entity.v1.StaffDomainService.DeleteStaff:input_type -> domain.entity.v1.DeleteStaffRequest
+	10, // 32: domain.entity.v1.StaffDomainService.ListStaffs:input_type -> domain.entity.v1.ListStaffsRequest
+	12, // 33: domain.entity.v1.StaffDomainService.GetStaffListPageData:input_type -> domain.entity.v1.GetStaffListPageDataRequest
+	14, // 34: domain.entity.v1.StaffDomainService.GetStaffItemPageData:input_type -> domain.entity.v1.GetStaffItemPageDataRequest
+	3,  // 35: domain.entity.v1.StaffDomainService.CreateStaff:output_type -> domain.entity.v1.CreateStaffResponse
+	5,  // 36: domain.entity.v1.StaffDomainService.ReadStaff:output_type -> domain.entity.v1.ReadStaffResponse
+	7,  // 37: domain.entity.v1.StaffDomainService.UpdateStaff:output_type -> domain.entity.v1.UpdateStaffResponse
+	9,  // 38: domain.entity.v1.StaffDomainService.DeleteStaff:output_type -> domain.entity.v1.DeleteStaffResponse
+	11, // 39: domain.entity.v1.StaffDomainService.ListStaffs:output_type -> domain.entity.v1.ListStaffsResponse
+	13, // 40: domain.entity.v1.StaffDomainService.GetStaffListPageData:output_type -> domain.entity.v1.GetStaffListPageDataResponse
+	15, // 41: domain.entity.v1.StaffDomainService.GetStaffItemPageData:output_type -> domain.entity.v1.GetStaffItemPageDataResponse
 	35, // [35:42] is the sub-list for method output_type
 	28, // [28:35] is the sub-list for method input_type
 	28, // [28:28] is the sub-list for extension type_name
@@ -1124,13 +1267,14 @@ func file_domain_entity_staff_staff_proto_init() {
 		File: protoimpl.DescBuilder{
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_domain_entity_staff_staff_proto_rawDesc), len(file_domain_entity_staff_staff_proto_rawDesc)),
-			NumEnums:      0,
+			NumEnums:      1,
 			NumMessages:   15,
 			NumExtensions: 0,
 			NumServices:   1,
 		},
 		GoTypes:           file_domain_entity_staff_staff_proto_goTypes,
 		DependencyIndexes: file_domain_entity_staff_staff_proto_depIdxs,
+		EnumInfos:         file_domain_entity_staff_staff_proto_enumTypes,
 		MessageInfos:      file_domain_entity_staff_staff_proto_msgTypes,
 	}.Build()
 	File_domain_entity_staff_staff_proto = out.File

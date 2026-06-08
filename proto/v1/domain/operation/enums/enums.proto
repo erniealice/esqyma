@@ -189,6 +189,7 @@ enum CriteriaScope {
   CRITERIA_SCOPE_SYSTEM = 1;
   CRITERIA_SCOPE_INDUSTRY = 2;
   CRITERIA_SCOPE_WORKSPACE = 3;
+  CRITERIA_SCOPE_EVALUATION = 4;  // perf-eval: partition feedback rubrics from manufacturing-QA rubrics (§E1)
 }
 
 enum PassRule {

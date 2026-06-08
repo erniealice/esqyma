@@ -13,6 +13,20 @@ import "domain/common/pagination.proto";
 import "domain/entity/user/user.proto";
 import "options/db.proto";
 
+// EmploymentType is the EMPLOYMENT model on entity/staff (Performance Evaluation §E2;
+// Q-EMPLOYMENT-TYPE-1). It is ORTHOGONAL to Staff.status (availability) and is never
+// overloaded onto status. The Staff.employment_type column stays `string` (existing-entity
+// convention, pairs with `active`); this enum is the canonical value vocabulary.
+enum EmploymentType {
+  EMPLOYMENT_TYPE_UNSPECIFIED   = 0;
+  EMPLOYMENT_TYPE_EMPLOYED      = 1;
+  EMPLOYMENT_TYPE_CONTRACTOR    = 2;
+  EMPLOYMENT_TYPE_EXTERNAL      = 3;
+  EMPLOYMENT_TYPE_PARTNER       = 4;
+  EMPLOYMENT_TYPE_RETAINED      = 5;
+  EMPLOYMENT_TYPE_SUBCONTRACTOR = 6;
+}
+
 message Staff {
   option (options.v1.table).table = true;
   string id = 1;
@@ -23,6 +37,17 @@ message Staff {
   optional int64 date_modified = 6;
   optional string date_modified_string = 7 [(options.v1.db).ignore = true];
   bool active = 8 [(options.v1.db).default = "true"];
+
+  // Performance Evaluation §E1 — the leased human = Identity. All ADDITIVE + optional
+  // (entity/staff is a POPULATED live table; no NOT NULL here). Two orthogonal axes:
+  //   * status (existing string) carries AVAILABILITY (available|assigned|bench|offboarded)
+  //   * employment_type carries the EMPLOYMENT model (see EmploymentType enum) — never overloaded onto status
+  optional string workspace_id     = 9 [(options.v1.db).references = "workspace", (options.v1.db).index = true]; // multi-tenant scope
+  optional string status           = 10;  // AVAILABILITY: available|assigned|bench|offboarded (active = status NOT IN {offboarded})
+  optional string employment_type  = 11;  // EMPLOYMENT model (string; values from EmploymentType): EMPLOYED|CONTRACTOR|EXTERNAL|PARTNER|RETAINED|SUBCONTRACTOR
+  optional string seniority        = 12;  // display snapshot; canonical rank = ProductVariant/ProductOption
+  optional string employment_start = 13;  // ISO 8601
+  optional string employment_end   = 14;  // ISO 8601 (nil = active)
 }
 
 service StaffDomainService {

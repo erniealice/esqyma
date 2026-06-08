@@ -1,0 +1,98 @@
+syntax = "proto3";
+
+package service.amortization.v1;
+
+option go_package = "github.com/erniealice/esqyma/golang/v1/service/amortization";
+
+// ---------------------------------------------------------------------------
+// Amortization schedule — service-driven domain (Mantra 3/3; see
+// docs/wiki/articles/hexagonal-rules.md §8 rule-of-three promotion).
+//
+// Pure period and tranche math for amortization schedules. Computes period
+// boundaries from start/end dates, applies proration policies, and distributes
+// amounts across tranches. No aggregate root, no DB writes — this is a
+// computation-only service-driven domain.
+//
+// Promoted from internal/application/shared/amortize_schedule/ (the pure-math
+// leaf that was the Mantra §8 worked example for "does this need a proto?").
+// The Go implementation remains in the shared package as the engine; this
+// proto provides the versioned wire contract.
+//
+// Consumed by usecases/service/amortization/ (proto wrapper).
+// Domain-layer callers:
+//   - usecases/domain/treasury/collection/amortize_advance_collection.go
+//   - usecases/domain/treasury/disbursement/amortize_advance_disbursement.go
+//   - usecases/domain/revenue/revenue/list_revenue_run_candidates.go
+//   - usecases/domain/expenditure/expense_recognition_run/list_expense_run_candidates.go
+// ---------------------------------------------------------------------------
+
+// ProrationPolicy controls the first-tranche behavior when the start date
+// falls mid-period.
+enum ProrationPolicy {
+  // UNSPECIFIED normalizes to FULL_TRANCHE per Decision 13.
+  PRORATION_POLICY_UNSPECIFIED = 0;
+  // DAY_PRORATED splits the first tranche by elapsed days over period days.
+  PRORATION_POLICY_DAY_PRORATED = 1;
+  // FULL_TRANCHE makes the first tranche a full period even if start falls
+  // mid-period. This is the default.
+  PRORATION_POLICY_FULL_TRANCHE = 2;
+  // NEXT_PERIOD_START skips the partial current period and anchors the first
+  // tranche to the next period boundary.
+  PRORATION_POLICY_NEXT_PERIOD_START = 3;
+}
+
+// TrancheSpec is a single computed period in the amortization schedule.
+message TrancheSpec {
+  // Index is the 0-based position of this tranche in the schedule.
+  int32 index = 1;
+  // PeriodStart is YYYY-MM-DD inclusive.
+  string period_start = 2;
+  // PeriodEnd is YYYY-MM-DD inclusive.
+  string period_end = 3;
+  // Amount is centavos for this tranche. First tranche may be smaller
+  // (DAY_PRORATED) or skipped (NEXT_PERIOD_START); last tranche absorbs
+  // the centavo remainder so SUM(Amount) == total_amount.
+  int64 amount = 4;
+}
+
+message EnumerateTranchesRequest {
+  // StartDate is the advance/schedule start date (YYYY-MM-DD).
+  string start_date = 1;
+  // EndDate is the advance/schedule end date (YYYY-MM-DD). Optional; empty
+  // means open-ended; the last tranche absorbs any partial if end_date
+  // falls mid-period.
+  string end_date = 2;
+  // PeriodCount is the total number of tranches. Must be > 0.
+  int32 period_count = 3;
+  // PeriodUnit is "day" | "week" | "month" | "year".
+  string period_unit = 4;
+  // TotalAmount is the original amount in centavos (integer). Tranche
+  // values are derived from this so floating-precision rounding is stable.
+  int64 total_amount = 5;
+  // ProrationPolicy controls the first-tranche behavior.
+  ProrationPolicy proration_policy = 6;
+}
+
+message EnumerateTranchesResponse {
+  repeated TrancheSpec tranches = 1;
+}
+
+message ComputeNextDueTrancheRequest {
+  string start_date = 1;
+  string end_date = 2;
+  int32 period_count = 3;
+  string period_unit = 4;
+  int64 total_amount = 5;
+  ProrationPolicy proration_policy = 6;
+  // AsOfDate is the operator's "as of" cursor (YYYY-MM-DD). Used to pick
+  // the next un-recognized tranche.
+  string as_of_date = 7;
+}
+
+message ComputeNextDueTrancheResponse {
+  // Tranche is populated when found=true.
+  optional TrancheSpec tranche = 1;
+  // Found is true when there is an un-recognized tranche whose start
+  // is <= as_of_date.
+  bool found = 2;
+}

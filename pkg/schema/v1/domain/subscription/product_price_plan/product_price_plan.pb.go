@@ -104,8 +104,13 @@ type ProductPricePlan struct {
 	TaxTreatmentId *string `protobuf:"bytes,20,opt,name=tax_treatment_id,json=taxTreatmentId,proto3,oneof" json:"tax_treatment_id,omitempty"`
 	// When set, overrides the parent product's withholding_class_id for this specific price plan line.
 	WithholdingClassId *string `protobuf:"bytes,21,opt,name=withholding_class_id,json=withholdingClassId,proto3,oneof" json:"withholding_class_id,omitempty"`
-	unknownFields      protoimpl.UnknownFields
-	sizeCache          protoimpl.SizeCache
+	// Performance Evaluation §E1 — the Offering's advertised rate band (display/quote).
+	// billing_amount (field 11) remains the operative contracted rate; the band is validated
+	// at config time (a seat's contracted_amount must fall within [min, max] when both set).
+	BillingAmountMin *int64 `protobuf:"varint,22,opt,name=billing_amount_min,json=billingAmountMin,proto3,oneof" json:"billing_amount_min,omitempty"` // centavos — advertised band floor
+	BillingAmountMax *int64 `protobuf:"varint,23,opt,name=billing_amount_max,json=billingAmountMax,proto3,oneof" json:"billing_amount_max,omitempty"` // centavos — advertised band ceiling
+	unknownFields    protoimpl.UnknownFields
+	sizeCache        protoimpl.SizeCache
 }
 
 func (x *ProductPricePlan) Reset() {
@@ -262,6 +267,20 @@ func (x *ProductPricePlan) GetWithholdingClassId() string {
 		return *x.WithholdingClassId
 	}
 	return ""
+}
+
+func (x *ProductPricePlan) GetBillingAmountMin() int64 {
+	if x != nil && x.BillingAmountMin != nil {
+		return *x.BillingAmountMin
+	}
+	return 0
+}
+
+func (x *ProductPricePlan) GetBillingAmountMax() int64 {
+	if x != nil && x.BillingAmountMax != nil {
+		return *x.BillingAmountMax
+	}
+	return 0
 }
 
 type CreateProductPricePlanRequest struct {
@@ -1052,8 +1071,7 @@ var File_domain_subscription_product_price_plan_product_price_plan_proto protore
 
 const file_domain_subscription_product_price_plan_product_price_plan_proto_rawDesc = "" +
 	"\n" +
-	"?domain/subscription/product_price_plan/product_price_plan.proto\x12\x16domain.subscription.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/search.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a.domain/product/product_plan/product_plan.proto\x1a/domain/subscription/price_plan/price_plan.proto\x1a\x10options/db.proto\"\x85\n" +
-	"\n" +
+	"?domain/subscription/product_price_plan/product_price_plan.proto\x12\x16domain.subscription.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/search.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a.domain/product/product_plan/product_plan.proto\x1a/domain/subscription/price_plan/price_plan.proto\x1a\x10options/db.proto\"\x99\v\n" +
 	"\x10ProductPricePlan\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12&\n" +
 	"\fdate_created\x18\x02 \x01(\x03H\x00R\vdateCreated\x88\x01\x01\x12;\n" +
@@ -1082,7 +1100,9 @@ const file_domain_subscription_product_price_plan_product_price_plan_proto_rawDe
 	"\rtax_treatment\x18\x01H\tR\x0etaxTreatmentId\x88\x01\x01\x12H\n" +
 	"\x14withholding_class_id\x18\x15 \x01(\tB\x11\x82\xb5\x18\r\n" +
 	"\ttax_class\x18\x01H\n" +
-	"R\x12withholdingClassId\x88\x01\x01:\x06\x8a\xb5\x18\x02\b\x01B\x0f\n" +
+	"R\x12withholdingClassId\x88\x01\x01\x121\n" +
+	"\x12billing_amount_min\x18\x16 \x01(\x03H\vR\x10billingAmountMin\x88\x01\x01\x121\n" +
+	"\x12billing_amount_max\x18\x17 \x01(\x03H\fR\x10billingAmountMax\x88\x01\x01:\x06\x8a\xb5\x18\x02\b\x01B\x0f\n" +
 	"\r_date_createdB\x16\n" +
 	"\x14_date_created_stringB\x10\n" +
 	"\x0e_date_modifiedB\x17\n" +
@@ -1093,7 +1113,9 @@ const file_domain_subscription_product_price_plan_product_price_plan_proto_rawDe
 	"\t_date_endB\x18\n" +
 	"\x16_job_template_phase_idB\x13\n" +
 	"\x11_tax_treatment_idB\x17\n" +
-	"\x15_withholding_class_idJ\x04\b\t\x10\n" +
+	"\x15_withholding_class_idB\x15\n" +
+	"\x13_billing_amount_minB\x15\n" +
+	"\x13_billing_amount_maxJ\x04\b\t\x10\n" +
 	"J\x04\b\n" +
 	"\x10\vJ\x04\b\x10\x10\x11R\aproductR\n" +
 	"product_idR\x12product_variant_id\"]\n" +

@@ -1,0 +1,142 @@
+syntax = "proto3";
+
+package domain.operation.v1;
+
+option go_package = "github.com/erniealice/esqyma/pkg/schema/v1/domain/operation/evaluation_template";
+
+import "domain/common/error.proto";
+import "domain/common/pagination.proto";
+import "domain/common/filter.proto";
+import "domain/common/sort.proto";
+import "domain/common/search.proto";
+// Re-uses EvaluationType / RelationshipType / VisibilityType defined in evaluation.proto
+// (same proto package domain.operation.v1).
+import "domain/operation/evaluation/evaluation.proto";
+import "options/db.proto";
+
+// =============================================================================
+// Performance Evaluation §E3 — evaluation_template (workspace-scoped, NOT
+// client-scoped). The reusable rubric definition picked when starting a review.
+// =============================================================================
+
+// EvaluationTemplateStatus — new-entity enum convention (matches the job_template
+// VersionStatus precedent). active = (status NOT IN {DEPRECATED}); the picker
+// filters status = ACTIVE. DB CHECK-pinned.
+enum EvaluationTemplateStatus {
+  EVALUATION_TEMPLATE_STATUS_UNSPECIFIED = 0;
+  EVALUATION_TEMPLATE_STATUS_DRAFT       = 1;  // authoring, not yet pickable
+  EVALUATION_TEMPLATE_STATUS_ACTIVE      = 2;  // pickable
+  EVALUATION_TEMPLATE_STATUS_DEPRECATED  = 3;  // no longer pickable; existing DRAFTs still submittable
+}
+
+message EvaluationTemplate {
+  option (options.v1.table).table = true;
+
+  string id = 1;
+  string workspace_id = 2 [(options.v1.db).references = "workspace", (options.v1.db).index = true];
+  string name = 3;
+  optional string description = 4;
+  EvaluationType evaluation_type = 5;        // proto ENUM (from evaluation.proto)
+  RelationshipType relationship_type = 6;    // proto ENUM (from evaluation.proto)
+  int32 version = 7;
+  EvaluationTemplateStatus status = 8;       // proto ENUM; single lifecycle source of truth
+  VisibilityType visibility_type = 9;        // proto ENUM (from evaluation.proto)
+  optional string copied_from_id = 10 [(options.v1.db).references = "evaluation_template"];  // self FK
+
+  bool active = 11 [(options.v1.db).default = "true"];
+  optional int64 date_created = 12;
+  optional string date_created_string = 13 [(options.v1.db).ignore = true];
+  optional int64 date_modified = 14;
+  optional string date_modified_string = 15 [(options.v1.db).ignore = true];
+}
+
+service EvaluationTemplateDomainService {
+  rpc CreateEvaluationTemplate(CreateEvaluationTemplateRequest) returns (CreateEvaluationTemplateResponse);
+  rpc ReadEvaluationTemplate(ReadEvaluationTemplateRequest) returns (ReadEvaluationTemplateResponse);
+  rpc UpdateEvaluationTemplate(UpdateEvaluationTemplateRequest) returns (UpdateEvaluationTemplateResponse);
+  rpc DeleteEvaluationTemplate(DeleteEvaluationTemplateRequest) returns (DeleteEvaluationTemplateResponse);
+  rpc ListEvaluationTemplates(ListEvaluationTemplatesRequest) returns (ListEvaluationTemplatesResponse);
+
+  rpc GetEvaluationTemplateListPageData(GetEvaluationTemplateListPageDataRequest)
+    returns (GetEvaluationTemplateListPageDataResponse);
+
+  rpc GetEvaluationTemplateItemPageData(GetEvaluationTemplateItemPageDataRequest)
+    returns (GetEvaluationTemplateItemPageDataResponse);
+}
+
+message CreateEvaluationTemplateRequest {
+  EvaluationTemplate data = 1;
+}
+
+message CreateEvaluationTemplateResponse {
+  repeated EvaluationTemplate data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message ReadEvaluationTemplateRequest {
+  EvaluationTemplate data = 1;
+}
+
+message ReadEvaluationTemplateResponse {
+  repeated EvaluationTemplate data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message UpdateEvaluationTemplateRequest {
+  EvaluationTemplate data = 1;
+}
+
+message UpdateEvaluationTemplateResponse {
+  repeated EvaluationTemplate data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message DeleteEvaluationTemplateRequest {
+  EvaluationTemplate data = 1;
+}
+
+message DeleteEvaluationTemplateResponse {
+  bool success = 1;
+  optional domain.common.v1.Error error = 2;
+}
+
+message ListEvaluationTemplatesRequest {
+  optional domain.common.v1.SearchRequest search = 1;
+  optional domain.common.v1.FilterRequest filters = 2;
+  optional domain.common.v1.SortRequest sort = 3;
+  optional domain.common.v1.PaginationRequest pagination = 4;
+}
+
+message ListEvaluationTemplatesResponse {
+  repeated EvaluationTemplate data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message GetEvaluationTemplateListPageDataRequest {
+  optional domain.common.v1.PaginationRequest pagination = 1;
+  optional domain.common.v1.FilterRequest filters = 2;
+  optional domain.common.v1.SortRequest sort = 3;
+  optional domain.common.v1.SearchRequest search = 4;
+}
+
+message GetEvaluationTemplateListPageDataResponse {
+  repeated EvaluationTemplate evaluation_template_list = 1;
+  domain.common.v1.PaginationResponse pagination = 2;
+  repeated domain.common.v1.SearchResult search_results = 3;
+  bool success = 4;
+  optional domain.common.v1.Error error = 5;
+}
+
+message GetEvaluationTemplateItemPageDataRequest {
+  string evaluation_template_id = 1;
+}
+
+message GetEvaluationTemplateItemPageDataResponse {
+  EvaluationTemplate evaluation_template = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}

@@ -1,0 +1,140 @@
+syntax = "proto3";
+
+package domain.operation.v1;
+
+option go_package = "github.com/erniealice/esqyma/pkg/schema/v1/domain/operation/evaluation_response";
+
+import "domain/common/error.proto";
+import "domain/common/pagination.proto";
+import "domain/common/filter.proto";
+import "domain/common/sort.proto";
+import "domain/common/search.proto";
+import "domain/operation/enums/enums.proto";  // CriteriaType (snapshotted at submit)
+import "options/db.proto";
+
+// =============================================================================
+// Performance Evaluation §E3 — evaluation_response (child of evaluation;
+// CASCADE on evaluation_id). One row per answered rubric dimension. The rubric
+// label/weight/version/TYPE are SNAPSHOTTED from the linked OutcomeCriteria at
+// submit (Q-EVAL-SNAPSHOT-1); the typed answer is a one-of pinned by the
+// snapshotted criteria_type (one-of CHECK at the DB layer).
+// =============================================================================
+message EvaluationResponse {
+  option (options.v1.table).table = true;
+
+  string id = 1;
+  string evaluation_id = 2 [(options.v1.db).references = "evaluation", (options.v1.db).index = true];
+  // COPIED from the parent evaluation at create; adapter validates it equals the parent's.
+  string workspace_id = 3 [(options.v1.db).references = "workspace", (options.v1.db).index = true];
+  string outcome_criteria_id = 4 [(options.v1.db).references = "outcome_criteria", (options.v1.db).index = true];
+
+  // Snapshot columns (copied from OutcomeCriteria at submit).
+  optional string criteria_version_id = 5 [(options.v1.db).references = "outcome_criteria"];  // version pin
+  string criteria_label = 6;                          // SNAPSHOT
+  optional double criteria_weight = 7;                // SNAPSHOT — score computed from this, NOT the live rubric
+  domain.operation.v1.CriteriaType criteria_type = 8; // SNAPSHOT — pins which answer column may be set (one-of CHECK)
+
+  // Typed answer one-of (exactly one set, matching the snapshotted criteria_type).
+  optional double numeric_value = 9;
+  optional string text_value = 10;
+  optional string categorical_value = 11;
+  optional bool pass_fail_value = 12;
+
+  optional string comment = 13;
+  int32 sequence_order = 14;
+
+  bool active = 15 [(options.v1.db).default = "true"];
+  optional int64 date_created = 16;
+  optional string date_created_string = 17 [(options.v1.db).ignore = true];
+}
+
+service EvaluationResponseDomainService {
+  rpc CreateEvaluationResponse(CreateEvaluationResponseRequest) returns (CreateEvaluationResponseResponse);
+  rpc ReadEvaluationResponse(ReadEvaluationResponseRequest) returns (ReadEvaluationResponseResponse);
+  rpc UpdateEvaluationResponse(UpdateEvaluationResponseRequest) returns (UpdateEvaluationResponseResponse);
+  rpc DeleteEvaluationResponse(DeleteEvaluationResponseRequest) returns (DeleteEvaluationResponseResponse);
+  rpc ListEvaluationResponses(ListEvaluationResponsesRequest) returns (ListEvaluationResponsesResponse);
+
+  rpc GetEvaluationResponseListPageData(GetEvaluationResponseListPageDataRequest)
+    returns (GetEvaluationResponseListPageDataResponse);
+
+  rpc GetEvaluationResponseItemPageData(GetEvaluationResponseItemPageDataRequest)
+    returns (GetEvaluationResponseItemPageDataResponse);
+}
+
+message CreateEvaluationResponseRequest {
+  EvaluationResponse data = 1;
+}
+
+message CreateEvaluationResponseResponse {
+  repeated EvaluationResponse data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message ReadEvaluationResponseRequest {
+  EvaluationResponse data = 1;
+}
+
+message ReadEvaluationResponseResponse {
+  repeated EvaluationResponse data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message UpdateEvaluationResponseRequest {
+  EvaluationResponse data = 1;
+}
+
+message UpdateEvaluationResponseResponse {
+  repeated EvaluationResponse data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message DeleteEvaluationResponseRequest {
+  EvaluationResponse data = 1;
+}
+
+message DeleteEvaluationResponseResponse {
+  bool success = 1;
+  optional domain.common.v1.Error error = 2;
+}
+
+message ListEvaluationResponsesRequest {
+  optional domain.common.v1.SearchRequest search = 1;
+  optional domain.common.v1.FilterRequest filters = 2;
+  optional domain.common.v1.SortRequest sort = 3;
+  optional domain.common.v1.PaginationRequest pagination = 4;
+}
+
+message ListEvaluationResponsesResponse {
+  repeated EvaluationResponse data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message GetEvaluationResponseListPageDataRequest {
+  optional domain.common.v1.PaginationRequest pagination = 1;
+  optional domain.common.v1.FilterRequest filters = 2;
+  optional domain.common.v1.SortRequest sort = 3;
+  optional domain.common.v1.SearchRequest search = 4;
+}
+
+message GetEvaluationResponseListPageDataResponse {
+  repeated EvaluationResponse evaluation_response_list = 1;
+  domain.common.v1.PaginationResponse pagination = 2;
+  repeated domain.common.v1.SearchResult search_results = 3;
+  bool success = 4;
+  optional domain.common.v1.Error error = 5;
+}
+
+message GetEvaluationResponseItemPageDataRequest {
+  string evaluation_response_id = 1;
+}
+
+message GetEvaluationResponseItemPageDataResponse {
+  EvaluationResponse evaluation_response = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}

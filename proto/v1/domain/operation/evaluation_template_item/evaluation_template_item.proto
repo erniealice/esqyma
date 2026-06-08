@@ -1,0 +1,126 @@
+syntax = "proto3";
+
+package domain.operation.v1;
+
+option go_package = "github.com/erniealice/esqyma/pkg/schema/v1/domain/operation/evaluation_template_item";
+
+import "domain/common/error.proto";
+import "domain/common/pagination.proto";
+import "domain/common/filter.proto";
+import "domain/common/sort.proto";
+import "domain/common/search.proto";
+import "options/db.proto";
+
+// =============================================================================
+// Performance Evaluation §E3 — evaluation_template_item (child of
+// evaluation_template; CASCADE). One row per rubric dimension on a template.
+// =============================================================================
+message EvaluationTemplateItem {
+  option (options.v1.table).table = true;
+
+  string id = 1;
+  string evaluation_template_id = 2 [(options.v1.db).references = "evaluation_template", (options.v1.db).index = true];
+  // COPIED from the parent template at create; adapter validates it equals the parent's.
+  string workspace_id = 3 [(options.v1.db).references = "workspace", (options.v1.db).index = true];
+  string outcome_criteria_id = 4 [(options.v1.db).references = "outcome_criteria", (options.v1.db).index = true];
+  int32 sequence_order = 5;
+  optional string question_label = 6;
+  optional string question_prompt = 7;
+  optional bool required_override = 8;
+  optional double weight_override = 9;
+
+  bool active = 10 [(options.v1.db).default = "true"];
+  optional int64 date_created = 11;
+  optional string date_created_string = 12 [(options.v1.db).ignore = true];
+}
+
+service EvaluationTemplateItemDomainService {
+  rpc CreateEvaluationTemplateItem(CreateEvaluationTemplateItemRequest) returns (CreateEvaluationTemplateItemResponse);
+  rpc ReadEvaluationTemplateItem(ReadEvaluationTemplateItemRequest) returns (ReadEvaluationTemplateItemResponse);
+  rpc UpdateEvaluationTemplateItem(UpdateEvaluationTemplateItemRequest) returns (UpdateEvaluationTemplateItemResponse);
+  rpc DeleteEvaluationTemplateItem(DeleteEvaluationTemplateItemRequest) returns (DeleteEvaluationTemplateItemResponse);
+  rpc ListEvaluationTemplateItems(ListEvaluationTemplateItemsRequest) returns (ListEvaluationTemplateItemsResponse);
+
+  rpc GetEvaluationTemplateItemListPageData(GetEvaluationTemplateItemListPageDataRequest)
+    returns (GetEvaluationTemplateItemListPageDataResponse);
+
+  rpc GetEvaluationTemplateItemItemPageData(GetEvaluationTemplateItemItemPageDataRequest)
+    returns (GetEvaluationTemplateItemItemPageDataResponse);
+}
+
+message CreateEvaluationTemplateItemRequest {
+  EvaluationTemplateItem data = 1;
+}
+
+message CreateEvaluationTemplateItemResponse {
+  repeated EvaluationTemplateItem data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message ReadEvaluationTemplateItemRequest {
+  EvaluationTemplateItem data = 1;
+}
+
+message ReadEvaluationTemplateItemResponse {
+  repeated EvaluationTemplateItem data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message UpdateEvaluationTemplateItemRequest {
+  EvaluationTemplateItem data = 1;
+}
+
+message UpdateEvaluationTemplateItemResponse {
+  repeated EvaluationTemplateItem data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message DeleteEvaluationTemplateItemRequest {
+  EvaluationTemplateItem data = 1;
+}
+
+message DeleteEvaluationTemplateItemResponse {
+  bool success = 1;
+  optional domain.common.v1.Error error = 2;
+}
+
+message ListEvaluationTemplateItemsRequest {
+  optional domain.common.v1.SearchRequest search = 1;
+  optional domain.common.v1.FilterRequest filters = 2;
+  optional domain.common.v1.SortRequest sort = 3;
+  optional domain.common.v1.PaginationRequest pagination = 4;
+}
+
+message ListEvaluationTemplateItemsResponse {
+  repeated EvaluationTemplateItem data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message GetEvaluationTemplateItemListPageDataRequest {
+  optional domain.common.v1.PaginationRequest pagination = 1;
+  optional domain.common.v1.FilterRequest filters = 2;
+  optional domain.common.v1.SortRequest sort = 3;
+  optional domain.common.v1.SearchRequest search = 4;
+}
+
+message GetEvaluationTemplateItemListPageDataResponse {
+  repeated EvaluationTemplateItem evaluation_template_item_list = 1;
+  domain.common.v1.PaginationResponse pagination = 2;
+  repeated domain.common.v1.SearchResult search_results = 3;
+  bool success = 4;
+  optional domain.common.v1.Error error = 5;
+}
+
+message GetEvaluationTemplateItemItemPageDataRequest {
+  string evaluation_template_item_id = 1;
+}
+
+message GetEvaluationTemplateItemItemPageDataResponse {
+  EvaluationTemplateItem evaluation_template_item = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}

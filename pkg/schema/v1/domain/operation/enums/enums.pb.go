@@ -1142,6 +1142,7 @@ const (
 	CriteriaScope_CRITERIA_SCOPE_SYSTEM      CriteriaScope = 1
 	CriteriaScope_CRITERIA_SCOPE_INDUSTRY    CriteriaScope = 2
 	CriteriaScope_CRITERIA_SCOPE_WORKSPACE   CriteriaScope = 3
+	CriteriaScope_CRITERIA_SCOPE_EVALUATION  CriteriaScope = 4 // perf-eval: partition feedback rubrics from manufacturing-QA rubrics (§E1)
 )
 
 // Enum value maps for CriteriaScope.
@@ -1151,12 +1152,14 @@ var (
 		1: "CRITERIA_SCOPE_SYSTEM",
 		2: "CRITERIA_SCOPE_INDUSTRY",
 		3: "CRITERIA_SCOPE_WORKSPACE",
+		4: "CRITERIA_SCOPE_EVALUATION",
 	}
 	CriteriaScope_value = map[string]int32{
 		"CRITERIA_SCOPE_UNSPECIFIED": 0,
 		"CRITERIA_SCOPE_SYSTEM":      1,
 		"CRITERIA_SCOPE_INDUSTRY":    2,
 		"CRITERIA_SCOPE_WORKSPACE":   3,
+		"CRITERIA_SCOPE_EVALUATION":  4,
 	}
 )
 
@@ -1470,12 +1473,13 @@ const file_domain_operation_enums_enums_proto_rawDesc = "" +
 	"\x1aVERSION_STATUS_UNSPECIFIED\x10\x00\x12\x18\n" +
 	"\x14VERSION_STATUS_DRAFT\x10\x01\x12\x1c\n" +
 	"\x18VERSION_STATUS_PUBLISHED\x10\x02\x12\x1d\n" +
-	"\x19VERSION_STATUS_DEPRECATED\x10\x03*\x85\x01\n" +
+	"\x19VERSION_STATUS_DEPRECATED\x10\x03*\xa4\x01\n" +
 	"\rCriteriaScope\x12\x1e\n" +
 	"\x1aCRITERIA_SCOPE_UNSPECIFIED\x10\x00\x12\x19\n" +
 	"\x15CRITERIA_SCOPE_SYSTEM\x10\x01\x12\x1b\n" +
 	"\x17CRITERIA_SCOPE_INDUSTRY\x10\x02\x12\x1c\n" +
-	"\x18CRITERIA_SCOPE_WORKSPACE\x10\x03*s\n" +
+	"\x18CRITERIA_SCOPE_WORKSPACE\x10\x03\x12\x1d\n" +
+	"\x19CRITERIA_SCOPE_EVALUATION\x10\x04*s\n" +
 	"\bPassRule\x12\x19\n" +
 	"\x15PASS_RULE_UNSPECIFIED\x10\x00\x12\x1a\n" +
 	"\x16PASS_RULE_ALL_REQUIRED\x10\x01\x12\x17\n" +

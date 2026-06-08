@@ -1,0 +1,216 @@
+syntax = "proto3";
+
+package domain.operation.v1;
+
+option go_package = "github.com/erniealice/esqyma/pkg/schema/v1/domain/operation/evaluation";
+
+import "domain/common/error.proto";
+import "domain/common/pagination.proto";
+import "domain/common/filter.proto";
+import "domain/common/sort.proto";
+import "domain/common/search.proto";
+import "options/db.proto";
+
+// =============================================================================
+// Performance Evaluation §E2/§E3 — the evaluation header aggregate (v1).
+// This file is the HUB for the evaluation subsystem's inline enums; sibling
+// evaluation protos in this same proto package (domain.operation.v1) re-use
+// EvaluationType / RelationshipType / VisibilityType from here.
+// =============================================================================
+
+// EvaluationType — the FORM/purpose of the evaluation. The DB pins this domain
+// via a CHECK constraint; UNSPECIFIED is excluded.
+enum EvaluationType {
+  EVALUATION_TYPE_UNSPECIFIED        = 0;
+  EVALUATION_TYPE_PERFORMANCE_REVIEW = 1;  // outsourcing: client rates the associate
+  EVALUATION_TYPE_CSAT               = 2;
+  EVALUATION_TYPE_COURSE_EVAL        = 3;  // education: student rates the instructor
+  EVALUATION_TYPE_VENDOR_SCORECARD   = 4;
+}
+
+// RelationshipType — the ARROW of the evaluation. Orthogonal to EvaluationType.
+enum RelationshipType {
+  RELATIONSHIP_TYPE_UNSPECIFIED         = 0;
+  RELATIONSHIP_TYPE_CLIENT_TO_ASSOCIATE = 1;  // outsourcing v1
+  RELATIONSHIP_TYPE_STAFF_TO_CLIENT     = 2;
+  RELATIONSHIP_TYPE_SELF                = 3;
+  RELATIONSHIP_TYPE_PEER                = 4;
+  RELATIONSHIP_TYPE_MANAGER             = 5;
+}
+
+// EvaluatorType — which arc carries the evaluator actor.
+enum EvaluatorType {
+  EVALUATOR_TYPE_UNSPECIFIED = 0;
+  EVALUATOR_TYPE_CLIENT      = 1;  // evaluator_client_portal_grant_id (CLIENT arc)
+  EVALUATOR_TYPE_STAFF       = 2;  // evaluator_workspace_user_id (operator-side; CR-4)
+}
+
+// SubjectType — which arc carries the reviewed subject.
+enum SubjectType {
+  SUBJECT_TYPE_UNSPECIFIED = 0;
+  SUBJECT_TYPE_ASSOCIATE   = 1;  // subject_staff_id (-> entity/staff) — the HUMAN Identity is the subject
+  SUBJECT_TYPE_CLIENT      = 2;  // subject_client_id
+}
+
+// VisibilityType — who may read the evaluation. INTERNAL_ONLY is fail-closed for
+// clients in the QUERY predicate (not just the view). Re-used by evaluation_template.
+enum VisibilityType {
+  VISIBILITY_TYPE_UNSPECIFIED             = 0;
+  VISIBILITY_TYPE_INTERNAL_ONLY           = 1;  // staff only
+  VISIBILITY_TYPE_VISIBLE_TO_SUBJECT      = 2;
+  VISIBILITY_TYPE_VISIBLE_TO_SUBJECT_ANON = 3;  // v2 anonymity
+}
+
+// EvaluationStatus — the single lifecycle source of truth. active = (status NOT IN
+// {ARCHIVED}). DRAFT is a partial save (NOT materialized at cycle-open — SR-1).
+enum EvaluationStatus {
+  EVALUATION_STATUS_UNSPECIFIED = 0;
+  EVALUATION_STATUS_DRAFT       = 1;  // partial save
+  EVALUATION_STATUS_SUBMITTED   = 2;
+  EVALUATION_STATUS_ARCHIVED    = 3;  // active = status NOT IN {archived}
+  EVALUATION_STATUS_SIGNED_OFF  = 4;  // distinct manager/client countersign (Q-SIGNOFF-1)
+}
+
+// Evaluation is the evaluation header aggregate (operation domain).
+message Evaluation {
+  option (options.v1.table).table = true;
+
+  string id = 1;
+  string workspace_id = 2 [(options.v1.db).references = "workspace", (options.v1.db).index = true];
+  // DENORMALIZED IDOR anchor; stamped from session.acting_as_client_id at create; NEVER from form.
+  string client_id = 3 [(options.v1.db).references = "client", (options.v1.db).index = true];
+  // Servicing-scope anchor (CR-5): NULL subscription_id resolves to ACCOUNT scope via client_id.
+  optional string subscription_id = 4 [(options.v1.db).references = "subscription", (options.v1.db).index = true];
+  // Anti-phantom ENGAGEMENT anchor (the seat, NOT the subject) — REQUIRED for CLIENT_TO_ASSOCIATE.
+  optional string subscription_seat_id = 5 [(options.v1.db).references = "subscription_seat", (options.v1.db).index = true];
+  // Template — REQUIRED for PERFORMANCE_REVIEW (CHECK).
+  optional string evaluation_template_id = 6 [(options.v1.db).references = "evaluation_template", (options.v1.db).index = true];
+
+  EvaluationType evaluation_type = 7;        // proto ENUM; DB CHECK-pinned
+  RelationshipType relationship_type = 8;    // proto ENUM; DB CHECK-pinned
+  EvaluatorType evaluator_type = 9;          // proto ENUM; DB CHECK-pinned
+  // Evaluator arc — exactly one (num_nonnulls=1). STAFF leg is the tenant-scoped workspace_user (CR-4).
+  optional string evaluator_workspace_user_id = 10 [(options.v1.db).references = "workspace_user", (options.v1.db).index = true];
+  optional string evaluator_client_portal_grant_id = 11 [(options.v1.db).references = "client_portal_grant", (options.v1.db).index = true];
+
+  SubjectType subject_type = 12;             // proto ENUM; DB CHECK-pinned
+  // Subject arc — exactly one (num_nonnulls=1). The HUMAN Identity is the subject.
+  optional string subject_staff_id = 13 [(options.v1.db).references = "staff", (options.v1.db).index = true];
+  optional string subject_client_id = 14 [(options.v1.db).references = "client", (options.v1.db).index = true];
+
+  string period_start = 15;                  // ISO 8601
+  string period_end = 16;                    // ISO 8601
+  EvaluationStatus status = 17;              // proto ENUM; single lifecycle source of truth
+  VisibilityType visibility_type = 18;       // proto ENUM; INTERNAL_ONLY fail-closed in query predicate
+
+  optional double overall_score = 19;        // computed from criteria_weight snapshots (NOT live rubric)
+  optional string narrative = 20;
+  optional int64 submitted_at = 21;          // set at DRAFT->SUBMITTED
+
+  bool active = 22 [(options.v1.db).default = "true"];
+  optional int64 date_created = 23;
+  optional string date_created_string = 24 [(options.v1.db).ignore = true];
+  optional int64 date_modified = 25;
+  optional string date_modified_string = 26 [(options.v1.db).ignore = true];
+
+  // v1 cycle FK — nullable for on-demand evals; stamped when created inside an open cycle.
+  optional string evaluation_cycle_id = 27 [(options.v1.db).references = "evaluation_cycle", (options.v1.db).index = true];
+
+  // Sign-off arc (Q-SIGNOFF-1) — exactly one actor when SIGNED_OFF (status-coupling CHECKs).
+  optional string signed_off_by_workspace_user_id = 28 [(options.v1.db).references = "workspace_user"];   // operator-side (CR-4)
+  optional string signed_off_by_client_portal_grant_id = 29 [(options.v1.db).references = "client_portal_grant"];
+  optional int64 signed_off_at = 30;
+}
+
+service EvaluationDomainService {
+  rpc CreateEvaluation(CreateEvaluationRequest) returns (CreateEvaluationResponse);
+  rpc ReadEvaluation(ReadEvaluationRequest) returns (ReadEvaluationResponse);
+  rpc UpdateEvaluation(UpdateEvaluationRequest) returns (UpdateEvaluationResponse);
+  rpc DeleteEvaluation(DeleteEvaluationRequest) returns (DeleteEvaluationResponse);
+  rpc ListEvaluations(ListEvaluationsRequest) returns (ListEvaluationsResponse);
+
+  // Enhanced list with pagination, filtering, sorting, search
+  rpc GetEvaluationListPageData(GetEvaluationListPageDataRequest)
+    returns (GetEvaluationListPageDataResponse);
+
+  // Enhanced item view with related data
+  rpc GetEvaluationItemPageData(GetEvaluationItemPageDataRequest)
+    returns (GetEvaluationItemPageDataResponse);
+}
+
+message CreateEvaluationRequest {
+  Evaluation data = 1;
+}
+
+message CreateEvaluationResponse {
+  repeated Evaluation data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message ReadEvaluationRequest {
+  Evaluation data = 1;
+}
+
+message ReadEvaluationResponse {
+  repeated Evaluation data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message UpdateEvaluationRequest {
+  Evaluation data = 1;
+}
+
+message UpdateEvaluationResponse {
+  repeated Evaluation data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message DeleteEvaluationRequest {
+  Evaluation data = 1;
+}
+
+message DeleteEvaluationResponse {
+  bool success = 1;
+  optional domain.common.v1.Error error = 2;
+}
+
+message ListEvaluationsRequest {
+  optional domain.common.v1.SearchRequest search = 1;
+  optional domain.common.v1.FilterRequest filters = 2;
+  optional domain.common.v1.SortRequest sort = 3;
+  optional domain.common.v1.PaginationRequest pagination = 4;
+}
+
+message ListEvaluationsResponse {
+  repeated Evaluation data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message GetEvaluationListPageDataRequest {
+  optional domain.common.v1.PaginationRequest pagination = 1;
+  optional domain.common.v1.FilterRequest filters = 2;
+  optional domain.common.v1.SortRequest sort = 3;
+  optional domain.common.v1.SearchRequest search = 4;
+}
+
+message GetEvaluationListPageDataResponse {
+  repeated Evaluation evaluation_list = 1;
+  domain.common.v1.PaginationResponse pagination = 2;
+  repeated domain.common.v1.SearchResult search_results = 3;
+  bool success = 4;
+  optional domain.common.v1.Error error = 5;
+}
+
+message GetEvaluationItemPageDataRequest {
+  string evaluation_id = 1;
+}
+
+message GetEvaluationItemPageDataResponse {
+  Evaluation evaluation = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}

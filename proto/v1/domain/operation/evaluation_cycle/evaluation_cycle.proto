@@ -1,0 +1,138 @@
+syntax = "proto3";
+
+package domain.operation.v1;
+
+option go_package = "github.com/erniealice/esqyma/pkg/schema/v1/domain/operation/evaluation_cycle";
+
+import "domain/common/error.proto";
+import "domain/common/pagination.proto";
+import "domain/common/filter.proto";
+import "domain/common/sort.proto";
+import "domain/common/search.proto";
+import "options/db.proto";
+
+// =============================================================================
+// Performance Evaluation §E4 — evaluation_cycle (v1; Q-EVAL-CYCLE-1). The named
+// review cycle whose "X of Y" denominator (Y) is FROZEN by the
+// evaluation_cycle_member snapshot (SR-1), NOT by materializing DRAFT evaluations.
+// =============================================================================
+
+// EvaluationCycleStatus — v1 enum. active = (status NOT IN {CLOSED}). DB CHECK-pinned.
+enum EvaluationCycleStatus {
+  EVALUATION_CYCLE_STATUS_UNSPECIFIED = 0;
+  EVALUATION_CYCLE_STATUS_OPEN        = 1;  // reviews being filled
+  EVALUATION_CYCLE_STATUS_SIGN_OFF    = 2;  // submitted; awaiting sign-offs
+  EVALUATION_CYCLE_STATUS_CLOSED      = 3;
+}
+
+message EvaluationCycle {
+  option (options.v1.table).table = true;
+
+  string id = 1;
+  string workspace_id = 2 [(options.v1.db).references = "workspace", (options.v1.db).index = true];
+  // DENOMINATOR SCOPE — one cycle per engagement (outsourcing v1).
+  string subscription_id = 3 [(options.v1.db).references = "subscription", (options.v1.db).index = true];
+  string name = 4;                            // "H1 2026 Performance Review"
+  string period_start = 5;                    // ISO 8601
+  string period_end = 6;                      // ISO 8601
+  optional string sign_off_due_date = 7;      // ISO 8601 — client sign-off deadline (!= close_date)
+  optional string close_date = 8;             // ISO 8601 — when the cycle closes
+  EvaluationCycleStatus status = 9;           // proto ENUM; single lifecycle source of truth
+
+  bool active = 10 [(options.v1.db).default = "true"];
+  optional int64 date_created = 11;
+  optional string date_created_string = 12 [(options.v1.db).ignore = true];
+  optional int64 date_modified = 13;
+  optional string date_modified_string = 14 [(options.v1.db).ignore = true];
+}
+
+service EvaluationCycleDomainService {
+  rpc CreateEvaluationCycle(CreateEvaluationCycleRequest) returns (CreateEvaluationCycleResponse);
+  rpc ReadEvaluationCycle(ReadEvaluationCycleRequest) returns (ReadEvaluationCycleResponse);
+  rpc UpdateEvaluationCycle(UpdateEvaluationCycleRequest) returns (UpdateEvaluationCycleResponse);
+  rpc DeleteEvaluationCycle(DeleteEvaluationCycleRequest) returns (DeleteEvaluationCycleResponse);
+  rpc ListEvaluationCycles(ListEvaluationCyclesRequest) returns (ListEvaluationCyclesResponse);
+
+  rpc GetEvaluationCycleListPageData(GetEvaluationCycleListPageDataRequest)
+    returns (GetEvaluationCycleListPageDataResponse);
+
+  rpc GetEvaluationCycleItemPageData(GetEvaluationCycleItemPageDataRequest)
+    returns (GetEvaluationCycleItemPageDataResponse);
+}
+
+message CreateEvaluationCycleRequest {
+  EvaluationCycle data = 1;
+}
+
+message CreateEvaluationCycleResponse {
+  repeated EvaluationCycle data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message ReadEvaluationCycleRequest {
+  EvaluationCycle data = 1;
+}
+
+message ReadEvaluationCycleResponse {
+  repeated EvaluationCycle data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message UpdateEvaluationCycleRequest {
+  EvaluationCycle data = 1;
+}
+
+message UpdateEvaluationCycleResponse {
+  repeated EvaluationCycle data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message DeleteEvaluationCycleRequest {
+  EvaluationCycle data = 1;
+}
+
+message DeleteEvaluationCycleResponse {
+  bool success = 1;
+  optional domain.common.v1.Error error = 2;
+}
+
+message ListEvaluationCyclesRequest {
+  optional domain.common.v1.SearchRequest search = 1;
+  optional domain.common.v1.FilterRequest filters = 2;
+  optional domain.common.v1.SortRequest sort = 3;
+  optional domain.common.v1.PaginationRequest pagination = 4;
+}
+
+message ListEvaluationCyclesResponse {
+  repeated EvaluationCycle data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message GetEvaluationCycleListPageDataRequest {
+  optional domain.common.v1.PaginationRequest pagination = 1;
+  optional domain.common.v1.FilterRequest filters = 2;
+  optional domain.common.v1.SortRequest sort = 3;
+  optional domain.common.v1.SearchRequest search = 4;
+}
+
+message GetEvaluationCycleListPageDataResponse {
+  repeated EvaluationCycle evaluation_cycle_list = 1;
+  domain.common.v1.PaginationResponse pagination = 2;
+  repeated domain.common.v1.SearchResult search_results = 3;
+  bool success = 4;
+  optional domain.common.v1.Error error = 5;
+}
+
+message GetEvaluationCycleItemPageDataRequest {
+  string evaluation_cycle_id = 1;
+}
+
+message GetEvaluationCycleItemPageDataResponse {
+  EvaluationCycle evaluation_cycle = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}

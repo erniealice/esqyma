@@ -62,6 +62,12 @@ message ProductPricePlan {
   optional string tax_treatment_id = 20 [(options.v1.db).references = "tax_treatment", (options.v1.db).index = true];
   // When set, overrides the parent product's withholding_class_id for this specific price plan line.
   optional string withholding_class_id = 21 [(options.v1.db).references = "tax_class", (options.v1.db).index = true];
+
+  // Performance Evaluation §E1 — the Offering's advertised rate band (display/quote).
+  // billing_amount (field 11) remains the operative contracted rate; the band is validated
+  // at config time (a seat's contracted_amount must fall within [min, max] when both set).
+  optional int64 billing_amount_min = 22;  // centavos — advertised band floor
+  optional int64 billing_amount_max = 23;  // centavos — advertised band ceiling
 }
 
 service ProductPricePlanDomainService {

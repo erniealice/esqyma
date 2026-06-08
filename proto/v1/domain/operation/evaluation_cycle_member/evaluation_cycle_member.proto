@@ -1,0 +1,132 @@
+syntax = "proto3";
+
+package domain.operation.v1;
+
+option go_package = "github.com/erniealice/esqyma/pkg/schema/v1/domain/operation/evaluation_cycle_member";
+
+import "domain/common/error.proto";
+import "domain/common/pagination.proto";
+import "domain/common/filter.proto";
+import "domain/common/sort.proto";
+import "domain/common/search.proto";
+import "options/db.proto";
+
+// =============================================================================
+// Performance Evaluation §E4b — evaluation_cycle_member (v1; SR-1). The
+// lightweight membership snapshot that freezes the cycle's "X of Y" denominator.
+// Carries NO evaluator/template/visibility/score, so it cannot trip the
+// evaluation table's NOT NULL + CHECK invariants — which is why materializing
+// full DRAFT evaluations at cycle-open was unexecutable (SR-1).
+//   Y = COUNT(member WHERE evaluation_cycle_id = X)
+//   X = COUNT(member that joins a SUBMITTED/SIGNED_OFF evaluation for the same
+//       (subject_staff_id, client_id, period, type))
+// UNIQUE (evaluation_cycle_id, subject_staff_id, client_id) — per-STAFF (SR-9);
+// dedupes a dual-seat associate to one obligation.
+// =============================================================================
+message EvaluationCycleMember {
+  option (options.v1.table).table = true;
+
+  string id = 1;
+  string workspace_id = 2 [(options.v1.db).references = "workspace", (options.v1.db).index = true];
+  string evaluation_cycle_id = 3 [(options.v1.db).references = "evaluation_cycle", (options.v1.db).index = true];
+  // DENORMALIZED RLS anchor (same fail-closed scoping as evaluation).
+  string client_id = 4 [(options.v1.db).references = "client", (options.v1.db).index = true];
+  // The reviewed human (per-staff grain, SR-9).
+  string subject_staff_id = 5 [(options.v1.db).references = "staff", (options.v1.db).index = true];
+  // Fresh probation clock for a replacement seat in-cycle (SR-8). DB default false.
+  bool is_probation = 6 [(options.v1.db).default = "false"];
+
+  bool active = 7 [(options.v1.db).default = "true"];
+  optional int64 date_added = 8;
+}
+
+service EvaluationCycleMemberDomainService {
+  rpc CreateEvaluationCycleMember(CreateEvaluationCycleMemberRequest) returns (CreateEvaluationCycleMemberResponse);
+  rpc ReadEvaluationCycleMember(ReadEvaluationCycleMemberRequest) returns (ReadEvaluationCycleMemberResponse);
+  rpc UpdateEvaluationCycleMember(UpdateEvaluationCycleMemberRequest) returns (UpdateEvaluationCycleMemberResponse);
+  rpc DeleteEvaluationCycleMember(DeleteEvaluationCycleMemberRequest) returns (DeleteEvaluationCycleMemberResponse);
+  rpc ListEvaluationCycleMembers(ListEvaluationCycleMembersRequest) returns (ListEvaluationCycleMembersResponse);
+
+  rpc GetEvaluationCycleMemberListPageData(GetEvaluationCycleMemberListPageDataRequest)
+    returns (GetEvaluationCycleMemberListPageDataResponse);
+
+  rpc GetEvaluationCycleMemberItemPageData(GetEvaluationCycleMemberItemPageDataRequest)
+    returns (GetEvaluationCycleMemberItemPageDataResponse);
+}
+
+message CreateEvaluationCycleMemberRequest {
+  EvaluationCycleMember data = 1;
+}
+
+message CreateEvaluationCycleMemberResponse {
+  repeated EvaluationCycleMember data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message ReadEvaluationCycleMemberRequest {
+  EvaluationCycleMember data = 1;
+}
+
+message ReadEvaluationCycleMemberResponse {
+  repeated EvaluationCycleMember data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message UpdateEvaluationCycleMemberRequest {
+  EvaluationCycleMember data = 1;
+}
+
+message UpdateEvaluationCycleMemberResponse {
+  repeated EvaluationCycleMember data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message DeleteEvaluationCycleMemberRequest {
+  EvaluationCycleMember data = 1;
+}
+
+message DeleteEvaluationCycleMemberResponse {
+  bool success = 1;
+  optional domain.common.v1.Error error = 2;
+}
+
+message ListEvaluationCycleMembersRequest {
+  optional domain.common.v1.SearchRequest search = 1;
+  optional domain.common.v1.FilterRequest filters = 2;
+  optional domain.common.v1.SortRequest sort = 3;
+  optional domain.common.v1.PaginationRequest pagination = 4;
+}
+
+message ListEvaluationCycleMembersResponse {
+  repeated EvaluationCycleMember data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message GetEvaluationCycleMemberListPageDataRequest {
+  optional domain.common.v1.PaginationRequest pagination = 1;
+  optional domain.common.v1.FilterRequest filters = 2;
+  optional domain.common.v1.SortRequest sort = 3;
+  optional domain.common.v1.SearchRequest search = 4;
+}
+
+message GetEvaluationCycleMemberListPageDataResponse {
+  repeated EvaluationCycleMember evaluation_cycle_member_list = 1;
+  domain.common.v1.PaginationResponse pagination = 2;
+  repeated domain.common.v1.SearchResult search_results = 3;
+  bool success = 4;
+  optional domain.common.v1.Error error = 5;
+}
+
+message GetEvaluationCycleMemberItemPageDataRequest {
+  string evaluation_cycle_member_id = 1;
+}
+
+message GetEvaluationCycleMemberItemPageDataResponse {
+  EvaluationCycleMember evaluation_cycle_member = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
