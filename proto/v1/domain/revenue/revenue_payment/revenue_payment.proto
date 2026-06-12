@@ -1,0 +1,138 @@
+syntax = "proto3";
+
+package domain.revenue.v1;
+
+option go_package = "github.com/erniealice/esqyma/golang/v1/domain/revenue/revenue_payment";
+
+import "domain/common/error.proto";
+import "domain/common/pagination.proto";
+import "domain/common/filter.proto";
+import "domain/common/sort.proto";
+import "domain/common/search.proto";
+
+import "options/db.proto";
+
+// RevenuePayment records an actual payment received against a Revenue (invoice).
+// Mirrors the loan_payment payment-against-a-parent shape.
+message RevenuePayment {
+  option (options.v1.table).table = true;
+
+  string id = 1;
+
+  // Parent revenue (invoice)
+  string revenue_id = 2 [(options.v1.db).references = "revenue", (options.v1.db).index = true];
+
+  // Chosen collection method (optional — action.go tolerates empty; methodName falls back to id)
+  optional string collection_method_id = 3 [(options.v1.db).references = "collection_method", (options.v1.db).index = true];
+
+  int64 amount = 4;                       // centavos — maps to "amount" column; FIXES the amount_paid drop
+  string currency = 5 [(options.v1.db).default = "PHP"];
+  optional string reference_number = 6;
+  optional string collection_type = 7 [(options.v1.db).default = "sale"];
+  optional string status = 8 [(options.v1.db).default = "completed"];
+
+  bool active = 9;
+
+  // --- 5 fields needing the ADDITIVE migration (no column today) ---
+  optional string payment_method = 10;    // denormalized collection_method.name snapshot
+  optional string received_by = 11;
+  optional string received_role = 12;
+  optional string notes = 13;
+  optional string payment_date = 14;      // ISO 8601 (YYYY-MM-DD); read-only/phantom today, rewire adds the write
+
+  // --- audit (mirror loan_payment:45-46) ---
+  optional int64 date_created = 15;
+  optional string date_created_string = 16 [(options.v1.db).ignore = true];
+  optional int64 date_modified = 17;
+  optional string date_modified_string = 18 [(options.v1.db).ignore = true];
+}
+
+service RevenuePaymentDomainService {
+  // Standard CRUD
+  rpc CreateRevenuePayment(CreateRevenuePaymentRequest) returns (CreateRevenuePaymentResponse);
+  rpc ReadRevenuePayment(ReadRevenuePaymentRequest) returns (ReadRevenuePaymentResponse);
+  rpc UpdateRevenuePayment(UpdateRevenuePaymentRequest) returns (UpdateRevenuePaymentResponse);
+  rpc DeleteRevenuePayment(DeleteRevenuePaymentRequest) returns (DeleteRevenuePaymentResponse);
+  rpc ListRevenuePayments(ListRevenuePaymentsRequest) returns (ListRevenuePaymentsResponse);
+
+  // Enhanced page data (for UI views)
+  rpc GetRevenuePaymentListPageData(GetRevenuePaymentListPageDataRequest) returns (GetRevenuePaymentListPageDataResponse);
+  rpc GetRevenuePaymentItemPageData(GetRevenuePaymentItemPageDataRequest) returns (GetRevenuePaymentItemPageDataResponse);
+}
+
+message CreateRevenuePaymentRequest {
+  RevenuePayment data = 1;
+}
+
+message CreateRevenuePaymentResponse {
+  repeated RevenuePayment data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message ReadRevenuePaymentRequest {
+  RevenuePayment data = 1;
+}
+
+message ReadRevenuePaymentResponse {
+  repeated RevenuePayment data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message UpdateRevenuePaymentRequest {
+  RevenuePayment data = 1;
+}
+
+message UpdateRevenuePaymentResponse {
+  repeated RevenuePayment data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message DeleteRevenuePaymentRequest {
+  RevenuePayment data = 1;
+}
+
+message DeleteRevenuePaymentResponse {
+  bool success = 1;
+  optional domain.common.v1.Error error = 2;
+}
+
+message ListRevenuePaymentsRequest {
+  optional domain.common.v1.SearchRequest search = 1;
+  optional domain.common.v1.FilterRequest filters = 2;
+  optional domain.common.v1.SortRequest sort = 3;
+  optional domain.common.v1.PaginationRequest pagination = 4;
+}
+
+message ListRevenuePaymentsResponse {
+  repeated RevenuePayment data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message GetRevenuePaymentListPageDataRequest {
+  optional domain.common.v1.PaginationRequest pagination = 1;
+  optional domain.common.v1.FilterRequest filters = 2;
+  optional domain.common.v1.SortRequest sort = 3;
+  optional domain.common.v1.SearchRequest search = 4;
+}
+
+message GetRevenuePaymentListPageDataResponse {
+  repeated RevenuePayment revenue_payment_list = 1;
+  optional domain.common.v1.PaginationResponse pagination = 2;
+  repeated domain.common.v1.SearchResult search_results = 3;
+  bool success = 4;
+  optional domain.common.v1.Error error = 5;
+}
+
+message GetRevenuePaymentItemPageDataRequest {
+  string revenue_payment_id = 1;
+}
+
+message GetRevenuePaymentItemPageDataResponse {
+  optional RevenuePayment revenue_payment = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
