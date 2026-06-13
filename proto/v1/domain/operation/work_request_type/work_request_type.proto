@@ -1,0 +1,176 @@
+syntax = "proto3";
+
+package domain.operation.v1;
+
+option go_package = "github.com/erniealice/esqyma/pkg/schema/v1/domain/operation/work_request_type";
+
+import "domain/common/error.proto";
+import "domain/common/pagination.proto";
+import "domain/common/filter.proto";
+import "domain/common/sort.proto";
+import "domain/common/search.proto";
+import "options/db.proto";
+
+// =============================================================================
+// WorkRequestType — Requests & Workflow Plan (OCID Plan 1, Phase 8a-1)
+//
+// Configurable type catalog for work requests (Q-REQ-TYPES). Each type carries
+// a JSON Schema for per-type dynamic fields (via the linked WorkflowTemplate's
+// input_schema_json), an SLA default, and a routing template FK.
+//
+// The catalog has NO origin column -- a type is origin-agnostic; the origin of
+// a concrete request is stamped on the WorkRequest row by the create use case.
+//
+// Placed in the existing `operation` domain (Q-REQ-DOMAIN). View package: fayna.
+// =============================================================================
+
+// WorkRequestTypeCategory -- category (PERSON vs ACCOUNT scoped).
+// This is a category, NOT a _type-suffixed discriminator (RT-6 / codex-MED-1).
+enum WorkRequestTypeCategory {
+  WORK_REQUEST_TYPE_CATEGORY_UNSPECIFIED    = 0;
+  WORK_REQUEST_TYPE_CATEGORY_PERSON_SCOPED  = 1; // salary/bonus/hours/offboarding -> requires subscription_seat_id
+  WORK_REQUEST_TYPE_CATEGORY_ACCOUNT_SCOPED = 2; // new headcount / new project / internal policy -> no resource
+}
+
+// WorkRequestTypeStatus -- lifecycle for the catalog entity.
+enum WorkRequestTypeStatus {
+  WORK_REQUEST_TYPE_STATUS_UNSPECIFIED = 0;
+  WORK_REQUEST_TYPE_STATUS_ACTIVE      = 1;
+  WORK_REQUEST_TYPE_STATUS_ARCHIVED    = 2;
+}
+
+message WorkRequestType {
+  option (options.v1.table).table = true;
+
+  // Identity
+  string id = 1;
+  string workspace_id = 2 [(options.v1.db).references = "workspace", (options.v1.db).index = true];
+
+  // Stable key (UNIQUE per workspace)
+  string code = 3;
+
+  // Display (lyngua keys)
+  string label_key = 4;
+  string description_key = 5;
+
+  // Category (controls requires_resource)
+  WorkRequestTypeCategory category = 6;
+  bool requires_resource = 7;                                                    // type names a roster seat -> subscription_seat_id required
+
+  // Routing template
+  optional string default_workflow_template_id = 8 [(options.v1.db).references = "workflow_template"];
+
+  // SLA
+  int64 default_sla_hours = 9;                                                   // snapshotted onto each request at submit
+
+  // Presentation
+  int32 sort_order = 10;
+  string icon_key = 11;                                                          // pyeza icon name for the picker card
+
+  // Lifecycle
+  WorkRequestTypeStatus status = 12;
+  bool active = 13 [(options.v1.db).default = "true"];                           // DB-coupled: active = (status = ACTIVE)
+
+  // Standard timestamps
+  optional int64 date_created = 100;
+  optional string date_created_string = 101 [(options.v1.db).ignore = true];
+  optional int64 date_modified = 102;
+  optional string date_modified_string = 103 [(options.v1.db).ignore = true];
+}
+
+// --- Service ---
+
+service WorkRequestTypeDomainService {
+  rpc CreateWorkRequestType(CreateWorkRequestTypeRequest) returns (CreateWorkRequestTypeResponse);
+  rpc ReadWorkRequestType(ReadWorkRequestTypeRequest) returns (ReadWorkRequestTypeResponse);
+  rpc UpdateWorkRequestType(UpdateWorkRequestTypeRequest) returns (UpdateWorkRequestTypeResponse);
+  rpc DeleteWorkRequestType(DeleteWorkRequestTypeRequest) returns (DeleteWorkRequestTypeResponse);
+  rpc ListWorkRequestTypes(ListWorkRequestTypesRequest) returns (ListWorkRequestTypesResponse);
+
+  rpc GetWorkRequestTypeListPageData(GetWorkRequestTypeListPageDataRequest)
+    returns (GetWorkRequestTypeListPageDataResponse);
+
+  rpc GetWorkRequestTypeItemPageData(GetWorkRequestTypeItemPageDataRequest)
+    returns (GetWorkRequestTypeItemPageDataResponse);
+}
+
+// --- Standard CRUD messages ---
+
+message CreateWorkRequestTypeRequest {
+  WorkRequestType data = 1;
+}
+
+message CreateWorkRequestTypeResponse {
+  repeated WorkRequestType data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message ReadWorkRequestTypeRequest {
+  WorkRequestType data = 1;
+}
+
+message ReadWorkRequestTypeResponse {
+  repeated WorkRequestType data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message UpdateWorkRequestTypeRequest {
+  WorkRequestType data = 1;
+}
+
+message UpdateWorkRequestTypeResponse {
+  repeated WorkRequestType data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message DeleteWorkRequestTypeRequest {
+  WorkRequestType data = 1;
+}
+
+message DeleteWorkRequestTypeResponse {
+  bool success = 1;
+  optional domain.common.v1.Error error = 2;
+}
+
+message ListWorkRequestTypesRequest {
+  optional domain.common.v1.SearchRequest search = 1;
+  optional domain.common.v1.FilterRequest filters = 2;
+  optional domain.common.v1.SortRequest sort = 3;
+  optional domain.common.v1.PaginationRequest pagination = 4;
+}
+
+message ListWorkRequestTypesResponse {
+  repeated WorkRequestType data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+// --- PageData messages ---
+
+message GetWorkRequestTypeListPageDataRequest {
+  optional domain.common.v1.PaginationRequest pagination = 1;
+  optional domain.common.v1.FilterRequest filters = 2;
+  optional domain.common.v1.SortRequest sort = 3;
+  optional domain.common.v1.SearchRequest search = 4;
+}
+
+message GetWorkRequestTypeListPageDataResponse {
+  repeated WorkRequestType work_request_type_list = 1;
+  optional domain.common.v1.PaginationResponse pagination = 2;
+  repeated domain.common.v1.SearchResult search_results = 3;
+  bool success = 4;
+  optional domain.common.v1.Error error = 5;
+}
+
+message GetWorkRequestTypeItemPageDataRequest {
+  string work_request_type_id = 1;
+}
+
+message GetWorkRequestTypeItemPageDataResponse {
+  optional WorkRequestType work_request_type = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}

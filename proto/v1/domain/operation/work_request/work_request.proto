@@ -1,0 +1,217 @@
+syntax = "proto3";
+
+package domain.operation.v1;
+
+option go_package = "github.com/erniealice/esqyma/pkg/schema/v1/domain/operation/work_request";
+
+import "domain/common/error.proto";
+import "domain/common/pagination.proto";
+import "domain/common/filter.proto";
+import "domain/common/sort.proto";
+import "domain/common/search.proto";
+import "options/db.proto";
+
+// =============================================================================
+// WorkRequest — Requests & Workflow Plan (OCID Plan 1, Phase 8a-1)
+//
+// A workspace work-request record that MAY be client-originated (CLIENT raises
+// a typed request via the portal), client-related-internal (staff-initiated
+// work ABOUT a client's seat), or internal (staff-initiated operational work,
+// no client). The `origin` enum is the discriminator; `client_id` is an
+// OPTIONAL, DB-gated dimension (present for origin 1/2, NULL for origin 3).
+//
+// Placed in the existing `operation` domain (Q-REQ-DOMAIN). View package: fayna.
+// =============================================================================
+
+// WorkRequestOrigin — the origin axis discriminator (Q-REQ-ORIGIN).
+// origin, NOT client_id, is the discriminator.
+enum WorkRequestOrigin {
+  WORK_REQUEST_ORIGIN_UNSPECIFIED             = 0;
+  WORK_REQUEST_ORIGIN_CLIENT_ORIGINATED       = 1; // a client raised it (portal) -- client-visible
+  WORK_REQUEST_ORIGIN_CLIENT_RELATED_INTERNAL = 2; // staff-initiated work ABOUT a client's seat -- NOT client-visible
+  WORK_REQUEST_ORIGIN_INTERNAL                = 3; // pure internal work -- no client at all
+}
+
+// WorkRequestStatus — typed negative-case lifecycle (Q-REQ-STATUS).
+// TERMINAL set = {DECLINED=5, COMPLETED=6, CANCELLED=7}. Everything else,
+// including APPROVED=4 and the 4 negative states 8-11, is NON-terminal
+// (active=true). DB coupling: active = status NOT IN (5,6,7).
+enum WorkRequestStatus {
+  WORK_REQUEST_STATUS_UNSPECIFIED       = 0;
+  WORK_REQUEST_STATUS_NEW               = 1;  // draft, not yet submitted
+  WORK_REQUEST_STATUS_SUBMITTED         = 2;
+  WORK_REQUEST_STATUS_IN_REVIEW         = 3;
+  WORK_REQUEST_STATUS_APPROVED          = 4;  // decision: yes; downstream action pending -- NON-TERMINAL
+  WORK_REQUEST_STATUS_DECLINED          = 5;  // TERMINAL
+  WORK_REQUEST_STATUS_COMPLETED         = 6;  // TERMINAL (downstream action done)
+  WORK_REQUEST_STATUS_CANCELLED         = 7;  // TERMINAL (requester withdrew)
+  WORK_REQUEST_STATUS_RETURNED_FOR_INFO = 8;  // sent back to requester for more info -- NON-TERMINAL
+  WORK_REQUEST_STATUS_ON_HOLD           = 9;  // blocked/paused -- NON-TERMINAL
+  WORK_REQUEST_STATUS_ESCALATED         = 10; // raised to higher authority -- NON-TERMINAL
+  WORK_REQUEST_STATUS_PENDING_OVERRIDE  = 11; // a decision awaits an override authority -- NON-TERMINAL
+}
+
+message WorkRequest {
+  option (options.v1.table).table = true;
+
+  // Identity
+  string id = 1;
+  string workspace_id = 2 [(options.v1.db).references = "workspace", (options.v1.db).index = true];
+
+  // Origin axis: client_id is OPTIONAL, DB-gated by origin (Q-REQ-ORIGIN).
+  // CHECK ((client_id IS NULL) = (origin = 3)) in migration.
+  optional string client_id = 3 [(options.v1.db).references = "client", (options.v1.db).index = true];
+  WorkRequestOrigin origin = 23 [(options.v1.db).index = true];
+
+  // Code + type
+  string request_number = 4;                                                     // "REQ-0104" per-workspace sequential (Q-REQ-CODE)
+  string work_request_type_id = 5 [(options.v1.db).references = "work_request_type", (options.v1.db).index = true];
+
+  // Lifecycle
+  WorkRequestStatus status = 6 [(options.v1.db).index = true];
+
+  // Display (denormalized from payload at create)
+  string title = 7;
+  string description = 8;
+
+  // Payload (type-specific values, validated vs type.input_schema_json)
+  string payload_json = 9;
+
+  // Person-specific seat (optional; CR-9 subscription_seat consumed, not re-authored)
+  optional string subscription_seat_id = 10 [(options.v1.db).references = "subscription_seat"];
+
+  // Principals
+  string requested_by_user_id = 11 [(options.v1.db).references = "user"];
+  optional string assigned_to_workspace_user_id = 12 [(options.v1.db).references = "workspace_user", (options.v1.db).index = true];
+
+  // Priority
+  int32 priority = 13;                                                            // 0=normal, 1=high
+
+  // SLA (Q-REQ-SLA)
+  int64 sla_target_hours = 14;                                                    // snapshot from type.default_sla_hours at submit
+  optional int64 sla_due_at = 15;                                                 // stored = date_submitted + sla_target_hours (unix millis)
+  optional int64 sla_breached_at = 16;                                            // idempotent stamp when first observed past-due & non-terminal
+
+  // Engine coupling (Q-REQ-ENGINE)
+  optional string workflow_id = 17 [(options.v1.db).references = "workflow"];
+  optional string resolution_note = 18;
+
+  // Lifecycle timestamps
+  optional int64 date_submitted = 19;
+  optional int64 date_resolved = 20;
+
+  // Active flag (DB-coupled to status: active = status NOT IN (5,6,7))
+  bool active = 21 [(options.v1.db).default = "true"];
+
+  // Idempotency (Q-REQ-CODE / duplicate-submit guard)
+  string submission_idempotency_key = 22;
+
+  // Downstream seam: FK to operation/job (nullable; set only when APPROVED -> costed fulfillment)
+  optional string job_id = 24 [(options.v1.db).references = "job"];
+
+  // Project/engagement anchor (Q-SERVICING)
+  optional string subscription_id = 25 [(options.v1.db).references = "subscription", (options.v1.db).index = true];
+
+  // Standard timestamps
+  optional int64 date_created = 100;
+  optional string date_created_string = 101 [(options.v1.db).ignore = true];
+  optional int64 date_modified = 102;
+  optional string date_modified_string = 103 [(options.v1.db).ignore = true];
+}
+
+// --- Service ---
+
+service WorkRequestDomainService {
+  rpc CreateWorkRequest(CreateWorkRequestRequest) returns (CreateWorkRequestResponse);
+  rpc ReadWorkRequest(ReadWorkRequestRequest) returns (ReadWorkRequestResponse);
+  rpc UpdateWorkRequest(UpdateWorkRequestRequest) returns (UpdateWorkRequestResponse);
+  rpc DeleteWorkRequest(DeleteWorkRequestRequest) returns (DeleteWorkRequestResponse);
+  rpc ListWorkRequests(ListWorkRequestsRequest) returns (ListWorkRequestsResponse);
+
+  rpc GetWorkRequestListPageData(GetWorkRequestListPageDataRequest)
+    returns (GetWorkRequestListPageDataResponse);
+
+  rpc GetWorkRequestItemPageData(GetWorkRequestItemPageDataRequest)
+    returns (GetWorkRequestItemPageDataResponse);
+}
+
+// --- Standard CRUD messages ---
+
+message CreateWorkRequestRequest {
+  WorkRequest data = 1;
+}
+
+message CreateWorkRequestResponse {
+  repeated WorkRequest data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message ReadWorkRequestRequest {
+  WorkRequest data = 1;
+}
+
+message ReadWorkRequestResponse {
+  repeated WorkRequest data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message UpdateWorkRequestRequest {
+  WorkRequest data = 1;
+}
+
+message UpdateWorkRequestResponse {
+  repeated WorkRequest data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message DeleteWorkRequestRequest {
+  WorkRequest data = 1;
+}
+
+message DeleteWorkRequestResponse {
+  bool success = 1;
+  optional domain.common.v1.Error error = 2;
+}
+
+message ListWorkRequestsRequest {
+  optional domain.common.v1.SearchRequest search = 1;
+  optional domain.common.v1.FilterRequest filters = 2;
+  optional domain.common.v1.SortRequest sort = 3;
+  optional domain.common.v1.PaginationRequest pagination = 4;
+}
+
+message ListWorkRequestsResponse {
+  repeated WorkRequest data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+// --- PageData messages ---
+
+message GetWorkRequestListPageDataRequest {
+  optional domain.common.v1.PaginationRequest pagination = 1;
+  optional domain.common.v1.FilterRequest filters = 2;
+  optional domain.common.v1.SortRequest sort = 3;
+  optional domain.common.v1.SearchRequest search = 4;
+}
+
+message GetWorkRequestListPageDataResponse {
+  repeated WorkRequest work_request_list = 1;
+  optional domain.common.v1.PaginationResponse pagination = 2;
+  repeated domain.common.v1.SearchResult search_results = 3;
+  bool success = 4;
+  optional domain.common.v1.Error error = 5;
+}
+
+message GetWorkRequestItemPageDataRequest {
+  string work_request_id = 1;
+}
+
+message GetWorkRequestItemPageDataResponse {
+  optional WorkRequest work_request = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
