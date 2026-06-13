@@ -983,6 +983,209 @@ func (x *GetWorkspaceUserItemPageDataResponse) GetError() *common.Error {
 	return nil
 }
 
+// ListWorkspacesForUsers — batch workspace membership lookup
+type ListWorkspacesForUsersRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *ListWorkspacesForUsersRequest) Reset() {
+	*x = ListWorkspacesForUsersRequest{}
+	mi := &file_domain_entity_workspace_user_workspace_user_proto_msgTypes[15]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *ListWorkspacesForUsersRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ListWorkspacesForUsersRequest) ProtoMessage() {}
+
+func (x *ListWorkspacesForUsersRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_domain_entity_workspace_user_workspace_user_proto_msgTypes[15]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ListWorkspacesForUsersRequest.ProtoReflect.Descriptor instead.
+func (*ListWorkspacesForUsersRequest) Descriptor() ([]byte, []int) {
+	return file_domain_entity_workspace_user_workspace_user_proto_rawDescGZIP(), []int{15}
+}
+
+// A single workspace's display-only summary.
+type WorkspaceSummary struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Id            string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
+	Name          string                 `protobuf:"bytes,2,opt,name=name,proto3" json:"name,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *WorkspaceSummary) Reset() {
+	*x = WorkspaceSummary{}
+	mi := &file_domain_entity_workspace_user_workspace_user_proto_msgTypes[16]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *WorkspaceSummary) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*WorkspaceSummary) ProtoMessage() {}
+
+func (x *WorkspaceSummary) ProtoReflect() protoreflect.Message {
+	mi := &file_domain_entity_workspace_user_workspace_user_proto_msgTypes[16]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use WorkspaceSummary.ProtoReflect.Descriptor instead.
+func (*WorkspaceSummary) Descriptor() ([]byte, []int) {
+	return file_domain_entity_workspace_user_workspace_user_proto_rawDescGZIP(), []int{16}
+}
+
+func (x *WorkspaceSummary) GetId() string {
+	if x != nil {
+		return x.Id
+	}
+	return ""
+}
+
+func (x *WorkspaceSummary) GetName() string {
+	if x != nil {
+		return x.Name
+	}
+	return ""
+}
+
+// Workspace memberships for a single user.
+type UserWorkspaces struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	UserId        string                 `protobuf:"bytes,1,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty"`
+	Workspaces    []*WorkspaceSummary    `protobuf:"bytes,2,rep,name=workspaces,proto3" json:"workspaces,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *UserWorkspaces) Reset() {
+	*x = UserWorkspaces{}
+	mi := &file_domain_entity_workspace_user_workspace_user_proto_msgTypes[17]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *UserWorkspaces) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*UserWorkspaces) ProtoMessage() {}
+
+func (x *UserWorkspaces) ProtoReflect() protoreflect.Message {
+	mi := &file_domain_entity_workspace_user_workspace_user_proto_msgTypes[17]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use UserWorkspaces.ProtoReflect.Descriptor instead.
+func (*UserWorkspaces) Descriptor() ([]byte, []int) {
+	return file_domain_entity_workspace_user_workspace_user_proto_rawDescGZIP(), []int{17}
+}
+
+func (x *UserWorkspaces) GetUserId() string {
+	if x != nil {
+		return x.UserId
+	}
+	return ""
+}
+
+func (x *UserWorkspaces) GetWorkspaces() []*WorkspaceSummary {
+	if x != nil {
+		return x.Workspaces
+	}
+	return nil
+}
+
+type ListWorkspacesForUsersResponse struct {
+	state          protoimpl.MessageState `protogen:"open.v1"`
+	UserWorkspaces []*UserWorkspaces      `protobuf:"bytes,1,rep,name=user_workspaces,json=userWorkspaces,proto3" json:"user_workspaces,omitempty"`
+	Success        bool                   `protobuf:"varint,2,opt,name=success,proto3" json:"success,omitempty"`
+	Error          *common.Error          `protobuf:"bytes,3,opt,name=error,proto3,oneof" json:"error,omitempty"`
+	unknownFields  protoimpl.UnknownFields
+	sizeCache      protoimpl.SizeCache
+}
+
+func (x *ListWorkspacesForUsersResponse) Reset() {
+	*x = ListWorkspacesForUsersResponse{}
+	mi := &file_domain_entity_workspace_user_workspace_user_proto_msgTypes[18]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *ListWorkspacesForUsersResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ListWorkspacesForUsersResponse) ProtoMessage() {}
+
+func (x *ListWorkspacesForUsersResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_domain_entity_workspace_user_workspace_user_proto_msgTypes[18]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ListWorkspacesForUsersResponse.ProtoReflect.Descriptor instead.
+func (*ListWorkspacesForUsersResponse) Descriptor() ([]byte, []int) {
+	return file_domain_entity_workspace_user_workspace_user_proto_rawDescGZIP(), []int{18}
+}
+
+func (x *ListWorkspacesForUsersResponse) GetUserWorkspaces() []*UserWorkspaces {
+	if x != nil {
+		return x.UserWorkspaces
+	}
+	return nil
+}
+
+func (x *ListWorkspacesForUsersResponse) GetSuccess() bool {
+	if x != nil {
+		return x.Success
+	}
+	return false
+}
+
+func (x *ListWorkspacesForUsersResponse) GetError() *common.Error {
+	if x != nil {
+		return x.Error
+	}
+	return nil
+}
+
 var File_domain_entity_workspace_user_workspace_user_proto protoreflect.FileDescriptor
 
 const file_domain_entity_workspace_user_workspace_user_proto_rawDesc = "" +
@@ -1085,7 +1288,21 @@ const file_domain_entity_workspace_user_workspace_user_proto_rawDesc = "" +
 	"\x0eworkspace_user\x18\x01 \x01(\v2\x1f.domain.entity.v1.WorkspaceUserR\rworkspaceUser\x12\x18\n" +
 	"\asuccess\x18\x02 \x01(\bR\asuccess\x122\n" +
 	"\x05error\x18\x03 \x01(\v2\x17.domain.common.v1.ErrorH\x00R\x05error\x88\x01\x01B\b\n" +
-	"\x06_error2\xf7\x06\n" +
+	"\x06_error\"\x1f\n" +
+	"\x1dListWorkspacesForUsersRequest\"6\n" +
+	"\x10WorkspaceSummary\x12\x0e\n" +
+	"\x02id\x18\x01 \x01(\tR\x02id\x12\x12\n" +
+	"\x04name\x18\x02 \x01(\tR\x04name\"m\n" +
+	"\x0eUserWorkspaces\x12\x17\n" +
+	"\auser_id\x18\x01 \x01(\tR\x06userId\x12B\n" +
+	"\n" +
+	"workspaces\x18\x02 \x03(\v2\".domain.entity.v1.WorkspaceSummaryR\n" +
+	"workspaces\"\xc3\x01\n" +
+	"\x1eListWorkspacesForUsersResponse\x12I\n" +
+	"\x0fuser_workspaces\x18\x01 \x03(\v2 .domain.entity.v1.UserWorkspacesR\x0euserWorkspaces\x12\x18\n" +
+	"\asuccess\x18\x02 \x01(\bR\asuccess\x122\n" +
+	"\x05error\x18\x03 \x01(\v2\x17.domain.common.v1.ErrorH\x00R\x05error\x88\x01\x01B\b\n" +
+	"\x06_error2\xf4\a\n" +
 	"\x1aWorkspaceUserDomainService\x12r\n" +
 	"\x13CreateWorkspaceUser\x12,.domain.entity.v1.CreateWorkspaceUserRequest\x1a-.domain.entity.v1.CreateWorkspaceUserResponse\x12l\n" +
 	"\x11ReadWorkspaceUser\x12*.domain.entity.v1.ReadWorkspaceUserRequest\x1a+.domain.entity.v1.ReadWorkspaceUserResponse\x12r\n" +
@@ -1093,7 +1310,8 @@ const file_domain_entity_workspace_user_workspace_user_proto_rawDesc = "" +
 	"\x13DeleteWorkspaceUser\x12,.domain.entity.v1.DeleteWorkspaceUserRequest\x1a-.domain.entity.v1.DeleteWorkspaceUserResponse\x12o\n" +
 	"\x12ListWorkspaceUsers\x12+.domain.entity.v1.ListWorkspaceUsersRequest\x1a,.domain.entity.v1.ListWorkspaceUsersResponse\x12\x8d\x01\n" +
 	"\x1cGetWorkspaceUserListPageData\x125.domain.entity.v1.GetWorkspaceUserListPageDataRequest\x1a6.domain.entity.v1.GetWorkspaceUserListPageDataResponse\x12\x8d\x01\n" +
-	"\x1cGetWorkspaceUserItemPageData\x125.domain.entity.v1.GetWorkspaceUserItemPageDataRequest\x1a6.domain.entity.v1.GetWorkspaceUserItemPageDataResponseB\xde\x01\n" +
+	"\x1cGetWorkspaceUserItemPageData\x125.domain.entity.v1.GetWorkspaceUserItemPageDataRequest\x1a6.domain.entity.v1.GetWorkspaceUserItemPageDataResponse\x12{\n" +
+	"\x16ListWorkspacesForUsers\x12/.domain.entity.v1.ListWorkspacesForUsersRequest\x1a0.domain.entity.v1.ListWorkspacesForUsersResponseB\xde\x01\n" +
 	"\x14com.domain.entity.v1B\x12WorkspaceUserProtoP\x01ZPgithub.com/erniealice/esqyma/pkg/schema/v1/domain/entity/workspace_user;entityv1\xa2\x02\x03DEX\xaa\x02\x10Domain.Entity.V1\xca\x02\x10Domain\\Entity\\V1\xe2\x02\x1cDomain\\Entity\\V1\\GPBMetadata\xea\x02\x12Domain::Entity::V1b\x06proto3"
 
 var (
@@ -1108,7 +1326,7 @@ func file_domain_entity_workspace_user_workspace_user_proto_rawDescGZIP() []byte
 	return file_domain_entity_workspace_user_workspace_user_proto_rawDescData
 }
 
-var file_domain_entity_workspace_user_workspace_user_proto_msgTypes = make([]protoimpl.MessageInfo, 15)
+var file_domain_entity_workspace_user_workspace_user_proto_msgTypes = make([]protoimpl.MessageInfo, 19)
 var file_domain_entity_workspace_user_workspace_user_proto_goTypes = []any{
 	(*WorkspaceUser)(nil),                         // 0: domain.entity.v1.WorkspaceUser
 	(*CreateWorkspaceUserRequest)(nil),            // 1: domain.entity.v1.CreateWorkspaceUserRequest
@@ -1125,67 +1343,76 @@ var file_domain_entity_workspace_user_workspace_user_proto_goTypes = []any{
 	(*GetWorkspaceUserListPageDataResponse)(nil),  // 12: domain.entity.v1.GetWorkspaceUserListPageDataResponse
 	(*GetWorkspaceUserItemPageDataRequest)(nil),   // 13: domain.entity.v1.GetWorkspaceUserItemPageDataRequest
 	(*GetWorkspaceUserItemPageDataResponse)(nil),  // 14: domain.entity.v1.GetWorkspaceUserItemPageDataResponse
-	(*workspace.Workspace)(nil),                   // 15: domain.entity.v1.Workspace
-	(*user.User)(nil),                             // 16: domain.entity.v1.User
-	(*workspace_user_role.WorkspaceUserRole)(nil), // 17: domain.entity.v1.WorkspaceUserRole
-	(*common.Error)(nil),                          // 18: domain.common.v1.Error
-	(*common.SearchRequest)(nil),                  // 19: domain.common.v1.SearchRequest
-	(*common.FilterRequest)(nil),                  // 20: domain.common.v1.FilterRequest
-	(*common.SortRequest)(nil),                    // 21: domain.common.v1.SortRequest
-	(*common.PaginationRequest)(nil),              // 22: domain.common.v1.PaginationRequest
-	(*common.PaginationResponse)(nil),             // 23: domain.common.v1.PaginationResponse
-	(*common.SearchResult)(nil),                   // 24: domain.common.v1.SearchResult
+	(*ListWorkspacesForUsersRequest)(nil),         // 15: domain.entity.v1.ListWorkspacesForUsersRequest
+	(*WorkspaceSummary)(nil),                      // 16: domain.entity.v1.WorkspaceSummary
+	(*UserWorkspaces)(nil),                        // 17: domain.entity.v1.UserWorkspaces
+	(*ListWorkspacesForUsersResponse)(nil),        // 18: domain.entity.v1.ListWorkspacesForUsersResponse
+	(*workspace.Workspace)(nil),                   // 19: domain.entity.v1.Workspace
+	(*user.User)(nil),                             // 20: domain.entity.v1.User
+	(*workspace_user_role.WorkspaceUserRole)(nil), // 21: domain.entity.v1.WorkspaceUserRole
+	(*common.Error)(nil),                          // 22: domain.common.v1.Error
+	(*common.SearchRequest)(nil),                  // 23: domain.common.v1.SearchRequest
+	(*common.FilterRequest)(nil),                  // 24: domain.common.v1.FilterRequest
+	(*common.SortRequest)(nil),                    // 25: domain.common.v1.SortRequest
+	(*common.PaginationRequest)(nil),              // 26: domain.common.v1.PaginationRequest
+	(*common.PaginationResponse)(nil),             // 27: domain.common.v1.PaginationResponse
+	(*common.SearchResult)(nil),                   // 28: domain.common.v1.SearchResult
 }
 var file_domain_entity_workspace_user_workspace_user_proto_depIdxs = []int32{
-	15, // 0: domain.entity.v1.WorkspaceUser.workspace:type_name -> domain.entity.v1.Workspace
-	16, // 1: domain.entity.v1.WorkspaceUser.user:type_name -> domain.entity.v1.User
-	17, // 2: domain.entity.v1.WorkspaceUser.workspace_user_roles:type_name -> domain.entity.v1.WorkspaceUserRole
+	19, // 0: domain.entity.v1.WorkspaceUser.workspace:type_name -> domain.entity.v1.Workspace
+	20, // 1: domain.entity.v1.WorkspaceUser.user:type_name -> domain.entity.v1.User
+	21, // 2: domain.entity.v1.WorkspaceUser.workspace_user_roles:type_name -> domain.entity.v1.WorkspaceUserRole
 	0,  // 3: domain.entity.v1.CreateWorkspaceUserRequest.data:type_name -> domain.entity.v1.WorkspaceUser
 	0,  // 4: domain.entity.v1.CreateWorkspaceUserResponse.data:type_name -> domain.entity.v1.WorkspaceUser
-	18, // 5: domain.entity.v1.CreateWorkspaceUserResponse.error:type_name -> domain.common.v1.Error
+	22, // 5: domain.entity.v1.CreateWorkspaceUserResponse.error:type_name -> domain.common.v1.Error
 	0,  // 6: domain.entity.v1.ReadWorkspaceUserRequest.data:type_name -> domain.entity.v1.WorkspaceUser
 	0,  // 7: domain.entity.v1.ReadWorkspaceUserResponse.data:type_name -> domain.entity.v1.WorkspaceUser
-	18, // 8: domain.entity.v1.ReadWorkspaceUserResponse.error:type_name -> domain.common.v1.Error
+	22, // 8: domain.entity.v1.ReadWorkspaceUserResponse.error:type_name -> domain.common.v1.Error
 	0,  // 9: domain.entity.v1.UpdateWorkspaceUserRequest.data:type_name -> domain.entity.v1.WorkspaceUser
 	0,  // 10: domain.entity.v1.UpdateWorkspaceUserResponse.data:type_name -> domain.entity.v1.WorkspaceUser
-	18, // 11: domain.entity.v1.UpdateWorkspaceUserResponse.error:type_name -> domain.common.v1.Error
+	22, // 11: domain.entity.v1.UpdateWorkspaceUserResponse.error:type_name -> domain.common.v1.Error
 	0,  // 12: domain.entity.v1.DeleteWorkspaceUserRequest.data:type_name -> domain.entity.v1.WorkspaceUser
-	18, // 13: domain.entity.v1.DeleteWorkspaceUserResponse.error:type_name -> domain.common.v1.Error
-	19, // 14: domain.entity.v1.ListWorkspaceUsersRequest.search:type_name -> domain.common.v1.SearchRequest
-	20, // 15: domain.entity.v1.ListWorkspaceUsersRequest.filters:type_name -> domain.common.v1.FilterRequest
-	21, // 16: domain.entity.v1.ListWorkspaceUsersRequest.sort:type_name -> domain.common.v1.SortRequest
-	22, // 17: domain.entity.v1.ListWorkspaceUsersRequest.pagination:type_name -> domain.common.v1.PaginationRequest
+	22, // 13: domain.entity.v1.DeleteWorkspaceUserResponse.error:type_name -> domain.common.v1.Error
+	23, // 14: domain.entity.v1.ListWorkspaceUsersRequest.search:type_name -> domain.common.v1.SearchRequest
+	24, // 15: domain.entity.v1.ListWorkspaceUsersRequest.filters:type_name -> domain.common.v1.FilterRequest
+	25, // 16: domain.entity.v1.ListWorkspaceUsersRequest.sort:type_name -> domain.common.v1.SortRequest
+	26, // 17: domain.entity.v1.ListWorkspaceUsersRequest.pagination:type_name -> domain.common.v1.PaginationRequest
 	0,  // 18: domain.entity.v1.ListWorkspaceUsersResponse.data:type_name -> domain.entity.v1.WorkspaceUser
-	18, // 19: domain.entity.v1.ListWorkspaceUsersResponse.error:type_name -> domain.common.v1.Error
-	22, // 20: domain.entity.v1.GetWorkspaceUserListPageDataRequest.pagination:type_name -> domain.common.v1.PaginationRequest
-	20, // 21: domain.entity.v1.GetWorkspaceUserListPageDataRequest.filters:type_name -> domain.common.v1.FilterRequest
-	21, // 22: domain.entity.v1.GetWorkspaceUserListPageDataRequest.sort:type_name -> domain.common.v1.SortRequest
-	19, // 23: domain.entity.v1.GetWorkspaceUserListPageDataRequest.search:type_name -> domain.common.v1.SearchRequest
+	22, // 19: domain.entity.v1.ListWorkspaceUsersResponse.error:type_name -> domain.common.v1.Error
+	26, // 20: domain.entity.v1.GetWorkspaceUserListPageDataRequest.pagination:type_name -> domain.common.v1.PaginationRequest
+	24, // 21: domain.entity.v1.GetWorkspaceUserListPageDataRequest.filters:type_name -> domain.common.v1.FilterRequest
+	25, // 22: domain.entity.v1.GetWorkspaceUserListPageDataRequest.sort:type_name -> domain.common.v1.SortRequest
+	23, // 23: domain.entity.v1.GetWorkspaceUserListPageDataRequest.search:type_name -> domain.common.v1.SearchRequest
 	0,  // 24: domain.entity.v1.GetWorkspaceUserListPageDataResponse.workspace_user_list:type_name -> domain.entity.v1.WorkspaceUser
-	23, // 25: domain.entity.v1.GetWorkspaceUserListPageDataResponse.pagination:type_name -> domain.common.v1.PaginationResponse
-	24, // 26: domain.entity.v1.GetWorkspaceUserListPageDataResponse.search_results:type_name -> domain.common.v1.SearchResult
-	18, // 27: domain.entity.v1.GetWorkspaceUserListPageDataResponse.error:type_name -> domain.common.v1.Error
+	27, // 25: domain.entity.v1.GetWorkspaceUserListPageDataResponse.pagination:type_name -> domain.common.v1.PaginationResponse
+	28, // 26: domain.entity.v1.GetWorkspaceUserListPageDataResponse.search_results:type_name -> domain.common.v1.SearchResult
+	22, // 27: domain.entity.v1.GetWorkspaceUserListPageDataResponse.error:type_name -> domain.common.v1.Error
 	0,  // 28: domain.entity.v1.GetWorkspaceUserItemPageDataResponse.workspace_user:type_name -> domain.entity.v1.WorkspaceUser
-	18, // 29: domain.entity.v1.GetWorkspaceUserItemPageDataResponse.error:type_name -> domain.common.v1.Error
-	1,  // 30: domain.entity.v1.WorkspaceUserDomainService.CreateWorkspaceUser:input_type -> domain.entity.v1.CreateWorkspaceUserRequest
-	3,  // 31: domain.entity.v1.WorkspaceUserDomainService.ReadWorkspaceUser:input_type -> domain.entity.v1.ReadWorkspaceUserRequest
-	5,  // 32: domain.entity.v1.WorkspaceUserDomainService.UpdateWorkspaceUser:input_type -> domain.entity.v1.UpdateWorkspaceUserRequest
-	7,  // 33: domain.entity.v1.WorkspaceUserDomainService.DeleteWorkspaceUser:input_type -> domain.entity.v1.DeleteWorkspaceUserRequest
-	9,  // 34: domain.entity.v1.WorkspaceUserDomainService.ListWorkspaceUsers:input_type -> domain.entity.v1.ListWorkspaceUsersRequest
-	11, // 35: domain.entity.v1.WorkspaceUserDomainService.GetWorkspaceUserListPageData:input_type -> domain.entity.v1.GetWorkspaceUserListPageDataRequest
-	13, // 36: domain.entity.v1.WorkspaceUserDomainService.GetWorkspaceUserItemPageData:input_type -> domain.entity.v1.GetWorkspaceUserItemPageDataRequest
-	2,  // 37: domain.entity.v1.WorkspaceUserDomainService.CreateWorkspaceUser:output_type -> domain.entity.v1.CreateWorkspaceUserResponse
-	4,  // 38: domain.entity.v1.WorkspaceUserDomainService.ReadWorkspaceUser:output_type -> domain.entity.v1.ReadWorkspaceUserResponse
-	6,  // 39: domain.entity.v1.WorkspaceUserDomainService.UpdateWorkspaceUser:output_type -> domain.entity.v1.UpdateWorkspaceUserResponse
-	8,  // 40: domain.entity.v1.WorkspaceUserDomainService.DeleteWorkspaceUser:output_type -> domain.entity.v1.DeleteWorkspaceUserResponse
-	10, // 41: domain.entity.v1.WorkspaceUserDomainService.ListWorkspaceUsers:output_type -> domain.entity.v1.ListWorkspaceUsersResponse
-	12, // 42: domain.entity.v1.WorkspaceUserDomainService.GetWorkspaceUserListPageData:output_type -> domain.entity.v1.GetWorkspaceUserListPageDataResponse
-	14, // 43: domain.entity.v1.WorkspaceUserDomainService.GetWorkspaceUserItemPageData:output_type -> domain.entity.v1.GetWorkspaceUserItemPageDataResponse
-	37, // [37:44] is the sub-list for method output_type
-	30, // [30:37] is the sub-list for method input_type
-	30, // [30:30] is the sub-list for extension type_name
-	30, // [30:30] is the sub-list for extension extendee
-	0,  // [0:30] is the sub-list for field type_name
+	22, // 29: domain.entity.v1.GetWorkspaceUserItemPageDataResponse.error:type_name -> domain.common.v1.Error
+	16, // 30: domain.entity.v1.UserWorkspaces.workspaces:type_name -> domain.entity.v1.WorkspaceSummary
+	17, // 31: domain.entity.v1.ListWorkspacesForUsersResponse.user_workspaces:type_name -> domain.entity.v1.UserWorkspaces
+	22, // 32: domain.entity.v1.ListWorkspacesForUsersResponse.error:type_name -> domain.common.v1.Error
+	1,  // 33: domain.entity.v1.WorkspaceUserDomainService.CreateWorkspaceUser:input_type -> domain.entity.v1.CreateWorkspaceUserRequest
+	3,  // 34: domain.entity.v1.WorkspaceUserDomainService.ReadWorkspaceUser:input_type -> domain.entity.v1.ReadWorkspaceUserRequest
+	5,  // 35: domain.entity.v1.WorkspaceUserDomainService.UpdateWorkspaceUser:input_type -> domain.entity.v1.UpdateWorkspaceUserRequest
+	7,  // 36: domain.entity.v1.WorkspaceUserDomainService.DeleteWorkspaceUser:input_type -> domain.entity.v1.DeleteWorkspaceUserRequest
+	9,  // 37: domain.entity.v1.WorkspaceUserDomainService.ListWorkspaceUsers:input_type -> domain.entity.v1.ListWorkspaceUsersRequest
+	11, // 38: domain.entity.v1.WorkspaceUserDomainService.GetWorkspaceUserListPageData:input_type -> domain.entity.v1.GetWorkspaceUserListPageDataRequest
+	13, // 39: domain.entity.v1.WorkspaceUserDomainService.GetWorkspaceUserItemPageData:input_type -> domain.entity.v1.GetWorkspaceUserItemPageDataRequest
+	15, // 40: domain.entity.v1.WorkspaceUserDomainService.ListWorkspacesForUsers:input_type -> domain.entity.v1.ListWorkspacesForUsersRequest
+	2,  // 41: domain.entity.v1.WorkspaceUserDomainService.CreateWorkspaceUser:output_type -> domain.entity.v1.CreateWorkspaceUserResponse
+	4,  // 42: domain.entity.v1.WorkspaceUserDomainService.ReadWorkspaceUser:output_type -> domain.entity.v1.ReadWorkspaceUserResponse
+	6,  // 43: domain.entity.v1.WorkspaceUserDomainService.UpdateWorkspaceUser:output_type -> domain.entity.v1.UpdateWorkspaceUserResponse
+	8,  // 44: domain.entity.v1.WorkspaceUserDomainService.DeleteWorkspaceUser:output_type -> domain.entity.v1.DeleteWorkspaceUserResponse
+	10, // 45: domain.entity.v1.WorkspaceUserDomainService.ListWorkspaceUsers:output_type -> domain.entity.v1.ListWorkspaceUsersResponse
+	12, // 46: domain.entity.v1.WorkspaceUserDomainService.GetWorkspaceUserListPageData:output_type -> domain.entity.v1.GetWorkspaceUserListPageDataResponse
+	14, // 47: domain.entity.v1.WorkspaceUserDomainService.GetWorkspaceUserItemPageData:output_type -> domain.entity.v1.GetWorkspaceUserItemPageDataResponse
+	18, // 48: domain.entity.v1.WorkspaceUserDomainService.ListWorkspacesForUsers:output_type -> domain.entity.v1.ListWorkspacesForUsersResponse
+	41, // [41:49] is the sub-list for method output_type
+	33, // [33:41] is the sub-list for method input_type
+	33, // [33:33] is the sub-list for extension type_name
+	33, // [33:33] is the sub-list for extension extendee
+	0,  // [0:33] is the sub-list for field type_name
 }
 
 func init() { file_domain_entity_workspace_user_workspace_user_proto_init() }
@@ -1202,13 +1429,14 @@ func file_domain_entity_workspace_user_workspace_user_proto_init() {
 	file_domain_entity_workspace_user_workspace_user_proto_msgTypes[10].OneofWrappers = []any{}
 	file_domain_entity_workspace_user_workspace_user_proto_msgTypes[12].OneofWrappers = []any{}
 	file_domain_entity_workspace_user_workspace_user_proto_msgTypes[14].OneofWrappers = []any{}
+	file_domain_entity_workspace_user_workspace_user_proto_msgTypes[18].OneofWrappers = []any{}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
 		File: protoimpl.DescBuilder{
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_domain_entity_workspace_user_workspace_user_proto_rawDesc), len(file_domain_entity_workspace_user_workspace_user_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   15,
+			NumMessages:   19,
 			NumExtensions: 0,
 			NumServices:   1,
 		},

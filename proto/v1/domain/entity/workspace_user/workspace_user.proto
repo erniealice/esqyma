@@ -65,6 +65,12 @@ service WorkspaceUserDomainService {
   // Enhanced item view
   rpc GetWorkspaceUserItemPageData(GetWorkspaceUserItemPageDataRequest)
     returns (GetWorkspaceUserItemPageDataResponse);
+
+  // Batch-load workspace memberships for all active users.
+  // Returns a grouped map: user_id -> list of workspace summaries.
+  // Used by the user list page to render workspace chip cells.
+  rpc ListWorkspacesForUsers(ListWorkspacesForUsersRequest)
+    returns (ListWorkspacesForUsersResponse);
 }
 
 message CreateWorkspaceUserRequest {
@@ -144,6 +150,29 @@ message GetWorkspaceUserItemPageDataRequest {
 // Item response
 message GetWorkspaceUserItemPageDataResponse {
   WorkspaceUser workspace_user = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+// ListWorkspacesForUsers — batch workspace membership lookup
+message ListWorkspacesForUsersRequest {
+  // No fields needed; workspace_id is extracted from context.
+}
+
+// A single workspace's display-only summary.
+message WorkspaceSummary {
+  string id = 1;
+  string name = 2;
+}
+
+// Workspace memberships for a single user.
+message UserWorkspaces {
+  string user_id = 1;
+  repeated WorkspaceSummary workspaces = 2;
+}
+
+message ListWorkspacesForUsersResponse {
+  repeated UserWorkspaces user_workspaces = 1;
   bool success = 2;
   optional domain.common.v1.Error error = 3;
 }

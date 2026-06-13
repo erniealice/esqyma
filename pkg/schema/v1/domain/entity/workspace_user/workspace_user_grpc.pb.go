@@ -26,6 +26,7 @@ const (
 	WorkspaceUserDomainService_ListWorkspaceUsers_FullMethodName           = "/domain.entity.v1.WorkspaceUserDomainService/ListWorkspaceUsers"
 	WorkspaceUserDomainService_GetWorkspaceUserListPageData_FullMethodName = "/domain.entity.v1.WorkspaceUserDomainService/GetWorkspaceUserListPageData"
 	WorkspaceUserDomainService_GetWorkspaceUserItemPageData_FullMethodName = "/domain.entity.v1.WorkspaceUserDomainService/GetWorkspaceUserItemPageData"
+	WorkspaceUserDomainService_ListWorkspacesForUsers_FullMethodName       = "/domain.entity.v1.WorkspaceUserDomainService/ListWorkspacesForUsers"
 )
 
 // WorkspaceUserDomainServiceClient is the client API for WorkspaceUserDomainService service.
@@ -41,6 +42,10 @@ type WorkspaceUserDomainServiceClient interface {
 	GetWorkspaceUserListPageData(ctx context.Context, in *GetWorkspaceUserListPageDataRequest, opts ...grpc.CallOption) (*GetWorkspaceUserListPageDataResponse, error)
 	// Enhanced item view
 	GetWorkspaceUserItemPageData(ctx context.Context, in *GetWorkspaceUserItemPageDataRequest, opts ...grpc.CallOption) (*GetWorkspaceUserItemPageDataResponse, error)
+	// Batch-load workspace memberships for all active users.
+	// Returns a grouped map: user_id -> list of workspace summaries.
+	// Used by the user list page to render workspace chip cells.
+	ListWorkspacesForUsers(ctx context.Context, in *ListWorkspacesForUsersRequest, opts ...grpc.CallOption) (*ListWorkspacesForUsersResponse, error)
 }
 
 type workspaceUserDomainServiceClient struct {
@@ -121,6 +126,16 @@ func (c *workspaceUserDomainServiceClient) GetWorkspaceUserItemPageData(ctx cont
 	return out, nil
 }
 
+func (c *workspaceUserDomainServiceClient) ListWorkspacesForUsers(ctx context.Context, in *ListWorkspacesForUsersRequest, opts ...grpc.CallOption) (*ListWorkspacesForUsersResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(ListWorkspacesForUsersResponse)
+	err := c.cc.Invoke(ctx, WorkspaceUserDomainService_ListWorkspacesForUsers_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // WorkspaceUserDomainServiceServer is the server API for WorkspaceUserDomainService service.
 // All implementations must embed UnimplementedWorkspaceUserDomainServiceServer
 // for forward compatibility.
@@ -134,6 +149,10 @@ type WorkspaceUserDomainServiceServer interface {
 	GetWorkspaceUserListPageData(context.Context, *GetWorkspaceUserListPageDataRequest) (*GetWorkspaceUserListPageDataResponse, error)
 	// Enhanced item view
 	GetWorkspaceUserItemPageData(context.Context, *GetWorkspaceUserItemPageDataRequest) (*GetWorkspaceUserItemPageDataResponse, error)
+	// Batch-load workspace memberships for all active users.
+	// Returns a grouped map: user_id -> list of workspace summaries.
+	// Used by the user list page to render workspace chip cells.
+	ListWorkspacesForUsers(context.Context, *ListWorkspacesForUsersRequest) (*ListWorkspacesForUsersResponse, error)
 	mustEmbedUnimplementedWorkspaceUserDomainServiceServer()
 }
 
@@ -164,6 +183,9 @@ func (UnimplementedWorkspaceUserDomainServiceServer) GetWorkspaceUserListPageDat
 }
 func (UnimplementedWorkspaceUserDomainServiceServer) GetWorkspaceUserItemPageData(context.Context, *GetWorkspaceUserItemPageDataRequest) (*GetWorkspaceUserItemPageDataResponse, error) {
 	return nil, status.Error(codes.Unimplemented, "method GetWorkspaceUserItemPageData not implemented")
+}
+func (UnimplementedWorkspaceUserDomainServiceServer) ListWorkspacesForUsers(context.Context, *ListWorkspacesForUsersRequest) (*ListWorkspacesForUsersResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method ListWorkspacesForUsers not implemented")
 }
 func (UnimplementedWorkspaceUserDomainServiceServer) mustEmbedUnimplementedWorkspaceUserDomainServiceServer() {
 }
@@ -313,6 +335,24 @@ func _WorkspaceUserDomainService_GetWorkspaceUserItemPageData_Handler(srv interf
 	return interceptor(ctx, in, info, handler)
 }
 
+func _WorkspaceUserDomainService_ListWorkspacesForUsers_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ListWorkspacesForUsersRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(WorkspaceUserDomainServiceServer).ListWorkspacesForUsers(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: WorkspaceUserDomainService_ListWorkspacesForUsers_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(WorkspaceUserDomainServiceServer).ListWorkspacesForUsers(ctx, req.(*ListWorkspacesForUsersRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // WorkspaceUserDomainService_ServiceDesc is the grpc.ServiceDesc for WorkspaceUserDomainService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -347,6 +387,10 @@ var WorkspaceUserDomainService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "GetWorkspaceUserItemPageData",
 			Handler:    _WorkspaceUserDomainService_GetWorkspaceUserItemPageData_Handler,
+		},
+		{
+			MethodName: "ListWorkspacesForUsers",
+			Handler:    _WorkspaceUserDomainService_ListWorkspacesForUsers_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
