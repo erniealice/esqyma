@@ -814,6 +814,308 @@ func (x *SwitchPrincipalResponse) GetRedirectUrl() string {
 	return ""
 }
 
+type ResolvePrincipalsRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	UserId        string                 `protobuf:"bytes,1,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *ResolvePrincipalsRequest) Reset() {
+	*x = ResolvePrincipalsRequest{}
+	mi := &file_service_auth_session_proto_msgTypes[11]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *ResolvePrincipalsRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ResolvePrincipalsRequest) ProtoMessage() {}
+
+func (x *ResolvePrincipalsRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_service_auth_session_proto_msgTypes[11]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ResolvePrincipalsRequest.ProtoReflect.Descriptor instead.
+func (*ResolvePrincipalsRequest) Descriptor() ([]byte, []int) {
+	return file_service_auth_session_proto_rawDescGZIP(), []int{11}
+}
+
+func (x *ResolvePrincipalsRequest) GetUserId() string {
+	if x != nil {
+		return x.UserId
+	}
+	return ""
+}
+
+type ResolvePrincipalsResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Principals    []*Principal           `protobuf:"bytes,1,rep,name=principals,proto3" json:"principals,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *ResolvePrincipalsResponse) Reset() {
+	*x = ResolvePrincipalsResponse{}
+	mi := &file_service_auth_session_proto_msgTypes[12]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *ResolvePrincipalsResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ResolvePrincipalsResponse) ProtoMessage() {}
+
+func (x *ResolvePrincipalsResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_service_auth_session_proto_msgTypes[12]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ResolvePrincipalsResponse.ProtoReflect.Descriptor instead.
+func (*ResolvePrincipalsResponse) Descriptor() ([]byte, []int) {
+	return file_service_auth_session_proto_rawDescGZIP(), []int{12}
+}
+
+func (x *ResolvePrincipalsResponse) GetPrincipals() []*Principal {
+	if x != nil {
+		return x.Principals
+	}
+	return nil
+}
+
+// EnumerateBindingsInWorkspace — enumerate every active binding a user holds
+// in a specific workspace. Used by ResolveBindingInWorkspace to build the
+// candidate list before pickBindingForSession applies the A3 resolution policy.
+type EnumerateBindingsRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	UserId        string                 `protobuf:"bytes,1,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty"`
+	WorkspaceId   string                 `protobuf:"bytes,2,opt,name=workspace_id,json=workspaceId,proto3" json:"workspace_id,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *EnumerateBindingsRequest) Reset() {
+	*x = EnumerateBindingsRequest{}
+	mi := &file_service_auth_session_proto_msgTypes[13]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *EnumerateBindingsRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*EnumerateBindingsRequest) ProtoMessage() {}
+
+func (x *EnumerateBindingsRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_service_auth_session_proto_msgTypes[13]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use EnumerateBindingsRequest.ProtoReflect.Descriptor instead.
+func (*EnumerateBindingsRequest) Descriptor() ([]byte, []int) {
+	return file_service_auth_session_proto_rawDescGZIP(), []int{13}
+}
+
+func (x *EnumerateBindingsRequest) GetUserId() string {
+	if x != nil {
+		return x.UserId
+	}
+	return ""
+}
+
+func (x *EnumerateBindingsRequest) GetWorkspaceId() string {
+	if x != nil {
+		return x.WorkspaceId
+	}
+	return ""
+}
+
+type EnumerateBindingsResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Bindings      []*Principal           `protobuf:"bytes,1,rep,name=bindings,proto3" json:"bindings,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *EnumerateBindingsResponse) Reset() {
+	*x = EnumerateBindingsResponse{}
+	mi := &file_service_auth_session_proto_msgTypes[14]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *EnumerateBindingsResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*EnumerateBindingsResponse) ProtoMessage() {}
+
+func (x *EnumerateBindingsResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_service_auth_session_proto_msgTypes[14]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use EnumerateBindingsResponse.ProtoReflect.Descriptor instead.
+func (*EnumerateBindingsResponse) Descriptor() ([]byte, []int) {
+	return file_service_auth_session_proto_rawDescGZIP(), []int{14}
+}
+
+func (x *EnumerateBindingsResponse) GetBindings() []*Principal {
+	if x != nil {
+		return x.Bindings
+	}
+	return nil
+}
+
+// LookupSessionPrincipal — read (principal_type, principal_id, acting_as_*)
+// from the session row by token. Replaces composition/session_principal.go's
+// raw-SQL lookupSessionPrincipalFull.
+type LookupSessionPrincipalRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Token         string                 `protobuf:"bytes,1,opt,name=token,proto3" json:"token,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *LookupSessionPrincipalRequest) Reset() {
+	*x = LookupSessionPrincipalRequest{}
+	mi := &file_service_auth_session_proto_msgTypes[15]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *LookupSessionPrincipalRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*LookupSessionPrincipalRequest) ProtoMessage() {}
+
+func (x *LookupSessionPrincipalRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_service_auth_session_proto_msgTypes[15]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use LookupSessionPrincipalRequest.ProtoReflect.Descriptor instead.
+func (*LookupSessionPrincipalRequest) Descriptor() ([]byte, []int) {
+	return file_service_auth_session_proto_rawDescGZIP(), []int{15}
+}
+
+func (x *LookupSessionPrincipalRequest) GetToken() string {
+	if x != nil {
+		return x.Token
+	}
+	return ""
+}
+
+type LookupSessionPrincipalResponse struct {
+	state              protoimpl.MessageState       `protogen:"open.v1"`
+	Kind               principal_type.PrincipalType `protobuf:"varint,1,opt,name=kind,proto3,enum=domain.entity.v1.PrincipalType" json:"kind,omitempty"`
+	PrincipalId        string                       `protobuf:"bytes,2,opt,name=principal_id,json=principalId,proto3" json:"principal_id,omitempty"`
+	ActingAsClientId   string                       `protobuf:"bytes,3,opt,name=acting_as_client_id,json=actingAsClientId,proto3" json:"acting_as_client_id,omitempty"`
+	ActingAsSupplierId string                       `protobuf:"bytes,4,opt,name=acting_as_supplier_id,json=actingAsSupplierId,proto3" json:"acting_as_supplier_id,omitempty"`
+	unknownFields      protoimpl.UnknownFields
+	sizeCache          protoimpl.SizeCache
+}
+
+func (x *LookupSessionPrincipalResponse) Reset() {
+	*x = LookupSessionPrincipalResponse{}
+	mi := &file_service_auth_session_proto_msgTypes[16]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *LookupSessionPrincipalResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*LookupSessionPrincipalResponse) ProtoMessage() {}
+
+func (x *LookupSessionPrincipalResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_service_auth_session_proto_msgTypes[16]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use LookupSessionPrincipalResponse.ProtoReflect.Descriptor instead.
+func (*LookupSessionPrincipalResponse) Descriptor() ([]byte, []int) {
+	return file_service_auth_session_proto_rawDescGZIP(), []int{16}
+}
+
+func (x *LookupSessionPrincipalResponse) GetKind() principal_type.PrincipalType {
+	if x != nil {
+		return x.Kind
+	}
+	return principal_type.PrincipalType(0)
+}
+
+func (x *LookupSessionPrincipalResponse) GetPrincipalId() string {
+	if x != nil {
+		return x.PrincipalId
+	}
+	return ""
+}
+
+func (x *LookupSessionPrincipalResponse) GetActingAsClientId() string {
+	if x != nil {
+		return x.ActingAsClientId
+	}
+	return ""
+}
+
+func (x *LookupSessionPrincipalResponse) GetActingAsSupplierId() string {
+	if x != nil {
+		return x.ActingAsSupplierId
+	}
+	return ""
+}
+
 var File_service_auth_session_proto protoreflect.FileDescriptor
 
 const file_service_auth_session_proto_rawDesc = "" +
@@ -876,7 +1178,25 @@ const file_service_auth_session_proto_rawDesc = "" +
 	"\rrequire_audit\x18\f \x01(\bR\frequireAudit\"Y\n" +
 	"\x17SwitchPrincipalResponse\x12\x1b\n" +
 	"\tnew_token\x18\x01 \x01(\tR\bnewToken\x12!\n" +
-	"\fredirect_url\x18\x02 \x01(\tR\vredirectUrl*\x99\x02\n" +
+	"\fredirect_url\x18\x02 \x01(\tR\vredirectUrl\"3\n" +
+	"\x18ResolvePrincipalsRequest\x12\x17\n" +
+	"\auser_id\x18\x01 \x01(\tR\x06userId\"W\n" +
+	"\x19ResolvePrincipalsResponse\x12:\n" +
+	"\n" +
+	"principals\x18\x01 \x03(\v2\x1a.service.auth.v1.PrincipalR\n" +
+	"principals\"V\n" +
+	"\x18EnumerateBindingsRequest\x12\x17\n" +
+	"\auser_id\x18\x01 \x01(\tR\x06userId\x12!\n" +
+	"\fworkspace_id\x18\x02 \x01(\tR\vworkspaceId\"S\n" +
+	"\x19EnumerateBindingsResponse\x126\n" +
+	"\bbindings\x18\x01 \x03(\v2\x1a.service.auth.v1.PrincipalR\bbindings\"5\n" +
+	"\x1dLookupSessionPrincipalRequest\x12\x14\n" +
+	"\x05token\x18\x01 \x01(\tR\x05token\"\xda\x01\n" +
+	"\x1eLookupSessionPrincipalResponse\x123\n" +
+	"\x04kind\x18\x01 \x01(\x0e2\x1f.domain.entity.v1.PrincipalTypeR\x04kind\x12!\n" +
+	"\fprincipal_id\x18\x02 \x01(\tR\vprincipalId\x12-\n" +
+	"\x13acting_as_client_id\x18\x03 \x01(\tR\x10actingAsClientId\x121\n" +
+	"\x15acting_as_supplier_id\x18\x04 \x01(\tR\x12actingAsSupplierId*\x99\x02\n" +
 	"\rSwitchUseCase\x12\x1f\n" +
 	"\x1bSWITCH_USE_CASE_UNSPECIFIED\x10\x00\x12\x1e\n" +
 	"\x1aSWITCH_USE_CASE_URL_ROTATE\x10\x01\x12)\n" +
@@ -900,33 +1220,42 @@ func file_service_auth_session_proto_rawDescGZIP() []byte {
 }
 
 var file_service_auth_session_proto_enumTypes = make([]protoimpl.EnumInfo, 1)
-var file_service_auth_session_proto_msgTypes = make([]protoimpl.MessageInfo, 11)
+var file_service_auth_session_proto_msgTypes = make([]protoimpl.MessageInfo, 17)
 var file_service_auth_session_proto_goTypes = []any{
-	(SwitchUseCase)(0),                  // 0: service.auth.v1.SwitchUseCase
-	(*AuthenticateSessionRequest)(nil),  // 1: service.auth.v1.AuthenticateSessionRequest
-	(*AuthIdentity)(nil),                // 2: service.auth.v1.AuthIdentity
-	(*AuthenticateSessionResponse)(nil), // 3: service.auth.v1.AuthenticateSessionResponse
-	(*IssueSessionRequest)(nil),         // 4: service.auth.v1.IssueSessionRequest
-	(*IssueSessionResponse)(nil),        // 5: service.auth.v1.IssueSessionResponse
-	(*InvalidateSessionRequest)(nil),    // 6: service.auth.v1.InvalidateSessionRequest
-	(*InvalidateSessionResponse)(nil),   // 7: service.auth.v1.InvalidateSessionResponse
-	(*ActingAsTarget)(nil),              // 8: service.auth.v1.ActingAsTarget
-	(*Principal)(nil),                   // 9: service.auth.v1.Principal
-	(*SwitchPrincipalRequest)(nil),      // 10: service.auth.v1.SwitchPrincipalRequest
-	(*SwitchPrincipalResponse)(nil),     // 11: service.auth.v1.SwitchPrincipalResponse
-	(principal_type.PrincipalType)(0),   // 12: domain.entity.v1.PrincipalType
+	(SwitchUseCase)(0),                     // 0: service.auth.v1.SwitchUseCase
+	(*AuthenticateSessionRequest)(nil),     // 1: service.auth.v1.AuthenticateSessionRequest
+	(*AuthIdentity)(nil),                   // 2: service.auth.v1.AuthIdentity
+	(*AuthenticateSessionResponse)(nil),    // 3: service.auth.v1.AuthenticateSessionResponse
+	(*IssueSessionRequest)(nil),            // 4: service.auth.v1.IssueSessionRequest
+	(*IssueSessionResponse)(nil),           // 5: service.auth.v1.IssueSessionResponse
+	(*InvalidateSessionRequest)(nil),       // 6: service.auth.v1.InvalidateSessionRequest
+	(*InvalidateSessionResponse)(nil),      // 7: service.auth.v1.InvalidateSessionResponse
+	(*ActingAsTarget)(nil),                 // 8: service.auth.v1.ActingAsTarget
+	(*Principal)(nil),                      // 9: service.auth.v1.Principal
+	(*SwitchPrincipalRequest)(nil),         // 10: service.auth.v1.SwitchPrincipalRequest
+	(*SwitchPrincipalResponse)(nil),        // 11: service.auth.v1.SwitchPrincipalResponse
+	(*ResolvePrincipalsRequest)(nil),       // 12: service.auth.v1.ResolvePrincipalsRequest
+	(*ResolvePrincipalsResponse)(nil),      // 13: service.auth.v1.ResolvePrincipalsResponse
+	(*EnumerateBindingsRequest)(nil),       // 14: service.auth.v1.EnumerateBindingsRequest
+	(*EnumerateBindingsResponse)(nil),      // 15: service.auth.v1.EnumerateBindingsResponse
+	(*LookupSessionPrincipalRequest)(nil),  // 16: service.auth.v1.LookupSessionPrincipalRequest
+	(*LookupSessionPrincipalResponse)(nil), // 17: service.auth.v1.LookupSessionPrincipalResponse
+	(principal_type.PrincipalType)(0),      // 18: domain.entity.v1.PrincipalType
 }
 var file_service_auth_session_proto_depIdxs = []int32{
 	2,  // 0: service.auth.v1.AuthenticateSessionResponse.identity:type_name -> service.auth.v1.AuthIdentity
-	12, // 1: service.auth.v1.Principal.type:type_name -> domain.entity.v1.PrincipalType
+	18, // 1: service.auth.v1.Principal.type:type_name -> domain.entity.v1.PrincipalType
 	8,  // 2: service.auth.v1.Principal.acting_as_targets:type_name -> service.auth.v1.ActingAsTarget
 	9,  // 3: service.auth.v1.SwitchPrincipalRequest.target_principal:type_name -> service.auth.v1.Principal
 	0,  // 4: service.auth.v1.SwitchPrincipalRequest.use_case:type_name -> service.auth.v1.SwitchUseCase
-	5,  // [5:5] is the sub-list for method output_type
-	5,  // [5:5] is the sub-list for method input_type
-	5,  // [5:5] is the sub-list for extension type_name
-	5,  // [5:5] is the sub-list for extension extendee
-	0,  // [0:5] is the sub-list for field type_name
+	9,  // 5: service.auth.v1.ResolvePrincipalsResponse.principals:type_name -> service.auth.v1.Principal
+	9,  // 6: service.auth.v1.EnumerateBindingsResponse.bindings:type_name -> service.auth.v1.Principal
+	18, // 7: service.auth.v1.LookupSessionPrincipalResponse.kind:type_name -> domain.entity.v1.PrincipalType
+	8,  // [8:8] is the sub-list for method output_type
+	8,  // [8:8] is the sub-list for method input_type
+	8,  // [8:8] is the sub-list for extension type_name
+	8,  // [8:8] is the sub-list for extension extendee
+	0,  // [0:8] is the sub-list for field type_name
 }
 
 func init() { file_service_auth_session_proto_init() }
@@ -940,7 +1269,7 @@ func file_service_auth_session_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_service_auth_session_proto_rawDesc), len(file_service_auth_session_proto_rawDesc)),
 			NumEnums:      1,
-			NumMessages:   11,
+			NumMessages:   17,
 			NumExtensions: 0,
 			NumServices:   0,
 		},

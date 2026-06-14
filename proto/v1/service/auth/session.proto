@@ -137,3 +137,49 @@ message SwitchPrincipalResponse {
   // RedirectURL the handler should redirect to.
   string redirect_url = 2;
 }
+
+// ============================================================================
+// ResolvePrincipals — added 2026-06-14 by principal_loader → typed-stack migration.
+//
+// Replaces apps/service-admin/internal/infrastructure/input/http/principal_loader.go's
+// DBPrincipalLoader.Resolve (login flow: enumerate ALL bindings for a user
+// across all workspaces) and EnumerateBindingsInWorkspace (workspace_path
+// middleware: enumerate bindings in a single workspace).
+//
+// No ActionGatekeeper — these run pre-auth (login flow) or in middleware
+// (before handlers). See package auth usecases.go invariant.
+// ============================================================================
+
+message ResolvePrincipalsRequest {
+  string user_id = 1;
+}
+
+message ResolvePrincipalsResponse {
+  repeated Principal principals = 1;
+}
+
+// EnumerateBindingsInWorkspace — enumerate every active binding a user holds
+// in a specific workspace. Used by ResolveBindingInWorkspace to build the
+// candidate list before pickBindingForSession applies the A3 resolution policy.
+message EnumerateBindingsRequest {
+  string user_id = 1;
+  string workspace_id = 2;
+}
+
+message EnumerateBindingsResponse {
+  repeated Principal bindings = 1;
+}
+
+// LookupSessionPrincipal — read (principal_type, principal_id, acting_as_*)
+// from the session row by token. Replaces composition/session_principal.go's
+// raw-SQL lookupSessionPrincipalFull.
+message LookupSessionPrincipalRequest {
+  string token = 1;
+}
+
+message LookupSessionPrincipalResponse {
+  domain.entity.v1.PrincipalType kind = 1;
+  string principal_id = 2;
+  string acting_as_client_id = 3;
+  string acting_as_supplier_id = 4;
+}
