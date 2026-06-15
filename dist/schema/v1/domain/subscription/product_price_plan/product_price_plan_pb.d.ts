@@ -106,6 +106,22 @@ export type ProductPricePlan = Message<"domain.subscription.v1.ProductPricePlan"
      * @generated from field: optional string withholding_class_id = 21;
      */
     withholdingClassId?: string;
+    /**
+     * Performance Evaluation §E1 — the Offering's advertised rate band (display/quote).
+     * billing_amount (field 11) remains the operative contracted rate; the band is validated
+     * at config time (a seat's contracted_amount must fall within [min, max] when both set).
+     *
+     * centavos — advertised band floor
+     *
+     * @generated from field: optional int64 billing_amount_min = 22;
+     */
+    billingAmountMin?: bigint;
+    /**
+     * centavos — advertised band ceiling
+     *
+     * @generated from field: optional int64 billing_amount_max = 23;
+     */
+    billingAmountMax?: bigint;
 };
 /**
  * Describes the message domain.subscription.v1.ProductPricePlan.

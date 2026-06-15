@@ -47,6 +47,12 @@ export type FieldOptions = Message<"options.v1.FieldOptions"> & {
      * @generated from field: string sql_type = 6;
      */
     sqlType: string;
+    /**
+     * Exclude from the persisted column set: computed/display-only mirror of another field.
+     *
+     * @generated from field: bool ignore = 7;
+     */
+    ignore: boolean;
 };
 /**
  * Describes the message options.v1.FieldOptions.

@@ -12,7 +12,7 @@ import type { Message } from "@bufbuild/protobuf";
  * Describes the file service/auth/session.proto.
  */
 export const file_service_auth_session: GenFile = /*@__PURE__*/
-  fileDesc("ChpzZXJ2aWNlL2F1dGgvc2Vzc2lvbi5wcm90bxIPc2VydmljZS5hdXRoLnYxIisKGkF1dGhlbnRpY2F0ZVNlc3Npb25SZXF1ZXN0Eg0KBXRva2VuGAEgASgJIooBCgxBdXRoSWRlbnRpdHkSDwoHdXNlcl9pZBgBIAEoCRINCgVlbWFpbBgCIAEoCRIZChF3b3Jrc3BhY2VfdXNlcl9pZBgDIAEoCRIUCgx3b3Jrc3BhY2VfaWQYBCABKAkSDQoFdG9rZW4YBSABKAkSGgoSZXhwaXJlc19hdF91bml4X21zGAYgASgDIk4KG0F1dGhlbnRpY2F0ZVNlc3Npb25SZXNwb25zZRIvCghpZGVudGl0eRgBIAEoCzIdLnNlcnZpY2UuYXV0aC52MS5BdXRoSWRlbnRpdHkiVwoTSXNzdWVTZXNzaW9uUmVxdWVzdBIPCgd1c2VyX2lkGAEgASgJEhkKEXdvcmtzcGFjZV91c2VyX2lkGAIgASgJEhQKDHdvcmtzcGFjZV9pZBgDIAEoCSKGAQoUSXNzdWVTZXNzaW9uUmVzcG9uc2USDQoFdG9rZW4YASABKAkSEgoKc2Vzc2lvbl9pZBgCIAEoCRIaChJleHBpcmVzX2F0X3VuaXhfbXMYAyABKAMSGQoRd29ya3NwYWNlX3VzZXJfaWQYBCABKAkSFAoMd29ya3NwYWNlX2lkGAUgASgJIj0KGEludmFsaWRhdGVTZXNzaW9uUmVxdWVzdBINCgV0b2tlbhgBIAEoCRISCgpzZXNzaW9uX2lkGAIgASgJIjAKGUludmFsaWRhdGVTZXNzaW9uUmVzcG9uc2USEwoLaW52YWxpZGF0ZWQYASABKAgiSAoOQWN0aW5nQXNUYXJnZXQSCgoCaWQYASABKAkSFAoMd29ya3NwYWNlX2lkGAIgASgJEhQKDGRpc3BsYXlfbmFtZRgDIAEoCSK4AQoJUHJpbmNpcGFsEi0KBHR5cGUYASABKA4yHy5kb21haW4uZW50aXR5LnYxLlByaW5jaXBhbFR5cGUSFAoMcHJpbmNpcGFsX2lkGAIgASgJEhQKDHdvcmtzcGFjZV9pZBgDIAEoCRIUCgxkaXNwbGF5X25hbWUYBCABKAkSOgoRYWN0aW5nX2FzX3RhcmdldHMYBSADKAsyHy5zZXJ2aWNlLmF1dGgudjEuQWN0aW5nQXNUYXJnZXQi2QIKFlN3aXRjaFByaW5jaXBhbFJlcXVlc3QSDwoHdXNlcl9pZBgBIAEoCRINCgV0b2tlbhgCIAEoCRI0ChB0YXJnZXRfcHJpbmNpcGFsGAMgASgLMhouc2VydmljZS5hdXRoLnYxLlByaW5jaXBhbBIbChNhY3RpbmdfYXNfY2xpZW50X2lkGAQgASgJEh0KFWFjdGluZ19hc19zdXBwbGllcl9pZBgFIAEoCRIwCgh1c2VfY2FzZRgGIAEoDjIeLnNlcnZpY2UuYXV0aC52MS5Td2l0Y2hVc2VDYXNlEhMKC3JlcXVlc3RfdXJsGAcgASgJEg8KB3JlZmVyZXIYCCABKAkSFgoOc2VjX2ZldGNoX3NpdGUYCSABKAkSEgoKdXNlcl9hZ2VudBgKIAEoCRISCgp1cmxfZHJpdmVuGAsgASgIEhUKDXJlcXVpcmVfYXVkaXQYDCABKAgiQgoXU3dpdGNoUHJpbmNpcGFsUmVzcG9uc2USEQoJbmV3X3Rva2VuGAEgASgJEhQKDHJlZGlyZWN0X3VybBgCIAEoCSqZAgoNU3dpdGNoVXNlQ2FzZRIfChtTV0lUQ0hfVVNFX0NBU0VfVU5TUEVDSUZJRUQQABIeChpTV0lUQ0hfVVNFX0NBU0VfVVJMX1JPVEFURRABEikKJVNXSVRDSF9VU0VfQ0FTRV9VUkxfQUNUSU5HX0FTX0lOUExBQ0UQAhIpCiVTV0lUQ0hfVVNFX0NBU0VfVVJMX1BSSU5DSVBBTF9JTlBMQUNFEAMSIwofU1dJVENIX1VTRV9DQVNFX0VYUExJQ0lUX1JPVEFURRAEEiQKIFNXSVRDSF9VU0VfQ0FTRV9FWFBMSUNJVF9JTlBMQUNFEAUSJgoiU1dJVENIX1VTRV9DQVNFX0VYUExJQ0lUX0FDVElOR19BUxAGQsEBChNjb20uc2VydmljZS5hdXRoLnYxQgxTZXNzaW9uUHJvdG9QAVo+Z2l0aHViLmNvbS9lcm5pZWFsaWNlL2VzcXltYS9wa2cvc2NoZW1hL3YxL3NlcnZpY2UvYXV0aDthdXRodjGiAgNTQViqAg9TZXJ2aWNlLkF1dGguVjHKAg9TZXJ2aWNlXEF1dGhcVjHiAhtTZXJ2aWNlXEF1dGhcVjFcR1BCTWV0YWRhdGHqAhFTZXJ2aWNlOjpBdXRoOjpWMWIGcHJvdG8z", [file_domain_entity_principal_type_principal_type]);
+  fileDesc("ChpzZXJ2aWNlL2F1dGgvc2Vzc2lvbi5wcm90bxIPc2VydmljZS5hdXRoLnYxIisKGkF1dGhlbnRpY2F0ZVNlc3Npb25SZXF1ZXN0Eg0KBXRva2VuGAEgASgJIooBCgxBdXRoSWRlbnRpdHkSDwoHdXNlcl9pZBgBIAEoCRINCgVlbWFpbBgCIAEoCRIZChF3b3Jrc3BhY2VfdXNlcl9pZBgDIAEoCRIUCgx3b3Jrc3BhY2VfaWQYBCABKAkSDQoFdG9rZW4YBSABKAkSGgoSZXhwaXJlc19hdF91bml4X21zGAYgASgDIk4KG0F1dGhlbnRpY2F0ZVNlc3Npb25SZXNwb25zZRIvCghpZGVudGl0eRgBIAEoCzIdLnNlcnZpY2UuYXV0aC52MS5BdXRoSWRlbnRpdHkiVwoTSXNzdWVTZXNzaW9uUmVxdWVzdBIPCgd1c2VyX2lkGAEgASgJEhkKEXdvcmtzcGFjZV91c2VyX2lkGAIgASgJEhQKDHdvcmtzcGFjZV9pZBgDIAEoCSKGAQoUSXNzdWVTZXNzaW9uUmVzcG9uc2USDQoFdG9rZW4YASABKAkSEgoKc2Vzc2lvbl9pZBgCIAEoCRIaChJleHBpcmVzX2F0X3VuaXhfbXMYAyABKAMSGQoRd29ya3NwYWNlX3VzZXJfaWQYBCABKAkSFAoMd29ya3NwYWNlX2lkGAUgASgJIj0KGEludmFsaWRhdGVTZXNzaW9uUmVxdWVzdBINCgV0b2tlbhgBIAEoCRISCgpzZXNzaW9uX2lkGAIgASgJIjAKGUludmFsaWRhdGVTZXNzaW9uUmVzcG9uc2USEwoLaW52YWxpZGF0ZWQYASABKAgiSAoOQWN0aW5nQXNUYXJnZXQSCgoCaWQYASABKAkSFAoMd29ya3NwYWNlX2lkGAIgASgJEhQKDGRpc3BsYXlfbmFtZRgDIAEoCSK4AQoJUHJpbmNpcGFsEi0KBHR5cGUYASABKA4yHy5kb21haW4uZW50aXR5LnYxLlByaW5jaXBhbFR5cGUSFAoMcHJpbmNpcGFsX2lkGAIgASgJEhQKDHdvcmtzcGFjZV9pZBgDIAEoCRIUCgxkaXNwbGF5X25hbWUYBCABKAkSOgoRYWN0aW5nX2FzX3RhcmdldHMYBSADKAsyHy5zZXJ2aWNlLmF1dGgudjEuQWN0aW5nQXNUYXJnZXQi2QIKFlN3aXRjaFByaW5jaXBhbFJlcXVlc3QSDwoHdXNlcl9pZBgBIAEoCRINCgV0b2tlbhgCIAEoCRI0ChB0YXJnZXRfcHJpbmNpcGFsGAMgASgLMhouc2VydmljZS5hdXRoLnYxLlByaW5jaXBhbBIbChNhY3RpbmdfYXNfY2xpZW50X2lkGAQgASgJEh0KFWFjdGluZ19hc19zdXBwbGllcl9pZBgFIAEoCRIwCgh1c2VfY2FzZRgGIAEoDjIeLnNlcnZpY2UuYXV0aC52MS5Td2l0Y2hVc2VDYXNlEhMKC3JlcXVlc3RfdXJsGAcgASgJEg8KB3JlZmVyZXIYCCABKAkSFgoOc2VjX2ZldGNoX3NpdGUYCSABKAkSEgoKdXNlcl9hZ2VudBgKIAEoCRISCgp1cmxfZHJpdmVuGAsgASgIEhUKDXJlcXVpcmVfYXVkaXQYDCABKAgiQgoXU3dpdGNoUHJpbmNpcGFsUmVzcG9uc2USEQoJbmV3X3Rva2VuGAEgASgJEhQKDHJlZGlyZWN0X3VybBgCIAEoCSIrChhSZXNvbHZlUHJpbmNpcGFsc1JlcXVlc3QSDwoHdXNlcl9pZBgBIAEoCSJLChlSZXNvbHZlUHJpbmNpcGFsc1Jlc3BvbnNlEi4KCnByaW5jaXBhbHMYASADKAsyGi5zZXJ2aWNlLmF1dGgudjEuUHJpbmNpcGFsIkEKGEVudW1lcmF0ZUJpbmRpbmdzUmVxdWVzdBIPCgd1c2VyX2lkGAEgASgJEhQKDHdvcmtzcGFjZV9pZBgCIAEoCSJJChlFbnVtZXJhdGVCaW5kaW5nc1Jlc3BvbnNlEiwKCGJpbmRpbmdzGAEgAygLMhouc2VydmljZS5hdXRoLnYxLlByaW5jaXBhbCIuCh1Mb29rdXBTZXNzaW9uUHJpbmNpcGFsUmVxdWVzdBINCgV0b2tlbhgBIAEoCSKhAQoeTG9va3VwU2Vzc2lvblByaW5jaXBhbFJlc3BvbnNlEi0KBGtpbmQYASABKA4yHy5kb21haW4uZW50aXR5LnYxLlByaW5jaXBhbFR5cGUSFAoMcHJpbmNpcGFsX2lkGAIgASgJEhsKE2FjdGluZ19hc19jbGllbnRfaWQYAyABKAkSHQoVYWN0aW5nX2FzX3N1cHBsaWVyX2lkGAQgASgJKpkCCg1Td2l0Y2hVc2VDYXNlEh8KG1NXSVRDSF9VU0VfQ0FTRV9VTlNQRUNJRklFRBAAEh4KGlNXSVRDSF9VU0VfQ0FTRV9VUkxfUk9UQVRFEAESKQolU1dJVENIX1VTRV9DQVNFX1VSTF9BQ1RJTkdfQVNfSU5QTEFDRRACEikKJVNXSVRDSF9VU0VfQ0FTRV9VUkxfUFJJTkNJUEFMX0lOUExBQ0UQAxIjCh9TV0lUQ0hfVVNFX0NBU0VfRVhQTElDSVRfUk9UQVRFEAQSJAogU1dJVENIX1VTRV9DQVNFX0VYUExJQ0lUX0lOUExBQ0UQBRImCiJTV0lUQ0hfVVNFX0NBU0VfRVhQTElDSVRfQUNUSU5HX0FTEAZCwQEKE2NvbS5zZXJ2aWNlLmF1dGgudjFCDFNlc3Npb25Qcm90b1ABWj5naXRodWIuY29tL2VybmllYWxpY2UvZXNxeW1hL3BrZy9zY2hlbWEvdjEvc2VydmljZS9hdXRoO2F1dGh2MaICA1NBWKoCD1NlcnZpY2UuQXV0aC5WMcoCD1NlcnZpY2VcQXV0aFxWMeICG1NlcnZpY2VcQXV0aFxWMVxHUEJNZXRhZGF0YeoCEVNlcnZpY2U6OkF1dGg6OlYxYgZwcm90bzM", [file_domain_entity_principal_type_principal_type]);
 
 /**
  * @generated from message service.auth.v1.AuthenticateSessionRequest
@@ -375,6 +375,136 @@ export type SwitchPrincipalResponse = Message<"service.auth.v1.SwitchPrincipalRe
  */
 export const SwitchPrincipalResponseSchema: GenMessage<SwitchPrincipalResponse> = /*@__PURE__*/
   messageDesc(file_service_auth_session, 10);
+
+/**
+ * @generated from message service.auth.v1.ResolvePrincipalsRequest
+ */
+export type ResolvePrincipalsRequest = Message<"service.auth.v1.ResolvePrincipalsRequest"> & {
+  /**
+   * @generated from field: string user_id = 1;
+   */
+  userId: string;
+};
+
+/**
+ * Describes the message service.auth.v1.ResolvePrincipalsRequest.
+ * Use `create(ResolvePrincipalsRequestSchema)` to create a new message.
+ */
+export const ResolvePrincipalsRequestSchema: GenMessage<ResolvePrincipalsRequest> = /*@__PURE__*/
+  messageDesc(file_service_auth_session, 11);
+
+/**
+ * @generated from message service.auth.v1.ResolvePrincipalsResponse
+ */
+export type ResolvePrincipalsResponse = Message<"service.auth.v1.ResolvePrincipalsResponse"> & {
+  /**
+   * @generated from field: repeated service.auth.v1.Principal principals = 1;
+   */
+  principals: Principal[];
+};
+
+/**
+ * Describes the message service.auth.v1.ResolvePrincipalsResponse.
+ * Use `create(ResolvePrincipalsResponseSchema)` to create a new message.
+ */
+export const ResolvePrincipalsResponseSchema: GenMessage<ResolvePrincipalsResponse> = /*@__PURE__*/
+  messageDesc(file_service_auth_session, 12);
+
+/**
+ * EnumerateBindingsInWorkspace — enumerate every active binding a user holds
+ * in a specific workspace. Used by ResolveBindingInWorkspace to build the
+ * candidate list before pickBindingForSession applies the A3 resolution policy.
+ *
+ * @generated from message service.auth.v1.EnumerateBindingsRequest
+ */
+export type EnumerateBindingsRequest = Message<"service.auth.v1.EnumerateBindingsRequest"> & {
+  /**
+   * @generated from field: string user_id = 1;
+   */
+  userId: string;
+
+  /**
+   * @generated from field: string workspace_id = 2;
+   */
+  workspaceId: string;
+};
+
+/**
+ * Describes the message service.auth.v1.EnumerateBindingsRequest.
+ * Use `create(EnumerateBindingsRequestSchema)` to create a new message.
+ */
+export const EnumerateBindingsRequestSchema: GenMessage<EnumerateBindingsRequest> = /*@__PURE__*/
+  messageDesc(file_service_auth_session, 13);
+
+/**
+ * @generated from message service.auth.v1.EnumerateBindingsResponse
+ */
+export type EnumerateBindingsResponse = Message<"service.auth.v1.EnumerateBindingsResponse"> & {
+  /**
+   * @generated from field: repeated service.auth.v1.Principal bindings = 1;
+   */
+  bindings: Principal[];
+};
+
+/**
+ * Describes the message service.auth.v1.EnumerateBindingsResponse.
+ * Use `create(EnumerateBindingsResponseSchema)` to create a new message.
+ */
+export const EnumerateBindingsResponseSchema: GenMessage<EnumerateBindingsResponse> = /*@__PURE__*/
+  messageDesc(file_service_auth_session, 14);
+
+/**
+ * LookupSessionPrincipal — read (principal_type, principal_id, acting_as_*)
+ * from the session row by token. Replaces composition/session_principal.go's
+ * raw-SQL lookupSessionPrincipalFull.
+ *
+ * @generated from message service.auth.v1.LookupSessionPrincipalRequest
+ */
+export type LookupSessionPrincipalRequest = Message<"service.auth.v1.LookupSessionPrincipalRequest"> & {
+  /**
+   * @generated from field: string token = 1;
+   */
+  token: string;
+};
+
+/**
+ * Describes the message service.auth.v1.LookupSessionPrincipalRequest.
+ * Use `create(LookupSessionPrincipalRequestSchema)` to create a new message.
+ */
+export const LookupSessionPrincipalRequestSchema: GenMessage<LookupSessionPrincipalRequest> = /*@__PURE__*/
+  messageDesc(file_service_auth_session, 15);
+
+/**
+ * @generated from message service.auth.v1.LookupSessionPrincipalResponse
+ */
+export type LookupSessionPrincipalResponse = Message<"service.auth.v1.LookupSessionPrincipalResponse"> & {
+  /**
+   * @generated from field: domain.entity.v1.PrincipalType kind = 1;
+   */
+  kind: PrincipalType;
+
+  /**
+   * @generated from field: string principal_id = 2;
+   */
+  principalId: string;
+
+  /**
+   * @generated from field: string acting_as_client_id = 3;
+   */
+  actingAsClientId: string;
+
+  /**
+   * @generated from field: string acting_as_supplier_id = 4;
+   */
+  actingAsSupplierId: string;
+};
+
+/**
+ * Describes the message service.auth.v1.LookupSessionPrincipalResponse.
+ * Use `create(LookupSessionPrincipalResponseSchema)` to create a new message.
+ */
+export const LookupSessionPrincipalResponseSchema: GenMessage<LookupSessionPrincipalResponse> = /*@__PURE__*/
+  messageDesc(file_service_auth_session, 16);
 
 /**
  * @generated from enum service.auth.v1.SwitchUseCase

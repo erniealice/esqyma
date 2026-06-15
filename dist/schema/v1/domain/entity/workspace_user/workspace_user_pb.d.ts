@@ -389,6 +389,81 @@ export type GetWorkspaceUserItemPageDataResponse = Message<"domain.entity.v1.Get
  */
 export declare const GetWorkspaceUserItemPageDataResponseSchema: GenMessage<GetWorkspaceUserItemPageDataResponse>;
 /**
+ * ListWorkspacesForUsers — batch workspace membership lookup
+ *
+ * No fields needed; workspace_id is extracted from context.
+ *
+ * @generated from message domain.entity.v1.ListWorkspacesForUsersRequest
+ */
+export type ListWorkspacesForUsersRequest = Message<"domain.entity.v1.ListWorkspacesForUsersRequest"> & {};
+/**
+ * Describes the message domain.entity.v1.ListWorkspacesForUsersRequest.
+ * Use `create(ListWorkspacesForUsersRequestSchema)` to create a new message.
+ */
+export declare const ListWorkspacesForUsersRequestSchema: GenMessage<ListWorkspacesForUsersRequest>;
+/**
+ * A single workspace's display-only summary.
+ *
+ * @generated from message domain.entity.v1.WorkspaceSummary
+ */
+export type WorkspaceSummary = Message<"domain.entity.v1.WorkspaceSummary"> & {
+    /**
+     * @generated from field: string id = 1;
+     */
+    id: string;
+    /**
+     * @generated from field: string name = 2;
+     */
+    name: string;
+};
+/**
+ * Describes the message domain.entity.v1.WorkspaceSummary.
+ * Use `create(WorkspaceSummarySchema)` to create a new message.
+ */
+export declare const WorkspaceSummarySchema: GenMessage<WorkspaceSummary>;
+/**
+ * Workspace memberships for a single user.
+ *
+ * @generated from message domain.entity.v1.UserWorkspaces
+ */
+export type UserWorkspaces = Message<"domain.entity.v1.UserWorkspaces"> & {
+    /**
+     * @generated from field: string user_id = 1;
+     */
+    userId: string;
+    /**
+     * @generated from field: repeated domain.entity.v1.WorkspaceSummary workspaces = 2;
+     */
+    workspaces: WorkspaceSummary[];
+};
+/**
+ * Describes the message domain.entity.v1.UserWorkspaces.
+ * Use `create(UserWorkspacesSchema)` to create a new message.
+ */
+export declare const UserWorkspacesSchema: GenMessage<UserWorkspaces>;
+/**
+ * @generated from message domain.entity.v1.ListWorkspacesForUsersResponse
+ */
+export type ListWorkspacesForUsersResponse = Message<"domain.entity.v1.ListWorkspacesForUsersResponse"> & {
+    /**
+     * @generated from field: repeated domain.entity.v1.UserWorkspaces user_workspaces = 1;
+     */
+    userWorkspaces: UserWorkspaces[];
+    /**
+     * @generated from field: bool success = 2;
+     */
+    success: boolean;
+    /**
+     * @generated from field: optional domain.common.v1.Error error = 3;
+     */
+    error?: Error;
+};
+/**
+ * Describes the message domain.entity.v1.ListWorkspacesForUsersResponse.
+ * Use `create(ListWorkspacesForUsersResponseSchema)` to create a new message.
+ */
+export declare const ListWorkspacesForUsersResponseSchema: GenMessage<ListWorkspacesForUsersResponse>;
+/**
  * @generated from service domain.entity.v1.WorkspaceUserDomainService
  */
 export declare const WorkspaceUserDomainService: GenService<{
@@ -451,5 +526,17 @@ export declare const WorkspaceUserDomainService: GenService<{
         methodKind: "unary";
         input: typeof GetWorkspaceUserItemPageDataRequestSchema;
         output: typeof GetWorkspaceUserItemPageDataResponseSchema;
+    };
+    /**
+     * Batch-load workspace memberships for all active users.
+     * Returns a grouped map: user_id -> list of workspace summaries.
+     * Used by the user list page to render workspace chip cells.
+     *
+     * @generated from rpc domain.entity.v1.WorkspaceUserDomainService.ListWorkspacesForUsers
+     */
+    listWorkspacesForUsers: {
+        methodKind: "unary";
+        input: typeof ListWorkspacesForUsersRequestSchema;
+        output: typeof ListWorkspacesForUsersResponseSchema;
     };
 }>;

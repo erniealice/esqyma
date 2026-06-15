@@ -138,6 +138,16 @@ export type Workspace = Message<"domain.entity.v1.Workspace"> & {
      * @generated from field: optional string tenant_subscription_id = 21;
      */
     tenantSubscriptionId?: string;
+    /**
+     * URL-canonical workspace slug — the human-readable identifier in /w/{slug}/* URLs
+     * per Q-WS-1 → A locked 2026-05-21. Format: lowercase alphanumeric + hyphens,
+     * 3-30 chars, regex ^[a-z0-9]+(?:-[a-z0-9]+)*$. UNIQUE across workspaces.
+     * Validation includes a reserved-word list (see workspace_slug_reserved.go).
+     * Added 2026-05-22 per Phase P-1 of docs/plan/20260521-workspace-keyed-routing.
+     *
+     * @generated from field: optional string slug = 22;
+     */
+    slug?: string;
 };
 /**
  * Describes the message domain.entity.v1.Workspace.

@@ -1,4 +1,4 @@
-import type { GenFile, GenMessage, GenService } from "@bufbuild/protobuf/codegenv2";
+import type { GenEnum, GenFile, GenMessage, GenService } from "@bufbuild/protobuf/codegenv2";
 import type { Error } from "../../common/error_pb";
 import type { SearchRequest, SearchResult } from "../../common/search_pb";
 import type { FilterRequest } from "../../common/filter_pb";
@@ -46,6 +46,47 @@ export type Staff = Message<"domain.entity.v1.Staff"> & {
      * @generated from field: bool active = 8;
      */
     active: boolean;
+    /**
+     * Performance Evaluation §E1 — the leased human = Identity. All ADDITIVE + optional
+     * (entity/staff is a POPULATED live table; no NOT NULL here). Two orthogonal axes:
+     *   * status (existing string) carries AVAILABILITY (available|assigned|bench|offboarded)
+     *   * employment_type carries the EMPLOYMENT model (see EmploymentType enum) — never overloaded onto status
+     *
+     * multi-tenant scope
+     *
+     * @generated from field: optional string workspace_id = 9;
+     */
+    workspaceId?: string;
+    /**
+     * AVAILABILITY: available|assigned|bench|offboarded (active = status NOT IN {offboarded})
+     *
+     * @generated from field: optional string status = 10;
+     */
+    status?: string;
+    /**
+     * EMPLOYMENT model (string; values from EmploymentType): EMPLOYED|CONTRACTOR|EXTERNAL|PARTNER|RETAINED|SUBCONTRACTOR
+     *
+     * @generated from field: optional string employment_type = 11;
+     */
+    employmentType?: string;
+    /**
+     * display snapshot; canonical rank = ProductVariant/ProductOption
+     *
+     * @generated from field: optional string seniority = 12;
+     */
+    seniority?: string;
+    /**
+     * ISO 8601
+     *
+     * @generated from field: optional string employment_start = 13;
+     */
+    employmentStart?: string;
+    /**
+     * ISO 8601 (nil = active)
+     *
+     * @generated from field: optional string employment_end = 14;
+     */
+    employmentEnd?: string;
 };
 /**
  * Describes the message domain.entity.v1.Staff.
@@ -332,6 +373,48 @@ export type GetStaffItemPageDataResponse = Message<"domain.entity.v1.GetStaffIte
  * Use `create(GetStaffItemPageDataResponseSchema)` to create a new message.
  */
 export declare const GetStaffItemPageDataResponseSchema: GenMessage<GetStaffItemPageDataResponse>;
+/**
+ * EmploymentType is the EMPLOYMENT model on entity/staff (Performance Evaluation §E2;
+ * Q-EMPLOYMENT-TYPE-1). It is ORTHOGONAL to Staff.status (availability) and is never
+ * overloaded onto status. The Staff.employment_type column stays `string` (existing-entity
+ * convention, pairs with `active`); this enum is the canonical value vocabulary.
+ *
+ * @generated from enum domain.entity.v1.EmploymentType
+ */
+export declare enum EmploymentType {
+    /**
+     * @generated from enum value: EMPLOYMENT_TYPE_UNSPECIFIED = 0;
+     */
+    UNSPECIFIED = 0,
+    /**
+     * @generated from enum value: EMPLOYMENT_TYPE_EMPLOYED = 1;
+     */
+    EMPLOYED = 1,
+    /**
+     * @generated from enum value: EMPLOYMENT_TYPE_CONTRACTOR = 2;
+     */
+    CONTRACTOR = 2,
+    /**
+     * @generated from enum value: EMPLOYMENT_TYPE_EXTERNAL = 3;
+     */
+    EXTERNAL = 3,
+    /**
+     * @generated from enum value: EMPLOYMENT_TYPE_PARTNER = 4;
+     */
+    PARTNER = 4,
+    /**
+     * @generated from enum value: EMPLOYMENT_TYPE_RETAINED = 5;
+     */
+    RETAINED = 5,
+    /**
+     * @generated from enum value: EMPLOYMENT_TYPE_SUBCONTRACTOR = 6;
+     */
+    SUBCONTRACTOR = 6
+}
+/**
+ * Describes the enum domain.entity.v1.EmploymentType.
+ */
+export declare const EmploymentTypeSchema: GenEnum<EmploymentType>;
 /**
  * @generated from service domain.entity.v1.StaffDomainService
  */

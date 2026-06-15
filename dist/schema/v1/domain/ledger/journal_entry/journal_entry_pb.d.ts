@@ -138,6 +138,15 @@ export type JournalEntry = Message<"domain.ledger.v1.JournalEntry"> & {
      * @generated from field: optional string date_modified_string = 24;
      */
     dateModifiedString?: string;
+    /**
+     * Tenancy scope. Added by 20260530000000_add_workspace_id_to_ledger_financials.sql
+     * to back the workspace_id filter the postgres adapter already issues
+     * (journal_entry.go:281). Documentation-only annotation today; keeps proto/DB
+     * aligned. NULLABLE until the deferred NOT NULL migration tightens it.
+     *
+     * @generated from field: optional string workspace_id = 25;
+     */
+    workspaceId?: string;
 };
 /**
  * Describes the message domain.ledger.v1.JournalEntry.

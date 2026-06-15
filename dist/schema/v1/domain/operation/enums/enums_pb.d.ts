@@ -669,7 +669,13 @@ export declare enum CriteriaScope {
     /**
      * @generated from enum value: CRITERIA_SCOPE_WORKSPACE = 3;
      */
-    WORKSPACE = 3
+    WORKSPACE = 3,
+    /**
+     * perf-eval: partition feedback rubrics from manufacturing-QA rubrics (§E1)
+     *
+     * @generated from enum value: CRITERIA_SCOPE_EVALUATION = 4;
+     */
+    EVALUATION = 4
 }
 /**
  * Describes the enum domain.operation.v1.CriteriaScope.
