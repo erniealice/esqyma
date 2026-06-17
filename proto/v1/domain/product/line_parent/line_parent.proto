@@ -1,0 +1,86 @@
+syntax = "proto3";
+
+package domain.product.v1;
+
+option go_package = "github.com/erniealice/esqyma/golang/v1/domain/product/line_parent";
+
+import "domain/common/error.proto";
+import "domain/common/search.proto";
+import "domain/common/filter.proto";
+import "domain/common/sort.proto";
+import "domain/common/pagination.proto";
+import "options/db.proto";
+
+message LineParent {
+  option (options.v1.table).table = true;
+  option (options.v1.table).unique_together = "line_parent_id,line_id";
+  string id = 1;
+  string line_parent_id = 2 [(options.v1.db).references = "line", (options.v1.db).index = true];
+  string line_id = 3 [(options.v1.db).references = "line", (options.v1.db).index = true];
+  optional int64 date_created = 4;
+  optional string date_created_string = 5 [(options.v1.db).ignore = true];
+  optional int64 date_modified = 6;
+  optional string date_modified_string = 7 [(options.v1.db).ignore = true];
+  bool active = 8 [(options.v1.db).default = "true"];
+  string workspace_id = 9 [(options.v1.db).references = "workspace", (options.v1.db).index = true];
+}
+
+service LineParentDomainService {
+  rpc CreateLineParent(CreateLineParentRequest) returns (CreateLineParentResponse);
+  rpc ReadLineParent(ReadLineParentRequest) returns (ReadLineParentResponse);
+  rpc UpdateLineParent(UpdateLineParentRequest) returns (UpdateLineParentResponse);
+  rpc DeleteLineParent(DeleteLineParentRequest) returns (DeleteLineParentResponse);
+  rpc ListLineParents(ListLineParentsRequest) returns (ListLineParentsResponse);
+}
+
+message CreateLineParentRequest {
+  LineParent data = 1;
+}
+
+message CreateLineParentResponse {
+  repeated LineParent data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message ReadLineParentRequest {
+  LineParent data = 1;
+}
+
+message ReadLineParentResponse {
+  repeated LineParent data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message UpdateLineParentRequest {
+  LineParent data = 1;
+}
+
+message UpdateLineParentResponse {
+  repeated LineParent data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message DeleteLineParentRequest {
+  LineParent data = 1;
+}
+
+message DeleteLineParentResponse {
+  bool success = 1;
+  optional domain.common.v1.Error error = 2;
+}
+
+message ListLineParentsRequest {
+  optional domain.common.v1.SearchRequest search = 1;
+  optional domain.common.v1.FilterRequest filters = 2;
+  optional domain.common.v1.SortRequest sort = 3;
+  optional domain.common.v1.PaginationRequest pagination = 4;
+}
+
+message ListLineParentsResponse {
+  repeated LineParent data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}

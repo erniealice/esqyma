@@ -24,6 +24,7 @@ message Line {
   optional string date_modified_string = 7 [(options.v1.db).ignore = true];
   bool active = 8 [(options.v1.db).default = "true"];
   repeated ProductLine product_lines = 9;
+  optional string workspace_id = 10 [(options.v1.db).references = "workspace", (options.v1.db).index = true];
 }
 
 service LineDomainService {
