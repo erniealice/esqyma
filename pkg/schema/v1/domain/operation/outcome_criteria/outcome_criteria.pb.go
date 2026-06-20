@@ -62,6 +62,7 @@ type OutcomeCriteria struct {
 	DateCreatedString     *string                 `protobuf:"bytes,34,opt,name=date_created_string,json=dateCreatedString,proto3,oneof" json:"date_created_string,omitempty"`
 	DateModified          *int64                  `protobuf:"varint,35,opt,name=date_modified,json=dateModified,proto3,oneof" json:"date_modified,omitempty"`
 	DateModifiedString    *string                 `protobuf:"bytes,36,opt,name=date_modified_string,json=dateModifiedString,proto3,oneof" json:"date_modified_string,omitempty"`
+	MinTextLength         *int32                  `protobuf:"varint,37,opt,name=min_text_length,json=minTextLength,proto3,oneof" json:"min_text_length,omitempty"`
 	unknownFields         protoimpl.UnknownFields
 	sizeCache             protoimpl.SizeCache
 }
@@ -346,6 +347,13 @@ func (x *OutcomeCriteria) GetDateModifiedString() string {
 		return *x.DateModifiedString
 	}
 	return ""
+}
+
+func (x *OutcomeCriteria) GetMinTextLength() int32 {
+	if x != nil && x.MinTextLength != nil {
+		return *x.MinTextLength
+	}
+	return 0
 }
 
 type CreateOutcomeCriteriaRequest struct {
@@ -1464,7 +1472,7 @@ var File_domain_operation_outcome_criteria_outcome_criteria_proto protoreflect.F
 
 const file_domain_operation_outcome_criteria_outcome_criteria_proto_rawDesc = "" +
 	"\n" +
-	"8domain/operation/outcome_criteria/outcome_criteria.proto\x12\x13domain.operation.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1adomain/common/search.proto\x1a\"domain/operation/enums/enums.proto\x1a\x10options/db.proto\"\x8c\x10\n" +
+	"8domain/operation/outcome_criteria/outcome_criteria.proto\x12\x13domain.operation.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1adomain/common/search.proto\x1a\"domain/operation/enums/enums.proto\x1a\x10options/db.proto\"\xcd\x10\n" +
 	"\x0fOutcomeCriteria\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12*\n" +
 	"\x11criteria_group_id\x18\x02 \x01(\tR\x0fcriteriaGroupId\x12\x18\n" +
@@ -1511,7 +1519,8 @@ const file_domain_operation_outcome_criteria_outcome_criteria_proto_rawDesc = ""
 	"\fdate_created\x18! \x01(\x03H\x11R\vdateCreated\x88\x01\x01\x12;\n" +
 	"\x13date_created_string\x18\" \x01(\tB\x06\x82\xb5\x18\x028\x01H\x12R\x11dateCreatedString\x88\x01\x01\x12(\n" +
 	"\rdate_modified\x18# \x01(\x03H\x13R\fdateModified\x88\x01\x01\x12=\n" +
-	"\x14date_modified_string\x18$ \x01(\tB\x06\x82\xb5\x18\x028\x01H\x14R\x12dateModifiedString\x88\x01\x01:\x06\x8a\xb5\x18\x02\b\x01B\x10\n" +
+	"\x14date_modified_string\x18$ \x01(\tB\x06\x82\xb5\x18\x028\x01H\x14R\x12dateModifiedString\x88\x01\x01\x12+\n" +
+	"\x0fmin_text_length\x18% \x01(\x05H\x15R\rminTextLength\x88\x01\x01:\x06\x8a\xb5\x18\x02\b\x01B\x10\n" +
 	"\x0e_supersedes_idB\x10\n" +
 	"\x0e_industry_codeB\x0f\n" +
 	"\r_workspace_idB\x0f\n" +
@@ -1535,7 +1544,8 @@ const file_domain_operation_outcome_criteria_outcome_criteria_proto_rawDesc = ""
 	"\r_date_createdB\x16\n" +
 	"\x14_date_created_stringB\x10\n" +
 	"\x0e_date_modifiedB\x17\n" +
-	"\x15_date_modified_string\"X\n" +
+	"\x15_date_modified_stringB\x12\n" +
+	"\x10_min_text_length\"X\n" +
 	"\x1cCreateOutcomeCriteriaRequest\x128\n" +
 	"\x04data\x18\x01 \x01(\v2$.domain.operation.v1.OutcomeCriteriaR\x04data\"\xb1\x01\n" +
 	"\x1dCreateOutcomeCriteriaResponse\x128\n" +

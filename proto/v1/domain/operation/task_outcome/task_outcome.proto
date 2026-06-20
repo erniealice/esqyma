@@ -48,6 +48,7 @@ message TaskOutcome {
   optional string date_created_string = 26 [(options.v1.db).ignore = true];
   optional int64 date_modified = 27;
   optional string date_modified_string = 28 [(options.v1.db).ignore = true];
+  bool is_synthesized = 29 [(options.v1.db).default = "false"];
 }
 
 // --- Service ---

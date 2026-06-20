@@ -1,0 +1,117 @@
+syntax = "proto3";
+
+package domain.operation.v1;
+
+
+option go_package = "github.com/erniealice/esqyma/golang/v1/domain/operation/scoring_component_criteria";
+
+import "domain/common/error.proto";
+import "domain/common/pagination.proto";
+import "domain/common/filter.proto";
+import "domain/common/sort.proto";
+import "domain/common/search.proto";
+import "options/db.proto";
+
+message ScoringComponentCriteria {
+  option (options.v1.table).table = true;
+  option (options.v1.table).unique_together = "scoring_scheme_id,scoring_component_id,outcome_criteria_id";
+  string id = 1;
+  string scoring_scheme_id = 2 [(options.v1.db).references = "scoring_scheme", (options.v1.db).index = true];
+  string scoring_component_id = 3 [(options.v1.db).references = "scoring_component", (options.v1.db).index = true];
+  string outcome_criteria_id = 4 [(options.v1.db).references = "outcome_criteria", (options.v1.db).index = true];
+  optional int64 date_created = 5;
+  optional string date_created_string = 6 [(options.v1.db).ignore = true];
+  optional int64 date_modified = 7;
+  optional string date_modified_string = 8 [(options.v1.db).ignore = true];
+  bool active = 9 [(options.v1.db).default = "true"];
+  string workspace_id = 10 [(options.v1.db).references = "workspace", (options.v1.db).index = true];
+}
+
+service ScoringComponentCriteriaDomainService {
+  rpc CreateScoringComponentCriteria(CreateScoringComponentCriteriaRequest) returns (CreateScoringComponentCriteriaResponse);
+  rpc ReadScoringComponentCriteria(ReadScoringComponentCriteriaRequest) returns (ReadScoringComponentCriteriaResponse);
+  rpc UpdateScoringComponentCriteria(UpdateScoringComponentCriteriaRequest) returns (UpdateScoringComponentCriteriaResponse);
+  rpc DeleteScoringComponentCriteria(DeleteScoringComponentCriteriaRequest) returns (DeleteScoringComponentCriteriaResponse);
+  rpc ListScoringComponentCriterias(ListScoringComponentCriteriasRequest) returns (ListScoringComponentCriteriasResponse);
+  rpc GetScoringComponentCriteriaListPageData(GetScoringComponentCriteriaListPageDataRequest)
+    returns (GetScoringComponentCriteriaListPageDataResponse);
+  rpc GetScoringComponentCriteriaItemPageData(GetScoringComponentCriteriaItemPageDataRequest)
+    returns (GetScoringComponentCriteriaItemPageDataResponse);
+}
+
+message CreateScoringComponentCriteriaRequest {
+  ScoringComponentCriteria data = 1;
+}
+
+message CreateScoringComponentCriteriaResponse {
+  repeated ScoringComponentCriteria data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message ReadScoringComponentCriteriaRequest {
+  ScoringComponentCriteria data = 1;
+}
+
+message ReadScoringComponentCriteriaResponse {
+  repeated ScoringComponentCriteria data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message UpdateScoringComponentCriteriaRequest {
+  ScoringComponentCriteria data = 1;
+}
+
+message UpdateScoringComponentCriteriaResponse {
+  repeated ScoringComponentCriteria data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message DeleteScoringComponentCriteriaRequest {
+  ScoringComponentCriteria data = 1;
+}
+
+message DeleteScoringComponentCriteriaResponse {
+  bool success = 1;
+  optional domain.common.v1.Error error = 2;
+}
+
+message ListScoringComponentCriteriasRequest {
+  optional domain.common.v1.SearchRequest search = 1;
+  optional domain.common.v1.FilterRequest filters = 2;
+  optional domain.common.v1.SortRequest sort = 3;
+  optional domain.common.v1.PaginationRequest pagination = 4;
+}
+
+message ListScoringComponentCriteriasResponse {
+  repeated ScoringComponentCriteria data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message GetScoringComponentCriteriaListPageDataRequest {
+  optional domain.common.v1.SearchRequest search = 1;
+  optional domain.common.v1.FilterRequest filters = 2;
+  optional domain.common.v1.SortRequest sort = 3;
+  optional domain.common.v1.PaginationRequest pagination = 4;
+}
+
+message GetScoringComponentCriteriaListPageDataResponse {
+  repeated ScoringComponentCriteria scoring_component_criteria_list = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+  optional domain.common.v1.PaginationResponse pagination = 4;
+  repeated domain.common.v1.SearchResult search_results = 5;
+}
+
+message GetScoringComponentCriteriaItemPageDataRequest {
+  string scoring_component_criteria_id = 1;
+}
+
+message GetScoringComponentCriteriaItemPageDataResponse {
+  ScoringComponentCriteria scoring_component_criteria = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}

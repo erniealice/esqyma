@@ -43,6 +43,9 @@ message JobOutcomeSummary {
   optional string date_created_string = 22 [(options.v1.db).ignore = true];
   optional int64 date_modified = 23;
   optional string date_modified_string = 24 [(options.v1.db).ignore = true];
+  optional string scoring_scheme_id = 25 [(options.v1.db).references = "scoring_scheme", (options.v1.db).index = true];
+  optional double scaled_score = 26;
+  optional string scaled_label = 27;
 }
 
 // --- Service ---

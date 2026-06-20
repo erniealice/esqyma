@@ -102,6 +102,8 @@ type JobPhase struct {
 	SetupMinutes       *int32                 `protobuf:"varint,22,opt,name=setup_minutes,json=setupMinutes,proto3,oneof" json:"setup_minutes,omitempty"`
 	RunMinutesPerUnit  *float64               `protobuf:"fixed64,23,opt,name=run_minutes_per_unit,json=runMinutesPerUnit,proto3,oneof" json:"run_minutes_per_unit,omitempty"`
 	PredecessorPhaseId *string                `protobuf:"bytes,24,opt,name=predecessor_phase_id,json=predecessorPhaseId,proto3,oneof" json:"predecessor_phase_id,omitempty"`
+	ScoringSchemeId    *string                `protobuf:"bytes,25,opt,name=scoring_scheme_id,json=scoringSchemeId,proto3,oneof" json:"scoring_scheme_id,omitempty"`
+	IsSynthesized      bool                   `protobuf:"varint,26,opt,name=is_synthesized,json=isSynthesized,proto3" json:"is_synthesized,omitempty"`
 	unknownFields      protoimpl.UnknownFields
 	sizeCache          protoimpl.SizeCache
 }
@@ -302,6 +304,20 @@ func (x *JobPhase) GetPredecessorPhaseId() string {
 		return *x.PredecessorPhaseId
 	}
 	return ""
+}
+
+func (x *JobPhase) GetScoringSchemeId() string {
+	if x != nil && x.ScoringSchemeId != nil {
+		return *x.ScoringSchemeId
+	}
+	return ""
+}
+
+func (x *JobPhase) GetIsSynthesized() bool {
+	if x != nil {
+		return x.IsSynthesized
+	}
+	return false
 }
 
 type CreateJobPhaseRequest struct {
@@ -1196,7 +1212,7 @@ var File_domain_operation_job_phase_job_phase_proto protoreflect.FileDescriptor
 
 const file_domain_operation_job_phase_job_phase_proto_rawDesc = "" +
 	"\n" +
-	"*domain/operation/job_phase/job_phase.proto\x12\x13domain.operation.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1adomain/common/search.proto\x1a\x1edomain/operation/job/job.proto\x1a\x10options/db.proto\"\xf1\v\n" +
+	"*domain/operation/job_phase/job_phase.proto\x12\x13domain.operation.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1adomain/common/search.proto\x1a\x1edomain/operation/job/job.proto\x1a\x10options/db.proto\"\x82\r\n" +
 	"\bJobPhase\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12&\n" +
 	"\fdate_created\x18\x02 \x01(\x03H\x00R\vdateCreated\x88\x01\x01\x12;\n" +
@@ -1231,7 +1247,10 @@ const file_domain_operation_job_phase_job_phase_proto_rawDesc = "" +
 	"\rsetup_minutes\x18\x16 \x01(\x05H\x0fR\fsetupMinutes\x88\x01\x01\x124\n" +
 	"\x14run_minutes_per_unit\x18\x17 \x01(\x01H\x10R\x11runMinutesPerUnit\x88\x01\x01\x12F\n" +
 	"\x14predecessor_phase_id\x18\x18 \x01(\tB\x0f\x82\xb5\x18\v\n" +
-	"\tjob_phaseH\x11R\x12predecessorPhaseId\x88\x01\x01:\x06\x8a\xb5\x18\x02\b\x01B\x0f\n" +
+	"\tjob_phaseH\x11R\x12predecessorPhaseId\x88\x01\x01\x12E\n" +
+	"\x11scoring_scheme_id\x18\x19 \x01(\tB\x14\x82\xb5\x18\x10\n" +
+	"\x0escoring_schemeH\x12R\x0fscoringSchemeId\x88\x01\x01\x122\n" +
+	"\x0eis_synthesized\x18\x1a \x01(\bB\v\x82\xb5\x18\a\"\x05falseR\risSynthesized:\x06\x8a\xb5\x18\x02\b\x01B\x0f\n" +
 	"\r_date_createdB\x16\n" +
 	"\x14_date_created_stringB\x10\n" +
 	"\x0e_date_modifiedB\x17\n" +
@@ -1249,7 +1268,8 @@ const file_domain_operation_job_phase_job_phase_proto_rawDesc = "" +
 	"\x12_actual_end_stringB\x10\n" +
 	"\x0e_setup_minutesB\x17\n" +
 	"\x15_run_minutes_per_unitB\x17\n" +
-	"\x15_predecessor_phase_idJ\x04\b\x19\x10(\"J\n" +
+	"\x15_predecessor_phase_idB\x14\n" +
+	"\x12_scoring_scheme_idJ\x04\b\x1b\x10(\"J\n" +
 	"\x15CreateJobPhaseRequest\x121\n" +
 	"\x04data\x18\x01 \x01(\v2\x1d.domain.operation.v1.JobPhaseR\x04data\"\xa3\x01\n" +
 	"\x16CreateJobPhaseResponse\x121\n" +

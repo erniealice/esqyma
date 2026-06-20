@@ -1,0 +1,115 @@
+syntax = "proto3";
+
+package domain.product.v1;
+
+option go_package = "github.com/erniealice/esqyma/golang/v1/domain/product/plan_group";
+
+import "domain/common/error.proto";
+import "domain/common/search.proto";
+import "domain/common/filter.proto";
+import "domain/common/sort.proto";
+import "domain/common/pagination.proto";
+import "options/db.proto";
+
+// PlanGroup represents a generic group-of-plans taxonomy with stable cross-period
+// identity (e.g. "Junior High" groups Grade 7/8/9). It is the plan-axis analogue of Line.
+message PlanGroup {
+  option (options.v1.table).table = true;
+  string id = 1;
+  string name = 2;
+  optional int64 date_created = 3;
+  optional string date_created_string = 4 [(options.v1.db).ignore = true];
+  optional int64 date_modified = 5;
+  optional string date_modified_string = 6 [(options.v1.db).ignore = true];
+  bool active = 7 [(options.v1.db).default = "true"];
+  optional string workspace_id = 8 [(options.v1.db).references = "workspace", (options.v1.db).index = true];
+  optional string code = 9;
+  optional string parent_id = 10 [(options.v1.db).references = "plan_group", (options.v1.db).index = true];
+}
+
+service PlanGroupDomainService {
+  rpc CreatePlanGroup(CreatePlanGroupRequest) returns (CreatePlanGroupResponse);
+  rpc ReadPlanGroup(ReadPlanGroupRequest) returns (ReadPlanGroupResponse);
+  rpc UpdatePlanGroup(UpdatePlanGroupRequest) returns (UpdatePlanGroupResponse);
+  rpc DeletePlanGroup(DeletePlanGroupRequest) returns (DeletePlanGroupResponse);
+  rpc ListPlanGroups(ListPlanGroupsRequest) returns (ListPlanGroupsResponse);
+  rpc GetPlanGroupListPageData(GetPlanGroupListPageDataRequest) returns (GetPlanGroupListPageDataResponse);
+  rpc GetPlanGroupItemPageData(GetPlanGroupItemPageDataRequest) returns (GetPlanGroupItemPageDataResponse);
+}
+
+message CreatePlanGroupRequest {
+  PlanGroup data = 1;
+}
+
+message CreatePlanGroupResponse {
+  repeated PlanGroup data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message ReadPlanGroupRequest {
+  PlanGroup data = 1;
+}
+
+message ReadPlanGroupResponse {
+  repeated PlanGroup data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message UpdatePlanGroupRequest {
+  PlanGroup data = 1;
+}
+
+message UpdatePlanGroupResponse {
+  repeated PlanGroup data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message DeletePlanGroupRequest {
+  PlanGroup data = 1;
+}
+
+message DeletePlanGroupResponse {
+  bool success = 1;
+  optional domain.common.v1.Error error = 2;
+}
+
+message ListPlanGroupsRequest {
+  optional domain.common.v1.SearchRequest search = 1;
+  optional domain.common.v1.FilterRequest filters = 2;
+  optional domain.common.v1.SortRequest sort = 3;
+  optional domain.common.v1.PaginationRequest pagination = 4;
+}
+
+message ListPlanGroupsResponse {
+  repeated PlanGroup data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message GetPlanGroupListPageDataRequest {
+  optional domain.common.v1.SearchRequest search = 1;
+  optional domain.common.v1.FilterRequest filters = 2;
+  optional domain.common.v1.SortRequest sort = 3;
+  optional domain.common.v1.PaginationRequest pagination = 4;
+}
+
+message GetPlanGroupListPageDataResponse {
+  repeated PlanGroup plan_group_list = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+  optional domain.common.v1.PaginationResponse pagination = 4;
+  repeated domain.common.v1.SearchResult search_results = 5;
+}
+
+message GetPlanGroupItemPageDataRequest {
+  string plan_group_id = 1;
+}
+
+message GetPlanGroupItemPageDataResponse {
+  PlanGroup plan_group = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}

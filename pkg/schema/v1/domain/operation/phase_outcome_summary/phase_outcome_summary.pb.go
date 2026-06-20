@@ -26,32 +26,35 @@ const (
 )
 
 type PhaseOutcomeSummary struct {
-	state              protoimpl.MessageState     `protogen:"open.v1"`
-	Id                 string                     `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
-	JobPhaseId         string                     `protobuf:"bytes,2,opt,name=job_phase_id,json=jobPhaseId,proto3" json:"job_phase_id,omitempty"`
-	JobPhase           *job_phase.JobPhase        `protobuf:"bytes,3,opt,name=job_phase,json=jobPhase,proto3,oneof" json:"job_phase,omitempty"`
-	JobId              string                     `protobuf:"bytes,4,opt,name=job_id,json=jobId,proto3" json:"job_id,omitempty"`
-	SummaryType        enums.SummaryType          `protobuf:"varint,5,opt,name=summary_type,json=summaryType,proto3,enum=domain.operation.v1.SummaryType" json:"summary_type,omitempty"`
-	PhaseDetermination enums.OverallDetermination `protobuf:"varint,6,opt,name=phase_determination,json=phaseDetermination,proto3,enum=domain.operation.v1.OverallDetermination" json:"phase_determination,omitempty"`
-	ScoringMethod      enums.ScoringMethod        `protobuf:"varint,7,opt,name=scoring_method,json=scoringMethod,proto3,enum=domain.operation.v1.ScoringMethod" json:"scoring_method,omitempty"`
-	SummaryScore       *float64                   `protobuf:"fixed64,8,opt,name=summary_score,json=summaryScore,proto3,oneof" json:"summary_score,omitempty"`
-	TotalCriteriaCount int32                      `protobuf:"varint,9,opt,name=total_criteria_count,json=totalCriteriaCount,proto3" json:"total_criteria_count,omitempty"`
-	PassCount          int32                      `protobuf:"varint,10,opt,name=pass_count,json=passCount,proto3" json:"pass_count,omitempty"`
-	FailCount          int32                      `protobuf:"varint,11,opt,name=fail_count,json=failCount,proto3" json:"fail_count,omitempty"`
-	ConditionalCount   int32                      `protobuf:"varint,12,opt,name=conditional_count,json=conditionalCount,proto3" json:"conditional_count,omitempty"`
-	DeferredCount      int32                      `protobuf:"varint,13,opt,name=deferred_count,json=deferredCount,proto3" json:"deferred_count,omitempty"`
-	NaCount            int32                      `protobuf:"varint,14,opt,name=na_count,json=naCount,proto3" json:"na_count,omitempty"`
-	Narrative          *string                    `protobuf:"bytes,15,opt,name=narrative,proto3,oneof" json:"narrative,omitempty"`
-	IssuedBy           string                     `protobuf:"bytes,16,opt,name=issued_by,json=issuedBy,proto3" json:"issued_by,omitempty"`
-	IssuedDate         *int64                     `protobuf:"varint,17,opt,name=issued_date,json=issuedDate,proto3,oneof" json:"issued_date,omitempty"`
-	SupersedesId       *string                    `protobuf:"bytes,18,opt,name=supersedes_id,json=supersedesId,proto3,oneof" json:"supersedes_id,omitempty"`
-	Active             bool                       `protobuf:"varint,19,opt,name=active,proto3" json:"active,omitempty"`
-	DateCreated        *int64                     `protobuf:"varint,20,opt,name=date_created,json=dateCreated,proto3,oneof" json:"date_created,omitempty"`
-	DateCreatedString  *string                    `protobuf:"bytes,21,opt,name=date_created_string,json=dateCreatedString,proto3,oneof" json:"date_created_string,omitempty"`
-	DateModified       *int64                     `protobuf:"varint,22,opt,name=date_modified,json=dateModified,proto3,oneof" json:"date_modified,omitempty"`
-	DateModifiedString *string                    `protobuf:"bytes,23,opt,name=date_modified_string,json=dateModifiedString,proto3,oneof" json:"date_modified_string,omitempty"`
-	unknownFields      protoimpl.UnknownFields
-	sizeCache          protoimpl.SizeCache
+	state                 protoimpl.MessageState     `protogen:"open.v1"`
+	Id                    string                     `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
+	JobPhaseId            string                     `protobuf:"bytes,2,opt,name=job_phase_id,json=jobPhaseId,proto3" json:"job_phase_id,omitempty"`
+	JobPhase              *job_phase.JobPhase        `protobuf:"bytes,3,opt,name=job_phase,json=jobPhase,proto3,oneof" json:"job_phase,omitempty"`
+	JobId                 string                     `protobuf:"bytes,4,opt,name=job_id,json=jobId,proto3" json:"job_id,omitempty"`
+	SummaryType           enums.SummaryType          `protobuf:"varint,5,opt,name=summary_type,json=summaryType,proto3,enum=domain.operation.v1.SummaryType" json:"summary_type,omitempty"`
+	PhaseDetermination    enums.OverallDetermination `protobuf:"varint,6,opt,name=phase_determination,json=phaseDetermination,proto3,enum=domain.operation.v1.OverallDetermination" json:"phase_determination,omitempty"`
+	ScoringMethod         enums.ScoringMethod        `protobuf:"varint,7,opt,name=scoring_method,json=scoringMethod,proto3,enum=domain.operation.v1.ScoringMethod" json:"scoring_method,omitempty"`
+	SummaryScore          *float64                   `protobuf:"fixed64,8,opt,name=summary_score,json=summaryScore,proto3,oneof" json:"summary_score,omitempty"`
+	TotalCriteriaCount    int32                      `protobuf:"varint,9,opt,name=total_criteria_count,json=totalCriteriaCount,proto3" json:"total_criteria_count,omitempty"`
+	PassCount             int32                      `protobuf:"varint,10,opt,name=pass_count,json=passCount,proto3" json:"pass_count,omitempty"`
+	FailCount             int32                      `protobuf:"varint,11,opt,name=fail_count,json=failCount,proto3" json:"fail_count,omitempty"`
+	ConditionalCount      int32                      `protobuf:"varint,12,opt,name=conditional_count,json=conditionalCount,proto3" json:"conditional_count,omitempty"`
+	DeferredCount         int32                      `protobuf:"varint,13,opt,name=deferred_count,json=deferredCount,proto3" json:"deferred_count,omitempty"`
+	NaCount               int32                      `protobuf:"varint,14,opt,name=na_count,json=naCount,proto3" json:"na_count,omitempty"`
+	Narrative             *string                    `protobuf:"bytes,15,opt,name=narrative,proto3,oneof" json:"narrative,omitempty"`
+	IssuedBy              string                     `protobuf:"bytes,16,opt,name=issued_by,json=issuedBy,proto3" json:"issued_by,omitempty"`
+	IssuedDate            *int64                     `protobuf:"varint,17,opt,name=issued_date,json=issuedDate,proto3,oneof" json:"issued_date,omitempty"`
+	SupersedesId          *string                    `protobuf:"bytes,18,opt,name=supersedes_id,json=supersedesId,proto3,oneof" json:"supersedes_id,omitempty"`
+	Active                bool                       `protobuf:"varint,19,opt,name=active,proto3" json:"active,omitempty"`
+	DateCreated           *int64                     `protobuf:"varint,20,opt,name=date_created,json=dateCreated,proto3,oneof" json:"date_created,omitempty"`
+	DateCreatedString     *string                    `protobuf:"bytes,21,opt,name=date_created_string,json=dateCreatedString,proto3,oneof" json:"date_created_string,omitempty"`
+	DateModified          *int64                     `protobuf:"varint,22,opt,name=date_modified,json=dateModified,proto3,oneof" json:"date_modified,omitempty"`
+	DateModifiedString    *string                    `protobuf:"bytes,23,opt,name=date_modified_string,json=dateModifiedString,proto3,oneof" json:"date_modified_string,omitempty"`
+	ReportingCheckpointId *string                    `protobuf:"bytes,24,opt,name=reporting_checkpoint_id,json=reportingCheckpointId,proto3,oneof" json:"reporting_checkpoint_id,omitempty"`
+	ScaledScore           *float64                   `protobuf:"fixed64,25,opt,name=scaled_score,json=scaledScore,proto3,oneof" json:"scaled_score,omitempty"`
+	ScaledLabel           *string                    `protobuf:"bytes,26,opt,name=scaled_label,json=scaledLabel,proto3,oneof" json:"scaled_label,omitempty"`
+	unknownFields         protoimpl.UnknownFields
+	sizeCache             protoimpl.SizeCache
 }
 
 func (x *PhaseOutcomeSummary) Reset() {
@@ -241,6 +244,27 @@ func (x *PhaseOutcomeSummary) GetDateModified() int64 {
 func (x *PhaseOutcomeSummary) GetDateModifiedString() string {
 	if x != nil && x.DateModifiedString != nil {
 		return *x.DateModifiedString
+	}
+	return ""
+}
+
+func (x *PhaseOutcomeSummary) GetReportingCheckpointId() string {
+	if x != nil && x.ReportingCheckpointId != nil {
+		return *x.ReportingCheckpointId
+	}
+	return ""
+}
+
+func (x *PhaseOutcomeSummary) GetScaledScore() float64 {
+	if x != nil && x.ScaledScore != nil {
+		return *x.ScaledScore
+	}
+	return 0
+}
+
+func (x *PhaseOutcomeSummary) GetScaledLabel() string {
+	if x != nil && x.ScaledLabel != nil {
+		return *x.ScaledLabel
 	}
 	return ""
 }
@@ -1241,8 +1265,7 @@ var File_domain_operation_phase_outcome_summary_phase_outcome_summary_proto prot
 
 const file_domain_operation_phase_outcome_summary_phase_outcome_summary_proto_rawDesc = "" +
 	"\n" +
-	"Bdomain/operation/phase_outcome_summary/phase_outcome_summary.proto\x12\x13domain.operation.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1adomain/common/search.proto\x1a\"domain/operation/enums/enums.proto\x1a*domain/operation/job_phase/job_phase.proto\x1a\x10options/db.proto\"\x8c\n" +
-	"\n" +
+	"Bdomain/operation/phase_outcome_summary/phase_outcome_summary.proto\x12\x13domain.operation.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1adomain/common/search.proto\x1a\"domain/operation/enums/enums.proto\x1a*domain/operation/job_phase/job_phase.proto\x1a\x10options/db.proto\"\xf5\v\n" +
 	"\x13PhaseOutcomeSummary\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x123\n" +
 	"\fjob_phase_id\x18\x02 \x01(\tB\x11\x82\xb5\x18\r\n" +
@@ -1276,7 +1299,12 @@ const file_domain_operation_phase_outcome_summary_phase_outcome_summary_proto_ra
 	"\fdate_created\x18\x14 \x01(\x03H\x05R\vdateCreated\x88\x01\x01\x12;\n" +
 	"\x13date_created_string\x18\x15 \x01(\tB\x06\x82\xb5\x18\x028\x01H\x06R\x11dateCreatedString\x88\x01\x01\x12(\n" +
 	"\rdate_modified\x18\x16 \x01(\x03H\aR\fdateModified\x88\x01\x01\x12=\n" +
-	"\x14date_modified_string\x18\x17 \x01(\tB\x06\x82\xb5\x18\x028\x01H\bR\x12dateModifiedString\x88\x01\x01:\x06\x8a\xb5\x18\x02\b\x01B\f\n" +
+	"\x14date_modified_string\x18\x17 \x01(\tB\x06\x82\xb5\x18\x028\x01H\bR\x12dateModifiedString\x88\x01\x01\x12Y\n" +
+	"\x17reporting_checkpoint_id\x18\x18 \x01(\tB\x1c\x82\xb5\x18\x18\n" +
+	"\x14reporting_checkpoint\x18\x01H\tR\x15reportingCheckpointId\x88\x01\x01\x12&\n" +
+	"\fscaled_score\x18\x19 \x01(\x01H\n" +
+	"R\vscaledScore\x88\x01\x01\x12&\n" +
+	"\fscaled_label\x18\x1a \x01(\tH\vR\vscaledLabel\x88\x01\x01:\x06\x8a\xb5\x18\x02\b\x01B\f\n" +
 	"\n" +
 	"_job_phaseB\x10\n" +
 	"\x0e_summary_scoreB\f\n" +
@@ -1287,7 +1315,10 @@ const file_domain_operation_phase_outcome_summary_phase_outcome_summary_proto_ra
 	"\r_date_createdB\x16\n" +
 	"\x14_date_created_stringB\x10\n" +
 	"\x0e_date_modifiedB\x17\n" +
-	"\x15_date_modified_string\"`\n" +
+	"\x15_date_modified_stringB\x1a\n" +
+	"\x18_reporting_checkpoint_idB\x0f\n" +
+	"\r_scaled_scoreB\x0f\n" +
+	"\r_scaled_label\"`\n" +
 	" CreatePhaseOutcomeSummaryRequest\x12<\n" +
 	"\x04data\x18\x01 \x01(\v2(.domain.operation.v1.PhaseOutcomeSummaryR\x04data\"\xb9\x01\n" +
 	"!CreatePhaseOutcomeSummaryResponse\x12<\n" +

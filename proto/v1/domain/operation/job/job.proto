@@ -127,8 +127,9 @@ message Job {
   // See docs/plan/20260501-ad-hoc-subscription-billing/plan.md §3.2 (codex CRIT-4).
   optional string usage_request_date = 56;  // ISO 8601 YYYY-MM-DD
   optional int32  usage_ordinal      = 57;
+  bool is_synthesized = 58 [(options.v1.db).default = "false"];
 
-  reserved 58 to 69;
+  reserved 59 to 69;
 }
 
 // --- Service ---

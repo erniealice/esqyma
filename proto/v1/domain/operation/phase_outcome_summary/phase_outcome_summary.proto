@@ -42,6 +42,9 @@ message PhaseOutcomeSummary {
   optional string date_created_string = 21 [(options.v1.db).ignore = true];
   optional int64 date_modified = 22;
   optional string date_modified_string = 23 [(options.v1.db).ignore = true];
+  optional string reporting_checkpoint_id = 24 [(options.v1.db).references = "reporting_checkpoint", (options.v1.db).index = true];
+  optional double scaled_score = 25;
+  optional string scaled_label = 26;
 }
 
 // --- Service ---

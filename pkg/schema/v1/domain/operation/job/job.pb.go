@@ -122,6 +122,7 @@ type Job struct {
 	// See docs/plan/20260501-ad-hoc-subscription-billing/plan.md §3.2 (codex CRIT-4).
 	UsageRequestDate *string `protobuf:"bytes,56,opt,name=usage_request_date,json=usageRequestDate,proto3,oneof" json:"usage_request_date,omitempty"` // ISO 8601 YYYY-MM-DD
 	UsageOrdinal     *int32  `protobuf:"varint,57,opt,name=usage_ordinal,json=usageOrdinal,proto3,oneof" json:"usage_ordinal,omitempty"`
+	IsSynthesized    bool    `protobuf:"varint,58,opt,name=is_synthesized,json=isSynthesized,proto3" json:"is_synthesized,omitempty"`
 	unknownFields    protoimpl.UnknownFields
 	sizeCache        protoimpl.SizeCache
 }
@@ -546,6 +547,13 @@ func (x *Job) GetUsageOrdinal() int32 {
 		return *x.UsageOrdinal
 	}
 	return 0
+}
+
+func (x *Job) GetIsSynthesized() bool {
+	if x != nil {
+		return x.IsSynthesized
+	}
+	return false
 }
 
 type CreateJobRequest struct {
@@ -1664,7 +1672,7 @@ var File_domain_operation_job_job_proto protoreflect.FileDescriptor
 
 const file_domain_operation_job_job_proto_rawDesc = "" +
 	"\n" +
-	"\x1edomain/operation/job/job.proto\x12\x13domain.operation.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1adomain/common/search.proto\x1a!domain/entity/client/client.proto\x1a%domain/entity/location/location.proto\x1a\"domain/operation/enums/enums.proto\x1a\x10options/db.proto\"\x9d\x1e\n" +
+	"\x1edomain/operation/job/job.proto\x12\x13domain.operation.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1adomain/common/search.proto\x1a!domain/entity/client/client.proto\x1a%domain/entity/location/location.proto\x1a\"domain/operation/enums/enums.proto\x1a\x10options/db.proto\"\xd1\x1e\n" +
 	"\x03Job\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12&\n" +
 	"\fdate_created\x18\x02 \x01(\x03H\x00R\vdateCreated\x88\x01\x01\x12;\n" +
@@ -1743,7 +1751,8 @@ const file_domain_operation_job_job_proto_rawDesc = "" +
 	"\x12cycle_period_start\x186 \x01(\tH'R\x10cyclePeriodStart\x88\x01\x01\x12-\n" +
 	"\x10cycle_period_end\x187 \x01(\tH(R\x0ecyclePeriodEnd\x88\x01\x01\x121\n" +
 	"\x12usage_request_date\x188 \x01(\tH)R\x10usageRequestDate\x88\x01\x01\x12(\n" +
-	"\rusage_ordinal\x189 \x01(\x05H*R\fusageOrdinal\x88\x01\x01:\x06\x8a\xb5\x18\x02\b\x01B\x0f\n" +
+	"\rusage_ordinal\x189 \x01(\x05H*R\fusageOrdinal\x88\x01\x01\x122\n" +
+	"\x0eis_synthesized\x18: \x01(\bB\v\x82\xb5\x18\a\"\x05falseR\risSynthesized:\x06\x8a\xb5\x18\x02\b\x01B\x0f\n" +
 	"\r_date_createdB\x16\n" +
 	"\x14_date_created_stringB\x10\n" +
 	"\x0e_date_modifiedB\x17\n" +
@@ -1788,7 +1797,7 @@ const file_domain_operation_job_job_proto_rawDesc = "" +
 	"\x13_cycle_period_startB\x13\n" +
 	"\x11_cycle_period_endB\x15\n" +
 	"\x13_usage_request_dateB\x10\n" +
-	"\x0e_usage_ordinalJ\x04\b:\x10F\"@\n" +
+	"\x0e_usage_ordinalJ\x04\b;\x10F\"@\n" +
 	"\x10CreateJobRequest\x12,\n" +
 	"\x04data\x18\x01 \x01(\v2\x18.domain.operation.v1.JobR\x04data\"\x99\x01\n" +
 	"\x11CreateJobResponse\x12,\n" +

@@ -51,8 +51,10 @@ message JobPhase {
   optional int32 setup_minutes = 22;
   optional double run_minutes_per_unit = 23;
   optional string predecessor_phase_id = 24 [(options.v1.db).references = "job_phase"];
+  optional string scoring_scheme_id = 25 [(options.v1.db).references = "scoring_scheme"];
+  bool is_synthesized = 26 [(options.v1.db).default = "false"];
 
-  reserved 25 to 39;
+  reserved 27 to 39;
 }
 
 // --- Service ---

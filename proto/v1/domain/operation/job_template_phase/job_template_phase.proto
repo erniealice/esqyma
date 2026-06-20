@@ -44,8 +44,9 @@ message JobTemplatePhase {
   optional int32  billing_percent_bps = 17;  // 10000 = 100% of PricePlan total
   optional int64  billing_amount      = 18;  // centavos; fixed override (mutually exclusive w/ percent)
   optional string billing_currency    = 19;  // ISO 4217; only meaningful when fixed billing_amount used
+  optional string scoring_scheme_id = 20 [(options.v1.db).references = "scoring_scheme"];
 
-  reserved 20 to 29;
+  reserved 21 to 29;
 }
 
 service JobTemplatePhaseDomainService {

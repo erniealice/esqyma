@@ -1,0 +1,122 @@
+syntax = "proto3";
+
+package domain.operation.v1;
+
+option go_package = "github.com/erniealice/esqyma/golang/v1/domain/operation/score_scale_band";
+
+import "domain/common/error.proto";
+import "domain/common/pagination.proto";
+import "domain/common/filter.proto";
+import "domain/common/sort.proto";
+import "domain/common/search.proto";
+
+import "domain/operation/enums/enums.proto";
+import "options/db.proto";
+
+message ScoreScaleBand {
+  option (options.v1.table).table = true;
+
+  string id = 1;
+  optional string workspace_id = 2 [(options.v1.db).references = "workspace", (options.v1.db).index = true];
+  bool active = 3 [(options.v1.db).default = "true"];
+  string score_scale_id = 4 [(options.v1.db).references = "score_scale", (options.v1.db).index = true];
+  int32 sequence_order = 5;
+  optional double input_min = 6;
+  optional double input_max = 7;
+  optional string input_match = 8;
+  optional double output_value = 9;
+  string output_label = 10;
+  optional string band_role = 11;
+  optional domain.operation.v1.Determination determination = 12;
+  optional int64 date_created = 13;
+  optional string date_created_string = 14 [(options.v1.db).ignore = true];
+  optional int64 date_modified = 15;
+  optional string date_modified_string = 16 [(options.v1.db).ignore = true];
+}
+
+service ScoreScaleBandDomainService {
+  rpc CreateScoreScaleBand(CreateScoreScaleBandRequest) returns (CreateScoreScaleBandResponse);
+  rpc ReadScoreScaleBand(ReadScoreScaleBandRequest) returns (ReadScoreScaleBandResponse);
+  rpc UpdateScoreScaleBand(UpdateScoreScaleBandRequest) returns (UpdateScoreScaleBandResponse);
+  rpc DeleteScoreScaleBand(DeleteScoreScaleBandRequest) returns (DeleteScoreScaleBandResponse);
+  rpc ListScoreScaleBands(ListScoreScaleBandsRequest) returns (ListScoreScaleBandsResponse);
+  rpc GetScoreScaleBandListPageData(GetScoreScaleBandListPageDataRequest) returns (GetScoreScaleBandListPageDataResponse);
+  rpc GetScoreScaleBandItemPageData(GetScoreScaleBandItemPageDataRequest) returns (GetScoreScaleBandItemPageDataResponse);
+}
+
+message CreateScoreScaleBandRequest {
+  ScoreScaleBand data = 1;
+}
+
+message CreateScoreScaleBandResponse {
+  repeated ScoreScaleBand data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message ReadScoreScaleBandRequest {
+  ScoreScaleBand data = 1;
+}
+
+message ReadScoreScaleBandResponse {
+  repeated ScoreScaleBand data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message UpdateScoreScaleBandRequest {
+  ScoreScaleBand data = 1;
+}
+
+message UpdateScoreScaleBandResponse {
+  repeated ScoreScaleBand data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message DeleteScoreScaleBandRequest {
+  ScoreScaleBand data = 1;
+}
+
+message DeleteScoreScaleBandResponse {
+  bool success = 1;
+  optional domain.common.v1.Error error = 2;
+}
+
+message ListScoreScaleBandsRequest {
+  optional domain.common.v1.SearchRequest search = 1;
+  optional domain.common.v1.FilterRequest filters = 2;
+  optional domain.common.v1.SortRequest sort = 3;
+  optional domain.common.v1.PaginationRequest pagination = 4;
+}
+
+message ListScoreScaleBandsResponse {
+  repeated ScoreScaleBand data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message GetScoreScaleBandListPageDataRequest {
+  optional domain.common.v1.PaginationRequest pagination = 1;
+  optional domain.common.v1.FilterRequest filters = 2;
+  optional domain.common.v1.SortRequest sort = 3;
+  optional domain.common.v1.SearchRequest search = 4;
+}
+
+message GetScoreScaleBandListPageDataResponse {
+  repeated ScoreScaleBand score_scale_band_list = 1;
+  optional domain.common.v1.PaginationResponse pagination = 2;
+  repeated domain.common.v1.SearchResult search_results = 3;
+  bool success = 4;
+  optional domain.common.v1.Error error = 5;
+}
+
+message GetScoreScaleBandItemPageDataRequest {
+  string score_scale_band_id = 1;
+}
+
+message GetScoreScaleBandItemPageDataResponse {
+  optional ScoreScaleBand score_scale_band = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}

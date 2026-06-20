@@ -1,0 +1,118 @@
+syntax = "proto3";
+
+package domain.operation.v1;
+
+option go_package = "github.com/erniealice/esqyma/golang/v1/domain/operation/scoring_component";
+
+import "domain/common/error.proto";
+import "domain/common/pagination.proto";
+import "domain/common/filter.proto";
+import "domain/common/sort.proto";
+import "domain/common/search.proto";
+
+import "domain/operation/enums/enums.proto";
+import "options/db.proto";
+
+message ScoringComponent {
+  option (options.v1.table).table = true;
+
+  string id = 1;
+  string scoring_scheme_id = 2 [(options.v1.db).references = "scoring_scheme", (options.v1.db).index = true];
+  string code = 3;
+  string label = 4;
+  double weight = 5 [(options.v1.db).default = "1.0"];
+  int32 sequence_order = 6;
+  optional string parent_component_id = 7 [(options.v1.db).references = "scoring_component", (options.v1.db).index = true];
+  bool active = 8 [(options.v1.db).default = "true"];
+  optional int64 date_created = 9;
+  optional string date_created_string = 10 [(options.v1.db).ignore = true];
+  optional int64 date_modified = 11;
+  optional string date_modified_string = 12 [(options.v1.db).ignore = true];
+}
+
+service ScoringComponentDomainService {
+  rpc CreateScoringComponent(CreateScoringComponentRequest) returns (CreateScoringComponentResponse);
+  rpc ReadScoringComponent(ReadScoringComponentRequest) returns (ReadScoringComponentResponse);
+  rpc UpdateScoringComponent(UpdateScoringComponentRequest) returns (UpdateScoringComponentResponse);
+  rpc DeleteScoringComponent(DeleteScoringComponentRequest) returns (DeleteScoringComponentResponse);
+  rpc ListScoringComponents(ListScoringComponentsRequest) returns (ListScoringComponentsResponse);
+  rpc GetScoringComponentListPageData(GetScoringComponentListPageDataRequest) returns (GetScoringComponentListPageDataResponse);
+  rpc GetScoringComponentItemPageData(GetScoringComponentItemPageDataRequest) returns (GetScoringComponentItemPageDataResponse);
+}
+
+message CreateScoringComponentRequest {
+  ScoringComponent data = 1;
+}
+
+message CreateScoringComponentResponse {
+  repeated ScoringComponent data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message ReadScoringComponentRequest {
+  ScoringComponent data = 1;
+}
+
+message ReadScoringComponentResponse {
+  repeated ScoringComponent data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message UpdateScoringComponentRequest {
+  ScoringComponent data = 1;
+}
+
+message UpdateScoringComponentResponse {
+  repeated ScoringComponent data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message DeleteScoringComponentRequest {
+  ScoringComponent data = 1;
+}
+
+message DeleteScoringComponentResponse {
+  bool success = 1;
+  optional domain.common.v1.Error error = 2;
+}
+
+message ListScoringComponentsRequest {
+  optional domain.common.v1.SearchRequest search = 1;
+  optional domain.common.v1.FilterRequest filters = 2;
+  optional domain.common.v1.SortRequest sort = 3;
+  optional domain.common.v1.PaginationRequest pagination = 4;
+}
+
+message ListScoringComponentsResponse {
+  repeated ScoringComponent data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message GetScoringComponentListPageDataRequest {
+  optional domain.common.v1.PaginationRequest pagination = 1;
+  optional domain.common.v1.FilterRequest filters = 2;
+  optional domain.common.v1.SortRequest sort = 3;
+  optional domain.common.v1.SearchRequest search = 4;
+}
+
+message GetScoringComponentListPageDataResponse {
+  repeated ScoringComponent scoring_component_list = 1;
+  optional domain.common.v1.PaginationResponse pagination = 2;
+  repeated domain.common.v1.SearchResult search_results = 3;
+  bool success = 4;
+  optional domain.common.v1.Error error = 5;
+}
+
+message GetScoringComponentItemPageDataRequest {
+  string scoring_component_id = 1;
+}
+
+message GetScoringComponentItemPageDataResponse {
+  optional ScoringComponent scoring_component = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}

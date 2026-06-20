@@ -55,8 +55,9 @@ message JobTask {
   repeated string predecessor_task_ids = 23;
   optional bool allow_parallel = 24 [(options.v1.db).default = "false"];
   optional string workflow_step_id = 25 [(options.v1.db).index = true];
+  bool is_synthesized = 26 [(options.v1.db).default = "false"];
 
-  reserved 26 to 39;
+  reserved 27 to 39;
 }
 
 // --- Service ---

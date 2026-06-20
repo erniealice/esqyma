@@ -1,0 +1,156 @@
+syntax = "proto3";
+
+package domain.subscription.v1;
+
+option go_package = "github.com/erniealice/esqyma/golang/v1/domain/subscription/subscription_group";
+
+import "domain/common/error.proto";
+import "domain/common/pagination.proto";
+import "domain/common/filter.proto";
+import "domain/common/sort.proto";
+import "domain/common/search.proto";
+
+import "options/db.proto";
+
+// SubscriptionGroup is a first-class per-period COHORT — a class roster, a
+// patient panel, or a project team. It anchors a set of subscription_group_member
+// rows to a single billing period via its price_schedule_id (the AY anchor) and
+// may optionally link to a line for discipline/visibility scoping.
+message SubscriptionGroup {
+  option (options.v1.table).table = true;
+
+  string id = 1;
+  optional int64 date_created = 2;
+  optional string date_created_string = 3 [(options.v1.db).ignore = true];
+  optional int64 date_modified = 4;
+  optional string date_modified_string = 5 [(options.v1.db).ignore = true];
+  bool active = 6 [(options.v1.db).default = "true"];
+  string name = 7;
+
+  // kind discriminates the cohort shape: "cohort" / "roster" / "panel" / "project_team".
+  string kind = 8;
+
+  // price_schedule_id is the period anchor (e.g. the academic-year price_schedule).
+  optional string price_schedule_id = 9 [(options.v1.db).references = "price_schedule", (options.v1.db).index = true];
+
+  // line_id is an optional discipline/visibility link.
+  optional string line_id = 10 [(options.v1.db).references = "line", (options.v1.db).index = true];
+
+  // Workspace ownership — subscription groups are scoped per workspace.
+  optional string workspace_id = 11 [(options.v1.db).references = "workspace", (options.v1.db).index = true];
+}
+
+service SubscriptionGroupDomainService {
+  rpc CreateSubscriptionGroup(CreateSubscriptionGroupRequest) returns (CreateSubscriptionGroupResponse);
+  rpc ReadSubscriptionGroup(ReadSubscriptionGroupRequest) returns (ReadSubscriptionGroupResponse);
+  rpc UpdateSubscriptionGroup(UpdateSubscriptionGroupRequest) returns (UpdateSubscriptionGroupResponse);
+  rpc DeleteSubscriptionGroup(DeleteSubscriptionGroupRequest) returns (DeleteSubscriptionGroupResponse);
+  rpc ListSubscriptionGroups(ListSubscriptionGroupsRequest) returns (ListSubscriptionGroupsResponse);
+
+  // NEW: Enhanced list with pagination, filtering, sorting, search
+  rpc GetSubscriptionGroupListPageData(GetSubscriptionGroupListPageDataRequest)
+    returns (GetSubscriptionGroupListPageDataResponse);
+
+  // NEW: Enhanced item view with related data
+  rpc GetSubscriptionGroupItemPageData(GetSubscriptionGroupItemPageDataRequest)
+    returns (GetSubscriptionGroupItemPageDataResponse);
+}
+
+message CreateSubscriptionGroupRequest {
+  SubscriptionGroup data = 1;
+}
+
+message CreateSubscriptionGroupResponse {
+  repeated SubscriptionGroup data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message ReadSubscriptionGroupRequest {
+  SubscriptionGroup data = 1;
+}
+
+message ReadSubscriptionGroupResponse {
+  repeated SubscriptionGroup data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message UpdateSubscriptionGroupRequest {
+  SubscriptionGroup data = 1;
+}
+
+message UpdateSubscriptionGroupResponse {
+  repeated SubscriptionGroup data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message DeleteSubscriptionGroupRequest {
+  SubscriptionGroup data = 1;
+}
+
+message DeleteSubscriptionGroupResponse {
+  bool success = 1;
+  optional domain.common.v1.Error error = 2;
+}
+
+message ListSubscriptionGroupsRequest {
+  optional domain.common.v1.SearchRequest search = 1;
+  optional domain.common.v1.FilterRequest filters = 2;
+  optional domain.common.v1.SortRequest sort = 3;
+  optional domain.common.v1.PaginationRequest pagination = 4;
+}
+
+message ListSubscriptionGroupsResponse {
+  repeated SubscriptionGroup data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+// NEW: Enhanced list request with core features
+message GetSubscriptionGroupListPageDataRequest {
+  // Pagination settings
+  domain.common.v1.PaginationRequest pagination = 1;
+
+  // Filter conditions
+  domain.common.v1.FilterRequest filters = 2;
+
+  // Sort settings
+  domain.common.v1.SortRequest sort = 3;
+
+  // Search settings
+  domain.common.v1.SearchRequest search = 4;
+}
+
+// NEW: Enhanced list response with metadata
+message GetSubscriptionGroupListPageDataResponse {
+  // The subscription group data
+  repeated SubscriptionGroup subscription_group_list = 1;
+
+  // Pagination metadata
+  domain.common.v1.PaginationResponse pagination = 2;
+
+  // Search results metadata (when search is used)
+  repeated domain.common.v1.SearchResult search_results = 3;
+
+  // Response status
+  bool success = 4;
+  optional domain.common.v1.Error error = 5;
+}
+
+// NEW: Simple item request
+message GetSubscriptionGroupItemPageDataRequest {
+  // The subscription group ID to retrieve
+  string subscription_group_id = 1;
+}
+
+// NEW: Simple item response
+message GetSubscriptionGroupItemPageDataResponse {
+  // The subscription group data
+  SubscriptionGroup subscription_group = 1;
+
+  // Response status
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}

@@ -1,0 +1,151 @@
+syntax = "proto3";
+
+package domain.operation.v1;
+
+option go_package = "github.com/erniealice/esqyma/golang/v1/domain/operation/score_scale";
+
+import "domain/common/error.proto";
+import "domain/common/pagination.proto";
+import "domain/common/filter.proto";
+import "domain/common/sort.proto";
+import "domain/common/search.proto";
+
+import "domain/operation/enums/enums.proto";
+import "options/db.proto";
+
+message ScoreScale {
+  option (options.v1.table).table = true;
+
+  string id = 1;
+  string scale_group_id = 2;
+  int32 version = 3;
+  domain.operation.v1.VersionStatus version_status = 4;
+  string name = 5;
+  domain.operation.v1.ScaleKind scale_kind = 6;
+  string input_unit = 7;
+  optional double input_min = 8;
+  optional double input_max = 9;
+  string output_unit = 10;
+  optional string workspace_id = 11 [(options.v1.db).references = "workspace"];
+  bool active = 12 [(options.v1.db).default = "true"];
+  string created_by = 13;
+  optional int64 date_created = 14;
+  optional string date_created_string = 15 [(options.v1.db).ignore = true];
+  optional int64 date_modified = 16;
+  optional string date_modified_string = 17 [(options.v1.db).ignore = true];
+}
+
+service ScoreScaleDomainService {
+  rpc CreateScoreScale(CreateScoreScaleRequest) returns (CreateScoreScaleResponse);
+  rpc ReadScoreScale(ReadScoreScaleRequest) returns (ReadScoreScaleResponse);
+  rpc UpdateScoreScale(UpdateScoreScaleRequest) returns (UpdateScoreScaleResponse);
+  rpc DeleteScoreScale(DeleteScoreScaleRequest) returns (DeleteScoreScaleResponse);
+  rpc ListScoreScales(ListScoreScalesRequest) returns (ListScoreScalesResponse);
+  rpc GetScoreScaleListPageData(GetScoreScaleListPageDataRequest) returns (GetScoreScaleListPageDataResponse);
+  rpc GetScoreScaleItemPageData(GetScoreScaleItemPageDataRequest) returns (GetScoreScaleItemPageDataResponse);
+
+  // Extra: filter by group
+  rpc ListByGroup(ListScoreScalesByGroupRequest) returns (ListScoreScalesByGroupResponse);
+
+  // Extra: get current published version for a group
+  rpc GetCurrentPublished(GetCurrentPublishedScoreScaleRequest) returns (GetCurrentPublishedScoreScaleResponse);
+}
+
+message CreateScoreScaleRequest {
+  ScoreScale data = 1;
+}
+
+message CreateScoreScaleResponse {
+  repeated ScoreScale data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message ReadScoreScaleRequest {
+  ScoreScale data = 1;
+}
+
+message ReadScoreScaleResponse {
+  repeated ScoreScale data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message UpdateScoreScaleRequest {
+  ScoreScale data = 1;
+}
+
+message UpdateScoreScaleResponse {
+  repeated ScoreScale data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message DeleteScoreScaleRequest {
+  ScoreScale data = 1;
+}
+
+message DeleteScoreScaleResponse {
+  bool success = 1;
+  optional domain.common.v1.Error error = 2;
+}
+
+message ListScoreScalesRequest {
+  optional domain.common.v1.SearchRequest search = 1;
+  optional domain.common.v1.FilterRequest filters = 2;
+  optional domain.common.v1.SortRequest sort = 3;
+  optional domain.common.v1.PaginationRequest pagination = 4;
+}
+
+message ListScoreScalesResponse {
+  repeated ScoreScale data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message GetScoreScaleListPageDataRequest {
+  optional domain.common.v1.PaginationRequest pagination = 1;
+  optional domain.common.v1.FilterRequest filters = 2;
+  optional domain.common.v1.SortRequest sort = 3;
+  optional domain.common.v1.SearchRequest search = 4;
+}
+
+message GetScoreScaleListPageDataResponse {
+  repeated ScoreScale score_scale_list = 1;
+  optional domain.common.v1.PaginationResponse pagination = 2;
+  repeated domain.common.v1.SearchResult search_results = 3;
+  bool success = 4;
+  optional domain.common.v1.Error error = 5;
+}
+
+message GetScoreScaleItemPageDataRequest {
+  string score_scale_id = 1;
+}
+
+message GetScoreScaleItemPageDataResponse {
+  optional ScoreScale score_scale = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+// Extra RPC messages
+
+message ListScoreScalesByGroupRequest {
+  string scale_group_id = 1;
+}
+
+message ListScoreScalesByGroupResponse {
+  repeated ScoreScale score_scales = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message GetCurrentPublishedScoreScaleRequest {
+  string scale_group_id = 1;
+}
+
+message GetCurrentPublishedScoreScaleResponse {
+  optional ScoreScale score_scale = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}

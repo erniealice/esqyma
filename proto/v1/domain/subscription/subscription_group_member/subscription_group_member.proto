@@ -1,0 +1,117 @@
+syntax = "proto3";
+
+package domain.subscription.v1;
+
+
+option go_package = "github.com/erniealice/esqyma/golang/v1/domain/subscription/subscription_group_member";
+
+import "domain/common/error.proto";
+import "domain/common/pagination.proto";
+import "domain/common/filter.proto";
+import "domain/common/sort.proto";
+import "domain/common/search.proto";
+import "options/db.proto";
+
+message SubscriptionGroupMember {
+  option (options.v1.table).table = true;
+  option (options.v1.table).unique_together = "subscription_group_id,subscription_id";
+  string id = 1;
+  string subscription_group_id = 2 [(options.v1.db).references = "subscription_group", (options.v1.db).index = true];
+  string subscription_id = 3 [(options.v1.db).references = "subscription", (options.v1.db).index = true];
+  string client_id = 4 [(options.v1.db).index = true];
+  optional int64 date_created = 5;
+  optional string date_created_string = 6 [(options.v1.db).ignore = true];
+  optional int64 date_modified = 7;
+  optional string date_modified_string = 8 [(options.v1.db).ignore = true];
+  bool active = 9 [(options.v1.db).default = "true"];
+  string workspace_id = 10 [(options.v1.db).references = "workspace", (options.v1.db).index = true];
+}
+
+service SubscriptionGroupMemberDomainService {
+  rpc CreateSubscriptionGroupMember(CreateSubscriptionGroupMemberRequest) returns (CreateSubscriptionGroupMemberResponse);
+  rpc ReadSubscriptionGroupMember(ReadSubscriptionGroupMemberRequest) returns (ReadSubscriptionGroupMemberResponse);
+  rpc UpdateSubscriptionGroupMember(UpdateSubscriptionGroupMemberRequest) returns (UpdateSubscriptionGroupMemberResponse);
+  rpc DeleteSubscriptionGroupMember(DeleteSubscriptionGroupMemberRequest) returns (DeleteSubscriptionGroupMemberResponse);
+  rpc ListSubscriptionGroupMembers(ListSubscriptionGroupMembersRequest) returns (ListSubscriptionGroupMembersResponse);
+  rpc GetSubscriptionGroupMemberListPageData(GetSubscriptionGroupMemberListPageDataRequest)
+    returns (GetSubscriptionGroupMemberListPageDataResponse);
+  rpc GetSubscriptionGroupMemberItemPageData(GetSubscriptionGroupMemberItemPageDataRequest)
+    returns (GetSubscriptionGroupMemberItemPageDataResponse);
+}
+
+message CreateSubscriptionGroupMemberRequest {
+  SubscriptionGroupMember data = 1;
+}
+
+message CreateSubscriptionGroupMemberResponse {
+  repeated SubscriptionGroupMember data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message ReadSubscriptionGroupMemberRequest {
+  SubscriptionGroupMember data = 1;
+}
+
+message ReadSubscriptionGroupMemberResponse {
+  repeated SubscriptionGroupMember data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message UpdateSubscriptionGroupMemberRequest {
+  SubscriptionGroupMember data = 1;
+}
+
+message UpdateSubscriptionGroupMemberResponse {
+  repeated SubscriptionGroupMember data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message DeleteSubscriptionGroupMemberRequest {
+  SubscriptionGroupMember data = 1;
+}
+
+message DeleteSubscriptionGroupMemberResponse {
+  bool success = 1;
+  optional domain.common.v1.Error error = 2;
+}
+
+message ListSubscriptionGroupMembersRequest {
+  optional domain.common.v1.SearchRequest search = 1;
+  optional domain.common.v1.FilterRequest filters = 2;
+  optional domain.common.v1.SortRequest sort = 3;
+  optional domain.common.v1.PaginationRequest pagination = 4;
+}
+
+message ListSubscriptionGroupMembersResponse {
+  repeated SubscriptionGroupMember data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message GetSubscriptionGroupMemberListPageDataRequest {
+  optional domain.common.v1.SearchRequest search = 1;
+  optional domain.common.v1.FilterRequest filters = 2;
+  optional domain.common.v1.SortRequest sort = 3;
+  optional domain.common.v1.PaginationRequest pagination = 4;
+}
+
+message GetSubscriptionGroupMemberListPageDataResponse {
+  repeated SubscriptionGroupMember subscription_group_member_list = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+  optional domain.common.v1.PaginationResponse pagination = 4;
+  repeated domain.common.v1.SearchResult search_results = 5;
+}
+
+message GetSubscriptionGroupMemberItemPageDataRequest {
+  string subscription_group_member_id = 1;
+}
+
+message GetSubscriptionGroupMemberItemPageDataResponse {
+  SubscriptionGroupMember subscription_group_member = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
