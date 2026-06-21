@@ -36,6 +36,7 @@ type Line struct {
 	DateModifiedString *string                     `protobuf:"bytes,7,opt,name=date_modified_string,json=dateModifiedString,proto3,oneof" json:"date_modified_string,omitempty"`
 	Active             bool                        `protobuf:"varint,8,opt,name=active,proto3" json:"active,omitempty"`
 	ProductLines       []*product_line.ProductLine `protobuf:"bytes,9,rep,name=product_lines,json=productLines,proto3" json:"product_lines,omitempty"`
+	WorkspaceId        *string                     `protobuf:"bytes,10,opt,name=workspace_id,json=workspaceId,proto3,oneof" json:"workspace_id,omitempty"`
 	unknownFields      protoimpl.UnknownFields
 	sizeCache          protoimpl.SizeCache
 }
@@ -131,6 +132,13 @@ func (x *Line) GetProductLines() []*product_line.ProductLine {
 		return x.ProductLines
 	}
 	return nil
+}
+
+func (x *Line) GetWorkspaceId() string {
+	if x != nil && x.WorkspaceId != nil {
+		return *x.WorkspaceId
+	}
+	return ""
 }
 
 type CreateLineRequest struct {
@@ -921,7 +929,7 @@ var File_domain_product_line_line_proto protoreflect.FileDescriptor
 
 const file_domain_product_line_line_proto_rawDesc = "" +
 	"\n" +
-	"\x1edomain/product/line/line.proto\x12\x11domain.product.v1\x1a\x19domain/common/error.proto\x1a\x1adomain/common/search.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1edomain/common/pagination.proto\x1a.domain/product/product_line/product_line.proto\x1a\x10options/db.proto\"\xdf\x03\n" +
+	"\x1edomain/product/line/line.proto\x12\x11domain.product.v1\x1a\x19domain/common/error.proto\x1a\x1adomain/common/search.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1edomain/common/pagination.proto\x1a.domain/product/product_line/product_line.proto\x1a\x10options/db.proto\"\xab\x04\n" +
 	"\x04Line\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12\x12\n" +
 	"\x04name\x18\x02 \x01(\tR\x04name\x12 \n" +
@@ -932,11 +940,15 @@ const file_domain_product_line_line_proto_rawDesc = "" +
 	"\x14date_modified_string\x18\a \x01(\tB\x06\x82\xb5\x18\x028\x01H\x03R\x12dateModifiedString\x88\x01\x01\x12\"\n" +
 	"\x06active\x18\b \x01(\bB\n" +
 	"\x82\xb5\x18\x06\"\x04trueR\x06active\x12C\n" +
-	"\rproduct_lines\x18\t \x03(\v2\x1e.domain.product.v1.ProductLineR\fproductLines:\x06\x8a\xb5\x18\x02\b\x01B\x0f\n" +
+	"\rproduct_lines\x18\t \x03(\v2\x1e.domain.product.v1.ProductLineR\fproductLines\x129\n" +
+	"\fworkspace_id\x18\n" +
+	" \x01(\tB\x11\x82\xb5\x18\r\n" +
+	"\tworkspace\x18\x01H\x04R\vworkspaceId\x88\x01\x01:\x06\x8a\xb5\x18\x02\b\x01B\x0f\n" +
 	"\r_date_createdB\x16\n" +
 	"\x14_date_created_stringB\x10\n" +
 	"\x0e_date_modifiedB\x17\n" +
-	"\x15_date_modified_string\"@\n" +
+	"\x15_date_modified_stringB\x0f\n" +
+	"\r_workspace_id\"@\n" +
 	"\x11CreateLineRequest\x12+\n" +
 	"\x04data\x18\x01 \x01(\v2\x17.domain.product.v1.LineR\x04data\"\x99\x01\n" +
 	"\x12CreateLineResponse\x12+\n" +

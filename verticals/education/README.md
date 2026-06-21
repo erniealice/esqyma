@@ -88,7 +88,15 @@ The core insight: **each student is a client of the school; each course-term enr
 │  ACCESS                                                   │
 │                                                           │
 │  role            → Teacher, Tutor, Admin, Registrar       │
-│  permission      → can_grade, can_enroll, can_view_roster  │
+│  permission      → generic <entity>:<verb> codes:          │
+│                    grade    = task_outcome:create/update    │
+│                    enroll   = subscription:create           │
+│                    roster   = group:read + client:list      │
+│   (no domain-specific perms like "can_grade"; RBAC codes    │
+│    always match the affected proto entity. role-edu-teacher │
+│    grants task_outcome:* / job:* / client:read,list /       │
+│    event:list — see docs/plan/20260615-education-firestore- │
+│    migration/teacher-integration.md)                        │
 └──────────────────────────────────────────────────────────┘
 ```
 
