@@ -1,0 +1,126 @@
+syntax = "proto3";
+
+package domain.subscription.v1;
+
+option go_package = "github.com/erniealice/esqyma/golang/v1/domain/subscription/price_schedule_workspace_user";
+
+import "domain/common/error.proto";
+import "domain/common/pagination.proto";
+import "domain/common/filter.proto";
+import "domain/common/sort.proto";
+import "domain/common/search.proto";
+import "options/db.proto";
+
+// PriceScheduleWorkspaceUser pins an operator (workspace_user) at a
+// price_schedule (period / academic-year) node for period-level
+// servicing/visibility — the "year coordinator". It is the 5th member of the
+// *_workspace_user access family (alongside client_workspace_user,
+// subscription_workspace_user, subscription_group_workspace_user,
+// line_workspace_user). Exact mirror of subscription_group_workspace_user with
+// the parent FK = price_schedule_id instead of subscription_group_id.
+message PriceScheduleWorkspaceUser {
+  option (options.v1.table).table = true;
+  option (options.v1.table).unique_together = "price_schedule_id,workspace_user_id";
+  string id = 1;
+  optional int64 date_created = 2;
+  optional string date_created_string = 3 [(options.v1.db).ignore = true];
+  optional int64 date_modified = 4;
+  optional string date_modified_string = 5 [(options.v1.db).ignore = true];
+  bool active = 6 [(options.v1.db).default = "true"];
+  string workspace_id = 7 [(options.v1.db).references = "workspace", (options.v1.db).index = true];
+  string price_schedule_id = 8 [(options.v1.db).references = "price_schedule", (options.v1.db).index = true];
+  string workspace_user_id = 9 [(options.v1.db).references = "workspace_user", (options.v1.db).index = true];
+  string scope = 10;
+  string role = 11;
+  bool is_owner = 12 [(options.v1.db).default = "false"];
+}
+
+service PriceScheduleWorkspaceUserDomainService {
+  rpc CreatePriceScheduleWorkspaceUser(CreatePriceScheduleWorkspaceUserRequest) returns (CreatePriceScheduleWorkspaceUserResponse);
+  rpc ReadPriceScheduleWorkspaceUser(ReadPriceScheduleWorkspaceUserRequest) returns (ReadPriceScheduleWorkspaceUserResponse);
+  rpc UpdatePriceScheduleWorkspaceUser(UpdatePriceScheduleWorkspaceUserRequest) returns (UpdatePriceScheduleWorkspaceUserResponse);
+  rpc DeletePriceScheduleWorkspaceUser(DeletePriceScheduleWorkspaceUserRequest) returns (DeletePriceScheduleWorkspaceUserResponse);
+  rpc ListPriceScheduleWorkspaceUsers(ListPriceScheduleWorkspaceUsersRequest) returns (ListPriceScheduleWorkspaceUsersResponse);
+
+  rpc GetPriceScheduleWorkspaceUserListPageData(GetPriceScheduleWorkspaceUserListPageDataRequest)
+    returns (GetPriceScheduleWorkspaceUserListPageDataResponse);
+  rpc GetPriceScheduleWorkspaceUserItemPageData(GetPriceScheduleWorkspaceUserItemPageDataRequest)
+    returns (GetPriceScheduleWorkspaceUserItemPageDataResponse);
+}
+
+message CreatePriceScheduleWorkspaceUserRequest {
+  PriceScheduleWorkspaceUser data = 1;
+}
+
+message CreatePriceScheduleWorkspaceUserResponse {
+  repeated PriceScheduleWorkspaceUser data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message ReadPriceScheduleWorkspaceUserRequest {
+  PriceScheduleWorkspaceUser data = 1;
+}
+
+message ReadPriceScheduleWorkspaceUserResponse {
+  repeated PriceScheduleWorkspaceUser data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message UpdatePriceScheduleWorkspaceUserRequest {
+  PriceScheduleWorkspaceUser data = 1;
+}
+
+message UpdatePriceScheduleWorkspaceUserResponse {
+  repeated PriceScheduleWorkspaceUser data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message DeletePriceScheduleWorkspaceUserRequest {
+  PriceScheduleWorkspaceUser data = 1;
+}
+
+message DeletePriceScheduleWorkspaceUserResponse {
+  bool success = 1;
+  optional domain.common.v1.Error error = 2;
+}
+
+message ListPriceScheduleWorkspaceUsersRequest {
+  optional domain.common.v1.SearchRequest search = 1;
+  optional domain.common.v1.FilterRequest filters = 2;
+  optional domain.common.v1.SortRequest sort = 3;
+  optional domain.common.v1.PaginationRequest pagination = 4;
+}
+
+message ListPriceScheduleWorkspaceUsersResponse {
+  repeated PriceScheduleWorkspaceUser data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message GetPriceScheduleWorkspaceUserListPageDataRequest {
+  optional domain.common.v1.PaginationRequest pagination = 1;
+  optional domain.common.v1.FilterRequest filters = 2;
+  optional domain.common.v1.SortRequest sort = 3;
+  optional domain.common.v1.SearchRequest search = 4;
+}
+
+message GetPriceScheduleWorkspaceUserListPageDataResponse {
+  repeated PriceScheduleWorkspaceUser price_schedule_workspace_user_list = 1;
+  domain.common.v1.PaginationResponse pagination = 2;
+  repeated domain.common.v1.SearchResult search_results = 3;
+  bool success = 4;
+  optional domain.common.v1.Error error = 5;
+}
+
+message GetPriceScheduleWorkspaceUserItemPageDataRequest {
+  string price_schedule_workspace_user_id = 1;
+}
+
+message GetPriceScheduleWorkspaceUserItemPageDataResponse {
+  PriceScheduleWorkspaceUser price_schedule_workspace_user = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}

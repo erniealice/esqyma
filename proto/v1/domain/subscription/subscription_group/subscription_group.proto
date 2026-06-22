@@ -12,10 +12,22 @@ import "domain/common/search.proto";
 
 import "options/db.proto";
 
+// CapacityMode is the explicit enrollment-capacity discriminator for a cohort.
+// It supersedes the prior magic-int encoding (-1=unlimited / 0=closed /
+// >0=soft-cap). UNSPECIFIED(0) is treated as UNLIMITED (the documented default);
+// max_capacity is read ONLY when the mode is CAPPED.
+enum CapacityMode {
+  CAPACITY_MODE_UNSPECIFIED = 0;
+  CAPACITY_MODE_UNLIMITED = 1;
+  CAPACITY_MODE_CLOSED = 2;
+  CAPACITY_MODE_CAPPED = 3;
+}
+
 // SubscriptionGroup is a first-class per-period COHORT — a class roster, a
 // patient panel, or a project team. It anchors a set of subscription_group_member
 // rows to a single billing period via its price_schedule_id (the AY anchor) and
-// may optionally link to a line for discipline/visibility scoping.
+// to a plan_id (the PROGRAM). Section identity = (plan_id x price_schedule_id).
+// Capacity is governed by capacity_mode (+ max_capacity when CAPPED).
 message SubscriptionGroup {
   option (options.v1.table).table = true;
 
@@ -33,11 +45,22 @@ message SubscriptionGroup {
   // price_schedule_id is the period anchor (e.g. the academic-year price_schedule).
   optional string price_schedule_id = 9 [(options.v1.db).references = "price_schedule", (options.v1.db).index = true];
 
-  // line_id is an optional discipline/visibility link.
-  optional string line_id = 10 [(options.v1.db).references = "line", (options.v1.db).index = true];
+  // R5 amendment (2026-06-21): line_id is dropped. Discipline lives on the
+  // subject axis via product_line, not on the cohort.
+  reserved 10;
+  reserved "line_id";
 
   // Workspace ownership — subscription groups are scoped per workspace.
   optional string workspace_id = 11 [(options.v1.db).references = "workspace", (options.v1.db).index = true];
+
+  // plan_id is the PROGRAM the cohort realizes (NOT price_plan_id — billing
+  // varies per member). Section identity = (plan_id x price_schedule_id).
+  optional string plan_id = 12 [(options.v1.db).references = "plan", (options.v1.db).index = true];
+
+  // capacity_mode governs enrollment capacity; max_capacity is read ONLY when
+  // capacity_mode = CAPACITY_MODE_CAPPED. UNSPECIFIED is treated as UNLIMITED.
+  CapacityMode capacity_mode = 13;
+  optional int32 max_capacity = 14;
 }
 
 service SubscriptionGroupDomainService {

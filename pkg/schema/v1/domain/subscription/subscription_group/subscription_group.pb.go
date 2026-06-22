@@ -23,10 +23,67 @@ const (
 	_ = protoimpl.EnforceVersion(protoimpl.MaxVersion - 20)
 )
 
+// CapacityMode is the explicit enrollment-capacity discriminator for a cohort.
+// It supersedes the prior magic-int encoding (-1=unlimited / 0=closed /
+// >0=soft-cap). UNSPECIFIED(0) is treated as UNLIMITED (the documented default);
+// max_capacity is read ONLY when the mode is CAPPED.
+type CapacityMode int32
+
+const (
+	CapacityMode_CAPACITY_MODE_UNSPECIFIED CapacityMode = 0
+	CapacityMode_CAPACITY_MODE_UNLIMITED   CapacityMode = 1
+	CapacityMode_CAPACITY_MODE_CLOSED      CapacityMode = 2
+	CapacityMode_CAPACITY_MODE_CAPPED      CapacityMode = 3
+)
+
+// Enum value maps for CapacityMode.
+var (
+	CapacityMode_name = map[int32]string{
+		0: "CAPACITY_MODE_UNSPECIFIED",
+		1: "CAPACITY_MODE_UNLIMITED",
+		2: "CAPACITY_MODE_CLOSED",
+		3: "CAPACITY_MODE_CAPPED",
+	}
+	CapacityMode_value = map[string]int32{
+		"CAPACITY_MODE_UNSPECIFIED": 0,
+		"CAPACITY_MODE_UNLIMITED":   1,
+		"CAPACITY_MODE_CLOSED":      2,
+		"CAPACITY_MODE_CAPPED":      3,
+	}
+)
+
+func (x CapacityMode) Enum() *CapacityMode {
+	p := new(CapacityMode)
+	*p = x
+	return p
+}
+
+func (x CapacityMode) String() string {
+	return protoimpl.X.EnumStringOf(x.Descriptor(), protoreflect.EnumNumber(x))
+}
+
+func (CapacityMode) Descriptor() protoreflect.EnumDescriptor {
+	return file_domain_subscription_subscription_group_subscription_group_proto_enumTypes[0].Descriptor()
+}
+
+func (CapacityMode) Type() protoreflect.EnumType {
+	return &file_domain_subscription_subscription_group_subscription_group_proto_enumTypes[0]
+}
+
+func (x CapacityMode) Number() protoreflect.EnumNumber {
+	return protoreflect.EnumNumber(x)
+}
+
+// Deprecated: Use CapacityMode.Descriptor instead.
+func (CapacityMode) EnumDescriptor() ([]byte, []int) {
+	return file_domain_subscription_subscription_group_subscription_group_proto_rawDescGZIP(), []int{0}
+}
+
 // SubscriptionGroup is a first-class per-period COHORT — a class roster, a
 // patient panel, or a project team. It anchors a set of subscription_group_member
 // rows to a single billing period via its price_schedule_id (the AY anchor) and
-// may optionally link to a line for discipline/visibility scoping.
+// to a plan_id (the PROGRAM). Section identity = (plan_id x price_schedule_id).
+// Capacity is governed by capacity_mode (+ max_capacity when CAPPED).
 type SubscriptionGroup struct {
 	state              protoimpl.MessageState `protogen:"open.v1"`
 	Id                 string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
@@ -40,10 +97,15 @@ type SubscriptionGroup struct {
 	Kind string `protobuf:"bytes,8,opt,name=kind,proto3" json:"kind,omitempty"`
 	// price_schedule_id is the period anchor (e.g. the academic-year price_schedule).
 	PriceScheduleId *string `protobuf:"bytes,9,opt,name=price_schedule_id,json=priceScheduleId,proto3,oneof" json:"price_schedule_id,omitempty"`
-	// line_id is an optional discipline/visibility link.
-	LineId *string `protobuf:"bytes,10,opt,name=line_id,json=lineId,proto3,oneof" json:"line_id,omitempty"`
 	// Workspace ownership — subscription groups are scoped per workspace.
-	WorkspaceId   *string `protobuf:"bytes,11,opt,name=workspace_id,json=workspaceId,proto3,oneof" json:"workspace_id,omitempty"`
+	WorkspaceId *string `protobuf:"bytes,11,opt,name=workspace_id,json=workspaceId,proto3,oneof" json:"workspace_id,omitempty"`
+	// plan_id is the PROGRAM the cohort realizes (NOT price_plan_id — billing
+	// varies per member). Section identity = (plan_id x price_schedule_id).
+	PlanId *string `protobuf:"bytes,12,opt,name=plan_id,json=planId,proto3,oneof" json:"plan_id,omitempty"`
+	// capacity_mode governs enrollment capacity; max_capacity is read ONLY when
+	// capacity_mode = CAPACITY_MODE_CAPPED. UNSPECIFIED is treated as UNLIMITED.
+	CapacityMode  CapacityMode `protobuf:"varint,13,opt,name=capacity_mode,json=capacityMode,proto3,enum=domain.subscription.v1.CapacityMode" json:"capacity_mode,omitempty"`
+	MaxCapacity   *int32       `protobuf:"varint,14,opt,name=max_capacity,json=maxCapacity,proto3,oneof" json:"max_capacity,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -141,18 +203,32 @@ func (x *SubscriptionGroup) GetPriceScheduleId() string {
 	return ""
 }
 
-func (x *SubscriptionGroup) GetLineId() string {
-	if x != nil && x.LineId != nil {
-		return *x.LineId
-	}
-	return ""
-}
-
 func (x *SubscriptionGroup) GetWorkspaceId() string {
 	if x != nil && x.WorkspaceId != nil {
 		return *x.WorkspaceId
 	}
 	return ""
+}
+
+func (x *SubscriptionGroup) GetPlanId() string {
+	if x != nil && x.PlanId != nil {
+		return *x.PlanId
+	}
+	return ""
+}
+
+func (x *SubscriptionGroup) GetCapacityMode() CapacityMode {
+	if x != nil {
+		return x.CapacityMode
+	}
+	return CapacityMode_CAPACITY_MODE_UNSPECIFIED
+}
+
+func (x *SubscriptionGroup) GetMaxCapacity() int32 {
+	if x != nil && x.MaxCapacity != nil {
+		return *x.MaxCapacity
+	}
+	return 0
 }
 
 type CreateSubscriptionGroupRequest struct {
@@ -958,7 +1034,7 @@ var File_domain_subscription_subscription_group_subscription_group_proto protore
 
 const file_domain_subscription_subscription_group_subscription_group_proto_rawDesc = "" +
 	"\n" +
-	"?domain/subscription/subscription_group/subscription_group.proto\x12\x16domain.subscription.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1adomain/common/search.proto\x1a\x10options/db.proto\"\xfc\x04\n" +
+	"?domain/subscription/subscription_group/subscription_group.proto\x12\x16domain.subscription.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1adomain/common/search.proto\x1a\x10options/db.proto\"\x8f\x06\n" +
 	"\x11SubscriptionGroup\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12&\n" +
 	"\fdate_created\x18\x02 \x01(\x03H\x00R\vdateCreated\x88\x01\x01\x12;\n" +
@@ -970,20 +1046,23 @@ const file_domain_subscription_subscription_group_subscription_group_proto_rawDe
 	"\x04name\x18\a \x01(\tR\x04name\x12\x12\n" +
 	"\x04kind\x18\b \x01(\tR\x04kind\x12G\n" +
 	"\x11price_schedule_id\x18\t \x01(\tB\x16\x82\xb5\x18\x12\n" +
-	"\x0eprice_schedule\x18\x01H\x04R\x0fpriceScheduleId\x88\x01\x01\x12*\n" +
-	"\aline_id\x18\n" +
-	" \x01(\tB\f\x82\xb5\x18\b\n" +
-	"\x04line\x18\x01H\x05R\x06lineId\x88\x01\x01\x129\n" +
+	"\x0eprice_schedule\x18\x01H\x04R\x0fpriceScheduleId\x88\x01\x01\x129\n" +
 	"\fworkspace_id\x18\v \x01(\tB\x11\x82\xb5\x18\r\n" +
-	"\tworkspace\x18\x01H\x06R\vworkspaceId\x88\x01\x01:\x06\x8a\xb5\x18\x02\b\x01B\x0f\n" +
+	"\tworkspace\x18\x01H\x05R\vworkspaceId\x88\x01\x01\x12*\n" +
+	"\aplan_id\x18\f \x01(\tB\f\x82\xb5\x18\b\n" +
+	"\x04plan\x18\x01H\x06R\x06planId\x88\x01\x01\x12I\n" +
+	"\rcapacity_mode\x18\r \x01(\x0e2$.domain.subscription.v1.CapacityModeR\fcapacityMode\x12&\n" +
+	"\fmax_capacity\x18\x0e \x01(\x05H\aR\vmaxCapacity\x88\x01\x01:\x06\x8a\xb5\x18\x02\b\x01B\x0f\n" +
 	"\r_date_createdB\x16\n" +
 	"\x14_date_created_stringB\x10\n" +
 	"\x0e_date_modifiedB\x17\n" +
 	"\x15_date_modified_stringB\x14\n" +
-	"\x12_price_schedule_idB\n" +
+	"\x12_price_schedule_idB\x0f\n" +
+	"\r_workspace_idB\n" +
 	"\n" +
-	"\b_line_idB\x0f\n" +
-	"\r_workspace_id\"_\n" +
+	"\b_plan_idB\x0f\n" +
+	"\r_max_capacityJ\x04\b\n" +
+	"\x10\vR\aline_id\"_\n" +
 	"\x1eCreateSubscriptionGroupRequest\x12=\n" +
 	"\x04data\x18\x01 \x01(\v2).domain.subscription.v1.SubscriptionGroupR\x04data\"\xb8\x01\n" +
 	"\x1fCreateSubscriptionGroupResponse\x12=\n" +
@@ -1050,7 +1129,12 @@ const file_domain_subscription_subscription_group_subscription_group_proto_rawDe
 	"\x12subscription_group\x18\x01 \x01(\v2).domain.subscription.v1.SubscriptionGroupR\x11subscriptionGroup\x12\x18\n" +
 	"\asuccess\x18\x02 \x01(\bR\asuccess\x122\n" +
 	"\x05error\x18\x03 \x01(\v2\x17.domain.common.v1.ErrorH\x00R\x05error\x88\x01\x01B\b\n" +
-	"\x06_error2\xa8\b\n" +
+	"\x06_error*~\n" +
+	"\fCapacityMode\x12\x1d\n" +
+	"\x19CAPACITY_MODE_UNSPECIFIED\x10\x00\x12\x1b\n" +
+	"\x17CAPACITY_MODE_UNLIMITED\x10\x01\x12\x18\n" +
+	"\x14CAPACITY_MODE_CLOSED\x10\x02\x12\x18\n" +
+	"\x14CAPACITY_MODE_CAPPED\x10\x032\xa8\b\n" +
 	"\x1eSubscriptionGroupDomainService\x12\x8a\x01\n" +
 	"\x17CreateSubscriptionGroup\x126.domain.subscription.v1.CreateSubscriptionGroupRequest\x1a7.domain.subscription.v1.CreateSubscriptionGroupResponse\x12\x84\x01\n" +
 	"\x15ReadSubscriptionGroup\x124.domain.subscription.v1.ReadSubscriptionGroupRequest\x1a5.domain.subscription.v1.ReadSubscriptionGroupResponse\x12\x8a\x01\n" +
@@ -1073,78 +1157,81 @@ func file_domain_subscription_subscription_group_subscription_group_proto_rawDes
 	return file_domain_subscription_subscription_group_subscription_group_proto_rawDescData
 }
 
+var file_domain_subscription_subscription_group_subscription_group_proto_enumTypes = make([]protoimpl.EnumInfo, 1)
 var file_domain_subscription_subscription_group_subscription_group_proto_msgTypes = make([]protoimpl.MessageInfo, 15)
 var file_domain_subscription_subscription_group_subscription_group_proto_goTypes = []any{
-	(*SubscriptionGroup)(nil),                        // 0: domain.subscription.v1.SubscriptionGroup
-	(*CreateSubscriptionGroupRequest)(nil),           // 1: domain.subscription.v1.CreateSubscriptionGroupRequest
-	(*CreateSubscriptionGroupResponse)(nil),          // 2: domain.subscription.v1.CreateSubscriptionGroupResponse
-	(*ReadSubscriptionGroupRequest)(nil),             // 3: domain.subscription.v1.ReadSubscriptionGroupRequest
-	(*ReadSubscriptionGroupResponse)(nil),            // 4: domain.subscription.v1.ReadSubscriptionGroupResponse
-	(*UpdateSubscriptionGroupRequest)(nil),           // 5: domain.subscription.v1.UpdateSubscriptionGroupRequest
-	(*UpdateSubscriptionGroupResponse)(nil),          // 6: domain.subscription.v1.UpdateSubscriptionGroupResponse
-	(*DeleteSubscriptionGroupRequest)(nil),           // 7: domain.subscription.v1.DeleteSubscriptionGroupRequest
-	(*DeleteSubscriptionGroupResponse)(nil),          // 8: domain.subscription.v1.DeleteSubscriptionGroupResponse
-	(*ListSubscriptionGroupsRequest)(nil),            // 9: domain.subscription.v1.ListSubscriptionGroupsRequest
-	(*ListSubscriptionGroupsResponse)(nil),           // 10: domain.subscription.v1.ListSubscriptionGroupsResponse
-	(*GetSubscriptionGroupListPageDataRequest)(nil),  // 11: domain.subscription.v1.GetSubscriptionGroupListPageDataRequest
-	(*GetSubscriptionGroupListPageDataResponse)(nil), // 12: domain.subscription.v1.GetSubscriptionGroupListPageDataResponse
-	(*GetSubscriptionGroupItemPageDataRequest)(nil),  // 13: domain.subscription.v1.GetSubscriptionGroupItemPageDataRequest
-	(*GetSubscriptionGroupItemPageDataResponse)(nil), // 14: domain.subscription.v1.GetSubscriptionGroupItemPageDataResponse
-	(*common.Error)(nil),                             // 15: domain.common.v1.Error
-	(*common.SearchRequest)(nil),                     // 16: domain.common.v1.SearchRequest
-	(*common.FilterRequest)(nil),                     // 17: domain.common.v1.FilterRequest
-	(*common.SortRequest)(nil),                       // 18: domain.common.v1.SortRequest
-	(*common.PaginationRequest)(nil),                 // 19: domain.common.v1.PaginationRequest
-	(*common.PaginationResponse)(nil),                // 20: domain.common.v1.PaginationResponse
-	(*common.SearchResult)(nil),                      // 21: domain.common.v1.SearchResult
+	(CapacityMode)(0),                                // 0: domain.subscription.v1.CapacityMode
+	(*SubscriptionGroup)(nil),                        // 1: domain.subscription.v1.SubscriptionGroup
+	(*CreateSubscriptionGroupRequest)(nil),           // 2: domain.subscription.v1.CreateSubscriptionGroupRequest
+	(*CreateSubscriptionGroupResponse)(nil),          // 3: domain.subscription.v1.CreateSubscriptionGroupResponse
+	(*ReadSubscriptionGroupRequest)(nil),             // 4: domain.subscription.v1.ReadSubscriptionGroupRequest
+	(*ReadSubscriptionGroupResponse)(nil),            // 5: domain.subscription.v1.ReadSubscriptionGroupResponse
+	(*UpdateSubscriptionGroupRequest)(nil),           // 6: domain.subscription.v1.UpdateSubscriptionGroupRequest
+	(*UpdateSubscriptionGroupResponse)(nil),          // 7: domain.subscription.v1.UpdateSubscriptionGroupResponse
+	(*DeleteSubscriptionGroupRequest)(nil),           // 8: domain.subscription.v1.DeleteSubscriptionGroupRequest
+	(*DeleteSubscriptionGroupResponse)(nil),          // 9: domain.subscription.v1.DeleteSubscriptionGroupResponse
+	(*ListSubscriptionGroupsRequest)(nil),            // 10: domain.subscription.v1.ListSubscriptionGroupsRequest
+	(*ListSubscriptionGroupsResponse)(nil),           // 11: domain.subscription.v1.ListSubscriptionGroupsResponse
+	(*GetSubscriptionGroupListPageDataRequest)(nil),  // 12: domain.subscription.v1.GetSubscriptionGroupListPageDataRequest
+	(*GetSubscriptionGroupListPageDataResponse)(nil), // 13: domain.subscription.v1.GetSubscriptionGroupListPageDataResponse
+	(*GetSubscriptionGroupItemPageDataRequest)(nil),  // 14: domain.subscription.v1.GetSubscriptionGroupItemPageDataRequest
+	(*GetSubscriptionGroupItemPageDataResponse)(nil), // 15: domain.subscription.v1.GetSubscriptionGroupItemPageDataResponse
+	(*common.Error)(nil),                             // 16: domain.common.v1.Error
+	(*common.SearchRequest)(nil),                     // 17: domain.common.v1.SearchRequest
+	(*common.FilterRequest)(nil),                     // 18: domain.common.v1.FilterRequest
+	(*common.SortRequest)(nil),                       // 19: domain.common.v1.SortRequest
+	(*common.PaginationRequest)(nil),                 // 20: domain.common.v1.PaginationRequest
+	(*common.PaginationResponse)(nil),                // 21: domain.common.v1.PaginationResponse
+	(*common.SearchResult)(nil),                      // 22: domain.common.v1.SearchResult
 }
 var file_domain_subscription_subscription_group_subscription_group_proto_depIdxs = []int32{
-	0,  // 0: domain.subscription.v1.CreateSubscriptionGroupRequest.data:type_name -> domain.subscription.v1.SubscriptionGroup
-	0,  // 1: domain.subscription.v1.CreateSubscriptionGroupResponse.data:type_name -> domain.subscription.v1.SubscriptionGroup
-	15, // 2: domain.subscription.v1.CreateSubscriptionGroupResponse.error:type_name -> domain.common.v1.Error
-	0,  // 3: domain.subscription.v1.ReadSubscriptionGroupRequest.data:type_name -> domain.subscription.v1.SubscriptionGroup
-	0,  // 4: domain.subscription.v1.ReadSubscriptionGroupResponse.data:type_name -> domain.subscription.v1.SubscriptionGroup
-	15, // 5: domain.subscription.v1.ReadSubscriptionGroupResponse.error:type_name -> domain.common.v1.Error
-	0,  // 6: domain.subscription.v1.UpdateSubscriptionGroupRequest.data:type_name -> domain.subscription.v1.SubscriptionGroup
-	0,  // 7: domain.subscription.v1.UpdateSubscriptionGroupResponse.data:type_name -> domain.subscription.v1.SubscriptionGroup
-	15, // 8: domain.subscription.v1.UpdateSubscriptionGroupResponse.error:type_name -> domain.common.v1.Error
-	0,  // 9: domain.subscription.v1.DeleteSubscriptionGroupRequest.data:type_name -> domain.subscription.v1.SubscriptionGroup
-	15, // 10: domain.subscription.v1.DeleteSubscriptionGroupResponse.error:type_name -> domain.common.v1.Error
-	16, // 11: domain.subscription.v1.ListSubscriptionGroupsRequest.search:type_name -> domain.common.v1.SearchRequest
-	17, // 12: domain.subscription.v1.ListSubscriptionGroupsRequest.filters:type_name -> domain.common.v1.FilterRequest
-	18, // 13: domain.subscription.v1.ListSubscriptionGroupsRequest.sort:type_name -> domain.common.v1.SortRequest
-	19, // 14: domain.subscription.v1.ListSubscriptionGroupsRequest.pagination:type_name -> domain.common.v1.PaginationRequest
-	0,  // 15: domain.subscription.v1.ListSubscriptionGroupsResponse.data:type_name -> domain.subscription.v1.SubscriptionGroup
-	15, // 16: domain.subscription.v1.ListSubscriptionGroupsResponse.error:type_name -> domain.common.v1.Error
-	19, // 17: domain.subscription.v1.GetSubscriptionGroupListPageDataRequest.pagination:type_name -> domain.common.v1.PaginationRequest
-	17, // 18: domain.subscription.v1.GetSubscriptionGroupListPageDataRequest.filters:type_name -> domain.common.v1.FilterRequest
-	18, // 19: domain.subscription.v1.GetSubscriptionGroupListPageDataRequest.sort:type_name -> domain.common.v1.SortRequest
-	16, // 20: domain.subscription.v1.GetSubscriptionGroupListPageDataRequest.search:type_name -> domain.common.v1.SearchRequest
-	0,  // 21: domain.subscription.v1.GetSubscriptionGroupListPageDataResponse.subscription_group_list:type_name -> domain.subscription.v1.SubscriptionGroup
-	20, // 22: domain.subscription.v1.GetSubscriptionGroupListPageDataResponse.pagination:type_name -> domain.common.v1.PaginationResponse
-	21, // 23: domain.subscription.v1.GetSubscriptionGroupListPageDataResponse.search_results:type_name -> domain.common.v1.SearchResult
-	15, // 24: domain.subscription.v1.GetSubscriptionGroupListPageDataResponse.error:type_name -> domain.common.v1.Error
-	0,  // 25: domain.subscription.v1.GetSubscriptionGroupItemPageDataResponse.subscription_group:type_name -> domain.subscription.v1.SubscriptionGroup
-	15, // 26: domain.subscription.v1.GetSubscriptionGroupItemPageDataResponse.error:type_name -> domain.common.v1.Error
-	1,  // 27: domain.subscription.v1.SubscriptionGroupDomainService.CreateSubscriptionGroup:input_type -> domain.subscription.v1.CreateSubscriptionGroupRequest
-	3,  // 28: domain.subscription.v1.SubscriptionGroupDomainService.ReadSubscriptionGroup:input_type -> domain.subscription.v1.ReadSubscriptionGroupRequest
-	5,  // 29: domain.subscription.v1.SubscriptionGroupDomainService.UpdateSubscriptionGroup:input_type -> domain.subscription.v1.UpdateSubscriptionGroupRequest
-	7,  // 30: domain.subscription.v1.SubscriptionGroupDomainService.DeleteSubscriptionGroup:input_type -> domain.subscription.v1.DeleteSubscriptionGroupRequest
-	9,  // 31: domain.subscription.v1.SubscriptionGroupDomainService.ListSubscriptionGroups:input_type -> domain.subscription.v1.ListSubscriptionGroupsRequest
-	11, // 32: domain.subscription.v1.SubscriptionGroupDomainService.GetSubscriptionGroupListPageData:input_type -> domain.subscription.v1.GetSubscriptionGroupListPageDataRequest
-	13, // 33: domain.subscription.v1.SubscriptionGroupDomainService.GetSubscriptionGroupItemPageData:input_type -> domain.subscription.v1.GetSubscriptionGroupItemPageDataRequest
-	2,  // 34: domain.subscription.v1.SubscriptionGroupDomainService.CreateSubscriptionGroup:output_type -> domain.subscription.v1.CreateSubscriptionGroupResponse
-	4,  // 35: domain.subscription.v1.SubscriptionGroupDomainService.ReadSubscriptionGroup:output_type -> domain.subscription.v1.ReadSubscriptionGroupResponse
-	6,  // 36: domain.subscription.v1.SubscriptionGroupDomainService.UpdateSubscriptionGroup:output_type -> domain.subscription.v1.UpdateSubscriptionGroupResponse
-	8,  // 37: domain.subscription.v1.SubscriptionGroupDomainService.DeleteSubscriptionGroup:output_type -> domain.subscription.v1.DeleteSubscriptionGroupResponse
-	10, // 38: domain.subscription.v1.SubscriptionGroupDomainService.ListSubscriptionGroups:output_type -> domain.subscription.v1.ListSubscriptionGroupsResponse
-	12, // 39: domain.subscription.v1.SubscriptionGroupDomainService.GetSubscriptionGroupListPageData:output_type -> domain.subscription.v1.GetSubscriptionGroupListPageDataResponse
-	14, // 40: domain.subscription.v1.SubscriptionGroupDomainService.GetSubscriptionGroupItemPageData:output_type -> domain.subscription.v1.GetSubscriptionGroupItemPageDataResponse
-	34, // [34:41] is the sub-list for method output_type
-	27, // [27:34] is the sub-list for method input_type
-	27, // [27:27] is the sub-list for extension type_name
-	27, // [27:27] is the sub-list for extension extendee
-	0,  // [0:27] is the sub-list for field type_name
+	0,  // 0: domain.subscription.v1.SubscriptionGroup.capacity_mode:type_name -> domain.subscription.v1.CapacityMode
+	1,  // 1: domain.subscription.v1.CreateSubscriptionGroupRequest.data:type_name -> domain.subscription.v1.SubscriptionGroup
+	1,  // 2: domain.subscription.v1.CreateSubscriptionGroupResponse.data:type_name -> domain.subscription.v1.SubscriptionGroup
+	16, // 3: domain.subscription.v1.CreateSubscriptionGroupResponse.error:type_name -> domain.common.v1.Error
+	1,  // 4: domain.subscription.v1.ReadSubscriptionGroupRequest.data:type_name -> domain.subscription.v1.SubscriptionGroup
+	1,  // 5: domain.subscription.v1.ReadSubscriptionGroupResponse.data:type_name -> domain.subscription.v1.SubscriptionGroup
+	16, // 6: domain.subscription.v1.ReadSubscriptionGroupResponse.error:type_name -> domain.common.v1.Error
+	1,  // 7: domain.subscription.v1.UpdateSubscriptionGroupRequest.data:type_name -> domain.subscription.v1.SubscriptionGroup
+	1,  // 8: domain.subscription.v1.UpdateSubscriptionGroupResponse.data:type_name -> domain.subscription.v1.SubscriptionGroup
+	16, // 9: domain.subscription.v1.UpdateSubscriptionGroupResponse.error:type_name -> domain.common.v1.Error
+	1,  // 10: domain.subscription.v1.DeleteSubscriptionGroupRequest.data:type_name -> domain.subscription.v1.SubscriptionGroup
+	16, // 11: domain.subscription.v1.DeleteSubscriptionGroupResponse.error:type_name -> domain.common.v1.Error
+	17, // 12: domain.subscription.v1.ListSubscriptionGroupsRequest.search:type_name -> domain.common.v1.SearchRequest
+	18, // 13: domain.subscription.v1.ListSubscriptionGroupsRequest.filters:type_name -> domain.common.v1.FilterRequest
+	19, // 14: domain.subscription.v1.ListSubscriptionGroupsRequest.sort:type_name -> domain.common.v1.SortRequest
+	20, // 15: domain.subscription.v1.ListSubscriptionGroupsRequest.pagination:type_name -> domain.common.v1.PaginationRequest
+	1,  // 16: domain.subscription.v1.ListSubscriptionGroupsResponse.data:type_name -> domain.subscription.v1.SubscriptionGroup
+	16, // 17: domain.subscription.v1.ListSubscriptionGroupsResponse.error:type_name -> domain.common.v1.Error
+	20, // 18: domain.subscription.v1.GetSubscriptionGroupListPageDataRequest.pagination:type_name -> domain.common.v1.PaginationRequest
+	18, // 19: domain.subscription.v1.GetSubscriptionGroupListPageDataRequest.filters:type_name -> domain.common.v1.FilterRequest
+	19, // 20: domain.subscription.v1.GetSubscriptionGroupListPageDataRequest.sort:type_name -> domain.common.v1.SortRequest
+	17, // 21: domain.subscription.v1.GetSubscriptionGroupListPageDataRequest.search:type_name -> domain.common.v1.SearchRequest
+	1,  // 22: domain.subscription.v1.GetSubscriptionGroupListPageDataResponse.subscription_group_list:type_name -> domain.subscription.v1.SubscriptionGroup
+	21, // 23: domain.subscription.v1.GetSubscriptionGroupListPageDataResponse.pagination:type_name -> domain.common.v1.PaginationResponse
+	22, // 24: domain.subscription.v1.GetSubscriptionGroupListPageDataResponse.search_results:type_name -> domain.common.v1.SearchResult
+	16, // 25: domain.subscription.v1.GetSubscriptionGroupListPageDataResponse.error:type_name -> domain.common.v1.Error
+	1,  // 26: domain.subscription.v1.GetSubscriptionGroupItemPageDataResponse.subscription_group:type_name -> domain.subscription.v1.SubscriptionGroup
+	16, // 27: domain.subscription.v1.GetSubscriptionGroupItemPageDataResponse.error:type_name -> domain.common.v1.Error
+	2,  // 28: domain.subscription.v1.SubscriptionGroupDomainService.CreateSubscriptionGroup:input_type -> domain.subscription.v1.CreateSubscriptionGroupRequest
+	4,  // 29: domain.subscription.v1.SubscriptionGroupDomainService.ReadSubscriptionGroup:input_type -> domain.subscription.v1.ReadSubscriptionGroupRequest
+	6,  // 30: domain.subscription.v1.SubscriptionGroupDomainService.UpdateSubscriptionGroup:input_type -> domain.subscription.v1.UpdateSubscriptionGroupRequest
+	8,  // 31: domain.subscription.v1.SubscriptionGroupDomainService.DeleteSubscriptionGroup:input_type -> domain.subscription.v1.DeleteSubscriptionGroupRequest
+	10, // 32: domain.subscription.v1.SubscriptionGroupDomainService.ListSubscriptionGroups:input_type -> domain.subscription.v1.ListSubscriptionGroupsRequest
+	12, // 33: domain.subscription.v1.SubscriptionGroupDomainService.GetSubscriptionGroupListPageData:input_type -> domain.subscription.v1.GetSubscriptionGroupListPageDataRequest
+	14, // 34: domain.subscription.v1.SubscriptionGroupDomainService.GetSubscriptionGroupItemPageData:input_type -> domain.subscription.v1.GetSubscriptionGroupItemPageDataRequest
+	3,  // 35: domain.subscription.v1.SubscriptionGroupDomainService.CreateSubscriptionGroup:output_type -> domain.subscription.v1.CreateSubscriptionGroupResponse
+	5,  // 36: domain.subscription.v1.SubscriptionGroupDomainService.ReadSubscriptionGroup:output_type -> domain.subscription.v1.ReadSubscriptionGroupResponse
+	7,  // 37: domain.subscription.v1.SubscriptionGroupDomainService.UpdateSubscriptionGroup:output_type -> domain.subscription.v1.UpdateSubscriptionGroupResponse
+	9,  // 38: domain.subscription.v1.SubscriptionGroupDomainService.DeleteSubscriptionGroup:output_type -> domain.subscription.v1.DeleteSubscriptionGroupResponse
+	11, // 39: domain.subscription.v1.SubscriptionGroupDomainService.ListSubscriptionGroups:output_type -> domain.subscription.v1.ListSubscriptionGroupsResponse
+	13, // 40: domain.subscription.v1.SubscriptionGroupDomainService.GetSubscriptionGroupListPageData:output_type -> domain.subscription.v1.GetSubscriptionGroupListPageDataResponse
+	15, // 41: domain.subscription.v1.SubscriptionGroupDomainService.GetSubscriptionGroupItemPageData:output_type -> domain.subscription.v1.GetSubscriptionGroupItemPageDataResponse
+	35, // [35:42] is the sub-list for method output_type
+	28, // [28:35] is the sub-list for method input_type
+	28, // [28:28] is the sub-list for extension type_name
+	28, // [28:28] is the sub-list for extension extendee
+	0,  // [0:28] is the sub-list for field type_name
 }
 
 func init() { file_domain_subscription_subscription_group_subscription_group_proto_init() }
@@ -1166,13 +1253,14 @@ func file_domain_subscription_subscription_group_subscription_group_proto_init()
 		File: protoimpl.DescBuilder{
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_domain_subscription_subscription_group_subscription_group_proto_rawDesc), len(file_domain_subscription_subscription_group_subscription_group_proto_rawDesc)),
-			NumEnums:      0,
+			NumEnums:      1,
 			NumMessages:   15,
 			NumExtensions: 0,
 			NumServices:   1,
 		},
 		GoTypes:           file_domain_subscription_subscription_group_subscription_group_proto_goTypes,
 		DependencyIndexes: file_domain_subscription_subscription_group_subscription_group_proto_depIdxs,
+		EnumInfos:         file_domain_subscription_subscription_group_subscription_group_proto_enumTypes,
 		MessageInfos:      file_domain_subscription_subscription_group_subscription_group_proto_msgTypes,
 	}.Build()
 	File_domain_subscription_subscription_group_subscription_group_proto = out.File

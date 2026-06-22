@@ -46,6 +46,12 @@ message JobOutcomeSummary {
   optional string scoring_scheme_id = 25 [(options.v1.db).references = "scoring_scheme", (options.v1.db).index = true];
   optional double scaled_score = 26;
   optional string scaled_label = 27;
+
+  // R5 portal-leaf denormalization (2026-06-22): the parent summary carries the
+  // same denormalized workspace_id + served-client_id as its job_outcome_line
+  // children so the portal self-read is single-table + fail-closed.
+  string workspace_id = 28 [(options.v1.db).references = "workspace", (options.v1.db).index = true];
+  optional string client_id = 29 [(options.v1.db).references = "client", (options.v1.db).index = true];
 }
 
 // --- Service ---

@@ -54,8 +54,13 @@ type JobOutcomeSummary struct {
 	ScoringSchemeId      *string                    `protobuf:"bytes,25,opt,name=scoring_scheme_id,json=scoringSchemeId,proto3,oneof" json:"scoring_scheme_id,omitempty"`
 	ScaledScore          *float64                   `protobuf:"fixed64,26,opt,name=scaled_score,json=scaledScore,proto3,oneof" json:"scaled_score,omitempty"`
 	ScaledLabel          *string                    `protobuf:"bytes,27,opt,name=scaled_label,json=scaledLabel,proto3,oneof" json:"scaled_label,omitempty"`
-	unknownFields        protoimpl.UnknownFields
-	sizeCache            protoimpl.SizeCache
+	// R5 portal-leaf denormalization (2026-06-22): the parent summary carries the
+	// same denormalized workspace_id + served-client_id as its job_outcome_line
+	// children so the portal self-read is single-table + fail-closed.
+	WorkspaceId   string  `protobuf:"bytes,28,opt,name=workspace_id,json=workspaceId,proto3" json:"workspace_id,omitempty"`
+	ClientId      *string `protobuf:"bytes,29,opt,name=client_id,json=clientId,proto3,oneof" json:"client_id,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
 }
 
 func (x *JobOutcomeSummary) Reset() {
@@ -273,6 +278,20 @@ func (x *JobOutcomeSummary) GetScaledScore() float64 {
 func (x *JobOutcomeSummary) GetScaledLabel() string {
 	if x != nil && x.ScaledLabel != nil {
 		return *x.ScaledLabel
+	}
+	return ""
+}
+
+func (x *JobOutcomeSummary) GetWorkspaceId() string {
+	if x != nil {
+		return x.WorkspaceId
+	}
+	return ""
+}
+
+func (x *JobOutcomeSummary) GetClientId() string {
+	if x != nil && x.ClientId != nil {
+		return *x.ClientId
 	}
 	return ""
 }
@@ -1169,7 +1188,7 @@ var File_domain_operation_job_outcome_summary_job_outcome_summary_proto protoref
 
 const file_domain_operation_job_outcome_summary_job_outcome_summary_proto_rawDesc = "" +
 	"\n" +
-	">domain/operation/job_outcome_summary/job_outcome_summary.proto\x12\x13domain.operation.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1adomain/common/search.proto\x1a\"domain/operation/enums/enums.proto\x1a\x1edomain/operation/job/job.proto\x1a\x10options/db.proto\"\xfd\v\n" +
+	">domain/operation/job_outcome_summary/job_outcome_summary.proto\x12\x13domain.operation.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1adomain/common/search.proto\x1a\"domain/operation/enums/enums.proto\x1a\x1edomain/operation/job/job.proto\x1a\x10options/db.proto\"\xf3\f\n" +
 	"\x11JobOutcomeSummary\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12\"\n" +
 	"\x06job_id\x18\x02 \x01(\tB\v\x82\xb5\x18\a\n" +
@@ -1207,7 +1226,12 @@ const file_domain_operation_job_outcome_summary_job_outcome_summary_proto_rawDes
 	"\x0escoring_scheme\x18\x01H\n" +
 	"R\x0fscoringSchemeId\x88\x01\x01\x12&\n" +
 	"\fscaled_score\x18\x1a \x01(\x01H\vR\vscaledScore\x88\x01\x01\x12&\n" +
-	"\fscaled_label\x18\x1b \x01(\tH\fR\vscaledLabel\x88\x01\x01:\x06\x8a\xb5\x18\x02\b\x01B\x06\n" +
+	"\fscaled_label\x18\x1b \x01(\tH\fR\vscaledLabel\x88\x01\x01\x124\n" +
+	"\fworkspace_id\x18\x1c \x01(\tB\x11\x82\xb5\x18\r\n" +
+	"\tworkspace\x18\x01R\vworkspaceId\x120\n" +
+	"\tclient_id\x18\x1d \x01(\tB\x0e\x82\xb5\x18\n" +
+	"\n" +
+	"\x06client\x18\x01H\rR\bclientId\x88\x01\x01:\x06\x8a\xb5\x18\x02\b\x01B\x06\n" +
 	"\x04_jobB\x10\n" +
 	"\x0e_summary_scoreB\f\n" +
 	"\n" +
@@ -1221,7 +1245,9 @@ const file_domain_operation_job_outcome_summary_job_outcome_summary_proto_rawDes
 	"\x15_date_modified_stringB\x14\n" +
 	"\x12_scoring_scheme_idB\x0f\n" +
 	"\r_scaled_scoreB\x0f\n" +
-	"\r_scaled_label\"\\\n" +
+	"\r_scaled_labelB\f\n" +
+	"\n" +
+	"_client_id\"\\\n" +
 	"\x1eCreateJobOutcomeSummaryRequest\x12:\n" +
 	"\x04data\x18\x01 \x01(\v2&.domain.operation.v1.JobOutcomeSummaryR\x04data\"\xb5\x01\n" +
 	"\x1fCreateJobOutcomeSummaryResponse\x12:\n" +

@@ -39,8 +39,15 @@ type JobOutcomeLine struct {
 	DateCreatedString   *string                `protobuf:"bytes,11,opt,name=date_created_string,json=dateCreatedString,proto3,oneof" json:"date_created_string,omitempty"`
 	DateModified        *int64                 `protobuf:"varint,12,opt,name=date_modified,json=dateModified,proto3,oneof" json:"date_modified,omitempty"`
 	DateModifiedString  *string                `protobuf:"bytes,13,opt,name=date_modified_string,json=dateModifiedString,proto3,oneof" json:"date_modified_string,omitempty"`
-	unknownFields       protoimpl.UnknownFields
-	sizeCache           protoimpl.SizeCache
+	// R5 portal-leaf denormalization (2026-06-22): workspace_id + served-client_id
+	// are stamped onto this read leaf so the student/guardian portal self-read is
+	// single-table + fail-closed (no fail-open on a NULL job.client_id /
+	// job.workspace_id join). client_id is optional: a non-client-served line
+	// (e.g. a staff-evaluation transcript) leaves it NULL -> portal matches nothing.
+	WorkspaceId   string  `protobuf:"bytes,14,opt,name=workspace_id,json=workspaceId,proto3" json:"workspace_id,omitempty"`
+	ClientId      *string `protobuf:"bytes,15,opt,name=client_id,json=clientId,proto3,oneof" json:"client_id,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
 }
 
 func (x *JobOutcomeLine) Reset() {
@@ -160,6 +167,20 @@ func (x *JobOutcomeLine) GetDateModified() int64 {
 func (x *JobOutcomeLine) GetDateModifiedString() string {
 	if x != nil && x.DateModifiedString != nil {
 		return *x.DateModifiedString
+	}
+	return ""
+}
+
+func (x *JobOutcomeLine) GetWorkspaceId() string {
+	if x != nil {
+		return x.WorkspaceId
+	}
+	return ""
+}
+
+func (x *JobOutcomeLine) GetClientId() string {
+	if x != nil && x.ClientId != nil {
+		return *x.ClientId
 	}
 	return ""
 }
@@ -952,7 +973,7 @@ var File_domain_operation_job_outcome_line_job_outcome_line_proto protoreflect.F
 
 const file_domain_operation_job_outcome_line_job_outcome_line_proto_rawDesc = "" +
 	"\n" +
-	"8domain/operation/job_outcome_line/job_outcome_line.proto\x12\x13domain.operation.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1adomain/common/search.proto\x1a\"domain/operation/enums/enums.proto\x1a\x10options/db.proto\"\xc0\x06\n" +
+	"8domain/operation/job_outcome_line/job_outcome_line.proto\x12\x13domain.operation.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1adomain/common/search.proto\x1a\"domain/operation/enums/enums.proto\x1a\x10options/db.proto\"\xb6\a\n" +
 	"\x0eJobOutcomeLine\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12P\n" +
 	"\x16job_outcome_summary_id\x18\x02 \x01(\tB\x1b\x82\xb5\x18\x17\n" +
@@ -970,7 +991,12 @@ const file_domain_operation_job_outcome_line_job_outcome_line_proto_rawDesc = ""
 	" \x01(\x03H\x04R\vdateCreated\x88\x01\x01\x12;\n" +
 	"\x13date_created_string\x18\v \x01(\tB\x06\x82\xb5\x18\x028\x01H\x05R\x11dateCreatedString\x88\x01\x01\x12(\n" +
 	"\rdate_modified\x18\f \x01(\x03H\x06R\fdateModified\x88\x01\x01\x12=\n" +
-	"\x14date_modified_string\x18\r \x01(\tB\x06\x82\xb5\x18\x028\x01H\aR\x12dateModifiedString\x88\x01\x01:\x06\x8a\xb5\x18\x02\b\x01B\x14\n" +
+	"\x14date_modified_string\x18\r \x01(\tB\x06\x82\xb5\x18\x028\x01H\aR\x12dateModifiedString\x88\x01\x01\x124\n" +
+	"\fworkspace_id\x18\x0e \x01(\tB\x11\x82\xb5\x18\r\n" +
+	"\tworkspace\x18\x01R\vworkspaceId\x120\n" +
+	"\tclient_id\x18\x0f \x01(\tB\x0e\x82\xb5\x18\n" +
+	"\n" +
+	"\x06client\x18\x01H\bR\bclientId\x88\x01\x01:\x06\x8a\xb5\x18\x02\b\x01B\x14\n" +
 	"\x12_weight_or_creditsB\x0f\n" +
 	"\r_output_valueB\x0f\n" +
 	"\r_output_labelB\x16\n" +
@@ -978,7 +1004,9 @@ const file_domain_operation_job_outcome_line_job_outcome_line_proto_rawDesc = ""
 	"\r_date_createdB\x16\n" +
 	"\x14_date_created_stringB\x10\n" +
 	"\x0e_date_modifiedB\x17\n" +
-	"\x15_date_modified_string\"V\n" +
+	"\x15_date_modified_stringB\f\n" +
+	"\n" +
+	"_client_id\"V\n" +
 	"\x1bCreateJobOutcomeLineRequest\x127\n" +
 	"\x04data\x18\x01 \x01(\v2#.domain.operation.v1.JobOutcomeLineR\x04data\"\xaf\x01\n" +
 	"\x1cCreateJobOutcomeLineResponse\x127\n" +
