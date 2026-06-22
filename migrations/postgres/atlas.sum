@@ -1,4 +1,4 @@
-h1:LvnhVe7FjX5+tf632iGX+SjEkyd8eQQZy4nFoevH8Z4=
+h1:M6nK5sMs5OD7sDGAtK0uzQhRKnndGa6U8m1yCYvi7ec=
 20260502000000_baseline.sql h1:nSWEB4eB5Yt6qrCeg8crmwudHHCA0Gpps2L5h649wAU=
 20260505221625_restore_revenue_period_marker_idempotency.sql h1:mAF68zDv14QT18Vfybt+p1uiJ1xtMjDsh8sj6GpTBB8=
 20260505221626_recreate_revenue_period_marker_unique_index.sql h1:9Tm42g4YD+ipRQAiTcMgIHwltETorc0jifJQddi4i7s=
@@ -43,3 +43,5 @@ h1:LvnhVe7FjX5+tf632iGX+SjEkyd8eQQZy4nFoevH8Z4=
 20260607110002_create_evaluation_cycle.sql h1:mYRv0HjODidtpESMKd8HVJywIfDxGMYviy7M8Ex4cu4=
 20260607110003_create_evaluation.sql h1:vctAiAerxLcaWGcXqRhNM7LPN6Tt10LnusoxYp+NPlM=
 20260612000000_add_revenue_payment_fields.sql h1:QaF3OTdgQCydr4I0gIZRSTe6UmG0NUZ1PAVv696BlQw=
+20260614100000_create_work_request.sql h1:jRP5OZbIcd7+Zyo0Fxwd0DNufjSGJad3wSach0+1kXQ=
+20260622000000_education_grading_wave.sql h1:YIhEc3qaz8VctbML/+y7cawbrnnCPkpqVPGUjm9LRL0=
