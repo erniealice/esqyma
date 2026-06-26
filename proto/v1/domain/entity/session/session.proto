@@ -110,3 +110,18 @@ message ListSessionsResponse {
   bool success = 2;
   optional domain.common.v1.Error error = 3;
 }
+
+// Admin session operation. Use-case-boundary request/response shape consumed by
+// the domain/entity/session RevokeUserSessions use case, which invalidates all of
+// a user's session rows and calls the AuthService port to revoke provider tokens.
+// Not an RPC on SessionDomainService — the use case owns the orchestration.
+
+message RevokeUserSessionsRequest {
+  string user_id = 1;
+}
+
+message RevokeUserSessionsResponse {
+  bool revoked = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}

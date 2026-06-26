@@ -119,3 +119,46 @@ message GetUserItemPageDataResponse {
   bool success = 2;
   optional domain.common.v1.Error error = 3;
 }
+
+// Admin user-lifecycle operations. These are use-case-boundary request/response
+// shapes consumed by domain/entity/user use cases (disable/enable/reset-password)
+// which call the AuthService port for the provider-specific IdP effect. They are
+// not RPCs on UserDomainService — the use cases own the orchestration.
+
+message DisableUserRequest {
+  string user_id = 1;
+  optional string reason = 2;
+}
+
+message DisableUserResponse {
+  bool disabled = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message EnableUserRequest {
+  string user_id = 1;
+}
+
+message EnableUserResponse {
+  bool enabled = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message AdminResetPasswordRequest {
+  string user_id = 1;
+  // Either set the password directly, or request a provider-generated reset link.
+  oneof method {
+    string new_password = 2;
+    bool generate_link = 3;
+  }
+}
+
+message AdminResetPasswordResponse {
+  bool reset = 1;
+  // Populated only when generate_link was requested and the provider supports it.
+  optional string reset_link = 2;
+  bool success = 3;
+  optional domain.common.v1.Error error = 4;
+}

@@ -23,12 +23,12 @@
 // Environment variables (same as cmd/diff):
 //
 //   DATABASE_URL        Full connection string (takes precedence)
-//   POSTGRES_HOST       Host (default: 127.0.0.1)
-//   POSTGRES_PORT       Port (default: 5432)
-//   POSTGRES_NAME       Database name
-//   POSTGRES_USER       Username
-//   POSTGRES_PASSWORD   Password
-//   POSTGRES_SSL_MODE   SSL mode (default: disable)
+//   DATABASE_POSTGRES_HOST       Host (default: 127.0.0.1)
+//   DATABASE_POSTGRES_PORT       Port (default: 5432)
+//   DATABASE_POSTGRES_DBNAME       Database name
+//   DATABASE_POSTGRES_USER       Username
+//   DATABASE_POSTGRES_PASSWORD   Password
+//   DATABASE_POSTGRES_SSLMODE   SSL mode (default: disable)
 //   DESCRIPTOR_FILE     Path to descriptor set
 //                       (default: proto/v1/descriptors.bin)
 package main
@@ -557,12 +557,12 @@ func openPostgres() (*sql.DB, error) {
 	} else {
 		dsn = fmt.Sprintf(
 			"host=%s port=%s dbname=%s user=%s password=%s sslmode=%s",
-			getEnv("POSTGRES_HOST", "127.0.0.1"),
-			getEnv("POSTGRES_PORT", "5432"),
-			getEnv("POSTGRES_NAME", ""),
-			getEnv("POSTGRES_USER", ""),
-			getEnv("POSTGRES_PASSWORD", ""),
-			getEnv("POSTGRES_SSL_MODE", "disable"),
+			getEnv("DATABASE_POSTGRES_HOST", "127.0.0.1"),
+			getEnv("DATABASE_POSTGRES_PORT", "5432"),
+			getEnv("DATABASE_POSTGRES_DBNAME", ""),
+			getEnv("DATABASE_POSTGRES_USER", ""),
+			getEnv("DATABASE_POSTGRES_PASSWORD", ""),
+			getEnv("DATABASE_POSTGRES_SSLMODE", "disable"),
 		)
 	}
 	db, err := sql.Open("pgx", dsn)

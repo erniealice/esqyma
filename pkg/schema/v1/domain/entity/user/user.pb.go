@@ -979,6 +979,383 @@ func (x *GetUserItemPageDataResponse) GetError() *common.Error {
 	return nil
 }
 
+type DisableUserRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	UserId        string                 `protobuf:"bytes,1,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty"`
+	Reason        *string                `protobuf:"bytes,2,opt,name=reason,proto3,oneof" json:"reason,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *DisableUserRequest) Reset() {
+	*x = DisableUserRequest{}
+	mi := &file_domain_entity_user_user_proto_msgTypes[15]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *DisableUserRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*DisableUserRequest) ProtoMessage() {}
+
+func (x *DisableUserRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_domain_entity_user_user_proto_msgTypes[15]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use DisableUserRequest.ProtoReflect.Descriptor instead.
+func (*DisableUserRequest) Descriptor() ([]byte, []int) {
+	return file_domain_entity_user_user_proto_rawDescGZIP(), []int{15}
+}
+
+func (x *DisableUserRequest) GetUserId() string {
+	if x != nil {
+		return x.UserId
+	}
+	return ""
+}
+
+func (x *DisableUserRequest) GetReason() string {
+	if x != nil && x.Reason != nil {
+		return *x.Reason
+	}
+	return ""
+}
+
+type DisableUserResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Disabled      bool                   `protobuf:"varint,1,opt,name=disabled,proto3" json:"disabled,omitempty"`
+	Success       bool                   `protobuf:"varint,2,opt,name=success,proto3" json:"success,omitempty"`
+	Error         *common.Error          `protobuf:"bytes,3,opt,name=error,proto3,oneof" json:"error,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *DisableUserResponse) Reset() {
+	*x = DisableUserResponse{}
+	mi := &file_domain_entity_user_user_proto_msgTypes[16]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *DisableUserResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*DisableUserResponse) ProtoMessage() {}
+
+func (x *DisableUserResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_domain_entity_user_user_proto_msgTypes[16]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use DisableUserResponse.ProtoReflect.Descriptor instead.
+func (*DisableUserResponse) Descriptor() ([]byte, []int) {
+	return file_domain_entity_user_user_proto_rawDescGZIP(), []int{16}
+}
+
+func (x *DisableUserResponse) GetDisabled() bool {
+	if x != nil {
+		return x.Disabled
+	}
+	return false
+}
+
+func (x *DisableUserResponse) GetSuccess() bool {
+	if x != nil {
+		return x.Success
+	}
+	return false
+}
+
+func (x *DisableUserResponse) GetError() *common.Error {
+	if x != nil {
+		return x.Error
+	}
+	return nil
+}
+
+type EnableUserRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	UserId        string                 `protobuf:"bytes,1,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *EnableUserRequest) Reset() {
+	*x = EnableUserRequest{}
+	mi := &file_domain_entity_user_user_proto_msgTypes[17]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *EnableUserRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*EnableUserRequest) ProtoMessage() {}
+
+func (x *EnableUserRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_domain_entity_user_user_proto_msgTypes[17]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use EnableUserRequest.ProtoReflect.Descriptor instead.
+func (*EnableUserRequest) Descriptor() ([]byte, []int) {
+	return file_domain_entity_user_user_proto_rawDescGZIP(), []int{17}
+}
+
+func (x *EnableUserRequest) GetUserId() string {
+	if x != nil {
+		return x.UserId
+	}
+	return ""
+}
+
+type EnableUserResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Enabled       bool                   `protobuf:"varint,1,opt,name=enabled,proto3" json:"enabled,omitempty"`
+	Success       bool                   `protobuf:"varint,2,opt,name=success,proto3" json:"success,omitempty"`
+	Error         *common.Error          `protobuf:"bytes,3,opt,name=error,proto3,oneof" json:"error,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *EnableUserResponse) Reset() {
+	*x = EnableUserResponse{}
+	mi := &file_domain_entity_user_user_proto_msgTypes[18]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *EnableUserResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*EnableUserResponse) ProtoMessage() {}
+
+func (x *EnableUserResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_domain_entity_user_user_proto_msgTypes[18]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use EnableUserResponse.ProtoReflect.Descriptor instead.
+func (*EnableUserResponse) Descriptor() ([]byte, []int) {
+	return file_domain_entity_user_user_proto_rawDescGZIP(), []int{18}
+}
+
+func (x *EnableUserResponse) GetEnabled() bool {
+	if x != nil {
+		return x.Enabled
+	}
+	return false
+}
+
+func (x *EnableUserResponse) GetSuccess() bool {
+	if x != nil {
+		return x.Success
+	}
+	return false
+}
+
+func (x *EnableUserResponse) GetError() *common.Error {
+	if x != nil {
+		return x.Error
+	}
+	return nil
+}
+
+type AdminResetPasswordRequest struct {
+	state  protoimpl.MessageState `protogen:"open.v1"`
+	UserId string                 `protobuf:"bytes,1,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty"`
+	// Either set the password directly, or request a provider-generated reset link.
+	//
+	// Types that are valid to be assigned to Method:
+	//
+	//	*AdminResetPasswordRequest_NewPassword
+	//	*AdminResetPasswordRequest_GenerateLink
+	Method        isAdminResetPasswordRequest_Method `protobuf_oneof:"method"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *AdminResetPasswordRequest) Reset() {
+	*x = AdminResetPasswordRequest{}
+	mi := &file_domain_entity_user_user_proto_msgTypes[19]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *AdminResetPasswordRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*AdminResetPasswordRequest) ProtoMessage() {}
+
+func (x *AdminResetPasswordRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_domain_entity_user_user_proto_msgTypes[19]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use AdminResetPasswordRequest.ProtoReflect.Descriptor instead.
+func (*AdminResetPasswordRequest) Descriptor() ([]byte, []int) {
+	return file_domain_entity_user_user_proto_rawDescGZIP(), []int{19}
+}
+
+func (x *AdminResetPasswordRequest) GetUserId() string {
+	if x != nil {
+		return x.UserId
+	}
+	return ""
+}
+
+func (x *AdminResetPasswordRequest) GetMethod() isAdminResetPasswordRequest_Method {
+	if x != nil {
+		return x.Method
+	}
+	return nil
+}
+
+func (x *AdminResetPasswordRequest) GetNewPassword() string {
+	if x != nil {
+		if x, ok := x.Method.(*AdminResetPasswordRequest_NewPassword); ok {
+			return x.NewPassword
+		}
+	}
+	return ""
+}
+
+func (x *AdminResetPasswordRequest) GetGenerateLink() bool {
+	if x != nil {
+		if x, ok := x.Method.(*AdminResetPasswordRequest_GenerateLink); ok {
+			return x.GenerateLink
+		}
+	}
+	return false
+}
+
+type isAdminResetPasswordRequest_Method interface {
+	isAdminResetPasswordRequest_Method()
+}
+
+type AdminResetPasswordRequest_NewPassword struct {
+	NewPassword string `protobuf:"bytes,2,opt,name=new_password,json=newPassword,proto3,oneof"`
+}
+
+type AdminResetPasswordRequest_GenerateLink struct {
+	GenerateLink bool `protobuf:"varint,3,opt,name=generate_link,json=generateLink,proto3,oneof"`
+}
+
+func (*AdminResetPasswordRequest_NewPassword) isAdminResetPasswordRequest_Method() {}
+
+func (*AdminResetPasswordRequest_GenerateLink) isAdminResetPasswordRequest_Method() {}
+
+type AdminResetPasswordResponse struct {
+	state  protoimpl.MessageState `protogen:"open.v1"`
+	Reset_ bool                   `protobuf:"varint,1,opt,name=reset,proto3" json:"reset,omitempty"`
+	// Populated only when generate_link was requested and the provider supports it.
+	ResetLink     *string       `protobuf:"bytes,2,opt,name=reset_link,json=resetLink,proto3,oneof" json:"reset_link,omitempty"`
+	Success       bool          `protobuf:"varint,3,opt,name=success,proto3" json:"success,omitempty"`
+	Error         *common.Error `protobuf:"bytes,4,opt,name=error,proto3,oneof" json:"error,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *AdminResetPasswordResponse) Reset() {
+	*x = AdminResetPasswordResponse{}
+	mi := &file_domain_entity_user_user_proto_msgTypes[20]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *AdminResetPasswordResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*AdminResetPasswordResponse) ProtoMessage() {}
+
+func (x *AdminResetPasswordResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_domain_entity_user_user_proto_msgTypes[20]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use AdminResetPasswordResponse.ProtoReflect.Descriptor instead.
+func (*AdminResetPasswordResponse) Descriptor() ([]byte, []int) {
+	return file_domain_entity_user_user_proto_rawDescGZIP(), []int{20}
+}
+
+func (x *AdminResetPasswordResponse) GetReset_() bool {
+	if x != nil {
+		return x.Reset_
+	}
+	return false
+}
+
+func (x *AdminResetPasswordResponse) GetResetLink() string {
+	if x != nil && x.ResetLink != nil {
+		return *x.ResetLink
+	}
+	return ""
+}
+
+func (x *AdminResetPasswordResponse) GetSuccess() bool {
+	if x != nil {
+		return x.Success
+	}
+	return false
+}
+
+func (x *AdminResetPasswordResponse) GetError() *common.Error {
+	if x != nil {
+		return x.Error
+	}
+	return nil
+}
+
 var File_domain_entity_user_user_proto protoreflect.FileDescriptor
 
 const file_domain_entity_user_user_proto_rawDesc = "" +
@@ -1087,6 +1464,35 @@ const file_domain_entity_user_user_proto_rawDesc = "" +
 	"\asuccess\x18\x02 \x01(\bR\asuccess\x122\n" +
 	"\x05error\x18\x03 \x01(\v2\x17.domain.common.v1.ErrorH\x01R\x05error\x88\x01\x01B\a\n" +
 	"\x05_userB\b\n" +
+	"\x06_error\"U\n" +
+	"\x12DisableUserRequest\x12\x17\n" +
+	"\auser_id\x18\x01 \x01(\tR\x06userId\x12\x1b\n" +
+	"\x06reason\x18\x02 \x01(\tH\x00R\x06reason\x88\x01\x01B\t\n" +
+	"\a_reason\"\x89\x01\n" +
+	"\x13DisableUserResponse\x12\x1a\n" +
+	"\bdisabled\x18\x01 \x01(\bR\bdisabled\x12\x18\n" +
+	"\asuccess\x18\x02 \x01(\bR\asuccess\x122\n" +
+	"\x05error\x18\x03 \x01(\v2\x17.domain.common.v1.ErrorH\x00R\x05error\x88\x01\x01B\b\n" +
+	"\x06_error\",\n" +
+	"\x11EnableUserRequest\x12\x17\n" +
+	"\auser_id\x18\x01 \x01(\tR\x06userId\"\x86\x01\n" +
+	"\x12EnableUserResponse\x12\x18\n" +
+	"\aenabled\x18\x01 \x01(\bR\aenabled\x12\x18\n" +
+	"\asuccess\x18\x02 \x01(\bR\asuccess\x122\n" +
+	"\x05error\x18\x03 \x01(\v2\x17.domain.common.v1.ErrorH\x00R\x05error\x88\x01\x01B\b\n" +
+	"\x06_error\"\x8a\x01\n" +
+	"\x19AdminResetPasswordRequest\x12\x17\n" +
+	"\auser_id\x18\x01 \x01(\tR\x06userId\x12#\n" +
+	"\fnew_password\x18\x02 \x01(\tH\x00R\vnewPassword\x12%\n" +
+	"\rgenerate_link\x18\x03 \x01(\bH\x00R\fgenerateLinkB\b\n" +
+	"\x06method\"\xbd\x01\n" +
+	"\x1aAdminResetPasswordResponse\x12\x14\n" +
+	"\x05reset\x18\x01 \x01(\bR\x05reset\x12\"\n" +
+	"\n" +
+	"reset_link\x18\x02 \x01(\tH\x00R\tresetLink\x88\x01\x01\x12\x18\n" +
+	"\asuccess\x18\x03 \x01(\bR\asuccess\x122\n" +
+	"\x05error\x18\x04 \x01(\v2\x17.domain.common.v1.ErrorH\x01R\x05error\x88\x01\x01B\r\n" +
+	"\v_reset_linkB\b\n" +
 	"\x06_error2\xaf\x05\n" +
 	"\x11UserDomainService\x12W\n" +
 	"\n" +
@@ -1113,7 +1519,7 @@ func file_domain_entity_user_user_proto_rawDescGZIP() []byte {
 	return file_domain_entity_user_user_proto_rawDescData
 }
 
-var file_domain_entity_user_user_proto_msgTypes = make([]protoimpl.MessageInfo, 15)
+var file_domain_entity_user_user_proto_msgTypes = make([]protoimpl.MessageInfo, 21)
 var file_domain_entity_user_user_proto_goTypes = []any{
 	(*User)(nil),                        // 0: domain.entity.v1.User
 	(*CreateUserRequest)(nil),           // 1: domain.entity.v1.CreateUserRequest
@@ -1130,61 +1536,70 @@ var file_domain_entity_user_user_proto_goTypes = []any{
 	(*GetUserListPageDataResponse)(nil), // 12: domain.entity.v1.GetUserListPageDataResponse
 	(*GetUserItemPageDataRequest)(nil),  // 13: domain.entity.v1.GetUserItemPageDataRequest
 	(*GetUserItemPageDataResponse)(nil), // 14: domain.entity.v1.GetUserItemPageDataResponse
-	(*common.Error)(nil),                // 15: domain.common.v1.Error
-	(*common.SearchRequest)(nil),        // 16: domain.common.v1.SearchRequest
-	(*common.FilterRequest)(nil),        // 17: domain.common.v1.FilterRequest
-	(*common.SortRequest)(nil),          // 18: domain.common.v1.SortRequest
-	(*common.PaginationRequest)(nil),    // 19: domain.common.v1.PaginationRequest
-	(*common.PaginationResponse)(nil),   // 20: domain.common.v1.PaginationResponse
-	(*common.SearchResult)(nil),         // 21: domain.common.v1.SearchResult
+	(*DisableUserRequest)(nil),          // 15: domain.entity.v1.DisableUserRequest
+	(*DisableUserResponse)(nil),         // 16: domain.entity.v1.DisableUserResponse
+	(*EnableUserRequest)(nil),           // 17: domain.entity.v1.EnableUserRequest
+	(*EnableUserResponse)(nil),          // 18: domain.entity.v1.EnableUserResponse
+	(*AdminResetPasswordRequest)(nil),   // 19: domain.entity.v1.AdminResetPasswordRequest
+	(*AdminResetPasswordResponse)(nil),  // 20: domain.entity.v1.AdminResetPasswordResponse
+	(*common.Error)(nil),                // 21: domain.common.v1.Error
+	(*common.SearchRequest)(nil),        // 22: domain.common.v1.SearchRequest
+	(*common.FilterRequest)(nil),        // 23: domain.common.v1.FilterRequest
+	(*common.SortRequest)(nil),          // 24: domain.common.v1.SortRequest
+	(*common.PaginationRequest)(nil),    // 25: domain.common.v1.PaginationRequest
+	(*common.PaginationResponse)(nil),   // 26: domain.common.v1.PaginationResponse
+	(*common.SearchResult)(nil),         // 27: domain.common.v1.SearchResult
 }
 var file_domain_entity_user_user_proto_depIdxs = []int32{
 	0,  // 0: domain.entity.v1.CreateUserRequest.data:type_name -> domain.entity.v1.User
 	0,  // 1: domain.entity.v1.CreateUserResponse.data:type_name -> domain.entity.v1.User
-	15, // 2: domain.entity.v1.CreateUserResponse.error:type_name -> domain.common.v1.Error
+	21, // 2: domain.entity.v1.CreateUserResponse.error:type_name -> domain.common.v1.Error
 	0,  // 3: domain.entity.v1.ReadUserRequest.data:type_name -> domain.entity.v1.User
 	0,  // 4: domain.entity.v1.ReadUserResponse.data:type_name -> domain.entity.v1.User
-	15, // 5: domain.entity.v1.ReadUserResponse.error:type_name -> domain.common.v1.Error
+	21, // 5: domain.entity.v1.ReadUserResponse.error:type_name -> domain.common.v1.Error
 	0,  // 6: domain.entity.v1.UpdateUserRequest.data:type_name -> domain.entity.v1.User
 	0,  // 7: domain.entity.v1.UpdateUserResponse.data:type_name -> domain.entity.v1.User
-	15, // 8: domain.entity.v1.UpdateUserResponse.error:type_name -> domain.common.v1.Error
+	21, // 8: domain.entity.v1.UpdateUserResponse.error:type_name -> domain.common.v1.Error
 	0,  // 9: domain.entity.v1.DeleteUserRequest.data:type_name -> domain.entity.v1.User
-	15, // 10: domain.entity.v1.DeleteUserResponse.error:type_name -> domain.common.v1.Error
-	16, // 11: domain.entity.v1.ListUsersRequest.search:type_name -> domain.common.v1.SearchRequest
-	17, // 12: domain.entity.v1.ListUsersRequest.filters:type_name -> domain.common.v1.FilterRequest
-	18, // 13: domain.entity.v1.ListUsersRequest.sort:type_name -> domain.common.v1.SortRequest
-	19, // 14: domain.entity.v1.ListUsersRequest.pagination:type_name -> domain.common.v1.PaginationRequest
+	21, // 10: domain.entity.v1.DeleteUserResponse.error:type_name -> domain.common.v1.Error
+	22, // 11: domain.entity.v1.ListUsersRequest.search:type_name -> domain.common.v1.SearchRequest
+	23, // 12: domain.entity.v1.ListUsersRequest.filters:type_name -> domain.common.v1.FilterRequest
+	24, // 13: domain.entity.v1.ListUsersRequest.sort:type_name -> domain.common.v1.SortRequest
+	25, // 14: domain.entity.v1.ListUsersRequest.pagination:type_name -> domain.common.v1.PaginationRequest
 	0,  // 15: domain.entity.v1.ListUsersResponse.data:type_name -> domain.entity.v1.User
-	15, // 16: domain.entity.v1.ListUsersResponse.error:type_name -> domain.common.v1.Error
-	16, // 17: domain.entity.v1.GetUserListPageDataRequest.search:type_name -> domain.common.v1.SearchRequest
-	17, // 18: domain.entity.v1.GetUserListPageDataRequest.filters:type_name -> domain.common.v1.FilterRequest
-	18, // 19: domain.entity.v1.GetUserListPageDataRequest.sort:type_name -> domain.common.v1.SortRequest
-	19, // 20: domain.entity.v1.GetUserListPageDataRequest.pagination:type_name -> domain.common.v1.PaginationRequest
+	21, // 16: domain.entity.v1.ListUsersResponse.error:type_name -> domain.common.v1.Error
+	22, // 17: domain.entity.v1.GetUserListPageDataRequest.search:type_name -> domain.common.v1.SearchRequest
+	23, // 18: domain.entity.v1.GetUserListPageDataRequest.filters:type_name -> domain.common.v1.FilterRequest
+	24, // 19: domain.entity.v1.GetUserListPageDataRequest.sort:type_name -> domain.common.v1.SortRequest
+	25, // 20: domain.entity.v1.GetUserListPageDataRequest.pagination:type_name -> domain.common.v1.PaginationRequest
 	0,  // 21: domain.entity.v1.GetUserListPageDataResponse.user_list:type_name -> domain.entity.v1.User
-	20, // 22: domain.entity.v1.GetUserListPageDataResponse.pagination:type_name -> domain.common.v1.PaginationResponse
-	21, // 23: domain.entity.v1.GetUserListPageDataResponse.search_results:type_name -> domain.common.v1.SearchResult
-	15, // 24: domain.entity.v1.GetUserListPageDataResponse.error:type_name -> domain.common.v1.Error
+	26, // 22: domain.entity.v1.GetUserListPageDataResponse.pagination:type_name -> domain.common.v1.PaginationResponse
+	27, // 23: domain.entity.v1.GetUserListPageDataResponse.search_results:type_name -> domain.common.v1.SearchResult
+	21, // 24: domain.entity.v1.GetUserListPageDataResponse.error:type_name -> domain.common.v1.Error
 	0,  // 25: domain.entity.v1.GetUserItemPageDataResponse.user:type_name -> domain.entity.v1.User
-	15, // 26: domain.entity.v1.GetUserItemPageDataResponse.error:type_name -> domain.common.v1.Error
-	1,  // 27: domain.entity.v1.UserDomainService.CreateUser:input_type -> domain.entity.v1.CreateUserRequest
-	3,  // 28: domain.entity.v1.UserDomainService.ReadUser:input_type -> domain.entity.v1.ReadUserRequest
-	5,  // 29: domain.entity.v1.UserDomainService.UpdateUser:input_type -> domain.entity.v1.UpdateUserRequest
-	7,  // 30: domain.entity.v1.UserDomainService.DeleteUser:input_type -> domain.entity.v1.DeleteUserRequest
-	9,  // 31: domain.entity.v1.UserDomainService.ListUsers:input_type -> domain.entity.v1.ListUsersRequest
-	11, // 32: domain.entity.v1.UserDomainService.GetUserListPageData:input_type -> domain.entity.v1.GetUserListPageDataRequest
-	13, // 33: domain.entity.v1.UserDomainService.GetUserItemPageData:input_type -> domain.entity.v1.GetUserItemPageDataRequest
-	2,  // 34: domain.entity.v1.UserDomainService.CreateUser:output_type -> domain.entity.v1.CreateUserResponse
-	4,  // 35: domain.entity.v1.UserDomainService.ReadUser:output_type -> domain.entity.v1.ReadUserResponse
-	6,  // 36: domain.entity.v1.UserDomainService.UpdateUser:output_type -> domain.entity.v1.UpdateUserResponse
-	8,  // 37: domain.entity.v1.UserDomainService.DeleteUser:output_type -> domain.entity.v1.DeleteUserResponse
-	10, // 38: domain.entity.v1.UserDomainService.ListUsers:output_type -> domain.entity.v1.ListUsersResponse
-	12, // 39: domain.entity.v1.UserDomainService.GetUserListPageData:output_type -> domain.entity.v1.GetUserListPageDataResponse
-	14, // 40: domain.entity.v1.UserDomainService.GetUserItemPageData:output_type -> domain.entity.v1.GetUserItemPageDataResponse
-	34, // [34:41] is the sub-list for method output_type
-	27, // [27:34] is the sub-list for method input_type
-	27, // [27:27] is the sub-list for extension type_name
-	27, // [27:27] is the sub-list for extension extendee
-	0,  // [0:27] is the sub-list for field type_name
+	21, // 26: domain.entity.v1.GetUserItemPageDataResponse.error:type_name -> domain.common.v1.Error
+	21, // 27: domain.entity.v1.DisableUserResponse.error:type_name -> domain.common.v1.Error
+	21, // 28: domain.entity.v1.EnableUserResponse.error:type_name -> domain.common.v1.Error
+	21, // 29: domain.entity.v1.AdminResetPasswordResponse.error:type_name -> domain.common.v1.Error
+	1,  // 30: domain.entity.v1.UserDomainService.CreateUser:input_type -> domain.entity.v1.CreateUserRequest
+	3,  // 31: domain.entity.v1.UserDomainService.ReadUser:input_type -> domain.entity.v1.ReadUserRequest
+	5,  // 32: domain.entity.v1.UserDomainService.UpdateUser:input_type -> domain.entity.v1.UpdateUserRequest
+	7,  // 33: domain.entity.v1.UserDomainService.DeleteUser:input_type -> domain.entity.v1.DeleteUserRequest
+	9,  // 34: domain.entity.v1.UserDomainService.ListUsers:input_type -> domain.entity.v1.ListUsersRequest
+	11, // 35: domain.entity.v1.UserDomainService.GetUserListPageData:input_type -> domain.entity.v1.GetUserListPageDataRequest
+	13, // 36: domain.entity.v1.UserDomainService.GetUserItemPageData:input_type -> domain.entity.v1.GetUserItemPageDataRequest
+	2,  // 37: domain.entity.v1.UserDomainService.CreateUser:output_type -> domain.entity.v1.CreateUserResponse
+	4,  // 38: domain.entity.v1.UserDomainService.ReadUser:output_type -> domain.entity.v1.ReadUserResponse
+	6,  // 39: domain.entity.v1.UserDomainService.UpdateUser:output_type -> domain.entity.v1.UpdateUserResponse
+	8,  // 40: domain.entity.v1.UserDomainService.DeleteUser:output_type -> domain.entity.v1.DeleteUserResponse
+	10, // 41: domain.entity.v1.UserDomainService.ListUsers:output_type -> domain.entity.v1.ListUsersResponse
+	12, // 42: domain.entity.v1.UserDomainService.GetUserListPageData:output_type -> domain.entity.v1.GetUserListPageDataResponse
+	14, // 43: domain.entity.v1.UserDomainService.GetUserItemPageData:output_type -> domain.entity.v1.GetUserItemPageDataResponse
+	37, // [37:44] is the sub-list for method output_type
+	30, // [30:37] is the sub-list for method input_type
+	30, // [30:30] is the sub-list for extension type_name
+	30, // [30:30] is the sub-list for extension extendee
+	0,  // [0:30] is the sub-list for field type_name
 }
 
 func init() { file_domain_entity_user_user_proto_init() }
@@ -1202,13 +1617,21 @@ func file_domain_entity_user_user_proto_init() {
 	file_domain_entity_user_user_proto_msgTypes[11].OneofWrappers = []any{}
 	file_domain_entity_user_user_proto_msgTypes[12].OneofWrappers = []any{}
 	file_domain_entity_user_user_proto_msgTypes[14].OneofWrappers = []any{}
+	file_domain_entity_user_user_proto_msgTypes[15].OneofWrappers = []any{}
+	file_domain_entity_user_user_proto_msgTypes[16].OneofWrappers = []any{}
+	file_domain_entity_user_user_proto_msgTypes[18].OneofWrappers = []any{}
+	file_domain_entity_user_user_proto_msgTypes[19].OneofWrappers = []any{
+		(*AdminResetPasswordRequest_NewPassword)(nil),
+		(*AdminResetPasswordRequest_GenerateLink)(nil),
+	}
+	file_domain_entity_user_user_proto_msgTypes[20].OneofWrappers = []any{}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
 		File: protoimpl.DescBuilder{
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_domain_entity_user_user_proto_rawDesc), len(file_domain_entity_user_user_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   15,
+			NumMessages:   21,
 			NumExtensions: 0,
 			NumServices:   1,
 		},

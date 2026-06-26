@@ -8,12 +8,12 @@
 // Environment variables (reads service-admin .env or set manually):
 //
 //	DATABASE_URL        Full connection string (takes precedence)
-//	POSTGRES_HOST       Host (default: 127.0.0.1)
-//	POSTGRES_PORT       Port (default: 5432)
-//	POSTGRES_NAME       Database name
-//	POSTGRES_USER       Username
-//	POSTGRES_PASSWORD   Password
-//	POSTGRES_SSL_MODE   SSL mode (default: disable)
+//	DATABASE_POSTGRES_HOST       Host (default: 127.0.0.1)
+//	DATABASE_POSTGRES_PORT       Port (default: 5432)
+//	DATABASE_POSTGRES_DBNAME       Database name
+//	DATABASE_POSTGRES_USER       Username
+//	DATABASE_POSTGRES_PASSWORD   Password
+//	DATABASE_POSTGRES_SSLMODE   SSL mode (default: disable)
 //	MIGRATE_DIALECT     Dialect (default: postgres)
 //	DDL_FILE            Path to DDL reference file
 //	                    (default: migrations/postgres/0001_initial.sql)
@@ -173,7 +173,7 @@ func queryPostgresColumns(ctx context.Context, db *sql.DB, table string) ([]stri
 func queryMySQLSchema(ctx context.Context, db *sql.DB) (liveSchema, error) {
 	schema := make(liveSchema)
 
-	dbName := getEnv("MYSQL_NAME", getEnv("POSTGRES_NAME", ""))
+	dbName := getEnv("MYSQL_NAME", getEnv("DATABASE_POSTGRES_DBNAME", ""))
 	rows, err := db.QueryContext(ctx, `
 		SELECT table_name
 		FROM information_schema.tables
@@ -342,21 +342,21 @@ func openDB(dialect string) (*sql.DB, error) {
 			driverName = "pgx"
 			dsn = fmt.Sprintf(
 				"host=%s port=%s dbname=%s user=%s password=%s sslmode=%s",
-				getEnv("POSTGRES_HOST", "127.0.0.1"),
-				getEnv("POSTGRES_PORT", "5432"),
-				getEnv("POSTGRES_NAME", ""),
-				getEnv("POSTGRES_USER", ""),
-				getEnv("POSTGRES_PASSWORD", ""),
-				getEnv("POSTGRES_SSL_MODE", "disable"),
+				getEnv("DATABASE_POSTGRES_HOST", "127.0.0.1"),
+				getEnv("DATABASE_POSTGRES_PORT", "5432"),
+				getEnv("DATABASE_POSTGRES_DBNAME", ""),
+				getEnv("DATABASE_POSTGRES_USER", ""),
+				getEnv("DATABASE_POSTGRES_PASSWORD", ""),
+				getEnv("DATABASE_POSTGRES_SSLMODE", "disable"),
 			)
 		case "mysql":
 			driverName = "mysql"
 			dsn = fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?parseTime=true",
-				getEnv("MYSQL_USER", getEnv("POSTGRES_USER", "")),
-				getEnv("MYSQL_PASSWORD", getEnv("POSTGRES_PASSWORD", "")),
-				getEnv("MYSQL_HOST", getEnv("POSTGRES_HOST", "127.0.0.1")),
+				getEnv("MYSQL_USER", getEnv("DATABASE_POSTGRES_USER", "")),
+				getEnv("MYSQL_PASSWORD", getEnv("DATABASE_POSTGRES_PASSWORD", "")),
+				getEnv("MYSQL_HOST", getEnv("DATABASE_POSTGRES_HOST", "127.0.0.1")),
 				getEnv("MYSQL_PORT", "3306"),
-				getEnv("MYSQL_NAME", getEnv("POSTGRES_NAME", "")),
+				getEnv("MYSQL_NAME", getEnv("DATABASE_POSTGRES_DBNAME", "")),
 			)
 		default:
 			return nil, fmt.Errorf("unsupported dialect: %s", dialect)

@@ -737,6 +737,110 @@ func (x *ListSessionsResponse) GetError() *common.Error {
 	return nil
 }
 
+type RevokeUserSessionsRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	UserId        string                 `protobuf:"bytes,1,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *RevokeUserSessionsRequest) Reset() {
+	*x = RevokeUserSessionsRequest{}
+	mi := &file_domain_entity_session_session_proto_msgTypes[11]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *RevokeUserSessionsRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*RevokeUserSessionsRequest) ProtoMessage() {}
+
+func (x *RevokeUserSessionsRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_domain_entity_session_session_proto_msgTypes[11]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use RevokeUserSessionsRequest.ProtoReflect.Descriptor instead.
+func (*RevokeUserSessionsRequest) Descriptor() ([]byte, []int) {
+	return file_domain_entity_session_session_proto_rawDescGZIP(), []int{11}
+}
+
+func (x *RevokeUserSessionsRequest) GetUserId() string {
+	if x != nil {
+		return x.UserId
+	}
+	return ""
+}
+
+type RevokeUserSessionsResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Revoked       bool                   `protobuf:"varint,1,opt,name=revoked,proto3" json:"revoked,omitempty"`
+	Success       bool                   `protobuf:"varint,2,opt,name=success,proto3" json:"success,omitempty"`
+	Error         *common.Error          `protobuf:"bytes,3,opt,name=error,proto3,oneof" json:"error,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *RevokeUserSessionsResponse) Reset() {
+	*x = RevokeUserSessionsResponse{}
+	mi := &file_domain_entity_session_session_proto_msgTypes[12]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *RevokeUserSessionsResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*RevokeUserSessionsResponse) ProtoMessage() {}
+
+func (x *RevokeUserSessionsResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_domain_entity_session_session_proto_msgTypes[12]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use RevokeUserSessionsResponse.ProtoReflect.Descriptor instead.
+func (*RevokeUserSessionsResponse) Descriptor() ([]byte, []int) {
+	return file_domain_entity_session_session_proto_rawDescGZIP(), []int{12}
+}
+
+func (x *RevokeUserSessionsResponse) GetRevoked() bool {
+	if x != nil {
+		return x.Revoked
+	}
+	return false
+}
+
+func (x *RevokeUserSessionsResponse) GetSuccess() bool {
+	if x != nil {
+		return x.Success
+	}
+	return false
+}
+
+func (x *RevokeUserSessionsResponse) GetError() *common.Error {
+	if x != nil {
+		return x.Error
+	}
+	return nil
+}
+
 var File_domain_entity_session_session_proto protoreflect.FileDescriptor
 
 const file_domain_entity_session_session_proto_rawDesc = "" +
@@ -818,6 +922,13 @@ const file_domain_entity_session_session_proto_rawDesc = "" +
 	"\x04data\x18\x01 \x03(\v2\x19.domain.entity.v1.SessionR\x04data\x12\x18\n" +
 	"\asuccess\x18\x02 \x01(\bR\asuccess\x122\n" +
 	"\x05error\x18\x03 \x01(\v2\x17.domain.common.v1.ErrorH\x00R\x05error\x88\x01\x01B\b\n" +
+	"\x06_error\"4\n" +
+	"\x19RevokeUserSessionsRequest\x12\x17\n" +
+	"\auser_id\x18\x01 \x01(\tR\x06userId\"\x8e\x01\n" +
+	"\x1aRevokeUserSessionsResponse\x12\x18\n" +
+	"\arevoked\x18\x01 \x01(\bR\arevoked\x12\x18\n" +
+	"\asuccess\x18\x02 \x01(\bR\asuccess\x122\n" +
+	"\x05error\x18\x03 \x01(\v2\x17.domain.common.v1.ErrorH\x00R\x05error\x88\x01\x01B\b\n" +
 	"\x06_error2\xf7\x03\n" +
 	"\x14SessionDomainService\x12`\n" +
 	"\rCreateSession\x12&.domain.entity.v1.CreateSessionRequest\x1a'.domain.entity.v1.CreateSessionResponse\x12Z\n" +
@@ -839,60 +950,63 @@ func file_domain_entity_session_session_proto_rawDescGZIP() []byte {
 	return file_domain_entity_session_session_proto_rawDescData
 }
 
-var file_domain_entity_session_session_proto_msgTypes = make([]protoimpl.MessageInfo, 11)
+var file_domain_entity_session_session_proto_msgTypes = make([]protoimpl.MessageInfo, 13)
 var file_domain_entity_session_session_proto_goTypes = []any{
-	(*Session)(nil),                   // 0: domain.entity.v1.Session
-	(*CreateSessionRequest)(nil),      // 1: domain.entity.v1.CreateSessionRequest
-	(*CreateSessionResponse)(nil),     // 2: domain.entity.v1.CreateSessionResponse
-	(*ReadSessionRequest)(nil),        // 3: domain.entity.v1.ReadSessionRequest
-	(*ReadSessionResponse)(nil),       // 4: domain.entity.v1.ReadSessionResponse
-	(*UpdateSessionRequest)(nil),      // 5: domain.entity.v1.UpdateSessionRequest
-	(*UpdateSessionResponse)(nil),     // 6: domain.entity.v1.UpdateSessionResponse
-	(*DeleteSessionRequest)(nil),      // 7: domain.entity.v1.DeleteSessionRequest
-	(*DeleteSessionResponse)(nil),     // 8: domain.entity.v1.DeleteSessionResponse
-	(*ListSessionsRequest)(nil),       // 9: domain.entity.v1.ListSessionsRequest
-	(*ListSessionsResponse)(nil),      // 10: domain.entity.v1.ListSessionsResponse
-	(principal_type.PrincipalType)(0), // 11: domain.entity.v1.PrincipalType
-	(*common.Error)(nil),              // 12: domain.common.v1.Error
-	(*common.SearchRequest)(nil),      // 13: domain.common.v1.SearchRequest
-	(*common.FilterRequest)(nil),      // 14: domain.common.v1.FilterRequest
-	(*common.SortRequest)(nil),        // 15: domain.common.v1.SortRequest
-	(*common.PaginationRequest)(nil),  // 16: domain.common.v1.PaginationRequest
+	(*Session)(nil),                    // 0: domain.entity.v1.Session
+	(*CreateSessionRequest)(nil),       // 1: domain.entity.v1.CreateSessionRequest
+	(*CreateSessionResponse)(nil),      // 2: domain.entity.v1.CreateSessionResponse
+	(*ReadSessionRequest)(nil),         // 3: domain.entity.v1.ReadSessionRequest
+	(*ReadSessionResponse)(nil),        // 4: domain.entity.v1.ReadSessionResponse
+	(*UpdateSessionRequest)(nil),       // 5: domain.entity.v1.UpdateSessionRequest
+	(*UpdateSessionResponse)(nil),      // 6: domain.entity.v1.UpdateSessionResponse
+	(*DeleteSessionRequest)(nil),       // 7: domain.entity.v1.DeleteSessionRequest
+	(*DeleteSessionResponse)(nil),      // 8: domain.entity.v1.DeleteSessionResponse
+	(*ListSessionsRequest)(nil),        // 9: domain.entity.v1.ListSessionsRequest
+	(*ListSessionsResponse)(nil),       // 10: domain.entity.v1.ListSessionsResponse
+	(*RevokeUserSessionsRequest)(nil),  // 11: domain.entity.v1.RevokeUserSessionsRequest
+	(*RevokeUserSessionsResponse)(nil), // 12: domain.entity.v1.RevokeUserSessionsResponse
+	(principal_type.PrincipalType)(0),  // 13: domain.entity.v1.PrincipalType
+	(*common.Error)(nil),               // 14: domain.common.v1.Error
+	(*common.SearchRequest)(nil),       // 15: domain.common.v1.SearchRequest
+	(*common.FilterRequest)(nil),       // 16: domain.common.v1.FilterRequest
+	(*common.SortRequest)(nil),         // 17: domain.common.v1.SortRequest
+	(*common.PaginationRequest)(nil),   // 18: domain.common.v1.PaginationRequest
 }
 var file_domain_entity_session_session_proto_depIdxs = []int32{
-	11, // 0: domain.entity.v1.Session.principal_type:type_name -> domain.entity.v1.PrincipalType
+	13, // 0: domain.entity.v1.Session.principal_type:type_name -> domain.entity.v1.PrincipalType
 	0,  // 1: domain.entity.v1.CreateSessionRequest.data:type_name -> domain.entity.v1.Session
 	0,  // 2: domain.entity.v1.CreateSessionResponse.data:type_name -> domain.entity.v1.Session
-	12, // 3: domain.entity.v1.CreateSessionResponse.error:type_name -> domain.common.v1.Error
+	14, // 3: domain.entity.v1.CreateSessionResponse.error:type_name -> domain.common.v1.Error
 	0,  // 4: domain.entity.v1.ReadSessionRequest.data:type_name -> domain.entity.v1.Session
 	0,  // 5: domain.entity.v1.ReadSessionResponse.data:type_name -> domain.entity.v1.Session
-	12, // 6: domain.entity.v1.ReadSessionResponse.error:type_name -> domain.common.v1.Error
+	14, // 6: domain.entity.v1.ReadSessionResponse.error:type_name -> domain.common.v1.Error
 	0,  // 7: domain.entity.v1.UpdateSessionRequest.data:type_name -> domain.entity.v1.Session
 	0,  // 8: domain.entity.v1.UpdateSessionResponse.data:type_name -> domain.entity.v1.Session
-	12, // 9: domain.entity.v1.UpdateSessionResponse.error:type_name -> domain.common.v1.Error
+	14, // 9: domain.entity.v1.UpdateSessionResponse.error:type_name -> domain.common.v1.Error
 	0,  // 10: domain.entity.v1.DeleteSessionRequest.data:type_name -> domain.entity.v1.Session
-	12, // 11: domain.entity.v1.DeleteSessionResponse.error:type_name -> domain.common.v1.Error
-	13, // 12: domain.entity.v1.ListSessionsRequest.search:type_name -> domain.common.v1.SearchRequest
-	14, // 13: domain.entity.v1.ListSessionsRequest.filters:type_name -> domain.common.v1.FilterRequest
-	15, // 14: domain.entity.v1.ListSessionsRequest.sort:type_name -> domain.common.v1.SortRequest
-	16, // 15: domain.entity.v1.ListSessionsRequest.pagination:type_name -> domain.common.v1.PaginationRequest
+	14, // 11: domain.entity.v1.DeleteSessionResponse.error:type_name -> domain.common.v1.Error
+	15, // 12: domain.entity.v1.ListSessionsRequest.search:type_name -> domain.common.v1.SearchRequest
+	16, // 13: domain.entity.v1.ListSessionsRequest.filters:type_name -> domain.common.v1.FilterRequest
+	17, // 14: domain.entity.v1.ListSessionsRequest.sort:type_name -> domain.common.v1.SortRequest
+	18, // 15: domain.entity.v1.ListSessionsRequest.pagination:type_name -> domain.common.v1.PaginationRequest
 	0,  // 16: domain.entity.v1.ListSessionsResponse.data:type_name -> domain.entity.v1.Session
-	12, // 17: domain.entity.v1.ListSessionsResponse.error:type_name -> domain.common.v1.Error
-	1,  // 18: domain.entity.v1.SessionDomainService.CreateSession:input_type -> domain.entity.v1.CreateSessionRequest
-	3,  // 19: domain.entity.v1.SessionDomainService.ReadSession:input_type -> domain.entity.v1.ReadSessionRequest
-	5,  // 20: domain.entity.v1.SessionDomainService.UpdateSession:input_type -> domain.entity.v1.UpdateSessionRequest
-	7,  // 21: domain.entity.v1.SessionDomainService.DeleteSession:input_type -> domain.entity.v1.DeleteSessionRequest
-	9,  // 22: domain.entity.v1.SessionDomainService.ListSessions:input_type -> domain.entity.v1.ListSessionsRequest
-	2,  // 23: domain.entity.v1.SessionDomainService.CreateSession:output_type -> domain.entity.v1.CreateSessionResponse
-	4,  // 24: domain.entity.v1.SessionDomainService.ReadSession:output_type -> domain.entity.v1.ReadSessionResponse
-	6,  // 25: domain.entity.v1.SessionDomainService.UpdateSession:output_type -> domain.entity.v1.UpdateSessionResponse
-	8,  // 26: domain.entity.v1.SessionDomainService.DeleteSession:output_type -> domain.entity.v1.DeleteSessionResponse
-	10, // 27: domain.entity.v1.SessionDomainService.ListSessions:output_type -> domain.entity.v1.ListSessionsResponse
-	23, // [23:28] is the sub-list for method output_type
-	18, // [18:23] is the sub-list for method input_type
-	18, // [18:18] is the sub-list for extension type_name
-	18, // [18:18] is the sub-list for extension extendee
-	0,  // [0:18] is the sub-list for field type_name
+	14, // 17: domain.entity.v1.ListSessionsResponse.error:type_name -> domain.common.v1.Error
+	14, // 18: domain.entity.v1.RevokeUserSessionsResponse.error:type_name -> domain.common.v1.Error
+	1,  // 19: domain.entity.v1.SessionDomainService.CreateSession:input_type -> domain.entity.v1.CreateSessionRequest
+	3,  // 20: domain.entity.v1.SessionDomainService.ReadSession:input_type -> domain.entity.v1.ReadSessionRequest
+	5,  // 21: domain.entity.v1.SessionDomainService.UpdateSession:input_type -> domain.entity.v1.UpdateSessionRequest
+	7,  // 22: domain.entity.v1.SessionDomainService.DeleteSession:input_type -> domain.entity.v1.DeleteSessionRequest
+	9,  // 23: domain.entity.v1.SessionDomainService.ListSessions:input_type -> domain.entity.v1.ListSessionsRequest
+	2,  // 24: domain.entity.v1.SessionDomainService.CreateSession:output_type -> domain.entity.v1.CreateSessionResponse
+	4,  // 25: domain.entity.v1.SessionDomainService.ReadSession:output_type -> domain.entity.v1.ReadSessionResponse
+	6,  // 26: domain.entity.v1.SessionDomainService.UpdateSession:output_type -> domain.entity.v1.UpdateSessionResponse
+	8,  // 27: domain.entity.v1.SessionDomainService.DeleteSession:output_type -> domain.entity.v1.DeleteSessionResponse
+	10, // 28: domain.entity.v1.SessionDomainService.ListSessions:output_type -> domain.entity.v1.ListSessionsResponse
+	24, // [24:29] is the sub-list for method output_type
+	19, // [19:24] is the sub-list for method input_type
+	19, // [19:19] is the sub-list for extension type_name
+	19, // [19:19] is the sub-list for extension extendee
+	0,  // [0:19] is the sub-list for field type_name
 }
 
 func init() { file_domain_entity_session_session_proto_init() }
@@ -907,13 +1021,14 @@ func file_domain_entity_session_session_proto_init() {
 	file_domain_entity_session_session_proto_msgTypes[8].OneofWrappers = []any{}
 	file_domain_entity_session_session_proto_msgTypes[9].OneofWrappers = []any{}
 	file_domain_entity_session_session_proto_msgTypes[10].OneofWrappers = []any{}
+	file_domain_entity_session_session_proto_msgTypes[12].OneofWrappers = []any{}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
 		File: protoimpl.DescBuilder{
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_domain_entity_session_session_proto_rawDesc), len(file_domain_entity_session_session_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   11,
+			NumMessages:   13,
 			NumExtensions: 0,
 			NumServices:   1,
 		},
