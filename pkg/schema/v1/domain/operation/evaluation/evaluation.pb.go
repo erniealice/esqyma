@@ -194,7 +194,7 @@ type SubjectType int32
 
 const (
 	SubjectType_SUBJECT_TYPE_UNSPECIFIED SubjectType = 0
-	SubjectType_SUBJECT_TYPE_ASSOCIATE   SubjectType = 1 // subject_staff_id (-> entity/staff) — the HUMAN Identity is the subject
+	SubjectType_SUBJECT_TYPE_ASSOCIATE   SubjectType = 1 // staff_id (-> entity/staff) — the HUMAN Identity is the subject
 	SubjectType_SUBJECT_TYPE_CLIENT      SubjectType = 2 // subject_client_id
 )
 
@@ -371,7 +371,7 @@ type Evaluation struct {
 	EvaluatorClientPortalGrantId *string     `protobuf:"bytes,11,opt,name=evaluator_client_portal_grant_id,json=evaluatorClientPortalGrantId,proto3,oneof" json:"evaluator_client_portal_grant_id,omitempty"`
 	SubjectType                  SubjectType `protobuf:"varint,12,opt,name=subject_type,json=subjectType,proto3,enum=domain.operation.v1.SubjectType" json:"subject_type,omitempty"` // proto ENUM; DB CHECK-pinned
 	// Subject arc — exactly one (num_nonnulls=1). The HUMAN Identity is the subject.
-	SubjectStaffId     *string          `protobuf:"bytes,13,opt,name=subject_staff_id,json=subjectStaffId,proto3,oneof" json:"subject_staff_id,omitempty"`
+	StaffId            *string          `protobuf:"bytes,13,opt,name=staff_id,json=staffId,proto3,oneof" json:"staff_id,omitempty"`
 	SubjectClientId    *string          `protobuf:"bytes,14,opt,name=subject_client_id,json=subjectClientId,proto3,oneof" json:"subject_client_id,omitempty"`
 	PeriodStart        string           `protobuf:"bytes,15,opt,name=period_start,json=periodStart,proto3" json:"period_start,omitempty"`                                                   // ISO 8601
 	PeriodEnd          string           `protobuf:"bytes,16,opt,name=period_end,json=periodEnd,proto3" json:"period_end,omitempty"`                                                         // ISO 8601
@@ -509,9 +509,9 @@ func (x *Evaluation) GetSubjectType() SubjectType {
 	return SubjectType_SUBJECT_TYPE_UNSPECIFIED
 }
 
-func (x *Evaluation) GetSubjectStaffId() string {
-	if x != nil && x.SubjectStaffId != nil {
-		return *x.SubjectStaffId
+func (x *Evaluation) GetStaffId() string {
+	if x != nil && x.StaffId != nil {
+		return *x.StaffId
 	}
 	return ""
 }
@@ -1423,7 +1423,7 @@ var File_domain_operation_evaluation_evaluation_proto protoreflect.FileDescripto
 
 const file_domain_operation_evaluation_evaluation_proto_rawDesc = "" +
 	"\n" +
-	",domain/operation/evaluation/evaluation.proto\x12\x13domain.operation.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1adomain/common/search.proto\x1a\x10options/db.proto\"\x9c\x12\n" +
+	",domain/operation/evaluation/evaluation.proto\x12\x13domain.operation.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1adomain/common/search.proto\x1a\x10options/db.proto\"\x85\x12\n" +
 	"\n" +
 	"Evaluation\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x124\n" +
@@ -1446,9 +1446,9 @@ const file_domain_operation_evaluation_evaluation_proto_rawDesc = "" +
 	"\x0eworkspace_user\x18\x01H\x03R\x18evaluatorWorkspaceUserId\x88\x01\x01\x12h\n" +
 	" evaluator_client_portal_grant_id\x18\v \x01(\tB\x1b\x82\xb5\x18\x17\n" +
 	"\x13client_portal_grant\x18\x01H\x04R\x1cevaluatorClientPortalGrantId\x88\x01\x01\x12C\n" +
-	"\fsubject_type\x18\f \x01(\x0e2 .domain.operation.v1.SubjectTypeR\vsubjectType\x12<\n" +
-	"\x10subject_staff_id\x18\r \x01(\tB\r\x82\xb5\x18\t\n" +
-	"\x05staff\x18\x01H\x05R\x0esubjectStaffId\x88\x01\x01\x12?\n" +
+	"\fsubject_type\x18\f \x01(\x0e2 .domain.operation.v1.SubjectTypeR\vsubjectType\x12-\n" +
+	"\bstaff_id\x18\r \x01(\tB\r\x82\xb5\x18\t\n" +
+	"\x05staff\x18\x01H\x05R\astaffId\x88\x01\x01\x12?\n" +
 	"\x11subject_client_id\x18\x0e \x01(\tB\x0e\x82\xb5\x18\n" +
 	"\n" +
 	"\x06client\x18\x01H\x06R\x0fsubjectClientId\x88\x01\x01\x12!\n" +
@@ -1478,8 +1478,8 @@ const file_domain_operation_evaluation_evaluation_proto_rawDesc = "" +
 	"\x15_subscription_seat_idB\x19\n" +
 	"\x17_evaluation_template_idB\x1e\n" +
 	"\x1c_evaluator_workspace_user_idB#\n" +
-	"!_evaluator_client_portal_grant_idB\x13\n" +
-	"\x11_subject_staff_idB\x14\n" +
+	"!_evaluator_client_portal_grant_idB\v\n" +
+	"\t_staff_idB\x14\n" +
 	"\x12_subject_client_idB\x10\n" +
 	"\x0e_overall_scoreB\f\n" +
 	"\n" +
