@@ -24,7 +24,8 @@ const (
 // PrincipalType identifies the kind of actor whose session is being authorized.
 // Values 1-2 are operator principals (WorkspaceUser-backed).
 // Values 3-6 are portal principals (party-grant-backed).
-// Reserved 7-15 for future platform-level principals (PLATFORM_ADMIN, INTEGRATION_AGENT, …).
+// Value 7 is the staff / operational-delivery principal (Staff-entity-backed; anchor = staff.id).
+// Reserved 8-15 for future platform-level principals (PLATFORM_ADMIN, INTEGRATION_AGENT, …).
 type PrincipalType int32
 
 const (
@@ -35,6 +36,7 @@ const (
 	PrincipalType_PRINCIPAL_TYPE_CLIENT_DELEGATE   PrincipalType = 4 // acts ON BEHALF OF a specific Client
 	PrincipalType_PRINCIPAL_TYPE_SUPPLIER          PrincipalType = 5 // external vendor / contractor
 	PrincipalType_PRINCIPAL_TYPE_SUPPLIER_DELEGATE PrincipalType = 6 // acts ON BEHALF OF a specific Supplier
+	PrincipalType_PRINCIPAL_TYPE_STAFF             PrincipalType = 7 // operational delivery identity (Staff-entity-backed; anchor = staff.id)
 )
 
 // Enum value maps for PrincipalType.
@@ -47,6 +49,7 @@ var (
 		4: "PRINCIPAL_TYPE_CLIENT_DELEGATE",
 		5: "PRINCIPAL_TYPE_SUPPLIER",
 		6: "PRINCIPAL_TYPE_SUPPLIER_DELEGATE",
+		7: "PRINCIPAL_TYPE_STAFF",
 	}
 	PrincipalType_value = map[string]int32{
 		"PRINCIPAL_TYPE_UNSPECIFIED":       0,
@@ -56,6 +59,7 @@ var (
 		"PRINCIPAL_TYPE_CLIENT_DELEGATE":   4,
 		"PRINCIPAL_TYPE_SUPPLIER":          5,
 		"PRINCIPAL_TYPE_SUPPLIER_DELEGATE": 6,
+		"PRINCIPAL_TYPE_STAFF":             7,
 	}
 )
 
@@ -90,7 +94,7 @@ var File_domain_entity_principal_type_principal_type_proto protoreflect.FileDesc
 
 const file_domain_entity_principal_type_principal_type_proto_rawDesc = "" +
 	"\n" +
-	"1domain/entity/principal_type/principal_type.proto\x12\x10domain.entity.v1*\xfd\x01\n" +
+	"1domain/entity/principal_type/principal_type.proto\x12\x10domain.entity.v1*\x97\x02\n" +
 	"\rPrincipalType\x12\x1e\n" +
 	"\x1aPRINCIPAL_TYPE_UNSPECIFIED\x10\x00\x12!\n" +
 	"\x1dPRINCIPAL_TYPE_OPERATOR_OWNER\x10\x01\x12!\n" +
@@ -98,7 +102,8 @@ const file_domain_entity_principal_type_principal_type_proto_rawDesc = "" +
 	"\x15PRINCIPAL_TYPE_CLIENT\x10\x03\x12\"\n" +
 	"\x1ePRINCIPAL_TYPE_CLIENT_DELEGATE\x10\x04\x12\x1b\n" +
 	"\x17PRINCIPAL_TYPE_SUPPLIER\x10\x05\x12$\n" +
-	" PRINCIPAL_TYPE_SUPPLIER_DELEGATE\x10\x06\"\x04\b\a\x10\x0fB\xde\x01\n" +
+	" PRINCIPAL_TYPE_SUPPLIER_DELEGATE\x10\x06\x12\x18\n" +
+	"\x14PRINCIPAL_TYPE_STAFF\x10\a\"\x04\b\b\x10\x0fB\xde\x01\n" +
 	"\x14com.domain.entity.v1B\x12PrincipalTypeProtoP\x01ZPgithub.com/erniealice/esqyma/pkg/schema/v1/domain/entity/principal_type;entityv1\xa2\x02\x03DEX\xaa\x02\x10Domain.Entity.V1\xca\x02\x10Domain\\Entity\\V1\xe2\x02\x1cDomain\\Entity\\V1\\GPBMetadata\xea\x02\x12Domain::Entity::V1b\x06proto3"
 
 var (

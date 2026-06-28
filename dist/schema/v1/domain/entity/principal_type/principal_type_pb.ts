@@ -9,13 +9,14 @@ import { enumDesc, fileDesc } from "@bufbuild/protobuf/codegenv2";
  * Describes the file domain/entity/principal_type/principal_type.proto.
  */
 export const file_domain_entity_principal_type_principal_type: GenFile = /*@__PURE__*/
-  fileDesc("CjFkb21haW4vZW50aXR5L3ByaW5jaXBhbF90eXBlL3ByaW5jaXBhbF90eXBlLnByb3RvEhBkb21haW4uZW50aXR5LnYxKv0BCg1QcmluY2lwYWxUeXBlEh4KGlBSSU5DSVBBTF9UWVBFX1VOU1BFQ0lGSUVEEAASIQodUFJJTkNJUEFMX1RZUEVfT1BFUkFUT1JfT1dORVIQARIhCh1QUklOQ0lQQUxfVFlQRV9PUEVSQVRPUl9TVEFGRhACEhkKFVBSSU5DSVBBTF9UWVBFX0NMSUVOVBADEiIKHlBSSU5DSVBBTF9UWVBFX0NMSUVOVF9ERUxFR0FURRAEEhsKF1BSSU5DSVBBTF9UWVBFX1NVUFBMSUVSEAUSJAogUFJJTkNJUEFMX1RZUEVfU1VQUExJRVJfREVMRUdBVEUQBiIECAcQD0LeAQoUY29tLmRvbWFpbi5lbnRpdHkudjFCElByaW5jaXBhbFR5cGVQcm90b1ABWlBnaXRodWIuY29tL2VybmllYWxpY2UvZXNxeW1hL3BrZy9zY2hlbWEvdjEvZG9tYWluL2VudGl0eS9wcmluY2lwYWxfdHlwZTtlbnRpdHl2MaICA0RFWKoCEERvbWFpbi5FbnRpdHkuVjHKAhBEb21haW5cRW50aXR5XFYx4gIcRG9tYWluXEVudGl0eVxWMVxHUEJNZXRhZGF0YeoCEkRvbWFpbjo6RW50aXR5OjpWMWIGcHJvdG8z");
+  fileDesc("CjFkb21haW4vZW50aXR5L3ByaW5jaXBhbF90eXBlL3ByaW5jaXBhbF90eXBlLnByb3RvEhBkb21haW4uZW50aXR5LnYxKpcCCg1QcmluY2lwYWxUeXBlEh4KGlBSSU5DSVBBTF9UWVBFX1VOU1BFQ0lGSUVEEAASIQodUFJJTkNJUEFMX1RZUEVfT1BFUkFUT1JfT1dORVIQARIhCh1QUklOQ0lQQUxfVFlQRV9PUEVSQVRPUl9TVEFGRhACEhkKFVBSSU5DSVBBTF9UWVBFX0NMSUVOVBADEiIKHlBSSU5DSVBBTF9UWVBFX0NMSUVOVF9ERUxFR0FURRAEEhsKF1BSSU5DSVBBTF9UWVBFX1NVUFBMSUVSEAUSJAogUFJJTkNJUEFMX1RZUEVfU1VQUExJRVJfREVMRUdBVEUQBhIYChRQUklOQ0lQQUxfVFlQRV9TVEFGRhAHIgQICBAPQt4BChRjb20uZG9tYWluLmVudGl0eS52MUISUHJpbmNpcGFsVHlwZVByb3RvUAFaUGdpdGh1Yi5jb20vZXJuaWVhbGljZS9lc3F5bWEvcGtnL3NjaGVtYS92MS9kb21haW4vZW50aXR5L3ByaW5jaXBhbF90eXBlO2VudGl0eXYxogIDREVYqgIQRG9tYWluLkVudGl0eS5WMcoCEERvbWFpblxFbnRpdHlcVjHiAhxEb21haW5cRW50aXR5XFYxXEdQQk1ldGFkYXRh6gISRG9tYWluOjpFbnRpdHk6OlYxYgZwcm90bzM");
 
 /**
  * PrincipalType identifies the kind of actor whose session is being authorized.
  * Values 1-2 are operator principals (WorkspaceUser-backed).
  * Values 3-6 are portal principals (party-grant-backed).
- * Reserved 7-15 for future platform-level principals (PLATFORM_ADMIN, INTEGRATION_AGENT, …).
+ * Value 7 is the staff / operational-delivery principal (Staff-entity-backed; anchor = staff.id).
+ * Reserved 8-15 for future platform-level principals (PLATFORM_ADMIN, INTEGRATION_AGENT, …).
  *
  * @generated from enum domain.entity.v1.PrincipalType
  */
@@ -66,6 +67,13 @@ export enum PrincipalType {
    * @generated from enum value: PRINCIPAL_TYPE_SUPPLIER_DELEGATE = 6;
    */
   SUPPLIER_DELEGATE = 6,
+
+  /**
+   * operational delivery identity (Staff-entity-backed; anchor = staff.id)
+   *
+   * @generated from enum value: PRINCIPAL_TYPE_STAFF = 7;
+   */
+  STAFF = 7,
 }
 
 /**

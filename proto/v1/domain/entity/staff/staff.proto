@@ -48,6 +48,13 @@ message Staff {
   optional string seniority        = 12;  // display snapshot; canonical rank = ProductVariant/ProductOption
   optional string employment_start = 13;  // ISO 8601
   optional string employment_end   = 14;  // ISO 8601 (nil = active)
+
+  // Principal binding (20260628) — the staff member's delivery ROLE, mirroring
+  // client_portal_grant.role_id / supplier_portal_grant.role_id. Backs
+  // PRINCIPAL_TYPE_STAFF (anchor = staff.id): the staff principal resolves its
+  // permissions via this role (userRolesStaffCTE). role_id IS NULL ⇒ the staff row
+  // is an HR record only, NOT a switchable principal.
+  optional string role_id = 15 [(options.v1.db).references = "role", (options.v1.db).index = true];
 }
 
 service StaffDomainService {
