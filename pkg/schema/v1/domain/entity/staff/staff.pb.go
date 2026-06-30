@@ -109,14 +109,8 @@ type Staff struct {
 	Seniority       *string `protobuf:"bytes,12,opt,name=seniority,proto3,oneof" json:"seniority,omitempty"`                                    // display snapshot; canonical rank = ProductVariant/ProductOption
 	EmploymentStart *string `protobuf:"bytes,13,opt,name=employment_start,json=employmentStart,proto3,oneof" json:"employment_start,omitempty"` // ISO 8601
 	EmploymentEnd   *string `protobuf:"bytes,14,opt,name=employment_end,json=employmentEnd,proto3,oneof" json:"employment_end,omitempty"`       // ISO 8601 (nil = active)
-	// Principal binding (20260628) — the staff member's delivery ROLE, mirroring
-	// client_portal_grant.role_id / supplier_portal_grant.role_id. Backs
-	// PRINCIPAL_TYPE_STAFF (anchor = staff.id): the staff principal resolves its
-	// permissions via this role (userRolesStaffCTE). role_id IS NULL ⇒ the staff row
-	// is an HR record only, NOT a switchable principal.
-	RoleId        *string `protobuf:"bytes,15,opt,name=role_id,json=roleId,proto3,oneof" json:"role_id,omitempty"`
-	unknownFields protoimpl.UnknownFields
-	sizeCache     protoimpl.SizeCache
+	unknownFields   protoimpl.UnknownFields
+	sizeCache       protoimpl.SizeCache
 }
 
 func (x *Staff) Reset() {
@@ -243,13 +237,6 @@ func (x *Staff) GetEmploymentStart() string {
 func (x *Staff) GetEmploymentEnd() string {
 	if x != nil && x.EmploymentEnd != nil {
 		return *x.EmploymentEnd
-	}
-	return ""
-}
-
-func (x *Staff) GetRoleId() string {
-	if x != nil && x.RoleId != nil {
-		return *x.RoleId
 	}
 	return ""
 }
@@ -1042,7 +1029,7 @@ var File_domain_entity_staff_staff_proto protoreflect.FileDescriptor
 
 const file_domain_entity_staff_staff_proto_rawDesc = "" +
 	"\n" +
-	"\x1fdomain/entity/staff/staff.proto\x12\x10domain.entity.v1\x1a\x19domain/common/error.proto\x1a\x1adomain/common/search.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1edomain/common/pagination.proto\x1a\x1ddomain/entity/user/user.proto\x1a\x10options/db.proto\"\xe9\x06\n" +
+	"\x1fdomain/entity/staff/staff.proto\x12\x10domain.entity.v1\x1a\x19domain/common/error.proto\x1a\x1adomain/common/search.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1edomain/common/pagination.proto\x1a\x1ddomain/entity/user/user.proto\x1a\x10options/db.proto\"\xc0\x06\n" +
 	"\x05Staff\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12/\n" +
 	"\x04user\x18\x02 \x01(\v2\x16.domain.entity.v1.UserH\x00R\x04user\x88\x01\x01\x12%\n" +
@@ -1062,9 +1049,7 @@ const file_domain_entity_staff_staff_proto_rawDesc = "" +
 	"\tseniority\x18\f \x01(\tH\bR\tseniority\x88\x01\x01\x12.\n" +
 	"\x10employment_start\x18\r \x01(\tH\tR\x0femploymentStart\x88\x01\x01\x12*\n" +
 	"\x0eemployment_end\x18\x0e \x01(\tH\n" +
-	"R\remploymentEnd\x88\x01\x01\x12*\n" +
-	"\arole_id\x18\x0f \x01(\tB\f\x82\xb5\x18\b\n" +
-	"\x04role\x18\x01H\vR\x06roleId\x88\x01\x01:\x06\x8a\xb5\x18\x02\b\x01B\a\n" +
+	"R\remploymentEnd\x88\x01\x01:\x06\x8a\xb5\x18\x02\b\x01B\a\n" +
 	"\x05_userB\x0f\n" +
 	"\r_date_createdB\x16\n" +
 	"\x14_date_created_stringB\x10\n" +
@@ -1076,9 +1061,7 @@ const file_domain_entity_staff_staff_proto_rawDesc = "" +
 	"\n" +
 	"_seniorityB\x13\n" +
 	"\x11_employment_startB\x11\n" +
-	"\x0f_employment_endB\n" +
-	"\n" +
-	"\b_role_id\"A\n" +
+	"\x0f_employment_endJ\x04\b\x0f\x10\x10R\arole_id\"A\n" +
 	"\x12CreateStaffRequest\x12+\n" +
 	"\x04data\x18\x01 \x01(\v2\x17.domain.entity.v1.StaffR\x04data\"\x9a\x01\n" +
 	"\x13CreateStaffResponse\x12+\n" +
