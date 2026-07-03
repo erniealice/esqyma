@@ -1,0 +1,141 @@
+syntax = "proto3";
+
+package service.operation.v1;
+
+option go_package = "github.com/erniealice/esqyma/pkg/schema/v1/service/operation/outcome_matrix";
+
+import "domain/common/error.proto";
+import "domain/operation/outcome_criteria/outcome_criteria.proto";
+
+// ---------------------------------------------------------------------------
+// Outcome matrix — an OPERATION-domain service (cross-aggregate derived read
+// with no aggregate root of its own; same service-driven-domain rationale as
+// service/security/permission_query.proto). Grouped under service/operation.
+//
+// It renders a SPREADSHEET grading grid for ONE job_template (the "subject"):
+//   rows    = clients (students)                       — frozen first column
+//   columns = job_template_phase → job_template_task
+//             → criterion (outcome_criteria via
+//               template_task_criteria)                — a 3-level sticky header
+//   cells   = the client's task_outcome for that
+//             (task, criterion), input-enforced by the
+//             criterion's outcome_criteria             — spreadsheet-editable
+//
+// COLUMNS come from the TEMPLATE decomposition (shared across all students);
+// CELLS resolve each student's own instance: job (client_id, job_template_id)
+// → job_phase (template_phase_id) → job_task (template_task_id) → task_outcome
+// (job_task_id, criteria_version_id). A principal may only edit cells it
+// recorded (recorded_by == acting staff); others are read-only.
+//
+// This genericizes the former education-specific, app-local grade sheet
+// (apps/school-admin/internal/composition/grade_sheet.go, 1,189 LOC of raw SQL).
+// The shape is pure universal-job-model with ZERO education columns — "grade /
+// student / subject / criterion" are lyngua label overrides only.
+//
+// PROTO SHAPE (Q-PROTO-SHAPE, locked 2026-07-02): domain-honest, per the
+// service/dashboard idiom of embedding domain messages. The column tree carries
+// THIN {id,label} phase/task envelopes and EMBEDS the full outcome_criteria
+// entity at the leaf (the cell-enforcement contract lives on the entity — no
+// bespoke re-field / drift). Only the derived, no-entity-equivalent projection
+// (the scoped OutcomeCell) is a bespoke message, mirroring reporting's
+// AgingBuckets. The 3-level header nesting is a thin presentation envelope the
+// fayna view maps 1:1 onto its grid.
+//
+// Row visibility is FAIL-CLOSED via the principalscope primitive; SCOPE_ALL is
+// permission-gated and downgrades to MINE if denied.
+//
+// PROTO MODE (Q-PROTO-MODE, locked 2026-07-02 → service{rpc}, FINAL): this
+// proto is the SINGLE DETERMINISTIC SOURCE for both the message shapes AND the
+// operation contract — the service block generates the
+// OutcomeMatrixServiceServer interface, which the postgres adapter implements
+// directly (exactly like task_outcome and the reporting/* services). NO
+// hand-written port file: a hand-written Go port can drift from the messages;
+// the generated interface cannot (the compiler forces the adapter to match).
+// The gRPC server scaffolding (ServiceDesc/Register/Unimplemented) is inert —
+// nothing registers it on a gRPC server — so it is dead weight, not attack
+// surface. The use case depends on the GENERATED interface via the registry
+// factory; the initializer wires it.
+//
+// Consumed by internal/application/usecases/service/operation/outcome_matrix/;
+// wired in internal/composition/core/initializers/service/operation.go.
+// ---------------------------------------------------------------------------
+
+service OutcomeMatrixService {
+  rpc GetOutcomeMatrix(GetOutcomeMatrixRequest) returns (GetOutcomeMatrixResponse);
+}
+
+// OutcomeMatrixScope selects the row set. UNSPECIFIED is fail-closed → MINE.
+enum OutcomeMatrixScope {
+  OUTCOME_MATRIX_SCOPE_UNSPECIFIED = 0;  // fail-closed → treated as MINE
+  OUTCOME_MATRIX_SCOPE_MINE        = 1;  // only clients/outcomes the acting principal is linked to / recorded
+  OUTCOME_MATRIX_SCOPE_ALL         = 2;  // all clients under the template (permission-gated; else downgraded to MINE)
+}
+
+message GetOutcomeMatrixRequest {
+  string job_template_id = 1;          // REQUIRED — the page is one template (subject)
+  OutcomeMatrixScope scope = 2;
+  optional string section_id = 3;      // subscription_group_id — narrow rows to a section's members
+  optional string product_id = 4;      // output_product_id — narrow rows to a product's jobs
+}
+
+// ---- Column tree: THIN phase/task envelopes; domain entity at the leaf ------
+
+// CriterionColumn is a LEAF column = one template_task_criteria row under a task.
+// It carries the composite cell-address key + the junction's ordering/required,
+// and EMBEDS the full outcome_criteria entity (the enforcement contract — type,
+// min/max, increment, labels, allowed values — lives on the entity, not a copy).
+message CriterionColumn {
+  string column_key = 1;               // "{job_template_task_id}:{outcome_criteria_id}" — the cell address
+  int32 sequence_order = 2;            // template_task_criteria.sequence_order
+  bool required = 3;                   // template_task_criteria.required_override (effective)
+  domain.operation.v1.OutcomeCriteria criteria = 4;
+}
+
+// TaskColumn is a thin grouping envelope for one job_template_task.
+message TaskColumn {
+  string job_template_task_id = 1;
+  string label = 2;                    // task name (e.g. "Summative Assessment 1")
+  int32 sequence_order = 3;
+  repeated CriterionColumn criteria = 4;
+}
+
+// PhaseColumn is a thin grouping envelope for one job_template_phase.
+message PhaseColumn {
+  string job_template_phase_id = 1;
+  string label = 2;                    // phase name (e.g. "Semester 1")
+  int32 sequence_order = 3;
+  repeated TaskColumn tasks = 4;
+}
+
+// ---- Rows: the derived, no-entity-equivalent cell projection ---------------
+
+// OutcomeCell is the one genuinely bespoke projection (like reporting's
+// AgingBuckets): a client's resolved outcome for a (template task, criterion).
+// job_task_id is the student's resolved instance ("" if the student has no
+// instance yet — cell not editable); outcome_id is "" until a score is recorded.
+// Value fields mirror task_outcome and are populated per the criterion's type.
+message OutcomeCell {
+  string outcome_id = 1;               // task_outcome.id — "" if not yet recorded
+  string job_task_id = 2;              // student's job_task for the column's template task — "" if none
+  optional double numeric_value = 3;
+  optional string text_value = 4;
+  optional string categorical_value = 5;
+  optional bool pass_fail_value = 6;
+  string recorded_by = 7;              // owner staff_id
+  bool editable = 8;                   // acting principal may edit (recorded_by == acting staff, or own new instance)
+}
+
+message OutcomeRow {
+  string client_id = 1;
+  string client_label = 2;             // display label (opaque id unless resolved)
+  map<string, OutcomeCell> cells = 3;  // column_key → cell
+}
+
+message GetOutcomeMatrixResponse {
+  string job_template_id = 1;
+  string job_template_name = 2;
+  repeated PhaseColumn phases = 3;       // the column tree
+  repeated OutcomeRow rows = 4;          // the client rows
+  bool success = 5;
+  optional domain.common.v1.Error error = 6;
+}
