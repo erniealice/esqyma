@@ -10,6 +10,8 @@ import "domain/common/filter.proto";
 import "domain/common/sort.proto";
 import "domain/common/search.proto";
 
+import "domain/subscription/price_schedule/price_schedule.proto";
+
 import "options/db.proto";
 
 // CapacityMode is the explicit enrollment-capacity discriminator for a cohort.
@@ -61,6 +63,10 @@ message SubscriptionGroup {
   // capacity_mode = CAPACITY_MODE_CAPPED. UNSPECIFIED is treated as UNLIMITED.
   CapacityMode capacity_mode = 13;
   optional int32 max_capacity = 14;
+
+  // Nested related read-model object — populated by the list adapter via a
+  // STATUS-AGNOSTIC join (a section may reference an archived AY). Not a column.
+  optional PriceSchedule price_schedule = 15;
 }
 
 service SubscriptionGroupDomainService {

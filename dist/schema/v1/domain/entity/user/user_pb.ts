@@ -21,7 +21,7 @@ import type { Message } from "@bufbuild/protobuf";
  * Describes the file domain/entity/user/user.proto.
  */
 export const file_domain_entity_user_user: GenFile = /*@__PURE__*/
-  fileDesc("Ch1kb21haW4vZW50aXR5L3VzZXIvdXNlci5wcm90bxIQZG9tYWluLmVudGl0eS52MSKZBQoEVXNlchIKCgJpZBgBIAEoCRISCgpmaXJzdF9uYW1lGAIgASgJEhEKCWxhc3RfbmFtZRgDIAEoCRIdCg1lbWFpbF9hZGRyZXNzGAQgASgJQgaCtRgCEAESHQoNbW9iaWxlX251bWJlchgKIAEoCUIGgrUYAhgBEhUKDXBhc3N3b3JkX2hhc2gYCyABKAkSGQoMZGF0ZV9jcmVhdGVkGAUgASgDSACIAQESKAoTZGF0ZV9jcmVhdGVkX3N0cmluZxgGIAEoCUIGgrUYAjgBSAGIAQESGgoNZGF0ZV9tb2RpZmllZBgHIAEoA0gCiAEBEikKFGRhdGVfbW9kaWZpZWRfc3RyaW5nGAggASgJQgaCtRgCOAFIA4gBARIaCgZhY3RpdmUYCSABKAhCCoK1GAYiBHRydWUSKAoIdGltZXpvbmUYDCABKAlCEYK1GA0iC0FzaWEvTWFuaWxhSASIAQESIQoUcGFzc3dvcmRfcmVzZXRfdG9rZW4YDSABKAlIBYgBARIjChZwYXNzd29yZF9yZXNldF9leHBpcmVzGA4gASgDSAaIAQESJgoVZmFpbGVkX2xvZ2luX2F0dGVtcHRzGA8gASgFQgeCtRgDIgEwEhkKDGxvY2tlZF91bnRpbBgQIAEoA0gHiAEBOgaKtRgCCAFCDwoNX2RhdGVfY3JlYXRlZEIWChRfZGF0ZV9jcmVhdGVkX3N0cmluZ0IQCg5fZGF0ZV9tb2RpZmllZEIXChVfZGF0ZV9tb2RpZmllZF9zdHJpbmdCCwoJX3RpbWV6b25lQhcKFV9wYXNzd29yZF9yZXNldF90b2tlbkIZChdfcGFzc3dvcmRfcmVzZXRfZXhwaXJlc0IPCg1fbG9ja2VkX3VudGlsIjkKEUNyZWF0ZVVzZXJSZXF1ZXN0EiQKBGRhdGEYASABKAsyFi5kb21haW4uZW50aXR5LnYxLlVzZXIiggEKEkNyZWF0ZVVzZXJSZXNwb25zZRIkCgRkYXRhGAEgAygLMhYuZG9tYWluLmVudGl0eS52MS5Vc2VyEg8KB3N1Y2Nlc3MYAiABKAgSKwoFZXJyb3IYAyABKAsyFy5kb21haW4uY29tbW9uLnYxLkVycm9ySACIAQFCCAoGX2Vycm9yIjcKD1JlYWRVc2VyUmVxdWVzdBIkCgRkYXRhGAEgASgLMhYuZG9tYWluLmVudGl0eS52MS5Vc2VyIoABChBSZWFkVXNlclJlc3BvbnNlEiQKBGRhdGEYASADKAsyFi5kb21haW4uZW50aXR5LnYxLlVzZXISDwoHc3VjY2VzcxgCIAEoCBIrCgVlcnJvchgDIAEoCzIXLmRvbWFpbi5jb21tb24udjEuRXJyb3JIAIgBAUIICgZfZXJyb3IiOQoRVXBkYXRlVXNlclJlcXVlc3QSJAoEZGF0YRgBIAEoCzIWLmRvbWFpbi5lbnRpdHkudjEuVXNlciKCAQoSVXBkYXRlVXNlclJlc3BvbnNlEiQKBGRhdGEYASADKAsyFi5kb21haW4uZW50aXR5LnYxLlVzZXISDwoHc3VjY2VzcxgCIAEoCBIrCgVlcnJvchgDIAEoCzIXLmRvbWFpbi5jb21tb24udjEuRXJyb3JIAIgBAUIICgZfZXJyb3IiOQoRRGVsZXRlVXNlclJlcXVlc3QSJAoEZGF0YRgBIAEoCzIWLmRvbWFpbi5lbnRpdHkudjEuVXNlciJcChJEZWxldGVVc2VyUmVzcG9uc2USDwoHc3VjY2VzcxgBIAEoCBIrCgVlcnJvchgCIAEoCzIXLmRvbWFpbi5jb21tb24udjEuRXJyb3JIAIgBAUIICgZfZXJyb3IingIKEExpc3RVc2Vyc1JlcXVlc3QSNAoGc2VhcmNoGAEgASgLMh8uZG9tYWluLmNvbW1vbi52MS5TZWFyY2hSZXF1ZXN0SACIAQESNQoHZmlsdGVycxgCIAEoCzIfLmRvbWFpbi5jb21tb24udjEuRmlsdGVyUmVxdWVzdEgBiAEBEjAKBHNvcnQYAyABKAsyHS5kb21haW4uY29tbW9uLnYxLlNvcnRSZXF1ZXN0SAKIAQESPAoKcGFnaW5hdGlvbhgEIAEoCzIjLmRvbWFpbi5jb21tb24udjEuUGFnaW5hdGlvblJlcXVlc3RIA4gBAUIJCgdfc2VhcmNoQgoKCF9maWx0ZXJzQgcKBV9zb3J0Qg0KC19wYWdpbmF0aW9uIrMBChFMaXN0VXNlcnNSZXNwb25zZRIkCgRkYXRhGAEgAygLMhYuZG9tYWluLmVudGl0eS52MS5Vc2VyEg8KB3N1Y2Nlc3MYAiABKAgSKwoFZXJyb3IYAyABKAsyFy5kb21haW4uY29tbW9uLnYxLkVycm9ySACIAQESHAoPbmV4dF9wYWdlX3Rva2VuGAQgASgJSAGIAQFCCAoGX2Vycm9yQhIKEF9uZXh0X3BhZ2VfdG9rZW4iqAIKGkdldFVzZXJMaXN0UGFnZURhdGFSZXF1ZXN0EjQKBnNlYXJjaBgBIAEoCzIfLmRvbWFpbi5jb21tb24udjEuU2VhcmNoUmVxdWVzdEgAiAEBEjUKB2ZpbHRlcnMYAiABKAsyHy5kb21haW4uY29tbW9uLnYxLkZpbHRlclJlcXVlc3RIAYgBARIwCgRzb3J0GAMgASgLMh0uZG9tYWluLmNvbW1vbi52MS5Tb3J0UmVxdWVzdEgCiAEBEjwKCnBhZ2luYXRpb24YBCABKAsyIy5kb21haW4uY29tbW9uLnYxLlBhZ2luYXRpb25SZXF1ZXN0SAOIAQFCCQoHX3NlYXJjaEIKCghfZmlsdGVyc0IHCgVfc29ydEINCgtfcGFnaW5hdGlvbiKWAgobR2V0VXNlckxpc3RQYWdlRGF0YVJlc3BvbnNlEikKCXVzZXJfbGlzdBgBIAMoCzIWLmRvbWFpbi5lbnRpdHkudjEuVXNlchI9CgpwYWdpbmF0aW9uGAIgASgLMiQuZG9tYWluLmNvbW1vbi52MS5QYWdpbmF0aW9uUmVzcG9uc2VIAIgBARI2Cg5zZWFyY2hfcmVzdWx0cxgDIAMoCzIeLmRvbWFpbi5jb21tb24udjEuU2VhcmNoUmVzdWx0Eg8KB3N1Y2Nlc3MYBCABKAgSKwoFZXJyb3IYBSABKAsyFy5kb21haW4uY29tbW9uLnYxLkVycm9ySAGIAQFCDQoLX3BhZ2luYXRpb25CCAoGX2Vycm9yIi0KGkdldFVzZXJJdGVtUGFnZURhdGFSZXF1ZXN0Eg8KB3VzZXJfaWQYASABKAkimQEKG0dldFVzZXJJdGVtUGFnZURhdGFSZXNwb25zZRIpCgR1c2VyGAEgASgLMhYuZG9tYWluLmVudGl0eS52MS5Vc2VySACIAQESDwoHc3VjY2VzcxgCIAEoCBIrCgVlcnJvchgDIAEoCzIXLmRvbWFpbi5jb21tb24udjEuRXJyb3JIAYgBAUIHCgVfdXNlckIICgZfZXJyb3IyrwUKEVVzZXJEb21haW5TZXJ2aWNlElcKCkNyZWF0ZVVzZXISIy5kb21haW4uZW50aXR5LnYxLkNyZWF0ZVVzZXJSZXF1ZXN0GiQuZG9tYWluLmVudGl0eS52MS5DcmVhdGVVc2VyUmVzcG9uc2USUQoIUmVhZFVzZXISIS5kb21haW4uZW50aXR5LnYxLlJlYWRVc2VyUmVxdWVzdBoiLmRvbWFpbi5lbnRpdHkudjEuUmVhZFVzZXJSZXNwb25zZRJXCgpVcGRhdGVVc2VyEiMuZG9tYWluLmVudGl0eS52MS5VcGRhdGVVc2VyUmVxdWVzdBokLmRvbWFpbi5lbnRpdHkudjEuVXBkYXRlVXNlclJlc3BvbnNlElcKCkRlbGV0ZVVzZXISIy5kb21haW4uZW50aXR5LnYxLkRlbGV0ZVVzZXJSZXF1ZXN0GiQuZG9tYWluLmVudGl0eS52MS5EZWxldGVVc2VyUmVzcG9uc2USVAoJTGlzdFVzZXJzEiIuZG9tYWluLmVudGl0eS52MS5MaXN0VXNlcnNSZXF1ZXN0GiMuZG9tYWluLmVudGl0eS52MS5MaXN0VXNlcnNSZXNwb25zZRJyChNHZXRVc2VyTGlzdFBhZ2VEYXRhEiwuZG9tYWluLmVudGl0eS52MS5HZXRVc2VyTGlzdFBhZ2VEYXRhUmVxdWVzdBotLmRvbWFpbi5lbnRpdHkudjEuR2V0VXNlckxpc3RQYWdlRGF0YVJlc3BvbnNlEnIKE0dldFVzZXJJdGVtUGFnZURhdGESLC5kb21haW4uZW50aXR5LnYxLkdldFVzZXJJdGVtUGFnZURhdGFSZXF1ZXN0Gi0uZG9tYWluLmVudGl0eS52MS5HZXRVc2VySXRlbVBhZ2VEYXRhUmVzcG9uc2VCywEKFGNvbS5kb21haW4uZW50aXR5LnYxQglVc2VyUHJvdG9QAVpGZ2l0aHViLmNvbS9lcm5pZWFsaWNlL2VzcXltYS9wa2cvc2NoZW1hL3YxL2RvbWFpbi9lbnRpdHkvdXNlcjtlbnRpdHl2MaICA0RFWKoCEERvbWFpbi5FbnRpdHkuVjHKAhBEb21haW5cRW50aXR5XFYx4gIcRG9tYWluXEVudGl0eVxWMVxHUEJNZXRhZGF0YeoCEkRvbWFpbjo6RW50aXR5OjpWMWIGcHJvdG8z", [file_domain_common_error, file_domain_common_search, file_domain_common_filter, file_domain_common_sort, file_domain_common_pagination, file_options_db]);
+  fileDesc("Ch1kb21haW4vZW50aXR5L3VzZXIvdXNlci5wcm90bxIQZG9tYWluLmVudGl0eS52MSKZBQoEVXNlchIKCgJpZBgBIAEoCRISCgpmaXJzdF9uYW1lGAIgASgJEhEKCWxhc3RfbmFtZRgDIAEoCRIdCg1lbWFpbF9hZGRyZXNzGAQgASgJQgaCtRgCEAESHQoNbW9iaWxlX251bWJlchgKIAEoCUIGgrUYAhgBEhUKDXBhc3N3b3JkX2hhc2gYCyABKAkSGQoMZGF0ZV9jcmVhdGVkGAUgASgDSACIAQESKAoTZGF0ZV9jcmVhdGVkX3N0cmluZxgGIAEoCUIGgrUYAjgBSAGIAQESGgoNZGF0ZV9tb2RpZmllZBgHIAEoA0gCiAEBEikKFGRhdGVfbW9kaWZpZWRfc3RyaW5nGAggASgJQgaCtRgCOAFIA4gBARIaCgZhY3RpdmUYCSABKAhCCoK1GAYiBHRydWUSKAoIdGltZXpvbmUYDCABKAlCEYK1GA0iC0FzaWEvTWFuaWxhSASIAQESIQoUcGFzc3dvcmRfcmVzZXRfdG9rZW4YDSABKAlIBYgBARIjChZwYXNzd29yZF9yZXNldF9leHBpcmVzGA4gASgDSAaIAQESJgoVZmFpbGVkX2xvZ2luX2F0dGVtcHRzGA8gASgFQgeCtRgDIgEwEhkKDGxvY2tlZF91bnRpbBgQIAEoA0gHiAEBOgaKtRgCCAFCDwoNX2RhdGVfY3JlYXRlZEIWChRfZGF0ZV9jcmVhdGVkX3N0cmluZ0IQCg5fZGF0ZV9tb2RpZmllZEIXChVfZGF0ZV9tb2RpZmllZF9zdHJpbmdCCwoJX3RpbWV6b25lQhcKFV9wYXNzd29yZF9yZXNldF90b2tlbkIZChdfcGFzc3dvcmRfcmVzZXRfZXhwaXJlc0IPCg1fbG9ja2VkX3VudGlsIjkKEUNyZWF0ZVVzZXJSZXF1ZXN0EiQKBGRhdGEYASABKAsyFi5kb21haW4uZW50aXR5LnYxLlVzZXIiggEKEkNyZWF0ZVVzZXJSZXNwb25zZRIkCgRkYXRhGAEgAygLMhYuZG9tYWluLmVudGl0eS52MS5Vc2VyEg8KB3N1Y2Nlc3MYAiABKAgSKwoFZXJyb3IYAyABKAsyFy5kb21haW4uY29tbW9uLnYxLkVycm9ySACIAQFCCAoGX2Vycm9yIjcKD1JlYWRVc2VyUmVxdWVzdBIkCgRkYXRhGAEgASgLMhYuZG9tYWluLmVudGl0eS52MS5Vc2VyIoABChBSZWFkVXNlclJlc3BvbnNlEiQKBGRhdGEYASADKAsyFi5kb21haW4uZW50aXR5LnYxLlVzZXISDwoHc3VjY2VzcxgCIAEoCBIrCgVlcnJvchgDIAEoCzIXLmRvbWFpbi5jb21tb24udjEuRXJyb3JIAIgBAUIICgZfZXJyb3IiOQoRVXBkYXRlVXNlclJlcXVlc3QSJAoEZGF0YRgBIAEoCzIWLmRvbWFpbi5lbnRpdHkudjEuVXNlciKCAQoSVXBkYXRlVXNlclJlc3BvbnNlEiQKBGRhdGEYASADKAsyFi5kb21haW4uZW50aXR5LnYxLlVzZXISDwoHc3VjY2VzcxgCIAEoCBIrCgVlcnJvchgDIAEoCzIXLmRvbWFpbi5jb21tb24udjEuRXJyb3JIAIgBAUIICgZfZXJyb3IiOQoRRGVsZXRlVXNlclJlcXVlc3QSJAoEZGF0YRgBIAEoCzIWLmRvbWFpbi5lbnRpdHkudjEuVXNlciJcChJEZWxldGVVc2VyUmVzcG9uc2USDwoHc3VjY2VzcxgBIAEoCBIrCgVlcnJvchgCIAEoCzIXLmRvbWFpbi5jb21tb24udjEuRXJyb3JIAIgBAUIICgZfZXJyb3IingIKEExpc3RVc2Vyc1JlcXVlc3QSNAoGc2VhcmNoGAEgASgLMh8uZG9tYWluLmNvbW1vbi52MS5TZWFyY2hSZXF1ZXN0SACIAQESNQoHZmlsdGVycxgCIAEoCzIfLmRvbWFpbi5jb21tb24udjEuRmlsdGVyUmVxdWVzdEgBiAEBEjAKBHNvcnQYAyABKAsyHS5kb21haW4uY29tbW9uLnYxLlNvcnRSZXF1ZXN0SAKIAQESPAoKcGFnaW5hdGlvbhgEIAEoCzIjLmRvbWFpbi5jb21tb24udjEuUGFnaW5hdGlvblJlcXVlc3RIA4gBAUIJCgdfc2VhcmNoQgoKCF9maWx0ZXJzQgcKBV9zb3J0Qg0KC19wYWdpbmF0aW9uIrMBChFMaXN0VXNlcnNSZXNwb25zZRIkCgRkYXRhGAEgAygLMhYuZG9tYWluLmVudGl0eS52MS5Vc2VyEg8KB3N1Y2Nlc3MYAiABKAgSKwoFZXJyb3IYAyABKAsyFy5kb21haW4uY29tbW9uLnYxLkVycm9ySACIAQESHAoPbmV4dF9wYWdlX3Rva2VuGAQgASgJSAGIAQFCCAoGX2Vycm9yQhIKEF9uZXh0X3BhZ2VfdG9rZW4iqAIKGkdldFVzZXJMaXN0UGFnZURhdGFSZXF1ZXN0EjQKBnNlYXJjaBgBIAEoCzIfLmRvbWFpbi5jb21tb24udjEuU2VhcmNoUmVxdWVzdEgAiAEBEjUKB2ZpbHRlcnMYAiABKAsyHy5kb21haW4uY29tbW9uLnYxLkZpbHRlclJlcXVlc3RIAYgBARIwCgRzb3J0GAMgASgLMh0uZG9tYWluLmNvbW1vbi52MS5Tb3J0UmVxdWVzdEgCiAEBEjwKCnBhZ2luYXRpb24YBCABKAsyIy5kb21haW4uY29tbW9uLnYxLlBhZ2luYXRpb25SZXF1ZXN0SAOIAQFCCQoHX3NlYXJjaEIKCghfZmlsdGVyc0IHCgVfc29ydEINCgtfcGFnaW5hdGlvbiKWAgobR2V0VXNlckxpc3RQYWdlRGF0YVJlc3BvbnNlEikKCXVzZXJfbGlzdBgBIAMoCzIWLmRvbWFpbi5lbnRpdHkudjEuVXNlchI9CgpwYWdpbmF0aW9uGAIgASgLMiQuZG9tYWluLmNvbW1vbi52MS5QYWdpbmF0aW9uUmVzcG9uc2VIAIgBARI2Cg5zZWFyY2hfcmVzdWx0cxgDIAMoCzIeLmRvbWFpbi5jb21tb24udjEuU2VhcmNoUmVzdWx0Eg8KB3N1Y2Nlc3MYBCABKAgSKwoFZXJyb3IYBSABKAsyFy5kb21haW4uY29tbW9uLnYxLkVycm9ySAGIAQFCDQoLX3BhZ2luYXRpb25CCAoGX2Vycm9yIi0KGkdldFVzZXJJdGVtUGFnZURhdGFSZXF1ZXN0Eg8KB3VzZXJfaWQYASABKAkimQEKG0dldFVzZXJJdGVtUGFnZURhdGFSZXNwb25zZRIpCgR1c2VyGAEgASgLMhYuZG9tYWluLmVudGl0eS52MS5Vc2VySACIAQESDwoHc3VjY2VzcxgCIAEoCBIrCgVlcnJvchgDIAEoCzIXLmRvbWFpbi5jb21tb24udjEuRXJyb3JIAYgBAUIHCgVfdXNlckIICgZfZXJyb3IiRQoSRGlzYWJsZVVzZXJSZXF1ZXN0Eg8KB3VzZXJfaWQYASABKAkSEwoGcmVhc29uGAIgASgJSACIAQFCCQoHX3JlYXNvbiJvChNEaXNhYmxlVXNlclJlc3BvbnNlEhAKCGRpc2FibGVkGAEgASgIEg8KB3N1Y2Nlc3MYAiABKAgSKwoFZXJyb3IYAyABKAsyFy5kb21haW4uY29tbW9uLnYxLkVycm9ySACIAQFCCAoGX2Vycm9yIiQKEUVuYWJsZVVzZXJSZXF1ZXN0Eg8KB3VzZXJfaWQYASABKAkibQoSRW5hYmxlVXNlclJlc3BvbnNlEg8KB2VuYWJsZWQYASABKAgSDwoHc3VjY2VzcxgCIAEoCBIrCgVlcnJvchgDIAEoCzIXLmRvbWFpbi5jb21tb24udjEuRXJyb3JIAIgBAUIICgZfZXJyb3IiZwoZQWRtaW5SZXNldFBhc3N3b3JkUmVxdWVzdBIPCgd1c2VyX2lkGAEgASgJEhYKDG5ld19wYXNzd29yZBgCIAEoCUgAEhcKDWdlbmVyYXRlX2xpbmsYAyABKAhIAEIICgZtZXRob2QimwEKGkFkbWluUmVzZXRQYXNzd29yZFJlc3BvbnNlEg0KBXJlc2V0GAEgASgIEhcKCnJlc2V0X2xpbmsYAiABKAlIAIgBARIPCgdzdWNjZXNzGAMgASgIEisKBWVycm9yGAQgASgLMhcuZG9tYWluLmNvbW1vbi52MS5FcnJvckgBiAEBQg0KC19yZXNldF9saW5rQggKBl9lcnJvcjKvBQoRVXNlckRvbWFpblNlcnZpY2USVwoKQ3JlYXRlVXNlchIjLmRvbWFpbi5lbnRpdHkudjEuQ3JlYXRlVXNlclJlcXVlc3QaJC5kb21haW4uZW50aXR5LnYxLkNyZWF0ZVVzZXJSZXNwb25zZRJRCghSZWFkVXNlchIhLmRvbWFpbi5lbnRpdHkudjEuUmVhZFVzZXJSZXF1ZXN0GiIuZG9tYWluLmVudGl0eS52MS5SZWFkVXNlclJlc3BvbnNlElcKClVwZGF0ZVVzZXISIy5kb21haW4uZW50aXR5LnYxLlVwZGF0ZVVzZXJSZXF1ZXN0GiQuZG9tYWluLmVudGl0eS52MS5VcGRhdGVVc2VyUmVzcG9uc2USVwoKRGVsZXRlVXNlchIjLmRvbWFpbi5lbnRpdHkudjEuRGVsZXRlVXNlclJlcXVlc3QaJC5kb21haW4uZW50aXR5LnYxLkRlbGV0ZVVzZXJSZXNwb25zZRJUCglMaXN0VXNlcnMSIi5kb21haW4uZW50aXR5LnYxLkxpc3RVc2Vyc1JlcXVlc3QaIy5kb21haW4uZW50aXR5LnYxLkxpc3RVc2Vyc1Jlc3BvbnNlEnIKE0dldFVzZXJMaXN0UGFnZURhdGESLC5kb21haW4uZW50aXR5LnYxLkdldFVzZXJMaXN0UGFnZURhdGFSZXF1ZXN0Gi0uZG9tYWluLmVudGl0eS52MS5HZXRVc2VyTGlzdFBhZ2VEYXRhUmVzcG9uc2UScgoTR2V0VXNlckl0ZW1QYWdlRGF0YRIsLmRvbWFpbi5lbnRpdHkudjEuR2V0VXNlckl0ZW1QYWdlRGF0YVJlcXVlc3QaLS5kb21haW4uZW50aXR5LnYxLkdldFVzZXJJdGVtUGFnZURhdGFSZXNwb25zZULLAQoUY29tLmRvbWFpbi5lbnRpdHkudjFCCVVzZXJQcm90b1ABWkZnaXRodWIuY29tL2VybmllYWxpY2UvZXNxeW1hL3BrZy9zY2hlbWEvdjEvZG9tYWluL2VudGl0eS91c2VyO2VudGl0eXYxogIDREVYqgIQRG9tYWluLkVudGl0eS5WMcoCEERvbWFpblxFbnRpdHlcVjHiAhxEb21haW5cRW50aXR5XFYxXEdQQk1ldGFkYXRh6gISRG9tYWluOjpFbnRpdHk6OlYxYgZwcm90bzM", [file_domain_common_error, file_domain_common_search, file_domain_common_filter, file_domain_common_sort, file_domain_common_pagination, file_options_db]);
 
 /**
  * @generated from message domain.entity.v1.User
@@ -462,6 +462,169 @@ export type GetUserItemPageDataResponse = Message<"domain.entity.v1.GetUserItemP
  */
 export const GetUserItemPageDataResponseSchema: GenMessage<GetUserItemPageDataResponse> = /*@__PURE__*/
   messageDesc(file_domain_entity_user_user, 14);
+
+/**
+ * @generated from message domain.entity.v1.DisableUserRequest
+ */
+export type DisableUserRequest = Message<"domain.entity.v1.DisableUserRequest"> & {
+  /**
+   * @generated from field: string user_id = 1;
+   */
+  userId: string;
+
+  /**
+   * @generated from field: optional string reason = 2;
+   */
+  reason?: string;
+};
+
+/**
+ * Describes the message domain.entity.v1.DisableUserRequest.
+ * Use `create(DisableUserRequestSchema)` to create a new message.
+ */
+export const DisableUserRequestSchema: GenMessage<DisableUserRequest> = /*@__PURE__*/
+  messageDesc(file_domain_entity_user_user, 15);
+
+/**
+ * @generated from message domain.entity.v1.DisableUserResponse
+ */
+export type DisableUserResponse = Message<"domain.entity.v1.DisableUserResponse"> & {
+  /**
+   * @generated from field: bool disabled = 1;
+   */
+  disabled: boolean;
+
+  /**
+   * @generated from field: bool success = 2;
+   */
+  success: boolean;
+
+  /**
+   * @generated from field: optional domain.common.v1.Error error = 3;
+   */
+  error?: Error;
+};
+
+/**
+ * Describes the message domain.entity.v1.DisableUserResponse.
+ * Use `create(DisableUserResponseSchema)` to create a new message.
+ */
+export const DisableUserResponseSchema: GenMessage<DisableUserResponse> = /*@__PURE__*/
+  messageDesc(file_domain_entity_user_user, 16);
+
+/**
+ * @generated from message domain.entity.v1.EnableUserRequest
+ */
+export type EnableUserRequest = Message<"domain.entity.v1.EnableUserRequest"> & {
+  /**
+   * @generated from field: string user_id = 1;
+   */
+  userId: string;
+};
+
+/**
+ * Describes the message domain.entity.v1.EnableUserRequest.
+ * Use `create(EnableUserRequestSchema)` to create a new message.
+ */
+export const EnableUserRequestSchema: GenMessage<EnableUserRequest> = /*@__PURE__*/
+  messageDesc(file_domain_entity_user_user, 17);
+
+/**
+ * @generated from message domain.entity.v1.EnableUserResponse
+ */
+export type EnableUserResponse = Message<"domain.entity.v1.EnableUserResponse"> & {
+  /**
+   * @generated from field: bool enabled = 1;
+   */
+  enabled: boolean;
+
+  /**
+   * @generated from field: bool success = 2;
+   */
+  success: boolean;
+
+  /**
+   * @generated from field: optional domain.common.v1.Error error = 3;
+   */
+  error?: Error;
+};
+
+/**
+ * Describes the message domain.entity.v1.EnableUserResponse.
+ * Use `create(EnableUserResponseSchema)` to create a new message.
+ */
+export const EnableUserResponseSchema: GenMessage<EnableUserResponse> = /*@__PURE__*/
+  messageDesc(file_domain_entity_user_user, 18);
+
+/**
+ * @generated from message domain.entity.v1.AdminResetPasswordRequest
+ */
+export type AdminResetPasswordRequest = Message<"domain.entity.v1.AdminResetPasswordRequest"> & {
+  /**
+   * @generated from field: string user_id = 1;
+   */
+  userId: string;
+
+  /**
+   * Either set the password directly, or request a provider-generated reset link.
+   *
+   * @generated from oneof domain.entity.v1.AdminResetPasswordRequest.method
+   */
+  method: {
+    /**
+     * @generated from field: string new_password = 2;
+     */
+    value: string;
+    case: "newPassword";
+  } | {
+    /**
+     * @generated from field: bool generate_link = 3;
+     */
+    value: boolean;
+    case: "generateLink";
+  } | { case: undefined; value?: undefined };
+};
+
+/**
+ * Describes the message domain.entity.v1.AdminResetPasswordRequest.
+ * Use `create(AdminResetPasswordRequestSchema)` to create a new message.
+ */
+export const AdminResetPasswordRequestSchema: GenMessage<AdminResetPasswordRequest> = /*@__PURE__*/
+  messageDesc(file_domain_entity_user_user, 19);
+
+/**
+ * @generated from message domain.entity.v1.AdminResetPasswordResponse
+ */
+export type AdminResetPasswordResponse = Message<"domain.entity.v1.AdminResetPasswordResponse"> & {
+  /**
+   * @generated from field: bool reset = 1;
+   */
+  reset: boolean;
+
+  /**
+   * Populated only when generate_link was requested and the provider supports it.
+   *
+   * @generated from field: optional string reset_link = 2;
+   */
+  resetLink?: string;
+
+  /**
+   * @generated from field: bool success = 3;
+   */
+  success: boolean;
+
+  /**
+   * @generated from field: optional domain.common.v1.Error error = 4;
+   */
+  error?: Error;
+};
+
+/**
+ * Describes the message domain.entity.v1.AdminResetPasswordResponse.
+ * Use `create(AdminResetPasswordResponseSchema)` to create a new message.
+ */
+export const AdminResetPasswordResponseSchema: GenMessage<AdminResetPasswordResponse> = /*@__PURE__*/
+  messageDesc(file_domain_entity_user_user, 20);
 
 /**
  * @generated from service domain.entity.v1.UserDomainService
