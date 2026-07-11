@@ -1,0 +1,90 @@
+syntax = "proto3";
+
+package service.operation.v1;
+
+option go_package = "github.com/erniealice/esqyma/pkg/schema/v1/service/operation/job_template_summary";
+
+import "domain/common/error.proto";
+import "domain/common/pagination.proto";
+
+// ---------------------------------------------------------------------------
+// Job-template summary — an OPERATION-domain service (a cross-aggregate derived
+// read with no aggregate root of its own; same service-driven-domain rationale
+// as service/operation/outcome_matrix.proto and service/security/
+// permission_query.proto). Grouped under service/operation.
+//
+// It collapses the education-tier "class list" (and, generically, any
+// deliverable-template roster summary) into ONE server-side GROUP-BY read: one
+// JobTemplateSummary row per job_template that has >=1 (resolver-scoped) job for
+// the requested job status. Each row carries the template's identity, its
+// delivery GROUP (the subscription_group its jobs' origin subscriptions belong
+// to), the DELIVERER (the staff of record, resolved through the active
+// subscription_seat whose product plan matches the template's output product),
+// the scoped JOB COUNT, the group's PRICE SCHEDULE, and the template's OUTPUT
+// PRODUCT.
+//
+// This is the server-side replacement for the fayna view's former ~76-fetch Go
+// aggregation (page-loop jobs + seats + lookups). The registrar path collapses
+// to a single call; the staff path is narrowed by principalscope inside the
+// adapter (STAFF principals see only their reachable jobs — the subscription_seat
+// tier widens that to the class grain; non-staff principals see all).
+//
+// GENERIC by construction (owner O5, 20260711): NO vertical nouns anywhere —
+// no class/section/teacher/student/subject identifiers. The universal
+// job/template/subscription/seat/staff vocabulary is the only vocabulary here;
+// education labels ("Class"/"Section"/"Teacher"/"Students"/"Academic Year")
+// enter ONLY via lyngua, never as a proto field, RPC, or message name.
+//
+// PROTO MODE (mirrors outcome_matrix, Q-PROTO-MODE service{rpc}): this proto is
+// the SINGLE deterministic source for both the message shapes AND the operation
+// contract — the service block generates the JobTemplateSummaryServiceServer
+// interface, which the postgres adapter implements directly (no hand-written
+// port that could drift from the messages). The gRPC scaffolding is inert
+// (nothing registers it on a gRPC server); the use case depends on the
+// GENERATED interface via the registry factory, and the initializer wires it.
+//
+// This message set is a QUERY read-model, NOT a persisted table: it carries no
+// (options.v1.table).table and no (options.v1.db) annotations.
+//
+// Consumed by internal/application/usecases/service/operation/job_template_summary/;
+// wired in internal/composition/core/initializers/service/operation.go.
+// ---------------------------------------------------------------------------
+
+service JobTemplateSummaryService {
+  rpc ListJobTemplateSummaries(ListJobTemplateSummariesRequest) returns (ListJobTemplateSummariesResponse);
+}
+
+// JobTemplateSummary is one aggregated delivery-summary row: one row per
+// job_template with >=1 resolver-scoped job for the requested status. Every id
+// is an opaque, generic entity id; every *_name is a display label the adapter
+// resolves server-side.
+message JobTemplateSummary {
+  string job_template_id = 1;
+  string job_template_name = 2;
+  string subscription_group_id = 3;    // the delivery group (education: Section)
+  string subscription_group_name = 4;
+  string staff_id = 5;                 // the deliverer / staff of record
+  string staff_name = 6;
+  int32 job_count = 7;                 // DISTINCT resolver-scoped jobs on the template
+  string price_schedule_id = 8;        // the group's price schedule
+  string price_schedule_name = 9;
+  string output_product_id = 10;       // the template's deliverable product
+  string output_product_name = 11;
+}
+
+message ListJobTemplateSummariesRequest {
+  // status is the job status token the job.status column stores (the full
+  // JobStatus enum name, e.g. "JOB_STATUS_ACTIVE"); the adapter filters jobs
+  // server-side by it. Empty = no status filter.
+  string status = 1;
+  // subscription_group_id optionally narrows the summary to one delivery group.
+  optional string subscription_group_id = 2;
+  optional domain.common.v1.PaginationRequest pagination = 3;
+}
+
+message ListJobTemplateSummariesResponse {
+  repeated JobTemplateSummary summaries = 1;
+  bool success = 2;
+  optional domain.common.v1.PaginationResponse pagination = 3;
+  optional domain.common.v1.Error error = 4;
+}
