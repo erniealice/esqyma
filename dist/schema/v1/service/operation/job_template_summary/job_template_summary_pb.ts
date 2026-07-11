@@ -14,7 +14,36 @@ import type { Message } from "@bufbuild/protobuf";
  * Describes the file service/operation/job_template_summary/job_template_summary.proto.
  */
 export const file_service_operation_job_template_summary_job_template_summary: GenFile = /*@__PURE__*/
-  fileDesc("CkFzZXJ2aWNlL29wZXJhdGlvbi9qb2JfdGVtcGxhdGVfc3VtbWFyeS9qb2JfdGVtcGxhdGVfc3VtbWFyeS5wcm90bxIUc2VydmljZS5vcGVyYXRpb24udjEisQIKEkpvYlRlbXBsYXRlU3VtbWFyeRIXCg9qb2JfdGVtcGxhdGVfaWQYASABKAkSGQoRam9iX3RlbXBsYXRlX25hbWUYAiABKAkSHQoVc3Vic2NyaXB0aW9uX2dyb3VwX2lkGAMgASgJEh8KF3N1YnNjcmlwdGlvbl9ncm91cF9uYW1lGAQgASgJEhAKCHN0YWZmX2lkGAUgASgJEhIKCnN0YWZmX25hbWUYBiABKAkSEQoJam9iX2NvdW50GAcgASgFEhkKEXByaWNlX3NjaGVkdWxlX2lkGAggASgJEhsKE3ByaWNlX3NjaGVkdWxlX25hbWUYCSABKAkSGQoRb3V0cHV0X3Byb2R1Y3RfaWQYCiABKAkSGwoTb3V0cHV0X3Byb2R1Y3RfbmFtZRgLIAEoCSK8AQofTGlzdEpvYlRlbXBsYXRlU3VtbWFyaWVzUmVxdWVzdBIOCgZzdGF0dXMYASABKAkSIgoVc3Vic2NyaXB0aW9uX2dyb3VwX2lkGAIgASgJSACIAQESPAoKcGFnaW5hdGlvbhgDIAEoCzIjLmRvbWFpbi5jb21tb24udjEuUGFnaW5hdGlvblJlcXVlc3RIAYgBAUIYChZfc3Vic2NyaXB0aW9uX2dyb3VwX2lkQg0KC19wYWdpbmF0aW9uIvUBCiBMaXN0Sm9iVGVtcGxhdGVTdW1tYXJpZXNSZXNwb25zZRI7CglzdW1tYXJpZXMYASADKAsyKC5zZXJ2aWNlLm9wZXJhdGlvbi52MS5Kb2JUZW1wbGF0ZVN1bW1hcnkSDwoHc3VjY2VzcxgCIAEoCBI9CgpwYWdpbmF0aW9uGAMgASgLMiQuZG9tYWluLmNvbW1vbi52MS5QYWdpbmF0aW9uUmVzcG9uc2VIAIgBARIrCgVlcnJvchgEIAEoCzIXLmRvbWFpbi5jb21tb24udjEuRXJyb3JIAYgBAUINCgtfcGFnaW5hdGlvbkIICgZfZXJyb3IypwEKGUpvYlRlbXBsYXRlU3VtbWFyeVNlcnZpY2USiQEKGExpc3RKb2JUZW1wbGF0ZVN1bW1hcmllcxI1LnNlcnZpY2Uub3BlcmF0aW9uLnYxLkxpc3RKb2JUZW1wbGF0ZVN1bW1hcmllc1JlcXVlc3QaNi5zZXJ2aWNlLm9wZXJhdGlvbi52MS5MaXN0Sm9iVGVtcGxhdGVTdW1tYXJpZXNSZXNwb25zZUKEAgoYY29tLnNlcnZpY2Uub3BlcmF0aW9uLnYxQhdKb2JUZW1wbGF0ZVN1bW1hcnlQcm90b1ABWl1naXRodWIuY29tL2VybmllYWxpY2UvZXNxeW1hL3BrZy9zY2hlbWEvdjEvc2VydmljZS9vcGVyYXRpb24vam9iX3RlbXBsYXRlX3N1bW1hcnk7b3BlcmF0aW9udjGiAgNTT1iqAhRTZXJ2aWNlLk9wZXJhdGlvbi5WMcoCFFNlcnZpY2VcT3BlcmF0aW9uXFYx4gIgU2VydmljZVxPcGVyYXRpb25cVjFcR1BCTWV0YWRhdGHqAhZTZXJ2aWNlOjpPcGVyYXRpb246OlYxYgZwcm90bzM", [file_domain_common_error, file_domain_common_pagination]);
+  fileDesc("CkFzZXJ2aWNlL29wZXJhdGlvbi9qb2JfdGVtcGxhdGVfc3VtbWFyeS9qb2JfdGVtcGxhdGVfc3VtbWFyeS5wcm90bxIUc2VydmljZS5vcGVyYXRpb24udjEiMQoJRGVsaXZlcmVyEhAKCHN0YWZmX2lkGAEgASgJEhIKCnN0YWZmX25hbWUYAiABKAki4gIKEkpvYlRlbXBsYXRlU3VtbWFyeRIXCg9qb2JfdGVtcGxhdGVfaWQYASABKAkSGQoRam9iX3RlbXBsYXRlX25hbWUYAiABKAkSHQoVc3Vic2NyaXB0aW9uX2dyb3VwX2lkGAMgASgJEh8KF3N1YnNjcmlwdGlvbl9ncm91cF9uYW1lGAQgASgJEhEKCWpvYl9jb3VudBgHIAEoBRIZChFwcmljZV9zY2hlZHVsZV9pZBgIIAEoCRIbChNwcmljZV9zY2hlZHVsZV9uYW1lGAkgASgJEhkKEW91dHB1dF9wcm9kdWN0X2lkGAogASgJEhsKE291dHB1dF9wcm9kdWN0X25hbWUYCyABKAkSMwoKZGVsaXZlcmVycxgMIAMoCzIfLnNlcnZpY2Uub3BlcmF0aW9uLnYxLkRlbGl2ZXJlckoECAUQBkoECAYQB1IIc3RhZmZfaWRSCnN0YWZmX25hbWUivAEKH0xpc3RKb2JUZW1wbGF0ZVN1bW1hcmllc1JlcXVlc3QSDgoGc3RhdHVzGAEgASgJEiIKFXN1YnNjcmlwdGlvbl9ncm91cF9pZBgCIAEoCUgAiAEBEjwKCnBhZ2luYXRpb24YAyABKAsyIy5kb21haW4uY29tbW9uLnYxLlBhZ2luYXRpb25SZXF1ZXN0SAGIAQFCGAoWX3N1YnNjcmlwdGlvbl9ncm91cF9pZEINCgtfcGFnaW5hdGlvbiL1AQogTGlzdEpvYlRlbXBsYXRlU3VtbWFyaWVzUmVzcG9uc2USOwoJc3VtbWFyaWVzGAEgAygLMiguc2VydmljZS5vcGVyYXRpb24udjEuSm9iVGVtcGxhdGVTdW1tYXJ5Eg8KB3N1Y2Nlc3MYAiABKAgSPQoKcGFnaW5hdGlvbhgDIAEoCzIkLmRvbWFpbi5jb21tb24udjEuUGFnaW5hdGlvblJlc3BvbnNlSACIAQESKwoFZXJyb3IYBCABKAsyFy5kb21haW4uY29tbW9uLnYxLkVycm9ySAGIAQFCDQoLX3BhZ2luYXRpb25CCAoGX2Vycm9yMqcBChlKb2JUZW1wbGF0ZVN1bW1hcnlTZXJ2aWNlEokBChhMaXN0Sm9iVGVtcGxhdGVTdW1tYXJpZXMSNS5zZXJ2aWNlLm9wZXJhdGlvbi52MS5MaXN0Sm9iVGVtcGxhdGVTdW1tYXJpZXNSZXF1ZXN0GjYuc2VydmljZS5vcGVyYXRpb24udjEuTGlzdEpvYlRlbXBsYXRlU3VtbWFyaWVzUmVzcG9uc2VChAIKGGNvbS5zZXJ2aWNlLm9wZXJhdGlvbi52MUIXSm9iVGVtcGxhdGVTdW1tYXJ5UHJvdG9QAVpdZ2l0aHViLmNvbS9lcm5pZWFsaWNlL2VzcXltYS9wa2cvc2NoZW1hL3YxL3NlcnZpY2Uvb3BlcmF0aW9uL2pvYl90ZW1wbGF0ZV9zdW1tYXJ5O29wZXJhdGlvbnYxogIDU09YqgIUU2VydmljZS5PcGVyYXRpb24uVjHKAhRTZXJ2aWNlXE9wZXJhdGlvblxWMeICIFNlcnZpY2VcT3BlcmF0aW9uXFYxXEdQQk1ldGFkYXRh6gIWU2VydmljZTo6T3BlcmF0aW9uOjpWMWIGcHJvdG8z", [file_domain_common_error, file_domain_common_pagination]);
+
+/**
+ * Deliverer is one staff-of-record on a template. A template can have MORE THAN
+ * ONE deliverer when its jobs are delivered by several staff (e.g. a merged
+ * deliverable whose phases are each delivered by a different staff — each holds
+ * an active subscription_seat whose product_plan matches the template's umbrella
+ * output product). Generic: no vertical nouns (education: a Section's two
+ * rotation-strand Teachers).
+ *
+ * @generated from message service.operation.v1.Deliverer
+ */
+export type Deliverer = Message<"service.operation.v1.Deliverer"> & {
+  /**
+   * @generated from field: string staff_id = 1;
+   */
+  staffId: string;
+
+  /**
+   * @generated from field: string staff_name = 2;
+   */
+  staffName: string;
+};
+
+/**
+ * Describes the message service.operation.v1.Deliverer.
+ * Use `create(DelivererSchema)` to create a new message.
+ */
+export const DelivererSchema: GenMessage<Deliverer> = /*@__PURE__*/
+  messageDesc(file_service_operation_job_template_summary_job_template_summary, 0);
 
 /**
  * JobTemplateSummary is one aggregated delivery-summary row: one row per
@@ -48,18 +77,6 @@ export type JobTemplateSummary = Message<"service.operation.v1.JobTemplateSummar
   subscriptionGroupName: string;
 
   /**
-   * the deliverer / staff of record
-   *
-   * @generated from field: string staff_id = 5;
-   */
-  staffId: string;
-
-  /**
-   * @generated from field: string staff_name = 6;
-   */
-  staffName: string;
-
-  /**
    * DISTINCT resolver-scoped jobs on the template
    *
    * @generated from field: int32 job_count = 7;
@@ -89,6 +106,13 @@ export type JobTemplateSummary = Message<"service.operation.v1.JobTemplateSummar
    * @generated from field: string output_product_name = 11;
    */
   outputProductName: string;
+
+  /**
+   * all staff of record (>=1), sort-stable
+   *
+   * @generated from field: repeated service.operation.v1.Deliverer deliverers = 12;
+   */
+  deliverers: Deliverer[];
 };
 
 /**
@@ -96,7 +120,7 @@ export type JobTemplateSummary = Message<"service.operation.v1.JobTemplateSummar
  * Use `create(JobTemplateSummarySchema)` to create a new message.
  */
 export const JobTemplateSummarySchema: GenMessage<JobTemplateSummary> = /*@__PURE__*/
-  messageDesc(file_service_operation_job_template_summary_job_template_summary, 0);
+  messageDesc(file_service_operation_job_template_summary_job_template_summary, 1);
 
 /**
  * @generated from message service.operation.v1.ListJobTemplateSummariesRequest
@@ -129,7 +153,7 @@ export type ListJobTemplateSummariesRequest = Message<"service.operation.v1.List
  * Use `create(ListJobTemplateSummariesRequestSchema)` to create a new message.
  */
 export const ListJobTemplateSummariesRequestSchema: GenMessage<ListJobTemplateSummariesRequest> = /*@__PURE__*/
-  messageDesc(file_service_operation_job_template_summary_job_template_summary, 1);
+  messageDesc(file_service_operation_job_template_summary_job_template_summary, 2);
 
 /**
  * @generated from message service.operation.v1.ListJobTemplateSummariesResponse
@@ -161,7 +185,7 @@ export type ListJobTemplateSummariesResponse = Message<"service.operation.v1.Lis
  * Use `create(ListJobTemplateSummariesResponseSchema)` to create a new message.
  */
 export const ListJobTemplateSummariesResponseSchema: GenMessage<ListJobTemplateSummariesResponse> = /*@__PURE__*/
-  messageDesc(file_service_operation_job_template_summary_job_template_summary, 2);
+  messageDesc(file_service_operation_job_template_summary_job_template_summary, 3);
 
 /**
  * @generated from service service.operation.v1.JobTemplateSummaryService

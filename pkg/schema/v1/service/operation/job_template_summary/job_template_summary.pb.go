@@ -22,6 +22,64 @@ const (
 	_ = protoimpl.EnforceVersion(protoimpl.MaxVersion - 20)
 )
 
+// Deliverer is one staff-of-record on a template. A template can have MORE THAN
+// ONE deliverer when its jobs are delivered by several staff (e.g. a merged
+// deliverable whose phases are each delivered by a different staff — each holds
+// an active subscription_seat whose product_plan matches the template's umbrella
+// output product). Generic: no vertical nouns (education: a Section's two
+// rotation-strand Teachers).
+type Deliverer struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	StaffId       string                 `protobuf:"bytes,1,opt,name=staff_id,json=staffId,proto3" json:"staff_id,omitempty"`
+	StaffName     string                 `protobuf:"bytes,2,opt,name=staff_name,json=staffName,proto3" json:"staff_name,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *Deliverer) Reset() {
+	*x = Deliverer{}
+	mi := &file_service_operation_job_template_summary_job_template_summary_proto_msgTypes[0]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *Deliverer) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*Deliverer) ProtoMessage() {}
+
+func (x *Deliverer) ProtoReflect() protoreflect.Message {
+	mi := &file_service_operation_job_template_summary_job_template_summary_proto_msgTypes[0]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use Deliverer.ProtoReflect.Descriptor instead.
+func (*Deliverer) Descriptor() ([]byte, []int) {
+	return file_service_operation_job_template_summary_job_template_summary_proto_rawDescGZIP(), []int{0}
+}
+
+func (x *Deliverer) GetStaffId() string {
+	if x != nil {
+		return x.StaffId
+	}
+	return ""
+}
+
+func (x *Deliverer) GetStaffName() string {
+	if x != nil {
+		return x.StaffName
+	}
+	return ""
+}
+
 // JobTemplateSummary is one aggregated delivery-summary row: one row per
 // job_template with >=1 resolver-scoped job for the requested status. Every id
 // is an opaque, generic entity id; every *_name is a display label the adapter
@@ -32,20 +90,19 @@ type JobTemplateSummary struct {
 	JobTemplateName       string                 `protobuf:"bytes,2,opt,name=job_template_name,json=jobTemplateName,proto3" json:"job_template_name,omitempty"`
 	SubscriptionGroupId   string                 `protobuf:"bytes,3,opt,name=subscription_group_id,json=subscriptionGroupId,proto3" json:"subscription_group_id,omitempty"` // the delivery group (education: Section)
 	SubscriptionGroupName string                 `protobuf:"bytes,4,opt,name=subscription_group_name,json=subscriptionGroupName,proto3" json:"subscription_group_name,omitempty"`
-	StaffId               string                 `protobuf:"bytes,5,opt,name=staff_id,json=staffId,proto3" json:"staff_id,omitempty"` // the deliverer / staff of record
-	StaffName             string                 `protobuf:"bytes,6,opt,name=staff_name,json=staffName,proto3" json:"staff_name,omitempty"`
 	JobCount              int32                  `protobuf:"varint,7,opt,name=job_count,json=jobCount,proto3" json:"job_count,omitempty"`                       // DISTINCT resolver-scoped jobs on the template
 	PriceScheduleId       string                 `protobuf:"bytes,8,opt,name=price_schedule_id,json=priceScheduleId,proto3" json:"price_schedule_id,omitempty"` // the group's price schedule
 	PriceScheduleName     string                 `protobuf:"bytes,9,opt,name=price_schedule_name,json=priceScheduleName,proto3" json:"price_schedule_name,omitempty"`
 	OutputProductId       string                 `protobuf:"bytes,10,opt,name=output_product_id,json=outputProductId,proto3" json:"output_product_id,omitempty"` // the template's deliverable product
 	OutputProductName     string                 `protobuf:"bytes,11,opt,name=output_product_name,json=outputProductName,proto3" json:"output_product_name,omitempty"`
+	Deliverers            []*Deliverer           `protobuf:"bytes,12,rep,name=deliverers,proto3" json:"deliverers,omitempty"` // all staff of record (>=1), sort-stable
 	unknownFields         protoimpl.UnknownFields
 	sizeCache             protoimpl.SizeCache
 }
 
 func (x *JobTemplateSummary) Reset() {
 	*x = JobTemplateSummary{}
-	mi := &file_service_operation_job_template_summary_job_template_summary_proto_msgTypes[0]
+	mi := &file_service_operation_job_template_summary_job_template_summary_proto_msgTypes[1]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -57,7 +114,7 @@ func (x *JobTemplateSummary) String() string {
 func (*JobTemplateSummary) ProtoMessage() {}
 
 func (x *JobTemplateSummary) ProtoReflect() protoreflect.Message {
-	mi := &file_service_operation_job_template_summary_job_template_summary_proto_msgTypes[0]
+	mi := &file_service_operation_job_template_summary_job_template_summary_proto_msgTypes[1]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -70,7 +127,7 @@ func (x *JobTemplateSummary) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use JobTemplateSummary.ProtoReflect.Descriptor instead.
 func (*JobTemplateSummary) Descriptor() ([]byte, []int) {
-	return file_service_operation_job_template_summary_job_template_summary_proto_rawDescGZIP(), []int{0}
+	return file_service_operation_job_template_summary_job_template_summary_proto_rawDescGZIP(), []int{1}
 }
 
 func (x *JobTemplateSummary) GetJobTemplateId() string {
@@ -97,20 +154,6 @@ func (x *JobTemplateSummary) GetSubscriptionGroupId() string {
 func (x *JobTemplateSummary) GetSubscriptionGroupName() string {
 	if x != nil {
 		return x.SubscriptionGroupName
-	}
-	return ""
-}
-
-func (x *JobTemplateSummary) GetStaffId() string {
-	if x != nil {
-		return x.StaffId
-	}
-	return ""
-}
-
-func (x *JobTemplateSummary) GetStaffName() string {
-	if x != nil {
-		return x.StaffName
 	}
 	return ""
 }
@@ -150,6 +193,13 @@ func (x *JobTemplateSummary) GetOutputProductName() string {
 	return ""
 }
 
+func (x *JobTemplateSummary) GetDeliverers() []*Deliverer {
+	if x != nil {
+		return x.Deliverers
+	}
+	return nil
+}
+
 type ListJobTemplateSummariesRequest struct {
 	state protoimpl.MessageState `protogen:"open.v1"`
 	// status is the job status token the job.status column stores (the full
@@ -165,7 +215,7 @@ type ListJobTemplateSummariesRequest struct {
 
 func (x *ListJobTemplateSummariesRequest) Reset() {
 	*x = ListJobTemplateSummariesRequest{}
-	mi := &file_service_operation_job_template_summary_job_template_summary_proto_msgTypes[1]
+	mi := &file_service_operation_job_template_summary_job_template_summary_proto_msgTypes[2]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -177,7 +227,7 @@ func (x *ListJobTemplateSummariesRequest) String() string {
 func (*ListJobTemplateSummariesRequest) ProtoMessage() {}
 
 func (x *ListJobTemplateSummariesRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_service_operation_job_template_summary_job_template_summary_proto_msgTypes[1]
+	mi := &file_service_operation_job_template_summary_job_template_summary_proto_msgTypes[2]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -190,7 +240,7 @@ func (x *ListJobTemplateSummariesRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ListJobTemplateSummariesRequest.ProtoReflect.Descriptor instead.
 func (*ListJobTemplateSummariesRequest) Descriptor() ([]byte, []int) {
-	return file_service_operation_job_template_summary_job_template_summary_proto_rawDescGZIP(), []int{1}
+	return file_service_operation_job_template_summary_job_template_summary_proto_rawDescGZIP(), []int{2}
 }
 
 func (x *ListJobTemplateSummariesRequest) GetStatus() string {
@@ -226,7 +276,7 @@ type ListJobTemplateSummariesResponse struct {
 
 func (x *ListJobTemplateSummariesResponse) Reset() {
 	*x = ListJobTemplateSummariesResponse{}
-	mi := &file_service_operation_job_template_summary_job_template_summary_proto_msgTypes[2]
+	mi := &file_service_operation_job_template_summary_job_template_summary_proto_msgTypes[3]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -238,7 +288,7 @@ func (x *ListJobTemplateSummariesResponse) String() string {
 func (*ListJobTemplateSummariesResponse) ProtoMessage() {}
 
 func (x *ListJobTemplateSummariesResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_service_operation_job_template_summary_job_template_summary_proto_msgTypes[2]
+	mi := &file_service_operation_job_template_summary_job_template_summary_proto_msgTypes[3]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -251,7 +301,7 @@ func (x *ListJobTemplateSummariesResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ListJobTemplateSummariesResponse.ProtoReflect.Descriptor instead.
 func (*ListJobTemplateSummariesResponse) Descriptor() ([]byte, []int) {
-	return file_service_operation_job_template_summary_job_template_summary_proto_rawDescGZIP(), []int{2}
+	return file_service_operation_job_template_summary_job_template_summary_proto_rawDescGZIP(), []int{3}
 }
 
 func (x *ListJobTemplateSummariesResponse) GetSummaries() []*JobTemplateSummary {
@@ -286,21 +336,26 @@ var File_service_operation_job_template_summary_job_template_summary_proto proto
 
 const file_service_operation_job_template_summary_job_template_summary_proto_rawDesc = "" +
 	"\n" +
-	"Aservice/operation/job_template_summary/job_template_summary.proto\x12\x14service.operation.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\"\xe3\x03\n" +
+	"Aservice/operation/job_template_summary/job_template_summary.proto\x12\x14service.operation.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\"E\n" +
+	"\tDeliverer\x12\x19\n" +
+	"\bstaff_id\x18\x01 \x01(\tR\astaffId\x12\x1d\n" +
+	"\n" +
+	"staff_name\x18\x02 \x01(\tR\tstaffName\"\x8c\x04\n" +
 	"\x12JobTemplateSummary\x12&\n" +
 	"\x0fjob_template_id\x18\x01 \x01(\tR\rjobTemplateId\x12*\n" +
 	"\x11job_template_name\x18\x02 \x01(\tR\x0fjobTemplateName\x122\n" +
 	"\x15subscription_group_id\x18\x03 \x01(\tR\x13subscriptionGroupId\x126\n" +
-	"\x17subscription_group_name\x18\x04 \x01(\tR\x15subscriptionGroupName\x12\x19\n" +
-	"\bstaff_id\x18\x05 \x01(\tR\astaffId\x12\x1d\n" +
-	"\n" +
-	"staff_name\x18\x06 \x01(\tR\tstaffName\x12\x1b\n" +
+	"\x17subscription_group_name\x18\x04 \x01(\tR\x15subscriptionGroupName\x12\x1b\n" +
 	"\tjob_count\x18\a \x01(\x05R\bjobCount\x12*\n" +
 	"\x11price_schedule_id\x18\b \x01(\tR\x0fpriceScheduleId\x12.\n" +
 	"\x13price_schedule_name\x18\t \x01(\tR\x11priceScheduleName\x12*\n" +
 	"\x11output_product_id\x18\n" +
 	" \x01(\tR\x0foutputProductId\x12.\n" +
-	"\x13output_product_name\x18\v \x01(\tR\x11outputProductName\"\xe5\x01\n" +
+	"\x13output_product_name\x18\v \x01(\tR\x11outputProductName\x12?\n" +
+	"\n" +
+	"deliverers\x18\f \x03(\v2\x1f.service.operation.v1.DelivererR\n" +
+	"deliverersJ\x04\b\x05\x10\x06J\x04\b\x06\x10\aR\bstaff_idR\n" +
+	"staff_name\"\xe5\x01\n" +
 	"\x1fListJobTemplateSummariesRequest\x12\x16\n" +
 	"\x06status\x18\x01 \x01(\tR\x06status\x127\n" +
 	"\x15subscription_group_id\x18\x02 \x01(\tH\x00R\x13subscriptionGroupId\x88\x01\x01\x12H\n" +
@@ -334,27 +389,29 @@ func file_service_operation_job_template_summary_job_template_summary_proto_rawD
 	return file_service_operation_job_template_summary_job_template_summary_proto_rawDescData
 }
 
-var file_service_operation_job_template_summary_job_template_summary_proto_msgTypes = make([]protoimpl.MessageInfo, 3)
+var file_service_operation_job_template_summary_job_template_summary_proto_msgTypes = make([]protoimpl.MessageInfo, 4)
 var file_service_operation_job_template_summary_job_template_summary_proto_goTypes = []any{
-	(*JobTemplateSummary)(nil),               // 0: service.operation.v1.JobTemplateSummary
-	(*ListJobTemplateSummariesRequest)(nil),  // 1: service.operation.v1.ListJobTemplateSummariesRequest
-	(*ListJobTemplateSummariesResponse)(nil), // 2: service.operation.v1.ListJobTemplateSummariesResponse
-	(*common.PaginationRequest)(nil),         // 3: domain.common.v1.PaginationRequest
-	(*common.PaginationResponse)(nil),        // 4: domain.common.v1.PaginationResponse
-	(*common.Error)(nil),                     // 5: domain.common.v1.Error
+	(*Deliverer)(nil),                        // 0: service.operation.v1.Deliverer
+	(*JobTemplateSummary)(nil),               // 1: service.operation.v1.JobTemplateSummary
+	(*ListJobTemplateSummariesRequest)(nil),  // 2: service.operation.v1.ListJobTemplateSummariesRequest
+	(*ListJobTemplateSummariesResponse)(nil), // 3: service.operation.v1.ListJobTemplateSummariesResponse
+	(*common.PaginationRequest)(nil),         // 4: domain.common.v1.PaginationRequest
+	(*common.PaginationResponse)(nil),        // 5: domain.common.v1.PaginationResponse
+	(*common.Error)(nil),                     // 6: domain.common.v1.Error
 }
 var file_service_operation_job_template_summary_job_template_summary_proto_depIdxs = []int32{
-	3, // 0: service.operation.v1.ListJobTemplateSummariesRequest.pagination:type_name -> domain.common.v1.PaginationRequest
-	0, // 1: service.operation.v1.ListJobTemplateSummariesResponse.summaries:type_name -> service.operation.v1.JobTemplateSummary
-	4, // 2: service.operation.v1.ListJobTemplateSummariesResponse.pagination:type_name -> domain.common.v1.PaginationResponse
-	5, // 3: service.operation.v1.ListJobTemplateSummariesResponse.error:type_name -> domain.common.v1.Error
-	1, // 4: service.operation.v1.JobTemplateSummaryService.ListJobTemplateSummaries:input_type -> service.operation.v1.ListJobTemplateSummariesRequest
-	2, // 5: service.operation.v1.JobTemplateSummaryService.ListJobTemplateSummaries:output_type -> service.operation.v1.ListJobTemplateSummariesResponse
-	5, // [5:6] is the sub-list for method output_type
-	4, // [4:5] is the sub-list for method input_type
-	4, // [4:4] is the sub-list for extension type_name
-	4, // [4:4] is the sub-list for extension extendee
-	0, // [0:4] is the sub-list for field type_name
+	0, // 0: service.operation.v1.JobTemplateSummary.deliverers:type_name -> service.operation.v1.Deliverer
+	4, // 1: service.operation.v1.ListJobTemplateSummariesRequest.pagination:type_name -> domain.common.v1.PaginationRequest
+	1, // 2: service.operation.v1.ListJobTemplateSummariesResponse.summaries:type_name -> service.operation.v1.JobTemplateSummary
+	5, // 3: service.operation.v1.ListJobTemplateSummariesResponse.pagination:type_name -> domain.common.v1.PaginationResponse
+	6, // 4: service.operation.v1.ListJobTemplateSummariesResponse.error:type_name -> domain.common.v1.Error
+	2, // 5: service.operation.v1.JobTemplateSummaryService.ListJobTemplateSummaries:input_type -> service.operation.v1.ListJobTemplateSummariesRequest
+	3, // 6: service.operation.v1.JobTemplateSummaryService.ListJobTemplateSummaries:output_type -> service.operation.v1.ListJobTemplateSummariesResponse
+	6, // [6:7] is the sub-list for method output_type
+	5, // [5:6] is the sub-list for method input_type
+	5, // [5:5] is the sub-list for extension type_name
+	5, // [5:5] is the sub-list for extension extendee
+	0, // [0:5] is the sub-list for field type_name
 }
 
 func init() { file_service_operation_job_template_summary_job_template_summary_proto_init() }
@@ -362,15 +419,15 @@ func file_service_operation_job_template_summary_job_template_summary_proto_init
 	if File_service_operation_job_template_summary_job_template_summary_proto != nil {
 		return
 	}
-	file_service_operation_job_template_summary_job_template_summary_proto_msgTypes[1].OneofWrappers = []any{}
 	file_service_operation_job_template_summary_job_template_summary_proto_msgTypes[2].OneofWrappers = []any{}
+	file_service_operation_job_template_summary_job_template_summary_proto_msgTypes[3].OneofWrappers = []any{}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
 		File: protoimpl.DescBuilder{
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_service_operation_job_template_summary_job_template_summary_proto_rawDesc), len(file_service_operation_job_template_summary_job_template_summary_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   3,
+			NumMessages:   4,
 			NumExtensions: 0,
 			NumServices:   1,
 		},

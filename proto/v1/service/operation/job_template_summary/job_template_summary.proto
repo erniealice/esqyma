@@ -54,6 +54,17 @@ service JobTemplateSummaryService {
   rpc ListJobTemplateSummaries(ListJobTemplateSummariesRequest) returns (ListJobTemplateSummariesResponse);
 }
 
+// Deliverer is one staff-of-record on a template. A template can have MORE THAN
+// ONE deliverer when its jobs are delivered by several staff (e.g. a merged
+// deliverable whose phases are each delivered by a different staff — each holds
+// an active subscription_seat whose product_plan matches the template's umbrella
+// output product). Generic: no vertical nouns (education: a Section's two
+// rotation-strand Teachers).
+message Deliverer {
+  string staff_id = 1;
+  string staff_name = 2;
+}
+
 // JobTemplateSummary is one aggregated delivery-summary row: one row per
 // job_template with >=1 resolver-scoped job for the requested status. Every id
 // is an opaque, generic entity id; every *_name is a display label the adapter
@@ -63,13 +74,17 @@ message JobTemplateSummary {
   string job_template_name = 2;
   string subscription_group_id = 3;    // the delivery group (education: Section)
   string subscription_group_name = 4;
-  string staff_id = 5;                 // the deliverer / staff of record
-  string staff_name = 6;
+  // 5,6 were singular staff_id/staff_name (one deliverer per template). A merged
+  // deliverable legitimately has multiple deliverers (one per delivered phase),
+  // so the shape is now the repeated `deliverers` (field 12).
+  reserved 5, 6;
+  reserved "staff_id", "staff_name";
   int32 job_count = 7;                 // DISTINCT resolver-scoped jobs on the template
   string price_schedule_id = 8;        // the group's price schedule
   string price_schedule_name = 9;
   string output_product_id = 10;       // the template's deliverable product
   string output_product_name = 11;
+  repeated Deliverer deliverers = 12;  // all staff of record (>=1), sort-stable
 }
 
 message ListJobTemplateSummariesRequest {

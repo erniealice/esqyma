@@ -46,7 +46,18 @@ message JobTemplatePhase {
   optional string billing_currency    = 19;  // ISO 4217; only meaningful when fixed billing_amount used
   optional string scoring_scheme_id = 20 [(options.v1.db).references = "scoring_scheme"];
 
-  reserved 21 to 29;
+  // Per-phase output deliverable variant. Mirrors JobTemplate.output_product_variant_id
+  // (f30) one level down: a phase yields/delivers a specific product_variant of the
+  // template's umbrella output_product. NULL = the phase inherits the template-level
+  // output (today's behavior — clean additive). Generic across verticals
+  // (manufacturing per-operation intermediate output, professional-services milestone
+  // deliverable, education rotation strand). The deliverable-match resolver joins the
+  // seat's product_plan.product_id to the template-level output_product_id at umbrella
+  // grain, so this field is NOT part of that match; it carries the sub-deliverable
+  // identity used for display (e.g. the outcome-matrix phase-header parenthetical).
+  optional string output_product_variant_id = 21 [(options.v1.db).references = "product_variant", (options.v1.db).index = true];
+
+  reserved 22 to 29;
 }
 
 service JobTemplatePhaseDomainService {

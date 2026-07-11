@@ -55,8 +55,18 @@ type JobTemplatePhase struct {
 	BillingAmount     *int64  `protobuf:"varint,18,opt,name=billing_amount,json=billingAmount,proto3,oneof" json:"billing_amount,omitempty"`               // centavos; fixed override (mutually exclusive w/ percent)
 	BillingCurrency   *string `protobuf:"bytes,19,opt,name=billing_currency,json=billingCurrency,proto3,oneof" json:"billing_currency,omitempty"`          // ISO 4217; only meaningful when fixed billing_amount used
 	ScoringSchemeId   *string `protobuf:"bytes,20,opt,name=scoring_scheme_id,json=scoringSchemeId,proto3,oneof" json:"scoring_scheme_id,omitempty"`
-	unknownFields     protoimpl.UnknownFields
-	sizeCache         protoimpl.SizeCache
+	// Per-phase output deliverable variant. Mirrors JobTemplate.output_product_variant_id
+	// (f30) one level down: a phase yields/delivers a specific product_variant of the
+	// template's umbrella output_product. NULL = the phase inherits the template-level
+	// output (today's behavior — clean additive). Generic across verticals
+	// (manufacturing per-operation intermediate output, professional-services milestone
+	// deliverable, education rotation strand). The deliverable-match resolver joins the
+	// seat's product_plan.product_id to the template-level output_product_id at umbrella
+	// grain, so this field is NOT part of that match; it carries the sub-deliverable
+	// identity used for display (e.g. the outcome-matrix phase-header parenthetical).
+	OutputProductVariantId *string `protobuf:"bytes,21,opt,name=output_product_variant_id,json=outputProductVariantId,proto3,oneof" json:"output_product_variant_id,omitempty"`
+	unknownFields          protoimpl.UnknownFields
+	sizeCache              protoimpl.SizeCache
 }
 
 func (x *JobTemplatePhase) Reset() {
@@ -225,6 +235,13 @@ func (x *JobTemplatePhase) GetBillingCurrency() string {
 func (x *JobTemplatePhase) GetScoringSchemeId() string {
 	if x != nil && x.ScoringSchemeId != nil {
 		return *x.ScoringSchemeId
+	}
+	return ""
+}
+
+func (x *JobTemplatePhase) GetOutputProductVariantId() string {
+	if x != nil && x.OutputProductVariantId != nil {
+		return *x.OutputProductVariantId
 	}
 	return ""
 }
@@ -1122,8 +1139,7 @@ var File_domain_operation_job_template_phase_job_template_phase_proto protorefle
 
 const file_domain_operation_job_template_phase_job_template_phase_proto_rawDesc = "" +
 	"\n" +
-	"<domain/operation/job_template_phase/job_template_phase.proto\x12\x13domain.operation.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1adomain/common/search.proto\x1a0domain/operation/job_template/job_template.proto\x1a\x10options/db.proto\"\xd3\n" +
-	"\n" +
+	"<domain/operation/job_template_phase/job_template_phase.proto\x12\x13domain.operation.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1adomain/common/search.proto\x1a0domain/operation/job_template/job_template.proto\x1a\x10options/db.proto\"\xca\v\n" +
 	"\x10JobTemplatePhase\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12&\n" +
 	"\fdate_created\x18\x02 \x01(\x03H\x00R\vdateCreated\x88\x01\x01\x12;\n" +
@@ -1153,7 +1169,9 @@ const file_domain_operation_job_template_phase_job_template_phase_proto_rawDesc 
 	"\x0ebilling_amount\x18\x12 \x01(\x03H\fR\rbillingAmount\x88\x01\x01\x12.\n" +
 	"\x10billing_currency\x18\x13 \x01(\tH\rR\x0fbillingCurrency\x88\x01\x01\x12E\n" +
 	"\x11scoring_scheme_id\x18\x14 \x01(\tB\x14\x82\xb5\x18\x10\n" +
-	"\x0escoring_schemeH\x0eR\x0fscoringSchemeId\x88\x01\x01:\x06\x8a\xb5\x18\x02\b\x01B\x0f\n" +
+	"\x0escoring_schemeH\x0eR\x0fscoringSchemeId\x88\x01\x01\x12W\n" +
+	"\x19output_product_variant_id\x18\x15 \x01(\tB\x17\x82\xb5\x18\x13\n" +
+	"\x0fproduct_variant\x18\x01H\x0fR\x16outputProductVariantId\x88\x01\x01:\x06\x8a\xb5\x18\x02\b\x01B\x0f\n" +
 	"\r_date_createdB\x16\n" +
 	"\x14_date_created_stringB\x10\n" +
 	"\x0e_date_modifiedB\x17\n" +
@@ -1168,7 +1186,8 @@ const file_domain_operation_job_template_phase_job_template_phase_proto_rawDesc 
 	"\x14_billing_percent_bpsB\x11\n" +
 	"\x0f_billing_amountB\x13\n" +
 	"\x11_billing_currencyB\x14\n" +
-	"\x12_scoring_scheme_idJ\x04\b\x15\x10\x1e\"Z\n" +
+	"\x12_scoring_scheme_idB\x1c\n" +
+	"\x1a_output_product_variant_idJ\x04\b\x16\x10\x1e\"Z\n" +
 	"\x1dCreateJobTemplatePhaseRequest\x129\n" +
 	"\x04data\x18\x01 \x01(\v2%.domain.operation.v1.JobTemplatePhaseR\x04data\"\xb3\x01\n" +
 	"\x1eCreateJobTemplatePhaseResponse\x129\n" +
