@@ -1032,14 +1032,15 @@ var File_domain_inventory_inventory_item_inventory_item_proto protoreflect.FileD
 
 const file_domain_inventory_inventory_item_inventory_item_proto_rawDesc = "" +
 	"\n" +
-	"4domain/inventory/inventory_item/inventory_item.proto\x12\x13domain.inventory.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1adomain/common/search.proto\x1a$domain/product/product/product.proto\x1a%domain/entity/location/location.proto\x1a\x10options/db.proto\"\xed\a\n" +
+	"4domain/inventory/inventory_item/inventory_item.proto\x12\x13domain.inventory.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1adomain/common/search.proto\x1a$domain/product/product/product.proto\x1a%domain/entity/location/location.proto\x1a\x10options/db.proto\"\xab\b\n" +
 	"\rInventoryItem\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12&\n" +
 	"\fdate_created\x18\x02 \x01(\x03H\x00R\vdateCreated\x88\x01\x01\x12;\n" +
 	"\x13date_created_string\x18\x03 \x01(\tB\x06\x82\xb5\x18\x028\x01H\x01R\x11dateCreatedString\x88\x01\x01\x12(\n" +
 	"\rdate_modified\x18\x04 \x01(\x03H\x02R\fdateModified\x88\x01\x01\x12=\n" +
-	"\x14date_modified_string\x18\x05 \x01(\tB\x06\x82\xb5\x18\x028\x01H\x03R\x12dateModifiedString\x88\x01\x01\x12\x16\n" +
-	"\x06active\x18\x06 \x01(\bR\x06active\x12\x12\n" +
+	"\x14date_modified_string\x18\x05 \x01(\tB\x06\x82\xb5\x18\x028\x01H\x03R\x12dateModifiedString\x88\x01\x01\x12\"\n" +
+	"\x06active\x18\x06 \x01(\bB\n" +
+	"\x82\xb5\x18\x06\"\x04trueR\x06active\x12\x12\n" +
 	"\x04name\x18\a \x01(\tR\x04name\x129\n" +
 	"\aproduct\x18\b \x01(\v2\x1a.domain.product.v1.ProductH\x04R\aproduct\x88\x01\x01\x12\"\n" +
 	"\n" +
@@ -1048,12 +1049,12 @@ const file_domain_inventory_inventory_item_inventory_item_proto_rawDesc = "" +
 	" \x01(\v2\x1a.domain.entity.v1.LocationH\x06R\blocation\x88\x01\x01\x12$\n" +
 	"\vlocation_id\x18\v \x01(\tH\aR\n" +
 	"locationId\x88\x01\x01\x12\x15\n" +
-	"\x03sku\x18\f \x01(\tH\bR\x03sku\x88\x01\x01\x12(\n" +
-	"\x10quantity_on_hand\x18\r \x01(\x01R\x0equantityOnHand\x12+\n" +
-	"\x11quantity_reserved\x18\x0e \x01(\x01R\x10quantityReserved\x12-\n" +
-	"\x12quantity_available\x18\x0f \x01(\x01R\x11quantityAvailable\x12(\n" +
-	"\rreorder_level\x18\x10 \x01(\x01H\tR\freorderLevel\x88\x01\x01\x12&\n" +
-	"\x0funit_of_measure\x18\x11 \x01(\tR\runitOfMeasure\x12\x19\n" +
+	"\x03sku\x18\f \x01(\tH\bR\x03sku\x88\x01\x01\x121\n" +
+	"\x10quantity_on_hand\x18\r \x01(\x01B\a\x82\xb5\x18\x03\"\x010R\x0equantityOnHand\x124\n" +
+	"\x11quantity_reserved\x18\x0e \x01(\x01B\a\x82\xb5\x18\x03\"\x010R\x10quantityReserved\x126\n" +
+	"\x12quantity_available\x18\x0f \x01(\x01B\a\x82\xb5\x18\x03\"\x010R\x11quantityAvailable\x121\n" +
+	"\rreorder_level\x18\x10 \x01(\x01B\a\x82\xb5\x18\x03\"\x010H\tR\freorderLevel\x88\x01\x01\x124\n" +
+	"\x0funit_of_measure\x18\x11 \x01(\tB\f\x82\xb5\x18\b\"\x06'unit'R\runitOfMeasure\x12\x19\n" +
 	"\x05notes\x18\x12 \x01(\tH\n" +
 	"R\x05notes\x88\x01\x01\x121\n" +
 	"\x12product_variant_id\x18\x14 \x01(\tH\vR\x10productVariantId\x88\x01\x01:\x06\x8a\xb5\x18\x02\b\x01B\x0f\n" +

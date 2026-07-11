@@ -74,40 +74,47 @@ enum EvaluationStatus {
 // Evaluation is the evaluation header aggregate (operation domain).
 message Evaluation {
   option (options.v1.table).table = true;
+  option (options.v1.table).index_together = "staff_id,status,submitted_at,id";
+  option (options.v1.table).index_together = "workspace_id,client_id";
+  // DB additionally enforces two partial uniques (not expressible as unique_together):
+  //   UNIQUE (client_id, staff_id, evaluation_type, evaluation_template_id, period_start)
+  //     NULLS NOT DISTINCT WHERE active AND staff_id IS NOT NULL
+  //   UNIQUE (client_id, subject_client_id, evaluation_type, evaluation_template_id, period_start)
+  //     NULLS NOT DISTINCT WHERE active AND subject_client_id IS NOT NULL
 
   string id = 1;
-  string workspace_id = 2 [(options.v1.db).references = "workspace", (options.v1.db).index = true];
+  string workspace_id = 2 [(options.v1.db).references = "workspace", (options.v1.db).index = true, (options.v1.db).check = "client_id <> '' AND workspace_id <> ''"];
   // DENORMALIZED IDOR anchor; stamped from session.acting_as_client_id at create; NEVER from form.
   string client_id = 3 [(options.v1.db).references = "client", (options.v1.db).index = true];
   // Servicing-scope anchor (CR-5): NULL subscription_id resolves to ACCOUNT scope via client_id.
   optional string subscription_id = 4 [(options.v1.db).references = "subscription", (options.v1.db).index = true];
   // Anti-phantom ENGAGEMENT anchor (the seat, NOT the subject) — REQUIRED for CLIENT_TO_ASSOCIATE.
-  optional string subscription_seat_id = 5 [(options.v1.db).references = "subscription_seat", (options.v1.db).index = true];
+  optional string subscription_seat_id = 5 [(options.v1.db).references = "subscription_seat", (options.v1.db).index = true, (options.v1.db).check = "relationship_type <> 'client_to_associate' OR subscription_seat_id IS NOT NULL"];
   // Template — REQUIRED for PERFORMANCE_REVIEW (CHECK).
-  optional string evaluation_template_id = 6 [(options.v1.db).references = "evaluation_template", (options.v1.db).index = true];
+  optional string evaluation_template_id = 6 [(options.v1.db).references = "evaluation_template", (options.v1.db).index = true, (options.v1.db).check = "evaluation_type <> 'performance_review' OR evaluation_template_id IS NOT NULL"];
 
-  EvaluationType evaluation_type = 7;        // proto ENUM; DB CHECK-pinned
-  RelationshipType relationship_type = 8;    // proto ENUM; DB CHECK-pinned
-  EvaluatorType evaluator_type = 9;          // proto ENUM; DB CHECK-pinned
+  EvaluationType evaluation_type = 7 [(options.v1.db).check = "evaluation_type IN ('performance_review','csat','course_eval','vendor_scorecard')"];        // proto ENUM; DB CHECK-pinned
+  RelationshipType relationship_type = 8 [(options.v1.db).check = "relationship_type IN ('client_to_associate','staff_to_client','self','peer','manager')"];    // proto ENUM; DB CHECK-pinned
+  EvaluatorType evaluator_type = 9 [(options.v1.db).check = "evaluator_type IN ('client','staff')"];          // proto ENUM; DB CHECK-pinned
   // Evaluator arc — exactly one (num_nonnulls=1). STAFF leg is the tenant-scoped workspace_user (CR-4).
-  optional string evaluator_workspace_user_id = 10 [(options.v1.db).references = "workspace_user", (options.v1.db).index = true];
-  optional string evaluator_client_portal_grant_id = 11 [(options.v1.db).references = "client_portal_grant", (options.v1.db).index = true];
+  optional string evaluator_workspace_user_id = 10 [(options.v1.db).references = "workspace_user", (options.v1.db).index = true, (options.v1.db).check = "num_nonnulls(evaluator_workspace_user_id, evaluator_client_portal_grant_id) = 1"];
+  optional string evaluator_client_portal_grant_id = 11 [(options.v1.db).references = "client_portal_grant", (options.v1.db).index = true, (options.v1.db).check = "(evaluator_type = 'client') = (evaluator_client_portal_grant_id IS NOT NULL)"];
 
-  SubjectType subject_type = 12;             // proto ENUM; DB CHECK-pinned
+  SubjectType subject_type = 12 [(options.v1.db).check = "subject_type IN ('associate','client')"];             // proto ENUM; DB CHECK-pinned
   // Subject arc — exactly one (num_nonnulls=1). The HUMAN Identity is the subject.
-  optional string staff_id = 13 [(options.v1.db).references = "staff", (options.v1.db).index = true];
-  optional string subject_client_id = 14 [(options.v1.db).references = "client", (options.v1.db).index = true];
+  optional string staff_id = 13 [(options.v1.db).references = "staff", (options.v1.db).index = true, (options.v1.db).check = "num_nonnulls(staff_id, subject_client_id) = 1"];
+  optional string subject_client_id = 14 [(options.v1.db).references = "client", (options.v1.db).index = true, (options.v1.db).check = "(subject_type = 'associate') = (staff_id IS NOT NULL)"];
 
   string period_start = 15;                  // ISO 8601
   string period_end = 16;                    // ISO 8601
-  EvaluationStatus status = 17;              // proto ENUM; single lifecycle source of truth
-  VisibilityType visibility_type = 18;       // proto ENUM; INTERNAL_ONLY fail-closed in query predicate
+  EvaluationStatus status = 17 [(options.v1.db).check = "status IN ('draft','submitted','archived','signed_off')"];              // proto ENUM; single lifecycle source of truth
+  VisibilityType visibility_type = 18 [(options.v1.db).check = "visibility_type IN ('internal_only','visible_to_subject','visible_to_subject_anon')"];       // proto ENUM; INTERNAL_ONLY fail-closed in query predicate
 
   optional double overall_score = 19;        // computed from criteria_weight snapshots (NOT live rubric)
   optional string narrative = 20;
   optional int64 submitted_at = 21;          // set at DRAFT->SUBMITTED
 
-  bool active = 22 [(options.v1.db).default = "true"];
+  bool active = 22 [(options.v1.db).default = "true", (options.v1.db).check = "active = (status <> 'archived')"];
   optional int64 date_created = 23;
   optional string date_created_string = 24 [(options.v1.db).ignore = true];
   optional int64 date_modified = 25;
@@ -117,8 +124,8 @@ message Evaluation {
   optional string evaluation_cycle_id = 27 [(options.v1.db).references = "evaluation_cycle", (options.v1.db).index = true];
 
   // Sign-off arc (Q-SIGNOFF-1) — exactly one actor when SIGNED_OFF (status-coupling CHECKs).
-  optional string signed_off_by_workspace_user_id = 28 [(options.v1.db).references = "workspace_user"];   // operator-side (CR-4)
-  optional string signed_off_by_client_portal_grant_id = 29 [(options.v1.db).references = "client_portal_grant"];
+  optional string signed_off_by_workspace_user_id = 28 [(options.v1.db).references = "workspace_user", (options.v1.db).check = "status <> 'signed_off' OR (signed_off_at IS NOT NULL AND num_nonnulls(signed_off_by_workspace_user_id, signed_off_by_client_portal_grant_id) = 1)"];   // operator-side (CR-4)
+  optional string signed_off_by_client_portal_grant_id = 29 [(options.v1.db).references = "client_portal_grant", (options.v1.db).check = "status = 'signed_off' OR (signed_off_at IS NULL AND signed_off_by_workspace_user_id IS NULL AND signed_off_by_client_portal_grant_id IS NULL)"];
   optional int64 signed_off_at = 30;
 }
 

@@ -37,6 +37,10 @@ enum TaxRateStatus {
 //         ORDER BY effective_from DESC
 message TaxRate {
   option (options.v1.table).table = true;
+  // Rate-lookup path: jurisdiction/authority/kind/treatment/direction equality plus
+  // effective_from ordering. The live index is partial (WHERE status IN (ACTIVE,
+  // SUPERSEDED)); the partial predicate is not expressible in this vocabulary.
+  option (options.v1.table).index_together = "workspace_id,jurisdiction,authority_code,kind,treatment_code,direction,effective_from";
 
   string id = 1;
   optional int64 date_created = 2;

@@ -15,16 +15,18 @@ import "options/db.proto";
 // LeaveType is a per-jurisdiction leave plan template (VL, SL, ML, PL, BL, SOLO_PARENT, MAGNA_CARTA, etc.).
 message LeaveType {
   option (options.v1.table).table = true;
+  // Workspace-scoped leave-code resolution (workspace_id NULL = global default).
+  option (options.v1.table).index_together = "workspace_id,code";
 
   string id = 1;
   optional string workspace_id = 2 [(options.v1.db).references = "workspace", (options.v1.db).index = true];
 
   string compliance_region = 3 [(options.v1.db).index = true];
-  string code = 4;                       // "VL" | "SL" | "ML" | "PL" | "BL" | "SOLO_PARENT" | "MAGNA_CARTA"
+  string code = 4 [(options.v1.db).index = true];  // "VL" | "SL" | "ML" | "PL" | "BL" | "SOLO_PARENT" | "MAGNA_CARTA"
   string name = 5;
   bool paid = 6 [(options.v1.db).default = "true"];
-  int32 accrual_days_per_year = 7;
-  int32 max_carryover_days = 8;
+  int32 accrual_days_per_year = 7 [(options.v1.db).default = "0"];
+  int32 max_carryover_days = 8 [(options.v1.db).default = "0"];
   optional string source_citation = 9;   // "RA 11210" / "RA 8187"
 
   // Audit

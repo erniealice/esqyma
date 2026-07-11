@@ -1826,7 +1826,7 @@ var File_domain_expenditure_supplier_contract_supplier_contract_proto protorefle
 
 const file_domain_expenditure_supplier_contract_supplier_contract_proto_rawDesc = "" +
 	"\n" +
-	"<domain/expenditure/supplier_contract/supplier_contract.proto\x12\x15domain.expenditure.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/search.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a%domain/entity/supplier/supplier.proto\x1a-domain/entity/payment_term/payment_term.proto\x1a\x10options/db.proto\"\xd8\x1b\n" +
+	"<domain/expenditure/supplier_contract/supplier_contract.proto\x12\x15domain.expenditure.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/search.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a%domain/entity/supplier/supplier.proto\x1a-domain/entity/payment_term/payment_term.proto\x1a\x10options/db.proto\"\xdc\x1b\n" +
 	"\x10SupplierContract\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x124\n" +
 	"\fworkspace_id\x18\x02 \x01(\tB\x11\x82\xb5\x18\r\n" +
@@ -1865,9 +1865,9 @@ const file_domain_expenditure_supplier_contract_supplier_contract_proto_rawDesc 
 	"\x0freleased_amount\x18> \x01(\x03B\a\x82\xb5\x18\x03\"\x010H\x0fR\x0ereleasedAmount\x88\x01\x01\x121\n" +
 	"\rbilled_amount\x18? \x01(\x03B\a\x82\xb5\x18\x03\"\x010H\x10R\fbilledAmount\x88\x01\x01\x127\n" +
 	"\x10remaining_amount\x18@ \x01(\x03B\a\x82\xb5\x18\x03\"\x010H\x11R\x0fremainingAmount\x88\x01\x01\x12&\n" +
-	"\fcycle_amount\x18A \x01(\x03H\x12R\vcycleAmount\x88\x01\x01\x12?\n" +
-	"\x0fpayment_term_id\x18B \x01(\tB\x12\x82\xb5\x18\x0e\n" +
-	"\fpayment_termH\x13R\rpaymentTermId\x88\x01\x01\x12E\n" +
+	"\fcycle_amount\x18A \x01(\x03H\x12R\vcycleAmount\x88\x01\x01\x12A\n" +
+	"\x0fpayment_term_id\x18B \x01(\tB\x14\x82\xb5\x18\x10\n" +
+	"\fpayment_term\x18\x01H\x13R\rpaymentTermId\x88\x01\x01\x12E\n" +
 	"\fpayment_term\x18C \x01(\v2\x1d.domain.entity.v1.PaymentTermH\x14R\vpaymentTerm\x88\x01\x01\x124\n" +
 	"\x13commitment_quantity\x18F \x01(\x01H\x15R\x12commitmentQuantity\x88\x01\x01\x129\n" +
 	"\x11released_quantity\x18G \x01(\x01B\a\x82\xb5\x18\x03\"\x010H\x16R\x10releasedQuantity\x88\x01\x01\x12&\n" +
@@ -1885,9 +1885,9 @@ const file_domain_expenditure_supplier_contract_supplier_contract_proto_rawDesc 
 	"\x12expense_account_id\x18d \x01(\tB\x0f\x82\xb5\x18\v\n" +
 	"\aaccount\x18\x01H\x1fR\x10expenseAccountId\x88\x01\x01\x12@\n" +
 	"\x12accrual_account_id\x18e \x01(\tB\r\x82\xb5\x18\t\n" +
-	"\aaccountH R\x10accrualAccountId\x88\x01\x01\x12W\n" +
-	"\x17expenditure_category_id\x18n \x01(\tB\x1a\x82\xb5\x18\x16\n" +
-	"\x14expenditure_categoryH!R\x15expenditureCategoryId\x88\x01\x01\x12\x19\n" +
+	"\aaccountH R\x10accrualAccountId\x88\x01\x01\x12Y\n" +
+	"\x17expenditure_category_id\x18n \x01(\tB\x1c\x82\xb5\x18\x18\n" +
+	"\x14expenditure_category\x18\x01H!R\x15expenditureCategoryId\x88\x01\x01\x12\x19\n" +
 	"\x05notes\x18x \x01(\tH\"R\x05notes\x88\x01\x01\x12Q\n" +
 	"\bmetadata\x18y \x03(\v25.domain.expenditure.v1.SupplierContract.MetadataEntryR\bmetadata\x12)\n" +
 	"\rpay_frequency\x18\x82\x01 \x01(\tH#R\fpayFrequency\x88\x01\x01\x12/\n" +

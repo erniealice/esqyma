@@ -27,8 +27,8 @@ message FiscalPeriod {
 
   string id = 1;
   string name = 2;                             // e.g. "March 2026"
-  int32 period_number = 3;                     // 1–12 (month number within the fiscal year)
-  int32 fiscal_year = 4 [(options.v1.db).index = true];  // e.g. 2026
+  int32 period_number = 3 [(options.v1.db).default = "0"];  // 1–12 (month number within the fiscal year)
+  int32 fiscal_year = 4 [(options.v1.db).index = true, (options.v1.db).default = "0"];  // e.g. 2026
 
   // Date range
   string start_date = 5; // ISO 8601 date (YYYY-MM-DD)

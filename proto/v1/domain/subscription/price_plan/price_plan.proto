@@ -63,7 +63,7 @@ message PricePlan {
   // Parent schedule — owns location + date range for this plan.
   // Field 17 was previously location_id (removed 2026-04-17); use price_schedule_id instead.
   optional string price_schedule_id = 18 [(options.v1.db).references = "price_schedule", (options.v1.db).index = true];
-  BillingKind billing_kind = 19;
+  BillingKind billing_kind = 19 [(options.v1.db).default = "'one_time'"];
   AmountBasis amount_basis = 20;
 
   // Billing cadence — only meaningful when billing_kind ∈ {RECURRING, CONTRACT with periodic billing}

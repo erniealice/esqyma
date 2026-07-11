@@ -73,7 +73,7 @@ message BillingEvent {
   string billing_currency = 13;  // ISO 4217
 
   // Lifecycle.
-  BillingEventStatus  status  = 14;
+  BillingEventStatus  status  = 14 [(options.v1.db).index = true];
   BillingEventTrigger trigger = 15;
 
   // Outcome.

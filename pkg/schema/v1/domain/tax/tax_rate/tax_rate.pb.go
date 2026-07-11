@@ -843,7 +843,7 @@ var File_domain_tax_tax_rate_tax_rate_proto protoreflect.FileDescriptor
 
 const file_domain_tax_tax_rate_tax_rate_proto_rawDesc = "" +
 	"\n" +
-	"\"domain/tax/tax_rate/tax_rate.proto\x12\rdomain.tax.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1adomain/common/search.proto\x1a\x10options/db.proto\"\xa1\t\n" +
+	"\"domain/tax/tax_rate/tax_rate.proto\x12\rdomain.tax.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1adomain/common/search.proto\x1a\x10options/db.proto\"\xf8\t\n" +
 	"\aTaxRate\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12&\n" +
 	"\fdate_created\x18\x02 \x01(\x03H\x00R\vdateCreated\x88\x01\x01\x12;\n" +
@@ -870,7 +870,7 @@ const file_domain_tax_tax_rate_tax_rate_proto_rawDesc = "" +
 	"\btax_rate\x18\x01H\tR\fsupersedesId\x88\x01\x01\x12,\n" +
 	"\x0fsource_citation\x18\x14 \x01(\tH\n" +
 	"R\x0esourceCitation\x88\x01\x01\x12(\n" +
-	"\rversion_label\x18\x15 \x01(\tH\vR\fversionLabel\x88\x01\x01:\x06\x8a\xb5\x18\x02\b\x01B\x0f\n" +
+	"\rversion_label\x18\x15 \x01(\tH\vR\fversionLabel\x88\x01\x01:]\x8a\xb5\x18Y\b\x01\"Uworkspace_id,jurisdiction,authority_code,kind,treatment_code,direction,effective_fromB\x0f\n" +
 	"\r_date_createdB\x16\n" +
 	"\x14_date_created_stringB\x10\n" +
 	"\x0e_date_modifiedB\x17\n" +

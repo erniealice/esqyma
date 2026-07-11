@@ -1996,7 +1996,7 @@ var File_domain_workflow_activity_activity_proto protoreflect.FileDescriptor
 
 const file_domain_workflow_activity_activity_proto_rawDesc = "" +
 	"\n" +
-	"'domain/workflow/activity/activity.proto\x12\x12domain.workflow.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1adomain/common/search.proto\x1a\x10options/db.proto\"\xe9\x10\n" +
+	"'domain/workflow/activity/activity.proto\x12\x12domain.workflow.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1adomain/common/search.proto\x1a\x10options/db.proto\"\xf1\x10\n" +
 	"\bActivity\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12(\n" +
 	"\bstage_id\x18\x02 \x01(\tB\r\x82\xb5\x18\t\n" +
@@ -2006,8 +2006,8 @@ const file_domain_workflow_activity_activity_proto_rawDesc = "" +
 	"\x04name\x18\x04 \x01(\tR\x04name\x12%\n" +
 	"\vdescription\x18\x05 \x01(\tH\x00R\vdescription\x88\x01\x01\x12\x16\n" +
 	"\x06status\x18\x06 \x01(\tR\x06status\x12\x1a\n" +
-	"\bpriority\x18\a \x01(\tR\bpriority\x12$\n" +
-	"\vassigned_to\x18\b \x01(\tH\x01R\n" +
+	"\bpriority\x18\a \x01(\tR\bpriority\x12,\n" +
+	"\vassigned_to\x18\b \x01(\tB\x06\x82\xb5\x18\x02\x18\x01H\x01R\n" +
 	"assignedTo\x88\x01\x01\x12&\n" +
 	"\fcompleted_by\x18\t \x01(\tH\x02R\vcompletedBy\x88\x01\x01\x12(\n" +
 	"\rdate_assigned\x18\n" +

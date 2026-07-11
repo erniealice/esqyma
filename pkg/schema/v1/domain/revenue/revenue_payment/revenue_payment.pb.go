@@ -997,7 +997,7 @@ var File_domain_revenue_revenue_payment_revenue_payment_proto protoreflect.FileD
 
 const file_domain_revenue_revenue_payment_revenue_payment_proto_rawDesc = "" +
 	"\n" +
-	"4domain/revenue/revenue_payment/revenue_payment.proto\x12\x11domain.revenue.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1adomain/common/search.proto\x1a\x10options/db.proto\"\x97\b\n" +
+	"4domain/revenue/revenue_payment/revenue_payment.proto\x12\x11domain.revenue.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1adomain/common/search.proto\x1a\x10options/db.proto\"\xa3\b\n" +
 	"\x0eRevenuePayment\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12.\n" +
 	"\n" +
@@ -1010,8 +1010,9 @@ const file_domain_revenue_revenue_payment_revenue_payment_proto_rawDesc = "" +
 	"\x10reference_number\x18\x06 \x01(\tH\x01R\x0freferenceNumber\x88\x01\x01\x128\n" +
 	"\x0fcollection_type\x18\a \x01(\tB\n" +
 	"\x82\xb5\x18\x06\"\x04saleH\x02R\x0ecollectionType\x88\x01\x01\x12,\n" +
-	"\x06status\x18\b \x01(\tB\x0f\x82\xb5\x18\v\"\tcompletedH\x03R\x06status\x88\x01\x01\x12\x16\n" +
-	"\x06active\x18\t \x01(\bR\x06active\x12*\n" +
+	"\x06status\x18\b \x01(\tB\x0f\x82\xb5\x18\v\"\tcompletedH\x03R\x06status\x88\x01\x01\x12\"\n" +
+	"\x06active\x18\t \x01(\bB\n" +
+	"\x82\xb5\x18\x06\"\x04trueR\x06active\x12*\n" +
 	"\x0epayment_method\x18\n" +
 	" \x01(\tH\x04R\rpaymentMethod\x88\x01\x01\x12$\n" +
 	"\vreceived_by\x18\v \x01(\tH\x05R\n" +

@@ -1024,7 +1024,7 @@ var File_domain_expenditure_supplier_contract_price_schedule_line_supplier_contr
 
 const file_domain_expenditure_supplier_contract_price_schedule_line_supplier_contract_price_schedule_line_proto_rawDesc = "" +
 	"\n" +
-	"ddomain/expenditure/supplier_contract_price_schedule_line/supplier_contract_price_schedule_line.proto\x12\x15domain.expenditure.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/search.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1aZdomain/expenditure/supplier_contract_price_schedule/supplier_contract_price_schedule.proto\x1a\x10options/db.proto\"\xbf\n" +
+	"ddomain/expenditure/supplier_contract_price_schedule_line/supplier_contract_price_schedule_line.proto\x12\x15domain.expenditure.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/search.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1aZdomain/expenditure/supplier_contract_price_schedule/supplier_contract_price_schedule.proto\x1a\x10options/db.proto\"\xfe\n" +
 	"\n" +
 	"!SupplierContractPriceScheduleLine\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x124\n" +
@@ -1053,7 +1053,7 @@ const file_domain_expenditure_supplier_contract_price_schedule_line_supplier_con
 	"\bmetadata\x183 \x03(\v2F.domain.expenditure.v1.SupplierContractPriceScheduleLine.MetadataEntryR\bmetadata\x1a;\n" +
 	"\rMetadataEntry\x12\x10\n" +
 	"\x03key\x18\x01 \x01(\tR\x03key\x12\x14\n" +
-	"\x05value\x18\x02 \x01(\tR\x05value:\x028\x01:\x06\x8a\xb5\x18\x02\b\x01B\x0f\n" +
+	"\x05value\x18\x02 \x01(\tR\x05value:\x028\x01:E\x8a\xb5\x18A\b\x01\x1a=supplier_contract_price_schedule_id,supplier_contract_line_idB\x0f\n" +
 	"\r_date_createdB\x16\n" +
 	"\x14_date_created_stringB\x10\n" +
 	"\x0e_date_modifiedB\x17\n" +

@@ -28,7 +28,7 @@ enum RateType {
 message ActivityLabor {
   option (options.v1.table).table = true;
 
-  string activity_id = 1 [(options.v1.db).references = "job_activity"];
+  string activity_id = 1 [(options.v1.db).references = "job_activity", (options.v1.db).index = true];
   optional JobActivity job_activity = 2;
   string staff_id = 3 [(options.v1.db).references = "staff", (options.v1.db).index = true];
   optional domain.entity.v1.Staff staff = 4;

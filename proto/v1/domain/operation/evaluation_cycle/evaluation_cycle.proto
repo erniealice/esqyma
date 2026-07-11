@@ -27,9 +27,10 @@ enum EvaluationCycleStatus {
 
 message EvaluationCycle {
   option (options.v1.table).table = true;
+  option (options.v1.table).index_together = "subscription_id,status";
 
   string id = 1;
-  string workspace_id = 2 [(options.v1.db).references = "workspace", (options.v1.db).index = true];
+  string workspace_id = 2 [(options.v1.db).references = "workspace", (options.v1.db).index = true, (options.v1.db).check = "workspace_id <> '' AND subscription_id <> ''"];
   // DENOMINATOR SCOPE — one cycle per engagement (outsourcing v1).
   string subscription_id = 3 [(options.v1.db).references = "subscription", (options.v1.db).index = true];
   string name = 4;                            // "H1 2026 Performance Review"
@@ -37,9 +38,9 @@ message EvaluationCycle {
   string period_end = 6;                      // ISO 8601
   optional string sign_off_due_date = 7;      // ISO 8601 — client sign-off deadline (!= close_date)
   optional string close_date = 8;             // ISO 8601 — when the cycle closes
-  EvaluationCycleStatus status = 9;           // proto ENUM; single lifecycle source of truth
+  EvaluationCycleStatus status = 9 [(options.v1.db).check = "status IN ('open','sign_off','closed')"];           // proto ENUM; single lifecycle source of truth
 
-  bool active = 10 [(options.v1.db).default = "true"];
+  bool active = 10 [(options.v1.db).default = "true", (options.v1.db).check = "active = (status <> 'closed')"];
   optional int64 date_created = 11;
   optional string date_created_string = 12 [(options.v1.db).ignore = true];
   optional int64 date_modified = 13;

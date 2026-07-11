@@ -23,7 +23,7 @@ message Activity {
   optional string description = 5;
   string status = 6;
   string priority = 7;
-  optional string assigned_to = 8;
+  optional string assigned_to = 8 [(options.v1.db).index = true];
   optional string completed_by = 9;
   optional int64 date_assigned = 10;
   optional string date_assigned_string = 11 [(options.v1.db).ignore = true];

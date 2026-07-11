@@ -928,11 +928,11 @@ var File_domain_operation_evaluation_cycle_member_evaluation_cycle_member_proto 
 
 const file_domain_operation_evaluation_cycle_member_evaluation_cycle_member_proto_rawDesc = "" +
 	"\n" +
-	"Fdomain/operation/evaluation_cycle_member/evaluation_cycle_member.proto\x12\x13domain.operation.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1adomain/common/search.proto\x1a\x10options/db.proto\"\x9c\x03\n" +
+	"Fdomain/operation/evaluation_cycle_member/evaluation_cycle_member.proto\x12\x13domain.operation.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1adomain/common/search.proto\x1a\x10options/db.proto\"\xae\x04\n" +
 	"\x15EvaluationCycleMember\x12\x0e\n" +
-	"\x02id\x18\x01 \x01(\tR\x02id\x124\n" +
-	"\fworkspace_id\x18\x02 \x01(\tB\x11\x82\xb5\x18\r\n" +
-	"\tworkspace\x18\x01R\vworkspaceId\x12H\n" +
+	"\x02id\x18\x01 \x01(\tR\x02id\x12w\n" +
+	"\fworkspace_id\x18\x02 \x01(\tBT\x82\xb5\x18P\n" +
+	"\tworkspace\x18\x01*Aworkspace_id <> '' AND client_id <> '' AND subject_staff_id <> ''R\vworkspaceId\x12H\n" +
 	"\x13evaluation_cycle_id\x18\x03 \x01(\tB\x18\x82\xb5\x18\x14\n" +
 	"\x10evaluation_cycle\x18\x01R\x11evaluationCycleId\x12+\n" +
 	"\tclient_id\x18\x04 \x01(\tB\x0e\x82\xb5\x18\n" +
@@ -944,7 +944,7 @@ const file_domain_operation_evaluation_cycle_member_evaluation_cycle_member_prot
 	"\x06active\x18\a \x01(\bB\n" +
 	"\x82\xb5\x18\x06\"\x04trueR\x06active\x12\"\n" +
 	"\n" +
-	"date_added\x18\b \x01(\x03H\x00R\tdateAdded\x88\x01\x01:\x06\x8a\xb5\x18\x02\b\x01B\r\n" +
+	"date_added\x18\b \x01(\x03H\x00R\tdateAdded\x88\x01\x01:U\x8a\xb5\x18Q\b\x01\x1a.evaluation_cycle_id,subject_staff_id,client_id\"\x1dworkspace_id,subject_staff_idB\r\n" +
 	"\v_date_added\"d\n" +
 	"\"CreateEvaluationCycleMemberRequest\x12>\n" +
 	"\x04data\x18\x01 \x01(\v2*.domain.operation.v1.EvaluationCycleMemberR\x04data\"\xbd\x01\n" +

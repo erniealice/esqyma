@@ -1030,7 +1030,7 @@ var File_domain_procurement_supplier_product_cost_plan_supplier_product_cost_pla
 
 const file_domain_procurement_supplier_product_cost_plan_supplier_product_cost_plan_proto_rawDesc = "" +
 	"\n" +
-	"Ndomain/procurement/supplier_product_cost_plan/supplier_product_cost_plan.proto\x12\x15domain.procurement.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/search.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a,domain/procurement/cost_plan/cost_plan.proto\x1aDdomain/procurement/supplier_product_plan/supplier_product_plan.proto\x1a\x10options/db.proto\"\xf3\a\n" +
+	"Ndomain/procurement/supplier_product_cost_plan/supplier_product_cost_plan.proto\x12\x15domain.procurement.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/search.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a,domain/procurement/cost_plan/cost_plan.proto\x1aDdomain/procurement/supplier_product_plan/supplier_product_plan.proto\x1a\x10options/db.proto\"\x8f\b\n" +
 	"\x17SupplierProductCostPlan\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12&\n" +
 	"\fdate_created\x18\x02 \x01(\x03H\x00R\vdateCreated\x88\x01\x01\x12;\n" +
@@ -1046,10 +1046,10 @@ const file_domain_procurement_supplier_product_cost_plan_supplier_product_cost_p
 	"\x15supplier_product_plan\x18\t \x01(\v2*.domain.procurement.v1.SupplierProductPlanH\x05R\x13supplierProductPlan\x88\x01\x01\x12V\n" +
 	"\x18supplier_product_plan_id\x18\n" +
 	" \x01(\tB\x1d\x82\xb5\x18\x19\n" +
-	"\x15supplier_product_plan\x18\x01R\x15supplierProductPlanId\x12%\n" +
-	"\x0ebilling_amount\x18\v \x01(\x03R\rbillingAmount\x12)\n" +
-	"\x10billing_currency\x18\f \x01(\tR\x0fbillingCurrency\x12k\n" +
-	"\x11billing_treatment\x18\r \x01(\x0e2>.domain.procurement.v1.SupplierProductCostPlanBillingTreatmentR\x10billingTreatment\x12\"\n" +
+	"\x15supplier_product_plan\x18\x01R\x15supplierProductPlanId\x12.\n" +
+	"\x0ebilling_amount\x18\v \x01(\x03B\a\x82\xb5\x18\x03\"\x010R\rbillingAmount\x12)\n" +
+	"\x10billing_currency\x18\f \x01(\tR\x0fbillingCurrency\x12~\n" +
+	"\x11billing_treatment\x18\r \x01(\x0e2>.domain.procurement.v1.SupplierProductCostPlanBillingTreatmentB\x11\x82\xb5\x18\r\"\v'recurring'R\x10billingTreatment\x12\"\n" +
 	"\n" +
 	"date_start\x18\x0e \x01(\tH\x06R\tdateStart\x88\x01\x01\x12\x1e\n" +
 	"\bdate_end\x18\x0f \x01(\tH\aR\adateEnd\x88\x01\x01:\x06\x8a\xb5\x18\x02\b\x01B\x0f\n" +

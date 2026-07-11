@@ -979,22 +979,22 @@ var File_domain_communication_conversation_participant_conversation_participant_
 
 const file_domain_communication_conversation_participant_conversation_participant_proto_rawDesc = "" +
 	"\n" +
-	"Ldomain/communication/conversation_participant/conversation_participant.proto\x12\x17domain.communication.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1adomain/common/search.proto\x1a\x10options/db.proto\"\x80\x05\n" +
+	"Ldomain/communication/conversation_participant/conversation_participant.proto\x12\x17domain.communication.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1adomain/common/search.proto\x1a\x10options/db.proto\"\xce\x05\n" +
 	"\x17ConversationParticipant\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12&\n" +
 	"\fdate_created\x18\x02 \x01(\x03H\x00R\vdateCreated\x88\x01\x01\x12\"\n" +
 	"\x06active\x18\x06 \x01(\bB\n" +
 	"\x82\xb5\x18\x06\"\x04trueR\x06active\x12=\n" +
 	"\x0fconversation_id\x18\a \x01(\tB\x14\x82\xb5\x18\x10\n" +
-	"\fconversation\x18\x01R\x0econversationId\x12)\n" +
-	"\fworkspace_id\x18\b \x01(\tB\x06\x82\xb5\x18\x02\x18\x01R\vworkspaceId\x12(\n" +
+	"\fconversation\x18\x01R\x0econversationId\x12=\n" +
+	"\fworkspace_id\x18\b \x01(\tB\x1a\x82\xb5\x18\x16\x18\x01*\x12workspace_id <> ''R\vworkspaceId\x12(\n" +
 	"\auser_id\x18\t \x01(\tB\n" +
 	"\x82\xb5\x18\x06\n" +
 	"\x04userH\x01R\x06userId\x88\x01\x01\x12A\n" +
 	"\x1aparticipant_principal_type\x18\n" +
 	" \x01(\tH\x02R\x18participantPrincipalType\x88\x01\x01\x12=\n" +
-	"\x18participant_principal_id\x18\v \x01(\tH\x03R\x16participantPrincipalId\x88\x01\x01\x12_\n" +
-	"\x10participant_type\x18\f \x01(\x0e24.domain.communication.v1.ConversationParticipantTypeR\x0fparticipantType\x12\"\n" +
+	"\x18participant_principal_id\x18\v \x01(\tH\x03R\x16participantPrincipalId\x88\x01\x01\x12\x98\x01\n" +
+	"\x10participant_type\x18\f \x01(\x0e24.domain.communication.v1.ConversationParticipantTypeB7\x82\xb5\x183*1participant_type IN ('named_staff', 'team_inbox')R\x0fparticipantType\x12\"\n" +
 	"\n" +
 	"team_label\x18\r \x01(\tH\x04R\tteamLabel\x88\x01\x01:\x06\x8a\xb5\x18\x02\b\x01B\x0f\n" +
 	"\r_date_createdB\n" +

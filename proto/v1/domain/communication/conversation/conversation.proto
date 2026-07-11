@@ -25,6 +25,8 @@ enum ConversationStatus {
 // Conversation is the thread header / ticket aggregate for the communication domain.
 message Conversation {
   option (options.v1.table).table = true;
+  option (options.v1.table).index_together = "workspace_id,client_id";
+  option (options.v1.table).index_together = "workspace_id,status";
 
   string id = 1;
   optional int64 date_created = 2;
@@ -33,14 +35,14 @@ message Conversation {
   optional string date_modified_string = 5 [(options.v1.db).ignore = true];
   bool active = 6 [(options.v1.db).default = "true"];
 
-  string workspace_id = 7 [(options.v1.db).references = "workspace", (options.v1.db).index = true];
-  string client_id = 8 [(options.v1.db).references = "client", (options.v1.db).index = true];
+  string workspace_id = 7 [(options.v1.db).references = "workspace", (options.v1.db).index = true, (options.v1.db).check = "workspace_id <> ''"];
+  string client_id = 8 [(options.v1.db).references = "client", (options.v1.db).index = true, (options.v1.db).check = "client_id <> ''"];
   // ^ DENORMALIZED for the IDOR gate; stamped from session.acting_as_client_id at create; NEVER from form (Q-MSG-5)
   // ^ workspace_id + client_id are the IDOR anchors -> NOT NULL from CREATE TABLE + CHECK(<> '') (directive F)
   string subject = 9;
-  ConversationStatus status = 10;                                 // proto ENUM (Q-MSG-6 / directive G — NOT string)
+  ConversationStatus status = 10 [(options.v1.db).check = "status IN ('open', 'in_progress', 'resolved', 'closed')"];  // proto ENUM (Q-MSG-6 / directive G — NOT string)
   optional string assigned_to_user_id = 11 [(options.v1.db).references = "user", (options.v1.db).index = true];  // Q-MSG-11
-  optional string reference_entity_type = 12;                     // "request" | "invoice" | ... ALLOWLIST CHECK (Q-MSG-14)
+  optional string reference_entity_type = 12 [(options.v1.db).check = "reference_entity_type IS NULL OR reference_entity_type IN ('request', 'invoice')"];  // "request" | "invoice" | ... ALLOWLIST CHECK (Q-MSG-14)
   optional string reference_entity_id = 13 [(options.v1.db).index = true];  // soft ref v1; hard FK when Plan-1 lands
   string created_by_user_id = 14 [(options.v1.db).references = "user"];
   optional int64 last_post_at = 15 [(options.v1.db).index = true]; // denorm: drives inbox sort + "2h" timestamps

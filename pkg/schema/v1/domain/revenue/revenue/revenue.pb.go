@@ -91,8 +91,11 @@ type Revenue struct {
 	// Symmetric with expense_recognition.advance_disbursement_id (buying side).
 	// Replaces the never-shipped Revenue.deferred_revenue_id concept (DeferredRevenue dropped in Phase 0).
 	AdvanceCollectionId *string `protobuf:"bytes,48,opt,name=advance_collection_id,json=advanceCollectionId,proto3,oneof" json:"advance_collection_id,omitempty"`
-	unknownFields       protoimpl.UnknownFields
-	sizeCache           protoimpl.SizeCache
+	// Tenancy scope. Backs the workspace_id filter the postgres adapter issues
+	// on every list/read (revenue.go). NULLABLE until a NOT NULL migration tightens it.
+	WorkspaceId   *string `protobuf:"bytes,49,opt,name=workspace_id,json=workspaceId,proto3,oneof" json:"workspace_id,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
 }
 
 func (x *Revenue) Reset() {
@@ -436,6 +439,13 @@ func (x *Revenue) GetCollectionProfileIdSnapshot() string {
 func (x *Revenue) GetAdvanceCollectionId() string {
 	if x != nil && x.AdvanceCollectionId != nil {
 		return *x.AdvanceCollectionId
+	}
+	return ""
+}
+
+func (x *Revenue) GetWorkspaceId() string {
+	if x != nil && x.WorkspaceId != nil {
+		return *x.WorkspaceId
 	}
 	return ""
 }
@@ -1765,22 +1775,23 @@ var File_domain_revenue_revenue_revenue_proto protoreflect.FileDescriptor
 
 const file_domain_revenue_revenue_revenue_proto_rawDesc = "" +
 	"\n" +
-	"$domain/revenue/revenue/revenue.proto\x12\x11domain.revenue.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/search.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a!domain/entity/client/client.proto\x1a%domain/entity/location/location.proto\x1a-domain/entity/payment_term/payment_term.proto\x1a\x10options/db.proto\"\xca\x17\n" +
+	"$domain/revenue/revenue/revenue.proto\x12\x11domain.revenue.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/search.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a!domain/entity/client/client.proto\x1a%domain/entity/location/location.proto\x1a-domain/entity/payment_term/payment_term.proto\x1a\x10options/db.proto\"\xbe\x18\n" +
 	"\aRevenue\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12&\n" +
 	"\fdate_created\x18\x02 \x01(\x03H\x00R\vdateCreated\x88\x01\x01\x12;\n" +
 	"\x13date_created_string\x18\x03 \x01(\tB\x06\x82\xb5\x18\x028\x01H\x01R\x11dateCreatedString\x88\x01\x01\x12(\n" +
 	"\rdate_modified\x18\x04 \x01(\x03H\x02R\fdateModified\x88\x01\x01\x12=\n" +
-	"\x14date_modified_string\x18\x05 \x01(\tB\x06\x82\xb5\x18\x028\x01H\x03R\x12dateModifiedString\x88\x01\x01\x12\x16\n" +
-	"\x06active\x18\x06 \x01(\bR\x06active\x12\x12\n" +
+	"\x14date_modified_string\x18\x05 \x01(\tB\x06\x82\xb5\x18\x028\x01H\x03R\x12dateModifiedString\x88\x01\x01\x12\"\n" +
+	"\x06active\x18\x06 \x01(\bB\n" +
+	"\x82\xb5\x18\x06\"\x04trueR\x06active\x12\x12\n" +
 	"\x04name\x18\a \x01(\tR\x04name\x125\n" +
 	"\x06client\x18\b \x01(\v2\x18.domain.entity.v1.ClientH\x04R\x06client\x88\x01\x01\x12\x1b\n" +
 	"\tclient_id\x18\t \x01(\tR\bclientId\x12&\n" +
 	"\frevenue_date\x18\n" +
 	" \x01(\tH\x05R\vrevenueDate\x88\x01\x01\x12!\n" +
-	"\ftotal_amount\x18\f \x01(\x03R\vtotalAmount\x12\x1a\n" +
-	"\bcurrency\x18\r \x01(\tR\bcurrency\x12\x16\n" +
-	"\x06status\x18\x0e \x01(\tR\x06status\x12.\n" +
+	"\ftotal_amount\x18\f \x01(\x03R\vtotalAmount\x12'\n" +
+	"\bcurrency\x18\r \x01(\tB\v\x82\xb5\x18\a\"\x05'PHP'R\bcurrency\x12%\n" +
+	"\x06status\x18\x0e \x01(\tB\r\x82\xb5\x18\t\"\a'draft'R\x06status\x12.\n" +
 	"\x10reference_number\x18\x0f \x01(\tH\x06R\x0freferenceNumber\x88\x01\x01\x12\x19\n" +
 	"\x05notes\x18\x10 \x01(\tH\aR\x05notes\x88\x01\x01\x123\n" +
 	"\x13revenue_category_id\x18\x12 \x01(\tH\bR\x11revenueCategoryId\x88\x01\x01\x12;\n" +
@@ -1819,7 +1830,9 @@ const file_domain_revenue_revenue_revenue_proto_rawDesc = "" +
 	"\x11forex_rate_source\x18. \x01(\tH\"R\x0fforexRateSource\x88\x01\x01\x12H\n" +
 	"\x1ecollection_profile_id_snapshot\x18/ \x01(\tH#R\x1bcollectionProfileIdSnapshot\x88\x01\x01\x12T\n" +
 	"\x15advance_collection_id\x180 \x01(\tB\x1b\x82\xb5\x18\x17\n" +
-	"\x13treasury_collection\x18\x01H$R\x13advanceCollectionId\x88\x01\x01:\x06\x8a\xb5\x18\x02\b\x01B\x0f\n" +
+	"\x13treasury_collection\x18\x01H$R\x13advanceCollectionId\x88\x01\x01\x129\n" +
+	"\fworkspace_id\x181 \x01(\tB\x11\x82\xb5\x18\r\n" +
+	"\tworkspace\x18\x01H%R\vworkspaceId\x88\x01\x01:\x06\x8a\xb5\x18\x02\b\x01B\x0f\n" +
 	"\r_date_createdB\x16\n" +
 	"\x14_date_created_stringB\x10\n" +
 	"\x0e_date_modifiedB\x17\n" +
@@ -1856,7 +1869,8 @@ const file_domain_revenue_revenue_revenue_proto_rawDesc = "" +
 	"\x17_forex_rate_micro_unitsB\x14\n" +
 	"\x12_forex_rate_sourceB!\n" +
 	"\x1f_collection_profile_id_snapshotB\x18\n" +
-	"\x16_advance_collection_idJ\x04\b\v\x10\fJ\x04\b\x1e\x10\x1f\"\x91\x03\n" +
+	"\x16_advance_collection_idB\x0f\n" +
+	"\r_workspace_idJ\x04\b\v\x10\fJ\x04\b\x1e\x10\x1f\"\x91\x03\n" +
 	"\x0ePreviewTaxLine\x12\x1c\n" +
 	"\tdirection\x18\x01 \x01(\tR\tdirection\x12*\n" +
 	"\x11tax_kind_snapshot\x18\x02 \x01(\tR\x0ftaxKindSnapshot\x12;\n" +

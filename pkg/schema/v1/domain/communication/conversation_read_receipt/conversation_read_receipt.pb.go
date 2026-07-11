@@ -938,7 +938,7 @@ var File_domain_communication_conversation_read_receipt_conversation_read_receip
 
 const file_domain_communication_conversation_read_receipt_conversation_read_receipt_proto_rawDesc = "" +
 	"\n" +
-	"Ndomain/communication/conversation_read_receipt/conversation_read_receipt.proto\x12\x17domain.communication.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1adomain/common/search.proto\x1a\x10options/db.proto\"\xd6\x04\n" +
+	"Ndomain/communication/conversation_read_receipt/conversation_read_receipt.proto\x12\x17domain.communication.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1adomain/common/search.proto\x1a\x10options/db.proto\"\xa5\x05\n" +
 	"\x17ConversationReadReceipt\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12&\n" +
 	"\fdate_created\x18\x02 \x01(\x03H\x00R\vdateCreated\x88\x01\x01\x12(\n" +
@@ -951,12 +951,12 @@ const file_domain_communication_conversation_read_receipt_conversation_read_rece
 	"\x13reader_principal_id\x18\t \x01(\tR\x11readerPrincipalId\x12%\n" +
 	"\auser_id\x18\n" +
 	" \x01(\tB\f\x82\xb5\x18\b\n" +
-	"\x04user\x18\x01R\x06userId\x12)\n" +
-	"\fworkspace_id\x18\v \x01(\tB\x06\x82\xb5\x18\x02\x18\x01R\vworkspaceId\x12G\n" +
+	"\x04user\x18\x01R\x06userId\x12=\n" +
+	"\fworkspace_id\x18\v \x01(\tB\x1a\x82\xb5\x18\x16\x18\x01*\x12workspace_id <> ''R\vworkspaceId\x12G\n" +
 	"\x11last_read_post_id\x18\f \x01(\tB\x17\x82\xb5\x18\x13\n" +
 	"\x11conversation_postH\x02R\x0elastReadPostId\x88\x01\x01\x12%\n" +
 	"\flast_read_at\x18\r \x01(\x03H\x03R\n" +
-	"lastReadAt\x88\x01\x01:\x06\x8a\xb5\x18\x02\b\x01B\x0f\n" +
+	"lastReadAt\x88\x01\x01:A\x8a\xb5\x18=\b\x01\x1a9conversation_id,reader_principal_type,reader_principal_idB\x0f\n" +
 	"\r_date_createdB\x10\n" +
 	"\x0e_date_modifiedB\x14\n" +
 	"\x12_last_read_post_idB\x0f\n" +

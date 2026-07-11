@@ -28,11 +28,11 @@ message ConversationParticipant {
   bool active = 6 [(options.v1.db).default = "true"];
 
   string conversation_id = 7 [(options.v1.db).references = "conversation", (options.v1.db).index = true];
-  string workspace_id = 8 [(options.v1.db).index = true];   // directive H — copied from parent at create
+  string workspace_id = 8 [(options.v1.db).index = true, (options.v1.db).check = "workspace_id <> ''"];   // directive H — copied from parent at create
   optional string user_id = 9 [(options.v1.db).references = "user"];  // NULL for a pure team label
   optional string participant_principal_type = 10;          // principal binding (codex H1) — for a named-staff participant
   optional string participant_principal_id = 11;
-  ConversationParticipantType participant_type = 12;        // proto ENUM (directive G — NOT string)
+  ConversationParticipantType participant_type = 12 [(options.v1.db).check = "participant_type IN ('named_staff', 'team_inbox')"];  // proto ENUM (directive G — NOT string)
   optional string team_label = 13;  // "Finance team", "Compliance team" (v2)
 }
 

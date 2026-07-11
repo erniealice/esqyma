@@ -1342,8 +1342,7 @@ var File_domain_entity_workspace_workspace_proto protoreflect.FileDescriptor
 
 const file_domain_entity_workspace_workspace_proto_rawDesc = "" +
 	"\n" +
-	"'domain/entity/workspace/workspace.proto\x12\x10domain.entity.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1adomain/common/search.proto\x1a\x10options/db.proto\"\xc9\n" +
-	"\n" +
+	"'domain/entity/workspace/workspace.proto\x12\x10domain.entity.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1adomain/common/search.proto\x1a\x10options/db.proto\"\xb0\v\n" +
 	"\tWorkspace\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12\x12\n" +
 	"\x04name\x18\x02 \x01(\tR\x04name\x12 \n" +
@@ -1360,8 +1359,8 @@ const file_domain_entity_workspace_workspace_proto_rawDesc = "" +
 	"\x82\xb5\x18\x06\"\x04trueR\x06active\x124\n" +
 	"\x13functional_currency\x18\v \x01(\tH\x05R\x12functionalCurrency\x88\x01\x01\x120\n" +
 	"\x11compliance_region\x18\f \x01(\tH\x06R\x10complianceRegion\x88\x01\x01\x12.\n" +
-	"\x10default_currency\x18\r \x01(\tH\aR\x0fdefaultCurrency\x88\x01\x01\x12\x1f\n" +
-	"\btimezone\x18\x0e \x01(\tH\bR\btimezone\x88\x01\x01\x12\x15\n" +
+	"\x10default_currency\x18\r \x01(\tH\aR\x0fdefaultCurrency\x88\x01\x01\x124\n" +
+	"\btimezone\x18\x0e \x01(\tB\x13\x82\xb5\x18\x0f\"\r'Asia/Manila'H\bR\btimezone\x88\x01\x01\x12\x15\n" +
 	"\x03tin\x18\x0f \x01(\tH\tR\x03tin\x88\x01\x01\x127\n" +
 	"\x15tax_inclusive_pricing\x18\x10 \x01(\bH\n" +
 	"R\x13taxInclusivePricing\x88\x01\x01\x12;\n" +
@@ -1372,8 +1371,8 @@ const file_domain_entity_workspace_workspace_proto_rawDesc = "" +
 	"\vtime_format\x18\x14 \x01(\tH\x0eR\n" +
 	"timeFormat\x88\x01\x01\x12V\n" +
 	"\x16tenant_subscription_id\x18\x15 \x01(\tB\x1b\x82\xb5\x18\x17\n" +
-	"\x13tenant_subscription\x18\x01H\x0fR\x14tenantSubscriptionId\x88\x01\x01\x12\x1f\n" +
-	"\x04slug\x18\x16 \x01(\tB\x06\x82\xb5\x18\x02\x10\x01H\x10R\x04slug\x88\x01\x01:\x06\x8a\xb5\x18\x02\b\x01B\x17\n" +
+	"\x13tenant_subscription\x18\x01H\x0fR\x14tenantSubscriptionId\x88\x01\x01\x12q\n" +
+	"\x04slug\x18\x16 \x01(\tBX\x82\xb5\x18T\x10\x01*Pslug ~ '^[a-z0-9]+(?:-[a-z0-9]+)*$' AND length(slug) >= 3 AND length(slug) <= 30H\x10R\x04slug\x88\x01\x01:\x06\x8a\xb5\x18\x02\b\x01B\x17\n" +
 	"\x15_workflow_template_idB\x0f\n" +
 	"\r_date_createdB\x16\n" +
 	"\x14_date_created_stringB\x10\n" +

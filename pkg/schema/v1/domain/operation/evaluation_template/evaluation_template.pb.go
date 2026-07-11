@@ -1023,27 +1023,27 @@ var File_domain_operation_evaluation_template_evaluation_template_proto protoref
 
 const file_domain_operation_evaluation_template_evaluation_template_proto_rawDesc = "" +
 	"\n" +
-	">domain/operation/evaluation_template/evaluation_template.proto\x12\x13domain.operation.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1adomain/common/search.proto\x1a,domain/operation/evaluation/evaluation.proto\x1a\x10options/db.proto\"\x9d\a\n" +
+	">domain/operation/evaluation_template/evaluation_template.proto\x12\x13domain.operation.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1adomain/common/search.proto\x1a,domain/operation/evaluation/evaluation.proto\x1a\x10options/db.proto\"\xb8\n" +
+	"\n" +
 	"\x12EvaluationTemplate\x12\x0e\n" +
-	"\x02id\x18\x01 \x01(\tR\x02id\x124\n" +
-	"\fworkspace_id\x18\x02 \x01(\tB\x11\x82\xb5\x18\r\n" +
-	"\tworkspace\x18\x01R\vworkspaceId\x12\x12\n" +
+	"\x02id\x18\x01 \x01(\tR\x02id\x12H\n" +
+	"\fworkspace_id\x18\x02 \x01(\tB%\x82\xb5\x18!\n" +
+	"\tworkspace\x18\x01*\x12workspace_id <> ''R\vworkspaceId\x12\x12\n" +
 	"\x04name\x18\x03 \x01(\tR\x04name\x12%\n" +
-	"\vdescription\x18\x04 \x01(\tH\x00R\vdescription\x88\x01\x01\x12L\n" +
-	"\x0fevaluation_type\x18\x05 \x01(\x0e2#.domain.operation.v1.EvaluationTypeR\x0eevaluationType\x12R\n" +
-	"\x11relationship_type\x18\x06 \x01(\x0e2%.domain.operation.v1.RelationshipTypeR\x10relationshipType\x12\x18\n" +
-	"\aversion\x18\a \x01(\x05R\aversion\x12E\n" +
-	"\x06status\x18\b \x01(\x0e2-.domain.operation.v1.EvaluationTemplateStatusR\x06status\x12L\n" +
-	"\x0fvisibility_type\x18\t \x01(\x0e2#.domain.operation.v1.VisibilityTypeR\x0evisibilityType\x12D\n" +
+	"\vdescription\x18\x04 \x01(\tH\x00R\vdescription\x88\x01\x01\x12\xa5\x01\n" +
+	"\x0fevaluation_type\x18\x05 \x01(\x0e2#.domain.operation.v1.EvaluationTypeBW\x82\xb5\x18S*Qevaluation_type IN ('performance_review','csat','course_eval','vendor_scorecard')R\x0eevaluationType\x12\xb0\x01\n" +
+	"\x11relationship_type\x18\x06 \x01(\x0e2%.domain.operation.v1.RelationshipTypeB\\\x82\xb5\x18X*Vrelationship_type IN ('client_to_associate','staff_to_client','self','peer','manager')R\x10relationshipType\x12!\n" +
+	"\aversion\x18\a \x01(\x05B\a\x82\xb5\x18\x03\"\x011R\aversion\x12v\n" +
+	"\x06status\x18\b \x01(\x0e2-.domain.operation.v1.EvaluationTemplateStatusB/\x82\xb5\x18+*)status IN ('draft','active','deprecated')R\x06status\x12\xa7\x01\n" +
+	"\x0fvisibility_type\x18\t \x01(\x0e2#.domain.operation.v1.VisibilityTypeBY\x82\xb5\x18U*Svisibility_type IN ('internal_only','visible_to_subject','visible_to_subject_anon')R\x0evisibilityType\x12D\n" +
 	"\x0ecopied_from_id\x18\n" +
 	" \x01(\tB\x19\x82\xb5\x18\x15\n" +
-	"\x13evaluation_templateH\x01R\fcopiedFromId\x88\x01\x01\x12\"\n" +
-	"\x06active\x18\v \x01(\bB\n" +
-	"\x82\xb5\x18\x06\"\x04trueR\x06active\x12&\n" +
+	"\x13evaluation_templateH\x01R\fcopiedFromId\x88\x01\x01\x12E\n" +
+	"\x06active\x18\v \x01(\bB-\x82\xb5\x18)\"\x04true*!active = (status <> 'deprecated')R\x06active\x12&\n" +
 	"\fdate_created\x18\f \x01(\x03H\x02R\vdateCreated\x88\x01\x01\x12;\n" +
 	"\x13date_created_string\x18\r \x01(\tB\x06\x82\xb5\x18\x028\x01H\x03R\x11dateCreatedString\x88\x01\x01\x12(\n" +
 	"\rdate_modified\x18\x0e \x01(\x03H\x04R\fdateModified\x88\x01\x01\x12=\n" +
-	"\x14date_modified_string\x18\x0f \x01(\tB\x06\x82\xb5\x18\x028\x01H\x05R\x12dateModifiedString\x88\x01\x01:\x06\x8a\xb5\x18\x02\b\x01B\x0e\n" +
+	"\x14date_modified_string\x18\x0f \x01(\tB\x06\x82\xb5\x18\x028\x01H\x05R\x12dateModifiedString\x88\x01\x01:\x1b\x8a\xb5\x18\x17\b\x01\"\x13workspace_id,statusB\x0e\n" +
 	"\f_descriptionB\x11\n" +
 	"\x0f_copied_from_idB\x0f\n" +
 	"\r_date_createdB\x16\n" +

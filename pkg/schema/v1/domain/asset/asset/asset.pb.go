@@ -2325,7 +2325,7 @@ var File_domain_asset_asset_asset_proto protoreflect.FileDescriptor
 
 const file_domain_asset_asset_asset_proto_rawDesc = "" +
 	"\n" +
-	"\x1edomain/asset/asset/asset.proto\x12\x0fdomain.asset.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1adomain/common/search.proto\x1a0domain/asset/asset_category/asset_category.proto\x1a,domain/asset/depreciation/depreciation.proto\x1a%domain/entity/location/location.proto\x1a\x10options/db.proto\"\xf6\x14\n" +
+	"\x1edomain/asset/asset/asset.proto\x12\x0fdomain.asset.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1adomain/common/search.proto\x1a0domain/asset/asset_category/asset_category.proto\x1a,domain/asset/depreciation/depreciation.proto\x1a%domain/entity/location/location.proto\x1a\x10options/db.proto\"\x9e\x15\n" +
 	"\x05Asset\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12)\n" +
 	"\fasset_number\x18\x02 \x01(\tB\x06\x82\xb5\x18\x02\x10\x01R\vassetNumber\x12\x12\n" +
@@ -2358,19 +2358,19 @@ const file_domain_asset_asset_asset_proto_rawDesc = "" +
 	"\x1ddate_placed_in_service_string\x18\x16 \x01(\tB\x06\x82\xb5\x18\x028\x01H\x0fR\x19datePlacedInServiceString\x88\x01\x01\x12)\n" +
 	"\x10acquisition_cost\x18\x17 \x01(\x03R\x0facquisitionCost\x12\x1a\n" +
 	"\bcurrency\x18\x18 \x01(\tR\bcurrency\x12#\n" +
-	"\rsalvage_value\x18\x19 \x01(\x03R\fsalvageValue\x12\x1d\n" +
+	"\rsalvage_value\x18\x19 \x01(\x03R\fsalvageValue\x12&\n" +
 	"\n" +
-	"book_value\x18\x1a \x01(\x03R\tbookValue\x12\"\n" +
+	"book_value\x18\x1a \x01(\x03B\a\x82\xb5\x18\x03\"\x010R\tbookValue\x12\"\n" +
 	"\n" +
 	"fair_value\x18\x1b \x01(\x03H\x10R\tfairValue\x88\x01\x01\x12,\n" +
 	"\x12useful_life_months\x18\x1c \x01(\x05R\x10usefulLifeMonths\x12/\n" +
 	"\x11useful_life_units\x18\x1d \x01(\x03H\x11R\x0fusefulLifeUnits\x88\x01\x01\x12T\n" +
 	"\x13depreciation_method\x18\x1e \x01(\x0e2#.domain.asset.v1.DepreciationMethodR\x12depreciationMethod\x120\n" +
 	"\x11depreciation_rate\x18\x1f \x01(\x01H\x12R\x10depreciationRate\x88\x01\x01\x12;\n" +
-	"\x17depreciation_start_date\x18  \x01(\tH\x13R\x15depreciationStartDate\x88\x01\x01\x129\n" +
-	"\x18accumulated_depreciation\x18\" \x01(\x03R\x17accumulatedDepreciation\x12N\n" +
-	"\x11measurement_model\x18# \x01(\x0e2!.domain.asset.v1.MeasurementModelR\x10measurementModel\x124\n" +
-	"\x06status\x18$ \x01(\x0e2\x1c.domain.asset.v1.AssetStatusR\x06status\x125\n" +
+	"\x17depreciation_start_date\x18  \x01(\tH\x13R\x15depreciationStartDate\x88\x01\x01\x12B\n" +
+	"\x18accumulated_depreciation\x18\" \x01(\x03B\a\x82\xb5\x18\x03\"\x010R\x17accumulatedDepreciation\x12\\\n" +
+	"\x11measurement_model\x18# \x01(\x0e2!.domain.asset.v1.MeasurementModelB\f\x82\xb5\x18\b\"\x06'COST'R\x10measurementModel\x12<\n" +
+	"\x06status\x18$ \x01(\x0e2\x1c.domain.asset.v1.AssetStatusB\x06\x82\xb5\x18\x02\x18\x01R\x06status\x125\n" +
 	"\x14warranty_expiry_date\x18% \x01(\x03H\x14R\x12warrantyExpiryDate\x88\x01\x01\x12J\n" +
 	"\x1bwarranty_expiry_date_string\x18& \x01(\tB\x06\x82\xb5\x18\x028\x01H\x15R\x18warrantyExpiryDateString\x88\x01\x01\x12\x19\n" +
 	"\x05notes\x18' \x01(\tH\x16R\x05notes\x88\x01\x01\x12&\n" +

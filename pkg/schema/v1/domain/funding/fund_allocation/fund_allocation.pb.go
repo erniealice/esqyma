@@ -1079,7 +1079,7 @@ var File_domain_funding_fund_allocation_fund_allocation_proto protoreflect.FileD
 
 const file_domain_funding_fund_allocation_fund_allocation_proto_rawDesc = "" +
 	"\n" +
-	"4domain/funding/fund_allocation/fund_allocation.proto\x12\x11domain.funding.v1\x1a\x19domain/common/error.proto\x1a\x1adomain/common/search.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1edomain/common/pagination.proto\x1a\x10options/db.proto\"\x8c\a\n" +
+	"4domain/funding/fund_allocation/fund_allocation.proto\x12\x11domain.funding.v1\x1a\x19domain/common/error.proto\x1a\x1adomain/common/search.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1edomain/common/pagination.proto\x1a\x10options/db.proto\"\x95\a\n" +
 	"\x0eFundAllocation\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12&\n" +
 	"\fdate_created\x18\x02 \x01(\x03H\x00R\vdateCreated\x88\x01\x01\x12;\n" +
@@ -1092,9 +1092,9 @@ const file_domain_funding_fund_allocation_fund_allocation_proto_rawDesc = "" +
 	"\x04fund\x18\x01R\x06fundId\x124\n" +
 	"\fworkspace_id\x18\b \x01(\tB\x11\x82\xb5\x18\r\n" +
 	"\tworkspace\x18\x01R\vworkspaceId\x129\n" +
-	"\x04mode\x18\t \x01(\x0e2%.domain.funding.v1.FundAllocationModeR\x04mode\x12'\n" +
+	"\x04mode\x18\t \x01(\x0e2%.domain.funding.v1.FundAllocationModeR\x04mode\x120\n" +
 	"\x0fallocated_limit\x18\n" +
-	" \x01(\x03R\x0eallocatedLimit\x12B\n" +
+	" \x01(\x03B\a\x82\xb5\x18\x03\"\x010R\x0eallocatedLimit\x12B\n" +
 	"\x12payable_account_id\x18\v \x01(\tB\x0f\x82\xb5\x18\v\n" +
 	"\aaccount\x18\x01H\x04R\x10payableAccountId\x88\x01\x01\x12K\n" +
 	"\x17default_cash_account_id\x18\f \x01(\tB\x0f\x82\xb5\x18\v\n" +

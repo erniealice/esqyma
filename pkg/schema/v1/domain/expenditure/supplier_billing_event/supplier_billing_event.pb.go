@@ -1056,7 +1056,7 @@ var File_domain_expenditure_supplier_billing_event_supplier_billing_event_proto 
 
 const file_domain_expenditure_supplier_billing_event_supplier_billing_event_proto_rawDesc = "" +
 	"\n" +
-	"Fdomain/expenditure/supplier_billing_event/supplier_billing_event.proto\x12\x15domain.expenditure.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/search.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x10options/db.proto\"\x96\x06\n" +
+	"Fdomain/expenditure/supplier_billing_event/supplier_billing_event.proto\x12\x15domain.expenditure.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/search.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x10options/db.proto\"\x9e\x06\n" +
 	"\x14SupplierBillingEvent\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12)\n" +
 	"\fworkspace_id\x18\x02 \x01(\tB\x06\x82\xb5\x18\x02\x18\x01R\vworkspaceId\x12W\n" +
@@ -1066,8 +1066,8 @@ const file_domain_expenditure_supplier_billing_event_supplier_billing_event_prot
 	"\x14supplier_contract_id\x18\v \x01(\tB\x19\x82\xb5\x18\x15\n" +
 	"\x11supplier_contract\x18\x01H\x00R\x12supplierContractId\x88\x01\x01\x12'\n" +
 	"\x0fbillable_amount\x18\x14 \x01(\x03R\x0ebillableAmount\x12)\n" +
-	"\x10billing_currency\x18\x15 \x01(\tR\x0fbillingCurrency\x12I\n" +
-	"\x06status\x18\x1e \x01(\x0e21.domain.expenditure.v1.SupplierBillingEventStatusR\x06status\x12L\n" +
+	"\x10billing_currency\x18\x15 \x01(\tR\x0fbillingCurrency\x12Q\n" +
+	"\x06status\x18\x1e \x01(\x0e21.domain.expenditure.v1.SupplierBillingEventStatusB\x06\x82\xb5\x18\x02\x18\x01R\x06status\x12L\n" +
 	"\atrigger\x18\x1f \x01(\x0e22.domain.expenditure.v1.SupplierBillingEventTriggerR\atrigger\x12V\n" +
 	"\x16expense_recognition_id\x18( \x01(\tB\x1b\x82\xb5\x18\x17\n" +
 	"\x13expense_recognition\x18\x01H\x01R\x14expenseRecognitionId\x88\x01\x01\x12\"\n" +

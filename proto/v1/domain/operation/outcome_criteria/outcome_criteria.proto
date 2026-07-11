@@ -17,7 +17,7 @@ message OutcomeCriteria {
   option (options.v1.table).table = true;
 
   string id = 1;
-  string criteria_group_id = 2;
+  string criteria_group_id = 2 [(options.v1.db).index = true];
   int32 version = 3;
   domain.operation.v1.VersionStatus version_status = 4;
   optional string supersedes_id = 5 [(options.v1.db).references = "outcome_criteria"];

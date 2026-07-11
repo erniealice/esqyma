@@ -1222,7 +1222,7 @@ var File_domain_operation_job_template_relation_job_template_relation_proto prot
 
 const file_domain_operation_job_template_relation_job_template_relation_proto_rawDesc = "" +
 	"\n" +
-	"Bdomain/operation/job_template_relation/job_template_relation.proto\x12\x13domain.operation.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1adomain/common/search.proto\x1a0domain/operation/job_template/job_template.proto\x1a\x10options/db.proto\"\xbe\x06\n" +
+	"Bdomain/operation/job_template_relation/job_template_relation.proto\x12\x13domain.operation.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1adomain/common/search.proto\x1a0domain/operation/job_template/job_template.proto\x1a\x10options/db.proto\"\xd0\x06\n" +
 	"\x13JobTemplateRelation\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12&\n" +
 	"\fdate_created\x18\x02 \x01(\x03H\x00R\vdateCreated\x88\x01\x01\x12;\n" +
@@ -1237,9 +1237,9 @@ const file_domain_operation_job_template_relation_job_template_relation_proto_ra
 	"\x11child_template_id\x18\t \x01(\tB\x14\x82\xb5\x18\x10\n" +
 	"\fjob_template\x18\x01R\x0fchildTemplateId\x12L\n" +
 	"\x0echild_template\x18\n" +
-	" \x01(\v2 .domain.operation.v1.JobTemplateH\x05R\rchildTemplate\x88\x01\x01\x12%\n" +
-	"\x0esequence_order\x18\v \x01(\x05R\rsequenceOrder\x12Q\n" +
-	"\rrelation_type\x18\f \x01(\x0e2,.domain.operation.v1.JobTemplateRelationTypeR\frelationType:\x06\x8a\xb5\x18\x02\b\x01B\x0f\n" +
+	" \x01(\v2 .domain.operation.v1.JobTemplateH\x05R\rchildTemplate\x88\x01\x01\x12.\n" +
+	"\x0esequence_order\x18\v \x01(\x05B\a\x82\xb5\x18\x03\"\x010R\rsequenceOrder\x12Z\n" +
+	"\rrelation_type\x18\f \x01(\x0e2,.domain.operation.v1.JobTemplateRelationTypeB\a\x82\xb5\x18\x03\"\x010R\frelationType:\x06\x8a\xb5\x18\x02\b\x01B\x0f\n" +
 	"\r_date_createdB\x16\n" +
 	"\x14_date_created_stringB\x10\n" +
 	"\x0e_date_modifiedB\x17\n" +

@@ -27,7 +27,7 @@ message LoanPayment {
 
   string payment_number = 3 [(options.v1.db).unique = true, (options.v1.db).index = true];
 
-  string payment_date = 4; // ISO 8601 date (YYYY-MM-DD)
+  string payment_date = 4 [(options.v1.db).index = true]; // ISO 8601 date (YYYY-MM-DD)
   reserved 5; // was payment_date_string
 
   // Payment breakdown

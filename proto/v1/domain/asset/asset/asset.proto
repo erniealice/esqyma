@@ -93,7 +93,7 @@ message Asset {
   int64 acquisition_cost = 23; // centavos
   string currency = 24;
   int64 salvage_value = 25; // centavos
-  int64 book_value = 26; // centavos
+  int64 book_value = 26 [(options.v1.db).default = "0"]; // centavos
   optional int64 fair_value = 27; // centavos
 
   // Depreciation configuration
@@ -103,13 +103,13 @@ message Asset {
   optional double depreciation_rate = 31;
   optional string depreciation_start_date = 32; // ISO 8601 date (YYYY-MM-DD)
   reserved 33; // was depreciation_start_date_string
-  int64 accumulated_depreciation = 34; // centavos
+  int64 accumulated_depreciation = 34 [(options.v1.db).default = "0"]; // centavos
 
   // Measurement model
-  MeasurementModel measurement_model = 35;
+  MeasurementModel measurement_model = 35 [(options.v1.db).default = "'COST'"];
 
   // Status and lifecycle
-  AssetStatus status = 36;
+  AssetStatus status = 36 [(options.v1.db).index = true];
   optional int64 warranty_expiry_date = 37;
   optional string warranty_expiry_date_string = 38 [(options.v1.db).ignore = true];
   optional string notes = 39;

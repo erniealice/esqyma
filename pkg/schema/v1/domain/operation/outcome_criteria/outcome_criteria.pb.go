@@ -1472,10 +1472,10 @@ var File_domain_operation_outcome_criteria_outcome_criteria_proto protoreflect.F
 
 const file_domain_operation_outcome_criteria_outcome_criteria_proto_rawDesc = "" +
 	"\n" +
-	"8domain/operation/outcome_criteria/outcome_criteria.proto\x12\x13domain.operation.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1adomain/common/search.proto\x1a\"domain/operation/enums/enums.proto\x1a\x10options/db.proto\"\xcd\x10\n" +
+	"8domain/operation/outcome_criteria/outcome_criteria.proto\x12\x13domain.operation.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1adomain/common/search.proto\x1a\"domain/operation/enums/enums.proto\x1a\x10options/db.proto\"\xd5\x10\n" +
 	"\x0fOutcomeCriteria\x12\x0e\n" +
-	"\x02id\x18\x01 \x01(\tR\x02id\x12*\n" +
-	"\x11criteria_group_id\x18\x02 \x01(\tR\x0fcriteriaGroupId\x12\x18\n" +
+	"\x02id\x18\x01 \x01(\tR\x02id\x122\n" +
+	"\x11criteria_group_id\x18\x02 \x01(\tB\x06\x82\xb5\x18\x02\x18\x01R\x0fcriteriaGroupId\x12\x18\n" +
 	"\aversion\x18\x03 \x01(\x05R\aversion\x12I\n" +
 	"\x0eversion_status\x18\x04 \x01(\x0e2\".domain.operation.v1.VersionStatusR\rversionStatus\x12@\n" +
 	"\rsupersedes_id\x18\x05 \x01(\tB\x16\x82\xb5\x18\x12\n" +

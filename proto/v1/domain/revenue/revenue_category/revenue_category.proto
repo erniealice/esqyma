@@ -18,7 +18,7 @@ message RevenueCategory {
   optional string date_created_string = 3 [(options.v1.db).ignore = true];
   optional int64 date_modified = 4;
   optional string date_modified_string = 5 [(options.v1.db).ignore = true];
-  bool active = 6;
+  bool active = 6 [(options.v1.db).default = "true"];
   string name = 7;
   string code = 8;
   optional string description = 9;

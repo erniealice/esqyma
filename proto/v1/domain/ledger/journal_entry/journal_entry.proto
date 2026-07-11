@@ -61,8 +61,8 @@ message JournalEntry {
   string entry_number = 2 [(options.v1.db).unique = true, (options.v1.db).index = true];
   string description = 3;
 
-  // Date — unix timestamp + display string
-  int64 entry_date = 4;
+  // Date — unix timestamp + display string. Default list sort key.
+  int64 entry_date = 4 [(options.v1.db).index = true];
   optional string entry_date_string = 5 [(options.v1.db).ignore = true];
 
   // Status and source traceability

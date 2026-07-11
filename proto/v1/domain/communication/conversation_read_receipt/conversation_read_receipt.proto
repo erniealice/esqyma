@@ -16,6 +16,7 @@ import "options/db.proto";
 // UNIQUE(conversation_id, reader_principal_type, reader_principal_id) is enforced at the DB.
 message ConversationReadReceipt {
   option (options.v1.table).table = true;
+  option (options.v1.table).unique_together = "conversation_id,reader_principal_type,reader_principal_id";
 
   string id = 1;
   optional int64 date_created = 2;
@@ -26,7 +27,7 @@ message ConversationReadReceipt {
   string reader_principal_type = 8;                            // principal-scoped reader (Q-MSG-12 / codex H1)
   string reader_principal_id = 9;                              // binding/grant id of the reader principal
   string user_id = 10 [(options.v1.db).references = "user", (options.v1.db).index = true];
-  string workspace_id = 11 [(options.v1.db).index = true];     // directive H — copied from parent
+  string workspace_id = 11 [(options.v1.db).index = true, (options.v1.db).check = "workspace_id <> ''"];     // directive H — copied from parent
   optional string last_read_post_id = 12 [(options.v1.db).references = "conversation_post"]; // THE single monotonic cursor (Q-MSG-12)
   optional int64 last_read_at = 13;                            // DISPLAY-ONLY denorm; NOT the unread comparison key
   // UNIQUE(conversation_id, reader_principal_type, reader_principal_id) — one receipt per reader PRINCIPAL per conversation (Q-MSG-12)

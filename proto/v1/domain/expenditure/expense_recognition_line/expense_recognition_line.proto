@@ -32,10 +32,10 @@ message ExpenseRecognitionLine {
 
   // Source links
   optional string supplier_contract_line_id = 11
-    [(options.v1.db).references = "supplier_contract_line"];
+    [(options.v1.db).references = "supplier_contract_line", (options.v1.db).index = true];
   optional string expenditure_line_item_id = 12
-    [(options.v1.db).references = "expenditure_line_item"];
-  optional string product_id = 13 [(options.v1.db).references = "product"];
+    [(options.v1.db).references = "expenditure_line_item", (options.v1.db).index = true];
+  optional string product_id = 13 [(options.v1.db).references = "product", (options.v1.db).index = true];
 
   // Pricing back-edges — mirrors revenue_line_item.proto:44 product_price_plan_id = 25
   // and revenue_line_item.proto subscription_id = 29.
@@ -52,8 +52,8 @@ message ExpenseRecognitionLine {
   string currency = 24;
 
   // GL
-  optional string expense_account_id = 30 [(options.v1.db).references = "account"];
-  optional string job_activity_id = 31 [(options.v1.db).references = "job_activity"];
+  optional string expense_account_id = 30 [(options.v1.db).references = "account", (options.v1.db).index = true];
+  optional string job_activity_id = 31 [(options.v1.db).references = "job_activity", (options.v1.db).index = true];
 }
 
 service ExpenseRecognitionLineDomainService {

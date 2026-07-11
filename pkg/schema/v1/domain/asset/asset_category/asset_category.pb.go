@@ -1208,17 +1208,17 @@ var File_domain_asset_asset_category_asset_category_proto protoreflect.FileDescr
 
 const file_domain_asset_asset_category_asset_category_proto_rawDesc = "" +
 	"\n" +
-	"0domain/asset/asset_category/asset_category.proto\x12\x0fdomain.asset.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1adomain/common/search.proto\x1a\x10options/db.proto\"\xaa\r\n" +
+	"0domain/asset/asset_category/asset_category.proto\x12\x0fdomain.asset.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1adomain/common/search.proto\x1a\x10options/db.proto\"\xd3\r\n" +
 	"\rAssetCategory\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12\x1a\n" +
 	"\x04code\x18\x02 \x01(\tB\x06\x82\xb5\x18\x02\x10\x01R\x04code\x12\x12\n" +
 	"\x04name\x18\x03 \x01(\tR\x04name\x12%\n" +
 	"\vdescription\x18\x04 \x01(\tH\x00R\vdescription\x88\x01\x01\x12I\n" +
 	"\x12parent_category_id\x18\x05 \x01(\tB\x16\x82\xb5\x18\x12\n" +
-	"\x0easset_category\x18\x01H\x01R\x10parentCategoryId\x88\x01\x01\x12>\n" +
-	"\x1bdefault_depreciation_method\x18\x06 \x01(\tR\x19defaultDepreciationMethod\x12;\n" +
-	"\x1adefault_useful_life_months\x18\a \x01(\x05R\x17defaultUsefulLifeMonths\x12A\n" +
-	"\x1ddefault_salvage_value_percent\x18\b \x01(\x01R\x1adefaultSalvageValuePercent\x121\n" +
+	"\x0easset_category\x18\x01H\x01R\x10parentCategoryId\x88\x01\x01\x12U\n" +
+	"\x1bdefault_depreciation_method\x18\x06 \x01(\tB\x15\x82\xb5\x18\x11\"\x0f'STRAIGHT_LINE'R\x19defaultDepreciationMethod\x12D\n" +
+	"\x1adefault_useful_life_months\x18\a \x01(\x05B\a\x82\xb5\x18\x03\"\x010R\x17defaultUsefulLifeMonths\x12J\n" +
+	"\x1ddefault_salvage_value_percent\x18\b \x01(\x01B\a\x82\xb5\x18\x03\"\x010R\x1adefaultSalvageValuePercent\x121\n" +
 	"\x12asset_cost_account\x18\t \x01(\tH\x02R\x10assetCostAccount\x88\x01\x01\x12M\n" +
 	" accumulated_depreciation_account\x18\n" +
 	" \x01(\tH\x03R\x1eaccumulatedDepreciationAccount\x88\x01\x01\x12E\n" +

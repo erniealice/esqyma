@@ -1325,7 +1325,7 @@ var File_domain_operation_job_task_job_task_proto protoreflect.FileDescriptor
 
 const file_domain_operation_job_task_job_task_proto_rawDesc = "" +
 	"\n" +
-	"(domain/operation/job_task/job_task.proto\x12\x13domain.operation.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1adomain/common/search.proto\x1a*domain/operation/job_phase/job_phase.proto\x1a\x10options/db.proto\"\xbc\f\n" +
+	"(domain/operation/job_task/job_task.proto\x12\x13domain.operation.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1adomain/common/search.proto\x1a*domain/operation/job_phase/job_phase.proto\x1a\x10options/db.proto\"\xc9\f\n" +
 	"\aJobTask\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12&\n" +
 	"\fdate_created\x18\x02 \x01(\x03H\x00R\vdateCreated\x88\x01\x01\x12;\n" +
@@ -1341,8 +1341,8 @@ const file_domain_operation_job_task_job_task_proto_rawDesc = "" +
 	"\n" +
 	"step_order\x18\n" +
 	" \x01(\x05R\tstepOrder\x127\n" +
-	"\x06status\x18\v \x01(\x0e2\x1f.domain.operation.v1.TaskStatusR\x06status\x12\x1a\n" +
-	"\tis_ad_hoc\x18\f \x01(\bR\aisAdHoc\x123\n" +
+	"\x06status\x18\v \x01(\x0e2\x1f.domain.operation.v1.TaskStatusR\x06status\x12'\n" +
+	"\tis_ad_hoc\x18\f \x01(\bB\v\x82\xb5\x18\a\"\x05falseR\aisAdHoc\x123\n" +
 	"\vassigned_to\x18\r \x01(\tB\r\x82\xb5\x18\t\n" +
 	"\x05staff\x18\x01H\x05R\n" +
 	"assignedTo\x88\x01\x01\x12H\n" +

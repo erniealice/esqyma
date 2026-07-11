@@ -18,6 +18,8 @@ import "google/protobuf/timestamp.proto";
 
 message SupplierSubscription {
   option (options.v1.table).table = true;
+  // Workspace-scoped active-subscription listing and counts.
+  option (options.v1.table).index_together = "workspace_id,active";
   string id = 1;
   optional int64 date_created = 2;
   optional string date_created_string = 3 [(options.v1.db).ignore = true];
@@ -39,7 +41,7 @@ message SupplierSubscription {
   optional google.protobuf.Timestamp date_time_end = 14; // UTC timestamp; nil = open-ended
   reserved 15; // reserved for future use (was date_end_string on selling side)
 
-  map<string, string> metadata = 16;
+  map<string, string> metadata = 16 [(options.v1.db).default = "'{}'"];
 
   // License-pool fields 17–21 intentionally omitted — no licensing concept on buying side.
   // Field 17: omitted (was quantity on selling side)

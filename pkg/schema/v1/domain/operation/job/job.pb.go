@@ -1672,7 +1672,7 @@ var File_domain_operation_job_job_proto protoreflect.FileDescriptor
 
 const file_domain_operation_job_job_proto_rawDesc = "" +
 	"\n" +
-	"\x1edomain/operation/job/job.proto\x12\x13domain.operation.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1adomain/common/search.proto\x1a!domain/entity/client/client.proto\x1a%domain/entity/location/location.proto\x1a\"domain/operation/enums/enums.proto\x1a\x10options/db.proto\"\xd1\x1e\n" +
+	"\x1edomain/operation/job/job.proto\x12\x13domain.operation.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1adomain/common/search.proto\x1a!domain/entity/client/client.proto\x1a%domain/entity/location/location.proto\x1a\"domain/operation/enums/enums.proto\x1a\x10options/db.proto\"\xae\x1f\n" +
 	"\x03Job\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12&\n" +
 	"\fdate_created\x18\x02 \x01(\x03H\x00R\vdateCreated\x88\x01\x01\x12;\n" +
@@ -1680,8 +1680,8 @@ const file_domain_operation_job_job_proto_rawDesc = "" +
 	"\rdate_modified\x18\x04 \x01(\x03H\x02R\fdateModified\x88\x01\x01\x12=\n" +
 	"\x14date_modified_string\x18\x05 \x01(\tB\x06\x82\xb5\x18\x028\x01H\x03R\x12dateModifiedString\x88\x01\x01\x12\"\n" +
 	"\x06active\x18\x06 \x01(\bB\n" +
-	"\x82\xb5\x18\x06\"\x04trueR\x06active\x12\x12\n" +
-	"\x04name\x18\a \x01(\tR\x04name\x12A\n" +
+	"\x82\xb5\x18\x06\"\x04trueR\x06active\x12\x1c\n" +
+	"\x04name\x18\a \x01(\tB\b\x82\xb5\x18\x04\"\x02''R\x04name\x12A\n" +
 	"\x0fjob_template_id\x18\b \x01(\tB\x14\x82\xb5\x18\x10\n" +
 	"\fjob_template\x18\x01H\x04R\rjobTemplateId\x88\x01\x01\x12@\n" +
 	"\vorigin_type\x18\n" +
@@ -1697,10 +1697,10 @@ const file_domain_operation_job_job_proto_rawDesc = "" +
 	"\x10fulfillment_type\x18\x0f \x01(\x0e2$.domain.operation.v1.FulfillmentTypeR\x0ffulfillmentType\x12G\n" +
 	"\x0ecost_flow_type\x18\x10 \x01(\x0e2!.domain.operation.v1.CostFlowTypeR\fcostFlowType\x12P\n" +
 	"\x11billing_rule_type\x18\x11 \x01(\x0e2$.domain.operation.v1.BillingRuleTypeR\x0fbillingRuleType\x126\n" +
-	"\x06status\x18\x12 \x01(\x0e2\x1e.domain.operation.v1.JobStatusR\x06status\x12L\n" +
-	"\x0fapproval_status\x18\x13 \x01(\x0e2#.domain.operation.v1.ApprovalStatusR\x0eapprovalStatus\x12I\n" +
-	"\x0eposting_status\x18\x14 \x01(\x0e2\".domain.operation.v1.PostingStatusR\rpostingStatus\x12I\n" +
-	"\x0ebilling_status\x18\x15 \x01(\x0e2\".domain.operation.v1.BillingStatusR\rbillingStatus\x126\n" +
+	"\x06status\x18\x12 \x01(\x0e2\x1e.domain.operation.v1.JobStatusR\x06status\x12V\n" +
+	"\x0fapproval_status\x18\x13 \x01(\x0e2#.domain.operation.v1.ApprovalStatusB\b\x82\xb5\x18\x04\"\x02''R\x0eapprovalStatus\x12S\n" +
+	"\x0eposting_status\x18\x14 \x01(\x0e2\".domain.operation.v1.PostingStatusB\b\x82\xb5\x18\x04\"\x02''R\rpostingStatus\x12S\n" +
+	"\x0ebilling_status\x18\x15 \x01(\x0e2\".domain.operation.v1.BillingStatusB\b\x82\xb5\x18\x04\"\x02''R\rbillingStatus\x126\n" +
 	"\vlocation_id\x18\x16 \x01(\tB\x10\x82\xb5\x18\f\n" +
 	"\blocation\x18\x01H\bR\n" +
 	"locationId\x88\x01\x01\x12;\n" +
@@ -1752,7 +1752,7 @@ const file_domain_operation_job_job_proto_rawDesc = "" +
 	"\x10cycle_period_end\x187 \x01(\tH(R\x0ecyclePeriodEnd\x88\x01\x01\x121\n" +
 	"\x12usage_request_date\x188 \x01(\tH)R\x10usageRequestDate\x88\x01\x01\x12(\n" +
 	"\rusage_ordinal\x189 \x01(\x05H*R\fusageOrdinal\x88\x01\x01\x122\n" +
-	"\x0eis_synthesized\x18: \x01(\bB\v\x82\xb5\x18\a\"\x05falseR\risSynthesized:\x06\x8a\xb5\x18\x02\b\x01B\x0f\n" +
+	"\x0eis_synthesized\x18: \x01(\bB\v\x82\xb5\x18\a\"\x05falseR\risSynthesized:;\x8a\xb5\x187\b\x01\"\x15origin_type,origin_id\"\x1corigin_id,usage_request_dateB\x0f\n" +
 	"\r_date_createdB\x16\n" +
 	"\x14_date_created_stringB\x10\n" +
 	"\x0e_date_modifiedB\x17\n" +

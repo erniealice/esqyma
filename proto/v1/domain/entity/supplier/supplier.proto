@@ -32,7 +32,7 @@ message Supplier {
   string internal_id = 9 [(options.v1.db).unique = true];
   optional string category_id = 10 [(options.v1.db).references = "supplier_category"];
   optional SupplierCategory category = 11;
-  string supplier_type = 12;                    // "company" or "individual"
+  string supplier_type = 12 [(options.v1.db).default = "'individual'"]; // "company" or "individual"
   string name = 13;
   optional string tax_id = 14;                  // TIN/VAT/EIN
   optional string registration_number = 15;     // Business registration number
@@ -56,7 +56,7 @@ message Supplier {
   // Discriminator: "vendor" (default) | "contractor" | "agency" | "regulator" | "employee".
   // Drives kind-aware permission gating, list filters, and payroll routing
   // (Supplier(kind='employee') is the employee identity primitive).
-  optional string kind = 33 [(options.v1.db).index = true];
+  optional string kind = 33 [(options.v1.db).index = true, (options.v1.db).default = "'vendor'"];
   // Salary-data privacy hooks (only populated when kind='employee'). Visible only to
   // callers holding payroll:read:compensation permission; redacted by default in
   // ListSuppliers / GetSupplier responses.
@@ -64,7 +64,7 @@ message Supplier {
   optional string department = 35;
 
   // Drift-recovered columns (DB had these; proto did not)
-  optional string currency = 36;                // ISO 4217 currency code — separate from billing_currency
+  optional string currency = 36 [(options.v1.db).default = "'PHP'"]; // ISO 4217 currency code — separate from billing_currency
   optional string workspace_id = 37 [(options.v1.db).references = "workspace", (options.v1.db).index = true];
 }
 

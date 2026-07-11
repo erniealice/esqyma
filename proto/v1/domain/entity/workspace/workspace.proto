@@ -39,7 +39,7 @@ message Workspace {
   // truth for billing-cycle math, period boundaries, AR aging buckets, and
   // any "what calendar day is this?" computation. Domain reads only — display
   // (e.g. "edited 5 min ago") may still resolve via user/operator tz.
-  optional string timezone = 14;
+  optional string timezone = 14 [(options.v1.db).default = "'Asia/Manila'"];
 
   // Tax identity fields — Phase 1 tax integration
   optional string tin = 15;                         // Taxpayer Identification Number
@@ -65,7 +65,7 @@ message Workspace {
   // 3-30 chars, regex ^[a-z0-9]+(?:-[a-z0-9]+)*$. UNIQUE across workspaces.
   // Validation includes a reserved-word list (see workspace_slug_reserved.go).
   // Added 2026-05-22 per Phase P-1 of docs/plan/20260521-workspace-keyed-routing.
-  optional string slug = 22 [(options.v1.db).unique = true];
+  optional string slug = 22 [(options.v1.db).unique = true, (options.v1.db).check = "slug ~ '^[a-z0-9]+(?:-[a-z0-9]+)*$' AND length(slug) >= 3 AND length(slug) <= 30"];
 }
 
 service WorkspaceDomainService {

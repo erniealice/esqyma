@@ -56,7 +56,7 @@ message AccruedExpense {
   // Source contract / supplier
   string supplier_contract_id = 20
     [(options.v1.db).references = "supplier_contract", (options.v1.db).index = true];
-  optional string supplier_id = 21 [(options.v1.db).references = "supplier"];
+  optional string supplier_id = 21 [(options.v1.db).references = "supplier", (options.v1.db).index = true];
 
   // Period
   optional google.protobuf.Timestamp period_start = 30;
@@ -74,8 +74,8 @@ message AccruedExpense {
   AccruedExpenseStatus status = 50 [(options.v1.db).index = true];
 
   // GL
-  optional string accrual_account_id = 60 [(options.v1.db).references = "account"];
-  optional string expense_account_id = 61 [(options.v1.db).references = "account"];
+  optional string accrual_account_id = 60 [(options.v1.db).references = "account", (options.v1.db).index = true];
+  optional string expense_account_id = 61 [(options.v1.db).references = "account", (options.v1.db).index = true];
 
   // Notes
   optional string notes = 90;
@@ -105,7 +105,7 @@ message AccruedExpenseSettlement {
   string expenditure_id = 11
     [(options.v1.db).references = "expenditure", (options.v1.db).index = true];
   optional string expenditure_line_item_id = 12
-    [(options.v1.db).references = "expenditure_line_item"];
+    [(options.v1.db).references = "expenditure_line_item", (options.v1.db).index = true];
 
   // The portion of THIS expenditure that settles THIS accrual.
   // Independent of expenditure.total_amount — one Expenditure can split
@@ -123,7 +123,8 @@ message AccruedExpenseSettlement {
   // Reversal — settlement can be reversed (e.g., bill voided after settle posted).
   // A reversal IS-A settlement with a negative amount; this self-FK points
   // from the original to its reversing row (and vice-versa).
-  optional string reversed_by_settlement_id = 50;
+  optional string reversed_by_settlement_id = 50
+    [(options.v1.db).references = "accrued_expense_settlement", (options.v1.db).index = true];
   optional string reversal_reason = 51;
 }
 

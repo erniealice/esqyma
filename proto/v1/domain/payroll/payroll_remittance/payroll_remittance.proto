@@ -43,7 +43,7 @@ message PayrollRemittance {
   RemittanceType remittance_type = 3;
   int64 amount = 4; // centavos
 
-  string due_date = 5; // ISO 8601 date (YYYY-MM-DD)
+  string due_date = 5 [(options.v1.db).index = true]; // ISO 8601 date (YYYY-MM-DD)
   reserved 6; // was due_date_string
 
   RemittanceStatus status = 7;

@@ -22,15 +22,15 @@ message Revenue {
   optional string date_created_string = 3 [(options.v1.db).ignore = true];
   optional int64 date_modified = 4;
   optional string date_modified_string = 5 [(options.v1.db).ignore = true];
-  bool active = 6;
+  bool active = 6 [(options.v1.db).default = "true"];
   string name = 7;
   optional domain.entity.v1.Client client = 8;
   string client_id = 9;
   optional string revenue_date = 10; // ISO 8601 date (YYYY-MM-DD)
   reserved 11; // was revenue_date_string
   int64 total_amount = 12; // centavos
-  string currency = 13;
-  string status = 14;
+  string currency = 13 [(options.v1.db).default = "'PHP'"];
+  string status = 14 [(options.v1.db).default = "'draft'"];
   optional string reference_number = 15;
   optional string notes = 16;
   // field 17 reserved for future use
@@ -88,6 +88,10 @@ message Revenue {
   // Symmetric with expense_recognition.advance_disbursement_id (buying side).
   // Replaces the never-shipped Revenue.deferred_revenue_id concept (DeferredRevenue dropped in Phase 0).
   optional string advance_collection_id = 48 [(options.v1.db).references = "treasury_collection", (options.v1.db).index = true];
+
+  // Tenancy scope. Backs the workspace_id filter the postgres adapter issues
+  // on every list/read (revenue.go). NULLABLE until a NOT NULL migration tightens it.
+  optional string workspace_id = 49 [(options.v1.db).references = "workspace", (options.v1.db).index = true];
 }
 
 // PreviewTaxLine — ephemeral, dry-run only. Not persisted.

@@ -17,12 +17,14 @@ import "options/db.proto";
 
 message Expenditure {
   option (options.v1.table).table = true;
+  // Composite index backs the dashboard aggregates (partial: WHERE active = true in DB).
+  option (options.v1.table).index_together = "workspace_id,expenditure_type,status";
   string id = 1;
   optional int64 date_created = 2;
   optional string date_created_string = 3 [(options.v1.db).ignore = true];
   optional int64 date_modified = 4;
   optional string date_modified_string = 5 [(options.v1.db).ignore = true];
-  bool active = 6;
+  bool active = 6 [(options.v1.db).default = "true"];
   string name = 7;
   // expenditure_type — free-text discriminator (legacy entity, not promoted to enum
   // per [entity-status-conventions](docs/wiki/articles/entity-status-conventions.md)
@@ -34,14 +36,14 @@ message Expenditure {
   //   "refund"    → supplier-issued refund/credit
   //   "payroll"   → payroll-driven expenditure (wages, statutory)
   //   "petty"     → sundry petty-cash expense; pair with petty_cash_fund_id (field 29)
-  string expenditure_type = 8;
+  string expenditure_type = 8 [(options.v1.db).default = "'expense'"];
   optional domain.entity.v1.Client vendor = 9;    // counterparty (vendor/supplier)
   string vendor_id = 10;                          // FK to entity/client (vendors are clients you buy from)
   optional int64 expenditure_date = 11;
   optional string expenditure_date_string = 12 [(options.v1.db).ignore = true];
   int64 total_amount = 13; // centavos
-  string currency = 14;
-  string status = 15;
+  string currency = 14 [(options.v1.db).default = "'PHP'"];
+  string status = 15 [(options.v1.db).default = "'draft'"];
   optional string reference_number = 16;
   optional string notes = 17;
   optional string expenditure_category_id = 18;   // FK to expenditure_category
@@ -56,8 +58,8 @@ message Expenditure {
   optional domain.entity.v1.PaymentTerm payment_term = 27;
 
   // Supplier commitment back-edges
-  optional string supplier_contract_id = 28 [(options.v1.db).references = "supplier_contract"];  // FK to SupplierContract (roll-up spend)
-  optional string petty_cash_fund_id = 29 [(options.v1.db).references = "petty_cash_fund"];      // FK to PettyCashFund (sundries flow)
+  optional string supplier_contract_id = 28 [(options.v1.db).references = "supplier_contract", (options.v1.db).index = true];  // FK to SupplierContract (roll-up spend)
+  optional string petty_cash_fund_id = 29 [(options.v1.db).references = "petty_cash_fund", (options.v1.db).index = true];      // FK to PettyCashFund (sundries flow)
 
   // Accrual-basis recognition back-edges (SPS plan §6.5).
   // expense_recognition_id: optional 1:1 link from a bill to its primary
@@ -66,16 +68,16 @@ message Expenditure {
   // accrued_expense_id: when an inbound bill settles a previously recognized
   //   accrual, the AccruedExpenseSettlement service writes both the
   //   join row and this back-edge for fast reverse lookup.
-  optional string expense_recognition_id = 30 [(options.v1.db).references = "expense_recognition"];
-  optional string accrued_expense_id = 31 [(options.v1.db).references = "accrued_expense"];
+  optional string expense_recognition_id = 30 [(options.v1.db).references = "expense_recognition", (options.v1.db).index = true];
+  optional string accrued_expense_id = 31 [(options.v1.db).references = "accrued_expense", (options.v1.db).index = true];
   // cycle_date: YYYY-MM-DD bucket the recurrence engine produced this draft
   //   against. Pairs with supplier_contract_id for idempotency when the
   //   recurrence engine produces draft Expenditures.
-  optional string cycle_date = 32;
+  optional string cycle_date = 32 [(options.v1.db).index = true];
   // source: free-text discriminator for how this row entered the system
   //   ("manual" | "recurrence" | "po_match" | "import"). Useful for
   //   filtering operational queues.
-  optional string source = 33;
+  optional string source = 33 [(options.v1.db).index = true];
 
   // Supplier subscription back-edges (supplier-subscriptions plan).
   // Fields 30/31 were taken (expense_recognition_id, accrued_expense_id); using 34/35.

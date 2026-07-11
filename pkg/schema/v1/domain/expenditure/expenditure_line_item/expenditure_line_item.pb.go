@@ -47,11 +47,11 @@ type ExpenditureLineItem struct {
 	LocationId              *string                  `protobuf:"bytes,19,opt,name=location_id,json=locationId,proto3,oneof" json:"location_id,omitempty"`                                              // FK to location (where received)
 	PurchaseOrderLineItemId *string                  `protobuf:"bytes,20,opt,name=purchase_order_line_item_id,json=purchaseOrderLineItemId,proto3,oneof" json:"purchase_order_line_item_id,omitempty"` // FK to PO line for line-level 3-way match
 	// Supplier commitment back-edge
-	SupplierContractLineId *string `protobuf:"bytes,21,opt,name=supplier_contract_line_id,json=supplierContractLineId,proto3,oneof" json:"supplier_contract_line_id,omitempty"` // FK to supplier_contract_line (no DB constraint)
+	SupplierContractLineId *string `protobuf:"bytes,21,opt,name=supplier_contract_line_id,json=supplierContractLineId,proto3,oneof" json:"supplier_contract_line_id,omitempty"` // FK to supplier_contract_line (no DB FK constraint; indexed)
 	// Payroll calculator provenance (only populated for Expenditure(type='payroll') lines).
 	// rate_table_id is pinned at calc time so reposting reproduces despite newer rate rows.
 	RateTableId        *string  `protobuf:"bytes,22,opt,name=rate_table_id,json=rateTableId,proto3,oneof" json:"rate_table_id,omitempty"`                       // FK to rate_table (no DB constraint)
-	PayCycleId         *string  `protobuf:"bytes,23,opt,name=pay_cycle_id,json=payCycleId,proto3,oneof" json:"pay_cycle_id,omitempty"`                          // FK to pay_cycle (no DB constraint)
+	PayCycleId         *string  `protobuf:"bytes,23,opt,name=pay_cycle_id,json=payCycleId,proto3,oneof" json:"pay_cycle_id,omitempty"`                          // FK to pay_cycle (no DB FK constraint; indexed)
 	AppliedBasisAmount *int64   `protobuf:"varint,24,opt,name=applied_basis_amount,json=appliedBasisAmount,proto3,oneof" json:"applied_basis_amount,omitempty"` // centavos — the salary basis the line applied to
 	ProrationFactor    *float64 `protobuf:"fixed64,25,opt,name=proration_factor,json=prorationFactor,proto3,oneof" json:"proration_factor,omitempty"`           // 0.0–1.0, for mid-cycle compensation changes
 	CalcMetadata       *string  `protobuf:"bytes,26,opt,name=calc_metadata,json=calcMetadata,proto3,oneof" json:"calc_metadata,omitempty"`                      // JSON-encoded calculator audit (pre/post split, formula refs)
@@ -1078,22 +1078,23 @@ var File_domain_expenditure_expenditure_line_item_expenditure_line_item_proto pr
 
 const file_domain_expenditure_expenditure_line_item_expenditure_line_item_proto_rawDesc = "" +
 	"\n" +
-	"Ddomain/expenditure/expenditure_line_item/expenditure_line_item.proto\x12\x15domain.expenditure.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/search.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a0domain/expenditure/expenditure/expenditure.proto\x1a$domain/product/product/product.proto\x1a\x10options/db.proto\"\xb1\r\n" +
+	"Ddomain/expenditure/expenditure_line_item/expenditure_line_item.proto\x12\x15domain.expenditure.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/search.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a0domain/expenditure/expenditure/expenditure.proto\x1a$domain/product/product/product.proto\x1a\x10options/db.proto\"\xf0\r\n" +
 	"\x13ExpenditureLineItem\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12&\n" +
 	"\fdate_created\x18\x02 \x01(\x03H\x00R\vdateCreated\x88\x01\x01\x12;\n" +
 	"\x13date_created_string\x18\x03 \x01(\tB\x06\x82\xb5\x18\x028\x01H\x01R\x11dateCreatedString\x88\x01\x01\x12(\n" +
 	"\rdate_modified\x18\x04 \x01(\x03H\x02R\fdateModified\x88\x01\x01\x12=\n" +
-	"\x14date_modified_string\x18\x05 \x01(\tB\x06\x82\xb5\x18\x028\x01H\x03R\x12dateModifiedString\x88\x01\x01\x12\x16\n" +
-	"\x06active\x18\x06 \x01(\bR\x06active\x12I\n" +
+	"\x14date_modified_string\x18\x05 \x01(\tB\x06\x82\xb5\x18\x028\x01H\x03R\x12dateModifiedString\x88\x01\x01\x12\"\n" +
+	"\x06active\x18\x06 \x01(\bB\n" +
+	"\x82\xb5\x18\x06\"\x04trueR\x06active\x12I\n" +
 	"\vexpenditure\x18\a \x01(\v2\".domain.expenditure.v1.ExpenditureH\x04R\vexpenditure\x88\x01\x01\x12%\n" +
 	"\x0eexpenditure_id\x18\b \x01(\tR\rexpenditureId\x129\n" +
 	"\aproduct\x18\t \x01(\v2\x1a.domain.product.v1.ProductH\x05R\aproduct\x88\x01\x01\x12\"\n" +
 	"\n" +
 	"product_id\x18\n" +
 	" \x01(\tH\x06R\tproductId\x88\x01\x01\x12 \n" +
-	"\vdescription\x18\v \x01(\tR\vdescription\x12\x1a\n" +
-	"\bquantity\x18\f \x01(\x01R\bquantity\x12\x1d\n" +
+	"\vdescription\x18\v \x01(\tR\vdescription\x12#\n" +
+	"\bquantity\x18\f \x01(\x01B\a\x82\xb5\x18\x03\"\x011R\bquantity\x12\x1d\n" +
 	"\n" +
 	"unit_price\x18\r \x01(\x03R\tunitPrice\x12\x1f\n" +
 	"\vtotal_price\x18\x0e \x01(\x03R\n" +
@@ -1108,17 +1109,17 @@ const file_domain_expenditure_expenditure_line_item_expenditure_line_item_proto_
 	"locationId\x88\x01\x01\x12a\n" +
 	"\x1bpurchase_order_line_item_id\x18\x14 \x01(\tB\x1e\x82\xb5\x18\x1a\n" +
 	"\x18purchase_order_line_itemH\n" +
-	"R\x17purchaseOrderLineItemId\x88\x01\x01\x12>\n" +
-	"\x19supplier_contract_line_id\x18\x15 \x01(\tH\vR\x16supplierContractLineId\x88\x01\x01\x12'\n" +
-	"\rrate_table_id\x18\x16 \x01(\tH\fR\vrateTableId\x88\x01\x01\x12%\n" +
-	"\fpay_cycle_id\x18\x17 \x01(\tH\rR\n" +
+	"R\x17purchaseOrderLineItemId\x88\x01\x01\x12F\n" +
+	"\x19supplier_contract_line_id\x18\x15 \x01(\tB\x06\x82\xb5\x18\x02\x18\x01H\vR\x16supplierContractLineId\x88\x01\x01\x12'\n" +
+	"\rrate_table_id\x18\x16 \x01(\tH\fR\vrateTableId\x88\x01\x01\x12-\n" +
+	"\fpay_cycle_id\x18\x17 \x01(\tB\x06\x82\xb5\x18\x02\x18\x01H\rR\n" +
 	"payCycleId\x88\x01\x01\x125\n" +
 	"\x14applied_basis_amount\x18\x18 \x01(\x03H\x0eR\x12appliedBasisAmount\x88\x01\x01\x12.\n" +
 	"\x10proration_factor\x18\x19 \x01(\x01H\x0fR\x0fprorationFactor\x88\x01\x01\x12(\n" +
 	"\rcalc_metadata\x18\x1a \x01(\tH\x10R\fcalcMetadata\x88\x01\x01\x12 \n" +
 	"\tline_kind\x18\x1b \x01(\tH\x11R\blineKind\x88\x01\x01\x12i\n" +
 	"\x1dsupplier_product_cost_plan_id\x18\x1c \x01(\tB\"\x82\xb5\x18\x1e\n" +
-	"\x1asupplier_product_cost_plan\x18\x01H\x12R\x19supplierProductCostPlanId\x88\x01\x01:\x06\x8a\xb5\x18\x02\b\x01B\x0f\n" +
+	"\x1asupplier_product_cost_plan\x18\x01H\x12R\x19supplierProductCostPlanId\x88\x01\x01: \x8a\xb5\x18\x1c\b\x01\"\x18expenditure_id,line_kindB\x0f\n" +
 	"\r_date_createdB\x16\n" +
 	"\x14_date_created_stringB\x10\n" +
 	"\x0e_date_modifiedB\x17\n" +

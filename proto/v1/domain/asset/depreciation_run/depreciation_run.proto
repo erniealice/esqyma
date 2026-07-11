@@ -45,17 +45,17 @@ enum DepreciationRunOutcome {
 message DepreciationRun {
   option (options.v1.table).table = true;
   string id = 1;
-  string workspace_id = 2 [(options.v1.db).index = true];
-  DepreciationRunScopeKind scope_kind = 3;
+  string workspace_id = 2 [(options.v1.db).references = "workspace", (options.v1.db).index = true];
+  DepreciationRunScopeKind scope_kind = 3 [(options.v1.db).default = "'DEPRECIATION_RUN_SCOPE_KIND_UNSPECIFIED'"];
   optional string scope_id = 4;     // asset_id | category_id | policy_id (= category_id in v1) | NULL for WORKSPACE
   string as_of_date = 5;            // ISO 8601 date (YYYY-MM-DD)
-  string initiator_id = 6;          // FK to entity.User
-  optional int64 initiated_at = 7;
+  string initiator_id = 6 [(options.v1.db).references = "user"];  // FK to entity.User
+  optional int64 initiated_at = 7 [(options.v1.db).index = true];
   optional int64 completed_at = 8;
-  DepreciationRunStatus status = 9;
-  int32 created_count = 10;
-  int32 skipped_count = 11;
-  int32 errored_count = 12;
+  DepreciationRunStatus status = 9 [(options.v1.db).index = true, (options.v1.db).default = "'DEPRECIATION_RUN_STATUS_PENDING'"];
+  int32 created_count = 10 [(options.v1.db).default = "0"];
+  int32 skipped_count = 11 [(options.v1.db).default = "0"];
+  int32 errored_count = 12 [(options.v1.db).default = "0"];
   optional string error_summary = 13;
   optional string notes = 14;
   bool active = 15 [(options.v1.db).default = "true"];

@@ -31,19 +31,20 @@ enum EvaluationTemplateStatus {
 
 message EvaluationTemplate {
   option (options.v1.table).table = true;
+  option (options.v1.table).index_together = "workspace_id,status";
 
   string id = 1;
-  string workspace_id = 2 [(options.v1.db).references = "workspace", (options.v1.db).index = true];
+  string workspace_id = 2 [(options.v1.db).references = "workspace", (options.v1.db).index = true, (options.v1.db).check = "workspace_id <> ''"];
   string name = 3;
   optional string description = 4;
-  EvaluationType evaluation_type = 5;        // proto ENUM (from evaluation.proto)
-  RelationshipType relationship_type = 6;    // proto ENUM (from evaluation.proto)
-  int32 version = 7;
-  EvaluationTemplateStatus status = 8;       // proto ENUM; single lifecycle source of truth
-  VisibilityType visibility_type = 9;        // proto ENUM (from evaluation.proto)
+  EvaluationType evaluation_type = 5 [(options.v1.db).check = "evaluation_type IN ('performance_review','csat','course_eval','vendor_scorecard')"];        // proto ENUM (from evaluation.proto)
+  RelationshipType relationship_type = 6 [(options.v1.db).check = "relationship_type IN ('client_to_associate','staff_to_client','self','peer','manager')"];    // proto ENUM (from evaluation.proto)
+  int32 version = 7 [(options.v1.db).default = "1"];
+  EvaluationTemplateStatus status = 8 [(options.v1.db).check = "status IN ('draft','active','deprecated')"];       // proto ENUM; single lifecycle source of truth
+  VisibilityType visibility_type = 9 [(options.v1.db).check = "visibility_type IN ('internal_only','visible_to_subject','visible_to_subject_anon')"];        // proto ENUM (from evaluation.proto)
   optional string copied_from_id = 10 [(options.v1.db).references = "evaluation_template"];  // self FK
 
-  bool active = 11 [(options.v1.db).default = "true"];
+  bool active = 11 [(options.v1.db).default = "true", (options.v1.db).check = "active = (status <> 'deprecated')"];
   optional int64 date_created = 12;
   optional string date_created_string = 13 [(options.v1.db).ignore = true];
   optional int64 date_modified = 14;

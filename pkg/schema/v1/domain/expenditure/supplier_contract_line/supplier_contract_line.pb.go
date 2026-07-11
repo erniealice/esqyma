@@ -1198,7 +1198,7 @@ var File_domain_expenditure_supplier_contract_line_supplier_contract_line_proto 
 
 const file_domain_expenditure_supplier_contract_line_supplier_contract_line_proto_rawDesc = "" +
 	"\n" +
-	"Fdomain/expenditure/supplier_contract_line/supplier_contract_line.proto\x12\x15domain.expenditure.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/search.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a<domain/expenditure/supplier_contract/supplier_contract.proto\x1a$domain/product/product/product.proto\x1a\x10options/db.proto\"\xa7\f\n" +
+	"Fdomain/expenditure/supplier_contract_line/supplier_contract_line.proto\x12\x15domain.expenditure.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/search.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a<domain/expenditure/supplier_contract/supplier_contract.proto\x1a$domain/product/product/product.proto\x1a\x10options/db.proto\"\xb5\f\n" +
 	"\x14SupplierContractLine\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12K\n" +
 	"\x14supplier_contract_id\x18\x02 \x01(\tB\x19\x82\xb5\x18\x15\n" +
@@ -1218,14 +1218,13 @@ const file_domain_expenditure_supplier_contract_line_supplier_contract_line_prot
 	"\ttreatment\x18\v \x01(\x0e24.domain.expenditure.v1.SupplierContractLineTreatmentR\ttreatment\x12\"\n" +
 	"\n" +
 	"start_date\x18\f \x01(\tH\x03R\tstartDate\x88\x01\x01\x12\x1e\n" +
-	"\bend_date\x18\r \x01(\tH\x04R\aendDate\x88\x01\x01\x12W\n" +
-	"\x17expenditure_category_id\x18\x0e \x01(\tB\x1a\x82\xb5\x18\x16\n" +
-	"\x14expenditure_categoryH\x05R\x15expenditureCategoryId\x88\x01\x01\x12@\n" +
-	"\x12expense_account_id\x18\x0f \x01(\tB\r\x82\xb5\x18\t\n" +
-	"\aaccountH\x06R\x10expenseAccountId\x88\x01\x01\x124\n" +
-	"\vlocation_id\x18\x10 \x01(\tB\x0e\x82\xb5\x18\n" +
-	"\n" +
-	"\blocationH\aR\n" +
+	"\bend_date\x18\r \x01(\tH\x04R\aendDate\x88\x01\x01\x12Y\n" +
+	"\x17expenditure_category_id\x18\x0e \x01(\tB\x1c\x82\xb5\x18\x18\n" +
+	"\x14expenditure_category\x18\x01H\x05R\x15expenditureCategoryId\x88\x01\x01\x12B\n" +
+	"\x12expense_account_id\x18\x0f \x01(\tB\x0f\x82\xb5\x18\v\n" +
+	"\aaccount\x18\x01H\x06R\x10expenseAccountId\x88\x01\x01\x126\n" +
+	"\vlocation_id\x18\x10 \x01(\tB\x10\x82\xb5\x18\f\n" +
+	"\blocation\x18\x01H\aR\n" +
 	"locationId\x88\x01\x01\x12\x1f\n" +
 	"\vline_number\x18\x11 \x01(\x05R\n" +
 	"lineNumber\x12\"\n" +
@@ -1236,8 +1235,8 @@ const file_domain_expenditure_supplier_contract_line_supplier_contract_line_prot
 	"\rdate_modified\x18\x15 \x01(\x03H\n" +
 	"R\fdateModified\x88\x01\x01\x12=\n" +
 	"\x14date_modified_string\x18\x16 \x01(\tB\x06\x82\xb5\x18\x028\x01H\vR\x12dateModifiedString\x88\x01\x01\x12P\n" +
-	"\x04kind\x18\x17 \x01(\x0e2/.domain.expenditure.v1.SupplierContractLineKindB\x06\x82\xb5\x18\x02\x18\x01H\fR\x04kind\x88\x01\x01\x12Z\n" +
-	"(supplier_contract_price_schedule_line_id\x18\x18 \x01(\tH\rR#supplierContractPriceScheduleLineId\x88\x01\x01:\x06\x8a\xb5\x18\x02\b\x01B\x14\n" +
+	"\x04kind\x18\x17 \x01(\x0e2/.domain.expenditure.v1.SupplierContractLineKindB\x06\x82\xb5\x18\x02\x18\x01H\fR\x04kind\x88\x01\x01\x12b\n" +
+	"(supplier_contract_price_schedule_line_id\x18\x18 \x01(\tB\x06\x82\xb5\x18\x02\x18\x01H\rR#supplierContractPriceScheduleLineId\x88\x01\x01:\x06\x8a\xb5\x18\x02\b\x01B\x14\n" +
 	"\x12_supplier_contractB\r\n" +
 	"\v_product_idB\n" +
 	"\n" +

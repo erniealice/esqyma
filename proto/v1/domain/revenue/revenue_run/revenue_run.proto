@@ -45,22 +45,26 @@ enum RevenueRunSourceKind {
 
 message RevenueRun {
   option (options.v1.table).table = true;
+  // Composite indexes back the list access paths (initiated_at ordered DESC in DB).
+  option (options.v1.table).index_together = "client_id,initiated_at";
+  option (options.v1.table).index_together = "subscription_id,initiated_at";
+  option (options.v1.table).index_together = "workspace_id,status,initiated_at";
   string id = 1;
-  string workspace_id = 2;
-  optional string client_id = 3;
-  optional string subscription_id = 4;
-  RevenueRunScopeKind scope_kind = 5;
+  string workspace_id = 2 [(options.v1.db).references = "workspace"];
+  optional string client_id = 3 [(options.v1.db).references = "client"];
+  optional string subscription_id = 4 [(options.v1.db).references = "subscription"];
+  RevenueRunScopeKind scope_kind = 5 [(options.v1.db).default = "'workspace'"];
   string as_of_date = 6; // YYYY-MM-DD
   int32 selection_count = 7;
   int32 created_count = 8;
   int32 skipped_count = 9;
   int32 errored_count = 10;
-  RevenueRunStatus status = 11;
-  string initiated_by = 12;
+  RevenueRunStatus status = 11 [(options.v1.db).default = "'pending'"];
+  string initiated_by = 12 [(options.v1.db).references = "workspace_user"];
   optional int64 initiated_at = 13;
   optional int64 completed_at = 14;
   optional string notes = 15;
-  bool active = 16;
+  bool active = 16 [(options.v1.db).default = "true"];
   optional int64 date_created = 17;
   optional string date_created_string = 18 [(options.v1.db).ignore = true];
   optional int64 date_modified = 19;
@@ -69,18 +73,20 @@ message RevenueRun {
 
 message RevenueRunAttempt {
   option (options.v1.table).table = true;
+  // Composite index backs per-subscription attempt history (attempted_at DESC in DB).
+  option (options.v1.table).index_together = "subscription_id,attempted_at";
   string id = 1;
-  string run_id = 2;
-  string subscription_id = 3;
+  string run_id = 2 [(options.v1.db).references = "revenue_run", (options.v1.db).index = true];
+  string subscription_id = 3 [(options.v1.db).references = "subscription"];
   string period_start = 4; // YYYY-MM-DD
   string period_end = 5; // YYYY-MM-DD
   string period_marker = 6;
   RevenueRunAttemptOutcome outcome = 7;
-  optional string revenue_id = 8;
+  optional string revenue_id = 8 [(options.v1.db).references = "revenue"];
   optional string error_code = 9;
   optional string error_message = 10;
   optional int64 attempted_at = 11;
-  bool active = 12;
+  bool active = 12 [(options.v1.db).default = "true"];
   optional int64 date_created = 13;
   optional string date_created_string = 14 [(options.v1.db).ignore = true];
   optional int64 date_modified = 15;
@@ -88,9 +94,9 @@ message RevenueRunAttempt {
   // source_kind discriminates SUBSCRIPTION_CYCLE vs ADVANCE_COLLECTION origin.
   // UNSPECIFIED is treated as SUBSCRIPTION_CYCLE so pre-Plan-B rows still
   // satisfy schema invariants. Plan B Phase 5.
-  RevenueRunSourceKind source_kind = 17;
+  RevenueRunSourceKind source_kind = 17 [(options.v1.db).index = true];
   // advance_collection_id is set when source_kind == ADVANCE_COLLECTION.
-  optional string advance_collection_id = 18;
+  optional string advance_collection_id = 18 [(options.v1.db).references = "treasury_collection", (options.v1.db).index = true];
 }
 
 service RevenueRunDomainService {

@@ -24,6 +24,8 @@ import "options/db.proto";
 //   - "Cancel all future" → add UNTIL to RRULE → delete future occurrence rows
 message EventOccurrence {
   option (options.v1.table).table = true;
+  option (options.v1.table).index_together = "workspace_id,start_date_time_utc";
+  option (options.v1.table).index_together = "workspace_id,end_date_time_utc";
   string id = 1;
 
   // Parent event FK (required)

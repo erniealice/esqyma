@@ -58,8 +58,8 @@ type PurchaseOrderLineItem struct {
 	DateModified       *int64  `protobuf:"varint,22,opt,name=date_modified,json=dateModified,proto3,oneof" json:"date_modified,omitempty"`
 	DateModifiedString *string `protobuf:"bytes,23,opt,name=date_modified_string,json=dateModifiedString,proto3,oneof" json:"date_modified_string,omitempty"`
 	// Supplier commitment back-edges
-	SupplierContractLineId   *string `protobuf:"bytes,24,opt,name=supplier_contract_line_id,json=supplierContractLineId,proto3,oneof" json:"supplier_contract_line_id,omitempty"`       // FK to supplier_contract_line (no DB constraint)
-	ProcurementRequestLineId *string `protobuf:"bytes,25,opt,name=procurement_request_line_id,json=procurementRequestLineId,proto3,oneof" json:"procurement_request_line_id,omitempty"` // FK to procurement_request_line (no DB constraint)
+	SupplierContractLineId   *string `protobuf:"bytes,24,opt,name=supplier_contract_line_id,json=supplierContractLineId,proto3,oneof" json:"supplier_contract_line_id,omitempty"`       // FK to supplier_contract_line (no DB FK constraint; indexed)
+	ProcurementRequestLineId *string `protobuf:"bytes,25,opt,name=procurement_request_line_id,json=procurementRequestLineId,proto3,oneof" json:"procurement_request_line_id,omitempty"` // FK to procurement_request_line (no DB FK constraint; indexed)
 	unknownFields            protoimpl.UnknownFields
 	sizeCache                protoimpl.SizeCache
 }
@@ -1065,7 +1065,7 @@ var File_domain_expenditure_purchase_order_line_item_purchase_order_line_item_pr
 
 const file_domain_expenditure_purchase_order_line_item_purchase_order_line_item_proto_rawDesc = "" +
 	"\n" +
-	"Jdomain/expenditure/purchase_order_line_item/purchase_order_line_item.proto\x12\x15domain.expenditure.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/search.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a6domain/expenditure/purchase_order/purchase_order.proto\x1a$domain/product/product/product.proto\x1a\x10options/db.proto\"\xf8\v\n" +
+	"Jdomain/expenditure/purchase_order_line_item/purchase_order_line_item.proto\x12\x15domain.expenditure.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/search.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a6domain/expenditure/purchase_order/purchase_order.proto\x1a$domain/product/product/product.proto\x1a\x10options/db.proto\"\x88\f\n" +
 	"\x15PurchaseOrderLineItem\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12P\n" +
 	"\x0epurchase_order\x18\x02 \x01(\v2$.domain.expenditure.v1.PurchaseOrderH\x00R\rpurchaseOrder\x88\x01\x01\x12B\n" +
@@ -1102,9 +1102,9 @@ const file_domain_expenditure_purchase_order_line_item_purchase_order_line_item_
 	"\x13date_created_string\x18\x15 \x01(\tB\x06\x82\xb5\x18\x028\x01H\tR\x11dateCreatedString\x88\x01\x01\x12(\n" +
 	"\rdate_modified\x18\x16 \x01(\x03H\n" +
 	"R\fdateModified\x88\x01\x01\x12=\n" +
-	"\x14date_modified_string\x18\x17 \x01(\tB\x06\x82\xb5\x18\x028\x01H\vR\x12dateModifiedString\x88\x01\x01\x12>\n" +
-	"\x19supplier_contract_line_id\x18\x18 \x01(\tH\fR\x16supplierContractLineId\x88\x01\x01\x12B\n" +
-	"\x1bprocurement_request_line_id\x18\x19 \x01(\tH\rR\x18procurementRequestLineId\x88\x01\x01:\x06\x8a\xb5\x18\x02\b\x01B\x11\n" +
+	"\x14date_modified_string\x18\x17 \x01(\tB\x06\x82\xb5\x18\x028\x01H\vR\x12dateModifiedString\x88\x01\x01\x12F\n" +
+	"\x19supplier_contract_line_id\x18\x18 \x01(\tB\x06\x82\xb5\x18\x02\x18\x01H\fR\x16supplierContractLineId\x88\x01\x01\x12J\n" +
+	"\x1bprocurement_request_line_id\x18\x19 \x01(\tB\x06\x82\xb5\x18\x02\x18\x01H\rR\x18procurementRequestLineId\x88\x01\x01:\x06\x8a\xb5\x18\x02\b\x01B\x11\n" +
 	"\x0f_purchase_orderB\n" +
 	"\n" +
 	"\b_productB\r\n" +

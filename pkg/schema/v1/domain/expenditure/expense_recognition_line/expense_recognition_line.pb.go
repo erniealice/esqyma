@@ -1026,8 +1026,7 @@ var File_domain_expenditure_expense_recognition_line_expense_recognition_line_pr
 
 const file_domain_expenditure_expense_recognition_line_expense_recognition_line_proto_rawDesc = "" +
 	"\n" +
-	"Jdomain/expenditure/expense_recognition_line/expense_recognition_line.proto\x12\x15domain.expenditure.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/search.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x10options/db.proto\"\xfe\n" +
-	"\n" +
+	"Jdomain/expenditure/expense_recognition_line/expense_recognition_line.proto\x12\x15domain.expenditure.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/search.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x10options/db.proto\"\x88\v\n" +
 	"\x16ExpenseRecognitionLine\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x124\n" +
 	"\fworkspace_id\x18\x02 \x01(\tB\x11\x82\xb5\x18\r\n" +
@@ -1040,14 +1039,14 @@ const file_domain_expenditure_expense_recognition_line_expense_recognition_line_
 	"\x82\xb5\x18\x06\"\x04trueR\x06active\x12Q\n" +
 	"\x16expense_recognition_id\x18\n" +
 	" \x01(\tB\x1b\x82\xb5\x18\x17\n" +
-	"\x13expense_recognition\x18\x01R\x14expenseRecognitionId\x12\\\n" +
-	"\x19supplier_contract_line_id\x18\v \x01(\tB\x1c\x82\xb5\x18\x18\n" +
-	"\x16supplier_contract_lineH\x04R\x16supplierContractLineId\x88\x01\x01\x12Y\n" +
-	"\x18expenditure_line_item_id\x18\f \x01(\tB\x1b\x82\xb5\x18\x17\n" +
-	"\x15expenditure_line_itemH\x05R\x15expenditureLineItemId\x88\x01\x01\x121\n" +
+	"\x13expense_recognition\x18\x01R\x14expenseRecognitionId\x12^\n" +
+	"\x19supplier_contract_line_id\x18\v \x01(\tB\x1e\x82\xb5\x18\x1a\n" +
+	"\x16supplier_contract_line\x18\x01H\x04R\x16supplierContractLineId\x88\x01\x01\x12[\n" +
+	"\x18expenditure_line_item_id\x18\f \x01(\tB\x1d\x82\xb5\x18\x19\n" +
+	"\x15expenditure_line_item\x18\x01H\x05R\x15expenditureLineItemId\x88\x01\x01\x123\n" +
 	"\n" +
-	"product_id\x18\r \x01(\tB\r\x82\xb5\x18\t\n" +
-	"\aproductH\x06R\tproductId\x88\x01\x01\x12i\n" +
+	"product_id\x18\r \x01(\tB\x0f\x82\xb5\x18\v\n" +
+	"\aproduct\x18\x01H\x06R\tproductId\x88\x01\x01\x12i\n" +
 	"\x1dsupplier_product_cost_plan_id\x18\x0e \x01(\tB\"\x82\xb5\x18\x1e\n" +
 	"\x1asupplier_product_cost_plan\x18\x01H\aR\x19supplierProductCostPlanId\x88\x01\x01\x12\\\n" +
 	"\x18supplier_subscription_id\x18\x0f \x01(\tB\x1d\x82\xb5\x18\x19\n" +
@@ -1057,11 +1056,11 @@ const file_domain_expenditure_expense_recognition_line_expense_recognition_line_
 	"\vunit_amount\x18\x16 \x01(\x03R\n" +
 	"unitAmount\x12\x16\n" +
 	"\x06amount\x18\x17 \x01(\x03R\x06amount\x12\x1a\n" +
-	"\bcurrency\x18\x18 \x01(\tR\bcurrency\x12@\n" +
-	"\x12expense_account_id\x18\x1e \x01(\tB\r\x82\xb5\x18\t\n" +
-	"\aaccountH\tR\x10expenseAccountId\x88\x01\x01\x12?\n" +
-	"\x0fjob_activity_id\x18\x1f \x01(\tB\x12\x82\xb5\x18\x0e\n" +
-	"\fjob_activityH\n" +
+	"\bcurrency\x18\x18 \x01(\tR\bcurrency\x12B\n" +
+	"\x12expense_account_id\x18\x1e \x01(\tB\x0f\x82\xb5\x18\v\n" +
+	"\aaccount\x18\x01H\tR\x10expenseAccountId\x88\x01\x01\x12A\n" +
+	"\x0fjob_activity_id\x18\x1f \x01(\tB\x14\x82\xb5\x18\x10\n" +
+	"\fjob_activity\x18\x01H\n" +
 	"R\rjobActivityId\x88\x01\x01:\x06\x8a\xb5\x18\x02\b\x01B\x0f\n" +
 	"\r_date_createdB\x16\n" +
 	"\x14_date_created_stringB\x10\n" +

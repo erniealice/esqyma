@@ -31,7 +31,7 @@ message Attachment {
   // File metadata
   string name = 9;                        // original filename
   optional string description = 10;       // user-provided description
-  optional string workspace_id = 11;
+  optional string workspace_id = 11 [(options.v1.db).references = "workspace", (options.v1.db).index = true];
   optional string storage_container = 12; // bucket/container name
   optional string storage_key = 13;       // full object path in storage
   optional string content_type = 14;      // MIME type (e.g. "application/pdf")

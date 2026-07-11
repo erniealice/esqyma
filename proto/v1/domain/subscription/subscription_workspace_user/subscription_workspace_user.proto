@@ -19,6 +19,8 @@ import "options/db.proto";
 // the composite FK enforced in SQL, not a standalone FK.
 message SubscriptionWorkspaceUser {
   option (options.v1.table).table = true;
+  option (options.v1.table).index_together = "subscription_id,active";
+  option (options.v1.table).index_together = "workspace_id,workspace_user_id,active";
 
   string id = 1;
   optional int64 date_created = 2;
@@ -27,10 +29,13 @@ message SubscriptionWorkspaceUser {
   optional string date_modified_string = 5 [(options.v1.db).ignore = true];
   bool active = 6 [(options.v1.db).default = "true"];
 
-  string workspace_id = 7 [(options.v1.db).references = "workspace", (options.v1.db).index = true];
+  // Non-empty anchor enforced alongside client_id (single combined DB CHECK).
+  string workspace_id = 7 [(options.v1.db).references = "workspace", (options.v1.db).index = true, (options.v1.db).check = "workspace_id <> ''"];
   string subscription_id = 8 [(options.v1.db).references = "subscription", (options.v1.db).index = true];
   // Denormalized — NO standalone FK; part of the composite FK enforced in SQL.
-  string client_id = 9;
+  string client_id = 9 [(options.v1.db).check = "client_id <> ''"];
+  // Partial DB unique: UNIQUE (subscription_id, workspace_user_id) WHERE active
+  // — not expressible as unique_together (no partial-index support).
   string workspace_user_id = 10 [(options.v1.db).references = "workspace_user", (options.v1.db).index = true];
   bool is_owner = 11 [(options.v1.db).default = "false"];
 }

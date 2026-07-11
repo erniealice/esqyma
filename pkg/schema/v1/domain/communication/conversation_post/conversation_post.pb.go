@@ -1080,7 +1080,7 @@ var File_domain_communication_conversation_post_conversation_post_proto protoref
 
 const file_domain_communication_conversation_post_conversation_post_proto_rawDesc = "" +
 	"\n" +
-	">domain/communication/conversation_post/conversation_post.proto\x12\x17domain.communication.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1adomain/common/search.proto\x1a\x10options/db.proto\"\xa4\a\n" +
+	">domain/communication/conversation_post/conversation_post.proto\x12\x17domain.communication.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1adomain/common/search.proto\x1a\x10options/db.proto\"\xc1\b\n" +
 	"\x10ConversationPost\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12&\n" +
 	"\fdate_created\x18\x02 \x01(\x03H\x00R\vdateCreated\x88\x01\x01\x12;\n" +
@@ -1090,22 +1090,21 @@ const file_domain_communication_conversation_post_conversation_post_proto_rawDes
 	"\x06active\x18\x06 \x01(\bB\n" +
 	"\x82\xb5\x18\x06\"\x04trueR\x06active\x12=\n" +
 	"\x0fconversation_id\x18\a \x01(\tB\x14\x82\xb5\x18\x10\n" +
-	"\fconversation\x18\x01R\x0econversationId\x12)\n" +
-	"\fworkspace_id\x18\b \x01(\tB\x06\x82\xb5\x18\x02\x18\x01R\vworkspaceId\x12+\n" +
-	"\tclient_id\x18\t \x01(\tB\x0e\x82\xb5\x18\n" +
-	"\n" +
-	"\x06client\x18\x01R\bclientId\x12`\n" +
+	"\fconversation\x18\x01R\x0econversationId\x12=\n" +
+	"\fworkspace_id\x18\b \x01(\tB\x1a\x82\xb5\x18\x16\x18\x01*\x12workspace_id <> ''R\vworkspaceId\x12<\n" +
+	"\tclient_id\x18\t \x01(\tB\x1f\x82\xb5\x18\x1b\n" +
+	"\x06client\x18\x01*\x0fclient_id <> ''R\bclientId\x12\x94\x01\n" +
 	"\x15sender_principal_type\x18\n" +
-	" \x01(\x0e2,.domain.communication.v1.SenderPrincipalTypeR\x13senderPrincipalType\x12.\n" +
+	" \x01(\x0e2,.domain.communication.v1.SenderPrincipalTypeB2\x82\xb5\x18.*,sender_principal_type IN ('client', 'staff')R\x13senderPrincipalType\x12.\n" +
 	"\x13sender_principal_id\x18\v \x01(\tR\x11senderPrincipalId\x120\n" +
 	"\x0esender_user_id\x18\f \x01(\tB\n" +
 	"\x82\xb5\x18\x06\n" +
 	"\x04userR\fsenderUserId\x12\x12\n" +
-	"\x04body\x18\r \x01(\tR\x04body\x12P\n" +
-	"\vsource_type\x18\x0e \x01(\x0e2/.domain.communication.v1.ConversationSourceTypeR\n" +
+	"\x04body\x18\r \x01(\tR\x04body\x12z\n" +
+	"\vsource_type\x18\x0e \x01(\x0e2/.domain.communication.v1.ConversationSourceTypeB(\x82\xb5\x18$*\"source_type IN ('portal', 'email')R\n" +
 	"sourceType\x12.\n" +
 	"\fclient_token\x18\x0f \x01(\tB\x06\x82\xb5\x18\x02\x18\x01H\x04R\vclientToken\x88\x01\x01\x12$\n" +
-	"\asent_at\x18\x10 \x01(\x03B\x06\x82\xb5\x18\x02\x18\x01H\x05R\x06sentAt\x88\x01\x01:\x06\x8a\xb5\x18\x02\b\x01B\x0f\n" +
+	"\asent_at\x18\x10 \x01(\x03B\x06\x82\xb5\x18\x02\x18\x01H\x05R\x06sentAt\x88\x01\x01:\x1f\x8a\xb5\x18\x1b\b\x01\"\x17conversation_id,sent_atB\x0f\n" +
 	"\r_date_createdB\x16\n" +
 	"\x14_date_created_stringB\x10\n" +
 	"\x0e_date_modifiedB\x17\n" +

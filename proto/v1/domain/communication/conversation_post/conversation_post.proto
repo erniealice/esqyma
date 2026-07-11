@@ -32,6 +32,7 @@ enum ConversationSourceType {
 // ConversationPost is the thread child (NEVER "Message" — protobuf reserved word).
 message ConversationPost {
   option (options.v1.table).table = true;
+  option (options.v1.table).index_together = "conversation_id,sent_at";
 
   string id = 1;
   optional int64 date_created = 2;
@@ -41,13 +42,13 @@ message ConversationPost {
   bool active = 6 [(options.v1.db).default = "true"];
 
   string conversation_id = 7 [(options.v1.db).references = "conversation", (options.v1.db).index = true];
-  string workspace_id = 8 [(options.v1.db).index = true];   // denorm — copied from parent at create (directive H); workspace-scoped post queries w/o join
-  string client_id = 9 [(options.v1.db).references = "client", (options.v1.db).index = true]; // denorm from parent — IDOR belt-and-suspenders
-  SenderPrincipalType sender_principal_type = 10;               // proto ENUM (Q-MSG-13 / directive G — NOT string)
+  string workspace_id = 8 [(options.v1.db).index = true, (options.v1.db).check = "workspace_id <> ''"];   // denorm — copied from parent at create (directive H); workspace-scoped post queries w/o join
+  string client_id = 9 [(options.v1.db).references = "client", (options.v1.db).index = true, (options.v1.db).check = "client_id <> ''"]; // denorm from parent — IDOR belt-and-suspenders
+  SenderPrincipalType sender_principal_type = 10 [(options.v1.db).check = "sender_principal_type IN ('client', 'staff')"];  // proto ENUM (Q-MSG-13 / directive G — NOT string)
   string sender_principal_id = 11;                             // principal/grant binding id (Q-MSG-13 / codex H1 — beyond user_id)
   string sender_user_id = 12 [(options.v1.db).references = "user"];
   string body = 13;                                            // post text — rendered TEXT-ONLY, NEVER template.HTML/safeHTML (XSS invariant; redteam N)
-  ConversationSourceType source_type = 14;                     // proto ENUM (Q-MSG-10 / directive G — NOT string): PORTAL (v1) | EMAIL (v2 seam)
+  ConversationSourceType source_type = 14 [(options.v1.db).check = "source_type IN ('portal', 'email')"];  // proto ENUM (Q-MSG-10 / directive G — NOT string): PORTAL (v1) | EMAIL (v2 seam)
   optional string client_token = 15 [(options.v1.db).index = true]; // idempotency key (Q-MSG-7); REQUIRED non-empty for portal/composer posts
   optional int64 sent_at = 16 [(options.v1.db).index = true];
   // Attachments via document.Attachment: module_key="conversation_post", foreign_key=<this.id> (Q-MSG-4)

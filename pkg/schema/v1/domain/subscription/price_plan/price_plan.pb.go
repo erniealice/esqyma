@@ -1192,7 +1192,7 @@ var File_domain_subscription_price_plan_price_plan_proto protoreflect.FileDescri
 
 const file_domain_subscription_price_plan_price_plan_proto_rawDesc = "" +
 	"\n" +
-	"/domain/subscription/price_plan/price_plan.proto\x12\x16domain.subscription.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/search.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a#domain/subscription/plan/plan.proto\x1a\x10options/db.proto\"\x86\r\n" +
+	"/domain/subscription/price_plan/price_plan.proto\x12\x16domain.subscription.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/search.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a#domain/subscription/plan/plan.proto\x1a\x10options/db.proto\"\x98\r\n" +
 	"\tPricePlan\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x125\n" +
 	"\x04plan\x18\x02 \x01(\v2\x1c.domain.subscription.v1.PlanH\x00R\x04plan\x88\x01\x01\x12%\n" +
@@ -1215,8 +1215,9 @@ const file_domain_subscription_price_plan_price_plan_proto_rawDesc = "" +
 	"\x10receipt_template\x18\x10 \x01(\tH\n" +
 	"R\x0freceiptTemplate\x88\x01\x01\x12G\n" +
 	"\x11price_schedule_id\x18\x12 \x01(\tB\x16\x82\xb5\x18\x12\n" +
-	"\x0eprice_schedule\x18\x01H\vR\x0fpriceScheduleId\x88\x01\x01\x12F\n" +
-	"\fbilling_kind\x18\x13 \x01(\x0e2#.domain.subscription.v1.BillingKindR\vbillingKind\x12F\n" +
+	"\x0eprice_schedule\x18\x01H\vR\x0fpriceScheduleId\x88\x01\x01\x12X\n" +
+	"\fbilling_kind\x18\x13 \x01(\x0e2#.domain.subscription.v1.BillingKindB\x10\x82\xb5\x18\f\"\n" +
+	"'one_time'R\vbillingKind\x12F\n" +
 	"\famount_basis\x18\x14 \x01(\x0e2#.domain.subscription.v1.AmountBasisR\vamountBasis\x123\n" +
 	"\x13billing_cycle_value\x18\x15 \x01(\x05H\fR\x11billingCycleValue\x88\x01\x01\x121\n" +
 	"\x12billing_cycle_unit\x18\x16 \x01(\tH\rR\x10billingCycleUnit\x88\x01\x01\x121\n" +

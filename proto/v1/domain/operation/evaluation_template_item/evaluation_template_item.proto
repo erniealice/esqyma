@@ -17,13 +17,14 @@ import "options/db.proto";
 // =============================================================================
 message EvaluationTemplateItem {
   option (options.v1.table).table = true;
+  option (options.v1.table).index_together = "evaluation_template_id,sequence_order";
 
   string id = 1;
   string evaluation_template_id = 2 [(options.v1.db).references = "evaluation_template", (options.v1.db).index = true];
   // COPIED from the parent template at create; adapter validates it equals the parent's.
-  string workspace_id = 3 [(options.v1.db).references = "workspace", (options.v1.db).index = true];
+  string workspace_id = 3 [(options.v1.db).references = "workspace", (options.v1.db).index = true, (options.v1.db).check = "workspace_id <> ''"];
   string outcome_criteria_id = 4 [(options.v1.db).references = "outcome_criteria", (options.v1.db).index = true];
-  int32 sequence_order = 5;
+  int32 sequence_order = 5 [(options.v1.db).default = "0"];
   optional string question_label = 6;
   optional string question_prompt = 7;
   optional bool required_override = 8;

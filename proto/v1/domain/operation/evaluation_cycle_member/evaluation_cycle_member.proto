@@ -25,9 +25,11 @@ import "options/db.proto";
 // =============================================================================
 message EvaluationCycleMember {
   option (options.v1.table).table = true;
+  option (options.v1.table).unique_together = "evaluation_cycle_id,subject_staff_id,client_id";
+  option (options.v1.table).index_together = "workspace_id,subject_staff_id";
 
   string id = 1;
-  string workspace_id = 2 [(options.v1.db).references = "workspace", (options.v1.db).index = true];
+  string workspace_id = 2 [(options.v1.db).references = "workspace", (options.v1.db).index = true, (options.v1.db).check = "workspace_id <> '' AND client_id <> '' AND subject_staff_id <> ''"];
   string evaluation_cycle_id = 3 [(options.v1.db).references = "evaluation_cycle", (options.v1.db).index = true];
   // DENORMALIZED RLS anchor (same fail-closed scoping as evaluation).
   string client_id = 4 [(options.v1.db).references = "client", (options.v1.db).index = true];

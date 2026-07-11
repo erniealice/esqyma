@@ -1156,7 +1156,7 @@ var File_domain_entity_supplier_supplier_proto protoreflect.FileDescriptor
 
 const file_domain_entity_supplier_supplier_proto_rawDesc = "" +
 	"\n" +
-	"%domain/entity/supplier/supplier.proto\x12\x10domain.entity.v1\x1a\x19domain/common/error.proto\x1a\x1adomain/common/search.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1edomain/common/pagination.proto\x1a\x10options/db.proto\x1a\x1ddomain/entity/user/user.proto\x1a7domain/entity/supplier_category/supplier_category.proto\x1a-domain/entity/payment_term/payment_term.proto\"\x86\x10\n" +
+	"%domain/entity/supplier/supplier.proto\x12\x10domain.entity.v1\x1a\x19domain/common/error.proto\x1a\x1adomain/common/search.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1edomain/common/pagination.proto\x1a\x10options/db.proto\x1a\x1ddomain/entity/user/user.proto\x1a7domain/entity/supplier_category/supplier_category.proto\x1a-domain/entity/payment_term/payment_term.proto\"\xb1\x10\n" +
 	"\bSupplier\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12/\n" +
 	"\x04user\x18\x02 \x01(\v2\x16.domain.entity.v1.UserH\x00R\x04user\x88\x01\x01\x12%\n" +
@@ -1174,8 +1174,8 @@ const file_domain_entity_supplier_supplier_proto_rawDesc = "" +
 	" \x01(\tB\x17\x82\xb5\x18\x13\n" +
 	"\x11supplier_categoryH\x05R\n" +
 	"categoryId\x88\x01\x01\x12C\n" +
-	"\bcategory\x18\v \x01(\v2\".domain.entity.v1.SupplierCategoryH\x06R\bcategory\x88\x01\x01\x12#\n" +
-	"\rsupplier_type\x18\f \x01(\tR\fsupplierType\x12\x12\n" +
+	"\bcategory\x18\v \x01(\v2\".domain.entity.v1.SupplierCategoryH\x06R\bcategory\x88\x01\x01\x127\n" +
+	"\rsupplier_type\x18\f \x01(\tB\x12\x82\xb5\x18\x0e\"\f'individual'R\fsupplierType\x12\x12\n" +
 	"\x04name\x18\r \x01(\tR\x04name\x12\x1a\n" +
 	"\x06tax_id\x18\x0e \x01(\tH\aR\x05taxId\x88\x01\x01\x124\n" +
 	"\x13registration_number\x18\x0f \x01(\tH\bR\x12registrationNumber\x88\x01\x01\x12*\n" +
@@ -1202,13 +1202,13 @@ const file_domain_entity_supplier_supplier_proto_rawDesc = "" +
 	"\x0fpayment_term_id\x18\x1e \x01(\tB\x12\x82\xb5\x18\x0e\n" +
 	"\fpayment_termH\x16R\rpaymentTermId\x88\x01\x01\x12E\n" +
 	"\fpayment_term\x18\x1f \x01(\v2\x1d.domain.entity.v1.PaymentTermH\x17R\vpaymentTerm\x88\x01\x01\x12\x1f\n" +
-	"\btimezone\x18  \x01(\tH\x18R\btimezone\x88\x01\x01\x12\x1f\n" +
-	"\x04kind\x18! \x01(\tB\x06\x82\xb5\x18\x02\x18\x01H\x19R\x04kind\x88\x01\x01\x12\x1f\n" +
+	"\btimezone\x18  \x01(\tH\x18R\btimezone\x88\x01\x01\x12)\n" +
+	"\x04kind\x18! \x01(\tB\x10\x82\xb5\x18\f\x18\x01\"\b'vendor'H\x19R\x04kind\x88\x01\x01\x12\x1f\n" +
 	"\bposition\x18\" \x01(\tH\x1aR\bposition\x88\x01\x01\x12#\n" +
 	"\n" +
 	"department\x18# \x01(\tH\x1bR\n" +
-	"department\x88\x01\x01\x12\x1f\n" +
-	"\bcurrency\x18$ \x01(\tH\x1cR\bcurrency\x88\x01\x01\x129\n" +
+	"department\x88\x01\x01\x12,\n" +
+	"\bcurrency\x18$ \x01(\tB\v\x82\xb5\x18\a\"\x05'PHP'H\x1cR\bcurrency\x88\x01\x01\x129\n" +
 	"\fworkspace_id\x18% \x01(\tB\x11\x82\xb5\x18\r\n" +
 	"\tworkspace\x18\x01H\x1dR\vworkspaceId\x88\x01\x01:\x06\x8a\xb5\x18\x02\b\x01B\a\n" +
 	"\x05_userB\x0f\n" +

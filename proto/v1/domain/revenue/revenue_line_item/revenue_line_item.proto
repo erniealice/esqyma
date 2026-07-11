@@ -23,7 +23,7 @@ message RevenueLineItem {
   optional string date_created_string = 3 [(options.v1.db).ignore = true];
   optional int64 date_modified = 4;
   optional string date_modified_string = 5 [(options.v1.db).ignore = true];
-  bool active = 6;
+  bool active = 6 [(options.v1.db).default = "true"];
   optional Revenue revenue = 7;
   string revenue_id = 8;
   optional domain.product.v1.Product product = 9;
@@ -59,6 +59,10 @@ message RevenueLineItem {
   // Multi-currency: original billing amount for this line before FX conversion.
   // NULL when billing_currency == functional_currency.
   optional int64 billing_amount = 33;             // centavos in billing_currency
+
+  // Drift-recovered column (DB has FK + index; proto did not).
+  // FK to subscription_seat — links a seat-scoped recurring line to its seat.
+  optional string subscription_seat_id = 34 [(options.v1.db).references = "subscription_seat", (options.v1.db).index = true];
 }
 
 service RevenueLineItemDomainService {

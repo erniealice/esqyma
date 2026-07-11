@@ -16,6 +16,11 @@ import "options/db.proto";
 // constrains against (project servicers must be a subset of the account team).
 message ClientWorkspaceUser {
   option (options.v1.table).table = true;
+  // A workspace_user may sit on a client's account team at most once.
+  option (options.v1.table).unique_together = "client_id,workspace_user_id";
+  // Workspace-scoped "which clients does this workspace_user service" lookups,
+  // filtered to active links.
+  option (options.v1.table).index_together = "workspace_id,workspace_user_id,active";
 
   string id = 1;
   optional int64 date_created = 2;
@@ -24,9 +29,12 @@ message ClientWorkspaceUser {
   optional string date_modified_string = 5 [(options.v1.db).ignore = true];
   bool active = 6 [(options.v1.db).default = "true"];
 
-  string workspace_id = 7 [(options.v1.db).references = "workspace", (options.v1.db).index = true];
-  string client_id = 8 [(options.v1.db).references = "client", (options.v1.db).index = true];
+  // IDOR anchors must be non-empty (enforced as a CHECK constraint).
+  string workspace_id = 7 [(options.v1.db).references = "workspace", (options.v1.db).index = true, (options.v1.db).check = "workspace_id <> ''"];
+  string client_id = 8 [(options.v1.db).references = "client", (options.v1.db).index = true, (options.v1.db).check = "client_id <> ''"];
   string workspace_user_id = 9 [(options.v1.db).references = "workspace_user", (options.v1.db).index = true];
+  // At most one owner per client (enforced as a partial unique index on
+  // client_id WHERE is_owner).
   bool is_owner = 10 [(options.v1.db).default = "false"];
 }
 

@@ -930,10 +930,10 @@ var File_domain_subscription_invoice_invoice_proto protoreflect.FileDescriptor
 
 const file_domain_subscription_invoice_invoice_proto_rawDesc = "" +
 	"\n" +
-	")domain/subscription/invoice/invoice.proto\x12\x16domain.subscription.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1adomain/common/search.proto\x1a3domain/subscription/subscription/subscription.proto\x1a\x10options/db.proto\"\xc5\x04\n" +
+	")domain/subscription/invoice/invoice.proto\x12\x16domain.subscription.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1adomain/common/search.proto\x1a3domain/subscription/subscription/subscription.proto\x1a\x10options/db.proto\"\xcd\x04\n" +
 	"\aInvoice\x12\x0e\n" +
-	"\x02id\x18\x01 \x01(\tR\x02id\x12%\n" +
-	"\x0einvoice_number\x18\x02 \x01(\tR\rinvoiceNumber\x12\x16\n" +
+	"\x02id\x18\x01 \x01(\tR\x02id\x12-\n" +
+	"\x0einvoice_number\x18\x02 \x01(\tB\x06\x82\xb5\x18\x02\x18\x01R\rinvoiceNumber\x12\x16\n" +
 	"\x06amount\x18\x03 \x01(\x03R\x06amount\x12&\n" +
 	"\fdate_created\x18\x04 \x01(\x03H\x00R\vdateCreated\x88\x01\x01\x12;\n" +
 	"\x13date_created_string\x18\x05 \x01(\tB\x06\x82\xb5\x18\x028\x01H\x01R\x11dateCreatedString\x88\x01\x01\x12(\n" +

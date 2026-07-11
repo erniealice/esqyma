@@ -1320,14 +1320,14 @@ var File_domain_payroll_payroll_run_payroll_run_proto protoreflect.FileDescripto
 
 const file_domain_payroll_payroll_run_payroll_run_proto_rawDesc = "" +
 	"\n" +
-	",domain/payroll/payroll_run/payroll_run.proto\x12\x11domain.payroll.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1adomain/common/search.proto\x1a\x10options/db.proto\"\x81\t\n" +
+	",domain/payroll/payroll_run/payroll_run.proto\x12\x11domain.payroll.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1adomain/common/search.proto\x1a\x10options/db.proto\"\x89\t\n" +
 	"\n" +
 	"PayrollRun\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12'\n" +
 	"\n" +
 	"run_number\x18\x02 \x01(\tB\b\x82\xb5\x18\x04\x10\x01\x18\x01R\trunNumber\x12(\n" +
-	"\x10pay_period_start\x18\x03 \x01(\tR\x0epayPeriodStart\x12$\n" +
-	"\x0epay_period_end\x18\x05 \x01(\tR\fpayPeriodEnd\x12(\n" +
+	"\x10pay_period_start\x18\x03 \x01(\tR\x0epayPeriodStart\x12,\n" +
+	"\x0epay_period_end\x18\x05 \x01(\tB\x06\x82\xb5\x18\x02\x18\x01R\fpayPeriodEnd\x12(\n" +
 	"\vtotal_gross\x18\a \x01(\x03B\a\x82\xb5\x18\x03\"\x010R\n" +
 	"totalGross\x122\n" +
 	"\x10total_deductions\x18\b \x01(\x03B\a\x82\xb5\x18\x03\"\x010R\x0ftotalDeductions\x12$\n" +

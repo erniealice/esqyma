@@ -1251,7 +1251,7 @@ var File_domain_tax_tax_registration_tax_registration_proto protoreflect.FileDes
 
 const file_domain_tax_tax_registration_tax_registration_proto_rawDesc = "" +
 	"\n" +
-	"2domain/tax/tax_registration/tax_registration.proto\x12\rdomain.tax.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1adomain/common/search.proto\x1a\x10options/db.proto\"\x9a\n" +
+	"2domain/tax/tax_registration/tax_registration.proto\x12\rdomain.tax.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1adomain/common/search.proto\x1a\x10options/db.proto\"\xaf\n" +
 	"\n" +
 	"\x0fTaxRegistration\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12&\n" +
@@ -1280,7 +1280,7 @@ const file_domain_tax_tax_registration_tax_registration_proto_rawDesc = "" +
 	"\x0fsource_citation\x18\x12 \x01(\tH\x06R\x0esourceCitation\x88\x01\x01\x121\n" +
 	"\x12source_document_id\x18\x13 \x01(\tH\aR\x10sourceDocumentId\x88\x01\x01\x124\n" +
 	"\fworkspace_id\x18\x14 \x01(\tB\x11\x82\xb5\x18\r\n" +
-	"\tworkspace\x18\x01R\vworkspaceId:\x06\x8a\xb5\x18\x02\b\x01B\x0f\n" +
+	"\tworkspace\x18\x01R\vworkspaceId:\x1b\x8a\xb5\x18\x17\b\x01\"\x13party_type,party_idB\x0f\n" +
 	"\r_date_createdB\x16\n" +
 	"\x14_date_created_stringB\x10\n" +
 	"\x0e_date_modifiedB\x17\n" +

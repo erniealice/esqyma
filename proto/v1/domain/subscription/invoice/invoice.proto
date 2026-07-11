@@ -16,7 +16,7 @@ import "options/db.proto";
 message Invoice {
   option (options.v1.table).table = true;
   string id = 1;
-  string invoice_number = 2;
+  string invoice_number = 2 [(options.v1.db).index = true];
   int64 amount = 3; // centavos
   optional int64 date_created = 4;
   optional string date_created_string = 5 [(options.v1.db).ignore = true];

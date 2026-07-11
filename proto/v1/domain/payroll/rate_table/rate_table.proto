@@ -32,6 +32,8 @@ enum RateTableStatus {
 // reproduces despite newer rows.
 message RateTable {
   option (options.v1.table).table = true;
+  // Calculator rate-table resolution: region + kind + lifecycle status.
+  option (options.v1.table).index_together = "compliance_region,kind,status";
 
   string id = 1;
   // Empty workspace_id = global default available to all workspaces in the region.
@@ -42,7 +44,7 @@ message RateTable {
   string kind = 4 [(options.v1.db).index = true];               // controlled vocab
 
   // Effective dating
-  string effective_from = 5;          // ISO 8601 date
+  string effective_from = 5 [(options.v1.db).index = true];  // ISO 8601 date
   optional string effective_to = 6;   // null = open-ended
   string version_label = 7;           // human-readable e.g. "PH-SSS-2025-01"
   optional string supersedes_id = 8;  // FK to a prior RateTable

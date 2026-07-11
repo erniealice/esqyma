@@ -71,11 +71,11 @@ message SupplierContractLine {
   optional string end_date = 13;   // ISO 8601 date (YYYY-MM-DD)
 
   // GL mapping (overrides header-level if set)
-  optional string expenditure_category_id = 14 [(options.v1.db).references = "expenditure_category"];
-  optional string expense_account_id = 15 [(options.v1.db).references = "account"];
+  optional string expenditure_category_id = 14 [(options.v1.db).references = "expenditure_category", (options.v1.db).index = true];
+  optional string expense_account_id = 15 [(options.v1.db).references = "account", (options.v1.db).index = true];
 
   // Receiving location
-  optional string location_id = 16 [(options.v1.db).references = "location"];
+  optional string location_id = 16 [(options.v1.db).references = "location", (options.v1.db).index = true];
 
   // Display ordering
   int32 line_number = 17;
@@ -95,7 +95,7 @@ message SupplierContractLine {
   // absence is fine; the recurrence engine resolves price via
   // ResolveActiveScheduleLine(line_id, asOf) when this is null. Application-
   // level FK only (no DB constraint, mirrors purchase_order_line_item linkage).
-  optional string supplier_contract_price_schedule_line_id = 24;
+  optional string supplier_contract_price_schedule_line_id = 24 [(options.v1.db).index = true];
 }
 
 service SupplierContractLineDomainService {

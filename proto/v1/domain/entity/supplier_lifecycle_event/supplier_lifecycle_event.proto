@@ -19,6 +19,10 @@ import "options/db.proto";
 // for UI filters (employee | vendor | regulator).
 message SupplierLifecycleEvent {
   option (options.v1.table).table = true;
+  // Reverse-chronological per-supplier timeline.
+  option (options.v1.table).index_together = "supplier_id,event_date";
+  // Workspace-scoped filter chips (category, then kind).
+  option (options.v1.table).index_together = "workspace_id,category,kind";
 
   string id = 1;
   string workspace_id = 2 [(options.v1.db).references = "workspace", (options.v1.db).index = true];

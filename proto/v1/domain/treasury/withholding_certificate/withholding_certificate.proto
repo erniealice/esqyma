@@ -27,6 +27,7 @@ enum WithholdingCertificateStatus {
 // ON DELETE RESTRICT from revenue — must void certificates before deleting revenue.
 message WithholdingCertificate {
   option (options.v1.table).table = true;
+  option (options.v1.table).unique_together = "revenue_id,certificate_number";
 
   string id = 1;
   optional int64 date_created = 2;
@@ -66,7 +67,7 @@ message WithholdingCertificate {
   int64 actual_amount = 16;
 
   // variance_amount = expected_amount - actual_amount (positive = under-withheld)
-  int64 variance_amount = 17;
+  int64 variance_amount = 17 [(options.v1.db).default = "0"];
 
   // Buyer TIN snapshot (from client.tin at create time)
   optional string buyer_tin_snapshot = 18;
@@ -75,7 +76,7 @@ message WithholdingCertificate {
   optional string source_document_id = 19;
 
   // Lifecycle status
-  WithholdingCertificateStatus status = 20;
+  WithholdingCertificateStatus status = 20 [(options.v1.db).default = "0"];
 
   // Optional notes / reason for variance or rejection
   optional string notes = 21;

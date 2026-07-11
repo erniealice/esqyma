@@ -1263,7 +1263,7 @@ var File_domain_procurement_supplier_subscription_supplier_subscription_proto pr
 
 const file_domain_procurement_supplier_subscription_supplier_subscription_proto_rawDesc = "" +
 	"\n" +
-	"Ddomain/procurement/supplier_subscription/supplier_subscription.proto\x12\x15domain.procurement.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1adomain/common/search.proto\x1a,domain/procurement/cost_plan/cost_plan.proto\x1a%domain/entity/supplier/supplier.proto\x1a@domain/expenditure/procurement_request/procurement_request.proto\x1a\x10options/db.proto\x1a\x1fgoogle/protobuf/timestamp.proto\"\xa0\f\n" +
+	"Ddomain/procurement/supplier_subscription/supplier_subscription.proto\x12\x15domain.procurement.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1adomain/common/search.proto\x1a,domain/procurement/cost_plan/cost_plan.proto\x1a%domain/entity/supplier/supplier.proto\x1a@domain/expenditure/procurement_request/procurement_request.proto\x1a\x10options/db.proto\x1a\x1fgoogle/protobuf/timestamp.proto\"\xc1\f\n" +
 	"\x14SupplierSubscription\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12&\n" +
 	"\fdate_created\x18\x02 \x01(\x03H\x00R\vdateCreated\x88\x01\x01\x12;\n" +
@@ -1283,8 +1283,9 @@ const file_domain_procurement_supplier_subscription_supplier_subscription_proto_
 	"\bsupplier\x18\x01R\n" +
 	"supplierId\x12G\n" +
 	"\x0fdate_time_start\x18\f \x01(\v2\x1a.google.protobuf.TimestampH\x06R\rdateTimeStart\x88\x01\x01\x12C\n" +
-	"\rdate_time_end\x18\x0e \x01(\v2\x1a.google.protobuf.TimestampH\aR\vdateTimeEnd\x88\x01\x01\x12U\n" +
-	"\bmetadata\x18\x10 \x03(\v29.domain.procurement.v1.SupplierSubscription.MetadataEntryR\bmetadata\x12\x17\n" +
+	"\rdate_time_end\x18\x0e \x01(\v2\x1a.google.protobuf.TimestampH\aR\vdateTimeEnd\x88\x01\x01\x12a\n" +
+	"\bmetadata\x18\x10 \x03(\v29.domain.procurement.v1.SupplierSubscription.MetadataEntryB\n" +
+	"\x82\xb5\x18\x06\"\x04'{}'R\bmetadata\x12\x17\n" +
 	"\x04code\x18\x16 \x01(\tH\bR\x04code\x88\x01\x01\x129\n" +
 	"\fworkspace_id\x18\x18 \x01(\tB\x11\x82\xb5\x18\r\n" +
 	"\tworkspace\x18\x01H\tR\vworkspaceId\x88\x01\x01\x12V\n" +
@@ -1300,7 +1301,7 @@ const file_domain_procurement_supplier_subscription_supplier_subscription_proto_
 	" disbursement_profile_id_snapshot\x18! \x01(\tH\rR\x1ddisbursementProfileIdSnapshot\x88\x01\x01\x1a;\n" +
 	"\rMetadataEntry\x12\x10\n" +
 	"\x03key\x18\x01 \x01(\tR\x03key\x12\x14\n" +
-	"\x05value\x18\x02 \x01(\tR\x05value:\x028\x01:\x06\x8a\xb5\x18\x02\b\x01B\x0f\n" +
+	"\x05value\x18\x02 \x01(\tR\x05value:\x028\x01:\x1b\x8a\xb5\x18\x17\b\x01\"\x13workspace_id,activeB\x0f\n" +
 	"\r_date_createdB\x16\n" +
 	"\x14_date_created_stringB\x10\n" +
 	"\x0e_date_modifiedB\x17\n" +

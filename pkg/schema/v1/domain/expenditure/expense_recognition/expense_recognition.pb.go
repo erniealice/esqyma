@@ -1756,7 +1756,7 @@ var File_domain_expenditure_expense_recognition_expense_recognition_proto protor
 
 const file_domain_expenditure_expense_recognition_expense_recognition_proto_rawDesc = "" +
 	"\n" +
-	"@domain/expenditure/expense_recognition/expense_recognition.proto\x12\x15domain.expenditure.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/search.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x10options/db.proto\x1a\x1fgoogle/protobuf/timestamp.proto\"\x90\x14\n" +
+	"@domain/expenditure/expense_recognition/expense_recognition.proto\x12\x15domain.expenditure.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/search.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x10options/db.proto\x1a\x1fgoogle/protobuf/timestamp.proto\"\xa4\x14\n" +
 	"\x12ExpenseRecognition\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x124\n" +
 	"\fworkspace_id\x18\x02 \x01(\tB\x11\x82\xb5\x18\r\n" +
@@ -1783,32 +1783,30 @@ const file_domain_expenditure_expense_recognition_expense_recognition_proto_rawD
 	"\x11supplier_contract\x18\x01H\aR\x12supplierContractId\x88\x01\x01\x12?\n" +
 	"\x0eexpenditure_id\x18\x1f \x01(\tB\x13\x82\xb5\x18\x0f\n" +
 	"\vexpenditure\x18\x01H\bR\rexpenditureId\x88\x01\x01\x123\n" +
-	"\x13deferred_expense_id\x18  \x01(\tH\tR\x11deferredExpenseId\x88\x01\x01\x12H\n" +
-	"\x12accrued_expense_id\x18! \x01(\tB\x15\x82\xb5\x18\x11\n" +
-	"\x0faccrued_expenseH\n" +
+	"\x13deferred_expense_id\x18  \x01(\tH\tR\x11deferredExpenseId\x88\x01\x01\x12J\n" +
+	"\x12accrued_expense_id\x18! \x01(\tB\x17\x82\xb5\x18\x13\n" +
+	"\x0faccrued_expense\x18\x01H\n" +
 	"R\x10accruedExpenseId\x88\x01\x01\x12\"\n" +
 	"\n" +
 	"cycle_date\x18\" \x01(\tH\vR\tcycleDate\x88\x01\x01\x12/\n" +
-	"\x0fidempotency_key\x18# \x01(\tB\x06\x82\xb5\x18\x02\x10\x01R\x0eidempotencyKey\x12@\n" +
-	"\x1areversal_of_recognition_id\x18$ \x01(\tH\fR\x17reversalOfRecognitionId\x88\x01\x01\x12@\n" +
+	"\x0fidempotency_key\x18# \x01(\tB\x06\x82\xb5\x18\x02\x10\x01R\x0eidempotencyKey\x12H\n" +
+	"\x1areversal_of_recognition_id\x18$ \x01(\tB\x06\x82\xb5\x18\x02\x18\x01H\fR\x17reversalOfRecognitionId\x88\x01\x01\x12@\n" +
 	"\x12expense_account_id\x18( \x01(\tB\r\x82\xb5\x18\t\n" +
 	"\aaccountH\rR\x10expenseAccountId\x88\x01\x01\x12@\n" +
 	"\x12accrual_account_id\x18) \x01(\tB\r\x82\xb5\x18\t\n" +
-	"\aaccountH\x0eR\x10accrualAccountId\x88\x01\x01\x12B\n" +
-	"\x10journal_entry_id\x18* \x01(\tB\x13\x82\xb5\x18\x0f\n" +
-	"\rjournal_entryH\x0fR\x0ejournalEntryId\x88\x01\x01\x124\n" +
-	"\vsupplier_id\x182 \x01(\tB\x0e\x82\xb5\x18\n" +
-	"\n" +
-	"\bsupplierH\x10R\n" +
-	"supplierId\x88\x01\x01\x124\n" +
-	"\vlocation_id\x183 \x01(\tB\x0e\x82\xb5\x18\n" +
-	"\n" +
-	"\blocationH\x11R\n" +
-	"locationId\x88\x01\x01\x12W\n" +
-	"\x17expenditure_category_id\x184 \x01(\tB\x1a\x82\xb5\x18\x16\n" +
-	"\x14expenditure_categoryH\x12R\x15expenditureCategoryId\x88\x01\x01\x126\n" +
-	"\fjob_phase_id\x185 \x01(\tB\x0f\x82\xb5\x18\v\n" +
-	"\tjob_phaseH\x13R\n" +
+	"\aaccountH\x0eR\x10accrualAccountId\x88\x01\x01\x12D\n" +
+	"\x10journal_entry_id\x18* \x01(\tB\x15\x82\xb5\x18\x11\n" +
+	"\rjournal_entry\x18\x01H\x0fR\x0ejournalEntryId\x88\x01\x01\x126\n" +
+	"\vsupplier_id\x182 \x01(\tB\x10\x82\xb5\x18\f\n" +
+	"\bsupplier\x18\x01H\x10R\n" +
+	"supplierId\x88\x01\x01\x126\n" +
+	"\vlocation_id\x183 \x01(\tB\x10\x82\xb5\x18\f\n" +
+	"\blocation\x18\x01H\x11R\n" +
+	"locationId\x88\x01\x01\x12Y\n" +
+	"\x17expenditure_category_id\x184 \x01(\tB\x1c\x82\xb5\x18\x18\n" +
+	"\x14expenditure_category\x18\x01H\x12R\x15expenditureCategoryId\x88\x01\x01\x128\n" +
+	"\fjob_phase_id\x185 \x01(\tB\x11\x82\xb5\x18\r\n" +
+	"\tjob_phase\x18\x01H\x13R\n" +
 	"jobPhaseId\x88\x01\x01\x12\\\n" +
 	"\x18supplier_subscription_id\x18< \x01(\tB\x1d\x82\xb5\x18\x19\n" +
 	"\x15supplier_subscription\x18\x01H\x14R\x16supplierSubscriptionId\x88\x01\x01\x12Z\n" +

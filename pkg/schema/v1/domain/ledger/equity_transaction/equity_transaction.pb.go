@@ -96,7 +96,7 @@ type EquityTransaction struct {
 	TransactionType EquityTransactionType `protobuf:"varint,3,opt,name=transaction_type,json=transactionType,proto3,enum=domain.ledger.v1.EquityTransactionType" json:"transaction_type,omitempty"`
 	Amount          int64                 `protobuf:"varint,4,opt,name=amount,proto3" json:"amount,omitempty"` // centavos
 	Description     *string               `protobuf:"bytes,5,opt,name=description,proto3,oneof" json:"description,omitempty"`
-	// Transaction date
+	// Transaction date. Range-filtered and sort key for dashboards.
 	TransactionDate       int64   `protobuf:"varint,6,opt,name=transaction_date,json=transactionDate,proto3" json:"transaction_date,omitempty"`
 	TransactionDateString *string `protobuf:"bytes,7,opt,name=transaction_date_string,json=transactionDateString,proto3,oneof" json:"transaction_date_string,omitempty"`
 	// GL traceability — FK to the auto-generated JournalEntry
@@ -996,15 +996,15 @@ var File_domain_ledger_equity_transaction_equity_transaction_proto protoreflect.
 
 const file_domain_ledger_equity_transaction_equity_transaction_proto_rawDesc = "" +
 	"\n" +
-	"9domain/ledger/equity_transaction/equity_transaction.proto\x12\x10domain.ledger.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1adomain/common/search.proto\x1a\x10options/db.proto\"\x87\x05\n" +
+	"9domain/ledger/equity_transaction/equity_transaction.proto\x12\x10domain.ledger.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1adomain/common/search.proto\x1a\x10options/db.proto\"\x8f\x05\n" +
 	"\x11EquityTransaction\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12B\n" +
 	"\x11equity_account_id\x18\x02 \x01(\tB\x16\x82\xb5\x18\x12\n" +
 	"\x0eequity_account\x18\x01R\x0fequityAccountId\x12R\n" +
 	"\x10transaction_type\x18\x03 \x01(\x0e2'.domain.ledger.v1.EquityTransactionTypeR\x0ftransactionType\x12\x16\n" +
 	"\x06amount\x18\x04 \x01(\x03R\x06amount\x12%\n" +
-	"\vdescription\x18\x05 \x01(\tH\x00R\vdescription\x88\x01\x01\x12)\n" +
-	"\x10transaction_date\x18\x06 \x01(\x03R\x0ftransactionDate\x12C\n" +
+	"\vdescription\x18\x05 \x01(\tH\x00R\vdescription\x88\x01\x01\x121\n" +
+	"\x10transaction_date\x18\x06 \x01(\x03B\x06\x82\xb5\x18\x02\x18\x01R\x0ftransactionDate\x12C\n" +
 	"\x17transaction_date_string\x18\a \x01(\tB\x06\x82\xb5\x18\x028\x01H\x01R\x15transactionDateString\x88\x01\x01\x12D\n" +
 	"\x10journal_entry_id\x18\b \x01(\tB\x15\x82\xb5\x18\x11\n" +
 	"\rjournal_entry\x18\x01H\x02R\x0ejournalEntryId\x88\x01\x01\x12&\n" +

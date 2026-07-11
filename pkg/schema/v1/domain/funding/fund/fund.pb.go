@@ -1324,7 +1324,7 @@ var File_domain_funding_fund_fund_proto protoreflect.FileDescriptor
 
 const file_domain_funding_fund_fund_proto_rawDesc = "" +
 	"\n" +
-	"\x1edomain/funding/fund/fund.proto\x12\x11domain.funding.v1\x1a\x19domain/common/error.proto\x1a\x1adomain/common/search.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1edomain/common/pagination.proto\x1a\x10options/db.proto\"\xc8\x10\n" +
+	"\x1edomain/funding/fund/fund.proto\x12\x11domain.funding.v1\x1a\x19domain/common/error.proto\x1a\x1adomain/common/search.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1edomain/common/pagination.proto\x1a\x10options/db.proto\"\xe9\x10\n" +
 	"\x04Fund\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12&\n" +
 	"\fdate_created\x18\x02 \x01(\x03H\x00R\vdateCreated\x88\x01\x01\x12;\n" +
@@ -1334,17 +1334,17 @@ const file_domain_funding_fund_fund_proto_rawDesc = "" +
 	"\x06active\x18\x06 \x01(\bB\n" +
 	"\x82\xb5\x18\x06\"\x04trueR\x06active\x12\x12\n" +
 	"\x04name\x18\a \x01(\tR\x04name\x12%\n" +
-	"\vdescription\x18\b \x01(\tH\x04R\vdescription\x88\x01\x01\x12/\n" +
-	"\x04kind\x18\t \x01(\x0e2\x1b.domain.funding.v1.FundKindR\x04kind\x12O\n" +
+	"\vdescription\x18\b \x01(\tH\x04R\vdescription\x88\x01\x01\x127\n" +
+	"\x04kind\x18\t \x01(\x0e2\x1b.domain.funding.v1.FundKindB\x06\x82\xb5\x18\x02\x18\x01R\x04kind\x12O\n" +
 	"\x10owner_party_type\x18\n" +
-	" \x01(\x0e2%.domain.funding.v1.FundOwnerPartyTypeR\x0eownerPartyType\x12$\n" +
-	"\x0eowner_party_id\x18\v \x01(\tR\fownerPartyId\x12\x1a\n" +
-	"\bcurrency\x18\f \x01(\tR\bcurrency\x12)\n" +
-	"\x10authorized_limit\x18\r \x01(\x03R\x0fauthorizedLimit\x128\n" +
+	" \x01(\x0e2%.domain.funding.v1.FundOwnerPartyTypeR\x0eownerPartyType\x12,\n" +
+	"\x0eowner_party_id\x18\v \x01(\tB\x06\x82\xb5\x18\x02\x18\x01R\fownerPartyId\x12\x1a\n" +
+	"\bcurrency\x18\f \x01(\tR\bcurrency\x122\n" +
+	"\x10authorized_limit\x18\r \x01(\x03B\a\x82\xb5\x18\x03\"\x010R\x0fauthorizedLimit\x128\n" +
 	"\rgl_account_id\x18\x0e \x01(\tB\x0f\x82\xb5\x18\v\n" +
 	"\aaccount\x18\x01H\x05R\vglAccountId\x88\x01\x01\x12#\n" +
-	"\x06shared\x18\x0f \x01(\bB\v\x82\xb5\x18\a\"\x05falseR\x06shared\x125\n" +
-	"\x06status\x18\x10 \x01(\x0e2\x1d.domain.funding.v1.FundStatusR\x06status\x12&\n" +
+	"\x06shared\x18\x0f \x01(\bB\v\x82\xb5\x18\a\"\x05falseR\x06shared\x12=\n" +
+	"\x06status\x18\x10 \x01(\x0e2\x1d.domain.funding.v1.FundStatusB\x06\x82\xb5\x18\x02\x18\x01R\x06status\x12&\n" +
 	"\fexternal_ref\x18\x11 \x01(\tH\x06R\vexternalRef\x88\x01\x01\x12<\n" +
 	"\x11linked_by_user_id\x18\x12 \x01(\tB\f\x82\xb5\x18\b\n" +
 	"\x04user\x18\x01H\aR\x0elinkedByUserId\x88\x01\x01\x12.\n" +

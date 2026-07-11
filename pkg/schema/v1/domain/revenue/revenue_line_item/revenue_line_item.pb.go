@@ -65,8 +65,11 @@ type RevenueLineItem struct {
 	// Multi-currency: original billing amount for this line before FX conversion.
 	// NULL when billing_currency == functional_currency.
 	BillingAmount *int64 `protobuf:"varint,33,opt,name=billing_amount,json=billingAmount,proto3,oneof" json:"billing_amount,omitempty"` // centavos in billing_currency
-	unknownFields protoimpl.UnknownFields
-	sizeCache     protoimpl.SizeCache
+	// Drift-recovered column (DB has FK + index; proto did not).
+	// FK to subscription_seat — links a seat-scoped recurring line to its seat.
+	SubscriptionSeatId *string `protobuf:"bytes,34,opt,name=subscription_seat_id,json=subscriptionSeatId,proto3,oneof" json:"subscription_seat_id,omitempty"`
+	unknownFields      protoimpl.UnknownFields
+	sizeCache          protoimpl.SizeCache
 }
 
 func (x *RevenueLineItem) Reset() {
@@ -321,6 +324,13 @@ func (x *RevenueLineItem) GetBillingAmount() int64 {
 		return *x.BillingAmount
 	}
 	return 0
+}
+
+func (x *RevenueLineItem) GetSubscriptionSeatId() string {
+	if x != nil && x.SubscriptionSeatId != nil {
+		return *x.SubscriptionSeatId
+	}
+	return ""
 }
 
 type CreateRevenueLineItemRequest struct {
@@ -1119,14 +1129,15 @@ var File_domain_revenue_revenue_line_item_revenue_line_item_proto protoreflect.F
 
 const file_domain_revenue_revenue_line_item_revenue_line_item_proto_rawDesc = "" +
 	"\n" +
-	"8domain/revenue/revenue_line_item/revenue_line_item.proto\x12\x11domain.revenue.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/search.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a$domain/revenue/revenue/revenue.proto\x1a$domain/product/product/product.proto\x1a\x10options/db.proto\"\xd7\x0e\n" +
+	"8domain/revenue/revenue_line_item/revenue_line_item.proto\x12\x11domain.revenue.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/search.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a$domain/revenue/revenue/revenue.proto\x1a$domain/product/product/product.proto\x1a\x10options/db.proto\"\xce\x0f\n" +
 	"\x0fRevenueLineItem\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12&\n" +
 	"\fdate_created\x18\x02 \x01(\x03H\x00R\vdateCreated\x88\x01\x01\x12;\n" +
 	"\x13date_created_string\x18\x03 \x01(\tB\x06\x82\xb5\x18\x028\x01H\x01R\x11dateCreatedString\x88\x01\x01\x12(\n" +
 	"\rdate_modified\x18\x04 \x01(\x03H\x02R\fdateModified\x88\x01\x01\x12=\n" +
-	"\x14date_modified_string\x18\x05 \x01(\tB\x06\x82\xb5\x18\x028\x01H\x03R\x12dateModifiedString\x88\x01\x01\x12\x16\n" +
-	"\x06active\x18\x06 \x01(\bR\x06active\x129\n" +
+	"\x14date_modified_string\x18\x05 \x01(\tB\x06\x82\xb5\x18\x028\x01H\x03R\x12dateModifiedString\x88\x01\x01\x12\"\n" +
+	"\x06active\x18\x06 \x01(\bB\n" +
+	"\x82\xb5\x18\x06\"\x04trueR\x06active\x129\n" +
 	"\arevenue\x18\a \x01(\v2\x1a.domain.revenue.v1.RevenueH\x04R\arevenue\x88\x01\x01\x12\x1d\n" +
 	"\n" +
 	"revenue_id\x18\b \x01(\tR\trevenueId\x129\n" +
@@ -1167,7 +1178,9 @@ const file_domain_revenue_revenue_line_item_revenue_line_item_proto_rawDesc = ""
 	"\tworkspace\x18\x01H\x11R\vworkspaceId\x88\x01\x01\x129\n" +
 	"\x16tax_treatment_snapshot\x18\x1f \x01(\tH\x12R\x14taxTreatmentSnapshot\x88\x01\x01\x12A\n" +
 	"\x1awithholding_class_snapshot\x18  \x01(\tH\x13R\x18withholdingClassSnapshot\x88\x01\x01\x12*\n" +
-	"\x0ebilling_amount\x18! \x01(\x03H\x14R\rbillingAmount\x88\x01\x01:\x06\x8a\xb5\x18\x02\b\x01B\x0f\n" +
+	"\x0ebilling_amount\x18! \x01(\x03H\x14R\rbillingAmount\x88\x01\x01\x12P\n" +
+	"\x14subscription_seat_id\x18\" \x01(\tB\x19\x82\xb5\x18\x15\n" +
+	"\x11subscription_seat\x18\x01H\x15R\x12subscriptionSeatId\x88\x01\x01:\x06\x8a\xb5\x18\x02\b\x01B\x0f\n" +
 	"\r_date_createdB\x16\n" +
 	"\x14_date_created_stringB\x10\n" +
 	"\x0e_date_modifiedB\x17\n" +
@@ -1190,7 +1203,8 @@ const file_domain_revenue_revenue_line_item_revenue_line_item_proto_rawDesc = ""
 	"\r_workspace_idB\x19\n" +
 	"\x17_tax_treatment_snapshotB\x1d\n" +
 	"\x1b_withholding_class_snapshotB\x11\n" +
-	"\x0f_billing_amount\"V\n" +
+	"\x0f_billing_amountB\x17\n" +
+	"\x15_subscription_seat_id\"V\n" +
 	"\x1cCreateRevenueLineItemRequest\x126\n" +
 	"\x04data\x18\x01 \x01(\v2\".domain.revenue.v1.RevenueLineItemR\x04data\"\xaf\x01\n" +
 	"\x1dCreateRevenueLineItemResponse\x126\n" +

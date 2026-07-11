@@ -1595,7 +1595,7 @@ var File_domain_subscription_billing_event_billing_event_proto protoreflect.File
 
 const file_domain_subscription_billing_event_billing_event_proto_rawDesc = "" +
 	"\n" +
-	"5domain/subscription/billing_event/billing_event.proto\x12\x16domain.subscription.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/search.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x10options/db.proto\"\xcf\n" +
+	"5domain/subscription/billing_event/billing_event.proto\x12\x16domain.subscription.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/search.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x10options/db.proto\"\xd7\n" +
 	"\n" +
 	"\fBillingEvent\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12&\n" +
@@ -1618,8 +1618,8 @@ const file_domain_subscription_billing_event_billing_event_proto_rawDesc = "" +
 	"\x15product_price_plan_id\x18\v \x01(\tB\x1a\x82\xb5\x18\x16\n" +
 	"\x12product_price_plan\x18\x01H\aR\x12productPricePlanId\x88\x01\x01\x12'\n" +
 	"\x0fbillable_amount\x18\f \x01(\x03R\x0ebillableAmount\x12)\n" +
-	"\x10billing_currency\x18\r \x01(\tR\x0fbillingCurrency\x12B\n" +
-	"\x06status\x18\x0e \x01(\x0e2*.domain.subscription.v1.BillingEventStatusR\x06status\x12E\n" +
+	"\x10billing_currency\x18\r \x01(\tR\x0fbillingCurrency\x12J\n" +
+	"\x06status\x18\x0e \x01(\x0e2*.domain.subscription.v1.BillingEventStatusB\x06\x82\xb5\x18\x02\x18\x01R\x06status\x12E\n" +
 	"\atrigger\x18\x0f \x01(\x0e2+.domain.subscription.v1.BillingEventTriggerR\atrigger\x123\n" +
 	"\n" +
 	"revenue_id\x18\x10 \x01(\tB\x0f\x82\xb5\x18\v\n" +

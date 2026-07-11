@@ -952,13 +952,13 @@ var File_domain_treasury_loan_payment_loan_payment_proto protoreflect.FileDescri
 
 const file_domain_treasury_loan_payment_loan_payment_proto_rawDesc = "" +
 	"\n" +
-	"/domain/treasury/loan_payment/loan_payment.proto\x12\x12domain.treasury.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1adomain/common/search.proto\x1a\x10options/db.proto\"\xa5\x04\n" +
+	"/domain/treasury/loan_payment/loan_payment.proto\x12\x12domain.treasury.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1adomain/common/search.proto\x1a\x10options/db.proto\"\xad\x04\n" +
 	"\vLoanPayment\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12%\n" +
 	"\aloan_id\x18\x02 \x01(\tB\f\x82\xb5\x18\b\n" +
 	"\x04loan\x18\x01R\x06loanId\x12/\n" +
-	"\x0epayment_number\x18\x03 \x01(\tB\b\x82\xb5\x18\x04\x10\x01\x18\x01R\rpaymentNumber\x12!\n" +
-	"\fpayment_date\x18\x04 \x01(\tR\vpaymentDate\x12)\n" +
+	"\x0epayment_number\x18\x03 \x01(\tB\b\x82\xb5\x18\x04\x10\x01\x18\x01R\rpaymentNumber\x12)\n" +
+	"\fpayment_date\x18\x04 \x01(\tB\x06\x82\xb5\x18\x02\x18\x01R\vpaymentDate\x12)\n" +
 	"\x10principal_amount\x18\x06 \x01(\x03R\x0fprincipalAmount\x12'\n" +
 	"\x0finterest_amount\x18\a \x01(\x03R\x0einterestAmount\x12&\n" +
 	"\n" +

@@ -68,12 +68,12 @@ message SupplierContractPriceSchedule {
   optional google.protobuf.Timestamp date_time_end = 23;  // nil = open-ended last bucket
 
   // Scoping
-  optional string location_id = 24 [(options.v1.db).references = "location"];
+  optional string location_id = 24 [(options.v1.db).references = "location", (options.v1.db).index = true];
   string currency = 25;
 
   // Lifecycle
   SupplierContractPriceScheduleStatus status = 30 [(options.v1.db).index = true];
-  int32 sequence_number = 31;                             // 1, 2, 3 ... ordering within a contract
+  int32 sequence_number = 31 [(options.v1.db).default = "1"];                             // 1, 2, 3 ... ordering within a contract
 
   // Notes
   optional string notes = 50;

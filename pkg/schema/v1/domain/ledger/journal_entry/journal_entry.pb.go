@@ -204,7 +204,7 @@ type JournalEntry struct {
 	Id          string `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
 	EntryNumber string `protobuf:"bytes,2,opt,name=entry_number,json=entryNumber,proto3" json:"entry_number,omitempty"`
 	Description string `protobuf:"bytes,3,opt,name=description,proto3" json:"description,omitempty"`
-	// Date — unix timestamp + display string
+	// Date — unix timestamp + display string. Default list sort key.
 	EntryDate       int64   `protobuf:"varint,4,opt,name=entry_date,json=entryDate,proto3" json:"entry_date,omitempty"`
 	EntryDateString *string `protobuf:"bytes,5,opt,name=entry_date_string,json=entryDateString,proto3,oneof" json:"entry_date_string,omitempty"`
 	// Status and source traceability
@@ -1476,13 +1476,13 @@ var File_domain_ledger_journal_entry_journal_entry_proto protoreflect.FileDescri
 
 const file_domain_ledger_journal_entry_journal_entry_proto_rawDesc = "" +
 	"\n" +
-	"/domain/ledger/journal_entry/journal_entry.proto\x12\x10domain.ledger.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1adomain/common/search.proto\x1a\x10options/db.proto\"\xbd\v\n" +
+	"/domain/ledger/journal_entry/journal_entry.proto\x12\x10domain.ledger.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1adomain/common/search.proto\x1a\x10options/db.proto\"\xc5\v\n" +
 	"\fJournalEntry\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12+\n" +
 	"\fentry_number\x18\x02 \x01(\tB\b\x82\xb5\x18\x04\x10\x01\x18\x01R\ventryNumber\x12 \n" +
-	"\vdescription\x18\x03 \x01(\tR\vdescription\x12\x1d\n" +
+	"\vdescription\x18\x03 \x01(\tR\vdescription\x12%\n" +
 	"\n" +
-	"entry_date\x18\x04 \x01(\x03R\tentryDate\x127\n" +
+	"entry_date\x18\x04 \x01(\x03B\x06\x82\xb5\x18\x02\x18\x01R\tentryDate\x127\n" +
 	"\x11entry_date_string\x18\x05 \x01(\tB\x06\x82\xb5\x18\x028\x01H\x00R\x0fentryDateString\x88\x01\x01\x12<\n" +
 	"\x06status\x18\x06 \x01(\x0e2$.domain.ledger.v1.JournalEntryStatusR\x06status\x12D\n" +
 	"\vsource_type\x18\a \x01(\x0e2#.domain.ledger.v1.JournalSourceTypeR\n" +

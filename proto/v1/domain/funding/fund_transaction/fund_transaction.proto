@@ -57,6 +57,11 @@ enum FundTransactionKind {
 // created by the migration. All projection queries MUST target the view.
 message FundTransaction {
   option (options.v1.table).table = true;
+  // Balance-projection scans: SUM over POSTED rows per fund / per allocation,
+  // ordered by posted_at. The allocation-scoped live index is partial
+  // (WHERE allocation_id IS NOT NULL); partiality is not expressible here.
+  option (options.v1.table).index_together = "fund_id,status,posted_at";
+  option (options.v1.table).index_together = "allocation_id,status,posted_at";
 
   string id = 1;
   optional int64 date_created = 2;
@@ -76,7 +81,7 @@ message FundTransaction {
 
   // Event classification + amount
   FundTransactionKind kind = 10;
-  int64 amount = 11;  // centavos, source currency, ALWAYS POSITIVE — direction encoded in kind
+  int64 amount = 11 [(options.v1.db).default = "0"];  // centavos, source currency, ALWAYS POSITIVE — direction encoded in kind
 
   // Timestamps
   int64 effective_at = 12;  // when the event happened (operator-supplied or paired-entity date)
@@ -88,7 +93,7 @@ message FundTransaction {
   optional string reverses_id = 15 [(options.v1.db).references = "fund_transaction"];
 
   // Idempotency — UNIQUE; convention: "{caller_use_case}-{caller_entity_id}-{verb}"
-  string idempotency_key = 16;
+  string idempotency_key = 16 [(options.v1.db).unique = true];
 
   // FX snapshot — present when source currency differs from workspace functional currency
   optional double exchange_rate_snapshot = 17;
@@ -97,9 +102,11 @@ message FundTransaction {
 
   // Optional back-edges to the entity that spawned this event
   optional string expenditure_id = 20 [(options.v1.db).references = "expenditure"];
-  optional string disbursement_id = 21 [(options.v1.db).references = "disbursement"];
+  optional string disbursement_id = 21 [(options.v1.db).references = "treasury_disbursement"];
   optional string collection_id = 22 [(options.v1.db).references = "collection"];
-  optional string transfer_id = 23;  // groups TRANSFER_OUT + TRANSFER_IN; NOT a FK (no transfer entity)
+  // groups TRANSFER_OUT + TRANSFER_IN; NOT a FK (no transfer entity).
+  // Live index is partial (WHERE transfer_id IS NOT NULL) — not expressible here.
+  optional string transfer_id = 23 [(options.v1.db).index = true];
 
   // GL traceability
   optional string journal_entry_id = 24 [(options.v1.db).references = "journal_entry", (options.v1.db).index = true];

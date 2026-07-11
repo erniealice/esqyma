@@ -1206,7 +1206,7 @@ var File_domain_asset_asset_maintenance_asset_maintenance_proto protoreflect.Fil
 
 const file_domain_asset_asset_maintenance_asset_maintenance_proto_rawDesc = "" +
 	"\n" +
-	"6domain/asset/asset_maintenance/asset_maintenance.proto\x12\x0fdomain.asset.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1adomain/common/search.proto\x1a\x10options/db.proto\"\xb5\n" +
+	"6domain/asset/asset_maintenance/asset_maintenance.proto\x12\x0fdomain.asset.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1adomain/common/search.proto\x1a\x10options/db.proto\"\xc2\n" +
 	"\n" +
 	"\x10AssetMaintenance\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12(\n" +
@@ -1221,8 +1221,8 @@ const file_domain_asset_asset_maintenance_asset_maintenance_proto_rawDesc = "" +
 	"\x0fcompletion_date\x18\n" +
 	" \x01(\tH\x02R\x0ecompletionDate\x88\x01\x01\x12%\n" +
 	"\vdescription\x18\f \x01(\tH\x03R\vdescription\x88\x01\x01\x12\x17\n" +
-	"\x04cost\x18\r \x01(\x03H\x04R\x04cost\x88\x01\x01\x12%\n" +
-	"\x0eis_capitalized\x18\x0e \x01(\bR\risCapitalized\x12&\n" +
+	"\x04cost\x18\r \x01(\x03H\x04R\x04cost\x88\x01\x01\x122\n" +
+	"\x0eis_capitalized\x18\x0e \x01(\bB\v\x82\xb5\x18\a\"\x05falseR\risCapitalized\x12&\n" +
 	"\fperformed_by\x18\x0f \x01(\tH\x05R\vperformedBy\x88\x01\x01\x12 \n" +
 	"\tvendor_id\x18\x10 \x01(\tH\x06R\bvendorId\x88\x01\x01\x12/\n" +
 	"\x11work_order_number\x18\x11 \x01(\tH\aR\x0fworkOrderNumber\x88\x01\x01\x127\n" +

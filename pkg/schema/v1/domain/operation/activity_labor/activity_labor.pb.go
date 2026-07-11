@@ -1189,10 +1189,10 @@ var File_domain_operation_activity_labor_activity_labor_proto protoreflect.FileD
 
 const file_domain_operation_activity_labor_activity_labor_proto_rawDesc = "" +
 	"\n" +
-	"4domain/operation/activity_labor/activity_labor.proto\x12\x13domain.operation.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1adomain/common/search.proto\x1a0domain/operation/job_activity/job_activity.proto\x1a\x1fdomain/entity/staff/staff.proto\x1a\x10options/db.proto\"\xd9\x04\n" +
-	"\rActivityLabor\x123\n" +
-	"\vactivity_id\x18\x01 \x01(\tB\x12\x82\xb5\x18\x0e\n" +
-	"\fjob_activityR\n" +
+	"4domain/operation/activity_labor/activity_labor.proto\x12\x13domain.operation.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1adomain/common/search.proto\x1a0domain/operation/job_activity/job_activity.proto\x1a\x1fdomain/entity/staff/staff.proto\x1a\x10options/db.proto\"\xdb\x04\n" +
+	"\rActivityLabor\x125\n" +
+	"\vactivity_id\x18\x01 \x01(\tB\x14\x82\xb5\x18\x10\n" +
+	"\fjob_activity\x18\x01R\n" +
 	"activityId\x12H\n" +
 	"\fjob_activity\x18\x02 \x01(\v2 .domain.operation.v1.JobActivityH\x00R\vjobActivity\x88\x01\x01\x12(\n" +
 	"\bstaff_id\x18\x03 \x01(\tB\r\x82\xb5\x18\t\n" +

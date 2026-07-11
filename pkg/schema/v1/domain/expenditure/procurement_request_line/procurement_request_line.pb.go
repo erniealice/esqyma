@@ -161,7 +161,7 @@ type ProcurementRequestLine struct {
 	EstimatedUnitPrice  int64   `protobuf:"varint,9,opt,name=estimated_unit_price,json=estimatedUnitPrice,proto3" json:"estimated_unit_price,omitempty"`     // centavos
 	EstimatedTotalPrice int64   `protobuf:"varint,10,opt,name=estimated_total_price,json=estimatedTotalPrice,proto3" json:"estimated_total_price,omitempty"` // centavos
 	// Pre-link to a contract line if the item is covered by a standing contract
-	SupplierContractLineId *string `protobuf:"bytes,11,opt,name=supplier_contract_line_id,json=supplierContractLineId,proto3,oneof" json:"supplier_contract_line_id,omitempty"` // FK to supplier_contract_line (no DB constraint)
+	SupplierContractLineId *string `protobuf:"bytes,11,opt,name=supplier_contract_line_id,json=supplierContractLineId,proto3,oneof" json:"supplier_contract_line_id,omitempty"` // FK to supplier_contract_line (no DB FK constraint; indexed)
 	// GL / categorization
 	ExpenditureCategoryId *string `protobuf:"bytes,12,opt,name=expenditure_category_id,json=expenditureCategoryId,proto3,oneof" json:"expenditure_category_id,omitempty"`
 	ExpenseAccountId      *string `protobuf:"bytes,13,opt,name=expense_account_id,json=expenseAccountId,proto3,oneof" json:"expense_account_id,omitempty"`
@@ -1260,7 +1260,7 @@ var File_domain_expenditure_procurement_request_line_procurement_request_line_pr
 
 const file_domain_expenditure_procurement_request_line_procurement_request_line_proto_rawDesc = "" +
 	"\n" +
-	"Jdomain/expenditure/procurement_request_line/procurement_request_line.proto\x12\x15domain.expenditure.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/search.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a@domain/expenditure/procurement_request/procurement_request.proto\x1a$domain/product/product/product.proto\x1a\x10options/db.proto\"\x86\x13\n" +
+	"Jdomain/expenditure/procurement_request_line/procurement_request_line.proto\x12\x15domain.expenditure.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/search.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a@domain/expenditure/procurement_request/procurement_request.proto\x1a$domain/product/product/product.proto\x1a\x10options/db.proto\"\xac\x13\n" +
 	"\x16ProcurementRequestLine\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12Q\n" +
 	"\x16procurement_request_id\x18\x02 \x01(\tB\x1b\x82\xb5\x18\x17\n" +
@@ -1275,15 +1275,14 @@ const file_domain_expenditure_procurement_request_line_procurement_request_line_
 	"\bquantity\x18\b \x01(\x01R\bquantity\x120\n" +
 	"\x14estimated_unit_price\x18\t \x01(\x03R\x12estimatedUnitPrice\x122\n" +
 	"\x15estimated_total_price\x18\n" +
-	" \x01(\x03R\x13estimatedTotalPrice\x12>\n" +
-	"\x19supplier_contract_line_id\x18\v \x01(\tH\x03R\x16supplierContractLineId\x88\x01\x01\x12W\n" +
-	"\x17expenditure_category_id\x18\f \x01(\tB\x1a\x82\xb5\x18\x16\n" +
-	"\x14expenditure_categoryH\x04R\x15expenditureCategoryId\x88\x01\x01\x12@\n" +
-	"\x12expense_account_id\x18\r \x01(\tB\r\x82\xb5\x18\t\n" +
-	"\aaccountH\x05R\x10expenseAccountId\x88\x01\x01\x124\n" +
-	"\vlocation_id\x18\x0e \x01(\tB\x0e\x82\xb5\x18\n" +
-	"\n" +
-	"\blocationH\x06R\n" +
+	" \x01(\x03R\x13estimatedTotalPrice\x12F\n" +
+	"\x19supplier_contract_line_id\x18\v \x01(\tB\x06\x82\xb5\x18\x02\x18\x01H\x03R\x16supplierContractLineId\x88\x01\x01\x12Y\n" +
+	"\x17expenditure_category_id\x18\f \x01(\tB\x1c\x82\xb5\x18\x18\n" +
+	"\x14expenditure_category\x18\x01H\x04R\x15expenditureCategoryId\x88\x01\x01\x12B\n" +
+	"\x12expense_account_id\x18\r \x01(\tB\x0f\x82\xb5\x18\v\n" +
+	"\aaccount\x18\x01H\x05R\x10expenseAccountId\x88\x01\x01\x126\n" +
+	"\vlocation_id\x18\x0e \x01(\tB\x10\x82\xb5\x18\f\n" +
+	"\blocation\x18\x01H\x06R\n" +
 	"locationId\x88\x01\x01\x12\x1f\n" +
 	"\vline_number\x18\x0f \x01(\x05R\n" +
 	"lineNumber\x12\"\n" +
@@ -1294,10 +1293,10 @@ const file_domain_expenditure_procurement_request_line_procurement_request_line_
 	"\rdate_modified\x18\x13 \x01(\x03H\tR\fdateModified\x88\x01\x01\x12=\n" +
 	"\x14date_modified_string\x18\x14 \x01(\tB\x06\x82\xb5\x18\x028\x01H\n" +
 	"R\x12dateModifiedString\x88\x01\x01\x12t\n" +
-	"\x10fulfillment_mode\x18\x15 \x01(\x0e2<.domain.expenditure.v1.ProcurementRequestLineFulfillmentModeB\x06\x82\xb5\x18\x02\x18\x01H\vR\x0ffulfillmentMode\x88\x01\x01\x12D\n" +
-	"\x1cspawned_supplier_contract_id\x18\x16 \x01(\tH\fR\x19spawnedSupplierContractId\x88\x01\x01\x12P\n" +
-	"#spawned_purchase_order_line_item_id\x18\x17 \x01(\tH\rR\x1espawnedPurchaseOrderLineItemId\x88\x01\x01\x129\n" +
-	"\x16spawned_expenditure_id\x18\x18 \x01(\tH\x0eR\x14spawnedExpenditureId\x88\x01\x01\x127\n" +
+	"\x10fulfillment_mode\x18\x15 \x01(\x0e2<.domain.expenditure.v1.ProcurementRequestLineFulfillmentModeB\x06\x82\xb5\x18\x02\x18\x01H\vR\x0ffulfillmentMode\x88\x01\x01\x12L\n" +
+	"\x1cspawned_supplier_contract_id\x18\x16 \x01(\tB\x06\x82\xb5\x18\x02\x18\x01H\fR\x19spawnedSupplierContractId\x88\x01\x01\x12X\n" +
+	"#spawned_purchase_order_line_item_id\x18\x17 \x01(\tB\x06\x82\xb5\x18\x02\x18\x01H\rR\x1espawnedPurchaseOrderLineItemId\x88\x01\x01\x12A\n" +
+	"\x16spawned_expenditure_id\x18\x18 \x01(\tB\x06\x82\xb5\x18\x02\x18\x01H\x0eR\x14spawnedExpenditureId\x88\x01\x01\x127\n" +
 	"\x15recurring_cycle_value\x18\x19 \x01(\x05H\x0fR\x13recurringCycleValue\x88\x01\x01\x125\n" +
 	"\x14recurring_cycle_unit\x18\x1a \x01(\tH\x10R\x12recurringCycleUnit\x88\x01\x01\x125\n" +
 	"\x14recurring_term_value\x18\x1b \x01(\x05H\x11R\x12recurringTermValue\x88\x01\x01\x123\n" +

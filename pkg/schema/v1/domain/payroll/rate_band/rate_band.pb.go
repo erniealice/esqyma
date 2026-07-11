@@ -988,19 +988,19 @@ var File_domain_payroll_rate_band_rate_band_proto protoreflect.FileDescriptor
 
 const file_domain_payroll_rate_band_rate_band_proto_rawDesc = "" +
 	"\n" +
-	"(domain/payroll/rate_band/rate_band.proto\x12\x11domain.payroll.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1adomain/common/search.proto\x1a\x10options/db.proto\"\xb2\x06\n" +
+	"(domain/payroll/rate_band/rate_band.proto\x12\x11domain.payroll.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1adomain/common/search.proto\x1a\x10options/db.proto\"\xed\x06\n" +
 	"\bRateBand\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x126\n" +
 	"\rrate_table_id\x18\x02 \x01(\tB\x12\x82\xb5\x18\x0e\n" +
 	"\n" +
-	"rate_table\x18\x01R\vrateTableId\x120\n" +
-	"\x14lower_bound_centavos\x18\x03 \x01(\x03R\x12lowerBoundCentavos\x125\n" +
+	"rate_table\x18\x01R\vrateTableId\x129\n" +
+	"\x14lower_bound_centavos\x18\x03 \x01(\x03B\a\x82\xb5\x18\x03\"\x010R\x12lowerBoundCentavos\x125\n" +
 	"\x14upper_bound_centavos\x18\x04 \x01(\x03H\x00R\x12upperBoundCentavos\x88\x01\x01\x12\x1b\n" +
-	"\trate_type\x18\x05 \x01(\tR\brateType\x12*\n" +
-	"\x11rate_basis_points\x18\x06 \x01(\x05R\x0frateBasisPoints\x122\n" +
-	"\x15fixed_amount_centavos\x18\a \x01(\x03R\x13fixedAmountCentavos\x122\n" +
-	"\x12formula_expression\x18\b \x01(\tH\x01R\x11formulaExpression\x88\x01\x01\x12\x18\n" +
-	"\aordinal\x18\t \x01(\x05R\aordinal\x12\x1f\n" +
+	"\trate_type\x18\x05 \x01(\tR\brateType\x123\n" +
+	"\x11rate_basis_points\x18\x06 \x01(\x05B\a\x82\xb5\x18\x03\"\x010R\x0frateBasisPoints\x12;\n" +
+	"\x15fixed_amount_centavos\x18\a \x01(\x03B\a\x82\xb5\x18\x03\"\x010R\x13fixedAmountCentavos\x122\n" +
+	"\x12formula_expression\x18\b \x01(\tH\x01R\x11formulaExpression\x88\x01\x01\x12!\n" +
+	"\aordinal\x18\t \x01(\x05B\a\x82\xb5\x18\x03\"\x010R\aordinal\x12\x1f\n" +
 	"\bmetadata\x18\n" +
 	" \x01(\tH\x02R\bmetadata\x88\x01\x01\x12\"\n" +
 	"\x06active\x18\v \x01(\bB\n" +
@@ -1008,7 +1008,7 @@ const file_domain_payroll_rate_band_rate_band_proto_rawDesc = "" +
 	"\fdate_created\x18\f \x01(\x03H\x03R\vdateCreated\x88\x01\x01\x12;\n" +
 	"\x13date_created_string\x18\r \x01(\tB\x06\x82\xb5\x18\x028\x01H\x04R\x11dateCreatedString\x88\x01\x01\x12(\n" +
 	"\rdate_modified\x18\x0e \x01(\x03H\x05R\fdateModified\x88\x01\x01\x12=\n" +
-	"\x14date_modified_string\x18\x0f \x01(\tB\x06\x82\xb5\x18\x028\x01H\x06R\x12dateModifiedString\x88\x01\x01:\x06\x8a\xb5\x18\x02\b\x01B\x17\n" +
+	"\x14date_modified_string\x18\x0f \x01(\tB\x06\x82\xb5\x18\x028\x01H\x06R\x12dateModifiedString\x88\x01\x01:\x1d\x8a\xb5\x18\x19\b\x01\"\x15rate_table_id,ordinalB\x17\n" +
 	"\x15_upper_bound_centavosB\x15\n" +
 	"\x13_formula_expressionB\v\n" +
 	"\t_metadataB\x0f\n" +

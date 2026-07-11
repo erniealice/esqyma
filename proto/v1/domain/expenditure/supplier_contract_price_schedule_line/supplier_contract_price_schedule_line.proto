@@ -23,6 +23,8 @@ import "options/db.proto";
 // the sales-side rate-card precedence (Model D refactor).
 message SupplierContractPriceScheduleLine {
   option (options.v1.table).table = true;
+  // One priced row per (schedule window, contract line).
+  option (options.v1.table).unique_together = "supplier_contract_price_schedule_id,supplier_contract_line_id";
 
   string id = 1;
   string workspace_id = 2 [(options.v1.db).references = "workspace", (options.v1.db).index = true];

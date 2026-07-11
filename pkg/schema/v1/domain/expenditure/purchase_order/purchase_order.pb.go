@@ -1198,7 +1198,7 @@ var File_domain_expenditure_purchase_order_purchase_order_proto protoreflect.Fil
 
 const file_domain_expenditure_purchase_order_purchase_order_proto_rawDesc = "" +
 	"\n" +
-	"6domain/expenditure/purchase_order/purchase_order.proto\x12\x15domain.expenditure.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/search.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a%domain/entity/supplier/supplier.proto\x1a%domain/entity/location/location.proto\x1a-domain/entity/payment_term/payment_term.proto\x1a,domain/procurement/cost_plan/cost_plan.proto\x1a\x10options/db.proto\"\xf2\x13\n" +
+	"6domain/expenditure/purchase_order/purchase_order.proto\x12\x15domain.expenditure.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/search.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a%domain/entity/supplier/supplier.proto\x1a%domain/entity/location/location.proto\x1a-domain/entity/payment_term/payment_term.proto\x1a,domain/procurement/cost_plan/cost_plan.proto\x1a\x10options/db.proto\"\xf6\x13\n" +
 	"\rPurchaseOrder\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12#\n" +
 	"\tpo_number\x18\x02 \x01(\tB\x06\x82\xb5\x18\x02\x10\x01R\bpoNumber\x12\x17\n" +
@@ -1247,11 +1247,11 @@ const file_domain_expenditure_purchase_order_purchase_order_proto_rawDesc = "" +
 	"\x14date_modified_string\x18# \x01(\tB\x06\x82\xb5\x18\x028\x01H\x13R\x12dateModifiedString\x88\x01\x01\x12?\n" +
 	"\x0fpayment_term_id\x18$ \x01(\tB\x12\x82\xb5\x18\x0e\n" +
 	"\fpayment_termH\x14R\rpaymentTermId\x88\x01\x01\x12E\n" +
-	"\fpayment_term\x18% \x01(\v2\x1d.domain.entity.v1.PaymentTermH\x15R\vpaymentTerm\x88\x01\x01\x12N\n" +
-	"\x14supplier_contract_id\x18& \x01(\tB\x17\x82\xb5\x18\x13\n" +
-	"\x11supplier_contractH\x16R\x12supplierContractId\x88\x01\x01\x12T\n" +
-	"\x16procurement_request_id\x18' \x01(\tB\x19\x82\xb5\x18\x15\n" +
-	"\x13procurement_requestH\x17R\x14procurementRequestId\x88\x01\x01\x12\\\n" +
+	"\fpayment_term\x18% \x01(\v2\x1d.domain.entity.v1.PaymentTermH\x15R\vpaymentTerm\x88\x01\x01\x12P\n" +
+	"\x14supplier_contract_id\x18& \x01(\tB\x19\x82\xb5\x18\x15\n" +
+	"\x11supplier_contract\x18\x01H\x16R\x12supplierContractId\x88\x01\x01\x12V\n" +
+	"\x16procurement_request_id\x18' \x01(\tB\x1b\x82\xb5\x18\x17\n" +
+	"\x13procurement_request\x18\x01H\x17R\x14procurementRequestId\x88\x01\x01\x12\\\n" +
 	"\x18supplier_subscription_id\x18( \x01(\tB\x1d\x82\xb5\x18\x19\n" +
 	"\x15supplier_subscription\x18\x01H\x18R\x16supplierSubscriptionId\x88\x01\x01\x12R\n" +
 	"\fbilling_kind\x18) \x01(\x0e2*.domain.procurement.v1.CostPlanBillingKindH\x19R\vbillingKind\x88\x01\x01:\x06\x8a\xb5\x18\x02\b\x01B\v\n" +

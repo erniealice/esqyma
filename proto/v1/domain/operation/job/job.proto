@@ -19,6 +19,13 @@ import "options/db.proto";
 
 message Job {
   option (options.v1.table).table = true;
+  option (options.v1.table).index_together = "origin_type,origin_id";
+  // DB index is partial: WHERE usage_request_date IS NOT NULL.
+  option (options.v1.table).index_together = "origin_id,usage_request_date";
+  // DB additionally enforces UNIQUE (origin_id, cycle_period_start)
+  // WHERE origin_type = 'SUBSCRIPTION' AND parent_job_id IS NOT NULL
+  // AND cycle_period_start IS NOT NULL (partial unique; not expressible
+  // as unique_together).
 
   // Identity
   string id = 1;
@@ -27,7 +34,7 @@ message Job {
   optional int64 date_modified = 4;
   optional string date_modified_string = 5 [(options.v1.db).ignore = true];
   bool active = 6 [(options.v1.db).default = "true"];
-  string name = 7;
+  string name = 7 [(options.v1.db).default = "''"];
   optional string job_template_id = 8 [(options.v1.db).references = "job_template", (options.v1.db).index = true];
 
   // Origin
@@ -44,9 +51,9 @@ message Job {
 
   // Lifecycle
   JobStatus status = 18;
-  ApprovalStatus approval_status = 19;
-  PostingStatus posting_status = 20;
-  BillingStatus billing_status = 21;
+  ApprovalStatus approval_status = 19 [(options.v1.db).default = "''"];
+  PostingStatus posting_status = 20 [(options.v1.db).default = "''"];
+  BillingStatus billing_status = 21 [(options.v1.db).default = "''"];
 
   // Location
   optional string location_id = 22 [(options.v1.db).references = "location", (options.v1.db).index = true];

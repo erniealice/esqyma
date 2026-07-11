@@ -41,7 +41,7 @@ message JobTask {
   string name = 9;
   int32 step_order = 10;
   TaskStatus status = 11;
-  bool is_ad_hoc = 12;
+  bool is_ad_hoc = 12 [(options.v1.db).default = "false"];
   optional string assigned_to = 13 [(options.v1.db).references = "staff", (options.v1.db).index = true];
   optional string template_task_id = 14 [(options.v1.db).references = "job_template_task", (options.v1.db).index = true];
   optional string resource_id = 15 [(options.v1.db).references = "resource", (options.v1.db).index = true];

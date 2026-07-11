@@ -1051,7 +1051,7 @@ var File_domain_product_product_product_proto protoreflect.FileDescriptor
 
 const file_domain_product_product_product_proto_rawDesc = "" +
 	"\n" +
-	"$domain/product/product/product.proto\x12\x11domain.product.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1adomain/common/search.proto\x1a\x10options/db.proto\"\xb8\t\n" +
+	"$domain/product/product/product.proto\x12\x11domain.product.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1adomain/common/search.proto\x1a\x10options/db.proto\"\xc0\t\n" +
 	"\aProduct\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12&\n" +
 	"\fdate_created\x18\x02 \x01(\x03H\x00R\vdateCreated\x88\x01\x01\x12;\n" +
@@ -1066,8 +1066,8 @@ const file_domain_product_product_product_proto_rawDesc = "" +
 	"\bcurrency\x18\n" +
 	" \x01(\tR\bcurrency\x12*\n" +
 	"\aline_id\x18\x0e \x01(\tB\f\x82\xb5\x18\b\n" +
-	"\x04line\x18\x01H\x06R\x06lineId\x88\x01\x01\x12!\n" +
-	"\fproduct_kind\x18\x0f \x01(\tR\vproductKind\x12#\n" +
+	"\x04line\x18\x01H\x06R\x06lineId\x88\x01\x01\x12)\n" +
+	"\fproduct_kind\x18\x0f \x01(\tB\x06\x82\xb5\x18\x02\x18\x01R\vproductKind\x12#\n" +
 	"\rdelivery_mode\x18\x10 \x01(\tR\fdeliveryMode\x12#\n" +
 	"\rtracking_mode\x18\x11 \x01(\tR\ftrackingMode\x12\x17\n" +
 	"\x04unit\x18\x12 \x01(\tH\aR\x04unit\x88\x01\x01\x12-\n" +

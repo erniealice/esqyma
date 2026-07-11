@@ -34,7 +34,7 @@ message Product {
   optional string line_id = 14 [(options.v1.db).references = "line", (options.v1.db).index = true];
   // What type of product? Drives inventory surface inclusion and GL policy.
   // Valid values: "service" | "stocked_good" | "non_stocked_good" | "consumable"
-  string product_kind = 15;
+  string product_kind = 15 [(options.v1.db).index = true];
   // How does it reach the client? Drives fulfillment UI and revenue recognition.
   // Valid values: "instant" | "scheduled" | "shipped" | "digital" | "project" | "subscription"
   string delivery_mode = 16;

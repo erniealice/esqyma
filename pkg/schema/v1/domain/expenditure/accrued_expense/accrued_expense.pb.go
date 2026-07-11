@@ -2537,7 +2537,7 @@ var File_domain_expenditure_accrued_expense_accrued_expense_proto protoreflect.F
 
 const file_domain_expenditure_accrued_expense_accrued_expense_proto_rawDesc = "" +
 	"\n" +
-	"8domain/expenditure/accrued_expense/accrued_expense.proto\x12\x15domain.expenditure.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/search.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x10options/db.proto\x1a\x1fgoogle/protobuf/timestamp.proto\"\xa2\f\n" +
+	"8domain/expenditure/accrued_expense/accrued_expense.proto\x12\x15domain.expenditure.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/search.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x10options/db.proto\x1a\x1fgoogle/protobuf/timestamp.proto\"\xa8\f\n" +
 	"\x0eAccruedExpense\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x124\n" +
 	"\fworkspace_id\x18\x02 \x01(\tB\x11\x82\xb5\x18\r\n" +
@@ -2554,10 +2554,9 @@ const file_domain_expenditure_accrued_expense_accrued_expense_proto_rawDesc = ""
 	" \x01(\tR\x04name\x12%\n" +
 	"\vdescription\x18\v \x01(\tH\x04R\vdescription\x88\x01\x01\x12K\n" +
 	"\x14supplier_contract_id\x18\x14 \x01(\tB\x19\x82\xb5\x18\x15\n" +
-	"\x11supplier_contract\x18\x01R\x12supplierContractId\x124\n" +
-	"\vsupplier_id\x18\x15 \x01(\tB\x0e\x82\xb5\x18\n" +
-	"\n" +
-	"\bsupplierH\x05R\n" +
+	"\x11supplier_contract\x18\x01R\x12supplierContractId\x126\n" +
+	"\vsupplier_id\x18\x15 \x01(\tB\x10\x82\xb5\x18\f\n" +
+	"\bsupplier\x18\x01H\x05R\n" +
 	"supplierId\x88\x01\x01\x12B\n" +
 	"\fperiod_start\x18\x1e \x01(\v2\x1a.google.protobuf.TimestampH\x06R\vperiodStart\x88\x01\x01\x12>\n" +
 	"\n" +
@@ -2569,11 +2568,11 @@ const file_domain_expenditure_accrued_expense_accrued_expense_proto_rawDesc = ""
 	"\x0eaccrued_amount\x18) \x01(\x03R\raccruedAmount\x12.\n" +
 	"\x0esettled_amount\x18* \x01(\x03B\a\x82\xb5\x18\x03\"\x010R\rsettledAmount\x122\n" +
 	"\x10remaining_amount\x18+ \x01(\x03B\a\x82\xb5\x18\x03\"\x010R\x0fremainingAmount\x12K\n" +
-	"\x06status\x182 \x01(\x0e2+.domain.expenditure.v1.AccruedExpenseStatusB\x06\x82\xb5\x18\x02\x18\x01R\x06status\x12@\n" +
-	"\x12accrual_account_id\x18< \x01(\tB\r\x82\xb5\x18\t\n" +
-	"\aaccountH\tR\x10accrualAccountId\x88\x01\x01\x12@\n" +
-	"\x12expense_account_id\x18= \x01(\tB\r\x82\xb5\x18\t\n" +
-	"\aaccountH\n" +
+	"\x06status\x182 \x01(\x0e2+.domain.expenditure.v1.AccruedExpenseStatusB\x06\x82\xb5\x18\x02\x18\x01R\x06status\x12B\n" +
+	"\x12accrual_account_id\x18< \x01(\tB\x0f\x82\xb5\x18\v\n" +
+	"\aaccount\x18\x01H\tR\x10accrualAccountId\x88\x01\x01\x12B\n" +
+	"\x12expense_account_id\x18= \x01(\tB\x0f\x82\xb5\x18\v\n" +
+	"\aaccount\x18\x01H\n" +
 	"R\x10expenseAccountId\x88\x01\x01\x12\x19\n" +
 	"\x05notes\x18Z \x01(\tH\vR\x05notes\x88\x01\x01\x12O\n" +
 	"\bmetadata\x18[ \x03(\v23.domain.expenditure.v1.AccruedExpense.MetadataEntryR\bmetadata\x1a;\n" +
@@ -2591,7 +2590,7 @@ const file_domain_expenditure_accrued_expense_accrued_expense_proto_rawDesc = ""
 	"\v_cycle_dateB\x15\n" +
 	"\x13_accrual_account_idB\x15\n" +
 	"\x13_expense_account_idB\b\n" +
-	"\x06_notes\"\xc1\b\n" +
+	"\x06_notes\"\xe7\b\n" +
 	"\x18AccruedExpenseSettlement\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x124\n" +
 	"\fworkspace_id\x18\x02 \x01(\tB\x11\x82\xb5\x18\r\n" +
@@ -2606,16 +2605,17 @@ const file_domain_expenditure_accrued_expense_accrued_expense_proto_rawDesc = ""
 	" \x01(\tB\x17\x82\xb5\x18\x13\n" +
 	"\x0faccrued_expense\x18\x01R\x10accruedExpenseId\x12:\n" +
 	"\x0eexpenditure_id\x18\v \x01(\tB\x13\x82\xb5\x18\x0f\n" +
-	"\vexpenditure\x18\x01R\rexpenditureId\x12Y\n" +
-	"\x18expenditure_line_item_id\x18\f \x01(\tB\x1b\x82\xb5\x18\x17\n" +
-	"\x15expenditure_line_itemH\x04R\x15expenditureLineItemId\x88\x01\x01\x12%\n" +
+	"\vexpenditure\x18\x01R\rexpenditureId\x12[\n" +
+	"\x18expenditure_line_item_id\x18\f \x01(\tB\x1d\x82\xb5\x18\x19\n" +
+	"\x15expenditure_line_item\x18\x01H\x04R\x15expenditureLineItemId\x88\x01\x01\x12%\n" +
 	"\x0eamount_settled\x18\x14 \x01(\x03R\ramountSettled\x12\x1a\n" +
 	"\bcurrency\x18\x15 \x01(\tR\bcurrency\x12\x1c\n" +
 	"\afx_rate\x18\x1e \x01(\x01H\x05R\x06fxRate\x88\x01\x01\x125\n" +
 	"\x14fx_adjustment_amount\x18\x1f \x01(\x03H\x06R\x12fxAdjustmentAmount\x88\x01\x01\x129\n" +
 	"\n" +
-	"settled_at\x18( \x01(\v2\x1a.google.protobuf.TimestampR\tsettledAt\x12>\n" +
-	"\x19reversed_by_settlement_id\x182 \x01(\tH\aR\x16reversedBySettlementId\x88\x01\x01\x12,\n" +
+	"settled_at\x18( \x01(\v2\x1a.google.protobuf.TimestampR\tsettledAt\x12b\n" +
+	"\x19reversed_by_settlement_id\x182 \x01(\tB\"\x82\xb5\x18\x1e\n" +
+	"\x1aaccrued_expense_settlement\x18\x01H\aR\x16reversedBySettlementId\x88\x01\x01\x12,\n" +
 	"\x0freversal_reason\x183 \x01(\tH\bR\x0ereversalReason\x88\x01\x01:\x06\x8a\xb5\x18\x02\b\x01B\x0f\n" +
 	"\r_date_createdB\x16\n" +
 	"\x14_date_created_stringB\x10\n" +

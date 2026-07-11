@@ -1071,7 +1071,7 @@ var File_domain_subscription_product_price_plan_product_price_plan_proto protore
 
 const file_domain_subscription_product_price_plan_product_price_plan_proto_rawDesc = "" +
 	"\n" +
-	"?domain/subscription/product_price_plan/product_price_plan.proto\x12\x16domain.subscription.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/search.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a.domain/product/product_plan/product_plan.proto\x1a/domain/subscription/price_plan/price_plan.proto\x1a\x10options/db.proto\"\x99\v\n" +
+	"?domain/subscription/product_price_plan/product_price_plan.proto\x12\x16domain.subscription.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/search.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a.domain/product/product_plan/product_plan.proto\x1a/domain/subscription/price_plan/price_plan.proto\x1a\x10options/db.proto\"\xb8\v\n" +
 	"\x10ProductPricePlan\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12&\n" +
 	"\fdate_created\x18\x02 \x01(\x03H\x00R\vdateCreated\x88\x01\x01\x12;\n" +
@@ -1102,7 +1102,7 @@ const file_domain_subscription_product_price_plan_product_price_plan_proto_rawDe
 	"\ttax_class\x18\x01H\n" +
 	"R\x12withholdingClassId\x88\x01\x01\x121\n" +
 	"\x12billing_amount_min\x18\x16 \x01(\x03H\vR\x10billingAmountMin\x88\x01\x01\x121\n" +
-	"\x12billing_amount_max\x18\x17 \x01(\x03H\fR\x10billingAmountMax\x88\x01\x01:\x06\x8a\xb5\x18\x02\b\x01B\x0f\n" +
+	"\x12billing_amount_max\x18\x17 \x01(\x03H\fR\x10billingAmountMax\x88\x01\x01:%\x8a\xb5\x18!\b\x01\x1a\x1dprice_plan_id,product_plan_idB\x0f\n" +
 	"\r_date_createdB\x16\n" +
 	"\x14_date_created_stringB\x10\n" +
 	"\x0e_date_modifiedB\x17\n" +

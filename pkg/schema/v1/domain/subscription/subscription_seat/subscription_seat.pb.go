@@ -90,25 +90,29 @@ type SubscriptionSeat struct {
 	DateModified       *int64                 `protobuf:"varint,4,opt,name=date_modified,json=dateModified,proto3,oneof" json:"date_modified,omitempty"`
 	DateModifiedString *string                `protobuf:"bytes,5,opt,name=date_modified_string,json=dateModifiedString,proto3,oneof" json:"date_modified_string,omitempty"`
 	Active             bool                   `protobuf:"varint,6,opt,name=active,proto3" json:"active,omitempty"`
-	WorkspaceId        string                 `protobuf:"bytes,7,opt,name=workspace_id,json=workspaceId,proto3" json:"workspace_id,omitempty"`
-	SubscriptionId     string                 `protobuf:"bytes,8,opt,name=subscription_id,json=subscriptionId,proto3" json:"subscription_id,omitempty"`
+	// Non-empty anchor enforced alongside client_id (single combined DB CHECK).
+	WorkspaceId    string `protobuf:"bytes,7,opt,name=workspace_id,json=workspaceId,proto3" json:"workspace_id,omitempty"`
+	SubscriptionId string `protobuf:"bytes,8,opt,name=subscription_id,json=subscriptionId,proto3" json:"subscription_id,omitempty"`
 	// CR-1: the person on the seat is entity/staff, NOT product/resource.
 	StaffId string `protobuf:"bytes,9,opt,name=staff_id,json=staffId,proto3" json:"staff_id,omitempty"`
 	// Denormalized IDOR anchor (stamped, never from form).
 	ClientId string `protobuf:"bytes,10,opt,name=client_id,json=clientId,proto3" json:"client_id,omitempty"`
 	// KEPT billing anchor.
-	ProductPlanId      string                 `protobuf:"bytes,11,opt,name=product_plan_id,json=productPlanId,proto3" json:"product_plan_id,omitempty"`
-	ProductVariantId   *string                `protobuf:"bytes,12,opt,name=product_variant_id,json=productVariantId,proto3,oneof" json:"product_variant_id,omitempty"`
-	ContractedAmount   *int64                 `protobuf:"varint,13,opt,name=contracted_amount,json=contractedAmount,proto3,oneof" json:"contracted_amount,omitempty"` // centavos (int64 money convention)
-	ContractedCurrency *string                `protobuf:"bytes,14,opt,name=contracted_currency,json=contractedCurrency,proto3,oneof" json:"contracted_currency,omitempty"`
-	RoleTitle          *string                `protobuf:"bytes,15,opt,name=role_title,json=roleTitle,proto3,oneof" json:"role_title,omitempty"`
-	Seniority          *string                `protobuf:"bytes,16,opt,name=seniority,proto3,oneof" json:"seniority,omitempty"`
-	DateStart          *int64                 `protobuf:"varint,17,opt,name=date_start,json=dateStart,proto3,oneof" json:"date_start,omitempty"`
-	DateEnd            *int64                 `protobuf:"varint,18,opt,name=date_end,json=dateEnd,proto3,oneof" json:"date_end,omitempty"`
-	Status             SubscriptionSeatStatus `protobuf:"varint,19,opt,name=status,proto3,enum=domain.subscription.v1.SubscriptionSeatStatus" json:"status,omitempty"` // proto ENUM (NOT string); DB CHECK-pinned
+	ProductPlanId      string  `protobuf:"bytes,11,opt,name=product_plan_id,json=productPlanId,proto3" json:"product_plan_id,omitempty"`
+	ProductVariantId   *string `protobuf:"bytes,12,opt,name=product_variant_id,json=productVariantId,proto3,oneof" json:"product_variant_id,omitempty"`
+	ContractedAmount   *int64  `protobuf:"varint,13,opt,name=contracted_amount,json=contractedAmount,proto3,oneof" json:"contracted_amount,omitempty"` // centavos (int64 money convention)
+	ContractedCurrency *string `protobuf:"bytes,14,opt,name=contracted_currency,json=contractedCurrency,proto3,oneof" json:"contracted_currency,omitempty"`
+	RoleTitle          *string `protobuf:"bytes,15,opt,name=role_title,json=roleTitle,proto3,oneof" json:"role_title,omitempty"`
+	Seniority          *string `protobuf:"bytes,16,opt,name=seniority,proto3,oneof" json:"seniority,omitempty"`
+	DateStart          *int64  `protobuf:"varint,17,opt,name=date_start,json=dateStart,proto3,oneof" json:"date_start,omitempty"`
+	DateEnd            *int64  `protobuf:"varint,18,opt,name=date_end,json=dateEnd,proto3,oneof" json:"date_end,omitempty"`
+	// proto ENUM (NOT string); stored as text, domain pinned by the DB CHECK below.
+	Status             SubscriptionSeatStatus `protobuf:"varint,19,opt,name=status,proto3,enum=domain.subscription.v1.SubscriptionSeatStatus" json:"status,omitempty"`
 	ReviewCadenceValue *int32                 `protobuf:"varint,20,opt,name=review_cadence_value,json=reviewCadenceValue,proto3,oneof" json:"review_cadence_value,omitempty"`
 	ReviewCadenceUnit  *string                `protobuf:"bytes,21,opt,name=review_cadence_unit,json=reviewCadenceUnit,proto3,oneof" json:"review_cadence_unit,omitempty"`
-	Position           *string                `protobuf:"bytes,22,opt,name=position,proto3,oneof" json:"position,omitempty"`
+	// Partial DB unique: UNIQUE (subscription_id, position) WHERE status = 'active'
+	// — not expressible as unique_together (no partial-index support).
+	Position *string `protobuf:"bytes,22,opt,name=position,proto3,oneof" json:"position,omitempty"`
 	// Self-reference: the seat this one supersedes (SR-2 replacement chain).
 	ReplacesId *string `protobuf:"bytes,23,opt,name=replaces_id,json=replacesId,proto3,oneof" json:"replaces_id,omitempty"`
 	// Soft-ref only: work_request table does not exist yet — NO FK annotation.
@@ -1103,7 +1107,7 @@ var File_domain_subscription_subscription_seat_subscription_seat_proto protorefl
 
 const file_domain_subscription_subscription_seat_subscription_seat_proto_rawDesc = "" +
 	"\n" +
-	"=domain/subscription/subscription_seat/subscription_seat.proto\x12\x16domain.subscription.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1adomain/common/search.proto\x1a\x10options/db.proto\"\xd8\v\n" +
+	"=domain/subscription/subscription_seat/subscription_seat.proto\x12\x16domain.subscription.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1adomain/common/search.proto\x1a\x10options/db.proto\"\xe8\f\n" +
 	"\x10SubscriptionSeat\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12&\n" +
 	"\fdate_created\x18\x02 \x01(\x03H\x00R\vdateCreated\x88\x01\x01\x12;\n" +
@@ -1111,17 +1115,16 @@ const file_domain_subscription_subscription_seat_subscription_seat_proto_rawDesc
 	"\rdate_modified\x18\x04 \x01(\x03H\x02R\fdateModified\x88\x01\x01\x12=\n" +
 	"\x14date_modified_string\x18\x05 \x01(\tB\x06\x82\xb5\x18\x028\x01H\x03R\x12dateModifiedString\x88\x01\x01\x12\"\n" +
 	"\x06active\x18\x06 \x01(\bB\n" +
-	"\x82\xb5\x18\x06\"\x04trueR\x06active\x124\n" +
-	"\fworkspace_id\x18\a \x01(\tB\x11\x82\xb5\x18\r\n" +
-	"\tworkspace\x18\x01R\vworkspaceId\x12=\n" +
+	"\x82\xb5\x18\x06\"\x04trueR\x06active\x12H\n" +
+	"\fworkspace_id\x18\a \x01(\tB%\x82\xb5\x18!\n" +
+	"\tworkspace\x18\x01*\x12workspace_id <> ''R\vworkspaceId\x12=\n" +
 	"\x0fsubscription_id\x18\b \x01(\tB\x14\x82\xb5\x18\x10\n" +
 	"\fsubscription\x18\x01R\x0esubscriptionId\x12(\n" +
 	"\bstaff_id\x18\t \x01(\tB\r\x82\xb5\x18\t\n" +
-	"\x05staff\x18\x01R\astaffId\x12+\n" +
+	"\x05staff\x18\x01R\astaffId\x12<\n" +
 	"\tclient_id\x18\n" +
-	" \x01(\tB\x0e\x82\xb5\x18\n" +
-	"\n" +
-	"\x06client\x18\x01R\bclientId\x12<\n" +
+	" \x01(\tB\x1f\x82\xb5\x18\x1b\n" +
+	"\x06client\x18\x01*\x0fclient_id <> ''R\bclientId\x12<\n" +
 	"\x0fproduct_plan_id\x18\v \x01(\tB\x14\x82\xb5\x18\x10\n" +
 	"\fproduct_plan\x18\x01R\rproductPlanId\x12H\n" +
 	"\x12product_variant_id\x18\f \x01(\tB\x15\x82\xb5\x18\x11\n" +
@@ -1134,15 +1137,15 @@ const file_domain_subscription_subscription_seat_subscription_seat_proto_rawDesc
 	"\n" +
 	"date_start\x18\x11 \x01(\x03H\tR\tdateStart\x88\x01\x01\x12\x1e\n" +
 	"\bdate_end\x18\x12 \x01(\x03H\n" +
-	"R\adateEnd\x88\x01\x01\x12F\n" +
-	"\x06status\x18\x13 \x01(\x0e2..domain.subscription.v1.SubscriptionSeatStatusR\x06status\x125\n" +
+	"R\adateEnd\x88\x01\x01\x12\x83\x01\n" +
+	"\x06status\x18\x13 \x01(\x0e2..domain.subscription.v1.SubscriptionSeatStatusB;\x82\xb5\x187*5status IN ('proposed', 'active', 'replaced', 'ended')R\x06status\x125\n" +
 	"\x14review_cadence_value\x18\x14 \x01(\x05H\vR\x12reviewCadenceValue\x88\x01\x01\x123\n" +
 	"\x13review_cadence_unit\x18\x15 \x01(\tH\fR\x11reviewCadenceUnit\x88\x01\x01\x12\x1f\n" +
 	"\bposition\x18\x16 \x01(\tH\rR\bposition\x88\x01\x01\x12=\n" +
 	"\vreplaces_id\x18\x17 \x01(\tB\x17\x82\xb5\x18\x13\n" +
 	"\x11subscription_seatH\x0eR\n" +
 	"replacesId\x88\x01\x01\x12+\n" +
-	"\x0fwork_request_id\x18\x18 \x01(\tH\x0fR\rworkRequestId\x88\x01\x01:\x06\x8a\xb5\x18\x02\b\x01B\x0f\n" +
+	"\x0fwork_request_id\x18\x18 \x01(\tH\x0fR\rworkRequestId\x88\x01\x01:3\x8a\xb5\x18/\b\x01\"\x16workspace_id,client_id\"\x13workspace_id,statusB\x0f\n" +
 	"\r_date_createdB\x16\n" +
 	"\x14_date_created_stringB\x10\n" +
 	"\x0e_date_modifiedB\x17\n" +

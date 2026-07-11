@@ -20,23 +20,25 @@ import "options/db.proto";
 //                                   fixed_amount: 93750, rate_basis_points: 2000}  (15% over 16,667 + 937.50)
 message RateBand {
   option (options.v1.table).table = true;
+  // Bands of a rate table in bracket order.
+  option (options.v1.table).index_together = "rate_table_id,ordinal";
 
   string id = 1;
   string rate_table_id = 2 [(options.v1.db).references = "rate_table", (options.v1.db).index = true];
 
   // Bracket window — both bounds in centavos.
-  int64 lower_bound_centavos = 3;
+  int64 lower_bound_centavos = 3 [(options.v1.db).default = "0"];
   optional int64 upper_bound_centavos = 4;  // null = uncapped
 
   // Rate calculation.
   // rate_type ∈ {"percentage", "fixed", "percentage_of_excess", "formula"}
   string rate_type = 5;
-  int32 rate_basis_points = 6;        // for percentage / percentage_of_excess (10000 = 100%)
-  int64 fixed_amount_centavos = 7;    // for fixed; also the additive constant for percentage_of_excess
+  int32 rate_basis_points = 6 [(options.v1.db).default = "0"];  // for percentage / percentage_of_excess (10000 = 100%)
+  int64 fixed_amount_centavos = 7 [(options.v1.db).default = "0"];  // for fixed; also the additive constant for percentage_of_excess
   optional string formula_expression = 8;  // for "formula" rate_type
 
   // Display ordering within the table
-  int32 ordinal = 9;
+  int32 ordinal = 9 [(options.v1.db).default = "0"];
 
   // Free-form metadata for jurisdictional quirks (e.g., MPF/WISP split, EC employer-only flag).
   optional string metadata = 10; // JSON-encoded map

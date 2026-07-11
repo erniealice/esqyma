@@ -38,8 +38,8 @@ message EquityTransaction {
   int64 amount = 4; // centavos
   optional string description = 5;
 
-  // Transaction date
-  int64 transaction_date = 6;
+  // Transaction date. Range-filtered and sort key for dashboards.
+  int64 transaction_date = 6 [(options.v1.db).index = true];
   optional string transaction_date_string = 7 [(options.v1.db).ignore = true];
 
   // GL traceability — FK to the auto-generated JournalEntry

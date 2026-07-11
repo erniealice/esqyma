@@ -58,6 +58,9 @@ enum TaxRegistrationPartyRoleSnapshot {
 // ACTIVE registrations of the same compute path per (party, authority).
 message TaxRegistration {
   option (options.v1.table).table = true;
+  // Per-party registration lookups filter on (party_type, party_id) across all
+  // lifecycle statuses; the ACTIVE-only partial unique index cannot serve them.
+  option (options.v1.table).index_together = "party_type,party_id";
 
   string id = 1;
   optional int64 date_created = 2;

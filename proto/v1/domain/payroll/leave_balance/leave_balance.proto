@@ -16,13 +16,15 @@ import "options/db.proto";
 // Queried independently from LeaveRequest workflow.
 message LeaveBalance {
   option (options.v1.table).table = true;
+  // Per-employee, per-type, per-year balance lookup (accrual and usage updates).
+  option (options.v1.table).index_together = "supplier_id,leave_type_id,year";
 
   string id = 1;
   string workspace_id = 2 [(options.v1.db).references = "workspace", (options.v1.db).index = true];
   string supplier_id = 3 [(options.v1.db).references = "supplier", (options.v1.db).index = true];
   string leave_type_id = 4 [(options.v1.db).references = "leave_type", (options.v1.db).index = true];
 
-  int32 year = 5;
+  int32 year = 5 [(options.v1.db).default = "0"];
   int32 accrued_days = 6 [(options.v1.db).default = "0"];
   int32 used_days = 7 [(options.v1.db).default = "0"];
   int32 carryover_days = 8 [(options.v1.db).default = "0"];

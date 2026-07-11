@@ -72,7 +72,7 @@ message ExpenseRecognition {
   optional string supplier_contract_id = 30 [(options.v1.db).references = "supplier_contract", (options.v1.db).index = true];
   optional string expenditure_id = 31 [(options.v1.db).references = "expenditure", (options.v1.db).index = true];
   optional string deferred_expense_id = 32;
-  optional string accrued_expense_id = 33 [(options.v1.db).references = "accrued_expense"];
+  optional string accrued_expense_id = 33 [(options.v1.db).references = "accrued_expense", (options.v1.db).index = true];
   optional string cycle_date = 34;                           // YYYY-MM-DD bucket; informational
 
   // Stable, status-independent idempotency key. Mandatory.
@@ -81,18 +81,18 @@ message ExpenseRecognition {
   string idempotency_key = 35 [(options.v1.db).unique = true];
 
   // Reversal — set on REVERSED rows that nullify a previously POSTED row.
-  optional string reversal_of_recognition_id = 36;
+  optional string reversal_of_recognition_id = 36 [(options.v1.db).index = true];
 
   // GL
   optional string expense_account_id = 40 [(options.v1.db).references = "account"];
   optional string accrual_account_id = 41 [(options.v1.db).references = "account"];
-  optional string journal_entry_id = 42 [(options.v1.db).references = "journal_entry"];
+  optional string journal_entry_id = 42 [(options.v1.db).references = "journal_entry", (options.v1.db).index = true];
 
   // Costing dimensions
-  optional string supplier_id = 50 [(options.v1.db).references = "supplier"];
-  optional string location_id = 51 [(options.v1.db).references = "location"];
-  optional string expenditure_category_id = 52 [(options.v1.db).references = "expenditure_category"];
-  optional string job_phase_id = 53 [(options.v1.db).references = "job_phase"];
+  optional string supplier_id = 50 [(options.v1.db).references = "supplier", (options.v1.db).index = true];
+  optional string location_id = 51 [(options.v1.db).references = "location", (options.v1.db).index = true];
+  optional string expenditure_category_id = 52 [(options.v1.db).references = "expenditure_category", (options.v1.db).index = true];
+  optional string job_phase_id = 53 [(options.v1.db).references = "job_phase", (options.v1.db).index = true];
 
   // Subscription back-edge — mirrors revenue.proto:52 subscription_id = 32.
   // Set when the ExpenseRecognition is generated from a SupplierSubscription

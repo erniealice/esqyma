@@ -811,7 +811,7 @@ var File_domain_finance_forex_rate_forex_rate_proto protoreflect.FileDescriptor
 
 const file_domain_finance_forex_rate_forex_rate_proto_rawDesc = "" +
 	"\n" +
-	"*domain/finance/forex_rate/forex_rate.proto\x12\x11domain.finance.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1adomain/common/search.proto\x1a\x10options/db.proto\"\x86\b\n" +
+	"*domain/finance/forex_rate/forex_rate.proto\x12\x11domain.finance.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1adomain/common/search.proto\x1a\x10options/db.proto\"\xbd\b\n" +
 	"\tForexRate\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12&\n" +
 	"\fdate_created\x18\x02 \x01(\x03H\x00R\vdateCreated\x88\x01\x01\x12;\n" +
@@ -837,7 +837,7 @@ const file_domain_finance_forex_rate_forex_rate_proto_rawDesc = "" +
 	"\rsupersedes_id\x18\x11 \x01(\tB\x12\x82\xb5\x18\x0e\n" +
 	"\n" +
 	"forex_rate\x18\x01H\aR\fsupersedesId\x88\x01\x01\x12\x19\n" +
-	"\x05notes\x18\x12 \x01(\tH\bR\x05notes\x88\x01\x01:\x06\x8a\xb5\x18\x02\b\x01B\x0f\n" +
+	"\x05notes\x18\x12 \x01(\tH\bR\x05notes\x88\x01\x01:=\x8a\xb5\x189\b\x01\"5workspace_id,from_currency,to_currency,effective_fromB\x0f\n" +
 	"\r_date_createdB\x16\n" +
 	"\x14_date_created_stringB\x10\n" +
 	"\x0e_date_modifiedB\x17\n" +

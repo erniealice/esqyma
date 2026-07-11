@@ -1065,14 +1065,14 @@ var File_domain_payroll_payroll_remittance_payroll_remittance_proto protoreflect
 
 const file_domain_payroll_payroll_remittance_payroll_remittance_proto_rawDesc = "" +
 	"\n" +
-	":domain/payroll/payroll_remittance/payroll_remittance.proto\x12\x11domain.payroll.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1adomain/common/search.proto\x1a\x10options/db.proto\"\xe1\x05\n" +
+	":domain/payroll/payroll_remittance/payroll_remittance.proto\x12\x11domain.payroll.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1adomain/common/search.proto\x1a\x10options/db.proto\"\xe9\x05\n" +
 	"\x11PayrollRemittance\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x129\n" +
 	"\x0epayroll_run_id\x18\x02 \x01(\tB\x13\x82\xb5\x18\x0f\n" +
 	"\vpayroll_run\x18\x01R\fpayrollRunId\x12J\n" +
 	"\x0fremittance_type\x18\x03 \x01(\x0e2!.domain.payroll.v1.RemittanceTypeR\x0eremittanceType\x12\x16\n" +
-	"\x06amount\x18\x04 \x01(\x03R\x06amount\x12\x19\n" +
-	"\bdue_date\x18\x05 \x01(\tR\adueDate\x12;\n" +
+	"\x06amount\x18\x04 \x01(\x03R\x06amount\x12!\n" +
+	"\bdue_date\x18\x05 \x01(\tB\x06\x82\xb5\x18\x02\x18\x01R\adueDate\x12;\n" +
 	"\x06status\x18\a \x01(\x0e2#.domain.payroll.v1.RemittanceStatusR\x06status\x12\x1e\n" +
 	"\bfiled_at\x18\b \x01(\x03H\x00R\afiledAt\x88\x01\x01\x123\n" +
 	"\x0ffiled_at_string\x18\t \x01(\tB\x06\x82\xb5\x18\x028\x01H\x01R\rfiledAtString\x88\x01\x01\x12\x1c\n" +

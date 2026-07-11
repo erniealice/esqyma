@@ -1423,57 +1423,55 @@ var File_domain_operation_evaluation_evaluation_proto protoreflect.FileDescripto
 
 const file_domain_operation_evaluation_evaluation_proto_rawDesc = "" +
 	"\n" +
-	",domain/operation/evaluation/evaluation.proto\x12\x13domain.operation.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1adomain/common/search.proto\x1a\x10options/db.proto\"\x85\x12\n" +
+	",domain/operation/evaluation/evaluation.proto\x12\x13domain.operation.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1adomain/common/search.proto\x1a\x10options/db.proto\"\x87\x1c\n" +
 	"\n" +
 	"Evaluation\x12\x0e\n" +
-	"\x02id\x18\x01 \x01(\tR\x02id\x124\n" +
-	"\fworkspace_id\x18\x02 \x01(\tB\x11\x82\xb5\x18\r\n" +
-	"\tworkspace\x18\x01R\vworkspaceId\x12+\n" +
+	"\x02id\x18\x01 \x01(\tR\x02id\x12\\\n" +
+	"\fworkspace_id\x18\x02 \x01(\tB9\x82\xb5\x185\n" +
+	"\tworkspace\x18\x01*&client_id <> '' AND workspace_id <> ''R\vworkspaceId\x12+\n" +
 	"\tclient_id\x18\x03 \x01(\tB\x0e\x82\xb5\x18\n" +
 	"\n" +
 	"\x06client\x18\x01R\bclientId\x12B\n" +
 	"\x0fsubscription_id\x18\x04 \x01(\tB\x14\x82\xb5\x18\x10\n" +
-	"\fsubscription\x18\x01H\x00R\x0esubscriptionId\x88\x01\x01\x12P\n" +
-	"\x14subscription_seat_id\x18\x05 \x01(\tB\x19\x82\xb5\x18\x15\n" +
-	"\x11subscription_seat\x18\x01H\x01R\x12subscriptionSeatId\x88\x01\x01\x12V\n" +
-	"\x16evaluation_template_id\x18\x06 \x01(\tB\x1b\x82\xb5\x18\x17\n" +
-	"\x13evaluation_template\x18\x01H\x02R\x14evaluationTemplateId\x88\x01\x01\x12L\n" +
-	"\x0fevaluation_type\x18\a \x01(\x0e2#.domain.operation.v1.EvaluationTypeR\x0eevaluationType\x12R\n" +
-	"\x11relationship_type\x18\b \x01(\x0e2%.domain.operation.v1.RelationshipTypeR\x10relationshipType\x12I\n" +
-	"\x0eevaluator_type\x18\t \x01(\x0e2\".domain.operation.v1.EvaluatorTypeR\revaluatorType\x12Z\n" +
+	"\fsubscription\x18\x01H\x00R\x0esubscriptionId\x88\x01\x01\x12\xa0\x01\n" +
+	"\x14subscription_seat_id\x18\x05 \x01(\tBi\x82\xb5\x18e\n" +
+	"\x11subscription_seat\x18\x01*Nrelationship_type <> 'client_to_associate' OR subscription_seat_id IS NOT NULLH\x01R\x12subscriptionSeatId\x88\x01\x01\x12\xa5\x01\n" +
+	"\x16evaluation_template_id\x18\x06 \x01(\tBj\x82\xb5\x18f\n" +
+	"\x13evaluation_template\x18\x01*Mevaluation_type <> 'performance_review' OR evaluation_template_id IS NOT NULLH\x02R\x14evaluationTemplateId\x88\x01\x01\x12\xa5\x01\n" +
+	"\x0fevaluation_type\x18\a \x01(\x0e2#.domain.operation.v1.EvaluationTypeBW\x82\xb5\x18S*Qevaluation_type IN ('performance_review','csat','course_eval','vendor_scorecard')R\x0eevaluationType\x12\xb0\x01\n" +
+	"\x11relationship_type\x18\b \x01(\x0e2%.domain.operation.v1.RelationshipTypeB\\\x82\xb5\x18X*Vrelationship_type IN ('client_to_associate','staff_to_client','self','peer','manager')R\x10relationshipType\x12u\n" +
+	"\x0eevaluator_type\x18\t \x01(\x0e2\".domain.operation.v1.EvaluatorTypeB*\x82\xb5\x18&*$evaluator_type IN ('client','staff')R\revaluatorType\x12\xab\x01\n" +
 	"\x1bevaluator_workspace_user_id\x18\n" +
-	" \x01(\tB\x16\x82\xb5\x18\x12\n" +
-	"\x0eworkspace_user\x18\x01H\x03R\x18evaluatorWorkspaceUserId\x88\x01\x01\x12h\n" +
-	" evaluator_client_portal_grant_id\x18\v \x01(\tB\x1b\x82\xb5\x18\x17\n" +
-	"\x13client_portal_grant\x18\x01H\x04R\x1cevaluatorClientPortalGrantId\x88\x01\x01\x12C\n" +
-	"\fsubject_type\x18\f \x01(\x0e2 .domain.operation.v1.SubjectTypeR\vsubjectType\x12-\n" +
-	"\bstaff_id\x18\r \x01(\tB\r\x82\xb5\x18\t\n" +
-	"\x05staff\x18\x01H\x05R\astaffId\x88\x01\x01\x12?\n" +
-	"\x11subject_client_id\x18\x0e \x01(\tB\x0e\x82\xb5\x18\n" +
-	"\n" +
-	"\x06client\x18\x01H\x06R\x0fsubjectClientId\x88\x01\x01\x12!\n" +
+	" \x01(\tBg\x82\xb5\x18c\n" +
+	"\x0eworkspace_user\x18\x01*Onum_nonnulls(evaluator_workspace_user_id, evaluator_client_portal_grant_id) = 1H\x03R\x18evaluatorWorkspaceUserId\x88\x01\x01\x12\xb6\x01\n" +
+	" evaluator_client_portal_grant_id\x18\v \x01(\tBi\x82\xb5\x18e\n" +
+	"\x13client_portal_grant\x18\x01*L(evaluator_type = 'client') = (evaluator_client_portal_grant_id IS NOT NULL)H\x04R\x1cevaluatorClientPortalGrantId\x88\x01\x01\x12q\n" +
+	"\fsubject_type\x18\f \x01(\x0e2 .domain.operation.v1.SubjectTypeB,\x82\xb5\x18(*&subject_type IN ('associate','client')R\vsubjectType\x12\\\n" +
+	"\bstaff_id\x18\r \x01(\tB<\x82\xb5\x188\n" +
+	"\x05staff\x18\x01*-num_nonnulls(staff_id, subject_client_id) = 1H\x05R\astaffId\x88\x01\x01\x12v\n" +
+	"\x11subject_client_id\x18\x0e \x01(\tBE\x82\xb5\x18A\n" +
+	"\x06client\x18\x01*5(subject_type = 'associate') = (staff_id IS NOT NULL)H\x06R\x0fsubjectClientId\x88\x01\x01\x12!\n" +
 	"\fperiod_start\x18\x0f \x01(\tR\vperiodStart\x12\x1d\n" +
 	"\n" +
-	"period_end\x18\x10 \x01(\tR\tperiodEnd\x12=\n" +
-	"\x06status\x18\x11 \x01(\x0e2%.domain.operation.v1.EvaluationStatusR\x06status\x12L\n" +
-	"\x0fvisibility_type\x18\x12 \x01(\x0e2#.domain.operation.v1.VisibilityTypeR\x0evisibilityType\x12(\n" +
+	"period_end\x18\x10 \x01(\tR\tperiodEnd\x12|\n" +
+	"\x06status\x18\x11 \x01(\x0e2%.domain.operation.v1.EvaluationStatusB=\x82\xb5\x189*7status IN ('draft','submitted','archived','signed_off')R\x06status\x12\xa7\x01\n" +
+	"\x0fvisibility_type\x18\x12 \x01(\x0e2#.domain.operation.v1.VisibilityTypeBY\x82\xb5\x18U*Svisibility_type IN ('internal_only','visible_to_subject','visible_to_subject_anon')R\x0evisibilityType\x12(\n" +
 	"\roverall_score\x18\x13 \x01(\x01H\aR\foverallScore\x88\x01\x01\x12!\n" +
 	"\tnarrative\x18\x14 \x01(\tH\bR\tnarrative\x88\x01\x01\x12&\n" +
-	"\fsubmitted_at\x18\x15 \x01(\x03H\tR\vsubmittedAt\x88\x01\x01\x12\"\n" +
-	"\x06active\x18\x16 \x01(\bB\n" +
-	"\x82\xb5\x18\x06\"\x04trueR\x06active\x12&\n" +
+	"\fsubmitted_at\x18\x15 \x01(\x03H\tR\vsubmittedAt\x88\x01\x01\x12C\n" +
+	"\x06active\x18\x16 \x01(\bB+\x82\xb5\x18'\"\x04true*\x1factive = (status <> 'archived')R\x06active\x12&\n" +
 	"\fdate_created\x18\x17 \x01(\x03H\n" +
 	"R\vdateCreated\x88\x01\x01\x12;\n" +
 	"\x13date_created_string\x18\x18 \x01(\tB\x06\x82\xb5\x18\x028\x01H\vR\x11dateCreatedString\x88\x01\x01\x12(\n" +
 	"\rdate_modified\x18\x19 \x01(\x03H\fR\fdateModified\x88\x01\x01\x12=\n" +
 	"\x14date_modified_string\x18\x1a \x01(\tB\x06\x82\xb5\x18\x028\x01H\rR\x12dateModifiedString\x88\x01\x01\x12M\n" +
 	"\x13evaluation_cycle_id\x18\x1b \x01(\tB\x18\x82\xb5\x18\x14\n" +
-	"\x10evaluation_cycle\x18\x01H\x0eR\x11evaluationCycleId\x88\x01\x01\x12^\n" +
-	"\x1fsigned_off_by_workspace_user_id\x18\x1c \x01(\tB\x14\x82\xb5\x18\x10\n" +
-	"\x0eworkspace_userH\x0fR\x1asignedOffByWorkspaceUserId\x88\x01\x01\x12l\n" +
-	"$signed_off_by_client_portal_grant_id\x18\x1d \x01(\tB\x19\x82\xb5\x18\x15\n" +
-	"\x13client_portal_grantH\x10R\x1esignedOffByClientPortalGrantId\x88\x01\x01\x12'\n" +
-	"\rsigned_off_at\x18\x1e \x01(\x03H\x11R\vsignedOffAt\x88\x01\x01:\x06\x8a\xb5\x18\x02\b\x01B\x12\n" +
+	"\x10evaluation_cycle\x18\x01H\x0eR\x11evaluationCycleId\x88\x01\x01\x12\xf4\x01\n" +
+	"\x1fsigned_off_by_workspace_user_id\x18\x1c \x01(\tB\xa9\x01\x82\xb5\x18\xa4\x01\n" +
+	"\x0eworkspace_user*\x91\x01status <> 'signed_off' OR (signed_off_at IS NOT NULL AND num_nonnulls(signed_off_by_workspace_user_id, signed_off_by_client_portal_grant_id) = 1)H\x0fR\x1asignedOffByWorkspaceUserId\x88\x01\x01\x12\xfe\x01\n" +
+	"$signed_off_by_client_portal_grant_id\x18\x1d \x01(\tB\xaa\x01\x82\xb5\x18\xa5\x01\n" +
+	"\x13client_portal_grant*\x8d\x01status = 'signed_off' OR (signed_off_at IS NULL AND signed_off_by_workspace_user_id IS NULL AND signed_off_by_client_portal_grant_id IS NULL)H\x10R\x1esignedOffByClientPortalGrantId\x88\x01\x01\x12'\n" +
+	"\rsigned_off_at\x18\x1e \x01(\x03H\x11R\vsignedOffAt\x88\x01\x01:?\x8a\xb5\x18;\b\x01\"\x1fstaff_id,status,submitted_at,id\"\x16workspace_id,client_idB\x12\n" +
 	"\x10_subscription_idB\x17\n" +
 	"\x15_subscription_seat_idB\x19\n" +
 	"\x17_evaluation_template_idB\x1e\n" +

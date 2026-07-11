@@ -1139,12 +1139,12 @@ var File_domain_ledger_fiscal_period_fiscal_period_proto protoreflect.FileDescri
 
 const file_domain_ledger_fiscal_period_fiscal_period_proto_rawDesc = "" +
 	"\n" +
-	"/domain/ledger/fiscal_period/fiscal_period.proto\x12\x10domain.ledger.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1adomain/common/search.proto\x1a\x10options/db.proto\"\xfe\x05\n" +
+	"/domain/ledger/fiscal_period/fiscal_period.proto\x12\x10domain.ledger.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1adomain/common/search.proto\x1a\x10options/db.proto\"\x8a\x06\n" +
 	"\fFiscalPeriod\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12\x12\n" +
-	"\x04name\x18\x02 \x01(\tR\x04name\x12#\n" +
-	"\rperiod_number\x18\x03 \x01(\x05R\fperiodNumber\x12'\n" +
-	"\vfiscal_year\x18\x04 \x01(\x05B\x06\x82\xb5\x18\x02\x18\x01R\n" +
+	"\x04name\x18\x02 \x01(\tR\x04name\x12,\n" +
+	"\rperiod_number\x18\x03 \x01(\x05B\a\x82\xb5\x18\x03\"\x010R\fperiodNumber\x12*\n" +
+	"\vfiscal_year\x18\x04 \x01(\x05B\t\x82\xb5\x18\x05\x18\x01\"\x010R\n" +
 	"fiscalYear\x12\x1d\n" +
 	"\n" +
 	"start_date\x18\x05 \x01(\tR\tstartDate\x12\x19\n" +

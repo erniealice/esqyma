@@ -60,14 +60,14 @@ message ProcurementRequestLine {
   int64 estimated_total_price = 10;              // centavos
 
   // Pre-link to a contract line if the item is covered by a standing contract
-  optional string supplier_contract_line_id = 11; // FK to supplier_contract_line (no DB constraint)
+  optional string supplier_contract_line_id = 11 [(options.v1.db).index = true]; // FK to supplier_contract_line (no DB FK constraint; indexed)
 
   // GL / categorization
-  optional string expenditure_category_id = 12 [(options.v1.db).references = "expenditure_category"];
-  optional string expense_account_id = 13 [(options.v1.db).references = "account"];
+  optional string expenditure_category_id = 12 [(options.v1.db).references = "expenditure_category", (options.v1.db).index = true];
+  optional string expense_account_id = 13 [(options.v1.db).references = "account", (options.v1.db).index = true];
 
   // Receiving location
-  optional string location_id = 14 [(options.v1.db).references = "location"];
+  optional string location_id = 14 [(options.v1.db).references = "location", (options.v1.db).index = true];
 
   // Display ordering
   int32 line_number = 15;
@@ -87,9 +87,9 @@ message ProcurementRequestLine {
   // downstream artifact is created. Exactly one of the three is populated
   // per line, determined by fulfillment_mode. Application-level FKs only
   // (no DB constraint, mirrors purchase_order_line_item linkage).
-  optional string spawned_supplier_contract_id = 22;          // RECURRING → SupplierContract
-  optional string spawned_purchase_order_line_item_id = 23;   // OUTRIGHT / STOCKABLE → PO line
-  optional string spawned_expenditure_id = 24;                // PETTY → Expenditure direct
+  optional string spawned_supplier_contract_id = 22 [(options.v1.db).index = true];          // RECURRING → SupplierContract
+  optional string spawned_purchase_order_line_item_id = 23 [(options.v1.db).index = true];   // OUTRIGHT / STOCKABLE → PO line
+  optional string spawned_expenditure_id = 24 [(options.v1.db).index = true];                // PETTY → Expenditure direct
 
   // RECURRING-mode parameters — populated when fulfillment_mode=RECURRING
   // and used by SpawnSupplierContractForRecurring. cycle == billing cadence,

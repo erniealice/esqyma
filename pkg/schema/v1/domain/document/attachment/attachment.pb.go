@@ -739,7 +739,7 @@ var File_domain_document_attachment_attachment_proto protoreflect.FileDescriptor
 
 const file_domain_document_attachment_attachment_proto_rawDesc = "" +
 	"\n" +
-	"+domain/document/attachment/attachment.proto\x12\x12domain.document.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/search.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x10options/db.proto\"\x91\a\n" +
+	"+domain/document/attachment/attachment.proto\x12\x12domain.document.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/search.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x10options/db.proto\"\xa4\a\n" +
 	"\n" +
 	"Attachment\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12&\n" +
@@ -755,8 +755,9 @@ const file_domain_document_attachment_attachment_proto_rawDesc = "" +
 	"foreignKey\x12\x12\n" +
 	"\x04name\x18\t \x01(\tR\x04name\x12%\n" +
 	"\vdescription\x18\n" +
-	" \x01(\tH\x04R\vdescription\x88\x01\x01\x12&\n" +
-	"\fworkspace_id\x18\v \x01(\tH\x05R\vworkspaceId\x88\x01\x01\x120\n" +
+	" \x01(\tH\x04R\vdescription\x88\x01\x01\x129\n" +
+	"\fworkspace_id\x18\v \x01(\tB\x11\x82\xb5\x18\r\n" +
+	"\tworkspace\x18\x01H\x05R\vworkspaceId\x88\x01\x01\x120\n" +
 	"\x11storage_container\x18\f \x01(\tH\x06R\x10storageContainer\x88\x01\x01\x12$\n" +
 	"\vstorage_key\x18\r \x01(\tH\aR\n" +
 	"storageKey\x88\x01\x01\x12&\n" +

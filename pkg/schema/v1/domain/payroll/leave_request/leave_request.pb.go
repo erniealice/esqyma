@@ -1036,7 +1036,7 @@ var File_domain_payroll_leave_request_leave_request_proto protoreflect.FileDescr
 
 const file_domain_payroll_leave_request_leave_request_proto_rawDesc = "" +
 	"\n" +
-	"0domain/payroll/leave_request/leave_request.proto\x12\x11domain.payroll.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1adomain/common/search.proto\x1a\x10options/db.proto\"\xcc\x06\n" +
+	"0domain/payroll/leave_request/leave_request.proto\x12\x11domain.payroll.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1adomain/common/search.proto\x1a\x10options/db.proto\"\xe9\x06\n" +
 	"\fLeaveRequest\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x124\n" +
 	"\fworkspace_id\x18\x02 \x01(\tB\x11\x82\xb5\x18\r\n" +
@@ -1049,8 +1049,8 @@ const file_domain_payroll_leave_request_leave_request_proto_rawDesc = "" +
 	"leave_type\x18\x01R\vleaveTypeId\x12\x1d\n" +
 	"\n" +
 	"start_date\x18\x05 \x01(\tR\tstartDate\x12\x19\n" +
-	"\bend_date\x18\x06 \x01(\tR\aendDate\x12\x12\n" +
-	"\x04days\x18\a \x01(\x05R\x04days\x12E\n" +
+	"\bend_date\x18\x06 \x01(\tR\aendDate\x12\x1b\n" +
+	"\x04days\x18\a \x01(\x05B\a\x82\xb5\x18\x03\"\x010R\x04days\x12E\n" +
 	"\x06status\x18\b \x01(\x0e2%.domain.payroll.v1.LeaveRequestStatusB\x06\x82\xb5\x18\x02\x18\x01R\x06status\x122\n" +
 	"\x13approved_by_user_id\x18\t \x01(\tH\x00R\x10approvedByUserId\x88\x01\x01\x12\x1b\n" +
 	"\x06reason\x18\n" +
@@ -1062,7 +1062,7 @@ const file_domain_payroll_leave_request_leave_request_proto_rawDesc = "" +
 	"\fdate_created\x18\r \x01(\x03H\x03R\vdateCreated\x88\x01\x01\x12;\n" +
 	"\x13date_created_string\x18\x0e \x01(\tB\x06\x82\xb5\x18\x028\x01H\x04R\x11dateCreatedString\x88\x01\x01\x12(\n" +
 	"\rdate_modified\x18\x0f \x01(\x03H\x05R\fdateModified\x88\x01\x01\x12=\n" +
-	"\x14date_modified_string\x18\x10 \x01(\tB\x06\x82\xb5\x18\x028\x01H\x06R\x12dateModifiedString\x88\x01\x01:\x06\x8a\xb5\x18\x02\b\x01B\x16\n" +
+	"\x14date_modified_string\x18\x10 \x01(\tB\x06\x82\xb5\x18\x028\x01H\x06R\x12dateModifiedString\x88\x01\x01:\x1a\x8a\xb5\x18\x16\b\x01\"\x12supplier_id,statusB\x16\n" +
 	"\x14_approved_by_user_idB\t\n" +
 	"\a_reasonB\x0e\n" +
 	"\f_approved_onB\x0f\n" +

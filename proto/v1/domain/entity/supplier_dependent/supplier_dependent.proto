@@ -17,6 +17,8 @@ import "options/db.proto";
 // PH dependent metadata for PhilHealth and BIR 2305.
 message SupplierDependent {
   option (options.v1.table).table = true;
+  // Workspace-scoped active-dependent listings.
+  option (options.v1.table).index_together = "workspace_id,active";
 
   string id = 1;
   string workspace_id = 2 [(options.v1.db).references = "workspace", (options.v1.db).index = true];

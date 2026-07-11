@@ -37,10 +37,13 @@ type SubscriptionWorkspaceUser struct {
 	DateModified       *int64                 `protobuf:"varint,4,opt,name=date_modified,json=dateModified,proto3,oneof" json:"date_modified,omitempty"`
 	DateModifiedString *string                `protobuf:"bytes,5,opt,name=date_modified_string,json=dateModifiedString,proto3,oneof" json:"date_modified_string,omitempty"`
 	Active             bool                   `protobuf:"varint,6,opt,name=active,proto3" json:"active,omitempty"`
-	WorkspaceId        string                 `protobuf:"bytes,7,opt,name=workspace_id,json=workspaceId,proto3" json:"workspace_id,omitempty"`
-	SubscriptionId     string                 `protobuf:"bytes,8,opt,name=subscription_id,json=subscriptionId,proto3" json:"subscription_id,omitempty"`
+	// Non-empty anchor enforced alongside client_id (single combined DB CHECK).
+	WorkspaceId    string `protobuf:"bytes,7,opt,name=workspace_id,json=workspaceId,proto3" json:"workspace_id,omitempty"`
+	SubscriptionId string `protobuf:"bytes,8,opt,name=subscription_id,json=subscriptionId,proto3" json:"subscription_id,omitempty"`
 	// Denormalized — NO standalone FK; part of the composite FK enforced in SQL.
-	ClientId        string `protobuf:"bytes,9,opt,name=client_id,json=clientId,proto3" json:"client_id,omitempty"`
+	ClientId string `protobuf:"bytes,9,opt,name=client_id,json=clientId,proto3" json:"client_id,omitempty"`
+	// Partial DB unique: UNIQUE (subscription_id, workspace_user_id) WHERE active
+	// — not expressible as unique_together (no partial-index support).
 	WorkspaceUserId string `protobuf:"bytes,10,opt,name=workspace_user_id,json=workspaceUserId,proto3" json:"workspace_user_id,omitempty"`
 	IsOwner         bool   `protobuf:"varint,11,opt,name=is_owner,json=isOwner,proto3" json:"is_owner,omitempty"`
 	unknownFields   protoimpl.UnknownFields
@@ -942,7 +945,7 @@ var File_domain_subscription_subscription_workspace_user_subscription_workspace_
 
 const file_domain_subscription_subscription_workspace_user_subscription_workspace_user_proto_rawDesc = "" +
 	"\n" +
-	"Qdomain/subscription/subscription_workspace_user/subscription_workspace_user.proto\x12\x16domain.subscription.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1adomain/common/search.proto\x1a\x10options/db.proto\"\xf7\x04\n" +
+	"Qdomain/subscription/subscription_workspace_user/subscription_workspace_user.proto\x12\x16domain.subscription.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1adomain/common/search.proto\x1a\x10options/db.proto\"\xe1\x05\n" +
 	"\x19SubscriptionWorkspaceUser\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12&\n" +
 	"\fdate_created\x18\x02 \x01(\x03H\x00R\vdateCreated\x88\x01\x01\x12;\n" +
@@ -950,16 +953,16 @@ const file_domain_subscription_subscription_workspace_user_subscription_workspac
 	"\rdate_modified\x18\x04 \x01(\x03H\x02R\fdateModified\x88\x01\x01\x12=\n" +
 	"\x14date_modified_string\x18\x05 \x01(\tB\x06\x82\xb5\x18\x028\x01H\x03R\x12dateModifiedString\x88\x01\x01\x12\"\n" +
 	"\x06active\x18\x06 \x01(\bB\n" +
-	"\x82\xb5\x18\x06\"\x04trueR\x06active\x124\n" +
-	"\fworkspace_id\x18\a \x01(\tB\x11\x82\xb5\x18\r\n" +
-	"\tworkspace\x18\x01R\vworkspaceId\x12=\n" +
+	"\x82\xb5\x18\x06\"\x04trueR\x06active\x12H\n" +
+	"\fworkspace_id\x18\a \x01(\tB%\x82\xb5\x18!\n" +
+	"\tworkspace\x18\x01*\x12workspace_id <> ''R\vworkspaceId\x12=\n" +
 	"\x0fsubscription_id\x18\b \x01(\tB\x14\x82\xb5\x18\x10\n" +
-	"\fsubscription\x18\x01R\x0esubscriptionId\x12\x1b\n" +
-	"\tclient_id\x18\t \x01(\tR\bclientId\x12B\n" +
+	"\fsubscription\x18\x01R\x0esubscriptionId\x122\n" +
+	"\tclient_id\x18\t \x01(\tB\x15\x82\xb5\x18\x11*\x0fclient_id <> ''R\bclientId\x12B\n" +
 	"\x11workspace_user_id\x18\n" +
 	" \x01(\tB\x16\x82\xb5\x18\x12\n" +
 	"\x0eworkspace_user\x18\x01R\x0fworkspaceUserId\x12&\n" +
-	"\bis_owner\x18\v \x01(\bB\v\x82\xb5\x18\a\"\x05falseR\aisOwner:\x06\x8a\xb5\x18\x02\b\x01B\x0f\n" +
+	"\bis_owner\x18\v \x01(\bB\v\x82\xb5\x18\a\"\x05falseR\aisOwner:E\x8a\xb5\x18A\b\x01\"\x16subscription_id,active\"%workspace_id,workspace_user_id,activeB\x0f\n" +
 	"\r_date_createdB\x16\n" +
 	"\x14_date_created_stringB\x10\n" +
 	"\x0e_date_modifiedB\x17\n" +

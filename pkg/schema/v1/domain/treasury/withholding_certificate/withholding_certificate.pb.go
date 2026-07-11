@@ -1101,7 +1101,8 @@ var File_domain_treasury_withholding_certificate_withholding_certificate_proto p
 
 const file_domain_treasury_withholding_certificate_withholding_certificate_proto_rawDesc = "" +
 	"\n" +
-	"Edomain/treasury/withholding_certificate/withholding_certificate.proto\x12\x12domain.treasury.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1adomain/common/search.proto\x1a\x10options/db.proto\"\xf6\t\n" +
+	"Edomain/treasury/withholding_certificate/withholding_certificate.proto\x12\x12domain.treasury.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1adomain/common/search.proto\x1a\x10options/db.proto\"\xa7\n" +
+	"\n" +
 	"\x16WithholdingCertificate\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12&\n" +
 	"\fdate_created\x18\x02 \x01(\x03H\x00R\vdateCreated\x88\x01\x01\x12;\n" +
@@ -1125,13 +1126,13 @@ const file_domain_treasury_withholding_certificate_withholding_certificate_proto
 	"issuedDate\x88\x01\x01\x12(\n" +
 	"\rreceived_date\x18\x0e \x01(\tH\bR\freceivedDate\x88\x01\x01\x12'\n" +
 	"\x0fexpected_amount\x18\x0f \x01(\x03R\x0eexpectedAmount\x12#\n" +
-	"\ractual_amount\x18\x10 \x01(\x03R\factualAmount\x12'\n" +
-	"\x0fvariance_amount\x18\x11 \x01(\x03R\x0evarianceAmount\x121\n" +
+	"\ractual_amount\x18\x10 \x01(\x03R\factualAmount\x120\n" +
+	"\x0fvariance_amount\x18\x11 \x01(\x03B\a\x82\xb5\x18\x03\"\x010R\x0evarianceAmount\x121\n" +
 	"\x12buyer_tin_snapshot\x18\x12 \x01(\tH\tR\x10buyerTinSnapshot\x88\x01\x01\x121\n" +
 	"\x12source_document_id\x18\x13 \x01(\tH\n" +
-	"R\x10sourceDocumentId\x88\x01\x01\x12H\n" +
-	"\x06status\x18\x14 \x01(\x0e20.domain.treasury.v1.WithholdingCertificateStatusR\x06status\x12\x19\n" +
-	"\x05notes\x18\x15 \x01(\tH\vR\x05notes\x88\x01\x01:\x06\x8a\xb5\x18\x02\b\x01B\x0f\n" +
+	"R\x10sourceDocumentId\x88\x01\x01\x12Q\n" +
+	"\x06status\x18\x14 \x01(\x0e20.domain.treasury.v1.WithholdingCertificateStatusB\a\x82\xb5\x18\x03\"\x010R\x06status\x12\x19\n" +
+	"\x05notes\x18\x15 \x01(\tH\vR\x05notes\x88\x01\x01:%\x8a\xb5\x18!\b\x01\x1a\x1drevenue_id,certificate_numberB\x0f\n" +
 	"\r_date_createdB\x16\n" +
 	"\x14_date_created_stringB\x10\n" +
 	"\x0e_date_modifiedB\x17\n" +

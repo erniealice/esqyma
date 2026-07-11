@@ -30,6 +30,8 @@ enum PayCycleStatus {
 // per-period unit of calculation that anchors rate-table lookup via pay_date.
 message PayCycle {
   option (options.v1.table).table = true;
+  // Workspace-scoped run/sequence ordering of cycles.
+  option (options.v1.table).index_together = "workspace_id,payroll_run_id,sequence_no";
 
   string id = 1;
   string workspace_id = 2 [(options.v1.db).references = "workspace", (options.v1.db).index = true];
@@ -43,7 +45,7 @@ message PayCycle {
 
   // Lifecycle
   PayCycleStatus status = 8 [(options.v1.db).index = true];
-  int32 sequence_no = 9;            // ordering within the run
+  int32 sequence_no = 9 [(options.v1.db).default = "0"];  // ordering within the run
 
   // Aggregates (filled at calculate time; recomputed on reopen)
   int64 total_gross = 10 [(options.v1.db).default = "0"];

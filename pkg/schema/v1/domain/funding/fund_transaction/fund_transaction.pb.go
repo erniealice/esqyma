@@ -209,7 +209,9 @@ type FundTransaction struct {
 	ExpenditureId  *string `protobuf:"bytes,20,opt,name=expenditure_id,json=expenditureId,proto3,oneof" json:"expenditure_id,omitempty"`
 	DisbursementId *string `protobuf:"bytes,21,opt,name=disbursement_id,json=disbursementId,proto3,oneof" json:"disbursement_id,omitempty"`
 	CollectionId   *string `protobuf:"bytes,22,opt,name=collection_id,json=collectionId,proto3,oneof" json:"collection_id,omitempty"`
-	TransferId     *string `protobuf:"bytes,23,opt,name=transfer_id,json=transferId,proto3,oneof" json:"transfer_id,omitempty"` // groups TRANSFER_OUT + TRANSFER_IN; NOT a FK (no transfer entity)
+	// groups TRANSFER_OUT + TRANSFER_IN; NOT a FK (no transfer entity).
+	// Live index is partial (WHERE transfer_id IS NOT NULL) — not expressible here.
+	TransferId *string `protobuf:"bytes,23,opt,name=transfer_id,json=transferId,proto3,oneof" json:"transfer_id,omitempty"`
 	// GL traceability
 	JournalEntryId *string `protobuf:"bytes,24,opt,name=journal_entry_id,json=journalEntryId,proto3,oneof" json:"journal_entry_id,omitempty"`
 	// Narrative
@@ -1228,7 +1230,7 @@ var File_domain_funding_fund_transaction_fund_transaction_proto protoreflect.Fil
 
 const file_domain_funding_fund_transaction_fund_transaction_proto_rawDesc = "" +
 	"\n" +
-	"6domain/funding/fund_transaction/fund_transaction.proto\x12\x11domain.funding.v1\x1a\x19domain/common/error.proto\x1a\x1adomain/common/search.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1edomain/common/pagination.proto\x1a\x10options/db.proto\"\xe2\r\n" +
+	"6domain/funding/fund_transaction/fund_transaction.proto\x12\x11domain.funding.v1\x1a\x19domain/common/error.proto\x1a\x1adomain/common/search.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1edomain/common/pagination.proto\x1a\x10options/db.proto\"\xbe\x0e\n" +
 	"\x0fFundTransaction\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12&\n" +
 	"\fdate_created\x18\x02 \x01(\x03H\x00R\vdateCreated\x88\x01\x01\x12;\n" +
@@ -1244,27 +1246,27 @@ const file_domain_funding_fund_transaction_fund_transaction_proto_rawDesc = "" +
 	"\fworkspace_id\x18\t \x01(\tB\x11\x82\xb5\x18\r\n" +
 	"\tworkspace\x18\x01H\x05R\vworkspaceId\x88\x01\x01\x12:\n" +
 	"\x04kind\x18\n" +
-	" \x01(\x0e2&.domain.funding.v1.FundTransactionKindR\x04kind\x12\x16\n" +
-	"\x06amount\x18\v \x01(\x03R\x06amount\x12!\n" +
+	" \x01(\x0e2&.domain.funding.v1.FundTransactionKindR\x04kind\x12\x1f\n" +
+	"\x06amount\x18\v \x01(\x03B\a\x82\xb5\x18\x03\"\x010R\x06amount\x12!\n" +
 	"\feffective_at\x18\f \x01(\x03R\veffectiveAt\x12\x1b\n" +
 	"\tposted_at\x18\r \x01(\x03R\bpostedAt\x12@\n" +
 	"\x06status\x18\x0e \x01(\x0e2(.domain.funding.v1.FundTransactionStatusR\x06status\x12<\n" +
 	"\vreverses_id\x18\x0f \x01(\tB\x16\x82\xb5\x18\x12\n" +
 	"\x10fund_transactionH\x06R\n" +
-	"reversesId\x88\x01\x01\x12'\n" +
-	"\x0fidempotency_key\x18\x10 \x01(\tR\x0eidempotencyKey\x129\n" +
+	"reversesId\x88\x01\x01\x12/\n" +
+	"\x0fidempotency_key\x18\x10 \x01(\tB\x06\x82\xb5\x18\x02\x10\x01R\x0eidempotencyKey\x129\n" +
 	"\x16exchange_rate_snapshot\x18\x11 \x01(\x01H\aR\x14exchangeRateSnapshot\x88\x01\x01\x12A\n" +
 	"\x1aamount_functional_currency\x18\x12 \x01(\x03H\bR\x18amountFunctionalCurrency\x88\x01\x01\x124\n" +
 	"\x13functional_currency\x18\x13 \x01(\tH\tR\x12functionalCurrency\x88\x01\x01\x12=\n" +
 	"\x0eexpenditure_id\x18\x14 \x01(\tB\x11\x82\xb5\x18\r\n" +
 	"\vexpenditureH\n" +
-	"R\rexpenditureId\x88\x01\x01\x12@\n" +
-	"\x0fdisbursement_id\x18\x15 \x01(\tB\x12\x82\xb5\x18\x0e\n" +
-	"\fdisbursementH\vR\x0edisbursementId\x88\x01\x01\x12:\n" +
+	"R\rexpenditureId\x88\x01\x01\x12I\n" +
+	"\x0fdisbursement_id\x18\x15 \x01(\tB\x1b\x82\xb5\x18\x17\n" +
+	"\x15treasury_disbursementH\vR\x0edisbursementId\x88\x01\x01\x12:\n" +
 	"\rcollection_id\x18\x16 \x01(\tB\x10\x82\xb5\x18\f\n" +
 	"\n" +
-	"collectionH\fR\fcollectionId\x88\x01\x01\x12$\n" +
-	"\vtransfer_id\x18\x17 \x01(\tH\rR\n" +
+	"collectionH\fR\fcollectionId\x88\x01\x01\x12,\n" +
+	"\vtransfer_id\x18\x17 \x01(\tB\x06\x82\xb5\x18\x02\x18\x01H\rR\n" +
 	"transferId\x88\x01\x01\x12D\n" +
 	"\x10journal_entry_id\x18\x18 \x01(\tB\x15\x82\xb5\x18\x11\n" +
 	"\rjournal_entry\x18\x01H\x0eR\x0ejournalEntryId\x88\x01\x01\x12%\n" +
@@ -1272,7 +1274,7 @@ const file_domain_funding_fund_transaction_fund_transaction_proto_rawDesc = "" +
 	"\x10reference_number\x18\x1a \x01(\tH\x10R\x0freferenceNumber\x88\x01\x01\x12<\n" +
 	"\x12created_by_user_id\x18\x1b \x01(\tB\n" +
 	"\x82\xb5\x18\x06\n" +
-	"\x04userH\x11R\x0fcreatedByUserId\x88\x01\x01:\x06\x8a\xb5\x18\x02\b\x01B\x0f\n" +
+	"\x04userH\x11R\x0fcreatedByUserId\x88\x01\x01:@\x8a\xb5\x18<\b\x01\"\x18fund_id,status,posted_at\"\x1eallocation_id,status,posted_atB\x0f\n" +
 	"\r_date_createdB\x16\n" +
 	"\x14_date_created_stringB\x10\n" +
 	"\x0e_date_modifiedB\x17\n" +

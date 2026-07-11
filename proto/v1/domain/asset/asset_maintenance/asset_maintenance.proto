@@ -56,7 +56,7 @@ message AssetMaintenance {
   reserved 11; // was completion_date_string
   optional string description = 12;
   optional int64 cost = 13; // centavos
-  bool is_capitalized = 14;
+  bool is_capitalized = 14 [(options.v1.db).default = "false"];
   optional string performed_by = 15;
   optional string vendor_id = 16;        // FK to entity.Client
   optional string work_order_number = 17;

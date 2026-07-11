@@ -25,6 +25,8 @@ enum LeaveRequestStatus {
 // LeaveRequest is the per-employee leave request workflow.
 message LeaveRequest {
   option (options.v1.table).table = true;
+  // Per-employee request listing filtered by approval state.
+  option (options.v1.table).index_together = "supplier_id,status";
 
   string id = 1;
   string workspace_id = 2 [(options.v1.db).references = "workspace", (options.v1.db).index = true];
@@ -33,7 +35,7 @@ message LeaveRequest {
 
   string start_date = 5;     // ISO 8601 date
   string end_date = 6;       // ISO 8601 date
-  int32 days = 7;
+  int32 days = 7 [(options.v1.db).default = "0"];
 
   LeaveRequestStatus status = 8 [(options.v1.db).index = true];
   optional string approved_by_user_id = 9;

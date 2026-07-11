@@ -1345,7 +1345,7 @@ var File_domain_expenditure_supplier_contract_price_schedule_supplier_contract_p
 
 const file_domain_expenditure_supplier_contract_price_schedule_supplier_contract_price_schedule_proto_rawDesc = "" +
 	"\n" +
-	"Zdomain/expenditure/supplier_contract_price_schedule/supplier_contract_price_schedule.proto\x12\x15domain.expenditure.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/search.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a<domain/expenditure/supplier_contract/supplier_contract.proto\x1a\x10options/db.proto\x1a\x1fgoogle/protobuf/timestamp.proto\"\xa9\n" +
+	"Zdomain/expenditure/supplier_contract_price_schedule/supplier_contract_price_schedule.proto\x12\x15domain.expenditure.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/search.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a<domain/expenditure/supplier_contract/supplier_contract.proto\x1a\x10options/db.proto\x1a\x1fgoogle/protobuf/timestamp.proto\"\xb4\n" +
 	"\n" +
 	"\x1dSupplierContractPriceSchedule\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x124\n" +
@@ -1366,14 +1366,13 @@ const file_domain_expenditure_supplier_contract_price_schedule_supplier_contract
 	"\x04name\x18\x14 \x01(\tR\x04name\x12%\n" +
 	"\vdescription\x18\x15 \x01(\tH\x05R\vdescription\x88\x01\x01\x12B\n" +
 	"\x0fdate_time_start\x18\x16 \x01(\v2\x1a.google.protobuf.TimestampR\rdateTimeStart\x12C\n" +
-	"\rdate_time_end\x18\x17 \x01(\v2\x1a.google.protobuf.TimestampH\x06R\vdateTimeEnd\x88\x01\x01\x124\n" +
-	"\vlocation_id\x18\x18 \x01(\tB\x0e\x82\xb5\x18\n" +
-	"\n" +
-	"\blocationH\aR\n" +
+	"\rdate_time_end\x18\x17 \x01(\v2\x1a.google.protobuf.TimestampH\x06R\vdateTimeEnd\x88\x01\x01\x126\n" +
+	"\vlocation_id\x18\x18 \x01(\tB\x10\x82\xb5\x18\f\n" +
+	"\blocation\x18\x01H\aR\n" +
 	"locationId\x88\x01\x01\x12\x1a\n" +
 	"\bcurrency\x18\x19 \x01(\tR\bcurrency\x12Z\n" +
-	"\x06status\x18\x1e \x01(\x0e2:.domain.expenditure.v1.SupplierContractPriceScheduleStatusB\x06\x82\xb5\x18\x02\x18\x01R\x06status\x12'\n" +
-	"\x0fsequence_number\x18\x1f \x01(\x05R\x0esequenceNumber\x12\x19\n" +
+	"\x06status\x18\x1e \x01(\x0e2:.domain.expenditure.v1.SupplierContractPriceScheduleStatusB\x06\x82\xb5\x18\x02\x18\x01R\x06status\x120\n" +
+	"\x0fsequence_number\x18\x1f \x01(\x05B\a\x82\xb5\x18\x03\"\x011R\x0esequenceNumber\x12\x19\n" +
 	"\x05notes\x182 \x01(\tH\bR\x05notes\x88\x01\x01\x12^\n" +
 	"\bmetadata\x183 \x03(\v2B.domain.expenditure.v1.SupplierContractPriceSchedule.MetadataEntryR\bmetadata\x1a;\n" +
 	"\rMetadataEntry\x12\x10\n" +

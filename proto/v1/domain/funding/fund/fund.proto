@@ -68,16 +68,16 @@ message Fund {
   // Identity
   string name = 7;                    // "Personal Visa", "Acme Operating Account"
   optional string description = 8;
-  FundKind kind = 9;
+  FundKind kind = 9 [(options.v1.db).index = true];
 
   // Polymorphic owner — no FK constraint at DB level (by design).
   // owner_party_id references user.id, workspace.id, or admin.id depending on owner_party_type.
   FundOwnerPartyType owner_party_type = 10;
-  string owner_party_id = 11;
+  string owner_party_id = 11 [(options.v1.db).index = true];
 
   // Currency + limit
   string currency = 12;               // ISO 4217, authoritative source currency
-  int64 authorized_limit = 13;        // centavos in source currency; meaningful for CREDIT_* kinds
+  int64 authorized_limit = 13 [(options.v1.db).default = "0"];        // centavos in source currency; meaningful for CREDIT_* kinds
 
   // GL traceability — the CoA account this Fund backs
   optional string gl_account_id = 14 [(options.v1.db).references = "account", (options.v1.db).index = true];
@@ -85,7 +85,7 @@ message Fund {
   // Sharing flag — false: single-allocation expected; true: cross-workspace primitive
   bool shared = 15 [(options.v1.db).default = "false"];
 
-  FundStatus status = 16;
+  FundStatus status = 16 [(options.v1.db).index = true];
 
   // Audit + provider linkage
   optional string external_ref = 17;                      // Plaid account_id, Stripe Issuing card id, etc.

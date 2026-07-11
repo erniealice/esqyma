@@ -46,7 +46,7 @@ message SupplierBillingEvent {
   int64 billable_amount = 20;
   string billing_currency = 21;
 
-  SupplierBillingEventStatus status = 30;
+  SupplierBillingEventStatus status = 30 [(options.v1.db).index = true];
   SupplierBillingEventTrigger trigger = 31;
 
   // Back-edge — set when status flips to BILLED via RecognizeMilestoneAdvance.

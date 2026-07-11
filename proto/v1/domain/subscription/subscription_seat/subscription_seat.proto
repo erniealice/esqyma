@@ -25,6 +25,8 @@ enum SubscriptionSeatStatus {
 // SubscriptionSeat is one billable/serviced headcount position on a subscription.
 message SubscriptionSeat {
   option (options.v1.table).table = true;
+  option (options.v1.table).index_together = "workspace_id,client_id";
+  option (options.v1.table).index_together = "workspace_id,status";
 
   string id = 1;
   optional int64 date_created = 2;
@@ -33,12 +35,13 @@ message SubscriptionSeat {
   optional string date_modified_string = 5 [(options.v1.db).ignore = true];
   bool active = 6 [(options.v1.db).default = "true"];
 
-  string workspace_id = 7 [(options.v1.db).references = "workspace", (options.v1.db).index = true];
+  // Non-empty anchor enforced alongside client_id (single combined DB CHECK).
+  string workspace_id = 7 [(options.v1.db).references = "workspace", (options.v1.db).index = true, (options.v1.db).check = "workspace_id <> ''"];
   string subscription_id = 8 [(options.v1.db).references = "subscription", (options.v1.db).index = true];
   // CR-1: the person on the seat is entity/staff, NOT product/resource.
   string staff_id = 9 [(options.v1.db).references = "staff", (options.v1.db).index = true];
   // Denormalized IDOR anchor (stamped, never from form).
-  string client_id = 10 [(options.v1.db).references = "client", (options.v1.db).index = true];
+  string client_id = 10 [(options.v1.db).references = "client", (options.v1.db).index = true, (options.v1.db).check = "client_id <> ''"];
   // KEPT billing anchor.
   string product_plan_id = 11 [(options.v1.db).references = "product_plan", (options.v1.db).index = true];
   optional string product_variant_id = 12 [(options.v1.db).references = "product_variant"];
@@ -48,9 +51,13 @@ message SubscriptionSeat {
   optional string seniority = 16;
   optional int64 date_start = 17;
   optional int64 date_end = 18;
-  SubscriptionSeatStatus status = 19;             // proto ENUM (NOT string); DB CHECK-pinned
+  // proto ENUM (NOT string); stored as text, domain pinned by the DB CHECK below.
+  SubscriptionSeatStatus status = 19
+    [(options.v1.db).check = "status IN ('proposed', 'active', 'replaced', 'ended')"];
   optional int32 review_cadence_value = 20;
   optional string review_cadence_unit = 21;
+  // Partial DB unique: UNIQUE (subscription_id, position) WHERE status = 'active'
+  // — not expressible as unique_together (no partial-index support).
   optional string position = 22;
   // Self-reference: the seat this one supersedes (SR-2 replacement chain).
   optional string replaces_id = 23 [(options.v1.db).references = "subscription_seat"];

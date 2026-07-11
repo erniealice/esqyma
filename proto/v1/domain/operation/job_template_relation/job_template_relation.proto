@@ -57,9 +57,9 @@ message JobTemplateRelation {
 
   // Deterministic spawn order for child Jobs when a Plan declares multiple
   // sub-templates. Ascending integer; ties broken by id.
-  int32 sequence_order = 11;
+  int32 sequence_order = 11 [(options.v1.db).default = "0"];
 
-  JobTemplateRelationType relation_type = 12;
+  JobTemplateRelationType relation_type = 12 [(options.v1.db).default = "0"];
 
   reserved 13 to 29;
 }

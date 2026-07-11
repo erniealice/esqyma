@@ -109,7 +109,7 @@ message SupplierContract {
   optional int64 remaining_amount = 64 [(options.v1.db).default = "0"];
   // cycle_amount: expected per-cycle charge for recurring types
   optional int64 cycle_amount = 65;
-  optional string payment_term_id = 66 [(options.v1.db).references = "payment_term"];
+  optional string payment_term_id = 66 [(options.v1.db).references = "payment_term", (options.v1.db).index = true];
   optional domain.entity.v1.PaymentTerm payment_term = 67;
 
   // Quantity (for blanket kind)
@@ -133,7 +133,7 @@ message SupplierContract {
   optional string accrual_account_id = 101 [(options.v1.db).references = "account"];
 
   // Categorization
-  optional string expenditure_category_id = 110 [(options.v1.db).references = "expenditure_category"];
+  optional string expenditure_category_id = 110 [(options.v1.db).references = "expenditure_category", (options.v1.db).index = true];
 
   // Notes & metadata
   optional string notes = 120;

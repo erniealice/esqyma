@@ -17,19 +17,21 @@ import "options/db.proto";
 message Disbursement {
   option (options.v1.table).table = true;
   option (options.v1.table).table_name = "treasury_disbursement";
+  // Composite index for advance workflow scans (DB index is partial: WHERE advance_kind IS NOT NULL).
+  option (options.v1.table).index_together = "advance_kind,advance_status";
   string id = 1;
   optional int64 date_created = 2;
   optional string date_created_string = 3 [(options.v1.db).ignore = true];
   optional int64 date_modified = 4;
   optional string date_modified_string = 5 [(options.v1.db).ignore = true];
-  bool active = 6;
+  bool active = 6 [(options.v1.db).default = "true"];
   string name = 7;
   optional domain.subscription.v1.Subscription subscription = 8;
   string subscription_id = 9;
   int64 amount = 10; // centavos
   string status = 11;
   // --- expenditure-related fields ---
-  string expenditure_id = 20;               // FK to expenditure table
+  string expenditure_id = 20 [(options.v1.db).index = true];  // FK to expenditure table
   string disbursement_type = 21;            // "purchase", "expense", "subscription_refund"
   string disbursement_method_id = 22;       // FK to disbursement_method
   string currency = 23;

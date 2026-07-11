@@ -55,8 +55,8 @@ message PurchaseOrderLineItem {
   optional string date_modified_string = 23 [(options.v1.db).ignore = true];
 
   // Supplier commitment back-edges
-  optional string supplier_contract_line_id = 24;   // FK to supplier_contract_line (no DB constraint)
-  optional string procurement_request_line_id = 25; // FK to procurement_request_line (no DB constraint)
+  optional string supplier_contract_line_id = 24 [(options.v1.db).index = true];   // FK to supplier_contract_line (no DB FK constraint; indexed)
+  optional string procurement_request_line_id = 25 [(options.v1.db).index = true]; // FK to procurement_request_line (no DB FK constraint; indexed)
 }
 
 service PurchaseOrderLineItemDomainService {

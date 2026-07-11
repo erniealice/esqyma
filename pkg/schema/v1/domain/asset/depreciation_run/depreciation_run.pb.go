@@ -1636,23 +1636,26 @@ var File_domain_asset_depreciation_run_depreciation_run_proto protoreflect.FileD
 
 const file_domain_asset_depreciation_run_depreciation_run_proto_rawDesc = "" +
 	"\n" +
-	"4domain/asset/depreciation_run/depreciation_run.proto\x12\x0fdomain.asset.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1adomain/common/search.proto\x1a\x10options/db.proto\"\xb6\a\n" +
+	"4domain/asset/depreciation_run/depreciation_run.proto\x12\x0fdomain.asset.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1adomain/common/search.proto\x1a\x10options/db.proto\"\xcc\b\n" +
 	"\x0fDepreciationRun\x12\x0e\n" +
-	"\x02id\x18\x01 \x01(\tR\x02id\x12)\n" +
-	"\fworkspace_id\x18\x02 \x01(\tB\x06\x82\xb5\x18\x02\x18\x01R\vworkspaceId\x12H\n" +
+	"\x02id\x18\x01 \x01(\tR\x02id\x124\n" +
+	"\fworkspace_id\x18\x02 \x01(\tB\x11\x82\xb5\x18\r\n" +
+	"\tworkspace\x18\x01R\vworkspaceId\x12y\n" +
 	"\n" +
-	"scope_kind\x18\x03 \x01(\x0e2).domain.asset.v1.DepreciationRunScopeKindR\tscopeKind\x12\x1e\n" +
+	"scope_kind\x18\x03 \x01(\x0e2).domain.asset.v1.DepreciationRunScopeKindB/\x82\xb5\x18+\")'DEPRECIATION_RUN_SCOPE_KIND_UNSPECIFIED'R\tscopeKind\x12\x1e\n" +
 	"\bscope_id\x18\x04 \x01(\tH\x00R\ascopeId\x88\x01\x01\x12\x1c\n" +
 	"\n" +
-	"as_of_date\x18\x05 \x01(\tR\basOfDate\x12!\n" +
-	"\finitiator_id\x18\x06 \x01(\tR\vinitiatorId\x12&\n" +
-	"\finitiated_at\x18\a \x01(\x03H\x01R\vinitiatedAt\x88\x01\x01\x12&\n" +
-	"\fcompleted_at\x18\b \x01(\x03H\x02R\vcompletedAt\x88\x01\x01\x12>\n" +
-	"\x06status\x18\t \x01(\x0e2&.domain.asset.v1.DepreciationRunStatusR\x06status\x12#\n" +
+	"as_of_date\x18\x05 \x01(\tR\basOfDate\x12-\n" +
+	"\finitiator_id\x18\x06 \x01(\tB\n" +
+	"\x82\xb5\x18\x06\n" +
+	"\x04userR\vinitiatorId\x12.\n" +
+	"\finitiated_at\x18\a \x01(\x03B\x06\x82\xb5\x18\x02\x18\x01H\x01R\vinitiatedAt\x88\x01\x01\x12&\n" +
+	"\fcompleted_at\x18\b \x01(\x03H\x02R\vcompletedAt\x88\x01\x01\x12i\n" +
+	"\x06status\x18\t \x01(\x0e2&.domain.asset.v1.DepreciationRunStatusB)\x82\xb5\x18%\x18\x01\"!'DEPRECIATION_RUN_STATUS_PENDING'R\x06status\x12,\n" +
 	"\rcreated_count\x18\n" +
-	" \x01(\x05R\fcreatedCount\x12#\n" +
-	"\rskipped_count\x18\v \x01(\x05R\fskippedCount\x12#\n" +
-	"\rerrored_count\x18\f \x01(\x05R\ferroredCount\x12(\n" +
+	" \x01(\x05B\a\x82\xb5\x18\x03\"\x010R\fcreatedCount\x12,\n" +
+	"\rskipped_count\x18\v \x01(\x05B\a\x82\xb5\x18\x03\"\x010R\fskippedCount\x12,\n" +
+	"\rerrored_count\x18\f \x01(\x05B\a\x82\xb5\x18\x03\"\x010R\ferroredCount\x12(\n" +
 	"\rerror_summary\x18\r \x01(\tH\x03R\ferrorSummary\x88\x01\x01\x12\x19\n" +
 	"\x05notes\x18\x0e \x01(\tH\x04R\x05notes\x88\x01\x01\x12\"\n" +
 	"\x06active\x18\x0f \x01(\bB\n" +

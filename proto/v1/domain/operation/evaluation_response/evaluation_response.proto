@@ -21,27 +21,28 @@ import "options/db.proto";
 // =============================================================================
 message EvaluationResponse {
   option (options.v1.table).table = true;
+  option (options.v1.table).index_together = "evaluation_id,sequence_order";
 
   string id = 1;
   string evaluation_id = 2 [(options.v1.db).references = "evaluation", (options.v1.db).index = true];
   // COPIED from the parent evaluation at create; adapter validates it equals the parent's.
-  string workspace_id = 3 [(options.v1.db).references = "workspace", (options.v1.db).index = true];
+  string workspace_id = 3 [(options.v1.db).references = "workspace", (options.v1.db).index = true, (options.v1.db).check = "workspace_id <> ''"];
   string outcome_criteria_id = 4 [(options.v1.db).references = "outcome_criteria", (options.v1.db).index = true];
 
   // Snapshot columns (copied from OutcomeCriteria at submit).
   optional string criteria_version_id = 5 [(options.v1.db).references = "outcome_criteria"];  // version pin
   string criteria_label = 6;                          // SNAPSHOT
   optional double criteria_weight = 7;                // SNAPSHOT — score computed from this, NOT the live rubric
-  domain.operation.v1.CriteriaType criteria_type = 8; // SNAPSHOT — pins which answer column may be set (one-of CHECK)
+  domain.operation.v1.CriteriaType criteria_type = 8 [(options.v1.db).check = "criteria_type IN ('numeric_range','numeric_score','pass_fail','categorical','text','multi_check')"]; // SNAPSHOT — pins which answer column may be set (one-of CHECK)
 
   // Typed answer one-of (exactly one set, matching the snapshotted criteria_type).
-  optional double numeric_value = 9;
+  optional double numeric_value = 9 [(options.v1.db).check = "(criteria_type IN ('numeric_range','numeric_score') AND numeric_value IS NOT NULL AND text_value IS NULL AND categorical_value IS NULL AND pass_fail_value IS NULL) OR (criteria_type = 'pass_fail' AND pass_fail_value IS NOT NULL AND numeric_value IS NULL AND text_value IS NULL AND categorical_value IS NULL) OR (criteria_type = 'categorical' AND categorical_value IS NOT NULL AND numeric_value IS NULL AND text_value IS NULL AND pass_fail_value IS NULL) OR (criteria_type IN ('text','multi_check') AND text_value IS NOT NULL AND numeric_value IS NULL AND categorical_value IS NULL AND pass_fail_value IS NULL)"];
   optional string text_value = 10;
   optional string categorical_value = 11;
   optional bool pass_fail_value = 12;
 
   optional string comment = 13;
-  int32 sequence_order = 14;
+  int32 sequence_order = 14 [(options.v1.db).default = "0"];
 
   bool active = 15 [(options.v1.db).default = "true"];
   optional int64 date_created = 16;

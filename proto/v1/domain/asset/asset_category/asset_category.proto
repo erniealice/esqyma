@@ -21,9 +21,9 @@ message AssetCategory {
   optional string parent_category_id = 5 [(options.v1.db).references = "asset_category", (options.v1.db).index = true];
 
   // Default depreciation settings for new assets in this category
-  string default_depreciation_method = 6;
-  int32 default_useful_life_months = 7;
-  double default_salvage_value_percent = 8;
+  string default_depreciation_method = 6 [(options.v1.db).default = "'STRAIGHT_LINE'"];
+  int32 default_useful_life_months = 7 [(options.v1.db).default = "0"];
+  double default_salvage_value_percent = 8 [(options.v1.db).default = "0"];
 
   // GL account mappings
   optional string asset_cost_account = 9;

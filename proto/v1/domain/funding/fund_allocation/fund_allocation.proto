@@ -55,7 +55,7 @@ message FundAllocation {
 
   // Limit policy
   FundAllocationMode mode = 9;
-  int64 allocated_limit = 10;  // centavos in source currency — a FACT, never mutated by transactions
+  int64 allocated_limit = 10 [(options.v1.db).default = "0"];  // centavos in source currency — a FACT, never mutated by transactions
 
   // GL pointers — per-allocation (each WS may have its own CoA structure)
   optional string payable_account_id = 11 [(options.v1.db).references = "account", (options.v1.db).index = true];         // liability account absorbing draws

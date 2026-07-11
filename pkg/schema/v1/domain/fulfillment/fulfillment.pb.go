@@ -216,7 +216,7 @@ var File_domain_fulfillment_fulfillment_proto protoreflect.FileDescriptor
 
 const file_domain_fulfillment_fulfillment_proto_rawDesc = "" +
 	"\n" +
-	"$domain/fulfillment/fulfillment.proto\x12\x15domain.fulfillment.v1\x1a\x1fgoogle/protobuf/timestamp.proto\x1a\x1cgoogle/protobuf/struct.proto\x1a\x10options/db.proto\"\xa3\a\n" +
+	"$domain/fulfillment/fulfillment.proto\x12\x15domain.fulfillment.v1\x1a\x1fgoogle/protobuf/timestamp.proto\x1a\x1cgoogle/protobuf/struct.proto\x1a\x10options/db.proto\"\xac\a\n" +
 	"\vFulfillment\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12)\n" +
 	"\fworkspace_id\x18\x02 \x01(\tB\x06\x82\xb5\x18\x02\x18\x01R\vworkspaceId\x12.\n" +
@@ -230,8 +230,8 @@ const file_domain_fulfillment_fulfillment_proto_rawDesc = "" +
 	"\rdelivery_mode\x18\x05 \x01(\tR\fdeliveryMode\x12\x1e\n" +
 	"\x06status\x18\x06 \x01(\tB\x06\x82\xb5\x18\x02\x18\x01R\x06status\x12'\n" +
 	"\x0fprovider_status\x18\a \x01(\tR\x0eproviderStatus\x12-\n" +
-	"\x12provider_reference\x18\b \x01(\tR\x11providerReference\x12#\n" +
-	"\rdelivery_cost\x18\t \x01(\x03R\fdeliveryCost\x12\x1a\n" +
+	"\x12provider_reference\x18\b \x01(\tR\x11providerReference\x12,\n" +
+	"\rdelivery_cost\x18\t \x01(\x03B\a\x82\xb5\x18\x03\"\x010R\fdeliveryCost\x12\x1a\n" +
 	"\bcurrency\x18\n" +
 	" \x01(\tR\bcurrency\x12=\n" +
 	"\x0eexpenditure_id\x18\v \x01(\tB\x11\x82\xb5\x18\r\n" +

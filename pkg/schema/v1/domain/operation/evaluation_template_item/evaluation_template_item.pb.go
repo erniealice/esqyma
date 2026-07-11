@@ -948,16 +948,16 @@ var File_domain_operation_evaluation_template_item_evaluation_template_item_prot
 
 const file_domain_operation_evaluation_template_item_evaluation_template_item_proto_rawDesc = "" +
 	"\n" +
-	"Hdomain/operation/evaluation_template_item/evaluation_template_item.proto\x12\x13domain.operation.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1adomain/common/search.proto\x1a\x10options/db.proto\"\xe7\x05\n" +
+	"Hdomain/operation/evaluation_template_item/evaluation_template_item.proto\x12\x13domain.operation.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1adomain/common/search.proto\x1a\x10options/db.proto\"\xab\x06\n" +
 	"\x16EvaluationTemplateItem\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12Q\n" +
 	"\x16evaluation_template_id\x18\x02 \x01(\tB\x1b\x82\xb5\x18\x17\n" +
-	"\x13evaluation_template\x18\x01R\x14evaluationTemplateId\x124\n" +
-	"\fworkspace_id\x18\x03 \x01(\tB\x11\x82\xb5\x18\r\n" +
-	"\tworkspace\x18\x01R\vworkspaceId\x12H\n" +
+	"\x13evaluation_template\x18\x01R\x14evaluationTemplateId\x12H\n" +
+	"\fworkspace_id\x18\x03 \x01(\tB%\x82\xb5\x18!\n" +
+	"\tworkspace\x18\x01*\x12workspace_id <> ''R\vworkspaceId\x12H\n" +
 	"\x13outcome_criteria_id\x18\x04 \x01(\tB\x18\x82\xb5\x18\x14\n" +
-	"\x10outcome_criteria\x18\x01R\x11outcomeCriteriaId\x12%\n" +
-	"\x0esequence_order\x18\x05 \x01(\x05R\rsequenceOrder\x12*\n" +
+	"\x10outcome_criteria\x18\x01R\x11outcomeCriteriaId\x12.\n" +
+	"\x0esequence_order\x18\x05 \x01(\x05B\a\x82\xb5\x18\x03\"\x010R\rsequenceOrder\x12*\n" +
 	"\x0equestion_label\x18\x06 \x01(\tH\x00R\rquestionLabel\x88\x01\x01\x12,\n" +
 	"\x0fquestion_prompt\x18\a \x01(\tH\x01R\x0equestionPrompt\x88\x01\x01\x120\n" +
 	"\x11required_override\x18\b \x01(\bH\x02R\x10requiredOverride\x88\x01\x01\x12,\n" +
@@ -966,7 +966,7 @@ const file_domain_operation_evaluation_template_item_evaluation_template_item_pr
 	" \x01(\bB\n" +
 	"\x82\xb5\x18\x06\"\x04trueR\x06active\x12&\n" +
 	"\fdate_created\x18\v \x01(\x03H\x04R\vdateCreated\x88\x01\x01\x12;\n" +
-	"\x13date_created_string\x18\f \x01(\tB\x06\x82\xb5\x18\x028\x01H\x05R\x11dateCreatedString\x88\x01\x01:\x06\x8a\xb5\x18\x02\b\x01B\x11\n" +
+	"\x13date_created_string\x18\f \x01(\tB\x06\x82\xb5\x18\x028\x01H\x05R\x11dateCreatedString\x88\x01\x01:-\x8a\xb5\x18)\b\x01\"%evaluation_template_id,sequence_orderB\x11\n" +
 	"\x0f_question_labelB\x12\n" +
 	"\x10_question_promptB\x14\n" +
 	"\x12_required_overrideB\x12\n" +

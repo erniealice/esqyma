@@ -994,33 +994,33 @@ var File_domain_operation_evaluation_response_evaluation_response_proto protoref
 
 const file_domain_operation_evaluation_response_evaluation_response_proto_rawDesc = "" +
 	"\n" +
-	">domain/operation/evaluation_response/evaluation_response.proto\x12\x13domain.operation.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1adomain/common/search.proto\x1a\"domain/operation/enums/enums.proto\x1a\x10options/db.proto\"\xf7\a\n" +
+	">domain/operation/evaluation_response/evaluation_response.proto\x12\x13domain.operation.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1adomain/common/search.proto\x1a\"domain/operation/enums/enums.proto\x1a\x10options/db.proto\"\x89\x0e\n" +
 	"\x12EvaluationResponse\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x127\n" +
 	"\revaluation_id\x18\x02 \x01(\tB\x12\x82\xb5\x18\x0e\n" +
 	"\n" +
-	"evaluation\x18\x01R\fevaluationId\x124\n" +
-	"\fworkspace_id\x18\x03 \x01(\tB\x11\x82\xb5\x18\r\n" +
-	"\tworkspace\x18\x01R\vworkspaceId\x12H\n" +
+	"evaluation\x18\x01R\fevaluationId\x12H\n" +
+	"\fworkspace_id\x18\x03 \x01(\tB%\x82\xb5\x18!\n" +
+	"\tworkspace\x18\x01*\x12workspace_id <> ''R\vworkspaceId\x12H\n" +
 	"\x13outcome_criteria_id\x18\x04 \x01(\tB\x18\x82\xb5\x18\x14\n" +
 	"\x10outcome_criteria\x18\x01R\x11outcomeCriteriaId\x12K\n" +
 	"\x13criteria_version_id\x18\x05 \x01(\tB\x16\x82\xb5\x18\x12\n" +
 	"\x10outcome_criteriaH\x00R\x11criteriaVersionId\x88\x01\x01\x12%\n" +
 	"\x0ecriteria_label\x18\x06 \x01(\tR\rcriteriaLabel\x12,\n" +
-	"\x0fcriteria_weight\x18\a \x01(\x01H\x01R\x0ecriteriaWeight\x88\x01\x01\x12F\n" +
-	"\rcriteria_type\x18\b \x01(\x0e2!.domain.operation.v1.CriteriaTypeR\fcriteriaType\x12(\n" +
-	"\rnumeric_value\x18\t \x01(\x01H\x02R\fnumericValue\x88\x01\x01\x12\"\n" +
+	"\x0fcriteria_weight\x18\a \x01(\x01H\x01R\x0ecriteriaWeight\x88\x01\x01\x12\xaf\x01\n" +
+	"\rcriteria_type\x18\b \x01(\x0e2!.domain.operation.v1.CriteriaTypeBg\x82\xb5\x18c*acriteria_type IN ('numeric_range','numeric_score','pass_fail','categorical','text','multi_check')R\fcriteriaType\x12\x94\x05\n" +
+	"\rnumeric_value\x18\t \x01(\x01B\xe9\x04\x82\xb5\x18\xe4\x04*\xe1\x04(criteria_type IN ('numeric_range','numeric_score') AND numeric_value IS NOT NULL AND text_value IS NULL AND categorical_value IS NULL AND pass_fail_value IS NULL) OR (criteria_type = 'pass_fail' AND pass_fail_value IS NOT NULL AND numeric_value IS NULL AND text_value IS NULL AND categorical_value IS NULL) OR (criteria_type = 'categorical' AND categorical_value IS NOT NULL AND numeric_value IS NULL AND text_value IS NULL AND pass_fail_value IS NULL) OR (criteria_type IN ('text','multi_check') AND text_value IS NOT NULL AND numeric_value IS NULL AND categorical_value IS NULL AND pass_fail_value IS NULL)H\x02R\fnumericValue\x88\x01\x01\x12\"\n" +
 	"\n" +
 	"text_value\x18\n" +
 	" \x01(\tH\x03R\ttextValue\x88\x01\x01\x120\n" +
 	"\x11categorical_value\x18\v \x01(\tH\x04R\x10categoricalValue\x88\x01\x01\x12+\n" +
 	"\x0fpass_fail_value\x18\f \x01(\bH\x05R\rpassFailValue\x88\x01\x01\x12\x1d\n" +
-	"\acomment\x18\r \x01(\tH\x06R\acomment\x88\x01\x01\x12%\n" +
-	"\x0esequence_order\x18\x0e \x01(\x05R\rsequenceOrder\x12\"\n" +
+	"\acomment\x18\r \x01(\tH\x06R\acomment\x88\x01\x01\x12.\n" +
+	"\x0esequence_order\x18\x0e \x01(\x05B\a\x82\xb5\x18\x03\"\x010R\rsequenceOrder\x12\"\n" +
 	"\x06active\x18\x0f \x01(\bB\n" +
 	"\x82\xb5\x18\x06\"\x04trueR\x06active\x12&\n" +
 	"\fdate_created\x18\x10 \x01(\x03H\aR\vdateCreated\x88\x01\x01\x12;\n" +
-	"\x13date_created_string\x18\x11 \x01(\tB\x06\x82\xb5\x18\x028\x01H\bR\x11dateCreatedString\x88\x01\x01:\x06\x8a\xb5\x18\x02\b\x01B\x16\n" +
+	"\x13date_created_string\x18\x11 \x01(\tB\x06\x82\xb5\x18\x028\x01H\bR\x11dateCreatedString\x88\x01\x01:$\x8a\xb5\x18 \b\x01\"\x1cevaluation_id,sequence_orderB\x16\n" +
 	"\x14_criteria_version_idB\x12\n" +
 	"\x10_criteria_weightB\x10\n" +
 	"\x0e_numeric_valueB\r\n" +

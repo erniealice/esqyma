@@ -52,21 +52,21 @@ enum ExpenseRecognitionRunSourceKind {
 message ExpenseRecognitionRun {
   option (options.v1.table).table = true;
   string id = 1;
-  string workspace_id = 2;
-  optional string supplier_id = 3;
-  optional string supplier_subscription_id = 4;
+  string workspace_id = 2 [(options.v1.db).references = "workspace", (options.v1.db).index = true];
+  optional string supplier_id = 3 [(options.v1.db).references = "supplier", (options.v1.db).index = true];
+  optional string supplier_subscription_id = 4 [(options.v1.db).references = "supplier_subscription", (options.v1.db).index = true];
   ExpenseRecognitionRunScope scope = 5;
-  string as_of_date = 6;                          // YYYY-MM-DD
+  string as_of_date = 6 [(options.v1.db).index = true];                          // YYYY-MM-DD
   int32 selection_count = 7;
   int32 created_count = 8;
   int32 skipped_count = 9;
   int32 errored_count = 10;
-  ExpenseRecognitionRunStatus status = 11;
-  string initiated_by = 12;
+  ExpenseRecognitionRunStatus status = 11 [(options.v1.db).index = true];
+  string initiated_by = 12 [(options.v1.db).references = "workspace_user"];
   optional int64 initiated_at = 13;
   optional int64 completed_at = 14;
   optional string notes = 15;
-  bool active = 16;
+  bool active = 16 [(options.v1.db).default = "true"];
   optional int64 date_created = 17;
   optional string date_created_string = 18 [(options.v1.db).ignore = true];
   optional int64 date_modified = 19;
@@ -196,20 +196,20 @@ message GenerateExpenseRunResponse {
 message ExpenseRecognitionRunAttempt {
   option (options.v1.table).table = true;
   string id = 1;
-  string run_id = 2;
+  string run_id = 2 [(options.v1.db).references = "expense_recognition_run", (options.v1.db).index = true];
   ExpenseRecognitionRunSourceKind source_kind = 3;
-  optional string supplier_subscription_id = 4;
-  optional string advance_disbursement_id = 5;
+  optional string supplier_subscription_id = 4 [(options.v1.db).references = "supplier_subscription", (options.v1.db).index = true];
+  optional string advance_disbursement_id = 5 [(options.v1.db).references = "treasury_disbursement", (options.v1.db).index = true];
   string period_start = 6;          // YYYY-MM-DD
   string period_end = 7;            // YYYY-MM-DD
   string period_marker = 8;
-  ExpenseRecognitionRunAttemptOutcome outcome = 9;
-  optional string expense_recognition_id = 10;
-  optional string expenditure_id = 11;
+  ExpenseRecognitionRunAttemptOutcome outcome = 9 [(options.v1.db).index = true];
+  optional string expense_recognition_id = 10 [(options.v1.db).references = "expense_recognition"];
+  optional string expenditure_id = 11 [(options.v1.db).references = "expenditure"];
   optional string error_code = 12;
   optional string error_message = 13;
   optional int64 attempted_at = 14;
-  bool active = 15;
+  bool active = 15 [(options.v1.db).default = "true"];
   optional int64 date_created = 16;
   optional string date_created_string = 17 [(options.v1.db).ignore = true];
   optional int64 date_modified = 18;

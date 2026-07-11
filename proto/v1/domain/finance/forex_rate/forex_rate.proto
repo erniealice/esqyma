@@ -38,6 +38,10 @@ enum ForexRateSource {
 // prevents two simultaneously ACTIVE rates for the same currency pair per workspace.
 message ForexRate {
   option (options.v1.table).table = true;
+  // Currency-pair lookup path with effective_from ordering. The live index is
+  // partial (WHERE status IN (ACTIVE, SUPERSEDED)); the partial predicate is not
+  // expressible in this vocabulary.
+  option (options.v1.table).index_together = "workspace_id,from_currency,to_currency,effective_from";
 
   string id = 1;
   optional int64 date_created = 2;

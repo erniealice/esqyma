@@ -31,7 +31,7 @@ message RevenuePayment {
   optional string collection_type = 7 [(options.v1.db).default = "sale"];
   optional string status = 8 [(options.v1.db).default = "completed"];
 
-  bool active = 9;
+  bool active = 9 [(options.v1.db).default = "true"];
 
   // --- 5 fields needing the ADDITIVE migration (no column today) ---
   optional string payment_method = 10;    // denormalized collection_method.name snapshot

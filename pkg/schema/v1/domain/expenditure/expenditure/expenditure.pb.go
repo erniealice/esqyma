@@ -1208,24 +1208,25 @@ var File_domain_expenditure_expenditure_expenditure_proto protoreflect.FileDescr
 
 const file_domain_expenditure_expenditure_expenditure_proto_rawDesc = "" +
 	"\n" +
-	"0domain/expenditure/expenditure/expenditure.proto\x12\x15domain.expenditure.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/search.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a!domain/entity/client/client.proto\x1a%domain/entity/location/location.proto\x1a-domain/entity/payment_term/payment_term.proto\x1a\x10options/db.proto\"\xab\x14\n" +
+	"0domain/expenditure/expenditure/expenditure.proto\x12\x15domain.expenditure.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/search.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a!domain/entity/client/client.proto\x1a%domain/entity/location/location.proto\x1a-domain/entity/payment_term/payment_term.proto\x1a\x10options/db.proto\"\xa2\x15\n" +
 	"\vExpenditure\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12&\n" +
 	"\fdate_created\x18\x02 \x01(\x03H\x00R\vdateCreated\x88\x01\x01\x12;\n" +
 	"\x13date_created_string\x18\x03 \x01(\tB\x06\x82\xb5\x18\x028\x01H\x01R\x11dateCreatedString\x88\x01\x01\x12(\n" +
 	"\rdate_modified\x18\x04 \x01(\x03H\x02R\fdateModified\x88\x01\x01\x12=\n" +
-	"\x14date_modified_string\x18\x05 \x01(\tB\x06\x82\xb5\x18\x028\x01H\x03R\x12dateModifiedString\x88\x01\x01\x12\x16\n" +
-	"\x06active\x18\x06 \x01(\bR\x06active\x12\x12\n" +
-	"\x04name\x18\a \x01(\tR\x04name\x12)\n" +
-	"\x10expenditure_type\x18\b \x01(\tR\x0fexpenditureType\x125\n" +
+	"\x14date_modified_string\x18\x05 \x01(\tB\x06\x82\xb5\x18\x028\x01H\x03R\x12dateModifiedString\x88\x01\x01\x12\"\n" +
+	"\x06active\x18\x06 \x01(\bB\n" +
+	"\x82\xb5\x18\x06\"\x04trueR\x06active\x12\x12\n" +
+	"\x04name\x18\a \x01(\tR\x04name\x12:\n" +
+	"\x10expenditure_type\x18\b \x01(\tB\x0f\x82\xb5\x18\v\"\t'expense'R\x0fexpenditureType\x125\n" +
 	"\x06vendor\x18\t \x01(\v2\x18.domain.entity.v1.ClientH\x04R\x06vendor\x88\x01\x01\x12\x1b\n" +
 	"\tvendor_id\x18\n" +
 	" \x01(\tR\bvendorId\x12.\n" +
 	"\x10expenditure_date\x18\v \x01(\x03H\x05R\x0fexpenditureDate\x88\x01\x01\x12C\n" +
 	"\x17expenditure_date_string\x18\f \x01(\tB\x06\x82\xb5\x18\x028\x01H\x06R\x15expenditureDateString\x88\x01\x01\x12!\n" +
-	"\ftotal_amount\x18\r \x01(\x03R\vtotalAmount\x12\x1a\n" +
-	"\bcurrency\x18\x0e \x01(\tR\bcurrency\x12\x16\n" +
-	"\x06status\x18\x0f \x01(\tR\x06status\x12.\n" +
+	"\ftotal_amount\x18\r \x01(\x03R\vtotalAmount\x12'\n" +
+	"\bcurrency\x18\x0e \x01(\tB\v\x82\xb5\x18\a\"\x05'PHP'R\bcurrency\x12%\n" +
+	"\x06status\x18\x0f \x01(\tB\r\x82\xb5\x18\t\"\a'draft'R\x06status\x12.\n" +
 	"\x10reference_number\x18\x10 \x01(\tH\aR\x0freferenceNumber\x88\x01\x01\x12\x19\n" +
 	"\x05notes\x18\x11 \x01(\tH\bR\x05notes\x88\x01\x01\x12;\n" +
 	"\x17expenditure_category_id\x18\x12 \x01(\tH\tR\x15expenditureCategoryId\x88\x01\x01\x12;\n" +
@@ -1244,18 +1245,18 @@ const file_domain_expenditure_expenditure_expenditure_proto_rawDesc = "" +
 	"\bsupplierH\x0fR\n" +
 	"supplierId\x88\x01\x01\x12+\n" +
 	"\x0fpayment_term_id\x18\x1a \x01(\tH\x10R\rpaymentTermId\x88\x01\x01\x12E\n" +
-	"\fpayment_term\x18\x1b \x01(\v2\x1d.domain.entity.v1.PaymentTermH\x11R\vpaymentTerm\x88\x01\x01\x12N\n" +
-	"\x14supplier_contract_id\x18\x1c \x01(\tB\x17\x82\xb5\x18\x13\n" +
-	"\x11supplier_contractH\x12R\x12supplierContractId\x88\x01\x01\x12G\n" +
-	"\x12petty_cash_fund_id\x18\x1d \x01(\tB\x15\x82\xb5\x18\x11\n" +
-	"\x0fpetty_cash_fundH\x13R\x0fpettyCashFundId\x88\x01\x01\x12T\n" +
-	"\x16expense_recognition_id\x18\x1e \x01(\tB\x19\x82\xb5\x18\x15\n" +
-	"\x13expense_recognitionH\x14R\x14expenseRecognitionId\x88\x01\x01\x12H\n" +
-	"\x12accrued_expense_id\x18\x1f \x01(\tB\x15\x82\xb5\x18\x11\n" +
-	"\x0faccrued_expenseH\x15R\x10accruedExpenseId\x88\x01\x01\x12\"\n" +
+	"\fpayment_term\x18\x1b \x01(\v2\x1d.domain.entity.v1.PaymentTermH\x11R\vpaymentTerm\x88\x01\x01\x12P\n" +
+	"\x14supplier_contract_id\x18\x1c \x01(\tB\x19\x82\xb5\x18\x15\n" +
+	"\x11supplier_contract\x18\x01H\x12R\x12supplierContractId\x88\x01\x01\x12I\n" +
+	"\x12petty_cash_fund_id\x18\x1d \x01(\tB\x17\x82\xb5\x18\x13\n" +
+	"\x0fpetty_cash_fund\x18\x01H\x13R\x0fpettyCashFundId\x88\x01\x01\x12V\n" +
+	"\x16expense_recognition_id\x18\x1e \x01(\tB\x1b\x82\xb5\x18\x17\n" +
+	"\x13expense_recognition\x18\x01H\x14R\x14expenseRecognitionId\x88\x01\x01\x12J\n" +
+	"\x12accrued_expense_id\x18\x1f \x01(\tB\x17\x82\xb5\x18\x13\n" +
+	"\x0faccrued_expense\x18\x01H\x15R\x10accruedExpenseId\x88\x01\x01\x12*\n" +
 	"\n" +
-	"cycle_date\x18  \x01(\tH\x16R\tcycleDate\x88\x01\x01\x12\x1b\n" +
-	"\x06source\x18! \x01(\tH\x17R\x06source\x88\x01\x01\x12\\\n" +
+	"cycle_date\x18  \x01(\tB\x06\x82\xb5\x18\x02\x18\x01H\x16R\tcycleDate\x88\x01\x01\x12#\n" +
+	"\x06source\x18! \x01(\tB\x06\x82\xb5\x18\x02\x18\x01H\x17R\x06source\x88\x01\x01\x12\\\n" +
 	"\x18supplier_subscription_id\x18\" \x01(\tB\x1d\x82\xb5\x18\x19\n" +
 	"\x15supplier_subscription\x18\x01H\x18R\x16supplierSubscriptionId\x88\x01\x01\x128\n" +
 	"\fcost_plan_id\x18# \x01(\tB\x11\x82\xb5\x18\r\n" +
@@ -1267,7 +1268,7 @@ const file_domain_expenditure_expenditure_expenditure_proto_rawDesc = "" +
 	"\x06run_id\x18& \x01(\tB\x1f\x82\xb5\x18\x1b\n" +
 	"\x17expense_recognition_run\x18\x01H\x1cR\x05runId\x88\x01\x01\x129\n" +
 	"\fworkspace_id\x18' \x01(\tB\x11\x82\xb5\x18\r\n" +
-	"\tworkspace\x18\x01H\x1dR\vworkspaceId\x88\x01\x01:\x06\x8a\xb5\x18\x02\b\x01B\x0f\n" +
+	"\tworkspace\x18\x01H\x1dR\vworkspaceId\x88\x01\x01:,\x8a\xb5\x18(\b\x01\"$workspace_id,expenditure_type,statusB\x0f\n" +
 	"\r_date_createdB\x16\n" +
 	"\x14_date_created_stringB\x10\n" +
 	"\x0e_date_modifiedB\x17\n" +
