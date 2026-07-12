@@ -41,8 +41,12 @@ type PriceSchedule struct {
 	ClientId          *string `protobuf:"bytes,12,opt,name=client_id,json=clientId,proto3,oneof" json:"client_id,omitempty"`
 	LegacyPriceListId *string `protobuf:"bytes,15,opt,name=legacy_price_list_id,json=legacyPriceListId,proto3,oneof" json:"legacy_price_list_id,omitempty"` // Legacy migration shim — links to old price-list IDs
 	WorkspaceId       *string `protobuf:"bytes,16,opt,name=workspace_id,json=workspaceId,proto3,oneof" json:"workspace_id,omitempty"`
-	unknownFields     protoimpl.UnknownFields
-	sizeCache         protoimpl.SizeCache
+	// Optional display-ordering key. Ordering contract wherever consumed:
+	// `sort_order NULLS LAST, name ASC` — absent (NULL) sorts last. Nullable by
+	// design (no default) so unset schedules fall to the end rather than tie at 0.
+	SortOrder     *int32 `protobuf:"varint,17,opt,name=sort_order,json=sortOrder,proto3,oneof" json:"sort_order,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
 }
 
 func (x *PriceSchedule) Reset() {
@@ -171,6 +175,13 @@ func (x *PriceSchedule) GetWorkspaceId() string {
 		return *x.WorkspaceId
 	}
 	return ""
+}
+
+func (x *PriceSchedule) GetSortOrder() int32 {
+	if x != nil && x.SortOrder != nil {
+		return *x.SortOrder
+	}
+	return 0
 }
 
 type CreatePriceScheduleRequest struct {
@@ -1081,7 +1092,7 @@ var File_domain_subscription_price_schedule_price_schedule_proto protoreflect.Fi
 
 const file_domain_subscription_price_schedule_price_schedule_proto_rawDesc = "" +
 	"\n" +
-	"7domain/subscription/price_schedule/price_schedule.proto\x12\x16domain.subscription.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/search.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x10options/db.proto\x1a\x1fgoogle/protobuf/timestamp.proto\"\x98\a\n" +
+	"7domain/subscription/price_schedule/price_schedule.proto\x12\x16domain.subscription.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/search.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x10options/db.proto\x1a\x1fgoogle/protobuf/timestamp.proto\"\xcb\a\n" +
 	"\rPriceSchedule\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12&\n" +
 	"\fdate_created\x18\x02 \x01(\x03H\x00R\vdateCreated\x88\x01\x01\x12;\n" +
@@ -1103,7 +1114,10 @@ const file_domain_subscription_price_schedule_price_schedule_proto_rawDesc = "" 
 	"\x06client\x18\x01H\aR\bclientId\x88\x01\x01\x124\n" +
 	"\x14legacy_price_list_id\x18\x0f \x01(\tH\bR\x11legacyPriceListId\x88\x01\x01\x129\n" +
 	"\fworkspace_id\x18\x10 \x01(\tB\x11\x82\xb5\x18\r\n" +
-	"\tworkspace\x18\x01H\tR\vworkspaceId\x88\x01\x01:\x06\x8a\xb5\x18\x02\b\x01B\x0f\n" +
+	"\tworkspace\x18\x01H\tR\vworkspaceId\x88\x01\x01\x12\"\n" +
+	"\n" +
+	"sort_order\x18\x11 \x01(\x05H\n" +
+	"R\tsortOrder\x88\x01\x01:\x06\x8a\xb5\x18\x02\b\x01B\x0f\n" +
 	"\r_date_createdB\x16\n" +
 	"\x14_date_created_stringB\x10\n" +
 	"\x0e_date_modifiedB\x17\n" +
@@ -1114,7 +1128,8 @@ const file_domain_subscription_price_schedule_price_schedule_proto_rawDesc = "" 
 	"\n" +
 	"_client_idB\x17\n" +
 	"\x15_legacy_price_list_idB\x0f\n" +
-	"\r_workspace_idJ\x04\b\r\x10\x0eJ\x04\b\x0e\x10\x0fR\n" +
+	"\r_workspace_idB\r\n" +
+	"\v_sort_orderJ\x04\b\r\x10\x0eJ\x04\b\x0e\x10\x0fR\n" +
 	"date_startR\bdate_end\"W\n" +
 	"\x1aCreatePriceScheduleRequest\x129\n" +
 	"\x04data\x18\x01 \x01(\v2%.domain.subscription.v1.PriceScheduleR\x04data\"\xb0\x01\n" +

@@ -36,6 +36,10 @@ message PriceSchedule {
   reserved "date_start", "date_end";
   optional string legacy_price_list_id = 15;    // Legacy migration shim — links to old price-list IDs
   optional string workspace_id = 16 [(options.v1.db).references = "workspace", (options.v1.db).index = true];
+  // Optional display-ordering key. Ordering contract wherever consumed:
+  // `sort_order NULLS LAST, name ASC` — absent (NULL) sorts last. Nullable by
+  // design (no default) so unset schedules fall to the end rather than tie at 0.
+  optional int32 sort_order = 17;
 }
 
 service PriceScheduleDomainService {

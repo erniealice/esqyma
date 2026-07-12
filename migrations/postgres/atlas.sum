@@ -1,4 +1,4 @@
-h1:BKrs3K/S6R6RtZGbQNiaJNsgMr0iGtQSGYnMEA47VhE=
+h1:MbqQRUA8xz05Y2FsztCypSbDfgF0YFeZh+pOZRmjpig=
 20260502000000_baseline.sql h1:nSWEB4eB5Yt6qrCeg8crmwudHHCA0Gpps2L5h649wAU=
 20260505221625_restore_revenue_period_marker_idempotency.sql h1:mAF68zDv14QT18Vfybt+p1uiJ1xtMjDsh8sj6GpTBB8=
 20260505221626_recreate_revenue_period_marker_unique_index.sql h1:9Tm42g4YD+ipRQAiTcMgIHwltETorc0jifJQddi4i7s=
@@ -47,3 +47,4 @@ h1:BKrs3K/S6R6RtZGbQNiaJNsgMr0iGtQSGYnMEA47VhE=
 20260622000000_education_grading_wave.sql h1:YIhEc3qaz8VctbML/+y7cawbrnnCPkpqVPGUjm9LRL0=
 20260628000000_add_staff_role_id.sql h1:6tS1OL0xFH/VMc3DnskgASuT/+o2eElZoDabv89emx0=
 20260630000000_drop_staff_role_id.sql h1:u6PAD5H8lAHYH/069DavHOFz2t/mqYafRDdXOgTzMbU=
+20260712000000_price_schedule_sort_order.sql h1:L5U1P03IAqM/reDPwxvmW49S1dLE+ldebHtAb6NyPhg=
