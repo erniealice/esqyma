@@ -58,7 +58,10 @@ message JobTemplate {
   // Workflow
   optional string workflow_template_id = 31 [(options.v1.db).index = true];
 
-  reserved 32 to 49;
+  // Categorization (single-valued taxonomy; generic — vertical vocabulary via lyngua).
+  optional string job_category_id = 32 [(options.v1.db).references = "job_category", (options.v1.db).index = true];
+
+  reserved 33 to 49;
 }
 
 service JobTemplateDomainService {

@@ -1,0 +1,166 @@
+syntax = "proto3";
+
+package domain.operation.v1;
+
+option go_package = "github.com/erniealice/esqyma/golang/v1/domain/operation/job_outcome_summary_document_template";
+
+import "domain/common/error.proto";
+import "domain/common/pagination.proto";
+import "domain/common/filter.proto";
+import "domain/common/sort.proto";
+import "domain/common/search.proto";
+import "domain/document/template/template.proto";
+import "domain/operation/enums/enums.proto";
+import "domain/subscription/price_schedule/price_schedule.proto";
+import "google/protobuf/timestamp.proto";
+import "options/db.proto";
+
+// JobOutcomeSummaryDocumentTemplate binds the job_outcome_summary outcome family
+// to a generic document.DocumentTemplate, scoped by workspace + (optional)
+// price_schedule, and versioned. It carries the publication lifecycle and
+// validity window that must NOT live on the shared DocumentTemplate. The binding
+// is implicitly the report-card binding (the only outcome family built today);
+// a document_purpose discriminator can be added additively when a second family
+// (certificate / transcript) needs the same lineage on one workspace+schedule.
+message JobOutcomeSummaryDocumentTemplate {
+  option (options.v1.table).table = true;
+
+  string id = 1;
+
+  // Tenant boundary — never accepted from untrusted resolver input; sourced from
+  // trusted context at resolve time.
+  string workspace_id = 2 [
+    (options.v1.db).references = "workspace",
+    (options.v1.db).index = true
+  ];
+
+  // The immutable template artifact this binding version selects.
+  string document_template_id = 3 [
+    (options.v1.db).references = "document_template",
+    (options.v1.db).index = true
+  ];
+  optional domain.document.v1.DocumentTemplate document_template = 4;   // hydrate-only (JOIN), never persisted
+
+  // NULL = workspace-wide fallback for this binding.
+  optional string price_schedule_id = 5 [
+    (options.v1.db).references = "price_schedule",
+    (options.v1.db).index = true
+  ];
+  optional domain.subscription.v1.PriceSchedule price_schedule = 6;     // hydrate-only (JOIN, status-agnostic), never persisted
+
+  int32 version = 7 [(options.v1.db).default = "1"];
+  VersionStatus version_status = 8;                                     // reuse operation enum (DRAFT/PUBLISHED/DEPRECATED)
+
+  // Half-open [validity_start, validity_end), UTC. Absent start = valid from
+  // beginning; absent end = open-ended.
+  optional google.protobuf.Timestamp validity_start = 9;
+  optional google.protobuf.Timestamp validity_end = 10;
+
+  optional string supersedes_binding_id = 11 [(options.v1.db).references = "job_outcome_summary_document_template"];
+
+  bool active = 12 [(options.v1.db).default = "true"];
+
+  optional string created_by = 13;
+  optional int64 published_at = 14;
+  optional string published_at_string = 15 [(options.v1.db).ignore = true];
+  optional string published_by = 16;
+
+  optional int64 date_created = 17;
+  optional string date_created_string = 18 [(options.v1.db).ignore = true];
+  optional int64 date_modified = 19;
+  optional string date_modified_string = 20 [(options.v1.db).ignore = true];
+
+  reserved 21 to 39;
+}
+
+service JobOutcomeSummaryDocumentTemplateDomainService {
+  rpc CreateJobOutcomeSummaryDocumentTemplate(CreateJobOutcomeSummaryDocumentTemplateRequest) returns (CreateJobOutcomeSummaryDocumentTemplateResponse);
+  rpc ReadJobOutcomeSummaryDocumentTemplate(ReadJobOutcomeSummaryDocumentTemplateRequest) returns (ReadJobOutcomeSummaryDocumentTemplateResponse);
+  rpc UpdateJobOutcomeSummaryDocumentTemplate(UpdateJobOutcomeSummaryDocumentTemplateRequest) returns (UpdateJobOutcomeSummaryDocumentTemplateResponse);
+  rpc DeleteJobOutcomeSummaryDocumentTemplate(DeleteJobOutcomeSummaryDocumentTemplateRequest) returns (DeleteJobOutcomeSummaryDocumentTemplateResponse);
+  rpc ListJobOutcomeSummaryDocumentTemplates(ListJobOutcomeSummaryDocumentTemplatesRequest) returns (ListJobOutcomeSummaryDocumentTemplatesResponse);
+
+  // Controlled publish transaction (NOT arbitrary CRUD update): flips this
+  // binding to PUBLISHED and closes the prior published sibling's validity_end
+  // in ONE transaction (publish-flips-sibling).
+  rpc PublishJobOutcomeSummaryDocumentTemplate(PublishJobOutcomeSummaryDocumentTemplateRequest) returns (PublishJobOutcomeSummaryDocumentTemplateResponse);
+
+  // Resolver: the single applicable, published binding for
+  // (price_schedule_id, as_of), workspace-scoped in SQL from trusted context.
+  rpc FindApplicableJobOutcomeSummaryDocumentTemplate(FindApplicableJobOutcomeSummaryDocumentTemplateRequest) returns (FindApplicableJobOutcomeSummaryDocumentTemplateResponse);
+}
+
+message CreateJobOutcomeSummaryDocumentTemplateRequest {
+  JobOutcomeSummaryDocumentTemplate data = 1;
+}
+
+message CreateJobOutcomeSummaryDocumentTemplateResponse {
+  repeated JobOutcomeSummaryDocumentTemplate data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message ReadJobOutcomeSummaryDocumentTemplateRequest {
+  JobOutcomeSummaryDocumentTemplate data = 1;
+}
+
+message ReadJobOutcomeSummaryDocumentTemplateResponse {
+  repeated JobOutcomeSummaryDocumentTemplate data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message UpdateJobOutcomeSummaryDocumentTemplateRequest {
+  JobOutcomeSummaryDocumentTemplate data = 1;
+}
+
+message UpdateJobOutcomeSummaryDocumentTemplateResponse {
+  repeated JobOutcomeSummaryDocumentTemplate data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message DeleteJobOutcomeSummaryDocumentTemplateRequest {
+  JobOutcomeSummaryDocumentTemplate data = 1;
+}
+
+message DeleteJobOutcomeSummaryDocumentTemplateResponse {
+  bool success = 1;
+  optional domain.common.v1.Error error = 2;
+}
+
+message ListJobOutcomeSummaryDocumentTemplatesRequest {
+  optional domain.common.v1.SearchRequest search = 1;
+  optional domain.common.v1.FilterRequest filters = 2;
+  optional domain.common.v1.SortRequest sort = 3;
+  optional domain.common.v1.PaginationRequest pagination = 4;
+}
+
+message ListJobOutcomeSummaryDocumentTemplatesResponse {
+  repeated JobOutcomeSummaryDocumentTemplate data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message FindApplicableJobOutcomeSummaryDocumentTemplateRequest {
+  optional string price_schedule_id = 1;         // AY/term scope; empty = fallback only
+  optional google.protobuf.Timestamp as_of = 2;  // absent = server UTC now
+  // NOTE: no workspace_id — sourced from trusted context in the adapter.
+}
+
+message FindApplicableJobOutcomeSummaryDocumentTemplateResponse {
+  optional JobOutcomeSummaryDocumentTemplate binding = 1;   // includes hydrated document_template + price_schedule
+  bool found = 2;
+  bool success = 3;
+  optional domain.common.v1.Error error = 4;
+}
+
+message PublishJobOutcomeSummaryDocumentTemplateRequest {
+  string id = 1;
+}
+
+message PublishJobOutcomeSummaryDocumentTemplateResponse {
+  optional JobOutcomeSummaryDocumentTemplate data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}

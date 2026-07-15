@@ -123,8 +123,13 @@ type Job struct {
 	UsageRequestDate *string `protobuf:"bytes,56,opt,name=usage_request_date,json=usageRequestDate,proto3,oneof" json:"usage_request_date,omitempty"` // ISO 8601 YYYY-MM-DD
 	UsageOrdinal     *int32  `protobuf:"varint,57,opt,name=usage_ordinal,json=usageOrdinal,proto3,oneof" json:"usage_ordinal,omitempty"`
 	IsSynthesized    bool    `protobuf:"varint,58,opt,name=is_synthesized,json=isSynthesized,proto3" json:"is_synthesized,omitempty"`
-	unknownFields    protoimpl.UnknownFields
-	sizeCache        protoimpl.SizeCache
+	// Denormalized job_category (copied from job_template.job_category_id at
+	// materialize/backfill time) so the jobs list ("/classes") tab-splits by
+	// category with a single-table read — no job→job_template join on the hot
+	// list path. Mirrors the job_outcome_line R5 portal-leaf denormalization.
+	JobCategoryId *string `protobuf:"bytes,59,opt,name=job_category_id,json=jobCategoryId,proto3,oneof" json:"job_category_id,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
 }
 
 func (x *Job) Reset() {
@@ -554,6 +559,13 @@ func (x *Job) GetIsSynthesized() bool {
 		return x.IsSynthesized
 	}
 	return false
+}
+
+func (x *Job) GetJobCategoryId() string {
+	if x != nil && x.JobCategoryId != nil {
+		return *x.JobCategoryId
+	}
+	return ""
 }
 
 type CreateJobRequest struct {
@@ -1672,7 +1684,7 @@ var File_domain_operation_job_job_proto protoreflect.FileDescriptor
 
 const file_domain_operation_job_job_proto_rawDesc = "" +
 	"\n" +
-	"\x1edomain/operation/job/job.proto\x12\x13domain.operation.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1adomain/common/search.proto\x1a!domain/entity/client/client.proto\x1a%domain/entity/location/location.proto\x1a\"domain/operation/enums/enums.proto\x1a\x10options/db.proto\"\xae\x1f\n" +
+	"\x1edomain/operation/job/job.proto\x12\x13domain.operation.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1adomain/common/search.proto\x1a!domain/entity/client/client.proto\x1a%domain/entity/location/location.proto\x1a\"domain/operation/enums/enums.proto\x1a\x10options/db.proto\"\x85 \n" +
 	"\x03Job\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12&\n" +
 	"\fdate_created\x18\x02 \x01(\x03H\x00R\vdateCreated\x88\x01\x01\x12;\n" +
@@ -1752,7 +1764,9 @@ const file_domain_operation_job_job_proto_rawDesc = "" +
 	"\x10cycle_period_end\x187 \x01(\tH(R\x0ecyclePeriodEnd\x88\x01\x01\x121\n" +
 	"\x12usage_request_date\x188 \x01(\tH)R\x10usageRequestDate\x88\x01\x01\x12(\n" +
 	"\rusage_ordinal\x189 \x01(\x05H*R\fusageOrdinal\x88\x01\x01\x122\n" +
-	"\x0eis_synthesized\x18: \x01(\bB\v\x82\xb5\x18\a\"\x05falseR\risSynthesized:;\x8a\xb5\x187\b\x01\"\x15origin_type,origin_id\"\x1corigin_id,usage_request_dateB\x0f\n" +
+	"\x0eis_synthesized\x18: \x01(\bB\v\x82\xb5\x18\a\"\x05falseR\risSynthesized\x12A\n" +
+	"\x0fjob_category_id\x18; \x01(\tB\x14\x82\xb5\x18\x10\n" +
+	"\fjob_category\x18\x01H+R\rjobCategoryId\x88\x01\x01:;\x8a\xb5\x187\b\x01\"\x15origin_type,origin_id\"\x1corigin_id,usage_request_dateB\x0f\n" +
 	"\r_date_createdB\x16\n" +
 	"\x14_date_created_stringB\x10\n" +
 	"\x0e_date_modifiedB\x17\n" +
@@ -1797,7 +1811,8 @@ const file_domain_operation_job_job_proto_rawDesc = "" +
 	"\x13_cycle_period_startB\x13\n" +
 	"\x11_cycle_period_endB\x15\n" +
 	"\x13_usage_request_dateB\x10\n" +
-	"\x0e_usage_ordinalJ\x04\b;\x10F\"@\n" +
+	"\x0e_usage_ordinalB\x12\n" +
+	"\x10_job_category_idJ\x04\b<\x10F\"@\n" +
 	"\x10CreateJobRequest\x12,\n" +
 	"\x04data\x18\x01 \x01(\v2\x18.domain.operation.v1.JobR\x04data\"\x99\x01\n" +
 	"\x11CreateJobResponse\x12,\n" +
