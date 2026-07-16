@@ -148,7 +148,8 @@ export type FundTransaction = Message<"domain.funding.v1.FundTransaction"> & {
      */
     collectionId?: string;
     /**
-     * groups TRANSFER_OUT + TRANSFER_IN; NOT a FK (no transfer entity)
+     * groups TRANSFER_OUT + TRANSFER_IN; NOT a FK (no transfer entity).
+     * Live index is partial (WHERE transfer_id IS NOT NULL) — not expressible here.
      *
      * @generated from field: optional string transfer_id = 23;
      */

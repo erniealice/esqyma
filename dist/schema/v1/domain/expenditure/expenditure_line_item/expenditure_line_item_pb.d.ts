@@ -106,7 +106,7 @@ export type ExpenditureLineItem = Message<"domain.expenditure.v1.ExpenditureLine
     /**
      * Supplier commitment back-edge
      *
-     * FK to supplier_contract_line (no DB constraint)
+     * FK to supplier_contract_line (no DB FK constraint; indexed)
      *
      * @generated from field: optional string supplier_contract_line_id = 21;
      */
@@ -121,7 +121,7 @@ export type ExpenditureLineItem = Message<"domain.expenditure.v1.ExpenditureLine
      */
     rateTableId?: string;
     /**
-     * FK to pay_cycle (no DB constraint)
+     * FK to pay_cycle (no DB FK constraint; indexed)
      *
      * @generated from field: optional string pay_cycle_id = 23;
      */

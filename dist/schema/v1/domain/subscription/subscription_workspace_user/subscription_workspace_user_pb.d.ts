@@ -45,6 +45,8 @@ export type SubscriptionWorkspaceUser = Message<"domain.subscription.v1.Subscrip
      */
     active: boolean;
     /**
+     * Non-empty anchor enforced alongside client_id (single combined DB CHECK).
+     *
      * @generated from field: string workspace_id = 7;
      */
     workspaceId: string;
@@ -59,6 +61,9 @@ export type SubscriptionWorkspaceUser = Message<"domain.subscription.v1.Subscrip
      */
     clientId: string;
     /**
+     * Partial DB unique: UNIQUE (subscription_id, workspace_user_id) WHERE active
+     * — not expressible as unique_together (no partial-index support).
+     *
      * @generated from field: string workspace_user_id = 10;
      */
     workspaceUserId: string;

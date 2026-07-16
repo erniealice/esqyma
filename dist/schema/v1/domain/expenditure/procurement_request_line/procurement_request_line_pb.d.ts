@@ -74,7 +74,7 @@ export type ProcurementRequestLine = Message<"domain.expenditure.v1.ProcurementR
     /**
      * Pre-link to a contract line if the item is covered by a standing contract
      *
-     * FK to supplier_contract_line (no DB constraint)
+     * FK to supplier_contract_line (no DB FK constraint; indexed)
      *
      * @generated from field: optional string supplier_contract_line_id = 11;
      */

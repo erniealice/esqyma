@@ -110,6 +110,14 @@ export type JobPhase = Message<"domain.operation.v1.JobPhase"> & {
      * @generated from field: optional string predecessor_phase_id = 24;
      */
     predecessorPhaseId?: string;
+    /**
+     * @generated from field: optional string scoring_scheme_id = 25;
+     */
+    scoringSchemeId?: string;
+    /**
+     * @generated from field: bool is_synthesized = 26;
+     */
+    isSynthesized: boolean;
 };
 /**
  * Describes the message domain.operation.v1.JobPhase.

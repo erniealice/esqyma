@@ -107,6 +107,18 @@ export type PhaseOutcomeSummary = Message<"domain.operation.v1.PhaseOutcomeSumma
      * @generated from field: optional string date_modified_string = 23;
      */
     dateModifiedString?: string;
+    /**
+     * @generated from field: optional string reporting_checkpoint_id = 24;
+     */
+    reportingCheckpointId?: string;
+    /**
+     * @generated from field: optional double scaled_score = 25;
+     */
+    scaledScore?: number;
+    /**
+     * @generated from field: optional string scaled_label = 26;
+     */
+    scaledLabel?: string;
 };
 /**
  * Describes the message domain.operation.v1.PhaseOutcomeSummary.

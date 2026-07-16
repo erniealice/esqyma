@@ -31,7 +31,7 @@ export type JournalEntry = Message<"domain.ledger.v1.JournalEntry"> & {
      */
     description: string;
     /**
-     * Date — unix timestamp + display string
+     * Date — unix timestamp + display string. Default list sort key.
      *
      * @generated from field: int64 entry_date = 4;
      */

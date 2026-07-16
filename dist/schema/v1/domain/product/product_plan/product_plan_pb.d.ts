@@ -63,6 +63,9 @@ export type ProductPlan = Message<"domain.product.v1.ProductPlan"> & {
      * Null when parent.variant_mode = "none". Model D: catalog-level specificity.
      * ProductPricePlan does NOT carry variant_id — it joins through product_plan_id to
      * inherit this row's variant. Binary invariant enforced at use-case layer.
+     * One row per (plan_id, product_id, product_variant_id-or-empty): DB unique index
+     * uq_product_plan_plan_product_variant on (plan_id, product_id,
+     * COALESCE(product_variant_id, '')).
      *
      * @generated from field: optional string product_variant_id = 15;
      */

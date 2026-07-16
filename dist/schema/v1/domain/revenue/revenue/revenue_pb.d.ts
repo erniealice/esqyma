@@ -263,6 +263,13 @@ export type Revenue = Message<"domain.revenue.v1.Revenue"> & {
      * @generated from field: optional string advance_collection_id = 48;
      */
     advanceCollectionId?: string;
+    /**
+     * Tenancy scope. Backs the workspace_id filter the postgres adapter issues
+     * on every list/read (revenue.go). NULLABLE until a NOT NULL migration tightens it.
+     *
+     * @generated from field: optional string workspace_id = 49;
+     */
+    workspaceId?: string;
 };
 /**
  * Describes the message domain.revenue.v1.Revenue.

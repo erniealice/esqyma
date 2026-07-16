@@ -516,7 +516,11 @@ export declare enum AggregationMethod {
     /**
      * @generated from enum value: AGGREGATION_METHOD_PERCENTAGE = 6;
      */
-    PERCENTAGE = 6
+    PERCENTAGE = 6,
+    /**
+     * @generated from enum value: AGGREGATION_METHOD_MAXIMUM = 7;
+     */
+    MAXIMUM = 7
 }
 /**
  * Describes the enum domain.operation.v1.AggregationMethod.
@@ -545,12 +549,95 @@ export declare enum ScoringMethod {
     /**
      * @generated from enum value: SCORING_METHOD_PERCENTAGE_PASS = 4;
      */
-    PERCENTAGE_PASS = 4
+    PERCENTAGE_PASS = 4,
+    /**
+     * @generated from enum value: SCORING_METHOD_SUM = 5;
+     */
+    SUM = 5
 }
 /**
  * Describes the enum domain.operation.v1.ScoringMethod.
  */
 export declare const ScoringMethodSchema: GenEnum<ScoringMethod>;
+/**
+ * @generated from enum domain.operation.v1.ScaleKind
+ */
+export declare enum ScaleKind {
+    /**
+     * @generated from enum value: SCALE_KIND_UNSPECIFIED = 0;
+     */
+    UNSPECIFIED = 0,
+    /**
+     * half-open [input_min, input_max) -> output
+     *
+     * @generated from enum value: SCALE_KIND_RANGE_MAP = 1;
+     */
+    RANGE_MAP = 1,
+    /**
+     * input_match -> output
+     *
+     * @generated from enum value: SCALE_KIND_EXACT_MAP = 2;
+     */
+    EXACT_MAP = 2
+}
+/**
+ * Describes the enum domain.operation.v1.ScaleKind.
+ */
+export declare const ScaleKindSchema: GenEnum<ScaleKind>;
+/**
+ * @generated from enum domain.operation.v1.ReportingRole
+ */
+export declare enum ReportingRole {
+    /**
+     * @generated from enum value: REPORTING_ROLE_UNSPECIFIED = 0;
+     */
+    UNSPECIFIED = 0,
+    /**
+     * @generated from enum value: REPORTING_ROLE_PRIMARY = 1;
+     */
+    PRIMARY = 1,
+    /**
+     * @generated from enum value: REPORTING_ROLE_ALTERNATE = 2;
+     */
+    ALTERNATE = 2,
+    /**
+     * @generated from enum value: REPORTING_ROLE_TRANSCRIPT = 3;
+     */
+    TRANSCRIPT = 3,
+    /**
+     * @generated from enum value: REPORTING_ROLE_PERCENTILE = 4;
+     */
+    PERCENTILE = 4
+}
+/**
+ * Describes the enum domain.operation.v1.ReportingRole.
+ */
+export declare const ReportingRoleSchema: GenEnum<ReportingRole>;
+/**
+ * @generated from enum domain.operation.v1.RoundingMode
+ */
+export declare enum RoundingMode {
+    /**
+     * @generated from enum value: ROUNDING_MODE_UNSPECIFIED = 0;
+     */
+    UNSPECIFIED = 0,
+    /**
+     * @generated from enum value: ROUNDING_MODE_HALF_UP = 1;
+     */
+    HALF_UP = 1,
+    /**
+     * @generated from enum value: ROUNDING_MODE_HALF_DOWN = 2;
+     */
+    HALF_DOWN = 2,
+    /**
+     * @generated from enum value: ROUNDING_MODE_HALF_EVEN = 3;
+     */
+    HALF_EVEN = 3
+}
+/**
+ * Describes the enum domain.operation.v1.RoundingMode.
+ */
+export declare const RoundingModeSchema: GenEnum<RoundingMode>;
 /**
  * @generated from enum domain.operation.v1.SummaryType
  */

@@ -186,6 +186,13 @@ export type RevenueLineItem = Message<"domain.revenue.v1.RevenueLineItem"> & {
      * @generated from field: optional int64 billing_amount = 33;
      */
     billingAmount?: bigint;
+    /**
+     * Drift-recovered column (DB has FK + index; proto did not).
+     * FK to subscription_seat — links a seat-scoped recurring line to its seat.
+     *
+     * @generated from field: optional string subscription_seat_id = 34;
+     */
+    subscriptionSeatId?: string;
 };
 /**
  * Describes the message domain.revenue.v1.RevenueLineItem.

@@ -142,6 +142,12 @@ export type JobTemplate = Message<"domain.operation.v1.JobTemplate"> & {
      * @generated from field: optional string workflow_template_id = 31;
      */
     workflowTemplateId?: string;
+    /**
+     * Categorization (single-valued taxonomy; generic — vertical vocabulary via lyngua).
+     *
+     * @generated from field: optional string job_category_id = 32;
+     */
+    jobCategoryId?: string;
 };
 /**
  * Describes the message domain.operation.v1.JobTemplate.

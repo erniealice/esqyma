@@ -294,6 +294,19 @@ export type Job = Message<"domain.operation.v1.Job"> & {
      * @generated from field: optional int32 usage_ordinal = 57;
      */
     usageOrdinal?: number;
+    /**
+     * @generated from field: bool is_synthesized = 58;
+     */
+    isSynthesized: boolean;
+    /**
+     * Denormalized job_category (copied from job_template.job_category_id at
+     * materialize/backfill time) so the jobs list ("/classes") tab-splits by
+     * category with a single-table read — no job→job_template join on the hot
+     * list path. Mirrors the job_outcome_line R5 portal-leaf denormalization.
+     *
+     * @generated from field: optional string job_category_id = 59;
+     */
+    jobCategoryId?: string;
 };
 /**
  * Describes the message domain.operation.v1.Job.

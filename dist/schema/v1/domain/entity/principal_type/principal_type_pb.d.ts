@@ -7,7 +7,8 @@ export declare const file_domain_entity_principal_type_principal_type: GenFile;
  * PrincipalType identifies the kind of actor whose session is being authorized.
  * Values 1-2 are operator principals (WorkspaceUser-backed).
  * Values 3-6 are portal principals (party-grant-backed).
- * Reserved 7-15 for future platform-level principals (PLATFORM_ADMIN, INTEGRATION_AGENT, …).
+ * Value 7 is the staff / operational-delivery principal (Staff-entity-backed; anchor = staff.id).
+ * Reserved 8-15 for future platform-level principals (PLATFORM_ADMIN, INTEGRATION_AGENT, …).
  *
  * @generated from enum domain.entity.v1.PrincipalType
  */
@@ -51,7 +52,13 @@ export declare enum PrincipalType {
      *
      * @generated from enum value: PRINCIPAL_TYPE_SUPPLIER_DELEGATE = 6;
      */
-    SUPPLIER_DELEGATE = 6
+    SUPPLIER_DELEGATE = 6,
+    /**
+     * operational delivery identity (Staff-entity-backed; anchor = staff.id)
+     *
+     * @generated from enum value: PRINCIPAL_TYPE_STAFF = 7;
+     */
+    STAFF = 7
 }
 /**
  * Describes the enum domain.entity.v1.PrincipalType.

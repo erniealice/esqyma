@@ -52,6 +52,10 @@ export type Line = Message<"domain.product.v1.Line"> & {
      * @generated from field: repeated domain.product.v1.ProductLine product_lines = 9;
      */
     productLines: ProductLine[];
+    /**
+     * @generated from field: optional string workspace_id = 10;
+     */
+    workspaceId?: string;
 };
 /**
  * Describes the message domain.product.v1.Line.

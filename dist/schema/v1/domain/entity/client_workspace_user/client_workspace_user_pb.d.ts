@@ -42,6 +42,8 @@ export type ClientWorkspaceUser = Message<"domain.entity.v1.ClientWorkspaceUser"
      */
     active: boolean;
     /**
+     * IDOR anchors must be non-empty (enforced as a CHECK constraint).
+     *
      * @generated from field: string workspace_id = 7;
      */
     workspaceId: string;
@@ -54,6 +56,9 @@ export type ClientWorkspaceUser = Message<"domain.entity.v1.ClientWorkspaceUser"
      */
     workspaceUserId: string;
     /**
+     * At most one owner per client (enforced as a partial unique index on
+     * client_id WHERE is_owner).
+     *
      * @generated from field: bool is_owner = 10;
      */
     isOwner: boolean;

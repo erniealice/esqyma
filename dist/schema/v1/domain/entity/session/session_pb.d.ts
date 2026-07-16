@@ -291,6 +291,42 @@ export type ListSessionsResponse = Message<"domain.entity.v1.ListSessionsRespons
  */
 export declare const ListSessionsResponseSchema: GenMessage<ListSessionsResponse>;
 /**
+ * @generated from message domain.entity.v1.RevokeUserSessionsRequest
+ */
+export type RevokeUserSessionsRequest = Message<"domain.entity.v1.RevokeUserSessionsRequest"> & {
+    /**
+     * @generated from field: string user_id = 1;
+     */
+    userId: string;
+};
+/**
+ * Describes the message domain.entity.v1.RevokeUserSessionsRequest.
+ * Use `create(RevokeUserSessionsRequestSchema)` to create a new message.
+ */
+export declare const RevokeUserSessionsRequestSchema: GenMessage<RevokeUserSessionsRequest>;
+/**
+ * @generated from message domain.entity.v1.RevokeUserSessionsResponse
+ */
+export type RevokeUserSessionsResponse = Message<"domain.entity.v1.RevokeUserSessionsResponse"> & {
+    /**
+     * @generated from field: bool revoked = 1;
+     */
+    revoked: boolean;
+    /**
+     * @generated from field: bool success = 2;
+     */
+    success: boolean;
+    /**
+     * @generated from field: optional domain.common.v1.Error error = 3;
+     */
+    error?: Error;
+};
+/**
+ * Describes the message domain.entity.v1.RevokeUserSessionsResponse.
+ * Use `create(RevokeUserSessionsResponseSchema)` to create a new message.
+ */
+export declare const RevokeUserSessionsResponseSchema: GenMessage<RevokeUserSessionsResponse>;
+/**
  * @generated from service domain.entity.v1.SessionDomainService
  */
 export declare const SessionDomainService: GenService<{

@@ -114,6 +114,10 @@ export type JobTask = Message<"domain.operation.v1.JobTask"> & {
      * @generated from field: optional string workflow_step_id = 25;
      */
     workflowStepId?: string;
+    /**
+     * @generated from field: bool is_synthesized = 26;
+     */
+    isSynthesized: boolean;
 };
 /**
  * Describes the message domain.operation.v1.JobTask.

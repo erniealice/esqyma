@@ -128,6 +128,10 @@ export type TaskOutcome = Message<"domain.operation.v1.TaskOutcome"> & {
      * @generated from field: optional string date_modified_string = 28;
      */
     dateModifiedString?: string;
+    /**
+     * @generated from field: bool is_synthesized = 29;
+     */
+    isSynthesized: boolean;
 };
 /**
  * Describes the message domain.operation.v1.TaskOutcome.

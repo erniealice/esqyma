@@ -78,6 +78,14 @@ export type PriceSchedule = Message<"domain.subscription.v1.PriceSchedule"> & {
      * @generated from field: optional string workspace_id = 16;
      */
     workspaceId?: string;
+    /**
+     * Optional display-ordering key. Ordering contract wherever consumed:
+     * `sort_order NULLS LAST, name ASC` — absent (NULL) sorts last. Nullable by
+     * design (no default) so unset schedules fall to the end rather than tie at 0.
+     *
+     * @generated from field: optional int32 sort_order = 17;
+     */
+    sortOrder?: number;
 };
 /**
  * Describes the message domain.subscription.v1.PriceSchedule.

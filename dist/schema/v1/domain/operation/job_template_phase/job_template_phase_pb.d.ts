@@ -105,6 +105,24 @@ export type JobTemplatePhase = Message<"domain.operation.v1.JobTemplatePhase"> &
      * @generated from field: optional string billing_currency = 19;
      */
     billingCurrency?: string;
+    /**
+     * @generated from field: optional string scoring_scheme_id = 20;
+     */
+    scoringSchemeId?: string;
+    /**
+     * Per-phase output deliverable variant. Mirrors JobTemplate.output_product_variant_id
+     * (f30) one level down: a phase yields/delivers a specific product_variant of the
+     * template's umbrella output_product. NULL = the phase inherits the template-level
+     * output (today's behavior — clean additive). Generic across verticals
+     * (manufacturing per-operation intermediate output, professional-services milestone
+     * deliverable, education rotation strand). The deliverable-match resolver joins the
+     * seat's product_plan.product_id to the template-level output_product_id at umbrella
+     * grain, so this field is NOT part of that match; it carries the sub-deliverable
+     * identity used for display (e.g. the outcome-matrix phase-header parenthetical).
+     *
+     * @generated from field: optional string output_product_variant_id = 21;
+     */
+    outputProductVariantId?: string;
 };
 /**
  * Describes the message domain.operation.v1.JobTemplatePhase.

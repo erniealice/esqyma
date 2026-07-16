@@ -368,6 +368,145 @@ export type GetUserItemPageDataResponse = Message<"domain.entity.v1.GetUserItemP
  */
 export declare const GetUserItemPageDataResponseSchema: GenMessage<GetUserItemPageDataResponse>;
 /**
+ * @generated from message domain.entity.v1.DisableUserRequest
+ */
+export type DisableUserRequest = Message<"domain.entity.v1.DisableUserRequest"> & {
+    /**
+     * @generated from field: string user_id = 1;
+     */
+    userId: string;
+    /**
+     * @generated from field: optional string reason = 2;
+     */
+    reason?: string;
+};
+/**
+ * Describes the message domain.entity.v1.DisableUserRequest.
+ * Use `create(DisableUserRequestSchema)` to create a new message.
+ */
+export declare const DisableUserRequestSchema: GenMessage<DisableUserRequest>;
+/**
+ * @generated from message domain.entity.v1.DisableUserResponse
+ */
+export type DisableUserResponse = Message<"domain.entity.v1.DisableUserResponse"> & {
+    /**
+     * @generated from field: bool disabled = 1;
+     */
+    disabled: boolean;
+    /**
+     * @generated from field: bool success = 2;
+     */
+    success: boolean;
+    /**
+     * @generated from field: optional domain.common.v1.Error error = 3;
+     */
+    error?: Error;
+};
+/**
+ * Describes the message domain.entity.v1.DisableUserResponse.
+ * Use `create(DisableUserResponseSchema)` to create a new message.
+ */
+export declare const DisableUserResponseSchema: GenMessage<DisableUserResponse>;
+/**
+ * @generated from message domain.entity.v1.EnableUserRequest
+ */
+export type EnableUserRequest = Message<"domain.entity.v1.EnableUserRequest"> & {
+    /**
+     * @generated from field: string user_id = 1;
+     */
+    userId: string;
+};
+/**
+ * Describes the message domain.entity.v1.EnableUserRequest.
+ * Use `create(EnableUserRequestSchema)` to create a new message.
+ */
+export declare const EnableUserRequestSchema: GenMessage<EnableUserRequest>;
+/**
+ * @generated from message domain.entity.v1.EnableUserResponse
+ */
+export type EnableUserResponse = Message<"domain.entity.v1.EnableUserResponse"> & {
+    /**
+     * @generated from field: bool enabled = 1;
+     */
+    enabled: boolean;
+    /**
+     * @generated from field: bool success = 2;
+     */
+    success: boolean;
+    /**
+     * @generated from field: optional domain.common.v1.Error error = 3;
+     */
+    error?: Error;
+};
+/**
+ * Describes the message domain.entity.v1.EnableUserResponse.
+ * Use `create(EnableUserResponseSchema)` to create a new message.
+ */
+export declare const EnableUserResponseSchema: GenMessage<EnableUserResponse>;
+/**
+ * @generated from message domain.entity.v1.AdminResetPasswordRequest
+ */
+export type AdminResetPasswordRequest = Message<"domain.entity.v1.AdminResetPasswordRequest"> & {
+    /**
+     * @generated from field: string user_id = 1;
+     */
+    userId: string;
+    /**
+     * Either set the password directly, or request a provider-generated reset link.
+     *
+     * @generated from oneof domain.entity.v1.AdminResetPasswordRequest.method
+     */
+    method: {
+        /**
+         * @generated from field: string new_password = 2;
+         */
+        value: string;
+        case: "newPassword";
+    } | {
+        /**
+         * @generated from field: bool generate_link = 3;
+         */
+        value: boolean;
+        case: "generateLink";
+    } | {
+        case: undefined;
+        value?: undefined;
+    };
+};
+/**
+ * Describes the message domain.entity.v1.AdminResetPasswordRequest.
+ * Use `create(AdminResetPasswordRequestSchema)` to create a new message.
+ */
+export declare const AdminResetPasswordRequestSchema: GenMessage<AdminResetPasswordRequest>;
+/**
+ * @generated from message domain.entity.v1.AdminResetPasswordResponse
+ */
+export type AdminResetPasswordResponse = Message<"domain.entity.v1.AdminResetPasswordResponse"> & {
+    /**
+     * @generated from field: bool reset = 1;
+     */
+    reset: boolean;
+    /**
+     * Populated only when generate_link was requested and the provider supports it.
+     *
+     * @generated from field: optional string reset_link = 2;
+     */
+    resetLink?: string;
+    /**
+     * @generated from field: bool success = 3;
+     */
+    success: boolean;
+    /**
+     * @generated from field: optional domain.common.v1.Error error = 4;
+     */
+    error?: Error;
+};
+/**
+ * Describes the message domain.entity.v1.AdminResetPasswordResponse.
+ * Use `create(AdminResetPasswordResponseSchema)` to create a new message.
+ */
+export declare const AdminResetPasswordResponseSchema: GenMessage<AdminResetPasswordResponse>;
+/**
  * @generated from service domain.entity.v1.UserDomainService
  */
 export declare const UserDomainService: GenService<{

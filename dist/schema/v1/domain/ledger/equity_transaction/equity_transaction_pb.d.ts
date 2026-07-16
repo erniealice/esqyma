@@ -41,7 +41,7 @@ export type EquityTransaction = Message<"domain.ledger.v1.EquityTransaction"> & 
      */
     description?: string;
     /**
-     * Transaction date
+     * Transaction date. Range-filtered and sort key for dashboards.
      *
      * @generated from field: int64 transaction_date = 6;
      */

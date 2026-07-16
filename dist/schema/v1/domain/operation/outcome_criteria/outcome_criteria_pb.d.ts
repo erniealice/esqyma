@@ -158,6 +158,10 @@ export type OutcomeCriteria = Message<"domain.operation.v1.OutcomeCriteria"> & {
      * @generated from field: optional string date_modified_string = 36;
      */
     dateModifiedString?: string;
+    /**
+     * @generated from field: optional int32 min_text_length = 37;
+     */
+    minTextLength?: number;
 };
 /**
  * Describes the message domain.operation.v1.OutcomeCriteria.

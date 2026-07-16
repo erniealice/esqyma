@@ -40,6 +40,8 @@ export type SubscriptionSeat = Message<"domain.subscription.v1.SubscriptionSeat"
      */
     active: boolean;
     /**
+     * Non-empty anchor enforced alongside client_id (single combined DB CHECK).
+     *
      * @generated from field: string workspace_id = 7;
      */
     workspaceId: string;
@@ -96,7 +98,7 @@ export type SubscriptionSeat = Message<"domain.subscription.v1.SubscriptionSeat"
      */
     dateEnd?: bigint;
     /**
-     * proto ENUM (NOT string); DB CHECK-pinned
+     * proto ENUM (NOT string); stored as text, domain pinned by the DB CHECK below.
      *
      * @generated from field: domain.subscription.v1.SubscriptionSeatStatus status = 19;
      */
@@ -110,6 +112,9 @@ export type SubscriptionSeat = Message<"domain.subscription.v1.SubscriptionSeat"
      */
     reviewCadenceUnit?: string;
     /**
+     * Partial DB unique: UNIQUE (subscription_id, position) WHERE status = 'active'
+     * — not expressible as unique_together (no partial-index support).
+     *
      * @generated from field: optional string position = 22;
      */
     position?: string;

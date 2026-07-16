@@ -84,9 +84,9 @@ export type Evaluation = Message<"domain.operation.v1.Evaluation"> & {
     /**
      * Subject arc — exactly one (num_nonnulls=1). The HUMAN Identity is the subject.
      *
-     * @generated from field: optional string subject_staff_id = 13;
+     * @generated from field: optional string staff_id = 13;
      */
-    subjectStaffId?: string;
+    staffId?: string;
     /**
      * @generated from field: optional string subject_client_id = 14;
      */
@@ -570,7 +570,7 @@ export declare enum SubjectType {
      */
     UNSPECIFIED = 0,
     /**
-     * subject_staff_id (-> entity/staff) — the HUMAN Identity is the subject
+     * staff_id (-> entity/staff) — the HUMAN Identity is the subject
      *
      * @generated from enum value: SUBJECT_TYPE_ASSOCIATE = 1;
      */
