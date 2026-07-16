@@ -57,10 +57,17 @@ type JobOutcomeSummary struct {
 	// R5 portal-leaf denormalization (2026-06-22): the parent summary carries the
 	// same denormalized workspace_id + served-client_id as its job_outcome_line
 	// children so the portal self-read is single-table + fail-closed.
-	WorkspaceId   string  `protobuf:"bytes,28,opt,name=workspace_id,json=workspaceId,proto3" json:"workspace_id,omitempty"`
-	ClientId      *string `protobuf:"bytes,29,opt,name=client_id,json=clientId,proto3,oneof" json:"client_id,omitempty"`
-	unknownFields protoimpl.UnknownFields
-	sizeCache     protoimpl.SizeCache
+	WorkspaceId string  `protobuf:"bytes,28,opt,name=workspace_id,json=workspaceId,proto3" json:"workspace_id,omitempty"`
+	ClientId    *string `protobuf:"bytes,29,opt,name=client_id,json=clientId,proto3,oneof" json:"client_id,omitempty"`
+	// Phase-1b year-final freeze provenance (B2, 2026-07-16): promoted from
+	// psql-added columns to real proto fields. `source` records the write origin
+	// (e.g. the authoritative-import batch id); `is_authoritative` marks a frozen
+	// row the grade recompute use-case must refuse to overwrite (fail-closed) —
+	// the deep write-boundary that holds for ALL callers, not just the cmd filter.
+	Source          *string `protobuf:"bytes,30,opt,name=source,proto3,oneof" json:"source,omitempty"`
+	IsAuthoritative bool    `protobuf:"varint,31,opt,name=is_authoritative,json=isAuthoritative,proto3" json:"is_authoritative,omitempty"`
+	unknownFields   protoimpl.UnknownFields
+	sizeCache       protoimpl.SizeCache
 }
 
 func (x *JobOutcomeSummary) Reset() {
@@ -294,6 +301,20 @@ func (x *JobOutcomeSummary) GetClientId() string {
 		return *x.ClientId
 	}
 	return ""
+}
+
+func (x *JobOutcomeSummary) GetSource() string {
+	if x != nil && x.Source != nil {
+		return *x.Source
+	}
+	return ""
+}
+
+func (x *JobOutcomeSummary) GetIsAuthoritative() bool {
+	if x != nil {
+		return x.IsAuthoritative
+	}
+	return false
 }
 
 type CreateJobOutcomeSummaryRequest struct {
@@ -1188,7 +1209,7 @@ var File_domain_operation_job_outcome_summary_job_outcome_summary_proto protoref
 
 const file_domain_operation_job_outcome_summary_job_outcome_summary_proto_rawDesc = "" +
 	"\n" +
-	">domain/operation/job_outcome_summary/job_outcome_summary.proto\x12\x13domain.operation.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1adomain/common/search.proto\x1a\"domain/operation/enums/enums.proto\x1a\x1edomain/operation/job/job.proto\x1a\x10options/db.proto\"\xf3\f\n" +
+	">domain/operation/job_outcome_summary/job_outcome_summary.proto\x12\x13domain.operation.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1adomain/common/search.proto\x1a\"domain/operation/enums/enums.proto\x1a\x1edomain/operation/job/job.proto\x1a\x10options/db.proto\"\xd3\r\n" +
 	"\x11JobOutcomeSummary\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12\"\n" +
 	"\x06job_id\x18\x02 \x01(\tB\v\x82\xb5\x18\a\n" +
@@ -1231,7 +1252,9 @@ const file_domain_operation_job_outcome_summary_job_outcome_summary_proto_rawDes
 	"\tworkspace\x18\x01R\vworkspaceId\x120\n" +
 	"\tclient_id\x18\x1d \x01(\tB\x0e\x82\xb5\x18\n" +
 	"\n" +
-	"\x06client\x18\x01H\rR\bclientId\x88\x01\x01:\x06\x8a\xb5\x18\x02\b\x01B\x06\n" +
+	"\x06client\x18\x01H\rR\bclientId\x88\x01\x01\x12\x1b\n" +
+	"\x06source\x18\x1e \x01(\tH\x0eR\x06source\x88\x01\x01\x126\n" +
+	"\x10is_authoritative\x18\x1f \x01(\bB\v\x82\xb5\x18\a\"\x05falseR\x0fisAuthoritative:\x06\x8a\xb5\x18\x02\b\x01B\x06\n" +
 	"\x04_jobB\x10\n" +
 	"\x0e_summary_scoreB\f\n" +
 	"\n" +
@@ -1247,7 +1270,8 @@ const file_domain_operation_job_outcome_summary_job_outcome_summary_proto_rawDes
 	"\r_scaled_scoreB\x0f\n" +
 	"\r_scaled_labelB\f\n" +
 	"\n" +
-	"_client_id\"\\\n" +
+	"_client_idB\t\n" +
+	"\a_source\"\\\n" +
 	"\x1eCreateJobOutcomeSummaryRequest\x12:\n" +
 	"\x04data\x18\x01 \x01(\v2&.domain.operation.v1.JobOutcomeSummaryR\x04data\"\xb5\x01\n" +
 	"\x1fCreateJobOutcomeSummaryResponse\x12:\n" +

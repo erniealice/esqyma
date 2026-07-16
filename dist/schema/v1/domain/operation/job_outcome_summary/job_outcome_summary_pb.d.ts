@@ -111,6 +111,44 @@ export type JobOutcomeSummary = Message<"domain.operation.v1.JobOutcomeSummary">
      * @generated from field: optional string date_modified_string = 24;
      */
     dateModifiedString?: string;
+    /**
+     * @generated from field: optional string scoring_scheme_id = 25;
+     */
+    scoringSchemeId?: string;
+    /**
+     * @generated from field: optional double scaled_score = 26;
+     */
+    scaledScore?: number;
+    /**
+     * @generated from field: optional string scaled_label = 27;
+     */
+    scaledLabel?: string;
+    /**
+     * R5 portal-leaf denormalization (2026-06-22): the parent summary carries the
+     * same denormalized workspace_id + served-client_id as its job_outcome_line
+     * children so the portal self-read is single-table + fail-closed.
+     *
+     * @generated from field: string workspace_id = 28;
+     */
+    workspaceId: string;
+    /**
+     * @generated from field: optional string client_id = 29;
+     */
+    clientId?: string;
+    /**
+     * Phase-1b year-final freeze provenance (B2, 2026-07-16): promoted from
+     * psql-added columns to real proto fields. `source` records the write origin
+     * (e.g. the authoritative-import batch id); `is_authoritative` marks a frozen
+     * row the grade recompute use-case must refuse to overwrite (fail-closed) —
+     * the deep write-boundary that holds for ALL callers, not just the cmd filter.
+     *
+     * @generated from field: optional string source = 30;
+     */
+    source?: string;
+    /**
+     * @generated from field: bool is_authoritative = 31;
+     */
+    isAuthoritative: boolean;
 };
 /**
  * Describes the message domain.operation.v1.JobOutcomeSummary.

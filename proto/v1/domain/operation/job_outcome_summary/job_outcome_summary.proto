@@ -52,6 +52,14 @@ message JobOutcomeSummary {
   // children so the portal self-read is single-table + fail-closed.
   string workspace_id = 28 [(options.v1.db).references = "workspace", (options.v1.db).index = true];
   optional string client_id = 29 [(options.v1.db).references = "client", (options.v1.db).index = true];
+
+  // Phase-1b year-final freeze provenance (B2, 2026-07-16): promoted from
+  // psql-added columns to real proto fields. `source` records the write origin
+  // (e.g. the authoritative-import batch id); `is_authoritative` marks a frozen
+  // row the grade recompute use-case must refuse to overwrite (fail-closed) —
+  // the deep write-boundary that holds for ALL callers, not just the cmd filter.
+  optional string source = 30;
+  bool is_authoritative = 31 [(options.v1.db).default = "false"];
 }
 
 // --- Service ---
