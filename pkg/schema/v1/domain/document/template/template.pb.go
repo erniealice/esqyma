@@ -753,7 +753,7 @@ var File_domain_document_template_template_proto protoreflect.FileDescriptor
 
 const file_domain_document_template_template_proto_rawDesc = "" +
 	"\n" +
-	"'domain/document/template/template.proto\x12\x12domain.document.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/search.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x10options/db.proto\"\xf0\a\n" +
+	"'domain/document/template/template.proto\x12\x12domain.document.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/search.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x10options/db.proto\"\xf8\a\n" +
 	"\x10DocumentTemplate\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12&\n" +
 	"\fdate_created\x18\x02 \x01(\x03H\x00R\vdateCreated\x88\x01\x01\x12;\n" +
@@ -779,7 +779,7 @@ const file_domain_document_template_template_proto_rawDesc = "" +
 	"created_by\x18\x11 \x01(\tH\vR\tcreatedBy\x88\x01\x01\x12\x16\n" +
 	"\x06status\x18\x12 \x01(\tR\x06status\x12*\n" +
 	"\n" +
-	"module_key\x18\x13 \x01(\tB\x06\x82\xb5\x18\x02\x18\x01H\fR\tmoduleKey\x88\x01\x01B\x0f\n" +
+	"module_key\x18\x13 \x01(\tB\x06\x82\xb5\x18\x02\x18\x01H\fR\tmoduleKey\x88\x01\x01:\x06\x8a\xb5\x18\x02\b\x01B\x0f\n" +
 	"\r_date_createdB\x16\n" +
 	"\x14_date_created_stringB\x10\n" +
 	"\x0e_date_modifiedB\x17\n" +
