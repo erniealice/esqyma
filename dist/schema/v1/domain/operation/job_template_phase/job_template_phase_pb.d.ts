@@ -123,6 +123,15 @@ export type JobTemplatePhase = Message<"domain.operation.v1.JobTemplatePhase"> &
      * @generated from field: optional string output_product_variant_id = 21;
      */
     outputProductVariantId?: string;
+    /**
+     * Stable machine key for this phase within its template — the path pivot for
+     * document-template placeholders (parity with JobCategory.code). Unique per
+     * parent job_template (message-level unique_together). Path-normalized:
+     * lower(btrim(code)) matching ^[a-z][a-z0-9_]*$; NULL where unanchored.
+     *
+     * @generated from field: optional string code = 30;
+     */
+    code?: string;
 };
 /**
  * Describes the message domain.operation.v1.JobTemplatePhase.

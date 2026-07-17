@@ -527,6 +527,83 @@ export type ListTaskOutcomesByJobResponse = Message<"domain.operation.v1.ListTas
  */
 export declare const ListTaskOutcomesByJobResponseSchema: GenMessage<ListTaskOutcomesByJobResponse>;
 /**
+ * @generated from message domain.operation.v1.ListCodedTaskOutcomeValuesByJobRequest
+ */
+export type ListCodedTaskOutcomeValuesByJobRequest = Message<"domain.operation.v1.ListCodedTaskOutcomeValuesByJobRequest"> & {
+    /**
+     * Allowlist of job ids to resolve. Workspace scope is applied from trusted
+     * context in the adapter, never carried on the request.
+     *
+     * @generated from field: repeated string job_ids = 1;
+     */
+    jobIds: string[];
+};
+/**
+ * Describes the message domain.operation.v1.ListCodedTaskOutcomeValuesByJobRequest.
+ * Use `create(ListCodedTaskOutcomeValuesByJobRequestSchema)` to create a new message.
+ */
+export declare const ListCodedTaskOutcomeValuesByJobRequestSchema: GenMessage<ListCodedTaskOutcomeValuesByJobRequest>;
+/**
+ * CodedTaskOutcomeValue is one resolved cell: the latest active outcome for a
+ * (job_task, criterion) pair, carrying the template-side stable codes so a
+ * consumer can key it without holding any instance ids. phase_code / task_code
+ * / criteria_code are empty when the underlying template row has no code yet.
+ *
+ * @generated from message domain.operation.v1.CodedTaskOutcomeValue
+ */
+export type CodedTaskOutcomeValue = Message<"domain.operation.v1.CodedTaskOutcomeValue"> & {
+    /**
+     * @generated from field: string job_id = 1;
+     */
+    jobId: string;
+    /**
+     * @generated from field: string phase_code = 2;
+     */
+    phaseCode: string;
+    /**
+     * @generated from field: string task_code = 3;
+     */
+    taskCode: string;
+    /**
+     * @generated from field: string criteria_code = 4;
+     */
+    criteriaCode: string;
+    /**
+     * Unset when no active outcome row exists for the pair (LEFT JOIN miss); set
+     * (including 0) when a value was recorded.
+     *
+     * @generated from field: optional double numeric_value = 5;
+     */
+    numericValue?: number;
+};
+/**
+ * Describes the message domain.operation.v1.CodedTaskOutcomeValue.
+ * Use `create(CodedTaskOutcomeValueSchema)` to create a new message.
+ */
+export declare const CodedTaskOutcomeValueSchema: GenMessage<CodedTaskOutcomeValue>;
+/**
+ * @generated from message domain.operation.v1.ListCodedTaskOutcomeValuesByJobResponse
+ */
+export type ListCodedTaskOutcomeValuesByJobResponse = Message<"domain.operation.v1.ListCodedTaskOutcomeValuesByJobResponse"> & {
+    /**
+     * @generated from field: repeated domain.operation.v1.CodedTaskOutcomeValue values = 1;
+     */
+    values: CodedTaskOutcomeValue[];
+    /**
+     * @generated from field: bool success = 2;
+     */
+    success: boolean;
+    /**
+     * @generated from field: optional domain.common.v1.Error error = 3;
+     */
+    error?: Error;
+};
+/**
+ * Describes the message domain.operation.v1.ListCodedTaskOutcomeValuesByJobResponse.
+ * Use `create(ListCodedTaskOutcomeValuesByJobResponseSchema)` to create a new message.
+ */
+export declare const ListCodedTaskOutcomeValuesByJobResponseSchema: GenMessage<ListCodedTaskOutcomeValuesByJobResponse>;
+/**
  * @generated from service domain.operation.v1.TaskOutcomeDomainService
  */
 export declare const TaskOutcomeDomainService: GenService<{
@@ -615,5 +692,22 @@ export declare const TaskOutcomeDomainService: GenService<{
         methodKind: "unary";
         input: typeof ListTaskOutcomesByJobRequestSchema;
         output: typeof ListTaskOutcomesByJobResponseSchema;
+    };
+    /**
+     * Extra: coded outcome values for a set of jobs. Walks each job's instance
+     * graph (job → job_phase → job_task) back to its template ancestry
+     * (job_template_phase / job_template_task / template_task_criteria /
+     * outcome_criteria) and returns the LATEST active outcome per
+     * (job_task, criterion) together with the template-side phase/task/criterion
+     * codes. Workspace is enforced from trusted context, never the request; the
+     * job set is the caller-supplied allowlist. A LEFT JOIN to task_outcome means
+     * numeric_value is unset when no outcome exists (distinct from a recorded 0).
+     *
+     * @generated from rpc domain.operation.v1.TaskOutcomeDomainService.ListCodedTaskOutcomeValuesByJob
+     */
+    listCodedTaskOutcomeValuesByJob: {
+        methodKind: "unary";
+        input: typeof ListCodedTaskOutcomeValuesByJobRequestSchema;
+        output: typeof ListCodedTaskOutcomeValuesByJobResponseSchema;
     };
 }>;

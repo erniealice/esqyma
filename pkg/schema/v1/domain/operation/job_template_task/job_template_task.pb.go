@@ -48,8 +48,15 @@ type JobTemplateTask struct {
 	ToolRequired             *string                              `protobuf:"bytes,20,opt,name=tool_required,json=toolRequired,proto3,oneof" json:"tool_required,omitempty"`
 	InstructionDocId         *string                              `protobuf:"bytes,21,opt,name=instruction_doc_id,json=instructionDocId,proto3,oneof" json:"instruction_doc_id,omitempty"`
 	WorkflowStepId           *string                              `protobuf:"bytes,22,opt,name=workflow_step_id,json=workflowStepId,proto3,oneof" json:"workflow_step_id,omitempty"`
-	unknownFields            protoimpl.UnknownFields
-	sizeCache                protoimpl.SizeCache
+	// Stable machine key for this task within its phase — the path pivot for
+	// document-template placeholders (parity with JobCategory.code). Unique per
+	// parent job_template_phase (message-level unique_together); flat task codes
+	// may collide across sibling phases, so the grain is (phase, code).
+	// Path-normalized: lower(btrim(code)) matching ^[a-z][a-z0-9_]*$; NULL where
+	// unanchored.
+	Code          *string `protobuf:"bytes,40,opt,name=code,proto3,oneof" json:"code,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
 }
 
 func (x *JobTemplateTask) Reset() {
@@ -232,6 +239,13 @@ func (x *JobTemplateTask) GetInstructionDocId() string {
 func (x *JobTemplateTask) GetWorkflowStepId() string {
 	if x != nil && x.WorkflowStepId != nil {
 		return *x.WorkflowStepId
+	}
+	return ""
+}
+
+func (x *JobTemplateTask) GetCode() string {
+	if x != nil && x.Code != nil {
+		return *x.Code
 	}
 	return ""
 }
@@ -1129,7 +1143,7 @@ var File_domain_operation_job_template_task_job_template_task_proto protoreflect
 
 const file_domain_operation_job_template_task_job_template_task_proto_rawDesc = "" +
 	"\n" +
-	":domain/operation/job_template_task/job_template_task.proto\x12\x13domain.operation.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1adomain/common/search.proto\x1a<domain/operation/job_template_phase/job_template_phase.proto\x1a\x10options/db.proto\"\xef\v\n" +
+	":domain/operation/job_template_task/job_template_task.proto\x12\x13domain.operation.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1adomain/common/search.proto\x1a<domain/operation/job_template_phase/job_template_phase.proto\x1a\x10options/db.proto\"\x81\r\n" +
 	"\x0fJobTemplateTask\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12&\n" +
 	"\fdate_created\x18\x02 \x01(\x03H\x00R\vdateCreated\x88\x01\x01\x12;\n" +
@@ -1159,7 +1173,8 @@ const file_domain_operation_job_template_task_job_template_task_proto_rawDesc = 
 	"\x10teardown_minutes\x18\x13 \x01(\x05H\rR\x0fteardownMinutes\x88\x01\x01\x12(\n" +
 	"\rtool_required\x18\x14 \x01(\tH\x0eR\ftoolRequired\x88\x01\x01\x129\n" +
 	"\x12instruction_doc_id\x18\x15 \x01(\tB\x06\x82\xb5\x18\x02\x18\x01H\x0fR\x10instructionDocId\x88\x01\x01\x125\n" +
-	"\x10workflow_step_id\x18\x16 \x01(\tB\x06\x82\xb5\x18\x02\x18\x01H\x10R\x0eworkflowStepId\x88\x01\x01:\x06\x8a\xb5\x18\x02\b\x01B\x0f\n" +
+	"\x10workflow_step_id\x18\x16 \x01(\tB\x06\x82\xb5\x18\x02\x18\x01H\x10R\x0eworkflowStepId\x88\x01\x01\x12k\n" +
+	"\x04code\x18( \x01(\tBR\x82\xb5\x18N\x18\x01*Jcode IS NULL OR (code = lower(btrim(code)) AND code ~ '^[a-z][a-z0-9_]*$')H\x11R\x04code\x88\x01\x01:\"\x8a\xb5\x18\x1e\b\x01\x1a\x1ajob_template_phase_id,codeB\x0f\n" +
 	"\r_date_createdB\x16\n" +
 	"\x14_date_created_stringB\x10\n" +
 	"\x0e_date_modifiedB\x17\n" +
@@ -1176,7 +1191,8 @@ const file_domain_operation_job_template_task_job_template_task_proto_rawDesc = 
 	"\x11_teardown_minutesB\x10\n" +
 	"\x0e_tool_requiredB\x15\n" +
 	"\x13_instruction_doc_idB\x13\n" +
-	"\x11_workflow_step_idJ\x04\b\x17\x10(\"X\n" +
+	"\x11_workflow_step_idB\a\n" +
+	"\x05_codeJ\x04\b\x17\x10(\"X\n" +
 	"\x1cCreateJobTemplateTaskRequest\x128\n" +
 	"\x04data\x18\x01 \x01(\v2$.domain.operation.v1.JobTemplateTaskR\x04data\"\xb1\x01\n" +
 	"\x1dCreateJobTemplateTaskResponse\x128\n" +

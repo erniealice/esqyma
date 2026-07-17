@@ -162,6 +162,20 @@ export type OutcomeCriteria = Message<"domain.operation.v1.OutcomeCriteria"> & {
      * @generated from field: optional int32 min_text_length = 37;
      */
     minTextLength?: number;
+    /**
+     * Stable machine key for this criterion — the path pivot for document-template
+     * placeholders (parity with JobCategory.code). Path-normalized: lower(btrim(code))
+     * matching ^[a-z][a-z0-9_]*$; NULL where unanchored.
+     *
+     * Uniqueness is conditional and cannot be a plain unique_together: all versions
+     * sharing a criteria_group_id carry the SAME code (code is stable across the
+     * version lineage), while the CURRENT published row's code must be unique within
+     * (scope, workspace_id, industry_code). Both are enforced by partial unique
+     * indexes at the DB layer (predicate on active + published), not by this field.
+     *
+     * @generated from field: optional string code = 38;
+     */
+    code?: string;
 };
 /**
  * Describes the message domain.operation.v1.OutcomeCriteria.

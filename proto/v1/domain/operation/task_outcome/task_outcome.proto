@@ -70,6 +70,16 @@ service TaskOutcomeDomainService {
 
   // Extra: filter by job (multi-join via job_task → job_phase → job)
   rpc ListByJob(ListTaskOutcomesByJobRequest) returns (ListTaskOutcomesByJobResponse);
+
+  // Extra: coded outcome values for a set of jobs. Walks each job's instance
+  // graph (job → job_phase → job_task) back to its template ancestry
+  // (job_template_phase / job_template_task / template_task_criteria /
+  // outcome_criteria) and returns the LATEST active outcome per
+  // (job_task, criterion) together with the template-side phase/task/criterion
+  // codes. Workspace is enforced from trusted context, never the request; the
+  // job set is the caller-supplied allowlist. A LEFT JOIN to task_outcome means
+  // numeric_value is unset when no outcome exists (distinct from a recorded 0).
+  rpc ListCodedTaskOutcomeValuesByJob(ListCodedTaskOutcomeValuesByJobRequest) returns (ListCodedTaskOutcomeValuesByJobResponse);
 }
 
 // --- Standard CRUD messages ---
@@ -181,6 +191,32 @@ message ListTaskOutcomesByJobRequest {
 
 message ListTaskOutcomesByJobResponse {
   repeated TaskOutcome task_outcomes = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message ListCodedTaskOutcomeValuesByJobRequest {
+  // Allowlist of job ids to resolve. Workspace scope is applied from trusted
+  // context in the adapter, never carried on the request.
+  repeated string job_ids = 1;
+}
+
+// CodedTaskOutcomeValue is one resolved cell: the latest active outcome for a
+// (job_task, criterion) pair, carrying the template-side stable codes so a
+// consumer can key it without holding any instance ids. phase_code / task_code
+// / criteria_code are empty when the underlying template row has no code yet.
+message CodedTaskOutcomeValue {
+  string job_id = 1;
+  string phase_code = 2;
+  string task_code = 3;
+  string criteria_code = 4;
+  // Unset when no active outcome row exists for the pair (LEFT JOIN miss); set
+  // (including 0) when a value was recorded.
+  optional double numeric_value = 5;
+}
+
+message ListCodedTaskOutcomeValuesByJobResponse {
+  repeated CodedTaskOutcomeValue values = 1;
   bool success = 2;
   optional domain.common.v1.Error error = 3;
 }

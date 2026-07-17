@@ -102,6 +102,17 @@ export type JobTemplateTask = Message<"domain.operation.v1.JobTemplateTask"> & {
      * @generated from field: optional string workflow_step_id = 22;
      */
     workflowStepId?: string;
+    /**
+     * Stable machine key for this task within its phase — the path pivot for
+     * document-template placeholders (parity with JobCategory.code). Unique per
+     * parent job_template_phase (message-level unique_together); flat task codes
+     * may collide across sibling phases, so the grain is (phase, code).
+     * Path-normalized: lower(btrim(code)) matching ^[a-z][a-z0-9_]*$; NULL where
+     * unanchored.
+     *
+     * @generated from field: optional string code = 40;
+     */
+    code?: string;
 };
 /**
  * Describes the message domain.operation.v1.JobTemplateTask.

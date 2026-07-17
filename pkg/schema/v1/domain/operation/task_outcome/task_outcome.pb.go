@@ -1390,6 +1390,194 @@ func (x *ListTaskOutcomesByJobResponse) GetError() *common.Error {
 	return nil
 }
 
+type ListCodedTaskOutcomeValuesByJobRequest struct {
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// Allowlist of job ids to resolve. Workspace scope is applied from trusted
+	// context in the adapter, never carried on the request.
+	JobIds        []string `protobuf:"bytes,1,rep,name=job_ids,json=jobIds,proto3" json:"job_ids,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *ListCodedTaskOutcomeValuesByJobRequest) Reset() {
+	*x = ListCodedTaskOutcomeValuesByJobRequest{}
+	mi := &file_domain_operation_task_outcome_task_outcome_proto_msgTypes[21]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *ListCodedTaskOutcomeValuesByJobRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ListCodedTaskOutcomeValuesByJobRequest) ProtoMessage() {}
+
+func (x *ListCodedTaskOutcomeValuesByJobRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_domain_operation_task_outcome_task_outcome_proto_msgTypes[21]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ListCodedTaskOutcomeValuesByJobRequest.ProtoReflect.Descriptor instead.
+func (*ListCodedTaskOutcomeValuesByJobRequest) Descriptor() ([]byte, []int) {
+	return file_domain_operation_task_outcome_task_outcome_proto_rawDescGZIP(), []int{21}
+}
+
+func (x *ListCodedTaskOutcomeValuesByJobRequest) GetJobIds() []string {
+	if x != nil {
+		return x.JobIds
+	}
+	return nil
+}
+
+// CodedTaskOutcomeValue is one resolved cell: the latest active outcome for a
+// (job_task, criterion) pair, carrying the template-side stable codes so a
+// consumer can key it without holding any instance ids. phase_code / task_code
+// / criteria_code are empty when the underlying template row has no code yet.
+type CodedTaskOutcomeValue struct {
+	state        protoimpl.MessageState `protogen:"open.v1"`
+	JobId        string                 `protobuf:"bytes,1,opt,name=job_id,json=jobId,proto3" json:"job_id,omitempty"`
+	PhaseCode    string                 `protobuf:"bytes,2,opt,name=phase_code,json=phaseCode,proto3" json:"phase_code,omitempty"`
+	TaskCode     string                 `protobuf:"bytes,3,opt,name=task_code,json=taskCode,proto3" json:"task_code,omitempty"`
+	CriteriaCode string                 `protobuf:"bytes,4,opt,name=criteria_code,json=criteriaCode,proto3" json:"criteria_code,omitempty"`
+	// Unset when no active outcome row exists for the pair (LEFT JOIN miss); set
+	// (including 0) when a value was recorded.
+	NumericValue  *float64 `protobuf:"fixed64,5,opt,name=numeric_value,json=numericValue,proto3,oneof" json:"numeric_value,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *CodedTaskOutcomeValue) Reset() {
+	*x = CodedTaskOutcomeValue{}
+	mi := &file_domain_operation_task_outcome_task_outcome_proto_msgTypes[22]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *CodedTaskOutcomeValue) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*CodedTaskOutcomeValue) ProtoMessage() {}
+
+func (x *CodedTaskOutcomeValue) ProtoReflect() protoreflect.Message {
+	mi := &file_domain_operation_task_outcome_task_outcome_proto_msgTypes[22]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use CodedTaskOutcomeValue.ProtoReflect.Descriptor instead.
+func (*CodedTaskOutcomeValue) Descriptor() ([]byte, []int) {
+	return file_domain_operation_task_outcome_task_outcome_proto_rawDescGZIP(), []int{22}
+}
+
+func (x *CodedTaskOutcomeValue) GetJobId() string {
+	if x != nil {
+		return x.JobId
+	}
+	return ""
+}
+
+func (x *CodedTaskOutcomeValue) GetPhaseCode() string {
+	if x != nil {
+		return x.PhaseCode
+	}
+	return ""
+}
+
+func (x *CodedTaskOutcomeValue) GetTaskCode() string {
+	if x != nil {
+		return x.TaskCode
+	}
+	return ""
+}
+
+func (x *CodedTaskOutcomeValue) GetCriteriaCode() string {
+	if x != nil {
+		return x.CriteriaCode
+	}
+	return ""
+}
+
+func (x *CodedTaskOutcomeValue) GetNumericValue() float64 {
+	if x != nil && x.NumericValue != nil {
+		return *x.NumericValue
+	}
+	return 0
+}
+
+type ListCodedTaskOutcomeValuesByJobResponse struct {
+	state         protoimpl.MessageState   `protogen:"open.v1"`
+	Values        []*CodedTaskOutcomeValue `protobuf:"bytes,1,rep,name=values,proto3" json:"values,omitempty"`
+	Success       bool                     `protobuf:"varint,2,opt,name=success,proto3" json:"success,omitempty"`
+	Error         *common.Error            `protobuf:"bytes,3,opt,name=error,proto3,oneof" json:"error,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *ListCodedTaskOutcomeValuesByJobResponse) Reset() {
+	*x = ListCodedTaskOutcomeValuesByJobResponse{}
+	mi := &file_domain_operation_task_outcome_task_outcome_proto_msgTypes[23]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *ListCodedTaskOutcomeValuesByJobResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ListCodedTaskOutcomeValuesByJobResponse) ProtoMessage() {}
+
+func (x *ListCodedTaskOutcomeValuesByJobResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_domain_operation_task_outcome_task_outcome_proto_msgTypes[23]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ListCodedTaskOutcomeValuesByJobResponse.ProtoReflect.Descriptor instead.
+func (*ListCodedTaskOutcomeValuesByJobResponse) Descriptor() ([]byte, []int) {
+	return file_domain_operation_task_outcome_task_outcome_proto_rawDescGZIP(), []int{23}
+}
+
+func (x *ListCodedTaskOutcomeValuesByJobResponse) GetValues() []*CodedTaskOutcomeValue {
+	if x != nil {
+		return x.Values
+	}
+	return nil
+}
+
+func (x *ListCodedTaskOutcomeValuesByJobResponse) GetSuccess() bool {
+	if x != nil {
+		return x.Success
+	}
+	return false
+}
+
+func (x *ListCodedTaskOutcomeValuesByJobResponse) GetError() *common.Error {
+	if x != nil {
+		return x.Error
+	}
+	return nil
+}
+
 var File_domain_operation_task_outcome_task_outcome_proto protoreflect.FileDescriptor
 
 const file_domain_operation_task_outcome_task_outcome_proto_rawDesc = "" +
@@ -1548,7 +1736,22 @@ const file_domain_operation_task_outcome_task_outcome_proto_rawDesc = "" +
 	"\rtask_outcomes\x18\x01 \x03(\v2 .domain.operation.v1.TaskOutcomeR\ftaskOutcomes\x12\x18\n" +
 	"\asuccess\x18\x02 \x01(\bR\asuccess\x122\n" +
 	"\x05error\x18\x03 \x01(\v2\x17.domain.common.v1.ErrorH\x00R\x05error\x88\x01\x01B\b\n" +
-	"\x06_error2\xed\t\n" +
+	"\x06_error\"A\n" +
+	"&ListCodedTaskOutcomeValuesByJobRequest\x12\x17\n" +
+	"\ajob_ids\x18\x01 \x03(\tR\x06jobIds\"\xcb\x01\n" +
+	"\x15CodedTaskOutcomeValue\x12\x15\n" +
+	"\x06job_id\x18\x01 \x01(\tR\x05jobId\x12\x1d\n" +
+	"\n" +
+	"phase_code\x18\x02 \x01(\tR\tphaseCode\x12\x1b\n" +
+	"\ttask_code\x18\x03 \x01(\tR\btaskCode\x12#\n" +
+	"\rcriteria_code\x18\x04 \x01(\tR\fcriteriaCode\x12(\n" +
+	"\rnumeric_value\x18\x05 \x01(\x01H\x00R\fnumericValue\x88\x01\x01B\x10\n" +
+	"\x0e_numeric_value\"\xc5\x01\n" +
+	"'ListCodedTaskOutcomeValuesByJobResponse\x12B\n" +
+	"\x06values\x18\x01 \x03(\v2*.domain.operation.v1.CodedTaskOutcomeValueR\x06values\x12\x18\n" +
+	"\asuccess\x18\x02 \x01(\bR\asuccess\x122\n" +
+	"\x05error\x18\x03 \x01(\v2\x17.domain.common.v1.ErrorH\x00R\x05error\x88\x01\x01B\b\n" +
+	"\x06_error2\x8c\v\n" +
 	"\x18TaskOutcomeDomainService\x12r\n" +
 	"\x11CreateTaskOutcome\x12-.domain.operation.v1.CreateTaskOutcomeRequest\x1a..domain.operation.v1.CreateTaskOutcomeResponse\x12l\n" +
 	"\x0fReadTaskOutcome\x12+.domain.operation.v1.ReadTaskOutcomeRequest\x1a,.domain.operation.v1.ReadTaskOutcomeResponse\x12r\n" +
@@ -1559,7 +1762,8 @@ const file_domain_operation_task_outcome_task_outcome_proto_rawDesc = "" +
 	"\x1aGetTaskOutcomeItemPageData\x126.domain.operation.v1.GetTaskOutcomeItemPageDataRequest\x1a7.domain.operation.v1.GetTaskOutcomeItemPageDataResponse\x12~\n" +
 	"\rListByJobTask\x125.domain.operation.v1.ListTaskOutcomesByJobTaskRequest\x1a6.domain.operation.v1.ListTaskOutcomesByJobTaskResponse\x12\x81\x01\n" +
 	"\x0eListByJobPhase\x126.domain.operation.v1.ListTaskOutcomesByJobPhaseRequest\x1a7.domain.operation.v1.ListTaskOutcomesByJobPhaseResponse\x12r\n" +
-	"\tListByJob\x121.domain.operation.v1.ListTaskOutcomesByJobRequest\x1a2.domain.operation.v1.ListTaskOutcomesByJobResponseB\xef\x01\n" +
+	"\tListByJob\x121.domain.operation.v1.ListTaskOutcomesByJobRequest\x1a2.domain.operation.v1.ListTaskOutcomesByJobResponse\x12\x9c\x01\n" +
+	"\x1fListCodedTaskOutcomeValuesByJob\x12;.domain.operation.v1.ListCodedTaskOutcomeValuesByJobRequest\x1a<.domain.operation.v1.ListCodedTaskOutcomeValuesByJobResponseB\xef\x01\n" +
 	"\x17com.domain.operation.v1B\x10TaskOutcomeProtoP\x01ZTgithub.com/erniealice/esqyma/pkg/schema/v1/domain/operation/task_outcome;operationv1\xa2\x02\x03DOX\xaa\x02\x13Domain.Operation.V1\xca\x02\x13Domain\\Operation\\V1\xe2\x02\x1fDomain\\Operation\\V1\\GPBMetadata\xea\x02\x15Domain::Operation::V1b\x06proto3"
 
 var (
@@ -1574,107 +1778,114 @@ func file_domain_operation_task_outcome_task_outcome_proto_rawDescGZIP() []byte 
 	return file_domain_operation_task_outcome_task_outcome_proto_rawDescData
 }
 
-var file_domain_operation_task_outcome_task_outcome_proto_msgTypes = make([]protoimpl.MessageInfo, 21)
+var file_domain_operation_task_outcome_task_outcome_proto_msgTypes = make([]protoimpl.MessageInfo, 24)
 var file_domain_operation_task_outcome_task_outcome_proto_goTypes = []any{
-	(*TaskOutcome)(nil),                        // 0: domain.operation.v1.TaskOutcome
-	(*CreateTaskOutcomeRequest)(nil),           // 1: domain.operation.v1.CreateTaskOutcomeRequest
-	(*CreateTaskOutcomeResponse)(nil),          // 2: domain.operation.v1.CreateTaskOutcomeResponse
-	(*ReadTaskOutcomeRequest)(nil),             // 3: domain.operation.v1.ReadTaskOutcomeRequest
-	(*ReadTaskOutcomeResponse)(nil),            // 4: domain.operation.v1.ReadTaskOutcomeResponse
-	(*UpdateTaskOutcomeRequest)(nil),           // 5: domain.operation.v1.UpdateTaskOutcomeRequest
-	(*UpdateTaskOutcomeResponse)(nil),          // 6: domain.operation.v1.UpdateTaskOutcomeResponse
-	(*DeleteTaskOutcomeRequest)(nil),           // 7: domain.operation.v1.DeleteTaskOutcomeRequest
-	(*DeleteTaskOutcomeResponse)(nil),          // 8: domain.operation.v1.DeleteTaskOutcomeResponse
-	(*ListTaskOutcomesRequest)(nil),            // 9: domain.operation.v1.ListTaskOutcomesRequest
-	(*ListTaskOutcomesResponse)(nil),           // 10: domain.operation.v1.ListTaskOutcomesResponse
-	(*GetTaskOutcomeListPageDataRequest)(nil),  // 11: domain.operation.v1.GetTaskOutcomeListPageDataRequest
-	(*GetTaskOutcomeListPageDataResponse)(nil), // 12: domain.operation.v1.GetTaskOutcomeListPageDataResponse
-	(*GetTaskOutcomeItemPageDataRequest)(nil),  // 13: domain.operation.v1.GetTaskOutcomeItemPageDataRequest
-	(*GetTaskOutcomeItemPageDataResponse)(nil), // 14: domain.operation.v1.GetTaskOutcomeItemPageDataResponse
-	(*ListTaskOutcomesByJobTaskRequest)(nil),   // 15: domain.operation.v1.ListTaskOutcomesByJobTaskRequest
-	(*ListTaskOutcomesByJobTaskResponse)(nil),  // 16: domain.operation.v1.ListTaskOutcomesByJobTaskResponse
-	(*ListTaskOutcomesByJobPhaseRequest)(nil),  // 17: domain.operation.v1.ListTaskOutcomesByJobPhaseRequest
-	(*ListTaskOutcomesByJobPhaseResponse)(nil), // 18: domain.operation.v1.ListTaskOutcomesByJobPhaseResponse
-	(*ListTaskOutcomesByJobRequest)(nil),       // 19: domain.operation.v1.ListTaskOutcomesByJobRequest
-	(*ListTaskOutcomesByJobResponse)(nil),      // 20: domain.operation.v1.ListTaskOutcomesByJobResponse
-	(*job_task.JobTask)(nil),                   // 21: domain.operation.v1.JobTask
-	(*outcome_criteria.OutcomeCriteria)(nil),   // 22: domain.operation.v1.OutcomeCriteria
-	(enums.CriteriaType)(0),                    // 23: domain.operation.v1.CriteriaType
-	(enums.Determination)(0),                   // 24: domain.operation.v1.Determination
-	(enums.DeterminationSource)(0),             // 25: domain.operation.v1.DeterminationSource
-	(*common.Error)(nil),                       // 26: domain.common.v1.Error
-	(*common.SearchRequest)(nil),               // 27: domain.common.v1.SearchRequest
-	(*common.FilterRequest)(nil),               // 28: domain.common.v1.FilterRequest
-	(*common.SortRequest)(nil),                 // 29: domain.common.v1.SortRequest
-	(*common.PaginationRequest)(nil),           // 30: domain.common.v1.PaginationRequest
-	(*common.PaginationResponse)(nil),          // 31: domain.common.v1.PaginationResponse
-	(*common.SearchResult)(nil),                // 32: domain.common.v1.SearchResult
+	(*TaskOutcome)(nil),                             // 0: domain.operation.v1.TaskOutcome
+	(*CreateTaskOutcomeRequest)(nil),                // 1: domain.operation.v1.CreateTaskOutcomeRequest
+	(*CreateTaskOutcomeResponse)(nil),               // 2: domain.operation.v1.CreateTaskOutcomeResponse
+	(*ReadTaskOutcomeRequest)(nil),                  // 3: domain.operation.v1.ReadTaskOutcomeRequest
+	(*ReadTaskOutcomeResponse)(nil),                 // 4: domain.operation.v1.ReadTaskOutcomeResponse
+	(*UpdateTaskOutcomeRequest)(nil),                // 5: domain.operation.v1.UpdateTaskOutcomeRequest
+	(*UpdateTaskOutcomeResponse)(nil),               // 6: domain.operation.v1.UpdateTaskOutcomeResponse
+	(*DeleteTaskOutcomeRequest)(nil),                // 7: domain.operation.v1.DeleteTaskOutcomeRequest
+	(*DeleteTaskOutcomeResponse)(nil),               // 8: domain.operation.v1.DeleteTaskOutcomeResponse
+	(*ListTaskOutcomesRequest)(nil),                 // 9: domain.operation.v1.ListTaskOutcomesRequest
+	(*ListTaskOutcomesResponse)(nil),                // 10: domain.operation.v1.ListTaskOutcomesResponse
+	(*GetTaskOutcomeListPageDataRequest)(nil),       // 11: domain.operation.v1.GetTaskOutcomeListPageDataRequest
+	(*GetTaskOutcomeListPageDataResponse)(nil),      // 12: domain.operation.v1.GetTaskOutcomeListPageDataResponse
+	(*GetTaskOutcomeItemPageDataRequest)(nil),       // 13: domain.operation.v1.GetTaskOutcomeItemPageDataRequest
+	(*GetTaskOutcomeItemPageDataResponse)(nil),      // 14: domain.operation.v1.GetTaskOutcomeItemPageDataResponse
+	(*ListTaskOutcomesByJobTaskRequest)(nil),        // 15: domain.operation.v1.ListTaskOutcomesByJobTaskRequest
+	(*ListTaskOutcomesByJobTaskResponse)(nil),       // 16: domain.operation.v1.ListTaskOutcomesByJobTaskResponse
+	(*ListTaskOutcomesByJobPhaseRequest)(nil),       // 17: domain.operation.v1.ListTaskOutcomesByJobPhaseRequest
+	(*ListTaskOutcomesByJobPhaseResponse)(nil),      // 18: domain.operation.v1.ListTaskOutcomesByJobPhaseResponse
+	(*ListTaskOutcomesByJobRequest)(nil),            // 19: domain.operation.v1.ListTaskOutcomesByJobRequest
+	(*ListTaskOutcomesByJobResponse)(nil),           // 20: domain.operation.v1.ListTaskOutcomesByJobResponse
+	(*ListCodedTaskOutcomeValuesByJobRequest)(nil),  // 21: domain.operation.v1.ListCodedTaskOutcomeValuesByJobRequest
+	(*CodedTaskOutcomeValue)(nil),                   // 22: domain.operation.v1.CodedTaskOutcomeValue
+	(*ListCodedTaskOutcomeValuesByJobResponse)(nil), // 23: domain.operation.v1.ListCodedTaskOutcomeValuesByJobResponse
+	(*job_task.JobTask)(nil),                        // 24: domain.operation.v1.JobTask
+	(*outcome_criteria.OutcomeCriteria)(nil),        // 25: domain.operation.v1.OutcomeCriteria
+	(enums.CriteriaType)(0),                         // 26: domain.operation.v1.CriteriaType
+	(enums.Determination)(0),                        // 27: domain.operation.v1.Determination
+	(enums.DeterminationSource)(0),                  // 28: domain.operation.v1.DeterminationSource
+	(*common.Error)(nil),                            // 29: domain.common.v1.Error
+	(*common.SearchRequest)(nil),                    // 30: domain.common.v1.SearchRequest
+	(*common.FilterRequest)(nil),                    // 31: domain.common.v1.FilterRequest
+	(*common.SortRequest)(nil),                      // 32: domain.common.v1.SortRequest
+	(*common.PaginationRequest)(nil),                // 33: domain.common.v1.PaginationRequest
+	(*common.PaginationResponse)(nil),               // 34: domain.common.v1.PaginationResponse
+	(*common.SearchResult)(nil),                     // 35: domain.common.v1.SearchResult
 }
 var file_domain_operation_task_outcome_task_outcome_proto_depIdxs = []int32{
-	21, // 0: domain.operation.v1.TaskOutcome.job_task:type_name -> domain.operation.v1.JobTask
-	22, // 1: domain.operation.v1.TaskOutcome.criteria_version:type_name -> domain.operation.v1.OutcomeCriteria
-	23, // 2: domain.operation.v1.TaskOutcome.criteria_type:type_name -> domain.operation.v1.CriteriaType
-	24, // 3: domain.operation.v1.TaskOutcome.determination:type_name -> domain.operation.v1.Determination
-	25, // 4: domain.operation.v1.TaskOutcome.determination_source:type_name -> domain.operation.v1.DeterminationSource
-	24, // 5: domain.operation.v1.TaskOutcome.auto_proposed_determination:type_name -> domain.operation.v1.Determination
+	24, // 0: domain.operation.v1.TaskOutcome.job_task:type_name -> domain.operation.v1.JobTask
+	25, // 1: domain.operation.v1.TaskOutcome.criteria_version:type_name -> domain.operation.v1.OutcomeCriteria
+	26, // 2: domain.operation.v1.TaskOutcome.criteria_type:type_name -> domain.operation.v1.CriteriaType
+	27, // 3: domain.operation.v1.TaskOutcome.determination:type_name -> domain.operation.v1.Determination
+	28, // 4: domain.operation.v1.TaskOutcome.determination_source:type_name -> domain.operation.v1.DeterminationSource
+	27, // 5: domain.operation.v1.TaskOutcome.auto_proposed_determination:type_name -> domain.operation.v1.Determination
 	0,  // 6: domain.operation.v1.CreateTaskOutcomeRequest.data:type_name -> domain.operation.v1.TaskOutcome
 	0,  // 7: domain.operation.v1.CreateTaskOutcomeResponse.data:type_name -> domain.operation.v1.TaskOutcome
-	26, // 8: domain.operation.v1.CreateTaskOutcomeResponse.error:type_name -> domain.common.v1.Error
+	29, // 8: domain.operation.v1.CreateTaskOutcomeResponse.error:type_name -> domain.common.v1.Error
 	0,  // 9: domain.operation.v1.ReadTaskOutcomeRequest.data:type_name -> domain.operation.v1.TaskOutcome
 	0,  // 10: domain.operation.v1.ReadTaskOutcomeResponse.data:type_name -> domain.operation.v1.TaskOutcome
-	26, // 11: domain.operation.v1.ReadTaskOutcomeResponse.error:type_name -> domain.common.v1.Error
+	29, // 11: domain.operation.v1.ReadTaskOutcomeResponse.error:type_name -> domain.common.v1.Error
 	0,  // 12: domain.operation.v1.UpdateTaskOutcomeRequest.data:type_name -> domain.operation.v1.TaskOutcome
 	0,  // 13: domain.operation.v1.UpdateTaskOutcomeResponse.data:type_name -> domain.operation.v1.TaskOutcome
-	26, // 14: domain.operation.v1.UpdateTaskOutcomeResponse.error:type_name -> domain.common.v1.Error
+	29, // 14: domain.operation.v1.UpdateTaskOutcomeResponse.error:type_name -> domain.common.v1.Error
 	0,  // 15: domain.operation.v1.DeleteTaskOutcomeRequest.data:type_name -> domain.operation.v1.TaskOutcome
-	26, // 16: domain.operation.v1.DeleteTaskOutcomeResponse.error:type_name -> domain.common.v1.Error
-	27, // 17: domain.operation.v1.ListTaskOutcomesRequest.search:type_name -> domain.common.v1.SearchRequest
-	28, // 18: domain.operation.v1.ListTaskOutcomesRequest.filters:type_name -> domain.common.v1.FilterRequest
-	29, // 19: domain.operation.v1.ListTaskOutcomesRequest.sort:type_name -> domain.common.v1.SortRequest
-	30, // 20: domain.operation.v1.ListTaskOutcomesRequest.pagination:type_name -> domain.common.v1.PaginationRequest
+	29, // 16: domain.operation.v1.DeleteTaskOutcomeResponse.error:type_name -> domain.common.v1.Error
+	30, // 17: domain.operation.v1.ListTaskOutcomesRequest.search:type_name -> domain.common.v1.SearchRequest
+	31, // 18: domain.operation.v1.ListTaskOutcomesRequest.filters:type_name -> domain.common.v1.FilterRequest
+	32, // 19: domain.operation.v1.ListTaskOutcomesRequest.sort:type_name -> domain.common.v1.SortRequest
+	33, // 20: domain.operation.v1.ListTaskOutcomesRequest.pagination:type_name -> domain.common.v1.PaginationRequest
 	0,  // 21: domain.operation.v1.ListTaskOutcomesResponse.data:type_name -> domain.operation.v1.TaskOutcome
-	26, // 22: domain.operation.v1.ListTaskOutcomesResponse.error:type_name -> domain.common.v1.Error
-	30, // 23: domain.operation.v1.GetTaskOutcomeListPageDataRequest.pagination:type_name -> domain.common.v1.PaginationRequest
-	28, // 24: domain.operation.v1.GetTaskOutcomeListPageDataRequest.filters:type_name -> domain.common.v1.FilterRequest
-	29, // 25: domain.operation.v1.GetTaskOutcomeListPageDataRequest.sort:type_name -> domain.common.v1.SortRequest
-	27, // 26: domain.operation.v1.GetTaskOutcomeListPageDataRequest.search:type_name -> domain.common.v1.SearchRequest
+	29, // 22: domain.operation.v1.ListTaskOutcomesResponse.error:type_name -> domain.common.v1.Error
+	33, // 23: domain.operation.v1.GetTaskOutcomeListPageDataRequest.pagination:type_name -> domain.common.v1.PaginationRequest
+	31, // 24: domain.operation.v1.GetTaskOutcomeListPageDataRequest.filters:type_name -> domain.common.v1.FilterRequest
+	32, // 25: domain.operation.v1.GetTaskOutcomeListPageDataRequest.sort:type_name -> domain.common.v1.SortRequest
+	30, // 26: domain.operation.v1.GetTaskOutcomeListPageDataRequest.search:type_name -> domain.common.v1.SearchRequest
 	0,  // 27: domain.operation.v1.GetTaskOutcomeListPageDataResponse.task_outcome_list:type_name -> domain.operation.v1.TaskOutcome
-	31, // 28: domain.operation.v1.GetTaskOutcomeListPageDataResponse.pagination:type_name -> domain.common.v1.PaginationResponse
-	32, // 29: domain.operation.v1.GetTaskOutcomeListPageDataResponse.search_results:type_name -> domain.common.v1.SearchResult
-	26, // 30: domain.operation.v1.GetTaskOutcomeListPageDataResponse.error:type_name -> domain.common.v1.Error
+	34, // 28: domain.operation.v1.GetTaskOutcomeListPageDataResponse.pagination:type_name -> domain.common.v1.PaginationResponse
+	35, // 29: domain.operation.v1.GetTaskOutcomeListPageDataResponse.search_results:type_name -> domain.common.v1.SearchResult
+	29, // 30: domain.operation.v1.GetTaskOutcomeListPageDataResponse.error:type_name -> domain.common.v1.Error
 	0,  // 31: domain.operation.v1.GetTaskOutcomeItemPageDataResponse.task_outcome:type_name -> domain.operation.v1.TaskOutcome
-	26, // 32: domain.operation.v1.GetTaskOutcomeItemPageDataResponse.error:type_name -> domain.common.v1.Error
+	29, // 32: domain.operation.v1.GetTaskOutcomeItemPageDataResponse.error:type_name -> domain.common.v1.Error
 	0,  // 33: domain.operation.v1.ListTaskOutcomesByJobTaskResponse.task_outcomes:type_name -> domain.operation.v1.TaskOutcome
-	26, // 34: domain.operation.v1.ListTaskOutcomesByJobTaskResponse.error:type_name -> domain.common.v1.Error
+	29, // 34: domain.operation.v1.ListTaskOutcomesByJobTaskResponse.error:type_name -> domain.common.v1.Error
 	0,  // 35: domain.operation.v1.ListTaskOutcomesByJobPhaseResponse.task_outcomes:type_name -> domain.operation.v1.TaskOutcome
-	26, // 36: domain.operation.v1.ListTaskOutcomesByJobPhaseResponse.error:type_name -> domain.common.v1.Error
+	29, // 36: domain.operation.v1.ListTaskOutcomesByJobPhaseResponse.error:type_name -> domain.common.v1.Error
 	0,  // 37: domain.operation.v1.ListTaskOutcomesByJobResponse.task_outcomes:type_name -> domain.operation.v1.TaskOutcome
-	26, // 38: domain.operation.v1.ListTaskOutcomesByJobResponse.error:type_name -> domain.common.v1.Error
-	1,  // 39: domain.operation.v1.TaskOutcomeDomainService.CreateTaskOutcome:input_type -> domain.operation.v1.CreateTaskOutcomeRequest
-	3,  // 40: domain.operation.v1.TaskOutcomeDomainService.ReadTaskOutcome:input_type -> domain.operation.v1.ReadTaskOutcomeRequest
-	5,  // 41: domain.operation.v1.TaskOutcomeDomainService.UpdateTaskOutcome:input_type -> domain.operation.v1.UpdateTaskOutcomeRequest
-	7,  // 42: domain.operation.v1.TaskOutcomeDomainService.DeleteTaskOutcome:input_type -> domain.operation.v1.DeleteTaskOutcomeRequest
-	9,  // 43: domain.operation.v1.TaskOutcomeDomainService.ListTaskOutcomes:input_type -> domain.operation.v1.ListTaskOutcomesRequest
-	11, // 44: domain.operation.v1.TaskOutcomeDomainService.GetTaskOutcomeListPageData:input_type -> domain.operation.v1.GetTaskOutcomeListPageDataRequest
-	13, // 45: domain.operation.v1.TaskOutcomeDomainService.GetTaskOutcomeItemPageData:input_type -> domain.operation.v1.GetTaskOutcomeItemPageDataRequest
-	15, // 46: domain.operation.v1.TaskOutcomeDomainService.ListByJobTask:input_type -> domain.operation.v1.ListTaskOutcomesByJobTaskRequest
-	17, // 47: domain.operation.v1.TaskOutcomeDomainService.ListByJobPhase:input_type -> domain.operation.v1.ListTaskOutcomesByJobPhaseRequest
-	19, // 48: domain.operation.v1.TaskOutcomeDomainService.ListByJob:input_type -> domain.operation.v1.ListTaskOutcomesByJobRequest
-	2,  // 49: domain.operation.v1.TaskOutcomeDomainService.CreateTaskOutcome:output_type -> domain.operation.v1.CreateTaskOutcomeResponse
-	4,  // 50: domain.operation.v1.TaskOutcomeDomainService.ReadTaskOutcome:output_type -> domain.operation.v1.ReadTaskOutcomeResponse
-	6,  // 51: domain.operation.v1.TaskOutcomeDomainService.UpdateTaskOutcome:output_type -> domain.operation.v1.UpdateTaskOutcomeResponse
-	8,  // 52: domain.operation.v1.TaskOutcomeDomainService.DeleteTaskOutcome:output_type -> domain.operation.v1.DeleteTaskOutcomeResponse
-	10, // 53: domain.operation.v1.TaskOutcomeDomainService.ListTaskOutcomes:output_type -> domain.operation.v1.ListTaskOutcomesResponse
-	12, // 54: domain.operation.v1.TaskOutcomeDomainService.GetTaskOutcomeListPageData:output_type -> domain.operation.v1.GetTaskOutcomeListPageDataResponse
-	14, // 55: domain.operation.v1.TaskOutcomeDomainService.GetTaskOutcomeItemPageData:output_type -> domain.operation.v1.GetTaskOutcomeItemPageDataResponse
-	16, // 56: domain.operation.v1.TaskOutcomeDomainService.ListByJobTask:output_type -> domain.operation.v1.ListTaskOutcomesByJobTaskResponse
-	18, // 57: domain.operation.v1.TaskOutcomeDomainService.ListByJobPhase:output_type -> domain.operation.v1.ListTaskOutcomesByJobPhaseResponse
-	20, // 58: domain.operation.v1.TaskOutcomeDomainService.ListByJob:output_type -> domain.operation.v1.ListTaskOutcomesByJobResponse
-	49, // [49:59] is the sub-list for method output_type
-	39, // [39:49] is the sub-list for method input_type
-	39, // [39:39] is the sub-list for extension type_name
-	39, // [39:39] is the sub-list for extension extendee
-	0,  // [0:39] is the sub-list for field type_name
+	29, // 38: domain.operation.v1.ListTaskOutcomesByJobResponse.error:type_name -> domain.common.v1.Error
+	22, // 39: domain.operation.v1.ListCodedTaskOutcomeValuesByJobResponse.values:type_name -> domain.operation.v1.CodedTaskOutcomeValue
+	29, // 40: domain.operation.v1.ListCodedTaskOutcomeValuesByJobResponse.error:type_name -> domain.common.v1.Error
+	1,  // 41: domain.operation.v1.TaskOutcomeDomainService.CreateTaskOutcome:input_type -> domain.operation.v1.CreateTaskOutcomeRequest
+	3,  // 42: domain.operation.v1.TaskOutcomeDomainService.ReadTaskOutcome:input_type -> domain.operation.v1.ReadTaskOutcomeRequest
+	5,  // 43: domain.operation.v1.TaskOutcomeDomainService.UpdateTaskOutcome:input_type -> domain.operation.v1.UpdateTaskOutcomeRequest
+	7,  // 44: domain.operation.v1.TaskOutcomeDomainService.DeleteTaskOutcome:input_type -> domain.operation.v1.DeleteTaskOutcomeRequest
+	9,  // 45: domain.operation.v1.TaskOutcomeDomainService.ListTaskOutcomes:input_type -> domain.operation.v1.ListTaskOutcomesRequest
+	11, // 46: domain.operation.v1.TaskOutcomeDomainService.GetTaskOutcomeListPageData:input_type -> domain.operation.v1.GetTaskOutcomeListPageDataRequest
+	13, // 47: domain.operation.v1.TaskOutcomeDomainService.GetTaskOutcomeItemPageData:input_type -> domain.operation.v1.GetTaskOutcomeItemPageDataRequest
+	15, // 48: domain.operation.v1.TaskOutcomeDomainService.ListByJobTask:input_type -> domain.operation.v1.ListTaskOutcomesByJobTaskRequest
+	17, // 49: domain.operation.v1.TaskOutcomeDomainService.ListByJobPhase:input_type -> domain.operation.v1.ListTaskOutcomesByJobPhaseRequest
+	19, // 50: domain.operation.v1.TaskOutcomeDomainService.ListByJob:input_type -> domain.operation.v1.ListTaskOutcomesByJobRequest
+	21, // 51: domain.operation.v1.TaskOutcomeDomainService.ListCodedTaskOutcomeValuesByJob:input_type -> domain.operation.v1.ListCodedTaskOutcomeValuesByJobRequest
+	2,  // 52: domain.operation.v1.TaskOutcomeDomainService.CreateTaskOutcome:output_type -> domain.operation.v1.CreateTaskOutcomeResponse
+	4,  // 53: domain.operation.v1.TaskOutcomeDomainService.ReadTaskOutcome:output_type -> domain.operation.v1.ReadTaskOutcomeResponse
+	6,  // 54: domain.operation.v1.TaskOutcomeDomainService.UpdateTaskOutcome:output_type -> domain.operation.v1.UpdateTaskOutcomeResponse
+	8,  // 55: domain.operation.v1.TaskOutcomeDomainService.DeleteTaskOutcome:output_type -> domain.operation.v1.DeleteTaskOutcomeResponse
+	10, // 56: domain.operation.v1.TaskOutcomeDomainService.ListTaskOutcomes:output_type -> domain.operation.v1.ListTaskOutcomesResponse
+	12, // 57: domain.operation.v1.TaskOutcomeDomainService.GetTaskOutcomeListPageData:output_type -> domain.operation.v1.GetTaskOutcomeListPageDataResponse
+	14, // 58: domain.operation.v1.TaskOutcomeDomainService.GetTaskOutcomeItemPageData:output_type -> domain.operation.v1.GetTaskOutcomeItemPageDataResponse
+	16, // 59: domain.operation.v1.TaskOutcomeDomainService.ListByJobTask:output_type -> domain.operation.v1.ListTaskOutcomesByJobTaskResponse
+	18, // 60: domain.operation.v1.TaskOutcomeDomainService.ListByJobPhase:output_type -> domain.operation.v1.ListTaskOutcomesByJobPhaseResponse
+	20, // 61: domain.operation.v1.TaskOutcomeDomainService.ListByJob:output_type -> domain.operation.v1.ListTaskOutcomesByJobResponse
+	23, // 62: domain.operation.v1.TaskOutcomeDomainService.ListCodedTaskOutcomeValuesByJob:output_type -> domain.operation.v1.ListCodedTaskOutcomeValuesByJobResponse
+	52, // [52:63] is the sub-list for method output_type
+	41, // [41:52] is the sub-list for method input_type
+	41, // [41:41] is the sub-list for extension type_name
+	41, // [41:41] is the sub-list for extension extendee
+	0,  // [0:41] is the sub-list for field type_name
 }
 
 func init() { file_domain_operation_task_outcome_task_outcome_proto_init() }
@@ -1695,13 +1906,15 @@ func file_domain_operation_task_outcome_task_outcome_proto_init() {
 	file_domain_operation_task_outcome_task_outcome_proto_msgTypes[16].OneofWrappers = []any{}
 	file_domain_operation_task_outcome_task_outcome_proto_msgTypes[18].OneofWrappers = []any{}
 	file_domain_operation_task_outcome_task_outcome_proto_msgTypes[20].OneofWrappers = []any{}
+	file_domain_operation_task_outcome_task_outcome_proto_msgTypes[22].OneofWrappers = []any{}
+	file_domain_operation_task_outcome_task_outcome_proto_msgTypes[23].OneofWrappers = []any{}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
 		File: protoimpl.DescBuilder{
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_domain_operation_task_outcome_task_outcome_proto_rawDesc), len(file_domain_operation_task_outcome_task_outcome_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   21,
+			NumMessages:   24,
 			NumExtensions: 0,
 			NumServices:   1,
 		},

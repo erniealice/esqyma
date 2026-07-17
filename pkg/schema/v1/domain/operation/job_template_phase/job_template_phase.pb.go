@@ -65,8 +65,13 @@ type JobTemplatePhase struct {
 	// grain, so this field is NOT part of that match; it carries the sub-deliverable
 	// identity used for display (e.g. the outcome-matrix phase-header parenthetical).
 	OutputProductVariantId *string `protobuf:"bytes,21,opt,name=output_product_variant_id,json=outputProductVariantId,proto3,oneof" json:"output_product_variant_id,omitempty"`
-	unknownFields          protoimpl.UnknownFields
-	sizeCache              protoimpl.SizeCache
+	// Stable machine key for this phase within its template — the path pivot for
+	// document-template placeholders (parity with JobCategory.code). Unique per
+	// parent job_template (message-level unique_together). Path-normalized:
+	// lower(btrim(code)) matching ^[a-z][a-z0-9_]*$; NULL where unanchored.
+	Code          *string `protobuf:"bytes,30,opt,name=code,proto3,oneof" json:"code,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
 }
 
 func (x *JobTemplatePhase) Reset() {
@@ -242,6 +247,13 @@ func (x *JobTemplatePhase) GetScoringSchemeId() string {
 func (x *JobTemplatePhase) GetOutputProductVariantId() string {
 	if x != nil && x.OutputProductVariantId != nil {
 		return *x.OutputProductVariantId
+	}
+	return ""
+}
+
+func (x *JobTemplatePhase) GetCode() string {
+	if x != nil && x.Code != nil {
+		return *x.Code
 	}
 	return ""
 }
@@ -1139,7 +1151,7 @@ var File_domain_operation_job_template_phase_job_template_phase_proto protorefle
 
 const file_domain_operation_job_template_phase_job_template_phase_proto_rawDesc = "" +
 	"\n" +
-	"<domain/operation/job_template_phase/job_template_phase.proto\x12\x13domain.operation.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1adomain/common/search.proto\x1a0domain/operation/job_template/job_template.proto\x1a\x10options/db.proto\"\xca\v\n" +
+	"<domain/operation/job_template_phase/job_template_phase.proto\x12\x13domain.operation.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1adomain/common/search.proto\x1a0domain/operation/job_template/job_template.proto\x1a\x10options/db.proto\"\xd6\f\n" +
 	"\x10JobTemplatePhase\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12&\n" +
 	"\fdate_created\x18\x02 \x01(\x03H\x00R\vdateCreated\x88\x01\x01\x12;\n" +
@@ -1171,7 +1183,8 @@ const file_domain_operation_job_template_phase_job_template_phase_proto_rawDesc 
 	"\x11scoring_scheme_id\x18\x14 \x01(\tB\x14\x82\xb5\x18\x10\n" +
 	"\x0escoring_schemeH\x0eR\x0fscoringSchemeId\x88\x01\x01\x12W\n" +
 	"\x19output_product_variant_id\x18\x15 \x01(\tB\x17\x82\xb5\x18\x13\n" +
-	"\x0fproduct_variant\x18\x01H\x0fR\x16outputProductVariantId\x88\x01\x01:\x06\x8a\xb5\x18\x02\b\x01B\x0f\n" +
+	"\x0fproduct_variant\x18\x01H\x0fR\x16outputProductVariantId\x88\x01\x01\x12k\n" +
+	"\x04code\x18\x1e \x01(\tBR\x82\xb5\x18N\x18\x01*Jcode IS NULL OR (code = lower(btrim(code)) AND code ~ '^[a-z][a-z0-9_]*$')H\x10R\x04code\x88\x01\x01:\x1c\x8a\xb5\x18\x18\b\x01\x1a\x14job_template_id,codeB\x0f\n" +
 	"\r_date_createdB\x16\n" +
 	"\x14_date_created_stringB\x10\n" +
 	"\x0e_date_modifiedB\x17\n" +
@@ -1187,7 +1200,8 @@ const file_domain_operation_job_template_phase_job_template_phase_proto_rawDesc 
 	"\x0f_billing_amountB\x13\n" +
 	"\x11_billing_currencyB\x14\n" +
 	"\x12_scoring_scheme_idB\x1c\n" +
-	"\x1a_output_product_variant_idJ\x04\b\x16\x10\x1e\"Z\n" +
+	"\x1a_output_product_variant_idB\a\n" +
+	"\x05_codeJ\x04\b\x16\x10\x1e\"Z\n" +
 	"\x1dCreateJobTemplatePhaseRequest\x129\n" +
 	"\x04data\x18\x01 \x01(\v2%.domain.operation.v1.JobTemplatePhaseR\x04data\"\xb3\x01\n" +
 	"\x1eCreateJobTemplatePhaseResponse\x129\n" +

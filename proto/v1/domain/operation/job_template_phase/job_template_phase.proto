@@ -15,6 +15,7 @@ import "options/db.proto";
 
 message JobTemplatePhase {
   option (options.v1.table).table = true;
+  option (options.v1.table).unique_together = "job_template_id,code";
 
   string id = 1;
   optional int64 date_created = 2;
@@ -58,6 +59,13 @@ message JobTemplatePhase {
   optional string output_product_variant_id = 21 [(options.v1.db).references = "product_variant", (options.v1.db).index = true];
 
   reserved 22 to 29;
+
+  // Stable machine key for this phase within its template — the path pivot for
+  // document-template placeholders (parity with JobCategory.code). Unique per
+  // parent job_template (message-level unique_together). Path-normalized:
+  // lower(btrim(code)) matching ^[a-z][a-z0-9_]*$; NULL where unanchored.
+  optional string code = 30 [(options.v1.db).index = true,
+    (options.v1.db).check = "code IS NULL OR (code = lower(btrim(code)) AND code ~ '^[a-z][a-z0-9_]*$')"];
 }
 
 service JobTemplatePhaseDomainService {

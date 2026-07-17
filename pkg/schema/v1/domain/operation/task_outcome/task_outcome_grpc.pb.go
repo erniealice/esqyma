@@ -19,16 +19,17 @@ import (
 const _ = grpc.SupportPackageIsVersion9
 
 const (
-	TaskOutcomeDomainService_CreateTaskOutcome_FullMethodName          = "/domain.operation.v1.TaskOutcomeDomainService/CreateTaskOutcome"
-	TaskOutcomeDomainService_ReadTaskOutcome_FullMethodName            = "/domain.operation.v1.TaskOutcomeDomainService/ReadTaskOutcome"
-	TaskOutcomeDomainService_UpdateTaskOutcome_FullMethodName          = "/domain.operation.v1.TaskOutcomeDomainService/UpdateTaskOutcome"
-	TaskOutcomeDomainService_DeleteTaskOutcome_FullMethodName          = "/domain.operation.v1.TaskOutcomeDomainService/DeleteTaskOutcome"
-	TaskOutcomeDomainService_ListTaskOutcomes_FullMethodName           = "/domain.operation.v1.TaskOutcomeDomainService/ListTaskOutcomes"
-	TaskOutcomeDomainService_GetTaskOutcomeListPageData_FullMethodName = "/domain.operation.v1.TaskOutcomeDomainService/GetTaskOutcomeListPageData"
-	TaskOutcomeDomainService_GetTaskOutcomeItemPageData_FullMethodName = "/domain.operation.v1.TaskOutcomeDomainService/GetTaskOutcomeItemPageData"
-	TaskOutcomeDomainService_ListByJobTask_FullMethodName              = "/domain.operation.v1.TaskOutcomeDomainService/ListByJobTask"
-	TaskOutcomeDomainService_ListByJobPhase_FullMethodName             = "/domain.operation.v1.TaskOutcomeDomainService/ListByJobPhase"
-	TaskOutcomeDomainService_ListByJob_FullMethodName                  = "/domain.operation.v1.TaskOutcomeDomainService/ListByJob"
+	TaskOutcomeDomainService_CreateTaskOutcome_FullMethodName               = "/domain.operation.v1.TaskOutcomeDomainService/CreateTaskOutcome"
+	TaskOutcomeDomainService_ReadTaskOutcome_FullMethodName                 = "/domain.operation.v1.TaskOutcomeDomainService/ReadTaskOutcome"
+	TaskOutcomeDomainService_UpdateTaskOutcome_FullMethodName               = "/domain.operation.v1.TaskOutcomeDomainService/UpdateTaskOutcome"
+	TaskOutcomeDomainService_DeleteTaskOutcome_FullMethodName               = "/domain.operation.v1.TaskOutcomeDomainService/DeleteTaskOutcome"
+	TaskOutcomeDomainService_ListTaskOutcomes_FullMethodName                = "/domain.operation.v1.TaskOutcomeDomainService/ListTaskOutcomes"
+	TaskOutcomeDomainService_GetTaskOutcomeListPageData_FullMethodName      = "/domain.operation.v1.TaskOutcomeDomainService/GetTaskOutcomeListPageData"
+	TaskOutcomeDomainService_GetTaskOutcomeItemPageData_FullMethodName      = "/domain.operation.v1.TaskOutcomeDomainService/GetTaskOutcomeItemPageData"
+	TaskOutcomeDomainService_ListByJobTask_FullMethodName                   = "/domain.operation.v1.TaskOutcomeDomainService/ListByJobTask"
+	TaskOutcomeDomainService_ListByJobPhase_FullMethodName                  = "/domain.operation.v1.TaskOutcomeDomainService/ListByJobPhase"
+	TaskOutcomeDomainService_ListByJob_FullMethodName                       = "/domain.operation.v1.TaskOutcomeDomainService/ListByJob"
+	TaskOutcomeDomainService_ListCodedTaskOutcomeValuesByJob_FullMethodName = "/domain.operation.v1.TaskOutcomeDomainService/ListCodedTaskOutcomeValuesByJob"
 )
 
 // TaskOutcomeDomainServiceClient is the client API for TaskOutcomeDomainService service.
@@ -48,6 +49,15 @@ type TaskOutcomeDomainServiceClient interface {
 	ListByJobPhase(ctx context.Context, in *ListTaskOutcomesByJobPhaseRequest, opts ...grpc.CallOption) (*ListTaskOutcomesByJobPhaseResponse, error)
 	// Extra: filter by job (multi-join via job_task → job_phase → job)
 	ListByJob(ctx context.Context, in *ListTaskOutcomesByJobRequest, opts ...grpc.CallOption) (*ListTaskOutcomesByJobResponse, error)
+	// Extra: coded outcome values for a set of jobs. Walks each job's instance
+	// graph (job → job_phase → job_task) back to its template ancestry
+	// (job_template_phase / job_template_task / template_task_criteria /
+	// outcome_criteria) and returns the LATEST active outcome per
+	// (job_task, criterion) together with the template-side phase/task/criterion
+	// codes. Workspace is enforced from trusted context, never the request; the
+	// job set is the caller-supplied allowlist. A LEFT JOIN to task_outcome means
+	// numeric_value is unset when no outcome exists (distinct from a recorded 0).
+	ListCodedTaskOutcomeValuesByJob(ctx context.Context, in *ListCodedTaskOutcomeValuesByJobRequest, opts ...grpc.CallOption) (*ListCodedTaskOutcomeValuesByJobResponse, error)
 }
 
 type taskOutcomeDomainServiceClient struct {
@@ -158,6 +168,16 @@ func (c *taskOutcomeDomainServiceClient) ListByJob(ctx context.Context, in *List
 	return out, nil
 }
 
+func (c *taskOutcomeDomainServiceClient) ListCodedTaskOutcomeValuesByJob(ctx context.Context, in *ListCodedTaskOutcomeValuesByJobRequest, opts ...grpc.CallOption) (*ListCodedTaskOutcomeValuesByJobResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(ListCodedTaskOutcomeValuesByJobResponse)
+	err := c.cc.Invoke(ctx, TaskOutcomeDomainService_ListCodedTaskOutcomeValuesByJob_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // TaskOutcomeDomainServiceServer is the server API for TaskOutcomeDomainService service.
 // All implementations must embed UnimplementedTaskOutcomeDomainServiceServer
 // for forward compatibility.
@@ -175,6 +195,15 @@ type TaskOutcomeDomainServiceServer interface {
 	ListByJobPhase(context.Context, *ListTaskOutcomesByJobPhaseRequest) (*ListTaskOutcomesByJobPhaseResponse, error)
 	// Extra: filter by job (multi-join via job_task → job_phase → job)
 	ListByJob(context.Context, *ListTaskOutcomesByJobRequest) (*ListTaskOutcomesByJobResponse, error)
+	// Extra: coded outcome values for a set of jobs. Walks each job's instance
+	// graph (job → job_phase → job_task) back to its template ancestry
+	// (job_template_phase / job_template_task / template_task_criteria /
+	// outcome_criteria) and returns the LATEST active outcome per
+	// (job_task, criterion) together with the template-side phase/task/criterion
+	// codes. Workspace is enforced from trusted context, never the request; the
+	// job set is the caller-supplied allowlist. A LEFT JOIN to task_outcome means
+	// numeric_value is unset when no outcome exists (distinct from a recorded 0).
+	ListCodedTaskOutcomeValuesByJob(context.Context, *ListCodedTaskOutcomeValuesByJobRequest) (*ListCodedTaskOutcomeValuesByJobResponse, error)
 	mustEmbedUnimplementedTaskOutcomeDomainServiceServer()
 }
 
@@ -214,6 +243,9 @@ func (UnimplementedTaskOutcomeDomainServiceServer) ListByJobPhase(context.Contex
 }
 func (UnimplementedTaskOutcomeDomainServiceServer) ListByJob(context.Context, *ListTaskOutcomesByJobRequest) (*ListTaskOutcomesByJobResponse, error) {
 	return nil, status.Error(codes.Unimplemented, "method ListByJob not implemented")
+}
+func (UnimplementedTaskOutcomeDomainServiceServer) ListCodedTaskOutcomeValuesByJob(context.Context, *ListCodedTaskOutcomeValuesByJobRequest) (*ListCodedTaskOutcomeValuesByJobResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method ListCodedTaskOutcomeValuesByJob not implemented")
 }
 func (UnimplementedTaskOutcomeDomainServiceServer) mustEmbedUnimplementedTaskOutcomeDomainServiceServer() {
 }
@@ -417,6 +449,24 @@ func _TaskOutcomeDomainService_ListByJob_Handler(srv interface{}, ctx context.Co
 	return interceptor(ctx, in, info, handler)
 }
 
+func _TaskOutcomeDomainService_ListCodedTaskOutcomeValuesByJob_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ListCodedTaskOutcomeValuesByJobRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(TaskOutcomeDomainServiceServer).ListCodedTaskOutcomeValuesByJob(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: TaskOutcomeDomainService_ListCodedTaskOutcomeValuesByJob_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(TaskOutcomeDomainServiceServer).ListCodedTaskOutcomeValuesByJob(ctx, req.(*ListCodedTaskOutcomeValuesByJobRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // TaskOutcomeDomainService_ServiceDesc is the grpc.ServiceDesc for TaskOutcomeDomainService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -463,6 +513,10 @@ var TaskOutcomeDomainService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "ListByJob",
 			Handler:    _TaskOutcomeDomainService_ListByJob_Handler,
+		},
+		{
+			MethodName: "ListCodedTaskOutcomeValuesByJob",
+			Handler:    _TaskOutcomeDomainService_ListCodedTaskOutcomeValuesByJob_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

@@ -15,6 +15,7 @@ import "options/db.proto";
 
 message JobTemplateTask {
   option (options.v1.table).table = true;
+  option (options.v1.table).unique_together = "job_template_phase_id,code";
 
   string id = 1;
   optional int64 date_created = 2;
@@ -40,6 +41,15 @@ message JobTemplateTask {
   optional string workflow_step_id = 22 [(options.v1.db).index = true];
 
   reserved 23 to 39;
+
+  // Stable machine key for this task within its phase — the path pivot for
+  // document-template placeholders (parity with JobCategory.code). Unique per
+  // parent job_template_phase (message-level unique_together); flat task codes
+  // may collide across sibling phases, so the grain is (phase, code).
+  // Path-normalized: lower(btrim(code)) matching ^[a-z][a-z0-9_]*$; NULL where
+  // unanchored.
+  optional string code = 40 [(options.v1.db).index = true,
+    (options.v1.db).check = "code IS NULL OR (code = lower(btrim(code)) AND code ~ '^[a-z][a-z0-9_]*$')"];
 }
 
 service JobTemplateTaskDomainService {

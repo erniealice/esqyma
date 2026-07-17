@@ -63,8 +63,18 @@ type OutcomeCriteria struct {
 	DateModified          *int64                  `protobuf:"varint,35,opt,name=date_modified,json=dateModified,proto3,oneof" json:"date_modified,omitempty"`
 	DateModifiedString    *string                 `protobuf:"bytes,36,opt,name=date_modified_string,json=dateModifiedString,proto3,oneof" json:"date_modified_string,omitempty"`
 	MinTextLength         *int32                  `protobuf:"varint,37,opt,name=min_text_length,json=minTextLength,proto3,oneof" json:"min_text_length,omitempty"`
-	unknownFields         protoimpl.UnknownFields
-	sizeCache             protoimpl.SizeCache
+	// Stable machine key for this criterion — the path pivot for document-template
+	// placeholders (parity with JobCategory.code). Path-normalized: lower(btrim(code))
+	// matching ^[a-z][a-z0-9_]*$; NULL where unanchored.
+	//
+	// Uniqueness is conditional and cannot be a plain unique_together: all versions
+	// sharing a criteria_group_id carry the SAME code (code is stable across the
+	// version lineage), while the CURRENT published row's code must be unique within
+	// (scope, workspace_id, industry_code). Both are enforced by partial unique
+	// indexes at the DB layer (predicate on active + published), not by this field.
+	Code          *string `protobuf:"bytes,38,opt,name=code,proto3,oneof" json:"code,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
 }
 
 func (x *OutcomeCriteria) Reset() {
@@ -354,6 +364,13 @@ func (x *OutcomeCriteria) GetMinTextLength() int32 {
 		return *x.MinTextLength
 	}
 	return 0
+}
+
+func (x *OutcomeCriteria) GetCode() string {
+	if x != nil && x.Code != nil {
+		return *x.Code
+	}
+	return ""
 }
 
 type CreateOutcomeCriteriaRequest struct {
@@ -1472,7 +1489,7 @@ var File_domain_operation_outcome_criteria_outcome_criteria_proto protoreflect.F
 
 const file_domain_operation_outcome_criteria_outcome_criteria_proto_rawDesc = "" +
 	"\n" +
-	"8domain/operation/outcome_criteria/outcome_criteria.proto\x12\x13domain.operation.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1adomain/common/search.proto\x1a\"domain/operation/enums/enums.proto\x1a\x10options/db.proto\"\xd5\x10\n" +
+	"8domain/operation/outcome_criteria/outcome_criteria.proto\x12\x13domain.operation.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1adomain/common/search.proto\x1a\"domain/operation/enums/enums.proto\x1a\x10options/db.proto\"\xcb\x11\n" +
 	"\x0fOutcomeCriteria\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x122\n" +
 	"\x11criteria_group_id\x18\x02 \x01(\tB\x06\x82\xb5\x18\x02\x18\x01R\x0fcriteriaGroupId\x12\x18\n" +
@@ -1520,7 +1537,8 @@ const file_domain_operation_outcome_criteria_outcome_criteria_proto_rawDesc = ""
 	"\x13date_created_string\x18\" \x01(\tB\x06\x82\xb5\x18\x028\x01H\x12R\x11dateCreatedString\x88\x01\x01\x12(\n" +
 	"\rdate_modified\x18# \x01(\x03H\x13R\fdateModified\x88\x01\x01\x12=\n" +
 	"\x14date_modified_string\x18$ \x01(\tB\x06\x82\xb5\x18\x028\x01H\x14R\x12dateModifiedString\x88\x01\x01\x12+\n" +
-	"\x0fmin_text_length\x18% \x01(\x05H\x15R\rminTextLength\x88\x01\x01:\x06\x8a\xb5\x18\x02\b\x01B\x10\n" +
+	"\x0fmin_text_length\x18% \x01(\x05H\x15R\rminTextLength\x88\x01\x01\x12k\n" +
+	"\x04code\x18& \x01(\tBR\x82\xb5\x18N\x18\x01*Jcode IS NULL OR (code = lower(btrim(code)) AND code ~ '^[a-z][a-z0-9_]*$')H\x16R\x04code\x88\x01\x01:\x06\x8a\xb5\x18\x02\b\x01B\x10\n" +
 	"\x0e_supersedes_idB\x10\n" +
 	"\x0e_industry_codeB\x0f\n" +
 	"\r_workspace_idB\x0f\n" +
@@ -1545,7 +1563,8 @@ const file_domain_operation_outcome_criteria_outcome_criteria_proto_rawDesc = ""
 	"\x14_date_created_stringB\x10\n" +
 	"\x0e_date_modifiedB\x17\n" +
 	"\x15_date_modified_stringB\x12\n" +
-	"\x10_min_text_length\"X\n" +
+	"\x10_min_text_lengthB\a\n" +
+	"\x05_code\"X\n" +
 	"\x1cCreateOutcomeCriteriaRequest\x128\n" +
 	"\x04data\x18\x01 \x01(\v2$.domain.operation.v1.OutcomeCriteriaR\x04data\"\xb1\x01\n" +
 	"\x1dCreateOutcomeCriteriaResponse\x128\n" +
