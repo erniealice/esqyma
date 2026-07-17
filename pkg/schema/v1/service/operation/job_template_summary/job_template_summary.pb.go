@@ -209,6 +209,11 @@ type ListJobTemplateSummariesRequest struct {
 	// subscription_group_id optionally narrows the summary to one delivery group.
 	SubscriptionGroupId *string                   `protobuf:"bytes,2,opt,name=subscription_group_id,json=subscriptionGroupId,proto3,oneof" json:"subscription_group_id,omitempty"`
 	Pagination          *common.PaginationRequest `protobuf:"bytes,3,opt,name=pagination,proto3,oneof" json:"pagination,omitempty"`
+	// price_schedule_active (Q-GSE-7, additive, school-admin only). When present
+	// and true, the adapter restricts the summary to templates whose group price
+	// schedule is currently active (the AY-scoping predicate). ABSENT ⇒ no
+	// schedule predicate (today's behaviour — all schedules).
+	PriceScheduleActive *bool `protobuf:"varint,4,opt,name=price_schedule_active,json=priceScheduleActive,proto3,oneof" json:"price_schedule_active,omitempty"`
 	unknownFields       protoimpl.UnknownFields
 	sizeCache           protoimpl.SizeCache
 }
@@ -262,6 +267,13 @@ func (x *ListJobTemplateSummariesRequest) GetPagination() *common.PaginationRequ
 		return x.Pagination
 	}
 	return nil
+}
+
+func (x *ListJobTemplateSummariesRequest) GetPriceScheduleActive() bool {
+	if x != nil && x.PriceScheduleActive != nil {
+		return *x.PriceScheduleActive
+	}
+	return false
 }
 
 type ListJobTemplateSummariesResponse struct {
@@ -355,15 +367,17 @@ const file_service_operation_job_template_summary_job_template_summary_proto_raw
 	"\n" +
 	"deliverers\x18\f \x03(\v2\x1f.service.operation.v1.DelivererR\n" +
 	"deliverersJ\x04\b\x05\x10\x06J\x04\b\x06\x10\aR\bstaff_idR\n" +
-	"staff_name\"\xe5\x01\n" +
+	"staff_name\"\xb8\x02\n" +
 	"\x1fListJobTemplateSummariesRequest\x12\x16\n" +
 	"\x06status\x18\x01 \x01(\tR\x06status\x127\n" +
 	"\x15subscription_group_id\x18\x02 \x01(\tH\x00R\x13subscriptionGroupId\x88\x01\x01\x12H\n" +
 	"\n" +
 	"pagination\x18\x03 \x01(\v2#.domain.common.v1.PaginationRequestH\x01R\n" +
-	"pagination\x88\x01\x01B\x18\n" +
+	"pagination\x88\x01\x01\x127\n" +
+	"\x15price_schedule_active\x18\x04 \x01(\bH\x02R\x13priceScheduleActive\x88\x01\x01B\x18\n" +
 	"\x16_subscription_group_idB\r\n" +
-	"\v_pagination\"\x9c\x02\n" +
+	"\v_paginationB\x18\n" +
+	"\x16_price_schedule_active\"\x9c\x02\n" +
 	" ListJobTemplateSummariesResponse\x12F\n" +
 	"\tsummaries\x18\x01 \x03(\v2(.service.operation.v1.JobTemplateSummaryR\tsummaries\x12\x18\n" +
 	"\asuccess\x18\x02 \x01(\bR\asuccess\x12I\n" +

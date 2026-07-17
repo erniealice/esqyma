@@ -14,6 +14,7 @@ import "options/db.proto";
 import "domain/entity/user/user.proto";
 import "domain/entity/client_category/client_category.proto";
 import "domain/entity/payment_term/payment_term.proto";
+import "domain/common/attribute.proto";
 
 // FK References: revenue.client_id, expenditure.vendor_id,
 // event_client.client_id, subscription.client_id,
@@ -80,6 +81,15 @@ service ClientDomainService {
 
 message CreateClientRequest {
   Client data = 1;
+
+  // Dynamic client attributes to reconcile atomically with the client create
+  // (Q-GSE-10). Each entry is a (code, value) pair the use case resolves to an
+  // attribute_id + client_attribute row inside the same txn. Kept on the REQUEST
+  // only — the base Client message stays free of dynamic EAV columns.
+  // `attributes_present` distinguishes "caller sent an empty attribute set
+  // (clear all)" from "caller did not manage attributes at all (leave as-is)".
+  repeated domain.common.v1.AttributeCodeValue attributes = 2;
+  bool attributes_present = 3;
 }
 
 message CreateClientResponse {
@@ -100,6 +110,11 @@ message ReadClientResponse {
 
 message UpdateClientRequest {
   Client data = 1;
+
+  // See CreateClientRequest. Same atomic (code,value) reconcile on update.
+  // `attributes_present=false` leaves existing client_attribute rows untouched.
+  repeated domain.common.v1.AttributeCodeValue attributes = 2;
+  bool attributes_present = 3;
 }
 
 message UpdateClientResponse {

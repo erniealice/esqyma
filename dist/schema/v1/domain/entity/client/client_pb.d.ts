@@ -7,6 +7,7 @@ import type { PaginationRequest, PaginationResponse } from "../../common/paginat
 import type { User } from "../user/user_pb";
 import type { ClientCategory } from "../client_category/client_category_pb";
 import type { PaymentTerm } from "../payment_term/payment_term_pb";
+import type { AttributeCodeValue } from "../../common/attribute_pb";
 import type { Message } from "@bufbuild/protobuf";
 /**
  * Describes the file domain/entity/client/client.proto.
@@ -203,6 +204,21 @@ export type CreateClientRequest = Message<"domain.entity.v1.CreateClientRequest"
      * @generated from field: domain.entity.v1.Client data = 1;
      */
     data?: Client;
+    /**
+     * Dynamic client attributes to reconcile atomically with the client create
+     * (Q-GSE-10). Each entry is a (code, value) pair the use case resolves to an
+     * attribute_id + client_attribute row inside the same txn. Kept on the REQUEST
+     * only — the base Client message stays free of dynamic EAV columns.
+     * `attributes_present` distinguishes "caller sent an empty attribute set
+     * (clear all)" from "caller did not manage attributes at all (leave as-is)".
+     *
+     * @generated from field: repeated domain.common.v1.AttributeCodeValue attributes = 2;
+     */
+    attributes: AttributeCodeValue[];
+    /**
+     * @generated from field: bool attributes_present = 3;
+     */
+    attributesPresent: boolean;
 };
 /**
  * Describes the message domain.entity.v1.CreateClientRequest.
@@ -275,6 +291,17 @@ export type UpdateClientRequest = Message<"domain.entity.v1.UpdateClientRequest"
      * @generated from field: domain.entity.v1.Client data = 1;
      */
     data?: Client;
+    /**
+     * See CreateClientRequest. Same atomic (code,value) reconcile on update.
+     * `attributes_present=false` leaves existing client_attribute rows untouched.
+     *
+     * @generated from field: repeated domain.common.v1.AttributeCodeValue attributes = 2;
+     */
+    attributes: AttributeCodeValue[];
+    /**
+     * @generated from field: bool attributes_present = 3;
+     */
+    attributesPresent: boolean;
 };
 /**
  * Describes the message domain.entity.v1.UpdateClientRequest.

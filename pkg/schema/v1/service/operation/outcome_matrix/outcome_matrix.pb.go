@@ -366,8 +366,16 @@ type OutcomeCell struct {
 	PassFailValue    *bool                  `protobuf:"varint,6,opt,name=pass_fail_value,json=passFailValue,proto3,oneof" json:"pass_fail_value,omitempty"`
 	RecordedBy       string                 `protobuf:"bytes,7,opt,name=recorded_by,json=recordedBy,proto3" json:"recorded_by,omitempty"` // owner staff_id
 	Editable         bool                   `protobuf:"varint,8,opt,name=editable,proto3" json:"editable,omitempty"`                      // acting principal may edit (recorded_by == acting staff, or own new instance)
-	unknownFields    protoimpl.UnknownFields
-	sizeCache        protoimpl.SizeCache
+	// Server-derived instance addressing for save-time recompute dedup (Q-GSE-5).
+	// The record action recomputes each affected phase/job summary inline on save;
+	// it must dedup the (job_phase, job) set from SERVER-derived data, never from
+	// attacker-controlled POST keys. These two ids come straight from the same
+	// resolved instance row that produced job_task_id (field 2) — "" when the
+	// student has no materialised instance for the column yet (cell not editable).
+	JobPhaseId    string `protobuf:"bytes,9,opt,name=job_phase_id,json=jobPhaseId,proto3" json:"job_phase_id,omitempty"` // student's job_phase for the column's template phase — "" if none
+	JobId         string `protobuf:"bytes,10,opt,name=job_id,json=jobId,proto3" json:"job_id,omitempty"`                 // student's job for this template (subject) — "" if none
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
 }
 
 func (x *OutcomeCell) Reset() {
@@ -454,6 +462,20 @@ func (x *OutcomeCell) GetEditable() bool {
 		return x.Editable
 	}
 	return false
+}
+
+func (x *OutcomeCell) GetJobPhaseId() string {
+	if x != nil {
+		return x.JobPhaseId
+	}
+	return ""
+}
+
+func (x *OutcomeCell) GetJobId() string {
+	if x != nil {
+		return x.JobId
+	}
+	return ""
 }
 
 type OutcomeRow struct {
@@ -630,7 +652,7 @@ const file_service_operation_outcome_matrix_outcome_matrix_proto_rawDesc = "" +
 	"\x15job_template_phase_id\x18\x01 \x01(\tR\x12jobTemplatePhaseId\x12\x14\n" +
 	"\x05label\x18\x02 \x01(\tR\x05label\x12%\n" +
 	"\x0esequence_order\x18\x03 \x01(\x05R\rsequenceOrder\x126\n" +
-	"\x05tasks\x18\x04 \x03(\v2 .service.operation.v1.TaskColumnR\x05tasks\"\x81\x03\n" +
+	"\x05tasks\x18\x04 \x03(\v2 .service.operation.v1.TaskColumnR\x05tasks\"\xba\x03\n" +
 	"\vOutcomeCell\x12\x1d\n" +
 	"\n" +
 	"outcome_id\x18\x01 \x01(\tR\toutcomeId\x12\x1e\n" +
@@ -642,7 +664,11 @@ const file_service_operation_outcome_matrix_outcome_matrix_proto_rawDesc = "" +
 	"\x0fpass_fail_value\x18\x06 \x01(\bH\x03R\rpassFailValue\x88\x01\x01\x12\x1f\n" +
 	"\vrecorded_by\x18\a \x01(\tR\n" +
 	"recordedBy\x12\x1a\n" +
-	"\beditable\x18\b \x01(\bR\beditableB\x10\n" +
+	"\beditable\x18\b \x01(\bR\beditable\x12 \n" +
+	"\fjob_phase_id\x18\t \x01(\tR\n" +
+	"jobPhaseId\x12\x15\n" +
+	"\x06job_id\x18\n" +
+	" \x01(\tR\x05jobIdB\x10\n" +
 	"\x0e_numeric_valueB\r\n" +
 	"\v_text_valueB\x14\n" +
 	"\x12_categorical_valueB\x12\n" +

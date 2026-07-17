@@ -34,8 +34,12 @@ type AttributeValue struct {
 	DateModified       *int64                 `protobuf:"varint,8,opt,name=date_modified,json=dateModified,proto3,oneof" json:"date_modified,omitempty"`
 	DateModifiedString *string                `protobuf:"bytes,9,opt,name=date_modified_string,json=dateModifiedString,proto3,oneof" json:"date_modified_string,omitempty"`
 	Attribute          *Attribute             `protobuf:"bytes,10,opt,name=attribute,proto3" json:"attribute,omitempty"`
-	unknownFields      protoimpl.UnknownFields
-	sizeCache          protoimpl.SizeCache
+	// label mirrors ProductOptionValue's label/value split (D1 lock, additive):
+	// `value` stays the stored/canonical value ("male"); `label` is the display
+	// form ("Male"). NULL falls back to `value` at render time.
+	Label         *string `protobuf:"bytes,11,opt,name=label,proto3,oneof" json:"label,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
 }
 
 func (x *AttributeValue) Reset() {
@@ -136,6 +140,13 @@ func (x *AttributeValue) GetAttribute() *Attribute {
 		return x.Attribute
 	}
 	return nil
+}
+
+func (x *AttributeValue) GetLabel() string {
+	if x != nil && x.Label != nil {
+		return *x.Label
+	}
+	return ""
 }
 
 type CreateAttributeValueRequest struct {
@@ -1030,7 +1041,7 @@ var File_domain_common_attribute_value_proto protoreflect.FileDescriptor
 
 const file_domain_common_attribute_value_proto_rawDesc = "" +
 	"\n" +
-	"#domain/common/attribute_value.proto\x12\x10domain.common.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1adomain/common/search.proto\x1a\x1ddomain/common/attribute.proto\x1a\x10options/db.proto\"\x94\x04\n" +
+	"#domain/common/attribute_value.proto\x12\x10domain.common.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1adomain/common/search.proto\x1a\x1ddomain/common/attribute.proto\x1a\x10options/db.proto\"\xb9\x04\n" +
 	"\x0eAttributeValue\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x124\n" +
 	"\fattribute_id\x18\x02 \x01(\tB\x11\x82\xb5\x18\r\n" +
@@ -1045,11 +1056,13 @@ const file_domain_common_attribute_value_proto_rawDesc = "" +
 	"\rdate_modified\x18\b \x01(\x03H\x02R\fdateModified\x88\x01\x01\x12=\n" +
 	"\x14date_modified_string\x18\t \x01(\tB\x06\x82\xb5\x18\x028\x01H\x03R\x12dateModifiedString\x88\x01\x01\x129\n" +
 	"\tattribute\x18\n" +
-	" \x01(\v2\x1b.domain.common.v1.AttributeR\tattribute:\x06\x8a\xb5\x18\x02\b\x01B\x0f\n" +
+	" \x01(\v2\x1b.domain.common.v1.AttributeR\tattribute\x12\x19\n" +
+	"\x05label\x18\v \x01(\tH\x04R\x05label\x88\x01\x01:\x06\x8a\xb5\x18\x02\b\x01B\x0f\n" +
 	"\r_date_createdB\x16\n" +
 	"\x14_date_created_stringB\x10\n" +
 	"\x0e_date_modifiedB\x17\n" +
-	"\x15_date_modified_string\"S\n" +
+	"\x15_date_modified_stringB\b\n" +
+	"\x06_label\"S\n" +
 	"\x1bCreateAttributeValueRequest\x124\n" +
 	"\x04data\x18\x01 \x01(\v2 .domain.common.v1.AttributeValueR\x04data\"\xac\x01\n" +
 	"\x1cCreateAttributeValueResponse\x124\n" +

@@ -123,6 +123,15 @@ message OutcomeCell {
   optional bool pass_fail_value = 6;
   string recorded_by = 7;              // owner staff_id
   bool editable = 8;                   // acting principal may edit (recorded_by == acting staff, or own new instance)
+
+  // Server-derived instance addressing for save-time recompute dedup (Q-GSE-5).
+  // The record action recomputes each affected phase/job summary inline on save;
+  // it must dedup the (job_phase, job) set from SERVER-derived data, never from
+  // attacker-controlled POST keys. These two ids come straight from the same
+  // resolved instance row that produced job_task_id (field 2) — "" when the
+  // student has no materialised instance for the column yet (cell not editable).
+  string job_phase_id = 9;             // student's job_phase for the column's template phase — "" if none
+  string job_id = 10;                  // student's job for this template (subject) — "" if none
 }
 
 message OutcomeRow {

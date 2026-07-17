@@ -89,12 +89,27 @@ service SubscriptionDomainService {
 
 message CreateSubscriptionRequest {
   Subscription data = 1;
+
+  // require_spawn_success (Q-GSE-8 lock, additive). When true, the create path
+  // materialises jobs in the SAME transaction and rolls the subscription back if
+  // a REQUIRED spawn fails. Spawn is REQUIRED only when the plan graph declares a
+  // root job_template; a plan with no template declared → clean skip (empty
+  // spawned_job_ids + a spawn_skip_reason), NOT an error. Default false preserves
+  // today's best-effort, out-of-band spawn behaviour for every existing caller.
+  optional bool require_spawn_success = 2;
 }
 
 message CreateSubscriptionResponse {
   repeated Subscription data = 1;
   bool success = 2;
   optional domain.common.v1.Error error = 3;
+
+  // Ids of the jobs spawned in the create txn (Q-GSE-8). Empty when the plan
+  // graph declared no root template (a clean skip) or require_spawn_success was
+  // false. `spawn_skip_reason` carries the why on a clean skip (e.g.
+  // "no_root_template", "operator_opt_out"); empty on a normal spawn.
+  repeated string spawned_job_ids = 4;
+  optional string spawn_skip_reason = 5;
 }
 
 message ReadSubscriptionRequest {

@@ -118,6 +118,15 @@ export type ListJobTemplateSummariesRequest = Message<"service.operation.v1.List
      * @generated from field: optional domain.common.v1.PaginationRequest pagination = 3;
      */
     pagination?: PaginationRequest;
+    /**
+     * price_schedule_active (Q-GSE-7, additive, school-admin only). When present
+     * and true, the adapter restricts the summary to templates whose group price
+     * schedule is currently active (the AY-scoping predicate). ABSENT ⇒ no
+     * schedule predicate (today's behaviour — all schedules).
+     *
+     * @generated from field: optional bool price_schedule_active = 4;
+     */
+    priceScheduleActive?: boolean;
 };
 /**
  * Describes the message service.operation.v1.ListJobTemplateSummariesRequest.

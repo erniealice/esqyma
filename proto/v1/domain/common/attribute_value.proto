@@ -25,6 +25,11 @@ message AttributeValue {
   optional int64 date_modified = 8;
   optional string date_modified_string = 9 [(options.v1.db).ignore = true];
   Attribute attribute = 10;
+
+  // label mirrors ProductOptionValue's label/value split (D1 lock, additive):
+  // `value` stays the stored/canonical value ("male"); `label` is the display
+  // form ("Male"). NULL falls back to `value` at render time.
+  optional string label = 11;
 }
 
 service AttributeValueDomainService {

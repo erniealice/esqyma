@@ -267,10 +267,17 @@ func (x *Subscription) GetCollectionMethodIdSnapshot() string {
 }
 
 type CreateSubscriptionRequest struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	Data          *Subscription          `protobuf:"bytes,1,opt,name=data,proto3" json:"data,omitempty"`
-	unknownFields protoimpl.UnknownFields
-	sizeCache     protoimpl.SizeCache
+	state protoimpl.MessageState `protogen:"open.v1"`
+	Data  *Subscription          `protobuf:"bytes,1,opt,name=data,proto3" json:"data,omitempty"`
+	// require_spawn_success (Q-GSE-8 lock, additive). When true, the create path
+	// materialises jobs in the SAME transaction and rolls the subscription back if
+	// a REQUIRED spawn fails. Spawn is REQUIRED only when the plan graph declares a
+	// root job_template; a plan with no template declared → clean skip (empty
+	// spawned_job_ids + a spawn_skip_reason), NOT an error. Default false preserves
+	// today's best-effort, out-of-band spawn behaviour for every existing caller.
+	RequireSpawnSuccess *bool `protobuf:"varint,2,opt,name=require_spawn_success,json=requireSpawnSuccess,proto3,oneof" json:"require_spawn_success,omitempty"`
+	unknownFields       protoimpl.UnknownFields
+	sizeCache           protoimpl.SizeCache
 }
 
 func (x *CreateSubscriptionRequest) Reset() {
@@ -310,13 +317,26 @@ func (x *CreateSubscriptionRequest) GetData() *Subscription {
 	return nil
 }
 
+func (x *CreateSubscriptionRequest) GetRequireSpawnSuccess() bool {
+	if x != nil && x.RequireSpawnSuccess != nil {
+		return *x.RequireSpawnSuccess
+	}
+	return false
+}
+
 type CreateSubscriptionResponse struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	Data          []*Subscription        `protobuf:"bytes,1,rep,name=data,proto3" json:"data,omitempty"`
-	Success       bool                   `protobuf:"varint,2,opt,name=success,proto3" json:"success,omitempty"`
-	Error         *common.Error          `protobuf:"bytes,3,opt,name=error,proto3,oneof" json:"error,omitempty"`
-	unknownFields protoimpl.UnknownFields
-	sizeCache     protoimpl.SizeCache
+	state   protoimpl.MessageState `protogen:"open.v1"`
+	Data    []*Subscription        `protobuf:"bytes,1,rep,name=data,proto3" json:"data,omitempty"`
+	Success bool                   `protobuf:"varint,2,opt,name=success,proto3" json:"success,omitempty"`
+	Error   *common.Error          `protobuf:"bytes,3,opt,name=error,proto3,oneof" json:"error,omitempty"`
+	// Ids of the jobs spawned in the create txn (Q-GSE-8). Empty when the plan
+	// graph declared no root template (a clean skip) or require_spawn_success was
+	// false. `spawn_skip_reason` carries the why on a clean skip (e.g.
+	// "no_root_template", "operator_opt_out"); empty on a normal spawn.
+	SpawnedJobIds   []string `protobuf:"bytes,4,rep,name=spawned_job_ids,json=spawnedJobIds,proto3" json:"spawned_job_ids,omitempty"`
+	SpawnSkipReason *string  `protobuf:"bytes,5,opt,name=spawn_skip_reason,json=spawnSkipReason,proto3,oneof" json:"spawn_skip_reason,omitempty"`
+	unknownFields   protoimpl.UnknownFields
+	sizeCache       protoimpl.SizeCache
 }
 
 func (x *CreateSubscriptionResponse) Reset() {
@@ -368,6 +388,20 @@ func (x *CreateSubscriptionResponse) GetError() *common.Error {
 		return x.Error
 	}
 	return nil
+}
+
+func (x *CreateSubscriptionResponse) GetSpawnedJobIds() []string {
+	if x != nil {
+		return x.SpawnedJobIds
+	}
+	return nil
+}
+
+func (x *CreateSubscriptionResponse) GetSpawnSkipReason() string {
+	if x != nil && x.SpawnSkipReason != nil {
+		return *x.SpawnSkipReason
+	}
+	return ""
 }
 
 type ReadSubscriptionRequest struct {
@@ -1667,14 +1701,19 @@ const file_domain_subscription_subscription_subscription_proto_rawDesc = "" +
 	"\x1e_entitled_occurrences_overrideB\x0f\n" +
 	"\r_workspace_idB!\n" +
 	"\x1f_collection_profile_id_snapshotB \n" +
-	"\x1e_collection_method_id_snapshotJ\x04\b\r\x10\x0eJ\x04\b\x0f\x10\x10\"U\n" +
+	"\x1e_collection_method_id_snapshotJ\x04\b\r\x10\x0eJ\x04\b\x0f\x10\x10\"\xa8\x01\n" +
 	"\x19CreateSubscriptionRequest\x128\n" +
-	"\x04data\x18\x01 \x01(\v2$.domain.subscription.v1.SubscriptionR\x04data\"\xae\x01\n" +
+	"\x04data\x18\x01 \x01(\v2$.domain.subscription.v1.SubscriptionR\x04data\x127\n" +
+	"\x15require_spawn_success\x18\x02 \x01(\bH\x00R\x13requireSpawnSuccess\x88\x01\x01B\x18\n" +
+	"\x16_require_spawn_success\"\x9d\x02\n" +
 	"\x1aCreateSubscriptionResponse\x128\n" +
 	"\x04data\x18\x01 \x03(\v2$.domain.subscription.v1.SubscriptionR\x04data\x12\x18\n" +
 	"\asuccess\x18\x02 \x01(\bR\asuccess\x122\n" +
-	"\x05error\x18\x03 \x01(\v2\x17.domain.common.v1.ErrorH\x00R\x05error\x88\x01\x01B\b\n" +
-	"\x06_error\"S\n" +
+	"\x05error\x18\x03 \x01(\v2\x17.domain.common.v1.ErrorH\x00R\x05error\x88\x01\x01\x12&\n" +
+	"\x0fspawned_job_ids\x18\x04 \x03(\tR\rspawnedJobIds\x12/\n" +
+	"\x11spawn_skip_reason\x18\x05 \x01(\tH\x01R\x0fspawnSkipReason\x88\x01\x01B\b\n" +
+	"\x06_errorB\x14\n" +
+	"\x12_spawn_skip_reason\"S\n" +
 	"\x17ReadSubscriptionRequest\x128\n" +
 	"\x04data\x18\x01 \x01(\v2$.domain.subscription.v1.SubscriptionR\x04data\"\xac\x01\n" +
 	"\x18ReadSubscriptionResponse\x128\n" +
@@ -1928,6 +1967,7 @@ func file_domain_subscription_subscription_subscription_proto_init() {
 		return
 	}
 	file_domain_subscription_subscription_subscription_proto_msgTypes[0].OneofWrappers = []any{}
+	file_domain_subscription_subscription_subscription_proto_msgTypes[1].OneofWrappers = []any{}
 	file_domain_subscription_subscription_subscription_proto_msgTypes[2].OneofWrappers = []any{}
 	file_domain_subscription_subscription_subscription_proto_msgTypes[4].OneofWrappers = []any{}
 	file_domain_subscription_subscription_subscription_proto_msgTypes[6].OneofWrappers = []any{}

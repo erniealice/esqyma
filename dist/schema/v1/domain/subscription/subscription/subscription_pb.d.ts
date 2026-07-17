@@ -161,6 +161,17 @@ export type CreateSubscriptionRequest = Message<"domain.subscription.v1.CreateSu
      * @generated from field: domain.subscription.v1.Subscription data = 1;
      */
     data?: Subscription;
+    /**
+     * require_spawn_success (Q-GSE-8 lock, additive). When true, the create path
+     * materialises jobs in the SAME transaction and rolls the subscription back if
+     * a REQUIRED spawn fails. Spawn is REQUIRED only when the plan graph declares a
+     * root job_template; a plan with no template declared → clean skip (empty
+     * spawned_job_ids + a spawn_skip_reason), NOT an error. Default false preserves
+     * today's best-effort, out-of-band spawn behaviour for every existing caller.
+     *
+     * @generated from field: optional bool require_spawn_success = 2;
+     */
+    requireSpawnSuccess?: boolean;
 };
 /**
  * Describes the message domain.subscription.v1.CreateSubscriptionRequest.
@@ -183,6 +194,19 @@ export type CreateSubscriptionResponse = Message<"domain.subscription.v1.CreateS
      * @generated from field: optional domain.common.v1.Error error = 3;
      */
     error?: Error;
+    /**
+     * Ids of the jobs spawned in the create txn (Q-GSE-8). Empty when the plan
+     * graph declared no root template (a clean skip) or require_spawn_success was
+     * false. `spawn_skip_reason` carries the why on a clean skip (e.g.
+     * "no_root_template", "operator_opt_out"); empty on a normal spawn.
+     *
+     * @generated from field: repeated string spawned_job_ids = 4;
+     */
+    spawnedJobIds: string[];
+    /**
+     * @generated from field: optional string spawn_skip_reason = 5;
+     */
+    spawnSkipReason?: string;
 };
 /**
  * Describes the message domain.subscription.v1.CreateSubscriptionResponse.

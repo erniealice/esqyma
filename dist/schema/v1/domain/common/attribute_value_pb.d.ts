@@ -54,6 +54,14 @@ export type AttributeValue = Message<"domain.common.v1.AttributeValue"> & {
      * @generated from field: domain.common.v1.Attribute attribute = 10;
      */
     attribute?: Attribute;
+    /**
+     * label mirrors ProductOptionValue's label/value split (D1 lock, additive):
+     * `value` stays the stored/canonical value ("male"); `label` is the display
+     * form ("Male"). NULL falls back to `value` at render time.
+     *
+     * @generated from field: optional string label = 11;
+     */
+    label?: string;
 };
 /**
  * Describes the message domain.common.v1.AttributeValue.

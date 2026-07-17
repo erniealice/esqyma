@@ -55,6 +55,52 @@ export type Attribute = Message<"domain.common.v1.Attribute"> & {
      * @generated from field: bool active = 11;
      */
     active: boolean;
+    /**
+     * --- Typed constraint columns (Q-GSE-10, D1 archaeology lock, additive) -----
+     * These give the generic EAV `Attribute` the same typed-bounds vocabulary that
+     * the retail-born, proven `ProductOption` already carries (min_value/max_value/
+     * required + a data_type dispatch). They fan out across ALL 13 `*_attribute`
+     * consumers that FK this ONE message: client / supplier / staff / delegate /
+     * group / location / plan / subscription / balance / invoice / event /
+     * collection / product _attribute. Additive + nullable — a NULL means "no
+     * constraint" (today's behaviour for every existing row).
+     *
+     * `data_type` (field 5) is repointed to carry the ProductOption input-dispatch
+     * vocabulary — text_list / number_list / color_list / free_text / free_number /
+     * option / … (see docs/plan/20260716-grade-sheet-edit-mode/research/D1-
+     * attribute-value-archaeology.md §2). It was a dead field (every seeded value
+     * the literal "option", zero code branched on it); the real use-case validator
+     * that reads these columns ships in the same wave (D1 rider 1).
+     *
+     * numeric lower bound (free_number). NULL = unbounded.
+     *
+     * @generated from field: optional double min_value = 12;
+     */
+    minValue?: number;
+    /**
+     * numeric upper bound (free_number). NULL = unbounded.
+     *
+     * @generated from field: optional double max_value = 13;
+     */
+    maxValue?: number;
+    /**
+     * text min length (free_text). NULL = no minimum.
+     *
+     * @generated from field: optional int32 min_length = 14;
+     */
+    minLength?: number;
+    /**
+     * text max length (free_text). NULL = no maximum.
+     *
+     * @generated from field: optional int32 max_length = 15;
+     */
+    maxLength?: number;
+    /**
+     * value required when the attribute is presented. NULL = optional.
+     *
+     * @generated from field: optional bool required = 16;
+     */
+    required?: boolean;
 };
 /**
  * Describes the message domain.common.v1.Attribute.

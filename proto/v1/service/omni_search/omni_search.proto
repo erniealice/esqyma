@@ -1,0 +1,95 @@
+syntax = "proto3";
+
+package service.omni_search.v1;
+
+option go_package = "github.com/erniealice/esqyma/pkg/schema/v1/service/omni_search";
+
+import "domain/common/error.proto";
+
+// ---------------------------------------------------------------------------
+// Omni search — a cross-cutting SERVICE (a read-only, cross-aggregate search
+// with no aggregate root of its own; same service-driven-domain rationale as
+// service/operation/outcome_matrix.proto and service/security/
+// permission_query.proto). It backs the ⌘K command-palette: one query fans out
+// across the major entity categories (client, subscription, subscription_group,
+// plan, price_schedule, product) and returns results split by category, each a
+// thin {id,label,sublabel} envelope the view maps onto a detail href.
+//
+// GENERIC by construction: NO vertical nouns anywhere. The category keys are the
+// universal entity vocabulary (client/subscription/plan/...); education labels
+// ("Students"/"Sections"/"Levels"/...) enter ONLY via lyngua, never as a proto
+// field, RPC, or message name.
+//
+// SECURITY (design spine, docs/plan/20260710-omni-search):
+//   - No workspace/tenant identifier on the request — ctx-derived only
+//     (identity.Must / FromContext), matching SearchClientsByName. The
+//     role-search client-supplied-workspace_id precedent is the named
+//     anti-pattern.
+//   - Per-category visibility == the entity's :list gate (no new permission).
+//     The use case gates each requested category via ActionGatekeeper and passes
+//     only the permitted subset to the adapter (fail-closed: nil gatekeeper /
+//     empty perms => zero categories).
+//   - Every category SQL arm carries the workspace predicate on the base table
+//     AND on every joined tenant alias; person-scoped rows (client, and the
+//     subscription arm's joined client) carry principalscope reachability.
+//   - The user query is LIKE-escaped (%/_/\) with ILIKE ... ESCAPE '\' and
+//     length-capped, so "%%" returns nothing rather than the first rows of every
+//     permitted category.
+//
+// PROTO MODE (mirrors outcome_matrix / job_template_summary, Q-PROTO-MODE
+// service{rpc}): this proto is the SINGLE deterministic source for both the
+// message shapes AND the operation contract — the service block generates the
+// OmniSearchServiceServer interface, which the postgres adapter implements
+// directly (no hand-written port that could drift). The gRPC scaffolding is
+// inert (nothing registers it on a gRPC server); the use case depends on the
+// GENERATED interface via the registry factory, and the initializer wires it.
+//
+// This message set is a QUERY read-model, NOT a persisted table: it carries no
+// (options.v1.db) annotations, has no entityid constant, no migration, no seed.
+//
+// Consumed by internal/application/usecases/service/omnisearch/;
+// wired in internal/composition/core/initializers/service/omni_search.go.
+// ---------------------------------------------------------------------------
+
+service OmniSearchService {
+  rpc SearchEntities(OmniSearchRequest) returns (OmniSearchResponse);
+}
+
+// OmniSearchRequest is the palette query. query is the raw user text (the use
+// case enforces a >= 2-char minimum and a server-side length cap; the adapter
+// LIKE-escapes it). limit_per_category defaults to 5 and is server-capped at 10.
+// categories optionally narrows the search to a subset of the compile-time
+// registry; an empty list means "all registered categories"; an unknown key is
+// rejected with INVALID_ARGUMENT by the use case.
+message OmniSearchRequest {
+  string query = 1;
+  optional int32 limit_per_category = 2;
+  repeated string categories = 3;
+}
+
+// OmniSearchResult is one row = one entity match. id is the entity's opaque id
+// (the view builds the detail href from it via the Layer-3 route map); label is
+// the resolved display string; sublabel is an optional secondary line
+// (internal_id, client label, product kind, ...).
+message OmniSearchResult {
+  string id = 1;
+  string label = 2;
+  optional string sublabel = 3;
+}
+
+// OmniSearchCategoryResults groups the matches for one category. category is the
+// registry key (client/subscription/...); the view maps it to a tier-skinned
+// section header via lyngua and to a detail route key via the route map.
+message OmniSearchCategoryResults {
+  string category = 1;
+  repeated OmniSearchResult results = 2;
+}
+
+// OmniSearchResponse carries the per-category result groups in registry order.
+// Denied categories are ABSENT (never enumerated as empty), so the response
+// never leaks which categories a principal cannot see.
+message OmniSearchResponse {
+  bool success = 1;
+  optional domain.common.v1.Error error = 2;
+  repeated OmniSearchCategoryResults categories = 3;
+}

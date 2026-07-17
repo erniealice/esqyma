@@ -35,8 +35,28 @@ type Attribute struct {
 	DateModified       *int64                 `protobuf:"varint,9,opt,name=date_modified,json=dateModified,proto3,oneof" json:"date_modified,omitempty"`
 	DateModifiedString *string                `protobuf:"bytes,10,opt,name=date_modified_string,json=dateModifiedString,proto3,oneof" json:"date_modified_string,omitempty"`
 	Active             bool                   `protobuf:"varint,11,opt,name=active,proto3" json:"active,omitempty"`
-	unknownFields      protoimpl.UnknownFields
-	sizeCache          protoimpl.SizeCache
+	// --- Typed constraint columns (Q-GSE-10, D1 archaeology lock, additive) -----
+	// These give the generic EAV `Attribute` the same typed-bounds vocabulary that
+	// the retail-born, proven `ProductOption` already carries (min_value/max_value/
+	// required + a data_type dispatch). They fan out across ALL 13 `*_attribute`
+	// consumers that FK this ONE message: client / supplier / staff / delegate /
+	// group / location / plan / subscription / balance / invoice / event /
+	// collection / product _attribute. Additive + nullable — a NULL means "no
+	// constraint" (today's behaviour for every existing row).
+	//
+	// `data_type` (field 5) is repointed to carry the ProductOption input-dispatch
+	// vocabulary — text_list / number_list / color_list / free_text / free_number /
+	// option / … (see docs/plan/20260716-grade-sheet-edit-mode/research/D1-
+	// attribute-value-archaeology.md §2). It was a dead field (every seeded value
+	// the literal "option", zero code branched on it); the real use-case validator
+	// that reads these columns ships in the same wave (D1 rider 1).
+	MinValue      *float64 `protobuf:"fixed64,12,opt,name=min_value,json=minValue,proto3,oneof" json:"min_value,omitempty"`   // numeric lower bound (free_number). NULL = unbounded.
+	MaxValue      *float64 `protobuf:"fixed64,13,opt,name=max_value,json=maxValue,proto3,oneof" json:"max_value,omitempty"`   // numeric upper bound (free_number). NULL = unbounded.
+	MinLength     *int32   `protobuf:"varint,14,opt,name=min_length,json=minLength,proto3,oneof" json:"min_length,omitempty"` // text min length (free_text). NULL = no minimum.
+	MaxLength     *int32   `protobuf:"varint,15,opt,name=max_length,json=maxLength,proto3,oneof" json:"max_length,omitempty"` // text max length (free_text). NULL = no maximum.
+	Required      *bool    `protobuf:"varint,16,opt,name=required,proto3,oneof" json:"required,omitempty"`                    // value required when the attribute is presented. NULL = optional.
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
 }
 
 func (x *Attribute) Reset() {
@@ -142,6 +162,41 @@ func (x *Attribute) GetDateModifiedString() string {
 func (x *Attribute) GetActive() bool {
 	if x != nil {
 		return x.Active
+	}
+	return false
+}
+
+func (x *Attribute) GetMinValue() float64 {
+	if x != nil && x.MinValue != nil {
+		return *x.MinValue
+	}
+	return 0
+}
+
+func (x *Attribute) GetMaxValue() float64 {
+	if x != nil && x.MaxValue != nil {
+		return *x.MaxValue
+	}
+	return 0
+}
+
+func (x *Attribute) GetMinLength() int32 {
+	if x != nil && x.MinLength != nil {
+		return *x.MinLength
+	}
+	return 0
+}
+
+func (x *Attribute) GetMaxLength() int32 {
+	if x != nil && x.MaxLength != nil {
+		return *x.MaxLength
+	}
+	return 0
+}
+
+func (x *Attribute) GetRequired() bool {
+	if x != nil && x.Required != nil {
+		return *x.Required
 	}
 	return false
 }
@@ -732,7 +787,7 @@ var File_domain_common_attribute_proto protoreflect.FileDescriptor
 
 const file_domain_common_attribute_proto_rawDesc = "" +
 	"\n" +
-	"\x1ddomain/common/attribute.proto\x12\x10domain.common.v1\x1a\x19domain/common/error.proto\x1a\x1adomain/common/filter.proto\x1a\x1edomain/common/pagination.proto\x1a\x10options/db.proto\"\xe8\x03\n" +
+	"\x1ddomain/common/attribute.proto\x12\x10domain.common.v1\x1a\x19domain/common/error.proto\x1a\x1adomain/common/filter.proto\x1a\x1edomain/common/pagination.proto\x1a\x10options/db.proto\"\xdc\x05\n" +
 	"\tAttribute\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12\x12\n" +
 	"\x04name\x18\x02 \x01(\tR\x04name\x12 \n" +
@@ -746,11 +801,25 @@ const file_domain_common_attribute_proto_rawDesc = "" +
 	"\x14date_modified_string\x18\n" +
 	" \x01(\tB\x06\x82\xb5\x18\x028\x01H\x03R\x12dateModifiedString\x88\x01\x01\x12\"\n" +
 	"\x06active\x18\v \x01(\bB\n" +
-	"\x82\xb5\x18\x06\"\x04trueR\x06active:\x06\x8a\xb5\x18\x02\b\x01B\x0f\n" +
+	"\x82\xb5\x18\x06\"\x04trueR\x06active\x12 \n" +
+	"\tmin_value\x18\f \x01(\x01H\x04R\bminValue\x88\x01\x01\x12 \n" +
+	"\tmax_value\x18\r \x01(\x01H\x05R\bmaxValue\x88\x01\x01\x12\"\n" +
+	"\n" +
+	"min_length\x18\x0e \x01(\x05H\x06R\tminLength\x88\x01\x01\x12\"\n" +
+	"\n" +
+	"max_length\x18\x0f \x01(\x05H\aR\tmaxLength\x88\x01\x01\x12\x1f\n" +
+	"\brequired\x18\x10 \x01(\bH\bR\brequired\x88\x01\x01:\x06\x8a\xb5\x18\x02\b\x01B\x0f\n" +
 	"\r_date_createdB\x16\n" +
 	"\x14_date_created_stringB\x10\n" +
 	"\x0e_date_modifiedB\x17\n" +
-	"\x15_date_modified_string\">\n" +
+	"\x15_date_modified_stringB\f\n" +
+	"\n" +
+	"_min_valueB\f\n" +
+	"\n" +
+	"_max_valueB\r\n" +
+	"\v_min_lengthB\r\n" +
+	"\v_max_lengthB\v\n" +
+	"\t_required\">\n" +
 	"\x12AttributeCodeValue\x12\x12\n" +
 	"\x04code\x18\x01 \x01(\tR\x04code\x12\x14\n" +
 	"\x05value\x18\x02 \x01(\tR\x05value\"I\n" +

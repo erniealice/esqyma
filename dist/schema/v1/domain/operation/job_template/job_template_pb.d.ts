@@ -148,6 +148,21 @@ export type JobTemplate = Message<"domain.operation.v1.JobTemplate"> & {
      * @generated from field: optional string job_category_id = 32;
      */
     jobCategoryId?: string;
+    /**
+     * initial_status — the lifecycle status a spawned Job takes when this template
+     * materialises (Q-GSE-9, INVERSION RIDER). The owner explicitly rejected
+     * homing a job reference/config inside `plan` (that deepens plan→operations
+     * coupling); the job_template family owns the spawned-job lifecycle, and plan
+     * already points at the root template via its existing field. Stored as a
+     * generic string carrying a JobStatus enum name (see
+     * domain/operation/enums/enums.proto JobStatus:
+     * JOB_STATUS_PLANNED / _ACTIVE / _RELEASED / …) so the vocabulary stays
+     * lyngua-fied and no vertical noun enters. NULL/empty ⇒ today's default
+     * (PLANNED). Placed at 50 because 33–49 are reserved above.
+     *
+     * @generated from field: optional string initial_status = 50;
+     */
+    initialStatus?: string;
 };
 /**
  * Describes the message domain.operation.v1.JobTemplate.

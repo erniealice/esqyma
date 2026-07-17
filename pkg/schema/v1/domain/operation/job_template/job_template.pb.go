@@ -62,6 +62,17 @@ type JobTemplate struct {
 	WorkflowTemplateId *string `protobuf:"bytes,31,opt,name=workflow_template_id,json=workflowTemplateId,proto3,oneof" json:"workflow_template_id,omitempty"`
 	// Categorization (single-valued taxonomy; generic — vertical vocabulary via lyngua).
 	JobCategoryId *string `protobuf:"bytes,32,opt,name=job_category_id,json=jobCategoryId,proto3,oneof" json:"job_category_id,omitempty"`
+	// initial_status — the lifecycle status a spawned Job takes when this template
+	// materialises (Q-GSE-9, INVERSION RIDER). The owner explicitly rejected
+	// homing a job reference/config inside `plan` (that deepens plan→operations
+	// coupling); the job_template family owns the spawned-job lifecycle, and plan
+	// already points at the root template via its existing field. Stored as a
+	// generic string carrying a JobStatus enum name (see
+	// domain/operation/enums/enums.proto JobStatus:
+	// JOB_STATUS_PLANNED / _ACTIVE / _RELEASED / …) so the vocabulary stays
+	// lyngua-fied and no vertical noun enters. NULL/empty ⇒ today's default
+	// (PLANNED). Placed at 50 because 33–49 are reserved above.
+	InitialStatus *string `protobuf:"bytes,50,opt,name=initial_status,json=initialStatus,proto3,oneof" json:"initial_status,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -309,6 +320,13 @@ func (x *JobTemplate) GetWorkflowTemplateId() string {
 func (x *JobTemplate) GetJobCategoryId() string {
 	if x != nil && x.JobCategoryId != nil {
 		return *x.JobCategoryId
+	}
+	return ""
+}
+
+func (x *JobTemplate) GetInitialStatus() string {
+	if x != nil && x.InitialStatus != nil {
+		return *x.InitialStatus
 	}
 	return ""
 }
@@ -1101,7 +1119,7 @@ var File_domain_operation_job_template_job_template_proto protoreflect.FileDescr
 
 const file_domain_operation_job_template_job_template_proto_rawDesc = "" +
 	"\n" +
-	"0domain/operation/job_template/job_template.proto\x12\x13domain.operation.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1adomain/common/search.proto\x1a\"domain/operation/enums/enums.proto\x1a\x10options/db.proto\"\xc1\x12\n" +
+	"0domain/operation/job_template/job_template.proto\x12\x13domain.operation.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1adomain/common/search.proto\x1a\"domain/operation/enums/enums.proto\x1a\x10options/db.proto\"\x80\x13\n" +
 	"\vJobTemplate\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12&\n" +
 	"\fdate_created\x18\x02 \x01(\x03H\x00R\vdateCreated\x88\x01\x01\x12;\n" +
@@ -1143,7 +1161,8 @@ const file_domain_operation_job_template_job_template_proto_rawDesc = "" +
 	"\x0fproduct_variant\x18\x01H\x19R\x16outputProductVariantId\x88\x01\x01\x12=\n" +
 	"\x14workflow_template_id\x18\x1f \x01(\tB\x06\x82\xb5\x18\x02\x18\x01H\x1aR\x12workflowTemplateId\x88\x01\x01\x12A\n" +
 	"\x0fjob_category_id\x18  \x01(\tB\x14\x82\xb5\x18\x10\n" +
-	"\fjob_category\x18\x01H\x1bR\rjobCategoryId\x88\x01\x01:\x06\x8a\xb5\x18\x02\b\x01B\x0f\n" +
+	"\fjob_category\x18\x01H\x1bR\rjobCategoryId\x88\x01\x01\x12*\n" +
+	"\x0einitial_status\x182 \x01(\tH\x1cR\rinitialStatus\x88\x01\x01:\x06\x8a\xb5\x18\x02\b\x01B\x0f\n" +
 	"\r_date_createdB\x16\n" +
 	"\x14_date_created_stringB\x10\n" +
 	"\x0e_date_modifiedB\x17\n" +
@@ -1171,7 +1190,8 @@ const file_domain_operation_job_template_job_template_proto_rawDesc = "" +
 	"\x12_output_product_idB\x1c\n" +
 	"\x1a_output_product_variant_idB\x17\n" +
 	"\x15_workflow_template_idB\x12\n" +
-	"\x10_job_category_idJ\x04\b\x1a\x10\x1bJ\x04\b!\x102\"P\n" +
+	"\x10_job_category_idB\x11\n" +
+	"\x0f_initial_statusJ\x04\b\x1a\x10\x1bJ\x04\b!\x102\"P\n" +
 	"\x18CreateJobTemplateRequest\x124\n" +
 	"\x04data\x18\x01 \x01(\v2 .domain.operation.v1.JobTemplateR\x04data\"\xa9\x01\n" +
 	"\x19CreateJobTemplateResponse\x124\n" +

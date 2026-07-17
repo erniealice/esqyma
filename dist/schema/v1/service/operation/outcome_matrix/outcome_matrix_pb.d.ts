@@ -185,6 +185,25 @@ export type OutcomeCell = Message<"service.operation.v1.OutcomeCell"> & {
      * @generated from field: bool editable = 8;
      */
     editable: boolean;
+    /**
+     * Server-derived instance addressing for save-time recompute dedup (Q-GSE-5).
+     * The record action recomputes each affected phase/job summary inline on save;
+     * it must dedup the (job_phase, job) set from SERVER-derived data, never from
+     * attacker-controlled POST keys. These two ids come straight from the same
+     * resolved instance row that produced job_task_id (field 2) — "" when the
+     * student has no materialised instance for the column yet (cell not editable).
+     *
+     * student's job_phase for the column's template phase — "" if none
+     *
+     * @generated from field: string job_phase_id = 9;
+     */
+    jobPhaseId: string;
+    /**
+     * student's job for this template (subject) — "" if none
+     *
+     * @generated from field: string job_id = 10;
+     */
+    jobId: string;
 };
 /**
  * Describes the message service.operation.v1.OutcomeCell.

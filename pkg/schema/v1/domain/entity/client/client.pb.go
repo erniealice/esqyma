@@ -345,10 +345,18 @@ func (x *Client) GetCountryCode() string {
 }
 
 type CreateClientRequest struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	Data          *Client                `protobuf:"bytes,1,opt,name=data,proto3" json:"data,omitempty"`
-	unknownFields protoimpl.UnknownFields
-	sizeCache     protoimpl.SizeCache
+	state protoimpl.MessageState `protogen:"open.v1"`
+	Data  *Client                `protobuf:"bytes,1,opt,name=data,proto3" json:"data,omitempty"`
+	// Dynamic client attributes to reconcile atomically with the client create
+	// (Q-GSE-10). Each entry is a (code, value) pair the use case resolves to an
+	// attribute_id + client_attribute row inside the same txn. Kept on the REQUEST
+	// only — the base Client message stays free of dynamic EAV columns.
+	// `attributes_present` distinguishes "caller sent an empty attribute set
+	// (clear all)" from "caller did not manage attributes at all (leave as-is)".
+	Attributes        []*common.AttributeCodeValue `protobuf:"bytes,2,rep,name=attributes,proto3" json:"attributes,omitempty"`
+	AttributesPresent bool                         `protobuf:"varint,3,opt,name=attributes_present,json=attributesPresent,proto3" json:"attributes_present,omitempty"`
+	unknownFields     protoimpl.UnknownFields
+	sizeCache         protoimpl.SizeCache
 }
 
 func (x *CreateClientRequest) Reset() {
@@ -386,6 +394,20 @@ func (x *CreateClientRequest) GetData() *Client {
 		return x.Data
 	}
 	return nil
+}
+
+func (x *CreateClientRequest) GetAttributes() []*common.AttributeCodeValue {
+	if x != nil {
+		return x.Attributes
+	}
+	return nil
+}
+
+func (x *CreateClientRequest) GetAttributesPresent() bool {
+	if x != nil {
+		return x.AttributesPresent
+	}
+	return false
 }
 
 type CreateClientResponse struct {
@@ -553,10 +575,14 @@ func (x *ReadClientResponse) GetError() *common.Error {
 }
 
 type UpdateClientRequest struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	Data          *Client                `protobuf:"bytes,1,opt,name=data,proto3" json:"data,omitempty"`
-	unknownFields protoimpl.UnknownFields
-	sizeCache     protoimpl.SizeCache
+	state protoimpl.MessageState `protogen:"open.v1"`
+	Data  *Client                `protobuf:"bytes,1,opt,name=data,proto3" json:"data,omitempty"`
+	// See CreateClientRequest. Same atomic (code,value) reconcile on update.
+	// `attributes_present=false` leaves existing client_attribute rows untouched.
+	Attributes        []*common.AttributeCodeValue `protobuf:"bytes,2,rep,name=attributes,proto3" json:"attributes,omitempty"`
+	AttributesPresent bool                         `protobuf:"varint,3,opt,name=attributes_present,json=attributesPresent,proto3" json:"attributes_present,omitempty"`
+	unknownFields     protoimpl.UnknownFields
+	sizeCache         protoimpl.SizeCache
 }
 
 func (x *UpdateClientRequest) Reset() {
@@ -594,6 +620,20 @@ func (x *UpdateClientRequest) GetData() *Client {
 		return x.Data
 	}
 	return nil
+}
+
+func (x *UpdateClientRequest) GetAttributes() []*common.AttributeCodeValue {
+	if x != nil {
+		return x.Attributes
+	}
+	return nil
+}
+
+func (x *UpdateClientRequest) GetAttributesPresent() bool {
+	if x != nil {
+		return x.AttributesPresent
+	}
+	return false
 }
 
 type UpdateClientResponse struct {
@@ -1296,7 +1336,7 @@ var File_domain_entity_client_client_proto protoreflect.FileDescriptor
 
 const file_domain_entity_client_client_proto_rawDesc = "" +
 	"\n" +
-	"!domain/entity/client/client.proto\x12\x10domain.entity.v1\x1a\x19domain/common/error.proto\x1a\x1adomain/common/search.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1edomain/common/pagination.proto\x1a\x10options/db.proto\x1a\x1ddomain/entity/user/user.proto\x1a3domain/entity/client_category/client_category.proto\x1a-domain/entity/payment_term/payment_term.proto\"\xcf\x0e\n" +
+	"!domain/entity/client/client.proto\x12\x10domain.entity.v1\x1a\x19domain/common/error.proto\x1a\x1adomain/common/search.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1edomain/common/pagination.proto\x1a\x10options/db.proto\x1a\x1ddomain/entity/user/user.proto\x1a3domain/entity/client_category/client_category.proto\x1a-domain/entity/payment_term/payment_term.proto\x1a\x1ddomain/common/attribute.proto\"\xcf\x0e\n" +
 	"\x06Client\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12/\n" +
 	"\x04user\x18\x02 \x01(\v2\x16.domain.entity.v1.UserH\x00R\x04user\x88\x01\x01\x12%\n" +
@@ -1375,9 +1415,13 @@ const file_domain_entity_client_client_proto_rawDesc = "" +
 	"\r_credit_limitB\x11\n" +
 	"\x0f_lead_time_daysB\x06\n" +
 	"\x04_tinB\x0f\n" +
-	"\r_country_code\"C\n" +
+	"\r_country_code\"\xb8\x01\n" +
 	"\x13CreateClientRequest\x12,\n" +
-	"\x04data\x18\x01 \x01(\v2\x18.domain.entity.v1.ClientR\x04data\"\x9c\x01\n" +
+	"\x04data\x18\x01 \x01(\v2\x18.domain.entity.v1.ClientR\x04data\x12D\n" +
+	"\n" +
+	"attributes\x18\x02 \x03(\v2$.domain.common.v1.AttributeCodeValueR\n" +
+	"attributes\x12-\n" +
+	"\x12attributes_present\x18\x03 \x01(\bR\x11attributesPresent\"\x9c\x01\n" +
 	"\x14CreateClientResponse\x12,\n" +
 	"\x04data\x18\x01 \x03(\v2\x18.domain.entity.v1.ClientR\x04data\x12\x18\n" +
 	"\asuccess\x18\x02 \x01(\bR\asuccess\x122\n" +
@@ -1389,9 +1433,13 @@ const file_domain_entity_client_client_proto_rawDesc = "" +
 	"\x04data\x18\x01 \x03(\v2\x18.domain.entity.v1.ClientR\x04data\x12\x18\n" +
 	"\asuccess\x18\x02 \x01(\bR\asuccess\x122\n" +
 	"\x05error\x18\x03 \x01(\v2\x17.domain.common.v1.ErrorH\x00R\x05error\x88\x01\x01B\b\n" +
-	"\x06_error\"C\n" +
+	"\x06_error\"\xb8\x01\n" +
 	"\x13UpdateClientRequest\x12,\n" +
-	"\x04data\x18\x01 \x01(\v2\x18.domain.entity.v1.ClientR\x04data\"\x9c\x01\n" +
+	"\x04data\x18\x01 \x01(\v2\x18.domain.entity.v1.ClientR\x04data\x12D\n" +
+	"\n" +
+	"attributes\x18\x02 \x03(\v2$.domain.common.v1.AttributeCodeValueR\n" +
+	"attributes\x12-\n" +
+	"\x12attributes_present\x18\x03 \x01(\bR\x11attributesPresent\"\x9c\x01\n" +
 	"\x14UpdateClientResponse\x12,\n" +
 	"\x04data\x18\x01 \x03(\v2\x18.domain.entity.v1.ClientR\x04data\x12\x18\n" +
 	"\asuccess\x18\x02 \x01(\bR\asuccess\x122\n" +
@@ -1510,13 +1558,14 @@ var file_domain_entity_client_client_proto_goTypes = []any{
 	(*user.User)(nil),                      // 18: domain.entity.v1.User
 	(*client_category.ClientCategory)(nil), // 19: domain.entity.v1.ClientCategory
 	(*payment_term.PaymentTerm)(nil),       // 20: domain.entity.v1.PaymentTerm
-	(*common.Error)(nil),                   // 21: domain.common.v1.Error
-	(*common.SearchRequest)(nil),           // 22: domain.common.v1.SearchRequest
-	(*common.FilterRequest)(nil),           // 23: domain.common.v1.FilterRequest
-	(*common.SortRequest)(nil),             // 24: domain.common.v1.SortRequest
-	(*common.PaginationRequest)(nil),       // 25: domain.common.v1.PaginationRequest
-	(*common.PaginationResponse)(nil),      // 26: domain.common.v1.PaginationResponse
-	(*common.SearchResult)(nil),            // 27: domain.common.v1.SearchResult
+	(*common.AttributeCodeValue)(nil),      // 21: domain.common.v1.AttributeCodeValue
+	(*common.Error)(nil),                   // 22: domain.common.v1.Error
+	(*common.SearchRequest)(nil),           // 23: domain.common.v1.SearchRequest
+	(*common.FilterRequest)(nil),           // 24: domain.common.v1.FilterRequest
+	(*common.SortRequest)(nil),             // 25: domain.common.v1.SortRequest
+	(*common.PaginationRequest)(nil),       // 26: domain.common.v1.PaginationRequest
+	(*common.PaginationResponse)(nil),      // 27: domain.common.v1.PaginationResponse
+	(*common.SearchResult)(nil),            // 28: domain.common.v1.SearchResult
 }
 var file_domain_entity_client_client_proto_depIdxs = []int32{
 	18, // 0: domain.entity.v1.Client.user:type_name -> domain.entity.v1.User
@@ -1524,55 +1573,57 @@ var file_domain_entity_client_client_proto_depIdxs = []int32{
 	19, // 2: domain.entity.v1.Client.categories:type_name -> domain.entity.v1.ClientCategory
 	20, // 3: domain.entity.v1.Client.payment_term:type_name -> domain.entity.v1.PaymentTerm
 	0,  // 4: domain.entity.v1.CreateClientRequest.data:type_name -> domain.entity.v1.Client
-	0,  // 5: domain.entity.v1.CreateClientResponse.data:type_name -> domain.entity.v1.Client
-	21, // 6: domain.entity.v1.CreateClientResponse.error:type_name -> domain.common.v1.Error
-	0,  // 7: domain.entity.v1.ReadClientRequest.data:type_name -> domain.entity.v1.Client
-	0,  // 8: domain.entity.v1.ReadClientResponse.data:type_name -> domain.entity.v1.Client
-	21, // 9: domain.entity.v1.ReadClientResponse.error:type_name -> domain.common.v1.Error
-	0,  // 10: domain.entity.v1.UpdateClientRequest.data:type_name -> domain.entity.v1.Client
-	0,  // 11: domain.entity.v1.UpdateClientResponse.data:type_name -> domain.entity.v1.Client
-	21, // 12: domain.entity.v1.UpdateClientResponse.error:type_name -> domain.common.v1.Error
-	0,  // 13: domain.entity.v1.DeleteClientRequest.data:type_name -> domain.entity.v1.Client
-	21, // 14: domain.entity.v1.DeleteClientResponse.error:type_name -> domain.common.v1.Error
-	22, // 15: domain.entity.v1.ListClientsRequest.search:type_name -> domain.common.v1.SearchRequest
-	23, // 16: domain.entity.v1.ListClientsRequest.filters:type_name -> domain.common.v1.FilterRequest
-	24, // 17: domain.entity.v1.ListClientsRequest.sort:type_name -> domain.common.v1.SortRequest
-	25, // 18: domain.entity.v1.ListClientsRequest.pagination:type_name -> domain.common.v1.PaginationRequest
-	0,  // 19: domain.entity.v1.ListClientsResponse.data:type_name -> domain.entity.v1.Client
-	21, // 20: domain.entity.v1.ListClientsResponse.error:type_name -> domain.common.v1.Error
-	22, // 21: domain.entity.v1.GetClientListPageDataRequest.search:type_name -> domain.common.v1.SearchRequest
-	23, // 22: domain.entity.v1.GetClientListPageDataRequest.filters:type_name -> domain.common.v1.FilterRequest
-	24, // 23: domain.entity.v1.GetClientListPageDataRequest.sort:type_name -> domain.common.v1.SortRequest
-	25, // 24: domain.entity.v1.GetClientListPageDataRequest.pagination:type_name -> domain.common.v1.PaginationRequest
-	0,  // 25: domain.entity.v1.GetClientListPageDataResponse.client_list:type_name -> domain.entity.v1.Client
-	26, // 26: domain.entity.v1.GetClientListPageDataResponse.pagination:type_name -> domain.common.v1.PaginationResponse
-	27, // 27: domain.entity.v1.GetClientListPageDataResponse.search_results:type_name -> domain.common.v1.SearchResult
-	21, // 28: domain.entity.v1.GetClientListPageDataResponse.error:type_name -> domain.common.v1.Error
-	0,  // 29: domain.entity.v1.GetClientItemPageDataResponse.client:type_name -> domain.entity.v1.Client
-	21, // 30: domain.entity.v1.GetClientItemPageDataResponse.error:type_name -> domain.common.v1.Error
-	17, // 31: domain.entity.v1.SearchClientsByNameResponse.results:type_name -> domain.entity.v1.SearchClientResult
-	21, // 32: domain.entity.v1.SearchClientsByNameResponse.error:type_name -> domain.common.v1.Error
-	1,  // 33: domain.entity.v1.ClientDomainService.CreateClient:input_type -> domain.entity.v1.CreateClientRequest
-	3,  // 34: domain.entity.v1.ClientDomainService.ReadClient:input_type -> domain.entity.v1.ReadClientRequest
-	5,  // 35: domain.entity.v1.ClientDomainService.UpdateClient:input_type -> domain.entity.v1.UpdateClientRequest
-	7,  // 36: domain.entity.v1.ClientDomainService.DeleteClient:input_type -> domain.entity.v1.DeleteClientRequest
-	9,  // 37: domain.entity.v1.ClientDomainService.ListClients:input_type -> domain.entity.v1.ListClientsRequest
-	11, // 38: domain.entity.v1.ClientDomainService.GetClientListPageData:input_type -> domain.entity.v1.GetClientListPageDataRequest
-	13, // 39: domain.entity.v1.ClientDomainService.GetClientItemPageData:input_type -> domain.entity.v1.GetClientItemPageDataRequest
-	15, // 40: domain.entity.v1.ClientDomainService.SearchClientsByName:input_type -> domain.entity.v1.SearchClientsByNameRequest
-	2,  // 41: domain.entity.v1.ClientDomainService.CreateClient:output_type -> domain.entity.v1.CreateClientResponse
-	4,  // 42: domain.entity.v1.ClientDomainService.ReadClient:output_type -> domain.entity.v1.ReadClientResponse
-	6,  // 43: domain.entity.v1.ClientDomainService.UpdateClient:output_type -> domain.entity.v1.UpdateClientResponse
-	8,  // 44: domain.entity.v1.ClientDomainService.DeleteClient:output_type -> domain.entity.v1.DeleteClientResponse
-	10, // 45: domain.entity.v1.ClientDomainService.ListClients:output_type -> domain.entity.v1.ListClientsResponse
-	12, // 46: domain.entity.v1.ClientDomainService.GetClientListPageData:output_type -> domain.entity.v1.GetClientListPageDataResponse
-	14, // 47: domain.entity.v1.ClientDomainService.GetClientItemPageData:output_type -> domain.entity.v1.GetClientItemPageDataResponse
-	16, // 48: domain.entity.v1.ClientDomainService.SearchClientsByName:output_type -> domain.entity.v1.SearchClientsByNameResponse
-	41, // [41:49] is the sub-list for method output_type
-	33, // [33:41] is the sub-list for method input_type
-	33, // [33:33] is the sub-list for extension type_name
-	33, // [33:33] is the sub-list for extension extendee
-	0,  // [0:33] is the sub-list for field type_name
+	21, // 5: domain.entity.v1.CreateClientRequest.attributes:type_name -> domain.common.v1.AttributeCodeValue
+	0,  // 6: domain.entity.v1.CreateClientResponse.data:type_name -> domain.entity.v1.Client
+	22, // 7: domain.entity.v1.CreateClientResponse.error:type_name -> domain.common.v1.Error
+	0,  // 8: domain.entity.v1.ReadClientRequest.data:type_name -> domain.entity.v1.Client
+	0,  // 9: domain.entity.v1.ReadClientResponse.data:type_name -> domain.entity.v1.Client
+	22, // 10: domain.entity.v1.ReadClientResponse.error:type_name -> domain.common.v1.Error
+	0,  // 11: domain.entity.v1.UpdateClientRequest.data:type_name -> domain.entity.v1.Client
+	21, // 12: domain.entity.v1.UpdateClientRequest.attributes:type_name -> domain.common.v1.AttributeCodeValue
+	0,  // 13: domain.entity.v1.UpdateClientResponse.data:type_name -> domain.entity.v1.Client
+	22, // 14: domain.entity.v1.UpdateClientResponse.error:type_name -> domain.common.v1.Error
+	0,  // 15: domain.entity.v1.DeleteClientRequest.data:type_name -> domain.entity.v1.Client
+	22, // 16: domain.entity.v1.DeleteClientResponse.error:type_name -> domain.common.v1.Error
+	23, // 17: domain.entity.v1.ListClientsRequest.search:type_name -> domain.common.v1.SearchRequest
+	24, // 18: domain.entity.v1.ListClientsRequest.filters:type_name -> domain.common.v1.FilterRequest
+	25, // 19: domain.entity.v1.ListClientsRequest.sort:type_name -> domain.common.v1.SortRequest
+	26, // 20: domain.entity.v1.ListClientsRequest.pagination:type_name -> domain.common.v1.PaginationRequest
+	0,  // 21: domain.entity.v1.ListClientsResponse.data:type_name -> domain.entity.v1.Client
+	22, // 22: domain.entity.v1.ListClientsResponse.error:type_name -> domain.common.v1.Error
+	23, // 23: domain.entity.v1.GetClientListPageDataRequest.search:type_name -> domain.common.v1.SearchRequest
+	24, // 24: domain.entity.v1.GetClientListPageDataRequest.filters:type_name -> domain.common.v1.FilterRequest
+	25, // 25: domain.entity.v1.GetClientListPageDataRequest.sort:type_name -> domain.common.v1.SortRequest
+	26, // 26: domain.entity.v1.GetClientListPageDataRequest.pagination:type_name -> domain.common.v1.PaginationRequest
+	0,  // 27: domain.entity.v1.GetClientListPageDataResponse.client_list:type_name -> domain.entity.v1.Client
+	27, // 28: domain.entity.v1.GetClientListPageDataResponse.pagination:type_name -> domain.common.v1.PaginationResponse
+	28, // 29: domain.entity.v1.GetClientListPageDataResponse.search_results:type_name -> domain.common.v1.SearchResult
+	22, // 30: domain.entity.v1.GetClientListPageDataResponse.error:type_name -> domain.common.v1.Error
+	0,  // 31: domain.entity.v1.GetClientItemPageDataResponse.client:type_name -> domain.entity.v1.Client
+	22, // 32: domain.entity.v1.GetClientItemPageDataResponse.error:type_name -> domain.common.v1.Error
+	17, // 33: domain.entity.v1.SearchClientsByNameResponse.results:type_name -> domain.entity.v1.SearchClientResult
+	22, // 34: domain.entity.v1.SearchClientsByNameResponse.error:type_name -> domain.common.v1.Error
+	1,  // 35: domain.entity.v1.ClientDomainService.CreateClient:input_type -> domain.entity.v1.CreateClientRequest
+	3,  // 36: domain.entity.v1.ClientDomainService.ReadClient:input_type -> domain.entity.v1.ReadClientRequest
+	5,  // 37: domain.entity.v1.ClientDomainService.UpdateClient:input_type -> domain.entity.v1.UpdateClientRequest
+	7,  // 38: domain.entity.v1.ClientDomainService.DeleteClient:input_type -> domain.entity.v1.DeleteClientRequest
+	9,  // 39: domain.entity.v1.ClientDomainService.ListClients:input_type -> domain.entity.v1.ListClientsRequest
+	11, // 40: domain.entity.v1.ClientDomainService.GetClientListPageData:input_type -> domain.entity.v1.GetClientListPageDataRequest
+	13, // 41: domain.entity.v1.ClientDomainService.GetClientItemPageData:input_type -> domain.entity.v1.GetClientItemPageDataRequest
+	15, // 42: domain.entity.v1.ClientDomainService.SearchClientsByName:input_type -> domain.entity.v1.SearchClientsByNameRequest
+	2,  // 43: domain.entity.v1.ClientDomainService.CreateClient:output_type -> domain.entity.v1.CreateClientResponse
+	4,  // 44: domain.entity.v1.ClientDomainService.ReadClient:output_type -> domain.entity.v1.ReadClientResponse
+	6,  // 45: domain.entity.v1.ClientDomainService.UpdateClient:output_type -> domain.entity.v1.UpdateClientResponse
+	8,  // 46: domain.entity.v1.ClientDomainService.DeleteClient:output_type -> domain.entity.v1.DeleteClientResponse
+	10, // 47: domain.entity.v1.ClientDomainService.ListClients:output_type -> domain.entity.v1.ListClientsResponse
+	12, // 48: domain.entity.v1.ClientDomainService.GetClientListPageData:output_type -> domain.entity.v1.GetClientListPageDataResponse
+	14, // 49: domain.entity.v1.ClientDomainService.GetClientItemPageData:output_type -> domain.entity.v1.GetClientItemPageDataResponse
+	16, // 50: domain.entity.v1.ClientDomainService.SearchClientsByName:output_type -> domain.entity.v1.SearchClientsByNameResponse
+	43, // [43:51] is the sub-list for method output_type
+	35, // [35:43] is the sub-list for method input_type
+	35, // [35:35] is the sub-list for extension type_name
+	35, // [35:35] is the sub-list for extension extendee
+	0,  // [0:35] is the sub-list for field type_name
 }
 
 func init() { file_domain_entity_client_client_proto_init() }
