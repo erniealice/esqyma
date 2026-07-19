@@ -6,6 +6,7 @@ option go_package = "github.com/erniealice/esqyma/pkg/schema/v1/service/operatio
 
 import "domain/common/error.proto";
 import "domain/operation/outcome_criteria/outcome_criteria.proto";
+import "domain/operation/job_phase/job_phase.proto";
 
 // ---------------------------------------------------------------------------
 // Outcome matrix — an OPERATION-domain service (cross-aggregate derived read
@@ -140,6 +141,36 @@ message OutcomeRow {
   map<string, OutcomeCell> cells = 3;  // column_key → cell
 }
 
+// ---- Per-phase approval roll-up (plan 20260718-phase-approval-workflow P3) --
+
+// PhaseApprovalRollup is the truthful, per-template-phase instance roll-up the
+// approval bar renders (codex-rereview.md fresh finding: "the matrix response
+// already carries enough data for a truthful approval bar" — REFUTED). It is
+// derived over the FULL sheet set S (every active job_phase in the workspace for
+// this template + template_phase), NOT the staff-visible row subset — a teacher
+// on scope=MINE still sees the whole sheet's true state, and the derived state
+// cannot be fabricated from the visible cells alone.
+//
+// `status` is the sole approval status when every member shares one, or the
+// LOWEST status on the ladder when they differ (`mixed` = true then). The four
+// derived overlay states (`not_started`, `mixed/attention`, `hard_frozen`) are
+// NOT enum members — they compose from these fields (not_started = status
+// IN_PROGRESS && !has_data; mixed = the flag; hard_frozen = the flag).
+message PhaseApprovalRollup {
+  string job_template_phase_id = 1;
+  // Sole status across the sheet, or the LOWEST ladder status when mixed.
+  domain.operation.v1.PhaseApprovalStatus status = 2;
+  bool mixed = 3;                       // the sheet's members are not all in one status
+  int32 target_count = 4;              // number of active job_phase rows in the full sheet S
+  bool has_data = 5;                   // any active outcome/data under the sheet
+  bool hard_frozen = 6;               // closed schedule OR active authoritative final (plan §4.4)
+  // Blank required matrix leaves (task × criterion) across S — surfaced in the
+  // D6 submit confirmation dialog. Same task×criterion seam the submit
+  // transition stamps on its audit event; computed only when the sheet is
+  // IN_PROGRESS (submit-eligible), otherwise 0.
+  int32 blank_required_count = 7;
+}
+
 message GetOutcomeMatrixResponse {
   string job_template_id = 1;
   string job_template_name = 2;
@@ -147,4 +178,7 @@ message GetOutcomeMatrixResponse {
   repeated OutcomeRow rows = 4;          // the client rows
   bool success = 5;
   optional domain.common.v1.Error error = 6;
+  // Per-template-phase approval roll-up, one entry per phase column, derived
+  // over the full sheet set S (P3). Empty on mock/non-postgres builds.
+  repeated PhaseApprovalRollup approval_rollups = 7;
 }

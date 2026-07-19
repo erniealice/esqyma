@@ -1,6 +1,7 @@
 import type { GenEnum, GenFile, GenMessage, GenService } from "@bufbuild/protobuf/codegenv2";
 import type { Error } from "../../../domain/common/error_pb";
 import type { OutcomeCriteria } from "../../../domain/operation/outcome_criteria/outcome_criteria_pb";
+import type { PhaseApprovalStatus } from "../../../domain/operation/job_phase/job_phase_pb";
 import type { Message } from "@bufbuild/protobuf";
 /**
  * Describes the file service/operation/outcome_matrix/outcome_matrix.proto.
@@ -239,6 +240,73 @@ export type OutcomeRow = Message<"service.operation.v1.OutcomeRow"> & {
  */
 export declare const OutcomeRowSchema: GenMessage<OutcomeRow>;
 /**
+ * PhaseApprovalRollup is the truthful, per-template-phase instance roll-up the
+ * approval bar renders (codex-rereview.md fresh finding: "the matrix response
+ * already carries enough data for a truthful approval bar" — REFUTED). It is
+ * derived over the FULL sheet set S (every active job_phase in the workspace for
+ * this template + template_phase), NOT the staff-visible row subset — a teacher
+ * on scope=MINE still sees the whole sheet's true state, and the derived state
+ * cannot be fabricated from the visible cells alone.
+ *
+ * `status` is the sole approval status when every member shares one, or the
+ * LOWEST status on the ladder when they differ (`mixed` = true then). The four
+ * derived overlay states (`not_started`, `mixed/attention`, `hard_frozen`) are
+ * NOT enum members — they compose from these fields (not_started = status
+ * IN_PROGRESS && !has_data; mixed = the flag; hard_frozen = the flag).
+ *
+ * @generated from message service.operation.v1.PhaseApprovalRollup
+ */
+export type PhaseApprovalRollup = Message<"service.operation.v1.PhaseApprovalRollup"> & {
+    /**
+     * @generated from field: string job_template_phase_id = 1;
+     */
+    jobTemplatePhaseId: string;
+    /**
+     * Sole status across the sheet, or the LOWEST ladder status when mixed.
+     *
+     * @generated from field: domain.operation.v1.PhaseApprovalStatus status = 2;
+     */
+    status: PhaseApprovalStatus;
+    /**
+     * the sheet's members are not all in one status
+     *
+     * @generated from field: bool mixed = 3;
+     */
+    mixed: boolean;
+    /**
+     * number of active job_phase rows in the full sheet S
+     *
+     * @generated from field: int32 target_count = 4;
+     */
+    targetCount: number;
+    /**
+     * any active outcome/data under the sheet
+     *
+     * @generated from field: bool has_data = 5;
+     */
+    hasData: boolean;
+    /**
+     * closed schedule OR active authoritative final (plan §4.4)
+     *
+     * @generated from field: bool hard_frozen = 6;
+     */
+    hardFrozen: boolean;
+    /**
+     * Blank required matrix leaves (task × criterion) across S — surfaced in the
+     * D6 submit confirmation dialog. Same task×criterion seam the submit
+     * transition stamps on its audit event; computed only when the sheet is
+     * IN_PROGRESS (submit-eligible), otherwise 0.
+     *
+     * @generated from field: int32 blank_required_count = 7;
+     */
+    blankRequiredCount: number;
+};
+/**
+ * Describes the message service.operation.v1.PhaseApprovalRollup.
+ * Use `create(PhaseApprovalRollupSchema)` to create a new message.
+ */
+export declare const PhaseApprovalRollupSchema: GenMessage<PhaseApprovalRollup>;
+/**
  * @generated from message service.operation.v1.GetOutcomeMatrixResponse
  */
 export type GetOutcomeMatrixResponse = Message<"service.operation.v1.GetOutcomeMatrixResponse"> & {
@@ -270,6 +338,13 @@ export type GetOutcomeMatrixResponse = Message<"service.operation.v1.GetOutcomeM
      * @generated from field: optional domain.common.v1.Error error = 6;
      */
     error?: Error;
+    /**
+     * Per-template-phase approval roll-up, one entry per phase column, derived
+     * over the full sheet set S (P3). Empty on mock/non-postgres builds.
+     *
+     * @generated from field: repeated service.operation.v1.PhaseApprovalRollup approval_rollups = 7;
+     */
+    approvalRollups: PhaseApprovalRollup[];
 };
 /**
  * Describes the message service.operation.v1.GetOutcomeMatrixResponse.

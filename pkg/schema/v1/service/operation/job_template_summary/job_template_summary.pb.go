@@ -8,6 +8,7 @@ package operationv1
 
 import (
 	common "github.com/erniealice/esqyma/pkg/schema/v1/domain/common"
+	job_phase "github.com/erniealice/esqyma/pkg/schema/v1/domain/operation/job_phase"
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
 	reflect "reflect"
@@ -96,8 +97,55 @@ type JobTemplateSummary struct {
 	OutputProductId       string                 `protobuf:"bytes,10,opt,name=output_product_id,json=outputProductId,proto3" json:"output_product_id,omitempty"` // the template's deliverable product
 	OutputProductName     string                 `protobuf:"bytes,11,opt,name=output_product_name,json=outputProductName,proto3" json:"output_product_name,omitempty"`
 	Deliverers            []*Deliverer           `protobuf:"bytes,12,rep,name=deliverers,proto3" json:"deliverers,omitempty"` // all staff of record (>=1), sort-stable
-	unknownFields         protoimpl.UnknownFields
-	sizeCache             protoimpl.SizeCache
+	// job_category_id (field 13, R9 W-A1) — the template's CURRENT job_category FK
+	// (job_template.job_category_id, proto field 32), the AUTHORITATIVE category
+	// partition for the report-cards landing (plan 20260719-report-cards-landing
+	// §3.0/§3.1). Nullable in the DB (a template may carry no category); the postgres
+	// adapter scans it with sql.NullString → "" on NULL, and the view maps "" to the
+	// single "Uncategorized" bucket. Declared as a plain string (NOT proto3 `optional`)
+	// to match this message's sibling nullable fields — price_schedule_id / price_
+	// schedule_name / output_product_id / output_product_name are all LEFT-join-nullable
+	// and all scan sql.NullString → "" into plain strings — and the "NULL → empty
+	// string" read-model contract (§3.1).
+	JobCategoryId string `protobuf:"bytes,13,opt,name=job_category_id,json=jobCategoryId,proto3" json:"job_category_id,omitempty"`
+	// --- Phase-approval preaggregate (R7 P4; fields 14–17 per the LOCKED tag
+	// allocation in plan 20260718-phase-approval-workflow §4.5, recorded
+	// identically in 20260719-report-cards-landing §3.5; fields 18–21 per the
+	// AMENDED dual-grain contract of the same two sections + Q-R9-1). Derived
+	// from the SAME resolver-scoped job set as the row (codex-tandem: STAFF and
+	// admin see the chip over the same job scope as the row's counts).
+	//
+	// A "phase" below is one SHEET (job_template_phase instance); a sheet is
+	// DATA-BEARING when >=1 active task_outcome exists under an active job_task
+	// of its active job_phase rows. No-data sheets are EXCLUDED from every
+	// count/denominator (the D3/Q-R9-1 contract). lowest_status is the
+	// conservative LOWEST approval ladder rank across the data-bearing sheets'
+	// job_phase rows; mixed_attention is true when any data-bearing sheet is
+	// internally mixed (its rows sit at differing statuses — the derived
+	// Attention overlay). With ZERO data-bearing sheets the counts are 0 and the
+	// status is PHASE_APPROVAL_STATUS_UNSPECIFIED (render the neutral
+	// not-started default; UNSPECIFIED is never persisted, plan §4.1).
+	//
+	// TEMPLATE-WIDE grain (14–17): over ALL scoped rows of the template — the
+	// /courses list row chip ("n/m published" + lowest state, D3).
+	PublishedCount int32                         `protobuf:"varint,14,opt,name=published_count,json=publishedCount,proto3" json:"published_count,omitempty"`                                        // data-bearing sheets whose every row is PUBLISHED
+	PhaseCount     int32                         `protobuf:"varint,15,opt,name=phase_count,json=phaseCount,proto3" json:"phase_count,omitempty"`                                                    // data-bearing sheets (the denominator)
+	LowestStatus   job_phase.PhaseApprovalStatus `protobuf:"varint,16,opt,name=lowest_status,json=lowestStatus,proto3,enum=domain.operation.v1.PhaseApprovalStatus" json:"lowest_status,omitempty"` // conservative lowest across data-bearing sheets
+	MixedAttention bool                          `protobuf:"varint,17,opt,name=mixed_attention,json=mixedAttention,proto3" json:"mixed_attention,omitempty"`                                        // any data-bearing sheet internally mixed
+	// GROUP+TEMPLATE grain (18–21): the SAME quadruple restricted to THIS row's
+	// (subscription_group, template) slice — the R9 Phase-B cell grain (Q-R9-1:
+	// subject state = group_lowest_status; the landing derives its four-status
+	// subject distribution per (group, category) cell by counting summary rows
+	// per group_lowest_status). Computed EXPLICITLY alongside 14–17 so the
+	// courses row keeps template-wide semantics while the landing cell reads
+	// per-group state — one consumer's semantics never silently changes for the
+	// other (codex-plan-review §7 wave 5).
+	GroupPublishedCount int32                         `protobuf:"varint,18,opt,name=group_published_count,json=groupPublishedCount,proto3" json:"group_published_count,omitempty"`
+	GroupPhaseCount     int32                         `protobuf:"varint,19,opt,name=group_phase_count,json=groupPhaseCount,proto3" json:"group_phase_count,omitempty"`
+	GroupLowestStatus   job_phase.PhaseApprovalStatus `protobuf:"varint,20,opt,name=group_lowest_status,json=groupLowestStatus,proto3,enum=domain.operation.v1.PhaseApprovalStatus" json:"group_lowest_status,omitempty"`
+	GroupMixedAttention bool                          `protobuf:"varint,21,opt,name=group_mixed_attention,json=groupMixedAttention,proto3" json:"group_mixed_attention,omitempty"`
+	unknownFields       protoimpl.UnknownFields
+	sizeCache           protoimpl.SizeCache
 }
 
 func (x *JobTemplateSummary) Reset() {
@@ -198,6 +246,69 @@ func (x *JobTemplateSummary) GetDeliverers() []*Deliverer {
 		return x.Deliverers
 	}
 	return nil
+}
+
+func (x *JobTemplateSummary) GetJobCategoryId() string {
+	if x != nil {
+		return x.JobCategoryId
+	}
+	return ""
+}
+
+func (x *JobTemplateSummary) GetPublishedCount() int32 {
+	if x != nil {
+		return x.PublishedCount
+	}
+	return 0
+}
+
+func (x *JobTemplateSummary) GetPhaseCount() int32 {
+	if x != nil {
+		return x.PhaseCount
+	}
+	return 0
+}
+
+func (x *JobTemplateSummary) GetLowestStatus() job_phase.PhaseApprovalStatus {
+	if x != nil {
+		return x.LowestStatus
+	}
+	return job_phase.PhaseApprovalStatus(0)
+}
+
+func (x *JobTemplateSummary) GetMixedAttention() bool {
+	if x != nil {
+		return x.MixedAttention
+	}
+	return false
+}
+
+func (x *JobTemplateSummary) GetGroupPublishedCount() int32 {
+	if x != nil {
+		return x.GroupPublishedCount
+	}
+	return 0
+}
+
+func (x *JobTemplateSummary) GetGroupPhaseCount() int32 {
+	if x != nil {
+		return x.GroupPhaseCount
+	}
+	return 0
+}
+
+func (x *JobTemplateSummary) GetGroupLowestStatus() job_phase.PhaseApprovalStatus {
+	if x != nil {
+		return x.GroupLowestStatus
+	}
+	return job_phase.PhaseApprovalStatus(0)
+}
+
+func (x *JobTemplateSummary) GetGroupMixedAttention() bool {
+	if x != nil {
+		return x.GroupMixedAttention
+	}
+	return false
 }
 
 type ListJobTemplateSummariesRequest struct {
@@ -348,11 +459,11 @@ var File_service_operation_job_template_summary_job_template_summary_proto proto
 
 const file_service_operation_job_template_summary_job_template_summary_proto_rawDesc = "" +
 	"\n" +
-	"Aservice/operation/job_template_summary/job_template_summary.proto\x12\x14service.operation.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\"E\n" +
+	"Aservice/operation/job_template_summary/job_template_summary.proto\x12\x14service.operation.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a*domain/operation/job_phase/job_phase.proto\"E\n" +
 	"\tDeliverer\x12\x19\n" +
 	"\bstaff_id\x18\x01 \x01(\tR\astaffId\x12\x1d\n" +
 	"\n" +
-	"staff_name\x18\x02 \x01(\tR\tstaffName\"\x8c\x04\n" +
+	"staff_name\x18\x02 \x01(\tR\tstaffName\"\xe4\a\n" +
 	"\x12JobTemplateSummary\x12&\n" +
 	"\x0fjob_template_id\x18\x01 \x01(\tR\rjobTemplateId\x12*\n" +
 	"\x11job_template_name\x18\x02 \x01(\tR\x0fjobTemplateName\x122\n" +
@@ -366,7 +477,17 @@ const file_service_operation_job_template_summary_job_template_summary_proto_raw
 	"\x13output_product_name\x18\v \x01(\tR\x11outputProductName\x12?\n" +
 	"\n" +
 	"deliverers\x18\f \x03(\v2\x1f.service.operation.v1.DelivererR\n" +
-	"deliverersJ\x04\b\x05\x10\x06J\x04\b\x06\x10\aR\bstaff_idR\n" +
+	"deliverers\x12&\n" +
+	"\x0fjob_category_id\x18\r \x01(\tR\rjobCategoryId\x12'\n" +
+	"\x0fpublished_count\x18\x0e \x01(\x05R\x0epublishedCount\x12\x1f\n" +
+	"\vphase_count\x18\x0f \x01(\x05R\n" +
+	"phaseCount\x12M\n" +
+	"\rlowest_status\x18\x10 \x01(\x0e2(.domain.operation.v1.PhaseApprovalStatusR\flowestStatus\x12'\n" +
+	"\x0fmixed_attention\x18\x11 \x01(\bR\x0emixedAttention\x122\n" +
+	"\x15group_published_count\x18\x12 \x01(\x05R\x13groupPublishedCount\x12*\n" +
+	"\x11group_phase_count\x18\x13 \x01(\x05R\x0fgroupPhaseCount\x12X\n" +
+	"\x13group_lowest_status\x18\x14 \x01(\x0e2(.domain.operation.v1.PhaseApprovalStatusR\x11groupLowestStatus\x122\n" +
+	"\x15group_mixed_attention\x18\x15 \x01(\bR\x13groupMixedAttentionJ\x04\b\x05\x10\x06J\x04\b\x06\x10\aR\bstaff_idR\n" +
 	"staff_name\"\xb8\x02\n" +
 	"\x1fListJobTemplateSummariesRequest\x12\x16\n" +
 	"\x06status\x18\x01 \x01(\tR\x06status\x127\n" +
@@ -409,23 +530,26 @@ var file_service_operation_job_template_summary_job_template_summary_proto_goTyp
 	(*JobTemplateSummary)(nil),               // 1: service.operation.v1.JobTemplateSummary
 	(*ListJobTemplateSummariesRequest)(nil),  // 2: service.operation.v1.ListJobTemplateSummariesRequest
 	(*ListJobTemplateSummariesResponse)(nil), // 3: service.operation.v1.ListJobTemplateSummariesResponse
-	(*common.PaginationRequest)(nil),         // 4: domain.common.v1.PaginationRequest
-	(*common.PaginationResponse)(nil),        // 5: domain.common.v1.PaginationResponse
-	(*common.Error)(nil),                     // 6: domain.common.v1.Error
+	(job_phase.PhaseApprovalStatus)(0),       // 4: domain.operation.v1.PhaseApprovalStatus
+	(*common.PaginationRequest)(nil),         // 5: domain.common.v1.PaginationRequest
+	(*common.PaginationResponse)(nil),        // 6: domain.common.v1.PaginationResponse
+	(*common.Error)(nil),                     // 7: domain.common.v1.Error
 }
 var file_service_operation_job_template_summary_job_template_summary_proto_depIdxs = []int32{
 	0, // 0: service.operation.v1.JobTemplateSummary.deliverers:type_name -> service.operation.v1.Deliverer
-	4, // 1: service.operation.v1.ListJobTemplateSummariesRequest.pagination:type_name -> domain.common.v1.PaginationRequest
-	1, // 2: service.operation.v1.ListJobTemplateSummariesResponse.summaries:type_name -> service.operation.v1.JobTemplateSummary
-	5, // 3: service.operation.v1.ListJobTemplateSummariesResponse.pagination:type_name -> domain.common.v1.PaginationResponse
-	6, // 4: service.operation.v1.ListJobTemplateSummariesResponse.error:type_name -> domain.common.v1.Error
-	2, // 5: service.operation.v1.JobTemplateSummaryService.ListJobTemplateSummaries:input_type -> service.operation.v1.ListJobTemplateSummariesRequest
-	3, // 6: service.operation.v1.JobTemplateSummaryService.ListJobTemplateSummaries:output_type -> service.operation.v1.ListJobTemplateSummariesResponse
-	6, // [6:7] is the sub-list for method output_type
-	5, // [5:6] is the sub-list for method input_type
-	5, // [5:5] is the sub-list for extension type_name
-	5, // [5:5] is the sub-list for extension extendee
-	0, // [0:5] is the sub-list for field type_name
+	4, // 1: service.operation.v1.JobTemplateSummary.lowest_status:type_name -> domain.operation.v1.PhaseApprovalStatus
+	4, // 2: service.operation.v1.JobTemplateSummary.group_lowest_status:type_name -> domain.operation.v1.PhaseApprovalStatus
+	5, // 3: service.operation.v1.ListJobTemplateSummariesRequest.pagination:type_name -> domain.common.v1.PaginationRequest
+	1, // 4: service.operation.v1.ListJobTemplateSummariesResponse.summaries:type_name -> service.operation.v1.JobTemplateSummary
+	6, // 5: service.operation.v1.ListJobTemplateSummariesResponse.pagination:type_name -> domain.common.v1.PaginationResponse
+	7, // 6: service.operation.v1.ListJobTemplateSummariesResponse.error:type_name -> domain.common.v1.Error
+	2, // 7: service.operation.v1.JobTemplateSummaryService.ListJobTemplateSummaries:input_type -> service.operation.v1.ListJobTemplateSummariesRequest
+	3, // 8: service.operation.v1.JobTemplateSummaryService.ListJobTemplateSummaries:output_type -> service.operation.v1.ListJobTemplateSummariesResponse
+	8, // [8:9] is the sub-list for method output_type
+	7, // [7:8] is the sub-list for method input_type
+	7, // [7:7] is the sub-list for extension type_name
+	7, // [7:7] is the sub-list for extension extendee
+	0, // [0:7] is the sub-list for field type_name
 }
 
 func init() { file_service_operation_job_template_summary_job_template_summary_proto_init() }

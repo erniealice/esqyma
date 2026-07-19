@@ -8,6 +8,7 @@ package operationv1
 
 import (
 	common "github.com/erniealice/esqyma/pkg/schema/v1/domain/common"
+	job_phase "github.com/erniealice/esqyma/pkg/schema/v1/domain/operation/job_phase"
 	outcome_criteria "github.com/erniealice/esqyma/pkg/schema/v1/domain/operation/outcome_criteria"
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
@@ -538,6 +539,116 @@ func (x *OutcomeRow) GetCells() map[string]*OutcomeCell {
 	return nil
 }
 
+// PhaseApprovalRollup is the truthful, per-template-phase instance roll-up the
+// approval bar renders (codex-rereview.md fresh finding: "the matrix response
+// already carries enough data for a truthful approval bar" — REFUTED). It is
+// derived over the FULL sheet set S (every active job_phase in the workspace for
+// this template + template_phase), NOT the staff-visible row subset — a teacher
+// on scope=MINE still sees the whole sheet's true state, and the derived state
+// cannot be fabricated from the visible cells alone.
+//
+// `status` is the sole approval status when every member shares one, or the
+// LOWEST status on the ladder when they differ (`mixed` = true then). The four
+// derived overlay states (`not_started`, `mixed/attention`, `hard_frozen`) are
+// NOT enum members — they compose from these fields (not_started = status
+// IN_PROGRESS && !has_data; mixed = the flag; hard_frozen = the flag).
+type PhaseApprovalRollup struct {
+	state              protoimpl.MessageState `protogen:"open.v1"`
+	JobTemplatePhaseId string                 `protobuf:"bytes,1,opt,name=job_template_phase_id,json=jobTemplatePhaseId,proto3" json:"job_template_phase_id,omitempty"`
+	// Sole status across the sheet, or the LOWEST ladder status when mixed.
+	Status      job_phase.PhaseApprovalStatus `protobuf:"varint,2,opt,name=status,proto3,enum=domain.operation.v1.PhaseApprovalStatus" json:"status,omitempty"`
+	Mixed       bool                          `protobuf:"varint,3,opt,name=mixed,proto3" json:"mixed,omitempty"`                                // the sheet's members are not all in one status
+	TargetCount int32                         `protobuf:"varint,4,opt,name=target_count,json=targetCount,proto3" json:"target_count,omitempty"` // number of active job_phase rows in the full sheet S
+	HasData     bool                          `protobuf:"varint,5,opt,name=has_data,json=hasData,proto3" json:"has_data,omitempty"`             // any active outcome/data under the sheet
+	HardFrozen  bool                          `protobuf:"varint,6,opt,name=hard_frozen,json=hardFrozen,proto3" json:"hard_frozen,omitempty"`    // closed schedule OR active authoritative final (plan §4.4)
+	// Blank required matrix leaves (task × criterion) across S — surfaced in the
+	// D6 submit confirmation dialog. Same task×criterion seam the submit
+	// transition stamps on its audit event; computed only when the sheet is
+	// IN_PROGRESS (submit-eligible), otherwise 0.
+	BlankRequiredCount int32 `protobuf:"varint,7,opt,name=blank_required_count,json=blankRequiredCount,proto3" json:"blank_required_count,omitempty"`
+	unknownFields      protoimpl.UnknownFields
+	sizeCache          protoimpl.SizeCache
+}
+
+func (x *PhaseApprovalRollup) Reset() {
+	*x = PhaseApprovalRollup{}
+	mi := &file_service_operation_outcome_matrix_outcome_matrix_proto_msgTypes[6]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *PhaseApprovalRollup) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*PhaseApprovalRollup) ProtoMessage() {}
+
+func (x *PhaseApprovalRollup) ProtoReflect() protoreflect.Message {
+	mi := &file_service_operation_outcome_matrix_outcome_matrix_proto_msgTypes[6]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use PhaseApprovalRollup.ProtoReflect.Descriptor instead.
+func (*PhaseApprovalRollup) Descriptor() ([]byte, []int) {
+	return file_service_operation_outcome_matrix_outcome_matrix_proto_rawDescGZIP(), []int{6}
+}
+
+func (x *PhaseApprovalRollup) GetJobTemplatePhaseId() string {
+	if x != nil {
+		return x.JobTemplatePhaseId
+	}
+	return ""
+}
+
+func (x *PhaseApprovalRollup) GetStatus() job_phase.PhaseApprovalStatus {
+	if x != nil {
+		return x.Status
+	}
+	return job_phase.PhaseApprovalStatus(0)
+}
+
+func (x *PhaseApprovalRollup) GetMixed() bool {
+	if x != nil {
+		return x.Mixed
+	}
+	return false
+}
+
+func (x *PhaseApprovalRollup) GetTargetCount() int32 {
+	if x != nil {
+		return x.TargetCount
+	}
+	return 0
+}
+
+func (x *PhaseApprovalRollup) GetHasData() bool {
+	if x != nil {
+		return x.HasData
+	}
+	return false
+}
+
+func (x *PhaseApprovalRollup) GetHardFrozen() bool {
+	if x != nil {
+		return x.HardFrozen
+	}
+	return false
+}
+
+func (x *PhaseApprovalRollup) GetBlankRequiredCount() int32 {
+	if x != nil {
+		return x.BlankRequiredCount
+	}
+	return 0
+}
+
 type GetOutcomeMatrixResponse struct {
 	state           protoimpl.MessageState `protogen:"open.v1"`
 	JobTemplateId   string                 `protobuf:"bytes,1,opt,name=job_template_id,json=jobTemplateId,proto3" json:"job_template_id,omitempty"`
@@ -546,13 +657,16 @@ type GetOutcomeMatrixResponse struct {
 	Rows            []*OutcomeRow          `protobuf:"bytes,4,rep,name=rows,proto3" json:"rows,omitempty"`     // the client rows
 	Success         bool                   `protobuf:"varint,5,opt,name=success,proto3" json:"success,omitempty"`
 	Error           *common.Error          `protobuf:"bytes,6,opt,name=error,proto3,oneof" json:"error,omitempty"`
+	// Per-template-phase approval roll-up, one entry per phase column, derived
+	// over the full sheet set S (P3). Empty on mock/non-postgres builds.
+	ApprovalRollups []*PhaseApprovalRollup `protobuf:"bytes,7,rep,name=approval_rollups,json=approvalRollups,proto3" json:"approval_rollups,omitempty"`
 	unknownFields   protoimpl.UnknownFields
 	sizeCache       protoimpl.SizeCache
 }
 
 func (x *GetOutcomeMatrixResponse) Reset() {
 	*x = GetOutcomeMatrixResponse{}
-	mi := &file_service_operation_outcome_matrix_outcome_matrix_proto_msgTypes[6]
+	mi := &file_service_operation_outcome_matrix_outcome_matrix_proto_msgTypes[7]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -564,7 +678,7 @@ func (x *GetOutcomeMatrixResponse) String() string {
 func (*GetOutcomeMatrixResponse) ProtoMessage() {}
 
 func (x *GetOutcomeMatrixResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_service_operation_outcome_matrix_outcome_matrix_proto_msgTypes[6]
+	mi := &file_service_operation_outcome_matrix_outcome_matrix_proto_msgTypes[7]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -577,7 +691,7 @@ func (x *GetOutcomeMatrixResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetOutcomeMatrixResponse.ProtoReflect.Descriptor instead.
 func (*GetOutcomeMatrixResponse) Descriptor() ([]byte, []int) {
-	return file_service_operation_outcome_matrix_outcome_matrix_proto_rawDescGZIP(), []int{6}
+	return file_service_operation_outcome_matrix_outcome_matrix_proto_rawDescGZIP(), []int{7}
 }
 
 func (x *GetOutcomeMatrixResponse) GetJobTemplateId() string {
@@ -622,11 +736,18 @@ func (x *GetOutcomeMatrixResponse) GetError() *common.Error {
 	return nil
 }
 
+func (x *GetOutcomeMatrixResponse) GetApprovalRollups() []*PhaseApprovalRollup {
+	if x != nil {
+		return x.ApprovalRollups
+	}
+	return nil
+}
+
 var File_service_operation_outcome_matrix_outcome_matrix_proto protoreflect.FileDescriptor
 
 const file_service_operation_outcome_matrix_outcome_matrix_proto_rawDesc = "" +
 	"\n" +
-	"5service/operation/outcome_matrix/outcome_matrix.proto\x12\x14service.operation.v1\x1a\x19domain/common/error.proto\x1a8domain/operation/outcome_criteria/outcome_criteria.proto\"\xe7\x01\n" +
+	"5service/operation/outcome_matrix/outcome_matrix.proto\x12\x14service.operation.v1\x1a\x19domain/common/error.proto\x1a8domain/operation/outcome_criteria/outcome_criteria.proto\x1a*domain/operation/job_phase/job_phase.proto\"\xe7\x01\n" +
 	"\x17GetOutcomeMatrixRequest\x12&\n" +
 	"\x0fjob_template_id\x18\x01 \x01(\tR\rjobTemplateId\x12>\n" +
 	"\x05scope\x18\x02 \x01(\x0e2(.service.operation.v1.OutcomeMatrixScopeR\x05scope\x12\"\n" +
@@ -681,14 +802,24 @@ const file_service_operation_outcome_matrix_outcome_matrix_proto_rawDesc = "" +
 	"\n" +
 	"CellsEntry\x12\x10\n" +
 	"\x03key\x18\x01 \x01(\tR\x03key\x127\n" +
-	"\x05value\x18\x02 \x01(\v2!.service.operation.v1.OutcomeCellR\x05value:\x028\x01\"\xb7\x02\n" +
+	"\x05value\x18\x02 \x01(\v2!.service.operation.v1.OutcomeCellR\x05value:\x028\x01\"\xb1\x02\n" +
+	"\x13PhaseApprovalRollup\x121\n" +
+	"\x15job_template_phase_id\x18\x01 \x01(\tR\x12jobTemplatePhaseId\x12@\n" +
+	"\x06status\x18\x02 \x01(\x0e2(.domain.operation.v1.PhaseApprovalStatusR\x06status\x12\x14\n" +
+	"\x05mixed\x18\x03 \x01(\bR\x05mixed\x12!\n" +
+	"\ftarget_count\x18\x04 \x01(\x05R\vtargetCount\x12\x19\n" +
+	"\bhas_data\x18\x05 \x01(\bR\ahasData\x12\x1f\n" +
+	"\vhard_frozen\x18\x06 \x01(\bR\n" +
+	"hardFrozen\x120\n" +
+	"\x14blank_required_count\x18\a \x01(\x05R\x12blankRequiredCount\"\x8d\x03\n" +
 	"\x18GetOutcomeMatrixResponse\x12&\n" +
 	"\x0fjob_template_id\x18\x01 \x01(\tR\rjobTemplateId\x12*\n" +
 	"\x11job_template_name\x18\x02 \x01(\tR\x0fjobTemplateName\x129\n" +
 	"\x06phases\x18\x03 \x03(\v2!.service.operation.v1.PhaseColumnR\x06phases\x124\n" +
 	"\x04rows\x18\x04 \x03(\v2 .service.operation.v1.OutcomeRowR\x04rows\x12\x18\n" +
 	"\asuccess\x18\x05 \x01(\bR\asuccess\x122\n" +
-	"\x05error\x18\x06 \x01(\v2\x17.domain.common.v1.ErrorH\x00R\x05error\x88\x01\x01B\b\n" +
+	"\x05error\x18\x06 \x01(\v2\x17.domain.common.v1.ErrorH\x00R\x05error\x88\x01\x01\x12T\n" +
+	"\x10approval_rollups\x18\a \x03(\v2).service.operation.v1.PhaseApprovalRollupR\x0fapprovalRollupsB\b\n" +
 	"\x06_error*w\n" +
 	"\x12OutcomeMatrixScope\x12$\n" +
 	" OUTCOME_MATRIX_SCOPE_UNSPECIFIED\x10\x00\x12\x1d\n" +
@@ -711,7 +842,7 @@ func file_service_operation_outcome_matrix_outcome_matrix_proto_rawDescGZIP() []
 }
 
 var file_service_operation_outcome_matrix_outcome_matrix_proto_enumTypes = make([]protoimpl.EnumInfo, 1)
-var file_service_operation_outcome_matrix_outcome_matrix_proto_msgTypes = make([]protoimpl.MessageInfo, 8)
+var file_service_operation_outcome_matrix_outcome_matrix_proto_msgTypes = make([]protoimpl.MessageInfo, 9)
 var file_service_operation_outcome_matrix_outcome_matrix_proto_goTypes = []any{
 	(OutcomeMatrixScope)(0),                  // 0: service.operation.v1.OutcomeMatrixScope
 	(*GetOutcomeMatrixRequest)(nil),          // 1: service.operation.v1.GetOutcomeMatrixRequest
@@ -720,28 +851,32 @@ var file_service_operation_outcome_matrix_outcome_matrix_proto_goTypes = []any{
 	(*PhaseColumn)(nil),                      // 4: service.operation.v1.PhaseColumn
 	(*OutcomeCell)(nil),                      // 5: service.operation.v1.OutcomeCell
 	(*OutcomeRow)(nil),                       // 6: service.operation.v1.OutcomeRow
-	(*GetOutcomeMatrixResponse)(nil),         // 7: service.operation.v1.GetOutcomeMatrixResponse
-	nil,                                      // 8: service.operation.v1.OutcomeRow.CellsEntry
-	(*outcome_criteria.OutcomeCriteria)(nil), // 9: domain.operation.v1.OutcomeCriteria
-	(*common.Error)(nil),                     // 10: domain.common.v1.Error
+	(*PhaseApprovalRollup)(nil),              // 7: service.operation.v1.PhaseApprovalRollup
+	(*GetOutcomeMatrixResponse)(nil),         // 8: service.operation.v1.GetOutcomeMatrixResponse
+	nil,                                      // 9: service.operation.v1.OutcomeRow.CellsEntry
+	(*outcome_criteria.OutcomeCriteria)(nil), // 10: domain.operation.v1.OutcomeCriteria
+	(job_phase.PhaseApprovalStatus)(0),       // 11: domain.operation.v1.PhaseApprovalStatus
+	(*common.Error)(nil),                     // 12: domain.common.v1.Error
 }
 var file_service_operation_outcome_matrix_outcome_matrix_proto_depIdxs = []int32{
 	0,  // 0: service.operation.v1.GetOutcomeMatrixRequest.scope:type_name -> service.operation.v1.OutcomeMatrixScope
-	9,  // 1: service.operation.v1.CriterionColumn.criteria:type_name -> domain.operation.v1.OutcomeCriteria
+	10, // 1: service.operation.v1.CriterionColumn.criteria:type_name -> domain.operation.v1.OutcomeCriteria
 	2,  // 2: service.operation.v1.TaskColumn.criteria:type_name -> service.operation.v1.CriterionColumn
 	3,  // 3: service.operation.v1.PhaseColumn.tasks:type_name -> service.operation.v1.TaskColumn
-	8,  // 4: service.operation.v1.OutcomeRow.cells:type_name -> service.operation.v1.OutcomeRow.CellsEntry
-	4,  // 5: service.operation.v1.GetOutcomeMatrixResponse.phases:type_name -> service.operation.v1.PhaseColumn
-	6,  // 6: service.operation.v1.GetOutcomeMatrixResponse.rows:type_name -> service.operation.v1.OutcomeRow
-	10, // 7: service.operation.v1.GetOutcomeMatrixResponse.error:type_name -> domain.common.v1.Error
-	5,  // 8: service.operation.v1.OutcomeRow.CellsEntry.value:type_name -> service.operation.v1.OutcomeCell
-	1,  // 9: service.operation.v1.OutcomeMatrixService.GetOutcomeMatrix:input_type -> service.operation.v1.GetOutcomeMatrixRequest
-	7,  // 10: service.operation.v1.OutcomeMatrixService.GetOutcomeMatrix:output_type -> service.operation.v1.GetOutcomeMatrixResponse
-	10, // [10:11] is the sub-list for method output_type
-	9,  // [9:10] is the sub-list for method input_type
-	9,  // [9:9] is the sub-list for extension type_name
-	9,  // [9:9] is the sub-list for extension extendee
-	0,  // [0:9] is the sub-list for field type_name
+	9,  // 4: service.operation.v1.OutcomeRow.cells:type_name -> service.operation.v1.OutcomeRow.CellsEntry
+	11, // 5: service.operation.v1.PhaseApprovalRollup.status:type_name -> domain.operation.v1.PhaseApprovalStatus
+	4,  // 6: service.operation.v1.GetOutcomeMatrixResponse.phases:type_name -> service.operation.v1.PhaseColumn
+	6,  // 7: service.operation.v1.GetOutcomeMatrixResponse.rows:type_name -> service.operation.v1.OutcomeRow
+	12, // 8: service.operation.v1.GetOutcomeMatrixResponse.error:type_name -> domain.common.v1.Error
+	7,  // 9: service.operation.v1.GetOutcomeMatrixResponse.approval_rollups:type_name -> service.operation.v1.PhaseApprovalRollup
+	5,  // 10: service.operation.v1.OutcomeRow.CellsEntry.value:type_name -> service.operation.v1.OutcomeCell
+	1,  // 11: service.operation.v1.OutcomeMatrixService.GetOutcomeMatrix:input_type -> service.operation.v1.GetOutcomeMatrixRequest
+	8,  // 12: service.operation.v1.OutcomeMatrixService.GetOutcomeMatrix:output_type -> service.operation.v1.GetOutcomeMatrixResponse
+	12, // [12:13] is the sub-list for method output_type
+	11, // [11:12] is the sub-list for method input_type
+	11, // [11:11] is the sub-list for extension type_name
+	11, // [11:11] is the sub-list for extension extendee
+	0,  // [0:11] is the sub-list for field type_name
 }
 
 func init() { file_service_operation_outcome_matrix_outcome_matrix_proto_init() }
@@ -751,14 +886,14 @@ func file_service_operation_outcome_matrix_outcome_matrix_proto_init() {
 	}
 	file_service_operation_outcome_matrix_outcome_matrix_proto_msgTypes[0].OneofWrappers = []any{}
 	file_service_operation_outcome_matrix_outcome_matrix_proto_msgTypes[4].OneofWrappers = []any{}
-	file_service_operation_outcome_matrix_outcome_matrix_proto_msgTypes[6].OneofWrappers = []any{}
+	file_service_operation_outcome_matrix_outcome_matrix_proto_msgTypes[7].OneofWrappers = []any{}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
 		File: protoimpl.DescBuilder{
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_service_operation_outcome_matrix_outcome_matrix_proto_rawDesc), len(file_service_operation_outcome_matrix_outcome_matrix_proto_rawDesc)),
 			NumEnums:      1,
-			NumMessages:   8,
+			NumMessages:   9,
 			NumExtensions: 0,
 			NumServices:   1,
 		},
