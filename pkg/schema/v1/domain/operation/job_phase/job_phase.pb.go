@@ -76,6 +76,71 @@ func (PhaseStatus) EnumDescriptor() ([]byte, []int) {
 	return file_domain_operation_job_phase_job_phase_proto_rawDescGZIP(), []int{0}
 }
 
+// PhaseApprovalStatus is the LOCAL per-phase approval ladder (plan
+// 20260718-phase-approval-workflow). It is orthogonal to PhaseStatus (field 11):
+// approval transitions never mutate PhaseStatus, trigger completion hooks, or
+// touch billing. The ladder is
+//
+//	IN_PROGRESS --submit--> FOR_REVIEW --verify--> VERIFIED --publish--> PUBLISHED
+//
+// with `return` normalizing any advanced/mixed sheet back to IN_PROGRESS.
+// UNSPECIFIED is never persisted; the DB stores the enum NAME (TEXT) with a
+// default of IN_PROGRESS and a CHECK over the four non-UNSPECIFIED tokens.
+type PhaseApprovalStatus int32
+
+const (
+	PhaseApprovalStatus_PHASE_APPROVAL_STATUS_UNSPECIFIED PhaseApprovalStatus = 0
+	PhaseApprovalStatus_PHASE_APPROVAL_STATUS_IN_PROGRESS PhaseApprovalStatus = 1
+	PhaseApprovalStatus_PHASE_APPROVAL_STATUS_FOR_REVIEW  PhaseApprovalStatus = 2
+	PhaseApprovalStatus_PHASE_APPROVAL_STATUS_VERIFIED    PhaseApprovalStatus = 3
+	PhaseApprovalStatus_PHASE_APPROVAL_STATUS_PUBLISHED   PhaseApprovalStatus = 4
+)
+
+// Enum value maps for PhaseApprovalStatus.
+var (
+	PhaseApprovalStatus_name = map[int32]string{
+		0: "PHASE_APPROVAL_STATUS_UNSPECIFIED",
+		1: "PHASE_APPROVAL_STATUS_IN_PROGRESS",
+		2: "PHASE_APPROVAL_STATUS_FOR_REVIEW",
+		3: "PHASE_APPROVAL_STATUS_VERIFIED",
+		4: "PHASE_APPROVAL_STATUS_PUBLISHED",
+	}
+	PhaseApprovalStatus_value = map[string]int32{
+		"PHASE_APPROVAL_STATUS_UNSPECIFIED": 0,
+		"PHASE_APPROVAL_STATUS_IN_PROGRESS": 1,
+		"PHASE_APPROVAL_STATUS_FOR_REVIEW":  2,
+		"PHASE_APPROVAL_STATUS_VERIFIED":    3,
+		"PHASE_APPROVAL_STATUS_PUBLISHED":   4,
+	}
+)
+
+func (x PhaseApprovalStatus) Enum() *PhaseApprovalStatus {
+	p := new(PhaseApprovalStatus)
+	*p = x
+	return p
+}
+
+func (x PhaseApprovalStatus) String() string {
+	return protoimpl.X.EnumStringOf(x.Descriptor(), protoreflect.EnumNumber(x))
+}
+
+func (PhaseApprovalStatus) Descriptor() protoreflect.EnumDescriptor {
+	return file_domain_operation_job_phase_job_phase_proto_enumTypes[1].Descriptor()
+}
+
+func (PhaseApprovalStatus) Type() protoreflect.EnumType {
+	return &file_domain_operation_job_phase_job_phase_proto_enumTypes[1]
+}
+
+func (x PhaseApprovalStatus) Number() protoreflect.EnumNumber {
+	return protoreflect.EnumNumber(x)
+}
+
+// Deprecated: Use PhaseApprovalStatus.Descriptor instead.
+func (PhaseApprovalStatus) EnumDescriptor() ([]byte, []int) {
+	return file_domain_operation_job_phase_job_phase_proto_rawDescGZIP(), []int{1}
+}
+
 type JobPhase struct {
 	state              protoimpl.MessageState `protogen:"open.v1"`
 	Id                 string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
@@ -104,8 +169,30 @@ type JobPhase struct {
 	PredecessorPhaseId *string                `protobuf:"bytes,24,opt,name=predecessor_phase_id,json=predecessorPhaseId,proto3,oneof" json:"predecessor_phase_id,omitempty"`
 	ScoringSchemeId    *string                `protobuf:"bytes,25,opt,name=scoring_scheme_id,json=scoringSchemeId,proto3,oneof" json:"scoring_scheme_id,omitempty"`
 	IsSynthesized      bool                   `protobuf:"varint,26,opt,name=is_synthesized,json=isSynthesized,proto3" json:"is_synthesized,omitempty"`
-	unknownFields      protoimpl.UnknownFields
-	sizeCache          protoimpl.SizeCache
+	// --- Approval workflow (per-phase approval ladder) ---
+	// Server-owned lifecycle. Generic create forces IN_PROGRESS/null audit and
+	// generic update strips these fields (P2); dedicated transition RPCs own the
+	// stamps. approval_status persists as the enum NAME (TEXT NOT NULL) with the
+	// raw-SQL quoted default below and a DB CHECK over the four persisted tokens.
+	// Each actor/time pair is null-or-nonnull together (DB CHECK, migration). The
+	// *_string fields are display-only mirrors (db.ignore) of their epoch-ms int64
+	// siblings and are never persisted.
+	ApprovalStatus    PhaseApprovalStatus `protobuf:"varint,40,opt,name=approval_status,json=approvalStatus,proto3,enum=domain.operation.v1.PhaseApprovalStatus" json:"approval_status,omitempty"`
+	SubmittedBy       *string             `protobuf:"bytes,41,opt,name=submitted_by,json=submittedBy,proto3,oneof" json:"submitted_by,omitempty"`
+	SubmittedAt       *int64              `protobuf:"varint,42,opt,name=submitted_at,json=submittedAt,proto3,oneof" json:"submitted_at,omitempty"`
+	SubmittedAtString *string             `protobuf:"bytes,43,opt,name=submitted_at_string,json=submittedAtString,proto3,oneof" json:"submitted_at_string,omitempty"`
+	VerifiedBy        *string             `protobuf:"bytes,44,opt,name=verified_by,json=verifiedBy,proto3,oneof" json:"verified_by,omitempty"`
+	VerifiedAt        *int64              `protobuf:"varint,45,opt,name=verified_at,json=verifiedAt,proto3,oneof" json:"verified_at,omitempty"`
+	VerifiedAtString  *string             `protobuf:"bytes,46,opt,name=verified_at_string,json=verifiedAtString,proto3,oneof" json:"verified_at_string,omitempty"`
+	PublishedBy       *string             `protobuf:"bytes,47,opt,name=published_by,json=publishedBy,proto3,oneof" json:"published_by,omitempty"`
+	PublishedAt       *int64              `protobuf:"varint,48,opt,name=published_at,json=publishedAt,proto3,oneof" json:"published_at,omitempty"`
+	PublishedAtString *string             `protobuf:"bytes,49,opt,name=published_at_string,json=publishedAtString,proto3,oneof" json:"published_at_string,omitempty"`
+	ReturnReason      *string             `protobuf:"bytes,50,opt,name=return_reason,json=returnReason,proto3,oneof" json:"return_reason,omitempty"`
+	ReturnedBy        *string             `protobuf:"bytes,51,opt,name=returned_by,json=returnedBy,proto3,oneof" json:"returned_by,omitempty"`
+	ReturnedAt        *int64              `protobuf:"varint,52,opt,name=returned_at,json=returnedAt,proto3,oneof" json:"returned_at,omitempty"`
+	ReturnedAtString  *string             `protobuf:"bytes,53,opt,name=returned_at_string,json=returnedAtString,proto3,oneof" json:"returned_at_string,omitempty"`
+	unknownFields     protoimpl.UnknownFields
+	sizeCache         protoimpl.SizeCache
 }
 
 func (x *JobPhase) Reset() {
@@ -318,6 +405,104 @@ func (x *JobPhase) GetIsSynthesized() bool {
 		return x.IsSynthesized
 	}
 	return false
+}
+
+func (x *JobPhase) GetApprovalStatus() PhaseApprovalStatus {
+	if x != nil {
+		return x.ApprovalStatus
+	}
+	return PhaseApprovalStatus_PHASE_APPROVAL_STATUS_UNSPECIFIED
+}
+
+func (x *JobPhase) GetSubmittedBy() string {
+	if x != nil && x.SubmittedBy != nil {
+		return *x.SubmittedBy
+	}
+	return ""
+}
+
+func (x *JobPhase) GetSubmittedAt() int64 {
+	if x != nil && x.SubmittedAt != nil {
+		return *x.SubmittedAt
+	}
+	return 0
+}
+
+func (x *JobPhase) GetSubmittedAtString() string {
+	if x != nil && x.SubmittedAtString != nil {
+		return *x.SubmittedAtString
+	}
+	return ""
+}
+
+func (x *JobPhase) GetVerifiedBy() string {
+	if x != nil && x.VerifiedBy != nil {
+		return *x.VerifiedBy
+	}
+	return ""
+}
+
+func (x *JobPhase) GetVerifiedAt() int64 {
+	if x != nil && x.VerifiedAt != nil {
+		return *x.VerifiedAt
+	}
+	return 0
+}
+
+func (x *JobPhase) GetVerifiedAtString() string {
+	if x != nil && x.VerifiedAtString != nil {
+		return *x.VerifiedAtString
+	}
+	return ""
+}
+
+func (x *JobPhase) GetPublishedBy() string {
+	if x != nil && x.PublishedBy != nil {
+		return *x.PublishedBy
+	}
+	return ""
+}
+
+func (x *JobPhase) GetPublishedAt() int64 {
+	if x != nil && x.PublishedAt != nil {
+		return *x.PublishedAt
+	}
+	return 0
+}
+
+func (x *JobPhase) GetPublishedAtString() string {
+	if x != nil && x.PublishedAtString != nil {
+		return *x.PublishedAtString
+	}
+	return ""
+}
+
+func (x *JobPhase) GetReturnReason() string {
+	if x != nil && x.ReturnReason != nil {
+		return *x.ReturnReason
+	}
+	return ""
+}
+
+func (x *JobPhase) GetReturnedBy() string {
+	if x != nil && x.ReturnedBy != nil {
+		return *x.ReturnedBy
+	}
+	return ""
+}
+
+func (x *JobPhase) GetReturnedAt() int64 {
+	if x != nil && x.ReturnedAt != nil {
+		return *x.ReturnedAt
+	}
+	return 0
+}
+
+func (x *JobPhase) GetReturnedAtString() string {
+	if x != nil && x.ReturnedAtString != nil {
+		return *x.ReturnedAtString
+	}
+	return ""
 }
 
 type CreateJobPhaseRequest struct {
@@ -1208,11 +1393,499 @@ func (x *ListJobPhasesByJobResponse) GetError() *common.Error {
 	return nil
 }
 
+type SubmitJobPhaseApprovalRequest struct {
+	state              protoimpl.MessageState `protogen:"open.v1"`
+	JobTemplateId      string                 `protobuf:"bytes,1,opt,name=job_template_id,json=jobTemplateId,proto3" json:"job_template_id,omitempty"`
+	JobTemplatePhaseId string                 `protobuf:"bytes,2,opt,name=job_template_phase_id,json=jobTemplatePhaseId,proto3" json:"job_template_phase_id,omitempty"`
+	unknownFields      protoimpl.UnknownFields
+	sizeCache          protoimpl.SizeCache
+}
+
+func (x *SubmitJobPhaseApprovalRequest) Reset() {
+	*x = SubmitJobPhaseApprovalRequest{}
+	mi := &file_domain_operation_job_phase_job_phase_proto_msgTypes[17]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *SubmitJobPhaseApprovalRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*SubmitJobPhaseApprovalRequest) ProtoMessage() {}
+
+func (x *SubmitJobPhaseApprovalRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_domain_operation_job_phase_job_phase_proto_msgTypes[17]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use SubmitJobPhaseApprovalRequest.ProtoReflect.Descriptor instead.
+func (*SubmitJobPhaseApprovalRequest) Descriptor() ([]byte, []int) {
+	return file_domain_operation_job_phase_job_phase_proto_rawDescGZIP(), []int{17}
+}
+
+func (x *SubmitJobPhaseApprovalRequest) GetJobTemplateId() string {
+	if x != nil {
+		return x.JobTemplateId
+	}
+	return ""
+}
+
+func (x *SubmitJobPhaseApprovalRequest) GetJobTemplatePhaseId() string {
+	if x != nil {
+		return x.JobTemplatePhaseId
+	}
+	return ""
+}
+
+type SubmitJobPhaseApprovalResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Status        PhaseApprovalStatus    `protobuf:"varint,1,opt,name=status,proto3,enum=domain.operation.v1.PhaseApprovalStatus" json:"status,omitempty"`
+	AffectedCount int32                  `protobuf:"varint,2,opt,name=affected_count,json=affectedCount,proto3" json:"affected_count,omitempty"`
+	Success       bool                   `protobuf:"varint,3,opt,name=success,proto3" json:"success,omitempty"`
+	Error         *common.Error          `protobuf:"bytes,4,opt,name=error,proto3,oneof" json:"error,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *SubmitJobPhaseApprovalResponse) Reset() {
+	*x = SubmitJobPhaseApprovalResponse{}
+	mi := &file_domain_operation_job_phase_job_phase_proto_msgTypes[18]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *SubmitJobPhaseApprovalResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*SubmitJobPhaseApprovalResponse) ProtoMessage() {}
+
+func (x *SubmitJobPhaseApprovalResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_domain_operation_job_phase_job_phase_proto_msgTypes[18]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use SubmitJobPhaseApprovalResponse.ProtoReflect.Descriptor instead.
+func (*SubmitJobPhaseApprovalResponse) Descriptor() ([]byte, []int) {
+	return file_domain_operation_job_phase_job_phase_proto_rawDescGZIP(), []int{18}
+}
+
+func (x *SubmitJobPhaseApprovalResponse) GetStatus() PhaseApprovalStatus {
+	if x != nil {
+		return x.Status
+	}
+	return PhaseApprovalStatus_PHASE_APPROVAL_STATUS_UNSPECIFIED
+}
+
+func (x *SubmitJobPhaseApprovalResponse) GetAffectedCount() int32 {
+	if x != nil {
+		return x.AffectedCount
+	}
+	return 0
+}
+
+func (x *SubmitJobPhaseApprovalResponse) GetSuccess() bool {
+	if x != nil {
+		return x.Success
+	}
+	return false
+}
+
+func (x *SubmitJobPhaseApprovalResponse) GetError() *common.Error {
+	if x != nil {
+		return x.Error
+	}
+	return nil
+}
+
+type VerifyJobPhaseApprovalRequest struct {
+	state              protoimpl.MessageState `protogen:"open.v1"`
+	JobTemplateId      string                 `protobuf:"bytes,1,opt,name=job_template_id,json=jobTemplateId,proto3" json:"job_template_id,omitempty"`
+	JobTemplatePhaseId string                 `protobuf:"bytes,2,opt,name=job_template_phase_id,json=jobTemplatePhaseId,proto3" json:"job_template_phase_id,omitempty"`
+	unknownFields      protoimpl.UnknownFields
+	sizeCache          protoimpl.SizeCache
+}
+
+func (x *VerifyJobPhaseApprovalRequest) Reset() {
+	*x = VerifyJobPhaseApprovalRequest{}
+	mi := &file_domain_operation_job_phase_job_phase_proto_msgTypes[19]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *VerifyJobPhaseApprovalRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*VerifyJobPhaseApprovalRequest) ProtoMessage() {}
+
+func (x *VerifyJobPhaseApprovalRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_domain_operation_job_phase_job_phase_proto_msgTypes[19]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use VerifyJobPhaseApprovalRequest.ProtoReflect.Descriptor instead.
+func (*VerifyJobPhaseApprovalRequest) Descriptor() ([]byte, []int) {
+	return file_domain_operation_job_phase_job_phase_proto_rawDescGZIP(), []int{19}
+}
+
+func (x *VerifyJobPhaseApprovalRequest) GetJobTemplateId() string {
+	if x != nil {
+		return x.JobTemplateId
+	}
+	return ""
+}
+
+func (x *VerifyJobPhaseApprovalRequest) GetJobTemplatePhaseId() string {
+	if x != nil {
+		return x.JobTemplatePhaseId
+	}
+	return ""
+}
+
+type VerifyJobPhaseApprovalResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Status        PhaseApprovalStatus    `protobuf:"varint,1,opt,name=status,proto3,enum=domain.operation.v1.PhaseApprovalStatus" json:"status,omitempty"`
+	AffectedCount int32                  `protobuf:"varint,2,opt,name=affected_count,json=affectedCount,proto3" json:"affected_count,omitempty"`
+	Success       bool                   `protobuf:"varint,3,opt,name=success,proto3" json:"success,omitempty"`
+	Error         *common.Error          `protobuf:"bytes,4,opt,name=error,proto3,oneof" json:"error,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *VerifyJobPhaseApprovalResponse) Reset() {
+	*x = VerifyJobPhaseApprovalResponse{}
+	mi := &file_domain_operation_job_phase_job_phase_proto_msgTypes[20]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *VerifyJobPhaseApprovalResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*VerifyJobPhaseApprovalResponse) ProtoMessage() {}
+
+func (x *VerifyJobPhaseApprovalResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_domain_operation_job_phase_job_phase_proto_msgTypes[20]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use VerifyJobPhaseApprovalResponse.ProtoReflect.Descriptor instead.
+func (*VerifyJobPhaseApprovalResponse) Descriptor() ([]byte, []int) {
+	return file_domain_operation_job_phase_job_phase_proto_rawDescGZIP(), []int{20}
+}
+
+func (x *VerifyJobPhaseApprovalResponse) GetStatus() PhaseApprovalStatus {
+	if x != nil {
+		return x.Status
+	}
+	return PhaseApprovalStatus_PHASE_APPROVAL_STATUS_UNSPECIFIED
+}
+
+func (x *VerifyJobPhaseApprovalResponse) GetAffectedCount() int32 {
+	if x != nil {
+		return x.AffectedCount
+	}
+	return 0
+}
+
+func (x *VerifyJobPhaseApprovalResponse) GetSuccess() bool {
+	if x != nil {
+		return x.Success
+	}
+	return false
+}
+
+func (x *VerifyJobPhaseApprovalResponse) GetError() *common.Error {
+	if x != nil {
+		return x.Error
+	}
+	return nil
+}
+
+type PublishJobPhaseApprovalRequest struct {
+	state              protoimpl.MessageState `protogen:"open.v1"`
+	JobTemplateId      string                 `protobuf:"bytes,1,opt,name=job_template_id,json=jobTemplateId,proto3" json:"job_template_id,omitempty"`
+	JobTemplatePhaseId string                 `protobuf:"bytes,2,opt,name=job_template_phase_id,json=jobTemplatePhaseId,proto3" json:"job_template_phase_id,omitempty"`
+	unknownFields      protoimpl.UnknownFields
+	sizeCache          protoimpl.SizeCache
+}
+
+func (x *PublishJobPhaseApprovalRequest) Reset() {
+	*x = PublishJobPhaseApprovalRequest{}
+	mi := &file_domain_operation_job_phase_job_phase_proto_msgTypes[21]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *PublishJobPhaseApprovalRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*PublishJobPhaseApprovalRequest) ProtoMessage() {}
+
+func (x *PublishJobPhaseApprovalRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_domain_operation_job_phase_job_phase_proto_msgTypes[21]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use PublishJobPhaseApprovalRequest.ProtoReflect.Descriptor instead.
+func (*PublishJobPhaseApprovalRequest) Descriptor() ([]byte, []int) {
+	return file_domain_operation_job_phase_job_phase_proto_rawDescGZIP(), []int{21}
+}
+
+func (x *PublishJobPhaseApprovalRequest) GetJobTemplateId() string {
+	if x != nil {
+		return x.JobTemplateId
+	}
+	return ""
+}
+
+func (x *PublishJobPhaseApprovalRequest) GetJobTemplatePhaseId() string {
+	if x != nil {
+		return x.JobTemplatePhaseId
+	}
+	return ""
+}
+
+type PublishJobPhaseApprovalResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Status        PhaseApprovalStatus    `protobuf:"varint,1,opt,name=status,proto3,enum=domain.operation.v1.PhaseApprovalStatus" json:"status,omitempty"`
+	AffectedCount int32                  `protobuf:"varint,2,opt,name=affected_count,json=affectedCount,proto3" json:"affected_count,omitempty"`
+	Success       bool                   `protobuf:"varint,3,opt,name=success,proto3" json:"success,omitempty"`
+	Error         *common.Error          `protobuf:"bytes,4,opt,name=error,proto3,oneof" json:"error,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *PublishJobPhaseApprovalResponse) Reset() {
+	*x = PublishJobPhaseApprovalResponse{}
+	mi := &file_domain_operation_job_phase_job_phase_proto_msgTypes[22]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *PublishJobPhaseApprovalResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*PublishJobPhaseApprovalResponse) ProtoMessage() {}
+
+func (x *PublishJobPhaseApprovalResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_domain_operation_job_phase_job_phase_proto_msgTypes[22]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use PublishJobPhaseApprovalResponse.ProtoReflect.Descriptor instead.
+func (*PublishJobPhaseApprovalResponse) Descriptor() ([]byte, []int) {
+	return file_domain_operation_job_phase_job_phase_proto_rawDescGZIP(), []int{22}
+}
+
+func (x *PublishJobPhaseApprovalResponse) GetStatus() PhaseApprovalStatus {
+	if x != nil {
+		return x.Status
+	}
+	return PhaseApprovalStatus_PHASE_APPROVAL_STATUS_UNSPECIFIED
+}
+
+func (x *PublishJobPhaseApprovalResponse) GetAffectedCount() int32 {
+	if x != nil {
+		return x.AffectedCount
+	}
+	return 0
+}
+
+func (x *PublishJobPhaseApprovalResponse) GetSuccess() bool {
+	if x != nil {
+		return x.Success
+	}
+	return false
+}
+
+func (x *PublishJobPhaseApprovalResponse) GetError() *common.Error {
+	if x != nil {
+		return x.Error
+	}
+	return nil
+}
+
+type ReturnJobPhaseApprovalRequest struct {
+	state              protoimpl.MessageState `protogen:"open.v1"`
+	JobTemplateId      string                 `protobuf:"bytes,1,opt,name=job_template_id,json=jobTemplateId,proto3" json:"job_template_id,omitempty"`
+	JobTemplatePhaseId string                 `protobuf:"bytes,2,opt,name=job_template_phase_id,json=jobTemplatePhaseId,proto3" json:"job_template_phase_id,omitempty"`
+	Reason             *string                `protobuf:"bytes,3,opt,name=reason,proto3,oneof" json:"reason,omitempty"`
+	unknownFields      protoimpl.UnknownFields
+	sizeCache          protoimpl.SizeCache
+}
+
+func (x *ReturnJobPhaseApprovalRequest) Reset() {
+	*x = ReturnJobPhaseApprovalRequest{}
+	mi := &file_domain_operation_job_phase_job_phase_proto_msgTypes[23]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *ReturnJobPhaseApprovalRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ReturnJobPhaseApprovalRequest) ProtoMessage() {}
+
+func (x *ReturnJobPhaseApprovalRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_domain_operation_job_phase_job_phase_proto_msgTypes[23]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ReturnJobPhaseApprovalRequest.ProtoReflect.Descriptor instead.
+func (*ReturnJobPhaseApprovalRequest) Descriptor() ([]byte, []int) {
+	return file_domain_operation_job_phase_job_phase_proto_rawDescGZIP(), []int{23}
+}
+
+func (x *ReturnJobPhaseApprovalRequest) GetJobTemplateId() string {
+	if x != nil {
+		return x.JobTemplateId
+	}
+	return ""
+}
+
+func (x *ReturnJobPhaseApprovalRequest) GetJobTemplatePhaseId() string {
+	if x != nil {
+		return x.JobTemplatePhaseId
+	}
+	return ""
+}
+
+func (x *ReturnJobPhaseApprovalRequest) GetReason() string {
+	if x != nil && x.Reason != nil {
+		return *x.Reason
+	}
+	return ""
+}
+
+type ReturnJobPhaseApprovalResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Status        PhaseApprovalStatus    `protobuf:"varint,1,opt,name=status,proto3,enum=domain.operation.v1.PhaseApprovalStatus" json:"status,omitempty"`
+	AffectedCount int32                  `protobuf:"varint,2,opt,name=affected_count,json=affectedCount,proto3" json:"affected_count,omitempty"`
+	Success       bool                   `protobuf:"varint,3,opt,name=success,proto3" json:"success,omitempty"`
+	Error         *common.Error          `protobuf:"bytes,4,opt,name=error,proto3,oneof" json:"error,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *ReturnJobPhaseApprovalResponse) Reset() {
+	*x = ReturnJobPhaseApprovalResponse{}
+	mi := &file_domain_operation_job_phase_job_phase_proto_msgTypes[24]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *ReturnJobPhaseApprovalResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ReturnJobPhaseApprovalResponse) ProtoMessage() {}
+
+func (x *ReturnJobPhaseApprovalResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_domain_operation_job_phase_job_phase_proto_msgTypes[24]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ReturnJobPhaseApprovalResponse.ProtoReflect.Descriptor instead.
+func (*ReturnJobPhaseApprovalResponse) Descriptor() ([]byte, []int) {
+	return file_domain_operation_job_phase_job_phase_proto_rawDescGZIP(), []int{24}
+}
+
+func (x *ReturnJobPhaseApprovalResponse) GetStatus() PhaseApprovalStatus {
+	if x != nil {
+		return x.Status
+	}
+	return PhaseApprovalStatus_PHASE_APPROVAL_STATUS_UNSPECIFIED
+}
+
+func (x *ReturnJobPhaseApprovalResponse) GetAffectedCount() int32 {
+	if x != nil {
+		return x.AffectedCount
+	}
+	return 0
+}
+
+func (x *ReturnJobPhaseApprovalResponse) GetSuccess() bool {
+	if x != nil {
+		return x.Success
+	}
+	return false
+}
+
+func (x *ReturnJobPhaseApprovalResponse) GetError() *common.Error {
+	if x != nil {
+		return x.Error
+	}
+	return nil
+}
+
 var File_domain_operation_job_phase_job_phase_proto protoreflect.FileDescriptor
 
 const file_domain_operation_job_phase_job_phase_proto_rawDesc = "" +
 	"\n" +
-	"*domain/operation/job_phase/job_phase.proto\x12\x13domain.operation.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1adomain/common/search.proto\x1a\x1edomain/operation/job/job.proto\x1a\x10options/db.proto\"\x82\r\n" +
+	"*domain/operation/job_phase/job_phase.proto\x12\x13domain.operation.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1adomain/common/search.proto\x1a\x1edomain/operation/job/job.proto\x1a\x10options/db.proto\"\xcc\x14\n" +
 	"\bJobPhase\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12&\n" +
 	"\fdate_created\x18\x02 \x01(\x03H\x00R\vdateCreated\x88\x01\x01\x12;\n" +
@@ -1250,7 +1923,25 @@ const file_domain_operation_job_phase_job_phase_proto_rawDesc = "" +
 	"\tjob_phaseH\x11R\x12predecessorPhaseId\x88\x01\x01\x12E\n" +
 	"\x11scoring_scheme_id\x18\x19 \x01(\tB\x14\x82\xb5\x18\x10\n" +
 	"\x0escoring_schemeH\x12R\x0fscoringSchemeId\x88\x01\x01\x122\n" +
-	"\x0eis_synthesized\x18\x1a \x01(\bB\v\x82\xb5\x18\a\"\x05falseR\risSynthesized:\x06\x8a\xb5\x18\x02\b\x01B\x0f\n" +
+	"\x0eis_synthesized\x18\x1a \x01(\bB\v\x82\xb5\x18\a\"\x05falseR\risSynthesized\x12|\n" +
+	"\x0fapproval_status\x18( \x01(\x0e2(.domain.operation.v1.PhaseApprovalStatusB)\x82\xb5\x18%\"#'PHASE_APPROVAL_STATUS_IN_PROGRESS'R\x0eapprovalStatus\x12&\n" +
+	"\fsubmitted_by\x18) \x01(\tH\x13R\vsubmittedBy\x88\x01\x01\x12&\n" +
+	"\fsubmitted_at\x18* \x01(\x03H\x14R\vsubmittedAt\x88\x01\x01\x12;\n" +
+	"\x13submitted_at_string\x18+ \x01(\tB\x06\x82\xb5\x18\x028\x01H\x15R\x11submittedAtString\x88\x01\x01\x12$\n" +
+	"\vverified_by\x18, \x01(\tH\x16R\n" +
+	"verifiedBy\x88\x01\x01\x12$\n" +
+	"\vverified_at\x18- \x01(\x03H\x17R\n" +
+	"verifiedAt\x88\x01\x01\x129\n" +
+	"\x12verified_at_string\x18. \x01(\tB\x06\x82\xb5\x18\x028\x01H\x18R\x10verifiedAtString\x88\x01\x01\x12&\n" +
+	"\fpublished_by\x18/ \x01(\tH\x19R\vpublishedBy\x88\x01\x01\x12&\n" +
+	"\fpublished_at\x180 \x01(\x03H\x1aR\vpublishedAt\x88\x01\x01\x12;\n" +
+	"\x13published_at_string\x181 \x01(\tB\x06\x82\xb5\x18\x028\x01H\x1bR\x11publishedAtString\x88\x01\x01\x12(\n" +
+	"\rreturn_reason\x182 \x01(\tH\x1cR\freturnReason\x88\x01\x01\x12$\n" +
+	"\vreturned_by\x183 \x01(\tH\x1dR\n" +
+	"returnedBy\x88\x01\x01\x12$\n" +
+	"\vreturned_at\x184 \x01(\x03H\x1eR\n" +
+	"returnedAt\x88\x01\x01\x129\n" +
+	"\x12returned_at_string\x185 \x01(\tB\x06\x82\xb5\x18\x028\x01H\x1fR\x10returnedAtString\x88\x01\x01:\x06\x8a\xb5\x18\x02\b\x01B\x0f\n" +
 	"\r_date_createdB\x16\n" +
 	"\x14_date_created_stringB\x10\n" +
 	"\x0e_date_modifiedB\x17\n" +
@@ -1269,7 +1960,20 @@ const file_domain_operation_job_phase_job_phase_proto_rawDesc = "" +
 	"\x0e_setup_minutesB\x17\n" +
 	"\x15_run_minutes_per_unitB\x17\n" +
 	"\x15_predecessor_phase_idB\x14\n" +
-	"\x12_scoring_scheme_idJ\x04\b\x1b\x10(\"J\n" +
+	"\x12_scoring_scheme_idB\x0f\n" +
+	"\r_submitted_byB\x0f\n" +
+	"\r_submitted_atB\x16\n" +
+	"\x14_submitted_at_stringB\x0e\n" +
+	"\f_verified_byB\x0e\n" +
+	"\f_verified_atB\x15\n" +
+	"\x13_verified_at_stringB\x0f\n" +
+	"\r_published_byB\x0f\n" +
+	"\r_published_atB\x16\n" +
+	"\x14_published_at_stringB\x10\n" +
+	"\x0e_return_reasonB\x0e\n" +
+	"\f_returned_byB\x0e\n" +
+	"\f_returned_atB\x15\n" +
+	"\x13_returned_at_stringJ\x04\b\x1b\x10(J\x04\b6\x10F\"J\n" +
 	"\x15CreateJobPhaseRequest\x121\n" +
 	"\x04data\x18\x01 \x01(\v2\x1d.domain.operation.v1.JobPhaseR\x04data\"\xa3\x01\n" +
 	"\x16CreateJobPhaseResponse\x121\n" +
@@ -1353,12 +2057,56 @@ const file_domain_operation_job_phase_job_phase_proto_rawDesc = "" +
 	"job_phases\x18\x01 \x03(\v2\x1d.domain.operation.v1.JobPhaseR\tjobPhases\x12\x18\n" +
 	"\asuccess\x18\x02 \x01(\bR\asuccess\x122\n" +
 	"\x05error\x18\x03 \x01(\v2\x17.domain.common.v1.ErrorH\x00R\x05error\x88\x01\x01B\b\n" +
+	"\x06_error\"z\n" +
+	"\x1dSubmitJobPhaseApprovalRequest\x12&\n" +
+	"\x0fjob_template_id\x18\x01 \x01(\tR\rjobTemplateId\x121\n" +
+	"\x15job_template_phase_id\x18\x02 \x01(\tR\x12jobTemplatePhaseId\"\xe1\x01\n" +
+	"\x1eSubmitJobPhaseApprovalResponse\x12@\n" +
+	"\x06status\x18\x01 \x01(\x0e2(.domain.operation.v1.PhaseApprovalStatusR\x06status\x12%\n" +
+	"\x0eaffected_count\x18\x02 \x01(\x05R\raffectedCount\x12\x18\n" +
+	"\asuccess\x18\x03 \x01(\bR\asuccess\x122\n" +
+	"\x05error\x18\x04 \x01(\v2\x17.domain.common.v1.ErrorH\x00R\x05error\x88\x01\x01B\b\n" +
+	"\x06_error\"z\n" +
+	"\x1dVerifyJobPhaseApprovalRequest\x12&\n" +
+	"\x0fjob_template_id\x18\x01 \x01(\tR\rjobTemplateId\x121\n" +
+	"\x15job_template_phase_id\x18\x02 \x01(\tR\x12jobTemplatePhaseId\"\xe1\x01\n" +
+	"\x1eVerifyJobPhaseApprovalResponse\x12@\n" +
+	"\x06status\x18\x01 \x01(\x0e2(.domain.operation.v1.PhaseApprovalStatusR\x06status\x12%\n" +
+	"\x0eaffected_count\x18\x02 \x01(\x05R\raffectedCount\x12\x18\n" +
+	"\asuccess\x18\x03 \x01(\bR\asuccess\x122\n" +
+	"\x05error\x18\x04 \x01(\v2\x17.domain.common.v1.ErrorH\x00R\x05error\x88\x01\x01B\b\n" +
+	"\x06_error\"{\n" +
+	"\x1ePublishJobPhaseApprovalRequest\x12&\n" +
+	"\x0fjob_template_id\x18\x01 \x01(\tR\rjobTemplateId\x121\n" +
+	"\x15job_template_phase_id\x18\x02 \x01(\tR\x12jobTemplatePhaseId\"\xe2\x01\n" +
+	"\x1fPublishJobPhaseApprovalResponse\x12@\n" +
+	"\x06status\x18\x01 \x01(\x0e2(.domain.operation.v1.PhaseApprovalStatusR\x06status\x12%\n" +
+	"\x0eaffected_count\x18\x02 \x01(\x05R\raffectedCount\x12\x18\n" +
+	"\asuccess\x18\x03 \x01(\bR\asuccess\x122\n" +
+	"\x05error\x18\x04 \x01(\v2\x17.domain.common.v1.ErrorH\x00R\x05error\x88\x01\x01B\b\n" +
+	"\x06_error\"\xa2\x01\n" +
+	"\x1dReturnJobPhaseApprovalRequest\x12&\n" +
+	"\x0fjob_template_id\x18\x01 \x01(\tR\rjobTemplateId\x121\n" +
+	"\x15job_template_phase_id\x18\x02 \x01(\tR\x12jobTemplatePhaseId\x12\x1b\n" +
+	"\x06reason\x18\x03 \x01(\tH\x00R\x06reason\x88\x01\x01B\t\n" +
+	"\a_reason\"\xe1\x01\n" +
+	"\x1eReturnJobPhaseApprovalResponse\x12@\n" +
+	"\x06status\x18\x01 \x01(\x0e2(.domain.operation.v1.PhaseApprovalStatusR\x06status\x12%\n" +
+	"\x0eaffected_count\x18\x02 \x01(\x05R\raffectedCount\x12\x18\n" +
+	"\asuccess\x18\x03 \x01(\bR\asuccess\x122\n" +
+	"\x05error\x18\x04 \x01(\v2\x17.domain.common.v1.ErrorH\x00R\x05error\x88\x01\x01B\b\n" +
 	"\x06_error*z\n" +
 	"\vPhaseStatus\x12\x1c\n" +
 	"\x18PHASE_STATUS_UNSPECIFIED\x10\x00\x12\x18\n" +
 	"\x14PHASE_STATUS_PENDING\x10\x01\x12\x17\n" +
 	"\x13PHASE_STATUS_ACTIVE\x10\x02\x12\x1a\n" +
-	"\x16PHASE_STATUS_COMPLETED\x10\x032\xa1\a\n" +
+	"\x16PHASE_STATUS_COMPLETED\x10\x03*\xd2\x01\n" +
+	"\x13PhaseApprovalStatus\x12%\n" +
+	"!PHASE_APPROVAL_STATUS_UNSPECIFIED\x10\x00\x12%\n" +
+	"!PHASE_APPROVAL_STATUS_IN_PROGRESS\x10\x01\x12$\n" +
+	" PHASE_APPROVAL_STATUS_FOR_REVIEW\x10\x02\x12\"\n" +
+	"\x1ePHASE_APPROVAL_STATUS_VERIFIED\x10\x03\x12#\n" +
+	"\x1fPHASE_APPROVAL_STATUS_PUBLISHED\x10\x042\xb4\v\n" +
 	"\x15JobPhaseDomainService\x12i\n" +
 	"\x0eCreateJobPhase\x12*.domain.operation.v1.CreateJobPhaseRequest\x1a+.domain.operation.v1.CreateJobPhaseResponse\x12c\n" +
 	"\fReadJobPhase\x12(.domain.operation.v1.ReadJobPhaseRequest\x1a).domain.operation.v1.ReadJobPhaseResponse\x12i\n" +
@@ -1367,7 +2115,11 @@ const file_domain_operation_job_phase_job_phase_proto_rawDesc = "" +
 	"\rListJobPhases\x12).domain.operation.v1.ListJobPhasesRequest\x1a*.domain.operation.v1.ListJobPhasesResponse\x12\x84\x01\n" +
 	"\x17GetJobPhaseListPageData\x123.domain.operation.v1.GetJobPhaseListPageDataRequest\x1a4.domain.operation.v1.GetJobPhaseListPageDataResponse\x12\x84\x01\n" +
 	"\x17GetJobPhaseItemPageData\x123.domain.operation.v1.GetJobPhaseItemPageDataRequest\x1a4.domain.operation.v1.GetJobPhaseItemPageDataResponse\x12l\n" +
-	"\tListByJob\x12..domain.operation.v1.ListJobPhasesByJobRequest\x1a/.domain.operation.v1.ListJobPhasesByJobResponseB\xe9\x01\n" +
+	"\tListByJob\x12..domain.operation.v1.ListJobPhasesByJobRequest\x1a/.domain.operation.v1.ListJobPhasesByJobResponse\x12\x81\x01\n" +
+	"\x16SubmitJobPhaseApproval\x122.domain.operation.v1.SubmitJobPhaseApprovalRequest\x1a3.domain.operation.v1.SubmitJobPhaseApprovalResponse\x12\x81\x01\n" +
+	"\x16VerifyJobPhaseApproval\x122.domain.operation.v1.VerifyJobPhaseApprovalRequest\x1a3.domain.operation.v1.VerifyJobPhaseApprovalResponse\x12\x84\x01\n" +
+	"\x17PublishJobPhaseApproval\x123.domain.operation.v1.PublishJobPhaseApprovalRequest\x1a4.domain.operation.v1.PublishJobPhaseApprovalResponse\x12\x81\x01\n" +
+	"\x16ReturnJobPhaseApproval\x122.domain.operation.v1.ReturnJobPhaseApprovalRequest\x1a3.domain.operation.v1.ReturnJobPhaseApprovalResponseB\xe9\x01\n" +
 	"\x17com.domain.operation.v1B\rJobPhaseProtoP\x01ZQgithub.com/erniealice/esqyma/pkg/schema/v1/domain/operation/job_phase;operationv1\xa2\x02\x03DOX\xaa\x02\x13Domain.Operation.V1\xca\x02\x13Domain\\Operation\\V1\xe2\x02\x1fDomain\\Operation\\V1\\GPBMetadata\xea\x02\x15Domain::Operation::V1b\x06proto3"
 
 var (
@@ -1382,89 +2134,115 @@ func file_domain_operation_job_phase_job_phase_proto_rawDescGZIP() []byte {
 	return file_domain_operation_job_phase_job_phase_proto_rawDescData
 }
 
-var file_domain_operation_job_phase_job_phase_proto_enumTypes = make([]protoimpl.EnumInfo, 1)
-var file_domain_operation_job_phase_job_phase_proto_msgTypes = make([]protoimpl.MessageInfo, 17)
+var file_domain_operation_job_phase_job_phase_proto_enumTypes = make([]protoimpl.EnumInfo, 2)
+var file_domain_operation_job_phase_job_phase_proto_msgTypes = make([]protoimpl.MessageInfo, 25)
 var file_domain_operation_job_phase_job_phase_proto_goTypes = []any{
 	(PhaseStatus)(0),                        // 0: domain.operation.v1.PhaseStatus
-	(*JobPhase)(nil),                        // 1: domain.operation.v1.JobPhase
-	(*CreateJobPhaseRequest)(nil),           // 2: domain.operation.v1.CreateJobPhaseRequest
-	(*CreateJobPhaseResponse)(nil),          // 3: domain.operation.v1.CreateJobPhaseResponse
-	(*ReadJobPhaseRequest)(nil),             // 4: domain.operation.v1.ReadJobPhaseRequest
-	(*ReadJobPhaseResponse)(nil),            // 5: domain.operation.v1.ReadJobPhaseResponse
-	(*UpdateJobPhaseRequest)(nil),           // 6: domain.operation.v1.UpdateJobPhaseRequest
-	(*UpdateJobPhaseResponse)(nil),          // 7: domain.operation.v1.UpdateJobPhaseResponse
-	(*DeleteJobPhaseRequest)(nil),           // 8: domain.operation.v1.DeleteJobPhaseRequest
-	(*DeleteJobPhaseResponse)(nil),          // 9: domain.operation.v1.DeleteJobPhaseResponse
-	(*ListJobPhasesRequest)(nil),            // 10: domain.operation.v1.ListJobPhasesRequest
-	(*ListJobPhasesResponse)(nil),           // 11: domain.operation.v1.ListJobPhasesResponse
-	(*GetJobPhaseListPageDataRequest)(nil),  // 12: domain.operation.v1.GetJobPhaseListPageDataRequest
-	(*GetJobPhaseListPageDataResponse)(nil), // 13: domain.operation.v1.GetJobPhaseListPageDataResponse
-	(*GetJobPhaseItemPageDataRequest)(nil),  // 14: domain.operation.v1.GetJobPhaseItemPageDataRequest
-	(*GetJobPhaseItemPageDataResponse)(nil), // 15: domain.operation.v1.GetJobPhaseItemPageDataResponse
-	(*ListJobPhasesByJobRequest)(nil),       // 16: domain.operation.v1.ListJobPhasesByJobRequest
-	(*ListJobPhasesByJobResponse)(nil),      // 17: domain.operation.v1.ListJobPhasesByJobResponse
-	(*job.Job)(nil),                         // 18: domain.operation.v1.Job
-	(*common.Error)(nil),                    // 19: domain.common.v1.Error
-	(*common.SearchRequest)(nil),            // 20: domain.common.v1.SearchRequest
-	(*common.FilterRequest)(nil),            // 21: domain.common.v1.FilterRequest
-	(*common.SortRequest)(nil),              // 22: domain.common.v1.SortRequest
-	(*common.PaginationRequest)(nil),        // 23: domain.common.v1.PaginationRequest
-	(*common.PaginationResponse)(nil),       // 24: domain.common.v1.PaginationResponse
-	(*common.SearchResult)(nil),             // 25: domain.common.v1.SearchResult
+	(PhaseApprovalStatus)(0),                // 1: domain.operation.v1.PhaseApprovalStatus
+	(*JobPhase)(nil),                        // 2: domain.operation.v1.JobPhase
+	(*CreateJobPhaseRequest)(nil),           // 3: domain.operation.v1.CreateJobPhaseRequest
+	(*CreateJobPhaseResponse)(nil),          // 4: domain.operation.v1.CreateJobPhaseResponse
+	(*ReadJobPhaseRequest)(nil),             // 5: domain.operation.v1.ReadJobPhaseRequest
+	(*ReadJobPhaseResponse)(nil),            // 6: domain.operation.v1.ReadJobPhaseResponse
+	(*UpdateJobPhaseRequest)(nil),           // 7: domain.operation.v1.UpdateJobPhaseRequest
+	(*UpdateJobPhaseResponse)(nil),          // 8: domain.operation.v1.UpdateJobPhaseResponse
+	(*DeleteJobPhaseRequest)(nil),           // 9: domain.operation.v1.DeleteJobPhaseRequest
+	(*DeleteJobPhaseResponse)(nil),          // 10: domain.operation.v1.DeleteJobPhaseResponse
+	(*ListJobPhasesRequest)(nil),            // 11: domain.operation.v1.ListJobPhasesRequest
+	(*ListJobPhasesResponse)(nil),           // 12: domain.operation.v1.ListJobPhasesResponse
+	(*GetJobPhaseListPageDataRequest)(nil),  // 13: domain.operation.v1.GetJobPhaseListPageDataRequest
+	(*GetJobPhaseListPageDataResponse)(nil), // 14: domain.operation.v1.GetJobPhaseListPageDataResponse
+	(*GetJobPhaseItemPageDataRequest)(nil),  // 15: domain.operation.v1.GetJobPhaseItemPageDataRequest
+	(*GetJobPhaseItemPageDataResponse)(nil), // 16: domain.operation.v1.GetJobPhaseItemPageDataResponse
+	(*ListJobPhasesByJobRequest)(nil),       // 17: domain.operation.v1.ListJobPhasesByJobRequest
+	(*ListJobPhasesByJobResponse)(nil),      // 18: domain.operation.v1.ListJobPhasesByJobResponse
+	(*SubmitJobPhaseApprovalRequest)(nil),   // 19: domain.operation.v1.SubmitJobPhaseApprovalRequest
+	(*SubmitJobPhaseApprovalResponse)(nil),  // 20: domain.operation.v1.SubmitJobPhaseApprovalResponse
+	(*VerifyJobPhaseApprovalRequest)(nil),   // 21: domain.operation.v1.VerifyJobPhaseApprovalRequest
+	(*VerifyJobPhaseApprovalResponse)(nil),  // 22: domain.operation.v1.VerifyJobPhaseApprovalResponse
+	(*PublishJobPhaseApprovalRequest)(nil),  // 23: domain.operation.v1.PublishJobPhaseApprovalRequest
+	(*PublishJobPhaseApprovalResponse)(nil), // 24: domain.operation.v1.PublishJobPhaseApprovalResponse
+	(*ReturnJobPhaseApprovalRequest)(nil),   // 25: domain.operation.v1.ReturnJobPhaseApprovalRequest
+	(*ReturnJobPhaseApprovalResponse)(nil),  // 26: domain.operation.v1.ReturnJobPhaseApprovalResponse
+	(*job.Job)(nil),                         // 27: domain.operation.v1.Job
+	(*common.Error)(nil),                    // 28: domain.common.v1.Error
+	(*common.SearchRequest)(nil),            // 29: domain.common.v1.SearchRequest
+	(*common.FilterRequest)(nil),            // 30: domain.common.v1.FilterRequest
+	(*common.SortRequest)(nil),              // 31: domain.common.v1.SortRequest
+	(*common.PaginationRequest)(nil),        // 32: domain.common.v1.PaginationRequest
+	(*common.PaginationResponse)(nil),       // 33: domain.common.v1.PaginationResponse
+	(*common.SearchResult)(nil),             // 34: domain.common.v1.SearchResult
 }
 var file_domain_operation_job_phase_job_phase_proto_depIdxs = []int32{
-	18, // 0: domain.operation.v1.JobPhase.job:type_name -> domain.operation.v1.Job
+	27, // 0: domain.operation.v1.JobPhase.job:type_name -> domain.operation.v1.Job
 	0,  // 1: domain.operation.v1.JobPhase.status:type_name -> domain.operation.v1.PhaseStatus
-	1,  // 2: domain.operation.v1.CreateJobPhaseRequest.data:type_name -> domain.operation.v1.JobPhase
-	1,  // 3: domain.operation.v1.CreateJobPhaseResponse.data:type_name -> domain.operation.v1.JobPhase
-	19, // 4: domain.operation.v1.CreateJobPhaseResponse.error:type_name -> domain.common.v1.Error
-	1,  // 5: domain.operation.v1.ReadJobPhaseRequest.data:type_name -> domain.operation.v1.JobPhase
-	1,  // 6: domain.operation.v1.ReadJobPhaseResponse.data:type_name -> domain.operation.v1.JobPhase
-	19, // 7: domain.operation.v1.ReadJobPhaseResponse.error:type_name -> domain.common.v1.Error
-	1,  // 8: domain.operation.v1.UpdateJobPhaseRequest.data:type_name -> domain.operation.v1.JobPhase
-	1,  // 9: domain.operation.v1.UpdateJobPhaseResponse.data:type_name -> domain.operation.v1.JobPhase
-	19, // 10: domain.operation.v1.UpdateJobPhaseResponse.error:type_name -> domain.common.v1.Error
-	1,  // 11: domain.operation.v1.DeleteJobPhaseRequest.data:type_name -> domain.operation.v1.JobPhase
-	19, // 12: domain.operation.v1.DeleteJobPhaseResponse.error:type_name -> domain.common.v1.Error
-	20, // 13: domain.operation.v1.ListJobPhasesRequest.search:type_name -> domain.common.v1.SearchRequest
-	21, // 14: domain.operation.v1.ListJobPhasesRequest.filters:type_name -> domain.common.v1.FilterRequest
-	22, // 15: domain.operation.v1.ListJobPhasesRequest.sort:type_name -> domain.common.v1.SortRequest
-	23, // 16: domain.operation.v1.ListJobPhasesRequest.pagination:type_name -> domain.common.v1.PaginationRequest
-	1,  // 17: domain.operation.v1.ListJobPhasesResponse.data:type_name -> domain.operation.v1.JobPhase
-	19, // 18: domain.operation.v1.ListJobPhasesResponse.error:type_name -> domain.common.v1.Error
-	23, // 19: domain.operation.v1.GetJobPhaseListPageDataRequest.pagination:type_name -> domain.common.v1.PaginationRequest
-	21, // 20: domain.operation.v1.GetJobPhaseListPageDataRequest.filters:type_name -> domain.common.v1.FilterRequest
-	22, // 21: domain.operation.v1.GetJobPhaseListPageDataRequest.sort:type_name -> domain.common.v1.SortRequest
-	20, // 22: domain.operation.v1.GetJobPhaseListPageDataRequest.search:type_name -> domain.common.v1.SearchRequest
-	1,  // 23: domain.operation.v1.GetJobPhaseListPageDataResponse.job_phase_list:type_name -> domain.operation.v1.JobPhase
-	24, // 24: domain.operation.v1.GetJobPhaseListPageDataResponse.pagination:type_name -> domain.common.v1.PaginationResponse
-	25, // 25: domain.operation.v1.GetJobPhaseListPageDataResponse.search_results:type_name -> domain.common.v1.SearchResult
-	19, // 26: domain.operation.v1.GetJobPhaseListPageDataResponse.error:type_name -> domain.common.v1.Error
-	1,  // 27: domain.operation.v1.GetJobPhaseItemPageDataResponse.job_phase:type_name -> domain.operation.v1.JobPhase
-	19, // 28: domain.operation.v1.GetJobPhaseItemPageDataResponse.error:type_name -> domain.common.v1.Error
-	1,  // 29: domain.operation.v1.ListJobPhasesByJobResponse.job_phases:type_name -> domain.operation.v1.JobPhase
-	19, // 30: domain.operation.v1.ListJobPhasesByJobResponse.error:type_name -> domain.common.v1.Error
-	2,  // 31: domain.operation.v1.JobPhaseDomainService.CreateJobPhase:input_type -> domain.operation.v1.CreateJobPhaseRequest
-	4,  // 32: domain.operation.v1.JobPhaseDomainService.ReadJobPhase:input_type -> domain.operation.v1.ReadJobPhaseRequest
-	6,  // 33: domain.operation.v1.JobPhaseDomainService.UpdateJobPhase:input_type -> domain.operation.v1.UpdateJobPhaseRequest
-	8,  // 34: domain.operation.v1.JobPhaseDomainService.DeleteJobPhase:input_type -> domain.operation.v1.DeleteJobPhaseRequest
-	10, // 35: domain.operation.v1.JobPhaseDomainService.ListJobPhases:input_type -> domain.operation.v1.ListJobPhasesRequest
-	12, // 36: domain.operation.v1.JobPhaseDomainService.GetJobPhaseListPageData:input_type -> domain.operation.v1.GetJobPhaseListPageDataRequest
-	14, // 37: domain.operation.v1.JobPhaseDomainService.GetJobPhaseItemPageData:input_type -> domain.operation.v1.GetJobPhaseItemPageDataRequest
-	16, // 38: domain.operation.v1.JobPhaseDomainService.ListByJob:input_type -> domain.operation.v1.ListJobPhasesByJobRequest
-	3,  // 39: domain.operation.v1.JobPhaseDomainService.CreateJobPhase:output_type -> domain.operation.v1.CreateJobPhaseResponse
-	5,  // 40: domain.operation.v1.JobPhaseDomainService.ReadJobPhase:output_type -> domain.operation.v1.ReadJobPhaseResponse
-	7,  // 41: domain.operation.v1.JobPhaseDomainService.UpdateJobPhase:output_type -> domain.operation.v1.UpdateJobPhaseResponse
-	9,  // 42: domain.operation.v1.JobPhaseDomainService.DeleteJobPhase:output_type -> domain.operation.v1.DeleteJobPhaseResponse
-	11, // 43: domain.operation.v1.JobPhaseDomainService.ListJobPhases:output_type -> domain.operation.v1.ListJobPhasesResponse
-	13, // 44: domain.operation.v1.JobPhaseDomainService.GetJobPhaseListPageData:output_type -> domain.operation.v1.GetJobPhaseListPageDataResponse
-	15, // 45: domain.operation.v1.JobPhaseDomainService.GetJobPhaseItemPageData:output_type -> domain.operation.v1.GetJobPhaseItemPageDataResponse
-	17, // 46: domain.operation.v1.JobPhaseDomainService.ListByJob:output_type -> domain.operation.v1.ListJobPhasesByJobResponse
-	39, // [39:47] is the sub-list for method output_type
-	31, // [31:39] is the sub-list for method input_type
-	31, // [31:31] is the sub-list for extension type_name
-	31, // [31:31] is the sub-list for extension extendee
-	0,  // [0:31] is the sub-list for field type_name
+	1,  // 2: domain.operation.v1.JobPhase.approval_status:type_name -> domain.operation.v1.PhaseApprovalStatus
+	2,  // 3: domain.operation.v1.CreateJobPhaseRequest.data:type_name -> domain.operation.v1.JobPhase
+	2,  // 4: domain.operation.v1.CreateJobPhaseResponse.data:type_name -> domain.operation.v1.JobPhase
+	28, // 5: domain.operation.v1.CreateJobPhaseResponse.error:type_name -> domain.common.v1.Error
+	2,  // 6: domain.operation.v1.ReadJobPhaseRequest.data:type_name -> domain.operation.v1.JobPhase
+	2,  // 7: domain.operation.v1.ReadJobPhaseResponse.data:type_name -> domain.operation.v1.JobPhase
+	28, // 8: domain.operation.v1.ReadJobPhaseResponse.error:type_name -> domain.common.v1.Error
+	2,  // 9: domain.operation.v1.UpdateJobPhaseRequest.data:type_name -> domain.operation.v1.JobPhase
+	2,  // 10: domain.operation.v1.UpdateJobPhaseResponse.data:type_name -> domain.operation.v1.JobPhase
+	28, // 11: domain.operation.v1.UpdateJobPhaseResponse.error:type_name -> domain.common.v1.Error
+	2,  // 12: domain.operation.v1.DeleteJobPhaseRequest.data:type_name -> domain.operation.v1.JobPhase
+	28, // 13: domain.operation.v1.DeleteJobPhaseResponse.error:type_name -> domain.common.v1.Error
+	29, // 14: domain.operation.v1.ListJobPhasesRequest.search:type_name -> domain.common.v1.SearchRequest
+	30, // 15: domain.operation.v1.ListJobPhasesRequest.filters:type_name -> domain.common.v1.FilterRequest
+	31, // 16: domain.operation.v1.ListJobPhasesRequest.sort:type_name -> domain.common.v1.SortRequest
+	32, // 17: domain.operation.v1.ListJobPhasesRequest.pagination:type_name -> domain.common.v1.PaginationRequest
+	2,  // 18: domain.operation.v1.ListJobPhasesResponse.data:type_name -> domain.operation.v1.JobPhase
+	28, // 19: domain.operation.v1.ListJobPhasesResponse.error:type_name -> domain.common.v1.Error
+	32, // 20: domain.operation.v1.GetJobPhaseListPageDataRequest.pagination:type_name -> domain.common.v1.PaginationRequest
+	30, // 21: domain.operation.v1.GetJobPhaseListPageDataRequest.filters:type_name -> domain.common.v1.FilterRequest
+	31, // 22: domain.operation.v1.GetJobPhaseListPageDataRequest.sort:type_name -> domain.common.v1.SortRequest
+	29, // 23: domain.operation.v1.GetJobPhaseListPageDataRequest.search:type_name -> domain.common.v1.SearchRequest
+	2,  // 24: domain.operation.v1.GetJobPhaseListPageDataResponse.job_phase_list:type_name -> domain.operation.v1.JobPhase
+	33, // 25: domain.operation.v1.GetJobPhaseListPageDataResponse.pagination:type_name -> domain.common.v1.PaginationResponse
+	34, // 26: domain.operation.v1.GetJobPhaseListPageDataResponse.search_results:type_name -> domain.common.v1.SearchResult
+	28, // 27: domain.operation.v1.GetJobPhaseListPageDataResponse.error:type_name -> domain.common.v1.Error
+	2,  // 28: domain.operation.v1.GetJobPhaseItemPageDataResponse.job_phase:type_name -> domain.operation.v1.JobPhase
+	28, // 29: domain.operation.v1.GetJobPhaseItemPageDataResponse.error:type_name -> domain.common.v1.Error
+	2,  // 30: domain.operation.v1.ListJobPhasesByJobResponse.job_phases:type_name -> domain.operation.v1.JobPhase
+	28, // 31: domain.operation.v1.ListJobPhasesByJobResponse.error:type_name -> domain.common.v1.Error
+	1,  // 32: domain.operation.v1.SubmitJobPhaseApprovalResponse.status:type_name -> domain.operation.v1.PhaseApprovalStatus
+	28, // 33: domain.operation.v1.SubmitJobPhaseApprovalResponse.error:type_name -> domain.common.v1.Error
+	1,  // 34: domain.operation.v1.VerifyJobPhaseApprovalResponse.status:type_name -> domain.operation.v1.PhaseApprovalStatus
+	28, // 35: domain.operation.v1.VerifyJobPhaseApprovalResponse.error:type_name -> domain.common.v1.Error
+	1,  // 36: domain.operation.v1.PublishJobPhaseApprovalResponse.status:type_name -> domain.operation.v1.PhaseApprovalStatus
+	28, // 37: domain.operation.v1.PublishJobPhaseApprovalResponse.error:type_name -> domain.common.v1.Error
+	1,  // 38: domain.operation.v1.ReturnJobPhaseApprovalResponse.status:type_name -> domain.operation.v1.PhaseApprovalStatus
+	28, // 39: domain.operation.v1.ReturnJobPhaseApprovalResponse.error:type_name -> domain.common.v1.Error
+	3,  // 40: domain.operation.v1.JobPhaseDomainService.CreateJobPhase:input_type -> domain.operation.v1.CreateJobPhaseRequest
+	5,  // 41: domain.operation.v1.JobPhaseDomainService.ReadJobPhase:input_type -> domain.operation.v1.ReadJobPhaseRequest
+	7,  // 42: domain.operation.v1.JobPhaseDomainService.UpdateJobPhase:input_type -> domain.operation.v1.UpdateJobPhaseRequest
+	9,  // 43: domain.operation.v1.JobPhaseDomainService.DeleteJobPhase:input_type -> domain.operation.v1.DeleteJobPhaseRequest
+	11, // 44: domain.operation.v1.JobPhaseDomainService.ListJobPhases:input_type -> domain.operation.v1.ListJobPhasesRequest
+	13, // 45: domain.operation.v1.JobPhaseDomainService.GetJobPhaseListPageData:input_type -> domain.operation.v1.GetJobPhaseListPageDataRequest
+	15, // 46: domain.operation.v1.JobPhaseDomainService.GetJobPhaseItemPageData:input_type -> domain.operation.v1.GetJobPhaseItemPageDataRequest
+	17, // 47: domain.operation.v1.JobPhaseDomainService.ListByJob:input_type -> domain.operation.v1.ListJobPhasesByJobRequest
+	19, // 48: domain.operation.v1.JobPhaseDomainService.SubmitJobPhaseApproval:input_type -> domain.operation.v1.SubmitJobPhaseApprovalRequest
+	21, // 49: domain.operation.v1.JobPhaseDomainService.VerifyJobPhaseApproval:input_type -> domain.operation.v1.VerifyJobPhaseApprovalRequest
+	23, // 50: domain.operation.v1.JobPhaseDomainService.PublishJobPhaseApproval:input_type -> domain.operation.v1.PublishJobPhaseApprovalRequest
+	25, // 51: domain.operation.v1.JobPhaseDomainService.ReturnJobPhaseApproval:input_type -> domain.operation.v1.ReturnJobPhaseApprovalRequest
+	4,  // 52: domain.operation.v1.JobPhaseDomainService.CreateJobPhase:output_type -> domain.operation.v1.CreateJobPhaseResponse
+	6,  // 53: domain.operation.v1.JobPhaseDomainService.ReadJobPhase:output_type -> domain.operation.v1.ReadJobPhaseResponse
+	8,  // 54: domain.operation.v1.JobPhaseDomainService.UpdateJobPhase:output_type -> domain.operation.v1.UpdateJobPhaseResponse
+	10, // 55: domain.operation.v1.JobPhaseDomainService.DeleteJobPhase:output_type -> domain.operation.v1.DeleteJobPhaseResponse
+	12, // 56: domain.operation.v1.JobPhaseDomainService.ListJobPhases:output_type -> domain.operation.v1.ListJobPhasesResponse
+	14, // 57: domain.operation.v1.JobPhaseDomainService.GetJobPhaseListPageData:output_type -> domain.operation.v1.GetJobPhaseListPageDataResponse
+	16, // 58: domain.operation.v1.JobPhaseDomainService.GetJobPhaseItemPageData:output_type -> domain.operation.v1.GetJobPhaseItemPageDataResponse
+	18, // 59: domain.operation.v1.JobPhaseDomainService.ListByJob:output_type -> domain.operation.v1.ListJobPhasesByJobResponse
+	20, // 60: domain.operation.v1.JobPhaseDomainService.SubmitJobPhaseApproval:output_type -> domain.operation.v1.SubmitJobPhaseApprovalResponse
+	22, // 61: domain.operation.v1.JobPhaseDomainService.VerifyJobPhaseApproval:output_type -> domain.operation.v1.VerifyJobPhaseApprovalResponse
+	24, // 62: domain.operation.v1.JobPhaseDomainService.PublishJobPhaseApproval:output_type -> domain.operation.v1.PublishJobPhaseApprovalResponse
+	26, // 63: domain.operation.v1.JobPhaseDomainService.ReturnJobPhaseApproval:output_type -> domain.operation.v1.ReturnJobPhaseApprovalResponse
+	52, // [52:64] is the sub-list for method output_type
+	40, // [40:52] is the sub-list for method input_type
+	40, // [40:40] is the sub-list for extension type_name
+	40, // [40:40] is the sub-list for extension extendee
+	0,  // [0:40] is the sub-list for field type_name
 }
 
 func init() { file_domain_operation_job_phase_job_phase_proto_init() }
@@ -1483,13 +2261,18 @@ func file_domain_operation_job_phase_job_phase_proto_init() {
 	file_domain_operation_job_phase_job_phase_proto_msgTypes[12].OneofWrappers = []any{}
 	file_domain_operation_job_phase_job_phase_proto_msgTypes[14].OneofWrappers = []any{}
 	file_domain_operation_job_phase_job_phase_proto_msgTypes[16].OneofWrappers = []any{}
+	file_domain_operation_job_phase_job_phase_proto_msgTypes[18].OneofWrappers = []any{}
+	file_domain_operation_job_phase_job_phase_proto_msgTypes[20].OneofWrappers = []any{}
+	file_domain_operation_job_phase_job_phase_proto_msgTypes[22].OneofWrappers = []any{}
+	file_domain_operation_job_phase_job_phase_proto_msgTypes[23].OneofWrappers = []any{}
+	file_domain_operation_job_phase_job_phase_proto_msgTypes[24].OneofWrappers = []any{}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
 		File: protoimpl.DescBuilder{
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_domain_operation_job_phase_job_phase_proto_rawDesc), len(file_domain_operation_job_phase_job_phase_proto_rawDesc)),
-			NumEnums:      1,
-			NumMessages:   17,
+			NumEnums:      2,
+			NumMessages:   25,
 			NumExtensions: 0,
 			NumServices:   1,
 		},

@@ -67,11 +67,21 @@ type OutcomeCriteria struct {
 	// placeholders (parity with JobCategory.code). Path-normalized: lower(btrim(code))
 	// matching ^[a-z][a-z0-9_]*$; NULL where unanchored.
 	//
-	// Uniqueness is conditional and cannot be a plain unique_together: all versions
-	// sharing a criteria_group_id carry the SAME code (code is stable across the
-	// version lineage), while the CURRENT published row's code must be unique within
-	// (scope, workspace_id, industry_code). Both are enforced by partial unique
-	// indexes at the DB layer (predicate on active + published), not by this field.
+	// Uniqueness is conditional and cannot be a plain unique_together. Three
+	// DB-enforced layers (esqyma migrations 20260718000001/3/4):
+	//  1. Lineage stability — every CODED version sharing a criteria_group_id
+	//     carries the SAME code. NULL-code versions are exempt by design (the
+	//     criteria_group anchor's composite FK uses MATCH SIMPLE), so an anchored
+	//     group may still hold uncoded draft/legacy versions. Enforced by the
+	//     criteria_group anchor table + populate-trigger + composite FK — NOT by
+	//     a partial unique index.
+	//  2. Domain ownership — a normalized (scope, workspace_id, industry_code,
+	//     code) is claimed by exactly ONE criteria_group across ALL version
+	//     statuses and both active states (unique index over the anchor's domain
+	//     columns; first-write-wins — concurrent cross-group drafts serialize
+	//     there and the loser fails closed).
+	//  3. Published uniqueness — the CURRENT active published row's code is
+	//     unique within its domain (partial unique index, active + published).
 	Code          *string `protobuf:"bytes,38,opt,name=code,proto3,oneof" json:"code,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache

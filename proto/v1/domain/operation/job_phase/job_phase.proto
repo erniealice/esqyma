@@ -22,6 +22,22 @@ enum PhaseStatus {
   PHASE_STATUS_COMPLETED = 3;
 }
 
+// PhaseApprovalStatus is the LOCAL per-phase approval ladder (plan
+// 20260718-phase-approval-workflow). It is orthogonal to PhaseStatus (field 11):
+// approval transitions never mutate PhaseStatus, trigger completion hooks, or
+// touch billing. The ladder is
+//   IN_PROGRESS --submit--> FOR_REVIEW --verify--> VERIFIED --publish--> PUBLISHED
+// with `return` normalizing any advanced/mixed sheet back to IN_PROGRESS.
+// UNSPECIFIED is never persisted; the DB stores the enum NAME (TEXT) with a
+// default of IN_PROGRESS and a CHECK over the four non-UNSPECIFIED tokens.
+enum PhaseApprovalStatus {
+  PHASE_APPROVAL_STATUS_UNSPECIFIED = 0;
+  PHASE_APPROVAL_STATUS_IN_PROGRESS = 1;
+  PHASE_APPROVAL_STATUS_FOR_REVIEW = 2;
+  PHASE_APPROVAL_STATUS_VERIFIED = 3;
+  PHASE_APPROVAL_STATUS_PUBLISHED = 4;
+}
+
 // --- Message ---
 
 message JobPhase {
@@ -55,6 +71,31 @@ message JobPhase {
   bool is_synthesized = 26 [(options.v1.db).default = "false"];
 
   reserved 27 to 39;
+
+  // --- Approval workflow (per-phase approval ladder) ---
+  // Server-owned lifecycle. Generic create forces IN_PROGRESS/null audit and
+  // generic update strips these fields (P2); dedicated transition RPCs own the
+  // stamps. approval_status persists as the enum NAME (TEXT NOT NULL) with the
+  // raw-SQL quoted default below and a DB CHECK over the four persisted tokens.
+  // Each actor/time pair is null-or-nonnull together (DB CHECK, migration). The
+  // *_string fields are display-only mirrors (db.ignore) of their epoch-ms int64
+  // siblings and are never persisted.
+  PhaseApprovalStatus approval_status = 40 [(options.v1.db).default = "'PHASE_APPROVAL_STATUS_IN_PROGRESS'"];
+  optional string submitted_by = 41;
+  optional int64 submitted_at = 42;
+  optional string submitted_at_string = 43 [(options.v1.db).ignore = true];
+  optional string verified_by = 44;
+  optional int64 verified_at = 45;
+  optional string verified_at_string = 46 [(options.v1.db).ignore = true];
+  optional string published_by = 47;
+  optional int64 published_at = 48;
+  optional string published_at_string = 49 [(options.v1.db).ignore = true];
+  optional string return_reason = 50;
+  optional string returned_by = 51;
+  optional int64 returned_at = 52;
+  optional string returned_at_string = 53 [(options.v1.db).ignore = true];
+
+  reserved 54 to 69;
 }
 
 // --- Service ---
@@ -70,6 +111,16 @@ service JobPhaseDomainService {
 
   // Extra: filter by job
   rpc ListByJob(ListJobPhasesByJobRequest) returns (ListJobPhasesByJobResponse);
+
+  // --- Approval transitions (per-phase approval ladder) ---
+  // Sheet-grain bulk transitions over one (job_template_id, job_template_phase_id).
+  // Requests carry ONLY the sheet identity; actor + workspace resolve from trusted
+  // context and are never request-supplied. Responses report the resulting target
+  // status and the exact affected phase count. Use cases land in P2.
+  rpc SubmitJobPhaseApproval(SubmitJobPhaseApprovalRequest) returns (SubmitJobPhaseApprovalResponse);
+  rpc VerifyJobPhaseApproval(VerifyJobPhaseApprovalRequest) returns (VerifyJobPhaseApprovalResponse);
+  rpc PublishJobPhaseApproval(PublishJobPhaseApprovalRequest) returns (PublishJobPhaseApprovalResponse);
+  rpc ReturnJobPhaseApproval(ReturnJobPhaseApprovalRequest) returns (ReturnJobPhaseApprovalResponse);
 }
 
 // --- Standard CRUD messages ---
@@ -163,4 +214,60 @@ message ListJobPhasesByJobResponse {
   repeated JobPhase job_phases = 1;
   bool success = 2;
   optional domain.common.v1.Error error = 3;
+}
+
+// --- Approval transition messages ---
+// Requests carry ONLY the sheet identity (job_template_id, job_template_phase_id);
+// the acting user and workspace resolve from trusted context, never from the
+// request. `return` additionally carries an optional reason (required for a
+// published return, enforced in the P2 use case). Responses report the resulting
+// target approval status and the exact count of phase rows flipped.
+
+message SubmitJobPhaseApprovalRequest {
+  string job_template_id = 1;
+  string job_template_phase_id = 2;
+}
+
+message SubmitJobPhaseApprovalResponse {
+  PhaseApprovalStatus status = 1;
+  int32 affected_count = 2;
+  bool success = 3;
+  optional domain.common.v1.Error error = 4;
+}
+
+message VerifyJobPhaseApprovalRequest {
+  string job_template_id = 1;
+  string job_template_phase_id = 2;
+}
+
+message VerifyJobPhaseApprovalResponse {
+  PhaseApprovalStatus status = 1;
+  int32 affected_count = 2;
+  bool success = 3;
+  optional domain.common.v1.Error error = 4;
+}
+
+message PublishJobPhaseApprovalRequest {
+  string job_template_id = 1;
+  string job_template_phase_id = 2;
+}
+
+message PublishJobPhaseApprovalResponse {
+  PhaseApprovalStatus status = 1;
+  int32 affected_count = 2;
+  bool success = 3;
+  optional domain.common.v1.Error error = 4;
+}
+
+message ReturnJobPhaseApprovalRequest {
+  string job_template_id = 1;
+  string job_template_phase_id = 2;
+  optional string reason = 3;
+}
+
+message ReturnJobPhaseApprovalResponse {
+  PhaseApprovalStatus status = 1;
+  int32 affected_count = 2;
+  bool success = 3;
+  optional domain.common.v1.Error error = 4;
 }

@@ -23,7 +23,7 @@ import type { Message } from "@bufbuild/protobuf";
  * Describes the file domain/operation/job_phase/job_phase.proto.
  */
 export const file_domain_operation_job_phase_job_phase: GenFile = /*@__PURE__*/
-  fileDesc("Cipkb21haW4vb3BlcmF0aW9uL2pvYl9waGFzZS9qb2JfcGhhc2UucHJvdG8SE2RvbWFpbi5vcGVyYXRpb24udjEioAoKCEpvYlBoYXNlEgoKAmlkGAEgASgJEhkKDGRhdGVfY3JlYXRlZBgCIAEoA0gAiAEBEigKE2RhdGVfY3JlYXRlZF9zdHJpbmcYAyABKAlCBoK1GAI4AUgBiAEBEhoKDWRhdGVfbW9kaWZpZWQYBCABKANIAogBARIpChRkYXRlX21vZGlmaWVkX3N0cmluZxgFIAEoCUIGgrUYAjgBSAOIAQESDgoGYWN0aXZlGAYgASgIEhsKBmpvYl9pZBgHIAEoCUILgrUYBwoDam9iGAESKgoDam9iGAggASgLMhguZG9tYWluLm9wZXJhdGlvbi52MS5Kb2JIBIgBARIMCgRuYW1lGAkgASgJEhMKC3BoYXNlX29yZGVyGAogASgFEjAKBnN0YXR1cxgLIAEoDjIgLmRvbWFpbi5vcGVyYXRpb24udjEuUGhhc2VTdGF0dXMSOgoRdGVtcGxhdGVfcGhhc2VfaWQYDCABKAlCGoK1GBYKEmpvYl90ZW1wbGF0ZV9waGFzZRgBSAWIAQESKgoLcmVzb3VyY2VfaWQYDSABKAlCEIK1GAwKCHJlc291cmNlGAFIBogBARIaCg1wbGFubmVkX3N0YXJ0GA4gASgDSAeIAQESKQoUcGxhbm5lZF9zdGFydF9zdHJpbmcYDyABKAlCBoK1GAI4AUgIiAEBEhgKC3BsYW5uZWRfZW5kGBAgASgDSAmIAQESJwoScGxhbm5lZF9lbmRfc3RyaW5nGBEgASgJQgaCtRgCOAFICogBARIZCgxhY3R1YWxfc3RhcnQYEiABKANIC4gBARIoChNhY3R1YWxfc3RhcnRfc3RyaW5nGBMgASgJQgaCtRgCOAFIDIgBARIXCgphY3R1YWxfZW5kGBQgASgDSA2IAQESJgoRYWN0dWFsX2VuZF9zdHJpbmcYFSABKAlCBoK1GAI4AUgOiAEBEhoKDXNldHVwX21pbnV0ZXMYFiABKAVID4gBARIhChRydW5fbWludXRlc19wZXJfdW5pdBgXIAEoAUgQiAEBEjIKFHByZWRlY2Vzc29yX3BoYXNlX2lkGBggASgJQg+CtRgLCglqb2JfcGhhc2VIEYgBARI0ChFzY29yaW5nX3NjaGVtZV9pZBgZIAEoCUIUgrUYEAoOc2NvcmluZ19zY2hlbWVIEogBARIjCg5pc19zeW50aGVzaXplZBgaIAEoCEILgrUYByIFZmFsc2U6Boq1GAIIAUIPCg1fZGF0ZV9jcmVhdGVkQhYKFF9kYXRlX2NyZWF0ZWRfc3RyaW5nQhAKDl9kYXRlX21vZGlmaWVkQhcKFV9kYXRlX21vZGlmaWVkX3N0cmluZ0IGCgRfam9iQhQKEl90ZW1wbGF0ZV9waGFzZV9pZEIOCgxfcmVzb3VyY2VfaWRCEAoOX3BsYW5uZWRfc3RhcnRCFwoVX3BsYW5uZWRfc3RhcnRfc3RyaW5nQg4KDF9wbGFubmVkX2VuZEIVChNfcGxhbm5lZF9lbmRfc3RyaW5nQg8KDV9hY3R1YWxfc3RhcnRCFgoUX2FjdHVhbF9zdGFydF9zdHJpbmdCDQoLX2FjdHVhbF9lbmRCFAoSX2FjdHVhbF9lbmRfc3RyaW5nQhAKDl9zZXR1cF9taW51dGVzQhcKFV9ydW5fbWludXRlc19wZXJfdW5pdEIXChVfcHJlZGVjZXNzb3JfcGhhc2VfaWRCFAoSX3Njb3Jpbmdfc2NoZW1lX2lkSgQIGxAoIkQKFUNyZWF0ZUpvYlBoYXNlUmVxdWVzdBIrCgRkYXRhGAEgASgLMh0uZG9tYWluLm9wZXJhdGlvbi52MS5Kb2JQaGFzZSKNAQoWQ3JlYXRlSm9iUGhhc2VSZXNwb25zZRIrCgRkYXRhGAEgAygLMh0uZG9tYWluLm9wZXJhdGlvbi52MS5Kb2JQaGFzZRIPCgdzdWNjZXNzGAIgASgIEisKBWVycm9yGAMgASgLMhcuZG9tYWluLmNvbW1vbi52MS5FcnJvckgAiAEBQggKBl9lcnJvciJCChNSZWFkSm9iUGhhc2VSZXF1ZXN0EisKBGRhdGEYASABKAsyHS5kb21haW4ub3BlcmF0aW9uLnYxLkpvYlBoYXNlIosBChRSZWFkSm9iUGhhc2VSZXNwb25zZRIrCgRkYXRhGAEgAygLMh0uZG9tYWluLm9wZXJhdGlvbi52MS5Kb2JQaGFzZRIPCgdzdWNjZXNzGAIgASgIEisKBWVycm9yGAMgASgLMhcuZG9tYWluLmNvbW1vbi52MS5FcnJvckgAiAEBQggKBl9lcnJvciJEChVVcGRhdGVKb2JQaGFzZVJlcXVlc3QSKwoEZGF0YRgBIAEoCzIdLmRvbWFpbi5vcGVyYXRpb24udjEuSm9iUGhhc2UijQEKFlVwZGF0ZUpvYlBoYXNlUmVzcG9uc2USKwoEZGF0YRgBIAMoCzIdLmRvbWFpbi5vcGVyYXRpb24udjEuSm9iUGhhc2USDwoHc3VjY2VzcxgCIAEoCBIrCgVlcnJvchgDIAEoCzIXLmRvbWFpbi5jb21tb24udjEuRXJyb3JIAIgBAUIICgZfZXJyb3IiRAoVRGVsZXRlSm9iUGhhc2VSZXF1ZXN0EisKBGRhdGEYASABKAsyHS5kb21haW4ub3BlcmF0aW9uLnYxLkpvYlBoYXNlImAKFkRlbGV0ZUpvYlBoYXNlUmVzcG9uc2USDwoHc3VjY2VzcxgBIAEoCBIrCgVlcnJvchgCIAEoCzIXLmRvbWFpbi5jb21tb24udjEuRXJyb3JIAIgBAUIICgZfZXJyb3IiogIKFExpc3RKb2JQaGFzZXNSZXF1ZXN0EjQKBnNlYXJjaBgBIAEoCzIfLmRvbWFpbi5jb21tb24udjEuU2VhcmNoUmVxdWVzdEgAiAEBEjUKB2ZpbHRlcnMYAiABKAsyHy5kb21haW4uY29tbW9uLnYxLkZpbHRlclJlcXVlc3RIAYgBARIwCgRzb3J0GAMgASgLMh0uZG9tYWluLmNvbW1vbi52MS5Tb3J0UmVxdWVzdEgCiAEBEjwKCnBhZ2luYXRpb24YBCABKAsyIy5kb21haW4uY29tbW9uLnYxLlBhZ2luYXRpb25SZXF1ZXN0SAOIAQFCCQoHX3NlYXJjaEIKCghfZmlsdGVyc0IHCgVfc29ydEINCgtfcGFnaW5hdGlvbiKMAQoVTGlzdEpvYlBoYXNlc1Jlc3BvbnNlEisKBGRhdGEYASADKAsyHS5kb21haW4ub3BlcmF0aW9uLnYxLkpvYlBoYXNlEg8KB3N1Y2Nlc3MYAiABKAgSKwoFZXJyb3IYAyABKAsyFy5kb21haW4uY29tbW9uLnYxLkVycm9ySACIAQFCCAoGX2Vycm9yIqwCCh5HZXRKb2JQaGFzZUxpc3RQYWdlRGF0YVJlcXVlc3QSPAoKcGFnaW5hdGlvbhgBIAEoCzIjLmRvbWFpbi5jb21tb24udjEuUGFnaW5hdGlvblJlcXVlc3RIAIgBARI1CgdmaWx0ZXJzGAIgASgLMh8uZG9tYWluLmNvbW1vbi52MS5GaWx0ZXJSZXF1ZXN0SAGIAQESMAoEc29ydBgDIAEoCzIdLmRvbWFpbi5jb21tb24udjEuU29ydFJlcXVlc3RIAogBARI0CgZzZWFyY2gYBCABKAsyHy5kb21haW4uY29tbW9uLnYxLlNlYXJjaFJlcXVlc3RIA4gBAUINCgtfcGFnaW5hdGlvbkIKCghfZmlsdGVyc0IHCgVfc29ydEIJCgdfc2VhcmNoIqYCCh9HZXRKb2JQaGFzZUxpc3RQYWdlRGF0YVJlc3BvbnNlEjUKDmpvYl9waGFzZV9saXN0GAEgAygLMh0uZG9tYWluLm9wZXJhdGlvbi52MS5Kb2JQaGFzZRI9CgpwYWdpbmF0aW9uGAIgASgLMiQuZG9tYWluLmNvbW1vbi52MS5QYWdpbmF0aW9uUmVzcG9uc2VIAIgBARI2Cg5zZWFyY2hfcmVzdWx0cxgDIAMoCzIeLmRvbWFpbi5jb21tb24udjEuU2VhcmNoUmVzdWx0Eg8KB3N1Y2Nlc3MYBCABKAgSKwoFZXJyb3IYBSABKAsyFy5kb21haW4uY29tbW9uLnYxLkVycm9ySAGIAQFCDQoLX3BhZ2luYXRpb25CCAoGX2Vycm9yIjYKHkdldEpvYlBoYXNlSXRlbVBhZ2VEYXRhUmVxdWVzdBIUCgxqb2JfcGhhc2VfaWQYASABKAkirgEKH0dldEpvYlBoYXNlSXRlbVBhZ2VEYXRhUmVzcG9uc2USNQoJam9iX3BoYXNlGAEgASgLMh0uZG9tYWluLm9wZXJhdGlvbi52MS5Kb2JQaGFzZUgAiAEBEg8KB3N1Y2Nlc3MYAiABKAgSKwoFZXJyb3IYAyABKAsyFy5kb21haW4uY29tbW9uLnYxLkVycm9ySAGIAQFCDAoKX2pvYl9waGFzZUIICgZfZXJyb3IiKwoZTGlzdEpvYlBoYXNlc0J5Sm9iUmVxdWVzdBIOCgZqb2JfaWQYASABKAkilwEKGkxpc3RKb2JQaGFzZXNCeUpvYlJlc3BvbnNlEjEKCmpvYl9waGFzZXMYASADKAsyHS5kb21haW4ub3BlcmF0aW9uLnYxLkpvYlBoYXNlEg8KB3N1Y2Nlc3MYAiABKAgSKwoFZXJyb3IYAyABKAsyFy5kb21haW4uY29tbW9uLnYxLkVycm9ySACIAQFCCAoGX2Vycm9yKnoKC1BoYXNlU3RhdHVzEhwKGFBIQVNFX1NUQVRVU19VTlNQRUNJRklFRBAAEhgKFFBIQVNFX1NUQVRVU19QRU5ESU5HEAESFwoTUEhBU0VfU1RBVFVTX0FDVElWRRACEhoKFlBIQVNFX1NUQVRVU19DT01QTEVURUQQAzKhBwoVSm9iUGhhc2VEb21haW5TZXJ2aWNlEmkKDkNyZWF0ZUpvYlBoYXNlEiouZG9tYWluLm9wZXJhdGlvbi52MS5DcmVhdGVKb2JQaGFzZVJlcXVlc3QaKy5kb21haW4ub3BlcmF0aW9uLnYxLkNyZWF0ZUpvYlBoYXNlUmVzcG9uc2USYwoMUmVhZEpvYlBoYXNlEiguZG9tYWluLm9wZXJhdGlvbi52MS5SZWFkSm9iUGhhc2VSZXF1ZXN0GikuZG9tYWluLm9wZXJhdGlvbi52MS5SZWFkSm9iUGhhc2VSZXNwb25zZRJpCg5VcGRhdGVKb2JQaGFzZRIqLmRvbWFpbi5vcGVyYXRpb24udjEuVXBkYXRlSm9iUGhhc2VSZXF1ZXN0GisuZG9tYWluLm9wZXJhdGlvbi52MS5VcGRhdGVKb2JQaGFzZVJlc3BvbnNlEmkKDkRlbGV0ZUpvYlBoYXNlEiouZG9tYWluLm9wZXJhdGlvbi52MS5EZWxldGVKb2JQaGFzZVJlcXVlc3QaKy5kb21haW4ub3BlcmF0aW9uLnYxLkRlbGV0ZUpvYlBoYXNlUmVzcG9uc2USZgoNTGlzdEpvYlBoYXNlcxIpLmRvbWFpbi5vcGVyYXRpb24udjEuTGlzdEpvYlBoYXNlc1JlcXVlc3QaKi5kb21haW4ub3BlcmF0aW9uLnYxLkxpc3RKb2JQaGFzZXNSZXNwb25zZRKEAQoXR2V0Sm9iUGhhc2VMaXN0UGFnZURhdGESMy5kb21haW4ub3BlcmF0aW9uLnYxLkdldEpvYlBoYXNlTGlzdFBhZ2VEYXRhUmVxdWVzdBo0LmRvbWFpbi5vcGVyYXRpb24udjEuR2V0Sm9iUGhhc2VMaXN0UGFnZURhdGFSZXNwb25zZRKEAQoXR2V0Sm9iUGhhc2VJdGVtUGFnZURhdGESMy5kb21haW4ub3BlcmF0aW9uLnYxLkdldEpvYlBoYXNlSXRlbVBhZ2VEYXRhUmVxdWVzdBo0LmRvbWFpbi5vcGVyYXRpb24udjEuR2V0Sm9iUGhhc2VJdGVtUGFnZURhdGFSZXNwb25zZRJsCglMaXN0QnlKb2ISLi5kb21haW4ub3BlcmF0aW9uLnYxLkxpc3RKb2JQaGFzZXNCeUpvYlJlcXVlc3QaLy5kb21haW4ub3BlcmF0aW9uLnYxLkxpc3RKb2JQaGFzZXNCeUpvYlJlc3BvbnNlQukBChdjb20uZG9tYWluLm9wZXJhdGlvbi52MUINSm9iUGhhc2VQcm90b1ABWlFnaXRodWIuY29tL2VybmllYWxpY2UvZXNxeW1hL3BrZy9zY2hlbWEvdjEvZG9tYWluL29wZXJhdGlvbi9qb2JfcGhhc2U7b3BlcmF0aW9udjGiAgNET1iqAhNEb21haW4uT3BlcmF0aW9uLlYxygITRG9tYWluXE9wZXJhdGlvblxWMeICH0RvbWFpblxPcGVyYXRpb25cVjFcR1BCTWV0YWRhdGHqAhVEb21haW46Ok9wZXJhdGlvbjo6VjFiBnByb3RvMw", [file_domain_common_error, file_domain_common_pagination, file_domain_common_filter, file_domain_common_sort, file_domain_common_search, file_domain_operation_job_job, file_options_db]);
+  fileDesc("Cipkb21haW4vb3BlcmF0aW9uL2pvYl9waGFzZS9qb2JfcGhhc2UucHJvdG8SE2RvbWFpbi5vcGVyYXRpb24udjEinhAKCEpvYlBoYXNlEgoKAmlkGAEgASgJEhkKDGRhdGVfY3JlYXRlZBgCIAEoA0gAiAEBEigKE2RhdGVfY3JlYXRlZF9zdHJpbmcYAyABKAlCBoK1GAI4AUgBiAEBEhoKDWRhdGVfbW9kaWZpZWQYBCABKANIAogBARIpChRkYXRlX21vZGlmaWVkX3N0cmluZxgFIAEoCUIGgrUYAjgBSAOIAQESDgoGYWN0aXZlGAYgASgIEhsKBmpvYl9pZBgHIAEoCUILgrUYBwoDam9iGAESKgoDam9iGAggASgLMhguZG9tYWluLm9wZXJhdGlvbi52MS5Kb2JIBIgBARIMCgRuYW1lGAkgASgJEhMKC3BoYXNlX29yZGVyGAogASgFEjAKBnN0YXR1cxgLIAEoDjIgLmRvbWFpbi5vcGVyYXRpb24udjEuUGhhc2VTdGF0dXMSOgoRdGVtcGxhdGVfcGhhc2VfaWQYDCABKAlCGoK1GBYKEmpvYl90ZW1wbGF0ZV9waGFzZRgBSAWIAQESKgoLcmVzb3VyY2VfaWQYDSABKAlCEIK1GAwKCHJlc291cmNlGAFIBogBARIaCg1wbGFubmVkX3N0YXJ0GA4gASgDSAeIAQESKQoUcGxhbm5lZF9zdGFydF9zdHJpbmcYDyABKAlCBoK1GAI4AUgIiAEBEhgKC3BsYW5uZWRfZW5kGBAgASgDSAmIAQESJwoScGxhbm5lZF9lbmRfc3RyaW5nGBEgASgJQgaCtRgCOAFICogBARIZCgxhY3R1YWxfc3RhcnQYEiABKANIC4gBARIoChNhY3R1YWxfc3RhcnRfc3RyaW5nGBMgASgJQgaCtRgCOAFIDIgBARIXCgphY3R1YWxfZW5kGBQgASgDSA2IAQESJgoRYWN0dWFsX2VuZF9zdHJpbmcYFSABKAlCBoK1GAI4AUgOiAEBEhoKDXNldHVwX21pbnV0ZXMYFiABKAVID4gBARIhChRydW5fbWludXRlc19wZXJfdW5pdBgXIAEoAUgQiAEBEjIKFHByZWRlY2Vzc29yX3BoYXNlX2lkGBggASgJQg+CtRgLCglqb2JfcGhhc2VIEYgBARI0ChFzY29yaW5nX3NjaGVtZV9pZBgZIAEoCUIUgrUYEAoOc2NvcmluZ19zY2hlbWVIEogBARIjCg5pc19zeW50aGVzaXplZBgaIAEoCEILgrUYByIFZmFsc2USbAoPYXBwcm92YWxfc3RhdHVzGCggASgOMiguZG9tYWluLm9wZXJhdGlvbi52MS5QaGFzZUFwcHJvdmFsU3RhdHVzQimCtRglIiMnUEhBU0VfQVBQUk9WQUxfU1RBVFVTX0lOX1BST0dSRVNTJxIZCgxzdWJtaXR0ZWRfYnkYKSABKAlIE4gBARIZCgxzdWJtaXR0ZWRfYXQYKiABKANIFIgBARIoChNzdWJtaXR0ZWRfYXRfc3RyaW5nGCsgASgJQgaCtRgCOAFIFYgBARIYCgt2ZXJpZmllZF9ieRgsIAEoCUgWiAEBEhgKC3ZlcmlmaWVkX2F0GC0gASgDSBeIAQESJwoSdmVyaWZpZWRfYXRfc3RyaW5nGC4gASgJQgaCtRgCOAFIGIgBARIZCgxwdWJsaXNoZWRfYnkYLyABKAlIGYgBARIZCgxwdWJsaXNoZWRfYXQYMCABKANIGogBARIoChNwdWJsaXNoZWRfYXRfc3RyaW5nGDEgASgJQgaCtRgCOAFIG4gBARIaCg1yZXR1cm5fcmVhc29uGDIgASgJSByIAQESGAoLcmV0dXJuZWRfYnkYMyABKAlIHYgBARIYCgtyZXR1cm5lZF9hdBg0IAEoA0geiAEBEicKEnJldHVybmVkX2F0X3N0cmluZxg1IAEoCUIGgrUYAjgBSB+IAQE6Boq1GAIIAUIPCg1fZGF0ZV9jcmVhdGVkQhYKFF9kYXRlX2NyZWF0ZWRfc3RyaW5nQhAKDl9kYXRlX21vZGlmaWVkQhcKFV9kYXRlX21vZGlmaWVkX3N0cmluZ0IGCgRfam9iQhQKEl90ZW1wbGF0ZV9waGFzZV9pZEIOCgxfcmVzb3VyY2VfaWRCEAoOX3BsYW5uZWRfc3RhcnRCFwoVX3BsYW5uZWRfc3RhcnRfc3RyaW5nQg4KDF9wbGFubmVkX2VuZEIVChNfcGxhbm5lZF9lbmRfc3RyaW5nQg8KDV9hY3R1YWxfc3RhcnRCFgoUX2FjdHVhbF9zdGFydF9zdHJpbmdCDQoLX2FjdHVhbF9lbmRCFAoSX2FjdHVhbF9lbmRfc3RyaW5nQhAKDl9zZXR1cF9taW51dGVzQhcKFV9ydW5fbWludXRlc19wZXJfdW5pdEIXChVfcHJlZGVjZXNzb3JfcGhhc2VfaWRCFAoSX3Njb3Jpbmdfc2NoZW1lX2lkQg8KDV9zdWJtaXR0ZWRfYnlCDwoNX3N1Ym1pdHRlZF9hdEIWChRfc3VibWl0dGVkX2F0X3N0cmluZ0IOCgxfdmVyaWZpZWRfYnlCDgoMX3ZlcmlmaWVkX2F0QhUKE192ZXJpZmllZF9hdF9zdHJpbmdCDwoNX3B1Ymxpc2hlZF9ieUIPCg1fcHVibGlzaGVkX2F0QhYKFF9wdWJsaXNoZWRfYXRfc3RyaW5nQhAKDl9yZXR1cm5fcmVhc29uQg4KDF9yZXR1cm5lZF9ieUIOCgxfcmV0dXJuZWRfYXRCFQoTX3JldHVybmVkX2F0X3N0cmluZ0oECBsQKEoECDYQRiJEChVDcmVhdGVKb2JQaGFzZVJlcXVlc3QSKwoEZGF0YRgBIAEoCzIdLmRvbWFpbi5vcGVyYXRpb24udjEuSm9iUGhhc2UijQEKFkNyZWF0ZUpvYlBoYXNlUmVzcG9uc2USKwoEZGF0YRgBIAMoCzIdLmRvbWFpbi5vcGVyYXRpb24udjEuSm9iUGhhc2USDwoHc3VjY2VzcxgCIAEoCBIrCgVlcnJvchgDIAEoCzIXLmRvbWFpbi5jb21tb24udjEuRXJyb3JIAIgBAUIICgZfZXJyb3IiQgoTUmVhZEpvYlBoYXNlUmVxdWVzdBIrCgRkYXRhGAEgASgLMh0uZG9tYWluLm9wZXJhdGlvbi52MS5Kb2JQaGFzZSKLAQoUUmVhZEpvYlBoYXNlUmVzcG9uc2USKwoEZGF0YRgBIAMoCzIdLmRvbWFpbi5vcGVyYXRpb24udjEuSm9iUGhhc2USDwoHc3VjY2VzcxgCIAEoCBIrCgVlcnJvchgDIAEoCzIXLmRvbWFpbi5jb21tb24udjEuRXJyb3JIAIgBAUIICgZfZXJyb3IiRAoVVXBkYXRlSm9iUGhhc2VSZXF1ZXN0EisKBGRhdGEYASABKAsyHS5kb21haW4ub3BlcmF0aW9uLnYxLkpvYlBoYXNlIo0BChZVcGRhdGVKb2JQaGFzZVJlc3BvbnNlEisKBGRhdGEYASADKAsyHS5kb21haW4ub3BlcmF0aW9uLnYxLkpvYlBoYXNlEg8KB3N1Y2Nlc3MYAiABKAgSKwoFZXJyb3IYAyABKAsyFy5kb21haW4uY29tbW9uLnYxLkVycm9ySACIAQFCCAoGX2Vycm9yIkQKFURlbGV0ZUpvYlBoYXNlUmVxdWVzdBIrCgRkYXRhGAEgASgLMh0uZG9tYWluLm9wZXJhdGlvbi52MS5Kb2JQaGFzZSJgChZEZWxldGVKb2JQaGFzZVJlc3BvbnNlEg8KB3N1Y2Nlc3MYASABKAgSKwoFZXJyb3IYAiABKAsyFy5kb21haW4uY29tbW9uLnYxLkVycm9ySACIAQFCCAoGX2Vycm9yIqICChRMaXN0Sm9iUGhhc2VzUmVxdWVzdBI0CgZzZWFyY2gYASABKAsyHy5kb21haW4uY29tbW9uLnYxLlNlYXJjaFJlcXVlc3RIAIgBARI1CgdmaWx0ZXJzGAIgASgLMh8uZG9tYWluLmNvbW1vbi52MS5GaWx0ZXJSZXF1ZXN0SAGIAQESMAoEc29ydBgDIAEoCzIdLmRvbWFpbi5jb21tb24udjEuU29ydFJlcXVlc3RIAogBARI8CgpwYWdpbmF0aW9uGAQgASgLMiMuZG9tYWluLmNvbW1vbi52MS5QYWdpbmF0aW9uUmVxdWVzdEgDiAEBQgkKB19zZWFyY2hCCgoIX2ZpbHRlcnNCBwoFX3NvcnRCDQoLX3BhZ2luYXRpb24ijAEKFUxpc3RKb2JQaGFzZXNSZXNwb25zZRIrCgRkYXRhGAEgAygLMh0uZG9tYWluLm9wZXJhdGlvbi52MS5Kb2JQaGFzZRIPCgdzdWNjZXNzGAIgASgIEisKBWVycm9yGAMgASgLMhcuZG9tYWluLmNvbW1vbi52MS5FcnJvckgAiAEBQggKBl9lcnJvciKsAgoeR2V0Sm9iUGhhc2VMaXN0UGFnZURhdGFSZXF1ZXN0EjwKCnBhZ2luYXRpb24YASABKAsyIy5kb21haW4uY29tbW9uLnYxLlBhZ2luYXRpb25SZXF1ZXN0SACIAQESNQoHZmlsdGVycxgCIAEoCzIfLmRvbWFpbi5jb21tb24udjEuRmlsdGVyUmVxdWVzdEgBiAEBEjAKBHNvcnQYAyABKAsyHS5kb21haW4uY29tbW9uLnYxLlNvcnRSZXF1ZXN0SAKIAQESNAoGc2VhcmNoGAQgASgLMh8uZG9tYWluLmNvbW1vbi52MS5TZWFyY2hSZXF1ZXN0SAOIAQFCDQoLX3BhZ2luYXRpb25CCgoIX2ZpbHRlcnNCBwoFX3NvcnRCCQoHX3NlYXJjaCKmAgofR2V0Sm9iUGhhc2VMaXN0UGFnZURhdGFSZXNwb25zZRI1Cg5qb2JfcGhhc2VfbGlzdBgBIAMoCzIdLmRvbWFpbi5vcGVyYXRpb24udjEuSm9iUGhhc2USPQoKcGFnaW5hdGlvbhgCIAEoCzIkLmRvbWFpbi5jb21tb24udjEuUGFnaW5hdGlvblJlc3BvbnNlSACIAQESNgoOc2VhcmNoX3Jlc3VsdHMYAyADKAsyHi5kb21haW4uY29tbW9uLnYxLlNlYXJjaFJlc3VsdBIPCgdzdWNjZXNzGAQgASgIEisKBWVycm9yGAUgASgLMhcuZG9tYWluLmNvbW1vbi52MS5FcnJvckgBiAEBQg0KC19wYWdpbmF0aW9uQggKBl9lcnJvciI2Ch5HZXRKb2JQaGFzZUl0ZW1QYWdlRGF0YVJlcXVlc3QSFAoMam9iX3BoYXNlX2lkGAEgASgJIq4BCh9HZXRKb2JQaGFzZUl0ZW1QYWdlRGF0YVJlc3BvbnNlEjUKCWpvYl9waGFzZRgBIAEoCzIdLmRvbWFpbi5vcGVyYXRpb24udjEuSm9iUGhhc2VIAIgBARIPCgdzdWNjZXNzGAIgASgIEisKBWVycm9yGAMgASgLMhcuZG9tYWluLmNvbW1vbi52MS5FcnJvckgBiAEBQgwKCl9qb2JfcGhhc2VCCAoGX2Vycm9yIisKGUxpc3RKb2JQaGFzZXNCeUpvYlJlcXVlc3QSDgoGam9iX2lkGAEgASgJIpcBChpMaXN0Sm9iUGhhc2VzQnlKb2JSZXNwb25zZRIxCgpqb2JfcGhhc2VzGAEgAygLMh0uZG9tYWluLm9wZXJhdGlvbi52MS5Kb2JQaGFzZRIPCgdzdWNjZXNzGAIgASgIEisKBWVycm9yGAMgASgLMhcuZG9tYWluLmNvbW1vbi52MS5FcnJvckgAiAEBQggKBl9lcnJvciJXCh1TdWJtaXRKb2JQaGFzZUFwcHJvdmFsUmVxdWVzdBIXCg9qb2JfdGVtcGxhdGVfaWQYASABKAkSHQoVam9iX3RlbXBsYXRlX3BoYXNlX2lkGAIgASgJIroBCh5TdWJtaXRKb2JQaGFzZUFwcHJvdmFsUmVzcG9uc2USOAoGc3RhdHVzGAEgASgOMiguZG9tYWluLm9wZXJhdGlvbi52MS5QaGFzZUFwcHJvdmFsU3RhdHVzEhYKDmFmZmVjdGVkX2NvdW50GAIgASgFEg8KB3N1Y2Nlc3MYAyABKAgSKwoFZXJyb3IYBCABKAsyFy5kb21haW4uY29tbW9uLnYxLkVycm9ySACIAQFCCAoGX2Vycm9yIlcKHVZlcmlmeUpvYlBoYXNlQXBwcm92YWxSZXF1ZXN0EhcKD2pvYl90ZW1wbGF0ZV9pZBgBIAEoCRIdChVqb2JfdGVtcGxhdGVfcGhhc2VfaWQYAiABKAkiugEKHlZlcmlmeUpvYlBoYXNlQXBwcm92YWxSZXNwb25zZRI4CgZzdGF0dXMYASABKA4yKC5kb21haW4ub3BlcmF0aW9uLnYxLlBoYXNlQXBwcm92YWxTdGF0dXMSFgoOYWZmZWN0ZWRfY291bnQYAiABKAUSDwoHc3VjY2VzcxgDIAEoCBIrCgVlcnJvchgEIAEoCzIXLmRvbWFpbi5jb21tb24udjEuRXJyb3JIAIgBAUIICgZfZXJyb3IiWAoeUHVibGlzaEpvYlBoYXNlQXBwcm92YWxSZXF1ZXN0EhcKD2pvYl90ZW1wbGF0ZV9pZBgBIAEoCRIdChVqb2JfdGVtcGxhdGVfcGhhc2VfaWQYAiABKAkiuwEKH1B1Ymxpc2hKb2JQaGFzZUFwcHJvdmFsUmVzcG9uc2USOAoGc3RhdHVzGAEgASgOMiguZG9tYWluLm9wZXJhdGlvbi52MS5QaGFzZUFwcHJvdmFsU3RhdHVzEhYKDmFmZmVjdGVkX2NvdW50GAIgASgFEg8KB3N1Y2Nlc3MYAyABKAgSKwoFZXJyb3IYBCABKAsyFy5kb21haW4uY29tbW9uLnYxLkVycm9ySACIAQFCCAoGX2Vycm9yIncKHVJldHVybkpvYlBoYXNlQXBwcm92YWxSZXF1ZXN0EhcKD2pvYl90ZW1wbGF0ZV9pZBgBIAEoCRIdChVqb2JfdGVtcGxhdGVfcGhhc2VfaWQYAiABKAkSEwoGcmVhc29uGAMgASgJSACIAQFCCQoHX3JlYXNvbiK6AQoeUmV0dXJuSm9iUGhhc2VBcHByb3ZhbFJlc3BvbnNlEjgKBnN0YXR1cxgBIAEoDjIoLmRvbWFpbi5vcGVyYXRpb24udjEuUGhhc2VBcHByb3ZhbFN0YXR1cxIWCg5hZmZlY3RlZF9jb3VudBgCIAEoBRIPCgdzdWNjZXNzGAMgASgIEisKBWVycm9yGAQgASgLMhcuZG9tYWluLmNvbW1vbi52MS5FcnJvckgAiAEBQggKBl9lcnJvcip6CgtQaGFzZVN0YXR1cxIcChhQSEFTRV9TVEFUVVNfVU5TUEVDSUZJRUQQABIYChRQSEFTRV9TVEFUVVNfUEVORElORxABEhcKE1BIQVNFX1NUQVRVU19BQ1RJVkUQAhIaChZQSEFTRV9TVEFUVVNfQ09NUExFVEVEEAMq0gEKE1BoYXNlQXBwcm92YWxTdGF0dXMSJQohUEhBU0VfQVBQUk9WQUxfU1RBVFVTX1VOU1BFQ0lGSUVEEAASJQohUEhBU0VfQVBQUk9WQUxfU1RBVFVTX0lOX1BST0dSRVNTEAESJAogUEhBU0VfQVBQUk9WQUxfU1RBVFVTX0ZPUl9SRVZJRVcQAhIiCh5QSEFTRV9BUFBST1ZBTF9TVEFUVVNfVkVSSUZJRUQQAxIjCh9QSEFTRV9BUFBST1ZBTF9TVEFUVVNfUFVCTElTSEVEEAQytAsKFUpvYlBoYXNlRG9tYWluU2VydmljZRJpCg5DcmVhdGVKb2JQaGFzZRIqLmRvbWFpbi5vcGVyYXRpb24udjEuQ3JlYXRlSm9iUGhhc2VSZXF1ZXN0GisuZG9tYWluLm9wZXJhdGlvbi52MS5DcmVhdGVKb2JQaGFzZVJlc3BvbnNlEmMKDFJlYWRKb2JQaGFzZRIoLmRvbWFpbi5vcGVyYXRpb24udjEuUmVhZEpvYlBoYXNlUmVxdWVzdBopLmRvbWFpbi5vcGVyYXRpb24udjEuUmVhZEpvYlBoYXNlUmVzcG9uc2USaQoOVXBkYXRlSm9iUGhhc2USKi5kb21haW4ub3BlcmF0aW9uLnYxLlVwZGF0ZUpvYlBoYXNlUmVxdWVzdBorLmRvbWFpbi5vcGVyYXRpb24udjEuVXBkYXRlSm9iUGhhc2VSZXNwb25zZRJpCg5EZWxldGVKb2JQaGFzZRIqLmRvbWFpbi5vcGVyYXRpb24udjEuRGVsZXRlSm9iUGhhc2VSZXF1ZXN0GisuZG9tYWluLm9wZXJhdGlvbi52MS5EZWxldGVKb2JQaGFzZVJlc3BvbnNlEmYKDUxpc3RKb2JQaGFzZXMSKS5kb21haW4ub3BlcmF0aW9uLnYxLkxpc3RKb2JQaGFzZXNSZXF1ZXN0GiouZG9tYWluLm9wZXJhdGlvbi52MS5MaXN0Sm9iUGhhc2VzUmVzcG9uc2UShAEKF0dldEpvYlBoYXNlTGlzdFBhZ2VEYXRhEjMuZG9tYWluLm9wZXJhdGlvbi52MS5HZXRKb2JQaGFzZUxpc3RQYWdlRGF0YVJlcXVlc3QaNC5kb21haW4ub3BlcmF0aW9uLnYxLkdldEpvYlBoYXNlTGlzdFBhZ2VEYXRhUmVzcG9uc2UShAEKF0dldEpvYlBoYXNlSXRlbVBhZ2VEYXRhEjMuZG9tYWluLm9wZXJhdGlvbi52MS5HZXRKb2JQaGFzZUl0ZW1QYWdlRGF0YVJlcXVlc3QaNC5kb21haW4ub3BlcmF0aW9uLnYxLkdldEpvYlBoYXNlSXRlbVBhZ2VEYXRhUmVzcG9uc2USbAoJTGlzdEJ5Sm9iEi4uZG9tYWluLm9wZXJhdGlvbi52MS5MaXN0Sm9iUGhhc2VzQnlKb2JSZXF1ZXN0Gi8uZG9tYWluLm9wZXJhdGlvbi52MS5MaXN0Sm9iUGhhc2VzQnlKb2JSZXNwb25zZRKBAQoWU3VibWl0Sm9iUGhhc2VBcHByb3ZhbBIyLmRvbWFpbi5vcGVyYXRpb24udjEuU3VibWl0Sm9iUGhhc2VBcHByb3ZhbFJlcXVlc3QaMy5kb21haW4ub3BlcmF0aW9uLnYxLlN1Ym1pdEpvYlBoYXNlQXBwcm92YWxSZXNwb25zZRKBAQoWVmVyaWZ5Sm9iUGhhc2VBcHByb3ZhbBIyLmRvbWFpbi5vcGVyYXRpb24udjEuVmVyaWZ5Sm9iUGhhc2VBcHByb3ZhbFJlcXVlc3QaMy5kb21haW4ub3BlcmF0aW9uLnYxLlZlcmlmeUpvYlBoYXNlQXBwcm92YWxSZXNwb25zZRKEAQoXUHVibGlzaEpvYlBoYXNlQXBwcm92YWwSMy5kb21haW4ub3BlcmF0aW9uLnYxLlB1Ymxpc2hKb2JQaGFzZUFwcHJvdmFsUmVxdWVzdBo0LmRvbWFpbi5vcGVyYXRpb24udjEuUHVibGlzaEpvYlBoYXNlQXBwcm92YWxSZXNwb25zZRKBAQoWUmV0dXJuSm9iUGhhc2VBcHByb3ZhbBIyLmRvbWFpbi5vcGVyYXRpb24udjEuUmV0dXJuSm9iUGhhc2VBcHByb3ZhbFJlcXVlc3QaMy5kb21haW4ub3BlcmF0aW9uLnYxLlJldHVybkpvYlBoYXNlQXBwcm92YWxSZXNwb25zZULpAQoXY29tLmRvbWFpbi5vcGVyYXRpb24udjFCDUpvYlBoYXNlUHJvdG9QAVpRZ2l0aHViLmNvbS9lcm5pZWFsaWNlL2VzcXltYS9wa2cvc2NoZW1hL3YxL2RvbWFpbi9vcGVyYXRpb24vam9iX3BoYXNlO29wZXJhdGlvbnYxogIDRE9YqgITRG9tYWluLk9wZXJhdGlvbi5WMcoCE0RvbWFpblxPcGVyYXRpb25cVjHiAh9Eb21haW5cT3BlcmF0aW9uXFYxXEdQQk1ldGFkYXRh6gIVRG9tYWluOjpPcGVyYXRpb246OlYxYgZwcm90bzM", [file_domain_common_error, file_domain_common_pagination, file_domain_common_filter, file_domain_common_sort, file_domain_common_search, file_domain_operation_job_job, file_options_db]);
 
 /**
  * @generated from message domain.operation.v1.JobPhase
@@ -158,6 +158,85 @@ export type JobPhase = Message<"domain.operation.v1.JobPhase"> & {
    * @generated from field: bool is_synthesized = 26;
    */
   isSynthesized: boolean;
+
+  /**
+   * --- Approval workflow (per-phase approval ladder) ---
+   * Server-owned lifecycle. Generic create forces IN_PROGRESS/null audit and
+   * generic update strips these fields (P2); dedicated transition RPCs own the
+   * stamps. approval_status persists as the enum NAME (TEXT NOT NULL) with the
+   * raw-SQL quoted default below and a DB CHECK over the four persisted tokens.
+   * Each actor/time pair is null-or-nonnull together (DB CHECK, migration). The
+   * *_string fields are display-only mirrors (db.ignore) of their epoch-ms int64
+   * siblings and are never persisted.
+   *
+   * @generated from field: domain.operation.v1.PhaseApprovalStatus approval_status = 40;
+   */
+  approvalStatus: PhaseApprovalStatus;
+
+  /**
+   * @generated from field: optional string submitted_by = 41;
+   */
+  submittedBy?: string;
+
+  /**
+   * @generated from field: optional int64 submitted_at = 42;
+   */
+  submittedAt?: bigint;
+
+  /**
+   * @generated from field: optional string submitted_at_string = 43;
+   */
+  submittedAtString?: string;
+
+  /**
+   * @generated from field: optional string verified_by = 44;
+   */
+  verifiedBy?: string;
+
+  /**
+   * @generated from field: optional int64 verified_at = 45;
+   */
+  verifiedAt?: bigint;
+
+  /**
+   * @generated from field: optional string verified_at_string = 46;
+   */
+  verifiedAtString?: string;
+
+  /**
+   * @generated from field: optional string published_by = 47;
+   */
+  publishedBy?: string;
+
+  /**
+   * @generated from field: optional int64 published_at = 48;
+   */
+  publishedAt?: bigint;
+
+  /**
+   * @generated from field: optional string published_at_string = 49;
+   */
+  publishedAtString?: string;
+
+  /**
+   * @generated from field: optional string return_reason = 50;
+   */
+  returnReason?: string;
+
+  /**
+   * @generated from field: optional string returned_by = 51;
+   */
+  returnedBy?: string;
+
+  /**
+   * @generated from field: optional int64 returned_at = 52;
+   */
+  returnedAt?: bigint;
+
+  /**
+   * @generated from field: optional string returned_at_string = 53;
+   */
+  returnedAtString?: string;
 };
 
 /**
@@ -555,6 +634,227 @@ export const ListJobPhasesByJobResponseSchema: GenMessage<ListJobPhasesByJobResp
   messageDesc(file_domain_operation_job_phase_job_phase, 16);
 
 /**
+ * @generated from message domain.operation.v1.SubmitJobPhaseApprovalRequest
+ */
+export type SubmitJobPhaseApprovalRequest = Message<"domain.operation.v1.SubmitJobPhaseApprovalRequest"> & {
+  /**
+   * @generated from field: string job_template_id = 1;
+   */
+  jobTemplateId: string;
+
+  /**
+   * @generated from field: string job_template_phase_id = 2;
+   */
+  jobTemplatePhaseId: string;
+};
+
+/**
+ * Describes the message domain.operation.v1.SubmitJobPhaseApprovalRequest.
+ * Use `create(SubmitJobPhaseApprovalRequestSchema)` to create a new message.
+ */
+export const SubmitJobPhaseApprovalRequestSchema: GenMessage<SubmitJobPhaseApprovalRequest> = /*@__PURE__*/
+  messageDesc(file_domain_operation_job_phase_job_phase, 17);
+
+/**
+ * @generated from message domain.operation.v1.SubmitJobPhaseApprovalResponse
+ */
+export type SubmitJobPhaseApprovalResponse = Message<"domain.operation.v1.SubmitJobPhaseApprovalResponse"> & {
+  /**
+   * @generated from field: domain.operation.v1.PhaseApprovalStatus status = 1;
+   */
+  status: PhaseApprovalStatus;
+
+  /**
+   * @generated from field: int32 affected_count = 2;
+   */
+  affectedCount: number;
+
+  /**
+   * @generated from field: bool success = 3;
+   */
+  success: boolean;
+
+  /**
+   * @generated from field: optional domain.common.v1.Error error = 4;
+   */
+  error?: Error;
+};
+
+/**
+ * Describes the message domain.operation.v1.SubmitJobPhaseApprovalResponse.
+ * Use `create(SubmitJobPhaseApprovalResponseSchema)` to create a new message.
+ */
+export const SubmitJobPhaseApprovalResponseSchema: GenMessage<SubmitJobPhaseApprovalResponse> = /*@__PURE__*/
+  messageDesc(file_domain_operation_job_phase_job_phase, 18);
+
+/**
+ * @generated from message domain.operation.v1.VerifyJobPhaseApprovalRequest
+ */
+export type VerifyJobPhaseApprovalRequest = Message<"domain.operation.v1.VerifyJobPhaseApprovalRequest"> & {
+  /**
+   * @generated from field: string job_template_id = 1;
+   */
+  jobTemplateId: string;
+
+  /**
+   * @generated from field: string job_template_phase_id = 2;
+   */
+  jobTemplatePhaseId: string;
+};
+
+/**
+ * Describes the message domain.operation.v1.VerifyJobPhaseApprovalRequest.
+ * Use `create(VerifyJobPhaseApprovalRequestSchema)` to create a new message.
+ */
+export const VerifyJobPhaseApprovalRequestSchema: GenMessage<VerifyJobPhaseApprovalRequest> = /*@__PURE__*/
+  messageDesc(file_domain_operation_job_phase_job_phase, 19);
+
+/**
+ * @generated from message domain.operation.v1.VerifyJobPhaseApprovalResponse
+ */
+export type VerifyJobPhaseApprovalResponse = Message<"domain.operation.v1.VerifyJobPhaseApprovalResponse"> & {
+  /**
+   * @generated from field: domain.operation.v1.PhaseApprovalStatus status = 1;
+   */
+  status: PhaseApprovalStatus;
+
+  /**
+   * @generated from field: int32 affected_count = 2;
+   */
+  affectedCount: number;
+
+  /**
+   * @generated from field: bool success = 3;
+   */
+  success: boolean;
+
+  /**
+   * @generated from field: optional domain.common.v1.Error error = 4;
+   */
+  error?: Error;
+};
+
+/**
+ * Describes the message domain.operation.v1.VerifyJobPhaseApprovalResponse.
+ * Use `create(VerifyJobPhaseApprovalResponseSchema)` to create a new message.
+ */
+export const VerifyJobPhaseApprovalResponseSchema: GenMessage<VerifyJobPhaseApprovalResponse> = /*@__PURE__*/
+  messageDesc(file_domain_operation_job_phase_job_phase, 20);
+
+/**
+ * @generated from message domain.operation.v1.PublishJobPhaseApprovalRequest
+ */
+export type PublishJobPhaseApprovalRequest = Message<"domain.operation.v1.PublishJobPhaseApprovalRequest"> & {
+  /**
+   * @generated from field: string job_template_id = 1;
+   */
+  jobTemplateId: string;
+
+  /**
+   * @generated from field: string job_template_phase_id = 2;
+   */
+  jobTemplatePhaseId: string;
+};
+
+/**
+ * Describes the message domain.operation.v1.PublishJobPhaseApprovalRequest.
+ * Use `create(PublishJobPhaseApprovalRequestSchema)` to create a new message.
+ */
+export const PublishJobPhaseApprovalRequestSchema: GenMessage<PublishJobPhaseApprovalRequest> = /*@__PURE__*/
+  messageDesc(file_domain_operation_job_phase_job_phase, 21);
+
+/**
+ * @generated from message domain.operation.v1.PublishJobPhaseApprovalResponse
+ */
+export type PublishJobPhaseApprovalResponse = Message<"domain.operation.v1.PublishJobPhaseApprovalResponse"> & {
+  /**
+   * @generated from field: domain.operation.v1.PhaseApprovalStatus status = 1;
+   */
+  status: PhaseApprovalStatus;
+
+  /**
+   * @generated from field: int32 affected_count = 2;
+   */
+  affectedCount: number;
+
+  /**
+   * @generated from field: bool success = 3;
+   */
+  success: boolean;
+
+  /**
+   * @generated from field: optional domain.common.v1.Error error = 4;
+   */
+  error?: Error;
+};
+
+/**
+ * Describes the message domain.operation.v1.PublishJobPhaseApprovalResponse.
+ * Use `create(PublishJobPhaseApprovalResponseSchema)` to create a new message.
+ */
+export const PublishJobPhaseApprovalResponseSchema: GenMessage<PublishJobPhaseApprovalResponse> = /*@__PURE__*/
+  messageDesc(file_domain_operation_job_phase_job_phase, 22);
+
+/**
+ * @generated from message domain.operation.v1.ReturnJobPhaseApprovalRequest
+ */
+export type ReturnJobPhaseApprovalRequest = Message<"domain.operation.v1.ReturnJobPhaseApprovalRequest"> & {
+  /**
+   * @generated from field: string job_template_id = 1;
+   */
+  jobTemplateId: string;
+
+  /**
+   * @generated from field: string job_template_phase_id = 2;
+   */
+  jobTemplatePhaseId: string;
+
+  /**
+   * @generated from field: optional string reason = 3;
+   */
+  reason?: string;
+};
+
+/**
+ * Describes the message domain.operation.v1.ReturnJobPhaseApprovalRequest.
+ * Use `create(ReturnJobPhaseApprovalRequestSchema)` to create a new message.
+ */
+export const ReturnJobPhaseApprovalRequestSchema: GenMessage<ReturnJobPhaseApprovalRequest> = /*@__PURE__*/
+  messageDesc(file_domain_operation_job_phase_job_phase, 23);
+
+/**
+ * @generated from message domain.operation.v1.ReturnJobPhaseApprovalResponse
+ */
+export type ReturnJobPhaseApprovalResponse = Message<"domain.operation.v1.ReturnJobPhaseApprovalResponse"> & {
+  /**
+   * @generated from field: domain.operation.v1.PhaseApprovalStatus status = 1;
+   */
+  status: PhaseApprovalStatus;
+
+  /**
+   * @generated from field: int32 affected_count = 2;
+   */
+  affectedCount: number;
+
+  /**
+   * @generated from field: bool success = 3;
+   */
+  success: boolean;
+
+  /**
+   * @generated from field: optional domain.common.v1.Error error = 4;
+   */
+  error?: Error;
+};
+
+/**
+ * Describes the message domain.operation.v1.ReturnJobPhaseApprovalResponse.
+ * Use `create(ReturnJobPhaseApprovalResponseSchema)` to create a new message.
+ */
+export const ReturnJobPhaseApprovalResponseSchema: GenMessage<ReturnJobPhaseApprovalResponse> = /*@__PURE__*/
+  messageDesc(file_domain_operation_job_phase_job_phase, 24);
+
+/**
  * @generated from enum domain.operation.v1.PhaseStatus
  */
 export enum PhaseStatus {
@@ -584,6 +884,51 @@ export enum PhaseStatus {
  */
 export const PhaseStatusSchema: GenEnum<PhaseStatus> = /*@__PURE__*/
   enumDesc(file_domain_operation_job_phase_job_phase, 0);
+
+/**
+ * PhaseApprovalStatus is the LOCAL per-phase approval ladder (plan
+ * 20260718-phase-approval-workflow). It is orthogonal to PhaseStatus (field 11):
+ * approval transitions never mutate PhaseStatus, trigger completion hooks, or
+ * touch billing. The ladder is
+ *   IN_PROGRESS --submit--> FOR_REVIEW --verify--> VERIFIED --publish--> PUBLISHED
+ * with `return` normalizing any advanced/mixed sheet back to IN_PROGRESS.
+ * UNSPECIFIED is never persisted; the DB stores the enum NAME (TEXT) with a
+ * default of IN_PROGRESS and a CHECK over the four non-UNSPECIFIED tokens.
+ *
+ * @generated from enum domain.operation.v1.PhaseApprovalStatus
+ */
+export enum PhaseApprovalStatus {
+  /**
+   * @generated from enum value: PHASE_APPROVAL_STATUS_UNSPECIFIED = 0;
+   */
+  UNSPECIFIED = 0,
+
+  /**
+   * @generated from enum value: PHASE_APPROVAL_STATUS_IN_PROGRESS = 1;
+   */
+  IN_PROGRESS = 1,
+
+  /**
+   * @generated from enum value: PHASE_APPROVAL_STATUS_FOR_REVIEW = 2;
+   */
+  FOR_REVIEW = 2,
+
+  /**
+   * @generated from enum value: PHASE_APPROVAL_STATUS_VERIFIED = 3;
+   */
+  VERIFIED = 3,
+
+  /**
+   * @generated from enum value: PHASE_APPROVAL_STATUS_PUBLISHED = 4;
+   */
+  PUBLISHED = 4,
+}
+
+/**
+ * Describes the enum domain.operation.v1.PhaseApprovalStatus.
+ */
+export const PhaseApprovalStatusSchema: GenEnum<PhaseApprovalStatus> = /*@__PURE__*/
+  enumDesc(file_domain_operation_job_phase_job_phase, 1);
 
 /**
  * @generated from service domain.operation.v1.JobPhaseDomainService
@@ -654,6 +999,44 @@ export const JobPhaseDomainService: GenService<{
     methodKind: "unary";
     input: typeof ListJobPhasesByJobRequestSchema;
     output: typeof ListJobPhasesByJobResponseSchema;
+  },
+  /**
+   * --- Approval transitions (per-phase approval ladder) ---
+   * Sheet-grain bulk transitions over one (job_template_id, job_template_phase_id).
+   * Requests carry ONLY the sheet identity; actor + workspace resolve from trusted
+   * context and are never request-supplied. Responses report the resulting target
+   * status and the exact affected phase count. Use cases land in P2.
+   *
+   * @generated from rpc domain.operation.v1.JobPhaseDomainService.SubmitJobPhaseApproval
+   */
+  submitJobPhaseApproval: {
+    methodKind: "unary";
+    input: typeof SubmitJobPhaseApprovalRequestSchema;
+    output: typeof SubmitJobPhaseApprovalResponseSchema;
+  },
+  /**
+   * @generated from rpc domain.operation.v1.JobPhaseDomainService.VerifyJobPhaseApproval
+   */
+  verifyJobPhaseApproval: {
+    methodKind: "unary";
+    input: typeof VerifyJobPhaseApprovalRequestSchema;
+    output: typeof VerifyJobPhaseApprovalResponseSchema;
+  },
+  /**
+   * @generated from rpc domain.operation.v1.JobPhaseDomainService.PublishJobPhaseApproval
+   */
+  publishJobPhaseApproval: {
+    methodKind: "unary";
+    input: typeof PublishJobPhaseApprovalRequestSchema;
+    output: typeof PublishJobPhaseApprovalResponseSchema;
+  },
+  /**
+   * @generated from rpc domain.operation.v1.JobPhaseDomainService.ReturnJobPhaseApproval
+   */
+  returnJobPhaseApproval: {
+    methodKind: "unary";
+    input: typeof ReturnJobPhaseApprovalRequestSchema;
+    output: typeof ReturnJobPhaseApprovalResponseSchema;
   },
 }> = /*@__PURE__*/
   serviceDesc(file_domain_operation_job_phase_job_phase, 0);

@@ -27,6 +27,10 @@ const (
 	JobPhaseDomainService_GetJobPhaseListPageData_FullMethodName = "/domain.operation.v1.JobPhaseDomainService/GetJobPhaseListPageData"
 	JobPhaseDomainService_GetJobPhaseItemPageData_FullMethodName = "/domain.operation.v1.JobPhaseDomainService/GetJobPhaseItemPageData"
 	JobPhaseDomainService_ListByJob_FullMethodName               = "/domain.operation.v1.JobPhaseDomainService/ListByJob"
+	JobPhaseDomainService_SubmitJobPhaseApproval_FullMethodName  = "/domain.operation.v1.JobPhaseDomainService/SubmitJobPhaseApproval"
+	JobPhaseDomainService_VerifyJobPhaseApproval_FullMethodName  = "/domain.operation.v1.JobPhaseDomainService/VerifyJobPhaseApproval"
+	JobPhaseDomainService_PublishJobPhaseApproval_FullMethodName = "/domain.operation.v1.JobPhaseDomainService/PublishJobPhaseApproval"
+	JobPhaseDomainService_ReturnJobPhaseApproval_FullMethodName  = "/domain.operation.v1.JobPhaseDomainService/ReturnJobPhaseApproval"
 )
 
 // JobPhaseDomainServiceClient is the client API for JobPhaseDomainService service.
@@ -42,6 +46,15 @@ type JobPhaseDomainServiceClient interface {
 	GetJobPhaseItemPageData(ctx context.Context, in *GetJobPhaseItemPageDataRequest, opts ...grpc.CallOption) (*GetJobPhaseItemPageDataResponse, error)
 	// Extra: filter by job
 	ListByJob(ctx context.Context, in *ListJobPhasesByJobRequest, opts ...grpc.CallOption) (*ListJobPhasesByJobResponse, error)
+	// --- Approval transitions (per-phase approval ladder) ---
+	// Sheet-grain bulk transitions over one (job_template_id, job_template_phase_id).
+	// Requests carry ONLY the sheet identity; actor + workspace resolve from trusted
+	// context and are never request-supplied. Responses report the resulting target
+	// status and the exact affected phase count. Use cases land in P2.
+	SubmitJobPhaseApproval(ctx context.Context, in *SubmitJobPhaseApprovalRequest, opts ...grpc.CallOption) (*SubmitJobPhaseApprovalResponse, error)
+	VerifyJobPhaseApproval(ctx context.Context, in *VerifyJobPhaseApprovalRequest, opts ...grpc.CallOption) (*VerifyJobPhaseApprovalResponse, error)
+	PublishJobPhaseApproval(ctx context.Context, in *PublishJobPhaseApprovalRequest, opts ...grpc.CallOption) (*PublishJobPhaseApprovalResponse, error)
+	ReturnJobPhaseApproval(ctx context.Context, in *ReturnJobPhaseApprovalRequest, opts ...grpc.CallOption) (*ReturnJobPhaseApprovalResponse, error)
 }
 
 type jobPhaseDomainServiceClient struct {
@@ -132,6 +145,46 @@ func (c *jobPhaseDomainServiceClient) ListByJob(ctx context.Context, in *ListJob
 	return out, nil
 }
 
+func (c *jobPhaseDomainServiceClient) SubmitJobPhaseApproval(ctx context.Context, in *SubmitJobPhaseApprovalRequest, opts ...grpc.CallOption) (*SubmitJobPhaseApprovalResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(SubmitJobPhaseApprovalResponse)
+	err := c.cc.Invoke(ctx, JobPhaseDomainService_SubmitJobPhaseApproval_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *jobPhaseDomainServiceClient) VerifyJobPhaseApproval(ctx context.Context, in *VerifyJobPhaseApprovalRequest, opts ...grpc.CallOption) (*VerifyJobPhaseApprovalResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(VerifyJobPhaseApprovalResponse)
+	err := c.cc.Invoke(ctx, JobPhaseDomainService_VerifyJobPhaseApproval_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *jobPhaseDomainServiceClient) PublishJobPhaseApproval(ctx context.Context, in *PublishJobPhaseApprovalRequest, opts ...grpc.CallOption) (*PublishJobPhaseApprovalResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(PublishJobPhaseApprovalResponse)
+	err := c.cc.Invoke(ctx, JobPhaseDomainService_PublishJobPhaseApproval_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *jobPhaseDomainServiceClient) ReturnJobPhaseApproval(ctx context.Context, in *ReturnJobPhaseApprovalRequest, opts ...grpc.CallOption) (*ReturnJobPhaseApprovalResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(ReturnJobPhaseApprovalResponse)
+	err := c.cc.Invoke(ctx, JobPhaseDomainService_ReturnJobPhaseApproval_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // JobPhaseDomainServiceServer is the server API for JobPhaseDomainService service.
 // All implementations must embed UnimplementedJobPhaseDomainServiceServer
 // for forward compatibility.
@@ -145,6 +198,15 @@ type JobPhaseDomainServiceServer interface {
 	GetJobPhaseItemPageData(context.Context, *GetJobPhaseItemPageDataRequest) (*GetJobPhaseItemPageDataResponse, error)
 	// Extra: filter by job
 	ListByJob(context.Context, *ListJobPhasesByJobRequest) (*ListJobPhasesByJobResponse, error)
+	// --- Approval transitions (per-phase approval ladder) ---
+	// Sheet-grain bulk transitions over one (job_template_id, job_template_phase_id).
+	// Requests carry ONLY the sheet identity; actor + workspace resolve from trusted
+	// context and are never request-supplied. Responses report the resulting target
+	// status and the exact affected phase count. Use cases land in P2.
+	SubmitJobPhaseApproval(context.Context, *SubmitJobPhaseApprovalRequest) (*SubmitJobPhaseApprovalResponse, error)
+	VerifyJobPhaseApproval(context.Context, *VerifyJobPhaseApprovalRequest) (*VerifyJobPhaseApprovalResponse, error)
+	PublishJobPhaseApproval(context.Context, *PublishJobPhaseApprovalRequest) (*PublishJobPhaseApprovalResponse, error)
+	ReturnJobPhaseApproval(context.Context, *ReturnJobPhaseApprovalRequest) (*ReturnJobPhaseApprovalResponse, error)
 	mustEmbedUnimplementedJobPhaseDomainServiceServer()
 }
 
@@ -178,6 +240,18 @@ func (UnimplementedJobPhaseDomainServiceServer) GetJobPhaseItemPageData(context.
 }
 func (UnimplementedJobPhaseDomainServiceServer) ListByJob(context.Context, *ListJobPhasesByJobRequest) (*ListJobPhasesByJobResponse, error) {
 	return nil, status.Error(codes.Unimplemented, "method ListByJob not implemented")
+}
+func (UnimplementedJobPhaseDomainServiceServer) SubmitJobPhaseApproval(context.Context, *SubmitJobPhaseApprovalRequest) (*SubmitJobPhaseApprovalResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method SubmitJobPhaseApproval not implemented")
+}
+func (UnimplementedJobPhaseDomainServiceServer) VerifyJobPhaseApproval(context.Context, *VerifyJobPhaseApprovalRequest) (*VerifyJobPhaseApprovalResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method VerifyJobPhaseApproval not implemented")
+}
+func (UnimplementedJobPhaseDomainServiceServer) PublishJobPhaseApproval(context.Context, *PublishJobPhaseApprovalRequest) (*PublishJobPhaseApprovalResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method PublishJobPhaseApproval not implemented")
+}
+func (UnimplementedJobPhaseDomainServiceServer) ReturnJobPhaseApproval(context.Context, *ReturnJobPhaseApprovalRequest) (*ReturnJobPhaseApprovalResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method ReturnJobPhaseApproval not implemented")
 }
 func (UnimplementedJobPhaseDomainServiceServer) mustEmbedUnimplementedJobPhaseDomainServiceServer() {}
 func (UnimplementedJobPhaseDomainServiceServer) testEmbeddedByValue()                               {}
@@ -344,6 +418,78 @@ func _JobPhaseDomainService_ListByJob_Handler(srv interface{}, ctx context.Conte
 	return interceptor(ctx, in, info, handler)
 }
 
+func _JobPhaseDomainService_SubmitJobPhaseApproval_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(SubmitJobPhaseApprovalRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(JobPhaseDomainServiceServer).SubmitJobPhaseApproval(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: JobPhaseDomainService_SubmitJobPhaseApproval_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(JobPhaseDomainServiceServer).SubmitJobPhaseApproval(ctx, req.(*SubmitJobPhaseApprovalRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _JobPhaseDomainService_VerifyJobPhaseApproval_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(VerifyJobPhaseApprovalRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(JobPhaseDomainServiceServer).VerifyJobPhaseApproval(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: JobPhaseDomainService_VerifyJobPhaseApproval_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(JobPhaseDomainServiceServer).VerifyJobPhaseApproval(ctx, req.(*VerifyJobPhaseApprovalRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _JobPhaseDomainService_PublishJobPhaseApproval_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(PublishJobPhaseApprovalRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(JobPhaseDomainServiceServer).PublishJobPhaseApproval(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: JobPhaseDomainService_PublishJobPhaseApproval_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(JobPhaseDomainServiceServer).PublishJobPhaseApproval(ctx, req.(*PublishJobPhaseApprovalRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _JobPhaseDomainService_ReturnJobPhaseApproval_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ReturnJobPhaseApprovalRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(JobPhaseDomainServiceServer).ReturnJobPhaseApproval(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: JobPhaseDomainService_ReturnJobPhaseApproval_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(JobPhaseDomainServiceServer).ReturnJobPhaseApproval(ctx, req.(*ReturnJobPhaseApprovalRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // JobPhaseDomainService_ServiceDesc is the grpc.ServiceDesc for JobPhaseDomainService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -382,6 +528,22 @@ var JobPhaseDomainService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "ListByJob",
 			Handler:    _JobPhaseDomainService_ListByJob_Handler,
+		},
+		{
+			MethodName: "SubmitJobPhaseApproval",
+			Handler:    _JobPhaseDomainService_SubmitJobPhaseApproval_Handler,
+		},
+		{
+			MethodName: "VerifyJobPhaseApproval",
+			Handler:    _JobPhaseDomainService_VerifyJobPhaseApproval_Handler,
+		},
+		{
+			MethodName: "PublishJobPhaseApproval",
+			Handler:    _JobPhaseDomainService_PublishJobPhaseApproval_Handler,
+		},
+		{
+			MethodName: "ReturnJobPhaseApproval",
+			Handler:    _JobPhaseDomainService_ReturnJobPhaseApproval_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
