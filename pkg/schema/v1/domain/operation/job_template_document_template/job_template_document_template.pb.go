@@ -798,6 +798,12 @@ type FindApplicableJobTemplateDocumentTemplateRequest struct {
 	PriceScheduleId *string                `protobuf:"bytes,1,opt,name=price_schedule_id,json=priceScheduleId,proto3,oneof" json:"price_schedule_id,omitempty"` // AY/term scope; empty = fallback only
 	JobCategoryId   *string                `protobuf:"bytes,2,opt,name=job_category_id,json=jobCategoryId,proto3,oneof" json:"job_category_id,omitempty"`       // sheet-shape scope; empty = any-shape fallback only
 	AsOf            *timestamppb.Timestamp `protobuf:"bytes,3,opt,name=as_of,json=asOf,proto3,oneof" json:"as_of,omitempty"`                                    // absent = server UTC now
+	// document_purpose — defense-in-depth family filter on the joined
+	// document_template (dt.document_purpose = 'outcome_matrix'): the caller pins
+	// the family it wants so a mis-purposed binding can never resolve. Empty = no
+	// filter (any purpose). Belt-and-suspenders alongside the settings-list purpose
+	// filter, so the sheet resolver can never surface a report-card template.
+	DocumentPurpose *string `protobuf:"bytes,4,opt,name=document_purpose,json=documentPurpose,proto3,oneof" json:"document_purpose,omitempty"` // NOTE: no workspace_id — sourced from trusted context in the adapter.
 	unknownFields   protoimpl.UnknownFields
 	sizeCache       protoimpl.SizeCache
 }
@@ -851,6 +857,13 @@ func (x *FindApplicableJobTemplateDocumentTemplateRequest) GetAsOf() *timestampp
 		return x.AsOf
 	}
 	return nil
+}
+
+func (x *FindApplicableJobTemplateDocumentTemplateRequest) GetDocumentPurpose() string {
+	if x != nil && x.DocumentPurpose != nil {
+		return *x.DocumentPurpose
+	}
+	return ""
 }
 
 type FindApplicableJobTemplateDocumentTemplateResponse struct {
@@ -1121,14 +1134,16 @@ const file_domain_operation_job_template_document_template_job_template_document
 	"\x04data\x18\x01 \x03(\v20.domain.operation.v1.JobTemplateDocumentTemplateR\x04data\x12\x18\n" +
 	"\asuccess\x18\x02 \x01(\bR\asuccess\x122\n" +
 	"\x05error\x18\x03 \x01(\v2\x17.domain.common.v1.ErrorH\x00R\x05error\x88\x01\x01B\b\n" +
-	"\x06_error\"\xfa\x01\n" +
+	"\x06_error\"\xbf\x02\n" +
 	"0FindApplicableJobTemplateDocumentTemplateRequest\x12/\n" +
 	"\x11price_schedule_id\x18\x01 \x01(\tH\x00R\x0fpriceScheduleId\x88\x01\x01\x12+\n" +
 	"\x0fjob_category_id\x18\x02 \x01(\tH\x01R\rjobCategoryId\x88\x01\x01\x124\n" +
-	"\x05as_of\x18\x03 \x01(\v2\x1a.google.protobuf.TimestampH\x02R\x04asOf\x88\x01\x01B\x14\n" +
+	"\x05as_of\x18\x03 \x01(\v2\x1a.google.protobuf.TimestampH\x02R\x04asOf\x88\x01\x01\x12.\n" +
+	"\x10document_purpose\x18\x04 \x01(\tH\x03R\x0fdocumentPurpose\x88\x01\x01B\x14\n" +
 	"\x12_price_schedule_idB\x12\n" +
 	"\x10_job_category_idB\b\n" +
-	"\x06_as_of\"\xfe\x01\n" +
+	"\x06_as_ofB\x13\n" +
+	"\x11_document_purpose\"\xfe\x01\n" +
 	"1FindApplicableJobTemplateDocumentTemplateResponse\x12O\n" +
 	"\abinding\x18\x01 \x01(\v20.domain.operation.v1.JobTemplateDocumentTemplateH\x00R\abinding\x88\x01\x01\x12\x14\n" +
 	"\x05found\x18\x02 \x01(\bR\x05found\x12\x18\n" +

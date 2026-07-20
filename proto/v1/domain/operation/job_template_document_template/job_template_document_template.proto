@@ -158,6 +158,12 @@ message FindApplicableJobTemplateDocumentTemplateRequest {
   optional string price_schedule_id = 1;         // AY/term scope; empty = fallback only
   optional string job_category_id = 2;           // sheet-shape scope; empty = any-shape fallback only
   optional google.protobuf.Timestamp as_of = 3;  // absent = server UTC now
+  // document_purpose — defense-in-depth family filter on the joined
+  // document_template (dt.document_purpose = 'outcome_matrix'): the caller pins
+  // the family it wants so a mis-purposed binding can never resolve. Empty = no
+  // filter (any purpose). Belt-and-suspenders alongside the settings-list purpose
+  // filter, so the sheet resolver can never surface a report-card template.
+  optional string document_purpose = 4;
   // NOTE: no workspace_id — sourced from trusted context in the adapter.
 }
 
