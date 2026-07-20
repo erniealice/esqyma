@@ -1,0 +1,179 @@
+syntax = "proto3";
+
+package domain.operation.v1;
+
+option go_package = "github.com/erniealice/esqyma/golang/v1/domain/operation/job_template_document_template";
+
+import "domain/common/error.proto";
+import "domain/common/pagination.proto";
+import "domain/common/filter.proto";
+import "domain/common/sort.proto";
+import "domain/common/search.proto";
+import "domain/document/template/template.proto";
+import "domain/operation/enums/enums.proto";
+import "domain/operation/job_category/job_category.proto";
+import "domain/subscription/price_schedule/price_schedule.proto";
+import "google/protobuf/timestamp.proto";
+import "options/db.proto";
+
+// JobTemplateDocumentTemplate binds the job_template rendering surface (the
+// outcome-matrix "grade sheet") to a generic document.DocumentTemplate, scoped
+// by workspace + (optional) price_schedule + (optional) job_category, and
+// versioned. It carries the publication lifecycle and validity window that must
+// NOT live on the shared DocumentTemplate. The job_category axis exists because
+// sheet COLUMN SHAPE is uniform per category (verified 2026-07-20) and the
+// doctemplate engine bakes column shape into each artifact; a document_purpose
+// discriminator can be added additively when a second surface needs the same
+// lineage on one workspace+schedule+category.
+message JobTemplateDocumentTemplate {
+  option (options.v1.table).table = true;
+
+  string id = 1;
+
+  // Tenant boundary — never accepted from untrusted resolver input; sourced from
+  // trusted context at resolve time.
+  string workspace_id = 2 [
+    (options.v1.db).references = "workspace",
+    (options.v1.db).index = true
+  ];
+
+  // The immutable template artifact this binding version selects.
+  string document_template_id = 3 [
+    (options.v1.db).references = "document_template",
+    (options.v1.db).index = true
+  ];
+  optional domain.document.v1.DocumentTemplate document_template = 4;   // hydrate-only (JOIN), never persisted
+
+  // NULL = workspace-wide fallback for this binding (AY axis).
+  optional string price_schedule_id = 5 [
+    (options.v1.db).references = "price_schedule",
+    (options.v1.db).index = true
+  ];
+  optional domain.subscription.v1.PriceSchedule price_schedule = 6;     // hydrate-only (JOIN, status-agnostic), never persisted
+
+  // NULL = any-shape fallback for this binding (sheet-shape axis). The column
+  // shape of the rendered sheet is uniform per job_category.
+  optional string job_category_id = 7 [
+    (options.v1.db).references = "job_category",
+    (options.v1.db).index = true
+  ];
+  optional domain.operation.v1.JobCategory job_category = 8;            // hydrate-only (JOIN), never persisted
+
+  int32 version = 9 [(options.v1.db).default = "0"];
+  VersionStatus version_status = 10;                                    // reuse operation enum (DRAFT/PUBLISHED/DEPRECATED)
+
+  // Half-open [validity_start, validity_end), UTC. Absent start = valid from
+  // beginning; absent end = open-ended.
+  optional google.protobuf.Timestamp validity_start = 11;
+  optional google.protobuf.Timestamp validity_end = 12;
+
+  optional string supersedes_binding_id = 13 [(options.v1.db).references = "job_template_document_template"];
+
+  bool active = 14 [(options.v1.db).default = "true"];
+
+  optional string created_by = 15;
+  optional int64 published_at = 16;
+  optional string published_at_string = 17 [(options.v1.db).ignore = true];
+  optional string published_by = 18;
+
+  optional int64 date_created = 19;
+  optional string date_created_string = 20 [(options.v1.db).ignore = true];
+  optional int64 date_modified = 21;
+  optional string date_modified_string = 22 [(options.v1.db).ignore = true];
+
+  reserved 23 to 39;
+}
+
+service JobTemplateDocumentTemplateDomainService {
+  rpc CreateJobTemplateDocumentTemplate(CreateJobTemplateDocumentTemplateRequest) returns (CreateJobTemplateDocumentTemplateResponse);
+  rpc ReadJobTemplateDocumentTemplate(ReadJobTemplateDocumentTemplateRequest) returns (ReadJobTemplateDocumentTemplateResponse);
+  rpc UpdateJobTemplateDocumentTemplate(UpdateJobTemplateDocumentTemplateRequest) returns (UpdateJobTemplateDocumentTemplateResponse);
+  rpc DeleteJobTemplateDocumentTemplate(DeleteJobTemplateDocumentTemplateRequest) returns (DeleteJobTemplateDocumentTemplateResponse);
+  rpc ListJobTemplateDocumentTemplates(ListJobTemplateDocumentTemplatesRequest) returns (ListJobTemplateDocumentTemplatesResponse);
+
+  // Controlled publish transaction (NOT arbitrary CRUD update): flips this
+  // binding to PUBLISHED and closes the prior published sibling's validity_end
+  // in ONE transaction (publish-flips-sibling).
+  rpc PublishJobTemplateDocumentTemplate(PublishJobTemplateDocumentTemplateRequest) returns (PublishJobTemplateDocumentTemplateResponse);
+
+  // Resolver: the single applicable, published binding for
+  // (job_category_id, price_schedule_id, as_of), workspace-scoped in SQL from
+  // trusted context, most-specific-wins across the category + schedule axes.
+  rpc FindApplicableJobTemplateDocumentTemplate(FindApplicableJobTemplateDocumentTemplateRequest) returns (FindApplicableJobTemplateDocumentTemplateResponse);
+}
+
+message CreateJobTemplateDocumentTemplateRequest {
+  JobTemplateDocumentTemplate data = 1;
+}
+
+message CreateJobTemplateDocumentTemplateResponse {
+  repeated JobTemplateDocumentTemplate data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message ReadJobTemplateDocumentTemplateRequest {
+  JobTemplateDocumentTemplate data = 1;
+}
+
+message ReadJobTemplateDocumentTemplateResponse {
+  repeated JobTemplateDocumentTemplate data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message UpdateJobTemplateDocumentTemplateRequest {
+  JobTemplateDocumentTemplate data = 1;
+}
+
+message UpdateJobTemplateDocumentTemplateResponse {
+  repeated JobTemplateDocumentTemplate data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message DeleteJobTemplateDocumentTemplateRequest {
+  JobTemplateDocumentTemplate data = 1;
+}
+
+message DeleteJobTemplateDocumentTemplateResponse {
+  bool success = 1;
+  optional domain.common.v1.Error error = 2;
+}
+
+message ListJobTemplateDocumentTemplatesRequest {
+  optional domain.common.v1.SearchRequest search = 1;
+  optional domain.common.v1.FilterRequest filters = 2;
+  optional domain.common.v1.SortRequest sort = 3;
+  optional domain.common.v1.PaginationRequest pagination = 4;
+}
+
+message ListJobTemplateDocumentTemplatesResponse {
+  repeated JobTemplateDocumentTemplate data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message FindApplicableJobTemplateDocumentTemplateRequest {
+  optional string price_schedule_id = 1;         // AY/term scope; empty = fallback only
+  optional string job_category_id = 2;           // sheet-shape scope; empty = any-shape fallback only
+  optional google.protobuf.Timestamp as_of = 3;  // absent = server UTC now
+  // NOTE: no workspace_id — sourced from trusted context in the adapter.
+}
+
+message FindApplicableJobTemplateDocumentTemplateResponse {
+  optional JobTemplateDocumentTemplate binding = 1;   // includes hydrated document_template + price_schedule + job_category
+  bool found = 2;
+  bool success = 3;
+  optional domain.common.v1.Error error = 4;
+}
+
+message PublishJobTemplateDocumentTemplateRequest {
+  string id = 1;
+}
+
+message PublishJobTemplateDocumentTemplateResponse {
+  optional JobTemplateDocumentTemplate data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
