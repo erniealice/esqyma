@@ -290,8 +290,13 @@ type PhaseColumn struct {
 	Label              string                 `protobuf:"bytes,2,opt,name=label,proto3" json:"label,omitempty"` // phase name (e.g. "Semester 1")
 	SequenceOrder      int32                  `protobuf:"varint,3,opt,name=sequence_order,json=sequenceOrder,proto3" json:"sequence_order,omitempty"`
 	Tasks              []*TaskColumn          `protobuf:"bytes,4,rep,name=tasks,proto3" json:"tasks,omitempty"`
-	unknownFields      protoimpl.UnknownFields
-	sizeCache          protoimpl.SizeCache
+	// Stable machine key from job_template_phase.code (e.g. "s1"/"s2"); empty
+	// when unset. Additive (Q8, 20260720 export drawer): lets the view/export key
+	// the period axis on the phase CODE rather than the mutable display label —
+	// the label is DB data that varies, the code is the reserved semester anchor.
+	Code          string `protobuf:"bytes,5,opt,name=code,proto3" json:"code,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
 }
 
 func (x *PhaseColumn) Reset() {
@@ -350,6 +355,13 @@ func (x *PhaseColumn) GetTasks() []*TaskColumn {
 		return x.Tasks
 	}
 	return nil
+}
+
+func (x *PhaseColumn) GetCode() string {
+	if x != nil {
+		return x.Code
+	}
+	return ""
 }
 
 // OutcomeCell is the one genuinely bespoke projection (like reporting's
@@ -743,6 +755,283 @@ func (x *GetOutcomeMatrixResponse) GetApprovalRollups() []*PhaseApprovalRollup {
 	return nil
 }
 
+type GetOutcomeSummaryRosterRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	JobTemplateId string                 `protobuf:"bytes,1,opt,name=job_template_id,json=jobTemplateId,proto3" json:"job_template_id,omitempty"` // REQUIRED — the page is one template (subject)
+	Scope         OutcomeMatrixScope     `protobuf:"varint,2,opt,name=scope,proto3,enum=service.operation.v1.OutcomeMatrixScope" json:"scope,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *GetOutcomeSummaryRosterRequest) Reset() {
+	*x = GetOutcomeSummaryRosterRequest{}
+	mi := &file_service_operation_outcome_matrix_outcome_matrix_proto_msgTypes[8]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *GetOutcomeSummaryRosterRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*GetOutcomeSummaryRosterRequest) ProtoMessage() {}
+
+func (x *GetOutcomeSummaryRosterRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_service_operation_outcome_matrix_outcome_matrix_proto_msgTypes[8]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use GetOutcomeSummaryRosterRequest.ProtoReflect.Descriptor instead.
+func (*GetOutcomeSummaryRosterRequest) Descriptor() ([]byte, []int) {
+	return file_service_operation_outcome_matrix_outcome_matrix_proto_rawDescGZIP(), []int{8}
+}
+
+func (x *GetOutcomeSummaryRosterRequest) GetJobTemplateId() string {
+	if x != nil {
+		return x.JobTemplateId
+	}
+	return ""
+}
+
+func (x *GetOutcomeSummaryRosterRequest) GetScope() OutcomeMatrixScope {
+	if x != nil {
+		return x.Scope
+	}
+	return OutcomeMatrixScope_OUTCOME_MATRIX_SCOPE_UNSPECIFIED
+}
+
+// OutcomeSummaryPhaseEntry is one student's stored composite for one phase.
+// scaled_label is job_phase's latest active phase_outcome_summary.scaled_label,
+// read verbatim ("" when no summary exists yet).
+type OutcomeSummaryPhaseEntry struct {
+	state              protoimpl.MessageState `protogen:"open.v1"`
+	JobTemplatePhaseId string                 `protobuf:"bytes,1,opt,name=job_template_phase_id,json=jobTemplatePhaseId,proto3" json:"job_template_phase_id,omitempty"`
+	Code               string                 `protobuf:"bytes,2,opt,name=code,proto3" json:"code,omitempty"`                                         // job_template_phase.code (e.g. "s1"/"s2"); "" when unset
+	Label              string                 `protobuf:"bytes,3,opt,name=label,proto3" json:"label,omitempty"`                                       // phase name (e.g. "Semester 1")
+	SequenceOrder      int32                  `protobuf:"varint,4,opt,name=sequence_order,json=sequenceOrder,proto3" json:"sequence_order,omitempty"` // job_template_phase.phase_order
+	ScaledLabel        string                 `protobuf:"bytes,5,opt,name=scaled_label,json=scaledLabel,proto3" json:"scaled_label,omitempty"`        // stored phase composite; "" when none
+	unknownFields      protoimpl.UnknownFields
+	sizeCache          protoimpl.SizeCache
+}
+
+func (x *OutcomeSummaryPhaseEntry) Reset() {
+	*x = OutcomeSummaryPhaseEntry{}
+	mi := &file_service_operation_outcome_matrix_outcome_matrix_proto_msgTypes[9]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *OutcomeSummaryPhaseEntry) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*OutcomeSummaryPhaseEntry) ProtoMessage() {}
+
+func (x *OutcomeSummaryPhaseEntry) ProtoReflect() protoreflect.Message {
+	mi := &file_service_operation_outcome_matrix_outcome_matrix_proto_msgTypes[9]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use OutcomeSummaryPhaseEntry.ProtoReflect.Descriptor instead.
+func (*OutcomeSummaryPhaseEntry) Descriptor() ([]byte, []int) {
+	return file_service_operation_outcome_matrix_outcome_matrix_proto_rawDescGZIP(), []int{9}
+}
+
+func (x *OutcomeSummaryPhaseEntry) GetJobTemplatePhaseId() string {
+	if x != nil {
+		return x.JobTemplatePhaseId
+	}
+	return ""
+}
+
+func (x *OutcomeSummaryPhaseEntry) GetCode() string {
+	if x != nil {
+		return x.Code
+	}
+	return ""
+}
+
+func (x *OutcomeSummaryPhaseEntry) GetLabel() string {
+	if x != nil {
+		return x.Label
+	}
+	return ""
+}
+
+func (x *OutcomeSummaryPhaseEntry) GetSequenceOrder() int32 {
+	if x != nil {
+		return x.SequenceOrder
+	}
+	return 0
+}
+
+func (x *OutcomeSummaryPhaseEntry) GetScaledLabel() string {
+	if x != nil {
+		return x.ScaledLabel
+	}
+	return ""
+}
+
+// OutcomeSummaryRosterRow is one student's per-period composites plus the stored
+// year-final (job_outcome_summary.scaled_label + is_authoritative), all verbatim.
+type OutcomeSummaryRosterRow struct {
+	state                    protoimpl.MessageState      `protogen:"open.v1"`
+	ClientId                 string                      `protobuf:"bytes,1,opt,name=client_id,json=clientId,proto3" json:"client_id,omitempty"`
+	ClientLabel              string                      `protobuf:"bytes,2,opt,name=client_label,json=clientLabel,proto3" json:"client_label,omitempty"`                                             // opaque id unless the view resolves a display name (matrix parity)
+	Phases                   []*OutcomeSummaryPhaseEntry `protobuf:"bytes,3,rep,name=phases,proto3" json:"phases,omitempty"`                                                                          // per-phase composites, sequence order
+	YearFinalLabel           string                      `protobuf:"bytes,4,opt,name=year_final_label,json=yearFinalLabel,proto3" json:"year_final_label,omitempty"`                                  // job_outcome_summary.scaled_label, verbatim; "" when none
+	YearFinalIsAuthoritative bool                        `protobuf:"varint,5,opt,name=year_final_is_authoritative,json=yearFinalIsAuthoritative,proto3" json:"year_final_is_authoritative,omitempty"` // job_outcome_summary.is_authoritative passthrough
+	unknownFields            protoimpl.UnknownFields
+	sizeCache                protoimpl.SizeCache
+}
+
+func (x *OutcomeSummaryRosterRow) Reset() {
+	*x = OutcomeSummaryRosterRow{}
+	mi := &file_service_operation_outcome_matrix_outcome_matrix_proto_msgTypes[10]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *OutcomeSummaryRosterRow) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*OutcomeSummaryRosterRow) ProtoMessage() {}
+
+func (x *OutcomeSummaryRosterRow) ProtoReflect() protoreflect.Message {
+	mi := &file_service_operation_outcome_matrix_outcome_matrix_proto_msgTypes[10]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use OutcomeSummaryRosterRow.ProtoReflect.Descriptor instead.
+func (*OutcomeSummaryRosterRow) Descriptor() ([]byte, []int) {
+	return file_service_operation_outcome_matrix_outcome_matrix_proto_rawDescGZIP(), []int{10}
+}
+
+func (x *OutcomeSummaryRosterRow) GetClientId() string {
+	if x != nil {
+		return x.ClientId
+	}
+	return ""
+}
+
+func (x *OutcomeSummaryRosterRow) GetClientLabel() string {
+	if x != nil {
+		return x.ClientLabel
+	}
+	return ""
+}
+
+func (x *OutcomeSummaryRosterRow) GetPhases() []*OutcomeSummaryPhaseEntry {
+	if x != nil {
+		return x.Phases
+	}
+	return nil
+}
+
+func (x *OutcomeSummaryRosterRow) GetYearFinalLabel() string {
+	if x != nil {
+		return x.YearFinalLabel
+	}
+	return ""
+}
+
+func (x *OutcomeSummaryRosterRow) GetYearFinalIsAuthoritative() bool {
+	if x != nil {
+		return x.YearFinalIsAuthoritative
+	}
+	return false
+}
+
+type GetOutcomeSummaryRosterResponse struct {
+	state         protoimpl.MessageState     `protogen:"open.v1"`
+	JobTemplateId string                     `protobuf:"bytes,1,opt,name=job_template_id,json=jobTemplateId,proto3" json:"job_template_id,omitempty"`
+	Rows          []*OutcomeSummaryRosterRow `protobuf:"bytes,2,rep,name=rows,proto3" json:"rows,omitempty"`
+	Success       bool                       `protobuf:"varint,3,opt,name=success,proto3" json:"success,omitempty"`
+	Error         *common.Error              `protobuf:"bytes,4,opt,name=error,proto3,oneof" json:"error,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *GetOutcomeSummaryRosterResponse) Reset() {
+	*x = GetOutcomeSummaryRosterResponse{}
+	mi := &file_service_operation_outcome_matrix_outcome_matrix_proto_msgTypes[11]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *GetOutcomeSummaryRosterResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*GetOutcomeSummaryRosterResponse) ProtoMessage() {}
+
+func (x *GetOutcomeSummaryRosterResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_service_operation_outcome_matrix_outcome_matrix_proto_msgTypes[11]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use GetOutcomeSummaryRosterResponse.ProtoReflect.Descriptor instead.
+func (*GetOutcomeSummaryRosterResponse) Descriptor() ([]byte, []int) {
+	return file_service_operation_outcome_matrix_outcome_matrix_proto_rawDescGZIP(), []int{11}
+}
+
+func (x *GetOutcomeSummaryRosterResponse) GetJobTemplateId() string {
+	if x != nil {
+		return x.JobTemplateId
+	}
+	return ""
+}
+
+func (x *GetOutcomeSummaryRosterResponse) GetRows() []*OutcomeSummaryRosterRow {
+	if x != nil {
+		return x.Rows
+	}
+	return nil
+}
+
+func (x *GetOutcomeSummaryRosterResponse) GetSuccess() bool {
+	if x != nil {
+		return x.Success
+	}
+	return false
+}
+
+func (x *GetOutcomeSummaryRosterResponse) GetError() *common.Error {
+	if x != nil {
+		return x.Error
+	}
+	return nil
+}
+
 var File_service_operation_outcome_matrix_outcome_matrix_proto protoreflect.FileDescriptor
 
 const file_service_operation_outcome_matrix_outcome_matrix_proto_rawDesc = "" +
@@ -768,12 +1057,13 @@ const file_service_operation_outcome_matrix_outcome_matrix_proto_rawDesc = "" +
 	"\x14job_template_task_id\x18\x01 \x01(\tR\x11jobTemplateTaskId\x12\x14\n" +
 	"\x05label\x18\x02 \x01(\tR\x05label\x12%\n" +
 	"\x0esequence_order\x18\x03 \x01(\x05R\rsequenceOrder\x12A\n" +
-	"\bcriteria\x18\x04 \x03(\v2%.service.operation.v1.CriterionColumnR\bcriteria\"\xb5\x01\n" +
+	"\bcriteria\x18\x04 \x03(\v2%.service.operation.v1.CriterionColumnR\bcriteria\"\xc9\x01\n" +
 	"\vPhaseColumn\x121\n" +
 	"\x15job_template_phase_id\x18\x01 \x01(\tR\x12jobTemplatePhaseId\x12\x14\n" +
 	"\x05label\x18\x02 \x01(\tR\x05label\x12%\n" +
 	"\x0esequence_order\x18\x03 \x01(\x05R\rsequenceOrder\x126\n" +
-	"\x05tasks\x18\x04 \x03(\v2 .service.operation.v1.TaskColumnR\x05tasks\"\xba\x03\n" +
+	"\x05tasks\x18\x04 \x03(\v2 .service.operation.v1.TaskColumnR\x05tasks\x12\x12\n" +
+	"\x04code\x18\x05 \x01(\tR\x04code\"\xba\x03\n" +
 	"\vOutcomeCell\x12\x1d\n" +
 	"\n" +
 	"outcome_id\x18\x01 \x01(\tR\toutcomeId\x12\x1e\n" +
@@ -820,13 +1110,35 @@ const file_service_operation_outcome_matrix_outcome_matrix_proto_rawDesc = "" +
 	"\asuccess\x18\x05 \x01(\bR\asuccess\x122\n" +
 	"\x05error\x18\x06 \x01(\v2\x17.domain.common.v1.ErrorH\x00R\x05error\x88\x01\x01\x12T\n" +
 	"\x10approval_rollups\x18\a \x03(\v2).service.operation.v1.PhaseApprovalRollupR\x0fapprovalRollupsB\b\n" +
+	"\x06_error\"\x88\x01\n" +
+	"\x1eGetOutcomeSummaryRosterRequest\x12&\n" +
+	"\x0fjob_template_id\x18\x01 \x01(\tR\rjobTemplateId\x12>\n" +
+	"\x05scope\x18\x02 \x01(\x0e2(.service.operation.v1.OutcomeMatrixScopeR\x05scope\"\xc1\x01\n" +
+	"\x18OutcomeSummaryPhaseEntry\x121\n" +
+	"\x15job_template_phase_id\x18\x01 \x01(\tR\x12jobTemplatePhaseId\x12\x12\n" +
+	"\x04code\x18\x02 \x01(\tR\x04code\x12\x14\n" +
+	"\x05label\x18\x03 \x01(\tR\x05label\x12%\n" +
+	"\x0esequence_order\x18\x04 \x01(\x05R\rsequenceOrder\x12!\n" +
+	"\fscaled_label\x18\x05 \x01(\tR\vscaledLabel\"\x8a\x02\n" +
+	"\x17OutcomeSummaryRosterRow\x12\x1b\n" +
+	"\tclient_id\x18\x01 \x01(\tR\bclientId\x12!\n" +
+	"\fclient_label\x18\x02 \x01(\tR\vclientLabel\x12F\n" +
+	"\x06phases\x18\x03 \x03(\v2..service.operation.v1.OutcomeSummaryPhaseEntryR\x06phases\x12(\n" +
+	"\x10year_final_label\x18\x04 \x01(\tR\x0eyearFinalLabel\x12=\n" +
+	"\x1byear_final_is_authoritative\x18\x05 \x01(\bR\x18yearFinalIsAuthoritative\"\xe4\x01\n" +
+	"\x1fGetOutcomeSummaryRosterResponse\x12&\n" +
+	"\x0fjob_template_id\x18\x01 \x01(\tR\rjobTemplateId\x12A\n" +
+	"\x04rows\x18\x02 \x03(\v2-.service.operation.v1.OutcomeSummaryRosterRowR\x04rows\x12\x18\n" +
+	"\asuccess\x18\x03 \x01(\bR\asuccess\x122\n" +
+	"\x05error\x18\x04 \x01(\v2\x17.domain.common.v1.ErrorH\x00R\x05error\x88\x01\x01B\b\n" +
 	"\x06_error*w\n" +
 	"\x12OutcomeMatrixScope\x12$\n" +
 	" OUTCOME_MATRIX_SCOPE_UNSPECIFIED\x10\x00\x12\x1d\n" +
 	"\x19OUTCOME_MATRIX_SCOPE_MINE\x10\x01\x12\x1c\n" +
-	"\x18OUTCOME_MATRIX_SCOPE_ALL\x10\x022\x89\x01\n" +
+	"\x18OUTCOME_MATRIX_SCOPE_ALL\x10\x022\x92\x02\n" +
 	"\x14OutcomeMatrixService\x12q\n" +
-	"\x10GetOutcomeMatrix\x12-.service.operation.v1.GetOutcomeMatrixRequest\x1a..service.operation.v1.GetOutcomeMatrixResponseB\xf9\x01\n" +
+	"\x10GetOutcomeMatrix\x12-.service.operation.v1.GetOutcomeMatrixRequest\x1a..service.operation.v1.GetOutcomeMatrixResponse\x12\x86\x01\n" +
+	"\x17GetOutcomeSummaryRoster\x124.service.operation.v1.GetOutcomeSummaryRosterRequest\x1a5.service.operation.v1.GetOutcomeSummaryRosterResponseB\xf9\x01\n" +
 	"\x18com.service.operation.v1B\x12OutcomeMatrixProtoP\x01ZWgithub.com/erniealice/esqyma/pkg/schema/v1/service/operation/outcome_matrix;operationv1\xa2\x02\x03SOX\xaa\x02\x14Service.Operation.V1\xca\x02\x14Service\\Operation\\V1\xe2\x02 Service\\Operation\\V1\\GPBMetadata\xea\x02\x16Service::Operation::V1b\x06proto3"
 
 var (
@@ -842,7 +1154,7 @@ func file_service_operation_outcome_matrix_outcome_matrix_proto_rawDescGZIP() []
 }
 
 var file_service_operation_outcome_matrix_outcome_matrix_proto_enumTypes = make([]protoimpl.EnumInfo, 1)
-var file_service_operation_outcome_matrix_outcome_matrix_proto_msgTypes = make([]protoimpl.MessageInfo, 9)
+var file_service_operation_outcome_matrix_outcome_matrix_proto_msgTypes = make([]protoimpl.MessageInfo, 13)
 var file_service_operation_outcome_matrix_outcome_matrix_proto_goTypes = []any{
 	(OutcomeMatrixScope)(0),                  // 0: service.operation.v1.OutcomeMatrixScope
 	(*GetOutcomeMatrixRequest)(nil),          // 1: service.operation.v1.GetOutcomeMatrixRequest
@@ -853,30 +1165,40 @@ var file_service_operation_outcome_matrix_outcome_matrix_proto_goTypes = []any{
 	(*OutcomeRow)(nil),                       // 6: service.operation.v1.OutcomeRow
 	(*PhaseApprovalRollup)(nil),              // 7: service.operation.v1.PhaseApprovalRollup
 	(*GetOutcomeMatrixResponse)(nil),         // 8: service.operation.v1.GetOutcomeMatrixResponse
-	nil,                                      // 9: service.operation.v1.OutcomeRow.CellsEntry
-	(*outcome_criteria.OutcomeCriteria)(nil), // 10: domain.operation.v1.OutcomeCriteria
-	(job_phase.PhaseApprovalStatus)(0),       // 11: domain.operation.v1.PhaseApprovalStatus
-	(*common.Error)(nil),                     // 12: domain.common.v1.Error
+	(*GetOutcomeSummaryRosterRequest)(nil),   // 9: service.operation.v1.GetOutcomeSummaryRosterRequest
+	(*OutcomeSummaryPhaseEntry)(nil),         // 10: service.operation.v1.OutcomeSummaryPhaseEntry
+	(*OutcomeSummaryRosterRow)(nil),          // 11: service.operation.v1.OutcomeSummaryRosterRow
+	(*GetOutcomeSummaryRosterResponse)(nil),  // 12: service.operation.v1.GetOutcomeSummaryRosterResponse
+	nil,                                      // 13: service.operation.v1.OutcomeRow.CellsEntry
+	(*outcome_criteria.OutcomeCriteria)(nil), // 14: domain.operation.v1.OutcomeCriteria
+	(job_phase.PhaseApprovalStatus)(0),       // 15: domain.operation.v1.PhaseApprovalStatus
+	(*common.Error)(nil),                     // 16: domain.common.v1.Error
 }
 var file_service_operation_outcome_matrix_outcome_matrix_proto_depIdxs = []int32{
 	0,  // 0: service.operation.v1.GetOutcomeMatrixRequest.scope:type_name -> service.operation.v1.OutcomeMatrixScope
-	10, // 1: service.operation.v1.CriterionColumn.criteria:type_name -> domain.operation.v1.OutcomeCriteria
+	14, // 1: service.operation.v1.CriterionColumn.criteria:type_name -> domain.operation.v1.OutcomeCriteria
 	2,  // 2: service.operation.v1.TaskColumn.criteria:type_name -> service.operation.v1.CriterionColumn
 	3,  // 3: service.operation.v1.PhaseColumn.tasks:type_name -> service.operation.v1.TaskColumn
-	9,  // 4: service.operation.v1.OutcomeRow.cells:type_name -> service.operation.v1.OutcomeRow.CellsEntry
-	11, // 5: service.operation.v1.PhaseApprovalRollup.status:type_name -> domain.operation.v1.PhaseApprovalStatus
+	13, // 4: service.operation.v1.OutcomeRow.cells:type_name -> service.operation.v1.OutcomeRow.CellsEntry
+	15, // 5: service.operation.v1.PhaseApprovalRollup.status:type_name -> domain.operation.v1.PhaseApprovalStatus
 	4,  // 6: service.operation.v1.GetOutcomeMatrixResponse.phases:type_name -> service.operation.v1.PhaseColumn
 	6,  // 7: service.operation.v1.GetOutcomeMatrixResponse.rows:type_name -> service.operation.v1.OutcomeRow
-	12, // 8: service.operation.v1.GetOutcomeMatrixResponse.error:type_name -> domain.common.v1.Error
+	16, // 8: service.operation.v1.GetOutcomeMatrixResponse.error:type_name -> domain.common.v1.Error
 	7,  // 9: service.operation.v1.GetOutcomeMatrixResponse.approval_rollups:type_name -> service.operation.v1.PhaseApprovalRollup
-	5,  // 10: service.operation.v1.OutcomeRow.CellsEntry.value:type_name -> service.operation.v1.OutcomeCell
-	1,  // 11: service.operation.v1.OutcomeMatrixService.GetOutcomeMatrix:input_type -> service.operation.v1.GetOutcomeMatrixRequest
-	8,  // 12: service.operation.v1.OutcomeMatrixService.GetOutcomeMatrix:output_type -> service.operation.v1.GetOutcomeMatrixResponse
-	12, // [12:13] is the sub-list for method output_type
-	11, // [11:12] is the sub-list for method input_type
-	11, // [11:11] is the sub-list for extension type_name
-	11, // [11:11] is the sub-list for extension extendee
-	0,  // [0:11] is the sub-list for field type_name
+	0,  // 10: service.operation.v1.GetOutcomeSummaryRosterRequest.scope:type_name -> service.operation.v1.OutcomeMatrixScope
+	10, // 11: service.operation.v1.OutcomeSummaryRosterRow.phases:type_name -> service.operation.v1.OutcomeSummaryPhaseEntry
+	11, // 12: service.operation.v1.GetOutcomeSummaryRosterResponse.rows:type_name -> service.operation.v1.OutcomeSummaryRosterRow
+	16, // 13: service.operation.v1.GetOutcomeSummaryRosterResponse.error:type_name -> domain.common.v1.Error
+	5,  // 14: service.operation.v1.OutcomeRow.CellsEntry.value:type_name -> service.operation.v1.OutcomeCell
+	1,  // 15: service.operation.v1.OutcomeMatrixService.GetOutcomeMatrix:input_type -> service.operation.v1.GetOutcomeMatrixRequest
+	9,  // 16: service.operation.v1.OutcomeMatrixService.GetOutcomeSummaryRoster:input_type -> service.operation.v1.GetOutcomeSummaryRosterRequest
+	8,  // 17: service.operation.v1.OutcomeMatrixService.GetOutcomeMatrix:output_type -> service.operation.v1.GetOutcomeMatrixResponse
+	12, // 18: service.operation.v1.OutcomeMatrixService.GetOutcomeSummaryRoster:output_type -> service.operation.v1.GetOutcomeSummaryRosterResponse
+	17, // [17:19] is the sub-list for method output_type
+	15, // [15:17] is the sub-list for method input_type
+	15, // [15:15] is the sub-list for extension type_name
+	15, // [15:15] is the sub-list for extension extendee
+	0,  // [0:15] is the sub-list for field type_name
 }
 
 func init() { file_service_operation_outcome_matrix_outcome_matrix_proto_init() }
@@ -887,13 +1209,14 @@ func file_service_operation_outcome_matrix_outcome_matrix_proto_init() {
 	file_service_operation_outcome_matrix_outcome_matrix_proto_msgTypes[0].OneofWrappers = []any{}
 	file_service_operation_outcome_matrix_outcome_matrix_proto_msgTypes[4].OneofWrappers = []any{}
 	file_service_operation_outcome_matrix_outcome_matrix_proto_msgTypes[7].OneofWrappers = []any{}
+	file_service_operation_outcome_matrix_outcome_matrix_proto_msgTypes[11].OneofWrappers = []any{}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
 		File: protoimpl.DescBuilder{
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_service_operation_outcome_matrix_outcome_matrix_proto_rawDesc), len(file_service_operation_outcome_matrix_outcome_matrix_proto_rawDesc)),
 			NumEnums:      1,
-			NumMessages:   9,
+			NumMessages:   13,
 			NumExtensions: 0,
 			NumServices:   1,
 		},

@@ -19,7 +19,8 @@ import (
 const _ = grpc.SupportPackageIsVersion9
 
 const (
-	OutcomeMatrixService_GetOutcomeMatrix_FullMethodName = "/service.operation.v1.OutcomeMatrixService/GetOutcomeMatrix"
+	OutcomeMatrixService_GetOutcomeMatrix_FullMethodName        = "/service.operation.v1.OutcomeMatrixService/GetOutcomeMatrix"
+	OutcomeMatrixService_GetOutcomeSummaryRoster_FullMethodName = "/service.operation.v1.OutcomeMatrixService/GetOutcomeSummaryRoster"
 )
 
 // OutcomeMatrixServiceClient is the client API for OutcomeMatrixService service.
@@ -27,6 +28,13 @@ const (
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type OutcomeMatrixServiceClient interface {
 	GetOutcomeMatrix(ctx context.Context, in *GetOutcomeMatrixRequest, opts ...grpc.CallOption) (*GetOutcomeMatrixResponse, error)
+	// GetOutcomeSummaryRoster is the roster-scoped composite read (20260720
+	// export drawer P2): one row per student under a job_template, carrying each
+	// phase's stored composite (phase_outcome_summary.scaled_label) and the
+	// stored year-final (job_outcome_summary.scaled_label + is_authoritative).
+	// Stored values are read VERBATIM — never recomputed (D8). Serves the CSV
+	// "Final" export today and the composite PDF builder later (P5).
+	GetOutcomeSummaryRoster(ctx context.Context, in *GetOutcomeSummaryRosterRequest, opts ...grpc.CallOption) (*GetOutcomeSummaryRosterResponse, error)
 }
 
 type outcomeMatrixServiceClient struct {
@@ -47,11 +55,28 @@ func (c *outcomeMatrixServiceClient) GetOutcomeMatrix(ctx context.Context, in *G
 	return out, nil
 }
 
+func (c *outcomeMatrixServiceClient) GetOutcomeSummaryRoster(ctx context.Context, in *GetOutcomeSummaryRosterRequest, opts ...grpc.CallOption) (*GetOutcomeSummaryRosterResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(GetOutcomeSummaryRosterResponse)
+	err := c.cc.Invoke(ctx, OutcomeMatrixService_GetOutcomeSummaryRoster_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // OutcomeMatrixServiceServer is the server API for OutcomeMatrixService service.
 // All implementations must embed UnimplementedOutcomeMatrixServiceServer
 // for forward compatibility.
 type OutcomeMatrixServiceServer interface {
 	GetOutcomeMatrix(context.Context, *GetOutcomeMatrixRequest) (*GetOutcomeMatrixResponse, error)
+	// GetOutcomeSummaryRoster is the roster-scoped composite read (20260720
+	// export drawer P2): one row per student under a job_template, carrying each
+	// phase's stored composite (phase_outcome_summary.scaled_label) and the
+	// stored year-final (job_outcome_summary.scaled_label + is_authoritative).
+	// Stored values are read VERBATIM — never recomputed (D8). Serves the CSV
+	// "Final" export today and the composite PDF builder later (P5).
+	GetOutcomeSummaryRoster(context.Context, *GetOutcomeSummaryRosterRequest) (*GetOutcomeSummaryRosterResponse, error)
 	mustEmbedUnimplementedOutcomeMatrixServiceServer()
 }
 
@@ -64,6 +89,9 @@ type UnimplementedOutcomeMatrixServiceServer struct{}
 
 func (UnimplementedOutcomeMatrixServiceServer) GetOutcomeMatrix(context.Context, *GetOutcomeMatrixRequest) (*GetOutcomeMatrixResponse, error) {
 	return nil, status.Error(codes.Unimplemented, "method GetOutcomeMatrix not implemented")
+}
+func (UnimplementedOutcomeMatrixServiceServer) GetOutcomeSummaryRoster(context.Context, *GetOutcomeSummaryRosterRequest) (*GetOutcomeSummaryRosterResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method GetOutcomeSummaryRoster not implemented")
 }
 func (UnimplementedOutcomeMatrixServiceServer) mustEmbedUnimplementedOutcomeMatrixServiceServer() {}
 func (UnimplementedOutcomeMatrixServiceServer) testEmbeddedByValue()                              {}
@@ -104,6 +132,24 @@ func _OutcomeMatrixService_GetOutcomeMatrix_Handler(srv interface{}, ctx context
 	return interceptor(ctx, in, info, handler)
 }
 
+func _OutcomeMatrixService_GetOutcomeSummaryRoster_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetOutcomeSummaryRosterRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(OutcomeMatrixServiceServer).GetOutcomeSummaryRoster(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: OutcomeMatrixService_GetOutcomeSummaryRoster_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(OutcomeMatrixServiceServer).GetOutcomeSummaryRoster(ctx, req.(*GetOutcomeSummaryRosterRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // OutcomeMatrixService_ServiceDesc is the grpc.ServiceDesc for OutcomeMatrixService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -114,6 +160,10 @@ var OutcomeMatrixService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "GetOutcomeMatrix",
 			Handler:    _OutcomeMatrixService_GetOutcomeMatrix_Handler,
+		},
+		{
+			MethodName: "GetOutcomeSummaryRoster",
+			Handler:    _OutcomeMatrixService_GetOutcomeSummaryRoster_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

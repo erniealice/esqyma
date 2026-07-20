@@ -63,6 +63,13 @@ import "domain/operation/job_phase/job_phase.proto";
 
 service OutcomeMatrixService {
   rpc GetOutcomeMatrix(GetOutcomeMatrixRequest) returns (GetOutcomeMatrixResponse);
+  // GetOutcomeSummaryRoster is the roster-scoped composite read (20260720
+  // export drawer P2): one row per student under a job_template, carrying each
+  // phase's stored composite (phase_outcome_summary.scaled_label) and the
+  // stored year-final (job_outcome_summary.scaled_label + is_authoritative).
+  // Stored values are read VERBATIM — never recomputed (D8). Serves the CSV
+  // "Final" export today and the composite PDF builder later (P5).
+  rpc GetOutcomeSummaryRoster(GetOutcomeSummaryRosterRequest) returns (GetOutcomeSummaryRosterResponse);
 }
 
 // OutcomeMatrixScope selects the row set. UNSPECIFIED is fail-closed → MINE.
@@ -106,6 +113,11 @@ message PhaseColumn {
   string label = 2;                    // phase name (e.g. "Semester 1")
   int32 sequence_order = 3;
   repeated TaskColumn tasks = 4;
+  // Stable machine key from job_template_phase.code (e.g. "s1"/"s2"); empty
+  // when unset. Additive (Q8, 20260720 export drawer): lets the view/export key
+  // the period axis on the phase CODE rather than the mutable display label —
+  // the label is DB data that varies, the code is the reserved semester anchor.
+  string code = 5;
 }
 
 // ---- Rows: the derived, no-entity-equivalent cell projection ---------------
@@ -181,4 +193,49 @@ message GetOutcomeMatrixResponse {
   // Per-template-phase approval roll-up, one entry per phase column, derived
   // over the full sheet set S (P3). Empty on mock/non-postgres builds.
   repeated PhaseApprovalRollup approval_rollups = 7;
+}
+
+// ---- Roster composite read (20260720 export drawer P2) ---------------------
+//
+// GetOutcomeSummaryRoster returns the stored per-period + year-final composites
+// for every student under one job_template — the MMIS-parity gradesheet schema
+// (student · Sem-1 final · Sem-2 final · Final). It reads STORED values
+// verbatim (phase_outcome_summary.scaled_label, job_outcome_summary.scaled_label)
+// and never recomputes (D8: closed AYs are frozen/authoritative). Workspace-
+// scoped in the adapter SQL from the session identity; `scope` mirrors
+// GetOutcomeMatrix — MINE/UNSPECIFIED narrows to the staff-reachable job set
+// (fail-closed for non-staff principals), ALL requires the caller's
+// workspace:list re-gate and reads the full workspace roster.
+
+message GetOutcomeSummaryRosterRequest {
+  string job_template_id = 1;          // REQUIRED — the page is one template (subject)
+  OutcomeMatrixScope scope = 2;
+}
+
+// OutcomeSummaryPhaseEntry is one student's stored composite for one phase.
+// scaled_label is job_phase's latest active phase_outcome_summary.scaled_label,
+// read verbatim ("" when no summary exists yet).
+message OutcomeSummaryPhaseEntry {
+  string job_template_phase_id = 1;
+  string code = 2;                     // job_template_phase.code (e.g. "s1"/"s2"); "" when unset
+  string label = 3;                    // phase name (e.g. "Semester 1")
+  int32 sequence_order = 4;            // job_template_phase.phase_order
+  string scaled_label = 5;             // stored phase composite; "" when none
+}
+
+// OutcomeSummaryRosterRow is one student's per-period composites plus the stored
+// year-final (job_outcome_summary.scaled_label + is_authoritative), all verbatim.
+message OutcomeSummaryRosterRow {
+  string client_id = 1;
+  string client_label = 2;             // opaque id unless the view resolves a display name (matrix parity)
+  repeated OutcomeSummaryPhaseEntry phases = 3;   // per-phase composites, sequence order
+  string year_final_label = 4;         // job_outcome_summary.scaled_label, verbatim; "" when none
+  bool year_final_is_authoritative = 5;// job_outcome_summary.is_authoritative passthrough
+}
+
+message GetOutcomeSummaryRosterResponse {
+  string job_template_id = 1;
+  repeated OutcomeSummaryRosterRow rows = 2;
+  bool success = 3;
+  optional domain.common.v1.Error error = 4;
 }
