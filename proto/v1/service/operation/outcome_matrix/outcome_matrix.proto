@@ -145,6 +145,14 @@ message OutcomeCell {
   // student has no materialised instance for the column yet (cell not editable).
   string job_phase_id = 9;             // student's job_phase for the column's template phase — "" if none
   string job_id = 10;                  // student's job for this template (subject) — "" if none
+
+  // Grader's free-text determination narrative for this cell, mirrored verbatim
+  // from task_outcome.determination_note (f14). "" when no narrative recorded.
+  // Additive projection field (20260723 grade-narrative drawer): drives the grid
+  // message-glyph filled/outline state and the read/write of the narrative drawer.
+  // Type-agnostic (safe for every criteria_type; never conflated with the typed
+  // value fields 3-6). NOTHING reads text_value (f4) for narratives post-cutover.
+  optional string determination_note = 11;
 }
 
 message OutcomeRow {

@@ -385,10 +385,17 @@ type OutcomeCell struct {
 	// attacker-controlled POST keys. These two ids come straight from the same
 	// resolved instance row that produced job_task_id (field 2) — "" when the
 	// student has no materialised instance for the column yet (cell not editable).
-	JobPhaseId    string `protobuf:"bytes,9,opt,name=job_phase_id,json=jobPhaseId,proto3" json:"job_phase_id,omitempty"` // student's job_phase for the column's template phase — "" if none
-	JobId         string `protobuf:"bytes,10,opt,name=job_id,json=jobId,proto3" json:"job_id,omitempty"`                 // student's job for this template (subject) — "" if none
-	unknownFields protoimpl.UnknownFields
-	sizeCache     protoimpl.SizeCache
+	JobPhaseId string `protobuf:"bytes,9,opt,name=job_phase_id,json=jobPhaseId,proto3" json:"job_phase_id,omitempty"` // student's job_phase for the column's template phase — "" if none
+	JobId      string `protobuf:"bytes,10,opt,name=job_id,json=jobId,proto3" json:"job_id,omitempty"`                 // student's job for this template (subject) — "" if none
+	// Grader's free-text determination narrative for this cell, mirrored verbatim
+	// from task_outcome.determination_note (f14). "" when no narrative recorded.
+	// Additive projection field (20260723 grade-narrative drawer): drives the grid
+	// message-glyph filled/outline state and the read/write of the narrative drawer.
+	// Type-agnostic (safe for every criteria_type; never conflated with the typed
+	// value fields 3-6). NOTHING reads text_value (f4) for narratives post-cutover.
+	DeterminationNote *string `protobuf:"bytes,11,opt,name=determination_note,json=determinationNote,proto3,oneof" json:"determination_note,omitempty"`
+	unknownFields     protoimpl.UnknownFields
+	sizeCache         protoimpl.SizeCache
 }
 
 func (x *OutcomeCell) Reset() {
@@ -487,6 +494,13 @@ func (x *OutcomeCell) GetJobPhaseId() string {
 func (x *OutcomeCell) GetJobId() string {
 	if x != nil {
 		return x.JobId
+	}
+	return ""
+}
+
+func (x *OutcomeCell) GetDeterminationNote() string {
+	if x != nil && x.DeterminationNote != nil {
+		return *x.DeterminationNote
 	}
 	return ""
 }
@@ -1063,7 +1077,7 @@ const file_service_operation_outcome_matrix_outcome_matrix_proto_rawDesc = "" +
 	"\x05label\x18\x02 \x01(\tR\x05label\x12%\n" +
 	"\x0esequence_order\x18\x03 \x01(\x05R\rsequenceOrder\x126\n" +
 	"\x05tasks\x18\x04 \x03(\v2 .service.operation.v1.TaskColumnR\x05tasks\x12\x12\n" +
-	"\x04code\x18\x05 \x01(\tR\x04code\"\xba\x03\n" +
+	"\x04code\x18\x05 \x01(\tR\x04code\"\x85\x04\n" +
 	"\vOutcomeCell\x12\x1d\n" +
 	"\n" +
 	"outcome_id\x18\x01 \x01(\tR\toutcomeId\x12\x1e\n" +
@@ -1079,11 +1093,13 @@ const file_service_operation_outcome_matrix_outcome_matrix_proto_rawDesc = "" +
 	"\fjob_phase_id\x18\t \x01(\tR\n" +
 	"jobPhaseId\x12\x15\n" +
 	"\x06job_id\x18\n" +
-	" \x01(\tR\x05jobIdB\x10\n" +
+	" \x01(\tR\x05jobId\x122\n" +
+	"\x12determination_note\x18\v \x01(\tH\x04R\x11determinationNote\x88\x01\x01B\x10\n" +
 	"\x0e_numeric_valueB\r\n" +
 	"\v_text_valueB\x14\n" +
 	"\x12_categorical_valueB\x12\n" +
-	"\x10_pass_fail_value\"\xec\x01\n" +
+	"\x10_pass_fail_valueB\x15\n" +
+	"\x13_determination_note\"\xec\x01\n" +
 	"\n" +
 	"OutcomeRow\x12\x1b\n" +
 	"\tclient_id\x18\x01 \x01(\tR\bclientId\x12!\n" +

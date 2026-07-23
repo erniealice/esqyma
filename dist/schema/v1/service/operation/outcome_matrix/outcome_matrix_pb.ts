@@ -16,7 +16,7 @@ import type { Message } from "@bufbuild/protobuf";
  * Describes the file service/operation/outcome_matrix/outcome_matrix.proto.
  */
 export const file_service_operation_outcome_matrix_outcome_matrix: GenFile = /*@__PURE__*/
-  fileDesc("CjVzZXJ2aWNlL29wZXJhdGlvbi9vdXRjb21lX21hdHJpeC9vdXRjb21lX21hdHJpeC5wcm90bxIUc2VydmljZS5vcGVyYXRpb24udjEiuwEKF0dldE91dGNvbWVNYXRyaXhSZXF1ZXN0EhcKD2pvYl90ZW1wbGF0ZV9pZBgBIAEoCRI3CgVzY29wZRgCIAEoDjIoLnNlcnZpY2Uub3BlcmF0aW9uLnYxLk91dGNvbWVNYXRyaXhTY29wZRIXCgpzZWN0aW9uX2lkGAMgASgJSACIAQESFwoKcHJvZHVjdF9pZBgEIAEoCUgBiAEBQg0KC19zZWN0aW9uX2lkQg0KC19wcm9kdWN0X2lkIocBCg9Dcml0ZXJpb25Db2x1bW4SEgoKY29sdW1uX2tleRgBIAEoCRIWCg5zZXF1ZW5jZV9vcmRlchgCIAEoBRIQCghyZXF1aXJlZBgDIAEoCBI2Cghjcml0ZXJpYRgEIAEoCzIkLmRvbWFpbi5vcGVyYXRpb24udjEuT3V0Y29tZUNyaXRlcmlhIooBCgpUYXNrQ29sdW1uEhwKFGpvYl90ZW1wbGF0ZV90YXNrX2lkGAEgASgJEg0KBWxhYmVsGAIgASgJEhYKDnNlcXVlbmNlX29yZGVyGAMgASgFEjcKCGNyaXRlcmlhGAQgAygLMiUuc2VydmljZS5vcGVyYXRpb24udjEuQ3JpdGVyaW9uQ29sdW1uIoQBCgtQaGFzZUNvbHVtbhIdChVqb2JfdGVtcGxhdGVfcGhhc2VfaWQYASABKAkSDQoFbGFiZWwYAiABKAkSFgoOc2VxdWVuY2Vfb3JkZXIYAyABKAUSLwoFdGFza3MYBCADKAsyIC5zZXJ2aWNlLm9wZXJhdGlvbi52MS5UYXNrQ29sdW1uIsECCgtPdXRjb21lQ2VsbBISCgpvdXRjb21lX2lkGAEgASgJEhMKC2pvYl90YXNrX2lkGAIgASgJEhoKDW51bWVyaWNfdmFsdWUYAyABKAFIAIgBARIXCgp0ZXh0X3ZhbHVlGAQgASgJSAGIAQESHgoRY2F0ZWdvcmljYWxfdmFsdWUYBSABKAlIAogBARIcCg9wYXNzX2ZhaWxfdmFsdWUYBiABKAhIA4gBARITCgtyZWNvcmRlZF9ieRgHIAEoCRIQCghlZGl0YWJsZRgIIAEoCBIUCgxqb2JfcGhhc2VfaWQYCSABKAkSDgoGam9iX2lkGAogASgJQhAKDl9udW1lcmljX3ZhbHVlQg0KC190ZXh0X3ZhbHVlQhQKEl9jYXRlZ29yaWNhbF92YWx1ZUISChBfcGFzc19mYWlsX3ZhbHVlIsIBCgpPdXRjb21lUm93EhEKCWNsaWVudF9pZBgBIAEoCRIUCgxjbGllbnRfbGFiZWwYAiABKAkSOgoFY2VsbHMYAyADKAsyKy5zZXJ2aWNlLm9wZXJhdGlvbi52MS5PdXRjb21lUm93LkNlbGxzRW50cnkaTwoKQ2VsbHNFbnRyeRILCgNrZXkYASABKAkSMAoFdmFsdWUYAiABKAsyIS5zZXJ2aWNlLm9wZXJhdGlvbi52MS5PdXRjb21lQ2VsbDoCOAEi2AEKE1BoYXNlQXBwcm92YWxSb2xsdXASHQoVam9iX3RlbXBsYXRlX3BoYXNlX2lkGAEgASgJEjgKBnN0YXR1cxgCIAEoDjIoLmRvbWFpbi5vcGVyYXRpb24udjEuUGhhc2VBcHByb3ZhbFN0YXR1cxINCgVtaXhlZBgDIAEoCBIUCgx0YXJnZXRfY291bnQYBCABKAUSEAoIaGFzX2RhdGEYBSABKAgSEwoLaGFyZF9mcm96ZW4YBiABKAgSHAoUYmxhbmtfcmVxdWlyZWRfY291bnQYByABKAUivgIKGEdldE91dGNvbWVNYXRyaXhSZXNwb25zZRIXCg9qb2JfdGVtcGxhdGVfaWQYASABKAkSGQoRam9iX3RlbXBsYXRlX25hbWUYAiABKAkSMQoGcGhhc2VzGAMgAygLMiEuc2VydmljZS5vcGVyYXRpb24udjEuUGhhc2VDb2x1bW4SLgoEcm93cxgEIAMoCzIgLnNlcnZpY2Uub3BlcmF0aW9uLnYxLk91dGNvbWVSb3cSDwoHc3VjY2VzcxgFIAEoCBIrCgVlcnJvchgGIAEoCzIXLmRvbWFpbi5jb21tb24udjEuRXJyb3JIAIgBARJDChBhcHByb3ZhbF9yb2xsdXBzGAcgAygLMikuc2VydmljZS5vcGVyYXRpb24udjEuUGhhc2VBcHByb3ZhbFJvbGx1cEIICgZfZXJyb3IqdwoST3V0Y29tZU1hdHJpeFNjb3BlEiQKIE9VVENPTUVfTUFUUklYX1NDT1BFX1VOU1BFQ0lGSUVEEAASHQoZT1VUQ09NRV9NQVRSSVhfU0NPUEVfTUlORRABEhwKGE9VVENPTUVfTUFUUklYX1NDT1BFX0FMTBACMokBChRPdXRjb21lTWF0cml4U2VydmljZRJxChBHZXRPdXRjb21lTWF0cml4Ei0uc2VydmljZS5vcGVyYXRpb24udjEuR2V0T3V0Y29tZU1hdHJpeFJlcXVlc3QaLi5zZXJ2aWNlLm9wZXJhdGlvbi52MS5HZXRPdXRjb21lTWF0cml4UmVzcG9uc2VC+QEKGGNvbS5zZXJ2aWNlLm9wZXJhdGlvbi52MUIST3V0Y29tZU1hdHJpeFByb3RvUAFaV2dpdGh1Yi5jb20vZXJuaWVhbGljZS9lc3F5bWEvcGtnL3NjaGVtYS92MS9zZXJ2aWNlL29wZXJhdGlvbi9vdXRjb21lX21hdHJpeDtvcGVyYXRpb252MaICA1NPWKoCFFNlcnZpY2UuT3BlcmF0aW9uLlYxygIUU2VydmljZVxPcGVyYXRpb25cVjHiAiBTZXJ2aWNlXE9wZXJhdGlvblxWMVxHUEJNZXRhZGF0YeoCFlNlcnZpY2U6Ok9wZXJhdGlvbjo6VjFiBnByb3RvMw", [file_domain_common_error, file_domain_operation_outcome_criteria_outcome_criteria, file_domain_operation_job_phase_job_phase]);
+  fileDesc("CjVzZXJ2aWNlL29wZXJhdGlvbi9vdXRjb21lX21hdHJpeC9vdXRjb21lX21hdHJpeC5wcm90bxIUc2VydmljZS5vcGVyYXRpb24udjEiuwEKF0dldE91dGNvbWVNYXRyaXhSZXF1ZXN0EhcKD2pvYl90ZW1wbGF0ZV9pZBgBIAEoCRI3CgVzY29wZRgCIAEoDjIoLnNlcnZpY2Uub3BlcmF0aW9uLnYxLk91dGNvbWVNYXRyaXhTY29wZRIXCgpzZWN0aW9uX2lkGAMgASgJSACIAQESFwoKcHJvZHVjdF9pZBgEIAEoCUgBiAEBQg0KC19zZWN0aW9uX2lkQg0KC19wcm9kdWN0X2lkIocBCg9Dcml0ZXJpb25Db2x1bW4SEgoKY29sdW1uX2tleRgBIAEoCRIWCg5zZXF1ZW5jZV9vcmRlchgCIAEoBRIQCghyZXF1aXJlZBgDIAEoCBI2Cghjcml0ZXJpYRgEIAEoCzIkLmRvbWFpbi5vcGVyYXRpb24udjEuT3V0Y29tZUNyaXRlcmlhIooBCgpUYXNrQ29sdW1uEhwKFGpvYl90ZW1wbGF0ZV90YXNrX2lkGAEgASgJEg0KBWxhYmVsGAIgASgJEhYKDnNlcXVlbmNlX29yZGVyGAMgASgFEjcKCGNyaXRlcmlhGAQgAygLMiUuc2VydmljZS5vcGVyYXRpb24udjEuQ3JpdGVyaW9uQ29sdW1uIpIBCgtQaGFzZUNvbHVtbhIdChVqb2JfdGVtcGxhdGVfcGhhc2VfaWQYASABKAkSDQoFbGFiZWwYAiABKAkSFgoOc2VxdWVuY2Vfb3JkZXIYAyABKAUSLwoFdGFza3MYBCADKAsyIC5zZXJ2aWNlLm9wZXJhdGlvbi52MS5UYXNrQ29sdW1uEgwKBGNvZGUYBSABKAki+QIKC091dGNvbWVDZWxsEhIKCm91dGNvbWVfaWQYASABKAkSEwoLam9iX3Rhc2tfaWQYAiABKAkSGgoNbnVtZXJpY192YWx1ZRgDIAEoAUgAiAEBEhcKCnRleHRfdmFsdWUYBCABKAlIAYgBARIeChFjYXRlZ29yaWNhbF92YWx1ZRgFIAEoCUgCiAEBEhwKD3Bhc3NfZmFpbF92YWx1ZRgGIAEoCEgDiAEBEhMKC3JlY29yZGVkX2J5GAcgASgJEhAKCGVkaXRhYmxlGAggASgIEhQKDGpvYl9waGFzZV9pZBgJIAEoCRIOCgZqb2JfaWQYCiABKAkSHwoSZGV0ZXJtaW5hdGlvbl9ub3RlGAsgASgJSASIAQFCEAoOX251bWVyaWNfdmFsdWVCDQoLX3RleHRfdmFsdWVCFAoSX2NhdGVnb3JpY2FsX3ZhbHVlQhIKEF9wYXNzX2ZhaWxfdmFsdWVCFQoTX2RldGVybWluYXRpb25fbm90ZSLCAQoKT3V0Y29tZVJvdxIRCgljbGllbnRfaWQYASABKAkSFAoMY2xpZW50X2xhYmVsGAIgASgJEjoKBWNlbGxzGAMgAygLMisuc2VydmljZS5vcGVyYXRpb24udjEuT3V0Y29tZVJvdy5DZWxsc0VudHJ5Gk8KCkNlbGxzRW50cnkSCwoDa2V5GAEgASgJEjAKBXZhbHVlGAIgASgLMiEuc2VydmljZS5vcGVyYXRpb24udjEuT3V0Y29tZUNlbGw6AjgBItgBChNQaGFzZUFwcHJvdmFsUm9sbHVwEh0KFWpvYl90ZW1wbGF0ZV9waGFzZV9pZBgBIAEoCRI4CgZzdGF0dXMYAiABKA4yKC5kb21haW4ub3BlcmF0aW9uLnYxLlBoYXNlQXBwcm92YWxTdGF0dXMSDQoFbWl4ZWQYAyABKAgSFAoMdGFyZ2V0X2NvdW50GAQgASgFEhAKCGhhc19kYXRhGAUgASgIEhMKC2hhcmRfZnJvemVuGAYgASgIEhwKFGJsYW5rX3JlcXVpcmVkX2NvdW50GAcgASgFIr4CChhHZXRPdXRjb21lTWF0cml4UmVzcG9uc2USFwoPam9iX3RlbXBsYXRlX2lkGAEgASgJEhkKEWpvYl90ZW1wbGF0ZV9uYW1lGAIgASgJEjEKBnBoYXNlcxgDIAMoCzIhLnNlcnZpY2Uub3BlcmF0aW9uLnYxLlBoYXNlQ29sdW1uEi4KBHJvd3MYBCADKAsyIC5zZXJ2aWNlLm9wZXJhdGlvbi52MS5PdXRjb21lUm93Eg8KB3N1Y2Nlc3MYBSABKAgSKwoFZXJyb3IYBiABKAsyFy5kb21haW4uY29tbW9uLnYxLkVycm9ySACIAQESQwoQYXBwcm92YWxfcm9sbHVwcxgHIAMoCzIpLnNlcnZpY2Uub3BlcmF0aW9uLnYxLlBoYXNlQXBwcm92YWxSb2xsdXBCCAoGX2Vycm9yInIKHkdldE91dGNvbWVTdW1tYXJ5Um9zdGVyUmVxdWVzdBIXCg9qb2JfdGVtcGxhdGVfaWQYASABKAkSNwoFc2NvcGUYAiABKA4yKC5zZXJ2aWNlLm9wZXJhdGlvbi52MS5PdXRjb21lTWF0cml4U2NvcGUihAEKGE91dGNvbWVTdW1tYXJ5UGhhc2VFbnRyeRIdChVqb2JfdGVtcGxhdGVfcGhhc2VfaWQYASABKAkSDAoEY29kZRgCIAEoCRINCgVsYWJlbBgDIAEoCRIWCg5zZXF1ZW5jZV9vcmRlchgEIAEoBRIUCgxzY2FsZWRfbGFiZWwYBSABKAkiwQEKF091dGNvbWVTdW1tYXJ5Um9zdGVyUm93EhEKCWNsaWVudF9pZBgBIAEoCRIUCgxjbGllbnRfbGFiZWwYAiABKAkSPgoGcGhhc2VzGAMgAygLMi4uc2VydmljZS5vcGVyYXRpb24udjEuT3V0Y29tZVN1bW1hcnlQaGFzZUVudHJ5EhgKEHllYXJfZmluYWxfbGFiZWwYBCABKAkSIwobeWVhcl9maW5hbF9pc19hdXRob3JpdGF0aXZlGAUgASgIIr8BCh9HZXRPdXRjb21lU3VtbWFyeVJvc3RlclJlc3BvbnNlEhcKD2pvYl90ZW1wbGF0ZV9pZBgBIAEoCRI7CgRyb3dzGAIgAygLMi0uc2VydmljZS5vcGVyYXRpb24udjEuT3V0Y29tZVN1bW1hcnlSb3N0ZXJSb3cSDwoHc3VjY2VzcxgDIAEoCBIrCgVlcnJvchgEIAEoCzIXLmRvbWFpbi5jb21tb24udjEuRXJyb3JIAIgBAUIICgZfZXJyb3IqdwoST3V0Y29tZU1hdHJpeFNjb3BlEiQKIE9VVENPTUVfTUFUUklYX1NDT1BFX1VOU1BFQ0lGSUVEEAASHQoZT1VUQ09NRV9NQVRSSVhfU0NPUEVfTUlORRABEhwKGE9VVENPTUVfTUFUUklYX1NDT1BFX0FMTBACMpICChRPdXRjb21lTWF0cml4U2VydmljZRJxChBHZXRPdXRjb21lTWF0cml4Ei0uc2VydmljZS5vcGVyYXRpb24udjEuR2V0T3V0Y29tZU1hdHJpeFJlcXVlc3QaLi5zZXJ2aWNlLm9wZXJhdGlvbi52MS5HZXRPdXRjb21lTWF0cml4UmVzcG9uc2UShgEKF0dldE91dGNvbWVTdW1tYXJ5Um9zdGVyEjQuc2VydmljZS5vcGVyYXRpb24udjEuR2V0T3V0Y29tZVN1bW1hcnlSb3N0ZXJSZXF1ZXN0GjUuc2VydmljZS5vcGVyYXRpb24udjEuR2V0T3V0Y29tZVN1bW1hcnlSb3N0ZXJSZXNwb25zZUL5AQoYY29tLnNlcnZpY2Uub3BlcmF0aW9uLnYxQhJPdXRjb21lTWF0cml4UHJvdG9QAVpXZ2l0aHViLmNvbS9lcm5pZWFsaWNlL2VzcXltYS9wa2cvc2NoZW1hL3YxL3NlcnZpY2Uvb3BlcmF0aW9uL291dGNvbWVfbWF0cml4O29wZXJhdGlvbnYxogIDU09YqgIUU2VydmljZS5PcGVyYXRpb24uVjHKAhRTZXJ2aWNlXE9wZXJhdGlvblxWMeICIFNlcnZpY2VcT3BlcmF0aW9uXFYxXEdQQk1ldGFkYXRh6gIWU2VydmljZTo6T3BlcmF0aW9uOjpWMWIGcHJvdG8z", [file_domain_common_error, file_domain_operation_outcome_criteria_outcome_criteria, file_domain_operation_job_phase_job_phase]);
 
 /**
  * @generated from message service.operation.v1.GetOutcomeMatrixRequest
@@ -162,6 +162,16 @@ export type PhaseColumn = Message<"service.operation.v1.PhaseColumn"> & {
    * @generated from field: repeated service.operation.v1.TaskColumn tasks = 4;
    */
   tasks: TaskColumn[];
+
+  /**
+   * Stable machine key from job_template_phase.code (e.g. "s1"/"s2"); empty
+   * when unset. Additive (Q8, 20260720 export drawer): lets the view/export key
+   * the period axis on the phase CODE rather than the mutable display label —
+   * the label is DB data that varies, the code is the reserved semester anchor.
+   *
+   * @generated from field: string code = 5;
+   */
+  code: string;
 };
 
 /**
@@ -249,6 +259,18 @@ export type OutcomeCell = Message<"service.operation.v1.OutcomeCell"> & {
    * @generated from field: string job_id = 10;
    */
   jobId: string;
+
+  /**
+   * Grader's free-text determination narrative for this cell, mirrored verbatim
+   * from task_outcome.determination_note (f14). "" when no narrative recorded.
+   * Additive projection field (20260723 grade-narrative drawer): drives the grid
+   * message-glyph filled/outline state and the read/write of the narrative drawer.
+   * Type-agnostic (safe for every criteria_type; never conflated with the typed
+   * value fields 3-6). NOTHING reads text_value (f4) for narratives post-cutover.
+   *
+   * @generated from field: optional string determination_note = 11;
+   */
+  determinationNote?: string;
 };
 
 /**
@@ -420,6 +442,159 @@ export const GetOutcomeMatrixResponseSchema: GenMessage<GetOutcomeMatrixResponse
   messageDesc(file_service_operation_outcome_matrix_outcome_matrix, 7);
 
 /**
+ * @generated from message service.operation.v1.GetOutcomeSummaryRosterRequest
+ */
+export type GetOutcomeSummaryRosterRequest = Message<"service.operation.v1.GetOutcomeSummaryRosterRequest"> & {
+  /**
+   * REQUIRED — the page is one template (subject)
+   *
+   * @generated from field: string job_template_id = 1;
+   */
+  jobTemplateId: string;
+
+  /**
+   * @generated from field: service.operation.v1.OutcomeMatrixScope scope = 2;
+   */
+  scope: OutcomeMatrixScope;
+};
+
+/**
+ * Describes the message service.operation.v1.GetOutcomeSummaryRosterRequest.
+ * Use `create(GetOutcomeSummaryRosterRequestSchema)` to create a new message.
+ */
+export const GetOutcomeSummaryRosterRequestSchema: GenMessage<GetOutcomeSummaryRosterRequest> = /*@__PURE__*/
+  messageDesc(file_service_operation_outcome_matrix_outcome_matrix, 8);
+
+/**
+ * OutcomeSummaryPhaseEntry is one student's stored composite for one phase.
+ * scaled_label is job_phase's latest active phase_outcome_summary.scaled_label,
+ * read verbatim ("" when no summary exists yet).
+ *
+ * @generated from message service.operation.v1.OutcomeSummaryPhaseEntry
+ */
+export type OutcomeSummaryPhaseEntry = Message<"service.operation.v1.OutcomeSummaryPhaseEntry"> & {
+  /**
+   * @generated from field: string job_template_phase_id = 1;
+   */
+  jobTemplatePhaseId: string;
+
+  /**
+   * job_template_phase.code (e.g. "s1"/"s2"); "" when unset
+   *
+   * @generated from field: string code = 2;
+   */
+  code: string;
+
+  /**
+   * phase name (e.g. "Semester 1")
+   *
+   * @generated from field: string label = 3;
+   */
+  label: string;
+
+  /**
+   * job_template_phase.phase_order
+   *
+   * @generated from field: int32 sequence_order = 4;
+   */
+  sequenceOrder: number;
+
+  /**
+   * stored phase composite; "" when none
+   *
+   * @generated from field: string scaled_label = 5;
+   */
+  scaledLabel: string;
+};
+
+/**
+ * Describes the message service.operation.v1.OutcomeSummaryPhaseEntry.
+ * Use `create(OutcomeSummaryPhaseEntrySchema)` to create a new message.
+ */
+export const OutcomeSummaryPhaseEntrySchema: GenMessage<OutcomeSummaryPhaseEntry> = /*@__PURE__*/
+  messageDesc(file_service_operation_outcome_matrix_outcome_matrix, 9);
+
+/**
+ * OutcomeSummaryRosterRow is one student's per-period composites plus the stored
+ * year-final (job_outcome_summary.scaled_label + is_authoritative), all verbatim.
+ *
+ * @generated from message service.operation.v1.OutcomeSummaryRosterRow
+ */
+export type OutcomeSummaryRosterRow = Message<"service.operation.v1.OutcomeSummaryRosterRow"> & {
+  /**
+   * @generated from field: string client_id = 1;
+   */
+  clientId: string;
+
+  /**
+   * opaque id unless the view resolves a display name (matrix parity)
+   *
+   * @generated from field: string client_label = 2;
+   */
+  clientLabel: string;
+
+  /**
+   * per-phase composites, sequence order
+   *
+   * @generated from field: repeated service.operation.v1.OutcomeSummaryPhaseEntry phases = 3;
+   */
+  phases: OutcomeSummaryPhaseEntry[];
+
+  /**
+   * job_outcome_summary.scaled_label, verbatim; "" when none
+   *
+   * @generated from field: string year_final_label = 4;
+   */
+  yearFinalLabel: string;
+
+  /**
+   * job_outcome_summary.is_authoritative passthrough
+   *
+   * @generated from field: bool year_final_is_authoritative = 5;
+   */
+  yearFinalIsAuthoritative: boolean;
+};
+
+/**
+ * Describes the message service.operation.v1.OutcomeSummaryRosterRow.
+ * Use `create(OutcomeSummaryRosterRowSchema)` to create a new message.
+ */
+export const OutcomeSummaryRosterRowSchema: GenMessage<OutcomeSummaryRosterRow> = /*@__PURE__*/
+  messageDesc(file_service_operation_outcome_matrix_outcome_matrix, 10);
+
+/**
+ * @generated from message service.operation.v1.GetOutcomeSummaryRosterResponse
+ */
+export type GetOutcomeSummaryRosterResponse = Message<"service.operation.v1.GetOutcomeSummaryRosterResponse"> & {
+  /**
+   * @generated from field: string job_template_id = 1;
+   */
+  jobTemplateId: string;
+
+  /**
+   * @generated from field: repeated service.operation.v1.OutcomeSummaryRosterRow rows = 2;
+   */
+  rows: OutcomeSummaryRosterRow[];
+
+  /**
+   * @generated from field: bool success = 3;
+   */
+  success: boolean;
+
+  /**
+   * @generated from field: optional domain.common.v1.Error error = 4;
+   */
+  error?: Error;
+};
+
+/**
+ * Describes the message service.operation.v1.GetOutcomeSummaryRosterResponse.
+ * Use `create(GetOutcomeSummaryRosterResponseSchema)` to create a new message.
+ */
+export const GetOutcomeSummaryRosterResponseSchema: GenMessage<GetOutcomeSummaryRosterResponse> = /*@__PURE__*/
+  messageDesc(file_service_operation_outcome_matrix_outcome_matrix, 11);
+
+/**
  * OutcomeMatrixScope selects the row set. UNSPECIFIED is fail-closed → MINE.
  *
  * @generated from enum service.operation.v1.OutcomeMatrixScope
@@ -464,6 +639,21 @@ export const OutcomeMatrixService: GenService<{
     methodKind: "unary";
     input: typeof GetOutcomeMatrixRequestSchema;
     output: typeof GetOutcomeMatrixResponseSchema;
+  },
+  /**
+   * GetOutcomeSummaryRoster is the roster-scoped composite read (20260720
+   * export drawer P2): one row per student under a job_template, carrying each
+   * phase's stored composite (phase_outcome_summary.scaled_label) and the
+   * stored year-final (job_outcome_summary.scaled_label + is_authoritative).
+   * Stored values are read VERBATIM — never recomputed (D8). Serves the CSV
+   * "Final" export today and the composite PDF builder later (P5).
+   *
+   * @generated from rpc service.operation.v1.OutcomeMatrixService.GetOutcomeSummaryRoster
+   */
+  getOutcomeSummaryRoster: {
+    methodKind: "unary";
+    input: typeof GetOutcomeSummaryRosterRequestSchema;
+    output: typeof GetOutcomeSummaryRosterResponseSchema;
   },
 }> = /*@__PURE__*/
   serviceDesc(file_service_operation_outcome_matrix_outcome_matrix, 0);
