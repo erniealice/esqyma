@@ -24,11 +24,11 @@ const (
 )
 
 // SubscriptionGroupWorkspaceUser pins an operator (workspace_user) at a
-// subscription_group (cohort) node for group-level servicing/visibility
-// (coordinator @ cohort, adviser @ cohort). Shape mirrors line_workspace_user
-// (workspace_id + is_owner); the parent FK is subscription_group_id instead of
-// line_id, plus the two servicing discriminators (scope, role) the
-// people-hierarchy model specified.
+// subscription_group (cohort) node for group-level servicing/visibility.
+// Shape mirrors line_workspace_user (workspace_id + is_owner); the parent FK is
+// subscription_group_id instead of line_id, plus a generic servicing-capacity
+// axis (see the capacity field). Vertical titles render from lyngua, never
+// stored here.
 type SubscriptionGroupWorkspaceUser struct {
 	state               protoimpl.MessageState `protogen:"open.v1"`
 	Id                  string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
@@ -40,11 +40,16 @@ type SubscriptionGroupWorkspaceUser struct {
 	WorkspaceId         string                 `protobuf:"bytes,7,opt,name=workspace_id,json=workspaceId,proto3" json:"workspace_id,omitempty"`
 	SubscriptionGroupId string                 `protobuf:"bytes,8,opt,name=subscription_group_id,json=subscriptionGroupId,proto3" json:"subscription_group_id,omitempty"`
 	WorkspaceUserId     string                 `protobuf:"bytes,9,opt,name=workspace_user_id,json=workspaceUserId,proto3" json:"workspace_user_id,omitempty"`
-	Scope               string                 `protobuf:"bytes,10,opt,name=scope,proto3" json:"scope,omitempty"`
-	Role                string                 `protobuf:"bytes,11,opt,name=role,proto3" json:"role,omitempty"`
-	IsOwner             bool                   `protobuf:"varint,12,opt,name=is_owner,json=isOwner,proto3" json:"is_owner,omitempty"`
-	unknownFields       protoimpl.UnknownFields
-	sizeCache           protoimpl.SizeCache
+	// field reusing these names would silently absorb stale column values.
+	IsOwner bool `protobuf:"varint,12,opt,name=is_owner,json=isOwner,proto3" json:"is_owner,omitempty"` // unchanged — do NOT renumber
+	// Generic servicing-capacity axis (replaces the removed discriminator's info content). NOT a vertical title.
+	//
+	//	'primary' = servicer / lead-eligible;  'access' = view-only member.
+	//
+	// Vertical titles render from lyngua on (node type, capacity, is_owner).
+	Capacity      string `protobuf:"bytes,13,opt,name=capacity,proto3" json:"capacity,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
 }
 
 func (x *SubscriptionGroupWorkspaceUser) Reset() {
@@ -140,25 +145,18 @@ func (x *SubscriptionGroupWorkspaceUser) GetWorkspaceUserId() string {
 	return ""
 }
 
-func (x *SubscriptionGroupWorkspaceUser) GetScope() string {
-	if x != nil {
-		return x.Scope
-	}
-	return ""
-}
-
-func (x *SubscriptionGroupWorkspaceUser) GetRole() string {
-	if x != nil {
-		return x.Role
-	}
-	return ""
-}
-
 func (x *SubscriptionGroupWorkspaceUser) GetIsOwner() bool {
 	if x != nil {
 		return x.IsOwner
 	}
 	return false
+}
+
+func (x *SubscriptionGroupWorkspaceUser) GetCapacity() string {
+	if x != nil {
+		return x.Capacity
+	}
+	return ""
 }
 
 type CreateSubscriptionGroupWorkspaceUserRequest struct {
@@ -949,7 +947,7 @@ var File_domain_subscription_subscription_group_workspace_user_subscription_grou
 
 const file_domain_subscription_subscription_group_workspace_user_subscription_group_workspace_user_proto_rawDesc = "" +
 	"\n" +
-	"]domain/subscription/subscription_group_workspace_user/subscription_group_workspace_user.proto\x12\x16domain.subscription.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1adomain/common/search.proto\x1a\x10options/db.proto\"\xc3\x05\n" +
+	"]domain/subscription/subscription_group_workspace_user/subscription_group_workspace_user.proto\x12\x16domain.subscription.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1adomain/common/search.proto\x1a\x10options/db.proto\"\xfe\x05\n" +
 	"\x1eSubscriptionGroupWorkspaceUser\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12&\n" +
 	"\fdate_created\x18\x02 \x01(\x03H\x00R\vdateCreated\x88\x01\x01\x12;\n" +
@@ -963,15 +961,14 @@ const file_domain_subscription_subscription_group_workspace_user_subscription_gr
 	"\x15subscription_group_id\x18\b \x01(\tB\x1a\x82\xb5\x18\x16\n" +
 	"\x12subscription_group\x18\x01R\x13subscriptionGroupId\x12B\n" +
 	"\x11workspace_user_id\x18\t \x01(\tB\x16\x82\xb5\x18\x12\n" +
-	"\x0eworkspace_user\x18\x01R\x0fworkspaceUserId\x12\x14\n" +
-	"\x05scope\x18\n" +
-	" \x01(\tR\x05scope\x12\x12\n" +
-	"\x04role\x18\v \x01(\tR\x04role\x12&\n" +
-	"\bis_owner\x18\f \x01(\bB\v\x82\xb5\x18\a\"\x05falseR\aisOwner:/\x8a\xb5\x18+\b\x01\x1a'subscription_group_id,workspace_user_idB\x0f\n" +
+	"\x0eworkspace_user\x18\x01R\x0fworkspaceUserId\x12&\n" +
+	"\bis_owner\x18\f \x01(\bB\v\x82\xb5\x18\a\"\x05falseR\aisOwner\x12J\n" +
+	"\bcapacity\x18\r \x01(\tB.\x82\xb5\x18*\"\x06access* capacity IN ('primary','access')R\bcapacity:/\x8a\xb5\x18+\b\x01\x1a'subscription_group_id,workspace_user_idB\x0f\n" +
 	"\r_date_createdB\x16\n" +
 	"\x14_date_created_stringB\x10\n" +
 	"\x0e_date_modifiedB\x17\n" +
-	"\x15_date_modified_string\"y\n" +
+	"\x15_date_modified_stringJ\x04\b\n" +
+	"\x10\vJ\x04\b\v\x10\fR\x05scopeR\x04role\"y\n" +
 	"+CreateSubscriptionGroupWorkspaceUserRequest\x12J\n" +
 	"\x04data\x18\x01 \x01(\v26.domain.subscription.v1.SubscriptionGroupWorkspaceUserR\x04data\"\xd2\x01\n" +
 	",CreateSubscriptionGroupWorkspaceUserResponse\x12J\n" +

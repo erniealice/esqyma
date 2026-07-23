@@ -12,11 +12,11 @@ import "domain/common/search.proto";
 import "options/db.proto";
 
 // SubscriptionGroupWorkspaceUser pins an operator (workspace_user) at a
-// subscription_group (cohort) node for group-level servicing/visibility
-// (coordinator @ cohort, adviser @ cohort). Shape mirrors line_workspace_user
-// (workspace_id + is_owner); the parent FK is subscription_group_id instead of
-// line_id, plus the two servicing discriminators (scope, role) the
-// people-hierarchy model specified.
+// subscription_group (cohort) node for group-level servicing/visibility.
+// Shape mirrors line_workspace_user (workspace_id + is_owner); the parent FK is
+// subscription_group_id instead of line_id, plus a generic servicing-capacity
+// axis (see the capacity field). Vertical titles render from lyngua, never
+// stored here.
 message SubscriptionGroupWorkspaceUser {
   option (options.v1.table).table = true;
   option (options.v1.table).unique_together = "subscription_group_id,workspace_user_id";
@@ -29,13 +29,14 @@ message SubscriptionGroupWorkspaceUser {
   string workspace_id = 7 [(options.v1.db).references = "workspace", (options.v1.db).index = true];
   string subscription_group_id = 8 [(options.v1.db).references = "subscription_group", (options.v1.db).index = true];
   string workspace_user_id = 9 [(options.v1.db).references = "workspace_user", (options.v1.db).index = true];
-  // scope/role: NOT NULL DEFAULT "" (interim, additive). The generic create path
-  // marshals via protojson, which omits empty strings, so without a column default
-  // an unset scope/role lands NULL and violates NOT NULL. These two fields are
-  // slated for REMOVAL — see docs/plan/20260721-servicing-grant-scope-role/.
-  string scope = 10 [(options.v1.db).default = ""];
-  string role = 11 [(options.v1.db).default = ""];
-  bool is_owner = 12 [(options.v1.db).default = "false"];
+  reserved 10, 11;                 // former scope(10), role(11) — removed 2026-07 (servicing-grant refactor)
+  reserved "scope", "role";        // NAMES reserved: the storage bridge is name-based protojson; a future
+                                   // field reusing these names would silently absorb stale column values.
+  bool is_owner = 12 [(options.v1.db).default = "false"];   // unchanged — do NOT renumber
+  // Generic servicing-capacity axis (replaces the removed discriminator's info content). NOT a vertical title.
+  //   'primary' = servicer / lead-eligible;  'access' = view-only member.
+  // Vertical titles render from lyngua on (node type, capacity, is_owner).
+  string capacity = 13 [(options.v1.db).default = "access", (options.v1.db).check = "capacity IN ('primary','access')"];
 }
 
 service SubscriptionGroupWorkspaceUserDomainService {

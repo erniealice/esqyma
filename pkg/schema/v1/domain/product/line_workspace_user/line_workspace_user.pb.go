@@ -24,10 +24,10 @@ const (
 )
 
 // LineWorkspaceUser pins an operator (workspace_user) at a line node for
-// tier-2 group visibility (coordinator @ department node, adviser @ section
-// node). Shape mirrors client_workspace_user (workspace_id + is_owner); the
-// parent FK is line_id instead of client_id, plus the two servicing
-// discriminators (scope, role) the people-hierarchy model specified.
+// tier-2 group visibility. Shape mirrors client_workspace_user (workspace_id +
+// is_owner); the parent FK is line_id instead of client_id, plus a generic
+// servicing-capacity axis (see the capacity field). Vertical titles render from
+// lyngua, never stored here.
 type LineWorkspaceUser struct {
 	state              protoimpl.MessageState `protogen:"open.v1"`
 	Id                 string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
@@ -39,11 +39,16 @@ type LineWorkspaceUser struct {
 	WorkspaceId        string                 `protobuf:"bytes,7,opt,name=workspace_id,json=workspaceId,proto3" json:"workspace_id,omitempty"`
 	LineId             string                 `protobuf:"bytes,8,opt,name=line_id,json=lineId,proto3" json:"line_id,omitempty"`
 	WorkspaceUserId    string                 `protobuf:"bytes,9,opt,name=workspace_user_id,json=workspaceUserId,proto3" json:"workspace_user_id,omitempty"`
-	Scope              string                 `protobuf:"bytes,10,opt,name=scope,proto3" json:"scope,omitempty"`
-	Role               string                 `protobuf:"bytes,11,opt,name=role,proto3" json:"role,omitempty"`
-	IsOwner            bool                   `protobuf:"varint,12,opt,name=is_owner,json=isOwner,proto3" json:"is_owner,omitempty"`
-	unknownFields      protoimpl.UnknownFields
-	sizeCache          protoimpl.SizeCache
+	// field reusing these names would silently absorb stale column values.
+	IsOwner bool `protobuf:"varint,12,opt,name=is_owner,json=isOwner,proto3" json:"is_owner,omitempty"` // unchanged — do NOT renumber
+	// Generic servicing-capacity axis (replaces the removed discriminator's info content). NOT a vertical title.
+	//
+	//	'primary' = servicer / lead-eligible;  'access' = view-only member.
+	//
+	// Vertical titles render from lyngua on (node type, capacity, is_owner).
+	Capacity      string `protobuf:"bytes,13,opt,name=capacity,proto3" json:"capacity,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
 }
 
 func (x *LineWorkspaceUser) Reset() {
@@ -139,25 +144,18 @@ func (x *LineWorkspaceUser) GetWorkspaceUserId() string {
 	return ""
 }
 
-func (x *LineWorkspaceUser) GetScope() string {
-	if x != nil {
-		return x.Scope
-	}
-	return ""
-}
-
-func (x *LineWorkspaceUser) GetRole() string {
-	if x != nil {
-		return x.Role
-	}
-	return ""
-}
-
 func (x *LineWorkspaceUser) GetIsOwner() bool {
 	if x != nil {
 		return x.IsOwner
 	}
 	return false
+}
+
+func (x *LineWorkspaceUser) GetCapacity() string {
+	if x != nil {
+		return x.Capacity
+	}
+	return ""
 }
 
 type CreateLineWorkspaceUserRequest struct {
@@ -948,7 +946,7 @@ var File_domain_product_line_workspace_user_line_workspace_user_proto protorefle
 
 const file_domain_product_line_workspace_user_line_workspace_user_proto_rawDesc = "" +
 	"\n" +
-	"<domain/product/line_workspace_user/line_workspace_user.proto\x12\x11domain.product.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1adomain/common/search.proto\x1a\x10options/db.proto\"\xff\x04\n" +
+	"<domain/product/line_workspace_user/line_workspace_user.proto\x12\x11domain.product.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1adomain/common/search.proto\x1a\x10options/db.proto\"\xba\x05\n" +
 	"\x11LineWorkspaceUser\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12&\n" +
 	"\fdate_created\x18\x02 \x01(\x03H\x00R\vdateCreated\x88\x01\x01\x12;\n" +
@@ -962,15 +960,14 @@ const file_domain_product_line_workspace_user_line_workspace_user_proto_rawDesc 
 	"\aline_id\x18\b \x01(\tB\f\x82\xb5\x18\b\n" +
 	"\x04line\x18\x01R\x06lineId\x12B\n" +
 	"\x11workspace_user_id\x18\t \x01(\tB\x16\x82\xb5\x18\x12\n" +
-	"\x0eworkspace_user\x18\x01R\x0fworkspaceUserId\x12\x14\n" +
-	"\x05scope\x18\n" +
-	" \x01(\tR\x05scope\x12\x12\n" +
-	"\x04role\x18\v \x01(\tR\x04role\x12&\n" +
-	"\bis_owner\x18\f \x01(\bB\v\x82\xb5\x18\a\"\x05falseR\aisOwner:!\x8a\xb5\x18\x1d\b\x01\x1a\x19line_id,workspace_user_idB\x0f\n" +
+	"\x0eworkspace_user\x18\x01R\x0fworkspaceUserId\x12&\n" +
+	"\bis_owner\x18\f \x01(\bB\v\x82\xb5\x18\a\"\x05falseR\aisOwner\x12J\n" +
+	"\bcapacity\x18\r \x01(\tB.\x82\xb5\x18*\"\x06access* capacity IN ('primary','access')R\bcapacity:!\x8a\xb5\x18\x1d\b\x01\x1a\x19line_id,workspace_user_idB\x0f\n" +
 	"\r_date_createdB\x16\n" +
 	"\x14_date_created_stringB\x10\n" +
 	"\x0e_date_modifiedB\x17\n" +
-	"\x15_date_modified_string\"Z\n" +
+	"\x15_date_modified_stringJ\x04\b\n" +
+	"\x10\vJ\x04\b\v\x10\fR\x05scopeR\x04role\"Z\n" +
 	"\x1eCreateLineWorkspaceUserRequest\x128\n" +
 	"\x04data\x18\x01 \x01(\v2$.domain.product.v1.LineWorkspaceUserR\x04data\"\xb3\x01\n" +
 	"\x1fCreateLineWorkspaceUserResponse\x128\n" +
