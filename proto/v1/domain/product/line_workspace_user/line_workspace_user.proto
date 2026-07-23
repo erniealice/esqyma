@@ -28,8 +28,12 @@ message LineWorkspaceUser {
   string workspace_id = 7 [(options.v1.db).references = "workspace", (options.v1.db).index = true];
   string line_id = 8 [(options.v1.db).references = "line", (options.v1.db).index = true];
   string workspace_user_id = 9 [(options.v1.db).references = "workspace_user", (options.v1.db).index = true];
-  string scope = 10;
-  string role = 11;
+  // scope/role: NOT NULL DEFAULT "" (interim, additive). The generic create path
+  // marshals via protojson, which omits empty strings, so without a column default
+  // an unset scope/role lands NULL and violates NOT NULL. These two fields are
+  // slated for REMOVAL — see docs/plan/20260721-servicing-grant-scope-role/.
+  string scope = 10 [(options.v1.db).default = ""];
+  string role = 11 [(options.v1.db).default = ""];
   bool is_owner = 12 [(options.v1.db).default = "false"];
 }
 
