@@ -33,6 +33,13 @@ message SubscriptionGroupProductPlanStaff {
   string product_plan_id = 9 [(options.v1.db).references = "product_plan", (options.v1.db).index = true];
   string staff_id = 10 [(options.v1.db).references = "staff", (options.v1.db).index = true];
   string role = 11;
+
+  // v2 re-parenting (docs/plan/20260724-section-assignment-merged): the edge
+  // becomes (class × eligibility [× phase]); legacy f8/f9/f10 stay populated
+  // (dual-write) until the M7 retirement decision (D-8).
+  optional string subscription_group_product_plan_id = 12 [(options.v1.db).references = "subscription_group_product_plan", (options.v1.db).index = true];
+  optional string product_plan_staff_id = 13 [(options.v1.db).references = "product_plan_staff", (options.v1.db).index = true];
+  optional string job_template_phase_id = 14 [(options.v1.db).references = "job_template_phase", (options.v1.db).index = true]; // NULL = all phases (coverage rule plan.md §2.5)
 }
 
 service SubscriptionGroupProductPlanStaffDomainService {

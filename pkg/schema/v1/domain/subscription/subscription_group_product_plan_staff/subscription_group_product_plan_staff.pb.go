@@ -44,8 +44,14 @@ type SubscriptionGroupProductPlanStaff struct {
 	ProductPlanId       string                 `protobuf:"bytes,9,opt,name=product_plan_id,json=productPlanId,proto3" json:"product_plan_id,omitempty"`
 	StaffId             string                 `protobuf:"bytes,10,opt,name=staff_id,json=staffId,proto3" json:"staff_id,omitempty"`
 	Role                string                 `protobuf:"bytes,11,opt,name=role,proto3" json:"role,omitempty"`
-	unknownFields       protoimpl.UnknownFields
-	sizeCache           protoimpl.SizeCache
+	// v2 re-parenting (docs/plan/20260724-section-assignment-merged): the edge
+	// becomes (class × eligibility [× phase]); legacy f8/f9/f10 stay populated
+	// (dual-write) until the M7 retirement decision (D-8).
+	SubscriptionGroupProductPlanId *string `protobuf:"bytes,12,opt,name=subscription_group_product_plan_id,json=subscriptionGroupProductPlanId,proto3,oneof" json:"subscription_group_product_plan_id,omitempty"`
+	ProductPlanStaffId             *string `protobuf:"bytes,13,opt,name=product_plan_staff_id,json=productPlanStaffId,proto3,oneof" json:"product_plan_staff_id,omitempty"`
+	JobTemplatePhaseId             *string `protobuf:"bytes,14,opt,name=job_template_phase_id,json=jobTemplatePhaseId,proto3,oneof" json:"job_template_phase_id,omitempty"` // NULL = all phases (coverage rule plan.md §2.5)
+	unknownFields                  protoimpl.UnknownFields
+	sizeCache                      protoimpl.SizeCache
 }
 
 func (x *SubscriptionGroupProductPlanStaff) Reset() {
@@ -151,6 +157,27 @@ func (x *SubscriptionGroupProductPlanStaff) GetStaffId() string {
 func (x *SubscriptionGroupProductPlanStaff) GetRole() string {
 	if x != nil {
 		return x.Role
+	}
+	return ""
+}
+
+func (x *SubscriptionGroupProductPlanStaff) GetSubscriptionGroupProductPlanId() string {
+	if x != nil && x.SubscriptionGroupProductPlanId != nil {
+		return *x.SubscriptionGroupProductPlanId
+	}
+	return ""
+}
+
+func (x *SubscriptionGroupProductPlanStaff) GetProductPlanStaffId() string {
+	if x != nil && x.ProductPlanStaffId != nil {
+		return *x.ProductPlanStaffId
+	}
+	return ""
+}
+
+func (x *SubscriptionGroupProductPlanStaff) GetJobTemplatePhaseId() string {
+	if x != nil && x.JobTemplatePhaseId != nil {
+		return *x.JobTemplatePhaseId
 	}
 	return ""
 }
@@ -943,7 +970,7 @@ var File_domain_subscription_subscription_group_product_plan_staff_subscription_
 
 const file_domain_subscription_subscription_group_product_plan_staff_subscription_group_product_plan_staff_proto_rawDesc = "" +
 	"\n" +
-	"edomain/subscription/subscription_group_product_plan_staff/subscription_group_product_plan_staff.proto\x12\x16domain.subscription.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1adomain/common/search.proto\x1a\x10options/db.proto\"\xb3\x05\n" +
+	"edomain/subscription/subscription_group_product_plan_staff/subscription_group_product_plan_staff.proto\x12\x16domain.subscription.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1adomain/common/search.proto\x1a\x10options/db.proto\"\xb0\b\n" +
 	"!SubscriptionGroupProductPlanStaff\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12&\n" +
 	"\fdate_created\x18\x02 \x01(\x03H\x00R\vdateCreated\x88\x01\x01\x12;\n" +
@@ -961,11 +988,20 @@ const file_domain_subscription_subscription_group_product_plan_staff_subscriptio
 	"\bstaff_id\x18\n" +
 	" \x01(\tB\r\x82\xb5\x18\t\n" +
 	"\x05staff\x18\x01R\astaffId\x12\x12\n" +
-	"\x04role\x18\v \x01(\tR\x04role:6\x8a\xb5\x182\b\x01\x1a.subscription_group_id,product_plan_id,staff_idB\x0f\n" +
+	"\x04role\x18\v \x01(\tR\x04role\x12x\n" +
+	"\"subscription_group_product_plan_id\x18\f \x01(\tB'\x82\xb5\x18#\n" +
+	"\x1fsubscription_group_product_plan\x18\x01H\x04R\x1esubscriptionGroupProductPlanId\x88\x01\x01\x12R\n" +
+	"\x15product_plan_staff_id\x18\r \x01(\tB\x1a\x82\xb5\x18\x16\n" +
+	"\x12product_plan_staff\x18\x01H\x05R\x12productPlanStaffId\x88\x01\x01\x12R\n" +
+	"\x15job_template_phase_id\x18\x0e \x01(\tB\x1a\x82\xb5\x18\x16\n" +
+	"\x12job_template_phase\x18\x01H\x06R\x12jobTemplatePhaseId\x88\x01\x01:6\x8a\xb5\x182\b\x01\x1a.subscription_group_id,product_plan_id,staff_idB\x0f\n" +
 	"\r_date_createdB\x16\n" +
 	"\x14_date_created_stringB\x10\n" +
 	"\x0e_date_modifiedB\x17\n" +
-	"\x15_date_modified_string\"\x7f\n" +
+	"\x15_date_modified_stringB%\n" +
+	"#_subscription_group_product_plan_idB\x18\n" +
+	"\x16_product_plan_staff_idB\x18\n" +
+	"\x16_job_template_phase_id\"\x7f\n" +
 	".CreateSubscriptionGroupProductPlanStaffRequest\x12M\n" +
 	"\x04data\x18\x01 \x01(\v29.domain.subscription.v1.SubscriptionGroupProductPlanStaffR\x04data\"\xd8\x01\n" +
 	"/CreateSubscriptionGroupProductPlanStaffResponse\x12M\n" +
