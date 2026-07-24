@@ -83,16 +83,70 @@ ALTER TABLE "subscription_group_product_plan_staff" ADD COLUMN IF NOT EXISTS "pr
 ALTER TABLE "subscription_group_product_plan_staff" ADD COLUMN IF NOT EXISTS "job_template_phase_id"              TEXT NULL;
 
 -- FKs (pg_constraint-guarded — ALTER ADD CONSTRAINT has no IF NOT EXISTS).
-DO $$ BEGIN
-  IF NOT EXISTS (SELECT 1 FROM pg_constraint WHERE conname = 'fk_subscription_group_product_plan_staff_subscription_group_product_plan_id') THEN
+--
+-- Guard by constraint SHAPE (target table + contype='f' + source-column attnum),
+-- NOT by hand-typed conname string. PostgreSQL's NAMEDATALEN is 63 bytes, so any
+-- identifier longer than that is silently truncated at DDL time. The first FK's
+-- natural name below is 75 bytes ("fk_subscription_group_product_plan_staff_
+-- subscription_group_product_plan_id"), so it gets stored truncated to 63 bytes
+-- ("fk_subscription_group_product_plan_staff_subscription_group_pro").
+--
+-- Note: a conname = '<75-byte literal>' comparison happens to still match here,
+-- because pg_constraint.conname is of Postgres type `name` (also capped at 63
+-- bytes) and the literal gets implicitly cast+truncated to `name` the same way
+-- before the comparison runs — verified empirically by replaying the original
+-- literal-comparison guard against the already-migrated education1 (wrapped in
+-- BEGIN/ROLLBACK): all three checks correctly reported "already exists" and
+-- skipped the ALTER, no error, FK count unchanged. So this is not fixing an
+-- observed failure; it's removing a fragile *coincidence*. That match depends on
+-- conname's underlying type and on the comparison going through the `name` input
+-- cast — easy to break by accident (e.g. an explicit ::text cast on either side,
+-- or the same string-literal pattern copied somewhere the column isn't type
+-- `name`). Matching on (conrelid, contype, conkey) instead is correct regardless
+-- of how any name gets truncated, and stays correct even if the constraint name
+-- text is edited later — it cannot rot.
+DO $$
+DECLARE
+  v_attnum smallint;
+BEGIN
+  SELECT attnum INTO v_attnum
+    FROM pg_attribute
+   WHERE attrelid = 'subscription_group_product_plan_staff'::regclass
+     AND attname = 'subscription_group_product_plan_id';
+  IF NOT EXISTS (
+    SELECT 1 FROM pg_constraint
+     WHERE conrelid = 'subscription_group_product_plan_staff'::regclass
+       AND contype = 'f'
+       AND conkey = ARRAY[v_attnum]
+  ) THEN
     ALTER TABLE "subscription_group_product_plan_staff" ADD CONSTRAINT "fk_subscription_group_product_plan_staff_subscription_group_product_plan_id"
       FOREIGN KEY ("subscription_group_product_plan_id") REFERENCES "subscription_group_product_plan"("id");
   END IF;
-  IF NOT EXISTS (SELECT 1 FROM pg_constraint WHERE conname = 'fk_subscription_group_product_plan_staff_product_plan_staff_id') THEN
+
+  SELECT attnum INTO v_attnum
+    FROM pg_attribute
+   WHERE attrelid = 'subscription_group_product_plan_staff'::regclass
+     AND attname = 'product_plan_staff_id';
+  IF NOT EXISTS (
+    SELECT 1 FROM pg_constraint
+     WHERE conrelid = 'subscription_group_product_plan_staff'::regclass
+       AND contype = 'f'
+       AND conkey = ARRAY[v_attnum]
+  ) THEN
     ALTER TABLE "subscription_group_product_plan_staff" ADD CONSTRAINT "fk_subscription_group_product_plan_staff_product_plan_staff_id"
       FOREIGN KEY ("product_plan_staff_id") REFERENCES "product_plan_staff"("id");
   END IF;
-  IF NOT EXISTS (SELECT 1 FROM pg_constraint WHERE conname = 'fk_subscription_group_product_plan_staff_job_template_phase_id') THEN
+
+  SELECT attnum INTO v_attnum
+    FROM pg_attribute
+   WHERE attrelid = 'subscription_group_product_plan_staff'::regclass
+     AND attname = 'job_template_phase_id';
+  IF NOT EXISTS (
+    SELECT 1 FROM pg_constraint
+     WHERE conrelid = 'subscription_group_product_plan_staff'::regclass
+       AND contype = 'f'
+       AND conkey = ARRAY[v_attnum]
+  ) THEN
     ALTER TABLE "subscription_group_product_plan_staff" ADD CONSTRAINT "fk_subscription_group_product_plan_staff_job_template_phase_id"
       FOREIGN KEY ("job_template_phase_id") REFERENCES "job_template_phase"("id");
   END IF;
