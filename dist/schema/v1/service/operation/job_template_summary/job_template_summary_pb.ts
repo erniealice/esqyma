@@ -8,13 +8,15 @@ import type { Error } from "../../../domain/common/error_pb";
 import { file_domain_common_error } from "../../../domain/common/error_pb";
 import type { PaginationRequest, PaginationResponse } from "../../../domain/common/pagination_pb";
 import { file_domain_common_pagination } from "../../../domain/common/pagination_pb";
+import type { PhaseApprovalStatus } from "../../../domain/operation/job_phase/job_phase_pb";
+import { file_domain_operation_job_phase_job_phase } from "../../../domain/operation/job_phase/job_phase_pb";
 import type { Message } from "@bufbuild/protobuf";
 
 /**
  * Describes the file service/operation/job_template_summary/job_template_summary.proto.
  */
 export const file_service_operation_job_template_summary_job_template_summary: GenFile = /*@__PURE__*/
-  fileDesc("CkFzZXJ2aWNlL29wZXJhdGlvbi9qb2JfdGVtcGxhdGVfc3VtbWFyeS9qb2JfdGVtcGxhdGVfc3VtbWFyeS5wcm90bxIUc2VydmljZS5vcGVyYXRpb24udjEiMQoJRGVsaXZlcmVyEhAKCHN0YWZmX2lkGAEgASgJEhIKCnN0YWZmX25hbWUYAiABKAki+wIKEkpvYlRlbXBsYXRlU3VtbWFyeRIXCg9qb2JfdGVtcGxhdGVfaWQYASABKAkSGQoRam9iX3RlbXBsYXRlX25hbWUYAiABKAkSHQoVc3Vic2NyaXB0aW9uX2dyb3VwX2lkGAMgASgJEh8KF3N1YnNjcmlwdGlvbl9ncm91cF9uYW1lGAQgASgJEhEKCWpvYl9jb3VudBgHIAEoBRIZChFwcmljZV9zY2hlZHVsZV9pZBgIIAEoCRIbChNwcmljZV9zY2hlZHVsZV9uYW1lGAkgASgJEhkKEW91dHB1dF9wcm9kdWN0X2lkGAogASgJEhsKE291dHB1dF9wcm9kdWN0X25hbWUYCyABKAkSMwoKZGVsaXZlcmVycxgMIAMoCzIfLnNlcnZpY2Uub3BlcmF0aW9uLnYxLkRlbGl2ZXJlchIXCg9qb2JfY2F0ZWdvcnlfaWQYDSABKAlKBAgFEAZKBAgGEAdSCHN0YWZmX2lkUgpzdGFmZl9uYW1lIvoBCh9MaXN0Sm9iVGVtcGxhdGVTdW1tYXJpZXNSZXF1ZXN0Eg4KBnN0YXR1cxgBIAEoCRIiChVzdWJzY3JpcHRpb25fZ3JvdXBfaWQYAiABKAlIAIgBARI8CgpwYWdpbmF0aW9uGAMgASgLMiMuZG9tYWluLmNvbW1vbi52MS5QYWdpbmF0aW9uUmVxdWVzdEgBiAEBEiIKFXByaWNlX3NjaGVkdWxlX2FjdGl2ZRgEIAEoCEgCiAEBQhgKFl9zdWJzY3JpcHRpb25fZ3JvdXBfaWRCDQoLX3BhZ2luYXRpb25CGAoWX3ByaWNlX3NjaGVkdWxlX2FjdGl2ZSL1AQogTGlzdEpvYlRlbXBsYXRlU3VtbWFyaWVzUmVzcG9uc2USOwoJc3VtbWFyaWVzGAEgAygLMiguc2VydmljZS5vcGVyYXRpb24udjEuSm9iVGVtcGxhdGVTdW1tYXJ5Eg8KB3N1Y2Nlc3MYAiABKAgSPQoKcGFnaW5hdGlvbhgDIAEoCzIkLmRvbWFpbi5jb21tb24udjEuUGFnaW5hdGlvblJlc3BvbnNlSACIAQESKwoFZXJyb3IYBCABKAsyFy5kb21haW4uY29tbW9uLnYxLkVycm9ySAGIAQFCDQoLX3BhZ2luYXRpb25CCAoGX2Vycm9yMqcBChlKb2JUZW1wbGF0ZVN1bW1hcnlTZXJ2aWNlEokBChhMaXN0Sm9iVGVtcGxhdGVTdW1tYXJpZXMSNS5zZXJ2aWNlLm9wZXJhdGlvbi52MS5MaXN0Sm9iVGVtcGxhdGVTdW1tYXJpZXNSZXF1ZXN0GjYuc2VydmljZS5vcGVyYXRpb24udjEuTGlzdEpvYlRlbXBsYXRlU3VtbWFyaWVzUmVzcG9uc2VChAIKGGNvbS5zZXJ2aWNlLm9wZXJhdGlvbi52MUIXSm9iVGVtcGxhdGVTdW1tYXJ5UHJvdG9QAVpdZ2l0aHViLmNvbS9lcm5pZWFsaWNlL2VzcXltYS9wa2cvc2NoZW1hL3YxL3NlcnZpY2Uvb3BlcmF0aW9uL2pvYl90ZW1wbGF0ZV9zdW1tYXJ5O29wZXJhdGlvbnYxogIDU09YqgIUU2VydmljZS5PcGVyYXRpb24uVjHKAhRTZXJ2aWNlXE9wZXJhdGlvblxWMeICIFNlcnZpY2VcT3BlcmF0aW9uXFYxXEdQQk1ldGFkYXRh6gIWU2VydmljZTo6T3BlcmF0aW9uOjpWMWIGcHJvdG8z", [file_domain_common_error, file_domain_common_pagination]);
+  fileDesc("CkFzZXJ2aWNlL29wZXJhdGlvbi9qb2JfdGVtcGxhdGVfc3VtbWFyeS9qb2JfdGVtcGxhdGVfc3VtbWFyeS5wcm90bxIUc2VydmljZS5vcGVyYXRpb24udjEiMQoJRGVsaXZlcmVyEhAKCHN0YWZmX2lkGAEgASgJEhIKCnN0YWZmX25hbWUYAiABKAkiowUKEkpvYlRlbXBsYXRlU3VtbWFyeRIXCg9qb2JfdGVtcGxhdGVfaWQYASABKAkSGQoRam9iX3RlbXBsYXRlX25hbWUYAiABKAkSHQoVc3Vic2NyaXB0aW9uX2dyb3VwX2lkGAMgASgJEh8KF3N1YnNjcmlwdGlvbl9ncm91cF9uYW1lGAQgASgJEhEKCWpvYl9jb3VudBgHIAEoBRIZChFwcmljZV9zY2hlZHVsZV9pZBgIIAEoCRIbChNwcmljZV9zY2hlZHVsZV9uYW1lGAkgASgJEhkKEW91dHB1dF9wcm9kdWN0X2lkGAogASgJEhsKE291dHB1dF9wcm9kdWN0X25hbWUYCyABKAkSMwoKZGVsaXZlcmVycxgMIAMoCzIfLnNlcnZpY2Uub3BlcmF0aW9uLnYxLkRlbGl2ZXJlchIXCg9qb2JfY2F0ZWdvcnlfaWQYDSABKAkSFwoPcHVibGlzaGVkX2NvdW50GA4gASgFEhMKC3BoYXNlX2NvdW50GA8gASgFEj8KDWxvd2VzdF9zdGF0dXMYECABKA4yKC5kb21haW4ub3BlcmF0aW9uLnYxLlBoYXNlQXBwcm92YWxTdGF0dXMSFwoPbWl4ZWRfYXR0ZW50aW9uGBEgASgIEh0KFWdyb3VwX3B1Ymxpc2hlZF9jb3VudBgSIAEoBRIZChFncm91cF9waGFzZV9jb3VudBgTIAEoBRJFChNncm91cF9sb3dlc3Rfc3RhdHVzGBQgASgOMiguZG9tYWluLm9wZXJhdGlvbi52MS5QaGFzZUFwcHJvdmFsU3RhdHVzEh0KFWdyb3VwX21peGVkX2F0dGVudGlvbhgVIAEoCEoECAUQBkoECAYQB1IIc3RhZmZfaWRSCnN0YWZmX25hbWUi+gEKH0xpc3RKb2JUZW1wbGF0ZVN1bW1hcmllc1JlcXVlc3QSDgoGc3RhdHVzGAEgASgJEiIKFXN1YnNjcmlwdGlvbl9ncm91cF9pZBgCIAEoCUgAiAEBEjwKCnBhZ2luYXRpb24YAyABKAsyIy5kb21haW4uY29tbW9uLnYxLlBhZ2luYXRpb25SZXF1ZXN0SAGIAQESIgoVcHJpY2Vfc2NoZWR1bGVfYWN0aXZlGAQgASgISAKIAQFCGAoWX3N1YnNjcmlwdGlvbl9ncm91cF9pZEINCgtfcGFnaW5hdGlvbkIYChZfcHJpY2Vfc2NoZWR1bGVfYWN0aXZlIvUBCiBMaXN0Sm9iVGVtcGxhdGVTdW1tYXJpZXNSZXNwb25zZRI7CglzdW1tYXJpZXMYASADKAsyKC5zZXJ2aWNlLm9wZXJhdGlvbi52MS5Kb2JUZW1wbGF0ZVN1bW1hcnkSDwoHc3VjY2VzcxgCIAEoCBI9CgpwYWdpbmF0aW9uGAMgASgLMiQuZG9tYWluLmNvbW1vbi52MS5QYWdpbmF0aW9uUmVzcG9uc2VIAIgBARIrCgVlcnJvchgEIAEoCzIXLmRvbWFpbi5jb21tb24udjEuRXJyb3JIAYgBAUINCgtfcGFnaW5hdGlvbkIICgZfZXJyb3IypwEKGUpvYlRlbXBsYXRlU3VtbWFyeVNlcnZpY2USiQEKGExpc3RKb2JUZW1wbGF0ZVN1bW1hcmllcxI1LnNlcnZpY2Uub3BlcmF0aW9uLnYxLkxpc3RKb2JUZW1wbGF0ZVN1bW1hcmllc1JlcXVlc3QaNi5zZXJ2aWNlLm9wZXJhdGlvbi52MS5MaXN0Sm9iVGVtcGxhdGVTdW1tYXJpZXNSZXNwb25zZUKEAgoYY29tLnNlcnZpY2Uub3BlcmF0aW9uLnYxQhdKb2JUZW1wbGF0ZVN1bW1hcnlQcm90b1ABWl1naXRodWIuY29tL2VybmllYWxpY2UvZXNxeW1hL3BrZy9zY2hlbWEvdjEvc2VydmljZS9vcGVyYXRpb24vam9iX3RlbXBsYXRlX3N1bW1hcnk7b3BlcmF0aW9udjGiAgNTT1iqAhRTZXJ2aWNlLk9wZXJhdGlvbi5WMcoCFFNlcnZpY2VcT3BlcmF0aW9uXFYx4gIgU2VydmljZVxPcGVyYXRpb25cVjFcR1BCTWV0YWRhdGHqAhZTZXJ2aWNlOjpPcGVyYXRpb246OlYxYgZwcm90bzM", [file_domain_common_error, file_domain_common_pagination, file_domain_operation_job_phase_job_phase]);
 
 /**
  * Deliverer is one staff-of-record on a template. A template can have MORE THAN
@@ -126,17 +128,87 @@ export type JobTemplateSummary = Message<"service.operation.v1.JobTemplateSummar
    * and all scan sql.NullString → "" into plain strings — and the "NULL → empty
    * string" read-model contract (§3.1).
    *
-   * Fields 14–17 are LOCKED for R7 P4 (phase-approval preaggregate) — do NOT reuse:
-   *   int32 published_count = 14;  int32 phase_count = 15;
-   *   PhaseApprovalStatus lowest_status = 16;  bool mixed_attention = 17;
-   * (plan 20260718-phase-approval-workflow §4.5, recorded identically in
-   *  20260719-report-cards-landing §3.5). R9 W-A1 owns ONLY field 13; R7 P4 adds
-   *  14–17 (and the job_phase import) atop this — a published tag can never be
-   *  safely reassigned.
-   *
    * @generated from field: string job_category_id = 13;
    */
   jobCategoryId: string;
+
+  /**
+   * --- Phase-approval preaggregate (R7 P4; fields 14–17 per the LOCKED tag
+   * allocation in plan 20260718-phase-approval-workflow §4.5, recorded
+   * identically in 20260719-report-cards-landing §3.5; fields 18–21 per the
+   * AMENDED dual-grain contract of the same two sections + Q-R9-1). Derived
+   * from the SAME resolver-scoped job set as the row (codex-tandem: STAFF and
+   * admin see the chip over the same job scope as the row's counts).
+   *
+   * A "phase" below is one SHEET (job_template_phase instance); a sheet is
+   * DATA-BEARING when >=1 active task_outcome exists under an active job_task
+   * of its active job_phase rows. No-data sheets are EXCLUDED from every
+   * count/denominator (the D3/Q-R9-1 contract). lowest_status is the
+   * conservative LOWEST approval ladder rank across the data-bearing sheets'
+   * job_phase rows; mixed_attention is true when any data-bearing sheet is
+   * internally mixed (its rows sit at differing statuses — the derived
+   * Attention overlay). With ZERO data-bearing sheets the counts are 0 and the
+   * status is PHASE_APPROVAL_STATUS_UNSPECIFIED (render the neutral
+   * not-started default; UNSPECIFIED is never persisted, plan §4.1).
+   *
+   * TEMPLATE-WIDE grain (14–17): over ALL scoped rows of the template — the
+   * /courses list row chip ("n/m published" + lowest state, D3).
+   *
+   * data-bearing sheets whose every row is PUBLISHED
+   *
+   * @generated from field: int32 published_count = 14;
+   */
+  publishedCount: number;
+
+  /**
+   * data-bearing sheets (the denominator)
+   *
+   * @generated from field: int32 phase_count = 15;
+   */
+  phaseCount: number;
+
+  /**
+   * conservative lowest across data-bearing sheets
+   *
+   * @generated from field: domain.operation.v1.PhaseApprovalStatus lowest_status = 16;
+   */
+  lowestStatus: PhaseApprovalStatus;
+
+  /**
+   * any data-bearing sheet internally mixed
+   *
+   * @generated from field: bool mixed_attention = 17;
+   */
+  mixedAttention: boolean;
+
+  /**
+   * GROUP+TEMPLATE grain (18–21): the SAME quadruple restricted to THIS row's
+   * (subscription_group, template) slice — the R9 Phase-B cell grain (Q-R9-1:
+   * subject state = group_lowest_status; the landing derives its four-status
+   * subject distribution per (group, category) cell by counting summary rows
+   * per group_lowest_status). Computed EXPLICITLY alongside 14–17 so the
+   * courses row keeps template-wide semantics while the landing cell reads
+   * per-group state — one consumer's semantics never silently changes for the
+   * other (codex-plan-review §7 wave 5).
+   *
+   * @generated from field: int32 group_published_count = 18;
+   */
+  groupPublishedCount: number;
+
+  /**
+   * @generated from field: int32 group_phase_count = 19;
+   */
+  groupPhaseCount: number;
+
+  /**
+   * @generated from field: domain.operation.v1.PhaseApprovalStatus group_lowest_status = 20;
+   */
+  groupLowestStatus: PhaseApprovalStatus;
+
+  /**
+   * @generated from field: bool group_mixed_attention = 21;
+   */
+  groupMixedAttention: boolean;
 };
 
 /**
