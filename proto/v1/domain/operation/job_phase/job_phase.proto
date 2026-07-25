@@ -226,6 +226,19 @@ message ListJobPhasesByJobResponse {
 message SubmitJobPhaseApprovalRequest {
   string job_template_id = 1;
   string job_template_phase_id = 2;
+
+  // Narrow the transition to ONE delivery group. ABSENT = every group under the
+  // template — the pre-20260725 behaviour, preserved exactly, so every existing
+  // caller is unaffected and the change is wire-compatible.
+  //
+  // Mirrors GetOutcomeMatrixRequest.subscription_group_id: that field decides
+  // which students a sheet DISPLAYS, this one decides which it UPDATES. Without
+  // it the two disagree — a page showing one group's 29 students transitions all
+  // 87 across the template's three groups.
+  //
+  // No schema change: approval_status lives on job_phase, one row per student
+  // job, so the storage grain was always finer than this RPC's.
+  optional string subscription_group_id = 3;
 }
 
 message SubmitJobPhaseApprovalResponse {
@@ -238,6 +251,19 @@ message SubmitJobPhaseApprovalResponse {
 message VerifyJobPhaseApprovalRequest {
   string job_template_id = 1;
   string job_template_phase_id = 2;
+
+  // Narrow the transition to ONE delivery group. ABSENT = every group under the
+  // template — the pre-20260725 behaviour, preserved exactly, so every existing
+  // caller is unaffected and the change is wire-compatible.
+  //
+  // Mirrors GetOutcomeMatrixRequest.subscription_group_id: that field decides
+  // which students a sheet DISPLAYS, this one decides which it UPDATES. Without
+  // it the two disagree — a page showing one group's 29 students transitions all
+  // 87 across the template's three groups.
+  //
+  // No schema change: approval_status lives on job_phase, one row per student
+  // job, so the storage grain was always finer than this RPC's.
+  optional string subscription_group_id = 3;
 }
 
 message VerifyJobPhaseApprovalResponse {
@@ -250,6 +276,19 @@ message VerifyJobPhaseApprovalResponse {
 message PublishJobPhaseApprovalRequest {
   string job_template_id = 1;
   string job_template_phase_id = 2;
+
+  // Narrow the transition to ONE delivery group. ABSENT = every group under the
+  // template — the pre-20260725 behaviour, preserved exactly, so every existing
+  // caller is unaffected and the change is wire-compatible.
+  //
+  // Mirrors GetOutcomeMatrixRequest.subscription_group_id: that field decides
+  // which students a sheet DISPLAYS, this one decides which it UPDATES. Without
+  // it the two disagree — a page showing one group's 29 students transitions all
+  // 87 across the template's three groups.
+  //
+  // No schema change: approval_status lives on job_phase, one row per student
+  // job, so the storage grain was always finer than this RPC's.
+  optional string subscription_group_id = 3;
 }
 
 message PublishJobPhaseApprovalResponse {
@@ -263,6 +302,19 @@ message ReturnJobPhaseApprovalRequest {
   string job_template_id = 1;
   string job_template_phase_id = 2;
   optional string reason = 3;
+
+  // Narrow the transition to ONE delivery group. ABSENT = every group under the
+  // template — the pre-20260725 behaviour, preserved exactly, so every existing
+  // caller is unaffected and the change is wire-compatible.
+  //
+  // Mirrors GetOutcomeMatrixRequest.subscription_group_id: that field decides
+  // which students a sheet DISPLAYS, this one decides which it UPDATES. Without
+  // it the two disagree — a page showing one group's 29 students transitions all
+  // 87 across the template's three groups.
+  //
+  // No schema change: approval_status lives on job_phase, one row per student
+  // job, so the storage grain was always finer than this RPC's.
+  optional string subscription_group_id = 4;
 }
 
 message ReturnJobPhaseApprovalResponse {

@@ -82,7 +82,11 @@ enum OutcomeMatrixScope {
 message GetOutcomeMatrixRequest {
   string job_template_id = 1;          // REQUIRED — the page is one template (subject)
   OutcomeMatrixScope scope = 2;
-  optional string section_id = 3;      // subscription_group_id — narrow rows to a section's members
+  // Narrow rows to one delivery group's members. Field 3 unchanged (wire
+  // compatible); RENAMED from section_id 2026-07-25 — "section" is education
+  // vocabulary and belongs in lyngua, not in a generic contract. The display
+  // slug stays /section/{group_id} via the education route overrides.
+  optional string subscription_group_id = 3;
   optional string product_id = 4;      // output_product_id — narrow rows to a product's jobs
 }
 

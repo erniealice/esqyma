@@ -78,10 +78,14 @@ type GetOutcomeMatrixRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	JobTemplateId string                 `protobuf:"bytes,1,opt,name=job_template_id,json=jobTemplateId,proto3" json:"job_template_id,omitempty"` // REQUIRED — the page is one template (subject)
 	Scope         OutcomeMatrixScope     `protobuf:"varint,2,opt,name=scope,proto3,enum=service.operation.v1.OutcomeMatrixScope" json:"scope,omitempty"`
-	SectionId     *string                `protobuf:"bytes,3,opt,name=section_id,json=sectionId,proto3,oneof" json:"section_id,omitempty"` // subscription_group_id — narrow rows to a section's members
-	ProductId     *string                `protobuf:"bytes,4,opt,name=product_id,json=productId,proto3,oneof" json:"product_id,omitempty"` // output_product_id — narrow rows to a product's jobs
-	unknownFields protoimpl.UnknownFields
-	sizeCache     protoimpl.SizeCache
+	// Narrow rows to one delivery group's members. Field 3 unchanged (wire
+	// compatible); RENAMED from section_id 2026-07-25 — "section" is education
+	// vocabulary and belongs in lyngua, not in a generic contract. The display
+	// slug stays /section/{group_id} via the education route overrides.
+	SubscriptionGroupId *string `protobuf:"bytes,3,opt,name=subscription_group_id,json=subscriptionGroupId,proto3,oneof" json:"subscription_group_id,omitempty"`
+	ProductId           *string `protobuf:"bytes,4,opt,name=product_id,json=productId,proto3,oneof" json:"product_id,omitempty"` // output_product_id — narrow rows to a product's jobs
+	unknownFields       protoimpl.UnknownFields
+	sizeCache           protoimpl.SizeCache
 }
 
 func (x *GetOutcomeMatrixRequest) Reset() {
@@ -128,9 +132,9 @@ func (x *GetOutcomeMatrixRequest) GetScope() OutcomeMatrixScope {
 	return OutcomeMatrixScope_OUTCOME_MATRIX_SCOPE_UNSPECIFIED
 }
 
-func (x *GetOutcomeMatrixRequest) GetSectionId() string {
-	if x != nil && x.SectionId != nil {
-		return *x.SectionId
+func (x *GetOutcomeMatrixRequest) GetSubscriptionGroupId() string {
+	if x != nil && x.SubscriptionGroupId != nil {
+		return *x.SubscriptionGroupId
 	}
 	return ""
 }
@@ -1050,15 +1054,14 @@ var File_service_operation_outcome_matrix_outcome_matrix_proto protoreflect.File
 
 const file_service_operation_outcome_matrix_outcome_matrix_proto_rawDesc = "" +
 	"\n" +
-	"5service/operation/outcome_matrix/outcome_matrix.proto\x12\x14service.operation.v1\x1a\x19domain/common/error.proto\x1a8domain/operation/outcome_criteria/outcome_criteria.proto\x1a*domain/operation/job_phase/job_phase.proto\"\xe7\x01\n" +
+	"5service/operation/outcome_matrix/outcome_matrix.proto\x12\x14service.operation.v1\x1a\x19domain/common/error.proto\x1a8domain/operation/outcome_criteria/outcome_criteria.proto\x1a*domain/operation/job_phase/job_phase.proto\"\x87\x02\n" +
 	"\x17GetOutcomeMatrixRequest\x12&\n" +
 	"\x0fjob_template_id\x18\x01 \x01(\tR\rjobTemplateId\x12>\n" +
-	"\x05scope\x18\x02 \x01(\x0e2(.service.operation.v1.OutcomeMatrixScopeR\x05scope\x12\"\n" +
+	"\x05scope\x18\x02 \x01(\x0e2(.service.operation.v1.OutcomeMatrixScopeR\x05scope\x127\n" +
+	"\x15subscription_group_id\x18\x03 \x01(\tH\x00R\x13subscriptionGroupId\x88\x01\x01\x12\"\n" +
 	"\n" +
-	"section_id\x18\x03 \x01(\tH\x00R\tsectionId\x88\x01\x01\x12\"\n" +
-	"\n" +
-	"product_id\x18\x04 \x01(\tH\x01R\tproductId\x88\x01\x01B\r\n" +
-	"\v_section_idB\r\n" +
+	"product_id\x18\x04 \x01(\tH\x01R\tproductId\x88\x01\x01B\x18\n" +
+	"\x16_subscription_group_idB\r\n" +
 	"\v_product_id\"\xb5\x01\n" +
 	"\x0fCriterionColumn\x12\x1d\n" +
 	"\n" +

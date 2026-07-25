@@ -1397,8 +1397,20 @@ type SubmitJobPhaseApprovalRequest struct {
 	state              protoimpl.MessageState `protogen:"open.v1"`
 	JobTemplateId      string                 `protobuf:"bytes,1,opt,name=job_template_id,json=jobTemplateId,proto3" json:"job_template_id,omitempty"`
 	JobTemplatePhaseId string                 `protobuf:"bytes,2,opt,name=job_template_phase_id,json=jobTemplatePhaseId,proto3" json:"job_template_phase_id,omitempty"`
-	unknownFields      protoimpl.UnknownFields
-	sizeCache          protoimpl.SizeCache
+	// Narrow the transition to ONE delivery group. ABSENT = every group under the
+	// template — the pre-20260725 behaviour, preserved exactly, so every existing
+	// caller is unaffected and the change is wire-compatible.
+	//
+	// Mirrors GetOutcomeMatrixRequest.subscription_group_id: that field decides
+	// which students a sheet DISPLAYS, this one decides which it UPDATES. Without
+	// it the two disagree — a page showing one group's 29 students transitions all
+	// 87 across the template's three groups.
+	//
+	// No schema change: approval_status lives on job_phase, one row per student
+	// job, so the storage grain was always finer than this RPC's.
+	SubscriptionGroupId *string `protobuf:"bytes,3,opt,name=subscription_group_id,json=subscriptionGroupId,proto3,oneof" json:"subscription_group_id,omitempty"`
+	unknownFields       protoimpl.UnknownFields
+	sizeCache           protoimpl.SizeCache
 }
 
 func (x *SubmitJobPhaseApprovalRequest) Reset() {
@@ -1441,6 +1453,13 @@ func (x *SubmitJobPhaseApprovalRequest) GetJobTemplateId() string {
 func (x *SubmitJobPhaseApprovalRequest) GetJobTemplatePhaseId() string {
 	if x != nil {
 		return x.JobTemplatePhaseId
+	}
+	return ""
+}
+
+func (x *SubmitJobPhaseApprovalRequest) GetSubscriptionGroupId() string {
+	if x != nil && x.SubscriptionGroupId != nil {
+		return *x.SubscriptionGroupId
 	}
 	return ""
 }
@@ -1517,8 +1536,20 @@ type VerifyJobPhaseApprovalRequest struct {
 	state              protoimpl.MessageState `protogen:"open.v1"`
 	JobTemplateId      string                 `protobuf:"bytes,1,opt,name=job_template_id,json=jobTemplateId,proto3" json:"job_template_id,omitempty"`
 	JobTemplatePhaseId string                 `protobuf:"bytes,2,opt,name=job_template_phase_id,json=jobTemplatePhaseId,proto3" json:"job_template_phase_id,omitempty"`
-	unknownFields      protoimpl.UnknownFields
-	sizeCache          protoimpl.SizeCache
+	// Narrow the transition to ONE delivery group. ABSENT = every group under the
+	// template — the pre-20260725 behaviour, preserved exactly, so every existing
+	// caller is unaffected and the change is wire-compatible.
+	//
+	// Mirrors GetOutcomeMatrixRequest.subscription_group_id: that field decides
+	// which students a sheet DISPLAYS, this one decides which it UPDATES. Without
+	// it the two disagree — a page showing one group's 29 students transitions all
+	// 87 across the template's three groups.
+	//
+	// No schema change: approval_status lives on job_phase, one row per student
+	// job, so the storage grain was always finer than this RPC's.
+	SubscriptionGroupId *string `protobuf:"bytes,3,opt,name=subscription_group_id,json=subscriptionGroupId,proto3,oneof" json:"subscription_group_id,omitempty"`
+	unknownFields       protoimpl.UnknownFields
+	sizeCache           protoimpl.SizeCache
 }
 
 func (x *VerifyJobPhaseApprovalRequest) Reset() {
@@ -1561,6 +1592,13 @@ func (x *VerifyJobPhaseApprovalRequest) GetJobTemplateId() string {
 func (x *VerifyJobPhaseApprovalRequest) GetJobTemplatePhaseId() string {
 	if x != nil {
 		return x.JobTemplatePhaseId
+	}
+	return ""
+}
+
+func (x *VerifyJobPhaseApprovalRequest) GetSubscriptionGroupId() string {
+	if x != nil && x.SubscriptionGroupId != nil {
+		return *x.SubscriptionGroupId
 	}
 	return ""
 }
@@ -1637,8 +1675,20 @@ type PublishJobPhaseApprovalRequest struct {
 	state              protoimpl.MessageState `protogen:"open.v1"`
 	JobTemplateId      string                 `protobuf:"bytes,1,opt,name=job_template_id,json=jobTemplateId,proto3" json:"job_template_id,omitempty"`
 	JobTemplatePhaseId string                 `protobuf:"bytes,2,opt,name=job_template_phase_id,json=jobTemplatePhaseId,proto3" json:"job_template_phase_id,omitempty"`
-	unknownFields      protoimpl.UnknownFields
-	sizeCache          protoimpl.SizeCache
+	// Narrow the transition to ONE delivery group. ABSENT = every group under the
+	// template — the pre-20260725 behaviour, preserved exactly, so every existing
+	// caller is unaffected and the change is wire-compatible.
+	//
+	// Mirrors GetOutcomeMatrixRequest.subscription_group_id: that field decides
+	// which students a sheet DISPLAYS, this one decides which it UPDATES. Without
+	// it the two disagree — a page showing one group's 29 students transitions all
+	// 87 across the template's three groups.
+	//
+	// No schema change: approval_status lives on job_phase, one row per student
+	// job, so the storage grain was always finer than this RPC's.
+	SubscriptionGroupId *string `protobuf:"bytes,3,opt,name=subscription_group_id,json=subscriptionGroupId,proto3,oneof" json:"subscription_group_id,omitempty"`
+	unknownFields       protoimpl.UnknownFields
+	sizeCache           protoimpl.SizeCache
 }
 
 func (x *PublishJobPhaseApprovalRequest) Reset() {
@@ -1681,6 +1731,13 @@ func (x *PublishJobPhaseApprovalRequest) GetJobTemplateId() string {
 func (x *PublishJobPhaseApprovalRequest) GetJobTemplatePhaseId() string {
 	if x != nil {
 		return x.JobTemplatePhaseId
+	}
+	return ""
+}
+
+func (x *PublishJobPhaseApprovalRequest) GetSubscriptionGroupId() string {
+	if x != nil && x.SubscriptionGroupId != nil {
+		return *x.SubscriptionGroupId
 	}
 	return ""
 }
@@ -1758,8 +1815,20 @@ type ReturnJobPhaseApprovalRequest struct {
 	JobTemplateId      string                 `protobuf:"bytes,1,opt,name=job_template_id,json=jobTemplateId,proto3" json:"job_template_id,omitempty"`
 	JobTemplatePhaseId string                 `protobuf:"bytes,2,opt,name=job_template_phase_id,json=jobTemplatePhaseId,proto3" json:"job_template_phase_id,omitempty"`
 	Reason             *string                `protobuf:"bytes,3,opt,name=reason,proto3,oneof" json:"reason,omitempty"`
-	unknownFields      protoimpl.UnknownFields
-	sizeCache          protoimpl.SizeCache
+	// Narrow the transition to ONE delivery group. ABSENT = every group under the
+	// template — the pre-20260725 behaviour, preserved exactly, so every existing
+	// caller is unaffected and the change is wire-compatible.
+	//
+	// Mirrors GetOutcomeMatrixRequest.subscription_group_id: that field decides
+	// which students a sheet DISPLAYS, this one decides which it UPDATES. Without
+	// it the two disagree — a page showing one group's 29 students transitions all
+	// 87 across the template's three groups.
+	//
+	// No schema change: approval_status lives on job_phase, one row per student
+	// job, so the storage grain was always finer than this RPC's.
+	SubscriptionGroupId *string `protobuf:"bytes,4,opt,name=subscription_group_id,json=subscriptionGroupId,proto3,oneof" json:"subscription_group_id,omitempty"`
+	unknownFields       protoimpl.UnknownFields
+	sizeCache           protoimpl.SizeCache
 }
 
 func (x *ReturnJobPhaseApprovalRequest) Reset() {
@@ -1809,6 +1878,13 @@ func (x *ReturnJobPhaseApprovalRequest) GetJobTemplatePhaseId() string {
 func (x *ReturnJobPhaseApprovalRequest) GetReason() string {
 	if x != nil && x.Reason != nil {
 		return *x.Reason
+	}
+	return ""
+}
+
+func (x *ReturnJobPhaseApprovalRequest) GetSubscriptionGroupId() string {
+	if x != nil && x.SubscriptionGroupId != nil {
+		return *x.SubscriptionGroupId
 	}
 	return ""
 }
@@ -2057,39 +2133,47 @@ const file_domain_operation_job_phase_job_phase_proto_rawDesc = "" +
 	"job_phases\x18\x01 \x03(\v2\x1d.domain.operation.v1.JobPhaseR\tjobPhases\x12\x18\n" +
 	"\asuccess\x18\x02 \x01(\bR\asuccess\x122\n" +
 	"\x05error\x18\x03 \x01(\v2\x17.domain.common.v1.ErrorH\x00R\x05error\x88\x01\x01B\b\n" +
-	"\x06_error\"z\n" +
+	"\x06_error\"\xcd\x01\n" +
 	"\x1dSubmitJobPhaseApprovalRequest\x12&\n" +
 	"\x0fjob_template_id\x18\x01 \x01(\tR\rjobTemplateId\x121\n" +
-	"\x15job_template_phase_id\x18\x02 \x01(\tR\x12jobTemplatePhaseId\"\xe1\x01\n" +
+	"\x15job_template_phase_id\x18\x02 \x01(\tR\x12jobTemplatePhaseId\x127\n" +
+	"\x15subscription_group_id\x18\x03 \x01(\tH\x00R\x13subscriptionGroupId\x88\x01\x01B\x18\n" +
+	"\x16_subscription_group_id\"\xe1\x01\n" +
 	"\x1eSubmitJobPhaseApprovalResponse\x12@\n" +
 	"\x06status\x18\x01 \x01(\x0e2(.domain.operation.v1.PhaseApprovalStatusR\x06status\x12%\n" +
 	"\x0eaffected_count\x18\x02 \x01(\x05R\raffectedCount\x12\x18\n" +
 	"\asuccess\x18\x03 \x01(\bR\asuccess\x122\n" +
 	"\x05error\x18\x04 \x01(\v2\x17.domain.common.v1.ErrorH\x00R\x05error\x88\x01\x01B\b\n" +
-	"\x06_error\"z\n" +
+	"\x06_error\"\xcd\x01\n" +
 	"\x1dVerifyJobPhaseApprovalRequest\x12&\n" +
 	"\x0fjob_template_id\x18\x01 \x01(\tR\rjobTemplateId\x121\n" +
-	"\x15job_template_phase_id\x18\x02 \x01(\tR\x12jobTemplatePhaseId\"\xe1\x01\n" +
+	"\x15job_template_phase_id\x18\x02 \x01(\tR\x12jobTemplatePhaseId\x127\n" +
+	"\x15subscription_group_id\x18\x03 \x01(\tH\x00R\x13subscriptionGroupId\x88\x01\x01B\x18\n" +
+	"\x16_subscription_group_id\"\xe1\x01\n" +
 	"\x1eVerifyJobPhaseApprovalResponse\x12@\n" +
 	"\x06status\x18\x01 \x01(\x0e2(.domain.operation.v1.PhaseApprovalStatusR\x06status\x12%\n" +
 	"\x0eaffected_count\x18\x02 \x01(\x05R\raffectedCount\x12\x18\n" +
 	"\asuccess\x18\x03 \x01(\bR\asuccess\x122\n" +
 	"\x05error\x18\x04 \x01(\v2\x17.domain.common.v1.ErrorH\x00R\x05error\x88\x01\x01B\b\n" +
-	"\x06_error\"{\n" +
+	"\x06_error\"\xce\x01\n" +
 	"\x1ePublishJobPhaseApprovalRequest\x12&\n" +
 	"\x0fjob_template_id\x18\x01 \x01(\tR\rjobTemplateId\x121\n" +
-	"\x15job_template_phase_id\x18\x02 \x01(\tR\x12jobTemplatePhaseId\"\xe2\x01\n" +
+	"\x15job_template_phase_id\x18\x02 \x01(\tR\x12jobTemplatePhaseId\x127\n" +
+	"\x15subscription_group_id\x18\x03 \x01(\tH\x00R\x13subscriptionGroupId\x88\x01\x01B\x18\n" +
+	"\x16_subscription_group_id\"\xe2\x01\n" +
 	"\x1fPublishJobPhaseApprovalResponse\x12@\n" +
 	"\x06status\x18\x01 \x01(\x0e2(.domain.operation.v1.PhaseApprovalStatusR\x06status\x12%\n" +
 	"\x0eaffected_count\x18\x02 \x01(\x05R\raffectedCount\x12\x18\n" +
 	"\asuccess\x18\x03 \x01(\bR\asuccess\x122\n" +
 	"\x05error\x18\x04 \x01(\v2\x17.domain.common.v1.ErrorH\x00R\x05error\x88\x01\x01B\b\n" +
-	"\x06_error\"\xa2\x01\n" +
+	"\x06_error\"\xf5\x01\n" +
 	"\x1dReturnJobPhaseApprovalRequest\x12&\n" +
 	"\x0fjob_template_id\x18\x01 \x01(\tR\rjobTemplateId\x121\n" +
 	"\x15job_template_phase_id\x18\x02 \x01(\tR\x12jobTemplatePhaseId\x12\x1b\n" +
-	"\x06reason\x18\x03 \x01(\tH\x00R\x06reason\x88\x01\x01B\t\n" +
-	"\a_reason\"\xe1\x01\n" +
+	"\x06reason\x18\x03 \x01(\tH\x00R\x06reason\x88\x01\x01\x127\n" +
+	"\x15subscription_group_id\x18\x04 \x01(\tH\x01R\x13subscriptionGroupId\x88\x01\x01B\t\n" +
+	"\a_reasonB\x18\n" +
+	"\x16_subscription_group_id\"\xe1\x01\n" +
 	"\x1eReturnJobPhaseApprovalResponse\x12@\n" +
 	"\x06status\x18\x01 \x01(\x0e2(.domain.operation.v1.PhaseApprovalStatusR\x06status\x12%\n" +
 	"\x0eaffected_count\x18\x02 \x01(\x05R\raffectedCount\x12\x18\n" +
@@ -2261,8 +2345,11 @@ func file_domain_operation_job_phase_job_phase_proto_init() {
 	file_domain_operation_job_phase_job_phase_proto_msgTypes[12].OneofWrappers = []any{}
 	file_domain_operation_job_phase_job_phase_proto_msgTypes[14].OneofWrappers = []any{}
 	file_domain_operation_job_phase_job_phase_proto_msgTypes[16].OneofWrappers = []any{}
+	file_domain_operation_job_phase_job_phase_proto_msgTypes[17].OneofWrappers = []any{}
 	file_domain_operation_job_phase_job_phase_proto_msgTypes[18].OneofWrappers = []any{}
+	file_domain_operation_job_phase_job_phase_proto_msgTypes[19].OneofWrappers = []any{}
 	file_domain_operation_job_phase_job_phase_proto_msgTypes[20].OneofWrappers = []any{}
+	file_domain_operation_job_phase_job_phase_proto_msgTypes[21].OneofWrappers = []any{}
 	file_domain_operation_job_phase_job_phase_proto_msgTypes[22].OneofWrappers = []any{}
 	file_domain_operation_job_phase_job_phase_proto_msgTypes[23].OneofWrappers = []any{}
 	file_domain_operation_job_phase_job_phase_proto_msgTypes[24].OneofWrappers = []any{}
