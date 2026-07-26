@@ -110,6 +110,12 @@ type SubscriptionGroup struct {
 	// Nested related read-model object — populated by the list adapter via a
 	// STATUS-AGNOSTIC join (a section may reference an archived AY). Not a column.
 	PriceSchedule *price_schedule.PriceSchedule `protobuf:"bytes,15,opt,name=price_schedule,json=priceSchedule,proto3,oneof" json:"price_schedule,omitempty"`
+	// status is the lifecycle CATEGORY of the cohort — free-text per the legacy
+	// status convention: "current" | "completed" | "draft". Orthogonal to `active`
+	// (the visibility gate): pickers offer only status="current" rows as selectable,
+	// non-current rows render as disabled options, and display contexts show the
+	// name regardless of status. Defaulted to "current" in the create use case.
+	Status        *string `protobuf:"bytes,16,opt,name=status,proto3,oneof" json:"status,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -240,6 +246,13 @@ func (x *SubscriptionGroup) GetPriceSchedule() *price_schedule.PriceSchedule {
 		return x.PriceSchedule
 	}
 	return nil
+}
+
+func (x *SubscriptionGroup) GetStatus() string {
+	if x != nil && x.Status != nil {
+		return *x.Status
+	}
+	return ""
 }
 
 type CreateSubscriptionGroupRequest struct {
@@ -1045,7 +1058,7 @@ var File_domain_subscription_subscription_group_subscription_group_proto protore
 
 const file_domain_subscription_subscription_group_subscription_group_proto_rawDesc = "" +
 	"\n" +
-	"?domain/subscription/subscription_group/subscription_group.proto\x12\x16domain.subscription.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1adomain/common/search.proto\x1a7domain/subscription/price_schedule/price_schedule.proto\x1a\x10options/db.proto\"\xf5\x06\n" +
+	"?domain/subscription/subscription_group/subscription_group.proto\x12\x16domain.subscription.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1adomain/common/search.proto\x1a7domain/subscription/price_schedule/price_schedule.proto\x1a\x10options/db.proto\"\x9d\a\n" +
 	"\x11SubscriptionGroup\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12&\n" +
 	"\fdate_created\x18\x02 \x01(\x03H\x00R\vdateCreated\x88\x01\x01\x12;\n" +
@@ -1064,7 +1077,8 @@ const file_domain_subscription_subscription_group_subscription_group_proto_rawDe
 	"\x04plan\x18\x01H\x06R\x06planId\x88\x01\x01\x12I\n" +
 	"\rcapacity_mode\x18\r \x01(\x0e2$.domain.subscription.v1.CapacityModeR\fcapacityMode\x12&\n" +
 	"\fmax_capacity\x18\x0e \x01(\x05H\aR\vmaxCapacity\x88\x01\x01\x12Q\n" +
-	"\x0eprice_schedule\x18\x0f \x01(\v2%.domain.subscription.v1.PriceScheduleH\bR\rpriceSchedule\x88\x01\x01:\x06\x8a\xb5\x18\x02\b\x01B\x0f\n" +
+	"\x0eprice_schedule\x18\x0f \x01(\v2%.domain.subscription.v1.PriceScheduleH\bR\rpriceSchedule\x88\x01\x01\x12\x1b\n" +
+	"\x06status\x18\x10 \x01(\tH\tR\x06status\x88\x01\x01:\x06\x8a\xb5\x18\x02\b\x01B\x0f\n" +
 	"\r_date_createdB\x16\n" +
 	"\x14_date_created_stringB\x10\n" +
 	"\x0e_date_modifiedB\x17\n" +
@@ -1074,7 +1088,8 @@ const file_domain_subscription_subscription_group_subscription_group_proto_rawDe
 	"\n" +
 	"\b_plan_idB\x0f\n" +
 	"\r_max_capacityB\x11\n" +
-	"\x0f_price_scheduleJ\x04\b\n" +
+	"\x0f_price_scheduleB\t\n" +
+	"\a_statusJ\x04\b\n" +
 	"\x10\vR\aline_id\"_\n" +
 	"\x1eCreateSubscriptionGroupRequest\x12=\n" +
 	"\x04data\x18\x01 \x01(\v2).domain.subscription.v1.SubscriptionGroupR\x04data\"\xb8\x01\n" +

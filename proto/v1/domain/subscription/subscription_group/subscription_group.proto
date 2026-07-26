@@ -67,6 +67,13 @@ message SubscriptionGroup {
   // Nested related read-model object — populated by the list adapter via a
   // STATUS-AGNOSTIC join (a section may reference an archived AY). Not a column.
   optional PriceSchedule price_schedule = 15;
+
+  // status is the lifecycle CATEGORY of the cohort — free-text per the legacy
+  // status convention: "current" | "completed" | "draft". Orthogonal to `active`
+  // (the visibility gate): pickers offer only status="current" rows as selectable,
+  // non-current rows render as disabled options, and display contexts show the
+  // name regardless of status. Defaulted to "current" in the create use case.
+  optional string status = 16;
 }
 
 service SubscriptionGroupDomainService {
