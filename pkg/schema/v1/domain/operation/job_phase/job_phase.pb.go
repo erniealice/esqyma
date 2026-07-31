@@ -914,13 +914,30 @@ func (x *DeleteJobPhaseResponse) GetError() *common.Error {
 }
 
 type ListJobPhasesRequest struct {
-	state         protoimpl.MessageState    `protogen:"open.v1"`
-	Search        *common.SearchRequest     `protobuf:"bytes,1,opt,name=search,proto3,oneof" json:"search,omitempty"`
-	Filters       *common.FilterRequest     `protobuf:"bytes,2,opt,name=filters,proto3,oneof" json:"filters,omitempty"`
-	Sort          *common.SortRequest       `protobuf:"bytes,3,opt,name=sort,proto3,oneof" json:"sort,omitempty"`
-	Pagination    *common.PaginationRequest `protobuf:"bytes,4,opt,name=pagination,proto3,oneof" json:"pagination,omitempty"`
-	unknownFields protoimpl.UnknownFields
-	sizeCache     protoimpl.SizeCache
+	state      protoimpl.MessageState    `protogen:"open.v1"`
+	Search     *common.SearchRequest     `protobuf:"bytes,1,opt,name=search,proto3,oneof" json:"search,omitempty"`
+	Filters    *common.FilterRequest     `protobuf:"bytes,2,opt,name=filters,proto3,oneof" json:"filters,omitempty"`
+	Sort       *common.SortRequest       `protobuf:"bytes,3,opt,name=sort,proto3,oneof" json:"sort,omitempty"`
+	Pagination *common.PaginationRequest `protobuf:"bytes,4,opt,name=pagination,proto3,oneof" json:"pagination,omitempty"`
+	// Narrow the listing to ONE delivery group. Strictly additive.
+	//
+	// ABSENT or EMPTY = no narrow = today's behaviour EXACTLY: the adapter emits
+	// the byte-identical query it emits now, so every existing caller is
+	// unaffected and the change is wire-compatible.
+	//
+	// WHEN SET the adapter narrows through subscription_group_member — `job` has
+	// NO subscription_group_id column, so the only path from a phase to a group is
+	// the existing predicate on (sgm.client_id = j.client_id,
+	// sgm.subscription_id = j.origin_id, sgm.subscription_group_id, sgm.workspace_id,
+	// sgm.active). Reuse that predicate verbatim; do not re-author the join.
+	//
+	// Mirrors Submit/Verify/Publish/ReturnJobPhaseApprovalRequest.subscription_group_id
+	// (which decide which phases a sheet TRANSITIONS) — this one decides which a
+	// sheet READS, so a reader can be evaluated at the same grain the transitions
+	// already operate at.
+	SubscriptionGroupId *string `protobuf:"bytes,5,opt,name=subscription_group_id,json=subscriptionGroupId,proto3,oneof" json:"subscription_group_id,omitempty"`
+	unknownFields       protoimpl.UnknownFields
+	sizeCache           protoimpl.SizeCache
 }
 
 func (x *ListJobPhasesRequest) Reset() {
@@ -979,6 +996,13 @@ func (x *ListJobPhasesRequest) GetPagination() *common.PaginationRequest {
 		return x.Pagination
 	}
 	return nil
+}
+
+func (x *ListJobPhasesRequest) GetSubscriptionGroupId() string {
+	if x != nil && x.SubscriptionGroupId != nil {
+		return *x.SubscriptionGroupId
+	}
+	return ""
 }
 
 type ListJobPhasesResponse struct {
@@ -2076,19 +2100,21 @@ const file_domain_operation_job_phase_job_phase_proto_rawDesc = "" +
 	"\x16DeleteJobPhaseResponse\x12\x18\n" +
 	"\asuccess\x18\x01 \x01(\bR\asuccess\x122\n" +
 	"\x05error\x18\x02 \x01(\v2\x17.domain.common.v1.ErrorH\x00R\x05error\x88\x01\x01B\b\n" +
-	"\x06_error\"\xc5\x02\n" +
+	"\x06_error\"\x98\x03\n" +
 	"\x14ListJobPhasesRequest\x12<\n" +
 	"\x06search\x18\x01 \x01(\v2\x1f.domain.common.v1.SearchRequestH\x00R\x06search\x88\x01\x01\x12>\n" +
 	"\afilters\x18\x02 \x01(\v2\x1f.domain.common.v1.FilterRequestH\x01R\afilters\x88\x01\x01\x126\n" +
 	"\x04sort\x18\x03 \x01(\v2\x1d.domain.common.v1.SortRequestH\x02R\x04sort\x88\x01\x01\x12H\n" +
 	"\n" +
 	"pagination\x18\x04 \x01(\v2#.domain.common.v1.PaginationRequestH\x03R\n" +
-	"pagination\x88\x01\x01B\t\n" +
+	"pagination\x88\x01\x01\x127\n" +
+	"\x15subscription_group_id\x18\x05 \x01(\tH\x04R\x13subscriptionGroupId\x88\x01\x01B\t\n" +
 	"\a_searchB\n" +
 	"\n" +
 	"\b_filtersB\a\n" +
 	"\x05_sortB\r\n" +
-	"\v_pagination\"\xa2\x01\n" +
+	"\v_paginationB\x18\n" +
+	"\x16_subscription_group_id\"\xa2\x01\n" +
 	"\x15ListJobPhasesResponse\x121\n" +
 	"\x04data\x18\x01 \x03(\v2\x1d.domain.operation.v1.JobPhaseR\x04data\x12\x18\n" +
 	"\asuccess\x18\x02 \x01(\bR\asuccess\x122\n" +

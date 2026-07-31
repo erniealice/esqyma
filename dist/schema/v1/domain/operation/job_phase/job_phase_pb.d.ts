@@ -349,6 +349,27 @@ export type ListJobPhasesRequest = Message<"domain.operation.v1.ListJobPhasesReq
      * @generated from field: optional domain.common.v1.PaginationRequest pagination = 4;
      */
     pagination?: PaginationRequest;
+    /**
+     * Narrow the listing to ONE delivery group. Strictly additive.
+     *
+     * ABSENT or EMPTY = no narrow = today's behaviour EXACTLY: the adapter emits
+     * the byte-identical query it emits now, so every existing caller is
+     * unaffected and the change is wire-compatible.
+     *
+     * WHEN SET the adapter narrows through subscription_group_member — `job` has
+     * NO subscription_group_id column, so the only path from a phase to a group is
+     * the existing predicate on (sgm.client_id = j.client_id,
+     * sgm.subscription_id = j.origin_id, sgm.subscription_group_id, sgm.workspace_id,
+     * sgm.active). Reuse that predicate verbatim; do not re-author the join.
+     *
+     * Mirrors Submit/Verify/Publish/ReturnJobPhaseApprovalRequest.subscription_group_id
+     * (which decide which phases a sheet TRANSITIONS) — this one decides which a
+     * sheet READS, so a reader can be evaluated at the same grain the transitions
+     * already operate at.
+     *
+     * @generated from field: optional string subscription_group_id = 5;
+     */
+    subscriptionGroupId?: string;
 };
 /**
  * Describes the message domain.operation.v1.ListJobPhasesRequest.
