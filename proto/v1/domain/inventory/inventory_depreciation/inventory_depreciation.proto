@@ -30,6 +30,11 @@ message InventoryDepreciation {
   optional int64 date_modified = 13;
   optional string date_modified_string = 14 [(options.v1.db).ignore = true];
   InventoryItem inventory_item = 15;
+
+  // Tenant anchor — same rationale as InventoryItem.workspace_id
+  // (docs/plan/20260729-inventory-item-tenant-scope, Option B, Q-FAMILY = all five).
+  // Nullable in v1; backfilled from the inventory_item parent; NULL is fail-closed.
+  optional string workspace_id = 16 [(options.v1.db).references = "workspace", (options.v1.db).index = true];
 }
 
 service InventoryDepreciationDomainService {

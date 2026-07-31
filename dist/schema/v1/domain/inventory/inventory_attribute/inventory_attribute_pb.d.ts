@@ -59,6 +59,14 @@ export type InventoryAttribute = Message<"domain.inventory.v1.InventoryAttribute
      * @generated from field: bool active = 11;
      */
     active: boolean;
+    /**
+     * Tenant anchor — same rationale as InventoryItem.workspace_id
+     * (docs/plan/20260729-inventory-item-tenant-scope, Option B, Q-FAMILY = all five).
+     * Nullable in v1; backfilled from the inventory_item parent; NULL is fail-closed.
+     *
+     * @generated from field: optional string workspace_id = 12;
+     */
+    workspaceId?: string;
 };
 /**
  * Describes the message domain.inventory.v1.InventoryAttribute.

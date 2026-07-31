@@ -224,15 +224,24 @@ message GetOutcomeSummaryRosterRequest {
   OutcomeMatrixScope scope = 2;
 }
 
-// OutcomeSummaryPhaseEntry is one student's stored composite for one phase.
-// scaled_label is job_phase's latest active phase_outcome_summary.scaled_label,
-// read verbatim ("" when no summary exists yet).
+// OutcomeSummaryPhaseEntry is one roster member's stored composite pair for one
+// phase. Both values come from the SAME latest active phase_outcome_summary row
+// and are read verbatim:
+//   * summary_score  — the raw composite the scoring scheme combined (pre-transmutation)
+//   * scaled_label   — the transmuted output of that composite (post-transmutation)
+// One row, one upsert, so the pair can never be mutually inconsistent.
 message OutcomeSummaryPhaseEntry {
   string job_template_phase_id = 1;
   string code = 2;                     // job_template_phase.code (e.g. "s1"/"s2"); "" when unset
   string label = 3;                    // phase name (e.g. "Semester 1")
   int32 sequence_order = 4;            // job_template_phase.phase_order
-  string scaled_label = 5;             // stored phase composite; "" when none
+  string scaled_label = 5;             // stored transmuted composite; "" when none
+
+  // Stored phase_outcome_summary.summary_score, verbatim; UNSET when the row has
+  // none. Presence-tracked on purpose (docs/plan/20260729-criteria-total-rating-rules,
+  // Option A / D4): a stored 0 is a real composite and must stay distinguishable
+  // from "not computed" — the adapter scans sql.NullFloat64 and must never COALESCE.
+  optional double summary_score = 6;
 }
 
 // OutcomeSummaryRosterRow is one student's per-period composites plus the stored

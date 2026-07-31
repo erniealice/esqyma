@@ -82,6 +82,14 @@ export type InventoryDepreciation = Message<"domain.inventory.v1.InventoryDeprec
      * @generated from field: domain.inventory.v1.InventoryItem inventory_item = 15;
      */
     inventoryItem?: InventoryItem;
+    /**
+     * Tenant anchor — same rationale as InventoryItem.workspace_id
+     * (docs/plan/20260729-inventory-item-tenant-scope, Option B, Q-FAMILY = all five).
+     * Nullable in v1; backfilled from the inventory_item parent; NULL is fail-closed.
+     *
+     * @generated from field: optional string workspace_id = 16;
+     */
+    workspaceId?: string;
 };
 /**
  * Describes the message domain.inventory.v1.InventoryDepreciation.

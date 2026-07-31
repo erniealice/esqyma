@@ -48,6 +48,10 @@ type InventorySerialHistory struct {
 	// Who made the change
 	ChangedBy     string `protobuf:"bytes,13,opt,name=changed_by,json=changedBy,proto3" json:"changed_by,omitempty"`               // User ID who made this change
 	ChangedByRole string `protobuf:"bytes,14,opt,name=changed_by_role,json=changedByRole,proto3" json:"changed_by_role,omitempty"` // Role of user who made this change
+	// Tenant anchor — same rationale as InventoryItem.workspace_id
+	// (docs/plan/20260729-inventory-item-tenant-scope, Option B, Q-FAMILY = all five).
+	// Nullable in v1; backfilled from the inventory_item parent; NULL is fail-closed.
+	WorkspaceId   *string `protobuf:"bytes,15,opt,name=workspace_id,json=workspaceId,proto3,oneof" json:"workspace_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -176,6 +180,13 @@ func (x *InventorySerialHistory) GetChangedBy() string {
 func (x *InventorySerialHistory) GetChangedByRole() string {
 	if x != nil {
 		return x.ChangedByRole
+	}
+	return ""
+}
+
+func (x *InventorySerialHistory) GetWorkspaceId() string {
+	if x != nil && x.WorkspaceId != nil {
+		return *x.WorkspaceId
 	}
 	return ""
 }
@@ -887,7 +898,7 @@ var File_domain_inventory_serial_history_inventory_serial_history_proto protoref
 
 const file_domain_inventory_serial_history_inventory_serial_history_proto_rawDesc = "" +
 	"\n" +
-	">domain/inventory/serial_history/inventory_serial_history.proto\x12\x13domain.inventory.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1adomain/common/search.proto\x1a4domain/inventory/inventory_item/inventory_item.proto\x1a8domain/inventory/inventory_serial/inventory_serial.proto\x1a\x10options/db.proto\"\xe2\x05\n" +
+	">domain/inventory/serial_history/inventory_serial_history.proto\x12\x13domain.inventory.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1adomain/common/search.proto\x1a4domain/inventory/inventory_item/inventory_item.proto\x1a8domain/inventory/inventory_serial/inventory_serial.proto\x1a\x10options/db.proto\"\xae\x06\n" +
 	"\x16InventorySerialHistory\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12&\n" +
 	"\fdate_created\x18\x02 \x01(\x03H\x00R\vdateCreated\x88\x01\x01\x12;\n" +
@@ -907,11 +918,14 @@ const file_domain_inventory_serial_history_inventory_serial_history_proto_rawDes
 	"\x05notes\x18\f \x01(\tR\x05notes\x12\x1d\n" +
 	"\n" +
 	"changed_by\x18\r \x01(\tR\tchangedBy\x12&\n" +
-	"\x0fchanged_by_role\x18\x0e \x01(\tR\rchangedByRole:\x06\x8a\xb5\x18\x02\b\x01B\x0f\n" +
+	"\x0fchanged_by_role\x18\x0e \x01(\tR\rchangedByRole\x129\n" +
+	"\fworkspace_id\x18\x0f \x01(\tB\x11\x82\xb5\x18\r\n" +
+	"\tworkspace\x18\x01H\x04R\vworkspaceId\x88\x01\x01:\x06\x8a\xb5\x18\x02\b\x01B\x0f\n" +
 	"\r_date_createdB\x16\n" +
 	"\x14_date_created_stringB\t\n" +
 	"\a_serialB\x11\n" +
-	"\x0f_inventory_item\"f\n" +
+	"\x0f_inventory_itemB\x0f\n" +
+	"\r_workspace_id\"f\n" +
 	"#CreateInventorySerialHistoryRequest\x12?\n" +
 	"\x04data\x18\x01 \x01(\v2+.domain.inventory.v1.InventorySerialHistoryR\x04data\"\xbf\x01\n" +
 	"$CreateInventorySerialHistoryResponse\x12?\n" +

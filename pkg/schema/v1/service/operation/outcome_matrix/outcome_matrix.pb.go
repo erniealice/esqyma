@@ -825,18 +825,27 @@ func (x *GetOutcomeSummaryRosterRequest) GetScope() OutcomeMatrixScope {
 	return OutcomeMatrixScope_OUTCOME_MATRIX_SCOPE_UNSPECIFIED
 }
 
-// OutcomeSummaryPhaseEntry is one student's stored composite for one phase.
-// scaled_label is job_phase's latest active phase_outcome_summary.scaled_label,
-// read verbatim ("" when no summary exists yet).
+// OutcomeSummaryPhaseEntry is one roster member's stored composite pair for one
+// phase. Both values come from the SAME latest active phase_outcome_summary row
+// and are read verbatim:
+//   - summary_score  — the raw composite the scoring scheme combined (pre-transmutation)
+//   - scaled_label   — the transmuted output of that composite (post-transmutation)
+//
+// One row, one upsert, so the pair can never be mutually inconsistent.
 type OutcomeSummaryPhaseEntry struct {
 	state              protoimpl.MessageState `protogen:"open.v1"`
 	JobTemplatePhaseId string                 `protobuf:"bytes,1,opt,name=job_template_phase_id,json=jobTemplatePhaseId,proto3" json:"job_template_phase_id,omitempty"`
 	Code               string                 `protobuf:"bytes,2,opt,name=code,proto3" json:"code,omitempty"`                                         // job_template_phase.code (e.g. "s1"/"s2"); "" when unset
 	Label              string                 `protobuf:"bytes,3,opt,name=label,proto3" json:"label,omitempty"`                                       // phase name (e.g. "Semester 1")
 	SequenceOrder      int32                  `protobuf:"varint,4,opt,name=sequence_order,json=sequenceOrder,proto3" json:"sequence_order,omitempty"` // job_template_phase.phase_order
-	ScaledLabel        string                 `protobuf:"bytes,5,opt,name=scaled_label,json=scaledLabel,proto3" json:"scaled_label,omitempty"`        // stored phase composite; "" when none
-	unknownFields      protoimpl.UnknownFields
-	sizeCache          protoimpl.SizeCache
+	ScaledLabel        string                 `protobuf:"bytes,5,opt,name=scaled_label,json=scaledLabel,proto3" json:"scaled_label,omitempty"`        // stored transmuted composite; "" when none
+	// Stored phase_outcome_summary.summary_score, verbatim; UNSET when the row has
+	// none. Presence-tracked on purpose (docs/plan/20260729-criteria-total-rating-rules,
+	// Option A / D4): a stored 0 is a real composite and must stay distinguishable
+	// from "not computed" — the adapter scans sql.NullFloat64 and must never COALESCE.
+	SummaryScore  *float64 `protobuf:"fixed64,6,opt,name=summary_score,json=summaryScore,proto3,oneof" json:"summary_score,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
 }
 
 func (x *OutcomeSummaryPhaseEntry) Reset() {
@@ -902,6 +911,13 @@ func (x *OutcomeSummaryPhaseEntry) GetScaledLabel() string {
 		return x.ScaledLabel
 	}
 	return ""
+}
+
+func (x *OutcomeSummaryPhaseEntry) GetSummaryScore() float64 {
+	if x != nil && x.SummaryScore != nil {
+		return *x.SummaryScore
+	}
+	return 0
 }
 
 // OutcomeSummaryRosterRow is one student's per-period composites plus the stored
@@ -1132,13 +1148,15 @@ const file_service_operation_outcome_matrix_outcome_matrix_proto_rawDesc = "" +
 	"\x06_error\"\x88\x01\n" +
 	"\x1eGetOutcomeSummaryRosterRequest\x12&\n" +
 	"\x0fjob_template_id\x18\x01 \x01(\tR\rjobTemplateId\x12>\n" +
-	"\x05scope\x18\x02 \x01(\x0e2(.service.operation.v1.OutcomeMatrixScopeR\x05scope\"\xc1\x01\n" +
+	"\x05scope\x18\x02 \x01(\x0e2(.service.operation.v1.OutcomeMatrixScopeR\x05scope\"\xfd\x01\n" +
 	"\x18OutcomeSummaryPhaseEntry\x121\n" +
 	"\x15job_template_phase_id\x18\x01 \x01(\tR\x12jobTemplatePhaseId\x12\x12\n" +
 	"\x04code\x18\x02 \x01(\tR\x04code\x12\x14\n" +
 	"\x05label\x18\x03 \x01(\tR\x05label\x12%\n" +
 	"\x0esequence_order\x18\x04 \x01(\x05R\rsequenceOrder\x12!\n" +
-	"\fscaled_label\x18\x05 \x01(\tR\vscaledLabel\"\x8a\x02\n" +
+	"\fscaled_label\x18\x05 \x01(\tR\vscaledLabel\x12(\n" +
+	"\rsummary_score\x18\x06 \x01(\x01H\x00R\fsummaryScore\x88\x01\x01B\x10\n" +
+	"\x0e_summary_score\"\x8a\x02\n" +
 	"\x17OutcomeSummaryRosterRow\x12\x1b\n" +
 	"\tclient_id\x18\x01 \x01(\tR\bclientId\x12!\n" +
 	"\fclient_label\x18\x02 \x01(\tR\vclientLabel\x12F\n" +
@@ -1228,6 +1246,7 @@ func file_service_operation_outcome_matrix_outcome_matrix_proto_init() {
 	file_service_operation_outcome_matrix_outcome_matrix_proto_msgTypes[0].OneofWrappers = []any{}
 	file_service_operation_outcome_matrix_outcome_matrix_proto_msgTypes[4].OneofWrappers = []any{}
 	file_service_operation_outcome_matrix_outcome_matrix_proto_msgTypes[7].OneofWrappers = []any{}
+	file_service_operation_outcome_matrix_outcome_matrix_proto_msgTypes[9].OneofWrappers = []any{}
 	file_service_operation_outcome_matrix_outcome_matrix_proto_msgTypes[11].OneofWrappers = []any{}
 	type x struct{}
 	out := protoimpl.TypeBuilder{

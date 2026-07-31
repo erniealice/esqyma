@@ -22,11 +22,14 @@ export type GetOutcomeMatrixRequest = Message<"service.operation.v1.GetOutcomeMa
      */
     scope: OutcomeMatrixScope;
     /**
-     * subscription_group_id — narrow rows to a section's members
+     * Narrow rows to one delivery group's members. Field 3 unchanged (wire
+     * compatible); RENAMED from section_id 2026-07-25 — "section" is education
+     * vocabulary and belongs in lyngua, not in a generic contract. The display
+     * slug stays /section/{group_id} via the education route overrides.
      *
-     * @generated from field: optional string section_id = 3;
+     * @generated from field: optional string subscription_group_id = 3;
      */
-    sectionId?: string;
+    subscriptionGroupId?: string;
     /**
      * output_product_id — narrow rows to a product's jobs
      *
@@ -130,6 +133,15 @@ export type PhaseColumn = Message<"service.operation.v1.PhaseColumn"> & {
      * @generated from field: repeated service.operation.v1.TaskColumn tasks = 4;
      */
     tasks: TaskColumn[];
+    /**
+     * Stable machine key from job_template_phase.code (e.g. "s1"/"s2"); empty
+     * when unset. Additive (Q8, 20260720 export drawer): lets the view/export key
+     * the period axis on the phase CODE rather than the mutable display label —
+     * the label is DB data that varies, the code is the reserved semester anchor.
+     *
+     * @generated from field: string code = 5;
+     */
+    code: string;
 };
 /**
  * Describes the message service.operation.v1.PhaseColumn.
@@ -205,6 +217,17 @@ export type OutcomeCell = Message<"service.operation.v1.OutcomeCell"> & {
      * @generated from field: string job_id = 10;
      */
     jobId: string;
+    /**
+     * Grader's free-text determination narrative for this cell, mirrored verbatim
+     * from task_outcome.determination_note (f14). "" when no narrative recorded.
+     * Additive projection field (20260723 grade-narrative drawer): drives the grid
+     * message-glyph filled/outline state and the read/write of the narrative drawer.
+     * Type-agnostic (safe for every criteria_type; never conflated with the typed
+     * value fields 3-6). NOTHING reads text_value (f4) for narratives post-cutover.
+     *
+     * @generated from field: optional string determination_note = 11;
+     */
+    determinationNote?: string;
 };
 /**
  * Describes the message service.operation.v1.OutcomeCell.
@@ -352,6 +375,147 @@ export type GetOutcomeMatrixResponse = Message<"service.operation.v1.GetOutcomeM
  */
 export declare const GetOutcomeMatrixResponseSchema: GenMessage<GetOutcomeMatrixResponse>;
 /**
+ * @generated from message service.operation.v1.GetOutcomeSummaryRosterRequest
+ */
+export type GetOutcomeSummaryRosterRequest = Message<"service.operation.v1.GetOutcomeSummaryRosterRequest"> & {
+    /**
+     * REQUIRED — the page is one template (subject)
+     *
+     * @generated from field: string job_template_id = 1;
+     */
+    jobTemplateId: string;
+    /**
+     * @generated from field: service.operation.v1.OutcomeMatrixScope scope = 2;
+     */
+    scope: OutcomeMatrixScope;
+};
+/**
+ * Describes the message service.operation.v1.GetOutcomeSummaryRosterRequest.
+ * Use `create(GetOutcomeSummaryRosterRequestSchema)` to create a new message.
+ */
+export declare const GetOutcomeSummaryRosterRequestSchema: GenMessage<GetOutcomeSummaryRosterRequest>;
+/**
+ * OutcomeSummaryPhaseEntry is one roster member's stored composite pair for one
+ * phase. Both values come from the SAME latest active phase_outcome_summary row
+ * and are read verbatim:
+ *   * summary_score  — the raw composite the scoring scheme combined (pre-transmutation)
+ *   * scaled_label   — the transmuted output of that composite (post-transmutation)
+ * One row, one upsert, so the pair can never be mutually inconsistent.
+ *
+ * @generated from message service.operation.v1.OutcomeSummaryPhaseEntry
+ */
+export type OutcomeSummaryPhaseEntry = Message<"service.operation.v1.OutcomeSummaryPhaseEntry"> & {
+    /**
+     * @generated from field: string job_template_phase_id = 1;
+     */
+    jobTemplatePhaseId: string;
+    /**
+     * job_template_phase.code (e.g. "s1"/"s2"); "" when unset
+     *
+     * @generated from field: string code = 2;
+     */
+    code: string;
+    /**
+     * phase name (e.g. "Semester 1")
+     *
+     * @generated from field: string label = 3;
+     */
+    label: string;
+    /**
+     * job_template_phase.phase_order
+     *
+     * @generated from field: int32 sequence_order = 4;
+     */
+    sequenceOrder: number;
+    /**
+     * stored transmuted composite; "" when none
+     *
+     * @generated from field: string scaled_label = 5;
+     */
+    scaledLabel: string;
+    /**
+     * Stored phase_outcome_summary.summary_score, verbatim; UNSET when the row has
+     * none. Presence-tracked on purpose (docs/plan/20260729-criteria-total-rating-rules,
+     * Option A / D4): a stored 0 is a real composite and must stay distinguishable
+     * from "not computed" — the adapter scans sql.NullFloat64 and must never COALESCE.
+     *
+     * @generated from field: optional double summary_score = 6;
+     */
+    summaryScore?: number;
+};
+/**
+ * Describes the message service.operation.v1.OutcomeSummaryPhaseEntry.
+ * Use `create(OutcomeSummaryPhaseEntrySchema)` to create a new message.
+ */
+export declare const OutcomeSummaryPhaseEntrySchema: GenMessage<OutcomeSummaryPhaseEntry>;
+/**
+ * OutcomeSummaryRosterRow is one student's per-period composites plus the stored
+ * year-final (job_outcome_summary.scaled_label + is_authoritative), all verbatim.
+ *
+ * @generated from message service.operation.v1.OutcomeSummaryRosterRow
+ */
+export type OutcomeSummaryRosterRow = Message<"service.operation.v1.OutcomeSummaryRosterRow"> & {
+    /**
+     * @generated from field: string client_id = 1;
+     */
+    clientId: string;
+    /**
+     * opaque id unless the view resolves a display name (matrix parity)
+     *
+     * @generated from field: string client_label = 2;
+     */
+    clientLabel: string;
+    /**
+     * per-phase composites, sequence order
+     *
+     * @generated from field: repeated service.operation.v1.OutcomeSummaryPhaseEntry phases = 3;
+     */
+    phases: OutcomeSummaryPhaseEntry[];
+    /**
+     * job_outcome_summary.scaled_label, verbatim; "" when none
+     *
+     * @generated from field: string year_final_label = 4;
+     */
+    yearFinalLabel: string;
+    /**
+     * job_outcome_summary.is_authoritative passthrough
+     *
+     * @generated from field: bool year_final_is_authoritative = 5;
+     */
+    yearFinalIsAuthoritative: boolean;
+};
+/**
+ * Describes the message service.operation.v1.OutcomeSummaryRosterRow.
+ * Use `create(OutcomeSummaryRosterRowSchema)` to create a new message.
+ */
+export declare const OutcomeSummaryRosterRowSchema: GenMessage<OutcomeSummaryRosterRow>;
+/**
+ * @generated from message service.operation.v1.GetOutcomeSummaryRosterResponse
+ */
+export type GetOutcomeSummaryRosterResponse = Message<"service.operation.v1.GetOutcomeSummaryRosterResponse"> & {
+    /**
+     * @generated from field: string job_template_id = 1;
+     */
+    jobTemplateId: string;
+    /**
+     * @generated from field: repeated service.operation.v1.OutcomeSummaryRosterRow rows = 2;
+     */
+    rows: OutcomeSummaryRosterRow[];
+    /**
+     * @generated from field: bool success = 3;
+     */
+    success: boolean;
+    /**
+     * @generated from field: optional domain.common.v1.Error error = 4;
+     */
+    error?: Error;
+};
+/**
+ * Describes the message service.operation.v1.GetOutcomeSummaryRosterResponse.
+ * Use `create(GetOutcomeSummaryRosterResponseSchema)` to create a new message.
+ */
+export declare const GetOutcomeSummaryRosterResponseSchema: GenMessage<GetOutcomeSummaryRosterResponse>;
+/**
  * OutcomeMatrixScope selects the row set. UNSPECIFIED is fail-closed → MINE.
  *
  * @generated from enum service.operation.v1.OutcomeMatrixScope
@@ -391,5 +555,20 @@ export declare const OutcomeMatrixService: GenService<{
         methodKind: "unary";
         input: typeof GetOutcomeMatrixRequestSchema;
         output: typeof GetOutcomeMatrixResponseSchema;
+    };
+    /**
+     * GetOutcomeSummaryRoster is the roster-scoped composite read (20260720
+     * export drawer P2): one row per student under a job_template, carrying each
+     * phase's stored composite (phase_outcome_summary.scaled_label) and the
+     * stored year-final (job_outcome_summary.scaled_label + is_authoritative).
+     * Stored values are read VERBATIM — never recomputed (D8). Serves the CSV
+     * "Final" export today and the composite PDF builder later (P5).
+     *
+     * @generated from rpc service.operation.v1.OutcomeMatrixService.GetOutcomeSummaryRoster
+     */
+    getOutcomeSummaryRoster: {
+        methodKind: "unary";
+        input: typeof GetOutcomeSummaryRosterRequestSchema;
+        output: typeof GetOutcomeSummaryRosterResponseSchema;
     };
 }>;

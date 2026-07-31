@@ -93,6 +93,17 @@ export type InventoryItem = Message<"domain.inventory.v1.InventoryItem"> & {
      * @generated from field: optional string product_variant_id = 20;
      */
     productVariantId?: string;
+    /**
+     * Tenant anchor. Added 2026-07-31 (docs/plan/20260729-inventory-item-tenant-scope,
+     * Option B): this table was column-less, so WorkspaceAwareOperations injected no
+     * predicate on List/Read/Create/Update/Delete/HardDelete. With the column present
+     * the decorator scopes every path structurally. Nullable in v1 — backfilled per row
+     * from product.workspace_id; a NULL anchor is fail-closed-excluded. NOT NULL is a
+     * deliberate follow-up (2-step tightening).
+     *
+     * @generated from field: optional string workspace_id = 21;
+     */
+    workspaceId?: string;
 };
 /**
  * Describes the message domain.inventory.v1.InventoryItem.

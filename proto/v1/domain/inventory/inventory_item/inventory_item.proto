@@ -36,6 +36,14 @@ message InventoryItem {
   optional string notes = 18;
   reserved 19; // item_type moved to Product
   optional string product_variant_id = 20; // FK to product_variant
+
+  // Tenant anchor. Added 2026-07-31 (docs/plan/20260729-inventory-item-tenant-scope,
+  // Option B): this table was column-less, so WorkspaceAwareOperations injected no
+  // predicate on List/Read/Create/Update/Delete/HardDelete. With the column present
+  // the decorator scopes every path structurally. Nullable in v1 — backfilled per row
+  // from product.workspace_id; a NULL anchor is fail-closed-excluded. NOT NULL is a
+  // deliberate follow-up (2-step tightening).
+  optional string workspace_id = 21 [(options.v1.db).references = "workspace", (options.v1.db).index = true];
 }
 
 service InventoryItemDomainService {

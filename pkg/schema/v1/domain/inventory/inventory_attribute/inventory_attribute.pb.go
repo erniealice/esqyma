@@ -37,8 +37,12 @@ type InventoryAttribute struct {
 	DateModified       *int64                        `protobuf:"varint,9,opt,name=date_modified,json=dateModified,proto3,oneof" json:"date_modified,omitempty"`
 	DateModifiedString *string                       `protobuf:"bytes,10,opt,name=date_modified_string,json=dateModifiedString,proto3,oneof" json:"date_modified_string,omitempty"`
 	Active             bool                          `protobuf:"varint,11,opt,name=active,proto3" json:"active,omitempty"`
-	unknownFields      protoimpl.UnknownFields
-	sizeCache          protoimpl.SizeCache
+	// Tenant anchor — same rationale as InventoryItem.workspace_id
+	// (docs/plan/20260729-inventory-item-tenant-scope, Option B, Q-FAMILY = all five).
+	// Nullable in v1; backfilled from the inventory_item parent; NULL is fail-closed.
+	WorkspaceId   *string `protobuf:"bytes,12,opt,name=workspace_id,json=workspaceId,proto3,oneof" json:"workspace_id,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
 }
 
 func (x *InventoryAttribute) Reset() {
@@ -146,6 +150,13 @@ func (x *InventoryAttribute) GetActive() bool {
 		return x.Active
 	}
 	return false
+}
+
+func (x *InventoryAttribute) GetWorkspaceId() string {
+	if x != nil && x.WorkspaceId != nil {
+		return *x.WorkspaceId
+	}
+	return ""
 }
 
 type CreateInventoryAttributeRequest struct {
@@ -1213,7 +1224,7 @@ var File_domain_inventory_inventory_attribute_inventory_attribute_proto protoref
 
 const file_domain_inventory_inventory_attribute_inventory_attribute_proto_rawDesc = "" +
 	"\n" +
-	">domain/inventory/inventory_attribute/inventory_attribute.proto\x12\x13domain.inventory.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1adomain/common/search.proto\x1a4domain/inventory/inventory_item/inventory_item.proto\x1a\x1ddomain/common/attribute.proto\x1a\x10options/db.proto\"\xdd\x04\n" +
+	">domain/inventory/inventory_attribute/inventory_attribute.proto\x12\x13domain.inventory.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1adomain/common/search.proto\x1a4domain/inventory/inventory_item/inventory_item.proto\x1a\x1ddomain/common/attribute.proto\x1a\x10options/db.proto\"\xa9\x05\n" +
 	"\x12InventoryAttribute\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12*\n" +
 	"\x11inventory_item_id\x18\x02 \x01(\tR\x0finventoryItemId\x12!\n" +
@@ -1227,11 +1238,14 @@ const file_domain_inventory_inventory_attribute_inventory_attribute_proto_rawDes
 	"\x14date_modified_string\x18\n" +
 	" \x01(\tB\x06\x82\xb5\x18\x028\x01H\x03R\x12dateModifiedString\x88\x01\x01\x12\"\n" +
 	"\x06active\x18\v \x01(\bB\n" +
-	"\x82\xb5\x18\x06\"\x04trueR\x06active:\x06\x8a\xb5\x18\x02\b\x01B\x0f\n" +
+	"\x82\xb5\x18\x06\"\x04trueR\x06active\x129\n" +
+	"\fworkspace_id\x18\f \x01(\tB\x11\x82\xb5\x18\r\n" +
+	"\tworkspace\x18\x01H\x04R\vworkspaceId\x88\x01\x01:\x06\x8a\xb5\x18\x02\b\x01B\x0f\n" +
 	"\r_date_createdB\x16\n" +
 	"\x14_date_created_stringB\x10\n" +
 	"\x0e_date_modifiedB\x17\n" +
-	"\x15_date_modified_string\"^\n" +
+	"\x15_date_modified_stringB\x0f\n" +
+	"\r_workspace_id\"^\n" +
 	"\x1fCreateInventoryAttributeRequest\x12;\n" +
 	"\x04data\x18\x01 \x01(\v2'.domain.inventory.v1.InventoryAttributeR\x04data\"\xb7\x01\n" +
 	" CreateInventoryAttributeResponse\x12;\n" +

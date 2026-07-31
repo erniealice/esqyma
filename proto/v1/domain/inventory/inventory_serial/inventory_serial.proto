@@ -24,12 +24,19 @@ message InventorySerial {
   optional string warranty_end = 7;
   optional string purchase_order = 8;
   optional string notes = 9; // NOTE: field 10 (sold_reference) removed 2026-02-12 - migrated to inventory_serial_history.reference_display
+  reserved 10; // sold_reference removed 2026-02-12, migrated to inventory_serial_history.reference_display — do not reuse this tag
   bool active = 11 [(options.v1.db).default = "true"];
   optional int64 date_created = 12;
   optional string date_created_string = 13 [(options.v1.db).ignore = true];
   optional int64 date_modified = 14;
   optional string date_modified_string = 15 [(options.v1.db).ignore = true];
   InventoryItem inventory_item = 16;
+
+  // Tenant anchor — same rationale as InventoryItem.workspace_id
+  // (docs/plan/20260729-inventory-item-tenant-scope, Option B, Q-FAMILY = all five).
+  // Nullable in v1; backfilled from the inventory_item parent; NULL is fail-closed.
+  // NOTE: tag 17, not 10 — 10 held the removed sold_reference field (see :9).
+  optional string workspace_id = 17 [(options.v1.db).references = "workspace", (options.v1.db).index = true];
 }
 
 service InventorySerialDomainService {

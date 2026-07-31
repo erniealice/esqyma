@@ -46,8 +46,15 @@ type InventoryItem struct {
 	UnitOfMeasure      string                 `protobuf:"bytes,17,opt,name=unit_of_measure,json=unitOfMeasure,proto3" json:"unit_of_measure,omitempty"`
 	Notes              *string                `protobuf:"bytes,18,opt,name=notes,proto3,oneof" json:"notes,omitempty"`
 	ProductVariantId   *string                `protobuf:"bytes,20,opt,name=product_variant_id,json=productVariantId,proto3,oneof" json:"product_variant_id,omitempty"` // FK to product_variant
-	unknownFields      protoimpl.UnknownFields
-	sizeCache          protoimpl.SizeCache
+	// Tenant anchor. Added 2026-07-31 (docs/plan/20260729-inventory-item-tenant-scope,
+	// Option B): this table was column-less, so WorkspaceAwareOperations injected no
+	// predicate on List/Read/Create/Update/Delete/HardDelete. With the column present
+	// the decorator scopes every path structurally. Nullable in v1 — backfilled per row
+	// from product.workspace_id; a NULL anchor is fail-closed-excluded. NOT NULL is a
+	// deliberate follow-up (2-step tightening).
+	WorkspaceId   *string `protobuf:"bytes,21,opt,name=workspace_id,json=workspaceId,proto3,oneof" json:"workspace_id,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
 }
 
 func (x *InventoryItem) Reset() {
@@ -209,6 +216,13 @@ func (x *InventoryItem) GetNotes() string {
 func (x *InventoryItem) GetProductVariantId() string {
 	if x != nil && x.ProductVariantId != nil {
 		return *x.ProductVariantId
+	}
+	return ""
+}
+
+func (x *InventoryItem) GetWorkspaceId() string {
+	if x != nil && x.WorkspaceId != nil {
+		return *x.WorkspaceId
 	}
 	return ""
 }
@@ -1032,7 +1046,7 @@ var File_domain_inventory_inventory_item_inventory_item_proto protoreflect.FileD
 
 const file_domain_inventory_inventory_item_inventory_item_proto_rawDesc = "" +
 	"\n" +
-	"4domain/inventory/inventory_item/inventory_item.proto\x12\x13domain.inventory.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1adomain/common/search.proto\x1a$domain/product/product/product.proto\x1a%domain/entity/location/location.proto\x1a\x10options/db.proto\"\xab\b\n" +
+	"4domain/inventory/inventory_item/inventory_item.proto\x12\x13domain.inventory.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1adomain/common/search.proto\x1a$domain/product/product/product.proto\x1a%domain/entity/location/location.proto\x1a\x10options/db.proto\"\xf7\b\n" +
 	"\rInventoryItem\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12&\n" +
 	"\fdate_created\x18\x02 \x01(\x03H\x00R\vdateCreated\x88\x01\x01\x12;\n" +
@@ -1057,7 +1071,9 @@ const file_domain_inventory_inventory_item_inventory_item_proto_rawDesc = "" +
 	"\x0funit_of_measure\x18\x11 \x01(\tB\f\x82\xb5\x18\b\"\x06'unit'R\runitOfMeasure\x12\x19\n" +
 	"\x05notes\x18\x12 \x01(\tH\n" +
 	"R\x05notes\x88\x01\x01\x121\n" +
-	"\x12product_variant_id\x18\x14 \x01(\tH\vR\x10productVariantId\x88\x01\x01:\x06\x8a\xb5\x18\x02\b\x01B\x0f\n" +
+	"\x12product_variant_id\x18\x14 \x01(\tH\vR\x10productVariantId\x88\x01\x01\x129\n" +
+	"\fworkspace_id\x18\x15 \x01(\tB\x11\x82\xb5\x18\r\n" +
+	"\tworkspace\x18\x01H\fR\vworkspaceId\x88\x01\x01:\x06\x8a\xb5\x18\x02\b\x01B\x0f\n" +
 	"\r_date_createdB\x16\n" +
 	"\x14_date_created_stringB\x10\n" +
 	"\x0e_date_modifiedB\x17\n" +
@@ -1070,7 +1086,8 @@ const file_domain_inventory_inventory_item_inventory_item_proto_rawDesc = "" +
 	"\x04_skuB\x10\n" +
 	"\x0e_reorder_levelB\b\n" +
 	"\x06_notesB\x15\n" +
-	"\x13_product_variant_idJ\x04\b\x13\x10\x14\"T\n" +
+	"\x13_product_variant_idB\x0f\n" +
+	"\r_workspace_idJ\x04\b\x13\x10\x14\"T\n" +
 	"\x1aCreateInventoryItemRequest\x126\n" +
 	"\x04data\x18\x01 \x01(\v2\".domain.inventory.v1.InventoryItemR\x04data\"\xad\x01\n" +
 	"\x1bCreateInventoryItemResponse\x126\n" +

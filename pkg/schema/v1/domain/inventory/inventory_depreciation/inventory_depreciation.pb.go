@@ -41,8 +41,12 @@ type InventoryDepreciation struct {
 	DateModified            *int64                        `protobuf:"varint,13,opt,name=date_modified,json=dateModified,proto3,oneof" json:"date_modified,omitempty"`
 	DateModifiedString      *string                       `protobuf:"bytes,14,opt,name=date_modified_string,json=dateModifiedString,proto3,oneof" json:"date_modified_string,omitempty"`
 	InventoryItem           *inventory_item.InventoryItem `protobuf:"bytes,15,opt,name=inventory_item,json=inventoryItem,proto3" json:"inventory_item,omitempty"`
-	unknownFields           protoimpl.UnknownFields
-	sizeCache               protoimpl.SizeCache
+	// Tenant anchor — same rationale as InventoryItem.workspace_id
+	// (docs/plan/20260729-inventory-item-tenant-scope, Option B, Q-FAMILY = all five).
+	// Nullable in v1; backfilled from the inventory_item parent; NULL is fail-closed.
+	WorkspaceId   *string `protobuf:"bytes,16,opt,name=workspace_id,json=workspaceId,proto3,oneof" json:"workspace_id,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
 }
 
 func (x *InventoryDepreciation) Reset() {
@@ -178,6 +182,13 @@ func (x *InventoryDepreciation) GetInventoryItem() *inventory_item.InventoryItem
 		return x.InventoryItem
 	}
 	return nil
+}
+
+func (x *InventoryDepreciation) GetWorkspaceId() string {
+	if x != nil && x.WorkspaceId != nil {
+		return *x.WorkspaceId
+	}
+	return ""
 }
 
 type CreateInventoryDepreciationRequest struct {
@@ -1095,7 +1106,7 @@ var File_domain_inventory_inventory_depreciation_inventory_depreciation_proto pr
 
 const file_domain_inventory_inventory_depreciation_inventory_depreciation_proto_rawDesc = "" +
 	"\n" +
-	"Ddomain/inventory/inventory_depreciation/inventory_depreciation.proto\x12\x13domain.inventory.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1adomain/common/search.proto\x1a4domain/inventory/inventory_item/inventory_item.proto\x1a\x10options/db.proto\"\x87\x06\n" +
+	"Ddomain/inventory/inventory_depreciation/inventory_depreciation.proto\x12\x13domain.inventory.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1adomain/common/search.proto\x1a4domain/inventory/inventory_item/inventory_item.proto\x1a\x10options/db.proto\"\xd3\x06\n" +
 	"\x15InventoryDepreciation\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12B\n" +
 	"\x11inventory_item_id\x18\x02 \x01(\tB\x16\x82\xb5\x18\x12\n" +
@@ -1117,11 +1128,14 @@ const file_domain_inventory_inventory_depreciation_inventory_depreciation_proto_
 	"\x13date_created_string\x18\f \x01(\tB\x06\x82\xb5\x18\x028\x01H\x01R\x11dateCreatedString\x88\x01\x01\x12(\n" +
 	"\rdate_modified\x18\r \x01(\x03H\x02R\fdateModified\x88\x01\x01\x12=\n" +
 	"\x14date_modified_string\x18\x0e \x01(\tB\x06\x82\xb5\x18\x028\x01H\x03R\x12dateModifiedString\x88\x01\x01\x12I\n" +
-	"\x0einventory_item\x18\x0f \x01(\v2\".domain.inventory.v1.InventoryItemR\rinventoryItem:\x06\x8a\xb5\x18\x02\b\x01B\x0f\n" +
+	"\x0einventory_item\x18\x0f \x01(\v2\".domain.inventory.v1.InventoryItemR\rinventoryItem\x129\n" +
+	"\fworkspace_id\x18\x10 \x01(\tB\x11\x82\xb5\x18\r\n" +
+	"\tworkspace\x18\x01H\x04R\vworkspaceId\x88\x01\x01:\x06\x8a\xb5\x18\x02\b\x01B\x0f\n" +
 	"\r_date_createdB\x16\n" +
 	"\x14_date_created_stringB\x10\n" +
 	"\x0e_date_modifiedB\x17\n" +
-	"\x15_date_modified_string\"d\n" +
+	"\x15_date_modified_stringB\x0f\n" +
+	"\r_workspace_id\"d\n" +
 	"\"CreateInventoryDepreciationRequest\x12>\n" +
 	"\x04data\x18\x01 \x01(\v2*.domain.inventory.v1.InventoryDepreciationR\x04data\"\xbd\x01\n" +
 	"#CreateInventoryDepreciationResponse\x12>\n" +
