@@ -11,11 +11,11 @@ import type { Message } from "@bufbuild/protobuf";
 export declare const file_domain_subscription_subscription_group_workspace_user_subscription_group_workspace_user: GenFile;
 /**
  * SubscriptionGroupWorkspaceUser pins an operator (workspace_user) at a
- * subscription_group (cohort) node for group-level servicing/visibility
- * (coordinator @ cohort, adviser @ cohort). Shape mirrors line_workspace_user
- * (workspace_id + is_owner); the parent FK is subscription_group_id instead of
- * line_id, plus the two servicing discriminators (scope, role) the
- * people-hierarchy model specified.
+ * subscription_group (cohort) node for group-level servicing/visibility.
+ * Shape mirrors line_workspace_user (workspace_id + is_owner); the parent FK is
+ * subscription_group_id instead of line_id, plus a generic servicing-capacity
+ * axis (see the capacity field). Vertical titles render from lyngua, never
+ * stored here.
  *
  * @generated from message domain.subscription.v1.SubscriptionGroupWorkspaceUser
  */
@@ -57,17 +57,21 @@ export type SubscriptionGroupWorkspaceUser = Message<"domain.subscription.v1.Sub
      */
     workspaceUserId: string;
     /**
-     * @generated from field: string scope = 10;
-     */
-    scope: string;
-    /**
-     * @generated from field: string role = 11;
-     */
-    role: string;
-    /**
+     * field reusing these names would silently absorb stale column values.
+     *
+     * unchanged — do NOT renumber
+     *
      * @generated from field: bool is_owner = 12;
      */
     isOwner: boolean;
+    /**
+     * Generic servicing-capacity axis (replaces the removed discriminator's info content). NOT a vertical title.
+     *   'primary' = servicer / lead-eligible;  'access' = view-only member.
+     * Vertical titles render from lyngua on (node type, capacity, is_owner).
+     *
+     * @generated from field: string capacity = 13;
+     */
+    capacity: string;
 };
 /**
  * Describes the message domain.subscription.v1.SubscriptionGroupWorkspaceUser.

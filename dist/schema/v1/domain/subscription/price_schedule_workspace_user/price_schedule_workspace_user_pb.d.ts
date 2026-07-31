@@ -11,12 +11,12 @@ import type { Message } from "@bufbuild/protobuf";
 export declare const file_domain_subscription_price_schedule_workspace_user_price_schedule_workspace_user: GenFile;
 /**
  * PriceScheduleWorkspaceUser pins an operator (workspace_user) at a
- * price_schedule (period / academic-year) node for period-level
- * servicing/visibility — the "year coordinator". It is the 5th member of the
- * *_workspace_user access family (alongside client_workspace_user,
- * subscription_workspace_user, subscription_group_workspace_user,
- * line_workspace_user). Exact mirror of subscription_group_workspace_user with
- * the parent FK = price_schedule_id instead of subscription_group_id.
+ * price_schedule (period) node for period-level servicing/visibility. It is the
+ * 5th member of the *_workspace_user access family (alongside
+ * client_workspace_user, subscription_workspace_user,
+ * subscription_group_workspace_user, line_workspace_user). Exact mirror of
+ * subscription_group_workspace_user with the parent FK = price_schedule_id
+ * instead of subscription_group_id.
  *
  * @generated from message domain.subscription.v1.PriceScheduleWorkspaceUser
  */
@@ -58,17 +58,21 @@ export type PriceScheduleWorkspaceUser = Message<"domain.subscription.v1.PriceSc
      */
     workspaceUserId: string;
     /**
-     * @generated from field: string scope = 10;
-     */
-    scope: string;
-    /**
-     * @generated from field: string role = 11;
-     */
-    role: string;
-    /**
+     * field reusing these names would silently absorb stale column values.
+     *
+     * unchanged — do NOT renumber
+     *
      * @generated from field: bool is_owner = 12;
      */
     isOwner: boolean;
+    /**
+     * Generic servicing-capacity axis (replaces the removed discriminator's info content). NOT a vertical title.
+     *   'primary' = servicer / lead-eligible;  'access' = view-only member.
+     * Vertical titles render from lyngua on (node type, capacity, is_owner).
+     *
+     * @generated from field: string capacity = 13;
+     */
+    capacity: string;
 };
 /**
  * Describes the message domain.subscription.v1.PriceScheduleWorkspaceUser.

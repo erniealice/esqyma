@@ -118,6 +118,71 @@ export type JobPhase = Message<"domain.operation.v1.JobPhase"> & {
      * @generated from field: bool is_synthesized = 26;
      */
     isSynthesized: boolean;
+    /**
+     * --- Approval workflow (per-phase approval ladder) ---
+     * Server-owned lifecycle. Generic create forces IN_PROGRESS/null audit and
+     * generic update strips these fields (P2); dedicated transition RPCs own the
+     * stamps. approval_status persists as the enum NAME (TEXT NOT NULL) with the
+     * raw-SQL quoted default below and a DB CHECK over the four persisted tokens.
+     * Each actor/time pair is null-or-nonnull together (DB CHECK, migration). The
+     * *_string fields are display-only mirrors (db.ignore) of their epoch-ms int64
+     * siblings and are never persisted.
+     *
+     * @generated from field: domain.operation.v1.PhaseApprovalStatus approval_status = 40;
+     */
+    approvalStatus: PhaseApprovalStatus;
+    /**
+     * @generated from field: optional string submitted_by = 41;
+     */
+    submittedBy?: string;
+    /**
+     * @generated from field: optional int64 submitted_at = 42;
+     */
+    submittedAt?: bigint;
+    /**
+     * @generated from field: optional string submitted_at_string = 43;
+     */
+    submittedAtString?: string;
+    /**
+     * @generated from field: optional string verified_by = 44;
+     */
+    verifiedBy?: string;
+    /**
+     * @generated from field: optional int64 verified_at = 45;
+     */
+    verifiedAt?: bigint;
+    /**
+     * @generated from field: optional string verified_at_string = 46;
+     */
+    verifiedAtString?: string;
+    /**
+     * @generated from field: optional string published_by = 47;
+     */
+    publishedBy?: string;
+    /**
+     * @generated from field: optional int64 published_at = 48;
+     */
+    publishedAt?: bigint;
+    /**
+     * @generated from field: optional string published_at_string = 49;
+     */
+    publishedAtString?: string;
+    /**
+     * @generated from field: optional string return_reason = 50;
+     */
+    returnReason?: string;
+    /**
+     * @generated from field: optional string returned_by = 51;
+     */
+    returnedBy?: string;
+    /**
+     * @generated from field: optional int64 returned_at = 52;
+     */
+    returnedAt?: bigint;
+    /**
+     * @generated from field: optional string returned_at_string = 53;
+     */
+    returnedAtString?: string;
 };
 /**
  * Describes the message domain.operation.v1.JobPhase.
@@ -441,6 +506,250 @@ export type ListJobPhasesByJobResponse = Message<"domain.operation.v1.ListJobPha
  */
 export declare const ListJobPhasesByJobResponseSchema: GenMessage<ListJobPhasesByJobResponse>;
 /**
+ * @generated from message domain.operation.v1.SubmitJobPhaseApprovalRequest
+ */
+export type SubmitJobPhaseApprovalRequest = Message<"domain.operation.v1.SubmitJobPhaseApprovalRequest"> & {
+    /**
+     * @generated from field: string job_template_id = 1;
+     */
+    jobTemplateId: string;
+    /**
+     * @generated from field: string job_template_phase_id = 2;
+     */
+    jobTemplatePhaseId: string;
+    /**
+     * Narrow the transition to ONE delivery group. ABSENT = every group under the
+     * template — the pre-20260725 behaviour, preserved exactly, so every existing
+     * caller is unaffected and the change is wire-compatible.
+     *
+     * Mirrors GetOutcomeMatrixRequest.subscription_group_id: that field decides
+     * which students a sheet DISPLAYS, this one decides which it UPDATES. Without
+     * it the two disagree — a page showing one group's 29 students transitions all
+     * 87 across the template's three groups.
+     *
+     * No schema change: approval_status lives on job_phase, one row per student
+     * job, so the storage grain was always finer than this RPC's.
+     *
+     * @generated from field: optional string subscription_group_id = 3;
+     */
+    subscriptionGroupId?: string;
+};
+/**
+ * Describes the message domain.operation.v1.SubmitJobPhaseApprovalRequest.
+ * Use `create(SubmitJobPhaseApprovalRequestSchema)` to create a new message.
+ */
+export declare const SubmitJobPhaseApprovalRequestSchema: GenMessage<SubmitJobPhaseApprovalRequest>;
+/**
+ * @generated from message domain.operation.v1.SubmitJobPhaseApprovalResponse
+ */
+export type SubmitJobPhaseApprovalResponse = Message<"domain.operation.v1.SubmitJobPhaseApprovalResponse"> & {
+    /**
+     * @generated from field: domain.operation.v1.PhaseApprovalStatus status = 1;
+     */
+    status: PhaseApprovalStatus;
+    /**
+     * @generated from field: int32 affected_count = 2;
+     */
+    affectedCount: number;
+    /**
+     * @generated from field: bool success = 3;
+     */
+    success: boolean;
+    /**
+     * @generated from field: optional domain.common.v1.Error error = 4;
+     */
+    error?: Error;
+};
+/**
+ * Describes the message domain.operation.v1.SubmitJobPhaseApprovalResponse.
+ * Use `create(SubmitJobPhaseApprovalResponseSchema)` to create a new message.
+ */
+export declare const SubmitJobPhaseApprovalResponseSchema: GenMessage<SubmitJobPhaseApprovalResponse>;
+/**
+ * @generated from message domain.operation.v1.VerifyJobPhaseApprovalRequest
+ */
+export type VerifyJobPhaseApprovalRequest = Message<"domain.operation.v1.VerifyJobPhaseApprovalRequest"> & {
+    /**
+     * @generated from field: string job_template_id = 1;
+     */
+    jobTemplateId: string;
+    /**
+     * @generated from field: string job_template_phase_id = 2;
+     */
+    jobTemplatePhaseId: string;
+    /**
+     * Narrow the transition to ONE delivery group. ABSENT = every group under the
+     * template — the pre-20260725 behaviour, preserved exactly, so every existing
+     * caller is unaffected and the change is wire-compatible.
+     *
+     * Mirrors GetOutcomeMatrixRequest.subscription_group_id: that field decides
+     * which students a sheet DISPLAYS, this one decides which it UPDATES. Without
+     * it the two disagree — a page showing one group's 29 students transitions all
+     * 87 across the template's three groups.
+     *
+     * No schema change: approval_status lives on job_phase, one row per student
+     * job, so the storage grain was always finer than this RPC's.
+     *
+     * @generated from field: optional string subscription_group_id = 3;
+     */
+    subscriptionGroupId?: string;
+};
+/**
+ * Describes the message domain.operation.v1.VerifyJobPhaseApprovalRequest.
+ * Use `create(VerifyJobPhaseApprovalRequestSchema)` to create a new message.
+ */
+export declare const VerifyJobPhaseApprovalRequestSchema: GenMessage<VerifyJobPhaseApprovalRequest>;
+/**
+ * @generated from message domain.operation.v1.VerifyJobPhaseApprovalResponse
+ */
+export type VerifyJobPhaseApprovalResponse = Message<"domain.operation.v1.VerifyJobPhaseApprovalResponse"> & {
+    /**
+     * @generated from field: domain.operation.v1.PhaseApprovalStatus status = 1;
+     */
+    status: PhaseApprovalStatus;
+    /**
+     * @generated from field: int32 affected_count = 2;
+     */
+    affectedCount: number;
+    /**
+     * @generated from field: bool success = 3;
+     */
+    success: boolean;
+    /**
+     * @generated from field: optional domain.common.v1.Error error = 4;
+     */
+    error?: Error;
+};
+/**
+ * Describes the message domain.operation.v1.VerifyJobPhaseApprovalResponse.
+ * Use `create(VerifyJobPhaseApprovalResponseSchema)` to create a new message.
+ */
+export declare const VerifyJobPhaseApprovalResponseSchema: GenMessage<VerifyJobPhaseApprovalResponse>;
+/**
+ * @generated from message domain.operation.v1.PublishJobPhaseApprovalRequest
+ */
+export type PublishJobPhaseApprovalRequest = Message<"domain.operation.v1.PublishJobPhaseApprovalRequest"> & {
+    /**
+     * @generated from field: string job_template_id = 1;
+     */
+    jobTemplateId: string;
+    /**
+     * @generated from field: string job_template_phase_id = 2;
+     */
+    jobTemplatePhaseId: string;
+    /**
+     * Narrow the transition to ONE delivery group. ABSENT = every group under the
+     * template — the pre-20260725 behaviour, preserved exactly, so every existing
+     * caller is unaffected and the change is wire-compatible.
+     *
+     * Mirrors GetOutcomeMatrixRequest.subscription_group_id: that field decides
+     * which students a sheet DISPLAYS, this one decides which it UPDATES. Without
+     * it the two disagree — a page showing one group's 29 students transitions all
+     * 87 across the template's three groups.
+     *
+     * No schema change: approval_status lives on job_phase, one row per student
+     * job, so the storage grain was always finer than this RPC's.
+     *
+     * @generated from field: optional string subscription_group_id = 3;
+     */
+    subscriptionGroupId?: string;
+};
+/**
+ * Describes the message domain.operation.v1.PublishJobPhaseApprovalRequest.
+ * Use `create(PublishJobPhaseApprovalRequestSchema)` to create a new message.
+ */
+export declare const PublishJobPhaseApprovalRequestSchema: GenMessage<PublishJobPhaseApprovalRequest>;
+/**
+ * @generated from message domain.operation.v1.PublishJobPhaseApprovalResponse
+ */
+export type PublishJobPhaseApprovalResponse = Message<"domain.operation.v1.PublishJobPhaseApprovalResponse"> & {
+    /**
+     * @generated from field: domain.operation.v1.PhaseApprovalStatus status = 1;
+     */
+    status: PhaseApprovalStatus;
+    /**
+     * @generated from field: int32 affected_count = 2;
+     */
+    affectedCount: number;
+    /**
+     * @generated from field: bool success = 3;
+     */
+    success: boolean;
+    /**
+     * @generated from field: optional domain.common.v1.Error error = 4;
+     */
+    error?: Error;
+};
+/**
+ * Describes the message domain.operation.v1.PublishJobPhaseApprovalResponse.
+ * Use `create(PublishJobPhaseApprovalResponseSchema)` to create a new message.
+ */
+export declare const PublishJobPhaseApprovalResponseSchema: GenMessage<PublishJobPhaseApprovalResponse>;
+/**
+ * @generated from message domain.operation.v1.ReturnJobPhaseApprovalRequest
+ */
+export type ReturnJobPhaseApprovalRequest = Message<"domain.operation.v1.ReturnJobPhaseApprovalRequest"> & {
+    /**
+     * @generated from field: string job_template_id = 1;
+     */
+    jobTemplateId: string;
+    /**
+     * @generated from field: string job_template_phase_id = 2;
+     */
+    jobTemplatePhaseId: string;
+    /**
+     * @generated from field: optional string reason = 3;
+     */
+    reason?: string;
+    /**
+     * Narrow the transition to ONE delivery group. ABSENT = every group under the
+     * template — the pre-20260725 behaviour, preserved exactly, so every existing
+     * caller is unaffected and the change is wire-compatible.
+     *
+     * Mirrors GetOutcomeMatrixRequest.subscription_group_id: that field decides
+     * which students a sheet DISPLAYS, this one decides which it UPDATES. Without
+     * it the two disagree — a page showing one group's 29 students transitions all
+     * 87 across the template's three groups.
+     *
+     * No schema change: approval_status lives on job_phase, one row per student
+     * job, so the storage grain was always finer than this RPC's.
+     *
+     * @generated from field: optional string subscription_group_id = 4;
+     */
+    subscriptionGroupId?: string;
+};
+/**
+ * Describes the message domain.operation.v1.ReturnJobPhaseApprovalRequest.
+ * Use `create(ReturnJobPhaseApprovalRequestSchema)` to create a new message.
+ */
+export declare const ReturnJobPhaseApprovalRequestSchema: GenMessage<ReturnJobPhaseApprovalRequest>;
+/**
+ * @generated from message domain.operation.v1.ReturnJobPhaseApprovalResponse
+ */
+export type ReturnJobPhaseApprovalResponse = Message<"domain.operation.v1.ReturnJobPhaseApprovalResponse"> & {
+    /**
+     * @generated from field: domain.operation.v1.PhaseApprovalStatus status = 1;
+     */
+    status: PhaseApprovalStatus;
+    /**
+     * @generated from field: int32 affected_count = 2;
+     */
+    affectedCount: number;
+    /**
+     * @generated from field: bool success = 3;
+     */
+    success: boolean;
+    /**
+     * @generated from field: optional domain.common.v1.Error error = 4;
+     */
+    error?: Error;
+};
+/**
+ * Describes the message domain.operation.v1.ReturnJobPhaseApprovalResponse.
+ * Use `create(ReturnJobPhaseApprovalResponseSchema)` to create a new message.
+ */
+export declare const ReturnJobPhaseApprovalResponseSchema: GenMessage<ReturnJobPhaseApprovalResponse>;
+/**
  * @generated from enum domain.operation.v1.PhaseStatus
  */
 export declare enum PhaseStatus {
@@ -465,6 +774,44 @@ export declare enum PhaseStatus {
  * Describes the enum domain.operation.v1.PhaseStatus.
  */
 export declare const PhaseStatusSchema: GenEnum<PhaseStatus>;
+/**
+ * PhaseApprovalStatus is the LOCAL per-phase approval ladder (plan
+ * 20260718-phase-approval-workflow). It is orthogonal to PhaseStatus (field 11):
+ * approval transitions never mutate PhaseStatus, trigger completion hooks, or
+ * touch billing. The ladder is
+ *   IN_PROGRESS --submit--> FOR_REVIEW --verify--> VERIFIED --publish--> PUBLISHED
+ * with `return` normalizing any advanced/mixed sheet back to IN_PROGRESS.
+ * UNSPECIFIED is never persisted; the DB stores the enum NAME (TEXT) with a
+ * default of IN_PROGRESS and a CHECK over the four non-UNSPECIFIED tokens.
+ *
+ * @generated from enum domain.operation.v1.PhaseApprovalStatus
+ */
+export declare enum PhaseApprovalStatus {
+    /**
+     * @generated from enum value: PHASE_APPROVAL_STATUS_UNSPECIFIED = 0;
+     */
+    UNSPECIFIED = 0,
+    /**
+     * @generated from enum value: PHASE_APPROVAL_STATUS_IN_PROGRESS = 1;
+     */
+    IN_PROGRESS = 1,
+    /**
+     * @generated from enum value: PHASE_APPROVAL_STATUS_FOR_REVIEW = 2;
+     */
+    FOR_REVIEW = 2,
+    /**
+     * @generated from enum value: PHASE_APPROVAL_STATUS_VERIFIED = 3;
+     */
+    VERIFIED = 3,
+    /**
+     * @generated from enum value: PHASE_APPROVAL_STATUS_PUBLISHED = 4;
+     */
+    PUBLISHED = 4
+}
+/**
+ * Describes the enum domain.operation.v1.PhaseApprovalStatus.
+ */
+export declare const PhaseApprovalStatusSchema: GenEnum<PhaseApprovalStatus>;
 /**
  * @generated from service domain.operation.v1.JobPhaseDomainService
  */
@@ -534,5 +881,43 @@ export declare const JobPhaseDomainService: GenService<{
         methodKind: "unary";
         input: typeof ListJobPhasesByJobRequestSchema;
         output: typeof ListJobPhasesByJobResponseSchema;
+    };
+    /**
+     * --- Approval transitions (per-phase approval ladder) ---
+     * Sheet-grain bulk transitions over one (job_template_id, job_template_phase_id).
+     * Requests carry ONLY the sheet identity; actor + workspace resolve from trusted
+     * context and are never request-supplied. Responses report the resulting target
+     * status and the exact affected phase count. Use cases land in P2.
+     *
+     * @generated from rpc domain.operation.v1.JobPhaseDomainService.SubmitJobPhaseApproval
+     */
+    submitJobPhaseApproval: {
+        methodKind: "unary";
+        input: typeof SubmitJobPhaseApprovalRequestSchema;
+        output: typeof SubmitJobPhaseApprovalResponseSchema;
+    };
+    /**
+     * @generated from rpc domain.operation.v1.JobPhaseDomainService.VerifyJobPhaseApproval
+     */
+    verifyJobPhaseApproval: {
+        methodKind: "unary";
+        input: typeof VerifyJobPhaseApprovalRequestSchema;
+        output: typeof VerifyJobPhaseApprovalResponseSchema;
+    };
+    /**
+     * @generated from rpc domain.operation.v1.JobPhaseDomainService.PublishJobPhaseApproval
+     */
+    publishJobPhaseApproval: {
+        methodKind: "unary";
+        input: typeof PublishJobPhaseApprovalRequestSchema;
+        output: typeof PublishJobPhaseApprovalResponseSchema;
+    };
+    /**
+     * @generated from rpc domain.operation.v1.JobPhaseDomainService.ReturnJobPhaseApproval
+     */
+    returnJobPhaseApproval: {
+        methodKind: "unary";
+        input: typeof ReturnJobPhaseApprovalRequestSchema;
+        output: typeof ReturnJobPhaseApprovalResponseSchema;
     };
 }>;

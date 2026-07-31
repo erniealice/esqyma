@@ -11,10 +11,10 @@ import type { Message } from "@bufbuild/protobuf";
 export declare const file_domain_product_line_workspace_user_line_workspace_user: GenFile;
 /**
  * LineWorkspaceUser pins an operator (workspace_user) at a line node for
- * tier-2 group visibility (coordinator @ department node, adviser @ section
- * node). Shape mirrors client_workspace_user (workspace_id + is_owner); the
- * parent FK is line_id instead of client_id, plus the two servicing
- * discriminators (scope, role) the people-hierarchy model specified.
+ * tier-2 group visibility. Shape mirrors client_workspace_user (workspace_id +
+ * is_owner); the parent FK is line_id instead of client_id, plus a generic
+ * servicing-capacity axis (see the capacity field). Vertical titles render from
+ * lyngua, never stored here.
  *
  * @generated from message domain.product.v1.LineWorkspaceUser
  */
@@ -56,17 +56,21 @@ export type LineWorkspaceUser = Message<"domain.product.v1.LineWorkspaceUser"> &
      */
     workspaceUserId: string;
     /**
-     * @generated from field: string scope = 10;
-     */
-    scope: string;
-    /**
-     * @generated from field: string role = 11;
-     */
-    role: string;
-    /**
+     * field reusing these names would silently absorb stale column values.
+     *
+     * unchanged — do NOT renumber
+     *
      * @generated from field: bool is_owner = 12;
      */
     isOwner: boolean;
+    /**
+     * Generic servicing-capacity axis (replaces the removed discriminator's info content). NOT a vertical title.
+     *   'primary' = servicer / lead-eligible;  'access' = view-only member.
+     * Vertical titles render from lyngua on (node type, capacity, is_owner).
+     *
+     * @generated from field: string capacity = 13;
+     */
+    capacity: string;
 };
 /**
  * Describes the message domain.product.v1.LineWorkspaceUser.

@@ -91,6 +91,16 @@ export type SubscriptionGroup = Message<"domain.subscription.v1.SubscriptionGrou
      * @generated from field: optional domain.subscription.v1.PriceSchedule price_schedule = 15;
      */
     priceSchedule?: PriceSchedule;
+    /**
+     * status is the lifecycle CATEGORY of the cohort — free-text per the legacy
+     * status convention: "current" | "completed" | "draft". Orthogonal to `active`
+     * (the visibility gate): pickers offer only status="current" rows as selectable,
+     * non-current rows render as disabled options, and display contexts show the
+     * name regardless of status. Defaulted to "current" in the create use case.
+     *
+     * @generated from field: optional string status = 16;
+     */
+    status?: string;
 };
 /**
  * Describes the message domain.subscription.v1.SubscriptionGroup.

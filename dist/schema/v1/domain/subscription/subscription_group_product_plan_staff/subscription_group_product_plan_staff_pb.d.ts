@@ -66,6 +66,24 @@ export type SubscriptionGroupProductPlanStaff = Message<"domain.subscription.v1.
      * @generated from field: string role = 11;
      */
     role: string;
+    /**
+     * v2 re-parenting (docs/plan/20260724-section-assignment-merged): the edge
+     * becomes (class × eligibility [× phase]); legacy f8/f9/f10 stay populated
+     * (dual-write) until the M7 retirement decision (D-8).
+     *
+     * @generated from field: optional string subscription_group_product_plan_id = 12;
+     */
+    subscriptionGroupProductPlanId?: string;
+    /**
+     * @generated from field: optional string product_plan_staff_id = 13;
+     */
+    productPlanStaffId?: string;
+    /**
+     * NULL = all phases (coverage rule plan.md §2.5)
+     *
+     * @generated from field: optional string job_template_phase_id = 14;
+     */
+    jobTemplatePhaseId?: string;
 };
 /**
  * Describes the message domain.subscription.v1.SubscriptionGroupProductPlanStaff.

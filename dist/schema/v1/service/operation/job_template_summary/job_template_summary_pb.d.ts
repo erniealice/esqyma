@@ -1,6 +1,7 @@
 import type { GenFile, GenMessage, GenService } from "@bufbuild/protobuf/codegenv2";
 import type { Error } from "../../../domain/common/error_pb";
 import type { PaginationRequest, PaginationResponse } from "../../../domain/common/pagination_pb";
+import type { PhaseApprovalStatus } from "../../../domain/operation/job_phase/job_phase_pb";
 import type { Message } from "@bufbuild/protobuf";
 /**
  * Describes the file service/operation/job_template_summary/job_template_summary.proto.
@@ -90,6 +91,91 @@ export type JobTemplateSummary = Message<"service.operation.v1.JobTemplateSummar
      * @generated from field: repeated service.operation.v1.Deliverer deliverers = 12;
      */
     deliverers: Deliverer[];
+    /**
+     * job_category_id (field 13, R9 W-A1) — the template's CURRENT job_category FK
+     * (job_template.job_category_id, proto field 32), the AUTHORITATIVE category
+     * partition for the report-cards landing (plan 20260719-report-cards-landing
+     * §3.0/§3.1). Nullable in the DB (a template may carry no category); the postgres
+     * adapter scans it with sql.NullString → "" on NULL, and the view maps "" to the
+     * single "Uncategorized" bucket. Declared as a plain string (NOT proto3 `optional`)
+     * to match this message's sibling nullable fields — price_schedule_id / price_
+     * schedule_name / output_product_id / output_product_name are all LEFT-join-nullable
+     * and all scan sql.NullString → "" into plain strings — and the "NULL → empty
+     * string" read-model contract (§3.1).
+     *
+     * @generated from field: string job_category_id = 13;
+     */
+    jobCategoryId: string;
+    /**
+     * --- Phase-approval preaggregate (R7 P4; fields 14–17 per the LOCKED tag
+     * allocation in plan 20260718-phase-approval-workflow §4.5, recorded
+     * identically in 20260719-report-cards-landing §3.5; fields 18–21 per the
+     * AMENDED dual-grain contract of the same two sections + Q-R9-1). Derived
+     * from the SAME resolver-scoped job set as the row (codex-tandem: STAFF and
+     * admin see the chip over the same job scope as the row's counts).
+     *
+     * A "phase" below is one SHEET (job_template_phase instance); a sheet is
+     * DATA-BEARING when >=1 active task_outcome exists under an active job_task
+     * of its active job_phase rows. No-data sheets are EXCLUDED from every
+     * count/denominator (the D3/Q-R9-1 contract). lowest_status is the
+     * conservative LOWEST approval ladder rank across the data-bearing sheets'
+     * job_phase rows; mixed_attention is true when any data-bearing sheet is
+     * internally mixed (its rows sit at differing statuses — the derived
+     * Attention overlay). With ZERO data-bearing sheets the counts are 0 and the
+     * status is PHASE_APPROVAL_STATUS_UNSPECIFIED (render the neutral
+     * not-started default; UNSPECIFIED is never persisted, plan §4.1).
+     *
+     * TEMPLATE-WIDE grain (14–17): over ALL scoped rows of the template — the
+     * /courses list row chip ("n/m published" + lowest state, D3).
+     *
+     * data-bearing sheets whose every row is PUBLISHED
+     *
+     * @generated from field: int32 published_count = 14;
+     */
+    publishedCount: number;
+    /**
+     * data-bearing sheets (the denominator)
+     *
+     * @generated from field: int32 phase_count = 15;
+     */
+    phaseCount: number;
+    /**
+     * conservative lowest across data-bearing sheets
+     *
+     * @generated from field: domain.operation.v1.PhaseApprovalStatus lowest_status = 16;
+     */
+    lowestStatus: PhaseApprovalStatus;
+    /**
+     * any data-bearing sheet internally mixed
+     *
+     * @generated from field: bool mixed_attention = 17;
+     */
+    mixedAttention: boolean;
+    /**
+     * GROUP+TEMPLATE grain (18–21): the SAME quadruple restricted to THIS row's
+     * (subscription_group, template) slice — the R9 Phase-B cell grain (Q-R9-1:
+     * subject state = group_lowest_status; the landing derives its four-status
+     * subject distribution per (group, category) cell by counting summary rows
+     * per group_lowest_status). Computed EXPLICITLY alongside 14–17 so the
+     * courses row keeps template-wide semantics while the landing cell reads
+     * per-group state — one consumer's semantics never silently changes for the
+     * other (codex-plan-review §7 wave 5).
+     *
+     * @generated from field: int32 group_published_count = 18;
+     */
+    groupPublishedCount: number;
+    /**
+     * @generated from field: int32 group_phase_count = 19;
+     */
+    groupPhaseCount: number;
+    /**
+     * @generated from field: domain.operation.v1.PhaseApprovalStatus group_lowest_status = 20;
+     */
+    groupLowestStatus: PhaseApprovalStatus;
+    /**
+     * @generated from field: bool group_mixed_attention = 21;
+     */
+    groupMixedAttention: boolean;
 };
 /**
  * Describes the message service.operation.v1.JobTemplateSummary.
