@@ -1,0 +1,129 @@
+syntax = "proto3";
+
+package service.dashboard.outcome_completion.v1;
+
+option go_package = "github.com/erniealice/esqyma/pkg/schema/v1/service/dashboard/outcome_completion";
+
+import "domain/common/error.proto";
+
+// ---------------------------------------------------------------------------
+// Outcome-completion dashboard — service-driven domain (cross-aggregate
+// projection reading across job_task × template_task_criteria × task_outcome
+// × job_phase in the operation domain).
+//
+// See docs/plan/20260801-persona-home-dashboard/plan.md §4.3 (Q5 lock: ONE
+// dedicated aggregate read — do NOT extend GetJobDashboard, do NOT compose
+// raw list reads) and decisions.html Q3/Q5/Q7 (all LOCKED 2026-08-01),
+// INCLUDING the §4.3 owner-acked amendment banner (2026-08-01):
+//   A2 — the response carries a per-phase_order period dimension
+//        (period_slices) so the consumer windows the denominator
+//        STRUCTURALLY, by phase order — never by dates: job_phase.planned_*
+//        are NULL across the current period and cannot be windowed on.
+//   Ride-alongs — the approval series adds a returned count (derived by the
+//        adapter from job_phase.returned_at, since a return re-enters the
+//        IN_PROGRESS status) and a not-started count (IN_PROGRESS is the
+//        spawn default, so raw IN_PROGRESS overwhelmingly means "not
+//        started"; the adapter splits it). The aggregate SQL excludes
+//        is_synthesized phase rows explicitly.
+//   (A1 — most-specific-wins responsibility scope — is adapter-side SQL and
+//        deliberately leaves no mark on this wire contract.)
+//
+// Mirrors proto/v1/service/dashboard/job/dashboard.proto: message-only
+// contract — per the service/dashboard convention there is NO gRPC service
+// block; the RPC surface is the espyna use case
+// internal/application/usecases/service/dashboard/outcome_completion/
+// get_outcome_completion_summary.go (actiongate `outcome_completion:read`
+// per the Q7 lock).
+//
+// Per Q-SDM-DASHBOARD-SHARED-TYPES (LOCKED 2026-05-20), this file owns its
+// own messages — there is no `service/dashboard/common.proto`. The approval
+// series is explicit counts rather than an import of the
+// PhaseApprovalStatus enum so this contract stays self-contained.
+//
+// Identity is resolved from ctx, never carried on the wire (Q-EIB-BRIDGE
+// invariant): the request has NO principal field. Row scoping happens inside
+// the adapter — principal kind 7 mirrors StaffScopeClause/reachableJobUnion
+// (plus the A1 most-specific-wins predicate); kinds 1/2 read at workspace
+// grain. All values are counts, never money — no centavo surface anywhere
+// in this contract.
+// ---------------------------------------------------------------------------
+
+// OutcomeCompletionApprovalCounts is the secondary series (Q3 lock + the
+// ride-along amendments): the number of reachable phase rows in each
+// approval-ladder state. The ladder tokens mirror
+// domain.operation.v1.PhaseApprovalStatus (IN_PROGRESS --submit-->
+// FOR_REVIEW --verify--> VERIFIED --publish--> PUBLISHED); the two derived
+// buckets are adapter-computed:
+//   not_started — IN_PROGRESS rows with no recorded cell outcome and no
+//                 submitted_at and no returned_at (the spawn-default split).
+//   returned    — rows with returned_at set (a return re-enters
+//                 IN_PROGRESS; without this bucket the most actionable
+//                 exception state would be invisible).
+//   in_progress — the remaining IN_PROGRESS rows (started, not returned).
+// The six counts are disjoint; their sum is the reachable, non-synthesized
+// phase-row population (is_synthesized rows are excluded explicitly).
+message OutcomeCompletionApprovalCounts {
+  int64 not_started = 1;
+  int64 in_progress = 2;
+  int64 for_review  = 3;
+  int64 verified    = 4;
+  int64 published   = 5;
+  int64 returned    = 6;
+}
+
+// OutcomeCompletionPeriodSlice is the A2 period dimension: the same
+// expected/recorded cell counts and approval series, restricted to phase
+// rows with a single phase_order value. The consumer windows the
+// denominator structurally with these slices (e.g. render the current
+// period, or default to the earliest phase_order with unrecorded work) —
+// phase dates are NULL and cannot drive a window.
+message OutcomeCompletionPeriodSlice {
+  // job_phase.phase_order for every row aggregated into this slice.
+  int32 phase_order    = 1;
+  int64 expected_cells = 2;
+  int64 recorded_cells = 3;
+  OutcomeCompletionApprovalCounts approval_counts = 4;
+}
+
+// OutcomeCompletionCategoryRow is one per-category completion row (Q3 lock:
+// cell grain, current period, live query). expected_cells = active job_task
+// × active template_task_criteria over the principal-reachable job set
+// (most-specific-wins responsibility, A1); recorded_cells = active
+// task_outcome rows over the same set. category_id / category_name echo the
+// job_category row (sorted by its sort_order asc) so the view can key tabs
+// (`?t=<category_id>`) and render labels without a second read.
+//
+// The row-level totals span every phase_order; period_slices carry the A2
+// per-phase_order breakdown (ordered by phase_order asc) so the consumer
+// can window without a second read. Totals equal the sum of the slices.
+message OutcomeCompletionCategoryRow {
+  string category_id     = 1;
+  string category_name   = 2;
+  int64  expected_cells  = 3;
+  int64  recorded_cells  = 4;
+  OutcomeCompletionApprovalCounts approval_counts = 5;
+  repeated OutcomeCompletionPeriodSlice period_slices = 6;
+}
+
+// GetOutcomeCompletionSummaryRequest is the request shape. Identity (and thus
+// staff-vs-workspace row scope) comes from ctx — deliberately absent here.
+message GetOutcomeCompletionSummaryRequest {
+  string workspace_id = 1;
+  // now_millis — unix milliseconds used for current-period boundary
+  // computations. Zero means "use server time".
+  optional int64 now_millis = 2;
+}
+
+// GetOutcomeCompletionSummaryResponse is the projection the view layer reads:
+// one row per category plus a pre-computed All rollup (all_rollup.category_id
+// and category_name are empty — the All tab label comes from lyngua, never
+// the wire). The rollup carries period_slices too, so the All tab windows
+// by phase_order exactly like the category tabs.
+message GetOutcomeCompletionSummaryResponse {
+  bool success                          = 1;
+  optional domain.common.v1.Error error = 2;
+  // Per-category rows, ordered by the category row's sort_order asc.
+  repeated OutcomeCompletionCategoryRow category_rows = 3;
+  // Rollup across every category row (the All tab).
+  OutcomeCompletionCategoryRow all_rollup = 4;
+}
