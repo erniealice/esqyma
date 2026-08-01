@@ -70,6 +70,14 @@ service OutcomeMatrixService {
   // Stored values are read VERBATIM — never recomputed (D8). Serves the CSV
   // "Final" export today and the composite PDF builder later (P5).
   rpc GetOutcomeSummaryRoster(GetOutcomeSummaryRosterRequest) returns (GetOutcomeSummaryRosterResponse);
+  // GetPhaseApprovalGateRollup is the report-card render gate's group-grain
+  // input read (docs/plan/20260729-report-card-render-gate-group-grain).
+  // Response is per requested template phase and carries INPUTS, not a verdict —
+  // gate policy stays in the consuming view layer. The applied group id is
+  // echoed EXACTLY so a caller can prove the narrow was applied to the group it
+  // asked for; providers that cannot prove application must error, never
+  // return an unnarrowed aggregate.
+  rpc GetPhaseApprovalGateRollup(GetPhaseApprovalGateRollupRequest) returns (GetPhaseApprovalGateRollupResponse);
 }
 
 // OutcomeMatrixScope selects the row set. UNSPECIFIED is fail-closed → MINE.
@@ -193,6 +201,50 @@ message PhaseApprovalRollup {
   // transition stamps on its audit event; computed only when the sheet is
   // IN_PROGRESS (submit-eligible), otherwise 0.
   int32 blank_required_count = 7;
+}
+
+// ---- Render-gate group-grain rollup (20260729 render-gate plan, v2) --------
+
+message GetPhaseApprovalGateRollupRequest {
+  // REQUIRED — the route-validated delivery group. Empty is an ERROR (never
+  // "no narrow"): the locked completion contract forbids a group-scoped read
+  // from silently degenerating (codex §"Recommended completion contract" #5).
+  string subscription_group_id = 1;
+  // REQUIRED, non-empty — the card's target job_template_phase ids (may span
+  // several job_templates: a card draws one sheet per subject).
+  repeated string job_template_phase_ids = 2;
+}
+
+// PhaseApprovalGateRollup is one (template_phase × group) sheet's gate input,
+// derived over the ACTIVE group-narrowed sheet with the exact shared transition
+// predicate (espyna groupNarrowPredicate — NOT the looser matrix-cells
+// predicate), applied in SQL before aggregation, no LIMIT/OFFSET.
+message PhaseApprovalGateRollup {
+  string job_template_phase_id = 1;
+  // Exact echo of the group id the narrow was applied with. A consumer MUST
+  // reject any row whose echo differs from the id it requested.
+  string applied_subscription_group_id = 2;
+  // Active member phases in the group sheet. 0 rows ⇒ the phase is omitted
+  // from the response entirely; a consumer requiring coverage treats that as
+  // unprovable (its own card is a proven member, so a correct narrow can
+  // never return an empty sheet for a phase the card draws from).
+  int32 target_count = 3;
+  // BOOL_OR over the sheet of "workflow entered": approval_status beyond
+  // IN_PROGRESS/UNSPECIFIED OR any of the four audit stamps present
+  // (submitted_by / verified_by / published_by / returned_by — job_phase
+  // fields 41/44/47/51). NEW derived bit — PhaseApprovalRollup lacks it and
+  // the never-workflowed carve-out requires it (h2-synthesis agreement #5).
+  bool any_workflow_entered = 4;
+  // BOOL_AND over the sheet of approval_status = PUBLISHED.
+  bool all_published = 5;
+  // Any active task_outcome under any active job_task of any sheet member.
+  bool has_data = 6;
+}
+
+message GetPhaseApprovalGateRollupResponse {
+  repeated PhaseApprovalGateRollup rollups = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
 }
 
 message GetOutcomeMatrixResponse {

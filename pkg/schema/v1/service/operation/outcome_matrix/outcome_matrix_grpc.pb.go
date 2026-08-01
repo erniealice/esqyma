@@ -19,8 +19,9 @@ import (
 const _ = grpc.SupportPackageIsVersion9
 
 const (
-	OutcomeMatrixService_GetOutcomeMatrix_FullMethodName        = "/service.operation.v1.OutcomeMatrixService/GetOutcomeMatrix"
-	OutcomeMatrixService_GetOutcomeSummaryRoster_FullMethodName = "/service.operation.v1.OutcomeMatrixService/GetOutcomeSummaryRoster"
+	OutcomeMatrixService_GetOutcomeMatrix_FullMethodName           = "/service.operation.v1.OutcomeMatrixService/GetOutcomeMatrix"
+	OutcomeMatrixService_GetOutcomeSummaryRoster_FullMethodName    = "/service.operation.v1.OutcomeMatrixService/GetOutcomeSummaryRoster"
+	OutcomeMatrixService_GetPhaseApprovalGateRollup_FullMethodName = "/service.operation.v1.OutcomeMatrixService/GetPhaseApprovalGateRollup"
 )
 
 // OutcomeMatrixServiceClient is the client API for OutcomeMatrixService service.
@@ -35,6 +36,14 @@ type OutcomeMatrixServiceClient interface {
 	// Stored values are read VERBATIM — never recomputed (D8). Serves the CSV
 	// "Final" export today and the composite PDF builder later (P5).
 	GetOutcomeSummaryRoster(ctx context.Context, in *GetOutcomeSummaryRosterRequest, opts ...grpc.CallOption) (*GetOutcomeSummaryRosterResponse, error)
+	// GetPhaseApprovalGateRollup is the report-card render gate's group-grain
+	// input read (docs/plan/20260729-report-card-render-gate-group-grain).
+	// Response is per requested template phase and carries INPUTS, not a verdict —
+	// gate policy stays in the consuming view layer. The applied group id is
+	// echoed EXACTLY so a caller can prove the narrow was applied to the group it
+	// asked for; providers that cannot prove application must error, never
+	// return an unnarrowed aggregate.
+	GetPhaseApprovalGateRollup(ctx context.Context, in *GetPhaseApprovalGateRollupRequest, opts ...grpc.CallOption) (*GetPhaseApprovalGateRollupResponse, error)
 }
 
 type outcomeMatrixServiceClient struct {
@@ -65,6 +74,16 @@ func (c *outcomeMatrixServiceClient) GetOutcomeSummaryRoster(ctx context.Context
 	return out, nil
 }
 
+func (c *outcomeMatrixServiceClient) GetPhaseApprovalGateRollup(ctx context.Context, in *GetPhaseApprovalGateRollupRequest, opts ...grpc.CallOption) (*GetPhaseApprovalGateRollupResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(GetPhaseApprovalGateRollupResponse)
+	err := c.cc.Invoke(ctx, OutcomeMatrixService_GetPhaseApprovalGateRollup_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // OutcomeMatrixServiceServer is the server API for OutcomeMatrixService service.
 // All implementations must embed UnimplementedOutcomeMatrixServiceServer
 // for forward compatibility.
@@ -77,6 +96,14 @@ type OutcomeMatrixServiceServer interface {
 	// Stored values are read VERBATIM — never recomputed (D8). Serves the CSV
 	// "Final" export today and the composite PDF builder later (P5).
 	GetOutcomeSummaryRoster(context.Context, *GetOutcomeSummaryRosterRequest) (*GetOutcomeSummaryRosterResponse, error)
+	// GetPhaseApprovalGateRollup is the report-card render gate's group-grain
+	// input read (docs/plan/20260729-report-card-render-gate-group-grain).
+	// Response is per requested template phase and carries INPUTS, not a verdict —
+	// gate policy stays in the consuming view layer. The applied group id is
+	// echoed EXACTLY so a caller can prove the narrow was applied to the group it
+	// asked for; providers that cannot prove application must error, never
+	// return an unnarrowed aggregate.
+	GetPhaseApprovalGateRollup(context.Context, *GetPhaseApprovalGateRollupRequest) (*GetPhaseApprovalGateRollupResponse, error)
 	mustEmbedUnimplementedOutcomeMatrixServiceServer()
 }
 
@@ -92,6 +119,9 @@ func (UnimplementedOutcomeMatrixServiceServer) GetOutcomeMatrix(context.Context,
 }
 func (UnimplementedOutcomeMatrixServiceServer) GetOutcomeSummaryRoster(context.Context, *GetOutcomeSummaryRosterRequest) (*GetOutcomeSummaryRosterResponse, error) {
 	return nil, status.Error(codes.Unimplemented, "method GetOutcomeSummaryRoster not implemented")
+}
+func (UnimplementedOutcomeMatrixServiceServer) GetPhaseApprovalGateRollup(context.Context, *GetPhaseApprovalGateRollupRequest) (*GetPhaseApprovalGateRollupResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method GetPhaseApprovalGateRollup not implemented")
 }
 func (UnimplementedOutcomeMatrixServiceServer) mustEmbedUnimplementedOutcomeMatrixServiceServer() {}
 func (UnimplementedOutcomeMatrixServiceServer) testEmbeddedByValue()                              {}
@@ -150,6 +180,24 @@ func _OutcomeMatrixService_GetOutcomeSummaryRoster_Handler(srv interface{}, ctx 
 	return interceptor(ctx, in, info, handler)
 }
 
+func _OutcomeMatrixService_GetPhaseApprovalGateRollup_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetPhaseApprovalGateRollupRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(OutcomeMatrixServiceServer).GetPhaseApprovalGateRollup(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: OutcomeMatrixService_GetPhaseApprovalGateRollup_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(OutcomeMatrixServiceServer).GetPhaseApprovalGateRollup(ctx, req.(*GetPhaseApprovalGateRollupRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // OutcomeMatrixService_ServiceDesc is the grpc.ServiceDesc for OutcomeMatrixService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -164,6 +212,10 @@ var OutcomeMatrixService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "GetOutcomeSummaryRoster",
 			Handler:    _OutcomeMatrixService_GetOutcomeSummaryRoster_Handler,
+		},
+		{
+			MethodName: "GetPhaseApprovalGateRollup",
+			Handler:    _OutcomeMatrixService_GetPhaseApprovalGateRollup_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

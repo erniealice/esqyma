@@ -330,6 +330,110 @@ export type PhaseApprovalRollup = Message<"service.operation.v1.PhaseApprovalRol
  */
 export declare const PhaseApprovalRollupSchema: GenMessage<PhaseApprovalRollup>;
 /**
+ * @generated from message service.operation.v1.GetPhaseApprovalGateRollupRequest
+ */
+export type GetPhaseApprovalGateRollupRequest = Message<"service.operation.v1.GetPhaseApprovalGateRollupRequest"> & {
+    /**
+     * REQUIRED — the route-validated delivery group. Empty is an ERROR (never
+     * "no narrow"): the locked completion contract forbids a group-scoped read
+     * from silently degenerating (codex §"Recommended completion contract" #5).
+     *
+     * @generated from field: string subscription_group_id = 1;
+     */
+    subscriptionGroupId: string;
+    /**
+     * REQUIRED, non-empty — the card's target job_template_phase ids (may span
+     * several job_templates: a card draws one sheet per subject).
+     *
+     * @generated from field: repeated string job_template_phase_ids = 2;
+     */
+    jobTemplatePhaseIds: string[];
+};
+/**
+ * Describes the message service.operation.v1.GetPhaseApprovalGateRollupRequest.
+ * Use `create(GetPhaseApprovalGateRollupRequestSchema)` to create a new message.
+ */
+export declare const GetPhaseApprovalGateRollupRequestSchema: GenMessage<GetPhaseApprovalGateRollupRequest>;
+/**
+ * PhaseApprovalGateRollup is one (template_phase × group) sheet's gate input,
+ * derived over the ACTIVE group-narrowed sheet with the exact shared transition
+ * predicate (espyna groupNarrowPredicate — NOT the looser matrix-cells
+ * predicate), applied in SQL before aggregation, no LIMIT/OFFSET.
+ *
+ * @generated from message service.operation.v1.PhaseApprovalGateRollup
+ */
+export type PhaseApprovalGateRollup = Message<"service.operation.v1.PhaseApprovalGateRollup"> & {
+    /**
+     * @generated from field: string job_template_phase_id = 1;
+     */
+    jobTemplatePhaseId: string;
+    /**
+     * Exact echo of the group id the narrow was applied with. A consumer MUST
+     * reject any row whose echo differs from the id it requested.
+     *
+     * @generated from field: string applied_subscription_group_id = 2;
+     */
+    appliedSubscriptionGroupId: string;
+    /**
+     * Active member phases in the group sheet. 0 rows ⇒ the phase is omitted
+     * from the response entirely; a consumer requiring coverage treats that as
+     * unprovable (its own card is a proven member, so a correct narrow can
+     * never return an empty sheet for a phase the card draws from).
+     *
+     * @generated from field: int32 target_count = 3;
+     */
+    targetCount: number;
+    /**
+     * BOOL_OR over the sheet of "workflow entered": approval_status beyond
+     * IN_PROGRESS/UNSPECIFIED OR any of the four audit stamps present
+     * (submitted_by / verified_by / published_by / returned_by — job_phase
+     * fields 41/44/47/51). NEW derived bit — PhaseApprovalRollup lacks it and
+     * the never-workflowed carve-out requires it (h2-synthesis agreement #5).
+     *
+     * @generated from field: bool any_workflow_entered = 4;
+     */
+    anyWorkflowEntered: boolean;
+    /**
+     * BOOL_AND over the sheet of approval_status = PUBLISHED.
+     *
+     * @generated from field: bool all_published = 5;
+     */
+    allPublished: boolean;
+    /**
+     * Any active task_outcome under any active job_task of any sheet member.
+     *
+     * @generated from field: bool has_data = 6;
+     */
+    hasData: boolean;
+};
+/**
+ * Describes the message service.operation.v1.PhaseApprovalGateRollup.
+ * Use `create(PhaseApprovalGateRollupSchema)` to create a new message.
+ */
+export declare const PhaseApprovalGateRollupSchema: GenMessage<PhaseApprovalGateRollup>;
+/**
+ * @generated from message service.operation.v1.GetPhaseApprovalGateRollupResponse
+ */
+export type GetPhaseApprovalGateRollupResponse = Message<"service.operation.v1.GetPhaseApprovalGateRollupResponse"> & {
+    /**
+     * @generated from field: repeated service.operation.v1.PhaseApprovalGateRollup rollups = 1;
+     */
+    rollups: PhaseApprovalGateRollup[];
+    /**
+     * @generated from field: bool success = 2;
+     */
+    success: boolean;
+    /**
+     * @generated from field: optional domain.common.v1.Error error = 3;
+     */
+    error?: Error;
+};
+/**
+ * Describes the message service.operation.v1.GetPhaseApprovalGateRollupResponse.
+ * Use `create(GetPhaseApprovalGateRollupResponseSchema)` to create a new message.
+ */
+export declare const GetPhaseApprovalGateRollupResponseSchema: GenMessage<GetPhaseApprovalGateRollupResponse>;
+/**
  * @generated from message service.operation.v1.GetOutcomeMatrixResponse
  */
 export type GetOutcomeMatrixResponse = Message<"service.operation.v1.GetOutcomeMatrixResponse"> & {
@@ -570,5 +674,21 @@ export declare const OutcomeMatrixService: GenService<{
         methodKind: "unary";
         input: typeof GetOutcomeSummaryRosterRequestSchema;
         output: typeof GetOutcomeSummaryRosterResponseSchema;
+    };
+    /**
+     * GetPhaseApprovalGateRollup is the report-card render gate's group-grain
+     * input read (docs/plan/20260729-report-card-render-gate-group-grain).
+     * Response is per requested template phase and carries INPUTS, not a verdict —
+     * gate policy stays in the consuming view layer. The applied group id is
+     * echoed EXACTLY so a caller can prove the narrow was applied to the group it
+     * asked for; providers that cannot prove application must error, never
+     * return an unnarrowed aggregate.
+     *
+     * @generated from rpc service.operation.v1.OutcomeMatrixService.GetPhaseApprovalGateRollup
+     */
+    getPhaseApprovalGateRollup: {
+        methodKind: "unary";
+        input: typeof GetPhaseApprovalGateRollupRequestSchema;
+        output: typeof GetPhaseApprovalGateRollupResponseSchema;
     };
 }>;

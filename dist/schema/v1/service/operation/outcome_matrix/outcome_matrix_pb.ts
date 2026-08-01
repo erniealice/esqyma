@@ -16,7 +16,7 @@ import type { Message } from "@bufbuild/protobuf";
  * Describes the file service/operation/outcome_matrix/outcome_matrix.proto.
  */
 export const file_service_operation_outcome_matrix_outcome_matrix: GenFile = /*@__PURE__*/
-  fileDesc("CjVzZXJ2aWNlL29wZXJhdGlvbi9vdXRjb21lX21hdHJpeC9vdXRjb21lX21hdHJpeC5wcm90bxIUc2VydmljZS5vcGVyYXRpb24udjEi0QEKF0dldE91dGNvbWVNYXRyaXhSZXF1ZXN0EhcKD2pvYl90ZW1wbGF0ZV9pZBgBIAEoCRI3CgVzY29wZRgCIAEoDjIoLnNlcnZpY2Uub3BlcmF0aW9uLnYxLk91dGNvbWVNYXRyaXhTY29wZRIiChVzdWJzY3JpcHRpb25fZ3JvdXBfaWQYAyABKAlIAIgBARIXCgpwcm9kdWN0X2lkGAQgASgJSAGIAQFCGAoWX3N1YnNjcmlwdGlvbl9ncm91cF9pZEINCgtfcHJvZHVjdF9pZCKHAQoPQ3JpdGVyaW9uQ29sdW1uEhIKCmNvbHVtbl9rZXkYASABKAkSFgoOc2VxdWVuY2Vfb3JkZXIYAiABKAUSEAoIcmVxdWlyZWQYAyABKAgSNgoIY3JpdGVyaWEYBCABKAsyJC5kb21haW4ub3BlcmF0aW9uLnYxLk91dGNvbWVDcml0ZXJpYSKKAQoKVGFza0NvbHVtbhIcChRqb2JfdGVtcGxhdGVfdGFza19pZBgBIAEoCRINCgVsYWJlbBgCIAEoCRIWCg5zZXF1ZW5jZV9vcmRlchgDIAEoBRI3Cghjcml0ZXJpYRgEIAMoCzIlLnNlcnZpY2Uub3BlcmF0aW9uLnYxLkNyaXRlcmlvbkNvbHVtbiKSAQoLUGhhc2VDb2x1bW4SHQoVam9iX3RlbXBsYXRlX3BoYXNlX2lkGAEgASgJEg0KBWxhYmVsGAIgASgJEhYKDnNlcXVlbmNlX29yZGVyGAMgASgFEi8KBXRhc2tzGAQgAygLMiAuc2VydmljZS5vcGVyYXRpb24udjEuVGFza0NvbHVtbhIMCgRjb2RlGAUgASgJIvkCCgtPdXRjb21lQ2VsbBISCgpvdXRjb21lX2lkGAEgASgJEhMKC2pvYl90YXNrX2lkGAIgASgJEhoKDW51bWVyaWNfdmFsdWUYAyABKAFIAIgBARIXCgp0ZXh0X3ZhbHVlGAQgASgJSAGIAQESHgoRY2F0ZWdvcmljYWxfdmFsdWUYBSABKAlIAogBARIcCg9wYXNzX2ZhaWxfdmFsdWUYBiABKAhIA4gBARITCgtyZWNvcmRlZF9ieRgHIAEoCRIQCghlZGl0YWJsZRgIIAEoCBIUCgxqb2JfcGhhc2VfaWQYCSABKAkSDgoGam9iX2lkGAogASgJEh8KEmRldGVybWluYXRpb25fbm90ZRgLIAEoCUgEiAEBQhAKDl9udW1lcmljX3ZhbHVlQg0KC190ZXh0X3ZhbHVlQhQKEl9jYXRlZ29yaWNhbF92YWx1ZUISChBfcGFzc19mYWlsX3ZhbHVlQhUKE19kZXRlcm1pbmF0aW9uX25vdGUiwgEKCk91dGNvbWVSb3cSEQoJY2xpZW50X2lkGAEgASgJEhQKDGNsaWVudF9sYWJlbBgCIAEoCRI6CgVjZWxscxgDIAMoCzIrLnNlcnZpY2Uub3BlcmF0aW9uLnYxLk91dGNvbWVSb3cuQ2VsbHNFbnRyeRpPCgpDZWxsc0VudHJ5EgsKA2tleRgBIAEoCRIwCgV2YWx1ZRgCIAEoCzIhLnNlcnZpY2Uub3BlcmF0aW9uLnYxLk91dGNvbWVDZWxsOgI4ASLYAQoTUGhhc2VBcHByb3ZhbFJvbGx1cBIdChVqb2JfdGVtcGxhdGVfcGhhc2VfaWQYASABKAkSOAoGc3RhdHVzGAIgASgOMiguZG9tYWluLm9wZXJhdGlvbi52MS5QaGFzZUFwcHJvdmFsU3RhdHVzEg0KBW1peGVkGAMgASgIEhQKDHRhcmdldF9jb3VudBgEIAEoBRIQCghoYXNfZGF0YRgFIAEoCBITCgtoYXJkX2Zyb3plbhgGIAEoCBIcChRibGFua19yZXF1aXJlZF9jb3VudBgHIAEoBSK+AgoYR2V0T3V0Y29tZU1hdHJpeFJlc3BvbnNlEhcKD2pvYl90ZW1wbGF0ZV9pZBgBIAEoCRIZChFqb2JfdGVtcGxhdGVfbmFtZRgCIAEoCRIxCgZwaGFzZXMYAyADKAsyIS5zZXJ2aWNlLm9wZXJhdGlvbi52MS5QaGFzZUNvbHVtbhIuCgRyb3dzGAQgAygLMiAuc2VydmljZS5vcGVyYXRpb24udjEuT3V0Y29tZVJvdxIPCgdzdWNjZXNzGAUgASgIEisKBWVycm9yGAYgASgLMhcuZG9tYWluLmNvbW1vbi52MS5FcnJvckgAiAEBEkMKEGFwcHJvdmFsX3JvbGx1cHMYByADKAsyKS5zZXJ2aWNlLm9wZXJhdGlvbi52MS5QaGFzZUFwcHJvdmFsUm9sbHVwQggKBl9lcnJvciJyCh5HZXRPdXRjb21lU3VtbWFyeVJvc3RlclJlcXVlc3QSFwoPam9iX3RlbXBsYXRlX2lkGAEgASgJEjcKBXNjb3BlGAIgASgOMiguc2VydmljZS5vcGVyYXRpb24udjEuT3V0Y29tZU1hdHJpeFNjb3BlIrIBChhPdXRjb21lU3VtbWFyeVBoYXNlRW50cnkSHQoVam9iX3RlbXBsYXRlX3BoYXNlX2lkGAEgASgJEgwKBGNvZGUYAiABKAkSDQoFbGFiZWwYAyABKAkSFgoOc2VxdWVuY2Vfb3JkZXIYBCABKAUSFAoMc2NhbGVkX2xhYmVsGAUgASgJEhoKDXN1bW1hcnlfc2NvcmUYBiABKAFIAIgBAUIQCg5fc3VtbWFyeV9zY29yZSLBAQoXT3V0Y29tZVN1bW1hcnlSb3N0ZXJSb3cSEQoJY2xpZW50X2lkGAEgASgJEhQKDGNsaWVudF9sYWJlbBgCIAEoCRI+CgZwaGFzZXMYAyADKAsyLi5zZXJ2aWNlLm9wZXJhdGlvbi52MS5PdXRjb21lU3VtbWFyeVBoYXNlRW50cnkSGAoQeWVhcl9maW5hbF9sYWJlbBgEIAEoCRIjCht5ZWFyX2ZpbmFsX2lzX2F1dGhvcml0YXRpdmUYBSABKAgivwEKH0dldE91dGNvbWVTdW1tYXJ5Um9zdGVyUmVzcG9uc2USFwoPam9iX3RlbXBsYXRlX2lkGAEgASgJEjsKBHJvd3MYAiADKAsyLS5zZXJ2aWNlLm9wZXJhdGlvbi52MS5PdXRjb21lU3VtbWFyeVJvc3RlclJvdxIPCgdzdWNjZXNzGAMgASgIEisKBWVycm9yGAQgASgLMhcuZG9tYWluLmNvbW1vbi52MS5FcnJvckgAiAEBQggKBl9lcnJvcip3ChJPdXRjb21lTWF0cml4U2NvcGUSJAogT1VUQ09NRV9NQVRSSVhfU0NPUEVfVU5TUEVDSUZJRUQQABIdChlPVVRDT01FX01BVFJJWF9TQ09QRV9NSU5FEAESHAoYT1VUQ09NRV9NQVRSSVhfU0NPUEVfQUxMEAIykgIKFE91dGNvbWVNYXRyaXhTZXJ2aWNlEnEKEEdldE91dGNvbWVNYXRyaXgSLS5zZXJ2aWNlLm9wZXJhdGlvbi52MS5HZXRPdXRjb21lTWF0cml4UmVxdWVzdBouLnNlcnZpY2Uub3BlcmF0aW9uLnYxLkdldE91dGNvbWVNYXRyaXhSZXNwb25zZRKGAQoXR2V0T3V0Y29tZVN1bW1hcnlSb3N0ZXISNC5zZXJ2aWNlLm9wZXJhdGlvbi52MS5HZXRPdXRjb21lU3VtbWFyeVJvc3RlclJlcXVlc3QaNS5zZXJ2aWNlLm9wZXJhdGlvbi52MS5HZXRPdXRjb21lU3VtbWFyeVJvc3RlclJlc3BvbnNlQvkBChhjb20uc2VydmljZS5vcGVyYXRpb24udjFCEk91dGNvbWVNYXRyaXhQcm90b1ABWldnaXRodWIuY29tL2VybmllYWxpY2UvZXNxeW1hL3BrZy9zY2hlbWEvdjEvc2VydmljZS9vcGVyYXRpb24vb3V0Y29tZV9tYXRyaXg7b3BlcmF0aW9udjGiAgNTT1iqAhRTZXJ2aWNlLk9wZXJhdGlvbi5WMcoCFFNlcnZpY2VcT3BlcmF0aW9uXFYx4gIgU2VydmljZVxPcGVyYXRpb25cVjFcR1BCTWV0YWRhdGHqAhZTZXJ2aWNlOjpPcGVyYXRpb246OlYxYgZwcm90bzM", [file_domain_common_error, file_domain_operation_outcome_criteria_outcome_criteria, file_domain_operation_job_phase_job_phase]);
+  fileDesc("CjVzZXJ2aWNlL29wZXJhdGlvbi9vdXRjb21lX21hdHJpeC9vdXRjb21lX21hdHJpeC5wcm90bxIUc2VydmljZS5vcGVyYXRpb24udjEi0QEKF0dldE91dGNvbWVNYXRyaXhSZXF1ZXN0EhcKD2pvYl90ZW1wbGF0ZV9pZBgBIAEoCRI3CgVzY29wZRgCIAEoDjIoLnNlcnZpY2Uub3BlcmF0aW9uLnYxLk91dGNvbWVNYXRyaXhTY29wZRIiChVzdWJzY3JpcHRpb25fZ3JvdXBfaWQYAyABKAlIAIgBARIXCgpwcm9kdWN0X2lkGAQgASgJSAGIAQFCGAoWX3N1YnNjcmlwdGlvbl9ncm91cF9pZEINCgtfcHJvZHVjdF9pZCKHAQoPQ3JpdGVyaW9uQ29sdW1uEhIKCmNvbHVtbl9rZXkYASABKAkSFgoOc2VxdWVuY2Vfb3JkZXIYAiABKAUSEAoIcmVxdWlyZWQYAyABKAgSNgoIY3JpdGVyaWEYBCABKAsyJC5kb21haW4ub3BlcmF0aW9uLnYxLk91dGNvbWVDcml0ZXJpYSKKAQoKVGFza0NvbHVtbhIcChRqb2JfdGVtcGxhdGVfdGFza19pZBgBIAEoCRINCgVsYWJlbBgCIAEoCRIWCg5zZXF1ZW5jZV9vcmRlchgDIAEoBRI3Cghjcml0ZXJpYRgEIAMoCzIlLnNlcnZpY2Uub3BlcmF0aW9uLnYxLkNyaXRlcmlvbkNvbHVtbiKSAQoLUGhhc2VDb2x1bW4SHQoVam9iX3RlbXBsYXRlX3BoYXNlX2lkGAEgASgJEg0KBWxhYmVsGAIgASgJEhYKDnNlcXVlbmNlX29yZGVyGAMgASgFEi8KBXRhc2tzGAQgAygLMiAuc2VydmljZS5vcGVyYXRpb24udjEuVGFza0NvbHVtbhIMCgRjb2RlGAUgASgJIvkCCgtPdXRjb21lQ2VsbBISCgpvdXRjb21lX2lkGAEgASgJEhMKC2pvYl90YXNrX2lkGAIgASgJEhoKDW51bWVyaWNfdmFsdWUYAyABKAFIAIgBARIXCgp0ZXh0X3ZhbHVlGAQgASgJSAGIAQESHgoRY2F0ZWdvcmljYWxfdmFsdWUYBSABKAlIAogBARIcCg9wYXNzX2ZhaWxfdmFsdWUYBiABKAhIA4gBARITCgtyZWNvcmRlZF9ieRgHIAEoCRIQCghlZGl0YWJsZRgIIAEoCBIUCgxqb2JfcGhhc2VfaWQYCSABKAkSDgoGam9iX2lkGAogASgJEh8KEmRldGVybWluYXRpb25fbm90ZRgLIAEoCUgEiAEBQhAKDl9udW1lcmljX3ZhbHVlQg0KC190ZXh0X3ZhbHVlQhQKEl9jYXRlZ29yaWNhbF92YWx1ZUISChBfcGFzc19mYWlsX3ZhbHVlQhUKE19kZXRlcm1pbmF0aW9uX25vdGUiwgEKCk91dGNvbWVSb3cSEQoJY2xpZW50X2lkGAEgASgJEhQKDGNsaWVudF9sYWJlbBgCIAEoCRI6CgVjZWxscxgDIAMoCzIrLnNlcnZpY2Uub3BlcmF0aW9uLnYxLk91dGNvbWVSb3cuQ2VsbHNFbnRyeRpPCgpDZWxsc0VudHJ5EgsKA2tleRgBIAEoCRIwCgV2YWx1ZRgCIAEoCzIhLnNlcnZpY2Uub3BlcmF0aW9uLnYxLk91dGNvbWVDZWxsOgI4ASLYAQoTUGhhc2VBcHByb3ZhbFJvbGx1cBIdChVqb2JfdGVtcGxhdGVfcGhhc2VfaWQYASABKAkSOAoGc3RhdHVzGAIgASgOMiguZG9tYWluLm9wZXJhdGlvbi52MS5QaGFzZUFwcHJvdmFsU3RhdHVzEg0KBW1peGVkGAMgASgIEhQKDHRhcmdldF9jb3VudBgEIAEoBRIQCghoYXNfZGF0YRgFIAEoCBITCgtoYXJkX2Zyb3plbhgGIAEoCBIcChRibGFua19yZXF1aXJlZF9jb3VudBgHIAEoBSJiCiFHZXRQaGFzZUFwcHJvdmFsR2F0ZVJvbGx1cFJlcXVlc3QSHQoVc3Vic2NyaXB0aW9uX2dyb3VwX2lkGAEgASgJEh4KFmpvYl90ZW1wbGF0ZV9waGFzZV9pZHMYAiADKAkivAEKF1BoYXNlQXBwcm92YWxHYXRlUm9sbHVwEh0KFWpvYl90ZW1wbGF0ZV9waGFzZV9pZBgBIAEoCRIlCh1hcHBsaWVkX3N1YnNjcmlwdGlvbl9ncm91cF9pZBgCIAEoCRIUCgx0YXJnZXRfY291bnQYAyABKAUSHAoUYW55X3dvcmtmbG93X2VudGVyZWQYBCABKAgSFQoNYWxsX3B1Ymxpc2hlZBgFIAEoCBIQCghoYXNfZGF0YRgGIAEoCCKsAQoiR2V0UGhhc2VBcHByb3ZhbEdhdGVSb2xsdXBSZXNwb25zZRI+Cgdyb2xsdXBzGAEgAygLMi0uc2VydmljZS5vcGVyYXRpb24udjEuUGhhc2VBcHByb3ZhbEdhdGVSb2xsdXASDwoHc3VjY2VzcxgCIAEoCBIrCgVlcnJvchgDIAEoCzIXLmRvbWFpbi5jb21tb24udjEuRXJyb3JIAIgBAUIICgZfZXJyb3IivgIKGEdldE91dGNvbWVNYXRyaXhSZXNwb25zZRIXCg9qb2JfdGVtcGxhdGVfaWQYASABKAkSGQoRam9iX3RlbXBsYXRlX25hbWUYAiABKAkSMQoGcGhhc2VzGAMgAygLMiEuc2VydmljZS5vcGVyYXRpb24udjEuUGhhc2VDb2x1bW4SLgoEcm93cxgEIAMoCzIgLnNlcnZpY2Uub3BlcmF0aW9uLnYxLk91dGNvbWVSb3cSDwoHc3VjY2VzcxgFIAEoCBIrCgVlcnJvchgGIAEoCzIXLmRvbWFpbi5jb21tb24udjEuRXJyb3JIAIgBARJDChBhcHByb3ZhbF9yb2xsdXBzGAcgAygLMikuc2VydmljZS5vcGVyYXRpb24udjEuUGhhc2VBcHByb3ZhbFJvbGx1cEIICgZfZXJyb3IicgoeR2V0T3V0Y29tZVN1bW1hcnlSb3N0ZXJSZXF1ZXN0EhcKD2pvYl90ZW1wbGF0ZV9pZBgBIAEoCRI3CgVzY29wZRgCIAEoDjIoLnNlcnZpY2Uub3BlcmF0aW9uLnYxLk91dGNvbWVNYXRyaXhTY29wZSKyAQoYT3V0Y29tZVN1bW1hcnlQaGFzZUVudHJ5Eh0KFWpvYl90ZW1wbGF0ZV9waGFzZV9pZBgBIAEoCRIMCgRjb2RlGAIgASgJEg0KBWxhYmVsGAMgASgJEhYKDnNlcXVlbmNlX29yZGVyGAQgASgFEhQKDHNjYWxlZF9sYWJlbBgFIAEoCRIaCg1zdW1tYXJ5X3Njb3JlGAYgASgBSACIAQFCEAoOX3N1bW1hcnlfc2NvcmUiwQEKF091dGNvbWVTdW1tYXJ5Um9zdGVyUm93EhEKCWNsaWVudF9pZBgBIAEoCRIUCgxjbGllbnRfbGFiZWwYAiABKAkSPgoGcGhhc2VzGAMgAygLMi4uc2VydmljZS5vcGVyYXRpb24udjEuT3V0Y29tZVN1bW1hcnlQaGFzZUVudHJ5EhgKEHllYXJfZmluYWxfbGFiZWwYBCABKAkSIwobeWVhcl9maW5hbF9pc19hdXRob3JpdGF0aXZlGAUgASgIIr8BCh9HZXRPdXRjb21lU3VtbWFyeVJvc3RlclJlc3BvbnNlEhcKD2pvYl90ZW1wbGF0ZV9pZBgBIAEoCRI7CgRyb3dzGAIgAygLMi0uc2VydmljZS5vcGVyYXRpb24udjEuT3V0Y29tZVN1bW1hcnlSb3N0ZXJSb3cSDwoHc3VjY2VzcxgDIAEoCBIrCgVlcnJvchgEIAEoCzIXLmRvbWFpbi5jb21tb24udjEuRXJyb3JIAIgBAUIICgZfZXJyb3IqdwoST3V0Y29tZU1hdHJpeFNjb3BlEiQKIE9VVENPTUVfTUFUUklYX1NDT1BFX1VOU1BFQ0lGSUVEEAASHQoZT1VUQ09NRV9NQVRSSVhfU0NPUEVfTUlORRABEhwKGE9VVENPTUVfTUFUUklYX1NDT1BFX0FMTBACMqQDChRPdXRjb21lTWF0cml4U2VydmljZRJxChBHZXRPdXRjb21lTWF0cml4Ei0uc2VydmljZS5vcGVyYXRpb24udjEuR2V0T3V0Y29tZU1hdHJpeFJlcXVlc3QaLi5zZXJ2aWNlLm9wZXJhdGlvbi52MS5HZXRPdXRjb21lTWF0cml4UmVzcG9uc2UShgEKF0dldE91dGNvbWVTdW1tYXJ5Um9zdGVyEjQuc2VydmljZS5vcGVyYXRpb24udjEuR2V0T3V0Y29tZVN1bW1hcnlSb3N0ZXJSZXF1ZXN0GjUuc2VydmljZS5vcGVyYXRpb24udjEuR2V0T3V0Y29tZVN1bW1hcnlSb3N0ZXJSZXNwb25zZRKPAQoaR2V0UGhhc2VBcHByb3ZhbEdhdGVSb2xsdXASNy5zZXJ2aWNlLm9wZXJhdGlvbi52MS5HZXRQaGFzZUFwcHJvdmFsR2F0ZVJvbGx1cFJlcXVlc3QaOC5zZXJ2aWNlLm9wZXJhdGlvbi52MS5HZXRQaGFzZUFwcHJvdmFsR2F0ZVJvbGx1cFJlc3BvbnNlQvkBChhjb20uc2VydmljZS5vcGVyYXRpb24udjFCEk91dGNvbWVNYXRyaXhQcm90b1ABWldnaXRodWIuY29tL2VybmllYWxpY2UvZXNxeW1hL3BrZy9zY2hlbWEvdjEvc2VydmljZS9vcGVyYXRpb24vb3V0Y29tZV9tYXRyaXg7b3BlcmF0aW9udjGiAgNTT1iqAhRTZXJ2aWNlLk9wZXJhdGlvbi5WMcoCFFNlcnZpY2VcT3BlcmF0aW9uXFYx4gIgU2VydmljZVxPcGVyYXRpb25cVjFcR1BCTWV0YWRhdGHqAhZTZXJ2aWNlOjpPcGVyYXRpb246OlYxYgZwcm90bzM", [file_domain_common_error, file_domain_operation_outcome_criteria_outcome_criteria, file_domain_operation_job_phase_job_phase]);
 
 /**
  * @generated from message service.operation.v1.GetOutcomeMatrixRequest
@@ -391,6 +391,127 @@ export const PhaseApprovalRollupSchema: GenMessage<PhaseApprovalRollup> = /*@__P
   messageDesc(file_service_operation_outcome_matrix_outcome_matrix, 6);
 
 /**
+ * @generated from message service.operation.v1.GetPhaseApprovalGateRollupRequest
+ */
+export type GetPhaseApprovalGateRollupRequest = Message<"service.operation.v1.GetPhaseApprovalGateRollupRequest"> & {
+  /**
+   * REQUIRED — the route-validated delivery group. Empty is an ERROR (never
+   * "no narrow"): the locked completion contract forbids a group-scoped read
+   * from silently degenerating (codex §"Recommended completion contract" #5).
+   *
+   * @generated from field: string subscription_group_id = 1;
+   */
+  subscriptionGroupId: string;
+
+  /**
+   * REQUIRED, non-empty — the card's target job_template_phase ids (may span
+   * several job_templates: a card draws one sheet per subject).
+   *
+   * @generated from field: repeated string job_template_phase_ids = 2;
+   */
+  jobTemplatePhaseIds: string[];
+};
+
+/**
+ * Describes the message service.operation.v1.GetPhaseApprovalGateRollupRequest.
+ * Use `create(GetPhaseApprovalGateRollupRequestSchema)` to create a new message.
+ */
+export const GetPhaseApprovalGateRollupRequestSchema: GenMessage<GetPhaseApprovalGateRollupRequest> = /*@__PURE__*/
+  messageDesc(file_service_operation_outcome_matrix_outcome_matrix, 7);
+
+/**
+ * PhaseApprovalGateRollup is one (template_phase × group) sheet's gate input,
+ * derived over the ACTIVE group-narrowed sheet with the exact shared transition
+ * predicate (espyna groupNarrowPredicate — NOT the looser matrix-cells
+ * predicate), applied in SQL before aggregation, no LIMIT/OFFSET.
+ *
+ * @generated from message service.operation.v1.PhaseApprovalGateRollup
+ */
+export type PhaseApprovalGateRollup = Message<"service.operation.v1.PhaseApprovalGateRollup"> & {
+  /**
+   * @generated from field: string job_template_phase_id = 1;
+   */
+  jobTemplatePhaseId: string;
+
+  /**
+   * Exact echo of the group id the narrow was applied with. A consumer MUST
+   * reject any row whose echo differs from the id it requested.
+   *
+   * @generated from field: string applied_subscription_group_id = 2;
+   */
+  appliedSubscriptionGroupId: string;
+
+  /**
+   * Active member phases in the group sheet. 0 rows ⇒ the phase is omitted
+   * from the response entirely; a consumer requiring coverage treats that as
+   * unprovable (its own card is a proven member, so a correct narrow can
+   * never return an empty sheet for a phase the card draws from).
+   *
+   * @generated from field: int32 target_count = 3;
+   */
+  targetCount: number;
+
+  /**
+   * BOOL_OR over the sheet of "workflow entered": approval_status beyond
+   * IN_PROGRESS/UNSPECIFIED OR any of the four audit stamps present
+   * (submitted_by / verified_by / published_by / returned_by — job_phase
+   * fields 41/44/47/51). NEW derived bit — PhaseApprovalRollup lacks it and
+   * the never-workflowed carve-out requires it (h2-synthesis agreement #5).
+   *
+   * @generated from field: bool any_workflow_entered = 4;
+   */
+  anyWorkflowEntered: boolean;
+
+  /**
+   * BOOL_AND over the sheet of approval_status = PUBLISHED.
+   *
+   * @generated from field: bool all_published = 5;
+   */
+  allPublished: boolean;
+
+  /**
+   * Any active task_outcome under any active job_task of any sheet member.
+   *
+   * @generated from field: bool has_data = 6;
+   */
+  hasData: boolean;
+};
+
+/**
+ * Describes the message service.operation.v1.PhaseApprovalGateRollup.
+ * Use `create(PhaseApprovalGateRollupSchema)` to create a new message.
+ */
+export const PhaseApprovalGateRollupSchema: GenMessage<PhaseApprovalGateRollup> = /*@__PURE__*/
+  messageDesc(file_service_operation_outcome_matrix_outcome_matrix, 8);
+
+/**
+ * @generated from message service.operation.v1.GetPhaseApprovalGateRollupResponse
+ */
+export type GetPhaseApprovalGateRollupResponse = Message<"service.operation.v1.GetPhaseApprovalGateRollupResponse"> & {
+  /**
+   * @generated from field: repeated service.operation.v1.PhaseApprovalGateRollup rollups = 1;
+   */
+  rollups: PhaseApprovalGateRollup[];
+
+  /**
+   * @generated from field: bool success = 2;
+   */
+  success: boolean;
+
+  /**
+   * @generated from field: optional domain.common.v1.Error error = 3;
+   */
+  error?: Error;
+};
+
+/**
+ * Describes the message service.operation.v1.GetPhaseApprovalGateRollupResponse.
+ * Use `create(GetPhaseApprovalGateRollupResponseSchema)` to create a new message.
+ */
+export const GetPhaseApprovalGateRollupResponseSchema: GenMessage<GetPhaseApprovalGateRollupResponse> = /*@__PURE__*/
+  messageDesc(file_service_operation_outcome_matrix_outcome_matrix, 9);
+
+/**
  * @generated from message service.operation.v1.GetOutcomeMatrixResponse
  */
 export type GetOutcomeMatrixResponse = Message<"service.operation.v1.GetOutcomeMatrixResponse"> & {
@@ -442,7 +563,7 @@ export type GetOutcomeMatrixResponse = Message<"service.operation.v1.GetOutcomeM
  * Use `create(GetOutcomeMatrixResponseSchema)` to create a new message.
  */
 export const GetOutcomeMatrixResponseSchema: GenMessage<GetOutcomeMatrixResponse> = /*@__PURE__*/
-  messageDesc(file_service_operation_outcome_matrix_outcome_matrix, 7);
+  messageDesc(file_service_operation_outcome_matrix_outcome_matrix, 10);
 
 /**
  * @generated from message service.operation.v1.GetOutcomeSummaryRosterRequest
@@ -466,7 +587,7 @@ export type GetOutcomeSummaryRosterRequest = Message<"service.operation.v1.GetOu
  * Use `create(GetOutcomeSummaryRosterRequestSchema)` to create a new message.
  */
 export const GetOutcomeSummaryRosterRequestSchema: GenMessage<GetOutcomeSummaryRosterRequest> = /*@__PURE__*/
-  messageDesc(file_service_operation_outcome_matrix_outcome_matrix, 8);
+  messageDesc(file_service_operation_outcome_matrix_outcome_matrix, 11);
 
 /**
  * OutcomeSummaryPhaseEntry is one roster member's stored composite pair for one
@@ -528,7 +649,7 @@ export type OutcomeSummaryPhaseEntry = Message<"service.operation.v1.OutcomeSumm
  * Use `create(OutcomeSummaryPhaseEntrySchema)` to create a new message.
  */
 export const OutcomeSummaryPhaseEntrySchema: GenMessage<OutcomeSummaryPhaseEntry> = /*@__PURE__*/
-  messageDesc(file_service_operation_outcome_matrix_outcome_matrix, 9);
+  messageDesc(file_service_operation_outcome_matrix_outcome_matrix, 12);
 
 /**
  * OutcomeSummaryRosterRow is one student's per-period composites plus the stored
@@ -576,7 +697,7 @@ export type OutcomeSummaryRosterRow = Message<"service.operation.v1.OutcomeSumma
  * Use `create(OutcomeSummaryRosterRowSchema)` to create a new message.
  */
 export const OutcomeSummaryRosterRowSchema: GenMessage<OutcomeSummaryRosterRow> = /*@__PURE__*/
-  messageDesc(file_service_operation_outcome_matrix_outcome_matrix, 10);
+  messageDesc(file_service_operation_outcome_matrix_outcome_matrix, 13);
 
 /**
  * @generated from message service.operation.v1.GetOutcomeSummaryRosterResponse
@@ -608,7 +729,7 @@ export type GetOutcomeSummaryRosterResponse = Message<"service.operation.v1.GetO
  * Use `create(GetOutcomeSummaryRosterResponseSchema)` to create a new message.
  */
 export const GetOutcomeSummaryRosterResponseSchema: GenMessage<GetOutcomeSummaryRosterResponse> = /*@__PURE__*/
-  messageDesc(file_service_operation_outcome_matrix_outcome_matrix, 11);
+  messageDesc(file_service_operation_outcome_matrix_outcome_matrix, 14);
 
 /**
  * OutcomeMatrixScope selects the row set. UNSPECIFIED is fail-closed → MINE.
@@ -670,6 +791,22 @@ export const OutcomeMatrixService: GenService<{
     methodKind: "unary";
     input: typeof GetOutcomeSummaryRosterRequestSchema;
     output: typeof GetOutcomeSummaryRosterResponseSchema;
+  },
+  /**
+   * GetPhaseApprovalGateRollup is the report-card render gate's group-grain
+   * input read (docs/plan/20260729-report-card-render-gate-group-grain).
+   * Response is per requested template phase and carries INPUTS, not a verdict —
+   * gate policy stays in the consuming view layer. The applied group id is
+   * echoed EXACTLY so a caller can prove the narrow was applied to the group it
+   * asked for; providers that cannot prove application must error, never
+   * return an unnarrowed aggregate.
+   *
+   * @generated from rpc service.operation.v1.OutcomeMatrixService.GetPhaseApprovalGateRollup
+   */
+  getPhaseApprovalGateRollup: {
+    methodKind: "unary";
+    input: typeof GetPhaseApprovalGateRollupRequestSchema;
+    output: typeof GetPhaseApprovalGateRollupResponseSchema;
   },
 }> = /*@__PURE__*/
   serviceDesc(file_service_operation_outcome_matrix_outcome_matrix, 0);
