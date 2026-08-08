@@ -108,6 +108,9 @@ type JobTemplateRelation struct {
 	// sub-templates. Ascending integer; ties broken by id.
 	SequenceOrder int32                   `protobuf:"varint,11,opt,name=sequence_order,json=sequenceOrder,proto3" json:"sequence_order,omitempty"`
 	RelationType  JobTemplateRelationType `protobuf:"varint,12,opt,name=relation_type,json=relationType,proto3,enum=domain.operation.v1.JobTemplateRelationType" json:"relation_type,omitempty"`
+	// Immutable tenant anchor. Both template parents must resolve to this same
+	// workspace; conflicting or missing ownership is left NULL/fail-closed.
+	WorkspaceId   *string `protobuf:"bytes,30,opt,name=workspace_id,json=workspaceId,proto3,oneof" json:"workspace_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -224,6 +227,13 @@ func (x *JobTemplateRelation) GetRelationType() JobTemplateRelationType {
 		return x.RelationType
 	}
 	return JobTemplateRelationType_JOB_TEMPLATE_RELATION_TYPE_UNSPECIFIED
+}
+
+func (x *JobTemplateRelation) GetWorkspaceId() string {
+	if x != nil && x.WorkspaceId != nil {
+		return *x.WorkspaceId
+	}
+	return ""
 }
 
 type CreateJobTemplateRelationRequest struct {
@@ -1222,7 +1232,7 @@ var File_domain_operation_job_template_relation_job_template_relation_proto prot
 
 const file_domain_operation_job_template_relation_job_template_relation_proto_rawDesc = "" +
 	"\n" +
-	"Bdomain/operation/job_template_relation/job_template_relation.proto\x12\x13domain.operation.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1adomain/common/search.proto\x1a0domain/operation/job_template/job_template.proto\x1a\x10options/db.proto\"\xd0\x06\n" +
+	"Bdomain/operation/job_template_relation/job_template_relation.proto\x12\x13domain.operation.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1adomain/common/search.proto\x1a0domain/operation/job_template/job_template.proto\x1a\x10options/db.proto\"\x9c\a\n" +
 	"\x13JobTemplateRelation\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12&\n" +
 	"\fdate_created\x18\x02 \x01(\x03H\x00R\vdateCreated\x88\x01\x01\x12;\n" +
@@ -1239,13 +1249,16 @@ const file_domain_operation_job_template_relation_job_template_relation_proto_ra
 	"\x0echild_template\x18\n" +
 	" \x01(\v2 .domain.operation.v1.JobTemplateH\x05R\rchildTemplate\x88\x01\x01\x12.\n" +
 	"\x0esequence_order\x18\v \x01(\x05B\a\x82\xb5\x18\x03\"\x010R\rsequenceOrder\x12Z\n" +
-	"\rrelation_type\x18\f \x01(\x0e2,.domain.operation.v1.JobTemplateRelationTypeB\a\x82\xb5\x18\x03\"\x010R\frelationType:\x06\x8a\xb5\x18\x02\b\x01B\x0f\n" +
+	"\rrelation_type\x18\f \x01(\x0e2,.domain.operation.v1.JobTemplateRelationTypeB\a\x82\xb5\x18\x03\"\x010R\frelationType\x129\n" +
+	"\fworkspace_id\x18\x1e \x01(\tB\x11\x82\xb5\x18\r\n" +
+	"\tworkspace\x18\x01H\x06R\vworkspaceId\x88\x01\x01:\x06\x8a\xb5\x18\x02\b\x01B\x0f\n" +
 	"\r_date_createdB\x16\n" +
 	"\x14_date_created_stringB\x10\n" +
 	"\x0e_date_modifiedB\x17\n" +
 	"\x15_date_modified_stringB\x12\n" +
 	"\x10_parent_templateB\x11\n" +
-	"\x0f_child_templateJ\x04\b\r\x10\x1e\"`\n" +
+	"\x0f_child_templateB\x0f\n" +
+	"\r_workspace_idJ\x04\b\r\x10\x1e\"`\n" +
 	" CreateJobTemplateRelationRequest\x12<\n" +
 	"\x04data\x18\x01 \x01(\v2(.domain.operation.v1.JobTemplateRelationR\x04data\"\xb9\x01\n" +
 	"!CreateJobTemplateRelationResponse\x12<\n" +

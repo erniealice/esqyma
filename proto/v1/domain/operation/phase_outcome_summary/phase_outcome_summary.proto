@@ -45,6 +45,8 @@ message PhaseOutcomeSummary {
   optional string reporting_checkpoint_id = 24 [(options.v1.db).references = "reporting_checkpoint", (options.v1.db).index = true];
   optional double scaled_score = 25;
   optional string scaled_label = 26;
+  // Immutable tenant anchor. JobPhase and Job parents must agree.
+  optional string workspace_id = 27 [(options.v1.db).references = "workspace", (options.v1.db).index = true];
 }
 
 // --- Service ---

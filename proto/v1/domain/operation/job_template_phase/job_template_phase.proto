@@ -66,6 +66,9 @@ message JobTemplatePhase {
   // lower(btrim(code)) matching ^[a-z][a-z0-9_]*$; NULL where unanchored.
   optional string code = 30 [(options.v1.db).index = true,
     (options.v1.db).check = "code IS NULL OR (code = lower(btrim(code)) AND code ~ '^[a-z][a-z0-9_]*$')"];
+
+  // Immutable tenant anchor inherited from the owning JobTemplate.
+  optional string workspace_id = 31 [(options.v1.db).references = "workspace", (options.v1.db).index = true];
 }
 
 service JobTemplatePhaseDomainService {

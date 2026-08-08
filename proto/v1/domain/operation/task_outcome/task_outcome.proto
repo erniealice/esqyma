@@ -49,6 +49,8 @@ message TaskOutcome {
   optional int64 date_modified = 27;
   optional string date_modified_string = 28 [(options.v1.db).ignore = true];
   bool is_synthesized = 29 [(options.v1.db).default = "false"];
+  // Immutable tenant anchor. Job task and criteria parents must agree.
+  optional string workspace_id = 30 [(options.v1.db).references = "workspace", (options.v1.db).index = true];
 }
 
 // --- Service ---

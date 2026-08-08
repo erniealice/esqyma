@@ -40,8 +40,10 @@ type TemplateTaskCriteria struct {
 	Active                    bool                               `protobuf:"varint,10,opt,name=active,proto3" json:"active,omitempty"`
 	DateCreated               *int64                             `protobuf:"varint,11,opt,name=date_created,json=dateCreated,proto3,oneof" json:"date_created,omitempty"`
 	DateCreatedString         *string                            `protobuf:"bytes,12,opt,name=date_created_string,json=dateCreatedString,proto3,oneof" json:"date_created_string,omitempty"`
-	unknownFields             protoimpl.UnknownFields
-	sizeCache                 protoimpl.SizeCache
+	// Immutable tenant anchor. Template task and criteria parents must agree.
+	WorkspaceId   *string `protobuf:"bytes,13,opt,name=workspace_id,json=workspaceId,proto3,oneof" json:"workspace_id,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
 }
 
 func (x *TemplateTaskCriteria) Reset() {
@@ -154,6 +156,13 @@ func (x *TemplateTaskCriteria) GetDateCreated() int64 {
 func (x *TemplateTaskCriteria) GetDateCreatedString() string {
 	if x != nil && x.DateCreatedString != nil {
 		return *x.DateCreatedString
+	}
+	return ""
+}
+
+func (x *TemplateTaskCriteria) GetWorkspaceId() string {
+	if x != nil && x.WorkspaceId != nil {
+		return *x.WorkspaceId
 	}
 	return ""
 }
@@ -1154,7 +1163,7 @@ var File_domain_operation_template_task_criteria_template_task_criteria_proto pr
 
 const file_domain_operation_template_task_criteria_template_task_criteria_proto_rawDesc = "" +
 	"\n" +
-	"Ddomain/operation/template_task_criteria/template_task_criteria.proto\x12\x13domain.operation.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1adomain/common/search.proto\x1a\"domain/operation/enums/enums.proto\x1a8domain/operation/outcome_criteria/outcome_criteria.proto\x1a:domain/operation/job_template_task/job_template_task.proto\x1a\x10options/db.proto\"\x8c\a\n" +
+	"Ddomain/operation/template_task_criteria/template_task_criteria.proto\x12\x13domain.operation.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1adomain/common/search.proto\x1a\"domain/operation/enums/enums.proto\x1a8domain/operation/outcome_criteria/outcome_criteria.proto\x1a:domain/operation/job_template_task/job_template_task.proto\x1a\x10options/db.proto\"\xd8\a\n" +
 	"\x14TemplateTaskCriteria\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12J\n" +
 	"\x14job_template_task_id\x18\x02 \x01(\tB\x19\x82\xb5\x18\x15\n" +
@@ -1171,14 +1180,17 @@ const file_domain_operation_template_task_criteria_template_task_criteria_proto_
 	" \x01(\bB\n" +
 	"\x82\xb5\x18\x06\"\x04trueR\x06active\x12&\n" +
 	"\fdate_created\x18\v \x01(\x03H\x05R\vdateCreated\x88\x01\x01\x12;\n" +
-	"\x13date_created_string\x18\f \x01(\tB\x06\x82\xb5\x18\x028\x01H\x06R\x11dateCreatedString\x88\x01\x01:\x06\x8a\xb5\x18\x02\b\x01B\x14\n" +
+	"\x13date_created_string\x18\f \x01(\tB\x06\x82\xb5\x18\x028\x01H\x06R\x11dateCreatedString\x88\x01\x01\x129\n" +
+	"\fworkspace_id\x18\r \x01(\tB\x11\x82\xb5\x18\r\n" +
+	"\tworkspace\x18\x01H\aR\vworkspaceId\x88\x01\x01:\x06\x8a\xb5\x18\x02\b\x01B\x14\n" +
 	"\x12_job_template_taskB\x13\n" +
 	"\x11_outcome_criteriaB\x14\n" +
 	"\x12_required_overrideB\x12\n" +
 	"\x10_weight_overrideB\x1e\n" +
 	"\x1c_aggregation_method_overrideB\x0f\n" +
 	"\r_date_createdB\x16\n" +
-	"\x14_date_created_string\"b\n" +
+	"\x14_date_created_stringB\x0f\n" +
+	"\r_workspace_id\"b\n" +
 	"!CreateTemplateTaskCriteriaRequest\x12=\n" +
 	"\x04data\x18\x01 \x01(\v2).domain.operation.v1.TemplateTaskCriteriaR\x04data\"\xbb\x01\n" +
 	"\"CreateTemplateTaskCriteriaResponse\x12=\n" +

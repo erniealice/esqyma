@@ -32,6 +32,8 @@ message TemplateTaskCriteria {
   bool active = 10 [(options.v1.db).default = "true"];
   optional int64 date_created = 11;
   optional string date_created_string = 12 [(options.v1.db).ignore = true];
+  // Immutable tenant anchor. Template task and criteria parents must agree.
+  optional string workspace_id = 13 [(options.v1.db).references = "workspace", (options.v1.db).index = true];
 }
 
 // --- Service ---

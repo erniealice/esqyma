@@ -50,6 +50,9 @@ message JobTemplateTask {
   // unanchored.
   optional string code = 40 [(options.v1.db).index = true,
     (options.v1.db).check = "code IS NULL OR (code = lower(btrim(code)) AND code ~ '^[a-z][a-z0-9_]*$')"];
+
+  // Immutable tenant anchor inherited from the owning JobTemplatePhase.
+  optional string workspace_id = 41 [(options.v1.db).references = "workspace", (options.v1.db).index = true];
 }
 
 service JobTemplateTaskDomainService {

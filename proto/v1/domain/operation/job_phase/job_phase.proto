@@ -96,6 +96,10 @@ message JobPhase {
   optional string returned_at_string = 53 [(options.v1.db).ignore = true];
 
   reserved 54 to 69;
+
+  // Immutable tenant anchor. The PostgreSQL workspace decorator stamps this
+  // from trusted request identity; callers cannot choose or reassign it.
+  optional string workspace_id = 70 [(options.v1.db).references = "workspace", (options.v1.db).index = true];
 }
 
 // --- Service ---

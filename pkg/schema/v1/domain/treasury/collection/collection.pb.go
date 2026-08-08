@@ -80,7 +80,10 @@ type Collection struct {
 	// Plan B Decision B — counterparty FK. Plan-B label "customer_id"; references the
 	// existing entydad `client` table since the codebase uses `client` everywhere
 	// (revenue.client_id, etc.). NOT a rename — additive.
-	ClientId      *string `protobuf:"bytes,45,opt,name=client_id,json=clientId,proto3,oneof" json:"client_id,omitempty"`
+	ClientId *string `protobuf:"bytes,45,opt,name=client_id,json=clientId,proto3,oneof" json:"client_id,omitempty"`
+	// Immutable tenant anchor. New rows are stamped from trusted request identity;
+	// legacy rows are backfilled only when all available structural anchors agree.
+	WorkspaceId   *string `protobuf:"bytes,46,opt,name=workspace_id,json=workspaceId,proto3,oneof" json:"workspace_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -363,6 +366,13 @@ func (x *Collection) GetAdvanceProrationPolicy() advance_kind.AdvanceProrationPo
 func (x *Collection) GetClientId() string {
 	if x != nil && x.ClientId != nil {
 		return *x.ClientId
+	}
+	return ""
+}
+
+func (x *Collection) GetWorkspaceId() string {
+	if x != nil && x.WorkspaceId != nil {
+		return *x.WorkspaceId
 	}
 	return ""
 }
@@ -2326,7 +2336,7 @@ var File_domain_treasury_collection_collection_proto protoreflect.FileDescriptor
 
 const file_domain_treasury_collection_collection_proto_rawDesc = "" +
 	"\n" +
-	"+domain/treasury/collection/collection.proto\x12\x12domain.treasury.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1adomain/common/search.proto\x1a3domain/subscription/subscription/subscription.proto\x1a_domain/treasury/collection_profile_collection_method/collection_profile_collection_method.proto\x1a-domain/common/advance_kind/advance_kind.proto\x1a\x10options/db.proto\"\xa7\x13\n" +
+	"+domain/treasury/collection/collection.proto\x12\x12domain.treasury.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1adomain/common/search.proto\x1a3domain/subscription/subscription/subscription.proto\x1a_domain/treasury/collection_profile_collection_method/collection_profile_collection_method.proto\x1a-domain/common/advance_kind/advance_kind.proto\x1a\x10options/db.proto\"\xf3\x13\n" +
 	"\n" +
 	"Collection\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12&\n" +
@@ -2374,7 +2384,9 @@ const file_domain_treasury_collection_collection_proto_rawDesc = "" +
 	"\x18advance_proration_policy\x18, \x01(\x0e2(.domain.common.v1.AdvanceProrationPolicyH\x14R\x16advanceProrationPolicy\x88\x01\x01\x120\n" +
 	"\tclient_id\x18- \x01(\tB\x0e\x82\xb5\x18\n" +
 	"\n" +
-	"\x06client\x18\x01H\x15R\bclientId\x88\x01\x01:8\x8a\xb5\x184\b\x01\x12\x13treasury_collection\"\x1badvance_kind,advance_statusB\x0f\n" +
+	"\x06client\x18\x01H\x15R\bclientId\x88\x01\x01\x129\n" +
+	"\fworkspace_id\x18. \x01(\tB\x11\x82\xb5\x18\r\n" +
+	"\tworkspace\x18\x01H\x16R\vworkspaceId\x88\x01\x01:8\x8a\xb5\x184\b\x01\x12\x13treasury_collection\"\x1badvance_kind,advance_statusB\x0f\n" +
 	"\r_date_createdB\x16\n" +
 	"\x14_date_created_stringB\x10\n" +
 	"\x0e_date_modifiedB\x17\n" +
@@ -2397,7 +2409,8 @@ const file_domain_treasury_collection_collection_proto_rawDesc = "" +
 	"\x14_advance_expiry_dateB\x1b\n" +
 	"\x19_advance_proration_policyB\f\n" +
 	"\n" +
-	"_client_idJ\x04\b\x1d\x10\x1e\"\x9d\x02\n" +
+	"_client_idB\x0f\n" +
+	"\r_workspace_idJ\x04\b\x1d\x10\x1e\"\x9d\x02\n" +
 	" AmortizeAdvanceCollectionRequest\x124\n" +
 	"\x16treasury_collection_id\x18\x01 \x01(\tR\x14treasuryCollectionId\x12\x1c\n" +
 	"\n" +

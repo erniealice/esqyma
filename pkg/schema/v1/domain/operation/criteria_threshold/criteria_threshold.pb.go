@@ -37,8 +37,10 @@ type CriteriaThreshold struct {
 	DateCreatedString  *string                           `protobuf:"bytes,8,opt,name=date_created_string,json=dateCreatedString,proto3,oneof" json:"date_created_string,omitempty"`
 	DateModified       *int64                            `protobuf:"varint,9,opt,name=date_modified,json=dateModified,proto3,oneof" json:"date_modified,omitempty"`
 	DateModifiedString *string                           `protobuf:"bytes,10,opt,name=date_modified_string,json=dateModifiedString,proto3,oneof" json:"date_modified_string,omitempty"`
-	unknownFields      protoimpl.UnknownFields
-	sizeCache          protoimpl.SizeCache
+	// Immutable tenant anchor inherited from OutcomeCriteria.
+	WorkspaceId   *string `protobuf:"bytes,11,opt,name=workspace_id,json=workspaceId,proto3,oneof" json:"workspace_id,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
 }
 
 func (x *CriteriaThreshold) Reset() {
@@ -137,6 +139,13 @@ func (x *CriteriaThreshold) GetDateModified() int64 {
 func (x *CriteriaThreshold) GetDateModifiedString() string {
 	if x != nil && x.DateModifiedString != nil {
 		return *x.DateModifiedString
+	}
+	return ""
+}
+
+func (x *CriteriaThreshold) GetWorkspaceId() string {
+	if x != nil && x.WorkspaceId != nil {
+		return *x.WorkspaceId
 	}
 	return ""
 }
@@ -1033,7 +1042,7 @@ var File_domain_operation_criteria_threshold_criteria_threshold_proto protorefle
 
 const file_domain_operation_criteria_threshold_criteria_threshold_proto_rawDesc = "" +
 	"\n" +
-	"<domain/operation/criteria_threshold/criteria_threshold.proto\x12\x13domain.operation.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1adomain/common/search.proto\x1a\"domain/operation/enums/enums.proto\x1a8domain/operation/outcome_criteria/outcome_criteria.proto\x1a\x10options/db.proto\"\x87\x05\n" +
+	"<domain/operation/criteria_threshold/criteria_threshold.proto\x12\x13domain.operation.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1adomain/common/search.proto\x1a\"domain/operation/enums/enums.proto\x1a8domain/operation/outcome_criteria/outcome_criteria.proto\x1a\x10options/db.proto\"\xd3\x05\n" +
 	"\x11CriteriaThreshold\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12H\n" +
 	"\x13outcome_criteria_id\x18\x02 \x01(\tB\x18\x82\xb5\x18\x14\n" +
@@ -1047,12 +1056,15 @@ const file_domain_operation_criteria_threshold_criteria_threshold_proto_rawDesc 
 	"\x13date_created_string\x18\b \x01(\tB\x06\x82\xb5\x18\x028\x01H\x02R\x11dateCreatedString\x88\x01\x01\x12(\n" +
 	"\rdate_modified\x18\t \x01(\x03H\x03R\fdateModified\x88\x01\x01\x12=\n" +
 	"\x14date_modified_string\x18\n" +
-	" \x01(\tB\x06\x82\xb5\x18\x028\x01H\x04R\x12dateModifiedString\x88\x01\x01:\x06\x8a\xb5\x18\x02\b\x01B\x13\n" +
+	" \x01(\tB\x06\x82\xb5\x18\x028\x01H\x04R\x12dateModifiedString\x88\x01\x01\x129\n" +
+	"\fworkspace_id\x18\v \x01(\tB\x11\x82\xb5\x18\r\n" +
+	"\tworkspace\x18\x01H\x05R\vworkspaceId\x88\x01\x01:\x06\x8a\xb5\x18\x02\b\x01B\x13\n" +
 	"\x11_outcome_criteriaB\x0f\n" +
 	"\r_date_createdB\x16\n" +
 	"\x14_date_created_stringB\x10\n" +
 	"\x0e_date_modifiedB\x17\n" +
-	"\x15_date_modified_string\"\\\n" +
+	"\x15_date_modified_stringB\x0f\n" +
+	"\r_workspace_id\"\\\n" +
 	"\x1eCreateCriteriaThresholdRequest\x12:\n" +
 	"\x04data\x18\x01 \x01(\v2&.domain.operation.v1.CriteriaThresholdR\x04data\"\xb5\x01\n" +
 	"\x1fCreateCriteriaThresholdResponse\x12:\n" +

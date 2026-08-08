@@ -214,8 +214,24 @@ string user_id = 2 [(options.v1.db) = {
   default: "'active'"     // Default value
   check: "length > 0"     // Check constraint
   sql_type: "VARCHAR(50)" // Override SQL type
+  // on_delete: omit — see the policy below
 }];
 ```
+
+### Referential action policy
+
+All foreign keys are `ON DELETE NO ACTION`; deletion order is a use-case
+concern, not a database one. Leave `on_delete` unset (the generators emit an
+explicit `ON DELETE NO ACTION` for unannotated FKs). Setting
+`ON_DELETE_ACTION_RESTRICT | CASCADE | SET_NULL` is an exception that requires a
+justification comment on the field.
+
+### Entity id policy
+
+Entity ids are `string id = 1` → postgres `TEXT` holding a uuid string. The uuid
+version is a runtime provider concern (`CONFIG_ID_PROVIDER=google_uuidv7`), not
+a schema one: no `uuid` column type, no DB-side uuid `DEFAULT`, no
+version-specific annotation on entity ids.
 
 ## Domain Entity Summary
 

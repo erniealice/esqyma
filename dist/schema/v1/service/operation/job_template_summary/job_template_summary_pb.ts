@@ -8,6 +8,10 @@ import type { Error } from "../../../domain/common/error_pb";
 import { file_domain_common_error } from "../../../domain/common/error_pb";
 import type { PaginationRequest, PaginationResponse } from "../../../domain/common/pagination_pb";
 import { file_domain_common_pagination } from "../../../domain/common/pagination_pb";
+import type { SearchRequest } from "../../../domain/common/search_pb";
+import { file_domain_common_search } from "../../../domain/common/search_pb";
+import type { SortRequest } from "../../../domain/common/sort_pb";
+import { file_domain_common_sort } from "../../../domain/common/sort_pb";
 import type { PhaseApprovalStatus } from "../../../domain/operation/job_phase/job_phase_pb";
 import { file_domain_operation_job_phase_job_phase } from "../../../domain/operation/job_phase/job_phase_pb";
 import type { Message } from "@bufbuild/protobuf";
@@ -16,7 +20,7 @@ import type { Message } from "@bufbuild/protobuf";
  * Describes the file service/operation/job_template_summary/job_template_summary.proto.
  */
 export const file_service_operation_job_template_summary_job_template_summary: GenFile = /*@__PURE__*/
-  fileDesc("CkFzZXJ2aWNlL29wZXJhdGlvbi9qb2JfdGVtcGxhdGVfc3VtbWFyeS9qb2JfdGVtcGxhdGVfc3VtbWFyeS5wcm90bxIUc2VydmljZS5vcGVyYXRpb24udjEiMQoJRGVsaXZlcmVyEhAKCHN0YWZmX2lkGAEgASgJEhIKCnN0YWZmX25hbWUYAiABKAkiowUKEkpvYlRlbXBsYXRlU3VtbWFyeRIXCg9qb2JfdGVtcGxhdGVfaWQYASABKAkSGQoRam9iX3RlbXBsYXRlX25hbWUYAiABKAkSHQoVc3Vic2NyaXB0aW9uX2dyb3VwX2lkGAMgASgJEh8KF3N1YnNjcmlwdGlvbl9ncm91cF9uYW1lGAQgASgJEhEKCWpvYl9jb3VudBgHIAEoBRIZChFwcmljZV9zY2hlZHVsZV9pZBgIIAEoCRIbChNwcmljZV9zY2hlZHVsZV9uYW1lGAkgASgJEhkKEW91dHB1dF9wcm9kdWN0X2lkGAogASgJEhsKE291dHB1dF9wcm9kdWN0X25hbWUYCyABKAkSMwoKZGVsaXZlcmVycxgMIAMoCzIfLnNlcnZpY2Uub3BlcmF0aW9uLnYxLkRlbGl2ZXJlchIXCg9qb2JfY2F0ZWdvcnlfaWQYDSABKAkSFwoPcHVibGlzaGVkX2NvdW50GA4gASgFEhMKC3BoYXNlX2NvdW50GA8gASgFEj8KDWxvd2VzdF9zdGF0dXMYECABKA4yKC5kb21haW4ub3BlcmF0aW9uLnYxLlBoYXNlQXBwcm92YWxTdGF0dXMSFwoPbWl4ZWRfYXR0ZW50aW9uGBEgASgIEh0KFWdyb3VwX3B1Ymxpc2hlZF9jb3VudBgSIAEoBRIZChFncm91cF9waGFzZV9jb3VudBgTIAEoBRJFChNncm91cF9sb3dlc3Rfc3RhdHVzGBQgASgOMiguZG9tYWluLm9wZXJhdGlvbi52MS5QaGFzZUFwcHJvdmFsU3RhdHVzEh0KFWdyb3VwX21peGVkX2F0dGVudGlvbhgVIAEoCEoECAUQBkoECAYQB1IIc3RhZmZfaWRSCnN0YWZmX25hbWUi+gEKH0xpc3RKb2JUZW1wbGF0ZVN1bW1hcmllc1JlcXVlc3QSDgoGc3RhdHVzGAEgASgJEiIKFXN1YnNjcmlwdGlvbl9ncm91cF9pZBgCIAEoCUgAiAEBEjwKCnBhZ2luYXRpb24YAyABKAsyIy5kb21haW4uY29tbW9uLnYxLlBhZ2luYXRpb25SZXF1ZXN0SAGIAQESIgoVcHJpY2Vfc2NoZWR1bGVfYWN0aXZlGAQgASgISAKIAQFCGAoWX3N1YnNjcmlwdGlvbl9ncm91cF9pZEINCgtfcGFnaW5hdGlvbkIYChZfcHJpY2Vfc2NoZWR1bGVfYWN0aXZlIvUBCiBMaXN0Sm9iVGVtcGxhdGVTdW1tYXJpZXNSZXNwb25zZRI7CglzdW1tYXJpZXMYASADKAsyKC5zZXJ2aWNlLm9wZXJhdGlvbi52MS5Kb2JUZW1wbGF0ZVN1bW1hcnkSDwoHc3VjY2VzcxgCIAEoCBI9CgpwYWdpbmF0aW9uGAMgASgLMiQuZG9tYWluLmNvbW1vbi52MS5QYWdpbmF0aW9uUmVzcG9uc2VIAIgBARIrCgVlcnJvchgEIAEoCzIXLmRvbWFpbi5jb21tb24udjEuRXJyb3JIAYgBAUINCgtfcGFnaW5hdGlvbkIICgZfZXJyb3IypwEKGUpvYlRlbXBsYXRlU3VtbWFyeVNlcnZpY2USiQEKGExpc3RKb2JUZW1wbGF0ZVN1bW1hcmllcxI1LnNlcnZpY2Uub3BlcmF0aW9uLnYxLkxpc3RKb2JUZW1wbGF0ZVN1bW1hcmllc1JlcXVlc3QaNi5zZXJ2aWNlLm9wZXJhdGlvbi52MS5MaXN0Sm9iVGVtcGxhdGVTdW1tYXJpZXNSZXNwb25zZUKEAgoYY29tLnNlcnZpY2Uub3BlcmF0aW9uLnYxQhdKb2JUZW1wbGF0ZVN1bW1hcnlQcm90b1ABWl1naXRodWIuY29tL2VybmllYWxpY2UvZXNxeW1hL3BrZy9zY2hlbWEvdjEvc2VydmljZS9vcGVyYXRpb24vam9iX3RlbXBsYXRlX3N1bW1hcnk7b3BlcmF0aW9udjGiAgNTT1iqAhRTZXJ2aWNlLk9wZXJhdGlvbi5WMcoCFFNlcnZpY2VcT3BlcmF0aW9uXFYx4gIgU2VydmljZVxPcGVyYXRpb25cVjFcR1BCTWV0YWRhdGHqAhZTZXJ2aWNlOjpPcGVyYXRpb246OlYxYgZwcm90bzM", [file_domain_common_error, file_domain_common_pagination, file_domain_operation_job_phase_job_phase]);
+  fileDesc("CkFzZXJ2aWNlL29wZXJhdGlvbi9qb2JfdGVtcGxhdGVfc3VtbWFyeS9qb2JfdGVtcGxhdGVfc3VtbWFyeS5wcm90bxIUc2VydmljZS5vcGVyYXRpb24udjEiMQoJRGVsaXZlcmVyEhAKCHN0YWZmX2lkGAEgASgJEhIKCnN0YWZmX25hbWUYAiABKAkixAUKEkpvYlRlbXBsYXRlU3VtbWFyeRIXCg9qb2JfdGVtcGxhdGVfaWQYASABKAkSGQoRam9iX3RlbXBsYXRlX25hbWUYAiABKAkSHQoVc3Vic2NyaXB0aW9uX2dyb3VwX2lkGAMgASgJEh8KF3N1YnNjcmlwdGlvbl9ncm91cF9uYW1lGAQgASgJEhEKCWpvYl9jb3VudBgHIAEoBRIZChFwcmljZV9zY2hlZHVsZV9pZBgIIAEoCRIbChNwcmljZV9zY2hlZHVsZV9uYW1lGAkgASgJEhkKEW91dHB1dF9wcm9kdWN0X2lkGAogASgJEhsKE291dHB1dF9wcm9kdWN0X25hbWUYCyABKAkSMwoKZGVsaXZlcmVycxgMIAMoCzIfLnNlcnZpY2Uub3BlcmF0aW9uLnYxLkRlbGl2ZXJlchIXCg9qb2JfY2F0ZWdvcnlfaWQYDSABKAkSFwoPcHVibGlzaGVkX2NvdW50GA4gASgFEhMKC3BoYXNlX2NvdW50GA8gASgFEj8KDWxvd2VzdF9zdGF0dXMYECABKA4yKC5kb21haW4ub3BlcmF0aW9uLnYxLlBoYXNlQXBwcm92YWxTdGF0dXMSFwoPbWl4ZWRfYXR0ZW50aW9uGBEgASgIEh0KFWdyb3VwX3B1Ymxpc2hlZF9jb3VudBgSIAEoBRIZChFncm91cF9waGFzZV9jb3VudBgTIAEoBRJFChNncm91cF9sb3dlc3Rfc3RhdHVzGBQgASgOMiguZG9tYWluLm9wZXJhdGlvbi52MS5QaGFzZUFwcHJvdmFsU3RhdHVzEh0KFWdyb3VwX21peGVkX2F0dGVudGlvbhgVIAEoCBIfChd0ZW1wbGF0ZV9ncmFpbl9mYWxsYmFjaxgWIAEoCEoECAUQBkoECAYQB1IIc3RhZmZfaWRSCnN0YWZmX25hbWUiSQoXSm9iQ2F0ZWdvcnlTdW1tYXJ5Q291bnQSFwoPam9iX2NhdGVnb3J5X2lkGAEgASgJEhUKDXN1bW1hcnlfY291bnQYAiABKAUi7gMKH0xpc3RKb2JUZW1wbGF0ZVN1bW1hcmllc1JlcXVlc3QSDgoGc3RhdHVzGAEgASgJEiIKFXN1YnNjcmlwdGlvbl9ncm91cF9pZBgCIAEoCUgAiAEBEjwKCnBhZ2luYXRpb24YAyABKAsyIy5kb21haW4uY29tbW9uLnYxLlBhZ2luYXRpb25SZXF1ZXN0SAGIAQESIgoVcHJpY2Vfc2NoZWR1bGVfYWN0aXZlGAQgASgISAKIAQESHAoPam9iX2NhdGVnb3J5X2lkGAUgASgJSAOIAQESNAoGc2VhcmNoGAYgASgLMh8uZG9tYWluLmNvbW1vbi52MS5TZWFyY2hSZXF1ZXN0SASIAQESMAoEc29ydBgHIAEoCzIdLmRvbWFpbi5jb21tb24udjEuU29ydFJlcXVlc3RIBYgBARImChlpbmNsdWRlX3RlbXBsYXRlX2ZhbGxiYWNrGAggASgISAaIAQFCGAoWX3N1YnNjcmlwdGlvbl9ncm91cF9pZEINCgtfcGFnaW5hdGlvbkIYChZfcHJpY2Vfc2NoZWR1bGVfYWN0aXZlQhIKEF9qb2JfY2F0ZWdvcnlfaWRCCQoHX3NlYXJjaEIHCgVfc29ydEIcChpfaW5jbHVkZV90ZW1wbGF0ZV9mYWxsYmFjayLBAgogTGlzdEpvYlRlbXBsYXRlU3VtbWFyaWVzUmVzcG9uc2USOwoJc3VtbWFyaWVzGAEgAygLMiguc2VydmljZS5vcGVyYXRpb24udjEuSm9iVGVtcGxhdGVTdW1tYXJ5Eg8KB3N1Y2Nlc3MYAiABKAgSPQoKcGFnaW5hdGlvbhgDIAEoCzIkLmRvbWFpbi5jb21tb24udjEuUGFnaW5hdGlvblJlc3BvbnNlSACIAQESKwoFZXJyb3IYBCABKAsyFy5kb21haW4uY29tbW9uLnYxLkVycm9ySAGIAQESSgoTam9iX2NhdGVnb3J5X2NvdW50cxgFIAMoCzItLnNlcnZpY2Uub3BlcmF0aW9uLnYxLkpvYkNhdGVnb3J5U3VtbWFyeUNvdW50Qg0KC19wYWdpbmF0aW9uQggKBl9lcnJvcjKnAQoZSm9iVGVtcGxhdGVTdW1tYXJ5U2VydmljZRKJAQoYTGlzdEpvYlRlbXBsYXRlU3VtbWFyaWVzEjUuc2VydmljZS5vcGVyYXRpb24udjEuTGlzdEpvYlRlbXBsYXRlU3VtbWFyaWVzUmVxdWVzdBo2LnNlcnZpY2Uub3BlcmF0aW9uLnYxLkxpc3RKb2JUZW1wbGF0ZVN1bW1hcmllc1Jlc3BvbnNlQoQCChhjb20uc2VydmljZS5vcGVyYXRpb24udjFCF0pvYlRlbXBsYXRlU3VtbWFyeVByb3RvUAFaXWdpdGh1Yi5jb20vZXJuaWVhbGljZS9lc3F5bWEvcGtnL3NjaGVtYS92MS9zZXJ2aWNlL29wZXJhdGlvbi9qb2JfdGVtcGxhdGVfc3VtbWFyeTtvcGVyYXRpb252MaICA1NPWKoCFFNlcnZpY2UuT3BlcmF0aW9uLlYxygIUU2VydmljZVxPcGVyYXRpb25cVjHiAiBTZXJ2aWNlXE9wZXJhdGlvblxWMVxHUEJNZXRhZGF0YeoCFlNlcnZpY2U6Ok9wZXJhdGlvbjo6VjFiBnByb3RvMw", [file_domain_common_error, file_domain_common_pagination, file_domain_common_search, file_domain_common_sort, file_domain_operation_job_phase_job_phase]);
 
 /**
  * Deliverer is one staff-of-record on a template. A template can have MORE THAN
@@ -48,10 +52,12 @@ export const DelivererSchema: GenMessage<Deliverer> = /*@__PURE__*/
   messageDesc(file_service_operation_job_template_summary_job_template_summary, 0);
 
 /**
- * JobTemplateSummary is one aggregated delivery-summary row: one row per
- * job_template with >=1 resolver-scoped job for the requested status. Every id
- * is an opaque, generic entity id; every *_name is a display label the adapter
- * resolves server-side.
+ * JobTemplateSummary is normally one aggregated delivery-summary row per
+ * (job_template, subscription_group) with >=1 resolver-scoped job for the
+ * requested status. When the sanitized request permits active-template
+ * fallback, a category with no aggregate rows may instead carry explicitly
+ * marked template-grain rows. Every id is an opaque, generic entity id; every
+ * *_name is a display label the adapter resolves server-side.
  *
  * @generated from message service.operation.v1.JobTemplateSummary
  */
@@ -209,6 +215,17 @@ export type JobTemplateSummary = Message<"service.operation.v1.JobTemplateSummar
    * @generated from field: bool group_mixed_attention = 21;
    */
   groupMixedAttention: boolean;
+
+  /**
+   * True only for an active job_template surfaced at template grain because
+   * its category has zero aggregate delivery rows in the scoped status
+   * universe. Delivery/group/schedule fields and item count are intentionally
+   * blank/zero on this row; consumers use this marker rather than inferring the
+   * grain from a nullable related id.
+   *
+   * @generated from field: bool template_grain_fallback = 22;
+   */
+  templateGrainFallback: boolean;
 };
 
 /**
@@ -217,6 +234,35 @@ export type JobTemplateSummary = Message<"service.operation.v1.JobTemplateSummar
  */
 export const JobTemplateSummarySchema: GenMessage<JobTemplateSummary> = /*@__PURE__*/
   messageDesc(file_service_operation_job_template_summary_job_template_summary, 1);
+
+/**
+ * JobCategorySummaryCount is the number of rows in one job-category partition
+ * of the status-scoped summary universe before selected-category pagination and
+ * search. A row is at the service's declared summary grain: normally
+ * (job_template, subscription_group), or the active template-grain fallback for
+ * a category with no delivery aggregate. It is deliberately not a persisted
+ * JobCategory field or a unique-template count.
+ *
+ * @generated from message service.operation.v1.JobCategorySummaryCount
+ */
+export type JobCategorySummaryCount = Message<"service.operation.v1.JobCategorySummaryCount"> & {
+  /**
+   * @generated from field: string job_category_id = 1;
+   */
+  jobCategoryId: string;
+
+  /**
+   * @generated from field: int32 summary_count = 2;
+   */
+  summaryCount: number;
+};
+
+/**
+ * Describes the message service.operation.v1.JobCategorySummaryCount.
+ * Use `create(JobCategorySummaryCountSchema)` to create a new message.
+ */
+export const JobCategorySummaryCountSchema: GenMessage<JobCategorySummaryCount> = /*@__PURE__*/
+  messageDesc(file_service_operation_job_template_summary_job_template_summary, 2);
 
 /**
  * @generated from message service.operation.v1.ListJobTemplateSummariesRequest
@@ -252,6 +298,38 @@ export type ListJobTemplateSummariesRequest = Message<"service.operation.v1.List
    * @generated from field: optional bool price_schedule_active = 4;
    */
   priceScheduleActive?: boolean;
+
+  /**
+   * job_category_id narrows the returned result before pagination. Category
+   * badge counts in the response remain status-scoped and are not narrowed by
+   * this selected-category value or by search.
+   *
+   * @generated from field: optional string job_category_id = 5;
+   */
+  jobCategoryId?: string;
+
+  /**
+   * Bounded free-text search over adapter-owned summary fields.
+   *
+   * @generated from field: optional domain.common.v1.SearchRequest search = 6;
+   */
+  search?: SearchRequest;
+
+  /**
+   * Adapter-allowlisted ordering at the complete response-row grain.
+   *
+   * @generated from field: optional domain.common.v1.SortRequest sort = 7;
+   */
+  sort?: SortRequest;
+
+  /**
+   * Caller preference for active template-grain fallback. The application use
+   * case sanitizes this flag through an independent job_template:list gate;
+   * the adapter never treats an unsanitized client value as authorization.
+   *
+   * @generated from field: optional bool include_template_fallback = 8;
+   */
+  includeTemplateFallback?: boolean;
 };
 
 /**
@@ -259,7 +337,7 @@ export type ListJobTemplateSummariesRequest = Message<"service.operation.v1.List
  * Use `create(ListJobTemplateSummariesRequestSchema)` to create a new message.
  */
 export const ListJobTemplateSummariesRequestSchema: GenMessage<ListJobTemplateSummariesRequest> = /*@__PURE__*/
-  messageDesc(file_service_operation_job_template_summary_job_template_summary, 2);
+  messageDesc(file_service_operation_job_template_summary_job_template_summary, 3);
 
 /**
  * @generated from message service.operation.v1.ListJobTemplateSummariesResponse
@@ -284,6 +362,11 @@ export type ListJobTemplateSummariesResponse = Message<"service.operation.v1.Lis
    * @generated from field: optional domain.common.v1.Error error = 4;
    */
   error?: Error;
+
+  /**
+   * @generated from field: repeated service.operation.v1.JobCategorySummaryCount job_category_counts = 5;
+   */
+  jobCategoryCounts: JobCategorySummaryCount[];
 };
 
 /**
@@ -291,7 +374,7 @@ export type ListJobTemplateSummariesResponse = Message<"service.operation.v1.Lis
  * Use `create(ListJobTemplateSummariesResponseSchema)` to create a new message.
  */
 export const ListJobTemplateSummariesResponseSchema: GenMessage<ListJobTemplateSummariesResponse> = /*@__PURE__*/
-  messageDesc(file_service_operation_job_template_summary_job_template_summary, 3);
+  messageDesc(file_service_operation_job_template_summary_job_template_summary, 4);
 
 /**
  * @generated from service service.operation.v1.JobTemplateSummaryService

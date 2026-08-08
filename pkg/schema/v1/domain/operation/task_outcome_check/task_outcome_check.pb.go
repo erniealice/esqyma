@@ -36,8 +36,10 @@ type TaskOutcomeCheck struct {
 	Note              *string                         `protobuf:"bytes,7,opt,name=note,proto3,oneof" json:"note,omitempty"`
 	DateCreated       *int64                          `protobuf:"varint,8,opt,name=date_created,json=dateCreated,proto3,oneof" json:"date_created,omitempty"`
 	DateCreatedString *string                         `protobuf:"bytes,9,opt,name=date_created_string,json=dateCreatedString,proto3,oneof" json:"date_created_string,omitempty"`
-	unknownFields     protoimpl.UnknownFields
-	sizeCache         protoimpl.SizeCache
+	// Immutable tenant anchor. Outcome and option parents must agree.
+	WorkspaceId   *string `protobuf:"bytes,10,opt,name=workspace_id,json=workspaceId,proto3,oneof" json:"workspace_id,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
 }
 
 func (x *TaskOutcomeCheck) Reset() {
@@ -129,6 +131,13 @@ func (x *TaskOutcomeCheck) GetDateCreated() int64 {
 func (x *TaskOutcomeCheck) GetDateCreatedString() string {
 	if x != nil && x.DateCreatedString != nil {
 		return *x.DateCreatedString
+	}
+	return ""
+}
+
+func (x *TaskOutcomeCheck) GetWorkspaceId() string {
+	if x != nil && x.WorkspaceId != nil {
+		return *x.WorkspaceId
 	}
 	return ""
 }
@@ -1025,7 +1034,7 @@ var File_domain_operation_task_outcome_check_task_outcome_check_proto protorefle
 
 const file_domain_operation_task_outcome_check_task_outcome_check_proto_rawDesc = "" +
 	"\n" +
-	"<domain/operation/task_outcome_check/task_outcome_check.proto\x12\x13domain.operation.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1adomain/common/search.proto\x1a0domain/operation/task_outcome/task_outcome.proto\x1a6domain/operation/criteria_option/criteria_option.proto\x1a\x10options/db.proto\"\xbb\x04\n" +
+	"<domain/operation/task_outcome_check/task_outcome_check.proto\x12\x13domain.operation.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1adomain/common/search.proto\x1a0domain/operation/task_outcome/task_outcome.proto\x1a6domain/operation/criteria_option/criteria_option.proto\x1a\x10options/db.proto\"\x87\x05\n" +
 	"\x10TaskOutcomeCheck\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12<\n" +
 	"\x0ftask_outcome_id\x18\x02 \x01(\tB\x14\x82\xb5\x18\x10\n" +
@@ -1037,12 +1046,16 @@ const file_domain_operation_task_outcome_check_task_outcome_check_proto_rawDesc 
 	"\achecked\x18\x06 \x01(\bR\achecked\x12\x17\n" +
 	"\x04note\x18\a \x01(\tH\x02R\x04note\x88\x01\x01\x12&\n" +
 	"\fdate_created\x18\b \x01(\x03H\x03R\vdateCreated\x88\x01\x01\x12;\n" +
-	"\x13date_created_string\x18\t \x01(\tB\x06\x82\xb5\x18\x028\x01H\x04R\x11dateCreatedString\x88\x01\x01:\x06\x8a\xb5\x18\x02\b\x01B\x0f\n" +
+	"\x13date_created_string\x18\t \x01(\tB\x06\x82\xb5\x18\x028\x01H\x04R\x11dateCreatedString\x88\x01\x01\x129\n" +
+	"\fworkspace_id\x18\n" +
+	" \x01(\tB\x11\x82\xb5\x18\r\n" +
+	"\tworkspace\x18\x01H\x05R\vworkspaceId\x88\x01\x01:\x06\x8a\xb5\x18\x02\b\x01B\x0f\n" +
 	"\r_task_outcomeB\x12\n" +
 	"\x10_criteria_optionB\a\n" +
 	"\x05_noteB\x0f\n" +
 	"\r_date_createdB\x16\n" +
-	"\x14_date_created_string\"Z\n" +
+	"\x14_date_created_stringB\x0f\n" +
+	"\r_workspace_id\"Z\n" +
 	"\x1dCreateTaskOutcomeCheckRequest\x129\n" +
 	"\x04data\x18\x01 \x01(\v2%.domain.operation.v1.TaskOutcomeCheckR\x04data\"\xb3\x01\n" +
 	"\x1eCreateTaskOutcomeCheckResponse\x129\n" +

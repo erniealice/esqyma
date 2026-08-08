@@ -71,6 +71,35 @@ Standard fields on every entity: `id`, `workspace_id`, `active`, `date_created`,
 managed via Atlas migrations, not regenerated from protos. Keeping the
 annotations accurate means a future migration tool could read them.
 
+### Foreign keys are ON DELETE NO ACTION
+
+Every foreign key in this schema is `ON DELETE NO ACTION`. Deletion order and
+dependent-row cleanup belong to the use-case layer, not to the database. An
+unannotated FK field is therefore the desired steady state: `on_delete` is left
+unset and both emitters (`cmd/generate-ddl`, `cmd/protocheck`) still write an
+explicit `ON DELETE NO ACTION` clause rather than leaning on the engine default.
+
+Any other referential action is an exception and needs the annotation plus a
+comment saying why the database must own that edge:
+
+```protobuf
+// Justification: a line has no meaning without its parent run.
+string run_id = 3 [(options.v1.db) = {
+  references: "expense_run"
+  on_delete: ON_DELETE_ACTION_CASCADE   // NO_ACTION | RESTRICT | CASCADE | SET_NULL
+}];
+```
+
+### Entity ids are TEXT uuids; the version is a runtime concern
+
+Entity primary keys are `string id = 1` → a postgres `TEXT` column holding a
+uuid string. The uuid *version* is deliberately not a schema or proto concern:
+ids are minted by the application's configured id provider
+(`CONFIG_ID_PROVIDER=google_uuidv7` today) and entity tables carry no uuid
+`DEFAULT`. Do not add a `uuid` column type, a DB-side uuid default, or a
+version-specific annotation for entity ids — swapping the generator must stay a
+runtime decision that needs no migration.
+
 ---
 
 ## Schema management with Atlas
@@ -131,11 +160,12 @@ pnpm db:diff fix_drift /tmp/drift-fixup-<TS>.sql
 pnpm db:hash && pnpm db:apply
 ```
 
-Backed by `cmd/protocheck --sql-out`. Reads `(options.v1.db).references` and
-`.index` from the proto annotations, so the drafted FKs and partial indexes
-are properly typed. Always emits NULLable; tighten with a follow-up
-migration after backfilling. Skips missing tables (use a hand-drafted
-migration) and never DROPs extra DB columns.
+Backed by `cmd/protocheck --sql-out`. Reads `(options.v1.db).references`,
+`.index`, and `.on_delete` from the proto annotations, so the drafted FKs and
+partial indexes are properly typed and carry the annotated referential action
+(`ON DELETE NO ACTION` unless the field says otherwise). Always emits NULLable;
+tighten with a follow-up migration after backfilling. Skips missing tables (use
+a hand-drafted migration) and never DROPs extra DB columns.
 
 ### Adding a column with a foreign key — worked example
 
@@ -144,7 +174,7 @@ Say you want `plan.region_id` referencing `region(id)`:
 ```bash
 # 1. Sketch the change in a scratch file. SQL fragment, not a full migration.
 cat > /tmp/plan_region.sql <<'SQL'
-ALTER TABLE plan ADD COLUMN region_id TEXT REFERENCES region(id) ON DELETE RESTRICT;
+ALTER TABLE plan ADD COLUMN region_id TEXT REFERENCES region(id) ON DELETE NO ACTION;
 CREATE INDEX idx_plan_region_id ON plan(region_id) WHERE region_id IS NOT NULL;
 SQL
 
@@ -156,7 +186,7 @@ pnpm db:diff add_plan_region_id /tmp/plan_region.sql
 #   ALTER TABLE "public"."plan"
 #     ADD COLUMN "region_id" text NULL,
 #     ADD CONSTRAINT "plan_region_id_fkey" FOREIGN KEY ("region_id")
-#     REFERENCES "public"."region" ("id") ON UPDATE NO ACTION ON DELETE RESTRICT;
+#     REFERENCES "public"."region" ("id") ON UPDATE NO ACTION ON DELETE NO ACTION;
 #   CREATE INDEX "idx_plan_region_id" ON "public"."plan" ("region_id")
 #     WHERE (region_id IS NOT NULL);
 

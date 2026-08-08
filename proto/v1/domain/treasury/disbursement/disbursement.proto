@@ -69,6 +69,10 @@ message Disbursement {
 
   // Plan B Decision B — counterparty FK; additive.
   optional string supplier_id = 43 [(options.v1.db).references = "supplier", (options.v1.db).index = true];
+
+  // Immutable tenant anchor. New rows are stamped from trusted request identity;
+  // legacy rows are backfilled only when all available structural anchors agree.
+  optional string workspace_id = 44 [(options.v1.db).references = "workspace", (options.v1.db).index = true];
 }
 
 // ---------------------------------------------------------------------------

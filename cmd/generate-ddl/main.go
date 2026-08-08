@@ -52,6 +52,7 @@ type FieldConstraints struct {
 	Default    string
 	Check      string
 	SqlType    string
+	OnDelete   optionsv1.OnDeleteAction
 }
 
 type TableConstraints struct {
@@ -104,10 +105,27 @@ func getFieldOptions(fd protoreflect.FieldDescriptor) FieldConstraints {
 			constraints.Default = dbOpts.GetDefault()
 			constraints.Check = dbOpts.GetCheck()
 			constraints.SqlType = dbOpts.GetSqlType()
+			constraints.OnDelete = dbOpts.GetOnDelete()
 		}
 	}
 
 	return constraints
+}
+
+// onDeleteSQL maps the proto referential action to its SQL clause. UNSPECIFIED
+// resolves to the repository default (NO ACTION), so every generated foreign key
+// carries an explicit ON DELETE clause instead of relying on the engine default.
+func onDeleteSQL(action optionsv1.OnDeleteAction) string {
+	switch action {
+	case optionsv1.OnDeleteAction_ON_DELETE_ACTION_RESTRICT:
+		return "RESTRICT"
+	case optionsv1.OnDeleteAction_ON_DELETE_ACTION_CASCADE:
+		return "CASCADE"
+	case optionsv1.OnDeleteAction_ON_DELETE_ACTION_SET_NULL:
+		return "SET NULL"
+	default:
+		return "NO ACTION"
+	}
 }
 
 // getMessageOptions extracts table options from a message descriptor
@@ -292,11 +310,12 @@ func generateCreateTable(entity *Entity, dialect string) string {
 				refColumn = parts[1]
 			}
 			fkName := fmt.Sprintf("fk_%s_%s", entity.TableName, field.Name)
-			constraint := fmt.Sprintf("  CONSTRAINT %s FOREIGN KEY (%s) REFERENCES %s(%s)",
+			constraint := fmt.Sprintf("  CONSTRAINT %s FOREIGN KEY (%s) REFERENCES %s(%s) ON DELETE %s",
 				quoteIdentifier(fkName, dialect),
 				colName,
 				quoteIdentifier(refTable, dialect),
-				quoteIdentifier(refColumn, dialect))
+				quoteIdentifier(refColumn, dialect),
+				onDeleteSQL(field.Constraints.OnDelete))
 			constraints = append(constraints, constraint)
 		}
 

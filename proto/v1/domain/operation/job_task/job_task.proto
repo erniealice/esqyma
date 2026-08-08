@@ -58,6 +58,10 @@ message JobTask {
   bool is_synthesized = 26 [(options.v1.db).default = "false"];
 
   reserved 27 to 39;
+
+  // Immutable tenant anchor, inherited from the owning JobPhase at migration
+  // time and stamped from trusted request identity for new rows.
+  optional string workspace_id = 40 [(options.v1.db).references = "workspace", (options.v1.db).index = true];
 }
 
 // --- Service ---

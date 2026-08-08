@@ -70,7 +70,10 @@ type Disbursement struct {
 	AdvanceExpiryDate       *string                              `protobuf:"bytes,41,opt,name=advance_expiry_date,json=advanceExpiryDate,proto3,oneof" json:"advance_expiry_date,omitempty"`                                                              // optional, v2 — escheat / expiration
 	AdvanceProrationPolicy  *advance_kind.AdvanceProrationPolicy `protobuf:"varint,42,opt,name=advance_proration_policy,json=advanceProrationPolicy,proto3,enum=domain.common.v1.AdvanceProrationPolicy,oneof" json:"advance_proration_policy,omitempty"` // TIME_BASED first-tranche; default FULL_TRANCHE
 	// Plan B Decision B — counterparty FK; additive.
-	SupplierId    *string `protobuf:"bytes,43,opt,name=supplier_id,json=supplierId,proto3,oneof" json:"supplier_id,omitempty"`
+	SupplierId *string `protobuf:"bytes,43,opt,name=supplier_id,json=supplierId,proto3,oneof" json:"supplier_id,omitempty"`
+	// Immutable tenant anchor. New rows are stamped from trusted request identity;
+	// legacy rows are backfilled only when all available structural anchors agree.
+	WorkspaceId   *string `protobuf:"bytes,44,opt,name=workspace_id,json=workspaceId,proto3,oneof" json:"workspace_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -339,6 +342,13 @@ func (x *Disbursement) GetAdvanceProrationPolicy() advance_kind.AdvanceProration
 func (x *Disbursement) GetSupplierId() string {
 	if x != nil && x.SupplierId != nil {
 		return *x.SupplierId
+	}
+	return ""
+}
+
+func (x *Disbursement) GetWorkspaceId() string {
+	if x != nil && x.WorkspaceId != nil {
+		return *x.WorkspaceId
 	}
 	return ""
 }
@@ -2198,7 +2208,7 @@ var File_domain_treasury_disbursement_disbursement_proto protoreflect.FileDescri
 
 const file_domain_treasury_disbursement_disbursement_proto_rawDesc = "" +
 	"\n" +
-	"/domain/treasury/disbursement/disbursement.proto\x12\x12domain.treasury.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1adomain/common/search.proto\x1a3domain/subscription/subscription/subscription.proto\x1a-domain/common/advance_kind/advance_kind.proto\x1a\x10options/db.proto\"\x9f\x12\n" +
+	"/domain/treasury/disbursement/disbursement.proto\x12\x12domain.treasury.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1adomain/common/search.proto\x1a3domain/subscription/subscription/subscription.proto\x1a-domain/common/advance_kind/advance_kind.proto\x1a\x10options/db.proto\"\xeb\x12\n" +
 	"\fDisbursement\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12&\n" +
 	"\fdate_created\x18\x02 \x01(\x03H\x00R\vdateCreated\x88\x01\x01\x12;\n" +
@@ -2242,7 +2252,9 @@ const file_domain_treasury_disbursement_disbursement_proto_rawDesc = "" +
 	"\x18advance_proration_policy\x18* \x01(\x0e2(.domain.common.v1.AdvanceProrationPolicyH\x13R\x16advanceProrationPolicy\x88\x01\x01\x126\n" +
 	"\vsupplier_id\x18+ \x01(\tB\x10\x82\xb5\x18\f\n" +
 	"\bsupplier\x18\x01H\x14R\n" +
-	"supplierId\x88\x01\x01::\x8a\xb5\x186\b\x01\x12\x15treasury_disbursement\"\x1badvance_kind,advance_statusB\x0f\n" +
+	"supplierId\x88\x01\x01\x129\n" +
+	"\fworkspace_id\x18, \x01(\tB\x11\x82\xb5\x18\r\n" +
+	"\tworkspace\x18\x01H\x15R\vworkspaceId\x88\x01\x01::\x8a\xb5\x186\b\x01\x12\x15treasury_disbursement\"\x1badvance_kind,advance_statusB\x0f\n" +
 	"\r_date_createdB\x16\n" +
 	"\x14_date_created_stringB\x10\n" +
 	"\x0e_date_modifiedB\x17\n" +
@@ -2263,7 +2275,8 @@ const file_domain_treasury_disbursement_disbursement_proto_rawDesc = "" +
 	"\x1a_advance_target_account_idB\x16\n" +
 	"\x14_advance_expiry_dateB\x1b\n" +
 	"\x19_advance_proration_policyB\x0e\n" +
-	"\f_supplier_idJ\x04\b\x1b\x10\x1c\"\xa3\x02\n" +
+	"\f_supplier_idB\x0f\n" +
+	"\r_workspace_idJ\x04\b\x1b\x10\x1c\"\xa3\x02\n" +
 	"\"AmortizeAdvanceDisbursementRequest\x128\n" +
 	"\x18treasury_disbursement_id\x18\x01 \x01(\tR\x16treasuryDisbursementId\x12\x1c\n" +
 	"\n" +

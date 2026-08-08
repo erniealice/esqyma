@@ -113,8 +113,11 @@ type JobTask struct {
 	AllowParallel      *bool                  `protobuf:"varint,24,opt,name=allow_parallel,json=allowParallel,proto3,oneof" json:"allow_parallel,omitempty"`
 	WorkflowStepId     *string                `protobuf:"bytes,25,opt,name=workflow_step_id,json=workflowStepId,proto3,oneof" json:"workflow_step_id,omitempty"`
 	IsSynthesized      bool                   `protobuf:"varint,26,opt,name=is_synthesized,json=isSynthesized,proto3" json:"is_synthesized,omitempty"`
-	unknownFields      protoimpl.UnknownFields
-	sizeCache          protoimpl.SizeCache
+	// Immutable tenant anchor, inherited from the owning JobPhase at migration
+	// time and stamped from trusted request identity for new rows.
+	WorkspaceId   *string `protobuf:"bytes,40,opt,name=workspace_id,json=workspaceId,proto3,oneof" json:"workspace_id,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
 }
 
 func (x *JobTask) Reset() {
@@ -327,6 +330,13 @@ func (x *JobTask) GetIsSynthesized() bool {
 		return x.IsSynthesized
 	}
 	return false
+}
+
+func (x *JobTask) GetWorkspaceId() string {
+	if x != nil && x.WorkspaceId != nil {
+		return *x.WorkspaceId
+	}
+	return ""
 }
 
 type CreateJobTaskRequest struct {
@@ -1325,7 +1335,7 @@ var File_domain_operation_job_task_job_task_proto protoreflect.FileDescriptor
 
 const file_domain_operation_job_task_job_task_proto_rawDesc = "" +
 	"\n" +
-	"(domain/operation/job_task/job_task.proto\x12\x13domain.operation.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1adomain/common/search.proto\x1a*domain/operation/job_phase/job_phase.proto\x1a\x10options/db.proto\"\xc9\f\n" +
+	"(domain/operation/job_task/job_task.proto\x12\x13domain.operation.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1adomain/common/search.proto\x1a*domain/operation/job_phase/job_phase.proto\x1a\x10options/db.proto\"\x95\r\n" +
 	"\aJobTask\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12&\n" +
 	"\fdate_created\x18\x02 \x01(\x03H\x00R\vdateCreated\x88\x01\x01\x12;\n" +
@@ -1363,7 +1373,9 @@ const file_domain_operation_job_task_job_task_proto_rawDesc = "" +
 	"\x14predecessor_task_ids\x18\x17 \x03(\tR\x12predecessorTaskIds\x127\n" +
 	"\x0eallow_parallel\x18\x18 \x01(\bB\v\x82\xb5\x18\a\"\x05falseH\x0fR\rallowParallel\x88\x01\x01\x125\n" +
 	"\x10workflow_step_id\x18\x19 \x01(\tB\x06\x82\xb5\x18\x02\x18\x01H\x10R\x0eworkflowStepId\x88\x01\x01\x122\n" +
-	"\x0eis_synthesized\x18\x1a \x01(\bB\v\x82\xb5\x18\a\"\x05falseR\risSynthesized:\x06\x8a\xb5\x18\x02\b\x01B\x0f\n" +
+	"\x0eis_synthesized\x18\x1a \x01(\bB\v\x82\xb5\x18\a\"\x05falseR\risSynthesized\x129\n" +
+	"\fworkspace_id\x18( \x01(\tB\x11\x82\xb5\x18\r\n" +
+	"\tworkspace\x18\x01H\x11R\vworkspaceId\x88\x01\x01:\x06\x8a\xb5\x18\x02\b\x01B\x0f\n" +
 	"\r_date_createdB\x16\n" +
 	"\x14_date_created_stringB\x10\n" +
 	"\x0e_date_modifiedB\x17\n" +
@@ -1381,7 +1393,8 @@ const file_domain_operation_job_task_job_task_proto_rawDesc = "" +
 	"\v_actual_endB\x14\n" +
 	"\x12_actual_end_stringB\x11\n" +
 	"\x0f_allow_parallelB\x13\n" +
-	"\x11_workflow_step_idJ\x04\b\x1b\x10(\"H\n" +
+	"\x11_workflow_step_idB\x0f\n" +
+	"\r_workspace_idJ\x04\b\x1b\x10(\"H\n" +
 	"\x14CreateJobTaskRequest\x120\n" +
 	"\x04data\x18\x01 \x01(\v2\x1c.domain.operation.v1.JobTaskR\x04data\"\xa1\x01\n" +
 	"\x15CreateJobTaskResponse\x120\n" +

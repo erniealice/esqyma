@@ -38,8 +38,10 @@ type ScoringComponent struct {
 	DateCreatedString  *string                `protobuf:"bytes,10,opt,name=date_created_string,json=dateCreatedString,proto3,oneof" json:"date_created_string,omitempty"`
 	DateModified       *int64                 `protobuf:"varint,11,opt,name=date_modified,json=dateModified,proto3,oneof" json:"date_modified,omitempty"`
 	DateModifiedString *string                `protobuf:"bytes,12,opt,name=date_modified_string,json=dateModifiedString,proto3,oneof" json:"date_modified_string,omitempty"`
-	unknownFields      protoimpl.UnknownFields
-	sizeCache          protoimpl.SizeCache
+	// Immutable tenant anchor inherited from ScoringScheme.
+	WorkspaceId   *string `protobuf:"bytes,13,opt,name=workspace_id,json=workspaceId,proto3,oneof" json:"workspace_id,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
 }
 
 func (x *ScoringComponent) Reset() {
@@ -152,6 +154,13 @@ func (x *ScoringComponent) GetDateModified() int64 {
 func (x *ScoringComponent) GetDateModifiedString() string {
 	if x != nil && x.DateModifiedString != nil {
 		return *x.DateModifiedString
+	}
+	return ""
+}
+
+func (x *ScoringComponent) GetWorkspaceId() string {
+	if x != nil && x.WorkspaceId != nil {
+		return *x.WorkspaceId
 	}
 	return ""
 }
@@ -944,7 +953,7 @@ var File_domain_operation_scoring_component_scoring_component_proto protoreflect
 
 const file_domain_operation_scoring_component_scoring_component_proto_rawDesc = "" +
 	"\n" +
-	":domain/operation/scoring_component/scoring_component.proto\x12\x13domain.operation.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1adomain/common/search.proto\x1a\"domain/operation/enums/enums.proto\x1a\x10options/db.proto\"\x90\x05\n" +
+	":domain/operation/scoring_component/scoring_component.proto\x12\x13domain.operation.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1adomain/common/search.proto\x1a\"domain/operation/enums/enums.proto\x1a\x10options/db.proto\"\xdc\x05\n" +
 	"\x10ScoringComponent\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12B\n" +
 	"\x11scoring_scheme_id\x18\x02 \x01(\tB\x16\x82\xb5\x18\x12\n" +
@@ -961,12 +970,15 @@ const file_domain_operation_scoring_component_scoring_component_proto_rawDesc = 
 	"\x13date_created_string\x18\n" +
 	" \x01(\tB\x06\x82\xb5\x18\x028\x01H\x02R\x11dateCreatedString\x88\x01\x01\x12(\n" +
 	"\rdate_modified\x18\v \x01(\x03H\x03R\fdateModified\x88\x01\x01\x12=\n" +
-	"\x14date_modified_string\x18\f \x01(\tB\x06\x82\xb5\x18\x028\x01H\x04R\x12dateModifiedString\x88\x01\x01:\x06\x8a\xb5\x18\x02\b\x01B\x16\n" +
+	"\x14date_modified_string\x18\f \x01(\tB\x06\x82\xb5\x18\x028\x01H\x04R\x12dateModifiedString\x88\x01\x01\x129\n" +
+	"\fworkspace_id\x18\r \x01(\tB\x11\x82\xb5\x18\r\n" +
+	"\tworkspace\x18\x01H\x05R\vworkspaceId\x88\x01\x01:\x06\x8a\xb5\x18\x02\b\x01B\x16\n" +
 	"\x14_parent_component_idB\x0f\n" +
 	"\r_date_createdB\x16\n" +
 	"\x14_date_created_stringB\x10\n" +
 	"\x0e_date_modifiedB\x17\n" +
-	"\x15_date_modified_string\"Z\n" +
+	"\x15_date_modified_stringB\x0f\n" +
+	"\r_workspace_id\"Z\n" +
 	"\x1dCreateScoringComponentRequest\x129\n" +
 	"\x04data\x18\x01 \x01(\v2%.domain.operation.v1.ScoringComponentR\x04data\"\xb3\x01\n" +
 	"\x1eCreateScoringComponentResponse\x129\n" +

@@ -28,6 +28,8 @@ message TaskOutcomeCheck {
   optional string note = 7;
   optional int64 date_created = 8;
   optional string date_created_string = 9 [(options.v1.db).ignore = true];
+  // Immutable tenant anchor. Outcome and option parents must agree.
+  optional string workspace_id = 10 [(options.v1.db).references = "workspace", (options.v1.db).index = true];
 }
 
 // --- Service ---

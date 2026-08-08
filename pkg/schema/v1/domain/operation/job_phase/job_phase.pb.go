@@ -191,8 +191,11 @@ type JobPhase struct {
 	ReturnedBy        *string             `protobuf:"bytes,51,opt,name=returned_by,json=returnedBy,proto3,oneof" json:"returned_by,omitempty"`
 	ReturnedAt        *int64              `protobuf:"varint,52,opt,name=returned_at,json=returnedAt,proto3,oneof" json:"returned_at,omitempty"`
 	ReturnedAtString  *string             `protobuf:"bytes,53,opt,name=returned_at_string,json=returnedAtString,proto3,oneof" json:"returned_at_string,omitempty"`
-	unknownFields     protoimpl.UnknownFields
-	sizeCache         protoimpl.SizeCache
+	// Immutable tenant anchor. The PostgreSQL workspace decorator stamps this
+	// from trusted request identity; callers cannot choose or reassign it.
+	WorkspaceId   *string `protobuf:"bytes,70,opt,name=workspace_id,json=workspaceId,proto3,oneof" json:"workspace_id,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
 }
 
 func (x *JobPhase) Reset() {
@@ -501,6 +504,13 @@ func (x *JobPhase) GetReturnedAt() int64 {
 func (x *JobPhase) GetReturnedAtString() string {
 	if x != nil && x.ReturnedAtString != nil {
 		return *x.ReturnedAtString
+	}
+	return ""
+}
+
+func (x *JobPhase) GetWorkspaceId() string {
+	if x != nil && x.WorkspaceId != nil {
+		return *x.WorkspaceId
 	}
 	return ""
 }
@@ -1985,7 +1995,7 @@ var File_domain_operation_job_phase_job_phase_proto protoreflect.FileDescriptor
 
 const file_domain_operation_job_phase_job_phase_proto_rawDesc = "" +
 	"\n" +
-	"*domain/operation/job_phase/job_phase.proto\x12\x13domain.operation.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1adomain/common/search.proto\x1a\x1edomain/operation/job/job.proto\x1a\x10options/db.proto\"\xcc\x14\n" +
+	"*domain/operation/job_phase/job_phase.proto\x12\x13domain.operation.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1adomain/common/search.proto\x1a\x1edomain/operation/job/job.proto\x1a\x10options/db.proto\"\x98\x15\n" +
 	"\bJobPhase\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12&\n" +
 	"\fdate_created\x18\x02 \x01(\x03H\x00R\vdateCreated\x88\x01\x01\x12;\n" +
@@ -2041,7 +2051,9 @@ const file_domain_operation_job_phase_job_phase_proto_rawDesc = "" +
 	"returnedBy\x88\x01\x01\x12$\n" +
 	"\vreturned_at\x184 \x01(\x03H\x1eR\n" +
 	"returnedAt\x88\x01\x01\x129\n" +
-	"\x12returned_at_string\x185 \x01(\tB\x06\x82\xb5\x18\x028\x01H\x1fR\x10returnedAtString\x88\x01\x01:\x06\x8a\xb5\x18\x02\b\x01B\x0f\n" +
+	"\x12returned_at_string\x185 \x01(\tB\x06\x82\xb5\x18\x028\x01H\x1fR\x10returnedAtString\x88\x01\x01\x129\n" +
+	"\fworkspace_id\x18F \x01(\tB\x11\x82\xb5\x18\r\n" +
+	"\tworkspace\x18\x01H R\vworkspaceId\x88\x01\x01:\x06\x8a\xb5\x18\x02\b\x01B\x0f\n" +
 	"\r_date_createdB\x16\n" +
 	"\x14_date_created_stringB\x10\n" +
 	"\x0e_date_modifiedB\x17\n" +
@@ -2073,7 +2085,8 @@ const file_domain_operation_job_phase_job_phase_proto_rawDesc = "" +
 	"\x0e_return_reasonB\x0e\n" +
 	"\f_returned_byB\x0e\n" +
 	"\f_returned_atB\x15\n" +
-	"\x13_returned_at_stringJ\x04\b\x1b\x10(J\x04\b6\x10F\"J\n" +
+	"\x13_returned_at_stringB\x0f\n" +
+	"\r_workspace_idJ\x04\b\x1b\x10(J\x04\b6\x10F\"J\n" +
 	"\x15CreateJobPhaseRequest\x121\n" +
 	"\x04data\x18\x01 \x01(\v2\x1d.domain.operation.v1.JobPhaseR\x04data\"\xa3\x01\n" +
 	"\x16CreateJobPhaseResponse\x121\n" +

@@ -1,3 +1,23 @@
+// Database annotation options for esqyma protos.
+//
+// These annotations are the schema contract. Table/column shape, foreign keys,
+// indexes, uniqueness, defaults, checks, and referential actions are declared
+// here and consumed by cmd/generate-ddl (full DDL) and cmd/protocheck (the
+// drift draft behind `pnpm db:drift-draft`).
+//
+// Entity id convention
+//   Every entity's primary key is `string id = 1` and materialises as a
+//   postgres TEXT column holding a uuid string. The uuid VERSION is
+//   deliberately NOT a schema or proto concern: ids are minted by the
+//   application's configured id provider (CONFIG_ID_PROVIDER=google_uuidv7
+//   today) and entity tables carry no uuid DEFAULT. Do not introduce a uuid
+//   column type, a DB-side uuid default, or a version-specific annotation for
+//   entity ids — swapping the generator must stay a runtime decision that
+//   requires no migration.
+//
+// Foreign key convention
+//   All foreign keys are ON DELETE NO ACTION. See OnDeleteAction below; any
+//   other referential action is an annotated, justified exception.
 syntax = "proto3";
 
 package options.v1;
@@ -5,6 +25,37 @@ package options.v1;
 option go_package = "github.com/erniealice/esqyma/golang/v1/options";
 
 import "google/protobuf/descriptor.proto";
+
+// Referential action applied when a referenced (parent) row is deleted.
+//
+// REPOSITORY POLICY: every foreign key in this schema is ON DELETE NO ACTION.
+// Deletion order and dependent-row cleanup belong to the use-case layer, not to
+// the database, so an unannotated FK field is the desired steady state and
+// generators must still emit an explicit `ON DELETE NO ACTION` clause for it.
+//
+// Any value other than NO ACTION is an exception: it requires an explicit
+// on_delete annotation on the field AND a comment justifying why the database
+// must own the delete behaviour for that edge.
+enum OnDeleteAction {
+  // Not annotated. Resolves to the repository default policy: NO ACTION.
+  ON_DELETE_ACTION_UNSPECIFIED = 0;
+
+  // NO ACTION — reject the parent delete while dependent rows exist, checked at
+  // the end of the statement. The repository default.
+  ON_DELETE_ACTION_NO_ACTION = 1;
+
+  // RESTRICT — reject the parent delete immediately, non-deferrable.
+  // Exception: requires a justification comment on the annotated field.
+  ON_DELETE_ACTION_RESTRICT = 2;
+
+  // CASCADE — delete dependent rows with the parent.
+  // Exception: requires a justification comment on the annotated field.
+  ON_DELETE_ACTION_CASCADE = 3;
+
+  // SET NULL — null the referencing column; the column must be nullable.
+  // Exception: requires a justification comment on the annotated field.
+  ON_DELETE_ACTION_SET_NULL = 4;
+}
 
 // Field-level database options
 message FieldOptions {
@@ -28,6 +79,11 @@ message FieldOptions {
 
   // Exclude from the persisted column set: computed/display-only mirror of another field.
   bool ignore = 7;
+
+  // Referential action for this foreign key. Only meaningful together with
+  // `references`. Leave unset for the repository default (ON DELETE NO ACTION);
+  // set a value only alongside a comment justifying the exception.
+  OnDeleteAction on_delete = 8;
 }
 
 // Message-level database options

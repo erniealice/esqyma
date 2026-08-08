@@ -64,6 +64,9 @@ type protoField struct {
 	Index      bool
 	Unique     bool
 	Default    string // raw SQL default expression (e.g. "true", "'active'")
+	// OnDelete is the annotated referential action; UNSPECIFIED means the
+	// repository default policy, ON DELETE NO ACTION.
+	OnDelete optionsv1.OnDeleteAction
 }
 
 func main() {
@@ -193,6 +196,7 @@ func protoFieldColumns(md protoreflect.MessageDescriptor) map[string]protoField 
 			Index:      fieldDBBool(fd, func(o *optionsv1.FieldOptions) bool { return o.GetIndex() }),
 			Unique:     fieldDBBool(fd, func(o *optionsv1.FieldOptions) bool { return o.GetUnique() }),
 			Default:    fieldDBOption(fd, func(o *optionsv1.FieldOptions) string { return o.GetDefault() }),
+			OnDelete:   fieldDBOnDelete(fd),
 		}
 		// SqlType override beats inferred type.
 		if override := fieldDBOption(fd, func(o *optionsv1.FieldOptions) string { return o.GetSqlType() }); override != "" {
@@ -227,6 +231,36 @@ func fieldDBBool(fd protoreflect.FieldDescriptor, get func(*optionsv1.FieldOptio
 		return false
 	}
 	return get(ext)
+}
+
+// fieldDBOnDelete pulls the referential action from the (options.v1.db)
+// annotation. Absent annotation → UNSPECIFIED → the repository default policy.
+func fieldDBOnDelete(fd protoreflect.FieldDescriptor) optionsv1.OnDeleteAction {
+	opts := fd.Options()
+	if opts == nil || !proto.HasExtension(opts, optionsv1.E_Db) {
+		return optionsv1.OnDeleteAction_ON_DELETE_ACTION_UNSPECIFIED
+	}
+	ext, ok := proto.GetExtension(opts, optionsv1.E_Db).(*optionsv1.FieldOptions)
+	if !ok || ext == nil {
+		return optionsv1.OnDeleteAction_ON_DELETE_ACTION_UNSPECIFIED
+	}
+	return ext.GetOnDelete()
+}
+
+// onDeleteSQL maps the proto referential action to its SQL clause. UNSPECIFIED
+// resolves to the repository default (NO ACTION), so every drafted foreign key
+// carries an explicit ON DELETE clause instead of relying on the engine default.
+func onDeleteSQL(action optionsv1.OnDeleteAction) string {
+	switch action {
+	case optionsv1.OnDeleteAction_ON_DELETE_ACTION_RESTRICT:
+		return "RESTRICT"
+	case optionsv1.OnDeleteAction_ON_DELETE_ACTION_CASCADE:
+		return "CASCADE"
+	case optionsv1.OnDeleteAction_ON_DELETE_ACTION_SET_NULL:
+		return "SET NULL"
+	default:
+		return "NO ACTION"
+	}
 }
 
 // fieldSQLType maps proto kinds to the conservative postgres types used by
@@ -518,7 +552,7 @@ func emitDriftSQL(path string, protoTables map[string]map[string]protoField, mis
 					refTable = ref[:i]
 					refCol = ref[i+1:]
 				}
-				parts = append(parts, fmt.Sprintf("REFERENCES %s(%s) ON DELETE RESTRICT", refTable, refCol))
+				parts = append(parts, fmt.Sprintf("REFERENCES %s(%s) ON DELETE %s", refTable, refCol, onDeleteSQL(f.OnDelete)))
 			}
 			if f.Unique {
 				parts = append(parts, "UNIQUE")

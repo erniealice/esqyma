@@ -57,8 +57,10 @@ type TaskOutcome struct {
 	DateModified              *int64                            `protobuf:"varint,27,opt,name=date_modified,json=dateModified,proto3,oneof" json:"date_modified,omitempty"`
 	DateModifiedString        *string                           `protobuf:"bytes,28,opt,name=date_modified_string,json=dateModifiedString,proto3,oneof" json:"date_modified_string,omitempty"`
 	IsSynthesized             bool                              `protobuf:"varint,29,opt,name=is_synthesized,json=isSynthesized,proto3" json:"is_synthesized,omitempty"`
-	unknownFields             protoimpl.UnknownFields
-	sizeCache                 protoimpl.SizeCache
+	// Immutable tenant anchor. Job task and criteria parents must agree.
+	WorkspaceId   *string `protobuf:"bytes,30,opt,name=workspace_id,json=workspaceId,proto3,oneof" json:"workspace_id,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
 }
 
 func (x *TaskOutcome) Reset() {
@@ -292,6 +294,13 @@ func (x *TaskOutcome) GetIsSynthesized() bool {
 		return x.IsSynthesized
 	}
 	return false
+}
+
+func (x *TaskOutcome) GetWorkspaceId() string {
+	if x != nil && x.WorkspaceId != nil {
+		return *x.WorkspaceId
+	}
+	return ""
 }
 
 type CreateTaskOutcomeRequest struct {
@@ -1582,7 +1591,7 @@ var File_domain_operation_task_outcome_task_outcome_proto protoreflect.FileDescr
 
 const file_domain_operation_task_outcome_task_outcome_proto_rawDesc = "" +
 	"\n" +
-	"0domain/operation/task_outcome/task_outcome.proto\x12\x13domain.operation.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1adomain/common/search.proto\x1a\"domain/operation/enums/enums.proto\x1a8domain/operation/outcome_criteria/outcome_criteria.proto\x1a(domain/operation/job_task/job_task.proto\x1a\x10options/db.proto\"\x80\x0f\n" +
+	"0domain/operation/task_outcome/task_outcome.proto\x12\x13domain.operation.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1adomain/common/search.proto\x1a\"domain/operation/enums/enums.proto\x1a8domain/operation/outcome_criteria/outcome_criteria.proto\x1a(domain/operation/job_task/job_task.proto\x1a\x10options/db.proto\"\xcc\x0f\n" +
 	"\vTaskOutcome\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x120\n" +
 	"\vjob_task_id\x18\x02 \x01(\tB\x10\x82\xb5\x18\f\n" +
@@ -1623,7 +1632,9 @@ const file_domain_operation_task_outcome_task_outcome_proto_rawDesc = "" +
 	"\x13date_created_string\x18\x1a \x01(\tB\x06\x82\xb5\x18\x028\x01H\x0eR\x11dateCreatedString\x88\x01\x01\x12(\n" +
 	"\rdate_modified\x18\x1b \x01(\x03H\x0fR\fdateModified\x88\x01\x01\x12=\n" +
 	"\x14date_modified_string\x18\x1c \x01(\tB\x06\x82\xb5\x18\x028\x01H\x10R\x12dateModifiedString\x88\x01\x01\x122\n" +
-	"\x0eis_synthesized\x18\x1d \x01(\bB\v\x82\xb5\x18\a\"\x05falseR\risSynthesized:\x06\x8a\xb5\x18\x02\b\x01B\v\n" +
+	"\x0eis_synthesized\x18\x1d \x01(\bB\v\x82\xb5\x18\a\"\x05falseR\risSynthesized\x129\n" +
+	"\fworkspace_id\x18\x1e \x01(\tB\x11\x82\xb5\x18\r\n" +
+	"\tworkspace\x18\x01H\x11R\vworkspaceId\x88\x01\x01:\x06\x8a\xb5\x18\x02\b\x01B\v\n" +
 	"\t_job_taskB\x13\n" +
 	"\x11_criteria_versionB\x10\n" +
 	"\x0e_numeric_valueB\r\n" +
@@ -1640,7 +1651,8 @@ const file_domain_operation_task_outcome_task_outcome_proto_rawDesc = "" +
 	"\r_date_createdB\x16\n" +
 	"\x14_date_created_stringB\x10\n" +
 	"\x0e_date_modifiedB\x17\n" +
-	"\x15_date_modified_string\"P\n" +
+	"\x15_date_modified_stringB\x0f\n" +
+	"\r_workspace_id\"P\n" +
 	"\x18CreateTaskOutcomeRequest\x124\n" +
 	"\x04data\x18\x01 \x01(\v2 .domain.operation.v1.TaskOutcomeR\x04data\"\xa9\x01\n" +
 	"\x19CreateTaskOutcomeResponse\x124\n" +

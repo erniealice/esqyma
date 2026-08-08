@@ -53,8 +53,10 @@ type PhaseOutcomeSummary struct {
 	ReportingCheckpointId *string                    `protobuf:"bytes,24,opt,name=reporting_checkpoint_id,json=reportingCheckpointId,proto3,oneof" json:"reporting_checkpoint_id,omitempty"`
 	ScaledScore           *float64                   `protobuf:"fixed64,25,opt,name=scaled_score,json=scaledScore,proto3,oneof" json:"scaled_score,omitempty"`
 	ScaledLabel           *string                    `protobuf:"bytes,26,opt,name=scaled_label,json=scaledLabel,proto3,oneof" json:"scaled_label,omitempty"`
-	unknownFields         protoimpl.UnknownFields
-	sizeCache             protoimpl.SizeCache
+	// Immutable tenant anchor. JobPhase and Job parents must agree.
+	WorkspaceId   *string `protobuf:"bytes,27,opt,name=workspace_id,json=workspaceId,proto3,oneof" json:"workspace_id,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
 }
 
 func (x *PhaseOutcomeSummary) Reset() {
@@ -265,6 +267,13 @@ func (x *PhaseOutcomeSummary) GetScaledScore() float64 {
 func (x *PhaseOutcomeSummary) GetScaledLabel() string {
 	if x != nil && x.ScaledLabel != nil {
 		return *x.ScaledLabel
+	}
+	return ""
+}
+
+func (x *PhaseOutcomeSummary) GetWorkspaceId() string {
+	if x != nil && x.WorkspaceId != nil {
+		return *x.WorkspaceId
 	}
 	return ""
 }
@@ -1265,7 +1274,7 @@ var File_domain_operation_phase_outcome_summary_phase_outcome_summary_proto prot
 
 const file_domain_operation_phase_outcome_summary_phase_outcome_summary_proto_rawDesc = "" +
 	"\n" +
-	"Bdomain/operation/phase_outcome_summary/phase_outcome_summary.proto\x12\x13domain.operation.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1adomain/common/search.proto\x1a\"domain/operation/enums/enums.proto\x1a*domain/operation/job_phase/job_phase.proto\x1a\x10options/db.proto\"\xf5\v\n" +
+	"Bdomain/operation/phase_outcome_summary/phase_outcome_summary.proto\x12\x13domain.operation.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1adomain/common/search.proto\x1a\"domain/operation/enums/enums.proto\x1a*domain/operation/job_phase/job_phase.proto\x1a\x10options/db.proto\"\xc1\f\n" +
 	"\x13PhaseOutcomeSummary\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x123\n" +
 	"\fjob_phase_id\x18\x02 \x01(\tB\x11\x82\xb5\x18\r\n" +
@@ -1304,7 +1313,9 @@ const file_domain_operation_phase_outcome_summary_phase_outcome_summary_proto_ra
 	"\x14reporting_checkpoint\x18\x01H\tR\x15reportingCheckpointId\x88\x01\x01\x12&\n" +
 	"\fscaled_score\x18\x19 \x01(\x01H\n" +
 	"R\vscaledScore\x88\x01\x01\x12&\n" +
-	"\fscaled_label\x18\x1a \x01(\tH\vR\vscaledLabel\x88\x01\x01:\x06\x8a\xb5\x18\x02\b\x01B\f\n" +
+	"\fscaled_label\x18\x1a \x01(\tH\vR\vscaledLabel\x88\x01\x01\x129\n" +
+	"\fworkspace_id\x18\x1b \x01(\tB\x11\x82\xb5\x18\r\n" +
+	"\tworkspace\x18\x01H\fR\vworkspaceId\x88\x01\x01:\x06\x8a\xb5\x18\x02\b\x01B\f\n" +
 	"\n" +
 	"_job_phaseB\x10\n" +
 	"\x0e_summary_scoreB\f\n" +
@@ -1318,7 +1329,8 @@ const file_domain_operation_phase_outcome_summary_phase_outcome_summary_proto_ra
 	"\x15_date_modified_stringB\x1a\n" +
 	"\x18_reporting_checkpoint_idB\x0f\n" +
 	"\r_scaled_scoreB\x0f\n" +
-	"\r_scaled_label\"`\n" +
+	"\r_scaled_labelB\x0f\n" +
+	"\r_workspace_id\"`\n" +
 	" CreatePhaseOutcomeSummaryRequest\x12<\n" +
 	"\x04data\x18\x01 \x01(\v2(.domain.operation.v1.PhaseOutcomeSummaryR\x04data\"\xb9\x01\n" +
 	"!CreatePhaseOutcomeSummaryResponse\x12<\n" +

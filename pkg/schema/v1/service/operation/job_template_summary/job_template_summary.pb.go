@@ -81,10 +81,12 @@ func (x *Deliverer) GetStaffName() string {
 	return ""
 }
 
-// JobTemplateSummary is one aggregated delivery-summary row: one row per
-// job_template with >=1 resolver-scoped job for the requested status. Every id
-// is an opaque, generic entity id; every *_name is a display label the adapter
-// resolves server-side.
+// JobTemplateSummary is normally one aggregated delivery-summary row per
+// (job_template, subscription_group) with >=1 resolver-scoped job for the
+// requested status. When the sanitized request permits active-template
+// fallback, a category with no aggregate rows may instead carry explicitly
+// marked template-grain rows. Every id is an opaque, generic entity id; every
+// *_name is a display label the adapter resolves server-side.
 type JobTemplateSummary struct {
 	state                 protoimpl.MessageState `protogen:"open.v1"`
 	JobTemplateId         string                 `protobuf:"bytes,1,opt,name=job_template_id,json=jobTemplateId,proto3" json:"job_template_id,omitempty"`
@@ -144,8 +146,14 @@ type JobTemplateSummary struct {
 	GroupPhaseCount     int32                         `protobuf:"varint,19,opt,name=group_phase_count,json=groupPhaseCount,proto3" json:"group_phase_count,omitempty"`
 	GroupLowestStatus   job_phase.PhaseApprovalStatus `protobuf:"varint,20,opt,name=group_lowest_status,json=groupLowestStatus,proto3,enum=domain.operation.v1.PhaseApprovalStatus" json:"group_lowest_status,omitempty"`
 	GroupMixedAttention bool                          `protobuf:"varint,21,opt,name=group_mixed_attention,json=groupMixedAttention,proto3" json:"group_mixed_attention,omitempty"`
-	unknownFields       protoimpl.UnknownFields
-	sizeCache           protoimpl.SizeCache
+	// True only for an active job_template surfaced at template grain because
+	// its category has zero aggregate delivery rows in the scoped status
+	// universe. Delivery/group/schedule fields and item count are intentionally
+	// blank/zero on this row; consumers use this marker rather than inferring the
+	// grain from a nullable related id.
+	TemplateGrainFallback bool `protobuf:"varint,22,opt,name=template_grain_fallback,json=templateGrainFallback,proto3" json:"template_grain_fallback,omitempty"`
+	unknownFields         protoimpl.UnknownFields
+	sizeCache             protoimpl.SizeCache
 }
 
 func (x *JobTemplateSummary) Reset() {
@@ -311,6 +319,71 @@ func (x *JobTemplateSummary) GetGroupMixedAttention() bool {
 	return false
 }
 
+func (x *JobTemplateSummary) GetTemplateGrainFallback() bool {
+	if x != nil {
+		return x.TemplateGrainFallback
+	}
+	return false
+}
+
+// JobCategorySummaryCount is the number of rows in one job-category partition
+// of the status-scoped summary universe before selected-category pagination and
+// search. A row is at the service's declared summary grain: normally
+// (job_template, subscription_group), or the active template-grain fallback for
+// a category with no delivery aggregate. It is deliberately not a persisted
+// JobCategory field or a unique-template count.
+type JobCategorySummaryCount struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	JobCategoryId string                 `protobuf:"bytes,1,opt,name=job_category_id,json=jobCategoryId,proto3" json:"job_category_id,omitempty"`
+	SummaryCount  int32                  `protobuf:"varint,2,opt,name=summary_count,json=summaryCount,proto3" json:"summary_count,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *JobCategorySummaryCount) Reset() {
+	*x = JobCategorySummaryCount{}
+	mi := &file_service_operation_job_template_summary_job_template_summary_proto_msgTypes[2]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *JobCategorySummaryCount) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*JobCategorySummaryCount) ProtoMessage() {}
+
+func (x *JobCategorySummaryCount) ProtoReflect() protoreflect.Message {
+	mi := &file_service_operation_job_template_summary_job_template_summary_proto_msgTypes[2]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use JobCategorySummaryCount.ProtoReflect.Descriptor instead.
+func (*JobCategorySummaryCount) Descriptor() ([]byte, []int) {
+	return file_service_operation_job_template_summary_job_template_summary_proto_rawDescGZIP(), []int{2}
+}
+
+func (x *JobCategorySummaryCount) GetJobCategoryId() string {
+	if x != nil {
+		return x.JobCategoryId
+	}
+	return ""
+}
+
+func (x *JobCategorySummaryCount) GetSummaryCount() int32 {
+	if x != nil {
+		return x.SummaryCount
+	}
+	return 0
+}
+
 type ListJobTemplateSummariesRequest struct {
 	state protoimpl.MessageState `protogen:"open.v1"`
 	// status is the job status token the job.status column stores (the full
@@ -325,13 +398,25 @@ type ListJobTemplateSummariesRequest struct {
 	// schedule is currently active (the AY-scoping predicate). ABSENT ⇒ no
 	// schedule predicate (today's behaviour — all schedules).
 	PriceScheduleActive *bool `protobuf:"varint,4,opt,name=price_schedule_active,json=priceScheduleActive,proto3,oneof" json:"price_schedule_active,omitempty"`
-	unknownFields       protoimpl.UnknownFields
-	sizeCache           protoimpl.SizeCache
+	// job_category_id narrows the returned result before pagination. Category
+	// badge counts in the response remain status-scoped and are not narrowed by
+	// this selected-category value or by search.
+	JobCategoryId *string `protobuf:"bytes,5,opt,name=job_category_id,json=jobCategoryId,proto3,oneof" json:"job_category_id,omitempty"`
+	// Bounded free-text search over adapter-owned summary fields.
+	Search *common.SearchRequest `protobuf:"bytes,6,opt,name=search,proto3,oneof" json:"search,omitempty"`
+	// Adapter-allowlisted ordering at the complete response-row grain.
+	Sort *common.SortRequest `protobuf:"bytes,7,opt,name=sort,proto3,oneof" json:"sort,omitempty"`
+	// Caller preference for active template-grain fallback. The application use
+	// case sanitizes this flag through an independent job_template:list gate;
+	// the adapter never treats an unsanitized client value as authorization.
+	IncludeTemplateFallback *bool `protobuf:"varint,8,opt,name=include_template_fallback,json=includeTemplateFallback,proto3,oneof" json:"include_template_fallback,omitempty"`
+	unknownFields           protoimpl.UnknownFields
+	sizeCache               protoimpl.SizeCache
 }
 
 func (x *ListJobTemplateSummariesRequest) Reset() {
 	*x = ListJobTemplateSummariesRequest{}
-	mi := &file_service_operation_job_template_summary_job_template_summary_proto_msgTypes[2]
+	mi := &file_service_operation_job_template_summary_job_template_summary_proto_msgTypes[3]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -343,7 +428,7 @@ func (x *ListJobTemplateSummariesRequest) String() string {
 func (*ListJobTemplateSummariesRequest) ProtoMessage() {}
 
 func (x *ListJobTemplateSummariesRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_service_operation_job_template_summary_job_template_summary_proto_msgTypes[2]
+	mi := &file_service_operation_job_template_summary_job_template_summary_proto_msgTypes[3]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -356,7 +441,7 @@ func (x *ListJobTemplateSummariesRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ListJobTemplateSummariesRequest.ProtoReflect.Descriptor instead.
 func (*ListJobTemplateSummariesRequest) Descriptor() ([]byte, []int) {
-	return file_service_operation_job_template_summary_job_template_summary_proto_rawDescGZIP(), []int{2}
+	return file_service_operation_job_template_summary_job_template_summary_proto_rawDescGZIP(), []int{3}
 }
 
 func (x *ListJobTemplateSummariesRequest) GetStatus() string {
@@ -387,19 +472,48 @@ func (x *ListJobTemplateSummariesRequest) GetPriceScheduleActive() bool {
 	return false
 }
 
+func (x *ListJobTemplateSummariesRequest) GetJobCategoryId() string {
+	if x != nil && x.JobCategoryId != nil {
+		return *x.JobCategoryId
+	}
+	return ""
+}
+
+func (x *ListJobTemplateSummariesRequest) GetSearch() *common.SearchRequest {
+	if x != nil {
+		return x.Search
+	}
+	return nil
+}
+
+func (x *ListJobTemplateSummariesRequest) GetSort() *common.SortRequest {
+	if x != nil {
+		return x.Sort
+	}
+	return nil
+}
+
+func (x *ListJobTemplateSummariesRequest) GetIncludeTemplateFallback() bool {
+	if x != nil && x.IncludeTemplateFallback != nil {
+		return *x.IncludeTemplateFallback
+	}
+	return false
+}
+
 type ListJobTemplateSummariesResponse struct {
-	state         protoimpl.MessageState     `protogen:"open.v1"`
-	Summaries     []*JobTemplateSummary      `protobuf:"bytes,1,rep,name=summaries,proto3" json:"summaries,omitempty"`
-	Success       bool                       `protobuf:"varint,2,opt,name=success,proto3" json:"success,omitempty"`
-	Pagination    *common.PaginationResponse `protobuf:"bytes,3,opt,name=pagination,proto3,oneof" json:"pagination,omitempty"`
-	Error         *common.Error              `protobuf:"bytes,4,opt,name=error,proto3,oneof" json:"error,omitempty"`
-	unknownFields protoimpl.UnknownFields
-	sizeCache     protoimpl.SizeCache
+	state             protoimpl.MessageState     `protogen:"open.v1"`
+	Summaries         []*JobTemplateSummary      `protobuf:"bytes,1,rep,name=summaries,proto3" json:"summaries,omitempty"`
+	Success           bool                       `protobuf:"varint,2,opt,name=success,proto3" json:"success,omitempty"`
+	Pagination        *common.PaginationResponse `protobuf:"bytes,3,opt,name=pagination,proto3,oneof" json:"pagination,omitempty"`
+	Error             *common.Error              `protobuf:"bytes,4,opt,name=error,proto3,oneof" json:"error,omitempty"`
+	JobCategoryCounts []*JobCategorySummaryCount `protobuf:"bytes,5,rep,name=job_category_counts,json=jobCategoryCounts,proto3" json:"job_category_counts,omitempty"`
+	unknownFields     protoimpl.UnknownFields
+	sizeCache         protoimpl.SizeCache
 }
 
 func (x *ListJobTemplateSummariesResponse) Reset() {
 	*x = ListJobTemplateSummariesResponse{}
-	mi := &file_service_operation_job_template_summary_job_template_summary_proto_msgTypes[3]
+	mi := &file_service_operation_job_template_summary_job_template_summary_proto_msgTypes[4]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -411,7 +525,7 @@ func (x *ListJobTemplateSummariesResponse) String() string {
 func (*ListJobTemplateSummariesResponse) ProtoMessage() {}
 
 func (x *ListJobTemplateSummariesResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_service_operation_job_template_summary_job_template_summary_proto_msgTypes[3]
+	mi := &file_service_operation_job_template_summary_job_template_summary_proto_msgTypes[4]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -424,7 +538,7 @@ func (x *ListJobTemplateSummariesResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ListJobTemplateSummariesResponse.ProtoReflect.Descriptor instead.
 func (*ListJobTemplateSummariesResponse) Descriptor() ([]byte, []int) {
-	return file_service_operation_job_template_summary_job_template_summary_proto_rawDescGZIP(), []int{3}
+	return file_service_operation_job_template_summary_job_template_summary_proto_rawDescGZIP(), []int{4}
 }
 
 func (x *ListJobTemplateSummariesResponse) GetSummaries() []*JobTemplateSummary {
@@ -455,15 +569,22 @@ func (x *ListJobTemplateSummariesResponse) GetError() *common.Error {
 	return nil
 }
 
+func (x *ListJobTemplateSummariesResponse) GetJobCategoryCounts() []*JobCategorySummaryCount {
+	if x != nil {
+		return x.JobCategoryCounts
+	}
+	return nil
+}
+
 var File_service_operation_job_template_summary_job_template_summary_proto protoreflect.FileDescriptor
 
 const file_service_operation_job_template_summary_job_template_summary_proto_rawDesc = "" +
 	"\n" +
-	"Aservice/operation/job_template_summary/job_template_summary.proto\x12\x14service.operation.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a*domain/operation/job_phase/job_phase.proto\"E\n" +
+	"Aservice/operation/job_template_summary/job_template_summary.proto\x12\x14service.operation.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/search.proto\x1a\x18domain/common/sort.proto\x1a*domain/operation/job_phase/job_phase.proto\"E\n" +
 	"\tDeliverer\x12\x19\n" +
 	"\bstaff_id\x18\x01 \x01(\tR\astaffId\x12\x1d\n" +
 	"\n" +
-	"staff_name\x18\x02 \x01(\tR\tstaffName\"\xe4\a\n" +
+	"staff_name\x18\x02 \x01(\tR\tstaffName\"\x9c\b\n" +
 	"\x12JobTemplateSummary\x12&\n" +
 	"\x0fjob_template_id\x18\x01 \x01(\tR\rjobTemplateId\x12*\n" +
 	"\x11job_template_name\x18\x02 \x01(\tR\x0fjobTemplateName\x122\n" +
@@ -487,25 +608,38 @@ const file_service_operation_job_template_summary_job_template_summary_proto_raw
 	"\x15group_published_count\x18\x12 \x01(\x05R\x13groupPublishedCount\x12*\n" +
 	"\x11group_phase_count\x18\x13 \x01(\x05R\x0fgroupPhaseCount\x12X\n" +
 	"\x13group_lowest_status\x18\x14 \x01(\x0e2(.domain.operation.v1.PhaseApprovalStatusR\x11groupLowestStatus\x122\n" +
-	"\x15group_mixed_attention\x18\x15 \x01(\bR\x13groupMixedAttentionJ\x04\b\x05\x10\x06J\x04\b\x06\x10\aR\bstaff_idR\n" +
-	"staff_name\"\xb8\x02\n" +
+	"\x15group_mixed_attention\x18\x15 \x01(\bR\x13groupMixedAttention\x126\n" +
+	"\x17template_grain_fallback\x18\x16 \x01(\bR\x15templateGrainFallbackJ\x04\b\x05\x10\x06J\x04\b\x06\x10\aR\bstaff_idR\n" +
+	"staff_name\"f\n" +
+	"\x17JobCategorySummaryCount\x12&\n" +
+	"\x0fjob_category_id\x18\x01 \x01(\tR\rjobCategoryId\x12#\n" +
+	"\rsummary_count\x18\x02 \x01(\x05R\fsummaryCount\"\xe2\x04\n" +
 	"\x1fListJobTemplateSummariesRequest\x12\x16\n" +
 	"\x06status\x18\x01 \x01(\tR\x06status\x127\n" +
 	"\x15subscription_group_id\x18\x02 \x01(\tH\x00R\x13subscriptionGroupId\x88\x01\x01\x12H\n" +
 	"\n" +
 	"pagination\x18\x03 \x01(\v2#.domain.common.v1.PaginationRequestH\x01R\n" +
 	"pagination\x88\x01\x01\x127\n" +
-	"\x15price_schedule_active\x18\x04 \x01(\bH\x02R\x13priceScheduleActive\x88\x01\x01B\x18\n" +
+	"\x15price_schedule_active\x18\x04 \x01(\bH\x02R\x13priceScheduleActive\x88\x01\x01\x12+\n" +
+	"\x0fjob_category_id\x18\x05 \x01(\tH\x03R\rjobCategoryId\x88\x01\x01\x12<\n" +
+	"\x06search\x18\x06 \x01(\v2\x1f.domain.common.v1.SearchRequestH\x04R\x06search\x88\x01\x01\x126\n" +
+	"\x04sort\x18\a \x01(\v2\x1d.domain.common.v1.SortRequestH\x05R\x04sort\x88\x01\x01\x12?\n" +
+	"\x19include_template_fallback\x18\b \x01(\bH\x06R\x17includeTemplateFallback\x88\x01\x01B\x18\n" +
 	"\x16_subscription_group_idB\r\n" +
 	"\v_paginationB\x18\n" +
-	"\x16_price_schedule_active\"\x9c\x02\n" +
+	"\x16_price_schedule_activeB\x12\n" +
+	"\x10_job_category_idB\t\n" +
+	"\a_searchB\a\n" +
+	"\x05_sortB\x1c\n" +
+	"\x1a_include_template_fallback\"\xfb\x02\n" +
 	" ListJobTemplateSummariesResponse\x12F\n" +
 	"\tsummaries\x18\x01 \x03(\v2(.service.operation.v1.JobTemplateSummaryR\tsummaries\x12\x18\n" +
 	"\asuccess\x18\x02 \x01(\bR\asuccess\x12I\n" +
 	"\n" +
 	"pagination\x18\x03 \x01(\v2$.domain.common.v1.PaginationResponseH\x00R\n" +
 	"pagination\x88\x01\x01\x122\n" +
-	"\x05error\x18\x04 \x01(\v2\x17.domain.common.v1.ErrorH\x01R\x05error\x88\x01\x01B\r\n" +
+	"\x05error\x18\x04 \x01(\v2\x17.domain.common.v1.ErrorH\x01R\x05error\x88\x01\x01\x12]\n" +
+	"\x13job_category_counts\x18\x05 \x03(\v2-.service.operation.v1.JobCategorySummaryCountR\x11jobCategoryCountsB\r\n" +
 	"\v_paginationB\b\n" +
 	"\x06_error2\xa7\x01\n" +
 	"\x19JobTemplateSummaryService\x12\x89\x01\n" +
@@ -524,32 +658,38 @@ func file_service_operation_job_template_summary_job_template_summary_proto_rawD
 	return file_service_operation_job_template_summary_job_template_summary_proto_rawDescData
 }
 
-var file_service_operation_job_template_summary_job_template_summary_proto_msgTypes = make([]protoimpl.MessageInfo, 4)
+var file_service_operation_job_template_summary_job_template_summary_proto_msgTypes = make([]protoimpl.MessageInfo, 5)
 var file_service_operation_job_template_summary_job_template_summary_proto_goTypes = []any{
 	(*Deliverer)(nil),                        // 0: service.operation.v1.Deliverer
 	(*JobTemplateSummary)(nil),               // 1: service.operation.v1.JobTemplateSummary
-	(*ListJobTemplateSummariesRequest)(nil),  // 2: service.operation.v1.ListJobTemplateSummariesRequest
-	(*ListJobTemplateSummariesResponse)(nil), // 3: service.operation.v1.ListJobTemplateSummariesResponse
-	(job_phase.PhaseApprovalStatus)(0),       // 4: domain.operation.v1.PhaseApprovalStatus
-	(*common.PaginationRequest)(nil),         // 5: domain.common.v1.PaginationRequest
-	(*common.PaginationResponse)(nil),        // 6: domain.common.v1.PaginationResponse
-	(*common.Error)(nil),                     // 7: domain.common.v1.Error
+	(*JobCategorySummaryCount)(nil),          // 2: service.operation.v1.JobCategorySummaryCount
+	(*ListJobTemplateSummariesRequest)(nil),  // 3: service.operation.v1.ListJobTemplateSummariesRequest
+	(*ListJobTemplateSummariesResponse)(nil), // 4: service.operation.v1.ListJobTemplateSummariesResponse
+	(job_phase.PhaseApprovalStatus)(0),       // 5: domain.operation.v1.PhaseApprovalStatus
+	(*common.PaginationRequest)(nil),         // 6: domain.common.v1.PaginationRequest
+	(*common.SearchRequest)(nil),             // 7: domain.common.v1.SearchRequest
+	(*common.SortRequest)(nil),               // 8: domain.common.v1.SortRequest
+	(*common.PaginationResponse)(nil),        // 9: domain.common.v1.PaginationResponse
+	(*common.Error)(nil),                     // 10: domain.common.v1.Error
 }
 var file_service_operation_job_template_summary_job_template_summary_proto_depIdxs = []int32{
-	0, // 0: service.operation.v1.JobTemplateSummary.deliverers:type_name -> service.operation.v1.Deliverer
-	4, // 1: service.operation.v1.JobTemplateSummary.lowest_status:type_name -> domain.operation.v1.PhaseApprovalStatus
-	4, // 2: service.operation.v1.JobTemplateSummary.group_lowest_status:type_name -> domain.operation.v1.PhaseApprovalStatus
-	5, // 3: service.operation.v1.ListJobTemplateSummariesRequest.pagination:type_name -> domain.common.v1.PaginationRequest
-	1, // 4: service.operation.v1.ListJobTemplateSummariesResponse.summaries:type_name -> service.operation.v1.JobTemplateSummary
-	6, // 5: service.operation.v1.ListJobTemplateSummariesResponse.pagination:type_name -> domain.common.v1.PaginationResponse
-	7, // 6: service.operation.v1.ListJobTemplateSummariesResponse.error:type_name -> domain.common.v1.Error
-	2, // 7: service.operation.v1.JobTemplateSummaryService.ListJobTemplateSummaries:input_type -> service.operation.v1.ListJobTemplateSummariesRequest
-	3, // 8: service.operation.v1.JobTemplateSummaryService.ListJobTemplateSummaries:output_type -> service.operation.v1.ListJobTemplateSummariesResponse
-	8, // [8:9] is the sub-list for method output_type
-	7, // [7:8] is the sub-list for method input_type
-	7, // [7:7] is the sub-list for extension type_name
-	7, // [7:7] is the sub-list for extension extendee
-	0, // [0:7] is the sub-list for field type_name
+	0,  // 0: service.operation.v1.JobTemplateSummary.deliverers:type_name -> service.operation.v1.Deliverer
+	5,  // 1: service.operation.v1.JobTemplateSummary.lowest_status:type_name -> domain.operation.v1.PhaseApprovalStatus
+	5,  // 2: service.operation.v1.JobTemplateSummary.group_lowest_status:type_name -> domain.operation.v1.PhaseApprovalStatus
+	6,  // 3: service.operation.v1.ListJobTemplateSummariesRequest.pagination:type_name -> domain.common.v1.PaginationRequest
+	7,  // 4: service.operation.v1.ListJobTemplateSummariesRequest.search:type_name -> domain.common.v1.SearchRequest
+	8,  // 5: service.operation.v1.ListJobTemplateSummariesRequest.sort:type_name -> domain.common.v1.SortRequest
+	1,  // 6: service.operation.v1.ListJobTemplateSummariesResponse.summaries:type_name -> service.operation.v1.JobTemplateSummary
+	9,  // 7: service.operation.v1.ListJobTemplateSummariesResponse.pagination:type_name -> domain.common.v1.PaginationResponse
+	10, // 8: service.operation.v1.ListJobTemplateSummariesResponse.error:type_name -> domain.common.v1.Error
+	2,  // 9: service.operation.v1.ListJobTemplateSummariesResponse.job_category_counts:type_name -> service.operation.v1.JobCategorySummaryCount
+	3,  // 10: service.operation.v1.JobTemplateSummaryService.ListJobTemplateSummaries:input_type -> service.operation.v1.ListJobTemplateSummariesRequest
+	4,  // 11: service.operation.v1.JobTemplateSummaryService.ListJobTemplateSummaries:output_type -> service.operation.v1.ListJobTemplateSummariesResponse
+	11, // [11:12] is the sub-list for method output_type
+	10, // [10:11] is the sub-list for method input_type
+	10, // [10:10] is the sub-list for extension type_name
+	10, // [10:10] is the sub-list for extension extendee
+	0,  // [0:10] is the sub-list for field type_name
 }
 
 func init() { file_service_operation_job_template_summary_job_template_summary_proto_init() }
@@ -557,15 +697,15 @@ func file_service_operation_job_template_summary_job_template_summary_proto_init
 	if File_service_operation_job_template_summary_job_template_summary_proto != nil {
 		return
 	}
-	file_service_operation_job_template_summary_job_template_summary_proto_msgTypes[2].OneofWrappers = []any{}
 	file_service_operation_job_template_summary_job_template_summary_proto_msgTypes[3].OneofWrappers = []any{}
+	file_service_operation_job_template_summary_job_template_summary_proto_msgTypes[4].OneofWrappers = []any{}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
 		File: protoimpl.DescBuilder{
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_service_operation_job_template_summary_job_template_summary_proto_rawDesc), len(file_service_operation_job_template_summary_job_template_summary_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   4,
+			NumMessages:   5,
 			NumExtensions: 0,
 			NumServices:   1,
 		},

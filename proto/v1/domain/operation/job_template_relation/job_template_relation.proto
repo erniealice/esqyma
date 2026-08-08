@@ -62,6 +62,10 @@ message JobTemplateRelation {
   JobTemplateRelationType relation_type = 12 [(options.v1.db).default = "0"];
 
   reserved 13 to 29;
+
+  // Immutable tenant anchor. Both template parents must resolve to this same
+  // workspace; conflicting or missing ownership is left NULL/fail-closed.
+  optional string workspace_id = 30 [(options.v1.db).references = "workspace", (options.v1.db).index = true];
 }
 
 service JobTemplateRelationDomainService {
