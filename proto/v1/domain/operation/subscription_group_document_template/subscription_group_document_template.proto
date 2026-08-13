@@ -1,0 +1,194 @@
+syntax = "proto3";
+
+package domain.operation.v1;
+
+option go_package = "github.com/erniealice/esqyma/golang/v1/domain/operation/subscription_group_document_template";
+
+import "domain/common/error.proto";
+import "domain/common/filter.proto";
+import "domain/common/pagination.proto";
+import "domain/common/search.proto";
+import "domain/common/sort.proto";
+import "domain/document/template/template.proto";
+import "domain/operation/enums/enums.proto";
+import "domain/operation/job_category/job_category.proto";
+import "domain/subscription/plan/plan.proto";
+import "domain/subscription/price_schedule/price_schedule.proto";
+import "google/protobuf/timestamp.proto";
+import "options/db.proto";
+
+// RenderProfile identifies a durable, generic data-to-document contract. It is
+// selected by trusted application composition and is never an HTTP selector.
+enum RenderProfile {
+  RENDER_PROFILE_UNSPECIFIED = 0;
+  RENDER_PROFILE_SUBSCRIPTION_GROUP_OUTCOME_MATRIX_SINGLE_PERIOD_11_V1 = 1;
+}
+
+// SubscriptionGroupDocumentTemplate binds a subscription-group outcome-summary
+// rendering profile to an immutable DocumentTemplate. Nullable applicability
+// axes are explicit fallback buckets; profile policy decides which buckets may
+// be published. The v1 eleven-column profile requires an exact job category.
+message SubscriptionGroupDocumentTemplate {
+  option (options.v1.table).table = true;
+
+  string id = 1;
+
+  // Tenant boundary. Resolver callers never supply this value; adapters source
+  // it from trusted request context and repeat tenant equality on every join.
+  string workspace_id = 2 [
+    (options.v1.db).references = "workspace",
+    (options.v1.db).index = true
+  ];
+
+  string document_template_id = 3 [
+    (options.v1.db).references = "document_template",
+    (options.v1.db).index = true
+  ];
+  optional domain.document.v1.DocumentTemplate document_template = 4; // hydrate-only
+
+  RenderProfile render_profile = 5 [(options.v1.db).index = true];
+
+  // NULL means every price schedule within a profile-permitted scope.
+  optional string price_schedule_id = 6 [
+    (options.v1.db).references = "price_schedule",
+    (options.v1.db).index = true
+  ];
+  optional domain.subscription.v1.PriceSchedule price_schedule = 7; // hydrate-only
+
+  // NULL means every plan within a profile-permitted scope.
+  optional string plan_id = 8 [
+    (options.v1.db).references = "plan",
+    (options.v1.db).index = true
+  ];
+  optional domain.subscription.v1.Plan plan = 9; // hydrate-only
+
+  // NULL is schema capacity for a registered category-agnostic profile. The
+  // currently registered v1 profile rejects it at create/publish time.
+  optional string job_category_id = 10 [
+    (options.v1.db).references = "job_category",
+    (options.v1.db).index = true
+  ];
+  optional domain.operation.v1.JobCategory job_category = 11; // hydrate-only
+
+  int32 version = 12 [(options.v1.db).default = "0"];
+  VersionStatus version_status = 13;
+
+  // Half-open [validity_start, validity_end), UTC.
+  optional google.protobuf.Timestamp validity_start = 14;
+  optional google.protobuf.Timestamp validity_end = 15;
+
+  optional string supersedes_binding_id = 16
+      [(options.v1.db).references = "subscription_group_document_template"];
+
+  bool active = 17 [(options.v1.db).default = "true"];
+
+  optional string created_by = 18;
+  optional int64 published_at = 19;
+  optional string published_at_string = 20 [(options.v1.db).ignore = true];
+  optional string published_by = 21;
+
+  optional int64 date_created = 22;
+  optional string date_created_string = 23 [(options.v1.db).ignore = true];
+  optional int64 date_modified = 24;
+  optional string date_modified_string = 25 [(options.v1.db).ignore = true];
+
+  reserved 26 to 39;
+}
+
+service SubscriptionGroupDocumentTemplateDomainService {
+  rpc CreateSubscriptionGroupDocumentTemplate(CreateSubscriptionGroupDocumentTemplateRequest)
+      returns (CreateSubscriptionGroupDocumentTemplateResponse);
+  rpc ReadSubscriptionGroupDocumentTemplate(ReadSubscriptionGroupDocumentTemplateRequest)
+      returns (ReadSubscriptionGroupDocumentTemplateResponse);
+  rpc UpdateSubscriptionGroupDocumentTemplate(UpdateSubscriptionGroupDocumentTemplateRequest)
+      returns (UpdateSubscriptionGroupDocumentTemplateResponse);
+  rpc DeleteSubscriptionGroupDocumentTemplate(DeleteSubscriptionGroupDocumentTemplateRequest)
+      returns (DeleteSubscriptionGroupDocumentTemplateResponse);
+  rpc ListSubscriptionGroupDocumentTemplates(ListSubscriptionGroupDocumentTemplatesRequest)
+      returns (ListSubscriptionGroupDocumentTemplatesResponse);
+  rpc PublishSubscriptionGroupDocumentTemplate(PublishSubscriptionGroupDocumentTemplateRequest)
+      returns (PublishSubscriptionGroupDocumentTemplateResponse);
+  rpc FindApplicableSubscriptionGroupDocumentTemplate(FindApplicableSubscriptionGroupDocumentTemplateRequest)
+      returns (FindApplicableSubscriptionGroupDocumentTemplateResponse);
+}
+
+message CreateSubscriptionGroupDocumentTemplateRequest {
+  SubscriptionGroupDocumentTemplate data = 1;
+}
+
+message CreateSubscriptionGroupDocumentTemplateResponse {
+  repeated SubscriptionGroupDocumentTemplate data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message ReadSubscriptionGroupDocumentTemplateRequest {
+  SubscriptionGroupDocumentTemplate data = 1;
+}
+
+message ReadSubscriptionGroupDocumentTemplateResponse {
+  repeated SubscriptionGroupDocumentTemplate data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message UpdateSubscriptionGroupDocumentTemplateRequest {
+  SubscriptionGroupDocumentTemplate data = 1;
+}
+
+message UpdateSubscriptionGroupDocumentTemplateResponse {
+  repeated SubscriptionGroupDocumentTemplate data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message DeleteSubscriptionGroupDocumentTemplateRequest {
+  SubscriptionGroupDocumentTemplate data = 1;
+}
+
+message DeleteSubscriptionGroupDocumentTemplateResponse {
+  bool success = 1;
+  optional domain.common.v1.Error error = 2;
+}
+
+message ListSubscriptionGroupDocumentTemplatesRequest {
+  optional domain.common.v1.SearchRequest search = 1;
+  optional domain.common.v1.FilterRequest filters = 2;
+  optional domain.common.v1.SortRequest sort = 3;
+  optional domain.common.v1.PaginationRequest pagination = 4;
+}
+
+message ListSubscriptionGroupDocumentTemplatesResponse {
+  repeated SubscriptionGroupDocumentTemplate data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+// Management resolver request. Workspace is always trusted context. The
+// document purpose is a required, caller-pinned family discriminator; the
+// report-scoped resolver uses a separate in-process request and pins it itself.
+message FindApplicableSubscriptionGroupDocumentTemplateRequest {
+  optional string price_schedule_id = 1;
+  optional string plan_id = 2;
+  optional string job_category_id = 3;
+  RenderProfile render_profile = 4;
+  optional google.protobuf.Timestamp as_of = 5;
+  string document_purpose = 6;
+}
+
+message FindApplicableSubscriptionGroupDocumentTemplateResponse {
+  optional SubscriptionGroupDocumentTemplate binding = 1;
+  bool found = 2;
+  bool success = 3;
+  optional domain.common.v1.Error error = 4;
+}
+
+message PublishSubscriptionGroupDocumentTemplateRequest {
+  string id = 1;
+}
+
+message PublishSubscriptionGroupDocumentTemplateResponse {
+  optional SubscriptionGroupDocumentTemplate data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}

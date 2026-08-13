@@ -1,0 +1,157 @@
+syntax = "proto3";
+
+package service.operation.v1;
+
+option go_package = "github.com/erniealice/esqyma/pkg/schema/v1/service/operation/subscription_group_outcome_export";
+
+import "domain/common/error.proto";
+import "domain/operation/subscription_group_document_template/subscription_group_document_template.proto";
+
+// SubscriptionGroupOutcomeExportService is the canonical, group-scoped
+// composite read for category/phase options and a selected one-period outcome
+// matrix. It deliberately has no workspace, principal, format, storage, or
+// client-attribute selector.
+service SubscriptionGroupOutcomeExportService {
+  rpc GetSubscriptionGroupOutcomeExport(GetSubscriptionGroupOutcomeExportRequest)
+      returns (GetSubscriptionGroupOutcomeExportResponse);
+  rpc ListSubscriptionGroupOutcomeLanding(ListSubscriptionGroupOutcomeLandingRequest)
+      returns (ListSubscriptionGroupOutcomeLandingResponse);
+}
+
+// ListSubscriptionGroupOutcomeLandingRequest carries only the optional schedule
+// status selector. Workspace, user, workspace-user membership, principal kind,
+// and scope widening are always derived from trusted request identity.
+message ListSubscriptionGroupOutcomeLandingRequest {
+  optional bool price_schedule_active = 1;
+}
+
+// SubscriptionGroupOutcomeLandingRow is the provider-neutral, non-PII grouped
+// landing projection. Counts are derived from the scoped member/job graph; no
+// client identity or outcome value crosses this boundary.
+message SubscriptionGroupOutcomeLandingRow {
+  string price_schedule_id = 1;
+  string price_schedule_name = 2;
+  bool price_schedule_active = 3;
+  optional int32 price_schedule_sort_order = 4;
+  string subscription_group_id = 5;
+  string subscription_group_name = 6;
+  bool subscription_group_active = 7;
+  int64 member_count = 8;
+  int64 job_template_count = 9;
+}
+
+message ListSubscriptionGroupOutcomeLandingResponse {
+  repeated SubscriptionGroupOutcomeLandingRow rows = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message GetSubscriptionGroupOutcomeExportRequest {
+  string subscription_group_id = 1;
+
+  // Optional while requesting options; required when outcome_selector is set.
+  optional string job_category_id = 2;
+
+  oneof outcome_selector {
+    string job_template_phase_code = 3;
+    bool final_outcome = 4;
+  }
+}
+
+message SubscriptionGroupOutcomeExportContext {
+  string subscription_group_id = 1;
+  string subscription_group_name = 2;
+  optional string price_schedule_id = 3;
+  string price_schedule_name = 4;
+  optional string plan_id = 5;
+  string plan_name = 6;
+  bool historical = 7;
+}
+
+message JobTemplatePhaseOption {
+  string code = 1;
+  string name = 2;
+  int32 sequence_order = 3;
+
+  // True when eligible templates disagree about the identity/ordering of this
+  // code. Fayna must not offer or export an ambiguous phase.
+  bool ambiguous = 4;
+}
+
+message JobCategoryOption {
+  string job_category_id = 1;
+  string code = 2;
+  string name = 3;
+  int32 sort_order = 4;
+  repeated JobTemplatePhaseOption job_template_phases = 5;
+  bool final_outcome_available = 6;
+}
+
+message JobTemplateColumn {
+  string job_template_id = 1;
+  string display_name = 2;
+}
+
+message EnrollmentEvidence {
+  bool has_marks = 1;
+  bool has_positive_mark = 2;
+}
+
+// OutcomeCell is lossless. Consumers apply the shared label-first/score-fallback
+// and non-enrolled suppression rules; a stored numeric zero remains present.
+message SubscriptionGroupOutcomeCell {
+  string job_template_id = 1;
+  bool job_present = 2;
+  optional string scaled_label = 3;
+  optional double scaled_score = 4;
+  EnrollmentEvidence enrollment_evidence = 5;
+}
+
+message SubscriptionGroupOutcomeClientRow {
+  string client_id = 1;
+  string client_name = 2;
+  string client_first_name = 3;
+  string client_last_name = 4;
+  repeated SubscriptionGroupOutcomeCell cells = 5;
+}
+
+message GetSubscriptionGroupOutcomeExportResponse {
+  SubscriptionGroupOutcomeExportContext context = 1;
+
+  // Always returned in options and selected-matrix modes. Each category owns
+  // its own phase/final choices; no flat cross-category phase union exists.
+  repeated JobCategoryOption job_categories = 2;
+
+  // Present only for a valid selected category + outcome selector.
+  repeated JobTemplateColumn job_template_columns = 3;
+  repeated SubscriptionGroupOutcomeClientRow client_rows = 4;
+
+  bool success = 5;
+  optional domain.common.v1.Error error = 6;
+}
+
+// The following messages define an in-process report-render seam. They are not
+// methods on the generated gRPC service and are never registered as transport.
+// Expected group axes are optimistic coherence assertions only; the resolver
+// re-derives them from the authorized group before candidate lookup.
+message ResolveSubscriptionGroupOutcomeDocumentForRenderRequest {
+  string subscription_group_id = 1;
+  string job_category_id = 2;
+  domain.operation.v1.RenderProfile render_profile = 3;
+  optional string expected_plan_id = 4;
+  optional string expected_price_schedule_id = 5;
+}
+
+message ResolvedSubscriptionGroupOutcomeDocument {
+  string storage_container = 1;
+  string storage_key = 2;
+  domain.operation.v1.RenderProfile render_profile = 3;
+  string job_category_id = 4;
+}
+
+message ResolveSubscriptionGroupOutcomeDocumentForRenderResponse {
+  optional ResolvedSubscriptionGroupOutcomeDocument document = 1;
+  bool found = 2;
+  bool success = 3;
+  optional domain.common.v1.Error error = 4;
+}
