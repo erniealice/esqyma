@@ -1,4 +1,4 @@
-import type { GenExtension, GenFile, GenMessage } from "@bufbuild/protobuf/codegenv2";
+import type { GenEnum, GenExtension, GenFile, GenMessage } from "@bufbuild/protobuf/codegenv2";
 import type { FieldOptions as FieldOptions$1, MessageOptions as MessageOptions$1 } from "@bufbuild/protobuf/wkt";
 import type { Message } from "@bufbuild/protobuf";
 /**
@@ -53,6 +53,14 @@ export type FieldOptions = Message<"options.v1.FieldOptions"> & {
      * @generated from field: bool ignore = 7;
      */
     ignore: boolean;
+    /**
+     * Referential action for this foreign key. Only meaningful together with
+     * `references`. Leave unset for the repository default (ON DELETE NO ACTION);
+     * set a value only alongside a comment justifying the exception.
+     *
+     * @generated from field: options.v1.OnDeleteAction on_delete = 8;
+     */
+    onDelete: OnDeleteAction;
 };
 /**
  * Describes the message options.v1.FieldOptions.
@@ -95,6 +103,60 @@ export type MessageOptions = Message<"options.v1.MessageOptions"> & {
  * Use `create(MessageOptionsSchema)` to create a new message.
  */
 export declare const MessageOptionsSchema: GenMessage<MessageOptions>;
+/**
+ * Referential action applied when a referenced (parent) row is deleted.
+ *
+ * REPOSITORY POLICY: every foreign key in this schema is ON DELETE NO ACTION.
+ * Deletion order and dependent-row cleanup belong to the use-case layer, not to
+ * the database, so an unannotated FK field is the desired steady state and
+ * generators must still emit an explicit `ON DELETE NO ACTION` clause for it.
+ *
+ * Any value other than NO ACTION is an exception: it requires an explicit
+ * on_delete annotation on the field AND a comment justifying why the database
+ * must own the delete behaviour for that edge.
+ *
+ * @generated from enum options.v1.OnDeleteAction
+ */
+export declare enum OnDeleteAction {
+    /**
+     * Not annotated. Resolves to the repository default policy: NO ACTION.
+     *
+     * @generated from enum value: ON_DELETE_ACTION_UNSPECIFIED = 0;
+     */
+    UNSPECIFIED = 0,
+    /**
+     * NO ACTION — reject the parent delete while dependent rows exist, checked at
+     * the end of the statement. The repository default.
+     *
+     * @generated from enum value: ON_DELETE_ACTION_NO_ACTION = 1;
+     */
+    NO_ACTION = 1,
+    /**
+     * RESTRICT — reject the parent delete immediately, non-deferrable.
+     * Exception: requires a justification comment on the annotated field.
+     *
+     * @generated from enum value: ON_DELETE_ACTION_RESTRICT = 2;
+     */
+    RESTRICT = 2,
+    /**
+     * CASCADE — delete dependent rows with the parent.
+     * Exception: requires a justification comment on the annotated field.
+     *
+     * @generated from enum value: ON_DELETE_ACTION_CASCADE = 3;
+     */
+    CASCADE = 3,
+    /**
+     * SET NULL — null the referencing column; the column must be nullable.
+     * Exception: requires a justification comment on the annotated field.
+     *
+     * @generated from enum value: ON_DELETE_ACTION_SET_NULL = 4;
+     */
+    SET_NULL = 4
+}
+/**
+ * Describes the enum options.v1.OnDeleteAction.
+ */
+export declare const OnDeleteActionSchema: GenEnum<OnDeleteAction>;
 /**
  * @generated from extension: options.v1.FieldOptions db = 50000;
  */

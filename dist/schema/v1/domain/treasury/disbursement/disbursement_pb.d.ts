@@ -198,6 +198,13 @@ export type Disbursement = Message<"domain.treasury.v1.Disbursement"> & {
      * @generated from field: optional string supplier_id = 43;
      */
     supplierId?: string;
+    /**
+     * Immutable tenant anchor. New rows are stamped from trusted request identity;
+     * legacy rows are backfilled only when all available structural anchors agree.
+     *
+     * @generated from field: optional string workspace_id = 44;
+     */
+    workspaceId?: string;
 };
 /**
  * Describes the message domain.treasury.v1.Disbursement.

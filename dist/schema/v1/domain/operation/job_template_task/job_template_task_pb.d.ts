@@ -113,6 +113,12 @@ export type JobTemplateTask = Message<"domain.operation.v1.JobTemplateTask"> & {
      * @generated from field: optional string code = 40;
      */
     code?: string;
+    /**
+     * Immutable tenant anchor inherited from the owning JobTemplatePhase.
+     *
+     * @generated from field: optional string workspace_id = 41;
+     */
+    workspaceId?: string;
 };
 /**
  * Describes the message domain.operation.v1.JobTemplateTask.

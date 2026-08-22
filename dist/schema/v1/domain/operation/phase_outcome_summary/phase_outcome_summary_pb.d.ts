@@ -119,6 +119,12 @@ export type PhaseOutcomeSummary = Message<"domain.operation.v1.PhaseOutcomeSumma
      * @generated from field: optional string scaled_label = 26;
      */
     scaledLabel?: string;
+    /**
+     * Immutable tenant anchor. JobPhase and Job parents must agree.
+     *
+     * @generated from field: optional string workspace_id = 27;
+     */
+    workspaceId?: string;
 };
 /**
  * Describes the message domain.operation.v1.PhaseOutcomeSummary.

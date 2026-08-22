@@ -9,7 +9,7 @@
 //   Every entity's primary key is `string id = 1` and materialises as a
 //   postgres TEXT column holding a uuid string. The uuid VERSION is
 //   deliberately NOT a schema or proto concern: ids are minted by the
-//   application's configured id provider (CONFIG_ID_PROVIDER=google_uuidv7
+//   application's configured id provider (CONFIG_ID_PROVIDER=uuidv7
 //   today) and entity tables carry no uuid DEFAULT. Do not introduce a uuid
 //   column type, a DB-side uuid default, or a version-specific annotation for
 //   entity ids — swapping the generator must stay a runtime decision that
@@ -221,4 +221,3 @@ export const db: GenExtension<FieldOptions$1, FieldOptions> = /*@__PURE__*/
  */
 export const table: GenExtension<MessageOptions$1, MessageOptions> = /*@__PURE__*/
   extDesc(file_options_db, 1);
-

@@ -95,7 +95,7 @@ string run_id = 3 [(options.v1.db) = {
 Entity primary keys are `string id = 1` → a postgres `TEXT` column holding a
 uuid string. The uuid *version* is deliberately not a schema or proto concern:
 ids are minted by the application's configured id provider
-(`CONFIG_ID_PROVIDER=google_uuidv7` today) and entity tables carry no uuid
+(`CONFIG_ID_PROVIDER=uuidv7` today) and entity tables carry no uuid
 `DEFAULT`. Do not add a `uuid` column type, a DB-side uuid default, or a
 version-specific annotation for entity ids — swapping the generator must stay a
 runtime decision that needs no migration.
@@ -306,7 +306,7 @@ import type { Client } from "@leapfor/esqyma/dist/schema/v1/domain/entity/client
 |------|---------|
 | [Buf CLI](https://buf.build/docs/installation) | Proto linting and code generation |
 | [Atlas](https://atlasgo.io) | Schema migrations (`pnpm atlas:install`) |
-| Go 1.25+ | Build the rest of the monorepo |
+| Go 1.27+ | Build the rest of the monorepo |
 | pnpm | TypeScript generation and Atlas wrapper scripts |
 
 ## License

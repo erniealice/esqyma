@@ -1,0 +1,111 @@
+syntax = "proto3";
+
+package domain.operation.v1;
+
+option go_package = "github.com/erniealice/esqyma/golang/v1/domain/operation/plan_job_template";
+
+import "domain/common/error.proto";
+import "domain/common/filter.proto";
+import "domain/common/pagination.proto";
+import "domain/common/search.proto";
+import "domain/common/sort.proto";
+import "domain/operation/job_template/job_template.proto";
+import "domain/subscription/plan/plan.proto";
+import "options/db.proto";
+
+// PlanJobTemplateCompositionEntryPattern describes how one ordered Plan
+// composition entry materializes. Bundle entries are co-equal operational
+// Jobs. Standalone entries remain substantive roots whose real
+// JobTemplateRelation children keep their parent relationship.
+enum PlanJobTemplateCompositionEntryPattern {
+  PLAN_JOB_TEMPLATE_COMPOSITION_ENTRY_PATTERN_UNSPECIFIED = 0;
+  PLAN_JOB_TEMPLATE_COMPOSITION_ENTRY_PATTERN_BUNDLE_ENTRY = 1;
+  PLAN_JOB_TEMPLATE_COMPOSITION_ENTRY_PATTERN_STANDALONE_ENTRY = 2;
+}
+
+// PlanJobTemplate is the explicit, ordered Plan composition association.
+// It replaces synthetic empty-root membership without flattening genuine
+// JobTemplateRelation dependency or onboarding edges.
+message PlanJobTemplate {
+  option (options.v1.table).table = true;
+
+  string id = 1;
+  optional int64 date_created = 2;
+  optional string date_created_string = 3 [(options.v1.db).ignore = true];
+  optional int64 date_modified = 4;
+  optional string date_modified_string = 5 [(options.v1.db).ignore = true];
+  bool active = 6 [(options.v1.db).default = "true"];
+
+  string plan_id = 7 [
+    (options.v1.db).references = "plan",
+    (options.v1.db).index = true
+  ];
+  optional domain.subscription.v1.Plan plan = 8;
+
+  string job_template_id = 9 [
+    (options.v1.db).references = "job_template",
+    (options.v1.db).index = true
+  ];
+  optional domain.operation.v1.JobTemplate job_template = 10;
+
+  int32 sequence_order = 11 [(options.v1.db).default = "0"];
+  PlanJobTemplateCompositionEntryPattern composition_entry_pattern = 12
+      [(options.v1.db).default = "0"];
+
+  string workspace_id = 13 [
+    (options.v1.db).references = "workspace",
+    (options.v1.db).index = true
+  ];
+
+  reserved 14 to 29;
+}
+
+service PlanJobTemplateDomainService {
+  rpc CreatePlanJobTemplate(CreatePlanJobTemplateRequest) returns (CreatePlanJobTemplateResponse);
+  rpc ReadPlanJobTemplate(ReadPlanJobTemplateRequest) returns (ReadPlanJobTemplateResponse);
+  rpc UpdatePlanJobTemplate(UpdatePlanJobTemplateRequest) returns (UpdatePlanJobTemplateResponse);
+  rpc DeletePlanJobTemplate(DeletePlanJobTemplateRequest) returns (DeletePlanJobTemplateResponse);
+  rpc ListPlanJobTemplates(ListPlanJobTemplatesRequest) returns (ListPlanJobTemplatesResponse);
+  rpc ListPlanJobTemplatesByPlan(ListPlanJobTemplatesByPlanRequest) returns (ListPlanJobTemplatesByPlanResponse);
+}
+
+message CreatePlanJobTemplateRequest { PlanJobTemplate data = 1; }
+message CreatePlanJobTemplateResponse {
+  repeated PlanJobTemplate data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+message ReadPlanJobTemplateRequest { PlanJobTemplate data = 1; }
+message ReadPlanJobTemplateResponse {
+  repeated PlanJobTemplate data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+message UpdatePlanJobTemplateRequest { PlanJobTemplate data = 1; }
+message UpdatePlanJobTemplateResponse {
+  repeated PlanJobTemplate data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+message DeletePlanJobTemplateRequest { PlanJobTemplate data = 1; }
+message DeletePlanJobTemplateResponse {
+  bool success = 1;
+  optional domain.common.v1.Error error = 2;
+}
+message ListPlanJobTemplatesRequest {
+  optional domain.common.v1.SearchRequest search = 1;
+  optional domain.common.v1.FilterRequest filters = 2;
+  optional domain.common.v1.SortRequest sort = 3;
+  optional domain.common.v1.PaginationRequest pagination = 4;
+}
+message ListPlanJobTemplatesResponse {
+  repeated PlanJobTemplate data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+message ListPlanJobTemplatesByPlanRequest { string plan_id = 1; }
+message ListPlanJobTemplatesByPlanResponse {
+  repeated PlanJobTemplate plan_job_templates = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}

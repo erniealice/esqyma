@@ -118,6 +118,13 @@ export type JobTask = Message<"domain.operation.v1.JobTask"> & {
      * @generated from field: bool is_synthesized = 26;
      */
     isSynthesized: boolean;
+    /**
+     * Immutable tenant anchor, inherited from the owning JobPhase at migration
+     * time and stamped from trusted request identity for new rows.
+     *
+     * @generated from field: optional string workspace_id = 40;
+     */
+    workspaceId?: string;
 };
 /**
  * Describes the message domain.operation.v1.JobTask.

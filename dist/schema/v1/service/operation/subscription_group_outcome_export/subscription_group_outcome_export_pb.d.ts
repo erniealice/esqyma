@@ -7,6 +7,96 @@ import type { Message } from "@bufbuild/protobuf";
  */
 export declare const file_service_operation_subscription_group_outcome_export_subscription_group_outcome_export: GenFile;
 /**
+ * ListSubscriptionGroupOutcomeLandingRequest carries only the optional schedule
+ * status selector. Workspace, user, workspace-user membership, principal kind,
+ * and scope widening are always derived from trusted request identity.
+ *
+ * @generated from message service.operation.v1.ListSubscriptionGroupOutcomeLandingRequest
+ */
+export type ListSubscriptionGroupOutcomeLandingRequest = Message<"service.operation.v1.ListSubscriptionGroupOutcomeLandingRequest"> & {
+    /**
+     * @generated from field: optional bool price_schedule_active = 1;
+     */
+    priceScheduleActive?: boolean;
+};
+/**
+ * Describes the message service.operation.v1.ListSubscriptionGroupOutcomeLandingRequest.
+ * Use `create(ListSubscriptionGroupOutcomeLandingRequestSchema)` to create a new message.
+ */
+export declare const ListSubscriptionGroupOutcomeLandingRequestSchema: GenMessage<ListSubscriptionGroupOutcomeLandingRequest>;
+/**
+ * SubscriptionGroupOutcomeLandingRow is the provider-neutral, non-PII grouped
+ * landing projection. Counts are derived from the scoped member/job graph; no
+ * client identity or outcome value crosses this boundary.
+ *
+ * @generated from message service.operation.v1.SubscriptionGroupOutcomeLandingRow
+ */
+export type SubscriptionGroupOutcomeLandingRow = Message<"service.operation.v1.SubscriptionGroupOutcomeLandingRow"> & {
+    /**
+     * @generated from field: string price_schedule_id = 1;
+     */
+    priceScheduleId: string;
+    /**
+     * @generated from field: string price_schedule_name = 2;
+     */
+    priceScheduleName: string;
+    /**
+     * @generated from field: bool price_schedule_active = 3;
+     */
+    priceScheduleActive: boolean;
+    /**
+     * @generated from field: optional int32 price_schedule_sort_order = 4;
+     */
+    priceScheduleSortOrder?: number;
+    /**
+     * @generated from field: string subscription_group_id = 5;
+     */
+    subscriptionGroupId: string;
+    /**
+     * @generated from field: string subscription_group_name = 6;
+     */
+    subscriptionGroupName: string;
+    /**
+     * @generated from field: bool subscription_group_active = 7;
+     */
+    subscriptionGroupActive: boolean;
+    /**
+     * @generated from field: int64 member_count = 8;
+     */
+    memberCount: bigint;
+    /**
+     * @generated from field: int64 job_template_count = 9;
+     */
+    jobTemplateCount: bigint;
+};
+/**
+ * Describes the message service.operation.v1.SubscriptionGroupOutcomeLandingRow.
+ * Use `create(SubscriptionGroupOutcomeLandingRowSchema)` to create a new message.
+ */
+export declare const SubscriptionGroupOutcomeLandingRowSchema: GenMessage<SubscriptionGroupOutcomeLandingRow>;
+/**
+ * @generated from message service.operation.v1.ListSubscriptionGroupOutcomeLandingResponse
+ */
+export type ListSubscriptionGroupOutcomeLandingResponse = Message<"service.operation.v1.ListSubscriptionGroupOutcomeLandingResponse"> & {
+    /**
+     * @generated from field: repeated service.operation.v1.SubscriptionGroupOutcomeLandingRow rows = 1;
+     */
+    rows: SubscriptionGroupOutcomeLandingRow[];
+    /**
+     * @generated from field: bool success = 2;
+     */
+    success: boolean;
+    /**
+     * @generated from field: optional domain.common.v1.Error error = 3;
+     */
+    error?: Error;
+};
+/**
+ * Describes the message service.operation.v1.ListSubscriptionGroupOutcomeLandingResponse.
+ * Use `create(ListSubscriptionGroupOutcomeLandingResponseSchema)` to create a new message.
+ */
+export declare const ListSubscriptionGroupOutcomeLandingResponseSchema: GenMessage<ListSubscriptionGroupOutcomeLandingResponse>;
+/**
  * @generated from message service.operation.v1.GetSubscriptionGroupOutcomeExportRequest
  */
 export type GetSubscriptionGroupOutcomeExportRequest = Message<"service.operation.v1.GetSubscriptionGroupOutcomeExportRequest"> & {
@@ -387,5 +477,13 @@ export declare const SubscriptionGroupOutcomeExportService: GenService<{
         methodKind: "unary";
         input: typeof GetSubscriptionGroupOutcomeExportRequestSchema;
         output: typeof GetSubscriptionGroupOutcomeExportResponseSchema;
+    };
+    /**
+     * @generated from rpc service.operation.v1.SubscriptionGroupOutcomeExportService.ListSubscriptionGroupOutcomeLanding
+     */
+    listSubscriptionGroupOutcomeLanding: {
+        methodKind: "unary";
+        input: typeof ListSubscriptionGroupOutcomeLandingRequestSchema;
+        output: typeof ListSubscriptionGroupOutcomeLandingResponseSchema;
     };
 }>;

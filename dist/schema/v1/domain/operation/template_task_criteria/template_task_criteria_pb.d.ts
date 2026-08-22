@@ -64,6 +64,12 @@ export type TemplateTaskCriteria = Message<"domain.operation.v1.TemplateTaskCrit
      * @generated from field: optional string date_created_string = 12;
      */
     dateCreatedString?: string;
+    /**
+     * Immutable tenant anchor. Template task and criteria parents must agree.
+     *
+     * @generated from field: optional string workspace_id = 13;
+     */
+    workspaceId?: string;
 };
 /**
  * Describes the message domain.operation.v1.TemplateTaskCriteria.

@@ -55,6 +55,12 @@ export type CriteriaThreshold = Message<"domain.operation.v1.CriteriaThreshold">
      * @generated from field: optional string date_modified_string = 10;
      */
     dateModifiedString?: string;
+    /**
+     * Immutable tenant anchor inherited from OutcomeCriteria.
+     *
+     * @generated from field: optional string workspace_id = 11;
+     */
+    workspaceId?: string;
 };
 /**
  * Describes the message domain.operation.v1.CriteriaThreshold.

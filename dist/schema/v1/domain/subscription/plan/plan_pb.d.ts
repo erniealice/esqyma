@@ -89,6 +89,18 @@ export type Plan = Message<"domain.subscription.v1.Plan"> & {
      */
     jobTemplateId?: string;
     /**
+     * Canonical behavior marker for this Plan in downstream execution pipelines.
+     * Accepted values:
+     * - template_driven (default behavior; root & template materialization)
+     * - manual_or_task_driven (fallback/manual workflow for custom progress tracking)
+     * - seat_or_assignment_driven (seat-level / assignment-level execution)
+     * This field does not alter current materialization semantics; it is a
+     * classification contract for future Plan/Job assignment adapters.
+     *
+     * @generated from field: optional string execution_strategy = 18;
+     */
+    executionStrategy?: string;
+    /**
      * Number of cycle Job instances spawned per billing cycle. Default 1
      * (semantically — NULL is treated as 1). Examples:
      *   Pro Cleaning Biweekly (billed monthly) = 2

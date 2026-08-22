@@ -132,6 +132,12 @@ export type TaskOutcome = Message<"domain.operation.v1.TaskOutcome"> & {
      * @generated from field: bool is_synthesized = 29;
      */
     isSynthesized: boolean;
+    /**
+     * Immutable tenant anchor. Job task and criteria parents must agree.
+     *
+     * @generated from field: optional string workspace_id = 30;
+     */
+    workspaceId?: string;
 };
 /**
  * Describes the message domain.operation.v1.TaskOutcome.

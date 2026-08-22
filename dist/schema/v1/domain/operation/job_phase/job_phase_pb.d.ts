@@ -183,6 +183,13 @@ export type JobPhase = Message<"domain.operation.v1.JobPhase"> & {
      * @generated from field: optional string returned_at_string = 53;
      */
     returnedAtString?: string;
+    /**
+     * Immutable tenant anchor. The PostgreSQL workspace decorator stamps this
+     * from trusted request identity; callers cannot choose or reassign it.
+     *
+     * @generated from field: optional string workspace_id = 70;
+     */
+    workspaceId?: string;
 };
 /**
  * Describes the message domain.operation.v1.JobPhase.

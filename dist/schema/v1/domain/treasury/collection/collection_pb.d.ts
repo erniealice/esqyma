@@ -227,6 +227,13 @@ export type Collection = Message<"domain.treasury.v1.Collection"> & {
      * @generated from field: optional string client_id = 45;
      */
     clientId?: string;
+    /**
+     * Immutable tenant anchor. New rows are stamped from trusted request identity;
+     * legacy rows are backfilled only when all available structural anchors agree.
+     *
+     * @generated from field: optional string workspace_id = 46;
+     */
+    workspaceId?: string;
 };
 /**
  * Describes the message domain.treasury.v1.Collection.

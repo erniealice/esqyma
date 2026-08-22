@@ -70,6 +70,12 @@ export type CriteriaOption = Message<"domain.operation.v1.CriteriaOption"> & {
      * @generated from field: optional string date_modified_string = 14;
      */
     dateModifiedString?: string;
+    /**
+     * Immutable tenant anchor inherited from OutcomeCriteria.
+     *
+     * @generated from field: optional string workspace_id = 15;
+     */
+    workspaceId?: string;
 };
 /**
  * Describes the message domain.operation.v1.CriteriaOption.

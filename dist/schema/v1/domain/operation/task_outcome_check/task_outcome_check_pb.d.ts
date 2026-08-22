@@ -51,6 +51,12 @@ export type TaskOutcomeCheck = Message<"domain.operation.v1.TaskOutcomeCheck"> &
      * @generated from field: optional string date_created_string = 9;
      */
     dateCreatedString?: string;
+    /**
+     * Immutable tenant anchor. Outcome and option parents must agree.
+     *
+     * @generated from field: optional string workspace_id = 10;
+     */
+    workspaceId?: string;
 };
 /**
  * Describes the message domain.operation.v1.TaskOutcomeCheck.

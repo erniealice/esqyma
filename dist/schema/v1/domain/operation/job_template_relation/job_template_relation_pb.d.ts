@@ -72,6 +72,13 @@ export type JobTemplateRelation = Message<"domain.operation.v1.JobTemplateRelati
      * @generated from field: domain.operation.v1.JobTemplateRelationType relation_type = 12;
      */
     relationType: JobTemplateRelationType;
+    /**
+     * Immutable tenant anchor. Both template parents must resolve to this same
+     * workspace; conflicting or missing ownership is left NULL/fail-closed.
+     *
+     * @generated from field: optional string workspace_id = 30;
+     */
+    workspaceId?: string;
 };
 /**
  * Describes the message domain.operation.v1.JobTemplateRelation.

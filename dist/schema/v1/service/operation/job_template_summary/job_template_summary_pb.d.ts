@@ -1,6 +1,8 @@
 import type { GenFile, GenMessage, GenService } from "@bufbuild/protobuf/codegenv2";
 import type { Error } from "../../../domain/common/error_pb";
 import type { PaginationRequest, PaginationResponse } from "../../../domain/common/pagination_pb";
+import type { SearchRequest } from "../../../domain/common/search_pb";
+import type { SortRequest } from "../../../domain/common/sort_pb";
 import type { PhaseApprovalStatus } from "../../../domain/operation/job_phase/job_phase_pb";
 import type { Message } from "@bufbuild/protobuf";
 /**
@@ -33,10 +35,12 @@ export type Deliverer = Message<"service.operation.v1.Deliverer"> & {
  */
 export declare const DelivererSchema: GenMessage<Deliverer>;
 /**
- * JobTemplateSummary is one aggregated delivery-summary row: one row per
- * job_template with >=1 resolver-scoped job for the requested status. Every id
- * is an opaque, generic entity id; every *_name is a display label the adapter
- * resolves server-side.
+ * JobTemplateSummary is normally one aggregated delivery-summary row per
+ * (job_template, subscription_group) with >=1 resolver-scoped job for the
+ * requested status. When the sanitized request permits active-template
+ * fallback, a category with no aggregate rows may instead carry explicitly
+ * marked template-grain rows. Every id is an opaque, generic entity id; every
+ * *_name is a display label the adapter resolves server-side.
  *
  * @generated from message service.operation.v1.JobTemplateSummary
  */
@@ -176,12 +180,47 @@ export type JobTemplateSummary = Message<"service.operation.v1.JobTemplateSummar
      * @generated from field: bool group_mixed_attention = 21;
      */
     groupMixedAttention: boolean;
+    /**
+     * True only for an active job_template surfaced at template grain because
+     * its category has zero aggregate delivery rows in the scoped status
+     * universe. Delivery/group/schedule fields and item count are intentionally
+     * blank/zero on this row; consumers use this marker rather than inferring the
+     * grain from a nullable related id.
+     *
+     * @generated from field: bool template_grain_fallback = 22;
+     */
+    templateGrainFallback: boolean;
 };
 /**
  * Describes the message service.operation.v1.JobTemplateSummary.
  * Use `create(JobTemplateSummarySchema)` to create a new message.
  */
 export declare const JobTemplateSummarySchema: GenMessage<JobTemplateSummary>;
+/**
+ * JobCategorySummaryCount is the number of rows in one job-category partition
+ * of the status-scoped summary universe before selected-category pagination and
+ * search. A row is at the service's declared summary grain: normally
+ * (job_template, subscription_group), or the active template-grain fallback for
+ * a category with no delivery aggregate. It is deliberately not a persisted
+ * JobCategory field or a unique-template count.
+ *
+ * @generated from message service.operation.v1.JobCategorySummaryCount
+ */
+export type JobCategorySummaryCount = Message<"service.operation.v1.JobCategorySummaryCount"> & {
+    /**
+     * @generated from field: string job_category_id = 1;
+     */
+    jobCategoryId: string;
+    /**
+     * @generated from field: int32 summary_count = 2;
+     */
+    summaryCount: number;
+};
+/**
+ * Describes the message service.operation.v1.JobCategorySummaryCount.
+ * Use `create(JobCategorySummaryCountSchema)` to create a new message.
+ */
+export declare const JobCategorySummaryCountSchema: GenMessage<JobCategorySummaryCount>;
 /**
  * @generated from message service.operation.v1.ListJobTemplateSummariesRequest
  */
@@ -213,6 +252,34 @@ export type ListJobTemplateSummariesRequest = Message<"service.operation.v1.List
      * @generated from field: optional bool price_schedule_active = 4;
      */
     priceScheduleActive?: boolean;
+    /**
+     * job_category_id narrows the returned result before pagination. Category
+     * badge counts in the response remain status-scoped and are not narrowed by
+     * this selected-category value or by search.
+     *
+     * @generated from field: optional string job_category_id = 5;
+     */
+    jobCategoryId?: string;
+    /**
+     * Bounded free-text search over adapter-owned summary fields.
+     *
+     * @generated from field: optional domain.common.v1.SearchRequest search = 6;
+     */
+    search?: SearchRequest;
+    /**
+     * Adapter-allowlisted ordering at the complete response-row grain.
+     *
+     * @generated from field: optional domain.common.v1.SortRequest sort = 7;
+     */
+    sort?: SortRequest;
+    /**
+     * Caller preference for active template-grain fallback. The application use
+     * case sanitizes this flag through an independent job_template:list gate;
+     * the adapter never treats an unsanitized client value as authorization.
+     *
+     * @generated from field: optional bool include_template_fallback = 8;
+     */
+    includeTemplateFallback?: boolean;
 };
 /**
  * Describes the message service.operation.v1.ListJobTemplateSummariesRequest.
@@ -239,6 +306,10 @@ export type ListJobTemplateSummariesResponse = Message<"service.operation.v1.Lis
      * @generated from field: optional domain.common.v1.Error error = 4;
      */
     error?: Error;
+    /**
+     * @generated from field: repeated service.operation.v1.JobCategorySummaryCount job_category_counts = 5;
+     */
+    jobCategoryCounts: JobCategorySummaryCount[];
 };
 /**
  * Describes the message service.operation.v1.ListJobTemplateSummariesResponse.

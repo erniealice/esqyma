@@ -229,7 +229,7 @@ justification comment on the field.
 ### Entity id policy
 
 Entity ids are `string id = 1` → postgres `TEXT` holding a uuid string. The uuid
-version is a runtime provider concern (`CONFIG_ID_PROVIDER=google_uuidv7`), not
+version is a runtime provider concern (`CONFIG_ID_PROVIDER=uuidv7`), not
 a schema one: no `uuid` column type, no DB-side uuid `DEFAULT`, no
 version-specific annotation on entity ids.
 

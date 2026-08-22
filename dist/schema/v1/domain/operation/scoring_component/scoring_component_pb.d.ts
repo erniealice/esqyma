@@ -61,6 +61,12 @@ export type ScoringComponent = Message<"domain.operation.v1.ScoringComponent"> &
      * @generated from field: optional string date_modified_string = 12;
      */
     dateModifiedString?: string;
+    /**
+     * Immutable tenant anchor inherited from ScoringScheme.
+     *
+     * @generated from field: optional string workspace_id = 13;
+     */
+    workspaceId?: string;
 };
 /**
  * Describes the message domain.operation.v1.ScoringComponent.
