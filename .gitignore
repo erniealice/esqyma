@@ -19,3 +19,6 @@ proto/v1/descriptors.bin
 # Test artifacts
 playwright-report/
 test-results/
+
+# Checksum-verified local tool installs (never repository state)
+.tools/

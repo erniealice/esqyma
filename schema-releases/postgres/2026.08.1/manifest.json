@@ -1,0 +1,26 @@
+{
+  "format_version": 1,
+  "release": "postgres/2026.08.1",
+  "dialect": "postgres",
+  "created_at": "2026-08-29T00:00:00Z",
+  "atlas": {
+    "tool_version": "1.3.0",
+    "head": "20260829000000",
+    "revision_count": 76,
+    "sum_sha256": "131a91ad4ae8f20cf6bf5ed9485d443b91606489a857e1876425371532b53a8e",
+    "tracker_fingerprint": "8e4147530d7cb208e997ec9282d9cdd6004867f8d6494f03f364b64a0792141b"
+  },
+  "bootstrap": {
+    "path": "bootstrap.sql",
+    "sha256": "3b1337b8600b497bb5a10935cd9f5b8a7c078d949870bc9eeb30ace4329263f2",
+    "pg_dump_version": "18.3",
+    "restrict_key": "49f2a51a2bd7fa7c2c83fcc507482008322fa6b08886025f5245a91ff7a6b167",
+    "normalized_schema_fingerprint": "6326da4f24e1e3b62d690f91f3497dd2175a8d5f2f7736eb3f66d9e6020c59f2",
+    "catalog_fingerprint": "65e71f4f248aa3bd1ed892b390d19c11277c124e3f659b65426debd7e7868653"
+  },
+  "seed_contract": {
+    "id": "copya/v1",
+    "bundle_manifest_version": 1,
+    "allowed_profiles": ["client-minimal"]
+  }
+}
