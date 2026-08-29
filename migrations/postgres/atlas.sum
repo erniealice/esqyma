@@ -1,4 +1,4 @@
-h1:gwq8LRrT0a2q0e9DikXHT+YLGXHvipGFo7hcubM0nq4=
+h1:hlMZcki6V2v1WdTAnwkYF4J1pSfJIDj+iDYO4l7r5a8=
 20260502000000_baseline.sql h1:nSWEB4eB5Yt6qrCeg8crmwudHHCA0Gpps2L5h649wAU=
 20260505221625_restore_revenue_period_marker_idempotency.sql h1:mAF68zDv14QT18Vfybt+p1uiJ1xtMjDsh8sj6GpTBB8=
 20260505221626_recreate_revenue_period_marker_unique_index.sql h1:9Tm42g4YD+ipRQAiTcMgIHwltETorc0jifJQddi4i7s=
@@ -75,3 +75,4 @@ h1:gwq8LRrT0a2q0e9DikXHT+YLGXHvipGFo7hcubM0nq4=
 20260813000000_add_plan_execution_strategy.sql h1:JM9Y3hgK2skvVZAqk5LQwIFELrFxnlQshX76w9jDz7A=
 20260815000000_plan_job_template.sql h1:O1TDtR3AI0ThpsBa1YAiyQ9aXaGn++jk/d/mOkItYHY=
 20260822213000_descriptor_schema_alignment.sql h1:QTlG6Gk3kHZ2sVmQZAdT8AnbrRVuEVaEGnyUVLGcYJ0=
+20260829000000_copya_bundle_receipt.sql h1:NoNLmDeMZk8nWbRd6qyLU33RUD2HKemE01yahFfXP7s=
