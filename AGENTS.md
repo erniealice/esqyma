@@ -51,8 +51,7 @@ esqyma/
 │
 └── migrations/               # SQL migration files
     ├── postgres/
-    │   └── YYYYMMDDHHMMSS_name.up.sql
-    │   └── YYYYMMDDHHMMSS_name.down.sql
+    │   └── YYYYMMDDHHMMSS_name.sql
     ├── mysql/
     └── sqlserver/
 ```
@@ -127,50 +126,33 @@ pnpm generate:ddl
 pnpm clean
 ```
 
-## Migration CLI
+## Schema migration and release workflow
 
-```bash
-# Create new migration (creates files for all 3 dialects)
-go run ./cmd/migrate make create_users
+PostgreSQL schema changes use append-only Atlas migrations named `YYYYMMDDHHMMSS_name.sql`.
+The legacy `cmd/migrate` up/down tool is not the deployment workflow. Never generate new up/down
+pairs, rewrite a published migration, infer a baseline from existing tables, reset a database, or
+apply schema changes inside app startup/deploy.
 
-# Run pending migrations
-go run ./cmd/migrate up
+- Author a reviewed additive SQL change and its descriptor annotations. Use isolated desired-state
+  fixtures for migration generation, never mutate a client database to discover the desired schema.
+- A migration timestamp is distinct from the code-owned calendar release `postgres/YYYY.MM.N` and
+  from the Go/API module version.
+- Each published release owns immutable `schema-releases/postgres/YYYY.MM.N/manifest.json` and a
+  complete `bootstrap.sql` for proven-empty targets. Generate that bootstrap from verified migration
+  output; do not maintain a second independent schema by hand.
+- Fresh installation: explicit `pnpm db:init -- --target CLIENT/TARGET --schema-release RELEASE`;
+  plan is default, `--apply` performs reviewed initialization, `--verify` checks readiness only.
+- Existing database: explicit source/destination upgrade protocol in `cmd/schema-release/README.md`.
+  Qualification status and required backup/approval/identity checks must be respected. Ordinary
+  `db:apply` is a low-level Atlas wrapper, not a complete release-promotion protocol.
+- Remote apply is separate from deployment and requires a reviewed target, backup/restore evidence,
+  operator authority and a qualified upgrade path. Recovery is forward correction or separately
+  authorized restore; no automatic destructive downgrade.
+- Owner checks: `go test ./schema-releases ./cmd/schema-release`; disposable upgrade/fresh matrix and
+  root policy/CI gates are additionally required before release promotion.
 
-# Rollback last batch
-go run ./cmd/migrate down
-
-# Check migration status
-go run ./cmd/migrate status
-```
-
-### Running Initial Migration
-
-1. Generate DDL from proto annotations:
-   ```bash
-   pnpm generate:ddl
-   ```
-
-2. The generated files are in `migrations/{dialect}/0001_initial.sql`.
-   Rename them to include up/down:
-   ```bash
-   # For each dialect (postgres, mysql, sqlserver)
-   mv migrations/postgres/0001_initial.sql migrations/postgres/20240101000000_initial.up.sql
-   ```
-
-3. Create the down migration (DROP statements in reverse order):
-   ```sql
-   -- migrations/postgres/20240101000000_initial.down.sql
-   DROP TABLE IF EXISTS "activity_execution_log" CASCADE;
-   DROP TABLE IF EXISTS "activity" CASCADE;
-   -- ... continue for all tables in reverse dependency order
-   ```
-
-4. Run the migration:
-   ```bash
-   go run ./cmd/migrate up
-   ```
-
-See `cmd/migrate/README.md` for full documentation.
+See `schema-releases/README.md`, `cmd/schema-release/README.md`, and the root wiki
+`docs/wiki/articles/infra-db-migrations.md` for authoritative current behavior.
 
 ## Architecture Layers
 
@@ -349,9 +331,9 @@ When working with educational/school contexts:
    }
    ```
 4. Run `pnpm build`
-5. Create migration: `go run ./cmd/migrate make create_{entity}`
-6. Edit the generated up/down SQL files
-7. Run migration: `go run ./cmd/migrate up`
+5. Author an additive timestamped Atlas migration against an isolated desired-state fixture.
+6. Qualify both prior-release upgrade and complete fresh-install paths.
+7. Apply only through the reviewed target/release operator workflow.
 
 ### Schema Validation
 

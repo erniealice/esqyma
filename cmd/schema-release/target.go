@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	schemareleases "github.com/erniealice/esqyma/schema-releases"
 	"io"
 	"os"
 	"path/filepath"
@@ -18,6 +19,12 @@ var (
 )
 
 type targetManifest struct {
+	schemaCommit  string
+	bundleDigests map[string]string
+	fleetDigest   string
+	fleetPath     string
+	Access        *databaseAccess `json:"access,omitempty"`
+	rawDigest     string
 	FormatVersion int             `json:"format_version"`
 	TargetKey     string          `json:"target_key"`
 	Scope         string          `json:"scope"`
@@ -29,6 +36,7 @@ type targetManifest struct {
 	Workspace     targetWorkspace `json:"workspace"`
 	SeedProfile   string          `json:"seed_profile"`
 	Bundles       []string        `json:"bundles"`
+	Upgrade       *upgradeTarget  `json:"upgrade,omitempty"`
 }
 
 type targetDatabase struct {
@@ -58,6 +66,7 @@ type bundleMetadata struct {
 }
 
 type resolvedBundle struct {
+	Raw      []byte
 	Path     string
 	Metadata bundleMetadata
 	Digest   string
@@ -80,6 +89,7 @@ func loadTarget(root, targetKey string) (targetManifest, string, error) {
 	if err := target.validate(targetKey); err != nil {
 		return targetManifest{}, "", err
 	}
+	target.rawDigest = sha256Hex(raw)
 	return target, path, nil
 }
 
@@ -128,10 +138,13 @@ func loadBundle(root, path string) (resolvedBundle, error) {
 	if err := json.Unmarshal(raw, &metadata); err != nil {
 		return resolvedBundle{}, fmt.Errorf("decode bundle metadata %s: %w", path, err)
 	}
-	return resolvedBundle{Path: absolute, Metadata: metadata, Digest: sha256Hex(raw)}, nil
+	return resolvedBundle{Raw: raw, Path: absolute, Metadata: metadata, Digest: sha256Hex(raw)}, nil
 }
 
 func (bundle resolvedBundle) validateAgainst(target targetManifest) error {
+	if target.bundleDigests != nil && target.bundleDigests[bundle.Path] != bundle.Digest {
+		return errors.New("bundle changed after fleet selection; replan required")
+	}
 	metadata := bundle.Metadata
 	if metadata.FormatVersion != 1 || metadata.ID == "" || metadata.Version == "" {
 		return fmt.Errorf("bundle %s has invalid identity", bundle.Path)
@@ -174,4 +187,33 @@ func decodeStrict(raw []byte, target any) error {
 		return err
 	}
 	return nil
+}
+
+// Bundle source release stays part of its immutable identity even when a newer
+// schema explicitly accepts that bundle contract.
+func (bundle resolvedBundle) validateForRelease(target targetManifest, manifest schemareleases.Manifest) error {
+	if manifest.Release != target.SchemaRelease || !manifest.AcceptsSeedRelease(bundle.Metadata.SchemaRelease) {
+		return errors.New("bundle source release is not accepted by selected schema")
+	}
+	target.SchemaRelease = bundle.Metadata.SchemaRelease
+	return bundle.validateAgainst(target)
+}
+
+// Bind every later use to the bytes decoded during target selection.
+func targetSnapshotDigest(target targetManifest, path string) (string, error) {
+	if target.fleetDigest != "" {
+		raw, err := os.ReadFile(target.fleetPath)
+		if err != nil || sha256Hex(raw) != target.fleetDigest {
+			return "", errors.New("fleet registry changed after selection; replan required")
+		}
+	}
+	raw, err := os.ReadFile(path)
+	if err != nil {
+		return "", err
+	}
+	digest := sha256Hex(raw)
+	if target.rawDigest != "" && digest != target.rawDigest {
+		return "", errors.New("target changed after selection; replan required")
+	}
+	return digest, nil
 }

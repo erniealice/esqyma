@@ -12,7 +12,7 @@
   },
   "bootstrap": {
     "path": "bootstrap.sql",
-    "sha256": "3b1337b8600b497bb5a10935cd9f5b8a7c078d949870bc9eeb30ace4329263f2",
+    "sha256": "6976439f651e891095b98b945aaed19ab32730cd893872a1659ea0f520cdb930",
     "pg_dump_version": "18.3",
     "restrict_key": "49f2a51a2bd7fa7c2c83fcc507482008322fa6b08886025f5245a91ff7a6b167",
     "normalized_schema_fingerprint": "6326da4f24e1e3b62d690f91f3497dd2175a8d5f2f7736eb3f66d9e6020c59f2",

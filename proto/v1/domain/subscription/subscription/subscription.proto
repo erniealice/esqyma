@@ -60,6 +60,14 @@ message Subscription {
   // breaking history — see architecture.md §3.5 (tax-integration audit-primitive pattern).
   optional string collection_profile_id_snapshot = 25;
   optional string collection_method_id_snapshot = 26;
+
+  // Independent agreement-clause snapshot. This release records the clause
+  // only and never adjusts billing automatically.
+  optional EscalationMode escalation_mode = 27;
+  optional EscalationScope escalation_scope = 28;
+  optional int32 escalation_rate_bps = 29;           // 500 = 5.00%
+  optional int32 escalation_first_after_months = 30;
+  optional int32 escalation_every_months = 31;
 }
 
 service SubscriptionDomainService {

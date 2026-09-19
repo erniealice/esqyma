@@ -78,6 +78,11 @@ func TestCatalogFingerprintIntegration(t *testing.T) {
 		t.Fatal(err)
 	}
 	t.Logf("catalog_fingerprint=%s", fingerprint)
+	tracker, err := AtlasTrackerFingerprint(context.Background(), db)
+	if err != nil {
+		t.Fatal(err)
+	}
+	t.Logf("tracker_fingerprint=%s", tracker)
 }
 
 func TestVerifyDatabaseRejectsReleaseStateMismatchIntegration(t *testing.T) {

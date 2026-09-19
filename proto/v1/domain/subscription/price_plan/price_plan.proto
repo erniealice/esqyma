@@ -37,6 +37,22 @@ enum AmountBasis {
   AMOUNT_BASIS_PER_OCCURRENCE     = 4;
 }
 
+// A recorded pricing-clause mode. UNSPECIFIED means the clause was not
+// recorded; NONE is an explicit agreement that no escalation applies.
+enum EscalationMode {
+  ESCALATION_MODE_UNSPECIFIED      = 0;
+  ESCALATION_MODE_NONE             = 1;
+  ESCALATION_MODE_FIXED_PERCENTAGE = 2;
+}
+
+// The boundary at which a recorded fixed percentage is intended to apply.
+// This release records the clause only; it does not alter billing.
+enum EscalationScope {
+  ESCALATION_SCOPE_UNSPECIFIED      = 0;
+  ESCALATION_SCOPE_WITHIN_AGREEMENT = 1;
+  ESCALATION_SCOPE_ON_RENEWAL       = 2;
+}
+
 message PricePlan {
   option (options.v1.table).table = true;
   string id = 1;
@@ -85,6 +101,14 @@ message PricePlan {
 
   // Drift-recovered column (DB had this; proto did not)
   optional string legacy_price_list_id = 27;    // Legacy migration shim — links to old price-list IDs
+
+  // Reusable escalation defaults. Values are copied into a subscription when
+  // that agreement is created; catalog edits never mutate an existing clause.
+  optional EscalationMode default_escalation_mode = 28;
+  optional EscalationScope default_escalation_scope = 29;
+  optional int32 default_escalation_rate_bps = 30;           // 500 = 5.00%
+  optional int32 default_escalation_first_after_months = 31;
+  optional int32 default_escalation_every_months = 32;
 }
 
 service PricePlanDomainService {

@@ -9,6 +9,7 @@ import (
 	"testing"
 	"time"
 
+	schemareleases "github.com/erniealice/esqyma/schema-releases"
 	_ "github.com/jackc/pgx/v5/stdlib"
 )
 
@@ -53,9 +54,59 @@ func TestDatabaseStateRejectsUntrackedNonemptyIntegration(t *testing.T) {
 	if state, err := databaseState(t.Context(), db); err != nil || state != "empty" {
 		t.Fatalf("new disposable database state=%q err=%v", state, err)
 	}
-	if _, err := db.ExecContext(t.Context(), `CREATE TABLE public.untracked_probe (id integer PRIMARY KEY)`); err != nil {
+	password, _ := parsed.User.Password()
+	config := databaseConfig{Host: parsed.Hostname(), Port: parsed.Port(), User: parsed.User.Username(), Password: password, Name: name, SSLMode: parsed.Query().Get("sslmode")}
+	if config.Port == "" {
+		config.Port = "5432"
+	}
+	if config.SSLMode == "" {
+		config.SSLMode = "disable"
+	}
+	target := targetManifest{Database: targetDatabase{Name: name}, Access: &databaseAccess{MigrationRole: config.User}}
+	if err := verifyInitializationIdentity(t.Context(), db, target, config, name); err != nil {
 		t.Fatal(err)
 	}
+	target.Access.MigrationRole = "not_the_selected_migrator"
+	if err := verifyInitializationIdentity(t.Context(), db, target, config, name); err == nil {
+		t.Fatal("accepted wrong migration role")
+	}
+	target.Access.MigrationRole = config.User
+	if err := verifyInitializationIdentity(t.Context(), db, target, config, "another_database"); err == nil {
+		t.Fatal("accepted wrong database")
+	}
+	lock, err := acquireInitializationLock(t.Context(), admin, name)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if other, err := acquireInitializationLock(t.Context(), admin, name); err == nil {
+		releaseInitializationLock(other, name)
+		t.Fatal("concurrent initializer accepted")
+	}
+	releaseInitializationLock(lock, name)
+	lock, err = acquireInitializationLock(t.Context(), db, name)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if other, err := acquireUpgradeLock(t.Context(), db); err == nil {
+		releaseInitializationLock(other, name)
+		t.Fatal("upgrade overlaps initializer")
+	}
+	releaseInitializationLock(lock, name)
+	lock, err = acquireUpgradeLock(t.Context(), db)
+	if err != nil {
+		t.Fatal("lock not released", err)
+	}
+	releaseInitializationLock(lock, name)
+	if err := applyBootstrap(config, schemareleases.Manifest{}, []byte("CREATE TABLE public.atomic_probe(id int); SELECT missing_bootstrap_function();")); err == nil {
+		t.Fatal("bad bootstrap unexpectedly succeeded")
+	}
+	if state, err := databaseState(t.Context(), db); err != nil || state != "empty" {
+		t.Fatalf("failed bootstrap left partial state: %s %v", state, err)
+	}
+	if err := applyBootstrap(config, schemareleases.Manifest{}, []byte("CREATE TABLE public.untracked_probe(id integer PRIMARY KEY);")); err != nil {
+		t.Fatal("bootstrap retry failed", err)
+	}
+
 	if state, err := databaseState(t.Context(), db); err != nil || state != "untracked-nonempty" {
 		t.Fatalf("untracked database state=%q err=%v", state, err)
 	}

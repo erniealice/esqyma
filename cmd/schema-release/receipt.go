@@ -21,22 +21,31 @@ type receiptBundle struct {
 }
 
 type runReceipt struct {
-	FormatVersion         int             `json:"format_version"`
-	TargetKey             string          `json:"target_key"`
-	TargetManifestDigest  string          `json:"target_manifest_digest"`
-	Scope                 string          `json:"scope"`
-	Database              string          `json:"database"`
-	SchemaRelease         string          `json:"schema_release"`
-	ReleaseManifestDigest string          `json:"release_manifest_digest"`
-	AtlasHead             string          `json:"atlas_head"`
-	CatalogFingerprint    string          `json:"catalog_fingerprint"`
-	BusinessType          string          `json:"business_type"`
-	SeedProfile           string          `json:"seed_profile"`
-	WorkspaceID           string          `json:"workspace_id"`
-	WorkspaceSlug         string          `json:"workspace_slug"`
-	Bundles               []receiptBundle `json:"bundles"`
-	Result                string          `json:"result"`
-	CompletedAt           string          `json:"completed_at"`
+	FromSchemaCommit      string              `json:"from_schema_commit,omitempty"`
+	SchemaCommit          string              `json:"schema_commit,omitempty"`
+	FleetManifestSHA256   string              `json:"fleet_manifest_sha256,omitempty"`
+	DataOracles           []oracleObservation `json:"data_oracles,omitempty"`
+	IntentSHA256          string              `json:"intent_sha256,omitempty"`
+	FromRelease           string              `json:"from_release,omitempty"`
+	PlanSHA256            string              `json:"plan_sha256,omitempty"`
+	BackupReceiptSHA256   string              `json:"backup_receipt_sha256,omitempty"`
+	ApprovalRef           string              `json:"approval_ref,omitempty"`
+	FormatVersion         int                 `json:"format_version"`
+	TargetKey             string              `json:"target_key"`
+	TargetManifestDigest  string              `json:"target_manifest_digest"`
+	Scope                 string              `json:"scope"`
+	Database              string              `json:"database"`
+	SchemaRelease         string              `json:"schema_release"`
+	ReleaseManifestDigest string              `json:"release_manifest_digest"`
+	AtlasHead             string              `json:"atlas_head"`
+	CatalogFingerprint    string              `json:"catalog_fingerprint"`
+	BusinessType          string              `json:"business_type"`
+	SeedProfile           string              `json:"seed_profile"`
+	WorkspaceID           string              `json:"workspace_id"`
+	WorkspaceSlug         string              `json:"workspace_slug"`
+	Bundles               []receiptBundle     `json:"bundles"`
+	Result                string              `json:"result"`
+	CompletedAt           string              `json:"completed_at"`
 }
 
 func writeRunReceipt(root string, values map[string]string, target targetManifest, targetPath string, manifest schemareleases.Manifest, manifestRaw []byte, bundles []resolvedBundle, output commandOutput) (string, string, error) {
@@ -55,14 +64,19 @@ func writeRunReceipt(root string, values map[string]string, target targetManifes
 		return "", "", errors.New("DB_INIT_RECEIPT_DIR must be outside the Git repository")
 	}
 
-	targetRaw, err := os.ReadFile(targetPath)
+	targetDigest, err := targetSnapshotDigest(target, targetPath)
 	if err != nil {
 		return "", "", fmt.Errorf("read target for receipt: %w", err)
 	}
 	receipt := runReceipt{
+		FromSchemaCommit: output.FromSchemaCommit, SchemaCommit: target.schemaCommit,
+		FleetManifestSHA256: target.fleetDigest,
+		DataOracles:         output.DataOracles,
+		IntentSHA256:        output.IntentSHA256,
+		FromRelease:         output.FromRelease, PlanSHA256: output.PlanSHA256, BackupReceiptSHA256: output.BackupReceiptSHA256, ApprovalRef: output.ApprovalRef,
 		FormatVersion:         1,
 		TargetKey:             target.TargetKey,
-		TargetManifestDigest:  sha256Hex(targetRaw),
+		TargetManifestDigest:  targetDigest,
 		Scope:                 target.Scope,
 		Database:              target.Database.Name,
 		SchemaRelease:         manifest.Release,
@@ -114,6 +128,10 @@ func writeRunReceipt(root string, values map[string]string, target targetManifes
 		_ = file.Close()
 		return "", "", fmt.Errorf("write run receipt: %w", err)
 	}
+	if err := file.Chmod(0o444); err != nil {
+		_ = file.Close()
+		return "", "", fmt.Errorf("seal run receipt: %w", err)
+	}
 	if err := file.Sync(); err != nil {
 		_ = file.Close()
 		return "", "", fmt.Errorf("sync run receipt: %w", err)
@@ -121,8 +139,14 @@ func writeRunReceipt(root string, values map[string]string, target targetManifes
 	if err := file.Close(); err != nil {
 		return "", "", fmt.Errorf("close run receipt: %w", err)
 	}
-	if err := os.Chmod(path, 0o444); err != nil {
-		return "", "", fmt.Errorf("seal run receipt: %w", err)
+	dir, err := os.Open(directory)
+	if err != nil {
+		return "", "", fmt.Errorf("open receipt directory: %w", err)
+	}
+	syncErr := dir.Sync()
+	closeErr := dir.Close()
+	if syncErr != nil || closeErr != nil {
+		return "", "", fmt.Errorf("persist receipt directory: %w", errors.Join(syncErr, closeErr))
 	}
 	removeOnError = false
 	return "file://" + filepath.ToSlash(path), sha256Hex(raw), nil
