@@ -62,8 +62,9 @@ psql_db() {
     psql -X -h "$DB_HOST" -p "$DB_PORT" -U "$DB_USER" -d "$db_name" "$@"
 }
 
+OWNED_DATABASES=()
 cleanup() {
-  for db_name in "$CONTROL_DB" "$BOOTSTRAP_DB"; do
+  for db_name in "${OWNED_DATABASES[@]+${OWNED_DATABASES[@]}}"; do
     case "$db_name" in
       "ichizen_p0_v130_${RUN_ID}_"[a-zA-Z0-9_]*)
         PGPASSWORD="$DB_PASSWORD" PGSSLMODE="$DB_SSLMODE" \
@@ -101,7 +102,9 @@ observed_server="$(psql_admin -Atqc "SELECT CASE WHEN inet_server_addr() <<= ine
 test "$observed_server" = "loopback"
 
 PGPASSWORD="$DB_PASSWORD" PGSSLMODE="$DB_SSLMODE" createdb -h "$DB_HOST" -p "$DB_PORT" -U "$DB_USER" "$CONTROL_DB"
+OWNED_DATABASES+=("$CONTROL_DB")
 PGPASSWORD="$DB_PASSWORD" PGSSLMODE="$DB_SSLMODE" createdb -h "$DB_HOST" -p "$DB_PORT" -U "$DB_USER" "$BOOTSTRAP_DB"
+OWNED_DATABASES+=("$BOOTSTRAP_DB")
 
 LEGACY_DOWN="20260509100000_expense_recognition_supplier_subscription_fks.down.sql"
 LEGACY_UP="20260509100000_expense_recognition_supplier_subscription_fks.up.sql"

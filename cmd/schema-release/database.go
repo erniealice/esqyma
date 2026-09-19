@@ -97,7 +97,7 @@ func applyBootstrap(config databaseConfig, manifest schemareleases.Manifest, raw
 	if err := temp.Close(); err != nil {
 		return err
 	}
-	command := exec.Command("psql", "-X", "-v", "ON_ERROR_STOP=1", "-f", path)
+	command := exec.Command("psql", "-X", "--single-transaction", "-v", "ON_ERROR_STOP=1", "-f", path)
 	command.Env = config.postgresEnvironment(config.Name)
 	output, err := command.CombinedOutput()
 	if err != nil {
@@ -140,12 +140,17 @@ func normalizedSchemaFingerprint(config databaseConfig, manifest schemareleases.
 }
 
 func establishAtlasHead(root string, config databaseConfig, manifest schemareleases.Manifest) error {
-	atlas := filepath.Join(root, "packages", "esqyma", ".tools", "atlas", "v1.3.0", "atlas")
-	migrations := filepath.Join(root, "packages", "esqyma", "migrations", "postgres")
-	command := exec.Command(atlas, "migrate", "set", manifest.Atlas.Head, "--dir", "file://"+migrations, "--url", config.databaseURL(config.Name))
-	output, err := command.CombinedOutput()
+	snapshot, err := createMigrationSnapshot(context.Background(), root, manifest)
 	if err != nil {
-		return fmt.Errorf("establish Atlas head: %w: %s", err, sanitizeCommandOutput(output))
+		return err
+	}
+	defer snapshot.Close()
+	command, err := atlasSnapshotCommand(context.Background(), root, snapshot, config, "migrate", "set", manifest.Atlas.Head)
+	if err != nil {
+		return err
+	}
+	if _, err := command.CombinedOutput(); err != nil {
+		return errors.New("establish Atlas head failed")
 	}
 	return nil
 }
@@ -160,13 +165,11 @@ func validateLocalTools(root string, manifest schemareleases.Manifest) error {
 	if err != nil || !strings.HasPrefix(string(output), "pg_dump (PostgreSQL) "+manifest.Bootstrap.PGDumpVersion) {
 		return fmt.Errorf("pg_dump %s is required", manifest.Bootstrap.PGDumpVersion)
 	}
-	atlasSum, err := os.ReadFile(filepath.Join(root, "packages", "esqyma", "migrations", "postgres", "atlas.sum"))
+	snapshot, err := createMigrationSnapshot(context.Background(), root, manifest)
 	if err != nil {
 		return err
 	}
-	if sha256Hex(atlasSum) != manifest.Atlas.SumSHA256 {
-		return errors.New("checked-out atlas.sum does not match the release manifest")
-	}
+	snapshot.Close()
 	return nil
 }
 

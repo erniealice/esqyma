@@ -11,12 +11,15 @@ import (
 )
 
 type databaseConfig struct {
-	Host     string
-	Port     string
-	User     string
-	Password string
-	SSLMode  string
-	Name     string
+	CredentialProfileSHA256 string
+	ReadOnly                bool
+	Host                    string
+	Port                    string
+	User                    string
+	Password                string
+	SSLRootCert             string
+	SSLMode                 string
+	Name                    string
 }
 
 func loadEnvironment(path string) (map[string]string, error) {
@@ -62,12 +65,13 @@ func valueFor(values map[string]string, key, fallback string) string {
 
 func configFromEnvironment(values map[string]string, databaseName string) (databaseConfig, error) {
 	config := databaseConfig{
-		Host:     valueFor(values, "DATABASE_POSTGRES_HOST", "127.0.0.1"),
-		Port:     valueFor(values, "DATABASE_POSTGRES_PORT", "5432"),
-		User:     valueFor(values, "DATABASE_POSTGRES_USER", ""),
-		Password: valueFor(values, "DATABASE_POSTGRES_PASSWORD", ""),
-		SSLMode:  valueFor(values, "DATABASE_POSTGRES_SSLMODE", "disable"),
-		Name:     databaseName,
+		Host:        valueFor(values, "DATABASE_POSTGRES_HOST", "127.0.0.1"),
+		Port:        valueFor(values, "DATABASE_POSTGRES_PORT", "5432"),
+		User:        valueFor(values, "DATABASE_POSTGRES_USER", ""),
+		Password:    valueFor(values, "DATABASE_POSTGRES_PASSWORD", ""),
+		SSLMode:     valueFor(values, "DATABASE_POSTGRES_SSLMODE", "disable"),
+		SSLRootCert: valueFor(values, "DATABASE_POSTGRES_SSLROOTCERT", ""),
+		Name:        databaseName,
 	}
 	if config.User == "" || !databasePattern.MatchString(config.Name) {
 		return databaseConfig{}, fmt.Errorf("database user and valid target database name are required")
@@ -99,6 +103,13 @@ func (config databaseConfig) databaseURL(name string) string {
 	u := url.URL{Scheme: "postgres", User: user, Host: net.JoinHostPort(strings.Trim(config.Host, "[]"), config.Port), Path: "/" + name}
 	query := u.Query()
 	query.Set("sslmode", config.SSLMode)
+	query.Set("connect_timeout", "10")
+	if config.ReadOnly {
+		query.Set("default_transaction_read_only", "on")
+	}
+	if config.SSLRootCert != "" {
+		query.Set("sslrootcert", config.SSLRootCert)
+	}
 	u.RawQuery = query.Encode()
 	return u.String()
 }
@@ -110,6 +121,7 @@ func (config databaseConfig) postgresEnvironment(name string) []string {
 		"PGUSER="+config.User,
 		"PGPASSWORD="+config.Password,
 		"PGSSLMODE="+config.SSLMode,
+		"PGSSLROOTCERT="+config.SSLRootCert,
 		"PGDATABASE="+name,
 	)
 }

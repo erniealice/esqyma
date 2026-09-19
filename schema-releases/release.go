@@ -30,6 +30,7 @@ type Manifest struct {
 	Atlas         AtlasManifest     `json:"atlas"`
 	Bootstrap     BootstrapManifest `json:"bootstrap"`
 	SeedContract  SeedContract      `json:"seed_contract"`
+	Compatibility *Compatibility    `json:"compatibility,omitempty"`
 }
 
 type AtlasManifest struct {
@@ -50,9 +51,10 @@ type BootstrapManifest struct {
 }
 
 type SeedContract struct {
-	ID                    string   `json:"id"`
-	BundleManifestVersion int      `json:"bundle_manifest_version"`
-	AllowedProfiles       []string `json:"allowed_profiles"`
+	ID                       string   `json:"id"`
+	BundleManifestVersion    int      `json:"bundle_manifest_version"`
+	AllowedProfiles          []string `json:"allowed_profiles"`
+	CompatibleSchemaReleases []string `json:"compatible_schema_releases,omitempty"`
 }
 
 type RequiredBundle struct {
@@ -115,7 +117,7 @@ func BootstrapBytes(manifest Manifest) ([]byte, error) {
 }
 
 func (manifest Manifest) Validate() error {
-	if manifest.FormatVersion != 1 {
+	if manifest.FormatVersion != 1 && manifest.FormatVersion != 2 {
 		return fmt.Errorf("unsupported schema release format_version %d", manifest.FormatVersion)
 	}
 	if !releasePattern.MatchString(manifest.Release) {
@@ -161,7 +163,7 @@ func (manifest Manifest) Validate() error {
 		}
 		seen[profile] = true
 	}
-	return nil
+	return manifest.validateCompatibility()
 }
 
 func ManifestDigest(raw []byte) string { return SHA256(raw) }
@@ -205,7 +207,7 @@ func VerifyDatabase(ctx context.Context, db *sql.DB, manifest Manifest, required
 	if err != nil {
 		return Verification{}, err
 	}
-	if trackerFingerprint != manifest.Atlas.TrackerFingerprint {
+	if !manifest.AcceptsTrackerFingerprint(trackerFingerprint) {
 		return Verification{}, fmt.Errorf("schema release verify: Atlas tracker fingerprint mismatch: got %s", trackerFingerprint)
 	}
 
@@ -218,7 +220,7 @@ func VerifyDatabase(ctx context.Context, db *sql.DB, manifest Manifest, required
 	}
 
 	for _, bundle := range required {
-		if bundle.TargetKey == "" || bundle.ID == "" || bundle.Version == "" || !hexPattern.MatchString(bundle.Digest) || bundle.SchemaRelease != manifest.Release {
+		if bundle.TargetKey == "" || bundle.ID == "" || bundle.Version == "" || !hexPattern.MatchString(bundle.Digest) || !manifest.AcceptsSeedRelease(bundle.SchemaRelease) {
 			return Verification{}, fmt.Errorf("schema release verify: invalid required bundle %+v", bundle)
 		}
 		var found bool

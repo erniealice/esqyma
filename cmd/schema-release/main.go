@@ -12,27 +12,35 @@ import (
 	"os"
 	"os/exec"
 	"path/filepath"
+	"time"
 
 	schemareleases "github.com/erniealice/esqyma/schema-releases"
 	_ "github.com/jackc/pgx/v5/stdlib"
 )
 
 type commandOutput struct {
-	Mode               string   `json:"mode"`
-	TargetKey          string   `json:"target_key"`
-	Database           string   `json:"database"`
-	Scope              string   `json:"scope"`
-	ObservedState      string   `json:"observed_state"`
-	SchemaRelease      string   `json:"schema_release"`
-	AtlasHead          string   `json:"atlas_head"`
-	SeedProfile        string   `json:"seed_profile"`
-	BusinessType       string   `json:"business_type"`
-	WorkspaceSlug      string   `json:"workspace_slug"`
-	Bundles            []string `json:"bundles"`
-	Actions            []string `json:"actions"`
-	CatalogFingerprint string   `json:"catalog_fingerprint,omitempty"`
-	ReceiptURI         string   `json:"receipt_uri,omitempty"`
-	ReceiptDigest      string   `json:"receipt_digest,omitempty"`
+	FromSchemaCommit    string              `json:"from_schema_commit,omitempty"`
+	DataOracles         []oracleObservation `json:"data_oracles,omitempty"`
+	IntentSHA256        string              `json:"intent_sha256,omitempty"`
+	FromRelease         string              `json:"from_release,omitempty"`
+	PlanSHA256          string              `json:"plan_sha256,omitempty"`
+	BackupReceiptSHA256 string              `json:"backup_receipt_sha256,omitempty"`
+	ApprovalRef         string              `json:"approval_ref,omitempty"`
+	Mode                string              `json:"mode"`
+	TargetKey           string              `json:"target_key"`
+	Database            string              `json:"database"`
+	Scope               string              `json:"scope"`
+	ObservedState       string              `json:"observed_state"`
+	SchemaRelease       string              `json:"schema_release"`
+	AtlasHead           string              `json:"atlas_head"`
+	SeedProfile         string              `json:"seed_profile"`
+	BusinessType        string              `json:"business_type"`
+	WorkspaceSlug       string              `json:"workspace_slug"`
+	Bundles             []string            `json:"bundles"`
+	Actions             []string            `json:"actions"`
+	CatalogFingerprint  string              `json:"catalog_fingerprint,omitempty"`
+	ReceiptURI          string              `json:"receipt_uri,omitempty"`
+	ReceiptDigest       string              `json:"receipt_digest,omitempty"`
 }
 
 func main() {
@@ -44,24 +52,70 @@ func main() {
 	targetKey := flags.String("target", "", "tracked database target key")
 	release := flags.String("schema-release", "", "explicit Esqyma calendar release assertion")
 	apply := flags.Bool("apply", false, "apply the reviewed initialization plan")
+	verify := flags.Bool("verify", false, "verify an existing exact release and required bundles without writes")
+	deploymentEnv := flags.String("deployment-env-file", "", "bind verification to the exact runtime environment being deployed")
+	deploymentCA := flags.String("deployment-ca-file", "", "operator-local CA bytes mapped to the deployed /app/certs path")
+	fromRelease := flags.String("upgrade-from", "", "explicit predecessor for a reviewed forward upgrade")
+	approvedPlan := flags.String("approve-plan", "", "SHA-256 of the exact reviewed upgrade plan")
+	approvalRef := flags.String("approval-ref", "", "operator authorization reference")
+	backup := flags.String("backup-receipt", "", "absolute external verified backup receipt path")
+	backupDigest := flags.String("backup-sha256", "", "SHA-256 of the reviewed backup receipt")
 	if err := flags.Parse(arguments); err != nil {
 		fatalf("%v", err)
 	}
-	if *targetKey == "" || *release == "" || flags.NArg() != 0 {
-		fatalf("usage: pnpm db:init -- --target CLIENT/TARGET --schema-release postgres/YYYY.MM.N [--apply]")
+	if *targetKey == "" || *release == "" || flags.NArg() != 0 || (*apply && *verify) {
+		fatalf("usage: pnpm db:init -- --target CLIENT/TARGET --schema-release postgres/YYYY.MM.N [--apply | --verify]")
 	}
-	if err := run(context.Background(), *targetKey, *release, *apply); err != nil {
+	if *deploymentCA != "" && *deploymentEnv == "" {
+		fatalf("--deployment-ca-file requires --deployment-env-file")
+	}
+	if *deploymentEnv != "" && (!*verify || *fromRelease != "") {
+		fatalf("deployment environment and CA binding requires destination-only --verify")
+	}
+	if *fromRelease != "" {
+		if *verify {
+			fatalf("use --verify without --upgrade-from to verify the destination")
+		}
+		root, err := findRepositoryRoot()
+		if err != nil {
+			fatalf("%v", err)
+		}
+		if err := runUpgrade(context.Background(), root, *targetKey, *release, upgradeOptions{FromRelease: *fromRelease, Apply: *apply, ApprovedPlan: *approvedPlan, ApprovalRef: *approvalRef, BackupReceipt: *backup, BackupSHA256: *backupDigest}); err != nil {
+			fatalf("%v", err)
+		}
+		return
+	}
+	if *approvedPlan != "" || *approvalRef != "" || *backup != "" || *backupDigest != "" {
+		fatalf("upgrade evidence requires --upgrade-from")
+	}
+	if err := runWithDeploymentEnv(context.Background(), *targetKey, *release, *apply, *verify, *deploymentEnv, *deploymentCA); err != nil {
 		fatalf("%v", err)
 	}
 }
 
-func run(ctx context.Context, targetKey, release string, apply bool) error {
+func run(ctx context.Context, targetKey, release string, apply, verify bool) error {
+	return runWithDeploymentEnv(ctx, targetKey, release, apply, verify, "", "")
+}
+
+func runWithDeploymentEnv(ctx context.Context, targetKey, release string, apply, verify bool, deploymentEnv, deploymentCA string) error {
+	if deploymentCA != "" && deploymentEnv == "" {
+		return errors.New("deployment CA binding requires a deployment environment")
+	}
+	if deploymentEnv != "" && (!verify || apply) {
+		return errors.New("deployment environment and CA binding requires read-only verification")
+	}
+	if apply && verify {
+		return errors.New("apply and verify are mutually exclusive")
+	}
 	root, err := findRepositoryRoot()
 	if err != nil {
 		return err
 	}
 	target, targetPath, err := loadTarget(root, targetKey)
 	if err != nil {
+		return err
+	}
+	if err := bindFleetTarget(root, &target, targetPath, apply || (verify && target.Scope == "remote")); err != nil {
 		return err
 	}
 	if target.SchemaRelease != release {
@@ -74,8 +128,26 @@ func run(ctx context.Context, targetKey, release string, apply bool) error {
 	if !schemareleases.ProfileAllowed(manifest, target.SeedProfile) {
 		return fmt.Errorf("release %s does not allow seed profile %s", release, target.SeedProfile)
 	}
-	if err := validateLocalTools(root, manifest); err != nil {
-		return err
+	if !verify {
+		if err := validateLocalTools(root, manifest); err != nil {
+			return err
+		}
+		if _, err := schemareleases.BootstrapBytes(manifest); err != nil {
+			return err
+		}
+	}
+
+	if target.Scope == "remote" && !verify {
+		snapshot, err := createMigrationSnapshot(ctx, root, manifest)
+		if err != nil {
+			return err
+		}
+		commit, err := verifySchemaTag(root, manifest, manifestRaw, snapshot.Files)
+		snapshot.Close()
+		if err != nil {
+			return err
+		}
+		target.schemaCommit = commit
 	}
 
 	bundles := make([]resolvedBundle, 0, len(target.Bundles))
@@ -85,16 +157,18 @@ func run(ctx context.Context, targetKey, release string, apply bool) error {
 		if err != nil {
 			return err
 		}
-		if err := bundle.validateAgainst(target); err != nil {
+		if err := bundle.validateForRelease(target, manifest); err != nil {
 			return err
 		}
-		if err := runCopya(root, target, bundle, false, "", nil); err != nil {
-			return fmt.Errorf("validate bundle %s: %w", path, err)
+		if !verify {
+			if err := runCopya(root, target, bundle, false, "", nil); err != nil {
+				return fmt.Errorf("validate bundle %s: %w", path, err)
+			}
 		}
 		bundles = append(bundles, bundle)
 		required = append(required, schemareleases.RequiredBundle{
 			TargetKey: target.TargetKey, ID: bundle.Metadata.ID, Version: bundle.Metadata.Version,
-			Digest: bundle.Digest, SchemaRelease: release,
+			Digest: bundle.Digest, SchemaRelease: bundle.Metadata.SchemaRelease,
 		})
 	}
 
@@ -103,7 +177,18 @@ func run(ctx context.Context, targetKey, release string, apply bool) error {
 	if err != nil {
 		return fmt.Errorf("load target environment: %w", err)
 	}
-	config, err := configFromEnvironment(values, target.Database.Name)
+	operation := "initialize"
+	if verify {
+		operation = "runtime"
+	}
+	sslRootCert := ""
+	if deploymentCA != "" {
+		sslRootCert, err = deploymentTrustPath(deploymentEnv, deploymentCA)
+		if err != nil {
+			return err
+		}
+	}
+	config, err := configForTargetWithTrust(root, values, target, operation, sslRootCert)
 	if err != nil {
 		return err
 	}
@@ -111,11 +196,29 @@ func run(ctx context.Context, targetKey, release string, apply bool) error {
 		return errors.New("local/disposable target must configure a loopback database host")
 	}
 
+	if verify {
+		if deploymentEnv != "" {
+			if err := validateDeploymentEnvironment(root, deploymentEnv, target, config, required); err != nil {
+				return err
+			}
+		}
+		return runVerify(ctx, target, config, manifest, required)
+	}
 	admin, err := openDatabase(config, "postgres")
 	if err != nil {
 		return fmt.Errorf("connect PostgreSQL control database: %w", err)
 	}
 	defer admin.Close()
+	if err := verifyInitializationIdentity(ctx, admin, target, config, "postgres"); err != nil {
+		return err
+	}
+	if apply {
+		lock, err := acquireInitializationLock(ctx, admin, target.Database.Name)
+		if err != nil {
+			return err
+		}
+		defer releaseInitializationLock(lock, target.Database.Name)
+	}
 	if target.Scope == "local" || target.Scope == "disposable" {
 		if err := observedLoopback(ctx, admin); err != nil {
 			return err
@@ -133,6 +236,16 @@ func run(ctx context.Context, targetKey, release string, apply bool) error {
 			return err
 		}
 		defer targetDB.Close()
+		if err := verifyInitializationIdentity(ctx, targetDB, target, config, target.Database.Name); err != nil {
+			return err
+		}
+		if apply {
+			lock, err := acquireUpgradeLock(ctx, targetDB)
+			if err != nil {
+				return err
+			}
+			defer releaseInitializationLock(lock, target.Database.Name)
+		}
 		state, err = databaseState(ctx, targetDB)
 		if err != nil {
 			return err
@@ -192,6 +305,14 @@ func run(ctx context.Context, targetKey, release string, apply bool) error {
 			return err
 		}
 		defer targetDB.Close()
+		if err := verifyInitializationIdentity(ctx, targetDB, target, config, target.Database.Name); err != nil {
+			return err
+		}
+		lock, err := acquireUpgradeLock(ctx, targetDB)
+		if err != nil {
+			return err
+		}
+		defer releaseInitializationLock(lock, target.Database.Name)
 		state = "empty"
 		output.Actions = append(output.Actions, "created database")
 	}
@@ -241,7 +362,38 @@ func run(ctx context.Context, targetKey, release string, apply bool) error {
 }
 
 func runCopya(root string, target targetManifest, bundle resolvedBundle, apply bool, databaseURL string, values map[string]string) error {
-	args := []string{"run", "./cmd/copya-bundle", "--manifest", bundle.Path, "--target", target.TargetKey, "--schema-release", target.SchemaRelease}
+	if target.bundleDigests != nil && target.bundleDigests[bundle.Path] != bundle.Digest {
+		return errors.New("bundle differs from selected fleet snapshot")
+	}
+	raw := bundle.Raw
+	if raw == nil {
+		var err error
+		raw, err = os.ReadFile(bundle.Path)
+		if err != nil {
+			return err
+		}
+	}
+	if sha256Hex(raw) != bundle.Digest {
+		return errors.New("bundle snapshot checksum mismatch")
+	}
+	snapshot, err := os.CreateTemp("", "ichizen-copya-bundle-*.json")
+	if err != nil {
+		return err
+	}
+	defer os.Remove(snapshot.Name())
+	if _, err := snapshot.Write(raw); err != nil {
+		snapshot.Close()
+		return err
+	}
+	if err := snapshot.Chmod(0o400); err != nil {
+		snapshot.Close()
+		return err
+	}
+	if err := snapshot.Close(); err != nil {
+		return err
+	}
+
+	args := []string{"run", "./cmd/copya-bundle", "--manifest", snapshot.Name(), "--target", target.TargetKey, "--schema-release", bundle.Metadata.SchemaRelease}
 	if apply {
 		args = append(args, "--apply")
 	}
@@ -257,6 +409,43 @@ func runCopya(root string, target targetManifest, bundle resolvedBundle, apply b
 		return fmt.Errorf("Copya bundle %s/%s: %w: %s", bundle.Metadata.ID, bundle.Metadata.Version, err, sanitizeCommandOutput(output))
 	}
 	return nil
+}
+
+// Serialize initializers before an absent database can be created. Once it exists,
+// also acquire the target-database lock shared with the upgrade runner.
+func verifyInitializationIdentity(ctx context.Context, db *sql.DB, target targetManifest, config databaseConfig, expectedDatabase string) error {
+	expectedRole := config.User
+	if target.Access != nil {
+		expectedRole = target.Access.MigrationRole
+	}
+	var database, role string
+	if err := db.QueryRowContext(ctx, "SELECT current_database(), current_user").Scan(&database, &role); err != nil {
+		return errors.New("initializer identity query failed")
+	}
+	if database != expectedDatabase || role != expectedRole {
+		return errors.New("observed initializer database/migration role differs from target")
+	}
+	return nil
+}
+
+func acquireInitializationLock(ctx context.Context, admin *sql.DB, name string) (*sql.Conn, error) {
+	conn, err := admin.Conn(ctx)
+	if err != nil {
+		return nil, err
+	}
+	var locked bool
+	if err := conn.QueryRowContext(ctx, "SELECT pg_try_advisory_lock(hashtextextended($1, 736492))", name).Scan(&locked); err != nil || !locked {
+		_ = conn.Close()
+		return nil, errors.New("another initializer holds this database; retry after it finishes")
+	}
+	return conn, nil
+}
+
+func releaseInitializationLock(conn *sql.Conn, name string) {
+	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+	defer cancel()
+	_, _ = conn.ExecContext(ctx, "SELECT pg_advisory_unlock(hashtextextended($1, 736492))", name)
+	_ = conn.Close()
 }
 
 func findRepositoryRoot() (string, error) {
