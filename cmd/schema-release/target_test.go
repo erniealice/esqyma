@@ -10,36 +10,26 @@ import (
 
 func TestTargetSafetyAndReleaseSelection(t *testing.T) {
 	root := repositoryRootForTest(t)
-	target, _, err := loadTarget(root, "gpagoda/local-leasing1")
+	target, _, err := loadTarget(root, "mmis/local-education2")
 	if err != nil {
 		t.Fatal(err)
 	}
-	if target.SchemaRelease != "postgres/2026.08.1" || target.Database.Name != "leasing1" || target.SeedProfile != "client-minimal" {
+	if target.SchemaRelease != "postgres/2026.08.1" || target.Database.Name != "education2" || target.SeedProfile != "client-minimal" {
 		t.Fatalf("unexpected target: %+v", target)
 	}
-	if target.Scope != "local" || !target.AllowCreate || !target.ExpectedEmpty {
-		t.Fatal("local target must explicitly authorize create-if-absent and expected-empty")
+	if target.Scope != "disposable" || !target.AllowCreate || !target.ExpectedEmpty {
+		t.Fatal("disposable target must explicitly authorize create-if-absent and expected-empty")
+	}
+	if len(target.Bundles) != 0 {
+		t.Fatalf("schema-only education target unexpectedly selects data bundles: %+v", target.Bundles)
 	}
 }
 
-func TestBusinessTypeSelectsBundleCompatibilityNotSchemaBytes(t *testing.T) {
+func TestSchemaOnlyTargetKeepsBundleCompatibilityOptional(t *testing.T) {
 	root := repositoryRootForTest(t)
-	target, _, err := loadTarget(root, "gpagoda/local-leasing1")
+	target, _, err := loadTarget(root, "mmis/local-education2")
 	if err != nil {
 		t.Fatal(err)
-	}
-	bundle, err := loadBundle(root, target.Bundles[0])
-	if err != nil {
-		t.Fatal(err)
-	}
-	if err := bundle.validateAgainst(target); err != nil {
-		t.Fatal(err)
-	}
-
-	otherBusiness := target
-	otherBusiness.BusinessType = "professional"
-	if err := bundle.validateAgainst(otherBusiness); err == nil {
-		t.Fatal("leasing bundle unexpectedly matched a professional target")
 	}
 	manifest, _, err := schemareleases.Load(target.SchemaRelease)
 	if err != nil {

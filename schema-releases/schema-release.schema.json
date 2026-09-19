@@ -44,7 +44,7 @@
         "bundle_manifest_version": { "const": 1 },
         "allowed_profiles": {
           "type": "array",
-          "minItems": 1,
+          "minItems": 0,
           "uniqueItems": true,
           "items": { "type": "string", "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$" }
         }

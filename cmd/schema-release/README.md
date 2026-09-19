@@ -2,7 +2,8 @@
 
 This command is the implementation behind `pnpm db:init`. It resolves a reviewed
 `deploy/<client>/database/targets/<name>.json`, asserts the explicit Esqyma calendar release, and
-validates every Copya bundle before it observes or changes a database.
+validates every selected Copya bundle before it observes or changes a database. A schema-only
+target may select an empty bundle list; data bundles are an explicit, separate rehearsal concern.
 
 Plan mode is the default and read-only. `--apply` may create only an absent database selected by a
 `local` or `disposable` target with `allow_create=true`; it never drops, resets, restores, applies a

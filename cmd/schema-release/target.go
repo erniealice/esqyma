@@ -102,9 +102,6 @@ func (target targetManifest) validate(expectedKey string) error {
 	if target.BusinessType == "" || target.SeedProfile == "" || target.Workspace.ID == "" || !slugPattern.MatchString(target.Workspace.Slug) {
 		return errors.New("invalid target business/workspace/profile configuration")
 	}
-	if len(target.Bundles) == 0 {
-		return errors.New("target must select at least one bundle")
-	}
 	seen := make(map[string]bool, len(target.Bundles))
 	for _, path := range target.Bundles {
 		if !safeRelativePath(path) || seen[path] {
