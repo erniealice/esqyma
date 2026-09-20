@@ -14,7 +14,7 @@ func TestTargetSafetyAndReleaseSelection(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	if target.SchemaRelease != "postgres/2026.08.1" || target.Database.Name != "education2" || target.SeedProfile != "client-minimal" {
+	if target.SchemaRelease != "postgres/2026.09.2" || target.Database.Name != "education2" || target.SeedProfile != "client-minimal" {
 		t.Fatalf("unexpected target: %+v", target)
 	}
 	if target.Scope != "disposable" || !target.AllowCreate || !target.ExpectedEmpty {

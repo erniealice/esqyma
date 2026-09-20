@@ -199,16 +199,16 @@ func VerifyDatabase(ctx context.Context, db *sql.DB, manifest Manifest, required
 	if err := db.QueryRowContext(ctx, `SELECT count(*), COALESCE(max(version), '') FROM atlas_schema_revisions.atlas_schema_revisions`).Scan(&count, &head); err != nil {
 		return Verification{}, fmt.Errorf("schema release verify: Atlas head: %w", err)
 	}
-	if count != manifest.Atlas.RevisionCount || head != manifest.Atlas.Head {
-		return Verification{}, fmt.Errorf("schema release verify: Atlas state got head=%s count=%d, want head=%s count=%d", head, count, manifest.Atlas.Head, manifest.Atlas.RevisionCount)
+	if head != manifest.Atlas.Head {
+		return Verification{}, fmt.Errorf("schema release verify: Atlas head got %s, want %s", head, manifest.Atlas.Head)
 	}
 
 	trackerFingerprint, err := AtlasTrackerFingerprint(ctx, db)
 	if err != nil {
 		return Verification{}, err
 	}
-	if !manifest.AcceptsTrackerFingerprint(trackerFingerprint) {
-		return Verification{}, fmt.Errorf("schema release verify: Atlas tracker fingerprint mismatch: got %s", trackerFingerprint)
+	if !manifest.AcceptsTrackerState(count, trackerFingerprint) {
+		return Verification{}, fmt.Errorf("schema release verify: Atlas state is not an accepted installation: head=%s count=%d fingerprint=%s", head, count, trackerFingerprint)
 	}
 
 	catalogFingerprint, err := CatalogFingerprint(ctx, db)

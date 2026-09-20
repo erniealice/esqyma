@@ -48,6 +48,10 @@ module `v*` tags; no tags are created by these checks.
    reference, operator version at least 2, named oracles and exact source proofs in `upgrades`.
    Each source proof contains `from_release`, `from_manifest_sha256`,
    `from_tracker_fingerprint` and the destination `tracker_fingerprint`.
+   If the live schema matches the release but its Atlas ledger contains a known partial legacy
+   history, declare each exact `tracker_revision_count`/`tracker_fingerprint` pair in
+   `compatibility.legacy_installations`. The verifier accepts that installation only when its
+   head, catalog, and exact tracker state agree; it never inserts or rewrites Atlas rows.
 5. Add workspace-scoped `compatibility.data_oracles` with exact SQL checksums and explicit row/time
    limits. Current comparisons support unchanged results or zero violating rows. If old Copya
    receipts remain valid, declare their releases in `seed_contract.compatible_schema_releases`;

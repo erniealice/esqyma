@@ -31,6 +31,23 @@ func TestLoadReleaseAndBootstrap(t *testing.T) {
 	}
 }
 
+func TestEducationLegacyPredecessorArtifact(t *testing.T) {
+	manifest, _, err := Load("postgres/2026.09.2")
+	if err != nil {
+		t.Fatal(err)
+	}
+	if manifest.Atlas.Head != "20260822213000" || manifest.Atlas.RevisionCount != 75 {
+		t.Fatalf("unexpected education predecessor: %+v", manifest.Atlas)
+	}
+	if manifest.Compatibility == nil || len(manifest.Compatibility.LegacyInstallations) != 1 {
+		t.Fatalf("education predecessor must declare one legacy installation: %+v", manifest.Compatibility)
+	}
+	legacy := manifest.Compatibility.LegacyInstallations[0]
+	if legacy.TrackerRevisionCount != 10 || !manifest.AcceptsTrackerState(10, legacy.TrackerFingerprint) {
+		t.Fatalf("legacy installation proof is not exact: %+v", legacy)
+	}
+}
+
 func TestManifestRejectsUnknownAndInvalidState(t *testing.T) {
 	_, _, err := Load("postgres/latest")
 	if err == nil {
@@ -95,7 +112,11 @@ func TestVerifyDatabaseRejectsReleaseStateMismatchIntegration(t *testing.T) {
 		t.Fatal(err)
 	}
 	defer db.Close()
-	manifest, _, err := Load("postgres/2026.08.1")
+	release := os.Getenv("ESQYMA_TEST_SCHEMA_RELEASE")
+	if release == "" {
+		release = "postgres/2026.08.1"
+	}
+	manifest, _, err := Load(release)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -109,7 +130,13 @@ func TestVerifyDatabaseRejectsReleaseStateMismatchIntegration(t *testing.T) {
 		required []RequiredBundle
 	}{
 		{name: "head", mutate: func(candidate *Manifest) { candidate.Atlas.Head = "20260830000000" }},
-		{name: "tracker fingerprint", mutate: func(candidate *Manifest) { candidate.Atlas.TrackerFingerprint = strings.Repeat("0", 64) }},
+		{name: "tracker fingerprint", mutate: func(candidate *Manifest) {
+			candidate.Atlas.TrackerFingerprint = strings.Repeat("0", 64)
+			if candidate.Compatibility != nil {
+				candidate.Compatibility.LegacyInstallations = nil
+				candidate.Compatibility.Upgrades = nil
+			}
+		}},
 		{name: "catalog fingerprint", mutate: func(candidate *Manifest) { candidate.Bootstrap.CatalogFingerprint = strings.Repeat("0", 64) }},
 		{name: "bundle digest", required: []RequiredBundle{{
 			TargetKey: "gpagoda/local-leasing1", ID: "gpagoda-base", Version: "2026.08.1",

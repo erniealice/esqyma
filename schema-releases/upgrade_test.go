@@ -46,6 +46,26 @@ func TestUpgradeInstallationProof(t *testing.T) {
 	}
 }
 
+func TestLegacyInstallationProofBindsExactTrackerState(t *testing.T) {
+	manifest, _, err := Load("postgres/2026.09.2")
+	if err != nil {
+		t.Fatal(err)
+	}
+	legacy := manifest.Compatibility.LegacyInstallations[0]
+	if !manifest.AcceptsTrackerFingerprint(legacy.TrackerFingerprint) {
+		t.Fatal("declared legacy fingerprint was rejected")
+	}
+	if !manifest.AcceptsTrackerState(legacy.TrackerRevisionCount, legacy.TrackerFingerprint) {
+		t.Fatal("declared legacy tracker state was rejected")
+	}
+	if manifest.AcceptsTrackerState(legacy.TrackerRevisionCount+1, legacy.TrackerFingerprint) {
+		t.Fatal("legacy fingerprint accepted with the wrong row count")
+	}
+	if manifest.AcceptsTrackerState(legacy.TrackerRevisionCount, strings.Repeat("0", 64)) {
+		t.Fatal("unknown legacy fingerprint accepted")
+	}
+}
+
 func TestUpgradeRejectsUnprovenSource(t *testing.T) {
 	for _, name := range []string{"manifest bytes", "history", "downgrade", "unlisted predecessor", "missing compatibility"} {
 		t.Run(name, func(t *testing.T) {

@@ -183,6 +183,30 @@
               "from_tracker_fingerprint": {
                 "$ref": "#/$defs/sha256"
               },
+              "tracker_revision_count": {
+                "type": "integer",
+                "minimum": 1
+              },
+              "tracker_fingerprint": {
+                "$ref": "#/$defs/sha256"
+              }
+            }
+          }
+        },
+        "legacy_installations": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "tracker_revision_count",
+              "tracker_fingerprint"
+            ],
+            "properties": {
+              "tracker_revision_count": {
+                "type": "integer",
+                "minimum": 1
+              },
               "tracker_fingerprint": {
                 "$ref": "#/$defs/sha256"
               }

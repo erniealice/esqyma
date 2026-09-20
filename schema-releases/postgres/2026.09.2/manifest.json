@@ -1,0 +1,46 @@
+{
+  "format_version": 2,
+  "release": "postgres/2026.09.2",
+  "dialect": "postgres",
+  "created_at": "2026-09-19T00:00:00Z",
+  "atlas": {
+    "tool_version": "1.3.0",
+    "head": "20260822213000",
+    "revision_count": 75,
+    "sum_sha256": "68eeb0187ea4349eeaaa6752c33b1fc8cc87d419214de979335037ce133c8799",
+    "tracker_fingerprint": "71765a5fb4937a7951a35a13a929a97a34ae111e3a02c143f28fb8439d0e438c"
+  },
+  "bootstrap": {
+    "path": "bootstrap.sql",
+    "sha256": "88c530e538ab22044e2f639bcf491fb4ed8127eaa2c103abca3257ad3320deab",
+    "pg_dump_version": "18.3",
+    "restrict_key": "49f2a51a2bd7fa7c2c83fcc507482008322fa6b08886025f5245a91ff7a6b167",
+    "normalized_schema_fingerprint": "e1d0b238538ae58dad67ea3d1a311f90e4a827d830064a8284b95e2782003384",
+    "catalog_fingerprint": "c70b11e571948cc474f5d2b11b892e25b06146697a402618b40299df53acdb57"
+  },
+  "seed_contract": {
+    "id": "copya/v1",
+    "bundle_manifest_version": 1,
+    "allowed_profiles": ["client-minimal"]
+  },
+  "compatibility": {
+    "phase": "expand",
+    "api_reference": "education-legacy-atlas-history-v1",
+    "minimum_operator_version": 2,
+    "oracles": [
+      "atlas-history",
+      "catalog",
+      "seed-receipts",
+      "workspace",
+      "runtime-role",
+      "normalized-schema"
+    ],
+    "legacy_installations": [
+      {
+        "tracker_revision_count": 10,
+        "tracker_fingerprint": "7cbfa83c39a99f75e4806cafa3996febc8239fd081fe409f5c0fa8950013b8ed"
+      }
+    ],
+    "upgrades": []
+  }
+}

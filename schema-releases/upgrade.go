@@ -12,18 +12,29 @@ import (
 // version marker. Each proof binds an exact predecessor installation history to
 // one exact resulting history. Fresh installation uses Atlas.TrackerFingerprint.
 type Compatibility struct {
-	DataOracles            []DataOracle   `json:"data_oracles,omitempty"`
-	Phase                  string         `json:"phase"`
-	APIReference           string         `json:"api_reference"`
-	MinimumOperatorVersion int            `json:"minimum_operator_version"`
-	Oracles                []string       `json:"oracles"`
-	Upgrades               []UpgradeProof `json:"upgrades"`
+	DataOracles            []DataOracle         `json:"data_oracles,omitempty"`
+	LegacyInstallations    []LegacyInstallation `json:"legacy_installations,omitempty"`
+	Phase                  string               `json:"phase"`
+	APIReference           string               `json:"api_reference"`
+	MinimumOperatorVersion int                  `json:"minimum_operator_version"`
+	Oracles                []string             `json:"oracles"`
+	Upgrades               []UpgradeProof       `json:"upgrades"`
+}
+
+// LegacyInstallation is an explicit proof for a database whose schema matches
+// this release but whose Atlas ledger was adopted from an older/partial
+// history. It is intentionally bound to the exact tracker row count and
+// fingerprint; an Atlas head by itself is never sufficient.
+type LegacyInstallation struct {
+	TrackerRevisionCount int    `json:"tracker_revision_count"`
+	TrackerFingerprint   string `json:"tracker_fingerprint"`
 }
 
 type UpgradeProof struct {
 	FromRelease            string `json:"from_release"`
 	FromManifestSHA256     string `json:"from_manifest_sha256"`
 	FromTrackerFingerprint string `json:"from_tracker_fingerprint"`
+	TrackerRevisionCount   int    `json:"tracker_revision_count,omitempty"`
 	TrackerFingerprint     string `json:"tracker_fingerprint"`
 }
 
@@ -61,6 +72,16 @@ func (m Manifest) validateCompatibility() error {
 		}
 		dataIDs[oracle.ID] = true
 	}
+	trackerStates := map[string]int{m.Atlas.TrackerFingerprint: m.Atlas.RevisionCount}
+	for _, installation := range c.LegacyInstallations {
+		if installation.TrackerRevisionCount < 1 || installation.TrackerRevisionCount > m.Atlas.RevisionCount || !hexPattern.MatchString(installation.TrackerFingerprint) {
+			return errors.New("invalid legacy installation proof")
+		}
+		if _, exists := trackerStates[installation.TrackerFingerprint]; exists {
+			return errors.New("duplicate tracker installation proof")
+		}
+		trackerStates[installation.TrackerFingerprint] = installation.TrackerRevisionCount
+	}
 	sources := map[string]bool{}
 	seen = map[string]bool{}
 	for _, proof := range c.Upgrades {
@@ -68,6 +89,17 @@ func (m Manifest) validateCompatibility() error {
 			!hexPattern.MatchString(proof.FromManifestSHA256) || !hexPattern.MatchString(proof.FromTrackerFingerprint) || !hexPattern.MatchString(proof.TrackerFingerprint) {
 			return errors.New("invalid upgrade installation proof")
 		}
+		if proof.TrackerRevisionCount < 0 || proof.TrackerRevisionCount > m.Atlas.RevisionCount {
+			return errors.New("invalid upgraded tracker revision count")
+		}
+		countForProof := proof.TrackerRevisionCount
+		if countForProof == 0 {
+			countForProof = m.Atlas.RevisionCount
+		}
+		if _, exists := trackerStates[proof.TrackerFingerprint]; exists {
+			return errors.New("duplicate tracker installation proof")
+		}
+		trackerStates[proof.TrackerFingerprint] = countForProof
 		key := proof.FromRelease + ":" + proof.FromTrackerFingerprint
 		if seen[key] {
 			return fmt.Errorf("duplicate upgrade source proof %s", key)
@@ -85,22 +117,44 @@ func (m Manifest) validateCompatibility() error {
 }
 
 // AcceptsTrackerFingerprint permits only the fresh proof or a declared exact
-// upgraded proof. Callers must still verify the revision head/count and catalog.
+// legacy/upgraded installation proof. Callers must still verify the revision
+// head/count and catalog when they have live database state.
 func (m Manifest) AcceptsTrackerFingerprint(fingerprint string) bool {
+	_, ok := m.trackerStateCount(fingerprint)
+	return ok
+}
+
+// AcceptsTrackerState verifies the exact tracker row count and fingerprint for
+// a fresh, legacy-adopted, or reviewed upgraded installation.
+func (m Manifest) AcceptsTrackerState(count int, fingerprint string) bool {
+	expected, ok := m.trackerStateCount(fingerprint)
+	return ok && count == expected
+}
+
+func (m Manifest) trackerStateCount(fingerprint string) (int, bool) {
 	if m.Validate() != nil || !hexPattern.MatchString(fingerprint) {
-		return false
+		return 0, false
 	}
 	if fingerprint == m.Atlas.TrackerFingerprint {
-		return true
+		return m.Atlas.RevisionCount, true
 	}
 	if m.Compatibility != nil {
+		for _, installation := range m.Compatibility.LegacyInstallations {
+			if fingerprint == installation.TrackerFingerprint {
+				return installation.TrackerRevisionCount, true
+			}
+		}
 		for _, proof := range m.Compatibility.Upgrades {
 			if fingerprint == proof.TrackerFingerprint {
-				return true
+				count := proof.TrackerRevisionCount
+				if count == 0 {
+					count = m.Atlas.RevisionCount
+				}
+				return count, true
 			}
 		}
 	}
-	return false
+	return 0, false
 }
 
 // AcceptsSeedRelease preserves the original receipt identity on an explicitly
