@@ -44,6 +44,36 @@ func TestSchemaOnlyTargetKeepsBundleCompatibilityOptional(t *testing.T) {
 	}
 }
 
+func TestLeasingTargetSafetyAndBundleSelection(t *testing.T) {
+	root := repositoryRootForTest(t)
+	target, _, err := loadTarget(root, "gpagoda/local-leasing1")
+	if err != nil {
+		t.Fatal(err)
+	}
+	if target.SchemaRelease != "postgres/2026.08.1" || target.Database.Name != "leasing1" || target.SeedProfile != "client-minimal" {
+		t.Fatalf("unexpected target: %+v", target)
+	}
+	if target.Scope != "local" || !target.AllowCreate || !target.ExpectedEmpty {
+		t.Fatal("local target must explicitly authorize create-if-absent and expected-empty")
+	}
+	if len(target.Bundles) == 0 {
+		t.Fatal("leasing target must select a data bundle")
+	}
+	bundle, err := loadBundle(root, target.Bundles[0])
+	if err != nil {
+		t.Fatal(err)
+	}
+	if err := bundle.validateAgainst(target); err != nil {
+		t.Fatal(err)
+	}
+
+	otherBusiness := target
+	otherBusiness.BusinessType = "professional"
+	if err := bundle.validateAgainst(otherBusiness); err == nil {
+		t.Fatal("leasing bundle unexpectedly matched a professional target")
+	}
+}
+
 func TestTargetRejectsTraversalAndRemoteCreate(t *testing.T) {
 	if safeRelativePath("../secret") || safeRelativePath("/absolute") {
 		t.Fatal("unsafe paths accepted")

@@ -1,6 +1,7 @@
 package main
 
 import (
+	"bytes"
 	"context"
 	"database/sql"
 	"encoding/json"
@@ -227,27 +228,37 @@ CREATE TABLE ichizen_deploy.data_bundle_receipts (target_key text NOT NULL, bund
 		}
 		to.FormatVersion = 2
 		to.Compatibility = &schemareleases.Compatibility{Phase: "expand", APIReference: "fixture-v1", MinimumOperatorVersion: 2, Oracles: []string{"atlas-history", "catalog", "seed-receipts", "workspace", "runtime-role", "normalized-schema"}, Upgrades: []schemareleases.UpgradeProof{{FromRelease: from.Release, FromManifestSHA256: sha256Hex(fromRaw), FromTrackerFingerprint: from.Atlas.TrackerFingerprint, TrackerFingerprint: upgradedTracker}}}
-		oracleSQL := "SELECT id, note FROM public.lifecycle_probe WHERE $1::text = 'workspace-education'"
+		oracleSQL := "SELECT id, note FROM public.lifecycle_probe WHERE $1::text = 'workspace-gpagoda'"
 		to.Compatibility.DataOracles = []schemareleases.DataOracle{{ID: "preserved-source-data", SQL: oracleSQL, SQLSHA256: sha256Hex([]byte(oracleSQL)), Mode: "unchanged", MaxRows: 10, TimeoutSeconds: 5}}
+		to.SeedContract.CompatibleSchemaReleases = []string{from.Release}
 		toRaw, err := json.Marshal(to)
 		if err != nil {
 			t.Fatal(err)
 		}
-		target := targetManifest{FormatVersion: 1, TargetKey: "mmis/lifecycle", Scope: "disposable", SchemaRelease: to.Release, Database: targetDatabase{EnvFile: "fixture.env", Name: sourceConfig.Name}, BusinessType: "education", Workspace: targetWorkspace{ID: "workspace-education", Slug: "education"}, SeedProfile: "client-minimal"}
+		bundleRaw, err := os.ReadFile(filepath.Join(realRoot, "deploy/gpagoda/database/data/gpagoda-base/2026.08.1.json"))
+		if err != nil {
+			t.Fatal(err)
+		}
+		bundleRaw = bytes.ReplaceAll(bundleRaw, []byte("postgres/2026.08.1"), []byte(from.Release))
+		bundlePath := "deploy/gpagoda/database/data/fixture.json"
+		write(filepath.Join(fixtureRoot, bundlePath), bundleRaw)
+		target := targetManifest{FormatVersion: 1, TargetKey: "gpagoda/lifecycle", Scope: "disposable", SchemaRelease: to.Release, Database: targetDatabase{EnvFile: "fixture.env", Name: sourceConfig.Name}, BusinessType: "leasing", Workspace: targetWorkspace{ID: "workspace-gpagoda", Slug: "gpagoda"}, SeedProfile: "client-minimal", Bundles: []string{bundlePath}}
 		endpoint := net.JoinHostPort(config.Host, config.Port)
 		target.Access = &databaseAccess{Endpoint: endpoint, RuntimeRole: runtimeRole, MigrationRole: config.User, Runtime: credentialReference{UserEnv: "FIXTURE_RUNTIME_USER", PasswordEnv: "FIXTURE_RUNTIME_PASSWORD", ConnectionUser: runtimeRole}, Migration: credentialReference{UserEnv: "FIXTURE_MIGRATION_USER", PasswordEnv: "FIXTURE_MIGRATION_PASSWORD", ConnectionUser: config.User}}
 		target.Upgrade = &upgradeTarget{ConnectionMode: "direct", FromRelease: from.Release, Endpoint: endpoint, MigrationRole: config.User, RuntimeRole: runtimeRole, BackupMaxAgeHours: 24}
 		targetRaw, _ := json.Marshal(target)
-		targetPath := "deploy/mmis/database/targets/lifecycle.json"
-		write(filepath.Join(fixtureRoot, targetPath), targetRaw)
-		fleetRaw, _ := json.Marshal(fleetRegistry{FormatVersion: 1, Targets: []fleetTarget{{Key: target.TargetKey, Path: targetPath, SHA256: sha256Hex(targetRaw), Scope: "disposable", Environment: "ci", RolloutBatch: 0}}})
+		write(filepath.Join(fixtureRoot, "deploy/gpagoda/database/targets/lifecycle.json"), targetRaw)
+		fleetRaw, _ := json.Marshal(fleetRegistry{FormatVersion: 1, Targets: []fleetTarget{{Key: target.TargetKey, Path: "deploy/gpagoda/database/targets/lifecycle.json", SHA256: sha256Hex(targetRaw), Scope: "disposable", Environment: "ci", RolloutBatch: 0}}})
 		write(filepath.Join(fixtureRoot, "deploy/database-fleet.json"), fleetRaw)
-		commitFleetFixture(t, fixtureRoot, "deploy/database-fleet.json", targetPath)
+		commitFleetFixture(t, fixtureRoot, "deploy/database-fleet.json", "deploy/gpagoda/database/targets/lifecycle.json", bundlePath)
 		write(filepath.Join(fixtureRoot, "fixture.env"), []byte(fmt.Sprintf("DATABASE_POSTGRES_HOST=%s\nDATABASE_POSTGRES_PORT=%s\nDATABASE_POSTGRES_SSLMODE=%s\n", config.Host, config.Port, config.SSLMode)))
 		t.Setenv("FIXTURE_MIGRATION_USER", config.User)
 		t.Setenv("FIXTURE_MIGRATION_PASSWORD", config.Password)
 		t.Setenv("DB_INIT_RECEIPT_DIR", receipts)
-		if _, err := source.ExecContext(t.Context(), "INSERT INTO public.workspace VALUES ('workspace-education','education'); INSERT INTO public.lifecycle_probe VALUES (1,'preserved');"); err != nil {
+		if _, err := source.ExecContext(t.Context(), "INSERT INTO public.workspace VALUES ('workspace-gpagoda','gpagoda'); INSERT INTO public.lifecycle_probe VALUES (1,'preserved');"); err != nil {
+			t.Fatal(err)
+		}
+		if _, err := source.ExecContext(t.Context(), "INSERT INTO ichizen_deploy.data_bundle_receipts VALUES ($1,$2,$3,$4,$5)", target.TargetKey, "gpagoda-base", "2026.08.1", sha256Hex(bundleRaw), from.Release); err != nil {
 			t.Fatal(err)
 		}
 		for _, query := range []string{
@@ -367,9 +378,12 @@ CREATE TABLE ichizen_deploy.data_bundle_receipts (target_key text NOT NULL, bund
 			t.Fatal("recovered receipt missing reviewed evidence")
 		}
 		var count int
-		var note string
+		var note, seedRelease string
 		if err := source.QueryRowContext(t.Context(), "SELECT count(*),min(note) FROM public.lifecycle_probe").Scan(&count, &note); err != nil || count != 1 || note != "preserved" {
 			t.Fatal("upgrade lost/duplicated source data")
+		}
+		if err := source.QueryRowContext(t.Context(), "SELECT count(*),min(schema_release) FROM ichizen_deploy.data_bundle_receipts").Scan(&count, &seedRelease); err != nil || count != 1 || seedRelease != from.Release {
+			t.Fatal("upgrade rewrote/duplicated original seed receipt")
 		}
 		if _, err := run(); err != nil {
 			t.Fatal(err)

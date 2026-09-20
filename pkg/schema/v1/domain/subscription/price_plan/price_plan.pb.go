@@ -145,6 +145,108 @@ func (AmountBasis) EnumDescriptor() ([]byte, []int) {
 	return file_domain_subscription_price_plan_price_plan_proto_rawDescGZIP(), []int{1}
 }
 
+// A recorded pricing-clause mode. UNSPECIFIED means the clause was not
+// recorded; NONE is an explicit agreement that no escalation applies.
+type EscalationMode int32
+
+const (
+	EscalationMode_ESCALATION_MODE_UNSPECIFIED      EscalationMode = 0
+	EscalationMode_ESCALATION_MODE_NONE             EscalationMode = 1
+	EscalationMode_ESCALATION_MODE_FIXED_PERCENTAGE EscalationMode = 2
+)
+
+// Enum value maps for EscalationMode.
+var (
+	EscalationMode_name = map[int32]string{
+		0: "ESCALATION_MODE_UNSPECIFIED",
+		1: "ESCALATION_MODE_NONE",
+		2: "ESCALATION_MODE_FIXED_PERCENTAGE",
+	}
+	EscalationMode_value = map[string]int32{
+		"ESCALATION_MODE_UNSPECIFIED":      0,
+		"ESCALATION_MODE_NONE":             1,
+		"ESCALATION_MODE_FIXED_PERCENTAGE": 2,
+	}
+)
+
+func (x EscalationMode) Enum() *EscalationMode {
+	p := new(EscalationMode)
+	*p = x
+	return p
+}
+
+func (x EscalationMode) String() string {
+	return protoimpl.X.EnumStringOf(x.Descriptor(), protoreflect.EnumNumber(x))
+}
+
+func (EscalationMode) Descriptor() protoreflect.EnumDescriptor {
+	return file_domain_subscription_price_plan_price_plan_proto_enumTypes[2].Descriptor()
+}
+
+func (EscalationMode) Type() protoreflect.EnumType {
+	return &file_domain_subscription_price_plan_price_plan_proto_enumTypes[2]
+}
+
+func (x EscalationMode) Number() protoreflect.EnumNumber {
+	return protoreflect.EnumNumber(x)
+}
+
+// Deprecated: Use EscalationMode.Descriptor instead.
+func (EscalationMode) EnumDescriptor() ([]byte, []int) {
+	return file_domain_subscription_price_plan_price_plan_proto_rawDescGZIP(), []int{2}
+}
+
+// The boundary at which a recorded fixed percentage is intended to apply.
+// This release records the clause only; it does not alter billing.
+type EscalationScope int32
+
+const (
+	EscalationScope_ESCALATION_SCOPE_UNSPECIFIED      EscalationScope = 0
+	EscalationScope_ESCALATION_SCOPE_WITHIN_AGREEMENT EscalationScope = 1
+	EscalationScope_ESCALATION_SCOPE_ON_RENEWAL       EscalationScope = 2
+)
+
+// Enum value maps for EscalationScope.
+var (
+	EscalationScope_name = map[int32]string{
+		0: "ESCALATION_SCOPE_UNSPECIFIED",
+		1: "ESCALATION_SCOPE_WITHIN_AGREEMENT",
+		2: "ESCALATION_SCOPE_ON_RENEWAL",
+	}
+	EscalationScope_value = map[string]int32{
+		"ESCALATION_SCOPE_UNSPECIFIED":      0,
+		"ESCALATION_SCOPE_WITHIN_AGREEMENT": 1,
+		"ESCALATION_SCOPE_ON_RENEWAL":       2,
+	}
+)
+
+func (x EscalationScope) Enum() *EscalationScope {
+	p := new(EscalationScope)
+	*p = x
+	return p
+}
+
+func (x EscalationScope) String() string {
+	return protoimpl.X.EnumStringOf(x.Descriptor(), protoreflect.EnumNumber(x))
+}
+
+func (EscalationScope) Descriptor() protoreflect.EnumDescriptor {
+	return file_domain_subscription_price_plan_price_plan_proto_enumTypes[3].Descriptor()
+}
+
+func (EscalationScope) Type() protoreflect.EnumType {
+	return &file_domain_subscription_price_plan_price_plan_proto_enumTypes[3]
+}
+
+func (x EscalationScope) Number() protoreflect.EnumNumber {
+	return protoreflect.EnumNumber(x)
+}
+
+// Deprecated: Use EscalationScope.Descriptor instead.
+func (EscalationScope) EnumDescriptor() ([]byte, []int) {
+	return file_domain_subscription_price_plan_price_plan_proto_rawDescGZIP(), []int{3}
+}
+
 type PricePlan struct {
 	state              protoimpl.MessageState `protogen:"open.v1"`
 	Id                 string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
@@ -188,8 +290,15 @@ type PricePlan struct {
 	EntitledOccurrences *int32 `protobuf:"varint,26,opt,name=entitled_occurrences,json=entitledOccurrences,proto3,oneof" json:"entitled_occurrences,omitempty"`
 	// Drift-recovered column (DB had this; proto did not)
 	LegacyPriceListId *string `protobuf:"bytes,27,opt,name=legacy_price_list_id,json=legacyPriceListId,proto3,oneof" json:"legacy_price_list_id,omitempty"` // Legacy migration shim — links to old price-list IDs
-	unknownFields     protoimpl.UnknownFields
-	sizeCache         protoimpl.SizeCache
+	// Reusable escalation defaults. Values are copied into a subscription when
+	// that agreement is created; catalog edits never mutate an existing clause.
+	DefaultEscalationMode             *EscalationMode  `protobuf:"varint,28,opt,name=default_escalation_mode,json=defaultEscalationMode,proto3,enum=domain.subscription.v1.EscalationMode,oneof" json:"default_escalation_mode,omitempty"`
+	DefaultEscalationScope            *EscalationScope `protobuf:"varint,29,opt,name=default_escalation_scope,json=defaultEscalationScope,proto3,enum=domain.subscription.v1.EscalationScope,oneof" json:"default_escalation_scope,omitempty"`
+	DefaultEscalationRateBps          *int32           `protobuf:"varint,30,opt,name=default_escalation_rate_bps,json=defaultEscalationRateBps,proto3,oneof" json:"default_escalation_rate_bps,omitempty"` // 500 = 5.00%
+	DefaultEscalationFirstAfterMonths *int32           `protobuf:"varint,31,opt,name=default_escalation_first_after_months,json=defaultEscalationFirstAfterMonths,proto3,oneof" json:"default_escalation_first_after_months,omitempty"`
+	DefaultEscalationEveryMonths      *int32           `protobuf:"varint,32,opt,name=default_escalation_every_months,json=defaultEscalationEveryMonths,proto3,oneof" json:"default_escalation_every_months,omitempty"`
+	unknownFields                     protoimpl.UnknownFields
+	sizeCache                         protoimpl.SizeCache
 }
 
 func (x *PricePlan) Reset() {
@@ -402,6 +511,41 @@ func (x *PricePlan) GetLegacyPriceListId() string {
 		return *x.LegacyPriceListId
 	}
 	return ""
+}
+
+func (x *PricePlan) GetDefaultEscalationMode() EscalationMode {
+	if x != nil && x.DefaultEscalationMode != nil {
+		return *x.DefaultEscalationMode
+	}
+	return EscalationMode_ESCALATION_MODE_UNSPECIFIED
+}
+
+func (x *PricePlan) GetDefaultEscalationScope() EscalationScope {
+	if x != nil && x.DefaultEscalationScope != nil {
+		return *x.DefaultEscalationScope
+	}
+	return EscalationScope_ESCALATION_SCOPE_UNSPECIFIED
+}
+
+func (x *PricePlan) GetDefaultEscalationRateBps() int32 {
+	if x != nil && x.DefaultEscalationRateBps != nil {
+		return *x.DefaultEscalationRateBps
+	}
+	return 0
+}
+
+func (x *PricePlan) GetDefaultEscalationFirstAfterMonths() int32 {
+	if x != nil && x.DefaultEscalationFirstAfterMonths != nil {
+		return *x.DefaultEscalationFirstAfterMonths
+	}
+	return 0
+}
+
+func (x *PricePlan) GetDefaultEscalationEveryMonths() int32 {
+	if x != nil && x.DefaultEscalationEveryMonths != nil {
+		return *x.DefaultEscalationEveryMonths
+	}
+	return 0
 }
 
 type CreatePricePlanRequest struct {
@@ -1192,7 +1336,7 @@ var File_domain_subscription_price_plan_price_plan_proto protoreflect.FileDescri
 
 const file_domain_subscription_price_plan_price_plan_proto_rawDesc = "" +
 	"\n" +
-	"/domain/subscription/price_plan/price_plan.proto\x12\x16domain.subscription.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/search.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a#domain/subscription/plan/plan.proto\x1a\x10options/db.proto\"\x98\r\n" +
+	"/domain/subscription/price_plan/price_plan.proto\x12\x16domain.subscription.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/search.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a#domain/subscription/plan/plan.proto\x1a\x10options/db.proto\"\xf3\x11\n" +
 	"\tPricePlan\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x125\n" +
 	"\x04plan\x18\x02 \x01(\v2\x1c.domain.subscription.v1.PlanH\x00R\x04plan\x88\x01\x01\x12%\n" +
@@ -1227,7 +1371,12 @@ const file_domain_subscription_price_plan_price_plan_proto_rawDesc = "" +
 	"\n" +
 	"\x06client\x18\x01H\x10R\bclientId\x88\x01\x01\x126\n" +
 	"\x14entitled_occurrences\x18\x1a \x01(\x05H\x11R\x13entitledOccurrences\x88\x01\x01\x124\n" +
-	"\x14legacy_price_list_id\x18\x1b \x01(\tH\x12R\x11legacyPriceListId\x88\x01\x01:\x06\x8a\xb5\x18\x02\b\x01B\a\n" +
+	"\x14legacy_price_list_id\x18\x1b \x01(\tH\x12R\x11legacyPriceListId\x88\x01\x01\x12c\n" +
+	"\x17default_escalation_mode\x18\x1c \x01(\x0e2&.domain.subscription.v1.EscalationModeH\x13R\x15defaultEscalationMode\x88\x01\x01\x12f\n" +
+	"\x18default_escalation_scope\x18\x1d \x01(\x0e2'.domain.subscription.v1.EscalationScopeH\x14R\x16defaultEscalationScope\x88\x01\x01\x12B\n" +
+	"\x1bdefault_escalation_rate_bps\x18\x1e \x01(\x05H\x15R\x18defaultEscalationRateBps\x88\x01\x01\x12U\n" +
+	"%default_escalation_first_after_months\x18\x1f \x01(\x05H\x16R!defaultEscalationFirstAfterMonths\x88\x01\x01\x12J\n" +
+	"\x1fdefault_escalation_every_months\x18  \x01(\x05H\x17R\x1cdefaultEscalationEveryMonths\x88\x01\x01:\x06\x8a\xb5\x18\x02\b\x01B\a\n" +
 	"\x05_planB\a\n" +
 	"\x05_nameB\x0e\n" +
 	"\f_descriptionB\x0f\n" +
@@ -1247,7 +1396,12 @@ const file_domain_subscription_price_plan_price_plan_proto_rawDesc = "" +
 	"\n" +
 	"_client_idB\x17\n" +
 	"\x15_entitled_occurrencesB\x17\n" +
-	"\x15_legacy_price_list_id\"O\n" +
+	"\x15_legacy_price_list_idB\x1a\n" +
+	"\x18_default_escalation_modeB\x1b\n" +
+	"\x19_default_escalation_scopeB\x1e\n" +
+	"\x1c_default_escalation_rate_bpsB(\n" +
+	"&_default_escalation_first_after_monthsB\"\n" +
+	" _default_escalation_every_months\"O\n" +
 	"\x16CreatePricePlanRequest\x125\n" +
 	"\x04data\x18\x01 \x01(\v2!.domain.subscription.v1.PricePlanR\x04data\"\xa8\x01\n" +
 	"\x17CreatePricePlanResponse\x125\n" +
@@ -1335,7 +1489,15 @@ const file_domain_subscription_price_plan_price_plan_proto_rawDesc = "" +
 	"\x16AMOUNT_BASIS_PER_CYCLE\x10\x01\x12\x1e\n" +
 	"\x1aAMOUNT_BASIS_TOTAL_PACKAGE\x10\x02\x12#\n" +
 	"\x1fAMOUNT_BASIS_DERIVED_FROM_LINES\x10\x03\x12\x1f\n" +
-	"\x1bAMOUNT_BASIS_PER_OCCURRENCE\x10\x042\xf3\x06\n" +
+	"\x1bAMOUNT_BASIS_PER_OCCURRENCE\x10\x04*q\n" +
+	"\x0eEscalationMode\x12\x1f\n" +
+	"\x1bESCALATION_MODE_UNSPECIFIED\x10\x00\x12\x18\n" +
+	"\x14ESCALATION_MODE_NONE\x10\x01\x12$\n" +
+	" ESCALATION_MODE_FIXED_PERCENTAGE\x10\x02*{\n" +
+	"\x0fEscalationScope\x12 \n" +
+	"\x1cESCALATION_SCOPE_UNSPECIFIED\x10\x00\x12%\n" +
+	"!ESCALATION_SCOPE_WITHIN_AGREEMENT\x10\x01\x12\x1f\n" +
+	"\x1bESCALATION_SCOPE_ON_RENEWAL\x10\x022\xf3\x06\n" +
 	"\x16PricePlanDomainService\x12r\n" +
 	"\x0fCreatePricePlan\x12..domain.subscription.v1.CreatePricePlanRequest\x1a/.domain.subscription.v1.CreatePricePlanResponse\x12l\n" +
 	"\rReadPricePlan\x12,.domain.subscription.v1.ReadPricePlanRequest\x1a-.domain.subscription.v1.ReadPricePlanResponse\x12r\n" +
@@ -1358,85 +1520,89 @@ func file_domain_subscription_price_plan_price_plan_proto_rawDescGZIP() []byte {
 	return file_domain_subscription_price_plan_price_plan_proto_rawDescData
 }
 
-var file_domain_subscription_price_plan_price_plan_proto_enumTypes = make([]protoimpl.EnumInfo, 2)
+var file_domain_subscription_price_plan_price_plan_proto_enumTypes = make([]protoimpl.EnumInfo, 4)
 var file_domain_subscription_price_plan_price_plan_proto_msgTypes = make([]protoimpl.MessageInfo, 15)
 var file_domain_subscription_price_plan_price_plan_proto_goTypes = []any{
 	(BillingKind)(0),                         // 0: domain.subscription.v1.BillingKind
 	(AmountBasis)(0),                         // 1: domain.subscription.v1.AmountBasis
-	(*PricePlan)(nil),                        // 2: domain.subscription.v1.PricePlan
-	(*CreatePricePlanRequest)(nil),           // 3: domain.subscription.v1.CreatePricePlanRequest
-	(*CreatePricePlanResponse)(nil),          // 4: domain.subscription.v1.CreatePricePlanResponse
-	(*ReadPricePlanRequest)(nil),             // 5: domain.subscription.v1.ReadPricePlanRequest
-	(*ReadPricePlanResponse)(nil),            // 6: domain.subscription.v1.ReadPricePlanResponse
-	(*UpdatePricePlanRequest)(nil),           // 7: domain.subscription.v1.UpdatePricePlanRequest
-	(*UpdatePricePlanResponse)(nil),          // 8: domain.subscription.v1.UpdatePricePlanResponse
-	(*DeletePricePlanRequest)(nil),           // 9: domain.subscription.v1.DeletePricePlanRequest
-	(*DeletePricePlanResponse)(nil),          // 10: domain.subscription.v1.DeletePricePlanResponse
-	(*ListPricePlansRequest)(nil),            // 11: domain.subscription.v1.ListPricePlansRequest
-	(*ListPricePlansResponse)(nil),           // 12: domain.subscription.v1.ListPricePlansResponse
-	(*GetPricePlanListPageDataRequest)(nil),  // 13: domain.subscription.v1.GetPricePlanListPageDataRequest
-	(*GetPricePlanListPageDataResponse)(nil), // 14: domain.subscription.v1.GetPricePlanListPageDataResponse
-	(*GetPricePlanItemPageDataRequest)(nil),  // 15: domain.subscription.v1.GetPricePlanItemPageDataRequest
-	(*GetPricePlanItemPageDataResponse)(nil), // 16: domain.subscription.v1.GetPricePlanItemPageDataResponse
-	(*plan.Plan)(nil),                        // 17: domain.subscription.v1.Plan
-	(*common.Error)(nil),                     // 18: domain.common.v1.Error
-	(*common.PaginationRequest)(nil),         // 19: domain.common.v1.PaginationRequest
-	(*common.FilterRequest)(nil),             // 20: domain.common.v1.FilterRequest
-	(*common.SortRequest)(nil),               // 21: domain.common.v1.SortRequest
-	(*common.SearchRequest)(nil),             // 22: domain.common.v1.SearchRequest
-	(*common.PaginationResponse)(nil),        // 23: domain.common.v1.PaginationResponse
-	(*common.SearchResult)(nil),              // 24: domain.common.v1.SearchResult
+	(EscalationMode)(0),                      // 2: domain.subscription.v1.EscalationMode
+	(EscalationScope)(0),                     // 3: domain.subscription.v1.EscalationScope
+	(*PricePlan)(nil),                        // 4: domain.subscription.v1.PricePlan
+	(*CreatePricePlanRequest)(nil),           // 5: domain.subscription.v1.CreatePricePlanRequest
+	(*CreatePricePlanResponse)(nil),          // 6: domain.subscription.v1.CreatePricePlanResponse
+	(*ReadPricePlanRequest)(nil),             // 7: domain.subscription.v1.ReadPricePlanRequest
+	(*ReadPricePlanResponse)(nil),            // 8: domain.subscription.v1.ReadPricePlanResponse
+	(*UpdatePricePlanRequest)(nil),           // 9: domain.subscription.v1.UpdatePricePlanRequest
+	(*UpdatePricePlanResponse)(nil),          // 10: domain.subscription.v1.UpdatePricePlanResponse
+	(*DeletePricePlanRequest)(nil),           // 11: domain.subscription.v1.DeletePricePlanRequest
+	(*DeletePricePlanResponse)(nil),          // 12: domain.subscription.v1.DeletePricePlanResponse
+	(*ListPricePlansRequest)(nil),            // 13: domain.subscription.v1.ListPricePlansRequest
+	(*ListPricePlansResponse)(nil),           // 14: domain.subscription.v1.ListPricePlansResponse
+	(*GetPricePlanListPageDataRequest)(nil),  // 15: domain.subscription.v1.GetPricePlanListPageDataRequest
+	(*GetPricePlanListPageDataResponse)(nil), // 16: domain.subscription.v1.GetPricePlanListPageDataResponse
+	(*GetPricePlanItemPageDataRequest)(nil),  // 17: domain.subscription.v1.GetPricePlanItemPageDataRequest
+	(*GetPricePlanItemPageDataResponse)(nil), // 18: domain.subscription.v1.GetPricePlanItemPageDataResponse
+	(*plan.Plan)(nil),                        // 19: domain.subscription.v1.Plan
+	(*common.Error)(nil),                     // 20: domain.common.v1.Error
+	(*common.PaginationRequest)(nil),         // 21: domain.common.v1.PaginationRequest
+	(*common.FilterRequest)(nil),             // 22: domain.common.v1.FilterRequest
+	(*common.SortRequest)(nil),               // 23: domain.common.v1.SortRequest
+	(*common.SearchRequest)(nil),             // 24: domain.common.v1.SearchRequest
+	(*common.PaginationResponse)(nil),        // 25: domain.common.v1.PaginationResponse
+	(*common.SearchResult)(nil),              // 26: domain.common.v1.SearchResult
 }
 var file_domain_subscription_price_plan_price_plan_proto_depIdxs = []int32{
-	17, // 0: domain.subscription.v1.PricePlan.plan:type_name -> domain.subscription.v1.Plan
+	19, // 0: domain.subscription.v1.PricePlan.plan:type_name -> domain.subscription.v1.Plan
 	0,  // 1: domain.subscription.v1.PricePlan.billing_kind:type_name -> domain.subscription.v1.BillingKind
 	1,  // 2: domain.subscription.v1.PricePlan.amount_basis:type_name -> domain.subscription.v1.AmountBasis
-	2,  // 3: domain.subscription.v1.CreatePricePlanRequest.data:type_name -> domain.subscription.v1.PricePlan
-	2,  // 4: domain.subscription.v1.CreatePricePlanResponse.data:type_name -> domain.subscription.v1.PricePlan
-	18, // 5: domain.subscription.v1.CreatePricePlanResponse.error:type_name -> domain.common.v1.Error
-	2,  // 6: domain.subscription.v1.ReadPricePlanRequest.data:type_name -> domain.subscription.v1.PricePlan
-	2,  // 7: domain.subscription.v1.ReadPricePlanResponse.data:type_name -> domain.subscription.v1.PricePlan
-	18, // 8: domain.subscription.v1.ReadPricePlanResponse.error:type_name -> domain.common.v1.Error
-	2,  // 9: domain.subscription.v1.UpdatePricePlanRequest.data:type_name -> domain.subscription.v1.PricePlan
-	2,  // 10: domain.subscription.v1.UpdatePricePlanResponse.data:type_name -> domain.subscription.v1.PricePlan
-	18, // 11: domain.subscription.v1.UpdatePricePlanResponse.error:type_name -> domain.common.v1.Error
-	2,  // 12: domain.subscription.v1.DeletePricePlanRequest.data:type_name -> domain.subscription.v1.PricePlan
-	18, // 13: domain.subscription.v1.DeletePricePlanResponse.error:type_name -> domain.common.v1.Error
-	19, // 14: domain.subscription.v1.ListPricePlansRequest.pagination:type_name -> domain.common.v1.PaginationRequest
-	20, // 15: domain.subscription.v1.ListPricePlansRequest.filters:type_name -> domain.common.v1.FilterRequest
-	21, // 16: domain.subscription.v1.ListPricePlansRequest.sort:type_name -> domain.common.v1.SortRequest
-	22, // 17: domain.subscription.v1.ListPricePlansRequest.search:type_name -> domain.common.v1.SearchRequest
-	2,  // 18: domain.subscription.v1.ListPricePlansResponse.data:type_name -> domain.subscription.v1.PricePlan
-	18, // 19: domain.subscription.v1.ListPricePlansResponse.error:type_name -> domain.common.v1.Error
-	19, // 20: domain.subscription.v1.GetPricePlanListPageDataRequest.pagination:type_name -> domain.common.v1.PaginationRequest
-	20, // 21: domain.subscription.v1.GetPricePlanListPageDataRequest.filters:type_name -> domain.common.v1.FilterRequest
-	21, // 22: domain.subscription.v1.GetPricePlanListPageDataRequest.sort:type_name -> domain.common.v1.SortRequest
-	22, // 23: domain.subscription.v1.GetPricePlanListPageDataRequest.search:type_name -> domain.common.v1.SearchRequest
-	2,  // 24: domain.subscription.v1.GetPricePlanListPageDataResponse.price_plan_list:type_name -> domain.subscription.v1.PricePlan
-	18, // 25: domain.subscription.v1.GetPricePlanListPageDataResponse.error:type_name -> domain.common.v1.Error
-	23, // 26: domain.subscription.v1.GetPricePlanListPageDataResponse.pagination:type_name -> domain.common.v1.PaginationResponse
-	24, // 27: domain.subscription.v1.GetPricePlanListPageDataResponse.search_results:type_name -> domain.common.v1.SearchResult
-	2,  // 28: domain.subscription.v1.GetPricePlanItemPageDataResponse.price_plan:type_name -> domain.subscription.v1.PricePlan
-	18, // 29: domain.subscription.v1.GetPricePlanItemPageDataResponse.error:type_name -> domain.common.v1.Error
-	3,  // 30: domain.subscription.v1.PricePlanDomainService.CreatePricePlan:input_type -> domain.subscription.v1.CreatePricePlanRequest
-	5,  // 31: domain.subscription.v1.PricePlanDomainService.ReadPricePlan:input_type -> domain.subscription.v1.ReadPricePlanRequest
-	7,  // 32: domain.subscription.v1.PricePlanDomainService.UpdatePricePlan:input_type -> domain.subscription.v1.UpdatePricePlanRequest
-	9,  // 33: domain.subscription.v1.PricePlanDomainService.DeletePricePlan:input_type -> domain.subscription.v1.DeletePricePlanRequest
-	11, // 34: domain.subscription.v1.PricePlanDomainService.ListPricePlans:input_type -> domain.subscription.v1.ListPricePlansRequest
-	13, // 35: domain.subscription.v1.PricePlanDomainService.GetPricePlanListPageData:input_type -> domain.subscription.v1.GetPricePlanListPageDataRequest
-	15, // 36: domain.subscription.v1.PricePlanDomainService.GetPricePlanItemPageData:input_type -> domain.subscription.v1.GetPricePlanItemPageDataRequest
-	4,  // 37: domain.subscription.v1.PricePlanDomainService.CreatePricePlan:output_type -> domain.subscription.v1.CreatePricePlanResponse
-	6,  // 38: domain.subscription.v1.PricePlanDomainService.ReadPricePlan:output_type -> domain.subscription.v1.ReadPricePlanResponse
-	8,  // 39: domain.subscription.v1.PricePlanDomainService.UpdatePricePlan:output_type -> domain.subscription.v1.UpdatePricePlanResponse
-	10, // 40: domain.subscription.v1.PricePlanDomainService.DeletePricePlan:output_type -> domain.subscription.v1.DeletePricePlanResponse
-	12, // 41: domain.subscription.v1.PricePlanDomainService.ListPricePlans:output_type -> domain.subscription.v1.ListPricePlansResponse
-	14, // 42: domain.subscription.v1.PricePlanDomainService.GetPricePlanListPageData:output_type -> domain.subscription.v1.GetPricePlanListPageDataResponse
-	16, // 43: domain.subscription.v1.PricePlanDomainService.GetPricePlanItemPageData:output_type -> domain.subscription.v1.GetPricePlanItemPageDataResponse
-	37, // [37:44] is the sub-list for method output_type
-	30, // [30:37] is the sub-list for method input_type
-	30, // [30:30] is the sub-list for extension type_name
-	30, // [30:30] is the sub-list for extension extendee
-	0,  // [0:30] is the sub-list for field type_name
+	2,  // 3: domain.subscription.v1.PricePlan.default_escalation_mode:type_name -> domain.subscription.v1.EscalationMode
+	3,  // 4: domain.subscription.v1.PricePlan.default_escalation_scope:type_name -> domain.subscription.v1.EscalationScope
+	4,  // 5: domain.subscription.v1.CreatePricePlanRequest.data:type_name -> domain.subscription.v1.PricePlan
+	4,  // 6: domain.subscription.v1.CreatePricePlanResponse.data:type_name -> domain.subscription.v1.PricePlan
+	20, // 7: domain.subscription.v1.CreatePricePlanResponse.error:type_name -> domain.common.v1.Error
+	4,  // 8: domain.subscription.v1.ReadPricePlanRequest.data:type_name -> domain.subscription.v1.PricePlan
+	4,  // 9: domain.subscription.v1.ReadPricePlanResponse.data:type_name -> domain.subscription.v1.PricePlan
+	20, // 10: domain.subscription.v1.ReadPricePlanResponse.error:type_name -> domain.common.v1.Error
+	4,  // 11: domain.subscription.v1.UpdatePricePlanRequest.data:type_name -> domain.subscription.v1.PricePlan
+	4,  // 12: domain.subscription.v1.UpdatePricePlanResponse.data:type_name -> domain.subscription.v1.PricePlan
+	20, // 13: domain.subscription.v1.UpdatePricePlanResponse.error:type_name -> domain.common.v1.Error
+	4,  // 14: domain.subscription.v1.DeletePricePlanRequest.data:type_name -> domain.subscription.v1.PricePlan
+	20, // 15: domain.subscription.v1.DeletePricePlanResponse.error:type_name -> domain.common.v1.Error
+	21, // 16: domain.subscription.v1.ListPricePlansRequest.pagination:type_name -> domain.common.v1.PaginationRequest
+	22, // 17: domain.subscription.v1.ListPricePlansRequest.filters:type_name -> domain.common.v1.FilterRequest
+	23, // 18: domain.subscription.v1.ListPricePlansRequest.sort:type_name -> domain.common.v1.SortRequest
+	24, // 19: domain.subscription.v1.ListPricePlansRequest.search:type_name -> domain.common.v1.SearchRequest
+	4,  // 20: domain.subscription.v1.ListPricePlansResponse.data:type_name -> domain.subscription.v1.PricePlan
+	20, // 21: domain.subscription.v1.ListPricePlansResponse.error:type_name -> domain.common.v1.Error
+	21, // 22: domain.subscription.v1.GetPricePlanListPageDataRequest.pagination:type_name -> domain.common.v1.PaginationRequest
+	22, // 23: domain.subscription.v1.GetPricePlanListPageDataRequest.filters:type_name -> domain.common.v1.FilterRequest
+	23, // 24: domain.subscription.v1.GetPricePlanListPageDataRequest.sort:type_name -> domain.common.v1.SortRequest
+	24, // 25: domain.subscription.v1.GetPricePlanListPageDataRequest.search:type_name -> domain.common.v1.SearchRequest
+	4,  // 26: domain.subscription.v1.GetPricePlanListPageDataResponse.price_plan_list:type_name -> domain.subscription.v1.PricePlan
+	20, // 27: domain.subscription.v1.GetPricePlanListPageDataResponse.error:type_name -> domain.common.v1.Error
+	25, // 28: domain.subscription.v1.GetPricePlanListPageDataResponse.pagination:type_name -> domain.common.v1.PaginationResponse
+	26, // 29: domain.subscription.v1.GetPricePlanListPageDataResponse.search_results:type_name -> domain.common.v1.SearchResult
+	4,  // 30: domain.subscription.v1.GetPricePlanItemPageDataResponse.price_plan:type_name -> domain.subscription.v1.PricePlan
+	20, // 31: domain.subscription.v1.GetPricePlanItemPageDataResponse.error:type_name -> domain.common.v1.Error
+	5,  // 32: domain.subscription.v1.PricePlanDomainService.CreatePricePlan:input_type -> domain.subscription.v1.CreatePricePlanRequest
+	7,  // 33: domain.subscription.v1.PricePlanDomainService.ReadPricePlan:input_type -> domain.subscription.v1.ReadPricePlanRequest
+	9,  // 34: domain.subscription.v1.PricePlanDomainService.UpdatePricePlan:input_type -> domain.subscription.v1.UpdatePricePlanRequest
+	11, // 35: domain.subscription.v1.PricePlanDomainService.DeletePricePlan:input_type -> domain.subscription.v1.DeletePricePlanRequest
+	13, // 36: domain.subscription.v1.PricePlanDomainService.ListPricePlans:input_type -> domain.subscription.v1.ListPricePlansRequest
+	15, // 37: domain.subscription.v1.PricePlanDomainService.GetPricePlanListPageData:input_type -> domain.subscription.v1.GetPricePlanListPageDataRequest
+	17, // 38: domain.subscription.v1.PricePlanDomainService.GetPricePlanItemPageData:input_type -> domain.subscription.v1.GetPricePlanItemPageDataRequest
+	6,  // 39: domain.subscription.v1.PricePlanDomainService.CreatePricePlan:output_type -> domain.subscription.v1.CreatePricePlanResponse
+	8,  // 40: domain.subscription.v1.PricePlanDomainService.ReadPricePlan:output_type -> domain.subscription.v1.ReadPricePlanResponse
+	10, // 41: domain.subscription.v1.PricePlanDomainService.UpdatePricePlan:output_type -> domain.subscription.v1.UpdatePricePlanResponse
+	12, // 42: domain.subscription.v1.PricePlanDomainService.DeletePricePlan:output_type -> domain.subscription.v1.DeletePricePlanResponse
+	14, // 43: domain.subscription.v1.PricePlanDomainService.ListPricePlans:output_type -> domain.subscription.v1.ListPricePlansResponse
+	16, // 44: domain.subscription.v1.PricePlanDomainService.GetPricePlanListPageData:output_type -> domain.subscription.v1.GetPricePlanListPageDataResponse
+	18, // 45: domain.subscription.v1.PricePlanDomainService.GetPricePlanItemPageData:output_type -> domain.subscription.v1.GetPricePlanItemPageDataResponse
+	39, // [39:46] is the sub-list for method output_type
+	32, // [32:39] is the sub-list for method input_type
+	32, // [32:32] is the sub-list for extension type_name
+	32, // [32:32] is the sub-list for extension extendee
+	0,  // [0:32] is the sub-list for field type_name
 }
 
 func init() { file_domain_subscription_price_plan_price_plan_proto_init() }
@@ -1459,7 +1625,7 @@ func file_domain_subscription_price_plan_price_plan_proto_init() {
 		File: protoimpl.DescBuilder{
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_domain_subscription_price_plan_price_plan_proto_rawDesc), len(file_domain_subscription_price_plan_price_plan_proto_rawDesc)),
-			NumEnums:      2,
+			NumEnums:      4,
 			NumMessages:   15,
 			NumExtensions: 0,
 			NumServices:   1,

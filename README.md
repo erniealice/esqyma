@@ -223,56 +223,38 @@ Do this in two migrations to avoid breaking running services:
 `db:diff` produces the right SQL for each step when you run it twice with
 different drafts.
 
-### Rollback
+### Fresh installs and existing database upgrades
 
-`atlas migrate down` regenerates the inverse SQL from a snapshot Atlas takes
-before each apply — you don't write `.down.sql` files anymore. Run from the
-package directory:
+Use the explicit release runner from the operator machine. Start with a read-only plan:
 
 ```bash
-atlas migrate down --env postgres
+pnpm db:init -- --target CLIENT/TARGET --schema-release postgres/YYYY.MM.N
 ```
 
-### First-time apply on a brand new database
+For an existing managed database, also specify `--upgrade-from postgres/YYYY.MM.P`.
+Apply only after reviewing the plan and satisfying the target's backup/identity requirements.
+Use `--verify` for read-only exact release, catalog, tracker and bundle verification; a successful
+plan or an Atlas pending-count check alone does not prove readiness.
 
-`pnpm db:apply` detects an empty DB on first run and executes the baseline
-(`migrations/postgres/<earliest>_baseline.sql`) and every migration after it.
-On a DB that already has the schema (e.g. an existing dev DB or a prod
-clone), it stamps the baseline as already-applied and only runs migrations
-created after the adoption date.
+A fresh installation uses the selected release's complete immutable bootstrap. The runner refuses
+untracked nonempty databases; it never automatically stamps an existing schema as migrated.
+There is no automatic downgrade. Recovery uses reviewed forward correction or a separately
+authorized restore, preserving the original migration history and receipts.
 
-### Schema check
-
-```bash
-pnpm db:status     # quick — does live match expected version?
-pnpm db:inspect    # full schema dump for diffing against another env
-```
-
-There's no automated `db:check` because Atlas's free tier restricts
-`atlas schema diff` against SQL files. If you need a strict CI gate, run
-`pnpm db:status` and assert "Already at latest version" in your pipeline.
-
----
+See [the operator contract](cmd/schema-release/README.md) for commands, supported transitions,
+backup evidence and current qualification limits.
 
 ## Installing Atlas
 
-One-time install, then everyone on the machine can use it. Binary size: ~117 MB.
+Use the repository-pinned installer from this package:
 
 ```bash
-curl -sSf https://atlasgo.sh | sudo sh    # installs to /usr/local/bin/atlas
-# or:
-brew install ariga/tap/atlas              # if you prefer brew
+pnpm atlas:install
 ```
 
-If you can't get admin: install into your home directory and add it to PATH:
-```bash
-mkdir -p $HOME/.local/bin
-curl -L https://release.ariga.io/atlas/atlas-darwin-arm64-latest \
-  -o $HOME/.local/bin/atlas && chmod +x $HOME/.local/bin/atlas
-echo 'export PATH=$HOME/.local/bin:$PATH' >> ~/.zshrc && source ~/.zshrc
-```
-
-Verify: `atlas version`
+The runner checks Atlas 1.3.0 and its platform-specific binary checksum. It does not use a global
+latest/Homebrew install. Supported pinned platforms are macOS amd64 and Linux amd64; unsupported
+platforms fail closed.
 
 ---
 
