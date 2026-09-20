@@ -25,18 +25,19 @@ type targetManifest struct {
 	fleetPath     string
 	Access        *databaseAccess `json:"access,omitempty"`
 	rawDigest     string
-	FormatVersion int             `json:"format_version"`
-	TargetKey     string          `json:"target_key"`
-	Scope         string          `json:"scope"`
-	AllowCreate   bool            `json:"allow_create"`
-	ExpectedEmpty bool            `json:"expected_empty"`
-	SchemaRelease string          `json:"schema_release"`
-	Database      targetDatabase  `json:"database"`
-	BusinessType  string          `json:"business_type"`
-	Workspace     targetWorkspace `json:"workspace"`
-	SeedProfile   string          `json:"seed_profile"`
-	Bundles       []string        `json:"bundles"`
-	Upgrade       *upgradeTarget  `json:"upgrade,omitempty"`
+	FormatVersion int                   `json:"format_version"`
+	TargetKey     string                `json:"target_key"`
+	Scope         string                `json:"scope"`
+	AllowCreate   bool                  `json:"allow_create"`
+	ExpectedEmpty bool                  `json:"expected_empty"`
+	SchemaRelease string                `json:"schema_release"`
+	Database      targetDatabase        `json:"database"`
+	BusinessType  string                `json:"business_type"`
+	Workspace     targetWorkspace       `json:"workspace"`
+	SeedProfile   string                `json:"seed_profile"`
+	Bundles       []string              `json:"bundles"`
+	Upgrade       *upgradeTarget        `json:"upgrade,omitempty"`
+	Adoption      *legacyAdoptionTarget `json:"adoption,omitempty"`
 }
 
 type targetDatabase struct {
@@ -106,11 +107,24 @@ func (target targetManifest) validate(expectedKey string) error {
 	if target.AllowCreate && !target.ExpectedEmpty {
 		return errors.New("create-if-absent requires expected_empty=true")
 	}
+	if target.Adoption != nil {
+		if target.Scope != "remote" && target.Scope != "disposable" {
+			return errors.New("adoption target must be remote or disposable")
+		}
+		if target.AllowCreate || target.ExpectedEmpty {
+			return errors.New("adoption target cannot allow create or expect empty")
+		}
+	}
 	if !databasePattern.MatchString(target.Database.Name) || !safeRelativePath(target.Database.EnvFile) {
 		return errors.New("invalid target database configuration")
 	}
 	if target.BusinessType == "" || target.SeedProfile == "" || target.Workspace.ID == "" || !slugPattern.MatchString(target.Workspace.Slug) {
 		return errors.New("invalid target business/workspace/profile configuration")
+	}
+	if target.Adoption != nil {
+		if err := target.Adoption.validate(target.SchemaRelease); err != nil {
+			return err
+		}
 	}
 	seen := make(map[string]bool, len(target.Bundles))
 	for _, path := range target.Bundles {

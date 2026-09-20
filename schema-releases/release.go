@@ -66,12 +66,14 @@ type RequiredBundle struct {
 }
 
 type Verification struct {
-	Release            string
-	AtlasHead          string
-	RevisionCount      int
-	TrackerFingerprint string
-	CatalogFingerprint string
-	Bundles            int
+	Release                string
+	AtlasHead              string
+	RevisionCount          int
+	TrackerFingerprint     string
+	CatalogFingerprint     string
+	BaseCatalogFingerprint string
+	OverlayFingerprint     string
+	Bundles                int
 }
 
 func Load(release string) (Manifest, []byte, error) {
@@ -179,6 +181,21 @@ func ProfileAllowed(manifest Manifest, profile string) bool {
 }
 
 func VerifyDatabase(ctx context.Context, db *sql.DB, manifest Manifest, required []RequiredBundle) (Verification, error) {
+	return verifyDatabase(ctx, db, manifest, required, "", "")
+}
+
+// VerifyDatabaseWithCatalogProof verifies a target whose application schema is
+// the Esqyma base projection plus an explicitly pinned platform/security
+// overlay. The normal VerifyDatabase path remains the strict fresh-install
+// proof and is intentionally unchanged.
+func VerifyDatabaseWithCatalogProof(ctx context.Context, db *sql.DB, manifest Manifest, required []RequiredBundle, baseCatalog, overlay string) (Verification, error) {
+	if !hexPattern.MatchString(baseCatalog) || !hexPattern.MatchString(overlay) {
+		return Verification{}, errors.New("schema release verify: base and overlay fingerprints are required")
+	}
+	return verifyDatabase(ctx, db, manifest, required, baseCatalog, overlay)
+}
+
+func verifyDatabase(ctx context.Context, db *sql.DB, manifest Manifest, required []RequiredBundle, expectedBase, expectedOverlay string) (Verification, error) {
 	if db == nil {
 		return Verification{}, errors.New("schema release verify: nil database")
 	}
@@ -211,12 +228,33 @@ func VerifyDatabase(ctx context.Context, db *sql.DB, manifest Manifest, required
 		return Verification{}, fmt.Errorf("schema release verify: Atlas state is not an accepted installation: head=%s count=%d fingerprint=%s", head, count, trackerFingerprint)
 	}
 
-	catalogFingerprint, err := CatalogFingerprint(ctx, db)
-	if err != nil {
-		return Verification{}, err
-	}
-	if catalogFingerprint != manifest.Bootstrap.CatalogFingerprint {
-		return Verification{}, fmt.Errorf("schema release verify: catalog fingerprint mismatch: got %s", catalogFingerprint)
+	catalogFingerprint := ""
+	baseCatalogFingerprint := ""
+	overlayFingerprint := ""
+	if expectedBase == "" && expectedOverlay == "" {
+		catalogFingerprint, err = CatalogFingerprint(ctx, db)
+		if err != nil {
+			return Verification{}, err
+		}
+		if catalogFingerprint != manifest.Bootstrap.CatalogFingerprint {
+			return Verification{}, fmt.Errorf("schema release verify: catalog fingerprint mismatch: got %s", catalogFingerprint)
+		}
+	} else {
+		baseCatalogFingerprint, err = BaseCatalogFingerprint(ctx, db)
+		if err != nil {
+			return Verification{}, err
+		}
+		if baseCatalogFingerprint != expectedBase {
+			return Verification{}, fmt.Errorf("schema release verify: base catalog fingerprint mismatch: got %s", baseCatalogFingerprint)
+		}
+		overlayFingerprint, err = OverlayFingerprint(ctx, db)
+		if err != nil {
+			return Verification{}, err
+		}
+		if overlayFingerprint != expectedOverlay {
+			return Verification{}, fmt.Errorf("schema release verify: security overlay fingerprint mismatch: got %s", overlayFingerprint)
+		}
+		catalogFingerprint = baseCatalogFingerprint
 	}
 
 	for _, bundle := range required {
@@ -240,12 +278,14 @@ func VerifyDatabase(ctx context.Context, db *sql.DB, manifest Manifest, required
 	}
 
 	return Verification{
-		Release:            manifest.Release,
-		AtlasHead:          head,
-		RevisionCount:      count,
-		TrackerFingerprint: trackerFingerprint,
-		CatalogFingerprint: catalogFingerprint,
-		Bundles:            len(required),
+		Release:                manifest.Release,
+		AtlasHead:              head,
+		RevisionCount:          count,
+		TrackerFingerprint:     trackerFingerprint,
+		CatalogFingerprint:     catalogFingerprint,
+		BaseCatalogFingerprint: baseCatalogFingerprint,
+		OverlayFingerprint:     overlayFingerprint,
+		Bundles:                len(required),
 	}, nil
 }
 
@@ -276,17 +316,56 @@ func AtlasTrackerFingerprint(ctx context.Context, db *sql.DB) (string, error) {
 }
 
 func CatalogFingerprint(ctx context.Context, db *sql.DB) (string, error) {
-	rows, err := db.QueryContext(ctx, catalogFingerprintQuery)
+	return fingerprintQuery(ctx, db, catalogFingerprintQuery, "catalog")
+}
+
+// BaseCatalogFingerprint is the cross-version application-schema projection used
+// by target-specific legacy adoption. It intentionally excludes Supabase
+// platform schemas and the security overlay so PostgreSQL 17/18 formatting and
+// platform-owned objects do not masquerade as an Esqyma schema change.
+func BaseCatalogFingerprint(ctx context.Context, db *sql.DB) (string, error) {
+	return fingerprintQueryUTC(ctx, db, baseCatalogFingerprintQuery, "base catalog")
+}
+
+// OverlayFingerprint identifies the target-owned security posture that is not
+// part of a fresh Esqyma bootstrap: public RLS flags, event triggers, and the
+// MMIS/Supabase RLS helper function.
+func OverlayFingerprint(ctx context.Context, db *sql.DB) (string, error) {
+	return fingerprintQuery(ctx, db, overlayFingerprintQuery, "security overlay")
+}
+
+func fingerprintQuery(ctx context.Context, db *sql.DB, query, label string) (string, error) {
+	rows, err := db.QueryContext(ctx, query)
 	if err != nil {
-		return "", fmt.Errorf("schema release verify: catalog query: %w", err)
+		return "", fmt.Errorf("schema release verify: %s query: %w", label, err)
 	}
 	defer rows.Close()
+	return fingerprintRows(rows, label)
+}
 
+func fingerprintQueryUTC(ctx context.Context, db *sql.DB, query, label string) (string, error) {
+	tx, err := db.BeginTx(ctx, &sql.TxOptions{ReadOnly: true, Isolation: sql.LevelRepeatableRead})
+	if err != nil {
+		return "", fmt.Errorf("schema release verify: start %s transaction: %w", label, err)
+	}
+	defer tx.Rollback()
+	if _, err := tx.ExecContext(ctx, "SET LOCAL TIME ZONE 'UTC'"); err != nil {
+		return "", fmt.Errorf("schema release verify: set %s timezone: %w", label, err)
+	}
+	rows, err := tx.QueryContext(ctx, query)
+	if err != nil {
+		return "", fmt.Errorf("schema release verify: %s query: %w", label, err)
+	}
+	defer rows.Close()
+	return fingerprintRows(rows, label)
+}
+
+func fingerprintRows(rows *sql.Rows, label string) (string, error) {
 	hash := sha256.New()
 	for rows.Next() {
 		var kind, schemaName, objectName, detail string
 		if err := rows.Scan(&kind, &schemaName, &objectName, &detail); err != nil {
-			return "", fmt.Errorf("schema release verify: catalog scan: %w", err)
+			return "", fmt.Errorf("schema release verify: %s scan: %w", label, err)
 		}
 		writeFingerprintField(hash, kind)
 		writeFingerprintField(hash, schemaName)
@@ -294,7 +373,7 @@ func CatalogFingerprint(ctx context.Context, db *sql.DB) (string, error) {
 		writeFingerprintField(hash, detail)
 	}
 	if err := rows.Err(); err != nil {
-		return "", fmt.Errorf("schema release verify: catalog iterate: %w", err)
+		return "", fmt.Errorf("schema release verify: %s iterate: %w", label, err)
 	}
 	return hex.EncodeToString(hash.Sum(nil)), nil
 }
@@ -395,6 +474,102 @@ WITH user_schemas AS (
                    seq.seqmax::text, seq.seqmin::text, seq.seqcache::text, seq.seqcycle::text)
   FROM pg_sequence seq JOIN pg_class c ON c.oid = seq.seqrelid JOIN pg_namespace n ON n.oid = c.relnamespace
   JOIN user_schemas s ON s.oid = n.oid
+)
+SELECT kind, schema_name, object_name, detail
+FROM objects
+ORDER BY kind, schema_name, object_name, detail`
+
+// Keep the base projection deliberately narrower than the fresh-install
+// fingerprint. A remote Supabase database has platform schemas and a security
+// function/event-trigger overlay that a local Esqyma bootstrap does not carry.
+// PostgreSQL 18 also exposes generated NOT NULL constraints that PostgreSQL 17
+// renders as column nullability; excluding contype 'n' makes that difference
+// explicit rather than weakening the full fresh-install proof.
+const baseCatalogFingerprintQuery = `
+WITH user_schemas AS (
+  SELECT oid, nspname
+  FROM pg_namespace
+  WHERE nspname IN ('public', 'audit_trail')
+), objects AS (
+  SELECT '00-schema'::text AS kind, s.nspname AS schema_name, s.nspname AS object_name, ''::text AS detail
+  FROM user_schemas s
+  UNION ALL
+  SELECT '01-extension', n.nspname, e.extname, ''::text
+  FROM pg_extension e JOIN pg_namespace n ON n.oid = e.extnamespace JOIN user_schemas s ON s.oid = n.oid
+  UNION ALL
+  SELECT '02-relation', n.nspname, c.relname,
+         concat_ws('|', c.relkind, c.relpersistence, COALESCE(array_to_string(c.reloptions, ','), ''),
+                   COALESCE(pg_get_expr(c.relpartbound, c.oid, true), ''),
+                   CASE WHEN c.relkind IN ('v','m') THEN pg_get_viewdef(c.oid, true) ELSE '' END)
+  FROM pg_class c JOIN pg_namespace n ON n.oid = c.relnamespace JOIN user_schemas s ON s.oid = n.oid
+  WHERE c.relkind IN ('r','p','v','m','S','f')
+  UNION ALL
+  SELECT '03-column', n.nspname, c.relname || '.' || a.attname,
+         concat_ws('|', a.attnum::text, format_type(a.atttypid, a.atttypmod), a.attnotnull::text,
+                   COALESCE(pg_get_expr(d.adbin, d.adrelid, true), ''), a.attidentity, a.attgenerated,
+                   COALESCE(coll.collname, ''))
+  FROM pg_attribute a
+  JOIN pg_class c ON c.oid = a.attrelid
+  JOIN pg_namespace n ON n.oid = c.relnamespace
+  JOIN user_schemas s ON s.oid = n.oid
+  LEFT JOIN pg_attrdef d ON d.adrelid = a.attrelid AND d.adnum = a.attnum
+  LEFT JOIN pg_collation coll ON coll.oid = a.attcollation AND a.attcollation <> 0
+  WHERE a.attnum > 0 AND NOT a.attisdropped AND c.relkind IN ('r','p','v','m','f')
+  UNION ALL
+  SELECT '04-constraint', n.nspname, c.relname || '.' || con.conname,
+         concat_ws('|', con.contype, con.convalidated::text, con.condeferrable::text, con.condeferred::text,
+                   pg_get_constraintdef(con.oid, true))
+  FROM pg_constraint con JOIN pg_class c ON c.oid = con.conrelid
+  JOIN pg_namespace n ON n.oid = c.relnamespace JOIN user_schemas s ON s.oid = n.oid
+  WHERE con.contype <> 'n'
+  UNION ALL
+  SELECT '05-index', n.nspname, idx.relname, pg_get_indexdef(i.indexrelid, 0, true)
+  FROM pg_index i JOIN pg_class idx ON idx.oid = i.indexrelid JOIN pg_namespace n ON n.oid = idx.relnamespace
+  JOIN user_schemas s ON s.oid = n.oid
+  UNION ALL
+  SELECT '06-trigger', n.nspname, c.relname || '.' || t.tgname, pg_get_triggerdef(t.oid, true)
+  FROM pg_trigger t JOIN pg_class c ON c.oid = t.tgrelid JOIN pg_namespace n ON n.oid = c.relnamespace
+  JOIN user_schemas s ON s.oid = n.oid WHERE NOT t.tgisinternal
+  UNION ALL
+  SELECT '07-policy', n.nspname, c.relname || '.' || p.polname,
+         concat_ws('|', p.polcmd, p.polpermissive::text, COALESCE(pg_get_expr(p.polqual, p.polrelid, true), ''),
+                   COALESCE(pg_get_expr(p.polwithcheck, p.polrelid, true), ''))
+  FROM pg_policy p JOIN pg_class c ON c.oid = p.polrelid JOIN pg_namespace n ON n.oid = c.relnamespace
+  JOIN user_schemas s ON s.oid = n.oid
+  UNION ALL
+  SELECT '08-function', n.nspname, p.proname || '(' || pg_get_function_identity_arguments(p.oid) || ')', pg_get_functiondef(p.oid)
+  FROM pg_proc p JOIN pg_namespace n ON n.oid = p.pronamespace JOIN user_schemas s ON s.oid = n.oid
+  WHERE p.probin = '-' AND NOT (n.nspname = 'public' AND p.proname = 'rls_auto_enable')
+  UNION ALL
+  SELECT '09-enum', n.nspname, t.typname || '.' || e.enumsortorder::text, e.enumlabel
+  FROM pg_enum e JOIN pg_type t ON t.oid = e.enumtypid JOIN pg_namespace n ON n.oid = t.typnamespace
+  JOIN user_schemas s ON s.oid = n.oid
+  UNION ALL
+  SELECT '10-sequence', n.nspname, c.relname,
+         concat_ws('|', format_type(seq.seqtypid, NULL), seq.seqstart::text, seq.seqincrement::text,
+                   seq.seqmax::text, seq.seqmin::text, seq.seqcache::text, seq.seqcycle::text)
+  FROM pg_sequence seq JOIN pg_class c ON c.oid = seq.seqrelid JOIN pg_namespace n ON n.oid = c.relnamespace
+  JOIN user_schemas s ON s.oid = n.oid
+)
+SELECT kind, schema_name, object_name, detail
+FROM objects
+ORDER BY kind, schema_name, object_name, detail`
+
+const overlayFingerprintQuery = `
+WITH objects AS (
+  SELECT '00-rls'::text AS kind, n.nspname AS schema_name, c.relname AS object_name,
+         concat_ws('|', c.relrowsecurity::text, c.relforcerowsecurity::text) AS detail
+  FROM pg_class c JOIN pg_namespace n ON n.oid = c.relnamespace
+  WHERE n.nspname = 'public' AND c.relkind IN ('r','p')
+  UNION ALL
+  SELECT '01-event-trigger', ''::text, e.evtname,
+         concat_ws('|', e.evtenabled::text, e.evtevent, p.pronamespace::regnamespace::text,
+                   p.proname || '(' || pg_get_function_identity_arguments(p.oid) || ')', pg_get_functiondef(p.oid))
+  FROM pg_event_trigger e JOIN pg_proc p ON p.oid = e.evtfoid
+  UNION ALL
+  SELECT '02-function', n.nspname, p.proname || '(' || pg_get_function_identity_arguments(p.oid) || ')', pg_get_functiondef(p.oid)
+  FROM pg_proc p JOIN pg_namespace n ON n.oid = p.pronamespace
+  WHERE n.nspname = 'public' AND p.proname = 'rls_auto_enable'
 )
 SELECT kind, schema_name, object_name, detail
 FROM objects

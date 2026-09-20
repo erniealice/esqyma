@@ -151,6 +151,31 @@ requires legacy reconciliation first. A wrapper's existence does not authorize o
 to an unregistered deployment. Rollout batch metadata alone does not prove promotion approval or
 a contract compatibility fence; those gates remain under implementation.
 
+### Target-specific legacy adoption
+
+For a reviewed target whose physical effects already exist but whose Atlas ledger is missing an
+allow-listed prefix, use the explicit `legacy_adoption` operation. It is separate from both fresh
+initialization and forward migration upgrades:
+
+```sh
+# Read-only: observe the exact pre-state and emit the adoption plan digest.
+pnpm db:init -- --target CLIENT/TARGET --schema-release postgres/YYYY.MM.N --legacy-adoption
+
+# Apply only the verified tracker rows; migration SQL is not executed.
+pnpm db:init -- --target CLIENT/TARGET --schema-release postgres/YYYY.MM.N --legacy-adoption --apply \
+  --approve-plan PLAN_SHA256 --approval-ref CHANGE_REFERENCE \
+  --backup-receipt /absolute/outside/git/adoption-backup.json --backup-sha256 RECEIPT_SHA256
+
+# Read-only runtime proof of the adopted release and target overlay.
+pnpm db:init -- --target CLIENT/TARGET --schema-release postgres/YYYY.MM.N --legacy-adoption --verify
+```
+
+The target contract binds the exact pre/post tracker fingerprints, immutable migration and Atlas
+hashes, effect oracles, base catalog projection, and platform overlay. Apply requires a restored
+backup receipt, distinct migration/runtime identities, the advisory lock, and an external durable
+intent. The receipt explicitly records `migration_sql_executed=false`; it never deletes audit rows
+or changes fresh-database initialization.
+
 
 For a macOS operator, `access.migration` can contain `connection_user` and `keychain_profile`
 (e.g. `deploy/CLIENT/.env.postgres-admin.local`) instead of `user_env` / `password_env`.

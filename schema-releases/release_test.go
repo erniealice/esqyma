@@ -95,6 +95,16 @@ func TestCatalogFingerprintIntegration(t *testing.T) {
 		t.Fatal(err)
 	}
 	t.Logf("catalog_fingerprint=%s", fingerprint)
+	base, err := BaseCatalogFingerprint(context.Background(), db)
+	if err != nil {
+		t.Fatal(err)
+	}
+	t.Logf("base_catalog_fingerprint=%s", base)
+	overlay, err := OverlayFingerprint(context.Background(), db)
+	if err != nil {
+		t.Fatal(err)
+	}
+	t.Logf("overlay_fingerprint=%s", overlay)
 	tracker, err := AtlasTrackerFingerprint(context.Background(), db)
 	if err != nil {
 		t.Fatal(err)

@@ -56,6 +56,7 @@ func main() {
 	deploymentEnv := flags.String("deployment-env-file", "", "bind verification to the exact runtime environment being deployed")
 	deploymentCA := flags.String("deployment-ca-file", "", "operator-local CA bytes mapped to the deployed /app/certs path")
 	fromRelease := flags.String("upgrade-from", "", "explicit predecessor for a reviewed forward upgrade")
+	legacyAdoption := flags.Bool("legacy-adoption", false, "adopt an allow-listed legacy Atlas history without executing migration SQL")
 	approvedPlan := flags.String("approve-plan", "", "SHA-256 of the exact reviewed upgrade plan")
 	approvalRef := flags.String("approval-ref", "", "operator authorization reference")
 	backup := flags.String("backup-receipt", "", "absolute external verified backup receipt path")
@@ -64,13 +65,32 @@ func main() {
 		fatalf("%v", err)
 	}
 	if *targetKey == "" || *release == "" || flags.NArg() != 0 || (*apply && *verify) {
-		fatalf("usage: pnpm db:init -- --target CLIENT/TARGET --schema-release postgres/YYYY.MM.N [--apply | --verify]")
+		fatalf("usage: pnpm db:init -- --target CLIENT/TARGET --schema-release postgres/YYYY.MM.N [--apply | --verify] [--legacy-adoption]")
+	}
+	if *legacyAdoption && *fromRelease != "" {
+		fatalf("--legacy-adoption and --upgrade-from are mutually exclusive")
 	}
 	if *deploymentCA != "" && *deploymentEnv == "" {
 		fatalf("--deployment-ca-file requires --deployment-env-file")
 	}
 	if *deploymentEnv != "" && (!*verify || *fromRelease != "") {
 		fatalf("deployment environment and CA binding requires destination-only --verify")
+	}
+	if *legacyAdoption {
+		if *deploymentEnv != "" || *deploymentCA != "" {
+			fatalf("legacy adoption does not use deployment environment binding")
+		}
+		root, err := findRepositoryRoot()
+		if err != nil {
+			fatalf("%v", err)
+		}
+		if err := runLegacyAdoption(context.Background(), root, *targetKey, *release, legacyAdoptionOptions{
+			Apply: *apply, Verify: *verify, ApprovedPlan: *approvedPlan, ApprovalRef: *approvalRef,
+			BackupReceipt: *backup, BackupSHA256: *backupDigest,
+		}); err != nil {
+			fatalf("%v", err)
+		}
+		return
 	}
 	if *fromRelease != "" {
 		if *verify {
