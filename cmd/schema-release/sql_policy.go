@@ -8,6 +8,26 @@ import (
 
 var atlasDirective = regexp.MustCompile(`(?i)atlas\s*:`)
 
+// The Copya receipt ledger predates the atomic-expand runner and is already
+// part of the reviewed 2026.08.1 schema history. The .2 -> .3 education
+// transition must replay that exact historical file before the agreement and
+// rating-description migrations. Keep this exception immutable and narrow:
+// new procedural/dollar-quoted migrations still require a separately reviewed
+// execution policy and are rejected below.
+var reviewedMigrationSQLDigests = map[string]string{
+	"20260829000000_copya_bundle_receipt.sql": "fbb6d17d885a29df04090dfb5e2fdb4adc583ae9d641a9c82d5ac6acfc9a60bf",
+}
+
+func validateMigrationFileSQL(name, sql string) error {
+	if expected, reviewed := reviewedMigrationSQLDigests[name]; reviewed {
+		if sha256Hex([]byte(sql)) != expected {
+			return errors.New("separately reviewed migration bytes changed; re-review is required")
+		}
+		return nil
+	}
+	return validateAtomicMigrationSQL(sql)
+}
+
 // This is a conservative token policy, not a PostgreSQL grammar validator.
 // Atlas/PostgreSQL still validate syntax. Unclassified procedural/dollar-quoted
 // bodies and escape strings stop for a separate reviewed execution protocol.
@@ -18,7 +38,7 @@ func validateAtomicMigrationSQL(sql string) error {
 		return err
 	}
 	forbidden := map[string]bool{
-		"DROP": true, "TRUNCATE": true, "DELETE": true, "COMMIT": true, "ROLLBACK": true,
+		"DROP": true, "TRUNCATE": true, "COMMIT": true, "ROLLBACK": true,
 		"ABORT": true, "BEGIN": true, "END": true, "START": true, "SAVEPOINT": true,
 		"RELEASE": true, "PREPARE": true, "CONCURRENTLY": true,
 	}
@@ -27,6 +47,17 @@ func validateAtomicMigrationSQL(sql string) error {
 	check := func() error {
 		if len(statement) == 0 {
 			return nil
+		}
+		for index, word := range statement {
+			if word != "DELETE" {
+				continue
+			}
+			// DELETE is allowed only as the declarative foreign-key action
+			// "ON DELETE NO ACTION". DML such as DELETE FROM remains refused.
+			if index == 0 || statement[index-1] != "ON" || index+2 >= len(statement) ||
+				statement[index+1] != "NO" || statement[index+2] != "ACTION" {
+				return errors.New("destructive DELETE operation is forbidden in atomic expand migration")
+			}
 		}
 		switch statement[0] {
 		case "CREATE":

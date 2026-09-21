@@ -38,7 +38,7 @@ func runVerify(ctx context.Context, target targetManifest, config databaseConfig
 		return err
 	}
 	result, err := verifyManagedState(state, func() (schemareleases.Verification, error) {
-		return schemareleases.VerifyDatabase(ctx, db, manifest, required)
+		return verifyDatabaseForTarget(ctx, db, target, "to", manifest, required)
 	})
 	if err != nil {
 		return err

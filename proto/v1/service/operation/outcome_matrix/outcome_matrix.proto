@@ -5,6 +5,7 @@ package service.operation.v1;
 option go_package = "github.com/erniealice/esqyma/pkg/schema/v1/service/operation/outcome_matrix";
 
 import "domain/common/error.proto";
+import "domain/operation/enums/enums.proto";
 import "domain/operation/outcome_criteria/outcome_criteria.proto";
 import "domain/operation/job_phase/job_phase.proto";
 
@@ -109,6 +110,21 @@ message CriterionColumn {
   int32 sequence_order = 2;            // template_task_criteria.sequence_order
   bool required = 3;                   // template_task_criteria.required_override (effective)
   domain.operation.v1.OutcomeCriteria criteria = 4;
+  // Binding-level presentation instruction; UNSPECIFIED is legacy/standard.
+  domain.operation.v1.RatingMode rating_mode = 5;
+  string rating_scale_id = 6;
+  repeated RatingDescription rating_descriptions = 7;
+}
+
+// RatingDescription is a presentation-safe matcher projected from the
+// selected ScoreScaleBand plus the binding-specific wording. It deliberately
+// excludes scale/band ids and any editable outcome fields.
+message RatingDescription {
+  domain.operation.v1.ScaleKind scale_kind = 1;
+  optional double input_min = 2;
+  optional double input_max = 3;
+  optional string input_match = 4;
+  string description = 5;
 }
 
 // TaskColumn is a thin grouping envelope for one job_template_task.

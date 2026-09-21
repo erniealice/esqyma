@@ -62,6 +62,15 @@ type upgradeReleaseCatalog struct {
 	Bootstrap  func(schemareleases.Manifest) ([]byte, error)
 }
 
+func verifyDatabaseForTarget(ctx context.Context, db *sql.DB, target targetManifest, phase string, manifest schemareleases.Manifest, required []schemareleases.RequiredBundle) (schemareleases.Verification, error) {
+	if target.Upgrade != nil {
+		if baseCatalog, overlay, ok := target.Upgrade.catalogProof(phase); ok {
+			return schemareleases.VerifyDatabaseWithCatalogProof(ctx, db, manifest, required, baseCatalog, overlay)
+		}
+	}
+	return schemareleases.VerifyDatabase(ctx, db, manifest, required)
+}
+
 func runUpgrade(ctx context.Context, root, targetKey, release string, options upgradeOptions) error {
 	return runUpgradeWithCatalog(ctx, root, targetKey, release, options, upgradeReleaseCatalog{Load: schemareleases.Load, Bootstrap: schemareleases.BootstrapBytes})
 }
@@ -221,20 +230,28 @@ func runUpgradeWithCatalog(ctx context.Context, root, targetKey, release string,
 	}
 	completed := false
 	var proof schemareleases.UpgradeProof
-	if current, verifyErr := schemareleases.VerifyDatabase(ctx, db, to, required); verifyErr == nil {
+	fromCatalog := from.Bootstrap.CatalogFingerprint
+	toCatalog := to.Bootstrap.CatalogFingerprint
+	if target.Upgrade != nil {
+		if baseCatalog, _, ok := target.Upgrade.catalogProof("to"); ok {
+			toCatalog = baseCatalog
+		}
+	}
+	if current, verifyErr := verifyDatabaseForTarget(ctx, db, target, "to", to, required); verifyErr == nil {
 		proof, err = completedUpgradeProof(to, from, fromRaw, current.TrackerFingerprint)
 		completed = true
 	} else {
-		before, verifyErr := schemareleases.VerifyDatabase(ctx, db, from, required)
+		before, verifyErr := verifyDatabaseForTarget(ctx, db, target, "from", from, required)
 		if verifyErr != nil {
 			return fmt.Errorf("predecessor verification failed: %w", verifyErr)
 		}
+		fromCatalog = before.CatalogFingerprint
 		proof, err = to.UpgradeFrom(from, fromRaw, before.TrackerFingerprint)
 	}
 	if err != nil {
 		return err
 	}
-	plan := upgradePlan{FromSchemaCommit: fromCommit, ToSchemaCommit: toCommit, CredentialProfileSHA256: config.CredentialProfileSHA256, FleetManifestSHA256: target.fleetDigest, CATrustSHA256: caDigest, FormatVersion: 1, TargetKey: target.TargetKey, TargetManifestSHA256: targetDigest, Database: config.Name, Endpoint: target.Upgrade.Endpoint, FromRelease: from.Release, FromManifestSHA256: sha256Hex(fromRaw), ToRelease: to.Release, ToManifestSHA256: sha256Hex(toRaw), FromTracker: proof.FromTrackerFingerprint, ToTracker: proof.TrackerFingerprint, FromCatalog: from.Bootstrap.CatalogFingerprint, ToCatalog: to.Bootstrap.CatalogFingerprint, Migrations: pending, RequiredBundles: required, SQLSHA256: sqlDigest}
+	plan := upgradePlan{FromSchemaCommit: fromCommit, ToSchemaCommit: toCommit, CredentialProfileSHA256: config.CredentialProfileSHA256, FleetManifestSHA256: target.fleetDigest, CATrustSHA256: caDigest, FormatVersion: 1, TargetKey: target.TargetKey, TargetManifestSHA256: targetDigest, Database: config.Name, Endpoint: target.Upgrade.Endpoint, FromRelease: from.Release, FromManifestSHA256: sha256Hex(fromRaw), ToRelease: to.Release, ToManifestSHA256: sha256Hex(toRaw), FromTracker: proof.FromTrackerFingerprint, ToTracker: proof.TrackerFingerprint, FromCatalog: fromCatalog, ToCatalog: toCatalog, Migrations: pending, RequiredBundles: required, SQLSHA256: sqlDigest}
 	if completed {
 		intent, err := readUpgradeIntent(root, values, options.ApprovedPlan)
 		if err != nil {
@@ -304,19 +321,25 @@ func runUpgradeWithCatalog(ctx context.Context, root, targetKey, release string,
 		}
 	}
 
-	after, err := schemareleases.VerifyDatabase(ctx, db, to, required)
+	after, err := verifyDatabaseForTarget(ctx, db, target, "to", to, required)
 	if err != nil {
 		return fmt.Errorf("post-upgrade verification failed; preserve evidence and stop: %w", err)
 	}
 	if after.TrackerFingerprint != proof.TrackerFingerprint {
 		return errors.New("result does not match the selected transition proof")
 	}
-	normalized, err := normalizedSchemaFingerprint(config, to)
-	if err != nil {
-		return err
+	targetCatalogProof := false
+	if target.Upgrade != nil {
+		_, _, targetCatalogProof = target.Upgrade.catalogProof("to")
 	}
-	if normalized != to.Bootstrap.NormalizedSchemaFingerprint {
-		return errors.New("upgraded schema differs from complete fresh-install schema")
+	if !targetCatalogProof {
+		normalized, err := normalizedSchemaFingerprint(config, to)
+		if err != nil {
+			return err
+		}
+		if normalized != to.Bootstrap.NormalizedSchemaFingerprint {
+			return errors.New("upgraded schema differs from complete fresh-install schema")
+		}
 	}
 	if err := verifyUpgradeIdentity(ctx, db, target, config); err != nil {
 		return err
@@ -382,8 +405,10 @@ func verifyRuntimeAuthority(ctx context.Context, db *sql.DB, runtimeRole, migrat
 	 OR pg_has_role(r.oid,(SELECT oid FROM pg_roles WHERE rolname=$2),'MEMBER')
 	 OR has_database_privilege(r.oid,current_database(),'CREATE')
 	 OR has_schema_privilege(r.oid,'public','CREATE')
-	 OR has_table_privilege(r.oid,'atlas_schema_revisions.atlas_schema_revisions','INSERT,UPDATE,DELETE,TRUNCATE,REFERENCES,TRIGGER,MAINTAIN')
-	 OR has_table_privilege(r.oid,'ichizen_deploy.data_bundle_receipts','INSERT,UPDATE,DELETE,TRUNCATE,REFERENCES,TRIGGER,MAINTAIN')
+	 OR CASE WHEN to_regclass('atlas_schema_revisions.atlas_schema_revisions') IS NULL THEN false
+	         ELSE has_table_privilege(r.oid,to_regclass('atlas_schema_revisions.atlas_schema_revisions')::oid,'INSERT,UPDATE,DELETE,TRUNCATE,REFERENCES,TRIGGER,MAINTAIN') END
+	 OR CASE WHEN to_regclass('ichizen_deploy.data_bundle_receipts') IS NULL THEN false
+	         ELSE has_table_privilege(r.oid,to_regclass('ichizen_deploy.data_bundle_receipts')::oid,'INSERT,UPDATE,DELETE,TRUNCATE,REFERENCES,TRIGGER,MAINTAIN') END
 	 FROM pg_roles r WHERE r.rolname=$1`, runtimeRole, migrationRole).Scan(&unsafe)
 	if err != nil || unsafe {
 		return errors.New("runtime role missing or has forbidden schema/ledger authority")
@@ -425,7 +450,7 @@ func pendingSQLDigest(directory string, files []migrationFile) (string, error) {
 		}
 		// This first operator supports atomic forward migrations. Nontransactional
 		// steps need their own reviewed recovery protocol before being executable.
-		if err := validateAtomicMigrationSQL(string(body)); err != nil {
+		if err := validateMigrationFileSQL(file.Name, string(body)); err != nil {
 			return "", fmt.Errorf("migration %s: %w", file.Name, err)
 		}
 		raw = append(raw, []byte(file.Name+"\x00")...)

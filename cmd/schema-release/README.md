@@ -45,6 +45,14 @@ ignored environment file or operator process environment. The endpoint assertion
 environment overrides. A session-mode connection is required for advisory locking; do not use a
 transaction pooler for migrations.
 
+An adopted platform target may additionally declare `catalog_mode: "base_overlay"`,
+`from_base_catalog_fingerprint`, `to_base_catalog_fingerprint`, `overlay_id`,
+`from_overlay_fingerprint`, and `to_overlay_fingerprint`. This is required when a fresh-bootstrap
+catalog fingerprint would incorrectly include or exclude provider objects. The source and
+destination base/overlay fingerprints are checked separately; one shared overlay hash is not
+sufficient because an approved migration may create a new RLS-protected relation. Fresh targets
+omit these fields and continue to use the strict release catalog fingerprint.
+
 ```sh
 # Observe the exact predecessor and emit a deterministic review digest; no DB writes.
 pnpm db:init -- --target CLIENT/TARGET --schema-release postgres/YYYY.MM.N \
@@ -146,10 +154,11 @@ Shared operator interface (no default target/release):
 ```
 
 Client wrappers at `deploy/<client>/scripts/migrate.sh` enforce client identity and delegate to
-this engine. MMIS currently has no registered upgrade target: its read-only production inventory
-requires legacy reconciliation first. A wrapper's existence does not authorize or enable applying
-to an unregistered deployment. Rollout batch metadata alone does not prove promotion approval or
-a contract compatibility fence; those gates remain under implementation.
+this engine. MMIS has an accepted legacy `.2` target profile, but its `.3` forward-upgrade profile
+must not be selected until the second legacy predecessor proof and destination base/overlay hashes
+are reviewed. A wrapper's existence does not authorize or enable applying to an unqualified
+deployment. Rollout batch metadata alone does not prove promotion approval or a contract
+compatibility fence; those gates remain under implementation.
 
 ### Target-specific legacy adoption
 

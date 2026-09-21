@@ -42,6 +42,7 @@ func TestAtomicMigrationPolicy(t *testing.T) {
 		"/* outer /* nested */ comment */ ALTER TABLE public.example ADD COLUMN extra integer;",
 		"CREATE UNIQUE INDEX example_idx ON public.example(id); COMMENT ON TABLE public.example IS 'transaction control: BEGIN';",
 		"CREATE TYPE public.probe AS ENUM ('new','done'); ALTER TYPE public.probe ADD VALUE 'later';",
+		"CREATE TABLE public.child(id integer REFERENCES public.parent(id) ON DELETE NO ACTION);",
 		"ALTER TABLE public.example VALIDATE CONSTRAINT example_check;",
 		"ALTER TABLE example VALIDATE CONSTRAINT example_check;",
 	} {
@@ -76,5 +77,23 @@ func TestAtomicMigrationPolicy(t *testing.T) {
 		if err := validateAtomicMigrationSQL(sql); err == nil {
 			t.Errorf("unsafe/unclassified SQL accepted: %s", sql)
 		}
+	}
+}
+
+func TestReviewedMigrationPolicyIsExactAndNarrow(t *testing.T) {
+	root := repositoryRootForTest(t)
+	path := filepath.Join(root, "packages/esqyma/migrations/postgres/20260829000000_copya_bundle_receipt.sql")
+	raw, err := os.ReadFile(path)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if err := validateMigrationFileSQL(filepath.Base(path), string(raw)); err != nil {
+		t.Fatalf("reviewed historical migration refused: %v", err)
+	}
+	if err := validateMigrationFileSQL(filepath.Base(path), string(raw)+"\n"); err == nil {
+		t.Fatal("changed reviewed migration bytes were accepted")
+	}
+	if err := validateMigrationFileSQL("20260921000000_new_procedural.sql", "CREATE OR REPLACE FUNCTION probe() RETURNS void AS $$ BEGIN NULL; END $$ LANGUAGE plpgsql;"); err == nil {
+		t.Fatal("new procedural migration bypassed atomic policy")
 	}
 }

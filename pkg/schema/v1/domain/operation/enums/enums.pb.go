@@ -1016,6 +1016,59 @@ func (ScaleKind) EnumDescriptor() ([]byte, []int) {
 	return file_domain_operation_enums_enums_proto_rawDescGZIP(), []int{16}
 }
 
+// RatingMode controls how a template-task criterion binding presents a
+// captured numeric rating. It is deliberately separate from CriteriaType:
+// CriteriaType remains the persisted value contract, while RatingMode is the
+// binding-level presentation/configuration instruction.
+type RatingMode int32
+
+const (
+	RatingMode_RATING_MODE_UNSPECIFIED              RatingMode = 0 // legacy behavior; resolve as STANDARD
+	RatingMode_RATING_MODE_STANDARD                 RatingMode = 1
+	RatingMode_RATING_MODE_NUMERIC_WITH_DESCRIPTION RatingMode = 2
+)
+
+// Enum value maps for RatingMode.
+var (
+	RatingMode_name = map[int32]string{
+		0: "RATING_MODE_UNSPECIFIED",
+		1: "RATING_MODE_STANDARD",
+		2: "RATING_MODE_NUMERIC_WITH_DESCRIPTION",
+	}
+	RatingMode_value = map[string]int32{
+		"RATING_MODE_UNSPECIFIED":              0,
+		"RATING_MODE_STANDARD":                 1,
+		"RATING_MODE_NUMERIC_WITH_DESCRIPTION": 2,
+	}
+)
+
+func (x RatingMode) Enum() *RatingMode {
+	p := new(RatingMode)
+	*p = x
+	return p
+}
+
+func (x RatingMode) String() string {
+	return protoimpl.X.EnumStringOf(x.Descriptor(), protoreflect.EnumNumber(x))
+}
+
+func (RatingMode) Descriptor() protoreflect.EnumDescriptor {
+	return file_domain_operation_enums_enums_proto_enumTypes[17].Descriptor()
+}
+
+func (RatingMode) Type() protoreflect.EnumType {
+	return &file_domain_operation_enums_enums_proto_enumTypes[17]
+}
+
+func (x RatingMode) Number() protoreflect.EnumNumber {
+	return protoreflect.EnumNumber(x)
+}
+
+// Deprecated: Use RatingMode.Descriptor instead.
+func (RatingMode) EnumDescriptor() ([]byte, []int) {
+	return file_domain_operation_enums_enums_proto_rawDescGZIP(), []int{17}
+}
+
 type ReportingRole int32
 
 const (
@@ -1055,11 +1108,11 @@ func (x ReportingRole) String() string {
 }
 
 func (ReportingRole) Descriptor() protoreflect.EnumDescriptor {
-	return file_domain_operation_enums_enums_proto_enumTypes[17].Descriptor()
+	return file_domain_operation_enums_enums_proto_enumTypes[18].Descriptor()
 }
 
 func (ReportingRole) Type() protoreflect.EnumType {
-	return &file_domain_operation_enums_enums_proto_enumTypes[17]
+	return &file_domain_operation_enums_enums_proto_enumTypes[18]
 }
 
 func (x ReportingRole) Number() protoreflect.EnumNumber {
@@ -1068,7 +1121,7 @@ func (x ReportingRole) Number() protoreflect.EnumNumber {
 
 // Deprecated: Use ReportingRole.Descriptor instead.
 func (ReportingRole) EnumDescriptor() ([]byte, []int) {
-	return file_domain_operation_enums_enums_proto_rawDescGZIP(), []int{17}
+	return file_domain_operation_enums_enums_proto_rawDescGZIP(), []int{18}
 }
 
 type RoundingMode int32
@@ -1107,11 +1160,11 @@ func (x RoundingMode) String() string {
 }
 
 func (RoundingMode) Descriptor() protoreflect.EnumDescriptor {
-	return file_domain_operation_enums_enums_proto_enumTypes[18].Descriptor()
+	return file_domain_operation_enums_enums_proto_enumTypes[19].Descriptor()
 }
 
 func (RoundingMode) Type() protoreflect.EnumType {
-	return &file_domain_operation_enums_enums_proto_enumTypes[18]
+	return &file_domain_operation_enums_enums_proto_enumTypes[19]
 }
 
 func (x RoundingMode) Number() protoreflect.EnumNumber {
@@ -1120,7 +1173,7 @@ func (x RoundingMode) Number() protoreflect.EnumNumber {
 
 // Deprecated: Use RoundingMode.Descriptor instead.
 func (RoundingMode) EnumDescriptor() ([]byte, []int) {
-	return file_domain_operation_enums_enums_proto_rawDescGZIP(), []int{18}
+	return file_domain_operation_enums_enums_proto_rawDescGZIP(), []int{19}
 }
 
 type SummaryType int32
@@ -1171,11 +1224,11 @@ func (x SummaryType) String() string {
 }
 
 func (SummaryType) Descriptor() protoreflect.EnumDescriptor {
-	return file_domain_operation_enums_enums_proto_enumTypes[19].Descriptor()
+	return file_domain_operation_enums_enums_proto_enumTypes[20].Descriptor()
 }
 
 func (SummaryType) Type() protoreflect.EnumType {
-	return &file_domain_operation_enums_enums_proto_enumTypes[19]
+	return &file_domain_operation_enums_enums_proto_enumTypes[20]
 }
 
 func (x SummaryType) Number() protoreflect.EnumNumber {
@@ -1184,7 +1237,7 @@ func (x SummaryType) Number() protoreflect.EnumNumber {
 
 // Deprecated: Use SummaryType.Descriptor instead.
 func (SummaryType) EnumDescriptor() ([]byte, []int) {
-	return file_domain_operation_enums_enums_proto_rawDescGZIP(), []int{19}
+	return file_domain_operation_enums_enums_proto_rawDescGZIP(), []int{20}
 }
 
 type OverallDetermination int32
@@ -1229,11 +1282,11 @@ func (x OverallDetermination) String() string {
 }
 
 func (OverallDetermination) Descriptor() protoreflect.EnumDescriptor {
-	return file_domain_operation_enums_enums_proto_enumTypes[20].Descriptor()
+	return file_domain_operation_enums_enums_proto_enumTypes[21].Descriptor()
 }
 
 func (OverallDetermination) Type() protoreflect.EnumType {
-	return &file_domain_operation_enums_enums_proto_enumTypes[20]
+	return &file_domain_operation_enums_enums_proto_enumTypes[21]
 }
 
 func (x OverallDetermination) Number() protoreflect.EnumNumber {
@@ -1242,7 +1295,7 @@ func (x OverallDetermination) Number() protoreflect.EnumNumber {
 
 // Deprecated: Use OverallDetermination.Descriptor instead.
 func (OverallDetermination) EnumDescriptor() ([]byte, []int) {
-	return file_domain_operation_enums_enums_proto_rawDescGZIP(), []int{20}
+	return file_domain_operation_enums_enums_proto_rawDescGZIP(), []int{21}
 }
 
 type VersionStatus int32
@@ -1281,11 +1334,11 @@ func (x VersionStatus) String() string {
 }
 
 func (VersionStatus) Descriptor() protoreflect.EnumDescriptor {
-	return file_domain_operation_enums_enums_proto_enumTypes[21].Descriptor()
+	return file_domain_operation_enums_enums_proto_enumTypes[22].Descriptor()
 }
 
 func (VersionStatus) Type() protoreflect.EnumType {
-	return &file_domain_operation_enums_enums_proto_enumTypes[21]
+	return &file_domain_operation_enums_enums_proto_enumTypes[22]
 }
 
 func (x VersionStatus) Number() protoreflect.EnumNumber {
@@ -1294,7 +1347,7 @@ func (x VersionStatus) Number() protoreflect.EnumNumber {
 
 // Deprecated: Use VersionStatus.Descriptor instead.
 func (VersionStatus) EnumDescriptor() ([]byte, []int) {
-	return file_domain_operation_enums_enums_proto_rawDescGZIP(), []int{21}
+	return file_domain_operation_enums_enums_proto_rawDescGZIP(), []int{22}
 }
 
 type CriteriaScope int32
@@ -1336,11 +1389,11 @@ func (x CriteriaScope) String() string {
 }
 
 func (CriteriaScope) Descriptor() protoreflect.EnumDescriptor {
-	return file_domain_operation_enums_enums_proto_enumTypes[22].Descriptor()
+	return file_domain_operation_enums_enums_proto_enumTypes[23].Descriptor()
 }
 
 func (CriteriaScope) Type() protoreflect.EnumType {
-	return &file_domain_operation_enums_enums_proto_enumTypes[22]
+	return &file_domain_operation_enums_enums_proto_enumTypes[23]
 }
 
 func (x CriteriaScope) Number() protoreflect.EnumNumber {
@@ -1349,7 +1402,7 @@ func (x CriteriaScope) Number() protoreflect.EnumNumber {
 
 // Deprecated: Use CriteriaScope.Descriptor instead.
 func (CriteriaScope) EnumDescriptor() ([]byte, []int) {
-	return file_domain_operation_enums_enums_proto_rawDescGZIP(), []int{22}
+	return file_domain_operation_enums_enums_proto_rawDescGZIP(), []int{23}
 }
 
 type PassRule int32
@@ -1388,11 +1441,11 @@ func (x PassRule) String() string {
 }
 
 func (PassRule) Descriptor() protoreflect.EnumDescriptor {
-	return file_domain_operation_enums_enums_proto_enumTypes[23].Descriptor()
+	return file_domain_operation_enums_enums_proto_enumTypes[24].Descriptor()
 }
 
 func (PassRule) Type() protoreflect.EnumType {
-	return &file_domain_operation_enums_enums_proto_enumTypes[23]
+	return &file_domain_operation_enums_enums_proto_enumTypes[24]
 }
 
 func (x PassRule) Number() protoreflect.EnumNumber {
@@ -1401,7 +1454,7 @@ func (x PassRule) Number() protoreflect.EnumNumber {
 
 // Deprecated: Use PassRule.Descriptor instead.
 func (PassRule) EnumDescriptor() ([]byte, []int) {
-	return file_domain_operation_enums_enums_proto_rawDescGZIP(), []int{23}
+	return file_domain_operation_enums_enums_proto_rawDescGZIP(), []int{24}
 }
 
 type ThresholdRole int32
@@ -1476,11 +1529,11 @@ func (x ThresholdRole) String() string {
 }
 
 func (ThresholdRole) Descriptor() protoreflect.EnumDescriptor {
-	return file_domain_operation_enums_enums_proto_enumTypes[24].Descriptor()
+	return file_domain_operation_enums_enums_proto_enumTypes[25].Descriptor()
 }
 
 func (ThresholdRole) Type() protoreflect.EnumType {
-	return &file_domain_operation_enums_enums_proto_enumTypes[24]
+	return &file_domain_operation_enums_enums_proto_enumTypes[25]
 }
 
 func (x ThresholdRole) Number() protoreflect.EnumNumber {
@@ -1489,7 +1542,7 @@ func (x ThresholdRole) Number() protoreflect.EnumNumber {
 
 // Deprecated: Use ThresholdRole.Descriptor instead.
 func (ThresholdRole) EnumDescriptor() ([]byte, []int) {
-	return file_domain_operation_enums_enums_proto_rawDescGZIP(), []int{24}
+	return file_domain_operation_enums_enums_proto_rawDescGZIP(), []int{25}
 }
 
 var File_domain_operation_enums_enums_proto protoreflect.FileDescriptor
@@ -1620,7 +1673,12 @@ const file_domain_operation_enums_enums_proto_rawDesc = "" +
 	"\tScaleKind\x12\x1a\n" +
 	"\x16SCALE_KIND_UNSPECIFIED\x10\x00\x12\x18\n" +
 	"\x14SCALE_KIND_RANGE_MAP\x10\x01\x12\x18\n" +
-	"\x14SCALE_KIND_EXACT_MAP\x10\x02*\xa7\x01\n" +
+	"\x14SCALE_KIND_EXACT_MAP\x10\x02*m\n" +
+	"\n" +
+	"RatingMode\x12\x1b\n" +
+	"\x17RATING_MODE_UNSPECIFIED\x10\x00\x12\x18\n" +
+	"\x14RATING_MODE_STANDARD\x10\x01\x12(\n" +
+	"$RATING_MODE_NUMERIC_WITH_DESCRIPTION\x10\x02*\xa7\x01\n" +
 	"\rReportingRole\x12\x1e\n" +
 	"\x1aREPORTING_ROLE_UNSPECIFIED\x10\x00\x12\x1a\n" +
 	"\x16REPORTING_ROLE_PRIMARY\x10\x01\x12\x1c\n" +
@@ -1697,7 +1755,7 @@ func file_domain_operation_enums_enums_proto_rawDescGZIP() []byte {
 	return file_domain_operation_enums_enums_proto_rawDescData
 }
 
-var file_domain_operation_enums_enums_proto_enumTypes = make([]protoimpl.EnumInfo, 25)
+var file_domain_operation_enums_enums_proto_enumTypes = make([]protoimpl.EnumInfo, 26)
 var file_domain_operation_enums_enums_proto_goTypes = []any{
 	(OriginType)(0),           // 0: domain.operation.v1.OriginType
 	(DemandType)(0),           // 1: domain.operation.v1.DemandType
@@ -1716,14 +1774,15 @@ var file_domain_operation_enums_enums_proto_goTypes = []any{
 	(AggregationMethod)(0),    // 14: domain.operation.v1.AggregationMethod
 	(ScoringMethod)(0),        // 15: domain.operation.v1.ScoringMethod
 	(ScaleKind)(0),            // 16: domain.operation.v1.ScaleKind
-	(ReportingRole)(0),        // 17: domain.operation.v1.ReportingRole
-	(RoundingMode)(0),         // 18: domain.operation.v1.RoundingMode
-	(SummaryType)(0),          // 19: domain.operation.v1.SummaryType
-	(OverallDetermination)(0), // 20: domain.operation.v1.OverallDetermination
-	(VersionStatus)(0),        // 21: domain.operation.v1.VersionStatus
-	(CriteriaScope)(0),        // 22: domain.operation.v1.CriteriaScope
-	(PassRule)(0),             // 23: domain.operation.v1.PassRule
-	(ThresholdRole)(0),        // 24: domain.operation.v1.ThresholdRole
+	(RatingMode)(0),           // 17: domain.operation.v1.RatingMode
+	(ReportingRole)(0),        // 18: domain.operation.v1.ReportingRole
+	(RoundingMode)(0),         // 19: domain.operation.v1.RoundingMode
+	(SummaryType)(0),          // 20: domain.operation.v1.SummaryType
+	(OverallDetermination)(0), // 21: domain.operation.v1.OverallDetermination
+	(VersionStatus)(0),        // 22: domain.operation.v1.VersionStatus
+	(CriteriaScope)(0),        // 23: domain.operation.v1.CriteriaScope
+	(PassRule)(0),             // 24: domain.operation.v1.PassRule
+	(ThresholdRole)(0),        // 25: domain.operation.v1.ThresholdRole
 }
 var file_domain_operation_enums_enums_proto_depIdxs = []int32{
 	0, // [0:0] is the sub-list for method output_type
@@ -1743,7 +1802,7 @@ func file_domain_operation_enums_enums_proto_init() {
 		File: protoimpl.DescBuilder{
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_domain_operation_enums_enums_proto_rawDesc), len(file_domain_operation_enums_enums_proto_rawDesc)),
-			NumEnums:      25,
+			NumEnums:      26,
 			NumMessages:   0,
 			NumExtensions: 0,
 			NumServices:   0,

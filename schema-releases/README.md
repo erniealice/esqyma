@@ -15,12 +15,14 @@ Use `pnpm db:init -- --target <client>/<target> --schema-release postgres/YYYY.M
 `packages/esqyma`. Plan mode is the default; writes require `--apply`.
 
 
-CI compares Esqyma history against the PR/push base package commit with
-`scripts/check-schema-release-history.py` in the root repository. Existing migration/release bytes
-cannot change; new active SQL must have a unique timestamp beyond the previous head and no up/down
-suffix. Archived historical SQL is frozen and cannot receive new migrations. Each release must
-include a bootstrap matching its manifest checksum. The one known 2026.08.1 newline restoration
-has an exact checksum waiver authorized by the user; it is not a general repair mechanism.
+Release validation compares Esqyma history against the PR/push base package commit when the
+repository-level history checker is available. In this checkout that auxiliary checker is absent;
+the co-located artifact/prefix tests below remain the executable proof. Existing migration/release
+bytes cannot change; new active SQL must have a unique timestamp beyond the previous head and no
+up/down suffix. Archived historical SQL is frozen and cannot receive new migrations. Each release
+must include a bootstrap matching its manifest checksum. The one known 2026.08.1 newline
+restoration has an exact checksum waiver authorized by the user; it is not a general repair
+mechanism.
 
 `TestEveryEmbeddedReleaseArtifact` discovers every embedded release, validates bootstrap hashes
 and predecessor proof bindings, and verifies exact Atlas prefix hashes when `ESQYMA_TEST_ATLAS=1`.

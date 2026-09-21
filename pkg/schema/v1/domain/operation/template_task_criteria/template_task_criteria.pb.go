@@ -41,7 +41,13 @@ type TemplateTaskCriteria struct {
 	DateCreated               *int64                             `protobuf:"varint,11,opt,name=date_created,json=dateCreated,proto3,oneof" json:"date_created,omitempty"`
 	DateCreatedString         *string                            `protobuf:"bytes,12,opt,name=date_created_string,json=dateCreatedString,proto3,oneof" json:"date_created_string,omitempty"`
 	// Immutable tenant anchor. Template task and criteria parents must agree.
-	WorkspaceId   *string `protobuf:"bytes,13,opt,name=workspace_id,json=workspaceId,proto3,oneof" json:"workspace_id,omitempty"`
+	WorkspaceId *string `protobuf:"bytes,13,opt,name=workspace_id,json=workspaceId,proto3,oneof" json:"workspace_id,omitempty"`
+	// Binding-level presentation instruction. NULL/UNSPECIFIED preserves the
+	// legacy numeric/text behavior and is resolved as STANDARD by consumers.
+	RatingMode *enums.RatingMode `protobuf:"varint,14,opt,name=rating_mode,json=ratingMode,proto3,enum=domain.operation.v1.RatingMode,oneof" json:"rating_mode,omitempty"`
+	// Reusable numeric scale selected for this binding. Descriptions remain in
+	// template_task_criteria_rating_description because wording is binding-specific.
+	RatingScaleId *string `protobuf:"bytes,15,opt,name=rating_scale_id,json=ratingScaleId,proto3,oneof" json:"rating_scale_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -163,6 +169,20 @@ func (x *TemplateTaskCriteria) GetDateCreatedString() string {
 func (x *TemplateTaskCriteria) GetWorkspaceId() string {
 	if x != nil && x.WorkspaceId != nil {
 		return *x.WorkspaceId
+	}
+	return ""
+}
+
+func (x *TemplateTaskCriteria) GetRatingMode() enums.RatingMode {
+	if x != nil && x.RatingMode != nil {
+		return *x.RatingMode
+	}
+	return enums.RatingMode(0)
+}
+
+func (x *TemplateTaskCriteria) GetRatingScaleId() string {
+	if x != nil && x.RatingScaleId != nil {
+		return *x.RatingScaleId
 	}
 	return ""
 }
@@ -1163,7 +1183,7 @@ var File_domain_operation_template_task_criteria_template_task_criteria_proto pr
 
 const file_domain_operation_template_task_criteria_template_task_criteria_proto_rawDesc = "" +
 	"\n" +
-	"Ddomain/operation/template_task_criteria/template_task_criteria.proto\x12\x13domain.operation.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1adomain/common/search.proto\x1a\"domain/operation/enums/enums.proto\x1a8domain/operation/outcome_criteria/outcome_criteria.proto\x1a:domain/operation/job_template_task/job_template_task.proto\x1a\x10options/db.proto\"\xd8\a\n" +
+	"Ddomain/operation/template_task_criteria/template_task_criteria.proto\x12\x13domain.operation.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1adomain/common/search.proto\x1a\"domain/operation/enums/enums.proto\x1a8domain/operation/outcome_criteria/outcome_criteria.proto\x1a:domain/operation/job_template_task/job_template_task.proto\x1a\x10options/db.proto\"\x85\t\n" +
 	"\x14TemplateTaskCriteria\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12J\n" +
 	"\x14job_template_task_id\x18\x02 \x01(\tB\x19\x82\xb5\x18\x15\n" +
@@ -1182,7 +1202,11 @@ const file_domain_operation_template_task_criteria_template_task_criteria_proto_
 	"\fdate_created\x18\v \x01(\x03H\x05R\vdateCreated\x88\x01\x01\x12;\n" +
 	"\x13date_created_string\x18\f \x01(\tB\x06\x82\xb5\x18\x028\x01H\x06R\x11dateCreatedString\x88\x01\x01\x129\n" +
 	"\fworkspace_id\x18\r \x01(\tB\x11\x82\xb5\x18\r\n" +
-	"\tworkspace\x18\x01H\aR\vworkspaceId\x88\x01\x01:\x06\x8a\xb5\x18\x02\b\x01B\x14\n" +
+	"\tworkspace\x18\x01H\aR\vworkspaceId\x88\x01\x01\x12E\n" +
+	"\vrating_mode\x18\x0e \x01(\x0e2\x1f.domain.operation.v1.RatingModeH\bR\n" +
+	"ratingMode\x88\x01\x01\x12@\n" +
+	"\x0frating_scale_id\x18\x0f \x01(\tB\x13\x82\xb5\x18\x0f\n" +
+	"\vscore_scale\x18\x01H\tR\rratingScaleId\x88\x01\x01:\x06\x8a\xb5\x18\x02\b\x01B\x14\n" +
 	"\x12_job_template_taskB\x13\n" +
 	"\x11_outcome_criteriaB\x14\n" +
 	"\x12_required_overrideB\x12\n" +
@@ -1190,7 +1214,9 @@ const file_domain_operation_template_task_criteria_template_task_criteria_proto_
 	"\x1c_aggregation_method_overrideB\x0f\n" +
 	"\r_date_createdB\x16\n" +
 	"\x14_date_created_stringB\x0f\n" +
-	"\r_workspace_id\"b\n" +
+	"\r_workspace_idB\x0e\n" +
+	"\f_rating_modeB\x12\n" +
+	"\x10_rating_scale_id\"b\n" +
 	"!CreateTemplateTaskCriteriaRequest\x12=\n" +
 	"\x04data\x18\x01 \x01(\v2).domain.operation.v1.TemplateTaskCriteriaR\x04data\"\xbb\x01\n" +
 	"\"CreateTemplateTaskCriteriaResponse\x12=\n" +
@@ -1328,72 +1354,74 @@ var file_domain_operation_template_task_criteria_template_task_criteria_proto_go
 	(*job_template_task.JobTemplateTask)(nil),               // 19: domain.operation.v1.JobTemplateTask
 	(*outcome_criteria.OutcomeCriteria)(nil),                // 20: domain.operation.v1.OutcomeCriteria
 	(enums.AggregationMethod)(0),                            // 21: domain.operation.v1.AggregationMethod
-	(*common.Error)(nil),                                    // 22: domain.common.v1.Error
-	(*common.SearchRequest)(nil),                            // 23: domain.common.v1.SearchRequest
-	(*common.FilterRequest)(nil),                            // 24: domain.common.v1.FilterRequest
-	(*common.SortRequest)(nil),                              // 25: domain.common.v1.SortRequest
-	(*common.PaginationRequest)(nil),                        // 26: domain.common.v1.PaginationRequest
-	(*common.PaginationResponse)(nil),                       // 27: domain.common.v1.PaginationResponse
-	(*common.SearchResult)(nil),                             // 28: domain.common.v1.SearchResult
+	(enums.RatingMode)(0),                                   // 22: domain.operation.v1.RatingMode
+	(*common.Error)(nil),                                    // 23: domain.common.v1.Error
+	(*common.SearchRequest)(nil),                            // 24: domain.common.v1.SearchRequest
+	(*common.FilterRequest)(nil),                            // 25: domain.common.v1.FilterRequest
+	(*common.SortRequest)(nil),                              // 26: domain.common.v1.SortRequest
+	(*common.PaginationRequest)(nil),                        // 27: domain.common.v1.PaginationRequest
+	(*common.PaginationResponse)(nil),                       // 28: domain.common.v1.PaginationResponse
+	(*common.SearchResult)(nil),                             // 29: domain.common.v1.SearchResult
 }
 var file_domain_operation_template_task_criteria_template_task_criteria_proto_depIdxs = []int32{
 	19, // 0: domain.operation.v1.TemplateTaskCriteria.job_template_task:type_name -> domain.operation.v1.JobTemplateTask
 	20, // 1: domain.operation.v1.TemplateTaskCriteria.outcome_criteria:type_name -> domain.operation.v1.OutcomeCriteria
 	21, // 2: domain.operation.v1.TemplateTaskCriteria.aggregation_method_override:type_name -> domain.operation.v1.AggregationMethod
-	0,  // 3: domain.operation.v1.CreateTemplateTaskCriteriaRequest.data:type_name -> domain.operation.v1.TemplateTaskCriteria
-	0,  // 4: domain.operation.v1.CreateTemplateTaskCriteriaResponse.data:type_name -> domain.operation.v1.TemplateTaskCriteria
-	22, // 5: domain.operation.v1.CreateTemplateTaskCriteriaResponse.error:type_name -> domain.common.v1.Error
-	0,  // 6: domain.operation.v1.ReadTemplateTaskCriteriaRequest.data:type_name -> domain.operation.v1.TemplateTaskCriteria
-	0,  // 7: domain.operation.v1.ReadTemplateTaskCriteriaResponse.data:type_name -> domain.operation.v1.TemplateTaskCriteria
-	22, // 8: domain.operation.v1.ReadTemplateTaskCriteriaResponse.error:type_name -> domain.common.v1.Error
-	0,  // 9: domain.operation.v1.UpdateTemplateTaskCriteriaRequest.data:type_name -> domain.operation.v1.TemplateTaskCriteria
-	0,  // 10: domain.operation.v1.UpdateTemplateTaskCriteriaResponse.data:type_name -> domain.operation.v1.TemplateTaskCriteria
-	22, // 11: domain.operation.v1.UpdateTemplateTaskCriteriaResponse.error:type_name -> domain.common.v1.Error
-	0,  // 12: domain.operation.v1.DeleteTemplateTaskCriteriaRequest.data:type_name -> domain.operation.v1.TemplateTaskCriteria
-	22, // 13: domain.operation.v1.DeleteTemplateTaskCriteriaResponse.error:type_name -> domain.common.v1.Error
-	23, // 14: domain.operation.v1.ListTemplateTaskCriteriasRequest.search:type_name -> domain.common.v1.SearchRequest
-	24, // 15: domain.operation.v1.ListTemplateTaskCriteriasRequest.filters:type_name -> domain.common.v1.FilterRequest
-	25, // 16: domain.operation.v1.ListTemplateTaskCriteriasRequest.sort:type_name -> domain.common.v1.SortRequest
-	26, // 17: domain.operation.v1.ListTemplateTaskCriteriasRequest.pagination:type_name -> domain.common.v1.PaginationRequest
-	0,  // 18: domain.operation.v1.ListTemplateTaskCriteriasResponse.data:type_name -> domain.operation.v1.TemplateTaskCriteria
-	22, // 19: domain.operation.v1.ListTemplateTaskCriteriasResponse.error:type_name -> domain.common.v1.Error
-	26, // 20: domain.operation.v1.GetTemplateTaskCriteriaListPageDataRequest.pagination:type_name -> domain.common.v1.PaginationRequest
-	24, // 21: domain.operation.v1.GetTemplateTaskCriteriaListPageDataRequest.filters:type_name -> domain.common.v1.FilterRequest
-	25, // 22: domain.operation.v1.GetTemplateTaskCriteriaListPageDataRequest.sort:type_name -> domain.common.v1.SortRequest
-	23, // 23: domain.operation.v1.GetTemplateTaskCriteriaListPageDataRequest.search:type_name -> domain.common.v1.SearchRequest
-	0,  // 24: domain.operation.v1.GetTemplateTaskCriteriaListPageDataResponse.template_task_criteria_list:type_name -> domain.operation.v1.TemplateTaskCriteria
-	27, // 25: domain.operation.v1.GetTemplateTaskCriteriaListPageDataResponse.pagination:type_name -> domain.common.v1.PaginationResponse
-	28, // 26: domain.operation.v1.GetTemplateTaskCriteriaListPageDataResponse.search_results:type_name -> domain.common.v1.SearchResult
-	22, // 27: domain.operation.v1.GetTemplateTaskCriteriaListPageDataResponse.error:type_name -> domain.common.v1.Error
-	0,  // 28: domain.operation.v1.GetTemplateTaskCriteriaItemPageDataResponse.template_task_criteria:type_name -> domain.operation.v1.TemplateTaskCriteria
-	22, // 29: domain.operation.v1.GetTemplateTaskCriteriaItemPageDataResponse.error:type_name -> domain.common.v1.Error
-	0,  // 30: domain.operation.v1.ListTemplateTaskCriteriasByTemplateTaskResponse.template_task_criterias:type_name -> domain.operation.v1.TemplateTaskCriteria
-	22, // 31: domain.operation.v1.ListTemplateTaskCriteriasByTemplateTaskResponse.error:type_name -> domain.common.v1.Error
-	0,  // 32: domain.operation.v1.ListTemplateTaskCriteriasByCriteriaResponse.template_task_criterias:type_name -> domain.operation.v1.TemplateTaskCriteria
-	22, // 33: domain.operation.v1.ListTemplateTaskCriteriasByCriteriaResponse.error:type_name -> domain.common.v1.Error
-	1,  // 34: domain.operation.v1.TemplateTaskCriteriaDomainService.CreateTemplateTaskCriteria:input_type -> domain.operation.v1.CreateTemplateTaskCriteriaRequest
-	3,  // 35: domain.operation.v1.TemplateTaskCriteriaDomainService.ReadTemplateTaskCriteria:input_type -> domain.operation.v1.ReadTemplateTaskCriteriaRequest
-	5,  // 36: domain.operation.v1.TemplateTaskCriteriaDomainService.UpdateTemplateTaskCriteria:input_type -> domain.operation.v1.UpdateTemplateTaskCriteriaRequest
-	7,  // 37: domain.operation.v1.TemplateTaskCriteriaDomainService.DeleteTemplateTaskCriteria:input_type -> domain.operation.v1.DeleteTemplateTaskCriteriaRequest
-	9,  // 38: domain.operation.v1.TemplateTaskCriteriaDomainService.ListTemplateTaskCriterias:input_type -> domain.operation.v1.ListTemplateTaskCriteriasRequest
-	11, // 39: domain.operation.v1.TemplateTaskCriteriaDomainService.GetTemplateTaskCriteriaListPageData:input_type -> domain.operation.v1.GetTemplateTaskCriteriaListPageDataRequest
-	13, // 40: domain.operation.v1.TemplateTaskCriteriaDomainService.GetTemplateTaskCriteriaItemPageData:input_type -> domain.operation.v1.GetTemplateTaskCriteriaItemPageDataRequest
-	15, // 41: domain.operation.v1.TemplateTaskCriteriaDomainService.ListByTemplateTask:input_type -> domain.operation.v1.ListTemplateTaskCriteriasByTemplateTaskRequest
-	17, // 42: domain.operation.v1.TemplateTaskCriteriaDomainService.ListByCriteria:input_type -> domain.operation.v1.ListTemplateTaskCriteriasByCriteriaRequest
-	2,  // 43: domain.operation.v1.TemplateTaskCriteriaDomainService.CreateTemplateTaskCriteria:output_type -> domain.operation.v1.CreateTemplateTaskCriteriaResponse
-	4,  // 44: domain.operation.v1.TemplateTaskCriteriaDomainService.ReadTemplateTaskCriteria:output_type -> domain.operation.v1.ReadTemplateTaskCriteriaResponse
-	6,  // 45: domain.operation.v1.TemplateTaskCriteriaDomainService.UpdateTemplateTaskCriteria:output_type -> domain.operation.v1.UpdateTemplateTaskCriteriaResponse
-	8,  // 46: domain.operation.v1.TemplateTaskCriteriaDomainService.DeleteTemplateTaskCriteria:output_type -> domain.operation.v1.DeleteTemplateTaskCriteriaResponse
-	10, // 47: domain.operation.v1.TemplateTaskCriteriaDomainService.ListTemplateTaskCriterias:output_type -> domain.operation.v1.ListTemplateTaskCriteriasResponse
-	12, // 48: domain.operation.v1.TemplateTaskCriteriaDomainService.GetTemplateTaskCriteriaListPageData:output_type -> domain.operation.v1.GetTemplateTaskCriteriaListPageDataResponse
-	14, // 49: domain.operation.v1.TemplateTaskCriteriaDomainService.GetTemplateTaskCriteriaItemPageData:output_type -> domain.operation.v1.GetTemplateTaskCriteriaItemPageDataResponse
-	16, // 50: domain.operation.v1.TemplateTaskCriteriaDomainService.ListByTemplateTask:output_type -> domain.operation.v1.ListTemplateTaskCriteriasByTemplateTaskResponse
-	18, // 51: domain.operation.v1.TemplateTaskCriteriaDomainService.ListByCriteria:output_type -> domain.operation.v1.ListTemplateTaskCriteriasByCriteriaResponse
-	43, // [43:52] is the sub-list for method output_type
-	34, // [34:43] is the sub-list for method input_type
-	34, // [34:34] is the sub-list for extension type_name
-	34, // [34:34] is the sub-list for extension extendee
-	0,  // [0:34] is the sub-list for field type_name
+	22, // 3: domain.operation.v1.TemplateTaskCriteria.rating_mode:type_name -> domain.operation.v1.RatingMode
+	0,  // 4: domain.operation.v1.CreateTemplateTaskCriteriaRequest.data:type_name -> domain.operation.v1.TemplateTaskCriteria
+	0,  // 5: domain.operation.v1.CreateTemplateTaskCriteriaResponse.data:type_name -> domain.operation.v1.TemplateTaskCriteria
+	23, // 6: domain.operation.v1.CreateTemplateTaskCriteriaResponse.error:type_name -> domain.common.v1.Error
+	0,  // 7: domain.operation.v1.ReadTemplateTaskCriteriaRequest.data:type_name -> domain.operation.v1.TemplateTaskCriteria
+	0,  // 8: domain.operation.v1.ReadTemplateTaskCriteriaResponse.data:type_name -> domain.operation.v1.TemplateTaskCriteria
+	23, // 9: domain.operation.v1.ReadTemplateTaskCriteriaResponse.error:type_name -> domain.common.v1.Error
+	0,  // 10: domain.operation.v1.UpdateTemplateTaskCriteriaRequest.data:type_name -> domain.operation.v1.TemplateTaskCriteria
+	0,  // 11: domain.operation.v1.UpdateTemplateTaskCriteriaResponse.data:type_name -> domain.operation.v1.TemplateTaskCriteria
+	23, // 12: domain.operation.v1.UpdateTemplateTaskCriteriaResponse.error:type_name -> domain.common.v1.Error
+	0,  // 13: domain.operation.v1.DeleteTemplateTaskCriteriaRequest.data:type_name -> domain.operation.v1.TemplateTaskCriteria
+	23, // 14: domain.operation.v1.DeleteTemplateTaskCriteriaResponse.error:type_name -> domain.common.v1.Error
+	24, // 15: domain.operation.v1.ListTemplateTaskCriteriasRequest.search:type_name -> domain.common.v1.SearchRequest
+	25, // 16: domain.operation.v1.ListTemplateTaskCriteriasRequest.filters:type_name -> domain.common.v1.FilterRequest
+	26, // 17: domain.operation.v1.ListTemplateTaskCriteriasRequest.sort:type_name -> domain.common.v1.SortRequest
+	27, // 18: domain.operation.v1.ListTemplateTaskCriteriasRequest.pagination:type_name -> domain.common.v1.PaginationRequest
+	0,  // 19: domain.operation.v1.ListTemplateTaskCriteriasResponse.data:type_name -> domain.operation.v1.TemplateTaskCriteria
+	23, // 20: domain.operation.v1.ListTemplateTaskCriteriasResponse.error:type_name -> domain.common.v1.Error
+	27, // 21: domain.operation.v1.GetTemplateTaskCriteriaListPageDataRequest.pagination:type_name -> domain.common.v1.PaginationRequest
+	25, // 22: domain.operation.v1.GetTemplateTaskCriteriaListPageDataRequest.filters:type_name -> domain.common.v1.FilterRequest
+	26, // 23: domain.operation.v1.GetTemplateTaskCriteriaListPageDataRequest.sort:type_name -> domain.common.v1.SortRequest
+	24, // 24: domain.operation.v1.GetTemplateTaskCriteriaListPageDataRequest.search:type_name -> domain.common.v1.SearchRequest
+	0,  // 25: domain.operation.v1.GetTemplateTaskCriteriaListPageDataResponse.template_task_criteria_list:type_name -> domain.operation.v1.TemplateTaskCriteria
+	28, // 26: domain.operation.v1.GetTemplateTaskCriteriaListPageDataResponse.pagination:type_name -> domain.common.v1.PaginationResponse
+	29, // 27: domain.operation.v1.GetTemplateTaskCriteriaListPageDataResponse.search_results:type_name -> domain.common.v1.SearchResult
+	23, // 28: domain.operation.v1.GetTemplateTaskCriteriaListPageDataResponse.error:type_name -> domain.common.v1.Error
+	0,  // 29: domain.operation.v1.GetTemplateTaskCriteriaItemPageDataResponse.template_task_criteria:type_name -> domain.operation.v1.TemplateTaskCriteria
+	23, // 30: domain.operation.v1.GetTemplateTaskCriteriaItemPageDataResponse.error:type_name -> domain.common.v1.Error
+	0,  // 31: domain.operation.v1.ListTemplateTaskCriteriasByTemplateTaskResponse.template_task_criterias:type_name -> domain.operation.v1.TemplateTaskCriteria
+	23, // 32: domain.operation.v1.ListTemplateTaskCriteriasByTemplateTaskResponse.error:type_name -> domain.common.v1.Error
+	0,  // 33: domain.operation.v1.ListTemplateTaskCriteriasByCriteriaResponse.template_task_criterias:type_name -> domain.operation.v1.TemplateTaskCriteria
+	23, // 34: domain.operation.v1.ListTemplateTaskCriteriasByCriteriaResponse.error:type_name -> domain.common.v1.Error
+	1,  // 35: domain.operation.v1.TemplateTaskCriteriaDomainService.CreateTemplateTaskCriteria:input_type -> domain.operation.v1.CreateTemplateTaskCriteriaRequest
+	3,  // 36: domain.operation.v1.TemplateTaskCriteriaDomainService.ReadTemplateTaskCriteria:input_type -> domain.operation.v1.ReadTemplateTaskCriteriaRequest
+	5,  // 37: domain.operation.v1.TemplateTaskCriteriaDomainService.UpdateTemplateTaskCriteria:input_type -> domain.operation.v1.UpdateTemplateTaskCriteriaRequest
+	7,  // 38: domain.operation.v1.TemplateTaskCriteriaDomainService.DeleteTemplateTaskCriteria:input_type -> domain.operation.v1.DeleteTemplateTaskCriteriaRequest
+	9,  // 39: domain.operation.v1.TemplateTaskCriteriaDomainService.ListTemplateTaskCriterias:input_type -> domain.operation.v1.ListTemplateTaskCriteriasRequest
+	11, // 40: domain.operation.v1.TemplateTaskCriteriaDomainService.GetTemplateTaskCriteriaListPageData:input_type -> domain.operation.v1.GetTemplateTaskCriteriaListPageDataRequest
+	13, // 41: domain.operation.v1.TemplateTaskCriteriaDomainService.GetTemplateTaskCriteriaItemPageData:input_type -> domain.operation.v1.GetTemplateTaskCriteriaItemPageDataRequest
+	15, // 42: domain.operation.v1.TemplateTaskCriteriaDomainService.ListByTemplateTask:input_type -> domain.operation.v1.ListTemplateTaskCriteriasByTemplateTaskRequest
+	17, // 43: domain.operation.v1.TemplateTaskCriteriaDomainService.ListByCriteria:input_type -> domain.operation.v1.ListTemplateTaskCriteriasByCriteriaRequest
+	2,  // 44: domain.operation.v1.TemplateTaskCriteriaDomainService.CreateTemplateTaskCriteria:output_type -> domain.operation.v1.CreateTemplateTaskCriteriaResponse
+	4,  // 45: domain.operation.v1.TemplateTaskCriteriaDomainService.ReadTemplateTaskCriteria:output_type -> domain.operation.v1.ReadTemplateTaskCriteriaResponse
+	6,  // 46: domain.operation.v1.TemplateTaskCriteriaDomainService.UpdateTemplateTaskCriteria:output_type -> domain.operation.v1.UpdateTemplateTaskCriteriaResponse
+	8,  // 47: domain.operation.v1.TemplateTaskCriteriaDomainService.DeleteTemplateTaskCriteria:output_type -> domain.operation.v1.DeleteTemplateTaskCriteriaResponse
+	10, // 48: domain.operation.v1.TemplateTaskCriteriaDomainService.ListTemplateTaskCriterias:output_type -> domain.operation.v1.ListTemplateTaskCriteriasResponse
+	12, // 49: domain.operation.v1.TemplateTaskCriteriaDomainService.GetTemplateTaskCriteriaListPageData:output_type -> domain.operation.v1.GetTemplateTaskCriteriaListPageDataResponse
+	14, // 50: domain.operation.v1.TemplateTaskCriteriaDomainService.GetTemplateTaskCriteriaItemPageData:output_type -> domain.operation.v1.GetTemplateTaskCriteriaItemPageDataResponse
+	16, // 51: domain.operation.v1.TemplateTaskCriteriaDomainService.ListByTemplateTask:output_type -> domain.operation.v1.ListTemplateTaskCriteriasByTemplateTaskResponse
+	18, // 52: domain.operation.v1.TemplateTaskCriteriaDomainService.ListByCriteria:output_type -> domain.operation.v1.ListTemplateTaskCriteriasByCriteriaResponse
+	44, // [44:53] is the sub-list for method output_type
+	35, // [35:44] is the sub-list for method input_type
+	35, // [35:35] is the sub-list for extension type_name
+	35, // [35:35] is the sub-list for extension extendee
+	0,  // [0:35] is the sub-list for field type_name
 }
 
 func init() { file_domain_operation_template_task_criteria_template_task_criteria_proto_init() }

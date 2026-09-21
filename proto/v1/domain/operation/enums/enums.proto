@@ -165,6 +165,16 @@ enum ScaleKind {
   SCALE_KIND_EXACT_MAP = 2; // input_match -> output
 }
 
+// RatingMode controls how a template-task criterion binding presents a
+// captured numeric rating. It is deliberately separate from CriteriaType:
+// CriteriaType remains the persisted value contract, while RatingMode is the
+// binding-level presentation/configuration instruction.
+enum RatingMode {
+  RATING_MODE_UNSPECIFIED = 0; // legacy behavior; resolve as STANDARD
+  RATING_MODE_STANDARD = 1;
+  RATING_MODE_NUMERIC_WITH_DESCRIPTION = 2;
+}
+
 enum ReportingRole {
   REPORTING_ROLE_UNSPECIFIED = 0;
   REPORTING_ROLE_PRIMARY = 1;

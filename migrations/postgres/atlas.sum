@@ -1,4 +1,4 @@
-h1:M9oYAprNsPzFYGssYiqQRZh3zxGQe+ev4K6a1gXNl/M=
+h1:YxUEmFVP976wWFFDcV4/RaN2v8p0k6G2wC+xlVpeG2I=
 20260502000000_baseline.sql h1:nSWEB4eB5Yt6qrCeg8crmwudHHCA0Gpps2L5h649wAU=
 20260505221625_restore_revenue_period_marker_idempotency.sql h1:mAF68zDv14QT18Vfybt+p1uiJ1xtMjDsh8sj6GpTBB8=
 20260505221626_recreate_revenue_period_marker_unique_index.sql h1:9Tm42g4YD+ipRQAiTcMgIHwltETorc0jifJQddi4i7s=
@@ -77,3 +77,4 @@ h1:M9oYAprNsPzFYGssYiqQRZh3zxGQe+ev4K6a1gXNl/M=
 20260822213000_descriptor_schema_alignment.sql h1:QTlG6Gk3kHZ2sVmQZAdT8AnbrRVuEVaEGnyUVLGcYJ0=
 20260829000000_copya_bundle_receipt.sql h1:NoNLmDeMZk8nWbRd6qyLU33RUD2HKemE01yahFfXP7s=
 20260918000000_agreement_escalation_clauses.sql h1:86eGAd8Bk924bw1cT+DFXZ8Z8T8oDWvfYepXo4yzaGg=
+20260920000000_rating_description_mode.sql h1:+VQOB55Y2rSHR/RYz1BDGupMr+AHNxVKtaQ+c1HYHa4=

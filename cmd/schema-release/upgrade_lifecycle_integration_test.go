@@ -20,6 +20,21 @@ import (
 	schemareleases "github.com/erniealice/esqyma/schema-releases"
 )
 
+const lifecycleBundleManifest = `{
+  "format_version": 1,
+  "id": "gpagoda-base",
+  "version": "2026.08.1",
+  "schema_release": "postgres/2026.08.1",
+  "profile": "client-minimal",
+  "business_type": "leasing",
+  "workspace": {"id":"workspace-gpagoda","name":"gpagoda","slug":"gpagoda","description":"local","timezone":"Australia/Sydney"},
+  "user": {"id":"superadmin-001","first_name":"Super","last_name":"Admin","email_address":"admin@example.test","mobile_number":"+61400000000","timezone":"Australia/Sydney","password_env":"DB_INIT_ADMIN_PASSWORD"},
+  "admin_id": "admin-gpagoda-superadmin",
+  "workspace_user_id": "workspace-user-gpagoda-superadmin",
+  "role": {"id":"role-gpagoda-super-admin","name":"Super Admin","description":"all grants","color":"#dc2626"},
+  "workspace_user_role_id": "workspace-user-role-gpagoda-superadmin"
+}`
+
 func captureUpgradeOutput(t *testing.T, run func() error) ([]byte, error) {
 	t.Helper()
 	reader, writer, err := os.Pipe()
@@ -235,11 +250,7 @@ CREATE TABLE ichizen_deploy.data_bundle_receipts (target_key text NOT NULL, bund
 		if err != nil {
 			t.Fatal(err)
 		}
-		bundleRaw, err := os.ReadFile(filepath.Join(realRoot, "deploy/gpagoda/database/data/gpagoda-base/2026.08.1.json"))
-		if err != nil {
-			t.Fatal(err)
-		}
-		bundleRaw = bytes.ReplaceAll(bundleRaw, []byte("postgres/2026.08.1"), []byte(from.Release))
+		bundleRaw := bytes.ReplaceAll([]byte(lifecycleBundleManifest), []byte("postgres/2026.08.1"), []byte(from.Release))
 		bundlePath := "deploy/gpagoda/database/data/fixture.json"
 		write(filepath.Join(fixtureRoot, bundlePath), bundleRaw)
 		target := targetManifest{FormatVersion: 1, TargetKey: "gpagoda/lifecycle", Scope: "disposable", SchemaRelease: to.Release, Database: targetDatabase{EnvFile: "fixture.env", Name: sourceConfig.Name}, BusinessType: "leasing", Workspace: targetWorkspace{ID: "workspace-gpagoda", Slug: "gpagoda"}, SeedProfile: "client-minimal", Bundles: []string{bundlePath}}
@@ -253,7 +264,7 @@ CREATE TABLE ichizen_deploy.data_bundle_receipts (target_key text NOT NULL, bund
 		commitFleetFixture(t, fixtureRoot, "deploy/database-fleet.json", "deploy/gpagoda/database/targets/lifecycle.json", bundlePath)
 		write(filepath.Join(fixtureRoot, "fixture.env"), []byte(fmt.Sprintf("DATABASE_POSTGRES_HOST=%s\nDATABASE_POSTGRES_PORT=%s\nDATABASE_POSTGRES_SSLMODE=%s\n", config.Host, config.Port, config.SSLMode)))
 		t.Setenv("FIXTURE_MIGRATION_USER", config.User)
-		t.Setenv("FIXTURE_MIGRATION_PASSWORD", config.Password)
+		t.Setenv("FIXTURE_MIGRATION_PASSWORD", "disposable-fixture-password")
 		t.Setenv("DB_INIT_RECEIPT_DIR", receipts)
 		if _, err := source.ExecContext(t.Context(), "INSERT INTO public.workspace VALUES ('workspace-gpagoda','gpagoda'); INSERT INTO public.lifecycle_probe VALUES (1,'preserved');"); err != nil {
 			t.Fatal(err)

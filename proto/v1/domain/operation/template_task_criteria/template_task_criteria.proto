@@ -34,6 +34,12 @@ message TemplateTaskCriteria {
   optional string date_created_string = 12 [(options.v1.db).ignore = true];
   // Immutable tenant anchor. Template task and criteria parents must agree.
   optional string workspace_id = 13 [(options.v1.db).references = "workspace", (options.v1.db).index = true];
+  // Binding-level presentation instruction. NULL/UNSPECIFIED preserves the
+  // legacy numeric/text behavior and is resolved as STANDARD by consumers.
+  optional domain.operation.v1.RatingMode rating_mode = 14;
+  // Reusable numeric scale selected for this binding. Descriptions remain in
+  // template_task_criteria_rating_description because wording is binding-specific.
+  optional string rating_scale_id = 15 [(options.v1.db).references = "score_scale", (options.v1.db).index = true];
 }
 
 // --- Service ---

@@ -16,13 +16,19 @@ import (
 // Upgrade authority belongs to a reviewed target, separate from app defaults.
 // Endpoint is a non-secret host:port assertion, not a free-form credential URL.
 type upgradeTarget struct {
-	ConnectionMode    string `json:"connection_mode"`
-	FromRelease       string `json:"from_release"`
-	Endpoint          string `json:"endpoint"`
-	ConnectionUser    string `json:"connection_user,omitempty"`
-	MigrationRole     string `json:"migration_role"`
-	RuntimeRole       string `json:"runtime_role"`
-	BackupMaxAgeHours int    `json:"backup_max_age_hours"`
+	ConnectionMode             string `json:"connection_mode"`
+	FromRelease                string `json:"from_release"`
+	Endpoint                   string `json:"endpoint"`
+	ConnectionUser             string `json:"connection_user,omitempty"`
+	MigrationRole              string `json:"migration_role"`
+	RuntimeRole                string `json:"runtime_role"`
+	BackupMaxAgeHours          int    `json:"backup_max_age_hours"`
+	CatalogMode                string `json:"catalog_mode,omitempty"`
+	FromBaseCatalogFingerprint string `json:"from_base_catalog_fingerprint,omitempty"`
+	ToBaseCatalogFingerprint   string `json:"to_base_catalog_fingerprint,omitempty"`
+	OverlayID                  string `json:"overlay_id,omitempty"`
+	FromOverlayFingerprint     string `json:"from_overlay_fingerprint,omitempty"`
+	ToOverlayFingerprint       string `json:"to_overlay_fingerprint,omitempty"`
 }
 
 type legacyAdoptionTarget struct {
@@ -142,6 +148,9 @@ func (target targetManifest) validateUpgrade(from string, config databaseConfig)
 	if u.BackupMaxAgeHours < 1 || u.BackupMaxAgeHours > 168 {
 		return errors.New("upgrade backup age must be 1..168 hours")
 	}
+	if err := u.validateCatalogProof(); err != nil {
+		return err
+	}
 	connectionUser := u.ConnectionUser
 	if connectionUser == "" {
 		connectionUser = u.MigrationRole
@@ -168,6 +177,45 @@ func (target targetManifest) validateUpgrade(from string, config databaseConfig)
 		return errors.New("local/disposable upgrade must use loopback")
 	}
 	return nil
+}
+
+func (u upgradeTarget) validateCatalogProof() error {
+	if u.CatalogMode == "" || u.CatalogMode == "fresh" {
+		if u.FromBaseCatalogFingerprint != "" || u.ToBaseCatalogFingerprint != "" || u.OverlayID != "" || u.FromOverlayFingerprint != "" || u.ToOverlayFingerprint != "" {
+			return errors.New("fresh catalog mode cannot declare target overlay fingerprints")
+		}
+		return nil
+	}
+	if u.CatalogMode != "base_overlay" {
+		return errors.New("unsupported target catalog mode")
+	}
+	for name, value := range map[string]string{
+		"from base catalog": u.FromBaseCatalogFingerprint,
+		"to base catalog":   u.ToBaseCatalogFingerprint,
+		"from overlay":      u.FromOverlayFingerprint,
+		"to overlay":        u.ToOverlayFingerprint,
+	} {
+		if !evidenceDigestPattern.MatchString(value) {
+			return fmt.Errorf("target %s fingerprint is invalid", name)
+		}
+	}
+	if u.OverlayID == "" {
+		return errors.New("target overlay identity is required for base_overlay catalog mode")
+	}
+	return nil
+}
+
+func (u upgradeTarget) catalogProof(phase string) (baseCatalog, overlay string, ok bool) {
+	if u.CatalogMode != "base_overlay" {
+		return "", "", false
+	}
+	if phase == "from" {
+		return u.FromBaseCatalogFingerprint, u.FromOverlayFingerprint, true
+	}
+	if phase == "to" {
+		return u.ToBaseCatalogFingerprint, u.ToOverlayFingerprint, true
+	}
+	return "", "", false
 }
 
 func (target targetManifest) validateLegacyAdoption(release string, config databaseConfig) error {

@@ -90,7 +90,7 @@ func TestPendingMigrationPolicyCI(t *testing.T) {
 			if err != nil {
 				t.Fatal(err)
 			}
-			if err := validateAtomicMigrationSQL(string(raw)); err != nil {
+			if err := validateMigrationFileSQL(name, string(raw)); err != nil {
 				t.Fatal(err)
 			}
 		})

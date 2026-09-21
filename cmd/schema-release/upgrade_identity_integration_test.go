@@ -68,7 +68,11 @@ func TestUpgradeRuntimeAuthorityIntegration(t *testing.T) {
 			t.Fatal(err)
 		}
 	}
-	exec(`CREATE SCHEMA atlas_schema_revisions; CREATE TABLE atlas_schema_revisions.atlas_schema_revisions(id integer); CREATE SCHEMA ichizen_deploy; CREATE TABLE ichizen_deploy.data_bundle_receipts(id integer); CREATE TABLE public.schema_migrations(id integer); CREATE TABLE public.application_probe(id integer)`)
+	// A reviewed legacy predecessor can have Atlas history and the legacy
+	// public.schema_migrations table without the newer Copya receipt ledger.
+	// Authority verification must remain read-only and must not fail before the
+	// candidate migration has a chance to create that ledger.
+	exec(`CREATE SCHEMA atlas_schema_revisions; CREATE TABLE atlas_schema_revisions.atlas_schema_revisions(id integer); CREATE TABLE public.schema_migrations(id integer); CREATE TABLE public.application_probe(id integer)`)
 	exec(`REVOKE CREATE ON SCHEMA public FROM PUBLIC`)
 	check := func(wantSafe bool) {
 		t.Helper()
@@ -77,6 +81,8 @@ func TestUpgradeRuntimeAuthorityIntegration(t *testing.T) {
 			t.Fatalf("safe=%t err=%v", wantSafe, err)
 		}
 	}
+	check(true)
+	exec(`CREATE SCHEMA ichizen_deploy; CREATE TABLE ichizen_deploy.data_bundle_receipts(id integer)`)
 	check(true)
 
 	t.Run("operator lock excludes a concurrent connection", func(t *testing.T) {

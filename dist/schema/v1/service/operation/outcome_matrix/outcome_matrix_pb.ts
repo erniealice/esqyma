@@ -6,6 +6,8 @@ import type { GenEnum, GenFile, GenMessage, GenService } from "@bufbuild/protobu
 import { enumDesc, fileDesc, messageDesc, serviceDesc } from "@bufbuild/protobuf/codegenv2";
 import type { Error } from "../../../domain/common/error_pb";
 import { file_domain_common_error } from "../../../domain/common/error_pb";
+import type { RatingMode, ScaleKind } from "../../../domain/operation/enums/enums_pb";
+import { file_domain_operation_enums_enums } from "../../../domain/operation/enums/enums_pb";
 import type { OutcomeCriteria } from "../../../domain/operation/outcome_criteria/outcome_criteria_pb";
 import { file_domain_operation_outcome_criteria_outcome_criteria } from "../../../domain/operation/outcome_criteria/outcome_criteria_pb";
 import type { PhaseApprovalStatus } from "../../../domain/operation/job_phase/job_phase_pb";
@@ -16,7 +18,7 @@ import type { Message } from "@bufbuild/protobuf";
  * Describes the file service/operation/outcome_matrix/outcome_matrix.proto.
  */
 export const file_service_operation_outcome_matrix_outcome_matrix: GenFile = /*@__PURE__*/
-  fileDesc("CjVzZXJ2aWNlL29wZXJhdGlvbi9vdXRjb21lX21hdHJpeC9vdXRjb21lX21hdHJpeC5wcm90bxIUc2VydmljZS5vcGVyYXRpb24udjEi0QEKF0dldE91dGNvbWVNYXRyaXhSZXF1ZXN0EhcKD2pvYl90ZW1wbGF0ZV9pZBgBIAEoCRI3CgVzY29wZRgCIAEoDjIoLnNlcnZpY2Uub3BlcmF0aW9uLnYxLk91dGNvbWVNYXRyaXhTY29wZRIiChVzdWJzY3JpcHRpb25fZ3JvdXBfaWQYAyABKAlIAIgBARIXCgpwcm9kdWN0X2lkGAQgASgJSAGIAQFCGAoWX3N1YnNjcmlwdGlvbl9ncm91cF9pZEINCgtfcHJvZHVjdF9pZCKHAQoPQ3JpdGVyaW9uQ29sdW1uEhIKCmNvbHVtbl9rZXkYASABKAkSFgoOc2VxdWVuY2Vfb3JkZXIYAiABKAUSEAoIcmVxdWlyZWQYAyABKAgSNgoIY3JpdGVyaWEYBCABKAsyJC5kb21haW4ub3BlcmF0aW9uLnYxLk91dGNvbWVDcml0ZXJpYSKKAQoKVGFza0NvbHVtbhIcChRqb2JfdGVtcGxhdGVfdGFza19pZBgBIAEoCRINCgVsYWJlbBgCIAEoCRIWCg5zZXF1ZW5jZV9vcmRlchgDIAEoBRI3Cghjcml0ZXJpYRgEIAMoCzIlLnNlcnZpY2Uub3BlcmF0aW9uLnYxLkNyaXRlcmlvbkNvbHVtbiKSAQoLUGhhc2VDb2x1bW4SHQoVam9iX3RlbXBsYXRlX3BoYXNlX2lkGAEgASgJEg0KBWxhYmVsGAIgASgJEhYKDnNlcXVlbmNlX29yZGVyGAMgASgFEi8KBXRhc2tzGAQgAygLMiAuc2VydmljZS5vcGVyYXRpb24udjEuVGFza0NvbHVtbhIMCgRjb2RlGAUgASgJIvkCCgtPdXRjb21lQ2VsbBISCgpvdXRjb21lX2lkGAEgASgJEhMKC2pvYl90YXNrX2lkGAIgASgJEhoKDW51bWVyaWNfdmFsdWUYAyABKAFIAIgBARIXCgp0ZXh0X3ZhbHVlGAQgASgJSAGIAQESHgoRY2F0ZWdvcmljYWxfdmFsdWUYBSABKAlIAogBARIcCg9wYXNzX2ZhaWxfdmFsdWUYBiABKAhIA4gBARITCgtyZWNvcmRlZF9ieRgHIAEoCRIQCghlZGl0YWJsZRgIIAEoCBIUCgxqb2JfcGhhc2VfaWQYCSABKAkSDgoGam9iX2lkGAogASgJEh8KEmRldGVybWluYXRpb25fbm90ZRgLIAEoCUgEiAEBQhAKDl9udW1lcmljX3ZhbHVlQg0KC190ZXh0X3ZhbHVlQhQKEl9jYXRlZ29yaWNhbF92YWx1ZUISChBfcGFzc19mYWlsX3ZhbHVlQhUKE19kZXRlcm1pbmF0aW9uX25vdGUiwgEKCk91dGNvbWVSb3cSEQoJY2xpZW50X2lkGAEgASgJEhQKDGNsaWVudF9sYWJlbBgCIAEoCRI6CgVjZWxscxgDIAMoCzIrLnNlcnZpY2Uub3BlcmF0aW9uLnYxLk91dGNvbWVSb3cuQ2VsbHNFbnRyeRpPCgpDZWxsc0VudHJ5EgsKA2tleRgBIAEoCRIwCgV2YWx1ZRgCIAEoCzIhLnNlcnZpY2Uub3BlcmF0aW9uLnYxLk91dGNvbWVDZWxsOgI4ASLYAQoTUGhhc2VBcHByb3ZhbFJvbGx1cBIdChVqb2JfdGVtcGxhdGVfcGhhc2VfaWQYASABKAkSOAoGc3RhdHVzGAIgASgOMiguZG9tYWluLm9wZXJhdGlvbi52MS5QaGFzZUFwcHJvdmFsU3RhdHVzEg0KBW1peGVkGAMgASgIEhQKDHRhcmdldF9jb3VudBgEIAEoBRIQCghoYXNfZGF0YRgFIAEoCBITCgtoYXJkX2Zyb3plbhgGIAEoCBIcChRibGFua19yZXF1aXJlZF9jb3VudBgHIAEoBSJiCiFHZXRQaGFzZUFwcHJvdmFsR2F0ZVJvbGx1cFJlcXVlc3QSHQoVc3Vic2NyaXB0aW9uX2dyb3VwX2lkGAEgASgJEh4KFmpvYl90ZW1wbGF0ZV9waGFzZV9pZHMYAiADKAkivAEKF1BoYXNlQXBwcm92YWxHYXRlUm9sbHVwEh0KFWpvYl90ZW1wbGF0ZV9waGFzZV9pZBgBIAEoCRIlCh1hcHBsaWVkX3N1YnNjcmlwdGlvbl9ncm91cF9pZBgCIAEoCRIUCgx0YXJnZXRfY291bnQYAyABKAUSHAoUYW55X3dvcmtmbG93X2VudGVyZWQYBCABKAgSFQoNYWxsX3B1Ymxpc2hlZBgFIAEoCBIQCghoYXNfZGF0YRgGIAEoCCKsAQoiR2V0UGhhc2VBcHByb3ZhbEdhdGVSb2xsdXBSZXNwb25zZRI+Cgdyb2xsdXBzGAEgAygLMi0uc2VydmljZS5vcGVyYXRpb24udjEuUGhhc2VBcHByb3ZhbEdhdGVSb2xsdXASDwoHc3VjY2VzcxgCIAEoCBIrCgVlcnJvchgDIAEoCzIXLmRvbWFpbi5jb21tb24udjEuRXJyb3JIAIgBAUIICgZfZXJyb3IivgIKGEdldE91dGNvbWVNYXRyaXhSZXNwb25zZRIXCg9qb2JfdGVtcGxhdGVfaWQYASABKAkSGQoRam9iX3RlbXBsYXRlX25hbWUYAiABKAkSMQoGcGhhc2VzGAMgAygLMiEuc2VydmljZS5vcGVyYXRpb24udjEuUGhhc2VDb2x1bW4SLgoEcm93cxgEIAMoCzIgLnNlcnZpY2Uub3BlcmF0aW9uLnYxLk91dGNvbWVSb3cSDwoHc3VjY2VzcxgFIAEoCBIrCgVlcnJvchgGIAEoCzIXLmRvbWFpbi5jb21tb24udjEuRXJyb3JIAIgBARJDChBhcHByb3ZhbF9yb2xsdXBzGAcgAygLMikuc2VydmljZS5vcGVyYXRpb24udjEuUGhhc2VBcHByb3ZhbFJvbGx1cEIICgZfZXJyb3IicgoeR2V0T3V0Y29tZVN1bW1hcnlSb3N0ZXJSZXF1ZXN0EhcKD2pvYl90ZW1wbGF0ZV9pZBgBIAEoCRI3CgVzY29wZRgCIAEoDjIoLnNlcnZpY2Uub3BlcmF0aW9uLnYxLk91dGNvbWVNYXRyaXhTY29wZSKyAQoYT3V0Y29tZVN1bW1hcnlQaGFzZUVudHJ5Eh0KFWpvYl90ZW1wbGF0ZV9waGFzZV9pZBgBIAEoCRIMCgRjb2RlGAIgASgJEg0KBWxhYmVsGAMgASgJEhYKDnNlcXVlbmNlX29yZGVyGAQgASgFEhQKDHNjYWxlZF9sYWJlbBgFIAEoCRIaCg1zdW1tYXJ5X3Njb3JlGAYgASgBSACIAQFCEAoOX3N1bW1hcnlfc2NvcmUiwQEKF091dGNvbWVTdW1tYXJ5Um9zdGVyUm93EhEKCWNsaWVudF9pZBgBIAEoCRIUCgxjbGllbnRfbGFiZWwYAiABKAkSPgoGcGhhc2VzGAMgAygLMi4uc2VydmljZS5vcGVyYXRpb24udjEuT3V0Y29tZVN1bW1hcnlQaGFzZUVudHJ5EhgKEHllYXJfZmluYWxfbGFiZWwYBCABKAkSIwobeWVhcl9maW5hbF9pc19hdXRob3JpdGF0aXZlGAUgASgIIr8BCh9HZXRPdXRjb21lU3VtbWFyeVJvc3RlclJlc3BvbnNlEhcKD2pvYl90ZW1wbGF0ZV9pZBgBIAEoCRI7CgRyb3dzGAIgAygLMi0uc2VydmljZS5vcGVyYXRpb24udjEuT3V0Y29tZVN1bW1hcnlSb3N0ZXJSb3cSDwoHc3VjY2VzcxgDIAEoCBIrCgVlcnJvchgEIAEoCzIXLmRvbWFpbi5jb21tb24udjEuRXJyb3JIAIgBAUIICgZfZXJyb3IqdwoST3V0Y29tZU1hdHJpeFNjb3BlEiQKIE9VVENPTUVfTUFUUklYX1NDT1BFX1VOU1BFQ0lGSUVEEAASHQoZT1VUQ09NRV9NQVRSSVhfU0NPUEVfTUlORRABEhwKGE9VVENPTUVfTUFUUklYX1NDT1BFX0FMTBACMqQDChRPdXRjb21lTWF0cml4U2VydmljZRJxChBHZXRPdXRjb21lTWF0cml4Ei0uc2VydmljZS5vcGVyYXRpb24udjEuR2V0T3V0Y29tZU1hdHJpeFJlcXVlc3QaLi5zZXJ2aWNlLm9wZXJhdGlvbi52MS5HZXRPdXRjb21lTWF0cml4UmVzcG9uc2UShgEKF0dldE91dGNvbWVTdW1tYXJ5Um9zdGVyEjQuc2VydmljZS5vcGVyYXRpb24udjEuR2V0T3V0Y29tZVN1bW1hcnlSb3N0ZXJSZXF1ZXN0GjUuc2VydmljZS5vcGVyYXRpb24udjEuR2V0T3V0Y29tZVN1bW1hcnlSb3N0ZXJSZXNwb25zZRKPAQoaR2V0UGhhc2VBcHByb3ZhbEdhdGVSb2xsdXASNy5zZXJ2aWNlLm9wZXJhdGlvbi52MS5HZXRQaGFzZUFwcHJvdmFsR2F0ZVJvbGx1cFJlcXVlc3QaOC5zZXJ2aWNlLm9wZXJhdGlvbi52MS5HZXRQaGFzZUFwcHJvdmFsR2F0ZVJvbGx1cFJlc3BvbnNlQvkBChhjb20uc2VydmljZS5vcGVyYXRpb24udjFCEk91dGNvbWVNYXRyaXhQcm90b1ABWldnaXRodWIuY29tL2VybmllYWxpY2UvZXNxeW1hL3BrZy9zY2hlbWEvdjEvc2VydmljZS9vcGVyYXRpb24vb3V0Y29tZV9tYXRyaXg7b3BlcmF0aW9udjGiAgNTT1iqAhRTZXJ2aWNlLk9wZXJhdGlvbi5WMcoCFFNlcnZpY2VcT3BlcmF0aW9uXFYx4gIgU2VydmljZVxPcGVyYXRpb25cVjFcR1BCTWV0YWRhdGHqAhZTZXJ2aWNlOjpPcGVyYXRpb246OlYxYgZwcm90bzM", [file_domain_common_error, file_domain_operation_outcome_criteria_outcome_criteria, file_domain_operation_job_phase_job_phase]);
+  fileDesc("CjVzZXJ2aWNlL29wZXJhdGlvbi9vdXRjb21lX21hdHJpeC9vdXRjb21lX21hdHJpeC5wcm90bxIUc2VydmljZS5vcGVyYXRpb24udjEi0QEKF0dldE91dGNvbWVNYXRyaXhSZXF1ZXN0EhcKD2pvYl90ZW1wbGF0ZV9pZBgBIAEoCRI3CgVzY29wZRgCIAEoDjIoLnNlcnZpY2Uub3BlcmF0aW9uLnYxLk91dGNvbWVNYXRyaXhTY29wZRIiChVzdWJzY3JpcHRpb25fZ3JvdXBfaWQYAyABKAlIAIgBARIXCgpwcm9kdWN0X2lkGAQgASgJSAGIAQFCGAoWX3N1YnNjcmlwdGlvbl9ncm91cF9pZEINCgtfcHJvZHVjdF9pZCKcAgoPQ3JpdGVyaW9uQ29sdW1uEhIKCmNvbHVtbl9rZXkYASABKAkSFgoOc2VxdWVuY2Vfb3JkZXIYAiABKAUSEAoIcmVxdWlyZWQYAyABKAgSNgoIY3JpdGVyaWEYBCABKAsyJC5kb21haW4ub3BlcmF0aW9uLnYxLk91dGNvbWVDcml0ZXJpYRI0CgtyYXRpbmdfbW9kZRgFIAEoDjIfLmRvbWFpbi5vcGVyYXRpb24udjEuUmF0aW5nTW9kZRIXCg9yYXRpbmdfc2NhbGVfaWQYBiABKAkSRAoTcmF0aW5nX2Rlc2NyaXB0aW9ucxgHIAMoCzInLnNlcnZpY2Uub3BlcmF0aW9uLnYxLlJhdGluZ0Rlc2NyaXB0aW9uItIBChFSYXRpbmdEZXNjcmlwdGlvbhIyCgpzY2FsZV9raW5kGAEgASgOMh4uZG9tYWluLm9wZXJhdGlvbi52MS5TY2FsZUtpbmQSFgoJaW5wdXRfbWluGAIgASgBSACIAQESFgoJaW5wdXRfbWF4GAMgASgBSAGIAQESGAoLaW5wdXRfbWF0Y2gYBCABKAlIAogBARITCgtkZXNjcmlwdGlvbhgFIAEoCUIMCgpfaW5wdXRfbWluQgwKCl9pbnB1dF9tYXhCDgoMX2lucHV0X21hdGNoIooBCgpUYXNrQ29sdW1uEhwKFGpvYl90ZW1wbGF0ZV90YXNrX2lkGAEgASgJEg0KBWxhYmVsGAIgASgJEhYKDnNlcXVlbmNlX29yZGVyGAMgASgFEjcKCGNyaXRlcmlhGAQgAygLMiUuc2VydmljZS5vcGVyYXRpb24udjEuQ3JpdGVyaW9uQ29sdW1uIpIBCgtQaGFzZUNvbHVtbhIdChVqb2JfdGVtcGxhdGVfcGhhc2VfaWQYASABKAkSDQoFbGFiZWwYAiABKAkSFgoOc2VxdWVuY2Vfb3JkZXIYAyABKAUSLwoFdGFza3MYBCADKAsyIC5zZXJ2aWNlLm9wZXJhdGlvbi52MS5UYXNrQ29sdW1uEgwKBGNvZGUYBSABKAki+QIKC091dGNvbWVDZWxsEhIKCm91dGNvbWVfaWQYASABKAkSEwoLam9iX3Rhc2tfaWQYAiABKAkSGgoNbnVtZXJpY192YWx1ZRgDIAEoAUgAiAEBEhcKCnRleHRfdmFsdWUYBCABKAlIAYgBARIeChFjYXRlZ29yaWNhbF92YWx1ZRgFIAEoCUgCiAEBEhwKD3Bhc3NfZmFpbF92YWx1ZRgGIAEoCEgDiAEBEhMKC3JlY29yZGVkX2J5GAcgASgJEhAKCGVkaXRhYmxlGAggASgIEhQKDGpvYl9waGFzZV9pZBgJIAEoCRIOCgZqb2JfaWQYCiABKAkSHwoSZGV0ZXJtaW5hdGlvbl9ub3RlGAsgASgJSASIAQFCEAoOX251bWVyaWNfdmFsdWVCDQoLX3RleHRfdmFsdWVCFAoSX2NhdGVnb3JpY2FsX3ZhbHVlQhIKEF9wYXNzX2ZhaWxfdmFsdWVCFQoTX2RldGVybWluYXRpb25fbm90ZSLCAQoKT3V0Y29tZVJvdxIRCgljbGllbnRfaWQYASABKAkSFAoMY2xpZW50X2xhYmVsGAIgASgJEjoKBWNlbGxzGAMgAygLMisuc2VydmljZS5vcGVyYXRpb24udjEuT3V0Y29tZVJvdy5DZWxsc0VudHJ5Gk8KCkNlbGxzRW50cnkSCwoDa2V5GAEgASgJEjAKBXZhbHVlGAIgASgLMiEuc2VydmljZS5vcGVyYXRpb24udjEuT3V0Y29tZUNlbGw6AjgBItgBChNQaGFzZUFwcHJvdmFsUm9sbHVwEh0KFWpvYl90ZW1wbGF0ZV9waGFzZV9pZBgBIAEoCRI4CgZzdGF0dXMYAiABKA4yKC5kb21haW4ub3BlcmF0aW9uLnYxLlBoYXNlQXBwcm92YWxTdGF0dXMSDQoFbWl4ZWQYAyABKAgSFAoMdGFyZ2V0X2NvdW50GAQgASgFEhAKCGhhc19kYXRhGAUgASgIEhMKC2hhcmRfZnJvemVuGAYgASgIEhwKFGJsYW5rX3JlcXVpcmVkX2NvdW50GAcgASgFImIKIUdldFBoYXNlQXBwcm92YWxHYXRlUm9sbHVwUmVxdWVzdBIdChVzdWJzY3JpcHRpb25fZ3JvdXBfaWQYASABKAkSHgoWam9iX3RlbXBsYXRlX3BoYXNlX2lkcxgCIAMoCSK8AQoXUGhhc2VBcHByb3ZhbEdhdGVSb2xsdXASHQoVam9iX3RlbXBsYXRlX3BoYXNlX2lkGAEgASgJEiUKHWFwcGxpZWRfc3Vic2NyaXB0aW9uX2dyb3VwX2lkGAIgASgJEhQKDHRhcmdldF9jb3VudBgDIAEoBRIcChRhbnlfd29ya2Zsb3dfZW50ZXJlZBgEIAEoCBIVCg1hbGxfcHVibGlzaGVkGAUgASgIEhAKCGhhc19kYXRhGAYgASgIIqwBCiJHZXRQaGFzZUFwcHJvdmFsR2F0ZVJvbGx1cFJlc3BvbnNlEj4KB3JvbGx1cHMYASADKAsyLS5zZXJ2aWNlLm9wZXJhdGlvbi52MS5QaGFzZUFwcHJvdmFsR2F0ZVJvbGx1cBIPCgdzdWNjZXNzGAIgASgIEisKBWVycm9yGAMgASgLMhcuZG9tYWluLmNvbW1vbi52MS5FcnJvckgAiAEBQggKBl9lcnJvciK+AgoYR2V0T3V0Y29tZU1hdHJpeFJlc3BvbnNlEhcKD2pvYl90ZW1wbGF0ZV9pZBgBIAEoCRIZChFqb2JfdGVtcGxhdGVfbmFtZRgCIAEoCRIxCgZwaGFzZXMYAyADKAsyIS5zZXJ2aWNlLm9wZXJhdGlvbi52MS5QaGFzZUNvbHVtbhIuCgRyb3dzGAQgAygLMiAuc2VydmljZS5vcGVyYXRpb24udjEuT3V0Y29tZVJvdxIPCgdzdWNjZXNzGAUgASgIEisKBWVycm9yGAYgASgLMhcuZG9tYWluLmNvbW1vbi52MS5FcnJvckgAiAEBEkMKEGFwcHJvdmFsX3JvbGx1cHMYByADKAsyKS5zZXJ2aWNlLm9wZXJhdGlvbi52MS5QaGFzZUFwcHJvdmFsUm9sbHVwQggKBl9lcnJvciJyCh5HZXRPdXRjb21lU3VtbWFyeVJvc3RlclJlcXVlc3QSFwoPam9iX3RlbXBsYXRlX2lkGAEgASgJEjcKBXNjb3BlGAIgASgOMiguc2VydmljZS5vcGVyYXRpb24udjEuT3V0Y29tZU1hdHJpeFNjb3BlIrIBChhPdXRjb21lU3VtbWFyeVBoYXNlRW50cnkSHQoVam9iX3RlbXBsYXRlX3BoYXNlX2lkGAEgASgJEgwKBGNvZGUYAiABKAkSDQoFbGFiZWwYAyABKAkSFgoOc2VxdWVuY2Vfb3JkZXIYBCABKAUSFAoMc2NhbGVkX2xhYmVsGAUgASgJEhoKDXN1bW1hcnlfc2NvcmUYBiABKAFIAIgBAUIQCg5fc3VtbWFyeV9zY29yZSLBAQoXT3V0Y29tZVN1bW1hcnlSb3N0ZXJSb3cSEQoJY2xpZW50X2lkGAEgASgJEhQKDGNsaWVudF9sYWJlbBgCIAEoCRI+CgZwaGFzZXMYAyADKAsyLi5zZXJ2aWNlLm9wZXJhdGlvbi52MS5PdXRjb21lU3VtbWFyeVBoYXNlRW50cnkSGAoQeWVhcl9maW5hbF9sYWJlbBgEIAEoCRIjCht5ZWFyX2ZpbmFsX2lzX2F1dGhvcml0YXRpdmUYBSABKAgivwEKH0dldE91dGNvbWVTdW1tYXJ5Um9zdGVyUmVzcG9uc2USFwoPam9iX3RlbXBsYXRlX2lkGAEgASgJEjsKBHJvd3MYAiADKAsyLS5zZXJ2aWNlLm9wZXJhdGlvbi52MS5PdXRjb21lU3VtbWFyeVJvc3RlclJvdxIPCgdzdWNjZXNzGAMgASgIEisKBWVycm9yGAQgASgLMhcuZG9tYWluLmNvbW1vbi52MS5FcnJvckgAiAEBQggKBl9lcnJvcip3ChJPdXRjb21lTWF0cml4U2NvcGUSJAogT1VUQ09NRV9NQVRSSVhfU0NPUEVfVU5TUEVDSUZJRUQQABIdChlPVVRDT01FX01BVFJJWF9TQ09QRV9NSU5FEAESHAoYT1VUQ09NRV9NQVRSSVhfU0NPUEVfQUxMEAIypAMKFE91dGNvbWVNYXRyaXhTZXJ2aWNlEnEKEEdldE91dGNvbWVNYXRyaXgSLS5zZXJ2aWNlLm9wZXJhdGlvbi52MS5HZXRPdXRjb21lTWF0cml4UmVxdWVzdBouLnNlcnZpY2Uub3BlcmF0aW9uLnYxLkdldE91dGNvbWVNYXRyaXhSZXNwb25zZRKGAQoXR2V0T3V0Y29tZVN1bW1hcnlSb3N0ZXISNC5zZXJ2aWNlLm9wZXJhdGlvbi52MS5HZXRPdXRjb21lU3VtbWFyeVJvc3RlclJlcXVlc3QaNS5zZXJ2aWNlLm9wZXJhdGlvbi52MS5HZXRPdXRjb21lU3VtbWFyeVJvc3RlclJlc3BvbnNlEo8BChpHZXRQaGFzZUFwcHJvdmFsR2F0ZVJvbGx1cBI3LnNlcnZpY2Uub3BlcmF0aW9uLnYxLkdldFBoYXNlQXBwcm92YWxHYXRlUm9sbHVwUmVxdWVzdBo4LnNlcnZpY2Uub3BlcmF0aW9uLnYxLkdldFBoYXNlQXBwcm92YWxHYXRlUm9sbHVwUmVzcG9uc2VC+QEKGGNvbS5zZXJ2aWNlLm9wZXJhdGlvbi52MUIST3V0Y29tZU1hdHJpeFByb3RvUAFaV2dpdGh1Yi5jb20vZXJuaWVhbGljZS9lc3F5bWEvcGtnL3NjaGVtYS92MS9zZXJ2aWNlL29wZXJhdGlvbi9vdXRjb21lX21hdHJpeDtvcGVyYXRpb252MaICA1NPWKoCFFNlcnZpY2UuT3BlcmF0aW9uLlYxygIUU2VydmljZVxPcGVyYXRpb25cVjHiAiBTZXJ2aWNlXE9wZXJhdGlvblxWMVxHUEJNZXRhZGF0YeoCFlNlcnZpY2U6Ok9wZXJhdGlvbjo6VjFiBnByb3RvMw", [file_domain_common_error, file_domain_operation_enums_enums, file_domain_operation_outcome_criteria_outcome_criteria, file_domain_operation_job_phase_job_phase]);
 
 /**
  * @generated from message service.operation.v1.GetOutcomeMatrixRequest
@@ -93,6 +95,23 @@ export type CriterionColumn = Message<"service.operation.v1.CriterionColumn"> & 
    * @generated from field: domain.operation.v1.OutcomeCriteria criteria = 4;
    */
   criteria?: OutcomeCriteria;
+
+  /**
+   * Binding-level presentation instruction; UNSPECIFIED is legacy/standard.
+   *
+   * @generated from field: domain.operation.v1.RatingMode rating_mode = 5;
+   */
+  ratingMode: RatingMode;
+
+  /**
+   * @generated from field: string rating_scale_id = 6;
+   */
+  ratingScaleId: string;
+
+  /**
+   * @generated from field: repeated service.operation.v1.RatingDescription rating_descriptions = 7;
+   */
+  ratingDescriptions: RatingDescription[];
 };
 
 /**
@@ -101,6 +120,47 @@ export type CriterionColumn = Message<"service.operation.v1.CriterionColumn"> & 
  */
 export const CriterionColumnSchema: GenMessage<CriterionColumn> = /*@__PURE__*/
   messageDesc(file_service_operation_outcome_matrix_outcome_matrix, 1);
+
+/**
+ * RatingDescription is a presentation-safe matcher projected from the
+ * selected ScoreScaleBand plus the binding-specific wording. It deliberately
+ * excludes scale/band ids and any editable outcome fields.
+ *
+ * @generated from message service.operation.v1.RatingDescription
+ */
+export type RatingDescription = Message<"service.operation.v1.RatingDescription"> & {
+  /**
+   * @generated from field: domain.operation.v1.ScaleKind scale_kind = 1;
+   */
+  scaleKind: ScaleKind;
+
+  /**
+   * @generated from field: optional double input_min = 2;
+   */
+  inputMin?: number;
+
+  /**
+   * @generated from field: optional double input_max = 3;
+   */
+  inputMax?: number;
+
+  /**
+   * @generated from field: optional string input_match = 4;
+   */
+  inputMatch?: string;
+
+  /**
+   * @generated from field: string description = 5;
+   */
+  description: string;
+};
+
+/**
+ * Describes the message service.operation.v1.RatingDescription.
+ * Use `create(RatingDescriptionSchema)` to create a new message.
+ */
+export const RatingDescriptionSchema: GenMessage<RatingDescription> = /*@__PURE__*/
+  messageDesc(file_service_operation_outcome_matrix_outcome_matrix, 2);
 
 /**
  * TaskColumn is a thin grouping envelope for one job_template_task.
@@ -136,7 +196,7 @@ export type TaskColumn = Message<"service.operation.v1.TaskColumn"> & {
  * Use `create(TaskColumnSchema)` to create a new message.
  */
 export const TaskColumnSchema: GenMessage<TaskColumn> = /*@__PURE__*/
-  messageDesc(file_service_operation_outcome_matrix_outcome_matrix, 2);
+  messageDesc(file_service_operation_outcome_matrix_outcome_matrix, 3);
 
 /**
  * PhaseColumn is a thin grouping envelope for one job_template_phase.
@@ -182,7 +242,7 @@ export type PhaseColumn = Message<"service.operation.v1.PhaseColumn"> & {
  * Use `create(PhaseColumnSchema)` to create a new message.
  */
 export const PhaseColumnSchema: GenMessage<PhaseColumn> = /*@__PURE__*/
-  messageDesc(file_service_operation_outcome_matrix_outcome_matrix, 3);
+  messageDesc(file_service_operation_outcome_matrix_outcome_matrix, 4);
 
 /**
  * OutcomeCell is the one genuinely bespoke projection (like reporting's
@@ -281,7 +341,7 @@ export type OutcomeCell = Message<"service.operation.v1.OutcomeCell"> & {
  * Use `create(OutcomeCellSchema)` to create a new message.
  */
 export const OutcomeCellSchema: GenMessage<OutcomeCell> = /*@__PURE__*/
-  messageDesc(file_service_operation_outcome_matrix_outcome_matrix, 4);
+  messageDesc(file_service_operation_outcome_matrix_outcome_matrix, 5);
 
 /**
  * @generated from message service.operation.v1.OutcomeRow
@@ -312,7 +372,7 @@ export type OutcomeRow = Message<"service.operation.v1.OutcomeRow"> & {
  * Use `create(OutcomeRowSchema)` to create a new message.
  */
 export const OutcomeRowSchema: GenMessage<OutcomeRow> = /*@__PURE__*/
-  messageDesc(file_service_operation_outcome_matrix_outcome_matrix, 5);
+  messageDesc(file_service_operation_outcome_matrix_outcome_matrix, 6);
 
 /**
  * PhaseApprovalRollup is the truthful, per-template-phase instance roll-up the
@@ -388,7 +448,7 @@ export type PhaseApprovalRollup = Message<"service.operation.v1.PhaseApprovalRol
  * Use `create(PhaseApprovalRollupSchema)` to create a new message.
  */
 export const PhaseApprovalRollupSchema: GenMessage<PhaseApprovalRollup> = /*@__PURE__*/
-  messageDesc(file_service_operation_outcome_matrix_outcome_matrix, 6);
+  messageDesc(file_service_operation_outcome_matrix_outcome_matrix, 7);
 
 /**
  * @generated from message service.operation.v1.GetPhaseApprovalGateRollupRequest
@@ -417,7 +477,7 @@ export type GetPhaseApprovalGateRollupRequest = Message<"service.operation.v1.Ge
  * Use `create(GetPhaseApprovalGateRollupRequestSchema)` to create a new message.
  */
 export const GetPhaseApprovalGateRollupRequestSchema: GenMessage<GetPhaseApprovalGateRollupRequest> = /*@__PURE__*/
-  messageDesc(file_service_operation_outcome_matrix_outcome_matrix, 7);
+  messageDesc(file_service_operation_outcome_matrix_outcome_matrix, 8);
 
 /**
  * PhaseApprovalGateRollup is one (template_phase × group) sheet's gate input,
@@ -482,7 +542,7 @@ export type PhaseApprovalGateRollup = Message<"service.operation.v1.PhaseApprova
  * Use `create(PhaseApprovalGateRollupSchema)` to create a new message.
  */
 export const PhaseApprovalGateRollupSchema: GenMessage<PhaseApprovalGateRollup> = /*@__PURE__*/
-  messageDesc(file_service_operation_outcome_matrix_outcome_matrix, 8);
+  messageDesc(file_service_operation_outcome_matrix_outcome_matrix, 9);
 
 /**
  * @generated from message service.operation.v1.GetPhaseApprovalGateRollupResponse
@@ -509,7 +569,7 @@ export type GetPhaseApprovalGateRollupResponse = Message<"service.operation.v1.G
  * Use `create(GetPhaseApprovalGateRollupResponseSchema)` to create a new message.
  */
 export const GetPhaseApprovalGateRollupResponseSchema: GenMessage<GetPhaseApprovalGateRollupResponse> = /*@__PURE__*/
-  messageDesc(file_service_operation_outcome_matrix_outcome_matrix, 9);
+  messageDesc(file_service_operation_outcome_matrix_outcome_matrix, 10);
 
 /**
  * @generated from message service.operation.v1.GetOutcomeMatrixResponse
@@ -563,7 +623,7 @@ export type GetOutcomeMatrixResponse = Message<"service.operation.v1.GetOutcomeM
  * Use `create(GetOutcomeMatrixResponseSchema)` to create a new message.
  */
 export const GetOutcomeMatrixResponseSchema: GenMessage<GetOutcomeMatrixResponse> = /*@__PURE__*/
-  messageDesc(file_service_operation_outcome_matrix_outcome_matrix, 10);
+  messageDesc(file_service_operation_outcome_matrix_outcome_matrix, 11);
 
 /**
  * @generated from message service.operation.v1.GetOutcomeSummaryRosterRequest
@@ -587,7 +647,7 @@ export type GetOutcomeSummaryRosterRequest = Message<"service.operation.v1.GetOu
  * Use `create(GetOutcomeSummaryRosterRequestSchema)` to create a new message.
  */
 export const GetOutcomeSummaryRosterRequestSchema: GenMessage<GetOutcomeSummaryRosterRequest> = /*@__PURE__*/
-  messageDesc(file_service_operation_outcome_matrix_outcome_matrix, 11);
+  messageDesc(file_service_operation_outcome_matrix_outcome_matrix, 12);
 
 /**
  * OutcomeSummaryPhaseEntry is one roster member's stored composite pair for one
@@ -649,7 +709,7 @@ export type OutcomeSummaryPhaseEntry = Message<"service.operation.v1.OutcomeSumm
  * Use `create(OutcomeSummaryPhaseEntrySchema)` to create a new message.
  */
 export const OutcomeSummaryPhaseEntrySchema: GenMessage<OutcomeSummaryPhaseEntry> = /*@__PURE__*/
-  messageDesc(file_service_operation_outcome_matrix_outcome_matrix, 12);
+  messageDesc(file_service_operation_outcome_matrix_outcome_matrix, 13);
 
 /**
  * OutcomeSummaryRosterRow is one student's per-period composites plus the stored
@@ -697,7 +757,7 @@ export type OutcomeSummaryRosterRow = Message<"service.operation.v1.OutcomeSumma
  * Use `create(OutcomeSummaryRosterRowSchema)` to create a new message.
  */
 export const OutcomeSummaryRosterRowSchema: GenMessage<OutcomeSummaryRosterRow> = /*@__PURE__*/
-  messageDesc(file_service_operation_outcome_matrix_outcome_matrix, 13);
+  messageDesc(file_service_operation_outcome_matrix_outcome_matrix, 14);
 
 /**
  * @generated from message service.operation.v1.GetOutcomeSummaryRosterResponse
@@ -729,7 +789,7 @@ export type GetOutcomeSummaryRosterResponse = Message<"service.operation.v1.GetO
  * Use `create(GetOutcomeSummaryRosterResponseSchema)` to create a new message.
  */
 export const GetOutcomeSummaryRosterResponseSchema: GenMessage<GetOutcomeSummaryRosterResponse> = /*@__PURE__*/
-  messageDesc(file_service_operation_outcome_matrix_outcome_matrix, 14);
+  messageDesc(file_service_operation_outcome_matrix_outcome_matrix, 15);
 
 /**
  * OutcomeMatrixScope selects the row set. UNSPECIFIED is fail-closed → MINE.

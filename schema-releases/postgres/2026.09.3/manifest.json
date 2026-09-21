@@ -1,0 +1,82 @@
+{
+  "format_version": 2,
+  "release": "postgres/2026.09.3",
+  "dialect": "postgres",
+  "created_at": "2026-09-20T16:21:08Z",
+  "atlas": {
+    "tool_version": "1.3.0",
+    "head": "20260920000000",
+    "revision_count": 78,
+    "sum_sha256": "7e63c0a98daa51ebf96efd24c645c857037878cde3703767764dc55c89ea8daa",
+    "tracker_fingerprint": "5c4dac1ef5fffdcc0e45ac984f44340851a0e1711b62e3c85f7926512352665f"
+  },
+  "bootstrap": {
+    "path": "bootstrap.sql",
+    "sha256": "d15ceb9e2b790b2755c3d1e99ca34d61bd66aa9733ed1112b8aa9178cc956432",
+    "pg_dump_version": "18.3",
+    "restrict_key": "49f2a51a2bd7fa7c2c83fcc507482008322fa6b08886025f5245a91ff7a6b167",
+    "normalized_schema_fingerprint": "74a2121a535e0d9718a81cbb9dfc9422f5658477195946598a1429d13a1a0912",
+    "catalog_fingerprint": "9eb335431c9f03c82e04950088982cbb2c340a3af4fc12de919d31e83abec6dc"
+  },
+  "seed_contract": {
+    "id": "copya/v1",
+    "bundle_manifest_version": 1,
+    "allowed_profiles": ["client-minimal"],
+    "compatible_schema_releases": ["postgres/2026.09.2"]
+  },
+  "compatibility": {
+    "phase": "expand",
+    "api_reference": "rating-description-mode-v1",
+    "minimum_operator_version": 2,
+    "oracles": [
+      "atlas-history",
+      "catalog",
+      "seed-receipts",
+      "workspace",
+      "runtime-role",
+      "normalized-schema"
+    ],
+    "upgrades": [
+      {
+        "from_release": "postgres/2026.09.2",
+        "from_manifest_sha256": "69b76f1a72ece785141fa5cd507f999ddcae273ee080139c89e388b8d30bd966",
+        "from_tracker_fingerprint": "71765a5fb4937a7951a35a13a929a97a34ae111e3a02c143f28fb8439d0e438c",
+        "tracker_revision_count": 78,
+        "tracker_fingerprint": "4f125d5b03e8b02086b6793d3f14e6d4db7732b3dc64ffd6230ab0ed145a7d28"
+      },
+      {
+        "from_release": "postgres/2026.09.2",
+        "from_manifest_sha256": "69b76f1a72ece785141fa5cd507f999ddcae273ee080139c89e388b8d30bd966",
+        "from_tracker_fingerprint": "7cbfa83c39a99f75e4806cafa3996febc8239fd081fe409f5c0fa8950013b8ed",
+        "tracker_revision_count": 13,
+        "tracker_fingerprint": "26eb25b7a97a3b3433c2224594ae319da59f6b2d2b54387d9dcc8ad6b1b61b8c"
+      }
+    ],
+    "data_oracles": [
+      {
+        "id": "template-task-criteria-unchanged",
+        "sql": "SELECT count(*)::bigint, COALESCE(sum(length(id)), 0)::bigint, count(*) FILTER (WHERE active)::bigint FROM public.template_task_criteria WHERE workspace_id=$1",
+        "sql_sha256": "86cabf7611731b1b299bf1b7785bc741b8af3bcd3c5066e4a32a55cc1a71a192",
+        "mode": "unchanged",
+        "max_rows": 1,
+        "timeout_seconds": 10
+      },
+      {
+        "id": "task-outcomes-unchanged",
+        "sql": "SELECT count(*)::bigint, COALESCE(sum(length(id)), 0)::bigint, count(*) FILTER (WHERE numeric_value IS NOT NULL)::bigint, count(*) FILTER (WHERE text_value IS NOT NULL)::bigint FROM public.task_outcome WHERE workspace_id=$1",
+        "sql_sha256": "ef8daa49e8adccd590e7993bd96725405548e8c1ec2bff303a52cfb79af1ce80",
+        "mode": "unchanged",
+        "max_rows": 1,
+        "timeout_seconds": 10
+      },
+      {
+        "id": "score-scale-bands-unchanged",
+        "sql": "SELECT count(*)::bigint, COALESCE(sum(length(id)), 0)::bigint, count(*) FILTER (WHERE active)::bigint FROM public.score_scale_band WHERE workspace_id=$1",
+        "sql_sha256": "a2a2f55faf05a706c849f81491310829b63778eb24b6ea011d11f50bb181227e",
+        "mode": "unchanged",
+        "max_rows": 1,
+        "timeout_seconds": 10
+      }
+    ]
+  }
+}
