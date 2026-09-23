@@ -6,6 +6,33 @@ import type { GenFile, GenMessage, GenService } from "@bufbuild/protobuf/codegen
 import { fileDesc, messageDesc, serviceDesc } from "@bufbuild/protobuf/codegenv2";
 import type { Error } from "../../../domain/common/error_pb";
 import { file_domain_common_error } from "../../../domain/common/error_pb";
+import type { Job } from "../../../domain/operation/job/job_pb";
+import { file_domain_operation_job_job } from "../../../domain/operation/job/job_pb";
+import type { JobCategory } from "../../../domain/operation/job_category/job_category_pb";
+import { file_domain_operation_job_category_job_category } from "../../../domain/operation/job_category/job_category_pb";
+import type { JobOutcomeLine } from "../../../domain/operation/job_outcome_line/job_outcome_line_pb";
+import { file_domain_operation_job_outcome_line_job_outcome_line } from "../../../domain/operation/job_outcome_line/job_outcome_line_pb";
+import type { JobOutcomeSummary } from "../../../domain/operation/job_outcome_summary/job_outcome_summary_pb";
+import { file_domain_operation_job_outcome_summary_job_outcome_summary } from "../../../domain/operation/job_outcome_summary/job_outcome_summary_pb";
+import type { JobPhase } from "../../../domain/operation/job_phase/job_phase_pb";
+import { file_domain_operation_job_phase_job_phase } from "../../../domain/operation/job_phase/job_phase_pb";
+import type { JobTask } from "../../../domain/operation/job_task/job_task_pb";
+import { file_domain_operation_job_task_job_task } from "../../../domain/operation/job_task/job_task_pb";
+import type { JobTemplate } from "../../../domain/operation/job_template/job_template_pb";
+import { file_domain_operation_job_template_job_template } from "../../../domain/operation/job_template/job_template_pb";
+import type { JobTemplateTask } from "../../../domain/operation/job_template_task/job_template_task_pb";
+import { file_domain_operation_job_template_task_job_template_task } from "../../../domain/operation/job_template_task/job_template_task_pb";
+import type { JobTemplatePhase } from "../../../domain/operation/job_template_phase/job_template_phase_pb";
+import { file_domain_operation_job_template_phase_job_template_phase } from "../../../domain/operation/job_template_phase/job_template_phase_pb";
+import type { OutcomeCriteria } from "../../../domain/operation/outcome_criteria/outcome_criteria_pb";
+import { file_domain_operation_outcome_criteria_outcome_criteria } from "../../../domain/operation/outcome_criteria/outcome_criteria_pb";
+import type { PhaseOutcomeSummary } from "../../../domain/operation/phase_outcome_summary/phase_outcome_summary_pb";
+import { file_domain_operation_phase_outcome_summary_phase_outcome_summary } from "../../../domain/operation/phase_outcome_summary/phase_outcome_summary_pb";
+import { file_domain_operation_task_outcome_task_outcome } from "../../../domain/operation/task_outcome/task_outcome_pb";
+import type { TemplateTaskCriteria } from "../../../domain/operation/template_task_criteria/template_task_criteria_pb";
+import { file_domain_operation_template_task_criteria_template_task_criteria } from "../../../domain/operation/template_task_criteria/template_task_criteria_pb";
+import type { TemplateTaskCriteriaRatingDescription } from "../../../domain/operation/template_task_criteria_rating_description/template_task_criteria_rating_description_pb";
+import { file_domain_operation_template_task_criteria_rating_description_template_task_criteria_rating_description } from "../../../domain/operation/template_task_criteria_rating_description/template_task_criteria_rating_description_pb";
 import type { RenderProfile } from "../../../domain/operation/subscription_group_document_template/subscription_group_document_template_pb";
 import { file_domain_operation_subscription_group_document_template_subscription_group_document_template } from "../../../domain/operation/subscription_group_document_template/subscription_group_document_template_pb";
 import type { Message } from "@bufbuild/protobuf";
@@ -14,7 +41,7 @@ import type { Message } from "@bufbuild/protobuf";
  * Describes the file service/operation/subscription_group_outcome_export/subscription_group_outcome_export.proto.
  */
 export const file_service_operation_subscription_group_outcome_export_subscription_group_outcome_export: GenFile = /*@__PURE__*/
-  fileDesc("CltzZXJ2aWNlL29wZXJhdGlvbi9zdWJzY3JpcHRpb25fZ3JvdXBfb3V0Y29tZV9leHBvcnQvc3Vic2NyaXB0aW9uX2dyb3VwX291dGNvbWVfZXhwb3J0LnByb3RvEhRzZXJ2aWNlLm9wZXJhdGlvbi52MSJqCipMaXN0U3Vic2NyaXB0aW9uR3JvdXBPdXRjb21lTGFuZGluZ1JlcXVlc3QSIgoVcHJpY2Vfc2NoZWR1bGVfYWN0aXZlGAEgASgISACIAQFCGAoWX3ByaWNlX3NjaGVkdWxlX2FjdGl2ZSLWAgoiU3Vic2NyaXB0aW9uR3JvdXBPdXRjb21lTGFuZGluZ1JvdxIZChFwcmljZV9zY2hlZHVsZV9pZBgBIAEoCRIbChNwcmljZV9zY2hlZHVsZV9uYW1lGAIgASgJEh0KFXByaWNlX3NjaGVkdWxlX2FjdGl2ZRgDIAEoCBImChlwcmljZV9zY2hlZHVsZV9zb3J0X29yZGVyGAQgASgFSACIAQESHQoVc3Vic2NyaXB0aW9uX2dyb3VwX2lkGAUgASgJEh8KF3N1YnNjcmlwdGlvbl9ncm91cF9uYW1lGAYgASgJEiEKGXN1YnNjcmlwdGlvbl9ncm91cF9hY3RpdmUYByABKAgSFAoMbWVtYmVyX2NvdW50GAggASgDEhoKEmpvYl90ZW1wbGF0ZV9jb3VudBgJIAEoA0IcChpfcHJpY2Vfc2NoZWR1bGVfc29ydF9vcmRlciK9AQorTGlzdFN1YnNjcmlwdGlvbkdyb3VwT3V0Y29tZUxhbmRpbmdSZXNwb25zZRJGCgRyb3dzGAEgAygLMjguc2VydmljZS5vcGVyYXRpb24udjEuU3Vic2NyaXB0aW9uR3JvdXBPdXRjb21lTGFuZGluZ1JvdxIPCgdzdWNjZXNzGAIgASgIEisKBWVycm9yGAMgASgLMhcuZG9tYWluLmNvbW1vbi52MS5FcnJvckgAiAEBQggKBl9lcnJvciLLAQooR2V0U3Vic2NyaXB0aW9uR3JvdXBPdXRjb21lRXhwb3J0UmVxdWVzdBIdChVzdWJzY3JpcHRpb25fZ3JvdXBfaWQYASABKAkSHAoPam9iX2NhdGVnb3J5X2lkGAIgASgJSAGIAQESIQoXam9iX3RlbXBsYXRlX3BoYXNlX2NvZGUYAyABKAlIABIXCg1maW5hbF9vdXRjb21lGAQgASgISABCEgoQb3V0Y29tZV9zZWxlY3RvckISChBfam9iX2NhdGVnb3J5X2lkIoMCCiVTdWJzY3JpcHRpb25Hcm91cE91dGNvbWVFeHBvcnRDb250ZXh0Eh0KFXN1YnNjcmlwdGlvbl9ncm91cF9pZBgBIAEoCRIfChdzdWJzY3JpcHRpb25fZ3JvdXBfbmFtZRgCIAEoCRIeChFwcmljZV9zY2hlZHVsZV9pZBgDIAEoCUgAiAEBEhsKE3ByaWNlX3NjaGVkdWxlX25hbWUYBCABKAkSFAoHcGxhbl9pZBgFIAEoCUgBiAEBEhEKCXBsYW5fbmFtZRgGIAEoCRISCgpoaXN0b3JpY2FsGAcgASgIQhQKEl9wcmljZV9zY2hlZHVsZV9pZEIKCghfcGxhbl9pZCJfChZKb2JUZW1wbGF0ZVBoYXNlT3B0aW9uEgwKBGNvZGUYASABKAkSDAoEbmFtZRgCIAEoCRIWCg5zZXF1ZW5jZV9vcmRlchgDIAEoBRIRCglhbWJpZ3VvdXMYBCABKAgiyAEKEUpvYkNhdGVnb3J5T3B0aW9uEhcKD2pvYl9jYXRlZ29yeV9pZBgBIAEoCRIMCgRjb2RlGAIgASgJEgwKBG5hbWUYAyABKAkSEgoKc29ydF9vcmRlchgEIAEoBRJJChNqb2JfdGVtcGxhdGVfcGhhc2VzGAUgAygLMiwuc2VydmljZS5vcGVyYXRpb24udjEuSm9iVGVtcGxhdGVQaGFzZU9wdGlvbhIfChdmaW5hbF9vdXRjb21lX2F2YWlsYWJsZRgGIAEoCCJCChFKb2JUZW1wbGF0ZUNvbHVtbhIXCg9qb2JfdGVtcGxhdGVfaWQYASABKAkSFAoMZGlzcGxheV9uYW1lGAIgASgJIkIKEkVucm9sbG1lbnRFdmlkZW5jZRIRCgloYXNfbWFya3MYASABKAgSGQoRaGFzX3Bvc2l0aXZlX21hcmsYAiABKAgi6wEKHFN1YnNjcmlwdGlvbkdyb3VwT3V0Y29tZUNlbGwSFwoPam9iX3RlbXBsYXRlX2lkGAEgASgJEhMKC2pvYl9wcmVzZW50GAIgASgIEhkKDHNjYWxlZF9sYWJlbBgDIAEoCUgAiAEBEhkKDHNjYWxlZF9zY29yZRgEIAEoAUgBiAEBEkUKE2Vucm9sbG1lbnRfZXZpZGVuY2UYBSABKAsyKC5zZXJ2aWNlLm9wZXJhdGlvbi52MS5FbnJvbGxtZW50RXZpZGVuY2VCDwoNX3NjYWxlZF9sYWJlbEIPCg1fc2NhbGVkX3Njb3JlIsMBCiFTdWJzY3JpcHRpb25Hcm91cE91dGNvbWVDbGllbnRSb3cSEQoJY2xpZW50X2lkGAEgASgJEhMKC2NsaWVudF9uYW1lGAIgASgJEhkKEWNsaWVudF9maXJzdF9uYW1lGAMgASgJEhgKEGNsaWVudF9sYXN0X25hbWUYBCABKAkSQQoFY2VsbHMYBSADKAsyMi5zZXJ2aWNlLm9wZXJhdGlvbi52MS5TdWJzY3JpcHRpb25Hcm91cE91dGNvbWVDZWxsIpcDCilHZXRTdWJzY3JpcHRpb25Hcm91cE91dGNvbWVFeHBvcnRSZXNwb25zZRJMCgdjb250ZXh0GAEgASgLMjsuc2VydmljZS5vcGVyYXRpb24udjEuU3Vic2NyaXB0aW9uR3JvdXBPdXRjb21lRXhwb3J0Q29udGV4dBI/Cg5qb2JfY2F0ZWdvcmllcxgCIAMoCzInLnNlcnZpY2Uub3BlcmF0aW9uLnYxLkpvYkNhdGVnb3J5T3B0aW9uEkUKFGpvYl90ZW1wbGF0ZV9jb2x1bW5zGAMgAygLMicuc2VydmljZS5vcGVyYXRpb24udjEuSm9iVGVtcGxhdGVDb2x1bW4STAoLY2xpZW50X3Jvd3MYBCADKAsyNy5zZXJ2aWNlLm9wZXJhdGlvbi52MS5TdWJzY3JpcHRpb25Hcm91cE91dGNvbWVDbGllbnRSb3cSDwoHc3VjY2VzcxgFIAEoCBIrCgVlcnJvchgGIAEoCzIXLmRvbWFpbi5jb21tb24udjEuRXJyb3JIAIgBAUIICgZfZXJyb3IiqQIKN1Jlc29sdmVTdWJzY3JpcHRpb25Hcm91cE91dGNvbWVEb2N1bWVudEZvclJlbmRlclJlcXVlc3QSHQoVc3Vic2NyaXB0aW9uX2dyb3VwX2lkGAEgASgJEhcKD2pvYl9jYXRlZ29yeV9pZBgCIAEoCRI6Cg5yZW5kZXJfcHJvZmlsZRgDIAEoDjIiLmRvbWFpbi5vcGVyYXRpb24udjEuUmVuZGVyUHJvZmlsZRIdChBleHBlY3RlZF9wbGFuX2lkGAQgASgJSACIAQESJwoaZXhwZWN0ZWRfcHJpY2Vfc2NoZWR1bGVfaWQYBSABKAlIAYgBAUITChFfZXhwZWN0ZWRfcGxhbl9pZEIdChtfZXhwZWN0ZWRfcHJpY2Vfc2NoZWR1bGVfaWQirwEKKFJlc29sdmVkU3Vic2NyaXB0aW9uR3JvdXBPdXRjb21lRG9jdW1lbnQSGQoRc3RvcmFnZV9jb250YWluZXIYASABKAkSEwoLc3RvcmFnZV9rZXkYAiABKAkSOgoOcmVuZGVyX3Byb2ZpbGUYAyABKA4yIi5kb21haW4ub3BlcmF0aW9uLnYxLlJlbmRlclByb2ZpbGUSFwoPam9iX2NhdGVnb3J5X2lkGAQgASgJIvUBCjhSZXNvbHZlU3Vic2NyaXB0aW9uR3JvdXBPdXRjb21lRG9jdW1lbnRGb3JSZW5kZXJSZXNwb25zZRJVCghkb2N1bWVudBgBIAEoCzI+LnNlcnZpY2Uub3BlcmF0aW9uLnYxLlJlc29sdmVkU3Vic2NyaXB0aW9uR3JvdXBPdXRjb21lRG9jdW1lbnRIAIgBARINCgVmb3VuZBgCIAEoCBIPCgdzdWNjZXNzGAMgASgIEisKBWVycm9yGAQgASgLMhcuZG9tYWluLmNvbW1vbi52MS5FcnJvckgBiAEBQgsKCV9kb2N1bWVudEIICgZfZXJyb3Iy+wIKJVN1YnNjcmlwdGlvbkdyb3VwT3V0Y29tZUV4cG9ydFNlcnZpY2USpAEKIUdldFN1YnNjcmlwdGlvbkdyb3VwT3V0Y29tZUV4cG9ydBI+LnNlcnZpY2Uub3BlcmF0aW9uLnYxLkdldFN1YnNjcmlwdGlvbkdyb3VwT3V0Y29tZUV4cG9ydFJlcXVlc3QaPy5zZXJ2aWNlLm9wZXJhdGlvbi52MS5HZXRTdWJzY3JpcHRpb25Hcm91cE91dGNvbWVFeHBvcnRSZXNwb25zZRKqAQojTGlzdFN1YnNjcmlwdGlvbkdyb3VwT3V0Y29tZUxhbmRpbmcSQC5zZXJ2aWNlLm9wZXJhdGlvbi52MS5MaXN0U3Vic2NyaXB0aW9uR3JvdXBPdXRjb21lTGFuZGluZ1JlcXVlc3QaQS5zZXJ2aWNlLm9wZXJhdGlvbi52MS5MaXN0U3Vic2NyaXB0aW9uR3JvdXBPdXRjb21lTGFuZGluZ1Jlc3BvbnNlQp0CChhjb20uc2VydmljZS5vcGVyYXRpb24udjFCI1N1YnNjcmlwdGlvbkdyb3VwT3V0Y29tZUV4cG9ydFByb3RvUAFaamdpdGh1Yi5jb20vZXJuaWVhbGljZS9lc3F5bWEvcGtnL3NjaGVtYS92MS9zZXJ2aWNlL29wZXJhdGlvbi9zdWJzY3JpcHRpb25fZ3JvdXBfb3V0Y29tZV9leHBvcnQ7b3BlcmF0aW9udjGiAgNTT1iqAhRTZXJ2aWNlLk9wZXJhdGlvbi5WMcoCFFNlcnZpY2VcT3BlcmF0aW9uXFYx4gIgU2VydmljZVxPcGVyYXRpb25cVjFcR1BCTWV0YWRhdGHqAhZTZXJ2aWNlOjpPcGVyYXRpb246OlYxYgZwcm90bzM", [file_domain_common_error, file_domain_operation_subscription_group_document_template_subscription_group_document_template]);
+  fileDesc("CltzZXJ2aWNlL29wZXJhdGlvbi9zdWJzY3JpcHRpb25fZ3JvdXBfb3V0Y29tZV9leHBvcnQvc3Vic2NyaXB0aW9uX2dyb3VwX291dGNvbWVfZXhwb3J0LnByb3RvEhRzZXJ2aWNlLm9wZXJhdGlvbi52MSJqCipMaXN0U3Vic2NyaXB0aW9uR3JvdXBPdXRjb21lTGFuZGluZ1JlcXVlc3QSIgoVcHJpY2Vfc2NoZWR1bGVfYWN0aXZlGAEgASgISACIAQFCGAoWX3ByaWNlX3NjaGVkdWxlX2FjdGl2ZSLWAgoiU3Vic2NyaXB0aW9uR3JvdXBPdXRjb21lTGFuZGluZ1JvdxIZChFwcmljZV9zY2hlZHVsZV9pZBgBIAEoCRIbChNwcmljZV9zY2hlZHVsZV9uYW1lGAIgASgJEh0KFXByaWNlX3NjaGVkdWxlX2FjdGl2ZRgDIAEoCBImChlwcmljZV9zY2hlZHVsZV9zb3J0X29yZGVyGAQgASgFSACIAQESHQoVc3Vic2NyaXB0aW9uX2dyb3VwX2lkGAUgASgJEh8KF3N1YnNjcmlwdGlvbl9ncm91cF9uYW1lGAYgASgJEiEKGXN1YnNjcmlwdGlvbl9ncm91cF9hY3RpdmUYByABKAgSFAoMbWVtYmVyX2NvdW50GAggASgDEhoKEmpvYl90ZW1wbGF0ZV9jb3VudBgJIAEoA0IcChpfcHJpY2Vfc2NoZWR1bGVfc29ydF9vcmRlciK9AQorTGlzdFN1YnNjcmlwdGlvbkdyb3VwT3V0Y29tZUxhbmRpbmdSZXNwb25zZRJGCgRyb3dzGAEgAygLMjguc2VydmljZS5vcGVyYXRpb24udjEuU3Vic2NyaXB0aW9uR3JvdXBPdXRjb21lTGFuZGluZ1JvdxIPCgdzdWNjZXNzGAIgASgIEisKBWVycm9yGAMgASgLMhcuZG9tYWluLmNvbW1vbi52MS5FcnJvckgAiAEBQggKBl9lcnJvciLLAQooR2V0U3Vic2NyaXB0aW9uR3JvdXBPdXRjb21lRXhwb3J0UmVxdWVzdBIdChVzdWJzY3JpcHRpb25fZ3JvdXBfaWQYASABKAkSHAoPam9iX2NhdGVnb3J5X2lkGAIgASgJSAGIAQESIQoXam9iX3RlbXBsYXRlX3BoYXNlX2NvZGUYAyABKAlIABIXCg1maW5hbF9vdXRjb21lGAQgASgISABCEgoQb3V0Y29tZV9zZWxlY3RvckISChBfam9iX2NhdGVnb3J5X2lkIoMCCiVTdWJzY3JpcHRpb25Hcm91cE91dGNvbWVFeHBvcnRDb250ZXh0Eh0KFXN1YnNjcmlwdGlvbl9ncm91cF9pZBgBIAEoCRIfChdzdWJzY3JpcHRpb25fZ3JvdXBfbmFtZRgCIAEoCRIeChFwcmljZV9zY2hlZHVsZV9pZBgDIAEoCUgAiAEBEhsKE3ByaWNlX3NjaGVkdWxlX25hbWUYBCABKAkSFAoHcGxhbl9pZBgFIAEoCUgBiAEBEhEKCXBsYW5fbmFtZRgGIAEoCRISCgpoaXN0b3JpY2FsGAcgASgIQhQKEl9wcmljZV9zY2hlZHVsZV9pZEIKCghfcGxhbl9pZCJfChZKb2JUZW1wbGF0ZVBoYXNlT3B0aW9uEgwKBGNvZGUYASABKAkSDAoEbmFtZRgCIAEoCRIWCg5zZXF1ZW5jZV9vcmRlchgDIAEoBRIRCglhbWJpZ3VvdXMYBCABKAgiyAEKEUpvYkNhdGVnb3J5T3B0aW9uEhcKD2pvYl9jYXRlZ29yeV9pZBgBIAEoCRIMCgRjb2RlGAIgASgJEgwKBG5hbWUYAyABKAkSEgoKc29ydF9vcmRlchgEIAEoBRJJChNqb2JfdGVtcGxhdGVfcGhhc2VzGAUgAygLMiwuc2VydmljZS5vcGVyYXRpb24udjEuSm9iVGVtcGxhdGVQaGFzZU9wdGlvbhIfChdmaW5hbF9vdXRjb21lX2F2YWlsYWJsZRgGIAEoCCJCChFKb2JUZW1wbGF0ZUNvbHVtbhIXCg9qb2JfdGVtcGxhdGVfaWQYASABKAkSFAoMZGlzcGxheV9uYW1lGAIgASgJIkIKEkVucm9sbG1lbnRFdmlkZW5jZRIRCgloYXNfbWFya3MYASABKAgSGQoRaGFzX3Bvc2l0aXZlX21hcmsYAiABKAgi6wEKHFN1YnNjcmlwdGlvbkdyb3VwT3V0Y29tZUNlbGwSFwoPam9iX3RlbXBsYXRlX2lkGAEgASgJEhMKC2pvYl9wcmVzZW50GAIgASgIEhkKDHNjYWxlZF9sYWJlbBgDIAEoCUgAiAEBEhkKDHNjYWxlZF9zY29yZRgEIAEoAUgBiAEBEkUKE2Vucm9sbG1lbnRfZXZpZGVuY2UYBSABKAsyKC5zZXJ2aWNlLm9wZXJhdGlvbi52MS5FbnJvbGxtZW50RXZpZGVuY2VCDwoNX3NjYWxlZF9sYWJlbEIPCg1fc2NhbGVkX3Njb3JlIsMBCiFTdWJzY3JpcHRpb25Hcm91cE91dGNvbWVDbGllbnRSb3cSEQoJY2xpZW50X2lkGAEgASgJEhMKC2NsaWVudF9uYW1lGAIgASgJEhkKEWNsaWVudF9maXJzdF9uYW1lGAMgASgJEhgKEGNsaWVudF9sYXN0X25hbWUYBCABKAkSQQoFY2VsbHMYBSADKAsyMi5zZXJ2aWNlLm9wZXJhdGlvbi52MS5TdWJzY3JpcHRpb25Hcm91cE91dGNvbWVDZWxsIpcDCilHZXRTdWJzY3JpcHRpb25Hcm91cE91dGNvbWVFeHBvcnRSZXNwb25zZRJMCgdjb250ZXh0GAEgASgLMjsuc2VydmljZS5vcGVyYXRpb24udjEuU3Vic2NyaXB0aW9uR3JvdXBPdXRjb21lRXhwb3J0Q29udGV4dBI/Cg5qb2JfY2F0ZWdvcmllcxgCIAMoCzInLnNlcnZpY2Uub3BlcmF0aW9uLnYxLkpvYkNhdGVnb3J5T3B0aW9uEkUKFGpvYl90ZW1wbGF0ZV9jb2x1bW5zGAMgAygLMicuc2VydmljZS5vcGVyYXRpb24udjEuSm9iVGVtcGxhdGVDb2x1bW4STAoLY2xpZW50X3Jvd3MYBCADKAsyNy5zZXJ2aWNlLm9wZXJhdGlvbi52MS5TdWJzY3JpcHRpb25Hcm91cE91dGNvbWVDbGllbnRSb3cSDwoHc3VjY2VzcxgFIAEoCBIrCgVlcnJvchgGIAEoCzIXLmRvbWFpbi5jb21tb24udjEuRXJyb3JIAIgBAUIICgZfZXJyb3IifworR2V0U3Vic2NyaXB0aW9uR3JvdXBDbGllbnRSZXBvcnRDYXJkUmVxdWVzdBIdChVzdWJzY3JpcHRpb25fZ3JvdXBfaWQYASABKAkSEQoJY2xpZW50X2lkGAIgASgJEh4KFmNsaWVudF9hdHRyaWJ1dGVfY29kZXMYAyADKAkiOAoZQ2xpZW50UmVwb3J0Q2FyZEF0dHJpYnV0ZRIMCgRjb2RlGAEgASgJEg0KBXZhbHVlGAIgASgJImAKFkNsaWVudFJlcG9ydENhcmRDbGllbnQSEQoJY2xpZW50X2lkGAEgASgJEgwKBG5hbWUYAiABKAkSEgoKZmlyc3RfbmFtZRgDIAEoCRIRCglsYXN0X25hbWUYBCABKAkilQIKG0NsaWVudFJlcG9ydENhcmRUYXNrT3V0Y29tZRITCgtqb2JfdGFza19pZBgBIAEoCRIhChl0ZW1wbGF0ZV90YXNrX2NyaXRlcmlhX2lkGAIgASgJEhoKDW51bWVyaWNfdmFsdWUYAyABKAFIAIgBARIZCgxzY2FsZWRfbGFiZWwYBCABKAlIAYgBARIfChJkZXRlcm1pbmF0aW9uX25vdGUYBSABKAlIAogBARIaCg1yZWNvcmRlZF9kYXRlGAYgASgDSAOIAQFCEAoOX251bWVyaWNfdmFsdWVCDwoNX3NjYWxlZF9sYWJlbEIVChNfZGV0ZXJtaW5hdGlvbl9ub3RlQhAKDl9yZWNvcmRlZF9kYXRlIj8KFUNsaWVudFJlcG9ydENhcmRTdGFmZhIQCghzdGFmZl9pZBgBIAEoCRIUCgxkaXNwbGF5X25hbWUYAiABKAkicQohQ2xpZW50UmVwb3J0Q2FyZFRlYWNoZXJBc3NpZ25tZW50Eg4KBmpvYl9pZBgBIAEoCRIUCgxqb2JfcGhhc2VfaWQYAiABKAkSEAoIc3RhZmZfaWQYAyABKAkSFAoMZGlzcGxheV9uYW1lGAQgASgJIo8CCh9DbGllbnRSZXBvcnRDYXJkUmVuZGVyR2F0ZVNoZWV0EiIKFWpvYl90ZW1wbGF0ZV9waGFzZV9pZBgBIAEoCUgAiAEBEhkKDGpvYl9waGFzZV9pZBgCIAEoCUgBiAEBEiUKHWFwcGxpZWRfc3Vic2NyaXB0aW9uX2dyb3VwX2lkGAMgASgJEhQKDHRhcmdldF9jb3VudBgEIAEoBRIcChRhbnlfd29ya2Zsb3dfZW50ZXJlZBgFIAEoCBIVCg1hbGxfcHVibGlzaGVkGAYgASgIEhAKCGhhc19kYXRhGAcgASgIQhgKFl9qb2JfdGVtcGxhdGVfcGhhc2VfaWRCDwoNX2pvYl9waGFzZV9pZCLICwoaQ2xpZW50UmVwb3J0Q2FyZFByb2plY3Rpb24STAoHY29udGV4dBgBIAEoCzI7LnNlcnZpY2Uub3BlcmF0aW9uLnYxLlN1YnNjcmlwdGlvbkdyb3VwT3V0Y29tZUV4cG9ydENvbnRleHQSPAoGY2xpZW50GAIgASgLMiwuc2VydmljZS5vcGVyYXRpb24udjEuQ2xpZW50UmVwb3J0Q2FyZENsaWVudBJDCgphdHRyaWJ1dGVzGAMgAygLMi8uc2VydmljZS5vcGVyYXRpb24udjEuQ2xpZW50UmVwb3J0Q2FyZEF0dHJpYnV0ZRImCgRqb2JzGAQgAygLMhguZG9tYWluLm9wZXJhdGlvbi52MS5Kb2ISNwoNam9iX3RlbXBsYXRlcxgFIAMoCzIgLmRvbWFpbi5vcGVyYXRpb24udjEuSm9iVGVtcGxhdGUSOAoOam9iX2NhdGVnb3JpZXMYBiADKAsyIC5kb21haW4ub3BlcmF0aW9uLnYxLkpvYkNhdGVnb3J5EjEKCmpvYl9waGFzZXMYByADKAsyHS5kb21haW4ub3BlcmF0aW9uLnYxLkpvYlBoYXNlEkIKE2pvYl90ZW1wbGF0ZV9waGFzZXMYCCADKAsyJS5kb21haW4ub3BlcmF0aW9uLnYxLkpvYlRlbXBsYXRlUGhhc2USQAoSam9iX3RlbXBsYXRlX3Rhc2tzGAkgAygLMiQuZG9tYWluLm9wZXJhdGlvbi52MS5Kb2JUZW1wbGF0ZVRhc2sSLwoJam9iX3Rhc2tzGAogAygLMhwuZG9tYWluLm9wZXJhdGlvbi52MS5Kb2JUYXNrEkgKDXRhc2tfb3V0Y29tZXMYCyADKAsyMS5zZXJ2aWNlLm9wZXJhdGlvbi52MS5DbGllbnRSZXBvcnRDYXJkVGFza091dGNvbWUSPgoQb3V0Y29tZV9jcml0ZXJpYRgMIAMoCzIkLmRvbWFpbi5vcGVyYXRpb24udjEuT3V0Y29tZUNyaXRlcmlhEkkKFnRlbXBsYXRlX3Rhc2tfY3JpdGVyaWEYDSADKAsyKS5kb21haW4ub3BlcmF0aW9uLnYxLlRlbXBsYXRlVGFza0NyaXRlcmlhEkkKF3BoYXNlX291dGNvbWVfc3VtbWFyaWVzGA4gAygLMiguZG9tYWluLm9wZXJhdGlvbi52MS5QaGFzZU91dGNvbWVTdW1tYXJ5EkUKFWpvYl9vdXRjb21lX3N1bW1hcmllcxgPIAMoCzImLmRvbWFpbi5vcGVyYXRpb24udjEuSm9iT3V0Y29tZVN1bW1hcnkSPgoRam9iX291dGNvbWVfbGluZXMYECADKAsyIy5kb21haW4ub3BlcmF0aW9uLnYxLkpvYk91dGNvbWVMaW5lEjoKBXN0YWZmGBEgAygLMisuc2VydmljZS5vcGVyYXRpb24udjEuQ2xpZW50UmVwb3J0Q2FyZFN0YWZmElQKE3RlYWNoZXJfYXNzaWdubWVudHMYEiADKAsyNy5zZXJ2aWNlLm9wZXJhdGlvbi52MS5DbGllbnRSZXBvcnRDYXJkVGVhY2hlckFzc2lnbm1lbnQSGwoTcmVuZGVyX2dhdGVfam9iX2lkcxgTIAMoCRIfChdjbGllbnRfc3Vic2NyaXB0aW9uX2lkcxgUIAMoCRJXChNyYXRpbmdfZGVzY3JpcHRpb25zGBUgAygLMjouZG9tYWluLm9wZXJhdGlvbi52MS5UZW1wbGF0ZVRhc2tDcml0ZXJpYVJhdGluZ0Rlc2NyaXB0aW9uEjEKKXJlbmRlcl9nYXRlX2FwcGxpZWRfc3Vic2NyaXB0aW9uX2dyb3VwX2lkGBYgASgJElEKEnJlbmRlcl9nYXRlX3NoZWV0cxgXIAMoCzI1LnNlcnZpY2Uub3BlcmF0aW9uLnYxLkNsaWVudFJlcG9ydENhcmRSZW5kZXJHYXRlU2hlZXQivQEKLEdldFN1YnNjcmlwdGlvbkdyb3VwQ2xpZW50UmVwb3J0Q2FyZFJlc3BvbnNlEkUKC3JlcG9ydF9jYXJkGAEgASgLMjAuc2VydmljZS5vcGVyYXRpb24udjEuQ2xpZW50UmVwb3J0Q2FyZFByb2plY3Rpb24SDwoHc3VjY2VzcxgCIAEoCBIrCgVlcnJvchgDIAEoCzIXLmRvbWFpbi5jb21tb24udjEuRXJyb3JIAIgBAUIICgZfZXJyb3IiqQIKN1Jlc29sdmVTdWJzY3JpcHRpb25Hcm91cE91dGNvbWVEb2N1bWVudEZvclJlbmRlclJlcXVlc3QSHQoVc3Vic2NyaXB0aW9uX2dyb3VwX2lkGAEgASgJEhcKD2pvYl9jYXRlZ29yeV9pZBgCIAEoCRI6Cg5yZW5kZXJfcHJvZmlsZRgDIAEoDjIiLmRvbWFpbi5vcGVyYXRpb24udjEuUmVuZGVyUHJvZmlsZRIdChBleHBlY3RlZF9wbGFuX2lkGAQgASgJSACIAQESJwoaZXhwZWN0ZWRfcHJpY2Vfc2NoZWR1bGVfaWQYBSABKAlIAYgBAUITChFfZXhwZWN0ZWRfcGxhbl9pZEIdChtfZXhwZWN0ZWRfcHJpY2Vfc2NoZWR1bGVfaWQirwEKKFJlc29sdmVkU3Vic2NyaXB0aW9uR3JvdXBPdXRjb21lRG9jdW1lbnQSGQoRc3RvcmFnZV9jb250YWluZXIYASABKAkSEwoLc3RvcmFnZV9rZXkYAiABKAkSOgoOcmVuZGVyX3Byb2ZpbGUYAyABKA4yIi5kb21haW4ub3BlcmF0aW9uLnYxLlJlbmRlclByb2ZpbGUSFwoPam9iX2NhdGVnb3J5X2lkGAQgASgJIvUBCjhSZXNvbHZlU3Vic2NyaXB0aW9uR3JvdXBPdXRjb21lRG9jdW1lbnRGb3JSZW5kZXJSZXNwb25zZRJVCghkb2N1bWVudBgBIAEoCzI+LnNlcnZpY2Uub3BlcmF0aW9uLnYxLlJlc29sdmVkU3Vic2NyaXB0aW9uR3JvdXBPdXRjb21lRG9jdW1lbnRIAIgBARINCgVmb3VuZBgCIAEoCBIPCgdzdWNjZXNzGAMgASgIEisKBWVycm9yGAQgASgLMhcuZG9tYWluLmNvbW1vbi52MS5FcnJvckgBiAEBQgsKCV9kb2N1bWVudEIICgZfZXJyb3Iy+wIKJVN1YnNjcmlwdGlvbkdyb3VwT3V0Y29tZUV4cG9ydFNlcnZpY2USpAEKIUdldFN1YnNjcmlwdGlvbkdyb3VwT3V0Y29tZUV4cG9ydBI+LnNlcnZpY2Uub3BlcmF0aW9uLnYxLkdldFN1YnNjcmlwdGlvbkdyb3VwT3V0Y29tZUV4cG9ydFJlcXVlc3QaPy5zZXJ2aWNlLm9wZXJhdGlvbi52MS5HZXRTdWJzY3JpcHRpb25Hcm91cE91dGNvbWVFeHBvcnRSZXNwb25zZRKqAQojTGlzdFN1YnNjcmlwdGlvbkdyb3VwT3V0Y29tZUxhbmRpbmcSQC5zZXJ2aWNlLm9wZXJhdGlvbi52MS5MaXN0U3Vic2NyaXB0aW9uR3JvdXBPdXRjb21lTGFuZGluZ1JlcXVlc3QaQS5zZXJ2aWNlLm9wZXJhdGlvbi52MS5MaXN0U3Vic2NyaXB0aW9uR3JvdXBPdXRjb21lTGFuZGluZ1Jlc3BvbnNlQp0CChhjb20uc2VydmljZS5vcGVyYXRpb24udjFCI1N1YnNjcmlwdGlvbkdyb3VwT3V0Y29tZUV4cG9ydFByb3RvUAFaamdpdGh1Yi5jb20vZXJuaWVhbGljZS9lc3F5bWEvcGtnL3NjaGVtYS92MS9zZXJ2aWNlL29wZXJhdGlvbi9zdWJzY3JpcHRpb25fZ3JvdXBfb3V0Y29tZV9leHBvcnQ7b3BlcmF0aW9udjGiAgNTT1iqAhRTZXJ2aWNlLk9wZXJhdGlvbi5WMcoCFFNlcnZpY2VcT3BlcmF0aW9uXFYx4gIgU2VydmljZVxPcGVyYXRpb25cVjFcR1BCTWV0YWRhdGHqAhZTZXJ2aWNlOjpPcGVyYXRpb246OlYxYgZwcm90bzM", [file_domain_common_error, file_domain_operation_job_job, file_domain_operation_job_category_job_category, file_domain_operation_job_outcome_line_job_outcome_line, file_domain_operation_job_outcome_summary_job_outcome_summary, file_domain_operation_job_phase_job_phase, file_domain_operation_job_task_job_task, file_domain_operation_job_template_job_template, file_domain_operation_job_template_task_job_template_task, file_domain_operation_job_template_phase_job_template_phase, file_domain_operation_outcome_criteria_outcome_criteria, file_domain_operation_phase_outcome_summary_phase_outcome_summary, file_domain_operation_task_outcome_task_outcome, file_domain_operation_template_task_criteria_template_task_criteria, file_domain_operation_template_task_criteria_rating_description_template_task_criteria_rating_description, file_domain_operation_subscription_group_document_template_subscription_group_document_template]);
 
 /**
  * ListSubscriptionGroupOutcomeLandingRequest carries only the optional schedule
@@ -459,6 +486,405 @@ export const GetSubscriptionGroupOutcomeExportResponseSchema: GenMessage<GetSubs
   messageDesc(file_service_operation_subscription_group_outcome_export_subscription_group_outcome_export, 11);
 
 /**
+ * GetSubscriptionGroupClientReportCardRequest selects one member of an
+ * authorized subscription group. Workspace/principal scope is always derived
+ * from trusted request identity by the application use case and adapter.
+ *
+ * @generated from message service.operation.v1.GetSubscriptionGroupClientReportCardRequest
+ */
+export type GetSubscriptionGroupClientReportCardRequest = Message<"service.operation.v1.GetSubscriptionGroupClientReportCardRequest"> & {
+  /**
+   * @generated from field: string subscription_group_id = 1;
+   */
+  subscriptionGroupId: string;
+
+  /**
+   * @generated from field: string client_id = 2;
+   */
+  clientId: string;
+
+  /**
+   * These codes are supplied by trusted server composition, never by an HTTP
+   * selector. The adapter returns only those configured client attributes.
+   *
+   * @generated from field: repeated string client_attribute_codes = 3;
+   */
+  clientAttributeCodes: string[];
+};
+
+/**
+ * Describes the message service.operation.v1.GetSubscriptionGroupClientReportCardRequest.
+ * Use `create(GetSubscriptionGroupClientReportCardRequestSchema)` to create a new message.
+ */
+export const GetSubscriptionGroupClientReportCardRequestSchema: GenMessage<GetSubscriptionGroupClientReportCardRequest> = /*@__PURE__*/
+  messageDesc(file_service_operation_subscription_group_outcome_export_subscription_group_outcome_export, 12);
+
+/**
+ * @generated from message service.operation.v1.ClientReportCardAttribute
+ */
+export type ClientReportCardAttribute = Message<"service.operation.v1.ClientReportCardAttribute"> & {
+  /**
+   * @generated from field: string code = 1;
+   */
+  code: string;
+
+  /**
+   * @generated from field: string value = 2;
+   */
+  value: string;
+};
+
+/**
+ * Describes the message service.operation.v1.ClientReportCardAttribute.
+ * Use `create(ClientReportCardAttributeSchema)` to create a new message.
+ */
+export const ClientReportCardAttributeSchema: GenMessage<ClientReportCardAttribute> = /*@__PURE__*/
+  messageDesc(file_service_operation_subscription_group_outcome_export_subscription_group_outcome_export, 13);
+
+/**
+ * @generated from message service.operation.v1.ClientReportCardClient
+ */
+export type ClientReportCardClient = Message<"service.operation.v1.ClientReportCardClient"> & {
+  /**
+   * @generated from field: string client_id = 1;
+   */
+  clientId: string;
+
+  /**
+   * @generated from field: string name = 2;
+   */
+  name: string;
+
+  /**
+   * @generated from field: string first_name = 3;
+   */
+  firstName: string;
+
+  /**
+   * @generated from field: string last_name = 4;
+   */
+  lastName: string;
+};
+
+/**
+ * Describes the message service.operation.v1.ClientReportCardClient.
+ * Use `create(ClientReportCardClientSchema)` to create a new message.
+ */
+export const ClientReportCardClientSchema: GenMessage<ClientReportCardClient> = /*@__PURE__*/
+  messageDesc(file_service_operation_subscription_group_outcome_export_subscription_group_outcome_export, 14);
+
+/**
+ * A minimal mark row. The renderer needs the latest numeric/label/comment
+ * outcome and its owning task/criterion; reviewer, recorder, and attachment
+ * metadata do not cross this in-process read boundary.
+ *
+ * @generated from message service.operation.v1.ClientReportCardTaskOutcome
+ */
+export type ClientReportCardTaskOutcome = Message<"service.operation.v1.ClientReportCardTaskOutcome"> & {
+  /**
+   * @generated from field: string job_task_id = 1;
+   */
+  jobTaskId: string;
+
+  /**
+   * @generated from field: string template_task_criteria_id = 2;
+   */
+  templateTaskCriteriaId: string;
+
+  /**
+   * @generated from field: optional double numeric_value = 3;
+   */
+  numericValue?: number;
+
+  /**
+   * @generated from field: optional string scaled_label = 4;
+   */
+  scaledLabel?: string;
+
+  /**
+   * @generated from field: optional string determination_note = 5;
+   */
+  determinationNote?: string;
+
+  /**
+   * @generated from field: optional int64 recorded_date = 6;
+   */
+  recordedDate?: bigint;
+};
+
+/**
+ * Describes the message service.operation.v1.ClientReportCardTaskOutcome.
+ * Use `create(ClientReportCardTaskOutcomeSchema)` to create a new message.
+ */
+export const ClientReportCardTaskOutcomeSchema: GenMessage<ClientReportCardTaskOutcome> = /*@__PURE__*/
+  messageDesc(file_service_operation_subscription_group_outcome_export_subscription_group_outcome_export, 15);
+
+/**
+ * @generated from message service.operation.v1.ClientReportCardStaff
+ */
+export type ClientReportCardStaff = Message<"service.operation.v1.ClientReportCardStaff"> & {
+  /**
+   * @generated from field: string staff_id = 1;
+   */
+  staffId: string;
+
+  /**
+   * @generated from field: string display_name = 2;
+   */
+  displayName: string;
+};
+
+/**
+ * Describes the message service.operation.v1.ClientReportCardStaff.
+ * Use `create(ClientReportCardStaffSchema)` to create a new message.
+ */
+export const ClientReportCardStaffSchema: GenMessage<ClientReportCardStaff> = /*@__PURE__*/
+  messageDesc(file_service_operation_subscription_group_outcome_export_subscription_group_outcome_export, 16);
+
+/**
+ * @generated from message service.operation.v1.ClientReportCardTeacherAssignment
+ */
+export type ClientReportCardTeacherAssignment = Message<"service.operation.v1.ClientReportCardTeacherAssignment"> & {
+  /**
+   * @generated from field: string job_id = 1;
+   */
+  jobId: string;
+
+  /**
+   * @generated from field: string job_phase_id = 2;
+   */
+  jobPhaseId: string;
+
+  /**
+   * @generated from field: string staff_id = 3;
+   */
+  staffId: string;
+
+  /**
+   * @generated from field: string display_name = 4;
+   */
+  displayName: string;
+};
+
+/**
+ * Describes the message service.operation.v1.ClientReportCardTeacherAssignment.
+ * Use `create(ClientReportCardTeacherAssignmentSchema)` to create a new message.
+ */
+export const ClientReportCardTeacherAssignmentSchema: GenMessage<ClientReportCardTeacherAssignment> = /*@__PURE__*/
+  messageDesc(file_service_operation_subscription_group_outcome_export_subscription_group_outcome_export, 17);
+
+/**
+ * ClientReportCardRenderGateSheet is one complete group-scoped approval
+ * sheet. Template-backed sheets are keyed by job_template_phase_id. A phase
+ * with no template phase is evaluated as its own singleton, keyed by
+ * job_phase_id. Exactly one row is returned for each distinct expected key.
+ *
+ * @generated from message service.operation.v1.ClientReportCardRenderGateSheet
+ */
+export type ClientReportCardRenderGateSheet = Message<"service.operation.v1.ClientReportCardRenderGateSheet"> & {
+  /**
+   * @generated from field: optional string job_template_phase_id = 1;
+   */
+  jobTemplatePhaseId?: string;
+
+  /**
+   * @generated from field: optional string job_phase_id = 2;
+   */
+  jobPhaseId?: string;
+
+  /**
+   * @generated from field: string applied_subscription_group_id = 3;
+   */
+  appliedSubscriptionGroupId: string;
+
+  /**
+   * @generated from field: int32 target_count = 4;
+   */
+  targetCount: number;
+
+  /**
+   * @generated from field: bool any_workflow_entered = 5;
+   */
+  anyWorkflowEntered: boolean;
+
+  /**
+   * @generated from field: bool all_published = 6;
+   */
+  allPublished: boolean;
+
+  /**
+   * @generated from field: bool has_data = 7;
+   */
+  hasData: boolean;
+};
+
+/**
+ * Describes the message service.operation.v1.ClientReportCardRenderGateSheet.
+ * Use `create(ClientReportCardRenderGateSheetSchema)` to create a new message.
+ */
+export const ClientReportCardRenderGateSheetSchema: GenMessage<ClientReportCardRenderGateSheet> = /*@__PURE__*/
+  messageDesc(file_service_operation_subscription_group_outcome_export_subscription_group_outcome_export, 18);
+
+/**
+ * ClientReportCardProjection contains only the selected client's enrollment
+ * graph and the supporting typed records needed by the client table, the
+ * repeated-table phase document, and the existing Year Final builder. It is
+ * never a roster response.
+ *
+ * @generated from message service.operation.v1.ClientReportCardProjection
+ */
+export type ClientReportCardProjection = Message<"service.operation.v1.ClientReportCardProjection"> & {
+  /**
+   * @generated from field: service.operation.v1.SubscriptionGroupOutcomeExportContext context = 1;
+   */
+  context?: SubscriptionGroupOutcomeExportContext;
+
+  /**
+   * @generated from field: service.operation.v1.ClientReportCardClient client = 2;
+   */
+  client?: ClientReportCardClient;
+
+  /**
+   * @generated from field: repeated service.operation.v1.ClientReportCardAttribute attributes = 3;
+   */
+  attributes: ClientReportCardAttribute[];
+
+  /**
+   * @generated from field: repeated domain.operation.v1.Job jobs = 4;
+   */
+  jobs: Job[];
+
+  /**
+   * @generated from field: repeated domain.operation.v1.JobTemplate job_templates = 5;
+   */
+  jobTemplates: JobTemplate[];
+
+  /**
+   * @generated from field: repeated domain.operation.v1.JobCategory job_categories = 6;
+   */
+  jobCategories: JobCategory[];
+
+  /**
+   * @generated from field: repeated domain.operation.v1.JobPhase job_phases = 7;
+   */
+  jobPhases: JobPhase[];
+
+  /**
+   * @generated from field: repeated domain.operation.v1.JobTemplatePhase job_template_phases = 8;
+   */
+  jobTemplatePhases: JobTemplatePhase[];
+
+  /**
+   * @generated from field: repeated domain.operation.v1.JobTemplateTask job_template_tasks = 9;
+   */
+  jobTemplateTasks: JobTemplateTask[];
+
+  /**
+   * @generated from field: repeated domain.operation.v1.JobTask job_tasks = 10;
+   */
+  jobTasks: JobTask[];
+
+  /**
+   * @generated from field: repeated service.operation.v1.ClientReportCardTaskOutcome task_outcomes = 11;
+   */
+  taskOutcomes: ClientReportCardTaskOutcome[];
+
+  /**
+   * @generated from field: repeated domain.operation.v1.OutcomeCriteria outcome_criteria = 12;
+   */
+  outcomeCriteria: OutcomeCriteria[];
+
+  /**
+   * @generated from field: repeated domain.operation.v1.TemplateTaskCriteria template_task_criteria = 13;
+   */
+  templateTaskCriteria: TemplateTaskCriteria[];
+
+  /**
+   * @generated from field: repeated domain.operation.v1.PhaseOutcomeSummary phase_outcome_summaries = 14;
+   */
+  phaseOutcomeSummaries: PhaseOutcomeSummary[];
+
+  /**
+   * @generated from field: repeated domain.operation.v1.JobOutcomeSummary job_outcome_summaries = 15;
+   */
+  jobOutcomeSummaries: JobOutcomeSummary[];
+
+  /**
+   * @generated from field: repeated domain.operation.v1.JobOutcomeLine job_outcome_lines = 16;
+   */
+  jobOutcomeLines: JobOutcomeLine[];
+
+  /**
+   * @generated from field: repeated service.operation.v1.ClientReportCardStaff staff = 17;
+   */
+  staff: ClientReportCardStaff[];
+
+  /**
+   * @generated from field: repeated service.operation.v1.ClientReportCardTeacherAssignment teacher_assignments = 18;
+   */
+  teacherAssignments: ClientReportCardTeacherAssignment[];
+
+  /**
+   * @generated from field: repeated string render_gate_job_ids = 19;
+   */
+  renderGateJobIds: string[];
+
+  /**
+   * @generated from field: repeated string client_subscription_ids = 20;
+   */
+  clientSubscriptionIds: string[];
+
+  /**
+   * @generated from field: repeated domain.operation.v1.TemplateTaskCriteriaRatingDescription rating_descriptions = 21;
+   */
+  ratingDescriptions: TemplateTaskCriteriaRatingDescription[];
+
+  /**
+   * @generated from field: string render_gate_applied_subscription_group_id = 22;
+   */
+  renderGateAppliedSubscriptionGroupId: string;
+
+  /**
+   * @generated from field: repeated service.operation.v1.ClientReportCardRenderGateSheet render_gate_sheets = 23;
+   */
+  renderGateSheets: ClientReportCardRenderGateSheet[];
+};
+
+/**
+ * Describes the message service.operation.v1.ClientReportCardProjection.
+ * Use `create(ClientReportCardProjectionSchema)` to create a new message.
+ */
+export const ClientReportCardProjectionSchema: GenMessage<ClientReportCardProjection> = /*@__PURE__*/
+  messageDesc(file_service_operation_subscription_group_outcome_export_subscription_group_outcome_export, 19);
+
+/**
+ * @generated from message service.operation.v1.GetSubscriptionGroupClientReportCardResponse
+ */
+export type GetSubscriptionGroupClientReportCardResponse = Message<"service.operation.v1.GetSubscriptionGroupClientReportCardResponse"> & {
+  /**
+   * @generated from field: service.operation.v1.ClientReportCardProjection report_card = 1;
+   */
+  reportCard?: ClientReportCardProjection;
+
+  /**
+   * @generated from field: bool success = 2;
+   */
+  success: boolean;
+
+  /**
+   * @generated from field: optional domain.common.v1.Error error = 3;
+   */
+  error?: Error;
+};
+
+/**
+ * Describes the message service.operation.v1.GetSubscriptionGroupClientReportCardResponse.
+ * Use `create(GetSubscriptionGroupClientReportCardResponseSchema)` to create a new message.
+ */
+export const GetSubscriptionGroupClientReportCardResponseSchema: GenMessage<GetSubscriptionGroupClientReportCardResponse> = /*@__PURE__*/
+  messageDesc(file_service_operation_subscription_group_outcome_export_subscription_group_outcome_export, 20);
+
+/**
  * The following messages define an in-process report-render seam. They are not
  * methods on the generated gRPC service and are never registered as transport.
  * Expected group axes are optimistic coherence assertions only; the resolver
@@ -498,7 +924,7 @@ export type ResolveSubscriptionGroupOutcomeDocumentForRenderRequest = Message<"s
  * Use `create(ResolveSubscriptionGroupOutcomeDocumentForRenderRequestSchema)` to create a new message.
  */
 export const ResolveSubscriptionGroupOutcomeDocumentForRenderRequestSchema: GenMessage<ResolveSubscriptionGroupOutcomeDocumentForRenderRequest> = /*@__PURE__*/
-  messageDesc(file_service_operation_subscription_group_outcome_export_subscription_group_outcome_export, 12);
+  messageDesc(file_service_operation_subscription_group_outcome_export_subscription_group_outcome_export, 21);
 
 /**
  * @generated from message service.operation.v1.ResolvedSubscriptionGroupOutcomeDocument
@@ -530,7 +956,7 @@ export type ResolvedSubscriptionGroupOutcomeDocument = Message<"service.operatio
  * Use `create(ResolvedSubscriptionGroupOutcomeDocumentSchema)` to create a new message.
  */
 export const ResolvedSubscriptionGroupOutcomeDocumentSchema: GenMessage<ResolvedSubscriptionGroupOutcomeDocument> = /*@__PURE__*/
-  messageDesc(file_service_operation_subscription_group_outcome_export_subscription_group_outcome_export, 13);
+  messageDesc(file_service_operation_subscription_group_outcome_export_subscription_group_outcome_export, 22);
 
 /**
  * @generated from message service.operation.v1.ResolveSubscriptionGroupOutcomeDocumentForRenderResponse
@@ -562,7 +988,7 @@ export type ResolveSubscriptionGroupOutcomeDocumentForRenderResponse = Message<"
  * Use `create(ResolveSubscriptionGroupOutcomeDocumentForRenderResponseSchema)` to create a new message.
  */
 export const ResolveSubscriptionGroupOutcomeDocumentForRenderResponseSchema: GenMessage<ResolveSubscriptionGroupOutcomeDocumentForRenderResponse> = /*@__PURE__*/
-  messageDesc(file_service_operation_subscription_group_outcome_export_subscription_group_outcome_export, 14);
+  messageDesc(file_service_operation_subscription_group_outcome_export_subscription_group_outcome_export, 23);
 
 /**
  * SubscriptionGroupOutcomeExportService is the canonical, group-scoped

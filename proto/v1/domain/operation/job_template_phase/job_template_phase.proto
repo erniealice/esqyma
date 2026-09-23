@@ -82,6 +82,7 @@ service JobTemplatePhaseDomainService {
 
   // Extra: filter by job template
   rpc ListByJobTemplate(ListByJobTemplateRequest) returns (ListByJobTemplateResponse);
+  rpc ListPhaseCodesByPriceSchedule(ListPhaseCodesByPriceScheduleRequest) returns (ListPhaseCodesByPriceScheduleResponse);
 }
 
 message CreateJobTemplatePhaseRequest {
@@ -168,6 +169,23 @@ message ListByJobTemplateRequest {
 
 message ListByJobTemplateResponse {
   repeated JobTemplatePhase job_template_phases = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+// Phase codes offered for binding a document within one academic schedule.
+message ListPhaseCodesByPriceScheduleRequest {
+  string price_schedule_id = 1;
+}
+
+message PhaseCodeOption {
+  string code = 1;
+  repeated string names = 2;
+  int32 template_count = 3;
+}
+
+message ListPhaseCodesByPriceScheduleResponse {
+  repeated PhaseCodeOption options = 1;
   bool success = 2;
   optional domain.common.v1.Error error = 3;
 }

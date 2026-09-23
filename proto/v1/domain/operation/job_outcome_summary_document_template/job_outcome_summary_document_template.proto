@@ -71,6 +71,9 @@ message JobOutcomeSummaryDocumentTemplate {
   optional string date_modified_string = 20 [(options.v1.db).ignore = true];
 
   reserved 21 to 39;
+
+  // NULL binds the whole-year card; a code binds one active phase period.
+  optional string job_template_phase_code = 40 [(options.v1.db).check = "job_template_phase_code IS NULL OR (job_template_phase_code = lower(btrim(job_template_phase_code)) AND job_template_phase_code ~ '^[a-z][a-z0-9_]*$')"];
 }
 
 service JobOutcomeSummaryDocumentTemplateDomainService {
@@ -145,6 +148,7 @@ message ListJobOutcomeSummaryDocumentTemplatesResponse {
 message FindApplicableJobOutcomeSummaryDocumentTemplateRequest {
   optional string price_schedule_id = 1;         // AY/term scope; empty = fallback only
   optional google.protobuf.Timestamp as_of = 2;  // absent = server UTC now
+  optional string job_template_phase_code = 3;   // absent = whole-year card only
   // NOTE: no workspace_id — sourced from trusted context in the adapter.
 }
 

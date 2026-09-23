@@ -27,6 +27,7 @@ const (
 	JobTemplatePhaseDomainService_GetJobTemplatePhaseListPageData_FullMethodName = "/domain.operation.v1.JobTemplatePhaseDomainService/GetJobTemplatePhaseListPageData"
 	JobTemplatePhaseDomainService_GetJobTemplatePhaseItemPageData_FullMethodName = "/domain.operation.v1.JobTemplatePhaseDomainService/GetJobTemplatePhaseItemPageData"
 	JobTemplatePhaseDomainService_ListByJobTemplate_FullMethodName               = "/domain.operation.v1.JobTemplatePhaseDomainService/ListByJobTemplate"
+	JobTemplatePhaseDomainService_ListPhaseCodesByPriceSchedule_FullMethodName   = "/domain.operation.v1.JobTemplatePhaseDomainService/ListPhaseCodesByPriceSchedule"
 )
 
 // JobTemplatePhaseDomainServiceClient is the client API for JobTemplatePhaseDomainService service.
@@ -42,6 +43,7 @@ type JobTemplatePhaseDomainServiceClient interface {
 	GetJobTemplatePhaseItemPageData(ctx context.Context, in *GetJobTemplatePhaseItemPageDataRequest, opts ...grpc.CallOption) (*GetJobTemplatePhaseItemPageDataResponse, error)
 	// Extra: filter by job template
 	ListByJobTemplate(ctx context.Context, in *ListByJobTemplateRequest, opts ...grpc.CallOption) (*ListByJobTemplateResponse, error)
+	ListPhaseCodesByPriceSchedule(ctx context.Context, in *ListPhaseCodesByPriceScheduleRequest, opts ...grpc.CallOption) (*ListPhaseCodesByPriceScheduleResponse, error)
 }
 
 type jobTemplatePhaseDomainServiceClient struct {
@@ -132,6 +134,16 @@ func (c *jobTemplatePhaseDomainServiceClient) ListByJobTemplate(ctx context.Cont
 	return out, nil
 }
 
+func (c *jobTemplatePhaseDomainServiceClient) ListPhaseCodesByPriceSchedule(ctx context.Context, in *ListPhaseCodesByPriceScheduleRequest, opts ...grpc.CallOption) (*ListPhaseCodesByPriceScheduleResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(ListPhaseCodesByPriceScheduleResponse)
+	err := c.cc.Invoke(ctx, JobTemplatePhaseDomainService_ListPhaseCodesByPriceSchedule_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // JobTemplatePhaseDomainServiceServer is the server API for JobTemplatePhaseDomainService service.
 // All implementations must embed UnimplementedJobTemplatePhaseDomainServiceServer
 // for forward compatibility.
@@ -145,6 +157,7 @@ type JobTemplatePhaseDomainServiceServer interface {
 	GetJobTemplatePhaseItemPageData(context.Context, *GetJobTemplatePhaseItemPageDataRequest) (*GetJobTemplatePhaseItemPageDataResponse, error)
 	// Extra: filter by job template
 	ListByJobTemplate(context.Context, *ListByJobTemplateRequest) (*ListByJobTemplateResponse, error)
+	ListPhaseCodesByPriceSchedule(context.Context, *ListPhaseCodesByPriceScheduleRequest) (*ListPhaseCodesByPriceScheduleResponse, error)
 	mustEmbedUnimplementedJobTemplatePhaseDomainServiceServer()
 }
 
@@ -178,6 +191,9 @@ func (UnimplementedJobTemplatePhaseDomainServiceServer) GetJobTemplatePhaseItemP
 }
 func (UnimplementedJobTemplatePhaseDomainServiceServer) ListByJobTemplate(context.Context, *ListByJobTemplateRequest) (*ListByJobTemplateResponse, error) {
 	return nil, status.Error(codes.Unimplemented, "method ListByJobTemplate not implemented")
+}
+func (UnimplementedJobTemplatePhaseDomainServiceServer) ListPhaseCodesByPriceSchedule(context.Context, *ListPhaseCodesByPriceScheduleRequest) (*ListPhaseCodesByPriceScheduleResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method ListPhaseCodesByPriceSchedule not implemented")
 }
 func (UnimplementedJobTemplatePhaseDomainServiceServer) mustEmbedUnimplementedJobTemplatePhaseDomainServiceServer() {
 }
@@ -345,6 +361,24 @@ func _JobTemplatePhaseDomainService_ListByJobTemplate_Handler(srv interface{}, c
 	return interceptor(ctx, in, info, handler)
 }
 
+func _JobTemplatePhaseDomainService_ListPhaseCodesByPriceSchedule_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ListPhaseCodesByPriceScheduleRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(JobTemplatePhaseDomainServiceServer).ListPhaseCodesByPriceSchedule(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: JobTemplatePhaseDomainService_ListPhaseCodesByPriceSchedule_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(JobTemplatePhaseDomainServiceServer).ListPhaseCodesByPriceSchedule(ctx, req.(*ListPhaseCodesByPriceScheduleRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // JobTemplatePhaseDomainService_ServiceDesc is the grpc.ServiceDesc for JobTemplatePhaseDomainService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -383,6 +417,10 @@ var JobTemplatePhaseDomainService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "ListByJobTemplate",
 			Handler:    _JobTemplatePhaseDomainService_ListByJobTemplate_Handler,
+		},
+		{
+			MethodName: "ListPhaseCodesByPriceSchedule",
+			Handler:    _JobTemplatePhaseDomainService_ListPhaseCodesByPriceSchedule_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

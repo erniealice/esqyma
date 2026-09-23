@@ -404,6 +404,8 @@ type PhaseColumn struct {
 	// the period axis on the phase CODE rather than the mutable display label —
 	// the label is DB data that varies, the code is the reserved semester anchor.
 	Code          string `protobuf:"bytes,5,opt,name=code,proto3" json:"code,omitempty"`
+	PhaseName     string `protobuf:"bytes,6,opt,name=phase_name,json=phaseName,proto3" json:"phase_name,omitempty"`          // raw phase name before document/variant composition
+	VariantLabel  string `protobuf:"bytes,7,opt,name=variant_label,json=variantLabel,proto3" json:"variant_label,omitempty"` // display label of the phase output variant
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -469,6 +471,20 @@ func (x *PhaseColumn) GetTasks() []*TaskColumn {
 func (x *PhaseColumn) GetCode() string {
 	if x != nil {
 		return x.Code
+	}
+	return ""
+}
+
+func (x *PhaseColumn) GetPhaseName() string {
+	if x != nil {
+		return x.PhaseName
+	}
+	return ""
+}
+
+func (x *PhaseColumn) GetVariantLabel() string {
+	if x != nil {
+		return x.VariantLabel
 	}
 	return ""
 }
@@ -1430,13 +1446,16 @@ const file_service_operation_outcome_matrix_outcome_matrix_proto_rawDesc = "" +
 	"\x14job_template_task_id\x18\x01 \x01(\tR\x11jobTemplateTaskId\x12\x14\n" +
 	"\x05label\x18\x02 \x01(\tR\x05label\x12%\n" +
 	"\x0esequence_order\x18\x03 \x01(\x05R\rsequenceOrder\x12A\n" +
-	"\bcriteria\x18\x04 \x03(\v2%.service.operation.v1.CriterionColumnR\bcriteria\"\xc9\x01\n" +
+	"\bcriteria\x18\x04 \x03(\v2%.service.operation.v1.CriterionColumnR\bcriteria\"\x8d\x02\n" +
 	"\vPhaseColumn\x121\n" +
 	"\x15job_template_phase_id\x18\x01 \x01(\tR\x12jobTemplatePhaseId\x12\x14\n" +
 	"\x05label\x18\x02 \x01(\tR\x05label\x12%\n" +
 	"\x0esequence_order\x18\x03 \x01(\x05R\rsequenceOrder\x126\n" +
 	"\x05tasks\x18\x04 \x03(\v2 .service.operation.v1.TaskColumnR\x05tasks\x12\x12\n" +
-	"\x04code\x18\x05 \x01(\tR\x04code\"\x85\x04\n" +
+	"\x04code\x18\x05 \x01(\tR\x04code\x12\x1d\n" +
+	"\n" +
+	"phase_name\x18\x06 \x01(\tR\tphaseName\x12#\n" +
+	"\rvariant_label\x18\a \x01(\tR\fvariantLabel\"\x85\x04\n" +
 	"\vOutcomeCell\x12\x1d\n" +
 	"\n" +
 	"outcome_id\x18\x01 \x01(\tR\toutcomeId\x12\x1e\n" +

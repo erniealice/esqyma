@@ -36,6 +36,10 @@ type RenderProfile int32
 const (
 	RenderProfile_RENDER_PROFILE_UNSPECIFIED                                           RenderProfile = 0
 	RenderProfile_RENDER_PROFILE_SUBSCRIPTION_GROUP_OUTCOME_MATRIX_SINGLE_PERIOD_11_V1 RenderProfile = 1
+	// Full-client, one-phase report with dynamic repeated job/outcome tables.
+	// Unlike the fixed matrix profile, this profile is category-agnostic and its
+	// binding uses a NULL job_category_id.
+	RenderProfile_RENDER_PROFILE_SUBSCRIPTION_GROUP_CLIENT_PHASE_OUTCOME_REPORT_V1 RenderProfile = 2
 )
 
 // Enum value maps for RenderProfile.
@@ -43,10 +47,12 @@ var (
 	RenderProfile_name = map[int32]string{
 		0: "RENDER_PROFILE_UNSPECIFIED",
 		1: "RENDER_PROFILE_SUBSCRIPTION_GROUP_OUTCOME_MATRIX_SINGLE_PERIOD_11_V1",
+		2: "RENDER_PROFILE_SUBSCRIPTION_GROUP_CLIENT_PHASE_OUTCOME_REPORT_V1",
 	}
 	RenderProfile_value = map[string]int32{
 		"RENDER_PROFILE_UNSPECIFIED": 0,
 		"RENDER_PROFILE_SUBSCRIPTION_GROUP_OUTCOME_MATRIX_SINGLE_PERIOD_11_V1": 1,
+		"RENDER_PROFILE_SUBSCRIPTION_GROUP_CLIENT_PHASE_OUTCOME_REPORT_V1":     2,
 	}
 )
 
@@ -1250,10 +1256,11 @@ const file_domain_operation_subscription_group_document_template_subscription_gr
 	"\asuccess\x18\x02 \x01(\bR\asuccess\x122\n" +
 	"\x05error\x18\x03 \x01(\v2\x17.domain.common.v1.ErrorH\x01R\x05error\x88\x01\x01B\a\n" +
 	"\x05_dataB\b\n" +
-	"\x06_error*y\n" +
+	"\x06_error*\xbf\x01\n" +
 	"\rRenderProfile\x12\x1e\n" +
 	"\x1aRENDER_PROFILE_UNSPECIFIED\x10\x00\x12H\n" +
-	"DRENDER_PROFILE_SUBSCRIPTION_GROUP_OUTCOME_MATRIX_SINGLE_PERIOD_11_V1\x10\x012\xc3\n" +
+	"DRENDER_PROFILE_SUBSCRIPTION_GROUP_OUTCOME_MATRIX_SINGLE_PERIOD_11_V1\x10\x01\x12D\n" +
+	"@RENDER_PROFILE_SUBSCRIPTION_GROUP_CLIENT_PHASE_OUTCOME_REPORT_V1\x10\x022\xc3\n" +
 	"\n" +
 	".SubscriptionGroupDocumentTemplateDomainService\x12\xb4\x01\n" +
 	"'CreateSubscriptionGroupDocumentTemplate\x12C.domain.operation.v1.CreateSubscriptionGroupDocumentTemplateRequest\x1aD.domain.operation.v1.CreateSubscriptionGroupDocumentTemplateResponse\x12\xae\x01\n" +

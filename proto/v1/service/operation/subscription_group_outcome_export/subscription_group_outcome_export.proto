@@ -5,6 +5,20 @@ package service.operation.v1;
 option go_package = "github.com/erniealice/esqyma/pkg/schema/v1/service/operation/subscription_group_outcome_export";
 
 import "domain/common/error.proto";
+import "domain/operation/job/job.proto";
+import "domain/operation/job_category/job_category.proto";
+import "domain/operation/job_outcome_line/job_outcome_line.proto";
+import "domain/operation/job_outcome_summary/job_outcome_summary.proto";
+import "domain/operation/job_phase/job_phase.proto";
+import "domain/operation/job_task/job_task.proto";
+import "domain/operation/job_template/job_template.proto";
+import "domain/operation/job_template_task/job_template_task.proto";
+import "domain/operation/job_template_phase/job_template_phase.proto";
+import "domain/operation/outcome_criteria/outcome_criteria.proto";
+import "domain/operation/phase_outcome_summary/phase_outcome_summary.proto";
+import "domain/operation/task_outcome/task_outcome.proto";
+import "domain/operation/template_task_criteria/template_task_criteria.proto";
+import "domain/operation/template_task_criteria_rating_description/template_task_criteria_rating_description.proto";
 import "domain/operation/subscription_group_document_template/subscription_group_document_template.proto";
 
 // SubscriptionGroupOutcomeExportService is the canonical, group-scoped
@@ -128,6 +142,104 @@ message GetSubscriptionGroupOutcomeExportResponse {
 
   bool success = 5;
   optional domain.common.v1.Error error = 6;
+}
+
+// GetSubscriptionGroupClientReportCardRequest selects one member of an
+// authorized subscription group. Workspace/principal scope is always derived
+// from trusted request identity by the application use case and adapter.
+message GetSubscriptionGroupClientReportCardRequest {
+  string subscription_group_id = 1;
+  string client_id = 2;
+
+  // These codes are supplied by trusted server composition, never by an HTTP
+  // selector. The adapter returns only those configured client attributes.
+  repeated string client_attribute_codes = 3;
+}
+
+message ClientReportCardAttribute {
+  string code = 1;
+  string value = 2;
+}
+
+message ClientReportCardClient {
+  string client_id = 1;
+  string name = 2;
+  string first_name = 3;
+  string last_name = 4;
+}
+
+// A minimal mark row. The renderer needs the latest numeric/label/comment
+// outcome and its owning task/criterion; reviewer, recorder, and attachment
+// metadata do not cross this in-process read boundary.
+message ClientReportCardTaskOutcome {
+  string job_task_id = 1;
+  string template_task_criteria_id = 2;
+  optional double numeric_value = 3;
+  optional string scaled_label = 4;
+  optional string determination_note = 5;
+  optional int64 recorded_date = 6;
+}
+
+message ClientReportCardStaff {
+  string staff_id = 1;
+  string display_name = 2;
+}
+
+message ClientReportCardTeacherAssignment {
+  string job_id = 1;
+  string job_phase_id = 2;
+  string staff_id = 3;
+  string display_name = 4;
+}
+
+// ClientReportCardRenderGateSheet is one complete group-scoped approval
+// sheet. Template-backed sheets are keyed by job_template_phase_id. A phase
+// with no template phase is evaluated as its own singleton, keyed by
+// job_phase_id. Exactly one row is returned for each distinct expected key.
+message ClientReportCardRenderGateSheet {
+  optional string job_template_phase_id = 1;
+  optional string job_phase_id = 2;
+  string applied_subscription_group_id = 3;
+  int32 target_count = 4;
+  bool any_workflow_entered = 5;
+  bool all_published = 6;
+  bool has_data = 7;
+}
+
+// ClientReportCardProjection contains only the selected client's enrollment
+// graph and the supporting typed records needed by the client table, the
+// repeated-table phase document, and the existing Year Final builder. It is
+// never a roster response.
+message ClientReportCardProjection {
+  SubscriptionGroupOutcomeExportContext context = 1;
+  ClientReportCardClient client = 2;
+  repeated ClientReportCardAttribute attributes = 3;
+  repeated domain.operation.v1.Job jobs = 4;
+  repeated domain.operation.v1.JobTemplate job_templates = 5;
+  repeated domain.operation.v1.JobCategory job_categories = 6;
+  repeated domain.operation.v1.JobPhase job_phases = 7;
+  repeated domain.operation.v1.JobTemplatePhase job_template_phases = 8;
+  repeated domain.operation.v1.JobTemplateTask job_template_tasks = 9;
+  repeated domain.operation.v1.JobTask job_tasks = 10;
+  repeated ClientReportCardTaskOutcome task_outcomes = 11;
+  repeated domain.operation.v1.OutcomeCriteria outcome_criteria = 12;
+  repeated domain.operation.v1.TemplateTaskCriteria template_task_criteria = 13;
+  repeated domain.operation.v1.PhaseOutcomeSummary phase_outcome_summaries = 14;
+  repeated domain.operation.v1.JobOutcomeSummary job_outcome_summaries = 15;
+  repeated domain.operation.v1.JobOutcomeLine job_outcome_lines = 16;
+  repeated ClientReportCardStaff staff = 17;
+  repeated ClientReportCardTeacherAssignment teacher_assignments = 18;
+  repeated string render_gate_job_ids = 19;
+  repeated string client_subscription_ids = 20;
+  repeated domain.operation.v1.TemplateTaskCriteriaRatingDescription rating_descriptions = 21;
+  string render_gate_applied_subscription_group_id = 22;
+  repeated ClientReportCardRenderGateSheet render_gate_sheets = 23;
+}
+
+message GetSubscriptionGroupClientReportCardResponse {
+  ClientReportCardProjection report_card = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
 }
 
 // The following messages define an in-process report-render seam. They are not

@@ -146,6 +146,8 @@ message PhaseColumn {
   // the period axis on the phase CODE rather than the mutable display label —
   // the label is DB data that varies, the code is the reserved semester anchor.
   string code = 5;
+  string phase_name = 6;               // raw phase name before document/variant composition
+  string variant_label = 7;            // display label of the phase output variant
 }
 
 // ---- Rows: the derived, no-entity-equivalent cell projection ---------------

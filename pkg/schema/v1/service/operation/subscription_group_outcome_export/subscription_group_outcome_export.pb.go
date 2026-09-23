@@ -8,7 +8,21 @@ package operationv1
 
 import (
 	common "github.com/erniealice/esqyma/pkg/schema/v1/domain/common"
+	job "github.com/erniealice/esqyma/pkg/schema/v1/domain/operation/job"
+	job_category "github.com/erniealice/esqyma/pkg/schema/v1/domain/operation/job_category"
+	job_outcome_line "github.com/erniealice/esqyma/pkg/schema/v1/domain/operation/job_outcome_line"
+	job_outcome_summary "github.com/erniealice/esqyma/pkg/schema/v1/domain/operation/job_outcome_summary"
+	job_phase "github.com/erniealice/esqyma/pkg/schema/v1/domain/operation/job_phase"
+	job_task "github.com/erniealice/esqyma/pkg/schema/v1/domain/operation/job_task"
+	job_template "github.com/erniealice/esqyma/pkg/schema/v1/domain/operation/job_template"
+	job_template_phase "github.com/erniealice/esqyma/pkg/schema/v1/domain/operation/job_template_phase"
+	job_template_task "github.com/erniealice/esqyma/pkg/schema/v1/domain/operation/job_template_task"
+	outcome_criteria "github.com/erniealice/esqyma/pkg/schema/v1/domain/operation/outcome_criteria"
+	phase_outcome_summary "github.com/erniealice/esqyma/pkg/schema/v1/domain/operation/phase_outcome_summary"
 	subscription_group_document_template "github.com/erniealice/esqyma/pkg/schema/v1/domain/operation/subscription_group_document_template"
+	_ "github.com/erniealice/esqyma/pkg/schema/v1/domain/operation/task_outcome"
+	template_task_criteria "github.com/erniealice/esqyma/pkg/schema/v1/domain/operation/template_task_criteria"
+	template_task_criteria_rating_description "github.com/erniealice/esqyma/pkg/schema/v1/domain/operation/template_task_criteria_rating_description"
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
 	reflect "reflect"
@@ -933,6 +947,778 @@ func (x *GetSubscriptionGroupOutcomeExportResponse) GetError() *common.Error {
 	return nil
 }
 
+// GetSubscriptionGroupClientReportCardRequest selects one member of an
+// authorized subscription group. Workspace/principal scope is always derived
+// from trusted request identity by the application use case and adapter.
+type GetSubscriptionGroupClientReportCardRequest struct {
+	state               protoimpl.MessageState `protogen:"open.v1"`
+	SubscriptionGroupId string                 `protobuf:"bytes,1,opt,name=subscription_group_id,json=subscriptionGroupId,proto3" json:"subscription_group_id,omitempty"`
+	ClientId            string                 `protobuf:"bytes,2,opt,name=client_id,json=clientId,proto3" json:"client_id,omitempty"`
+	// These codes are supplied by trusted server composition, never by an HTTP
+	// selector. The adapter returns only those configured client attributes.
+	ClientAttributeCodes []string `protobuf:"bytes,3,rep,name=client_attribute_codes,json=clientAttributeCodes,proto3" json:"client_attribute_codes,omitempty"`
+	unknownFields        protoimpl.UnknownFields
+	sizeCache            protoimpl.SizeCache
+}
+
+func (x *GetSubscriptionGroupClientReportCardRequest) Reset() {
+	*x = GetSubscriptionGroupClientReportCardRequest{}
+	mi := &file_service_operation_subscription_group_outcome_export_subscription_group_outcome_export_proto_msgTypes[12]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *GetSubscriptionGroupClientReportCardRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*GetSubscriptionGroupClientReportCardRequest) ProtoMessage() {}
+
+func (x *GetSubscriptionGroupClientReportCardRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_service_operation_subscription_group_outcome_export_subscription_group_outcome_export_proto_msgTypes[12]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use GetSubscriptionGroupClientReportCardRequest.ProtoReflect.Descriptor instead.
+func (*GetSubscriptionGroupClientReportCardRequest) Descriptor() ([]byte, []int) {
+	return file_service_operation_subscription_group_outcome_export_subscription_group_outcome_export_proto_rawDescGZIP(), []int{12}
+}
+
+func (x *GetSubscriptionGroupClientReportCardRequest) GetSubscriptionGroupId() string {
+	if x != nil {
+		return x.SubscriptionGroupId
+	}
+	return ""
+}
+
+func (x *GetSubscriptionGroupClientReportCardRequest) GetClientId() string {
+	if x != nil {
+		return x.ClientId
+	}
+	return ""
+}
+
+func (x *GetSubscriptionGroupClientReportCardRequest) GetClientAttributeCodes() []string {
+	if x != nil {
+		return x.ClientAttributeCodes
+	}
+	return nil
+}
+
+type ClientReportCardAttribute struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Code          string                 `protobuf:"bytes,1,opt,name=code,proto3" json:"code,omitempty"`
+	Value         string                 `protobuf:"bytes,2,opt,name=value,proto3" json:"value,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *ClientReportCardAttribute) Reset() {
+	*x = ClientReportCardAttribute{}
+	mi := &file_service_operation_subscription_group_outcome_export_subscription_group_outcome_export_proto_msgTypes[13]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *ClientReportCardAttribute) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ClientReportCardAttribute) ProtoMessage() {}
+
+func (x *ClientReportCardAttribute) ProtoReflect() protoreflect.Message {
+	mi := &file_service_operation_subscription_group_outcome_export_subscription_group_outcome_export_proto_msgTypes[13]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ClientReportCardAttribute.ProtoReflect.Descriptor instead.
+func (*ClientReportCardAttribute) Descriptor() ([]byte, []int) {
+	return file_service_operation_subscription_group_outcome_export_subscription_group_outcome_export_proto_rawDescGZIP(), []int{13}
+}
+
+func (x *ClientReportCardAttribute) GetCode() string {
+	if x != nil {
+		return x.Code
+	}
+	return ""
+}
+
+func (x *ClientReportCardAttribute) GetValue() string {
+	if x != nil {
+		return x.Value
+	}
+	return ""
+}
+
+type ClientReportCardClient struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	ClientId      string                 `protobuf:"bytes,1,opt,name=client_id,json=clientId,proto3" json:"client_id,omitempty"`
+	Name          string                 `protobuf:"bytes,2,opt,name=name,proto3" json:"name,omitempty"`
+	FirstName     string                 `protobuf:"bytes,3,opt,name=first_name,json=firstName,proto3" json:"first_name,omitempty"`
+	LastName      string                 `protobuf:"bytes,4,opt,name=last_name,json=lastName,proto3" json:"last_name,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *ClientReportCardClient) Reset() {
+	*x = ClientReportCardClient{}
+	mi := &file_service_operation_subscription_group_outcome_export_subscription_group_outcome_export_proto_msgTypes[14]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *ClientReportCardClient) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ClientReportCardClient) ProtoMessage() {}
+
+func (x *ClientReportCardClient) ProtoReflect() protoreflect.Message {
+	mi := &file_service_operation_subscription_group_outcome_export_subscription_group_outcome_export_proto_msgTypes[14]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ClientReportCardClient.ProtoReflect.Descriptor instead.
+func (*ClientReportCardClient) Descriptor() ([]byte, []int) {
+	return file_service_operation_subscription_group_outcome_export_subscription_group_outcome_export_proto_rawDescGZIP(), []int{14}
+}
+
+func (x *ClientReportCardClient) GetClientId() string {
+	if x != nil {
+		return x.ClientId
+	}
+	return ""
+}
+
+func (x *ClientReportCardClient) GetName() string {
+	if x != nil {
+		return x.Name
+	}
+	return ""
+}
+
+func (x *ClientReportCardClient) GetFirstName() string {
+	if x != nil {
+		return x.FirstName
+	}
+	return ""
+}
+
+func (x *ClientReportCardClient) GetLastName() string {
+	if x != nil {
+		return x.LastName
+	}
+	return ""
+}
+
+// A minimal mark row. The renderer needs the latest numeric/label/comment
+// outcome and its owning task/criterion; reviewer, recorder, and attachment
+// metadata do not cross this in-process read boundary.
+type ClientReportCardTaskOutcome struct {
+	state                  protoimpl.MessageState `protogen:"open.v1"`
+	JobTaskId              string                 `protobuf:"bytes,1,opt,name=job_task_id,json=jobTaskId,proto3" json:"job_task_id,omitempty"`
+	TemplateTaskCriteriaId string                 `protobuf:"bytes,2,opt,name=template_task_criteria_id,json=templateTaskCriteriaId,proto3" json:"template_task_criteria_id,omitempty"`
+	NumericValue           *float64               `protobuf:"fixed64,3,opt,name=numeric_value,json=numericValue,proto3,oneof" json:"numeric_value,omitempty"`
+	ScaledLabel            *string                `protobuf:"bytes,4,opt,name=scaled_label,json=scaledLabel,proto3,oneof" json:"scaled_label,omitempty"`
+	DeterminationNote      *string                `protobuf:"bytes,5,opt,name=determination_note,json=determinationNote,proto3,oneof" json:"determination_note,omitempty"`
+	RecordedDate           *int64                 `protobuf:"varint,6,opt,name=recorded_date,json=recordedDate,proto3,oneof" json:"recorded_date,omitempty"`
+	unknownFields          protoimpl.UnknownFields
+	sizeCache              protoimpl.SizeCache
+}
+
+func (x *ClientReportCardTaskOutcome) Reset() {
+	*x = ClientReportCardTaskOutcome{}
+	mi := &file_service_operation_subscription_group_outcome_export_subscription_group_outcome_export_proto_msgTypes[15]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *ClientReportCardTaskOutcome) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ClientReportCardTaskOutcome) ProtoMessage() {}
+
+func (x *ClientReportCardTaskOutcome) ProtoReflect() protoreflect.Message {
+	mi := &file_service_operation_subscription_group_outcome_export_subscription_group_outcome_export_proto_msgTypes[15]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ClientReportCardTaskOutcome.ProtoReflect.Descriptor instead.
+func (*ClientReportCardTaskOutcome) Descriptor() ([]byte, []int) {
+	return file_service_operation_subscription_group_outcome_export_subscription_group_outcome_export_proto_rawDescGZIP(), []int{15}
+}
+
+func (x *ClientReportCardTaskOutcome) GetJobTaskId() string {
+	if x != nil {
+		return x.JobTaskId
+	}
+	return ""
+}
+
+func (x *ClientReportCardTaskOutcome) GetTemplateTaskCriteriaId() string {
+	if x != nil {
+		return x.TemplateTaskCriteriaId
+	}
+	return ""
+}
+
+func (x *ClientReportCardTaskOutcome) GetNumericValue() float64 {
+	if x != nil && x.NumericValue != nil {
+		return *x.NumericValue
+	}
+	return 0
+}
+
+func (x *ClientReportCardTaskOutcome) GetScaledLabel() string {
+	if x != nil && x.ScaledLabel != nil {
+		return *x.ScaledLabel
+	}
+	return ""
+}
+
+func (x *ClientReportCardTaskOutcome) GetDeterminationNote() string {
+	if x != nil && x.DeterminationNote != nil {
+		return *x.DeterminationNote
+	}
+	return ""
+}
+
+func (x *ClientReportCardTaskOutcome) GetRecordedDate() int64 {
+	if x != nil && x.RecordedDate != nil {
+		return *x.RecordedDate
+	}
+	return 0
+}
+
+type ClientReportCardStaff struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	StaffId       string                 `protobuf:"bytes,1,opt,name=staff_id,json=staffId,proto3" json:"staff_id,omitempty"`
+	DisplayName   string                 `protobuf:"bytes,2,opt,name=display_name,json=displayName,proto3" json:"display_name,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *ClientReportCardStaff) Reset() {
+	*x = ClientReportCardStaff{}
+	mi := &file_service_operation_subscription_group_outcome_export_subscription_group_outcome_export_proto_msgTypes[16]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *ClientReportCardStaff) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ClientReportCardStaff) ProtoMessage() {}
+
+func (x *ClientReportCardStaff) ProtoReflect() protoreflect.Message {
+	mi := &file_service_operation_subscription_group_outcome_export_subscription_group_outcome_export_proto_msgTypes[16]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ClientReportCardStaff.ProtoReflect.Descriptor instead.
+func (*ClientReportCardStaff) Descriptor() ([]byte, []int) {
+	return file_service_operation_subscription_group_outcome_export_subscription_group_outcome_export_proto_rawDescGZIP(), []int{16}
+}
+
+func (x *ClientReportCardStaff) GetStaffId() string {
+	if x != nil {
+		return x.StaffId
+	}
+	return ""
+}
+
+func (x *ClientReportCardStaff) GetDisplayName() string {
+	if x != nil {
+		return x.DisplayName
+	}
+	return ""
+}
+
+type ClientReportCardTeacherAssignment struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	JobId         string                 `protobuf:"bytes,1,opt,name=job_id,json=jobId,proto3" json:"job_id,omitempty"`
+	JobPhaseId    string                 `protobuf:"bytes,2,opt,name=job_phase_id,json=jobPhaseId,proto3" json:"job_phase_id,omitempty"`
+	StaffId       string                 `protobuf:"bytes,3,opt,name=staff_id,json=staffId,proto3" json:"staff_id,omitempty"`
+	DisplayName   string                 `protobuf:"bytes,4,opt,name=display_name,json=displayName,proto3" json:"display_name,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *ClientReportCardTeacherAssignment) Reset() {
+	*x = ClientReportCardTeacherAssignment{}
+	mi := &file_service_operation_subscription_group_outcome_export_subscription_group_outcome_export_proto_msgTypes[17]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *ClientReportCardTeacherAssignment) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ClientReportCardTeacherAssignment) ProtoMessage() {}
+
+func (x *ClientReportCardTeacherAssignment) ProtoReflect() protoreflect.Message {
+	mi := &file_service_operation_subscription_group_outcome_export_subscription_group_outcome_export_proto_msgTypes[17]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ClientReportCardTeacherAssignment.ProtoReflect.Descriptor instead.
+func (*ClientReportCardTeacherAssignment) Descriptor() ([]byte, []int) {
+	return file_service_operation_subscription_group_outcome_export_subscription_group_outcome_export_proto_rawDescGZIP(), []int{17}
+}
+
+func (x *ClientReportCardTeacherAssignment) GetJobId() string {
+	if x != nil {
+		return x.JobId
+	}
+	return ""
+}
+
+func (x *ClientReportCardTeacherAssignment) GetJobPhaseId() string {
+	if x != nil {
+		return x.JobPhaseId
+	}
+	return ""
+}
+
+func (x *ClientReportCardTeacherAssignment) GetStaffId() string {
+	if x != nil {
+		return x.StaffId
+	}
+	return ""
+}
+
+func (x *ClientReportCardTeacherAssignment) GetDisplayName() string {
+	if x != nil {
+		return x.DisplayName
+	}
+	return ""
+}
+
+// ClientReportCardRenderGateSheet is one complete group-scoped approval
+// sheet. Template-backed sheets are keyed by job_template_phase_id. A phase
+// with no template phase is evaluated as its own singleton, keyed by
+// job_phase_id. Exactly one row is returned for each distinct expected key.
+type ClientReportCardRenderGateSheet struct {
+	state                      protoimpl.MessageState `protogen:"open.v1"`
+	JobTemplatePhaseId         *string                `protobuf:"bytes,1,opt,name=job_template_phase_id,json=jobTemplatePhaseId,proto3,oneof" json:"job_template_phase_id,omitempty"`
+	JobPhaseId                 *string                `protobuf:"bytes,2,opt,name=job_phase_id,json=jobPhaseId,proto3,oneof" json:"job_phase_id,omitempty"`
+	AppliedSubscriptionGroupId string                 `protobuf:"bytes,3,opt,name=applied_subscription_group_id,json=appliedSubscriptionGroupId,proto3" json:"applied_subscription_group_id,omitempty"`
+	TargetCount                int32                  `protobuf:"varint,4,opt,name=target_count,json=targetCount,proto3" json:"target_count,omitempty"`
+	AnyWorkflowEntered         bool                   `protobuf:"varint,5,opt,name=any_workflow_entered,json=anyWorkflowEntered,proto3" json:"any_workflow_entered,omitempty"`
+	AllPublished               bool                   `protobuf:"varint,6,opt,name=all_published,json=allPublished,proto3" json:"all_published,omitempty"`
+	HasData                    bool                   `protobuf:"varint,7,opt,name=has_data,json=hasData,proto3" json:"has_data,omitempty"`
+	unknownFields              protoimpl.UnknownFields
+	sizeCache                  protoimpl.SizeCache
+}
+
+func (x *ClientReportCardRenderGateSheet) Reset() {
+	*x = ClientReportCardRenderGateSheet{}
+	mi := &file_service_operation_subscription_group_outcome_export_subscription_group_outcome_export_proto_msgTypes[18]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *ClientReportCardRenderGateSheet) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ClientReportCardRenderGateSheet) ProtoMessage() {}
+
+func (x *ClientReportCardRenderGateSheet) ProtoReflect() protoreflect.Message {
+	mi := &file_service_operation_subscription_group_outcome_export_subscription_group_outcome_export_proto_msgTypes[18]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ClientReportCardRenderGateSheet.ProtoReflect.Descriptor instead.
+func (*ClientReportCardRenderGateSheet) Descriptor() ([]byte, []int) {
+	return file_service_operation_subscription_group_outcome_export_subscription_group_outcome_export_proto_rawDescGZIP(), []int{18}
+}
+
+func (x *ClientReportCardRenderGateSheet) GetJobTemplatePhaseId() string {
+	if x != nil && x.JobTemplatePhaseId != nil {
+		return *x.JobTemplatePhaseId
+	}
+	return ""
+}
+
+func (x *ClientReportCardRenderGateSheet) GetJobPhaseId() string {
+	if x != nil && x.JobPhaseId != nil {
+		return *x.JobPhaseId
+	}
+	return ""
+}
+
+func (x *ClientReportCardRenderGateSheet) GetAppliedSubscriptionGroupId() string {
+	if x != nil {
+		return x.AppliedSubscriptionGroupId
+	}
+	return ""
+}
+
+func (x *ClientReportCardRenderGateSheet) GetTargetCount() int32 {
+	if x != nil {
+		return x.TargetCount
+	}
+	return 0
+}
+
+func (x *ClientReportCardRenderGateSheet) GetAnyWorkflowEntered() bool {
+	if x != nil {
+		return x.AnyWorkflowEntered
+	}
+	return false
+}
+
+func (x *ClientReportCardRenderGateSheet) GetAllPublished() bool {
+	if x != nil {
+		return x.AllPublished
+	}
+	return false
+}
+
+func (x *ClientReportCardRenderGateSheet) GetHasData() bool {
+	if x != nil {
+		return x.HasData
+	}
+	return false
+}
+
+// ClientReportCardProjection contains only the selected client's enrollment
+// graph and the supporting typed records needed by the client table, the
+// repeated-table phase document, and the existing Year Final builder. It is
+// never a roster response.
+type ClientReportCardProjection struct {
+	state                                protoimpl.MessageState                                                             `protogen:"open.v1"`
+	Context                              *SubscriptionGroupOutcomeExportContext                                             `protobuf:"bytes,1,opt,name=context,proto3" json:"context,omitempty"`
+	Client                               *ClientReportCardClient                                                            `protobuf:"bytes,2,opt,name=client,proto3" json:"client,omitempty"`
+	Attributes                           []*ClientReportCardAttribute                                                       `protobuf:"bytes,3,rep,name=attributes,proto3" json:"attributes,omitempty"`
+	Jobs                                 []*job.Job                                                                         `protobuf:"bytes,4,rep,name=jobs,proto3" json:"jobs,omitempty"`
+	JobTemplates                         []*job_template.JobTemplate                                                        `protobuf:"bytes,5,rep,name=job_templates,json=jobTemplates,proto3" json:"job_templates,omitempty"`
+	JobCategories                        []*job_category.JobCategory                                                        `protobuf:"bytes,6,rep,name=job_categories,json=jobCategories,proto3" json:"job_categories,omitempty"`
+	JobPhases                            []*job_phase.JobPhase                                                              `protobuf:"bytes,7,rep,name=job_phases,json=jobPhases,proto3" json:"job_phases,omitempty"`
+	JobTemplatePhases                    []*job_template_phase.JobTemplatePhase                                             `protobuf:"bytes,8,rep,name=job_template_phases,json=jobTemplatePhases,proto3" json:"job_template_phases,omitempty"`
+	JobTemplateTasks                     []*job_template_task.JobTemplateTask                                               `protobuf:"bytes,9,rep,name=job_template_tasks,json=jobTemplateTasks,proto3" json:"job_template_tasks,omitempty"`
+	JobTasks                             []*job_task.JobTask                                                                `protobuf:"bytes,10,rep,name=job_tasks,json=jobTasks,proto3" json:"job_tasks,omitempty"`
+	TaskOutcomes                         []*ClientReportCardTaskOutcome                                                     `protobuf:"bytes,11,rep,name=task_outcomes,json=taskOutcomes,proto3" json:"task_outcomes,omitempty"`
+	OutcomeCriteria                      []*outcome_criteria.OutcomeCriteria                                                `protobuf:"bytes,12,rep,name=outcome_criteria,json=outcomeCriteria,proto3" json:"outcome_criteria,omitempty"`
+	TemplateTaskCriteria                 []*template_task_criteria.TemplateTaskCriteria                                     `protobuf:"bytes,13,rep,name=template_task_criteria,json=templateTaskCriteria,proto3" json:"template_task_criteria,omitempty"`
+	PhaseOutcomeSummaries                []*phase_outcome_summary.PhaseOutcomeSummary                                       `protobuf:"bytes,14,rep,name=phase_outcome_summaries,json=phaseOutcomeSummaries,proto3" json:"phase_outcome_summaries,omitempty"`
+	JobOutcomeSummaries                  []*job_outcome_summary.JobOutcomeSummary                                           `protobuf:"bytes,15,rep,name=job_outcome_summaries,json=jobOutcomeSummaries,proto3" json:"job_outcome_summaries,omitempty"`
+	JobOutcomeLines                      []*job_outcome_line.JobOutcomeLine                                                 `protobuf:"bytes,16,rep,name=job_outcome_lines,json=jobOutcomeLines,proto3" json:"job_outcome_lines,omitempty"`
+	Staff                                []*ClientReportCardStaff                                                           `protobuf:"bytes,17,rep,name=staff,proto3" json:"staff,omitempty"`
+	TeacherAssignments                   []*ClientReportCardTeacherAssignment                                               `protobuf:"bytes,18,rep,name=teacher_assignments,json=teacherAssignments,proto3" json:"teacher_assignments,omitempty"`
+	RenderGateJobIds                     []string                                                                           `protobuf:"bytes,19,rep,name=render_gate_job_ids,json=renderGateJobIds,proto3" json:"render_gate_job_ids,omitempty"`
+	ClientSubscriptionIds                []string                                                                           `protobuf:"bytes,20,rep,name=client_subscription_ids,json=clientSubscriptionIds,proto3" json:"client_subscription_ids,omitempty"`
+	RatingDescriptions                   []*template_task_criteria_rating_description.TemplateTaskCriteriaRatingDescription `protobuf:"bytes,21,rep,name=rating_descriptions,json=ratingDescriptions,proto3" json:"rating_descriptions,omitempty"`
+	RenderGateAppliedSubscriptionGroupId string                                                                             `protobuf:"bytes,22,opt,name=render_gate_applied_subscription_group_id,json=renderGateAppliedSubscriptionGroupId,proto3" json:"render_gate_applied_subscription_group_id,omitempty"`
+	RenderGateSheets                     []*ClientReportCardRenderGateSheet                                                 `protobuf:"bytes,23,rep,name=render_gate_sheets,json=renderGateSheets,proto3" json:"render_gate_sheets,omitempty"`
+	unknownFields                        protoimpl.UnknownFields
+	sizeCache                            protoimpl.SizeCache
+}
+
+func (x *ClientReportCardProjection) Reset() {
+	*x = ClientReportCardProjection{}
+	mi := &file_service_operation_subscription_group_outcome_export_subscription_group_outcome_export_proto_msgTypes[19]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *ClientReportCardProjection) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ClientReportCardProjection) ProtoMessage() {}
+
+func (x *ClientReportCardProjection) ProtoReflect() protoreflect.Message {
+	mi := &file_service_operation_subscription_group_outcome_export_subscription_group_outcome_export_proto_msgTypes[19]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ClientReportCardProjection.ProtoReflect.Descriptor instead.
+func (*ClientReportCardProjection) Descriptor() ([]byte, []int) {
+	return file_service_operation_subscription_group_outcome_export_subscription_group_outcome_export_proto_rawDescGZIP(), []int{19}
+}
+
+func (x *ClientReportCardProjection) GetContext() *SubscriptionGroupOutcomeExportContext {
+	if x != nil {
+		return x.Context
+	}
+	return nil
+}
+
+func (x *ClientReportCardProjection) GetClient() *ClientReportCardClient {
+	if x != nil {
+		return x.Client
+	}
+	return nil
+}
+
+func (x *ClientReportCardProjection) GetAttributes() []*ClientReportCardAttribute {
+	if x != nil {
+		return x.Attributes
+	}
+	return nil
+}
+
+func (x *ClientReportCardProjection) GetJobs() []*job.Job {
+	if x != nil {
+		return x.Jobs
+	}
+	return nil
+}
+
+func (x *ClientReportCardProjection) GetJobTemplates() []*job_template.JobTemplate {
+	if x != nil {
+		return x.JobTemplates
+	}
+	return nil
+}
+
+func (x *ClientReportCardProjection) GetJobCategories() []*job_category.JobCategory {
+	if x != nil {
+		return x.JobCategories
+	}
+	return nil
+}
+
+func (x *ClientReportCardProjection) GetJobPhases() []*job_phase.JobPhase {
+	if x != nil {
+		return x.JobPhases
+	}
+	return nil
+}
+
+func (x *ClientReportCardProjection) GetJobTemplatePhases() []*job_template_phase.JobTemplatePhase {
+	if x != nil {
+		return x.JobTemplatePhases
+	}
+	return nil
+}
+
+func (x *ClientReportCardProjection) GetJobTemplateTasks() []*job_template_task.JobTemplateTask {
+	if x != nil {
+		return x.JobTemplateTasks
+	}
+	return nil
+}
+
+func (x *ClientReportCardProjection) GetJobTasks() []*job_task.JobTask {
+	if x != nil {
+		return x.JobTasks
+	}
+	return nil
+}
+
+func (x *ClientReportCardProjection) GetTaskOutcomes() []*ClientReportCardTaskOutcome {
+	if x != nil {
+		return x.TaskOutcomes
+	}
+	return nil
+}
+
+func (x *ClientReportCardProjection) GetOutcomeCriteria() []*outcome_criteria.OutcomeCriteria {
+	if x != nil {
+		return x.OutcomeCriteria
+	}
+	return nil
+}
+
+func (x *ClientReportCardProjection) GetTemplateTaskCriteria() []*template_task_criteria.TemplateTaskCriteria {
+	if x != nil {
+		return x.TemplateTaskCriteria
+	}
+	return nil
+}
+
+func (x *ClientReportCardProjection) GetPhaseOutcomeSummaries() []*phase_outcome_summary.PhaseOutcomeSummary {
+	if x != nil {
+		return x.PhaseOutcomeSummaries
+	}
+	return nil
+}
+
+func (x *ClientReportCardProjection) GetJobOutcomeSummaries() []*job_outcome_summary.JobOutcomeSummary {
+	if x != nil {
+		return x.JobOutcomeSummaries
+	}
+	return nil
+}
+
+func (x *ClientReportCardProjection) GetJobOutcomeLines() []*job_outcome_line.JobOutcomeLine {
+	if x != nil {
+		return x.JobOutcomeLines
+	}
+	return nil
+}
+
+func (x *ClientReportCardProjection) GetStaff() []*ClientReportCardStaff {
+	if x != nil {
+		return x.Staff
+	}
+	return nil
+}
+
+func (x *ClientReportCardProjection) GetTeacherAssignments() []*ClientReportCardTeacherAssignment {
+	if x != nil {
+		return x.TeacherAssignments
+	}
+	return nil
+}
+
+func (x *ClientReportCardProjection) GetRenderGateJobIds() []string {
+	if x != nil {
+		return x.RenderGateJobIds
+	}
+	return nil
+}
+
+func (x *ClientReportCardProjection) GetClientSubscriptionIds() []string {
+	if x != nil {
+		return x.ClientSubscriptionIds
+	}
+	return nil
+}
+
+func (x *ClientReportCardProjection) GetRatingDescriptions() []*template_task_criteria_rating_description.TemplateTaskCriteriaRatingDescription {
+	if x != nil {
+		return x.RatingDescriptions
+	}
+	return nil
+}
+
+func (x *ClientReportCardProjection) GetRenderGateAppliedSubscriptionGroupId() string {
+	if x != nil {
+		return x.RenderGateAppliedSubscriptionGroupId
+	}
+	return ""
+}
+
+func (x *ClientReportCardProjection) GetRenderGateSheets() []*ClientReportCardRenderGateSheet {
+	if x != nil {
+		return x.RenderGateSheets
+	}
+	return nil
+}
+
+type GetSubscriptionGroupClientReportCardResponse struct {
+	state         protoimpl.MessageState      `protogen:"open.v1"`
+	ReportCard    *ClientReportCardProjection `protobuf:"bytes,1,opt,name=report_card,json=reportCard,proto3" json:"report_card,omitempty"`
+	Success       bool                        `protobuf:"varint,2,opt,name=success,proto3" json:"success,omitempty"`
+	Error         *common.Error               `protobuf:"bytes,3,opt,name=error,proto3,oneof" json:"error,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *GetSubscriptionGroupClientReportCardResponse) Reset() {
+	*x = GetSubscriptionGroupClientReportCardResponse{}
+	mi := &file_service_operation_subscription_group_outcome_export_subscription_group_outcome_export_proto_msgTypes[20]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *GetSubscriptionGroupClientReportCardResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*GetSubscriptionGroupClientReportCardResponse) ProtoMessage() {}
+
+func (x *GetSubscriptionGroupClientReportCardResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_service_operation_subscription_group_outcome_export_subscription_group_outcome_export_proto_msgTypes[20]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use GetSubscriptionGroupClientReportCardResponse.ProtoReflect.Descriptor instead.
+func (*GetSubscriptionGroupClientReportCardResponse) Descriptor() ([]byte, []int) {
+	return file_service_operation_subscription_group_outcome_export_subscription_group_outcome_export_proto_rawDescGZIP(), []int{20}
+}
+
+func (x *GetSubscriptionGroupClientReportCardResponse) GetReportCard() *ClientReportCardProjection {
+	if x != nil {
+		return x.ReportCard
+	}
+	return nil
+}
+
+func (x *GetSubscriptionGroupClientReportCardResponse) GetSuccess() bool {
+	if x != nil {
+		return x.Success
+	}
+	return false
+}
+
+func (x *GetSubscriptionGroupClientReportCardResponse) GetError() *common.Error {
+	if x != nil {
+		return x.Error
+	}
+	return nil
+}
+
 // The following messages define an in-process report-render seam. They are not
 // methods on the generated gRPC service and are never registered as transport.
 // Expected group axes are optimistic coherence assertions only; the resolver
@@ -950,7 +1736,7 @@ type ResolveSubscriptionGroupOutcomeDocumentForRenderRequest struct {
 
 func (x *ResolveSubscriptionGroupOutcomeDocumentForRenderRequest) Reset() {
 	*x = ResolveSubscriptionGroupOutcomeDocumentForRenderRequest{}
-	mi := &file_service_operation_subscription_group_outcome_export_subscription_group_outcome_export_proto_msgTypes[12]
+	mi := &file_service_operation_subscription_group_outcome_export_subscription_group_outcome_export_proto_msgTypes[21]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -962,7 +1748,7 @@ func (x *ResolveSubscriptionGroupOutcomeDocumentForRenderRequest) String() strin
 func (*ResolveSubscriptionGroupOutcomeDocumentForRenderRequest) ProtoMessage() {}
 
 func (x *ResolveSubscriptionGroupOutcomeDocumentForRenderRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_service_operation_subscription_group_outcome_export_subscription_group_outcome_export_proto_msgTypes[12]
+	mi := &file_service_operation_subscription_group_outcome_export_subscription_group_outcome_export_proto_msgTypes[21]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -975,7 +1761,7 @@ func (x *ResolveSubscriptionGroupOutcomeDocumentForRenderRequest) ProtoReflect()
 
 // Deprecated: Use ResolveSubscriptionGroupOutcomeDocumentForRenderRequest.ProtoReflect.Descriptor instead.
 func (*ResolveSubscriptionGroupOutcomeDocumentForRenderRequest) Descriptor() ([]byte, []int) {
-	return file_service_operation_subscription_group_outcome_export_subscription_group_outcome_export_proto_rawDescGZIP(), []int{12}
+	return file_service_operation_subscription_group_outcome_export_subscription_group_outcome_export_proto_rawDescGZIP(), []int{21}
 }
 
 func (x *ResolveSubscriptionGroupOutcomeDocumentForRenderRequest) GetSubscriptionGroupId() string {
@@ -1025,7 +1811,7 @@ type ResolvedSubscriptionGroupOutcomeDocument struct {
 
 func (x *ResolvedSubscriptionGroupOutcomeDocument) Reset() {
 	*x = ResolvedSubscriptionGroupOutcomeDocument{}
-	mi := &file_service_operation_subscription_group_outcome_export_subscription_group_outcome_export_proto_msgTypes[13]
+	mi := &file_service_operation_subscription_group_outcome_export_subscription_group_outcome_export_proto_msgTypes[22]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1037,7 +1823,7 @@ func (x *ResolvedSubscriptionGroupOutcomeDocument) String() string {
 func (*ResolvedSubscriptionGroupOutcomeDocument) ProtoMessage() {}
 
 func (x *ResolvedSubscriptionGroupOutcomeDocument) ProtoReflect() protoreflect.Message {
-	mi := &file_service_operation_subscription_group_outcome_export_subscription_group_outcome_export_proto_msgTypes[13]
+	mi := &file_service_operation_subscription_group_outcome_export_subscription_group_outcome_export_proto_msgTypes[22]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1050,7 +1836,7 @@ func (x *ResolvedSubscriptionGroupOutcomeDocument) ProtoReflect() protoreflect.M
 
 // Deprecated: Use ResolvedSubscriptionGroupOutcomeDocument.ProtoReflect.Descriptor instead.
 func (*ResolvedSubscriptionGroupOutcomeDocument) Descriptor() ([]byte, []int) {
-	return file_service_operation_subscription_group_outcome_export_subscription_group_outcome_export_proto_rawDescGZIP(), []int{13}
+	return file_service_operation_subscription_group_outcome_export_subscription_group_outcome_export_proto_rawDescGZIP(), []int{22}
 }
 
 func (x *ResolvedSubscriptionGroupOutcomeDocument) GetStorageContainer() string {
@@ -1093,7 +1879,7 @@ type ResolveSubscriptionGroupOutcomeDocumentForRenderResponse struct {
 
 func (x *ResolveSubscriptionGroupOutcomeDocumentForRenderResponse) Reset() {
 	*x = ResolveSubscriptionGroupOutcomeDocumentForRenderResponse{}
-	mi := &file_service_operation_subscription_group_outcome_export_subscription_group_outcome_export_proto_msgTypes[14]
+	mi := &file_service_operation_subscription_group_outcome_export_subscription_group_outcome_export_proto_msgTypes[23]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1105,7 +1891,7 @@ func (x *ResolveSubscriptionGroupOutcomeDocumentForRenderResponse) String() stri
 func (*ResolveSubscriptionGroupOutcomeDocumentForRenderResponse) ProtoMessage() {}
 
 func (x *ResolveSubscriptionGroupOutcomeDocumentForRenderResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_service_operation_subscription_group_outcome_export_subscription_group_outcome_export_proto_msgTypes[14]
+	mi := &file_service_operation_subscription_group_outcome_export_subscription_group_outcome_export_proto_msgTypes[23]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1118,7 +1904,7 @@ func (x *ResolveSubscriptionGroupOutcomeDocumentForRenderResponse) ProtoReflect(
 
 // Deprecated: Use ResolveSubscriptionGroupOutcomeDocumentForRenderResponse.ProtoReflect.Descriptor instead.
 func (*ResolveSubscriptionGroupOutcomeDocumentForRenderResponse) Descriptor() ([]byte, []int) {
-	return file_service_operation_subscription_group_outcome_export_subscription_group_outcome_export_proto_rawDescGZIP(), []int{14}
+	return file_service_operation_subscription_group_outcome_export_subscription_group_outcome_export_proto_rawDescGZIP(), []int{23}
 }
 
 func (x *ResolveSubscriptionGroupOutcomeDocumentForRenderResponse) GetDocument() *ResolvedSubscriptionGroupOutcomeDocument {
@@ -1153,7 +1939,7 @@ var File_service_operation_subscription_group_outcome_export_subscription_group_
 
 const file_service_operation_subscription_group_outcome_export_subscription_group_outcome_export_proto_rawDesc = "" +
 	"\n" +
-	"[service/operation/subscription_group_outcome_export/subscription_group_outcome_export.proto\x12\x14service.operation.v1\x1a\x19domain/common/error.proto\x1a`domain/operation/subscription_group_document_template/subscription_group_document_template.proto\"\x7f\n" +
+	"[service/operation/subscription_group_outcome_export/subscription_group_outcome_export.proto\x12\x14service.operation.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/operation/job/job.proto\x1a0domain/operation/job_category/job_category.proto\x1a8domain/operation/job_outcome_line/job_outcome_line.proto\x1a>domain/operation/job_outcome_summary/job_outcome_summary.proto\x1a*domain/operation/job_phase/job_phase.proto\x1a(domain/operation/job_task/job_task.proto\x1a0domain/operation/job_template/job_template.proto\x1a:domain/operation/job_template_task/job_template_task.proto\x1a<domain/operation/job_template_phase/job_template_phase.proto\x1a8domain/operation/outcome_criteria/outcome_criteria.proto\x1aBdomain/operation/phase_outcome_summary/phase_outcome_summary.proto\x1a0domain/operation/task_outcome/task_outcome.proto\x1aDdomain/operation/template_task_criteria/template_task_criteria.proto\x1ajdomain/operation/template_task_criteria_rating_description/template_task_criteria_rating_description.proto\x1a`domain/operation/subscription_group_document_template/subscription_group_document_template.proto\"\x7f\n" +
 	"*ListSubscriptionGroupOutcomeLandingRequest\x127\n" +
 	"\x15price_schedule_active\x18\x01 \x01(\bH\x00R\x13priceScheduleActive\x88\x01\x01B\x18\n" +
 	"\x16_price_schedule_active\"\x8b\x04\n" +
@@ -1236,6 +2022,84 @@ const file_service_operation_subscription_group_outcome_export_subscription_grou
 	"clientRows\x12\x18\n" +
 	"\asuccess\x18\x05 \x01(\bR\asuccess\x122\n" +
 	"\x05error\x18\x06 \x01(\v2\x17.domain.common.v1.ErrorH\x00R\x05error\x88\x01\x01B\b\n" +
+	"\x06_error\"\xb4\x01\n" +
+	"+GetSubscriptionGroupClientReportCardRequest\x122\n" +
+	"\x15subscription_group_id\x18\x01 \x01(\tR\x13subscriptionGroupId\x12\x1b\n" +
+	"\tclient_id\x18\x02 \x01(\tR\bclientId\x124\n" +
+	"\x16client_attribute_codes\x18\x03 \x03(\tR\x14clientAttributeCodes\"E\n" +
+	"\x19ClientReportCardAttribute\x12\x12\n" +
+	"\x04code\x18\x01 \x01(\tR\x04code\x12\x14\n" +
+	"\x05value\x18\x02 \x01(\tR\x05value\"\x85\x01\n" +
+	"\x16ClientReportCardClient\x12\x1b\n" +
+	"\tclient_id\x18\x01 \x01(\tR\bclientId\x12\x12\n" +
+	"\x04name\x18\x02 \x01(\tR\x04name\x12\x1d\n" +
+	"\n" +
+	"first_name\x18\x03 \x01(\tR\tfirstName\x12\x1b\n" +
+	"\tlast_name\x18\x04 \x01(\tR\blastName\"\xf4\x02\n" +
+	"\x1bClientReportCardTaskOutcome\x12\x1e\n" +
+	"\vjob_task_id\x18\x01 \x01(\tR\tjobTaskId\x129\n" +
+	"\x19template_task_criteria_id\x18\x02 \x01(\tR\x16templateTaskCriteriaId\x12(\n" +
+	"\rnumeric_value\x18\x03 \x01(\x01H\x00R\fnumericValue\x88\x01\x01\x12&\n" +
+	"\fscaled_label\x18\x04 \x01(\tH\x01R\vscaledLabel\x88\x01\x01\x122\n" +
+	"\x12determination_note\x18\x05 \x01(\tH\x02R\x11determinationNote\x88\x01\x01\x12(\n" +
+	"\rrecorded_date\x18\x06 \x01(\x03H\x03R\frecordedDate\x88\x01\x01B\x10\n" +
+	"\x0e_numeric_valueB\x0f\n" +
+	"\r_scaled_labelB\x15\n" +
+	"\x13_determination_noteB\x10\n" +
+	"\x0e_recorded_date\"U\n" +
+	"\x15ClientReportCardStaff\x12\x19\n" +
+	"\bstaff_id\x18\x01 \x01(\tR\astaffId\x12!\n" +
+	"\fdisplay_name\x18\x02 \x01(\tR\vdisplayName\"\x9a\x01\n" +
+	"!ClientReportCardTeacherAssignment\x12\x15\n" +
+	"\x06job_id\x18\x01 \x01(\tR\x05jobId\x12 \n" +
+	"\fjob_phase_id\x18\x02 \x01(\tR\n" +
+	"jobPhaseId\x12\x19\n" +
+	"\bstaff_id\x18\x03 \x01(\tR\astaffId\x12!\n" +
+	"\fdisplay_name\x18\x04 \x01(\tR\vdisplayName\"\x83\x03\n" +
+	"\x1fClientReportCardRenderGateSheet\x126\n" +
+	"\x15job_template_phase_id\x18\x01 \x01(\tH\x00R\x12jobTemplatePhaseId\x88\x01\x01\x12%\n" +
+	"\fjob_phase_id\x18\x02 \x01(\tH\x01R\n" +
+	"jobPhaseId\x88\x01\x01\x12A\n" +
+	"\x1dapplied_subscription_group_id\x18\x03 \x01(\tR\x1aappliedSubscriptionGroupId\x12!\n" +
+	"\ftarget_count\x18\x04 \x01(\x05R\vtargetCount\x120\n" +
+	"\x14any_workflow_entered\x18\x05 \x01(\bR\x12anyWorkflowEntered\x12#\n" +
+	"\rall_published\x18\x06 \x01(\bR\fallPublished\x12\x19\n" +
+	"\bhas_data\x18\a \x01(\bR\ahasDataB\x18\n" +
+	"\x16_job_template_phase_idB\x0f\n" +
+	"\r_job_phase_id\"\xc4\x0e\n" +
+	"\x1aClientReportCardProjection\x12U\n" +
+	"\acontext\x18\x01 \x01(\v2;.service.operation.v1.SubscriptionGroupOutcomeExportContextR\acontext\x12D\n" +
+	"\x06client\x18\x02 \x01(\v2,.service.operation.v1.ClientReportCardClientR\x06client\x12O\n" +
+	"\n" +
+	"attributes\x18\x03 \x03(\v2/.service.operation.v1.ClientReportCardAttributeR\n" +
+	"attributes\x12,\n" +
+	"\x04jobs\x18\x04 \x03(\v2\x18.domain.operation.v1.JobR\x04jobs\x12E\n" +
+	"\rjob_templates\x18\x05 \x03(\v2 .domain.operation.v1.JobTemplateR\fjobTemplates\x12G\n" +
+	"\x0ejob_categories\x18\x06 \x03(\v2 .domain.operation.v1.JobCategoryR\rjobCategories\x12<\n" +
+	"\n" +
+	"job_phases\x18\a \x03(\v2\x1d.domain.operation.v1.JobPhaseR\tjobPhases\x12U\n" +
+	"\x13job_template_phases\x18\b \x03(\v2%.domain.operation.v1.JobTemplatePhaseR\x11jobTemplatePhases\x12R\n" +
+	"\x12job_template_tasks\x18\t \x03(\v2$.domain.operation.v1.JobTemplateTaskR\x10jobTemplateTasks\x129\n" +
+	"\tjob_tasks\x18\n" +
+	" \x03(\v2\x1c.domain.operation.v1.JobTaskR\bjobTasks\x12V\n" +
+	"\rtask_outcomes\x18\v \x03(\v21.service.operation.v1.ClientReportCardTaskOutcomeR\ftaskOutcomes\x12O\n" +
+	"\x10outcome_criteria\x18\f \x03(\v2$.domain.operation.v1.OutcomeCriteriaR\x0foutcomeCriteria\x12_\n" +
+	"\x16template_task_criteria\x18\r \x03(\v2).domain.operation.v1.TemplateTaskCriteriaR\x14templateTaskCriteria\x12`\n" +
+	"\x17phase_outcome_summaries\x18\x0e \x03(\v2(.domain.operation.v1.PhaseOutcomeSummaryR\x15phaseOutcomeSummaries\x12Z\n" +
+	"\x15job_outcome_summaries\x18\x0f \x03(\v2&.domain.operation.v1.JobOutcomeSummaryR\x13jobOutcomeSummaries\x12O\n" +
+	"\x11job_outcome_lines\x18\x10 \x03(\v2#.domain.operation.v1.JobOutcomeLineR\x0fjobOutcomeLines\x12A\n" +
+	"\x05staff\x18\x11 \x03(\v2+.service.operation.v1.ClientReportCardStaffR\x05staff\x12h\n" +
+	"\x13teacher_assignments\x18\x12 \x03(\v27.service.operation.v1.ClientReportCardTeacherAssignmentR\x12teacherAssignments\x12-\n" +
+	"\x13render_gate_job_ids\x18\x13 \x03(\tR\x10renderGateJobIds\x126\n" +
+	"\x17client_subscription_ids\x18\x14 \x03(\tR\x15clientSubscriptionIds\x12k\n" +
+	"\x13rating_descriptions\x18\x15 \x03(\v2:.domain.operation.v1.TemplateTaskCriteriaRatingDescriptionR\x12ratingDescriptions\x12W\n" +
+	")render_gate_applied_subscription_group_id\x18\x16 \x01(\tR$renderGateAppliedSubscriptionGroupId\x12c\n" +
+	"\x12render_gate_sheets\x18\x17 \x03(\v25.service.operation.v1.ClientReportCardRenderGateSheetR\x10renderGateSheets\"\xd9\x01\n" +
+	",GetSubscriptionGroupClientReportCardResponse\x12Q\n" +
+	"\vreport_card\x18\x01 \x01(\v20.service.operation.v1.ClientReportCardProjectionR\n" +
+	"reportCard\x12\x18\n" +
+	"\asuccess\x18\x02 \x01(\bR\asuccess\x122\n" +
+	"\x05error\x18\x03 \x01(\v2\x17.domain.common.v1.ErrorH\x00R\x05error\x88\x01\x01B\b\n" +
 	"\x06_error\"\x85\x03\n" +
 	"7ResolveSubscriptionGroupOutcomeDocumentForRenderRequest\x122\n" +
 	"\x15subscription_group_id\x18\x01 \x01(\tR\x13subscriptionGroupId\x12&\n" +
@@ -1275,29 +2139,51 @@ func file_service_operation_subscription_group_outcome_export_subscription_group
 	return file_service_operation_subscription_group_outcome_export_subscription_group_outcome_export_proto_rawDescData
 }
 
-var file_service_operation_subscription_group_outcome_export_subscription_group_outcome_export_proto_msgTypes = make([]protoimpl.MessageInfo, 15)
+var file_service_operation_subscription_group_outcome_export_subscription_group_outcome_export_proto_msgTypes = make([]protoimpl.MessageInfo, 24)
 var file_service_operation_subscription_group_outcome_export_subscription_group_outcome_export_proto_goTypes = []any{
-	(*ListSubscriptionGroupOutcomeLandingRequest)(nil),               // 0: service.operation.v1.ListSubscriptionGroupOutcomeLandingRequest
-	(*SubscriptionGroupOutcomeLandingRow)(nil),                       // 1: service.operation.v1.SubscriptionGroupOutcomeLandingRow
-	(*ListSubscriptionGroupOutcomeLandingResponse)(nil),              // 2: service.operation.v1.ListSubscriptionGroupOutcomeLandingResponse
-	(*GetSubscriptionGroupOutcomeExportRequest)(nil),                 // 3: service.operation.v1.GetSubscriptionGroupOutcomeExportRequest
-	(*SubscriptionGroupOutcomeExportContext)(nil),                    // 4: service.operation.v1.SubscriptionGroupOutcomeExportContext
-	(*JobTemplatePhaseOption)(nil),                                   // 5: service.operation.v1.JobTemplatePhaseOption
-	(*JobCategoryOption)(nil),                                        // 6: service.operation.v1.JobCategoryOption
-	(*JobTemplateColumn)(nil),                                        // 7: service.operation.v1.JobTemplateColumn
-	(*EnrollmentEvidence)(nil),                                       // 8: service.operation.v1.EnrollmentEvidence
-	(*SubscriptionGroupOutcomeCell)(nil),                             // 9: service.operation.v1.SubscriptionGroupOutcomeCell
-	(*SubscriptionGroupOutcomeClientRow)(nil),                        // 10: service.operation.v1.SubscriptionGroupOutcomeClientRow
-	(*GetSubscriptionGroupOutcomeExportResponse)(nil),                // 11: service.operation.v1.GetSubscriptionGroupOutcomeExportResponse
-	(*ResolveSubscriptionGroupOutcomeDocumentForRenderRequest)(nil),  // 12: service.operation.v1.ResolveSubscriptionGroupOutcomeDocumentForRenderRequest
-	(*ResolvedSubscriptionGroupOutcomeDocument)(nil),                 // 13: service.operation.v1.ResolvedSubscriptionGroupOutcomeDocument
-	(*ResolveSubscriptionGroupOutcomeDocumentForRenderResponse)(nil), // 14: service.operation.v1.ResolveSubscriptionGroupOutcomeDocumentForRenderResponse
-	(*common.Error)(nil),                                             // 15: domain.common.v1.Error
-	(subscription_group_document_template.RenderProfile)(0),          // 16: domain.operation.v1.RenderProfile
+	(*ListSubscriptionGroupOutcomeLandingRequest)(nil),                                      // 0: service.operation.v1.ListSubscriptionGroupOutcomeLandingRequest
+	(*SubscriptionGroupOutcomeLandingRow)(nil),                                              // 1: service.operation.v1.SubscriptionGroupOutcomeLandingRow
+	(*ListSubscriptionGroupOutcomeLandingResponse)(nil),                                     // 2: service.operation.v1.ListSubscriptionGroupOutcomeLandingResponse
+	(*GetSubscriptionGroupOutcomeExportRequest)(nil),                                        // 3: service.operation.v1.GetSubscriptionGroupOutcomeExportRequest
+	(*SubscriptionGroupOutcomeExportContext)(nil),                                           // 4: service.operation.v1.SubscriptionGroupOutcomeExportContext
+	(*JobTemplatePhaseOption)(nil),                                                          // 5: service.operation.v1.JobTemplatePhaseOption
+	(*JobCategoryOption)(nil),                                                               // 6: service.operation.v1.JobCategoryOption
+	(*JobTemplateColumn)(nil),                                                               // 7: service.operation.v1.JobTemplateColumn
+	(*EnrollmentEvidence)(nil),                                                              // 8: service.operation.v1.EnrollmentEvidence
+	(*SubscriptionGroupOutcomeCell)(nil),                                                    // 9: service.operation.v1.SubscriptionGroupOutcomeCell
+	(*SubscriptionGroupOutcomeClientRow)(nil),                                               // 10: service.operation.v1.SubscriptionGroupOutcomeClientRow
+	(*GetSubscriptionGroupOutcomeExportResponse)(nil),                                       // 11: service.operation.v1.GetSubscriptionGroupOutcomeExportResponse
+	(*GetSubscriptionGroupClientReportCardRequest)(nil),                                     // 12: service.operation.v1.GetSubscriptionGroupClientReportCardRequest
+	(*ClientReportCardAttribute)(nil),                                                       // 13: service.operation.v1.ClientReportCardAttribute
+	(*ClientReportCardClient)(nil),                                                          // 14: service.operation.v1.ClientReportCardClient
+	(*ClientReportCardTaskOutcome)(nil),                                                     // 15: service.operation.v1.ClientReportCardTaskOutcome
+	(*ClientReportCardStaff)(nil),                                                           // 16: service.operation.v1.ClientReportCardStaff
+	(*ClientReportCardTeacherAssignment)(nil),                                               // 17: service.operation.v1.ClientReportCardTeacherAssignment
+	(*ClientReportCardRenderGateSheet)(nil),                                                 // 18: service.operation.v1.ClientReportCardRenderGateSheet
+	(*ClientReportCardProjection)(nil),                                                      // 19: service.operation.v1.ClientReportCardProjection
+	(*GetSubscriptionGroupClientReportCardResponse)(nil),                                    // 20: service.operation.v1.GetSubscriptionGroupClientReportCardResponse
+	(*ResolveSubscriptionGroupOutcomeDocumentForRenderRequest)(nil),                         // 21: service.operation.v1.ResolveSubscriptionGroupOutcomeDocumentForRenderRequest
+	(*ResolvedSubscriptionGroupOutcomeDocument)(nil),                                        // 22: service.operation.v1.ResolvedSubscriptionGroupOutcomeDocument
+	(*ResolveSubscriptionGroupOutcomeDocumentForRenderResponse)(nil),                        // 23: service.operation.v1.ResolveSubscriptionGroupOutcomeDocumentForRenderResponse
+	(*common.Error)(nil),                                                                    // 24: domain.common.v1.Error
+	(*job.Job)(nil),                                                                         // 25: domain.operation.v1.Job
+	(*job_template.JobTemplate)(nil),                                                        // 26: domain.operation.v1.JobTemplate
+	(*job_category.JobCategory)(nil),                                                        // 27: domain.operation.v1.JobCategory
+	(*job_phase.JobPhase)(nil),                                                              // 28: domain.operation.v1.JobPhase
+	(*job_template_phase.JobTemplatePhase)(nil),                                             // 29: domain.operation.v1.JobTemplatePhase
+	(*job_template_task.JobTemplateTask)(nil),                                               // 30: domain.operation.v1.JobTemplateTask
+	(*job_task.JobTask)(nil),                                                                // 31: domain.operation.v1.JobTask
+	(*outcome_criteria.OutcomeCriteria)(nil),                                                // 32: domain.operation.v1.OutcomeCriteria
+	(*template_task_criteria.TemplateTaskCriteria)(nil),                                     // 33: domain.operation.v1.TemplateTaskCriteria
+	(*phase_outcome_summary.PhaseOutcomeSummary)(nil),                                       // 34: domain.operation.v1.PhaseOutcomeSummary
+	(*job_outcome_summary.JobOutcomeSummary)(nil),                                           // 35: domain.operation.v1.JobOutcomeSummary
+	(*job_outcome_line.JobOutcomeLine)(nil),                                                 // 36: domain.operation.v1.JobOutcomeLine
+	(*template_task_criteria_rating_description.TemplateTaskCriteriaRatingDescription)(nil), // 37: domain.operation.v1.TemplateTaskCriteriaRatingDescription
+	(subscription_group_document_template.RenderProfile)(0),                                 // 38: domain.operation.v1.RenderProfile
 }
 var file_service_operation_subscription_group_outcome_export_subscription_group_outcome_export_proto_depIdxs = []int32{
 	1,  // 0: service.operation.v1.ListSubscriptionGroupOutcomeLandingResponse.rows:type_name -> service.operation.v1.SubscriptionGroupOutcomeLandingRow
-	15, // 1: service.operation.v1.ListSubscriptionGroupOutcomeLandingResponse.error:type_name -> domain.common.v1.Error
+	24, // 1: service.operation.v1.ListSubscriptionGroupOutcomeLandingResponse.error:type_name -> domain.common.v1.Error
 	5,  // 2: service.operation.v1.JobCategoryOption.job_template_phases:type_name -> service.operation.v1.JobTemplatePhaseOption
 	8,  // 3: service.operation.v1.SubscriptionGroupOutcomeCell.enrollment_evidence:type_name -> service.operation.v1.EnrollmentEvidence
 	9,  // 4: service.operation.v1.SubscriptionGroupOutcomeClientRow.cells:type_name -> service.operation.v1.SubscriptionGroupOutcomeCell
@@ -1305,20 +2191,42 @@ var file_service_operation_subscription_group_outcome_export_subscription_group_
 	6,  // 6: service.operation.v1.GetSubscriptionGroupOutcomeExportResponse.job_categories:type_name -> service.operation.v1.JobCategoryOption
 	7,  // 7: service.operation.v1.GetSubscriptionGroupOutcomeExportResponse.job_template_columns:type_name -> service.operation.v1.JobTemplateColumn
 	10, // 8: service.operation.v1.GetSubscriptionGroupOutcomeExportResponse.client_rows:type_name -> service.operation.v1.SubscriptionGroupOutcomeClientRow
-	15, // 9: service.operation.v1.GetSubscriptionGroupOutcomeExportResponse.error:type_name -> domain.common.v1.Error
-	16, // 10: service.operation.v1.ResolveSubscriptionGroupOutcomeDocumentForRenderRequest.render_profile:type_name -> domain.operation.v1.RenderProfile
-	16, // 11: service.operation.v1.ResolvedSubscriptionGroupOutcomeDocument.render_profile:type_name -> domain.operation.v1.RenderProfile
-	13, // 12: service.operation.v1.ResolveSubscriptionGroupOutcomeDocumentForRenderResponse.document:type_name -> service.operation.v1.ResolvedSubscriptionGroupOutcomeDocument
-	15, // 13: service.operation.v1.ResolveSubscriptionGroupOutcomeDocumentForRenderResponse.error:type_name -> domain.common.v1.Error
-	3,  // 14: service.operation.v1.SubscriptionGroupOutcomeExportService.GetSubscriptionGroupOutcomeExport:input_type -> service.operation.v1.GetSubscriptionGroupOutcomeExportRequest
-	0,  // 15: service.operation.v1.SubscriptionGroupOutcomeExportService.ListSubscriptionGroupOutcomeLanding:input_type -> service.operation.v1.ListSubscriptionGroupOutcomeLandingRequest
-	11, // 16: service.operation.v1.SubscriptionGroupOutcomeExportService.GetSubscriptionGroupOutcomeExport:output_type -> service.operation.v1.GetSubscriptionGroupOutcomeExportResponse
-	2,  // 17: service.operation.v1.SubscriptionGroupOutcomeExportService.ListSubscriptionGroupOutcomeLanding:output_type -> service.operation.v1.ListSubscriptionGroupOutcomeLandingResponse
-	16, // [16:18] is the sub-list for method output_type
-	14, // [14:16] is the sub-list for method input_type
-	14, // [14:14] is the sub-list for extension type_name
-	14, // [14:14] is the sub-list for extension extendee
-	0,  // [0:14] is the sub-list for field type_name
+	24, // 9: service.operation.v1.GetSubscriptionGroupOutcomeExportResponse.error:type_name -> domain.common.v1.Error
+	4,  // 10: service.operation.v1.ClientReportCardProjection.context:type_name -> service.operation.v1.SubscriptionGroupOutcomeExportContext
+	14, // 11: service.operation.v1.ClientReportCardProjection.client:type_name -> service.operation.v1.ClientReportCardClient
+	13, // 12: service.operation.v1.ClientReportCardProjection.attributes:type_name -> service.operation.v1.ClientReportCardAttribute
+	25, // 13: service.operation.v1.ClientReportCardProjection.jobs:type_name -> domain.operation.v1.Job
+	26, // 14: service.operation.v1.ClientReportCardProjection.job_templates:type_name -> domain.operation.v1.JobTemplate
+	27, // 15: service.operation.v1.ClientReportCardProjection.job_categories:type_name -> domain.operation.v1.JobCategory
+	28, // 16: service.operation.v1.ClientReportCardProjection.job_phases:type_name -> domain.operation.v1.JobPhase
+	29, // 17: service.operation.v1.ClientReportCardProjection.job_template_phases:type_name -> domain.operation.v1.JobTemplatePhase
+	30, // 18: service.operation.v1.ClientReportCardProjection.job_template_tasks:type_name -> domain.operation.v1.JobTemplateTask
+	31, // 19: service.operation.v1.ClientReportCardProjection.job_tasks:type_name -> domain.operation.v1.JobTask
+	15, // 20: service.operation.v1.ClientReportCardProjection.task_outcomes:type_name -> service.operation.v1.ClientReportCardTaskOutcome
+	32, // 21: service.operation.v1.ClientReportCardProjection.outcome_criteria:type_name -> domain.operation.v1.OutcomeCriteria
+	33, // 22: service.operation.v1.ClientReportCardProjection.template_task_criteria:type_name -> domain.operation.v1.TemplateTaskCriteria
+	34, // 23: service.operation.v1.ClientReportCardProjection.phase_outcome_summaries:type_name -> domain.operation.v1.PhaseOutcomeSummary
+	35, // 24: service.operation.v1.ClientReportCardProjection.job_outcome_summaries:type_name -> domain.operation.v1.JobOutcomeSummary
+	36, // 25: service.operation.v1.ClientReportCardProjection.job_outcome_lines:type_name -> domain.operation.v1.JobOutcomeLine
+	16, // 26: service.operation.v1.ClientReportCardProjection.staff:type_name -> service.operation.v1.ClientReportCardStaff
+	17, // 27: service.operation.v1.ClientReportCardProjection.teacher_assignments:type_name -> service.operation.v1.ClientReportCardTeacherAssignment
+	37, // 28: service.operation.v1.ClientReportCardProjection.rating_descriptions:type_name -> domain.operation.v1.TemplateTaskCriteriaRatingDescription
+	18, // 29: service.operation.v1.ClientReportCardProjection.render_gate_sheets:type_name -> service.operation.v1.ClientReportCardRenderGateSheet
+	19, // 30: service.operation.v1.GetSubscriptionGroupClientReportCardResponse.report_card:type_name -> service.operation.v1.ClientReportCardProjection
+	24, // 31: service.operation.v1.GetSubscriptionGroupClientReportCardResponse.error:type_name -> domain.common.v1.Error
+	38, // 32: service.operation.v1.ResolveSubscriptionGroupOutcomeDocumentForRenderRequest.render_profile:type_name -> domain.operation.v1.RenderProfile
+	38, // 33: service.operation.v1.ResolvedSubscriptionGroupOutcomeDocument.render_profile:type_name -> domain.operation.v1.RenderProfile
+	22, // 34: service.operation.v1.ResolveSubscriptionGroupOutcomeDocumentForRenderResponse.document:type_name -> service.operation.v1.ResolvedSubscriptionGroupOutcomeDocument
+	24, // 35: service.operation.v1.ResolveSubscriptionGroupOutcomeDocumentForRenderResponse.error:type_name -> domain.common.v1.Error
+	3,  // 36: service.operation.v1.SubscriptionGroupOutcomeExportService.GetSubscriptionGroupOutcomeExport:input_type -> service.operation.v1.GetSubscriptionGroupOutcomeExportRequest
+	0,  // 37: service.operation.v1.SubscriptionGroupOutcomeExportService.ListSubscriptionGroupOutcomeLanding:input_type -> service.operation.v1.ListSubscriptionGroupOutcomeLandingRequest
+	11, // 38: service.operation.v1.SubscriptionGroupOutcomeExportService.GetSubscriptionGroupOutcomeExport:output_type -> service.operation.v1.GetSubscriptionGroupOutcomeExportResponse
+	2,  // 39: service.operation.v1.SubscriptionGroupOutcomeExportService.ListSubscriptionGroupOutcomeLanding:output_type -> service.operation.v1.ListSubscriptionGroupOutcomeLandingResponse
+	38, // [38:40] is the sub-list for method output_type
+	36, // [36:38] is the sub-list for method input_type
+	36, // [36:36] is the sub-list for extension type_name
+	36, // [36:36] is the sub-list for extension extendee
+	0,  // [0:36] is the sub-list for field type_name
 }
 
 func init() {
@@ -1338,15 +2246,18 @@ func file_service_operation_subscription_group_outcome_export_subscription_group
 	file_service_operation_subscription_group_outcome_export_subscription_group_outcome_export_proto_msgTypes[4].OneofWrappers = []any{}
 	file_service_operation_subscription_group_outcome_export_subscription_group_outcome_export_proto_msgTypes[9].OneofWrappers = []any{}
 	file_service_operation_subscription_group_outcome_export_subscription_group_outcome_export_proto_msgTypes[11].OneofWrappers = []any{}
-	file_service_operation_subscription_group_outcome_export_subscription_group_outcome_export_proto_msgTypes[12].OneofWrappers = []any{}
-	file_service_operation_subscription_group_outcome_export_subscription_group_outcome_export_proto_msgTypes[14].OneofWrappers = []any{}
+	file_service_operation_subscription_group_outcome_export_subscription_group_outcome_export_proto_msgTypes[15].OneofWrappers = []any{}
+	file_service_operation_subscription_group_outcome_export_subscription_group_outcome_export_proto_msgTypes[18].OneofWrappers = []any{}
+	file_service_operation_subscription_group_outcome_export_subscription_group_outcome_export_proto_msgTypes[20].OneofWrappers = []any{}
+	file_service_operation_subscription_group_outcome_export_subscription_group_outcome_export_proto_msgTypes[21].OneofWrappers = []any{}
+	file_service_operation_subscription_group_outcome_export_subscription_group_outcome_export_proto_msgTypes[23].OneofWrappers = []any{}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
 		File: protoimpl.DescBuilder{
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_service_operation_subscription_group_outcome_export_subscription_group_outcome_export_proto_rawDesc), len(file_service_operation_subscription_group_outcome_export_subscription_group_outcome_export_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   15,
+			NumMessages:   24,
 			NumExtensions: 0,
 			NumServices:   1,
 		},

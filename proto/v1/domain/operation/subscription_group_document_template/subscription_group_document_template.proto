@@ -22,6 +22,10 @@ import "options/db.proto";
 enum RenderProfile {
   RENDER_PROFILE_UNSPECIFIED = 0;
   RENDER_PROFILE_SUBSCRIPTION_GROUP_OUTCOME_MATRIX_SINGLE_PERIOD_11_V1 = 1;
+  // Full-client, one-phase report with dynamic repeated job/outcome tables.
+  // Unlike the fixed matrix profile, this profile is category-agnostic and its
+  // binding uses a NULL job_category_id.
+  RENDER_PROFILE_SUBSCRIPTION_GROUP_CLIENT_PHASE_OUTCOME_REPORT_V1 = 2;
 }
 
 // SubscriptionGroupDocumentTemplate binds a subscription-group outcome-summary

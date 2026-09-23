@@ -62,8 +62,10 @@ type JobOutcomeSummaryDocumentTemplate struct {
 	DateCreatedString   *string                `protobuf:"bytes,18,opt,name=date_created_string,json=dateCreatedString,proto3,oneof" json:"date_created_string,omitempty"`
 	DateModified        *int64                 `protobuf:"varint,19,opt,name=date_modified,json=dateModified,proto3,oneof" json:"date_modified,omitempty"`
 	DateModifiedString  *string                `protobuf:"bytes,20,opt,name=date_modified_string,json=dateModifiedString,proto3,oneof" json:"date_modified_string,omitempty"`
-	unknownFields       protoimpl.UnknownFields
-	sizeCache           protoimpl.SizeCache
+	// NULL binds the whole-year card; a code binds one active phase period.
+	JobTemplatePhaseCode *string `protobuf:"bytes,40,opt,name=job_template_phase_code,json=jobTemplatePhaseCode,proto3,oneof" json:"job_template_phase_code,omitempty"`
+	unknownFields        protoimpl.UnknownFields
+	sizeCache            protoimpl.SizeCache
 }
 
 func (x *JobOutcomeSummaryDocumentTemplate) Reset() {
@@ -232,6 +234,13 @@ func (x *JobOutcomeSummaryDocumentTemplate) GetDateModified() int64 {
 func (x *JobOutcomeSummaryDocumentTemplate) GetDateModifiedString() string {
 	if x != nil && x.DateModifiedString != nil {
 		return *x.DateModifiedString
+	}
+	return ""
+}
+
+func (x *JobOutcomeSummaryDocumentTemplate) GetJobTemplatePhaseCode() string {
+	if x != nil && x.JobTemplatePhaseCode != nil {
+		return *x.JobTemplatePhaseCode
 	}
 	return ""
 }
@@ -773,11 +782,12 @@ func (x *ListJobOutcomeSummaryDocumentTemplatesResponse) GetError() *common.Erro
 }
 
 type FindApplicableJobOutcomeSummaryDocumentTemplateRequest struct {
-	state           protoimpl.MessageState `protogen:"open.v1"`
-	PriceScheduleId *string                `protobuf:"bytes,1,opt,name=price_schedule_id,json=priceScheduleId,proto3,oneof" json:"price_schedule_id,omitempty"` // AY/term scope; empty = fallback only
-	AsOf            *timestamppb.Timestamp `protobuf:"bytes,2,opt,name=as_of,json=asOf,proto3,oneof" json:"as_of,omitempty"`                                    // absent = server UTC now
-	unknownFields   protoimpl.UnknownFields
-	sizeCache       protoimpl.SizeCache
+	state                protoimpl.MessageState `protogen:"open.v1"`
+	PriceScheduleId      *string                `protobuf:"bytes,1,opt,name=price_schedule_id,json=priceScheduleId,proto3,oneof" json:"price_schedule_id,omitempty"`                  // AY/term scope; empty = fallback only
+	AsOf                 *timestamppb.Timestamp `protobuf:"bytes,2,opt,name=as_of,json=asOf,proto3,oneof" json:"as_of,omitempty"`                                                     // absent = server UTC now
+	JobTemplatePhaseCode *string                `protobuf:"bytes,3,opt,name=job_template_phase_code,json=jobTemplatePhaseCode,proto3,oneof" json:"job_template_phase_code,omitempty"` // absent = whole-year card only
+	unknownFields        protoimpl.UnknownFields
+	sizeCache            protoimpl.SizeCache
 }
 
 func (x *FindApplicableJobOutcomeSummaryDocumentTemplateRequest) Reset() {
@@ -822,6 +832,13 @@ func (x *FindApplicableJobOutcomeSummaryDocumentTemplateRequest) GetAsOf() *time
 		return x.AsOf
 	}
 	return nil
+}
+
+func (x *FindApplicableJobOutcomeSummaryDocumentTemplateRequest) GetJobTemplatePhaseCode() string {
+	if x != nil && x.JobTemplatePhaseCode != nil {
+		return *x.JobTemplatePhaseCode
+	}
+	return ""
 }
 
 type FindApplicableJobOutcomeSummaryDocumentTemplateResponse struct {
@@ -1000,7 +1017,7 @@ var File_domain_operation_job_outcome_summary_document_template_job_outcome_summ
 
 const file_domain_operation_job_outcome_summary_document_template_job_outcome_summary_document_template_proto_rawDesc = "" +
 	"\n" +
-	"bdomain/operation/job_outcome_summary_document_template/job_outcome_summary_document_template.proto\x12\x13domain.operation.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1adomain/common/search.proto\x1a'domain/document/template/template.proto\x1a\"domain/operation/enums/enums.proto\x1a7domain/subscription/price_schedule/price_schedule.proto\x1a\x1fgoogle/protobuf/timestamp.proto\x1a\x10options/db.proto\"\xd5\v\n" +
+	"bdomain/operation/job_outcome_summary_document_template/job_outcome_summary_document_template.proto\x12\x13domain.operation.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a\x1adomain/common/search.proto\x1a'domain/document/template/template.proto\x1a\"domain/operation/enums/enums.proto\x1a7domain/subscription/price_schedule/price_schedule.proto\x1a\x1fgoogle/protobuf/timestamp.proto\x1a\x10options/db.proto\"\xcf\r\n" +
 	"!JobOutcomeSummaryDocumentTemplate\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x124\n" +
 	"\fworkspace_id\x18\x02 \x01(\tB\x11\x82\xb5\x18\r\n" +
@@ -1029,7 +1046,8 @@ const file_domain_operation_job_outcome_summary_document_template_job_outcome_su
 	"R\vdateCreated\x88\x01\x01\x12;\n" +
 	"\x13date_created_string\x18\x12 \x01(\tB\x06\x82\xb5\x18\x028\x01H\vR\x11dateCreatedString\x88\x01\x01\x12(\n" +
 	"\rdate_modified\x18\x13 \x01(\x03H\fR\fdateModified\x88\x01\x01\x12=\n" +
-	"\x14date_modified_string\x18\x14 \x01(\tB\x06\x82\xb5\x18\x028\x01H\rR\x12dateModifiedString\x88\x01\x01:\x06\x8a\xb5\x18\x02\b\x01B\x14\n" +
+	"\x14date_modified_string\x18\x14 \x01(\tB\x06\x82\xb5\x18\x028\x01H\rR\x12dateModifiedString\x88\x01\x01\x12\xdb\x01\n" +
+	"\x17job_template_phase_code\x18( \x01(\tB\x9e\x01\x82\xb5\x18\x99\x01*\x96\x01job_template_phase_code IS NULL OR (job_template_phase_code = lower(btrim(job_template_phase_code)) AND job_template_phase_code ~ '^[a-z][a-z0-9_]*$')H\x0eR\x14jobTemplatePhaseCode\x88\x01\x01:\x06\x8a\xb5\x18\x02\b\x01B\x14\n" +
 	"\x12_document_templateB\x14\n" +
 	"\x12_price_schedule_idB\x11\n" +
 	"\x0f_price_scheduleB\x11\n" +
@@ -1043,7 +1061,8 @@ const file_domain_operation_job_outcome_summary_document_template_job_outcome_su
 	"\r_date_createdB\x16\n" +
 	"\x14_date_created_stringB\x10\n" +
 	"\x0e_date_modifiedB\x17\n" +
-	"\x15_date_modified_stringJ\x04\b\x15\x10(\"|\n" +
+	"\x15_date_modified_stringB\x1a\n" +
+	"\x18_job_template_phase_codeJ\x04\b\x15\x10(\"|\n" +
 	".CreateJobOutcomeSummaryDocumentTemplateRequest\x12J\n" +
 	"\x04data\x18\x01 \x01(\v26.domain.operation.v1.JobOutcomeSummaryDocumentTemplateR\x04data\"\xd5\x01\n" +
 	"/CreateJobOutcomeSummaryDocumentTemplateResponse\x12J\n" +
@@ -1087,12 +1106,14 @@ const file_domain_operation_job_outcome_summary_document_template_job_outcome_su
 	"\x04data\x18\x01 \x03(\v26.domain.operation.v1.JobOutcomeSummaryDocumentTemplateR\x04data\x12\x18\n" +
 	"\asuccess\x18\x02 \x01(\bR\asuccess\x122\n" +
 	"\x05error\x18\x03 \x01(\v2\x17.domain.common.v1.ErrorH\x00R\x05error\x88\x01\x01B\b\n" +
-	"\x06_error\"\xbf\x01\n" +
+	"\x06_error\"\x97\x02\n" +
 	"6FindApplicableJobOutcomeSummaryDocumentTemplateRequest\x12/\n" +
 	"\x11price_schedule_id\x18\x01 \x01(\tH\x00R\x0fpriceScheduleId\x88\x01\x01\x124\n" +
-	"\x05as_of\x18\x02 \x01(\v2\x1a.google.protobuf.TimestampH\x01R\x04asOf\x88\x01\x01B\x14\n" +
+	"\x05as_of\x18\x02 \x01(\v2\x1a.google.protobuf.TimestampH\x01R\x04asOf\x88\x01\x01\x12:\n" +
+	"\x17job_template_phase_code\x18\x03 \x01(\tH\x02R\x14jobTemplatePhaseCode\x88\x01\x01B\x14\n" +
 	"\x12_price_schedule_idB\b\n" +
-	"\x06_as_of\"\x8a\x02\n" +
+	"\x06_as_ofB\x1a\n" +
+	"\x18_job_template_phase_code\"\x8a\x02\n" +
 	"7FindApplicableJobOutcomeSummaryDocumentTemplateResponse\x12U\n" +
 	"\abinding\x18\x01 \x01(\v26.domain.operation.v1.JobOutcomeSummaryDocumentTemplateH\x00R\abinding\x88\x01\x01\x12\x14\n" +
 	"\x05found\x18\x02 \x01(\bR\x05found\x12\x18\n" +

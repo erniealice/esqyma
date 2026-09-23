@@ -1156,6 +1156,171 @@ func (x *ListByJobTemplateResponse) GetError() *common.Error {
 	return nil
 }
 
+// Phase codes offered for binding a document within one academic schedule.
+type ListPhaseCodesByPriceScheduleRequest struct {
+	state           protoimpl.MessageState `protogen:"open.v1"`
+	PriceScheduleId string                 `protobuf:"bytes,1,opt,name=price_schedule_id,json=priceScheduleId,proto3" json:"price_schedule_id,omitempty"`
+	unknownFields   protoimpl.UnknownFields
+	sizeCache       protoimpl.SizeCache
+}
+
+func (x *ListPhaseCodesByPriceScheduleRequest) Reset() {
+	*x = ListPhaseCodesByPriceScheduleRequest{}
+	mi := &file_domain_operation_job_template_phase_job_template_phase_proto_msgTypes[17]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *ListPhaseCodesByPriceScheduleRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ListPhaseCodesByPriceScheduleRequest) ProtoMessage() {}
+
+func (x *ListPhaseCodesByPriceScheduleRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_domain_operation_job_template_phase_job_template_phase_proto_msgTypes[17]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ListPhaseCodesByPriceScheduleRequest.ProtoReflect.Descriptor instead.
+func (*ListPhaseCodesByPriceScheduleRequest) Descriptor() ([]byte, []int) {
+	return file_domain_operation_job_template_phase_job_template_phase_proto_rawDescGZIP(), []int{17}
+}
+
+func (x *ListPhaseCodesByPriceScheduleRequest) GetPriceScheduleId() string {
+	if x != nil {
+		return x.PriceScheduleId
+	}
+	return ""
+}
+
+type PhaseCodeOption struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Code          string                 `protobuf:"bytes,1,opt,name=code,proto3" json:"code,omitempty"`
+	Names         []string               `protobuf:"bytes,2,rep,name=names,proto3" json:"names,omitempty"`
+	TemplateCount int32                  `protobuf:"varint,3,opt,name=template_count,json=templateCount,proto3" json:"template_count,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *PhaseCodeOption) Reset() {
+	*x = PhaseCodeOption{}
+	mi := &file_domain_operation_job_template_phase_job_template_phase_proto_msgTypes[18]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *PhaseCodeOption) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*PhaseCodeOption) ProtoMessage() {}
+
+func (x *PhaseCodeOption) ProtoReflect() protoreflect.Message {
+	mi := &file_domain_operation_job_template_phase_job_template_phase_proto_msgTypes[18]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use PhaseCodeOption.ProtoReflect.Descriptor instead.
+func (*PhaseCodeOption) Descriptor() ([]byte, []int) {
+	return file_domain_operation_job_template_phase_job_template_phase_proto_rawDescGZIP(), []int{18}
+}
+
+func (x *PhaseCodeOption) GetCode() string {
+	if x != nil {
+		return x.Code
+	}
+	return ""
+}
+
+func (x *PhaseCodeOption) GetNames() []string {
+	if x != nil {
+		return x.Names
+	}
+	return nil
+}
+
+func (x *PhaseCodeOption) GetTemplateCount() int32 {
+	if x != nil {
+		return x.TemplateCount
+	}
+	return 0
+}
+
+type ListPhaseCodesByPriceScheduleResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Options       []*PhaseCodeOption     `protobuf:"bytes,1,rep,name=options,proto3" json:"options,omitempty"`
+	Success       bool                   `protobuf:"varint,2,opt,name=success,proto3" json:"success,omitempty"`
+	Error         *common.Error          `protobuf:"bytes,3,opt,name=error,proto3,oneof" json:"error,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *ListPhaseCodesByPriceScheduleResponse) Reset() {
+	*x = ListPhaseCodesByPriceScheduleResponse{}
+	mi := &file_domain_operation_job_template_phase_job_template_phase_proto_msgTypes[19]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *ListPhaseCodesByPriceScheduleResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ListPhaseCodesByPriceScheduleResponse) ProtoMessage() {}
+
+func (x *ListPhaseCodesByPriceScheduleResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_domain_operation_job_template_phase_job_template_phase_proto_msgTypes[19]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ListPhaseCodesByPriceScheduleResponse.ProtoReflect.Descriptor instead.
+func (*ListPhaseCodesByPriceScheduleResponse) Descriptor() ([]byte, []int) {
+	return file_domain_operation_job_template_phase_job_template_phase_proto_rawDescGZIP(), []int{19}
+}
+
+func (x *ListPhaseCodesByPriceScheduleResponse) GetOptions() []*PhaseCodeOption {
+	if x != nil {
+		return x.Options
+	}
+	return nil
+}
+
+func (x *ListPhaseCodesByPriceScheduleResponse) GetSuccess() bool {
+	if x != nil {
+		return x.Success
+	}
+	return false
+}
+
+func (x *ListPhaseCodesByPriceScheduleResponse) GetError() *common.Error {
+	if x != nil {
+		return x.Error
+	}
+	return nil
+}
+
 var File_domain_operation_job_template_phase_job_template_phase_proto protoreflect.FileDescriptor
 
 const file_domain_operation_job_template_phase_job_template_phase_proto_rawDesc = "" +
@@ -1294,7 +1459,18 @@ const file_domain_operation_job_template_phase_job_template_phase_proto_rawDesc 
 	"\x13job_template_phases\x18\x01 \x03(\v2%.domain.operation.v1.JobTemplatePhaseR\x11jobTemplatePhases\x12\x18\n" +
 	"\asuccess\x18\x02 \x01(\bR\asuccess\x122\n" +
 	"\x05error\x18\x03 \x01(\v2\x17.domain.common.v1.ErrorH\x00R\x05error\x88\x01\x01B\b\n" +
-	"\x06_error2\xda\b\n" +
+	"\x06_error\"R\n" +
+	"$ListPhaseCodesByPriceScheduleRequest\x12*\n" +
+	"\x11price_schedule_id\x18\x01 \x01(\tR\x0fpriceScheduleId\"b\n" +
+	"\x0fPhaseCodeOption\x12\x12\n" +
+	"\x04code\x18\x01 \x01(\tR\x04code\x12\x14\n" +
+	"\x05names\x18\x02 \x03(\tR\x05names\x12%\n" +
+	"\x0etemplate_count\x18\x03 \x01(\x05R\rtemplateCount\"\xbf\x01\n" +
+	"%ListPhaseCodesByPriceScheduleResponse\x12>\n" +
+	"\aoptions\x18\x01 \x03(\v2$.domain.operation.v1.PhaseCodeOptionR\aoptions\x12\x18\n" +
+	"\asuccess\x18\x02 \x01(\bR\asuccess\x122\n" +
+	"\x05error\x18\x03 \x01(\v2\x17.domain.common.v1.ErrorH\x00R\x05error\x88\x01\x01B\b\n" +
+	"\x06_error2\xf3\t\n" +
 	"\x1dJobTemplatePhaseDomainService\x12\x81\x01\n" +
 	"\x16CreateJobTemplatePhase\x122.domain.operation.v1.CreateJobTemplatePhaseRequest\x1a3.domain.operation.v1.CreateJobTemplatePhaseResponse\x12{\n" +
 	"\x14ReadJobTemplatePhase\x120.domain.operation.v1.ReadJobTemplatePhaseRequest\x1a1.domain.operation.v1.ReadJobTemplatePhaseResponse\x12\x81\x01\n" +
@@ -1303,7 +1479,8 @@ const file_domain_operation_job_template_phase_job_template_phase_proto_rawDesc 
 	"\x15ListJobTemplatePhases\x121.domain.operation.v1.ListJobTemplatePhasesRequest\x1a2.domain.operation.v1.ListJobTemplatePhasesResponse\x12\x9c\x01\n" +
 	"\x1fGetJobTemplatePhaseListPageData\x12;.domain.operation.v1.GetJobTemplatePhaseListPageDataRequest\x1a<.domain.operation.v1.GetJobTemplatePhaseListPageDataResponse\x12\x9c\x01\n" +
 	"\x1fGetJobTemplatePhaseItemPageData\x12;.domain.operation.v1.GetJobTemplatePhaseItemPageDataRequest\x1a<.domain.operation.v1.GetJobTemplatePhaseItemPageDataResponse\x12r\n" +
-	"\x11ListByJobTemplate\x12-.domain.operation.v1.ListByJobTemplateRequest\x1a..domain.operation.v1.ListByJobTemplateResponseB\xfa\x01\n" +
+	"\x11ListByJobTemplate\x12-.domain.operation.v1.ListByJobTemplateRequest\x1a..domain.operation.v1.ListByJobTemplateResponse\x12\x96\x01\n" +
+	"\x1dListPhaseCodesByPriceSchedule\x129.domain.operation.v1.ListPhaseCodesByPriceScheduleRequest\x1a:.domain.operation.v1.ListPhaseCodesByPriceScheduleResponseB\xfa\x01\n" +
 	"\x17com.domain.operation.v1B\x15JobTemplatePhaseProtoP\x01ZZgithub.com/erniealice/esqyma/pkg/schema/v1/domain/operation/job_template_phase;operationv1\xa2\x02\x03DOX\xaa\x02\x13Domain.Operation.V1\xca\x02\x13Domain\\Operation\\V1\xe2\x02\x1fDomain\\Operation\\V1\\GPBMetadata\xea\x02\x15Domain::Operation::V1b\x06proto3"
 
 var (
@@ -1318,7 +1495,7 @@ func file_domain_operation_job_template_phase_job_template_phase_proto_rawDescGZ
 	return file_domain_operation_job_template_phase_job_template_phase_proto_rawDescData
 }
 
-var file_domain_operation_job_template_phase_job_template_phase_proto_msgTypes = make([]protoimpl.MessageInfo, 17)
+var file_domain_operation_job_template_phase_job_template_phase_proto_msgTypes = make([]protoimpl.MessageInfo, 20)
 var file_domain_operation_job_template_phase_job_template_phase_proto_goTypes = []any{
 	(*JobTemplatePhase)(nil),                        // 0: domain.operation.v1.JobTemplatePhase
 	(*CreateJobTemplatePhaseRequest)(nil),           // 1: domain.operation.v1.CreateJobTemplatePhaseRequest
@@ -1337,67 +1514,74 @@ var file_domain_operation_job_template_phase_job_template_phase_proto_goTypes = 
 	(*GetJobTemplatePhaseItemPageDataResponse)(nil), // 14: domain.operation.v1.GetJobTemplatePhaseItemPageDataResponse
 	(*ListByJobTemplateRequest)(nil),                // 15: domain.operation.v1.ListByJobTemplateRequest
 	(*ListByJobTemplateResponse)(nil),               // 16: domain.operation.v1.ListByJobTemplateResponse
-	(*job_template.JobTemplate)(nil),                // 17: domain.operation.v1.JobTemplate
-	(*common.Error)(nil),                            // 18: domain.common.v1.Error
-	(*common.SearchRequest)(nil),                    // 19: domain.common.v1.SearchRequest
-	(*common.FilterRequest)(nil),                    // 20: domain.common.v1.FilterRequest
-	(*common.SortRequest)(nil),                      // 21: domain.common.v1.SortRequest
-	(*common.PaginationRequest)(nil),                // 22: domain.common.v1.PaginationRequest
-	(*common.PaginationResponse)(nil),               // 23: domain.common.v1.PaginationResponse
-	(*common.SearchResult)(nil),                     // 24: domain.common.v1.SearchResult
+	(*ListPhaseCodesByPriceScheduleRequest)(nil),    // 17: domain.operation.v1.ListPhaseCodesByPriceScheduleRequest
+	(*PhaseCodeOption)(nil),                         // 18: domain.operation.v1.PhaseCodeOption
+	(*ListPhaseCodesByPriceScheduleResponse)(nil),   // 19: domain.operation.v1.ListPhaseCodesByPriceScheduleResponse
+	(*job_template.JobTemplate)(nil),                // 20: domain.operation.v1.JobTemplate
+	(*common.Error)(nil),                            // 21: domain.common.v1.Error
+	(*common.SearchRequest)(nil),                    // 22: domain.common.v1.SearchRequest
+	(*common.FilterRequest)(nil),                    // 23: domain.common.v1.FilterRequest
+	(*common.SortRequest)(nil),                      // 24: domain.common.v1.SortRequest
+	(*common.PaginationRequest)(nil),                // 25: domain.common.v1.PaginationRequest
+	(*common.PaginationResponse)(nil),               // 26: domain.common.v1.PaginationResponse
+	(*common.SearchResult)(nil),                     // 27: domain.common.v1.SearchResult
 }
 var file_domain_operation_job_template_phase_job_template_phase_proto_depIdxs = []int32{
-	17, // 0: domain.operation.v1.JobTemplatePhase.job_template:type_name -> domain.operation.v1.JobTemplate
+	20, // 0: domain.operation.v1.JobTemplatePhase.job_template:type_name -> domain.operation.v1.JobTemplate
 	0,  // 1: domain.operation.v1.CreateJobTemplatePhaseRequest.data:type_name -> domain.operation.v1.JobTemplatePhase
 	0,  // 2: domain.operation.v1.CreateJobTemplatePhaseResponse.data:type_name -> domain.operation.v1.JobTemplatePhase
-	18, // 3: domain.operation.v1.CreateJobTemplatePhaseResponse.error:type_name -> domain.common.v1.Error
+	21, // 3: domain.operation.v1.CreateJobTemplatePhaseResponse.error:type_name -> domain.common.v1.Error
 	0,  // 4: domain.operation.v1.ReadJobTemplatePhaseRequest.data:type_name -> domain.operation.v1.JobTemplatePhase
 	0,  // 5: domain.operation.v1.ReadJobTemplatePhaseResponse.data:type_name -> domain.operation.v1.JobTemplatePhase
-	18, // 6: domain.operation.v1.ReadJobTemplatePhaseResponse.error:type_name -> domain.common.v1.Error
+	21, // 6: domain.operation.v1.ReadJobTemplatePhaseResponse.error:type_name -> domain.common.v1.Error
 	0,  // 7: domain.operation.v1.UpdateJobTemplatePhaseRequest.data:type_name -> domain.operation.v1.JobTemplatePhase
 	0,  // 8: domain.operation.v1.UpdateJobTemplatePhaseResponse.data:type_name -> domain.operation.v1.JobTemplatePhase
-	18, // 9: domain.operation.v1.UpdateJobTemplatePhaseResponse.error:type_name -> domain.common.v1.Error
+	21, // 9: domain.operation.v1.UpdateJobTemplatePhaseResponse.error:type_name -> domain.common.v1.Error
 	0,  // 10: domain.operation.v1.DeleteJobTemplatePhaseRequest.data:type_name -> domain.operation.v1.JobTemplatePhase
-	18, // 11: domain.operation.v1.DeleteJobTemplatePhaseResponse.error:type_name -> domain.common.v1.Error
-	19, // 12: domain.operation.v1.ListJobTemplatePhasesRequest.search:type_name -> domain.common.v1.SearchRequest
-	20, // 13: domain.operation.v1.ListJobTemplatePhasesRequest.filters:type_name -> domain.common.v1.FilterRequest
-	21, // 14: domain.operation.v1.ListJobTemplatePhasesRequest.sort:type_name -> domain.common.v1.SortRequest
-	22, // 15: domain.operation.v1.ListJobTemplatePhasesRequest.pagination:type_name -> domain.common.v1.PaginationRequest
+	21, // 11: domain.operation.v1.DeleteJobTemplatePhaseResponse.error:type_name -> domain.common.v1.Error
+	22, // 12: domain.operation.v1.ListJobTemplatePhasesRequest.search:type_name -> domain.common.v1.SearchRequest
+	23, // 13: domain.operation.v1.ListJobTemplatePhasesRequest.filters:type_name -> domain.common.v1.FilterRequest
+	24, // 14: domain.operation.v1.ListJobTemplatePhasesRequest.sort:type_name -> domain.common.v1.SortRequest
+	25, // 15: domain.operation.v1.ListJobTemplatePhasesRequest.pagination:type_name -> domain.common.v1.PaginationRequest
 	0,  // 16: domain.operation.v1.ListJobTemplatePhasesResponse.data:type_name -> domain.operation.v1.JobTemplatePhase
-	18, // 17: domain.operation.v1.ListJobTemplatePhasesResponse.error:type_name -> domain.common.v1.Error
-	22, // 18: domain.operation.v1.GetJobTemplatePhaseListPageDataRequest.pagination:type_name -> domain.common.v1.PaginationRequest
-	20, // 19: domain.operation.v1.GetJobTemplatePhaseListPageDataRequest.filters:type_name -> domain.common.v1.FilterRequest
-	21, // 20: domain.operation.v1.GetJobTemplatePhaseListPageDataRequest.sort:type_name -> domain.common.v1.SortRequest
-	19, // 21: domain.operation.v1.GetJobTemplatePhaseListPageDataRequest.search:type_name -> domain.common.v1.SearchRequest
+	21, // 17: domain.operation.v1.ListJobTemplatePhasesResponse.error:type_name -> domain.common.v1.Error
+	25, // 18: domain.operation.v1.GetJobTemplatePhaseListPageDataRequest.pagination:type_name -> domain.common.v1.PaginationRequest
+	23, // 19: domain.operation.v1.GetJobTemplatePhaseListPageDataRequest.filters:type_name -> domain.common.v1.FilterRequest
+	24, // 20: domain.operation.v1.GetJobTemplatePhaseListPageDataRequest.sort:type_name -> domain.common.v1.SortRequest
+	22, // 21: domain.operation.v1.GetJobTemplatePhaseListPageDataRequest.search:type_name -> domain.common.v1.SearchRequest
 	0,  // 22: domain.operation.v1.GetJobTemplatePhaseListPageDataResponse.job_template_phase_list:type_name -> domain.operation.v1.JobTemplatePhase
-	23, // 23: domain.operation.v1.GetJobTemplatePhaseListPageDataResponse.pagination:type_name -> domain.common.v1.PaginationResponse
-	24, // 24: domain.operation.v1.GetJobTemplatePhaseListPageDataResponse.search_results:type_name -> domain.common.v1.SearchResult
-	18, // 25: domain.operation.v1.GetJobTemplatePhaseListPageDataResponse.error:type_name -> domain.common.v1.Error
+	26, // 23: domain.operation.v1.GetJobTemplatePhaseListPageDataResponse.pagination:type_name -> domain.common.v1.PaginationResponse
+	27, // 24: domain.operation.v1.GetJobTemplatePhaseListPageDataResponse.search_results:type_name -> domain.common.v1.SearchResult
+	21, // 25: domain.operation.v1.GetJobTemplatePhaseListPageDataResponse.error:type_name -> domain.common.v1.Error
 	0,  // 26: domain.operation.v1.GetJobTemplatePhaseItemPageDataResponse.job_template_phase:type_name -> domain.operation.v1.JobTemplatePhase
-	18, // 27: domain.operation.v1.GetJobTemplatePhaseItemPageDataResponse.error:type_name -> domain.common.v1.Error
+	21, // 27: domain.operation.v1.GetJobTemplatePhaseItemPageDataResponse.error:type_name -> domain.common.v1.Error
 	0,  // 28: domain.operation.v1.ListByJobTemplateResponse.job_template_phases:type_name -> domain.operation.v1.JobTemplatePhase
-	18, // 29: domain.operation.v1.ListByJobTemplateResponse.error:type_name -> domain.common.v1.Error
-	1,  // 30: domain.operation.v1.JobTemplatePhaseDomainService.CreateJobTemplatePhase:input_type -> domain.operation.v1.CreateJobTemplatePhaseRequest
-	3,  // 31: domain.operation.v1.JobTemplatePhaseDomainService.ReadJobTemplatePhase:input_type -> domain.operation.v1.ReadJobTemplatePhaseRequest
-	5,  // 32: domain.operation.v1.JobTemplatePhaseDomainService.UpdateJobTemplatePhase:input_type -> domain.operation.v1.UpdateJobTemplatePhaseRequest
-	7,  // 33: domain.operation.v1.JobTemplatePhaseDomainService.DeleteJobTemplatePhase:input_type -> domain.operation.v1.DeleteJobTemplatePhaseRequest
-	9,  // 34: domain.operation.v1.JobTemplatePhaseDomainService.ListJobTemplatePhases:input_type -> domain.operation.v1.ListJobTemplatePhasesRequest
-	11, // 35: domain.operation.v1.JobTemplatePhaseDomainService.GetJobTemplatePhaseListPageData:input_type -> domain.operation.v1.GetJobTemplatePhaseListPageDataRequest
-	13, // 36: domain.operation.v1.JobTemplatePhaseDomainService.GetJobTemplatePhaseItemPageData:input_type -> domain.operation.v1.GetJobTemplatePhaseItemPageDataRequest
-	15, // 37: domain.operation.v1.JobTemplatePhaseDomainService.ListByJobTemplate:input_type -> domain.operation.v1.ListByJobTemplateRequest
-	2,  // 38: domain.operation.v1.JobTemplatePhaseDomainService.CreateJobTemplatePhase:output_type -> domain.operation.v1.CreateJobTemplatePhaseResponse
-	4,  // 39: domain.operation.v1.JobTemplatePhaseDomainService.ReadJobTemplatePhase:output_type -> domain.operation.v1.ReadJobTemplatePhaseResponse
-	6,  // 40: domain.operation.v1.JobTemplatePhaseDomainService.UpdateJobTemplatePhase:output_type -> domain.operation.v1.UpdateJobTemplatePhaseResponse
-	8,  // 41: domain.operation.v1.JobTemplatePhaseDomainService.DeleteJobTemplatePhase:output_type -> domain.operation.v1.DeleteJobTemplatePhaseResponse
-	10, // 42: domain.operation.v1.JobTemplatePhaseDomainService.ListJobTemplatePhases:output_type -> domain.operation.v1.ListJobTemplatePhasesResponse
-	12, // 43: domain.operation.v1.JobTemplatePhaseDomainService.GetJobTemplatePhaseListPageData:output_type -> domain.operation.v1.GetJobTemplatePhaseListPageDataResponse
-	14, // 44: domain.operation.v1.JobTemplatePhaseDomainService.GetJobTemplatePhaseItemPageData:output_type -> domain.operation.v1.GetJobTemplatePhaseItemPageDataResponse
-	16, // 45: domain.operation.v1.JobTemplatePhaseDomainService.ListByJobTemplate:output_type -> domain.operation.v1.ListByJobTemplateResponse
-	38, // [38:46] is the sub-list for method output_type
-	30, // [30:38] is the sub-list for method input_type
-	30, // [30:30] is the sub-list for extension type_name
-	30, // [30:30] is the sub-list for extension extendee
-	0,  // [0:30] is the sub-list for field type_name
+	21, // 29: domain.operation.v1.ListByJobTemplateResponse.error:type_name -> domain.common.v1.Error
+	18, // 30: domain.operation.v1.ListPhaseCodesByPriceScheduleResponse.options:type_name -> domain.operation.v1.PhaseCodeOption
+	21, // 31: domain.operation.v1.ListPhaseCodesByPriceScheduleResponse.error:type_name -> domain.common.v1.Error
+	1,  // 32: domain.operation.v1.JobTemplatePhaseDomainService.CreateJobTemplatePhase:input_type -> domain.operation.v1.CreateJobTemplatePhaseRequest
+	3,  // 33: domain.operation.v1.JobTemplatePhaseDomainService.ReadJobTemplatePhase:input_type -> domain.operation.v1.ReadJobTemplatePhaseRequest
+	5,  // 34: domain.operation.v1.JobTemplatePhaseDomainService.UpdateJobTemplatePhase:input_type -> domain.operation.v1.UpdateJobTemplatePhaseRequest
+	7,  // 35: domain.operation.v1.JobTemplatePhaseDomainService.DeleteJobTemplatePhase:input_type -> domain.operation.v1.DeleteJobTemplatePhaseRequest
+	9,  // 36: domain.operation.v1.JobTemplatePhaseDomainService.ListJobTemplatePhases:input_type -> domain.operation.v1.ListJobTemplatePhasesRequest
+	11, // 37: domain.operation.v1.JobTemplatePhaseDomainService.GetJobTemplatePhaseListPageData:input_type -> domain.operation.v1.GetJobTemplatePhaseListPageDataRequest
+	13, // 38: domain.operation.v1.JobTemplatePhaseDomainService.GetJobTemplatePhaseItemPageData:input_type -> domain.operation.v1.GetJobTemplatePhaseItemPageDataRequest
+	15, // 39: domain.operation.v1.JobTemplatePhaseDomainService.ListByJobTemplate:input_type -> domain.operation.v1.ListByJobTemplateRequest
+	17, // 40: domain.operation.v1.JobTemplatePhaseDomainService.ListPhaseCodesByPriceSchedule:input_type -> domain.operation.v1.ListPhaseCodesByPriceScheduleRequest
+	2,  // 41: domain.operation.v1.JobTemplatePhaseDomainService.CreateJobTemplatePhase:output_type -> domain.operation.v1.CreateJobTemplatePhaseResponse
+	4,  // 42: domain.operation.v1.JobTemplatePhaseDomainService.ReadJobTemplatePhase:output_type -> domain.operation.v1.ReadJobTemplatePhaseResponse
+	6,  // 43: domain.operation.v1.JobTemplatePhaseDomainService.UpdateJobTemplatePhase:output_type -> domain.operation.v1.UpdateJobTemplatePhaseResponse
+	8,  // 44: domain.operation.v1.JobTemplatePhaseDomainService.DeleteJobTemplatePhase:output_type -> domain.operation.v1.DeleteJobTemplatePhaseResponse
+	10, // 45: domain.operation.v1.JobTemplatePhaseDomainService.ListJobTemplatePhases:output_type -> domain.operation.v1.ListJobTemplatePhasesResponse
+	12, // 46: domain.operation.v1.JobTemplatePhaseDomainService.GetJobTemplatePhaseListPageData:output_type -> domain.operation.v1.GetJobTemplatePhaseListPageDataResponse
+	14, // 47: domain.operation.v1.JobTemplatePhaseDomainService.GetJobTemplatePhaseItemPageData:output_type -> domain.operation.v1.GetJobTemplatePhaseItemPageDataResponse
+	16, // 48: domain.operation.v1.JobTemplatePhaseDomainService.ListByJobTemplate:output_type -> domain.operation.v1.ListByJobTemplateResponse
+	19, // 49: domain.operation.v1.JobTemplatePhaseDomainService.ListPhaseCodesByPriceSchedule:output_type -> domain.operation.v1.ListPhaseCodesByPriceScheduleResponse
+	41, // [41:50] is the sub-list for method output_type
+	32, // [32:41] is the sub-list for method input_type
+	32, // [32:32] is the sub-list for extension type_name
+	32, // [32:32] is the sub-list for extension extendee
+	0,  // [0:32] is the sub-list for field type_name
 }
 
 func init() { file_domain_operation_job_template_phase_job_template_phase_proto_init() }
@@ -1416,13 +1600,14 @@ func file_domain_operation_job_template_phase_job_template_phase_proto_init() {
 	file_domain_operation_job_template_phase_job_template_phase_proto_msgTypes[12].OneofWrappers = []any{}
 	file_domain_operation_job_template_phase_job_template_phase_proto_msgTypes[14].OneofWrappers = []any{}
 	file_domain_operation_job_template_phase_job_template_phase_proto_msgTypes[16].OneofWrappers = []any{}
+	file_domain_operation_job_template_phase_job_template_phase_proto_msgTypes[19].OneofWrappers = []any{}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
 		File: protoimpl.DescBuilder{
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_domain_operation_job_template_phase_job_template_phase_proto_rawDesc), len(file_domain_operation_job_template_phase_job_template_phase_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   17,
+			NumMessages:   20,
 			NumExtensions: 0,
 			NumServices:   1,
 		},
