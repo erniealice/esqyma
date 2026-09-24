@@ -282,6 +282,10 @@ message GetOutcomeMatrixResponse {
   // Per-template-phase approval roll-up, one entry per phase column, derived
   // over the full sheet set S (P3). Empty on mock/non-postgres builds.
   repeated PhaseApprovalRollup approval_rollups = 7;
+  // The template's job_category.code (blank when none). Lets views apply
+  // category-scoped display rules without a separately permission-gated
+  // category read; carried by this already-authorized sheet read.
+  string job_category_code = 8;
 }
 
 // ---- Roster composite read (20260720 export drawer P2) ---------------------

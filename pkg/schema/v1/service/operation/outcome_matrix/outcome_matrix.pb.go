@@ -1043,6 +1043,10 @@ type GetOutcomeMatrixResponse struct {
 	// Per-template-phase approval roll-up, one entry per phase column, derived
 	// over the full sheet set S (P3). Empty on mock/non-postgres builds.
 	ApprovalRollups []*PhaseApprovalRollup `protobuf:"bytes,7,rep,name=approval_rollups,json=approvalRollups,proto3" json:"approval_rollups,omitempty"`
+	// The template's job_category.code (blank when none). Lets views apply
+	// category-scoped display rules without a separately permission-gated
+	// category read; carried by this already-authorized sheet read.
+	JobCategoryCode string `protobuf:"bytes,8,opt,name=job_category_code,json=jobCategoryCode,proto3" json:"job_category_code,omitempty"`
 	unknownFields   protoimpl.UnknownFields
 	sizeCache       protoimpl.SizeCache
 }
@@ -1124,6 +1128,13 @@ func (x *GetOutcomeMatrixResponse) GetApprovalRollups() []*PhaseApprovalRollup {
 		return x.ApprovalRollups
 	}
 	return nil
+}
+
+func (x *GetOutcomeMatrixResponse) GetJobCategoryCode() string {
+	if x != nil {
+		return x.JobCategoryCode
+	}
+	return ""
 }
 
 type GetOutcomeSummaryRosterRequest struct {
@@ -1525,7 +1536,7 @@ const file_service_operation_outcome_matrix_outcome_matrix_proto_rawDesc = "" +
 	"\arollups\x18\x01 \x03(\v2-.service.operation.v1.PhaseApprovalGateRollupR\arollups\x12\x18\n" +
 	"\asuccess\x18\x02 \x01(\bR\asuccess\x122\n" +
 	"\x05error\x18\x03 \x01(\v2\x17.domain.common.v1.ErrorH\x00R\x05error\x88\x01\x01B\b\n" +
-	"\x06_error\"\x8d\x03\n" +
+	"\x06_error\"\xb9\x03\n" +
 	"\x18GetOutcomeMatrixResponse\x12&\n" +
 	"\x0fjob_template_id\x18\x01 \x01(\tR\rjobTemplateId\x12*\n" +
 	"\x11job_template_name\x18\x02 \x01(\tR\x0fjobTemplateName\x129\n" +
@@ -1533,7 +1544,8 @@ const file_service_operation_outcome_matrix_outcome_matrix_proto_rawDesc = "" +
 	"\x04rows\x18\x04 \x03(\v2 .service.operation.v1.OutcomeRowR\x04rows\x12\x18\n" +
 	"\asuccess\x18\x05 \x01(\bR\asuccess\x122\n" +
 	"\x05error\x18\x06 \x01(\v2\x17.domain.common.v1.ErrorH\x00R\x05error\x88\x01\x01\x12T\n" +
-	"\x10approval_rollups\x18\a \x03(\v2).service.operation.v1.PhaseApprovalRollupR\x0fapprovalRollupsB\b\n" +
+	"\x10approval_rollups\x18\a \x03(\v2).service.operation.v1.PhaseApprovalRollupR\x0fapprovalRollups\x12*\n" +
+	"\x11job_category_code\x18\b \x01(\tR\x0fjobCategoryCodeB\b\n" +
 	"\x06_error\"\x88\x01\n" +
 	"\x1eGetOutcomeSummaryRosterRequest\x12&\n" +
 	"\x0fjob_template_id\x18\x01 \x01(\tR\rjobTemplateId\x12>\n" +
