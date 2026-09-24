@@ -219,6 +219,13 @@ message PhaseApprovalRollup {
   // transition stamps on its audit event; computed only when the sheet is
   // IN_PROGRESS (submit-eligible), otherwise 0.
   int32 blank_required_count = 7;
+  // The most recent non-blank return reason among the scoped sheet's returned
+  // members (job_phase.return_reason, latest returned_at), surfaced so the
+  // grade entrant sees why the period came back (plan
+  // 20260924-approval-role-workflow D5). Populated only when the sheet is
+  // IN_PROGRESS (a returned sheet is editable again); empty otherwise, or when
+  // the return carried no reason.
+  string last_return_reason = 8;
 }
 
 // ---- Render-gate group-grain rollup (20260729 render-gate plan, v2) --------

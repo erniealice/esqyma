@@ -957,8 +957,12 @@ type GetSubscriptionGroupClientReportCardRequest struct {
 	// These codes are supplied by trusted server composition, never by an HTTP
 	// selector. The adapter returns only those configured client attributes.
 	ClientAttributeCodes []string `protobuf:"bytes,3,rep,name=client_attribute_codes,json=clientAttributeCodes,proto3" json:"client_attribute_codes,omitempty"`
-	unknownFields        protoimpl.UnknownFields
-	sizeCache            protoimpl.SizeCache
+	// Plan (grade/level) attribute codes to return for the group's plan
+	// (subscription_group.plan_id), e.g. a program-year label. Supplied by trusted
+	// server composition, never by an HTTP selector.
+	PlanAttributeCodes []string `protobuf:"bytes,4,rep,name=plan_attribute_codes,json=planAttributeCodes,proto3" json:"plan_attribute_codes,omitempty"`
+	unknownFields      protoimpl.UnknownFields
+	sizeCache          protoimpl.SizeCache
 }
 
 func (x *GetSubscriptionGroupClientReportCardRequest) Reset() {
@@ -1008,6 +1012,13 @@ func (x *GetSubscriptionGroupClientReportCardRequest) GetClientId() string {
 func (x *GetSubscriptionGroupClientReportCardRequest) GetClientAttributeCodes() []string {
 	if x != nil {
 		return x.ClientAttributeCodes
+	}
+	return nil
+}
+
+func (x *GetSubscriptionGroupClientReportCardRequest) GetPlanAttributeCodes() []string {
+	if x != nil {
+		return x.PlanAttributeCodes
 	}
 	return nil
 }
@@ -1464,8 +1475,11 @@ type ClientReportCardProjection struct {
 	RatingDescriptions                   []*template_task_criteria_rating_description.TemplateTaskCriteriaRatingDescription `protobuf:"bytes,21,rep,name=rating_descriptions,json=ratingDescriptions,proto3" json:"rating_descriptions,omitempty"`
 	RenderGateAppliedSubscriptionGroupId string                                                                             `protobuf:"bytes,22,opt,name=render_gate_applied_subscription_group_id,json=renderGateAppliedSubscriptionGroupId,proto3" json:"render_gate_applied_subscription_group_id,omitempty"`
 	RenderGateSheets                     []*ClientReportCardRenderGateSheet                                                 `protobuf:"bytes,23,rep,name=render_gate_sheets,json=renderGateSheets,proto3" json:"render_gate_sheets,omitempty"`
-	unknownFields                        protoimpl.UnknownFields
-	sizeCache                            protoimpl.SizeCache
+	// Configured attributes of the group's plan (plan_attribute), same shape as
+	// the client attributes above.
+	PlanAttributes []*ClientReportCardAttribute `protobuf:"bytes,24,rep,name=plan_attributes,json=planAttributes,proto3" json:"plan_attributes,omitempty"`
+	unknownFields  protoimpl.UnknownFields
+	sizeCache      protoimpl.SizeCache
 }
 
 func (x *ClientReportCardProjection) Reset() {
@@ -1655,6 +1669,13 @@ func (x *ClientReportCardProjection) GetRenderGateAppliedSubscriptionGroupId() s
 func (x *ClientReportCardProjection) GetRenderGateSheets() []*ClientReportCardRenderGateSheet {
 	if x != nil {
 		return x.RenderGateSheets
+	}
+	return nil
+}
+
+func (x *ClientReportCardProjection) GetPlanAttributes() []*ClientReportCardAttribute {
+	if x != nil {
+		return x.PlanAttributes
 	}
 	return nil
 }
@@ -2022,11 +2043,12 @@ const file_service_operation_subscription_group_outcome_export_subscription_grou
 	"clientRows\x12\x18\n" +
 	"\asuccess\x18\x05 \x01(\bR\asuccess\x122\n" +
 	"\x05error\x18\x06 \x01(\v2\x17.domain.common.v1.ErrorH\x00R\x05error\x88\x01\x01B\b\n" +
-	"\x06_error\"\xb4\x01\n" +
+	"\x06_error\"\xe6\x01\n" +
 	"+GetSubscriptionGroupClientReportCardRequest\x122\n" +
 	"\x15subscription_group_id\x18\x01 \x01(\tR\x13subscriptionGroupId\x12\x1b\n" +
 	"\tclient_id\x18\x02 \x01(\tR\bclientId\x124\n" +
-	"\x16client_attribute_codes\x18\x03 \x03(\tR\x14clientAttributeCodes\"E\n" +
+	"\x16client_attribute_codes\x18\x03 \x03(\tR\x14clientAttributeCodes\x120\n" +
+	"\x14plan_attribute_codes\x18\x04 \x03(\tR\x12planAttributeCodes\"E\n" +
 	"\x19ClientReportCardAttribute\x12\x12\n" +
 	"\x04code\x18\x01 \x01(\tR\x04code\x12\x14\n" +
 	"\x05value\x18\x02 \x01(\tR\x05value\"\x85\x01\n" +
@@ -2066,7 +2088,7 @@ const file_service_operation_subscription_group_outcome_export_subscription_grou
 	"\rall_published\x18\x06 \x01(\bR\fallPublished\x12\x19\n" +
 	"\bhas_data\x18\a \x01(\bR\ahasDataB\x18\n" +
 	"\x16_job_template_phase_idB\x0f\n" +
-	"\r_job_phase_id\"\xc4\x0e\n" +
+	"\r_job_phase_id\"\x9e\x0f\n" +
 	"\x1aClientReportCardProjection\x12U\n" +
 	"\acontext\x18\x01 \x01(\v2;.service.operation.v1.SubscriptionGroupOutcomeExportContextR\acontext\x12D\n" +
 	"\x06client\x18\x02 \x01(\v2,.service.operation.v1.ClientReportCardClientR\x06client\x12O\n" +
@@ -2094,7 +2116,8 @@ const file_service_operation_subscription_group_outcome_export_subscription_grou
 	"\x17client_subscription_ids\x18\x14 \x03(\tR\x15clientSubscriptionIds\x12k\n" +
 	"\x13rating_descriptions\x18\x15 \x03(\v2:.domain.operation.v1.TemplateTaskCriteriaRatingDescriptionR\x12ratingDescriptions\x12W\n" +
 	")render_gate_applied_subscription_group_id\x18\x16 \x01(\tR$renderGateAppliedSubscriptionGroupId\x12c\n" +
-	"\x12render_gate_sheets\x18\x17 \x03(\v25.service.operation.v1.ClientReportCardRenderGateSheetR\x10renderGateSheets\"\xd9\x01\n" +
+	"\x12render_gate_sheets\x18\x17 \x03(\v25.service.operation.v1.ClientReportCardRenderGateSheetR\x10renderGateSheets\x12X\n" +
+	"\x0fplan_attributes\x18\x18 \x03(\v2/.service.operation.v1.ClientReportCardAttributeR\x0eplanAttributes\"\xd9\x01\n" +
 	",GetSubscriptionGroupClientReportCardResponse\x12Q\n" +
 	"\vreport_card\x18\x01 \x01(\v20.service.operation.v1.ClientReportCardProjectionR\n" +
 	"reportCard\x12\x18\n" +
@@ -2212,21 +2235,22 @@ var file_service_operation_subscription_group_outcome_export_subscription_group_
 	17, // 27: service.operation.v1.ClientReportCardProjection.teacher_assignments:type_name -> service.operation.v1.ClientReportCardTeacherAssignment
 	37, // 28: service.operation.v1.ClientReportCardProjection.rating_descriptions:type_name -> domain.operation.v1.TemplateTaskCriteriaRatingDescription
 	18, // 29: service.operation.v1.ClientReportCardProjection.render_gate_sheets:type_name -> service.operation.v1.ClientReportCardRenderGateSheet
-	19, // 30: service.operation.v1.GetSubscriptionGroupClientReportCardResponse.report_card:type_name -> service.operation.v1.ClientReportCardProjection
-	24, // 31: service.operation.v1.GetSubscriptionGroupClientReportCardResponse.error:type_name -> domain.common.v1.Error
-	38, // 32: service.operation.v1.ResolveSubscriptionGroupOutcomeDocumentForRenderRequest.render_profile:type_name -> domain.operation.v1.RenderProfile
-	38, // 33: service.operation.v1.ResolvedSubscriptionGroupOutcomeDocument.render_profile:type_name -> domain.operation.v1.RenderProfile
-	22, // 34: service.operation.v1.ResolveSubscriptionGroupOutcomeDocumentForRenderResponse.document:type_name -> service.operation.v1.ResolvedSubscriptionGroupOutcomeDocument
-	24, // 35: service.operation.v1.ResolveSubscriptionGroupOutcomeDocumentForRenderResponse.error:type_name -> domain.common.v1.Error
-	3,  // 36: service.operation.v1.SubscriptionGroupOutcomeExportService.GetSubscriptionGroupOutcomeExport:input_type -> service.operation.v1.GetSubscriptionGroupOutcomeExportRequest
-	0,  // 37: service.operation.v1.SubscriptionGroupOutcomeExportService.ListSubscriptionGroupOutcomeLanding:input_type -> service.operation.v1.ListSubscriptionGroupOutcomeLandingRequest
-	11, // 38: service.operation.v1.SubscriptionGroupOutcomeExportService.GetSubscriptionGroupOutcomeExport:output_type -> service.operation.v1.GetSubscriptionGroupOutcomeExportResponse
-	2,  // 39: service.operation.v1.SubscriptionGroupOutcomeExportService.ListSubscriptionGroupOutcomeLanding:output_type -> service.operation.v1.ListSubscriptionGroupOutcomeLandingResponse
-	38, // [38:40] is the sub-list for method output_type
-	36, // [36:38] is the sub-list for method input_type
-	36, // [36:36] is the sub-list for extension type_name
-	36, // [36:36] is the sub-list for extension extendee
-	0,  // [0:36] is the sub-list for field type_name
+	13, // 30: service.operation.v1.ClientReportCardProjection.plan_attributes:type_name -> service.operation.v1.ClientReportCardAttribute
+	19, // 31: service.operation.v1.GetSubscriptionGroupClientReportCardResponse.report_card:type_name -> service.operation.v1.ClientReportCardProjection
+	24, // 32: service.operation.v1.GetSubscriptionGroupClientReportCardResponse.error:type_name -> domain.common.v1.Error
+	38, // 33: service.operation.v1.ResolveSubscriptionGroupOutcomeDocumentForRenderRequest.render_profile:type_name -> domain.operation.v1.RenderProfile
+	38, // 34: service.operation.v1.ResolvedSubscriptionGroupOutcomeDocument.render_profile:type_name -> domain.operation.v1.RenderProfile
+	22, // 35: service.operation.v1.ResolveSubscriptionGroupOutcomeDocumentForRenderResponse.document:type_name -> service.operation.v1.ResolvedSubscriptionGroupOutcomeDocument
+	24, // 36: service.operation.v1.ResolveSubscriptionGroupOutcomeDocumentForRenderResponse.error:type_name -> domain.common.v1.Error
+	3,  // 37: service.operation.v1.SubscriptionGroupOutcomeExportService.GetSubscriptionGroupOutcomeExport:input_type -> service.operation.v1.GetSubscriptionGroupOutcomeExportRequest
+	0,  // 38: service.operation.v1.SubscriptionGroupOutcomeExportService.ListSubscriptionGroupOutcomeLanding:input_type -> service.operation.v1.ListSubscriptionGroupOutcomeLandingRequest
+	11, // 39: service.operation.v1.SubscriptionGroupOutcomeExportService.GetSubscriptionGroupOutcomeExport:output_type -> service.operation.v1.GetSubscriptionGroupOutcomeExportResponse
+	2,  // 40: service.operation.v1.SubscriptionGroupOutcomeExportService.ListSubscriptionGroupOutcomeLanding:output_type -> service.operation.v1.ListSubscriptionGroupOutcomeLandingResponse
+	39, // [39:41] is the sub-list for method output_type
+	37, // [37:39] is the sub-list for method input_type
+	37, // [37:37] is the sub-list for extension type_name
+	37, // [37:37] is the sub-list for extension extendee
+	0,  // [0:37] is the sub-list for field type_name
 }
 
 func init() {

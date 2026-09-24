@@ -154,6 +154,11 @@ message GetSubscriptionGroupClientReportCardRequest {
   // These codes are supplied by trusted server composition, never by an HTTP
   // selector. The adapter returns only those configured client attributes.
   repeated string client_attribute_codes = 3;
+
+  // Plan (grade/level) attribute codes to return for the group's plan
+  // (subscription_group.plan_id), e.g. a program-year label. Supplied by trusted
+  // server composition, never by an HTTP selector.
+  repeated string plan_attribute_codes = 4;
 }
 
 message ClientReportCardAttribute {
@@ -234,6 +239,9 @@ message ClientReportCardProjection {
   repeated domain.operation.v1.TemplateTaskCriteriaRatingDescription rating_descriptions = 21;
   string render_gate_applied_subscription_group_id = 22;
   repeated ClientReportCardRenderGateSheet render_gate_sheets = 23;
+  // Configured attributes of the group's plan (plan_attribute), same shape as
+  // the client attributes above.
+  repeated ClientReportCardAttribute plan_attributes = 24;
 }
 
 message GetSubscriptionGroupClientReportCardResponse {

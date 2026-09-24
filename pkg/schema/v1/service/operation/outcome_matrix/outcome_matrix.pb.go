@@ -717,8 +717,15 @@ type PhaseApprovalRollup struct {
 	// transition stamps on its audit event; computed only when the sheet is
 	// IN_PROGRESS (submit-eligible), otherwise 0.
 	BlankRequiredCount int32 `protobuf:"varint,7,opt,name=blank_required_count,json=blankRequiredCount,proto3" json:"blank_required_count,omitempty"`
-	unknownFields      protoimpl.UnknownFields
-	sizeCache          protoimpl.SizeCache
+	// The most recent non-blank return reason among the scoped sheet's returned
+	// members (job_phase.return_reason, latest returned_at), surfaced so the
+	// grade entrant sees why the period came back (plan
+	// 20260924-approval-role-workflow D5). Populated only when the sheet is
+	// IN_PROGRESS (a returned sheet is editable again); empty otherwise, or when
+	// the return carried no reason.
+	LastReturnReason string `protobuf:"bytes,8,opt,name=last_return_reason,json=lastReturnReason,proto3" json:"last_return_reason,omitempty"`
+	unknownFields    protoimpl.UnknownFields
+	sizeCache        protoimpl.SizeCache
 }
 
 func (x *PhaseApprovalRollup) Reset() {
@@ -798,6 +805,13 @@ func (x *PhaseApprovalRollup) GetBlankRequiredCount() int32 {
 		return x.BlankRequiredCount
 	}
 	return 0
+}
+
+func (x *PhaseApprovalRollup) GetLastReturnReason() string {
+	if x != nil {
+		return x.LastReturnReason
+	}
+	return ""
 }
 
 type GetPhaseApprovalGateRollupRequest struct {
@@ -1486,7 +1500,7 @@ const file_service_operation_outcome_matrix_outcome_matrix_proto_rawDesc = "" +
 	"\n" +
 	"CellsEntry\x12\x10\n" +
 	"\x03key\x18\x01 \x01(\tR\x03key\x127\n" +
-	"\x05value\x18\x02 \x01(\v2!.service.operation.v1.OutcomeCellR\x05value:\x028\x01\"\xb1\x02\n" +
+	"\x05value\x18\x02 \x01(\v2!.service.operation.v1.OutcomeCellR\x05value:\x028\x01\"\xdf\x02\n" +
 	"\x13PhaseApprovalRollup\x121\n" +
 	"\x15job_template_phase_id\x18\x01 \x01(\tR\x12jobTemplatePhaseId\x12@\n" +
 	"\x06status\x18\x02 \x01(\x0e2(.domain.operation.v1.PhaseApprovalStatusR\x06status\x12\x14\n" +
@@ -1495,7 +1509,8 @@ const file_service_operation_outcome_matrix_outcome_matrix_proto_rawDesc = "" +
 	"\bhas_data\x18\x05 \x01(\bR\ahasData\x12\x1f\n" +
 	"\vhard_frozen\x18\x06 \x01(\bR\n" +
 	"hardFrozen\x120\n" +
-	"\x14blank_required_count\x18\a \x01(\x05R\x12blankRequiredCount\"\x8c\x01\n" +
+	"\x14blank_required_count\x18\a \x01(\x05R\x12blankRequiredCount\x12,\n" +
+	"\x12last_return_reason\x18\b \x01(\tR\x10lastReturnReason\"\x8c\x01\n" +
 	"!GetPhaseApprovalGateRollupRequest\x122\n" +
 	"\x15subscription_group_id\x18\x01 \x01(\tR\x13subscriptionGroupId\x123\n" +
 	"\x16job_template_phase_ids\x18\x02 \x03(\tR\x13jobTemplatePhaseIds\"\xa4\x02\n" +
