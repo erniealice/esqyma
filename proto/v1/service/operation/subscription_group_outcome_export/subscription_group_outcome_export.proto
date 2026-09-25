@@ -119,6 +119,9 @@ message SubscriptionGroupOutcomeCell {
   optional string scaled_label = 3;
   optional double scaled_score = 4;
   EnrollmentEvidence enrollment_evidence = 5;
+  // Raw composite (pre-transmutation summary_score) of the same summary row the
+  // scaled pair came from; unset when none was computed.
+  optional double summary_score = 6;
 }
 
 message SubscriptionGroupOutcomeClientRow {

@@ -715,8 +715,11 @@ type SubscriptionGroupOutcomeCell struct {
 	ScaledLabel        *string                `protobuf:"bytes,3,opt,name=scaled_label,json=scaledLabel,proto3,oneof" json:"scaled_label,omitempty"`
 	ScaledScore        *float64               `protobuf:"fixed64,4,opt,name=scaled_score,json=scaledScore,proto3,oneof" json:"scaled_score,omitempty"`
 	EnrollmentEvidence *EnrollmentEvidence    `protobuf:"bytes,5,opt,name=enrollment_evidence,json=enrollmentEvidence,proto3" json:"enrollment_evidence,omitempty"`
-	unknownFields      protoimpl.UnknownFields
-	sizeCache          protoimpl.SizeCache
+	// Raw composite (pre-transmutation summary_score) of the same summary row the
+	// scaled pair came from; unset when none was computed.
+	SummaryScore  *float64 `protobuf:"fixed64,6,opt,name=summary_score,json=summaryScore,proto3,oneof" json:"summary_score,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
 }
 
 func (x *SubscriptionGroupOutcomeCell) Reset() {
@@ -782,6 +785,13 @@ func (x *SubscriptionGroupOutcomeCell) GetEnrollmentEvidence() *EnrollmentEviden
 		return x.EnrollmentEvidence
 	}
 	return nil
+}
+
+func (x *SubscriptionGroupOutcomeCell) GetSummaryScore() float64 {
+	if x != nil && x.SummaryScore != nil {
+		return *x.SummaryScore
+	}
+	return 0
 }
 
 type SubscriptionGroupOutcomeClientRow struct {
@@ -2018,16 +2028,18 @@ const file_service_operation_subscription_group_outcome_export_subscription_grou
 	"\fdisplay_name\x18\x02 \x01(\tR\vdisplayName\"]\n" +
 	"\x12EnrollmentEvidence\x12\x1b\n" +
 	"\thas_marks\x18\x01 \x01(\bR\bhasMarks\x12*\n" +
-	"\x11has_positive_mark\x18\x02 \x01(\bR\x0fhasPositiveMark\"\xb4\x02\n" +
+	"\x11has_positive_mark\x18\x02 \x01(\bR\x0fhasPositiveMark\"\xf0\x02\n" +
 	"\x1cSubscriptionGroupOutcomeCell\x12&\n" +
 	"\x0fjob_template_id\x18\x01 \x01(\tR\rjobTemplateId\x12\x1f\n" +
 	"\vjob_present\x18\x02 \x01(\bR\n" +
 	"jobPresent\x12&\n" +
 	"\fscaled_label\x18\x03 \x01(\tH\x00R\vscaledLabel\x88\x01\x01\x12&\n" +
 	"\fscaled_score\x18\x04 \x01(\x01H\x01R\vscaledScore\x88\x01\x01\x12Y\n" +
-	"\x13enrollment_evidence\x18\x05 \x01(\v2(.service.operation.v1.EnrollmentEvidenceR\x12enrollmentEvidenceB\x0f\n" +
+	"\x13enrollment_evidence\x18\x05 \x01(\v2(.service.operation.v1.EnrollmentEvidenceR\x12enrollmentEvidence\x12(\n" +
+	"\rsummary_score\x18\x06 \x01(\x01H\x02R\fsummaryScore\x88\x01\x01B\x0f\n" +
 	"\r_scaled_labelB\x0f\n" +
-	"\r_scaled_score\"\x81\x02\n" +
+	"\r_scaled_scoreB\x10\n" +
+	"\x0e_summary_score\"\x81\x02\n" +
 	"!SubscriptionGroupOutcomeClientRow\x12\x1b\n" +
 	"\tclient_id\x18\x01 \x01(\tR\bclientId\x12\x1f\n" +
 	"\vclient_name\x18\x02 \x01(\tR\n" +
