@@ -23,6 +23,7 @@ import (
 	_ "github.com/erniealice/esqyma/pkg/schema/v1/domain/operation/task_outcome"
 	template_task_criteria "github.com/erniealice/esqyma/pkg/schema/v1/domain/operation/template_task_criteria"
 	template_task_criteria_rating_description "github.com/erniealice/esqyma/pkg/schema/v1/domain/operation/template_task_criteria_rating_description"
+	product_variant "github.com/erniealice/esqyma/pkg/schema/v1/domain/product/product_variant"
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
 	reflect "reflect"
@@ -1488,8 +1489,12 @@ type ClientReportCardProjection struct {
 	// Configured attributes of the group's plan (plan_attribute), same shape as
 	// the client attributes above.
 	PlanAttributes []*ClientReportCardAttribute `protobuf:"bytes,24,rep,name=plan_attributes,json=planAttributes,proto3" json:"plan_attributes,omitempty"`
-	unknownFields  protoimpl.UnknownFields
-	sizeCache      protoimpl.SizeCache
+	// Product variants referenced by the template phases above
+	// (job_template_phase.output_product_variant_id), id + sku only. The
+	// document names a variant-pinned job "Arts (Music)" from these.
+	ProductVariants []*product_variant.ProductVariant `protobuf:"bytes,25,rep,name=product_variants,json=productVariants,proto3" json:"product_variants,omitempty"`
+	unknownFields   protoimpl.UnknownFields
+	sizeCache       protoimpl.SizeCache
 }
 
 func (x *ClientReportCardProjection) Reset() {
@@ -1686,6 +1691,13 @@ func (x *ClientReportCardProjection) GetRenderGateSheets() []*ClientReportCardRe
 func (x *ClientReportCardProjection) GetPlanAttributes() []*ClientReportCardAttribute {
 	if x != nil {
 		return x.PlanAttributes
+	}
+	return nil
+}
+
+func (x *ClientReportCardProjection) GetProductVariants() []*product_variant.ProductVariant {
+	if x != nil {
+		return x.ProductVariants
 	}
 	return nil
 }
@@ -1970,7 +1982,7 @@ var File_service_operation_subscription_group_outcome_export_subscription_group_
 
 const file_service_operation_subscription_group_outcome_export_subscription_group_outcome_export_proto_rawDesc = "" +
 	"\n" +
-	"[service/operation/subscription_group_outcome_export/subscription_group_outcome_export.proto\x12\x14service.operation.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/operation/job/job.proto\x1a0domain/operation/job_category/job_category.proto\x1a8domain/operation/job_outcome_line/job_outcome_line.proto\x1a>domain/operation/job_outcome_summary/job_outcome_summary.proto\x1a*domain/operation/job_phase/job_phase.proto\x1a(domain/operation/job_task/job_task.proto\x1a0domain/operation/job_template/job_template.proto\x1a:domain/operation/job_template_task/job_template_task.proto\x1a<domain/operation/job_template_phase/job_template_phase.proto\x1a8domain/operation/outcome_criteria/outcome_criteria.proto\x1aBdomain/operation/phase_outcome_summary/phase_outcome_summary.proto\x1a0domain/operation/task_outcome/task_outcome.proto\x1aDdomain/operation/template_task_criteria/template_task_criteria.proto\x1ajdomain/operation/template_task_criteria_rating_description/template_task_criteria_rating_description.proto\x1a`domain/operation/subscription_group_document_template/subscription_group_document_template.proto\"\x7f\n" +
+	"[service/operation/subscription_group_outcome_export/subscription_group_outcome_export.proto\x12\x14service.operation.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/operation/job/job.proto\x1a0domain/operation/job_category/job_category.proto\x1a8domain/operation/job_outcome_line/job_outcome_line.proto\x1a>domain/operation/job_outcome_summary/job_outcome_summary.proto\x1a*domain/operation/job_phase/job_phase.proto\x1a(domain/operation/job_task/job_task.proto\x1a0domain/operation/job_template/job_template.proto\x1a:domain/operation/job_template_task/job_template_task.proto\x1a<domain/operation/job_template_phase/job_template_phase.proto\x1a8domain/operation/outcome_criteria/outcome_criteria.proto\x1aBdomain/operation/phase_outcome_summary/phase_outcome_summary.proto\x1a0domain/operation/task_outcome/task_outcome.proto\x1aDdomain/operation/template_task_criteria/template_task_criteria.proto\x1ajdomain/operation/template_task_criteria_rating_description/template_task_criteria_rating_description.proto\x1a`domain/operation/subscription_group_document_template/subscription_group_document_template.proto\x1a4domain/product/product_variant/product_variant.proto\"\x7f\n" +
 	"*ListSubscriptionGroupOutcomeLandingRequest\x127\n" +
 	"\x15price_schedule_active\x18\x01 \x01(\bH\x00R\x13priceScheduleActive\x88\x01\x01B\x18\n" +
 	"\x16_price_schedule_active\"\x8b\x04\n" +
@@ -2100,7 +2112,7 @@ const file_service_operation_subscription_group_outcome_export_subscription_grou
 	"\rall_published\x18\x06 \x01(\bR\fallPublished\x12\x19\n" +
 	"\bhas_data\x18\a \x01(\bR\ahasDataB\x18\n" +
 	"\x16_job_template_phase_idB\x0f\n" +
-	"\r_job_phase_id\"\x9e\x0f\n" +
+	"\r_job_phase_id\"\xec\x0f\n" +
 	"\x1aClientReportCardProjection\x12U\n" +
 	"\acontext\x18\x01 \x01(\v2;.service.operation.v1.SubscriptionGroupOutcomeExportContextR\acontext\x12D\n" +
 	"\x06client\x18\x02 \x01(\v2,.service.operation.v1.ClientReportCardClientR\x06client\x12O\n" +
@@ -2129,7 +2141,8 @@ const file_service_operation_subscription_group_outcome_export_subscription_grou
 	"\x13rating_descriptions\x18\x15 \x03(\v2:.domain.operation.v1.TemplateTaskCriteriaRatingDescriptionR\x12ratingDescriptions\x12W\n" +
 	")render_gate_applied_subscription_group_id\x18\x16 \x01(\tR$renderGateAppliedSubscriptionGroupId\x12c\n" +
 	"\x12render_gate_sheets\x18\x17 \x03(\v25.service.operation.v1.ClientReportCardRenderGateSheetR\x10renderGateSheets\x12X\n" +
-	"\x0fplan_attributes\x18\x18 \x03(\v2/.service.operation.v1.ClientReportCardAttributeR\x0eplanAttributes\"\xd9\x01\n" +
+	"\x0fplan_attributes\x18\x18 \x03(\v2/.service.operation.v1.ClientReportCardAttributeR\x0eplanAttributes\x12L\n" +
+	"\x10product_variants\x18\x19 \x03(\v2!.domain.product.v1.ProductVariantR\x0fproductVariants\"\xd9\x01\n" +
 	",GetSubscriptionGroupClientReportCardResponse\x12Q\n" +
 	"\vreport_card\x18\x01 \x01(\v20.service.operation.v1.ClientReportCardProjectionR\n" +
 	"reportCard\x12\x18\n" +
@@ -2214,7 +2227,8 @@ var file_service_operation_subscription_group_outcome_export_subscription_group_
 	(*job_outcome_summary.JobOutcomeSummary)(nil),                                           // 35: domain.operation.v1.JobOutcomeSummary
 	(*job_outcome_line.JobOutcomeLine)(nil),                                                 // 36: domain.operation.v1.JobOutcomeLine
 	(*template_task_criteria_rating_description.TemplateTaskCriteriaRatingDescription)(nil), // 37: domain.operation.v1.TemplateTaskCriteriaRatingDescription
-	(subscription_group_document_template.RenderProfile)(0),                                 // 38: domain.operation.v1.RenderProfile
+	(*product_variant.ProductVariant)(nil),                                                  // 38: domain.product.v1.ProductVariant
+	(subscription_group_document_template.RenderProfile)(0),                                 // 39: domain.operation.v1.RenderProfile
 }
 var file_service_operation_subscription_group_outcome_export_subscription_group_outcome_export_proto_depIdxs = []int32{
 	1,  // 0: service.operation.v1.ListSubscriptionGroupOutcomeLandingResponse.rows:type_name -> service.operation.v1.SubscriptionGroupOutcomeLandingRow
@@ -2248,21 +2262,22 @@ var file_service_operation_subscription_group_outcome_export_subscription_group_
 	37, // 28: service.operation.v1.ClientReportCardProjection.rating_descriptions:type_name -> domain.operation.v1.TemplateTaskCriteriaRatingDescription
 	18, // 29: service.operation.v1.ClientReportCardProjection.render_gate_sheets:type_name -> service.operation.v1.ClientReportCardRenderGateSheet
 	13, // 30: service.operation.v1.ClientReportCardProjection.plan_attributes:type_name -> service.operation.v1.ClientReportCardAttribute
-	19, // 31: service.operation.v1.GetSubscriptionGroupClientReportCardResponse.report_card:type_name -> service.operation.v1.ClientReportCardProjection
-	24, // 32: service.operation.v1.GetSubscriptionGroupClientReportCardResponse.error:type_name -> domain.common.v1.Error
-	38, // 33: service.operation.v1.ResolveSubscriptionGroupOutcomeDocumentForRenderRequest.render_profile:type_name -> domain.operation.v1.RenderProfile
-	38, // 34: service.operation.v1.ResolvedSubscriptionGroupOutcomeDocument.render_profile:type_name -> domain.operation.v1.RenderProfile
-	22, // 35: service.operation.v1.ResolveSubscriptionGroupOutcomeDocumentForRenderResponse.document:type_name -> service.operation.v1.ResolvedSubscriptionGroupOutcomeDocument
-	24, // 36: service.operation.v1.ResolveSubscriptionGroupOutcomeDocumentForRenderResponse.error:type_name -> domain.common.v1.Error
-	3,  // 37: service.operation.v1.SubscriptionGroupOutcomeExportService.GetSubscriptionGroupOutcomeExport:input_type -> service.operation.v1.GetSubscriptionGroupOutcomeExportRequest
-	0,  // 38: service.operation.v1.SubscriptionGroupOutcomeExportService.ListSubscriptionGroupOutcomeLanding:input_type -> service.operation.v1.ListSubscriptionGroupOutcomeLandingRequest
-	11, // 39: service.operation.v1.SubscriptionGroupOutcomeExportService.GetSubscriptionGroupOutcomeExport:output_type -> service.operation.v1.GetSubscriptionGroupOutcomeExportResponse
-	2,  // 40: service.operation.v1.SubscriptionGroupOutcomeExportService.ListSubscriptionGroupOutcomeLanding:output_type -> service.operation.v1.ListSubscriptionGroupOutcomeLandingResponse
-	39, // [39:41] is the sub-list for method output_type
-	37, // [37:39] is the sub-list for method input_type
-	37, // [37:37] is the sub-list for extension type_name
-	37, // [37:37] is the sub-list for extension extendee
-	0,  // [0:37] is the sub-list for field type_name
+	38, // 31: service.operation.v1.ClientReportCardProjection.product_variants:type_name -> domain.product.v1.ProductVariant
+	19, // 32: service.operation.v1.GetSubscriptionGroupClientReportCardResponse.report_card:type_name -> service.operation.v1.ClientReportCardProjection
+	24, // 33: service.operation.v1.GetSubscriptionGroupClientReportCardResponse.error:type_name -> domain.common.v1.Error
+	39, // 34: service.operation.v1.ResolveSubscriptionGroupOutcomeDocumentForRenderRequest.render_profile:type_name -> domain.operation.v1.RenderProfile
+	39, // 35: service.operation.v1.ResolvedSubscriptionGroupOutcomeDocument.render_profile:type_name -> domain.operation.v1.RenderProfile
+	22, // 36: service.operation.v1.ResolveSubscriptionGroupOutcomeDocumentForRenderResponse.document:type_name -> service.operation.v1.ResolvedSubscriptionGroupOutcomeDocument
+	24, // 37: service.operation.v1.ResolveSubscriptionGroupOutcomeDocumentForRenderResponse.error:type_name -> domain.common.v1.Error
+	3,  // 38: service.operation.v1.SubscriptionGroupOutcomeExportService.GetSubscriptionGroupOutcomeExport:input_type -> service.operation.v1.GetSubscriptionGroupOutcomeExportRequest
+	0,  // 39: service.operation.v1.SubscriptionGroupOutcomeExportService.ListSubscriptionGroupOutcomeLanding:input_type -> service.operation.v1.ListSubscriptionGroupOutcomeLandingRequest
+	11, // 40: service.operation.v1.SubscriptionGroupOutcomeExportService.GetSubscriptionGroupOutcomeExport:output_type -> service.operation.v1.GetSubscriptionGroupOutcomeExportResponse
+	2,  // 41: service.operation.v1.SubscriptionGroupOutcomeExportService.ListSubscriptionGroupOutcomeLanding:output_type -> service.operation.v1.ListSubscriptionGroupOutcomeLandingResponse
+	40, // [40:42] is the sub-list for method output_type
+	38, // [38:40] is the sub-list for method input_type
+	38, // [38:38] is the sub-list for extension type_name
+	38, // [38:38] is the sub-list for extension extendee
+	0,  // [0:38] is the sub-list for field type_name
 }
 
 func init() {

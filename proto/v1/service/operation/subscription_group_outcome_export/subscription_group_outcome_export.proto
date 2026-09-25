@@ -20,6 +20,7 @@ import "domain/operation/task_outcome/task_outcome.proto";
 import "domain/operation/template_task_criteria/template_task_criteria.proto";
 import "domain/operation/template_task_criteria_rating_description/template_task_criteria_rating_description.proto";
 import "domain/operation/subscription_group_document_template/subscription_group_document_template.proto";
+import "domain/product/product_variant/product_variant.proto";
 
 // SubscriptionGroupOutcomeExportService is the canonical, group-scoped
 // composite read for category/phase options and a selected one-period outcome
@@ -245,6 +246,10 @@ message ClientReportCardProjection {
   // Configured attributes of the group's plan (plan_attribute), same shape as
   // the client attributes above.
   repeated ClientReportCardAttribute plan_attributes = 24;
+  // Product variants referenced by the template phases above
+  // (job_template_phase.output_product_variant_id), id + sku only. The
+  // document names a variant-pinned job "Arts (Music)" from these.
+  repeated domain.product.v1.ProductVariant product_variants = 25;
 }
 
 message GetSubscriptionGroupClientReportCardResponse {
