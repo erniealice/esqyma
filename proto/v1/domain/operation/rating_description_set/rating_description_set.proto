@@ -1,0 +1,180 @@
+syntax = "proto3";
+
+package domain.operation.v1;
+
+option go_package = "github.com/erniealice/esqyma/golang/v1/domain/operation/rating_description_set";
+
+import "domain/common/error.proto";
+import "domain/common/pagination.proto";
+import "domain/common/filter.proto";
+import "domain/common/sort.proto";
+import "domain/common/search.proto";
+
+import "domain/operation/enums/enums.proto";
+import "options/db.proto";
+
+// ---------------------------------------------------------------------------
+// RatingDescriptionSet is one rubric version: a named, versioned collection of
+// descriptive rating text (RatingDescriptionSetEntry rows), tied to a single
+// score_scale whose bands the entries describe. Reusable across offerings —
+// many RatingDescriptionSetProductPlan links (offering x academic year) may
+// point at one PUBLISHED set (e.g. Civics and CLF share "I&S . Year 1").
+//
+// PUBLISHED and DEPRECATED sets and their entries are immutable; enforced in
+// use cases via conditional writes (row lock + status check), NOT by a DB
+// trigger (docs/plan/20260925-criterion-descriptors-by-program-year,
+// schema-proposal.md §1, §9.2). Only PUBLISHED sets may be newly linked;
+// existing links to PUBLISHED or DEPRECATED sets keep resolving (Q19); DRAFT
+// never resolves. New versions are created via CreateRatingDescriptionSetVersion
+// (copy header + entries, supersedes_id = source, version = source.version + 1)
+// rather than in-place edits, once a set has left DRAFT.
+// ---------------------------------------------------------------------------
+message RatingDescriptionSet {
+  option (options.v1.table).table = true;
+
+  string id = 1;
+  string workspace_id = 2 [(options.v1.db).references = "workspace", (options.v1.db).index = true];
+  // Manifest key, e.g. "ib-myp-design-y1". UNIQUE (workspace_id, code, version)
+  // when set — a partial unique index (WHERE code IS NOT NULL), authored in the
+  // hand-written migration (esqyma.md migration contract), not representable by
+  // the plain `unique_together` annotation below.
+  optional string code = 3;
+  int32 version = 4;                    // CHECK (version > 0)
+  domain.operation.v1.VersionStatus version_status = 5;
+  optional string supersedes_id = 6 [(options.v1.db).references = "rating_description_set", (options.v1.db).index = true];
+  string name = 7;                      // non-blank, e.g. "IB MYP Design · Year 1"
+  string score_scale_id = 8 [(options.v1.db).references = "score_scale", (options.v1.db).index = true];
+  optional string source_ref = 9;       // provenance
+  optional string source_sha256 = 10;   // provenance
+  bool active = 11 [(options.v1.db).default = "true"];
+  optional int64 date_created = 12;
+  optional string date_created_string = 13 [(options.v1.db).ignore = true];
+  optional int64 date_modified = 14;
+  optional string date_modified_string = 15 [(options.v1.db).ignore = true];
+}
+
+service RatingDescriptionSetDomainService {
+  rpc CreateRatingDescriptionSet(CreateRatingDescriptionSetRequest) returns (CreateRatingDescriptionSetResponse);
+  rpc ReadRatingDescriptionSet(ReadRatingDescriptionSetRequest) returns (ReadRatingDescriptionSetResponse);
+  rpc UpdateRatingDescriptionSet(UpdateRatingDescriptionSetRequest) returns (UpdateRatingDescriptionSetResponse);
+  rpc DeleteRatingDescriptionSet(DeleteRatingDescriptionSetRequest) returns (DeleteRatingDescriptionSetResponse);
+  rpc ListRatingDescriptionSets(ListRatingDescriptionSetsRequest) returns (ListRatingDescriptionSetsResponse);
+  rpc GetRatingDescriptionSetListPageData(GetRatingDescriptionSetListPageDataRequest) returns (GetRatingDescriptionSetListPageDataResponse);
+  rpc GetRatingDescriptionSetItemPageData(GetRatingDescriptionSetItemPageDataRequest) returns (GetRatingDescriptionSetItemPageDataResponse);
+}
+
+message CreateRatingDescriptionSetRequest {
+  RatingDescriptionSet data = 1;
+}
+
+message CreateRatingDescriptionSetResponse {
+  repeated RatingDescriptionSet data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message ReadRatingDescriptionSetRequest {
+  RatingDescriptionSet data = 1;
+}
+
+message ReadRatingDescriptionSetResponse {
+  repeated RatingDescriptionSet data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message UpdateRatingDescriptionSetRequest {
+  RatingDescriptionSet data = 1;
+}
+
+message UpdateRatingDescriptionSetResponse {
+  repeated RatingDescriptionSet data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message DeleteRatingDescriptionSetRequest {
+  RatingDescriptionSet data = 1;
+}
+
+message DeleteRatingDescriptionSetResponse {
+  bool success = 1;
+  optional domain.common.v1.Error error = 2;
+}
+
+message ListRatingDescriptionSetsRequest {
+  optional domain.common.v1.SearchRequest search = 1;
+  optional domain.common.v1.FilterRequest filters = 2;
+  optional domain.common.v1.SortRequest sort = 3;
+  optional domain.common.v1.PaginationRequest pagination = 4;
+}
+
+message ListRatingDescriptionSetsResponse {
+  repeated RatingDescriptionSet data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message GetRatingDescriptionSetListPageDataRequest {
+  optional domain.common.v1.PaginationRequest pagination = 1;
+  optional domain.common.v1.FilterRequest filters = 2;
+  optional domain.common.v1.SortRequest sort = 3;
+  optional domain.common.v1.SearchRequest search = 4;
+}
+
+message GetRatingDescriptionSetListPageDataResponse {
+  repeated RatingDescriptionSet rating_description_set_list = 1;
+  optional domain.common.v1.PaginationResponse pagination = 2;
+  repeated domain.common.v1.SearchResult search_results = 3;
+  bool success = 4;
+  optional domain.common.v1.Error error = 5;
+}
+
+message GetRatingDescriptionSetItemPageDataRequest {
+  string rating_description_set_id = 1;
+}
+
+message GetRatingDescriptionSetItemPageDataResponse {
+  optional RatingDescriptionSet rating_description_set = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+// ---------------------------------------------------------------------------
+// Lifecycle transitions (interfaces.md §2, schema-proposal.md §9.2). These are
+// PLAIN use-case request/response messages — NOT repository RPCs on
+// RatingDescriptionSetDomainService. Each transition is a conditional,
+// row-locked write inside one transaction (Publish: DRAFT -> PUBLISHED,
+// requires >= 1 entry; Deprecate: PUBLISHED -> DEPRECATED, existing links keep
+// resolving; CreateVersion: copy header + entries into a new DRAFT).
+// ---------------------------------------------------------------------------
+
+message CreateRatingDescriptionSetVersionRequest {
+  string source_rating_description_set_id = 1;
+}
+
+message CreateRatingDescriptionSetVersionResponse {
+  repeated RatingDescriptionSet data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message PublishRatingDescriptionSetRequest {
+  string id = 1;
+}
+
+message PublishRatingDescriptionSetResponse {
+  repeated RatingDescriptionSet data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message DeprecateRatingDescriptionSetRequest {
+  string id = 1;
+}
+
+message DeprecateRatingDescriptionSetResponse {
+  repeated RatingDescriptionSet data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}

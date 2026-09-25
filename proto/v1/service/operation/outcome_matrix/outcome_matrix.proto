@@ -79,6 +79,16 @@ service OutcomeMatrixService {
   // asked for; providers that cannot prove application must error, never
   // return an unnarrowed aggregate.
   rpc GetPhaseApprovalGateRollup(GetPhaseApprovalGateRollupRequest) returns (GetPhaseApprovalGateRollupResponse);
+  // ResolveCellRatingDescriptions is the per-cell resolver for descriptive rating text
+  // (docs/plan/20260925-criterion-descriptors-by-program-year, interfaces.md §2). Given a
+  // batch of (job, job_task, outcome_criteria) cell refs, it walks the resolution chain
+  // (schema-proposal.md §4) — job -> subscription.price_plan -> price_plan(price_schedule)
+  // -> product_plan -> active rating_description_set_product_plan -> rating_description_set
+  // (PUBLISHED/DEPRECATED) -> entries joined to score_scale_band — and returns, per cell, a
+  // RatingDescriptionResolutionStatus plus the matcher-safe RatingDescription rows for that
+  // criterion only. Only slots with rating_mode = NUMERIC_WITH_DESCRIPTION resolve; the
+  // caller (existing record action) invokes this as a port, no HTTP route of its own.
+  rpc ResolveCellRatingDescriptions(ResolveCellRatingDescriptionsRequest) returns (ResolveCellRatingDescriptionsResponse);
 }
 
 // OutcomeMatrixScope selects the row set. UNSPECIFIED is fail-closed → MINE.
@@ -125,6 +135,40 @@ message RatingDescription {
   optional double input_max = 3;
   optional string input_match = 4;
   string description = 5;
+}
+
+// ---- Cell rating-description resolver (20260925 criterion descriptors) ----
+//
+// CellRatingRef addresses one grade-sheet cell the resolver must resolve: the
+// student's job, the student's resolved job_task instance for the column's
+// template task, and the target criterion. All three are server-derived from
+// the already-authorized matrix/record action — never attacker-supplied alone.
+message CellRatingRef {
+  string job_id = 1;
+  string job_task_id = 2;
+  string outcome_criteria_id = 3;
+}
+
+message ResolveCellRatingDescriptionsRequest {
+  repeated CellRatingRef cells = 1;
+}
+
+// CellRatingResolution is one cell's resolution outcome. `descriptions` is
+// scoped to the requested criterion only (never the whole set), reusing the
+// matcher-safe RatingDescription projection above. `reason` is bounded and
+// non-sensitive (safe to surface in an inline error, e.g. Q22/INVALID_CONFIG).
+message CellRatingResolution {
+  CellRatingRef cell = 1;
+  domain.operation.v1.RatingDescriptionResolutionStatus status = 2;
+  string rating_description_set_id = 3;
+  repeated RatingDescription descriptions = 4;
+  string reason = 5;
+}
+
+message ResolveCellRatingDescriptionsResponse {
+  repeated CellRatingResolution results = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
 }
 
 // TaskColumn is a thin grouping envelope for one job_template_task.

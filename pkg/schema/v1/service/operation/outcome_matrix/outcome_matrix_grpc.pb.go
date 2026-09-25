@@ -19,9 +19,10 @@ import (
 const _ = grpc.SupportPackageIsVersion9
 
 const (
-	OutcomeMatrixService_GetOutcomeMatrix_FullMethodName           = "/service.operation.v1.OutcomeMatrixService/GetOutcomeMatrix"
-	OutcomeMatrixService_GetOutcomeSummaryRoster_FullMethodName    = "/service.operation.v1.OutcomeMatrixService/GetOutcomeSummaryRoster"
-	OutcomeMatrixService_GetPhaseApprovalGateRollup_FullMethodName = "/service.operation.v1.OutcomeMatrixService/GetPhaseApprovalGateRollup"
+	OutcomeMatrixService_GetOutcomeMatrix_FullMethodName              = "/service.operation.v1.OutcomeMatrixService/GetOutcomeMatrix"
+	OutcomeMatrixService_GetOutcomeSummaryRoster_FullMethodName       = "/service.operation.v1.OutcomeMatrixService/GetOutcomeSummaryRoster"
+	OutcomeMatrixService_GetPhaseApprovalGateRollup_FullMethodName    = "/service.operation.v1.OutcomeMatrixService/GetPhaseApprovalGateRollup"
+	OutcomeMatrixService_ResolveCellRatingDescriptions_FullMethodName = "/service.operation.v1.OutcomeMatrixService/ResolveCellRatingDescriptions"
 )
 
 // OutcomeMatrixServiceClient is the client API for OutcomeMatrixService service.
@@ -44,6 +45,16 @@ type OutcomeMatrixServiceClient interface {
 	// asked for; providers that cannot prove application must error, never
 	// return an unnarrowed aggregate.
 	GetPhaseApprovalGateRollup(ctx context.Context, in *GetPhaseApprovalGateRollupRequest, opts ...grpc.CallOption) (*GetPhaseApprovalGateRollupResponse, error)
+	// ResolveCellRatingDescriptions is the per-cell resolver for descriptive rating text
+	// (docs/plan/20260925-criterion-descriptors-by-program-year, interfaces.md §2). Given a
+	// batch of (job, job_task, outcome_criteria) cell refs, it walks the resolution chain
+	// (schema-proposal.md §4) — job -> subscription.price_plan -> price_plan(price_schedule)
+	// -> product_plan -> active rating_description_set_product_plan -> rating_description_set
+	// (PUBLISHED/DEPRECATED) -> entries joined to score_scale_band — and returns, per cell, a
+	// RatingDescriptionResolutionStatus plus the matcher-safe RatingDescription rows for that
+	// criterion only. Only slots with rating_mode = NUMERIC_WITH_DESCRIPTION resolve; the
+	// caller (existing record action) invokes this as a port, no HTTP route of its own.
+	ResolveCellRatingDescriptions(ctx context.Context, in *ResolveCellRatingDescriptionsRequest, opts ...grpc.CallOption) (*ResolveCellRatingDescriptionsResponse, error)
 }
 
 type outcomeMatrixServiceClient struct {
@@ -84,6 +95,16 @@ func (c *outcomeMatrixServiceClient) GetPhaseApprovalGateRollup(ctx context.Cont
 	return out, nil
 }
 
+func (c *outcomeMatrixServiceClient) ResolveCellRatingDescriptions(ctx context.Context, in *ResolveCellRatingDescriptionsRequest, opts ...grpc.CallOption) (*ResolveCellRatingDescriptionsResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(ResolveCellRatingDescriptionsResponse)
+	err := c.cc.Invoke(ctx, OutcomeMatrixService_ResolveCellRatingDescriptions_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // OutcomeMatrixServiceServer is the server API for OutcomeMatrixService service.
 // All implementations must embed UnimplementedOutcomeMatrixServiceServer
 // for forward compatibility.
@@ -104,6 +125,16 @@ type OutcomeMatrixServiceServer interface {
 	// asked for; providers that cannot prove application must error, never
 	// return an unnarrowed aggregate.
 	GetPhaseApprovalGateRollup(context.Context, *GetPhaseApprovalGateRollupRequest) (*GetPhaseApprovalGateRollupResponse, error)
+	// ResolveCellRatingDescriptions is the per-cell resolver for descriptive rating text
+	// (docs/plan/20260925-criterion-descriptors-by-program-year, interfaces.md §2). Given a
+	// batch of (job, job_task, outcome_criteria) cell refs, it walks the resolution chain
+	// (schema-proposal.md §4) — job -> subscription.price_plan -> price_plan(price_schedule)
+	// -> product_plan -> active rating_description_set_product_plan -> rating_description_set
+	// (PUBLISHED/DEPRECATED) -> entries joined to score_scale_band — and returns, per cell, a
+	// RatingDescriptionResolutionStatus plus the matcher-safe RatingDescription rows for that
+	// criterion only. Only slots with rating_mode = NUMERIC_WITH_DESCRIPTION resolve; the
+	// caller (existing record action) invokes this as a port, no HTTP route of its own.
+	ResolveCellRatingDescriptions(context.Context, *ResolveCellRatingDescriptionsRequest) (*ResolveCellRatingDescriptionsResponse, error)
 	mustEmbedUnimplementedOutcomeMatrixServiceServer()
 }
 
@@ -122,6 +153,9 @@ func (UnimplementedOutcomeMatrixServiceServer) GetOutcomeSummaryRoster(context.C
 }
 func (UnimplementedOutcomeMatrixServiceServer) GetPhaseApprovalGateRollup(context.Context, *GetPhaseApprovalGateRollupRequest) (*GetPhaseApprovalGateRollupResponse, error) {
 	return nil, status.Error(codes.Unimplemented, "method GetPhaseApprovalGateRollup not implemented")
+}
+func (UnimplementedOutcomeMatrixServiceServer) ResolveCellRatingDescriptions(context.Context, *ResolveCellRatingDescriptionsRequest) (*ResolveCellRatingDescriptionsResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method ResolveCellRatingDescriptions not implemented")
 }
 func (UnimplementedOutcomeMatrixServiceServer) mustEmbedUnimplementedOutcomeMatrixServiceServer() {}
 func (UnimplementedOutcomeMatrixServiceServer) testEmbeddedByValue()                              {}
@@ -198,6 +232,24 @@ func _OutcomeMatrixService_GetPhaseApprovalGateRollup_Handler(srv interface{}, c
 	return interceptor(ctx, in, info, handler)
 }
 
+func _OutcomeMatrixService_ResolveCellRatingDescriptions_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ResolveCellRatingDescriptionsRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(OutcomeMatrixServiceServer).ResolveCellRatingDescriptions(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: OutcomeMatrixService_ResolveCellRatingDescriptions_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(OutcomeMatrixServiceServer).ResolveCellRatingDescriptions(ctx, req.(*ResolveCellRatingDescriptionsRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // OutcomeMatrixService_ServiceDesc is the grpc.ServiceDesc for OutcomeMatrixService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -216,6 +268,10 @@ var OutcomeMatrixService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "GetPhaseApprovalGateRollup",
 			Handler:    _OutcomeMatrixService_GetPhaseApprovalGateRollup_Handler,
+		},
+		{
+			MethodName: "ResolveCellRatingDescriptions",
+			Handler:    _OutcomeMatrixService_ResolveCellRatingDescriptions_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

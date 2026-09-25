@@ -1,0 +1,138 @@
+syntax = "proto3";
+
+package domain.operation.v1;
+
+option go_package = "github.com/erniealice/esqyma/golang/v1/domain/operation/rating_description_set_entry";
+
+import "domain/common/error.proto";
+import "domain/common/pagination.proto";
+import "domain/common/filter.proto";
+import "domain/common/sort.proto";
+import "domain/common/search.proto";
+
+import "options/db.proto";
+
+// ---------------------------------------------------------------------------
+// RatingDescriptionSetEntry is one cell of a rating_description_set's matrix:
+// the descriptive text for one (criterion, level) pair, where the level is a
+// score_scale_band belonging to the parent set's score_scale. A missing row is
+// an intentional absence (schema-proposal.md §2) — most commonly level 0,
+// which can never carry an entry (band_role = 'no_description' on the band;
+// enforced by every writer, including the CSV import below).
+//
+// Entries of a PUBLISHED or DEPRECATED parent set are immutable; write-side
+// use cases lock the parent row FOR SHARE and require version_status = DRAFT
+// before create/update/delete/import (schema-proposal.md §9.2, §9.3).
+// ---------------------------------------------------------------------------
+message RatingDescriptionSetEntry {
+  option (options.v1.table).table = true;
+  option (options.v1.table).unique_together = "rating_description_set_id,outcome_criteria_id,score_scale_band_id";
+
+  string id = 1;
+  string workspace_id = 2 [(options.v1.db).references = "workspace", (options.v1.db).index = true];
+  string rating_description_set_id = 3 [(options.v1.db).references = "rating_description_set", (options.v1.db).index = true];
+  string outcome_criteria_id = 4 [(options.v1.db).references = "outcome_criteria", (options.v1.db).index = true];
+  string score_scale_band_id = 5 [(options.v1.db).references = "score_scale_band", (options.v1.db).index = true];
+  string description = 6;               // non-blank
+  int32 sequence_order = 7 [(options.v1.db).default = "0"];
+  bool active = 8 [(options.v1.db).default = "true"];
+  optional int64 date_created = 9;
+  optional string date_created_string = 10 [(options.v1.db).ignore = true];
+  optional int64 date_modified = 11;
+  optional string date_modified_string = 12 [(options.v1.db).ignore = true];
+}
+
+service RatingDescriptionSetEntryDomainService {
+  rpc CreateRatingDescriptionSetEntry(CreateRatingDescriptionSetEntryRequest) returns (CreateRatingDescriptionSetEntryResponse);
+  rpc ReadRatingDescriptionSetEntry(ReadRatingDescriptionSetEntryRequest) returns (ReadRatingDescriptionSetEntryResponse);
+  rpc UpdateRatingDescriptionSetEntry(UpdateRatingDescriptionSetEntryRequest) returns (UpdateRatingDescriptionSetEntryResponse);
+  rpc DeleteRatingDescriptionSetEntry(DeleteRatingDescriptionSetEntryRequest) returns (DeleteRatingDescriptionSetEntryResponse);
+  rpc ListRatingDescriptionSetEntries(ListRatingDescriptionSetEntriesRequest) returns (ListRatingDescriptionSetEntriesResponse);
+}
+
+message CreateRatingDescriptionSetEntryRequest {
+  RatingDescriptionSetEntry data = 1;
+}
+
+message CreateRatingDescriptionSetEntryResponse {
+  repeated RatingDescriptionSetEntry data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message ReadRatingDescriptionSetEntryRequest {
+  RatingDescriptionSetEntry data = 1;
+}
+
+message ReadRatingDescriptionSetEntryResponse {
+  repeated RatingDescriptionSetEntry data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message UpdateRatingDescriptionSetEntryRequest {
+  RatingDescriptionSetEntry data = 1;
+}
+
+message UpdateRatingDescriptionSetEntryResponse {
+  repeated RatingDescriptionSetEntry data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message DeleteRatingDescriptionSetEntryRequest {
+  RatingDescriptionSetEntry data = 1;
+}
+
+message DeleteRatingDescriptionSetEntryResponse {
+  bool success = 1;
+  optional domain.common.v1.Error error = 2;
+}
+
+message ListRatingDescriptionSetEntriesRequest {
+  optional domain.common.v1.SearchRequest search = 1;
+  optional domain.common.v1.FilterRequest filters = 2;
+  optional domain.common.v1.SortRequest sort = 3;
+  optional domain.common.v1.PaginationRequest pagination = 4;
+}
+
+message ListRatingDescriptionSetEntriesResponse {
+  repeated RatingDescriptionSetEntry data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+// ---------------------------------------------------------------------------
+// CSV import into a DRAFT set (interfaces.md §2, Q25-UI-1). PLAIN use-case
+// request/response messages — not a repository RPC. `dry_run` validates and
+// previews counts with no writes; confirm writes in one transaction.
+// ---------------------------------------------------------------------------
+
+message ImportRatingDescriptionSetEntryRow {
+  int32 row_number = 1;
+  string outcome_criteria_id = 2;
+  string level = 3;
+  string description = 4;
+}
+
+message ImportRatingDescriptionSetEntriesRequest {
+  string rating_description_set_id = 1;
+  repeated ImportRatingDescriptionSetEntryRow rows = 2;
+  bool dry_run = 3;              // true = validate + preview counts, no writes
+  bool replace_existing = 4;     // false = upsert per (criterion, level); true = also remove entries absent from the file
+}
+
+// code: unknown_criterion | unknown_level | level_zero | blank | duplicate | too_long
+message ImportRatingDescriptionSetEntryError {
+  int32 row_number = 1;
+  string code = 2;
+}
+
+message ImportRatingDescriptionSetEntriesResponse {
+  int32 created = 1;
+  int32 updated = 2;
+  int32 removed = 3;
+  repeated ImportRatingDescriptionSetEntryError errors = 4;
+  bool success = 5;
+  optional domain.common.v1.Error error = 6;
+}

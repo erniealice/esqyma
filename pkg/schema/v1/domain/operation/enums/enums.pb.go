@@ -1545,6 +1545,72 @@ func (ThresholdRole) EnumDescriptor() ([]byte, []int) {
 	return file_domain_operation_enums_enums_proto_rawDescGZIP(), []int{25}
 }
 
+// RatingDescriptionResolutionStatus is the server-computed outcome of resolving a
+// grade-sheet cell's descriptive rating text (docs/plan/20260925-criterion-descriptors-by-program-year,
+// interfaces.md §1). NO_ENTRY is not a member here: it is the matcher result when a
+// RESOLVED set has no entry for the typed value (level 0) — computed at match time, not
+// a server status.
+type RatingDescriptionResolutionStatus int32
+
+const (
+	RatingDescriptionResolutionStatus_RATING_DESCRIPTION_RESOLUTION_STATUS_UNSPECIFIED            RatingDescriptionResolutionStatus = 0
+	RatingDescriptionResolutionStatus_RATING_DESCRIPTION_RESOLUTION_STATUS_RESOLVED               RatingDescriptionResolutionStatus = 1 // set found; entries returned (may lack this value -> NO_ENTRY at match time)
+	RatingDescriptionResolutionStatus_RATING_DESCRIPTION_RESOLUTION_STATUS_NO_LINK                RatingDescriptionResolutionStatus = 2 // offering x AY has no active link (Q21)
+	RatingDescriptionResolutionStatus_RATING_DESCRIPTION_RESOLUTION_STATUS_UNRESOLVED_IDENTITY    RatingDescriptionResolutionStatus = 3 // job lacks product / subscription / price plan, OR 0 product_plans match (Q22)
+	RatingDescriptionResolutionStatus_RATING_DESCRIPTION_RESOLUTION_STATUS_AMBIGUOUS              RatingDescriptionResolutionStatus = 4 // >1 product_plan or >1 active link (integrity failure)
+	RatingDescriptionResolutionStatus_RATING_DESCRIPTION_RESOLUTION_STATUS_INVALID_CONFIG         RatingDescriptionResolutionStatus = 5 // link -> missing / foreign-workspace / DRAFT set, scale mismatch
+	RatingDescriptionResolutionStatus_RATING_DESCRIPTION_RESOLUTION_STATUS_PLACEHOLDER_UNRESOLVED RatingDescriptionResolutionStatus = 6 // resolved text has an allowlisted placeholder tag whose value is empty/unresolvable for this cell (fail closed; descriptions cleared)
+)
+
+// Enum value maps for RatingDescriptionResolutionStatus.
+var (
+	RatingDescriptionResolutionStatus_name = map[int32]string{
+		0: "RATING_DESCRIPTION_RESOLUTION_STATUS_UNSPECIFIED",
+		1: "RATING_DESCRIPTION_RESOLUTION_STATUS_RESOLVED",
+		2: "RATING_DESCRIPTION_RESOLUTION_STATUS_NO_LINK",
+		3: "RATING_DESCRIPTION_RESOLUTION_STATUS_UNRESOLVED_IDENTITY",
+		4: "RATING_DESCRIPTION_RESOLUTION_STATUS_AMBIGUOUS",
+		5: "RATING_DESCRIPTION_RESOLUTION_STATUS_INVALID_CONFIG",
+		6: "RATING_DESCRIPTION_RESOLUTION_STATUS_PLACEHOLDER_UNRESOLVED",
+	}
+	RatingDescriptionResolutionStatus_value = map[string]int32{
+		"RATING_DESCRIPTION_RESOLUTION_STATUS_UNSPECIFIED":            0,
+		"RATING_DESCRIPTION_RESOLUTION_STATUS_RESOLVED":               1,
+		"RATING_DESCRIPTION_RESOLUTION_STATUS_NO_LINK":                2,
+		"RATING_DESCRIPTION_RESOLUTION_STATUS_UNRESOLVED_IDENTITY":    3,
+		"RATING_DESCRIPTION_RESOLUTION_STATUS_AMBIGUOUS":              4,
+		"RATING_DESCRIPTION_RESOLUTION_STATUS_INVALID_CONFIG":         5,
+		"RATING_DESCRIPTION_RESOLUTION_STATUS_PLACEHOLDER_UNRESOLVED": 6,
+	}
+)
+
+func (x RatingDescriptionResolutionStatus) Enum() *RatingDescriptionResolutionStatus {
+	p := new(RatingDescriptionResolutionStatus)
+	*p = x
+	return p
+}
+
+func (x RatingDescriptionResolutionStatus) String() string {
+	return protoimpl.X.EnumStringOf(x.Descriptor(), protoreflect.EnumNumber(x))
+}
+
+func (RatingDescriptionResolutionStatus) Descriptor() protoreflect.EnumDescriptor {
+	return file_domain_operation_enums_enums_proto_enumTypes[26].Descriptor()
+}
+
+func (RatingDescriptionResolutionStatus) Type() protoreflect.EnumType {
+	return &file_domain_operation_enums_enums_proto_enumTypes[26]
+}
+
+func (x RatingDescriptionResolutionStatus) Number() protoreflect.EnumNumber {
+	return protoreflect.EnumNumber(x)
+}
+
+// Deprecated: Use RatingDescriptionResolutionStatus.Descriptor instead.
+func (RatingDescriptionResolutionStatus) EnumDescriptor() ([]byte, []int) {
+	return file_domain_operation_enums_enums_proto_rawDescGZIP(), []int{26}
+}
+
 var File_domain_operation_enums_enums_proto protoreflect.FileDescriptor
 
 const file_domain_operation_enums_enums_proto_rawDesc = "" +
@@ -1739,7 +1805,15 @@ const file_domain_operation_enums_enums_proto_rawDesc = "" +
 	"\"THRESHOLD_ROLE_WARN_TOLERANCE_PLUS\x10\f\x12'\n" +
 	"#THRESHOLD_ROLE_WARN_TOLERANCE_MINUS\x10\r\x12!\n" +
 	"\x1dTHRESHOLD_ROLE_PASS_THRESHOLD\x10\x0e\x12(\n" +
-	"$THRESHOLD_ROLE_DISTINCTION_THRESHOLD\x10\x0fB\xe2\x01\n" +
+	"$THRESHOLD_ROLE_DISTINCTION_THRESHOLD\x10\x0f*\xaa\x03\n" +
+	"!RatingDescriptionResolutionStatus\x124\n" +
+	"0RATING_DESCRIPTION_RESOLUTION_STATUS_UNSPECIFIED\x10\x00\x121\n" +
+	"-RATING_DESCRIPTION_RESOLUTION_STATUS_RESOLVED\x10\x01\x120\n" +
+	",RATING_DESCRIPTION_RESOLUTION_STATUS_NO_LINK\x10\x02\x12<\n" +
+	"8RATING_DESCRIPTION_RESOLUTION_STATUS_UNRESOLVED_IDENTITY\x10\x03\x122\n" +
+	".RATING_DESCRIPTION_RESOLUTION_STATUS_AMBIGUOUS\x10\x04\x127\n" +
+	"3RATING_DESCRIPTION_RESOLUTION_STATUS_INVALID_CONFIG\x10\x05\x12?\n" +
+	";RATING_DESCRIPTION_RESOLUTION_STATUS_PLACEHOLDER_UNRESOLVED\x10\x06B\xe2\x01\n" +
 	"\x17com.domain.operation.v1B\n" +
 	"EnumsProtoP\x01ZMgithub.com/erniealice/esqyma/pkg/schema/v1/domain/operation/enums;operationv1\xa2\x02\x03DOX\xaa\x02\x13Domain.Operation.V1\xca\x02\x13Domain\\Operation\\V1\xe2\x02\x1fDomain\\Operation\\V1\\GPBMetadata\xea\x02\x15Domain::Operation::V1b\x06proto3"
 
@@ -1755,34 +1829,35 @@ func file_domain_operation_enums_enums_proto_rawDescGZIP() []byte {
 	return file_domain_operation_enums_enums_proto_rawDescData
 }
 
-var file_domain_operation_enums_enums_proto_enumTypes = make([]protoimpl.EnumInfo, 26)
+var file_domain_operation_enums_enums_proto_enumTypes = make([]protoimpl.EnumInfo, 27)
 var file_domain_operation_enums_enums_proto_goTypes = []any{
-	(OriginType)(0),           // 0: domain.operation.v1.OriginType
-	(DemandType)(0),           // 1: domain.operation.v1.DemandType
-	(FulfillmentType)(0),      // 2: domain.operation.v1.FulfillmentType
-	(CostFlowType)(0),         // 3: domain.operation.v1.CostFlowType
-	(BillingRuleType)(0),      // 4: domain.operation.v1.BillingRuleType
-	(JobStatus)(0),            // 5: domain.operation.v1.JobStatus
-	(ApprovalStatus)(0),       // 6: domain.operation.v1.ApprovalStatus
-	(PostingStatus)(0),        // 7: domain.operation.v1.PostingStatus
-	(BillingStatus)(0),        // 8: domain.operation.v1.BillingStatus
-	(MovementType)(0),         // 9: domain.operation.v1.MovementType
-	(CriteriaType)(0),         // 10: domain.operation.v1.CriteriaType
-	(DeterminationMode)(0),    // 11: domain.operation.v1.DeterminationMode
-	(Determination)(0),        // 12: domain.operation.v1.Determination
-	(DeterminationSource)(0),  // 13: domain.operation.v1.DeterminationSource
-	(AggregationMethod)(0),    // 14: domain.operation.v1.AggregationMethod
-	(ScoringMethod)(0),        // 15: domain.operation.v1.ScoringMethod
-	(ScaleKind)(0),            // 16: domain.operation.v1.ScaleKind
-	(RatingMode)(0),           // 17: domain.operation.v1.RatingMode
-	(ReportingRole)(0),        // 18: domain.operation.v1.ReportingRole
-	(RoundingMode)(0),         // 19: domain.operation.v1.RoundingMode
-	(SummaryType)(0),          // 20: domain.operation.v1.SummaryType
-	(OverallDetermination)(0), // 21: domain.operation.v1.OverallDetermination
-	(VersionStatus)(0),        // 22: domain.operation.v1.VersionStatus
-	(CriteriaScope)(0),        // 23: domain.operation.v1.CriteriaScope
-	(PassRule)(0),             // 24: domain.operation.v1.PassRule
-	(ThresholdRole)(0),        // 25: domain.operation.v1.ThresholdRole
+	(OriginType)(0),                        // 0: domain.operation.v1.OriginType
+	(DemandType)(0),                        // 1: domain.operation.v1.DemandType
+	(FulfillmentType)(0),                   // 2: domain.operation.v1.FulfillmentType
+	(CostFlowType)(0),                      // 3: domain.operation.v1.CostFlowType
+	(BillingRuleType)(0),                   // 4: domain.operation.v1.BillingRuleType
+	(JobStatus)(0),                         // 5: domain.operation.v1.JobStatus
+	(ApprovalStatus)(0),                    // 6: domain.operation.v1.ApprovalStatus
+	(PostingStatus)(0),                     // 7: domain.operation.v1.PostingStatus
+	(BillingStatus)(0),                     // 8: domain.operation.v1.BillingStatus
+	(MovementType)(0),                      // 9: domain.operation.v1.MovementType
+	(CriteriaType)(0),                      // 10: domain.operation.v1.CriteriaType
+	(DeterminationMode)(0),                 // 11: domain.operation.v1.DeterminationMode
+	(Determination)(0),                     // 12: domain.operation.v1.Determination
+	(DeterminationSource)(0),               // 13: domain.operation.v1.DeterminationSource
+	(AggregationMethod)(0),                 // 14: domain.operation.v1.AggregationMethod
+	(ScoringMethod)(0),                     // 15: domain.operation.v1.ScoringMethod
+	(ScaleKind)(0),                         // 16: domain.operation.v1.ScaleKind
+	(RatingMode)(0),                        // 17: domain.operation.v1.RatingMode
+	(ReportingRole)(0),                     // 18: domain.operation.v1.ReportingRole
+	(RoundingMode)(0),                      // 19: domain.operation.v1.RoundingMode
+	(SummaryType)(0),                       // 20: domain.operation.v1.SummaryType
+	(OverallDetermination)(0),              // 21: domain.operation.v1.OverallDetermination
+	(VersionStatus)(0),                     // 22: domain.operation.v1.VersionStatus
+	(CriteriaScope)(0),                     // 23: domain.operation.v1.CriteriaScope
+	(PassRule)(0),                          // 24: domain.operation.v1.PassRule
+	(ThresholdRole)(0),                     // 25: domain.operation.v1.ThresholdRole
+	(RatingDescriptionResolutionStatus)(0), // 26: domain.operation.v1.RatingDescriptionResolutionStatus
 }
 var file_domain_operation_enums_enums_proto_depIdxs = []int32{
 	0, // [0:0] is the sub-list for method output_type
@@ -1802,7 +1877,7 @@ func file_domain_operation_enums_enums_proto_init() {
 		File: protoimpl.DescBuilder{
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_domain_operation_enums_enums_proto_rawDesc), len(file_domain_operation_enums_enums_proto_rawDesc)),
-			NumEnums:      26,
+			NumEnums:      27,
 			NumMessages:   0,
 			NumExtensions: 0,
 			NumServices:   0,

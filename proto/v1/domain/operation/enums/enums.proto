@@ -250,3 +250,18 @@ enum ThresholdRole {
   THRESHOLD_ROLE_PASS_THRESHOLD = 14;
   THRESHOLD_ROLE_DISTINCTION_THRESHOLD = 15;
 }
+
+// RatingDescriptionResolutionStatus is the server-computed outcome of resolving a
+// grade-sheet cell's descriptive rating text (docs/plan/20260925-criterion-descriptors-by-program-year,
+// interfaces.md §1). NO_ENTRY is not a member here: it is the matcher result when a
+// RESOLVED set has no entry for the typed value (level 0) — computed at match time, not
+// a server status.
+enum RatingDescriptionResolutionStatus {
+  RATING_DESCRIPTION_RESOLUTION_STATUS_UNSPECIFIED         = 0;
+  RATING_DESCRIPTION_RESOLUTION_STATUS_RESOLVED            = 1; // set found; entries returned (may lack this value -> NO_ENTRY at match time)
+  RATING_DESCRIPTION_RESOLUTION_STATUS_NO_LINK             = 2; // offering x AY has no active link (Q21)
+  RATING_DESCRIPTION_RESOLUTION_STATUS_UNRESOLVED_IDENTITY = 3; // job lacks product / subscription / price plan, OR 0 product_plans match (Q22)
+  RATING_DESCRIPTION_RESOLUTION_STATUS_AMBIGUOUS           = 4; // >1 product_plan or >1 active link (integrity failure)
+  RATING_DESCRIPTION_RESOLUTION_STATUS_INVALID_CONFIG      = 5; // link -> missing / foreign-workspace / DRAFT set, scale mismatch
+  RATING_DESCRIPTION_RESOLUTION_STATUS_PLACEHOLDER_UNRESOLVED = 6; // resolved text has an allowlisted placeholder tag whose value is empty/unresolvable for this cell (fail closed; descriptions cleared)
+}

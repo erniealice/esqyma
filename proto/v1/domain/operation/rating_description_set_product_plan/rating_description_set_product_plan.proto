@@ -1,0 +1,203 @@
+syntax = "proto3";
+
+package domain.operation.v1;
+
+option go_package = "github.com/erniealice/esqyma/golang/v1/domain/operation/rating_description_set_product_plan";
+
+import "domain/common/error.proto";
+import "domain/common/pagination.proto";
+import "domain/common/filter.proto";
+import "domain/common/sort.proto";
+import "domain/common/search.proto";
+
+import "domain/operation/enums/enums.proto";
+import "options/db.proto";
+
+// ---------------------------------------------------------------------------
+// RatingDescriptionSetProductPlan is the per-academic-year link: which
+// rating_description_set an offering (product_plan) uses for a given AY
+// (price_schedule). A set is reusable content; the link row is the per-AY
+// choice — changing the set for AY 2027-28 never touches AY 2026-27's rows
+// (schema-proposal.md §3, §9.2). The target set must be PUBLISHED when a link
+// is (re)created (Q19); a change deactivates the old row and inserts a new one
+// (history kept — never an in-place update of `rating_description_set_id`).
+// ---------------------------------------------------------------------------
+message RatingDescriptionSetProductPlan {
+  option (options.v1.table).table = true;
+
+  string id = 1;
+  string workspace_id = 2 [(options.v1.db).references = "workspace", (options.v1.db).index = true];
+  string rating_description_set_id = 3 [(options.v1.db).references = "rating_description_set", (options.v1.db).index = true];
+  string product_plan_id = 4 [(options.v1.db).references = "product_plan", (options.v1.db).index = true];
+  string price_schedule_id = 5 [(options.v1.db).references = "price_schedule", (options.v1.db).index = true];
+  // Partial UNIQUE (product_plan_id, price_schedule_id) WHERE active — authored
+  // in the hand-written migration (esqyma.md migration contract); not
+  // representable by the plain `unique_together` annotation (partial index).
+  bool active = 6 [(options.v1.db).default = "true"];
+  optional int64 date_created = 7;
+  optional string date_created_string = 8 [(options.v1.db).ignore = true];
+  optional int64 date_modified = 9;
+  optional string date_modified_string = 10 [(options.v1.db).ignore = true];
+}
+
+service RatingDescriptionSetProductPlanDomainService {
+  rpc CreateRatingDescriptionSetProductPlan(CreateRatingDescriptionSetProductPlanRequest) returns (CreateRatingDescriptionSetProductPlanResponse);
+  rpc ReadRatingDescriptionSetProductPlan(ReadRatingDescriptionSetProductPlanRequest) returns (ReadRatingDescriptionSetProductPlanResponse);
+  rpc UpdateRatingDescriptionSetProductPlan(UpdateRatingDescriptionSetProductPlanRequest) returns (UpdateRatingDescriptionSetProductPlanResponse);
+  rpc DeleteRatingDescriptionSetProductPlan(DeleteRatingDescriptionSetProductPlanRequest) returns (DeleteRatingDescriptionSetProductPlanResponse);
+  rpc ListRatingDescriptionSetProductPlans(ListRatingDescriptionSetProductPlansRequest) returns (ListRatingDescriptionSetProductPlansResponse);
+  // GetRatingDescriptionSetProductPlanListPageData is the AY setup read:
+  // offerings x AY with link status (status filter: all/linked/unlinked/invalid,
+  // interfaces.md §4 route rating_description_set_product_plan.list).
+  rpc GetRatingDescriptionSetProductPlanListPageData(GetRatingDescriptionSetProductPlanListPageDataRequest) returns (GetRatingDescriptionSetProductPlanListPageDataResponse);
+  // ProposeRatingDescriptionSetProductPlansFromPreviousPriceSchedule is a
+  // read-only proposal (Q25-3): target offerings with no active link in the
+  // target price_schedule, sourced from the workspace's price_schedule with
+  // the latest date_time_start before the target's. Rows whose source set is
+  // DEPRECATED are proposed unticked (espyna-golang.md, interfaces.md §2).
+  rpc ProposeRatingDescriptionSetProductPlansFromPreviousPriceSchedule(ProposeRatingDescriptionSetProductPlansFromPreviousPriceScheduleRequest) returns (ProposeRatingDescriptionSetProductPlansFromPreviousPriceScheduleResponse);
+}
+
+message CreateRatingDescriptionSetProductPlanRequest {
+  RatingDescriptionSetProductPlan data = 1;
+}
+
+message CreateRatingDescriptionSetProductPlanResponse {
+  repeated RatingDescriptionSetProductPlan data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message ReadRatingDescriptionSetProductPlanRequest {
+  RatingDescriptionSetProductPlan data = 1;
+}
+
+message ReadRatingDescriptionSetProductPlanResponse {
+  repeated RatingDescriptionSetProductPlan data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message UpdateRatingDescriptionSetProductPlanRequest {
+  RatingDescriptionSetProductPlan data = 1;
+}
+
+message UpdateRatingDescriptionSetProductPlanResponse {
+  repeated RatingDescriptionSetProductPlan data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message DeleteRatingDescriptionSetProductPlanRequest {
+  RatingDescriptionSetProductPlan data = 1;
+}
+
+message DeleteRatingDescriptionSetProductPlanResponse {
+  bool success = 1;
+  optional domain.common.v1.Error error = 2;
+}
+
+message ListRatingDescriptionSetProductPlansRequest {
+  optional domain.common.v1.SearchRequest search = 1;
+  optional domain.common.v1.FilterRequest filters = 2;
+  optional domain.common.v1.SortRequest sort = 3;
+  optional domain.common.v1.PaginationRequest pagination = 4;
+}
+
+message ListRatingDescriptionSetProductPlansResponse {
+  repeated RatingDescriptionSetProductPlan data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message GetRatingDescriptionSetProductPlanListPageDataRequest {
+  string price_schedule_id = 1;    // REQUIRED — the AY setup view scopes to one academic year
+  optional domain.common.v1.PaginationRequest pagination = 2;
+  optional domain.common.v1.FilterRequest filters = 3;
+  optional domain.common.v1.SortRequest sort = 4;
+  optional domain.common.v1.SearchRequest search = 5;
+}
+
+message GetRatingDescriptionSetProductPlanListPageDataResponse {
+  repeated RatingDescriptionSetProductPlan rating_description_set_product_plan_list = 1;
+  optional domain.common.v1.PaginationResponse pagination = 2;
+  repeated domain.common.v1.SearchResult search_results = 3;
+  bool success = 4;
+  optional domain.common.v1.Error error = 5;
+}
+
+// ---------------------------------------------------------------------------
+// Relink / unlink / bulk relink (interfaces.md §2, schema-proposal.md §9.2).
+// PLAIN use-case request/response messages — not repository RPCs. Each is a
+// single transaction: lock the offering pair (row lock on the active link, or
+// an advisory lock on hash(product_plan_id, price_schedule_id) when none),
+// compare `expected_current_link_id`, deactivate the old row, insert the new
+// one, write the audit record inside the same transaction.
+// ---------------------------------------------------------------------------
+
+message RelinkRatingDescriptionSetProductPlanRequest {
+  string product_plan_id = 1;
+  string price_schedule_id = 2;
+  string rating_description_set_id = 3;
+  optional string expected_current_link_id = 4;  // stale-request guard; empty = expect no current link
+  string reason = 5;
+}
+
+message RelinkRatingDescriptionSetProductPlanResponse {
+  repeated RatingDescriptionSetProductPlan data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message UnlinkRatingDescriptionSetProductPlanRequest {
+  string link_id = 1;
+  string reason = 2;
+}
+
+message UnlinkRatingDescriptionSetProductPlanResponse {
+  bool success = 1;
+  optional domain.common.v1.Error error = 2;
+}
+
+// Bulk assign (Q25-2) — one request, one transaction PER ROW, per-row results
+// (never all-or-nothing).
+message BulkRelinkRatingDescriptionSetProductPlansRequest {
+  repeated RelinkRatingDescriptionSetProductPlanRequest rows = 1;
+}
+
+// error_code: stale | set_not_published | forbidden | invalid
+message BulkRelinkRowResult {
+  string product_plan_id = 1;
+  string price_schedule_id = 2;
+  bool success = 3;
+  string link_id = 4;
+  string error_code = 5;
+}
+
+message BulkRelinkRatingDescriptionSetProductPlansResponse {
+  repeated BulkRelinkRowResult results = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+// Copy from previous price schedule (Q25-3) — read-only proposal; the repository
+// RPC is declared on the service above.
+
+message ProposeRatingDescriptionSetProductPlansFromPreviousPriceScheduleRequest {
+  string price_schedule_id = 1;
+}
+
+message ProposedRatingDescriptionSetProductPlan {
+  string product_plan_id = 1;
+  string previous_price_schedule_id = 2;
+  string previous_rating_description_set_id = 3;
+  domain.operation.v1.VersionStatus previous_set_status = 4;  // DEPRECATED rows are proposed unticked
+  optional string current_link_id = 5;                        // set when this offering already has a link in the target schedule (not proposed)
+}
+
+message ProposeRatingDescriptionSetProductPlansFromPreviousPriceScheduleResponse {
+  repeated ProposedRatingDescriptionSetProductPlan rows = 1;
+  string previous_price_schedule_id = 2;
+  bool success = 3;
+  optional domain.common.v1.Error error = 4;
+}
