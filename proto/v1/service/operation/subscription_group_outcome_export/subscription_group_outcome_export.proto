@@ -107,19 +107,19 @@ message JobTemplateColumn {
   string display_name = 2;
 }
 
-message EnrollmentEvidence {
-  bool has_marks = 1;
-  bool has_positive_mark = 2;
+message TaskOutcomeEvidence {
+  bool has_task_outcome = 1;
+  bool has_positive_task_outcome = 2;
 }
 
 // OutcomeCell is lossless. Consumers apply the shared label-first/score-fallback
-// and non-enrolled suppression rules; a stored numeric zero remains present.
+// and placeholder suppression rules; a stored numeric zero remains present.
 message SubscriptionGroupOutcomeCell {
   string job_template_id = 1;
   bool job_present = 2;
   optional string scaled_label = 3;
   optional double scaled_score = 4;
-  EnrollmentEvidence enrollment_evidence = 5;
+  TaskOutcomeEvidence task_outcome_evidence = 5;
   // Raw composite (pre-transmutation summary_score) of the same summary row the
   // scaled pair came from; unset when none was computed.
   optional double summary_score = 6;
@@ -148,10 +148,10 @@ message GetSubscriptionGroupOutcomeExportResponse {
   optional domain.common.v1.Error error = 6;
 }
 
-// GetSubscriptionGroupClientReportCardRequest selects one member of an
+// GetSubscriptionGroupClientOutcomeSummaryRequest selects one member of an
 // authorized subscription group. Workspace/principal scope is always derived
 // from trusted request identity by the application use case and adapter.
-message GetSubscriptionGroupClientReportCardRequest {
+message GetSubscriptionGroupClientOutcomeSummaryRequest {
   string subscription_group_id = 1;
   string client_id = 2;
 
@@ -165,12 +165,12 @@ message GetSubscriptionGroupClientReportCardRequest {
   repeated string plan_attribute_codes = 4;
 }
 
-message ClientReportCardAttribute {
+message ClientOutcomeSummaryAttribute {
   string code = 1;
   string value = 2;
 }
 
-message ClientReportCardClient {
+message ClientOutcomeSummaryClient {
   string client_id = 1;
   string name = 2;
   string first_name = 3;
@@ -180,7 +180,7 @@ message ClientReportCardClient {
 // A minimal mark row. The renderer needs the latest numeric/label/comment
 // outcome and its owning task/criterion; reviewer, recorder, and attachment
 // metadata do not cross this in-process read boundary.
-message ClientReportCardTaskOutcome {
+message ClientOutcomeSummaryTaskOutcome {
   string job_task_id = 1;
   string template_task_criteria_id = 2;
   optional double numeric_value = 3;
@@ -189,23 +189,23 @@ message ClientReportCardTaskOutcome {
   optional int64 recorded_date = 6;
 }
 
-message ClientReportCardStaff {
+message ClientOutcomeSummaryStaff {
   string staff_id = 1;
   string display_name = 2;
 }
 
-message ClientReportCardTeacherAssignment {
+message ClientOutcomeSummaryStaffAssignment {
   string job_id = 1;
   string job_phase_id = 2;
   string staff_id = 3;
   string display_name = 4;
 }
 
-// ClientReportCardRenderGateSheet is one complete group-scoped approval
+// ClientOutcomeSummaryRenderGateSheet is one complete group-scoped approval
 // sheet. Template-backed sheets are keyed by job_template_phase_id. A phase
 // with no template phase is evaluated as its own singleton, keyed by
 // job_phase_id. Exactly one row is returned for each distinct expected key.
-message ClientReportCardRenderGateSheet {
+message ClientOutcomeSummaryRenderGateSheet {
   optional string job_template_phase_id = 1;
   optional string job_phase_id = 2;
   string applied_subscription_group_id = 3;
@@ -215,14 +215,14 @@ message ClientReportCardRenderGateSheet {
   bool has_data = 7;
 }
 
-// ClientReportCardProjection contains only the selected client's enrollment
+// ClientOutcomeSummaryProjection contains only the selected client's subscription
 // graph and the supporting typed records needed by the client table, the
 // repeated-table phase document, and the existing Year Final builder. It is
 // never a roster response.
-message ClientReportCardProjection {
+message ClientOutcomeSummaryProjection {
   SubscriptionGroupOutcomeExportContext context = 1;
-  ClientReportCardClient client = 2;
-  repeated ClientReportCardAttribute attributes = 3;
+  ClientOutcomeSummaryClient client = 2;
+  repeated ClientOutcomeSummaryAttribute attributes = 3;
   repeated domain.operation.v1.Job jobs = 4;
   repeated domain.operation.v1.JobTemplate job_templates = 5;
   repeated domain.operation.v1.JobCategory job_categories = 6;
@@ -230,30 +230,30 @@ message ClientReportCardProjection {
   repeated domain.operation.v1.JobTemplatePhase job_template_phases = 8;
   repeated domain.operation.v1.JobTemplateTask job_template_tasks = 9;
   repeated domain.operation.v1.JobTask job_tasks = 10;
-  repeated ClientReportCardTaskOutcome task_outcomes = 11;
+  repeated ClientOutcomeSummaryTaskOutcome task_outcomes = 11;
   repeated domain.operation.v1.OutcomeCriteria outcome_criteria = 12;
   repeated domain.operation.v1.TemplateTaskCriteria template_task_criteria = 13;
   repeated domain.operation.v1.PhaseOutcomeSummary phase_outcome_summaries = 14;
   repeated domain.operation.v1.JobOutcomeSummary job_outcome_summaries = 15;
   repeated domain.operation.v1.JobOutcomeLine job_outcome_lines = 16;
-  repeated ClientReportCardStaff staff = 17;
-  repeated ClientReportCardTeacherAssignment teacher_assignments = 18;
+  repeated ClientOutcomeSummaryStaff staff = 17;
+  repeated ClientOutcomeSummaryStaffAssignment staff_assignments = 18;
   repeated string render_gate_job_ids = 19;
   repeated string client_subscription_ids = 20;
   repeated domain.operation.v1.TemplateTaskCriteriaRatingDescription rating_descriptions = 21;
   string render_gate_applied_subscription_group_id = 22;
-  repeated ClientReportCardRenderGateSheet render_gate_sheets = 23;
+  repeated ClientOutcomeSummaryRenderGateSheet render_gate_sheets = 23;
   // Configured attributes of the group's plan (plan_attribute), same shape as
   // the client attributes above.
-  repeated ClientReportCardAttribute plan_attributes = 24;
+  repeated ClientOutcomeSummaryAttribute plan_attributes = 24;
   // Product variants referenced by the template phases above
   // (job_template_phase.output_product_variant_id), id + sku only. The
   // document names a variant-pinned job "Arts (Music)" from these.
   repeated domain.product.v1.ProductVariant product_variants = 25;
 }
 
-message GetSubscriptionGroupClientReportCardResponse {
-  ClientReportCardProjection report_card = 1;
+message GetSubscriptionGroupClientOutcomeSummaryResponse {
+  ClientOutcomeSummaryProjection outcome_summary = 1;
   bool success = 2;
   optional domain.common.v1.Error error = 3;
 }

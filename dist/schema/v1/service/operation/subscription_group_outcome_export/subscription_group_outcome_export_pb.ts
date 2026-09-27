@@ -43,7 +43,7 @@ import type { Message } from "@bufbuild/protobuf";
  * Describes the file service/operation/subscription_group_outcome_export/subscription_group_outcome_export.proto.
  */
 export const file_service_operation_subscription_group_outcome_export_subscription_group_outcome_export: GenFile = /*@__PURE__*/
-  fileDesc("CltzZXJ2aWNlL29wZXJhdGlvbi9zdWJzY3JpcHRpb25fZ3JvdXBfb3V0Y29tZV9leHBvcnQvc3Vic2NyaXB0aW9uX2dyb3VwX291dGNvbWVfZXhwb3J0LnByb3RvEhRzZXJ2aWNlLm9wZXJhdGlvbi52MSJqCipMaXN0U3Vic2NyaXB0aW9uR3JvdXBPdXRjb21lTGFuZGluZ1JlcXVlc3QSIgoVcHJpY2Vfc2NoZWR1bGVfYWN0aXZlGAEgASgISACIAQFCGAoWX3ByaWNlX3NjaGVkdWxlX2FjdGl2ZSLWAgoiU3Vic2NyaXB0aW9uR3JvdXBPdXRjb21lTGFuZGluZ1JvdxIZChFwcmljZV9zY2hlZHVsZV9pZBgBIAEoCRIbChNwcmljZV9zY2hlZHVsZV9uYW1lGAIgASgJEh0KFXByaWNlX3NjaGVkdWxlX2FjdGl2ZRgDIAEoCBImChlwcmljZV9zY2hlZHVsZV9zb3J0X29yZGVyGAQgASgFSACIAQESHQoVc3Vic2NyaXB0aW9uX2dyb3VwX2lkGAUgASgJEh8KF3N1YnNjcmlwdGlvbl9ncm91cF9uYW1lGAYgASgJEiEKGXN1YnNjcmlwdGlvbl9ncm91cF9hY3RpdmUYByABKAgSFAoMbWVtYmVyX2NvdW50GAggASgDEhoKEmpvYl90ZW1wbGF0ZV9jb3VudBgJIAEoA0IcChpfcHJpY2Vfc2NoZWR1bGVfc29ydF9vcmRlciK9AQorTGlzdFN1YnNjcmlwdGlvbkdyb3VwT3V0Y29tZUxhbmRpbmdSZXNwb25zZRJGCgRyb3dzGAEgAygLMjguc2VydmljZS5vcGVyYXRpb24udjEuU3Vic2NyaXB0aW9uR3JvdXBPdXRjb21lTGFuZGluZ1JvdxIPCgdzdWNjZXNzGAIgASgIEisKBWVycm9yGAMgASgLMhcuZG9tYWluLmNvbW1vbi52MS5FcnJvckgAiAEBQggKBl9lcnJvciLLAQooR2V0U3Vic2NyaXB0aW9uR3JvdXBPdXRjb21lRXhwb3J0UmVxdWVzdBIdChVzdWJzY3JpcHRpb25fZ3JvdXBfaWQYASABKAkSHAoPam9iX2NhdGVnb3J5X2lkGAIgASgJSAGIAQESIQoXam9iX3RlbXBsYXRlX3BoYXNlX2NvZGUYAyABKAlIABIXCg1maW5hbF9vdXRjb21lGAQgASgISABCEgoQb3V0Y29tZV9zZWxlY3RvckISChBfam9iX2NhdGVnb3J5X2lkIoMCCiVTdWJzY3JpcHRpb25Hcm91cE91dGNvbWVFeHBvcnRDb250ZXh0Eh0KFXN1YnNjcmlwdGlvbl9ncm91cF9pZBgBIAEoCRIfChdzdWJzY3JpcHRpb25fZ3JvdXBfbmFtZRgCIAEoCRIeChFwcmljZV9zY2hlZHVsZV9pZBgDIAEoCUgAiAEBEhsKE3ByaWNlX3NjaGVkdWxlX25hbWUYBCABKAkSFAoHcGxhbl9pZBgFIAEoCUgBiAEBEhEKCXBsYW5fbmFtZRgGIAEoCRISCgpoaXN0b3JpY2FsGAcgASgIQhQKEl9wcmljZV9zY2hlZHVsZV9pZEIKCghfcGxhbl9pZCJfChZKb2JUZW1wbGF0ZVBoYXNlT3B0aW9uEgwKBGNvZGUYASABKAkSDAoEbmFtZRgCIAEoCRIWCg5zZXF1ZW5jZV9vcmRlchgDIAEoBRIRCglhbWJpZ3VvdXMYBCABKAgiyAEKEUpvYkNhdGVnb3J5T3B0aW9uEhcKD2pvYl9jYXRlZ29yeV9pZBgBIAEoCRIMCgRjb2RlGAIgASgJEgwKBG5hbWUYAyABKAkSEgoKc29ydF9vcmRlchgEIAEoBRJJChNqb2JfdGVtcGxhdGVfcGhhc2VzGAUgAygLMiwuc2VydmljZS5vcGVyYXRpb24udjEuSm9iVGVtcGxhdGVQaGFzZU9wdGlvbhIfChdmaW5hbF9vdXRjb21lX2F2YWlsYWJsZRgGIAEoCCJCChFKb2JUZW1wbGF0ZUNvbHVtbhIXCg9qb2JfdGVtcGxhdGVfaWQYASABKAkSFAoMZGlzcGxheV9uYW1lGAIgASgJIkIKEkVucm9sbG1lbnRFdmlkZW5jZRIRCgloYXNfbWFya3MYASABKAgSGQoRaGFzX3Bvc2l0aXZlX21hcmsYAiABKAgimQIKHFN1YnNjcmlwdGlvbkdyb3VwT3V0Y29tZUNlbGwSFwoPam9iX3RlbXBsYXRlX2lkGAEgASgJEhMKC2pvYl9wcmVzZW50GAIgASgIEhkKDHNjYWxlZF9sYWJlbBgDIAEoCUgAiAEBEhkKDHNjYWxlZF9zY29yZRgEIAEoAUgBiAEBEkUKE2Vucm9sbG1lbnRfZXZpZGVuY2UYBSABKAsyKC5zZXJ2aWNlLm9wZXJhdGlvbi52MS5FbnJvbGxtZW50RXZpZGVuY2USGgoNc3VtbWFyeV9zY29yZRgGIAEoAUgCiAEBQg8KDV9zY2FsZWRfbGFiZWxCDwoNX3NjYWxlZF9zY29yZUIQCg5fc3VtbWFyeV9zY29yZSLDAQohU3Vic2NyaXB0aW9uR3JvdXBPdXRjb21lQ2xpZW50Um93EhEKCWNsaWVudF9pZBgBIAEoCRITCgtjbGllbnRfbmFtZRgCIAEoCRIZChFjbGllbnRfZmlyc3RfbmFtZRgDIAEoCRIYChBjbGllbnRfbGFzdF9uYW1lGAQgASgJEkEKBWNlbGxzGAUgAygLMjIuc2VydmljZS5vcGVyYXRpb24udjEuU3Vic2NyaXB0aW9uR3JvdXBPdXRjb21lQ2VsbCKXAwopR2V0U3Vic2NyaXB0aW9uR3JvdXBPdXRjb21lRXhwb3J0UmVzcG9uc2USTAoHY29udGV4dBgBIAEoCzI7LnNlcnZpY2Uub3BlcmF0aW9uLnYxLlN1YnNjcmlwdGlvbkdyb3VwT3V0Y29tZUV4cG9ydENvbnRleHQSPwoOam9iX2NhdGVnb3JpZXMYAiADKAsyJy5zZXJ2aWNlLm9wZXJhdGlvbi52MS5Kb2JDYXRlZ29yeU9wdGlvbhJFChRqb2JfdGVtcGxhdGVfY29sdW1ucxgDIAMoCzInLnNlcnZpY2Uub3BlcmF0aW9uLnYxLkpvYlRlbXBsYXRlQ29sdW1uEkwKC2NsaWVudF9yb3dzGAQgAygLMjcuc2VydmljZS5vcGVyYXRpb24udjEuU3Vic2NyaXB0aW9uR3JvdXBPdXRjb21lQ2xpZW50Um93Eg8KB3N1Y2Nlc3MYBSABKAgSKwoFZXJyb3IYBiABKAsyFy5kb21haW4uY29tbW9uLnYxLkVycm9ySACIAQFCCAoGX2Vycm9yIp0BCitHZXRTdWJzY3JpcHRpb25Hcm91cENsaWVudFJlcG9ydENhcmRSZXF1ZXN0Eh0KFXN1YnNjcmlwdGlvbl9ncm91cF9pZBgBIAEoCRIRCgljbGllbnRfaWQYAiABKAkSHgoWY2xpZW50X2F0dHJpYnV0ZV9jb2RlcxgDIAMoCRIcChRwbGFuX2F0dHJpYnV0ZV9jb2RlcxgEIAMoCSI4ChlDbGllbnRSZXBvcnRDYXJkQXR0cmlidXRlEgwKBGNvZGUYASABKAkSDQoFdmFsdWUYAiABKAkiYAoWQ2xpZW50UmVwb3J0Q2FyZENsaWVudBIRCgljbGllbnRfaWQYASABKAkSDAoEbmFtZRgCIAEoCRISCgpmaXJzdF9uYW1lGAMgASgJEhEKCWxhc3RfbmFtZRgEIAEoCSKVAgobQ2xpZW50UmVwb3J0Q2FyZFRhc2tPdXRjb21lEhMKC2pvYl90YXNrX2lkGAEgASgJEiEKGXRlbXBsYXRlX3Rhc2tfY3JpdGVyaWFfaWQYAiABKAkSGgoNbnVtZXJpY192YWx1ZRgDIAEoAUgAiAEBEhkKDHNjYWxlZF9sYWJlbBgEIAEoCUgBiAEBEh8KEmRldGVybWluYXRpb25fbm90ZRgFIAEoCUgCiAEBEhoKDXJlY29yZGVkX2RhdGUYBiABKANIA4gBAUIQCg5fbnVtZXJpY192YWx1ZUIPCg1fc2NhbGVkX2xhYmVsQhUKE19kZXRlcm1pbmF0aW9uX25vdGVCEAoOX3JlY29yZGVkX2RhdGUiPwoVQ2xpZW50UmVwb3J0Q2FyZFN0YWZmEhAKCHN0YWZmX2lkGAEgASgJEhQKDGRpc3BsYXlfbmFtZRgCIAEoCSJxCiFDbGllbnRSZXBvcnRDYXJkVGVhY2hlckFzc2lnbm1lbnQSDgoGam9iX2lkGAEgASgJEhQKDGpvYl9waGFzZV9pZBgCIAEoCRIQCghzdGFmZl9pZBgDIAEoCRIUCgxkaXNwbGF5X25hbWUYBCABKAkijwIKH0NsaWVudFJlcG9ydENhcmRSZW5kZXJHYXRlU2hlZXQSIgoVam9iX3RlbXBsYXRlX3BoYXNlX2lkGAEgASgJSACIAQESGQoMam9iX3BoYXNlX2lkGAIgASgJSAGIAQESJQodYXBwbGllZF9zdWJzY3JpcHRpb25fZ3JvdXBfaWQYAyABKAkSFAoMdGFyZ2V0X2NvdW50GAQgASgFEhwKFGFueV93b3JrZmxvd19lbnRlcmVkGAUgASgIEhUKDWFsbF9wdWJsaXNoZWQYBiABKAgSEAoIaGFzX2RhdGEYByABKAhCGAoWX2pvYl90ZW1wbGF0ZV9waGFzZV9pZEIPCg1fam9iX3BoYXNlX2lkIs8MChpDbGllbnRSZXBvcnRDYXJkUHJvamVjdGlvbhJMCgdjb250ZXh0GAEgASgLMjsuc2VydmljZS5vcGVyYXRpb24udjEuU3Vic2NyaXB0aW9uR3JvdXBPdXRjb21lRXhwb3J0Q29udGV4dBI8CgZjbGllbnQYAiABKAsyLC5zZXJ2aWNlLm9wZXJhdGlvbi52MS5DbGllbnRSZXBvcnRDYXJkQ2xpZW50EkMKCmF0dHJpYnV0ZXMYAyADKAsyLy5zZXJ2aWNlLm9wZXJhdGlvbi52MS5DbGllbnRSZXBvcnRDYXJkQXR0cmlidXRlEiYKBGpvYnMYBCADKAsyGC5kb21haW4ub3BlcmF0aW9uLnYxLkpvYhI3Cg1qb2JfdGVtcGxhdGVzGAUgAygLMiAuZG9tYWluLm9wZXJhdGlvbi52MS5Kb2JUZW1wbGF0ZRI4Cg5qb2JfY2F0ZWdvcmllcxgGIAMoCzIgLmRvbWFpbi5vcGVyYXRpb24udjEuSm9iQ2F0ZWdvcnkSMQoKam9iX3BoYXNlcxgHIAMoCzIdLmRvbWFpbi5vcGVyYXRpb24udjEuSm9iUGhhc2USQgoTam9iX3RlbXBsYXRlX3BoYXNlcxgIIAMoCzIlLmRvbWFpbi5vcGVyYXRpb24udjEuSm9iVGVtcGxhdGVQaGFzZRJAChJqb2JfdGVtcGxhdGVfdGFza3MYCSADKAsyJC5kb21haW4ub3BlcmF0aW9uLnYxLkpvYlRlbXBsYXRlVGFzaxIvCglqb2JfdGFza3MYCiADKAsyHC5kb21haW4ub3BlcmF0aW9uLnYxLkpvYlRhc2sSSAoNdGFza19vdXRjb21lcxgLIAMoCzIxLnNlcnZpY2Uub3BlcmF0aW9uLnYxLkNsaWVudFJlcG9ydENhcmRUYXNrT3V0Y29tZRI+ChBvdXRjb21lX2NyaXRlcmlhGAwgAygLMiQuZG9tYWluLm9wZXJhdGlvbi52MS5PdXRjb21lQ3JpdGVyaWESSQoWdGVtcGxhdGVfdGFza19jcml0ZXJpYRgNIAMoCzIpLmRvbWFpbi5vcGVyYXRpb24udjEuVGVtcGxhdGVUYXNrQ3JpdGVyaWESSQoXcGhhc2Vfb3V0Y29tZV9zdW1tYXJpZXMYDiADKAsyKC5kb21haW4ub3BlcmF0aW9uLnYxLlBoYXNlT3V0Y29tZVN1bW1hcnkSRQoVam9iX291dGNvbWVfc3VtbWFyaWVzGA8gAygLMiYuZG9tYWluLm9wZXJhdGlvbi52MS5Kb2JPdXRjb21lU3VtbWFyeRI+ChFqb2Jfb3V0Y29tZV9saW5lcxgQIAMoCzIjLmRvbWFpbi5vcGVyYXRpb24udjEuSm9iT3V0Y29tZUxpbmUSOgoFc3RhZmYYESADKAsyKy5zZXJ2aWNlLm9wZXJhdGlvbi52MS5DbGllbnRSZXBvcnRDYXJkU3RhZmYSVAoTdGVhY2hlcl9hc3NpZ25tZW50cxgSIAMoCzI3LnNlcnZpY2Uub3BlcmF0aW9uLnYxLkNsaWVudFJlcG9ydENhcmRUZWFjaGVyQXNzaWdubWVudBIbChNyZW5kZXJfZ2F0ZV9qb2JfaWRzGBMgAygJEh8KF2NsaWVudF9zdWJzY3JpcHRpb25faWRzGBQgAygJElcKE3JhdGluZ19kZXNjcmlwdGlvbnMYFSADKAsyOi5kb21haW4ub3BlcmF0aW9uLnYxLlRlbXBsYXRlVGFza0NyaXRlcmlhUmF0aW5nRGVzY3JpcHRpb24SMQopcmVuZGVyX2dhdGVfYXBwbGllZF9zdWJzY3JpcHRpb25fZ3JvdXBfaWQYFiABKAkSUQoScmVuZGVyX2dhdGVfc2hlZXRzGBcgAygLMjUuc2VydmljZS5vcGVyYXRpb24udjEuQ2xpZW50UmVwb3J0Q2FyZFJlbmRlckdhdGVTaGVldBJICg9wbGFuX2F0dHJpYnV0ZXMYGCADKAsyLy5zZXJ2aWNlLm9wZXJhdGlvbi52MS5DbGllbnRSZXBvcnRDYXJkQXR0cmlidXRlEjsKEHByb2R1Y3RfdmFyaWFudHMYGSADKAsyIS5kb21haW4ucHJvZHVjdC52MS5Qcm9kdWN0VmFyaWFudCK9AQosR2V0U3Vic2NyaXB0aW9uR3JvdXBDbGllbnRSZXBvcnRDYXJkUmVzcG9uc2USRQoLcmVwb3J0X2NhcmQYASABKAsyMC5zZXJ2aWNlLm9wZXJhdGlvbi52MS5DbGllbnRSZXBvcnRDYXJkUHJvamVjdGlvbhIPCgdzdWNjZXNzGAIgASgIEisKBWVycm9yGAMgASgLMhcuZG9tYWluLmNvbW1vbi52MS5FcnJvckgAiAEBQggKBl9lcnJvciKpAgo3UmVzb2x2ZVN1YnNjcmlwdGlvbkdyb3VwT3V0Y29tZURvY3VtZW50Rm9yUmVuZGVyUmVxdWVzdBIdChVzdWJzY3JpcHRpb25fZ3JvdXBfaWQYASABKAkSFwoPam9iX2NhdGVnb3J5X2lkGAIgASgJEjoKDnJlbmRlcl9wcm9maWxlGAMgASgOMiIuZG9tYWluLm9wZXJhdGlvbi52MS5SZW5kZXJQcm9maWxlEh0KEGV4cGVjdGVkX3BsYW5faWQYBCABKAlIAIgBARInChpleHBlY3RlZF9wcmljZV9zY2hlZHVsZV9pZBgFIAEoCUgBiAEBQhMKEV9leHBlY3RlZF9wbGFuX2lkQh0KG19leHBlY3RlZF9wcmljZV9zY2hlZHVsZV9pZCKvAQooUmVzb2x2ZWRTdWJzY3JpcHRpb25Hcm91cE91dGNvbWVEb2N1bWVudBIZChFzdG9yYWdlX2NvbnRhaW5lchgBIAEoCRITCgtzdG9yYWdlX2tleRgCIAEoCRI6Cg5yZW5kZXJfcHJvZmlsZRgDIAEoDjIiLmRvbWFpbi5vcGVyYXRpb24udjEuUmVuZGVyUHJvZmlsZRIXCg9qb2JfY2F0ZWdvcnlfaWQYBCABKAki9QEKOFJlc29sdmVTdWJzY3JpcHRpb25Hcm91cE91dGNvbWVEb2N1bWVudEZvclJlbmRlclJlc3BvbnNlElUKCGRvY3VtZW50GAEgASgLMj4uc2VydmljZS5vcGVyYXRpb24udjEuUmVzb2x2ZWRTdWJzY3JpcHRpb25Hcm91cE91dGNvbWVEb2N1bWVudEgAiAEBEg0KBWZvdW5kGAIgASgIEg8KB3N1Y2Nlc3MYAyABKAgSKwoFZXJyb3IYBCABKAsyFy5kb21haW4uY29tbW9uLnYxLkVycm9ySAGIAQFCCwoJX2RvY3VtZW50QggKBl9lcnJvcjL7AgolU3Vic2NyaXB0aW9uR3JvdXBPdXRjb21lRXhwb3J0U2VydmljZRKkAQohR2V0U3Vic2NyaXB0aW9uR3JvdXBPdXRjb21lRXhwb3J0Ej4uc2VydmljZS5vcGVyYXRpb24udjEuR2V0U3Vic2NyaXB0aW9uR3JvdXBPdXRjb21lRXhwb3J0UmVxdWVzdBo/LnNlcnZpY2Uub3BlcmF0aW9uLnYxLkdldFN1YnNjcmlwdGlvbkdyb3VwT3V0Y29tZUV4cG9ydFJlc3BvbnNlEqoBCiNMaXN0U3Vic2NyaXB0aW9uR3JvdXBPdXRjb21lTGFuZGluZxJALnNlcnZpY2Uub3BlcmF0aW9uLnYxLkxpc3RTdWJzY3JpcHRpb25Hcm91cE91dGNvbWVMYW5kaW5nUmVxdWVzdBpBLnNlcnZpY2Uub3BlcmF0aW9uLnYxLkxpc3RTdWJzY3JpcHRpb25Hcm91cE91dGNvbWVMYW5kaW5nUmVzcG9uc2VCnQIKGGNvbS5zZXJ2aWNlLm9wZXJhdGlvbi52MUIjU3Vic2NyaXB0aW9uR3JvdXBPdXRjb21lRXhwb3J0UHJvdG9QAVpqZ2l0aHViLmNvbS9lcm5pZWFsaWNlL2VzcXltYS9wa2cvc2NoZW1hL3YxL3NlcnZpY2Uvb3BlcmF0aW9uL3N1YnNjcmlwdGlvbl9ncm91cF9vdXRjb21lX2V4cG9ydDtvcGVyYXRpb252MaICA1NPWKoCFFNlcnZpY2UuT3BlcmF0aW9uLlYxygIUU2VydmljZVxPcGVyYXRpb25cVjHiAiBTZXJ2aWNlXE9wZXJhdGlvblxWMVxHUEJNZXRhZGF0YeoCFlNlcnZpY2U6Ok9wZXJhdGlvbjo6VjFiBnByb3RvMw", [file_domain_common_error, file_domain_operation_job_job, file_domain_operation_job_category_job_category, file_domain_operation_job_outcome_line_job_outcome_line, file_domain_operation_job_outcome_summary_job_outcome_summary, file_domain_operation_job_phase_job_phase, file_domain_operation_job_task_job_task, file_domain_operation_job_template_job_template, file_domain_operation_job_template_task_job_template_task, file_domain_operation_job_template_phase_job_template_phase, file_domain_operation_outcome_criteria_outcome_criteria, file_domain_operation_phase_outcome_summary_phase_outcome_summary, file_domain_operation_task_outcome_task_outcome, file_domain_operation_template_task_criteria_template_task_criteria, file_domain_operation_template_task_criteria_rating_description_template_task_criteria_rating_description, file_domain_operation_subscription_group_document_template_subscription_group_document_template, file_domain_product_product_variant_product_variant]);
+  fileDesc("CltzZXJ2aWNlL29wZXJhdGlvbi9zdWJzY3JpcHRpb25fZ3JvdXBfb3V0Y29tZV9leHBvcnQvc3Vic2NyaXB0aW9uX2dyb3VwX291dGNvbWVfZXhwb3J0LnByb3RvEhRzZXJ2aWNlLm9wZXJhdGlvbi52MSJqCipMaXN0U3Vic2NyaXB0aW9uR3JvdXBPdXRjb21lTGFuZGluZ1JlcXVlc3QSIgoVcHJpY2Vfc2NoZWR1bGVfYWN0aXZlGAEgASgISACIAQFCGAoWX3ByaWNlX3NjaGVkdWxlX2FjdGl2ZSLWAgoiU3Vic2NyaXB0aW9uR3JvdXBPdXRjb21lTGFuZGluZ1JvdxIZChFwcmljZV9zY2hlZHVsZV9pZBgBIAEoCRIbChNwcmljZV9zY2hlZHVsZV9uYW1lGAIgASgJEh0KFXByaWNlX3NjaGVkdWxlX2FjdGl2ZRgDIAEoCBImChlwcmljZV9zY2hlZHVsZV9zb3J0X29yZGVyGAQgASgFSACIAQESHQoVc3Vic2NyaXB0aW9uX2dyb3VwX2lkGAUgASgJEh8KF3N1YnNjcmlwdGlvbl9ncm91cF9uYW1lGAYgASgJEiEKGXN1YnNjcmlwdGlvbl9ncm91cF9hY3RpdmUYByABKAgSFAoMbWVtYmVyX2NvdW50GAggASgDEhoKEmpvYl90ZW1wbGF0ZV9jb3VudBgJIAEoA0IcChpfcHJpY2Vfc2NoZWR1bGVfc29ydF9vcmRlciK9AQorTGlzdFN1YnNjcmlwdGlvbkdyb3VwT3V0Y29tZUxhbmRpbmdSZXNwb25zZRJGCgRyb3dzGAEgAygLMjguc2VydmljZS5vcGVyYXRpb24udjEuU3Vic2NyaXB0aW9uR3JvdXBPdXRjb21lTGFuZGluZ1JvdxIPCgdzdWNjZXNzGAIgASgIEisKBWVycm9yGAMgASgLMhcuZG9tYWluLmNvbW1vbi52MS5FcnJvckgAiAEBQggKBl9lcnJvciLLAQooR2V0U3Vic2NyaXB0aW9uR3JvdXBPdXRjb21lRXhwb3J0UmVxdWVzdBIdChVzdWJzY3JpcHRpb25fZ3JvdXBfaWQYASABKAkSHAoPam9iX2NhdGVnb3J5X2lkGAIgASgJSAGIAQESIQoXam9iX3RlbXBsYXRlX3BoYXNlX2NvZGUYAyABKAlIABIXCg1maW5hbF9vdXRjb21lGAQgASgISABCEgoQb3V0Y29tZV9zZWxlY3RvckISChBfam9iX2NhdGVnb3J5X2lkIoMCCiVTdWJzY3JpcHRpb25Hcm91cE91dGNvbWVFeHBvcnRDb250ZXh0Eh0KFXN1YnNjcmlwdGlvbl9ncm91cF9pZBgBIAEoCRIfChdzdWJzY3JpcHRpb25fZ3JvdXBfbmFtZRgCIAEoCRIeChFwcmljZV9zY2hlZHVsZV9pZBgDIAEoCUgAiAEBEhsKE3ByaWNlX3NjaGVkdWxlX25hbWUYBCABKAkSFAoHcGxhbl9pZBgFIAEoCUgBiAEBEhEKCXBsYW5fbmFtZRgGIAEoCRISCgpoaXN0b3JpY2FsGAcgASgIQhQKEl9wcmljZV9zY2hlZHVsZV9pZEIKCghfcGxhbl9pZCJfChZKb2JUZW1wbGF0ZVBoYXNlT3B0aW9uEgwKBGNvZGUYASABKAkSDAoEbmFtZRgCIAEoCRIWCg5zZXF1ZW5jZV9vcmRlchgDIAEoBRIRCglhbWJpZ3VvdXMYBCABKAgiyAEKEUpvYkNhdGVnb3J5T3B0aW9uEhcKD2pvYl9jYXRlZ29yeV9pZBgBIAEoCRIMCgRjb2RlGAIgASgJEgwKBG5hbWUYAyABKAkSEgoKc29ydF9vcmRlchgEIAEoBRJJChNqb2JfdGVtcGxhdGVfcGhhc2VzGAUgAygLMiwuc2VydmljZS5vcGVyYXRpb24udjEuSm9iVGVtcGxhdGVQaGFzZU9wdGlvbhIfChdmaW5hbF9vdXRjb21lX2F2YWlsYWJsZRgGIAEoCCJCChFKb2JUZW1wbGF0ZUNvbHVtbhIXCg9qb2JfdGVtcGxhdGVfaWQYASABKAkSFAoMZGlzcGxheV9uYW1lGAIgASgJIlIKE1Rhc2tPdXRjb21lRXZpZGVuY2USGAoQaGFzX3Rhc2tfb3V0Y29tZRgBIAEoCBIhChloYXNfcG9zaXRpdmVfdGFza19vdXRjb21lGAIgASgIIpwCChxTdWJzY3JpcHRpb25Hcm91cE91dGNvbWVDZWxsEhcKD2pvYl90ZW1wbGF0ZV9pZBgBIAEoCRITCgtqb2JfcHJlc2VudBgCIAEoCBIZCgxzY2FsZWRfbGFiZWwYAyABKAlIAIgBARIZCgxzY2FsZWRfc2NvcmUYBCABKAFIAYgBARJIChV0YXNrX291dGNvbWVfZXZpZGVuY2UYBSABKAsyKS5zZXJ2aWNlLm9wZXJhdGlvbi52MS5UYXNrT3V0Y29tZUV2aWRlbmNlEhoKDXN1bW1hcnlfc2NvcmUYBiABKAFIAogBAUIPCg1fc2NhbGVkX2xhYmVsQg8KDV9zY2FsZWRfc2NvcmVCEAoOX3N1bW1hcnlfc2NvcmUiwwEKIVN1YnNjcmlwdGlvbkdyb3VwT3V0Y29tZUNsaWVudFJvdxIRCgljbGllbnRfaWQYASABKAkSEwoLY2xpZW50X25hbWUYAiABKAkSGQoRY2xpZW50X2ZpcnN0X25hbWUYAyABKAkSGAoQY2xpZW50X2xhc3RfbmFtZRgEIAEoCRJBCgVjZWxscxgFIAMoCzIyLnNlcnZpY2Uub3BlcmF0aW9uLnYxLlN1YnNjcmlwdGlvbkdyb3VwT3V0Y29tZUNlbGwilwMKKUdldFN1YnNjcmlwdGlvbkdyb3VwT3V0Y29tZUV4cG9ydFJlc3BvbnNlEkwKB2NvbnRleHQYASABKAsyOy5zZXJ2aWNlLm9wZXJhdGlvbi52MS5TdWJzY3JpcHRpb25Hcm91cE91dGNvbWVFeHBvcnRDb250ZXh0Ej8KDmpvYl9jYXRlZ29yaWVzGAIgAygLMicuc2VydmljZS5vcGVyYXRpb24udjEuSm9iQ2F0ZWdvcnlPcHRpb24SRQoUam9iX3RlbXBsYXRlX2NvbHVtbnMYAyADKAsyJy5zZXJ2aWNlLm9wZXJhdGlvbi52MS5Kb2JUZW1wbGF0ZUNvbHVtbhJMCgtjbGllbnRfcm93cxgEIAMoCzI3LnNlcnZpY2Uub3BlcmF0aW9uLnYxLlN1YnNjcmlwdGlvbkdyb3VwT3V0Y29tZUNsaWVudFJvdxIPCgdzdWNjZXNzGAUgASgIEisKBWVycm9yGAYgASgLMhcuZG9tYWluLmNvbW1vbi52MS5FcnJvckgAiAEBQggKBl9lcnJvciKhAQovR2V0U3Vic2NyaXB0aW9uR3JvdXBDbGllbnRPdXRjb21lU3VtbWFyeVJlcXVlc3QSHQoVc3Vic2NyaXB0aW9uX2dyb3VwX2lkGAEgASgJEhEKCWNsaWVudF9pZBgCIAEoCRIeChZjbGllbnRfYXR0cmlidXRlX2NvZGVzGAMgAygJEhwKFHBsYW5fYXR0cmlidXRlX2NvZGVzGAQgAygJIjwKHUNsaWVudE91dGNvbWVTdW1tYXJ5QXR0cmlidXRlEgwKBGNvZGUYASABKAkSDQoFdmFsdWUYAiABKAkiZAoaQ2xpZW50T3V0Y29tZVN1bW1hcnlDbGllbnQSEQoJY2xpZW50X2lkGAEgASgJEgwKBG5hbWUYAiABKAkSEgoKZmlyc3RfbmFtZRgDIAEoCRIRCglsYXN0X25hbWUYBCABKAkimQIKH0NsaWVudE91dGNvbWVTdW1tYXJ5VGFza091dGNvbWUSEwoLam9iX3Rhc2tfaWQYASABKAkSIQoZdGVtcGxhdGVfdGFza19jcml0ZXJpYV9pZBgCIAEoCRIaCg1udW1lcmljX3ZhbHVlGAMgASgBSACIAQESGQoMc2NhbGVkX2xhYmVsGAQgASgJSAGIAQESHwoSZGV0ZXJtaW5hdGlvbl9ub3RlGAUgASgJSAKIAQESGgoNcmVjb3JkZWRfZGF0ZRgGIAEoA0gDiAEBQhAKDl9udW1lcmljX3ZhbHVlQg8KDV9zY2FsZWRfbGFiZWxCFQoTX2RldGVybWluYXRpb25fbm90ZUIQCg5fcmVjb3JkZWRfZGF0ZSJDChlDbGllbnRPdXRjb21lU3VtbWFyeVN0YWZmEhAKCHN0YWZmX2lkGAEgASgJEhQKDGRpc3BsYXlfbmFtZRgCIAEoCSJzCiNDbGllbnRPdXRjb21lU3VtbWFyeVN0YWZmQXNzaWdubWVudBIOCgZqb2JfaWQYASABKAkSFAoMam9iX3BoYXNlX2lkGAIgASgJEhAKCHN0YWZmX2lkGAMgASgJEhQKDGRpc3BsYXlfbmFtZRgEIAEoCSKTAgojQ2xpZW50T3V0Y29tZVN1bW1hcnlSZW5kZXJHYXRlU2hlZXQSIgoVam9iX3RlbXBsYXRlX3BoYXNlX2lkGAEgASgJSACIAQESGQoMam9iX3BoYXNlX2lkGAIgASgJSAGIAQESJQodYXBwbGllZF9zdWJzY3JpcHRpb25fZ3JvdXBfaWQYAyABKAkSFAoMdGFyZ2V0X2NvdW50GAQgASgFEhwKFGFueV93b3JrZmxvd19lbnRlcmVkGAUgASgIEhUKDWFsbF9wdWJsaXNoZWQYBiABKAgSEAoIaGFzX2RhdGEYByABKAhCGAoWX2pvYl90ZW1wbGF0ZV9waGFzZV9pZEIPCg1fam9iX3BoYXNlX2lkIusMCh5DbGllbnRPdXRjb21lU3VtbWFyeVByb2plY3Rpb24STAoHY29udGV4dBgBIAEoCzI7LnNlcnZpY2Uub3BlcmF0aW9uLnYxLlN1YnNjcmlwdGlvbkdyb3VwT3V0Y29tZUV4cG9ydENvbnRleHQSQAoGY2xpZW50GAIgASgLMjAuc2VydmljZS5vcGVyYXRpb24udjEuQ2xpZW50T3V0Y29tZVN1bW1hcnlDbGllbnQSRwoKYXR0cmlidXRlcxgDIAMoCzIzLnNlcnZpY2Uub3BlcmF0aW9uLnYxLkNsaWVudE91dGNvbWVTdW1tYXJ5QXR0cmlidXRlEiYKBGpvYnMYBCADKAsyGC5kb21haW4ub3BlcmF0aW9uLnYxLkpvYhI3Cg1qb2JfdGVtcGxhdGVzGAUgAygLMiAuZG9tYWluLm9wZXJhdGlvbi52MS5Kb2JUZW1wbGF0ZRI4Cg5qb2JfY2F0ZWdvcmllcxgGIAMoCzIgLmRvbWFpbi5vcGVyYXRpb24udjEuSm9iQ2F0ZWdvcnkSMQoKam9iX3BoYXNlcxgHIAMoCzIdLmRvbWFpbi5vcGVyYXRpb24udjEuSm9iUGhhc2USQgoTam9iX3RlbXBsYXRlX3BoYXNlcxgIIAMoCzIlLmRvbWFpbi5vcGVyYXRpb24udjEuSm9iVGVtcGxhdGVQaGFzZRJAChJqb2JfdGVtcGxhdGVfdGFza3MYCSADKAsyJC5kb21haW4ub3BlcmF0aW9uLnYxLkpvYlRlbXBsYXRlVGFzaxIvCglqb2JfdGFza3MYCiADKAsyHC5kb21haW4ub3BlcmF0aW9uLnYxLkpvYlRhc2sSTAoNdGFza19vdXRjb21lcxgLIAMoCzI1LnNlcnZpY2Uub3BlcmF0aW9uLnYxLkNsaWVudE91dGNvbWVTdW1tYXJ5VGFza091dGNvbWUSPgoQb3V0Y29tZV9jcml0ZXJpYRgMIAMoCzIkLmRvbWFpbi5vcGVyYXRpb24udjEuT3V0Y29tZUNyaXRlcmlhEkkKFnRlbXBsYXRlX3Rhc2tfY3JpdGVyaWEYDSADKAsyKS5kb21haW4ub3BlcmF0aW9uLnYxLlRlbXBsYXRlVGFza0NyaXRlcmlhEkkKF3BoYXNlX291dGNvbWVfc3VtbWFyaWVzGA4gAygLMiguZG9tYWluLm9wZXJhdGlvbi52MS5QaGFzZU91dGNvbWVTdW1tYXJ5EkUKFWpvYl9vdXRjb21lX3N1bW1hcmllcxgPIAMoCzImLmRvbWFpbi5vcGVyYXRpb24udjEuSm9iT3V0Y29tZVN1bW1hcnkSPgoRam9iX291dGNvbWVfbGluZXMYECADKAsyIy5kb21haW4ub3BlcmF0aW9uLnYxLkpvYk91dGNvbWVMaW5lEj4KBXN0YWZmGBEgAygLMi8uc2VydmljZS5vcGVyYXRpb24udjEuQ2xpZW50T3V0Y29tZVN1bW1hcnlTdGFmZhJUChFzdGFmZl9hc3NpZ25tZW50cxgSIAMoCzI5LnNlcnZpY2Uub3BlcmF0aW9uLnYxLkNsaWVudE91dGNvbWVTdW1tYXJ5U3RhZmZBc3NpZ25tZW50EhsKE3JlbmRlcl9nYXRlX2pvYl9pZHMYEyADKAkSHwoXY2xpZW50X3N1YnNjcmlwdGlvbl9pZHMYFCADKAkSVwoTcmF0aW5nX2Rlc2NyaXB0aW9ucxgVIAMoCzI6LmRvbWFpbi5vcGVyYXRpb24udjEuVGVtcGxhdGVUYXNrQ3JpdGVyaWFSYXRpbmdEZXNjcmlwdGlvbhIxCilyZW5kZXJfZ2F0ZV9hcHBsaWVkX3N1YnNjcmlwdGlvbl9ncm91cF9pZBgWIAEoCRJVChJyZW5kZXJfZ2F0ZV9zaGVldHMYFyADKAsyOS5zZXJ2aWNlLm9wZXJhdGlvbi52MS5DbGllbnRPdXRjb21lU3VtbWFyeVJlbmRlckdhdGVTaGVldBJMCg9wbGFuX2F0dHJpYnV0ZXMYGCADKAsyMy5zZXJ2aWNlLm9wZXJhdGlvbi52MS5DbGllbnRPdXRjb21lU3VtbWFyeUF0dHJpYnV0ZRI7ChBwcm9kdWN0X3ZhcmlhbnRzGBkgAygLMiEuZG9tYWluLnByb2R1Y3QudjEuUHJvZHVjdFZhcmlhbnQiyQEKMEdldFN1YnNjcmlwdGlvbkdyb3VwQ2xpZW50T3V0Y29tZVN1bW1hcnlSZXNwb25zZRJNCg9vdXRjb21lX3N1bW1hcnkYASABKAsyNC5zZXJ2aWNlLm9wZXJhdGlvbi52MS5DbGllbnRPdXRjb21lU3VtbWFyeVByb2plY3Rpb24SDwoHc3VjY2VzcxgCIAEoCBIrCgVlcnJvchgDIAEoCzIXLmRvbWFpbi5jb21tb24udjEuRXJyb3JIAIgBAUIICgZfZXJyb3IiqQIKN1Jlc29sdmVTdWJzY3JpcHRpb25Hcm91cE91dGNvbWVEb2N1bWVudEZvclJlbmRlclJlcXVlc3QSHQoVc3Vic2NyaXB0aW9uX2dyb3VwX2lkGAEgASgJEhcKD2pvYl9jYXRlZ29yeV9pZBgCIAEoCRI6Cg5yZW5kZXJfcHJvZmlsZRgDIAEoDjIiLmRvbWFpbi5vcGVyYXRpb24udjEuUmVuZGVyUHJvZmlsZRIdChBleHBlY3RlZF9wbGFuX2lkGAQgASgJSACIAQESJwoaZXhwZWN0ZWRfcHJpY2Vfc2NoZWR1bGVfaWQYBSABKAlIAYgBAUITChFfZXhwZWN0ZWRfcGxhbl9pZEIdChtfZXhwZWN0ZWRfcHJpY2Vfc2NoZWR1bGVfaWQirwEKKFJlc29sdmVkU3Vic2NyaXB0aW9uR3JvdXBPdXRjb21lRG9jdW1lbnQSGQoRc3RvcmFnZV9jb250YWluZXIYASABKAkSEwoLc3RvcmFnZV9rZXkYAiABKAkSOgoOcmVuZGVyX3Byb2ZpbGUYAyABKA4yIi5kb21haW4ub3BlcmF0aW9uLnYxLlJlbmRlclByb2ZpbGUSFwoPam9iX2NhdGVnb3J5X2lkGAQgASgJIvUBCjhSZXNvbHZlU3Vic2NyaXB0aW9uR3JvdXBPdXRjb21lRG9jdW1lbnRGb3JSZW5kZXJSZXNwb25zZRJVCghkb2N1bWVudBgBIAEoCzI+LnNlcnZpY2Uub3BlcmF0aW9uLnYxLlJlc29sdmVkU3Vic2NyaXB0aW9uR3JvdXBPdXRjb21lRG9jdW1lbnRIAIgBARINCgVmb3VuZBgCIAEoCBIPCgdzdWNjZXNzGAMgASgIEisKBWVycm9yGAQgASgLMhcuZG9tYWluLmNvbW1vbi52MS5FcnJvckgBiAEBQgsKCV9kb2N1bWVudEIICgZfZXJyb3Iy+wIKJVN1YnNjcmlwdGlvbkdyb3VwT3V0Y29tZUV4cG9ydFNlcnZpY2USpAEKIUdldFN1YnNjcmlwdGlvbkdyb3VwT3V0Y29tZUV4cG9ydBI+LnNlcnZpY2Uub3BlcmF0aW9uLnYxLkdldFN1YnNjcmlwdGlvbkdyb3VwT3V0Y29tZUV4cG9ydFJlcXVlc3QaPy5zZXJ2aWNlLm9wZXJhdGlvbi52MS5HZXRTdWJzY3JpcHRpb25Hcm91cE91dGNvbWVFeHBvcnRSZXNwb25zZRKqAQojTGlzdFN1YnNjcmlwdGlvbkdyb3VwT3V0Y29tZUxhbmRpbmcSQC5zZXJ2aWNlLm9wZXJhdGlvbi52MS5MaXN0U3Vic2NyaXB0aW9uR3JvdXBPdXRjb21lTGFuZGluZ1JlcXVlc3QaQS5zZXJ2aWNlLm9wZXJhdGlvbi52MS5MaXN0U3Vic2NyaXB0aW9uR3JvdXBPdXRjb21lTGFuZGluZ1Jlc3BvbnNlQp0CChhjb20uc2VydmljZS5vcGVyYXRpb24udjFCI1N1YnNjcmlwdGlvbkdyb3VwT3V0Y29tZUV4cG9ydFByb3RvUAFaamdpdGh1Yi5jb20vZXJuaWVhbGljZS9lc3F5bWEvcGtnL3NjaGVtYS92MS9zZXJ2aWNlL29wZXJhdGlvbi9zdWJzY3JpcHRpb25fZ3JvdXBfb3V0Y29tZV9leHBvcnQ7b3BlcmF0aW9udjGiAgNTT1iqAhRTZXJ2aWNlLk9wZXJhdGlvbi5WMcoCFFNlcnZpY2VcT3BlcmF0aW9uXFYx4gIgU2VydmljZVxPcGVyYXRpb25cVjFcR1BCTWV0YWRhdGHqAhZTZXJ2aWNlOjpPcGVyYXRpb246OlYxYgZwcm90bzM", [file_domain_common_error, file_domain_operation_job_job, file_domain_operation_job_category_job_category, file_domain_operation_job_outcome_line_job_outcome_line, file_domain_operation_job_outcome_summary_job_outcome_summary, file_domain_operation_job_phase_job_phase, file_domain_operation_job_task_job_task, file_domain_operation_job_template_job_template, file_domain_operation_job_template_task_job_template_task, file_domain_operation_job_template_phase_job_template_phase, file_domain_operation_outcome_criteria_outcome_criteria, file_domain_operation_phase_outcome_summary_phase_outcome_summary, file_domain_operation_task_outcome_task_outcome, file_domain_operation_template_task_criteria_template_task_criteria, file_domain_operation_template_task_criteria_rating_description_template_task_criteria_rating_description, file_domain_operation_subscription_group_document_template_subscription_group_document_template, file_domain_product_product_variant_product_variant]);
 
 /**
  * ListSubscriptionGroupOutcomeLandingRequest carries only the optional schedule
@@ -342,30 +342,30 @@ export const JobTemplateColumnSchema: GenMessage<JobTemplateColumn> = /*@__PURE_
   messageDesc(file_service_operation_subscription_group_outcome_export_subscription_group_outcome_export, 7);
 
 /**
- * @generated from message service.operation.v1.EnrollmentEvidence
+ * @generated from message service.operation.v1.TaskOutcomeEvidence
  */
-export type EnrollmentEvidence = Message<"service.operation.v1.EnrollmentEvidence"> & {
+export type TaskOutcomeEvidence = Message<"service.operation.v1.TaskOutcomeEvidence"> & {
   /**
-   * @generated from field: bool has_marks = 1;
+   * @generated from field: bool has_task_outcome = 1;
    */
-  hasMarks: boolean;
+  hasTaskOutcome: boolean;
 
   /**
-   * @generated from field: bool has_positive_mark = 2;
+   * @generated from field: bool has_positive_task_outcome = 2;
    */
-  hasPositiveMark: boolean;
+  hasPositiveTaskOutcome: boolean;
 };
 
 /**
- * Describes the message service.operation.v1.EnrollmentEvidence.
- * Use `create(EnrollmentEvidenceSchema)` to create a new message.
+ * Describes the message service.operation.v1.TaskOutcomeEvidence.
+ * Use `create(TaskOutcomeEvidenceSchema)` to create a new message.
  */
-export const EnrollmentEvidenceSchema: GenMessage<EnrollmentEvidence> = /*@__PURE__*/
+export const TaskOutcomeEvidenceSchema: GenMessage<TaskOutcomeEvidence> = /*@__PURE__*/
   messageDesc(file_service_operation_subscription_group_outcome_export_subscription_group_outcome_export, 8);
 
 /**
  * OutcomeCell is lossless. Consumers apply the shared label-first/score-fallback
- * and non-enrolled suppression rules; a stored numeric zero remains present.
+ * and placeholder suppression rules; a stored numeric zero remains present.
  *
  * @generated from message service.operation.v1.SubscriptionGroupOutcomeCell
  */
@@ -391,9 +391,9 @@ export type SubscriptionGroupOutcomeCell = Message<"service.operation.v1.Subscri
   scaledScore?: number;
 
   /**
-   * @generated from field: service.operation.v1.EnrollmentEvidence enrollment_evidence = 5;
+   * @generated from field: service.operation.v1.TaskOutcomeEvidence task_outcome_evidence = 5;
    */
-  enrollmentEvidence?: EnrollmentEvidence;
+  taskOutcomeEvidence?: TaskOutcomeEvidence;
 
   /**
    * Raw composite (pre-transmutation summary_score) of the same summary row the
@@ -496,13 +496,13 @@ export const GetSubscriptionGroupOutcomeExportResponseSchema: GenMessage<GetSubs
   messageDesc(file_service_operation_subscription_group_outcome_export_subscription_group_outcome_export, 11);
 
 /**
- * GetSubscriptionGroupClientReportCardRequest selects one member of an
+ * GetSubscriptionGroupClientOutcomeSummaryRequest selects one member of an
  * authorized subscription group. Workspace/principal scope is always derived
  * from trusted request identity by the application use case and adapter.
  *
- * @generated from message service.operation.v1.GetSubscriptionGroupClientReportCardRequest
+ * @generated from message service.operation.v1.GetSubscriptionGroupClientOutcomeSummaryRequest
  */
-export type GetSubscriptionGroupClientReportCardRequest = Message<"service.operation.v1.GetSubscriptionGroupClientReportCardRequest"> & {
+export type GetSubscriptionGroupClientOutcomeSummaryRequest = Message<"service.operation.v1.GetSubscriptionGroupClientOutcomeSummaryRequest"> & {
   /**
    * @generated from field: string subscription_group_id = 1;
    */
@@ -532,16 +532,16 @@ export type GetSubscriptionGroupClientReportCardRequest = Message<"service.opera
 };
 
 /**
- * Describes the message service.operation.v1.GetSubscriptionGroupClientReportCardRequest.
- * Use `create(GetSubscriptionGroupClientReportCardRequestSchema)` to create a new message.
+ * Describes the message service.operation.v1.GetSubscriptionGroupClientOutcomeSummaryRequest.
+ * Use `create(GetSubscriptionGroupClientOutcomeSummaryRequestSchema)` to create a new message.
  */
-export const GetSubscriptionGroupClientReportCardRequestSchema: GenMessage<GetSubscriptionGroupClientReportCardRequest> = /*@__PURE__*/
+export const GetSubscriptionGroupClientOutcomeSummaryRequestSchema: GenMessage<GetSubscriptionGroupClientOutcomeSummaryRequest> = /*@__PURE__*/
   messageDesc(file_service_operation_subscription_group_outcome_export_subscription_group_outcome_export, 12);
 
 /**
- * @generated from message service.operation.v1.ClientReportCardAttribute
+ * @generated from message service.operation.v1.ClientOutcomeSummaryAttribute
  */
-export type ClientReportCardAttribute = Message<"service.operation.v1.ClientReportCardAttribute"> & {
+export type ClientOutcomeSummaryAttribute = Message<"service.operation.v1.ClientOutcomeSummaryAttribute"> & {
   /**
    * @generated from field: string code = 1;
    */
@@ -554,16 +554,16 @@ export type ClientReportCardAttribute = Message<"service.operation.v1.ClientRepo
 };
 
 /**
- * Describes the message service.operation.v1.ClientReportCardAttribute.
- * Use `create(ClientReportCardAttributeSchema)` to create a new message.
+ * Describes the message service.operation.v1.ClientOutcomeSummaryAttribute.
+ * Use `create(ClientOutcomeSummaryAttributeSchema)` to create a new message.
  */
-export const ClientReportCardAttributeSchema: GenMessage<ClientReportCardAttribute> = /*@__PURE__*/
+export const ClientOutcomeSummaryAttributeSchema: GenMessage<ClientOutcomeSummaryAttribute> = /*@__PURE__*/
   messageDesc(file_service_operation_subscription_group_outcome_export_subscription_group_outcome_export, 13);
 
 /**
- * @generated from message service.operation.v1.ClientReportCardClient
+ * @generated from message service.operation.v1.ClientOutcomeSummaryClient
  */
-export type ClientReportCardClient = Message<"service.operation.v1.ClientReportCardClient"> & {
+export type ClientOutcomeSummaryClient = Message<"service.operation.v1.ClientOutcomeSummaryClient"> & {
   /**
    * @generated from field: string client_id = 1;
    */
@@ -586,10 +586,10 @@ export type ClientReportCardClient = Message<"service.operation.v1.ClientReportC
 };
 
 /**
- * Describes the message service.operation.v1.ClientReportCardClient.
- * Use `create(ClientReportCardClientSchema)` to create a new message.
+ * Describes the message service.operation.v1.ClientOutcomeSummaryClient.
+ * Use `create(ClientOutcomeSummaryClientSchema)` to create a new message.
  */
-export const ClientReportCardClientSchema: GenMessage<ClientReportCardClient> = /*@__PURE__*/
+export const ClientOutcomeSummaryClientSchema: GenMessage<ClientOutcomeSummaryClient> = /*@__PURE__*/
   messageDesc(file_service_operation_subscription_group_outcome_export_subscription_group_outcome_export, 14);
 
 /**
@@ -597,9 +597,9 @@ export const ClientReportCardClientSchema: GenMessage<ClientReportCardClient> = 
  * outcome and its owning task/criterion; reviewer, recorder, and attachment
  * metadata do not cross this in-process read boundary.
  *
- * @generated from message service.operation.v1.ClientReportCardTaskOutcome
+ * @generated from message service.operation.v1.ClientOutcomeSummaryTaskOutcome
  */
-export type ClientReportCardTaskOutcome = Message<"service.operation.v1.ClientReportCardTaskOutcome"> & {
+export type ClientOutcomeSummaryTaskOutcome = Message<"service.operation.v1.ClientOutcomeSummaryTaskOutcome"> & {
   /**
    * @generated from field: string job_task_id = 1;
    */
@@ -632,16 +632,16 @@ export type ClientReportCardTaskOutcome = Message<"service.operation.v1.ClientRe
 };
 
 /**
- * Describes the message service.operation.v1.ClientReportCardTaskOutcome.
- * Use `create(ClientReportCardTaskOutcomeSchema)` to create a new message.
+ * Describes the message service.operation.v1.ClientOutcomeSummaryTaskOutcome.
+ * Use `create(ClientOutcomeSummaryTaskOutcomeSchema)` to create a new message.
  */
-export const ClientReportCardTaskOutcomeSchema: GenMessage<ClientReportCardTaskOutcome> = /*@__PURE__*/
+export const ClientOutcomeSummaryTaskOutcomeSchema: GenMessage<ClientOutcomeSummaryTaskOutcome> = /*@__PURE__*/
   messageDesc(file_service_operation_subscription_group_outcome_export_subscription_group_outcome_export, 15);
 
 /**
- * @generated from message service.operation.v1.ClientReportCardStaff
+ * @generated from message service.operation.v1.ClientOutcomeSummaryStaff
  */
-export type ClientReportCardStaff = Message<"service.operation.v1.ClientReportCardStaff"> & {
+export type ClientOutcomeSummaryStaff = Message<"service.operation.v1.ClientOutcomeSummaryStaff"> & {
   /**
    * @generated from field: string staff_id = 1;
    */
@@ -654,16 +654,16 @@ export type ClientReportCardStaff = Message<"service.operation.v1.ClientReportCa
 };
 
 /**
- * Describes the message service.operation.v1.ClientReportCardStaff.
- * Use `create(ClientReportCardStaffSchema)` to create a new message.
+ * Describes the message service.operation.v1.ClientOutcomeSummaryStaff.
+ * Use `create(ClientOutcomeSummaryStaffSchema)` to create a new message.
  */
-export const ClientReportCardStaffSchema: GenMessage<ClientReportCardStaff> = /*@__PURE__*/
+export const ClientOutcomeSummaryStaffSchema: GenMessage<ClientOutcomeSummaryStaff> = /*@__PURE__*/
   messageDesc(file_service_operation_subscription_group_outcome_export_subscription_group_outcome_export, 16);
 
 /**
- * @generated from message service.operation.v1.ClientReportCardTeacherAssignment
+ * @generated from message service.operation.v1.ClientOutcomeSummaryStaffAssignment
  */
-export type ClientReportCardTeacherAssignment = Message<"service.operation.v1.ClientReportCardTeacherAssignment"> & {
+export type ClientOutcomeSummaryStaffAssignment = Message<"service.operation.v1.ClientOutcomeSummaryStaffAssignment"> & {
   /**
    * @generated from field: string job_id = 1;
    */
@@ -686,21 +686,21 @@ export type ClientReportCardTeacherAssignment = Message<"service.operation.v1.Cl
 };
 
 /**
- * Describes the message service.operation.v1.ClientReportCardTeacherAssignment.
- * Use `create(ClientReportCardTeacherAssignmentSchema)` to create a new message.
+ * Describes the message service.operation.v1.ClientOutcomeSummaryStaffAssignment.
+ * Use `create(ClientOutcomeSummaryStaffAssignmentSchema)` to create a new message.
  */
-export const ClientReportCardTeacherAssignmentSchema: GenMessage<ClientReportCardTeacherAssignment> = /*@__PURE__*/
+export const ClientOutcomeSummaryStaffAssignmentSchema: GenMessage<ClientOutcomeSummaryStaffAssignment> = /*@__PURE__*/
   messageDesc(file_service_operation_subscription_group_outcome_export_subscription_group_outcome_export, 17);
 
 /**
- * ClientReportCardRenderGateSheet is one complete group-scoped approval
+ * ClientOutcomeSummaryRenderGateSheet is one complete group-scoped approval
  * sheet. Template-backed sheets are keyed by job_template_phase_id. A phase
  * with no template phase is evaluated as its own singleton, keyed by
  * job_phase_id. Exactly one row is returned for each distinct expected key.
  *
- * @generated from message service.operation.v1.ClientReportCardRenderGateSheet
+ * @generated from message service.operation.v1.ClientOutcomeSummaryRenderGateSheet
  */
-export type ClientReportCardRenderGateSheet = Message<"service.operation.v1.ClientReportCardRenderGateSheet"> & {
+export type ClientOutcomeSummaryRenderGateSheet = Message<"service.operation.v1.ClientOutcomeSummaryRenderGateSheet"> & {
   /**
    * @generated from field: optional string job_template_phase_id = 1;
    */
@@ -738,35 +738,35 @@ export type ClientReportCardRenderGateSheet = Message<"service.operation.v1.Clie
 };
 
 /**
- * Describes the message service.operation.v1.ClientReportCardRenderGateSheet.
- * Use `create(ClientReportCardRenderGateSheetSchema)` to create a new message.
+ * Describes the message service.operation.v1.ClientOutcomeSummaryRenderGateSheet.
+ * Use `create(ClientOutcomeSummaryRenderGateSheetSchema)` to create a new message.
  */
-export const ClientReportCardRenderGateSheetSchema: GenMessage<ClientReportCardRenderGateSheet> = /*@__PURE__*/
+export const ClientOutcomeSummaryRenderGateSheetSchema: GenMessage<ClientOutcomeSummaryRenderGateSheet> = /*@__PURE__*/
   messageDesc(file_service_operation_subscription_group_outcome_export_subscription_group_outcome_export, 18);
 
 /**
- * ClientReportCardProjection contains only the selected client's enrollment
+ * ClientOutcomeSummaryProjection contains only the selected client's subscription
  * graph and the supporting typed records needed by the client table, the
  * repeated-table phase document, and the existing Year Final builder. It is
  * never a roster response.
  *
- * @generated from message service.operation.v1.ClientReportCardProjection
+ * @generated from message service.operation.v1.ClientOutcomeSummaryProjection
  */
-export type ClientReportCardProjection = Message<"service.operation.v1.ClientReportCardProjection"> & {
+export type ClientOutcomeSummaryProjection = Message<"service.operation.v1.ClientOutcomeSummaryProjection"> & {
   /**
    * @generated from field: service.operation.v1.SubscriptionGroupOutcomeExportContext context = 1;
    */
   context?: SubscriptionGroupOutcomeExportContext;
 
   /**
-   * @generated from field: service.operation.v1.ClientReportCardClient client = 2;
+   * @generated from field: service.operation.v1.ClientOutcomeSummaryClient client = 2;
    */
-  client?: ClientReportCardClient;
+  client?: ClientOutcomeSummaryClient;
 
   /**
-   * @generated from field: repeated service.operation.v1.ClientReportCardAttribute attributes = 3;
+   * @generated from field: repeated service.operation.v1.ClientOutcomeSummaryAttribute attributes = 3;
    */
-  attributes: ClientReportCardAttribute[];
+  attributes: ClientOutcomeSummaryAttribute[];
 
   /**
    * @generated from field: repeated domain.operation.v1.Job jobs = 4;
@@ -804,9 +804,9 @@ export type ClientReportCardProjection = Message<"service.operation.v1.ClientRep
   jobTasks: JobTask[];
 
   /**
-   * @generated from field: repeated service.operation.v1.ClientReportCardTaskOutcome task_outcomes = 11;
+   * @generated from field: repeated service.operation.v1.ClientOutcomeSummaryTaskOutcome task_outcomes = 11;
    */
-  taskOutcomes: ClientReportCardTaskOutcome[];
+  taskOutcomes: ClientOutcomeSummaryTaskOutcome[];
 
   /**
    * @generated from field: repeated domain.operation.v1.OutcomeCriteria outcome_criteria = 12;
@@ -834,14 +834,14 @@ export type ClientReportCardProjection = Message<"service.operation.v1.ClientRep
   jobOutcomeLines: JobOutcomeLine[];
 
   /**
-   * @generated from field: repeated service.operation.v1.ClientReportCardStaff staff = 17;
+   * @generated from field: repeated service.operation.v1.ClientOutcomeSummaryStaff staff = 17;
    */
-  staff: ClientReportCardStaff[];
+  staff: ClientOutcomeSummaryStaff[];
 
   /**
-   * @generated from field: repeated service.operation.v1.ClientReportCardTeacherAssignment teacher_assignments = 18;
+   * @generated from field: repeated service.operation.v1.ClientOutcomeSummaryStaffAssignment staff_assignments = 18;
    */
-  teacherAssignments: ClientReportCardTeacherAssignment[];
+  staffAssignments: ClientOutcomeSummaryStaffAssignment[];
 
   /**
    * @generated from field: repeated string render_gate_job_ids = 19;
@@ -864,17 +864,17 @@ export type ClientReportCardProjection = Message<"service.operation.v1.ClientRep
   renderGateAppliedSubscriptionGroupId: string;
 
   /**
-   * @generated from field: repeated service.operation.v1.ClientReportCardRenderGateSheet render_gate_sheets = 23;
+   * @generated from field: repeated service.operation.v1.ClientOutcomeSummaryRenderGateSheet render_gate_sheets = 23;
    */
-  renderGateSheets: ClientReportCardRenderGateSheet[];
+  renderGateSheets: ClientOutcomeSummaryRenderGateSheet[];
 
   /**
    * Configured attributes of the group's plan (plan_attribute), same shape as
    * the client attributes above.
    *
-   * @generated from field: repeated service.operation.v1.ClientReportCardAttribute plan_attributes = 24;
+   * @generated from field: repeated service.operation.v1.ClientOutcomeSummaryAttribute plan_attributes = 24;
    */
-  planAttributes: ClientReportCardAttribute[];
+  planAttributes: ClientOutcomeSummaryAttribute[];
 
   /**
    * Product variants referenced by the template phases above
@@ -887,20 +887,20 @@ export type ClientReportCardProjection = Message<"service.operation.v1.ClientRep
 };
 
 /**
- * Describes the message service.operation.v1.ClientReportCardProjection.
- * Use `create(ClientReportCardProjectionSchema)` to create a new message.
+ * Describes the message service.operation.v1.ClientOutcomeSummaryProjection.
+ * Use `create(ClientOutcomeSummaryProjectionSchema)` to create a new message.
  */
-export const ClientReportCardProjectionSchema: GenMessage<ClientReportCardProjection> = /*@__PURE__*/
+export const ClientOutcomeSummaryProjectionSchema: GenMessage<ClientOutcomeSummaryProjection> = /*@__PURE__*/
   messageDesc(file_service_operation_subscription_group_outcome_export_subscription_group_outcome_export, 19);
 
 /**
- * @generated from message service.operation.v1.GetSubscriptionGroupClientReportCardResponse
+ * @generated from message service.operation.v1.GetSubscriptionGroupClientOutcomeSummaryResponse
  */
-export type GetSubscriptionGroupClientReportCardResponse = Message<"service.operation.v1.GetSubscriptionGroupClientReportCardResponse"> & {
+export type GetSubscriptionGroupClientOutcomeSummaryResponse = Message<"service.operation.v1.GetSubscriptionGroupClientOutcomeSummaryResponse"> & {
   /**
-   * @generated from field: service.operation.v1.ClientReportCardProjection report_card = 1;
+   * @generated from field: service.operation.v1.ClientOutcomeSummaryProjection outcome_summary = 1;
    */
-  reportCard?: ClientReportCardProjection;
+  outcomeSummary?: ClientOutcomeSummaryProjection;
 
   /**
    * @generated from field: bool success = 2;
@@ -914,10 +914,10 @@ export type GetSubscriptionGroupClientReportCardResponse = Message<"service.oper
 };
 
 /**
- * Describes the message service.operation.v1.GetSubscriptionGroupClientReportCardResponse.
- * Use `create(GetSubscriptionGroupClientReportCardResponseSchema)` to create a new message.
+ * Describes the message service.operation.v1.GetSubscriptionGroupClientOutcomeSummaryResponse.
+ * Use `create(GetSubscriptionGroupClientOutcomeSummaryResponseSchema)` to create a new message.
  */
-export const GetSubscriptionGroupClientReportCardResponseSchema: GenMessage<GetSubscriptionGroupClientReportCardResponse> = /*@__PURE__*/
+export const GetSubscriptionGroupClientOutcomeSummaryResponseSchema: GenMessage<GetSubscriptionGroupClientOutcomeSummaryResponse> = /*@__PURE__*/
   messageDesc(file_service_operation_subscription_group_outcome_export_subscription_group_outcome_export, 20);
 
 /**

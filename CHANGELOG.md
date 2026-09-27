@@ -7,6 +7,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+- BREAKING (Go API): renamed the in-process client outcome export projection and task outcome evidence fields to canonical outcome summary and staff terms. Protobuf field numbers remain unchanged.
+
 ## [0.1.0-alpha] - 2026-06-15
 
 First published alpha of the schema package — protobuf definitions, generated Go
