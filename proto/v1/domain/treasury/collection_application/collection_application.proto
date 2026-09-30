@@ -1,0 +1,223 @@
+syntax = "proto3";
+
+package domain.treasury.v1;
+
+option go_package = "github.com/erniealice/esqyma/golang/v1/domain/treasury/collection_application";
+
+import "domain/common/error.proto";
+import "domain/common/pagination.proto";
+import "domain/common/filter.proto";
+import "domain/common/sort.proto";
+import "domain/common/search.proto";
+import "domain/treasury/collection/collection.proto";
+
+import "options/db.proto";
+
+enum ApplicationTargetKind {
+  APPLICATION_TARGET_KIND_UNSPECIFIED = 0;
+  APPLICATION_TARGET_KIND_REVENUE = 1;
+  APPLICATION_TARGET_KIND_RECOVERY_DOCUMENT = 2;
+}
+
+enum ApplicationKind {
+  APPLICATION_KIND_UNSPECIFIED = 0;
+  APPLICATION_KIND_CASH = 1;
+  APPLICATION_KIND_NON_CASH_SETTLEMENT = 2;
+}
+
+enum ApplicationStatus {
+  APPLICATION_STATUS_UNSPECIFIED = 0;
+  APPLICATION_STATUS_APPLIED = 1;
+  APPLICATION_STATUS_REVERSED = 2;
+}
+
+// Applies part of a treasury_collection (receipt) to a revenue or recovery document. Reversal = a new row pointing at the original (original becomes REVERSED).
+message CollectionApplication {
+  option (options.v1.table).table = true;
+
+  string id = 1;
+  string workspace_id = 2 [(options.v1.db).references = "workspace", (options.v1.db).index = true];
+  string treasury_collection_id = 3 [(options.v1.db).references = "treasury_collection", (options.v1.db).index = true];
+  string client_id = 4 [(options.v1.db).references = "client", (options.v1.db).index = true];
+  domain.treasury.v1.ApplicationTargetKind target_kind = 5 [(options.v1.db).check = "(target_kind IN ('APPLICATION_TARGET_KIND_REVENUE', 'APPLICATION_TARGET_KIND_RECOVERY_DOCUMENT')) AND ((target_kind = 'APPLICATION_TARGET_KIND_REVENUE' AND revenue_id IS NOT NULL AND recovery_document_id IS NULL) OR (target_kind = 'APPLICATION_TARGET_KIND_RECOVERY_DOCUMENT' AND recovery_document_id IS NOT NULL AND revenue_id IS NULL))"];
+  optional string revenue_id = 6 [(options.v1.db).references = "revenue", (options.v1.db).index = true];
+  optional string recovery_document_id = 7 [(options.v1.db).references = "recovery_document", (options.v1.db).index = true];
+  domain.treasury.v1.ApplicationKind application_kind = 8 [(options.v1.db).check = "(application_kind IN ('APPLICATION_KIND_CASH', 'APPLICATION_KIND_NON_CASH_SETTLEMENT')) AND (application_kind <> 'APPLICATION_KIND_NON_CASH_SETTLEMENT' OR withholding_certificate_id IS NOT NULL)"];
+  optional string withholding_certificate_id = 9 [(options.v1.db).references = "withholding_certificate", (options.v1.db).index = true];
+  optional string charge_component_id = 10 [(options.v1.db).references = "charge_component"];
+  int64 amount = 11 [(options.v1.db).check = "amount > 0"];
+  string currency = 12;
+  optional int64 applied_at = 13;
+  optional string applied_by = 14;
+  optional int32 order_rank = 15;
+  optional string reverses_application_id = 16 [(options.v1.db).references = "collection_application", (options.v1.db).index = true];
+  domain.treasury.v1.ApplicationStatus status = 17 [(options.v1.db).check = "status IN ('APPLICATION_STATUS_APPLIED', 'APPLICATION_STATUS_REVERSED')"];
+  bool active = 18 [(options.v1.db).default = "true"];
+  optional int64 date_created = 19;
+  optional string date_created_string = 20 [(options.v1.db).ignore = true];
+  optional int64 date_modified = 21;
+  optional string date_modified_string = 22 [(options.v1.db).ignore = true];
+}
+
+service CollectionApplicationDomainService {
+  rpc CreateCollectionApplication(CreateCollectionApplicationRequest) returns (CreateCollectionApplicationResponse);
+  rpc ReadCollectionApplication(ReadCollectionApplicationRequest) returns (ReadCollectionApplicationResponse);
+  rpc UpdateCollectionApplication(UpdateCollectionApplicationRequest) returns (UpdateCollectionApplicationResponse);
+  rpc DeleteCollectionApplication(DeleteCollectionApplicationRequest) returns (DeleteCollectionApplicationResponse);
+  rpc ListCollectionApplications(ListCollectionApplicationsRequest) returns (ListCollectionApplicationsResponse);
+  rpc GetCollectionApplicationListPageData(GetCollectionApplicationListPageDataRequest) returns (GetCollectionApplicationListPageDataResponse);
+  rpc GetCollectionApplicationItemPageData(GetCollectionApplicationItemPageDataRequest) returns (GetCollectionApplicationItemPageDataResponse);
+  rpc ReceiveAndApplyCollection(ReceiveAndApplyCollectionRequest) returns (ReceiveAndApplyCollectionResponse);
+  rpc PreviewCollectionApplication(PreviewCollectionApplicationRequest) returns (PreviewCollectionApplicationResponse);
+  rpc ReverseCollectionApplication(ReverseCollectionApplicationRequest) returns (ReverseCollectionApplicationResponse);
+}
+
+message CreateCollectionApplicationRequest {
+  CollectionApplication data = 1;
+}
+
+message CreateCollectionApplicationResponse {
+  repeated CollectionApplication data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message ReadCollectionApplicationRequest {
+  CollectionApplication data = 1;
+}
+
+message ReadCollectionApplicationResponse {
+  repeated CollectionApplication data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message UpdateCollectionApplicationRequest {
+  CollectionApplication data = 1;
+}
+
+message UpdateCollectionApplicationResponse {
+  repeated CollectionApplication data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message DeleteCollectionApplicationRequest {
+  CollectionApplication data = 1;
+}
+
+message DeleteCollectionApplicationResponse {
+  bool success = 1;
+  optional domain.common.v1.Error error = 2;
+}
+
+message ListCollectionApplicationsRequest {
+  optional domain.common.v1.SearchRequest search = 1;
+  optional domain.common.v1.FilterRequest filters = 2;
+  optional domain.common.v1.SortRequest sort = 3;
+  optional domain.common.v1.PaginationRequest pagination = 4;
+}
+
+message ListCollectionApplicationsResponse {
+  repeated CollectionApplication data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message GetCollectionApplicationListPageDataRequest {
+  optional domain.common.v1.PaginationRequest pagination = 1;
+  optional domain.common.v1.FilterRequest filters = 2;
+  optional domain.common.v1.SortRequest sort = 3;
+  optional domain.common.v1.SearchRequest search = 4;
+}
+
+message GetCollectionApplicationListPageDataResponse {
+  repeated CollectionApplication collection_application_list = 1;
+  optional domain.common.v1.PaginationResponse pagination = 2;
+  repeated domain.common.v1.SearchResult search_results = 3;
+  bool success = 4;
+  optional domain.common.v1.Error error = 5;
+}
+
+message GetCollectionApplicationItemPageDataRequest {
+  string collection_application_id = 1;
+}
+
+message GetCollectionApplicationItemPageDataResponse {
+  optional CollectionApplication collection_application = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+// One planned application of a receipt to an open item (revenue or recovery document).
+message CollectionApplicationPlanAllocation {
+  domain.treasury.v1.ApplicationTargetKind target_kind = 1;
+  string target_id = 2;
+  // Invoice reference / document number.
+  string number = 3;
+  string due_date = 4;
+  // Open balance before this application (centavos).
+  int64 balance = 5;
+  // Amount applied now (> 0, centavos).
+  int64 apply = 6;
+  // Payment-order position, 1-based (due date asc, rent before recovery, then number).
+  int32 rank = 7;
+}
+
+message CollectionApplicationPlan {
+  string currency = 1;
+  repeated CollectionApplicationPlanAllocation allocations = 2;
+  int64 applied = 3;
+  // Leftover kept on the receipt.
+  int64 unapplied = 4;
+}
+
+// ReceiveAndApplyCollection records a receipt (treasury_collection, collection_type = receipt) and
+// applies it across the client's open items in payment order, all in one transaction. Money = integer centavos.
+message ReceiveAndApplyCollectionRequest {
+  string client_id = 1;
+  int64 amount = 2;
+  string currency = 3;
+  // ISO date; unset = today (UTC).
+  optional string payment_date = 4;
+  optional string collection_method_id = 5;
+  optional string reference_number = 6;
+  optional string name = 7;
+}
+
+message ReceiveAndApplyCollectionResponse {
+  optional domain.treasury.v1.Collection collection = 1;
+  repeated CollectionApplication applications = 2;
+  optional CollectionApplicationPlan plan = 3;
+  int64 unapplied = 4;
+  bool success = 5;
+  optional domain.common.v1.Error error = 6;
+}
+
+// PreviewCollectionApplication computes the plan without writing anything.
+message PreviewCollectionApplicationRequest {
+  string client_id = 1;
+  int64 amount = 2;
+  string currency = 3;
+  optional string payment_date = 4;
+  optional string collection_method_id = 5;
+  optional string reference_number = 6;
+  optional string name = 7;
+}
+
+message PreviewCollectionApplicationResponse {
+  optional CollectionApplicationPlan plan = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+// ReverseCollectionApplication writes a REVERSED reversal row pointing at the original and flips the original to REVERSED. data = the reversal row.
+message ReverseCollectionApplicationRequest {
+  string collection_application_id = 1;
+}
+
+message ReverseCollectionApplicationResponse {
+  optional CollectionApplication data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}

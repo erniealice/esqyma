@@ -1,0 +1,191 @@
+syntax = "proto3";
+
+package domain.expenditure.v1;
+
+option go_package = "github.com/erniealice/esqyma/golang/v1/domain/expenditure/cost_source_component";
+
+import "domain/common/error.proto";
+import "domain/common/pagination.proto";
+import "domain/common/filter.proto";
+import "domain/common/sort.proto";
+import "domain/common/search.proto";
+
+import "options/db.proto";
+
+enum CostSourceComponentKind {
+  COST_SOURCE_COMPONENT_KIND_UNSPECIFIED = 0;
+  COST_SOURCE_COMPONENT_KIND_ENERGY = 1;
+  COST_SOURCE_COMPONENT_KIND_WATER = 2;
+  COST_SOURCE_COMPONENT_KIND_SERVICE_FEE = 3;
+  COST_SOURCE_COMPONENT_KIND_OTHER = 4;
+}
+
+enum CostTaxFact {
+  COST_TAX_FACT_UNSPECIFIED = 0;
+  COST_TAX_FACT_VATABLE = 1;
+  COST_TAX_FACT_EXEMPT = 2;
+  COST_TAX_FACT_ZERO_RATED = 3;
+  COST_TAX_FACT_NOT_APPLICABLE = 4;
+}
+
+enum SourceClaimKind {
+  SOURCE_CLAIM_KIND_UNSPECIFIED = 0;
+  SOURCE_CLAIM_KIND_ALLOCATION = 1;
+  SOURCE_CLAIM_KIND_RECOGNITION = 2;
+}
+
+// One measured slice of a supplier cost (energy, water, fee) that can be allocated to tenants or recognised as own expense. claim_kind/claim_ref_id/claimed_at is the exclusive-use claim (allocation XOR recognition), written under a FOR UPDATE lock.
+message CostSourceComponent {
+  option (options.v1.table).table = true;
+
+  string id = 1;
+  string workspace_id = 2 [(options.v1.db).references = "workspace", (options.v1.db).index = true];
+  string expenditure_id = 3 [(options.v1.db).references = "expenditure", (options.v1.db).index = true];
+  optional string expenditure_line_item_id = 4 [(options.v1.db).references = "expenditure_line_item", (options.v1.db).index = true];
+  domain.expenditure.v1.CostSourceComponentKind component_kind = 5 [(options.v1.db).check = "component_kind IN ('COST_SOURCE_COMPONENT_KIND_ENERGY', 'COST_SOURCE_COMPONENT_KIND_WATER', 'COST_SOURCE_COMPONENT_KIND_SERVICE_FEE', 'COST_SOURCE_COMPONENT_KIND_OTHER')"];
+  optional string description = 6;
+  optional string basis_unit = 7;
+  optional int64 basis_quantity_scaled = 8;
+  optional int32 basis_scale = 9;
+  int64 amount = 10 [(options.v1.db).check = "amount > 0"];
+  string currency = 11;
+  optional string tax_treatment_id = 12 [(options.v1.db).references = "tax_treatment", (options.v1.db).index = true];
+  optional domain.expenditure.v1.CostTaxFact tax_fact = 13 [(options.v1.db).check = "tax_fact IS NULL OR tax_fact IN ('COST_TAX_FACT_VATABLE', 'COST_TAX_FACT_EXEMPT', 'COST_TAX_FACT_ZERO_RATED', 'COST_TAX_FACT_NOT_APPLICABLE')"];
+  optional string service_from = 14 [(options.v1.db).check = "service_from IS NULL OR service_to IS NULL OR service_from < service_to"];
+  optional string service_to = 15;
+  int32 source_version = 16 [(options.v1.db).default = "1", (options.v1.db).check = "source_version > 0"];
+  optional domain.expenditure.v1.SourceClaimKind claim_kind = 17 [(options.v1.db).check = "claim_kind IS NULL OR claim_kind IN ('SOURCE_CLAIM_KIND_ALLOCATION', 'SOURCE_CLAIM_KIND_RECOGNITION')"];
+  optional string claim_ref_id = 18;
+  optional int64 claimed_at = 19;
+  bool active = 20 [(options.v1.db).default = "true"];
+  optional int64 date_created = 21;
+  optional string date_created_string = 22 [(options.v1.db).ignore = true];
+  optional int64 date_modified = 23;
+  optional string date_modified_string = 24 [(options.v1.db).ignore = true];
+}
+
+service CostSourceComponentDomainService {
+  rpc CreateCostSourceComponent(CreateCostSourceComponentRequest) returns (CreateCostSourceComponentResponse);
+  rpc ReadCostSourceComponent(ReadCostSourceComponentRequest) returns (ReadCostSourceComponentResponse);
+  rpc UpdateCostSourceComponent(UpdateCostSourceComponentRequest) returns (UpdateCostSourceComponentResponse);
+  rpc DeleteCostSourceComponent(DeleteCostSourceComponentRequest) returns (DeleteCostSourceComponentResponse);
+  rpc ListCostSourceComponents(ListCostSourceComponentsRequest) returns (ListCostSourceComponentsResponse);
+  rpc GetCostSourceComponentListPageData(GetCostSourceComponentListPageDataRequest) returns (GetCostSourceComponentListPageDataResponse);
+  rpc GetCostSourceComponentItemPageData(GetCostSourceComponentItemPageDataRequest) returns (GetCostSourceComponentItemPageDataResponse);
+  rpc ReconcileCostSource(ReconcileCostSourceRequest) returns (ReconcileCostSourceResponse);
+}
+
+message CreateCostSourceComponentRequest {
+  CostSourceComponent data = 1;
+}
+
+message CreateCostSourceComponentResponse {
+  repeated CostSourceComponent data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message ReadCostSourceComponentRequest {
+  CostSourceComponent data = 1;
+}
+
+message ReadCostSourceComponentResponse {
+  repeated CostSourceComponent data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message UpdateCostSourceComponentRequest {
+  CostSourceComponent data = 1;
+}
+
+message UpdateCostSourceComponentResponse {
+  repeated CostSourceComponent data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message DeleteCostSourceComponentRequest {
+  CostSourceComponent data = 1;
+}
+
+message DeleteCostSourceComponentResponse {
+  bool success = 1;
+  optional domain.common.v1.Error error = 2;
+}
+
+message ListCostSourceComponentsRequest {
+  optional domain.common.v1.SearchRequest search = 1;
+  optional domain.common.v1.FilterRequest filters = 2;
+  optional domain.common.v1.SortRequest sort = 3;
+  optional domain.common.v1.PaginationRequest pagination = 4;
+}
+
+message ListCostSourceComponentsResponse {
+  repeated CostSourceComponent data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message GetCostSourceComponentListPageDataRequest {
+  optional domain.common.v1.PaginationRequest pagination = 1;
+  optional domain.common.v1.FilterRequest filters = 2;
+  optional domain.common.v1.SortRequest sort = 3;
+  optional domain.common.v1.SearchRequest search = 4;
+}
+
+message GetCostSourceComponentListPageDataResponse {
+  repeated CostSourceComponent cost_source_component_list = 1;
+  optional domain.common.v1.PaginationResponse pagination = 2;
+  repeated domain.common.v1.SearchResult search_results = 3;
+  bool success = 4;
+  optional domain.common.v1.Error error = 5;
+}
+
+message GetCostSourceComponentItemPageDataRequest {
+  string cost_source_component_id = 1;
+}
+
+message GetCostSourceComponentItemPageDataResponse {
+  optional CostSourceComponent cost_source_component = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+// Reconciliation of one cost line: allocation shares vs the recoverable total, and billable charges vs the recoverable total.
+message CostSourceComponentReconciliation {
+  string component_id = 1;
+  string currency = 2;
+  // The cost line amount.
+  int64 amount = 3;
+  bool has_published_batch = 4;
+  optional string batch_id = 5;
+  // Σ shares by AllocationShareKind name.
+  map<string, int64> shares_by_kind = 6;
+  int64 shares_total = 7;
+  int64 recoverable_total = 8;
+  int64 share_variance = 9;
+  int64 charges_open = 10;
+  int64 charges_issued = 11;
+  int64 charges_cancelled = 12;
+  // recoverable_total - (open + issued + cancelled originals).
+  int64 charge_variance = 13;
+  // Σ CORRECTION deltas (<= 0).
+  int64 corrections = 14;
+  // ISSUED originals + corrections (net of credit notes).
+  int64 issued_net = 15;
+  // A published batch and both variances are zero.
+  bool reconciled = 16;
+}
+
+// ReconcileCostSource reconciles one component, or every component of an expenditure. Exactly one of component_id / expenditure_id.
+message ReconcileCostSourceRequest {
+  optional string component_id = 1;
+  optional string expenditure_id = 2;
+}
+
+message ReconcileCostSourceResponse {
+  repeated CostSourceComponentReconciliation data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}

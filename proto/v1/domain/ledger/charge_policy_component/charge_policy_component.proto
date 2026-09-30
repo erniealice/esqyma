@@ -1,0 +1,125 @@
+syntax = "proto3";
+
+package domain.ledger.v1;
+
+option go_package = "github.com/erniealice/esqyma/golang/v1/domain/ledger/charge_policy_component";
+
+import "domain/common/error.proto";
+import "domain/common/pagination.proto";
+import "domain/common/filter.proto";
+import "domain/common/sort.proto";
+import "domain/common/search.proto";
+
+import "domain/ledger/enums/enums.proto";
+import "options/db.proto";
+
+// ChargePolicyComponent is one charge component of a policy version (own revenue, recovery
+// cost or fee), the document kind it is billed on, and its book presentation.
+// UNIQUE (charge_policy_version_id, component_role) is authored in the migration.
+message ChargePolicyComponent {
+  option (options.v1.table).table = true;
+  option (options.v1.table).unique_together = "charge_policy_version_id,component_role";
+
+  string id = 1;
+  string workspace_id = 2 [(options.v1.db).references = "workspace", (options.v1.db).index = true];
+  string charge_policy_version_id = 3 [(options.v1.db).references = "charge_policy_version", (options.v1.db).index = true];
+  domain.ledger.v1.ChargeComponentRole component_role = 4 [(options.v1.db).check = "component_role IN ('CHARGE_COMPONENT_ROLE_OWN_REVENUE', 'CHARGE_COMPONENT_ROLE_RECOVERY_COST', 'CHARGE_COMPONENT_ROLE_FEE')"];
+  domain.ledger.v1.ChargeDocumentKind document_kind = 5 [(options.v1.db).check = "document_kind IN ('CHARGE_DOCUMENT_KIND_INVOICE', 'CHARGE_DOCUMENT_KIND_RECOVERY_DOCUMENT')"];
+  domain.ledger.v1.BookPresentation book_presentation = 6 [(options.v1.db).check = "book_presentation IN ('BOOK_PRESENTATION_REVENUE', 'BOOK_PRESENTATION_EXCLUDED_REIMBURSEMENT')"];
+  int32 sequence_order = 7 [(options.v1.db).default = "0"];
+  bool active = 8 [(options.v1.db).default = "true"];
+  optional int64 date_created = 9;
+  optional string date_created_string = 10 [(options.v1.db).ignore = true];
+  optional int64 date_modified = 11;
+  optional string date_modified_string = 12 [(options.v1.db).ignore = true];
+}
+
+service ChargePolicyComponentDomainService {
+  rpc CreateChargePolicyComponent(CreateChargePolicyComponentRequest) returns (CreateChargePolicyComponentResponse);
+  rpc ReadChargePolicyComponent(ReadChargePolicyComponentRequest) returns (ReadChargePolicyComponentResponse);
+  rpc UpdateChargePolicyComponent(UpdateChargePolicyComponentRequest) returns (UpdateChargePolicyComponentResponse);
+  rpc DeleteChargePolicyComponent(DeleteChargePolicyComponentRequest) returns (DeleteChargePolicyComponentResponse);
+  rpc ListChargePolicyComponents(ListChargePolicyComponentsRequest) returns (ListChargePolicyComponentsResponse);
+  rpc GetChargePolicyComponentListPageData(GetChargePolicyComponentListPageDataRequest) returns (GetChargePolicyComponentListPageDataResponse);
+  rpc GetChargePolicyComponentItemPageData(GetChargePolicyComponentItemPageDataRequest) returns (GetChargePolicyComponentItemPageDataResponse);
+}
+
+message CreateChargePolicyComponentRequest {
+  ChargePolicyComponent data = 1;
+}
+
+message CreateChargePolicyComponentResponse {
+  repeated ChargePolicyComponent data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message ReadChargePolicyComponentRequest {
+  ChargePolicyComponent data = 1;
+}
+
+message ReadChargePolicyComponentResponse {
+  repeated ChargePolicyComponent data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message UpdateChargePolicyComponentRequest {
+  ChargePolicyComponent data = 1;
+}
+
+message UpdateChargePolicyComponentResponse {
+  repeated ChargePolicyComponent data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message DeleteChargePolicyComponentRequest {
+  ChargePolicyComponent data = 1;
+}
+
+message DeleteChargePolicyComponentResponse {
+  bool success = 1;
+  optional domain.common.v1.Error error = 2;
+}
+
+message ListChargePolicyComponentsRequest {
+  optional domain.common.v1.SearchRequest search = 1;
+  optional domain.common.v1.FilterRequest filters = 2;
+  optional domain.common.v1.SortRequest sort = 3;
+  optional domain.common.v1.PaginationRequest pagination = 4;
+  // Scope: only the rows of this version.
+  optional string charge_policy_version_id = 5;
+}
+
+message ListChargePolicyComponentsResponse {
+  repeated ChargePolicyComponent data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+  optional domain.common.v1.PaginationResponse pagination = 4;
+}
+
+message GetChargePolicyComponentListPageDataRequest {
+  optional domain.common.v1.PaginationRequest pagination = 1;
+  optional domain.common.v1.FilterRequest filters = 2;
+  optional domain.common.v1.SortRequest sort = 3;
+  optional domain.common.v1.SearchRequest search = 4;
+}
+
+message GetChargePolicyComponentListPageDataResponse {
+  repeated ChargePolicyComponent charge_policy_component_list = 1;
+  optional domain.common.v1.PaginationResponse pagination = 2;
+  repeated domain.common.v1.SearchResult search_results = 3;
+  bool success = 4;
+  optional domain.common.v1.Error error = 5;
+}
+
+message GetChargePolicyComponentItemPageDataRequest {
+  string charge_policy_component_id = 1;
+}
+
+message GetChargePolicyComponentItemPageDataResponse {
+  optional ChargePolicyComponent charge_policy_component = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}

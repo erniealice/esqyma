@@ -1,0 +1,133 @@
+syntax = "proto3";
+
+package domain.subscription.v1;
+
+option go_package = "github.com/erniealice/esqyma/golang/v1/domain/subscription/agreement_line_term";
+
+import "domain/common/error.proto";
+import "domain/common/pagination.proto";
+import "domain/common/filter.proto";
+import "domain/common/sort.proto";
+import "domain/common/search.proto";
+
+import "options/db.proto";
+
+enum AgreementLineTermOrigin {
+  AGREEMENT_LINE_TERM_ORIGIN_UNSPECIFIED = 0;
+  AGREEMENT_LINE_TERM_ORIGIN_COPIED = 1;
+  AGREEMENT_LINE_TERM_ORIGIN_NEGOTIATED = 2;
+}
+
+// The charge policy version pinned on a subscription line for a half-open [effective_from, effective_to) interval. Overlap is refused in the use case under the subscription row lock.
+message AgreementLineTerm {
+  option (options.v1.table).table = true;
+  option (options.v1.table).unique_together = "subscription_id,product_price_plan_id,effective_from";
+
+  string id = 1;
+  string workspace_id = 2 [(options.v1.db).references = "workspace", (options.v1.db).index = true];
+  string subscription_id = 3 [(options.v1.db).references = "subscription", (options.v1.db).index = true];
+  string product_price_plan_id = 4 [(options.v1.db).references = "product_price_plan", (options.v1.db).index = true];
+  string client_id = 5 [(options.v1.db).references = "client", (options.v1.db).index = true];
+  string charge_policy_version_id = 6 [(options.v1.db).references = "charge_policy_version", (options.v1.db).index = true];
+  optional int32 markup_bps = 7 [(options.v1.db).check = "markup_bps IS NULL OR markup_bps >= 0"];
+  string effective_from = 8;
+  optional string effective_to = 9;
+  domain.subscription.v1.AgreementLineTermOrigin origin = 10 [(options.v1.db).check = "origin IN ('AGREEMENT_LINE_TERM_ORIGIN_COPIED', 'AGREEMENT_LINE_TERM_ORIGIN_NEGOTIATED')"];
+  optional int64 accepted_at = 11;
+  optional string accepted_by = 12;
+  bool active = 13 [(options.v1.db).default = "true"];
+  optional int64 date_created = 14;
+  optional string date_created_string = 15 [(options.v1.db).ignore = true];
+  optional int64 date_modified = 16;
+  optional string date_modified_string = 17 [(options.v1.db).ignore = true];
+}
+
+service AgreementLineTermDomainService {
+  rpc CreateAgreementLineTerm(CreateAgreementLineTermRequest) returns (CreateAgreementLineTermResponse);
+  rpc ReadAgreementLineTerm(ReadAgreementLineTermRequest) returns (ReadAgreementLineTermResponse);
+  rpc UpdateAgreementLineTerm(UpdateAgreementLineTermRequest) returns (UpdateAgreementLineTermResponse);
+  rpc DeleteAgreementLineTerm(DeleteAgreementLineTermRequest) returns (DeleteAgreementLineTermResponse);
+  rpc ListAgreementLineTerms(ListAgreementLineTermsRequest) returns (ListAgreementLineTermsResponse);
+  rpc GetAgreementLineTermListPageData(GetAgreementLineTermListPageDataRequest) returns (GetAgreementLineTermListPageDataResponse);
+  rpc GetAgreementLineTermItemPageData(GetAgreementLineTermItemPageDataRequest) returns (GetAgreementLineTermItemPageDataResponse);
+}
+
+message CreateAgreementLineTermRequest {
+  AgreementLineTerm data = 1;
+}
+
+message CreateAgreementLineTermResponse {
+  repeated AgreementLineTerm data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message ReadAgreementLineTermRequest {
+  AgreementLineTerm data = 1;
+}
+
+message ReadAgreementLineTermResponse {
+  repeated AgreementLineTerm data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message UpdateAgreementLineTermRequest {
+  AgreementLineTerm data = 1;
+}
+
+message UpdateAgreementLineTermResponse {
+  repeated AgreementLineTerm data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message DeleteAgreementLineTermRequest {
+  AgreementLineTerm data = 1;
+}
+
+message DeleteAgreementLineTermResponse {
+  bool success = 1;
+  optional domain.common.v1.Error error = 2;
+}
+
+message ListAgreementLineTermsRequest {
+  optional domain.common.v1.SearchRequest search = 1;
+  optional domain.common.v1.FilterRequest filters = 2;
+  optional domain.common.v1.SortRequest sort = 3;
+  optional domain.common.v1.PaginationRequest pagination = 4;
+  // Scope: only the terms of this subscription.
+  optional string subscription_id = 5;
+}
+
+message ListAgreementLineTermsResponse {
+  repeated AgreementLineTerm data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+  optional domain.common.v1.PaginationResponse pagination = 4;
+}
+
+message GetAgreementLineTermListPageDataRequest {
+  optional domain.common.v1.PaginationRequest pagination = 1;
+  optional domain.common.v1.FilterRequest filters = 2;
+  optional domain.common.v1.SortRequest sort = 3;
+  optional domain.common.v1.SearchRequest search = 4;
+}
+
+message GetAgreementLineTermListPageDataResponse {
+  repeated AgreementLineTerm agreement_line_term_list = 1;
+  optional domain.common.v1.PaginationResponse pagination = 2;
+  repeated domain.common.v1.SearchResult search_results = 3;
+  bool success = 4;
+  optional domain.common.v1.Error error = 5;
+}
+
+message GetAgreementLineTermItemPageDataRequest {
+  string agreement_line_term_id = 1;
+}
+
+message GetAgreementLineTermItemPageDataResponse {
+  optional AgreementLineTerm agreement_line_term = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}

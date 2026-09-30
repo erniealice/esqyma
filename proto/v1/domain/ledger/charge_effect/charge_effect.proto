@@ -1,0 +1,132 @@
+syntax = "proto3";
+
+package domain.ledger.v1;
+
+option go_package = "github.com/erniealice/esqyma/golang/v1/domain/ledger/charge_effect";
+
+import "domain/common/error.proto";
+import "domain/common/pagination.proto";
+import "domain/common/filter.proto";
+import "domain/common/sort.proto";
+import "domain/common/search.proto";
+
+import "domain/ledger/enums/enums.proto";
+import "options/db.proto";
+
+enum EffectDirection {
+  EFFECT_DIRECTION_UNSPECIFIED = 0;
+  EFFECT_DIRECTION_DEBIT = 1;
+  EFFECT_DIRECTION_CREDIT = 2;
+}
+
+// Append-only accounting effect of a charge event (issue / application / reversal) against a ledger account. Not a journal entry; reports read operational entities, not this table.
+message ChargeEffect {
+  option (options.v1.table).table = true;
+  option (options.v1.table).unique_together = "event_kind,event_id,posting_role,direction";
+
+  string id = 1;
+  string workspace_id = 2 [(options.v1.db).references = "workspace", (options.v1.db).index = true];
+  domain.ledger.v1.ChargePostingEvent event_kind = 3 [(options.v1.db).check = "event_kind IN ('CHARGE_POSTING_EVENT_ALLOCATION', 'CHARGE_POSTING_EVENT_ISSUE', 'CHARGE_POSTING_EVENT_APPLICATION', 'CHARGE_POSTING_EVENT_REVERSAL')"];
+  string event_id = 4;
+  domain.ledger.v1.ChargePostingRole posting_role = 5 [(options.v1.db).check = "posting_role IN ('CHARGE_POSTING_ROLE_RECEIVABLE', 'CHARGE_POSTING_ROLE_CLEARING', 'CHARGE_POSTING_ROLE_REVENUE', 'CHARGE_POSTING_ROLE_REFUND_LIABILITY', 'CHARGE_POSTING_ROLE_EXPENSE', 'CHARGE_POSTING_ROLE_CASH')"];
+  string account_id = 6 [(options.v1.db).references = "account", (options.v1.db).index = true];
+  domain.ledger.v1.EffectDirection direction = 7 [(options.v1.db).check = "direction IN ('EFFECT_DIRECTION_DEBIT', 'EFFECT_DIRECTION_CREDIT')"];
+  int64 amount = 8 [(options.v1.db).check = "amount > 0"];
+  string currency = 9;
+  optional string event_date = 10;
+  optional string charge_policy_version_id = 11 [(options.v1.db).references = "charge_policy_version", (options.v1.db).index = true];
+  optional int32 rule_version = 12;
+  optional string source_ref = 13;
+  bool active = 14 [(options.v1.db).default = "true"];
+  optional int64 date_created = 15;
+  optional string date_created_string = 16 [(options.v1.db).ignore = true];
+  optional int64 date_modified = 17;
+  optional string date_modified_string = 18 [(options.v1.db).ignore = true];
+}
+
+service ChargeEffectDomainService {
+  rpc CreateChargeEffect(CreateChargeEffectRequest) returns (CreateChargeEffectResponse);
+  rpc ReadChargeEffect(ReadChargeEffectRequest) returns (ReadChargeEffectResponse);
+  rpc UpdateChargeEffect(UpdateChargeEffectRequest) returns (UpdateChargeEffectResponse);
+  rpc DeleteChargeEffect(DeleteChargeEffectRequest) returns (DeleteChargeEffectResponse);
+  rpc ListChargeEffects(ListChargeEffectsRequest) returns (ListChargeEffectsResponse);
+  rpc GetChargeEffectListPageData(GetChargeEffectListPageDataRequest) returns (GetChargeEffectListPageDataResponse);
+  rpc GetChargeEffectItemPageData(GetChargeEffectItemPageDataRequest) returns (GetChargeEffectItemPageDataResponse);
+}
+
+message CreateChargeEffectRequest {
+  ChargeEffect data = 1;
+}
+
+message CreateChargeEffectResponse {
+  repeated ChargeEffect data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message ReadChargeEffectRequest {
+  ChargeEffect data = 1;
+}
+
+message ReadChargeEffectResponse {
+  repeated ChargeEffect data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message UpdateChargeEffectRequest {
+  ChargeEffect data = 1;
+}
+
+message UpdateChargeEffectResponse {
+  repeated ChargeEffect data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message DeleteChargeEffectRequest {
+  ChargeEffect data = 1;
+}
+
+message DeleteChargeEffectResponse {
+  bool success = 1;
+  optional domain.common.v1.Error error = 2;
+}
+
+message ListChargeEffectsRequest {
+  optional domain.common.v1.SearchRequest search = 1;
+  optional domain.common.v1.FilterRequest filters = 2;
+  optional domain.common.v1.SortRequest sort = 3;
+  optional domain.common.v1.PaginationRequest pagination = 4;
+}
+
+message ListChargeEffectsResponse {
+  repeated ChargeEffect data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message GetChargeEffectListPageDataRequest {
+  optional domain.common.v1.PaginationRequest pagination = 1;
+  optional domain.common.v1.FilterRequest filters = 2;
+  optional domain.common.v1.SortRequest sort = 3;
+  optional domain.common.v1.SearchRequest search = 4;
+}
+
+message GetChargeEffectListPageDataResponse {
+  repeated ChargeEffect charge_effect_list = 1;
+  optional domain.common.v1.PaginationResponse pagination = 2;
+  repeated domain.common.v1.SearchResult search_results = 3;
+  bool success = 4;
+  optional domain.common.v1.Error error = 5;
+}
+
+message GetChargeEffectItemPageDataRequest {
+  string charge_effect_id = 1;
+}
+
+message GetChargeEffectItemPageDataResponse {
+  optional ChargeEffect charge_effect = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}

@@ -1,0 +1,183 @@
+syntax = "proto3";
+
+package domain.ledger.v1;
+
+option go_package = "github.com/erniealice/esqyma/golang/v1/domain/ledger/charge_policy";
+
+import "domain/common/error.proto";
+import "domain/common/pagination.proto";
+import "domain/common/filter.proto";
+import "domain/common/sort.proto";
+import "domain/common/search.proto";
+import "domain/ledger/charge_policy_version/charge_policy_version.proto";
+
+import "domain/ledger/enums/enums.proto";
+import "options/db.proto";
+
+// ChargePolicy is the named, workspace-scoped header of a versioned charge policy: how a
+// charge (for example a known-cost recovery) is presented in the books and taxed. The policy
+// carries only identity + ACTIVE/RETIRED status; behaviour lives on ChargePolicyVersion rows.
+message ChargePolicy {
+  option (options.v1.table).table = true;
+  option (options.v1.table).unique_together = "workspace_id,code";
+
+  string id = 1;
+  string workspace_id = 2 [(options.v1.db).references = "workspace", (options.v1.db).index = true];
+  // Upper-snake code; UNIQUE (workspace_id, code) — see unique_together.
+  string code = 3 [(options.v1.db).check = "btrim(code) <> ''"];
+  string name = 4 [(options.v1.db).check = "btrim(name) <> ''"];  // non-blank
+  optional string description = 5;
+  domain.ledger.v1.ChargePolicyStatus status = 6 [(options.v1.db).check = "status IN ('CHARGE_POLICY_STATUS_ACTIVE', 'CHARGE_POLICY_STATUS_RETIRED')"];
+  optional int64 retired_at = 7;
+  optional string retired_by = 8;
+  optional string created_by = 9;
+  bool active = 10 [(options.v1.db).default = "true"];
+  optional int64 date_created = 11;
+  optional string date_created_string = 12 [(options.v1.db).ignore = true];
+  optional int64 date_modified = 13;
+  optional string date_modified_string = 14 [(options.v1.db).ignore = true];
+}
+
+service ChargePolicyDomainService {
+  rpc CreateChargePolicy(CreateChargePolicyRequest) returns (CreateChargePolicyResponse);
+  rpc ReadChargePolicy(ReadChargePolicyRequest) returns (ReadChargePolicyResponse);
+  rpc UpdateChargePolicy(UpdateChargePolicyRequest) returns (UpdateChargePolicyResponse);
+  rpc DeleteChargePolicy(DeleteChargePolicyRequest) returns (DeleteChargePolicyResponse);
+  rpc ListChargePolicies(ListChargePoliciesRequest) returns (ListChargePoliciesResponse);
+  rpc GetChargePolicyListPageData(GetChargePolicyListPageDataRequest) returns (GetChargePolicyListPageDataResponse);
+  rpc GetChargePolicyItemPageData(GetChargePolicyItemPageDataRequest) returns (GetChargePolicyItemPageDataResponse);
+  rpc RetireChargePolicy(RetireChargePolicyRequest) returns (RetireChargePolicyResponse);
+  rpc GetChargePolicyInUseIds(GetChargePolicyInUseIdsRequest) returns (GetChargePolicyInUseIdsResponse);
+  rpc ListPickerChargePolicies(ListPickerChargePoliciesRequest) returns (ListPickerChargePoliciesResponse);
+  rpc ResolveChargePolicy(ResolveChargePolicyRequest) returns (ResolveChargePolicyResponse);
+}
+
+message CreateChargePolicyRequest {
+  ChargePolicy data = 1;
+}
+
+message CreateChargePolicyResponse {
+  repeated ChargePolicy data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+  // The DRAFT version 1 created in the same transaction as the policy header.
+  optional ChargePolicyVersion draft = 4;
+}
+
+message ReadChargePolicyRequest {
+  ChargePolicy data = 1;
+}
+
+message ReadChargePolicyResponse {
+  repeated ChargePolicy data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+  // Every version of the policy (ordering is the view's concern).
+  repeated ChargePolicyVersion versions = 4;
+}
+
+message UpdateChargePolicyRequest {
+  ChargePolicy data = 1;
+}
+
+message UpdateChargePolicyResponse {
+  repeated ChargePolicy data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message DeleteChargePolicyRequest {
+  ChargePolicy data = 1;
+}
+
+message DeleteChargePolicyResponse {
+  bool success = 1;
+  optional domain.common.v1.Error error = 2;
+}
+
+message ListChargePoliciesRequest {
+  optional domain.common.v1.SearchRequest search = 1;
+  optional domain.common.v1.FilterRequest filters = 2;
+  optional domain.common.v1.SortRequest sort = 3;
+  optional domain.common.v1.PaginationRequest pagination = 4;
+}
+
+message ListChargePoliciesResponse {
+  repeated ChargePolicy data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message GetChargePolicyListPageDataRequest {
+  optional domain.common.v1.PaginationRequest pagination = 1;
+  optional domain.common.v1.FilterRequest filters = 2;
+  optional domain.common.v1.SortRequest sort = 3;
+  optional domain.common.v1.SearchRequest search = 4;
+}
+
+message GetChargePolicyListPageDataResponse {
+  repeated ChargePolicy charge_policy_list = 1;
+  optional domain.common.v1.PaginationResponse pagination = 2;
+  repeated domain.common.v1.SearchResult search_results = 3;
+  bool success = 4;
+  optional domain.common.v1.Error error = 5;
+}
+
+message GetChargePolicyItemPageDataRequest {
+  string charge_policy_id = 1;
+}
+
+message GetChargePolicyItemPageDataResponse {
+  optional ChargePolicy charge_policy = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+// RetireChargePolicy moves an ACTIVE policy to RETIRED (any time). An open draft is kept but can no longer be approved.
+message RetireChargePolicyRequest {
+  string charge_policy_id = 1;
+}
+
+message RetireChargePolicyResponse {
+  optional ChargePolicy data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+// GetChargePolicyInUseIds answers which of the given policies are referenced by a package line
+// (product_price_plan) or a pinned agreement term, so lists can hide the delete action.
+message GetChargePolicyInUseIdsRequest {
+  repeated string charge_policy_ids = 1;
+}
+
+message GetChargePolicyInUseIdsResponse {
+  repeated string in_use_charge_policy_ids = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+// ListPickerChargePolicies returns ACTIVE policies that have an APPROVED version (picker options); unpaginated by design (bounded picker).
+message ListPickerChargePoliciesRequest {
+}
+
+message ListPickerChargePoliciesResponse {
+  repeated ChargePolicy data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+// ResolveChargePolicy resolves the effective policy + current APPROVED version for a package line.
+// source is "none" (legacy path; policy/version unset), "package_line", or "product_default" (S2).
+message ResolveChargePolicyRequest {
+  optional string package_line_charge_policy_id = 1;
+  // S2 product default; ignored in S1.
+  optional string product_charge_policy_id = 2;
+}
+
+message ResolveChargePolicyResponse {
+  string source = 1;
+  optional ChargePolicy policy = 2;
+  optional ChargePolicyVersion version = 3;
+  bool success = 4;
+  optional domain.common.v1.Error error = 5;
+}

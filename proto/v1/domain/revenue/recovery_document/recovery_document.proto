@@ -1,0 +1,234 @@
+syntax = "proto3";
+
+package domain.revenue.v1;
+
+option go_package = "github.com/erniealice/esqyma/golang/v1/domain/revenue/recovery_document";
+
+import "domain/common/error.proto";
+import "domain/common/pagination.proto";
+import "domain/common/filter.proto";
+import "domain/common/sort.proto";
+import "domain/common/search.proto";
+import "domain/revenue/recovery_document_line/recovery_document_line.proto";
+
+import "options/db.proto";
+
+enum RecoveryDocumentType {
+  RECOVERY_DOCUMENT_TYPE_UNSPECIFIED = 0;
+  RECOVERY_DOCUMENT_TYPE_STATEMENT = 1;
+  RECOVERY_DOCUMENT_TYPE_CREDIT_NOTE = 2;
+}
+
+enum RecoveryDocumentStatus {
+  RECOVERY_DOCUMENT_STATUS_UNSPECIFIED = 0;
+  RECOVERY_DOCUMENT_STATUS_ISSUED = 1;
+  RECOVERY_DOCUMENT_STATUS_VOID = 2;
+}
+
+// A statement (or credit note) issued to a client for recovered costs. Never deleted; VOID is a status. Idempotent by (workspace_id, issuance_key).
+message RecoveryDocument {
+  option (options.v1.table).table = true;
+  option (options.v1.table).unique_together = "workspace_id,issuance_key";
+  option (options.v1.table).unique_together = "document_series_id,document_number";
+  option (options.v1.table).unique_together = "document_series_id,sequence_number";
+
+  string id = 1;
+  string workspace_id = 2 [(options.v1.db).references = "workspace", (options.v1.db).index = true];
+  string document_series_id = 3 [(options.v1.db).references = "document_series", (options.v1.db).index = true];
+  int64 sequence_number = 4;
+  string document_number = 5;
+  domain.revenue.v1.RecoveryDocumentType document_type = 6 [(options.v1.db).check = "(document_type IN ('RECOVERY_DOCUMENT_TYPE_STATEMENT', 'RECOVERY_DOCUMENT_TYPE_CREDIT_NOTE')) AND (document_type <> 'RECOVERY_DOCUMENT_TYPE_CREDIT_NOTE' OR corrects_document_id IS NOT NULL)"];
+  optional string corrects_document_id = 7 [(options.v1.db).references = "recovery_document", (options.v1.db).index = true];
+  string client_id = 8 [(options.v1.db).references = "client", (options.v1.db).index = true];
+  optional string subscription_id = 9 [(options.v1.db).references = "subscription", (options.v1.db).index = true];
+  optional string issue_date = 10;
+  optional string due_date = 11;
+  int64 total_amount = 12 [(options.v1.db).default = "0"];
+  string currency = 13;
+  domain.revenue.v1.RecoveryDocumentStatus status = 14 [(options.v1.db).check = "status IN ('RECOVERY_DOCUMENT_STATUS_ISSUED', 'RECOVERY_DOCUMENT_STATUS_VOID')"];
+  string issuance_key = 15 [(options.v1.db).check = "btrim(issuance_key) <> ''"];
+  optional string issued_by = 16;
+  optional int64 issued_at = 17;
+  optional string void_reason = 18;
+  optional int64 voided_at = 19;
+  bool active = 20 [(options.v1.db).default = "true"];
+  optional int64 date_created = 21;
+  optional string date_created_string = 22 [(options.v1.db).ignore = true];
+  optional int64 date_modified = 23;
+  optional string date_modified_string = 24 [(options.v1.db).ignore = true];
+}
+
+service RecoveryDocumentDomainService {
+  rpc CreateRecoveryDocument(CreateRecoveryDocumentRequest) returns (CreateRecoveryDocumentResponse);
+  rpc ReadRecoveryDocument(ReadRecoveryDocumentRequest) returns (ReadRecoveryDocumentResponse);
+  rpc UpdateRecoveryDocument(UpdateRecoveryDocumentRequest) returns (UpdateRecoveryDocumentResponse);
+  rpc DeleteRecoveryDocument(DeleteRecoveryDocumentRequest) returns (DeleteRecoveryDocumentResponse);
+  rpc ListRecoveryDocuments(ListRecoveryDocumentsRequest) returns (ListRecoveryDocumentsResponse);
+  rpc GetRecoveryDocumentListPageData(GetRecoveryDocumentListPageDataRequest) returns (GetRecoveryDocumentListPageDataResponse);
+  rpc GetRecoveryDocumentItemPageData(GetRecoveryDocumentItemPageDataRequest) returns (GetRecoveryDocumentItemPageDataResponse);
+  rpc IssueRecoveryDocuments(IssueRecoveryDocumentsRequest) returns (IssueRecoveryDocumentsResponse);
+  rpc VoidRecoveryDocument(VoidRecoveryDocumentRequest) returns (VoidRecoveryDocumentResponse);
+  rpc GetRecoveryBalance(GetRecoveryBalanceRequest) returns (GetRecoveryBalanceResponse);
+  rpc ListRecoverablesAging(ListRecoverablesAgingRequest) returns (ListRecoverablesAgingResponse);
+}
+
+message CreateRecoveryDocumentRequest {
+  RecoveryDocument data = 1;
+}
+
+message CreateRecoveryDocumentResponse {
+  repeated RecoveryDocument data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message ReadRecoveryDocumentRequest {
+  RecoveryDocument data = 1;
+}
+
+message ReadRecoveryDocumentResponse {
+  repeated RecoveryDocument data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+  // Enrichment (data[0] is the document): its lines and the ISSUED credit notes that correct it.
+  repeated domain.revenue.v1.RecoveryDocumentLine lines = 4;
+  repeated RecoveryDocument credit_notes = 5;
+}
+
+message UpdateRecoveryDocumentRequest {
+  RecoveryDocument data = 1;
+}
+
+message UpdateRecoveryDocumentResponse {
+  repeated RecoveryDocument data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message DeleteRecoveryDocumentRequest {
+  RecoveryDocument data = 1;
+}
+
+message DeleteRecoveryDocumentResponse {
+  bool success = 1;
+  optional domain.common.v1.Error error = 2;
+}
+
+message ListRecoveryDocumentsRequest {
+  optional domain.common.v1.SearchRequest search = 1;
+  optional domain.common.v1.FilterRequest filters = 2;
+  optional domain.common.v1.SortRequest sort = 3;
+  optional domain.common.v1.PaginationRequest pagination = 4;
+  // Scope: only documents in this status.
+  optional RecoveryDocumentStatus status = 5;
+}
+
+message ListRecoveryDocumentsResponse {
+  repeated RecoveryDocument data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+  optional domain.common.v1.PaginationResponse pagination = 4;
+}
+
+message GetRecoveryDocumentListPageDataRequest {
+  optional domain.common.v1.PaginationRequest pagination = 1;
+  optional domain.common.v1.FilterRequest filters = 2;
+  optional domain.common.v1.SortRequest sort = 3;
+  optional domain.common.v1.SearchRequest search = 4;
+}
+
+message GetRecoveryDocumentListPageDataResponse {
+  repeated RecoveryDocument recovery_document_list = 1;
+  optional domain.common.v1.PaginationResponse pagination = 2;
+  repeated domain.common.v1.SearchResult search_results = 3;
+  bool success = 4;
+  optional domain.common.v1.Error error = 5;
+}
+
+message GetRecoveryDocumentItemPageDataRequest {
+  string recovery_document_id = 1;
+}
+
+message GetRecoveryDocumentItemPageDataResponse {
+  optional RecoveryDocument recovery_document = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+// IssueRecoveryDocuments groups the given OPEN billable charges into statements (and credit notes for
+// correction charges) and numbers them from the series. Idempotent: the same issuance_key with the same
+// charges replays the prior documents (replayed = true); the same key with different charges is refused (issuance_conflict).
+message IssueRecoveryDocumentsRequest {
+  repeated string billable_charge_ids = 1;
+  string document_series_id = 2;
+  // ISO date; unset = today (UTC).
+  optional string issue_date = 3;
+  optional string due_date = 4;
+  string issuance_key = 5;
+}
+
+message IssueRecoveryDocumentsResponse {
+  repeated RecoveryDocument data = 1;
+  bool replayed = 2;
+  bool success = 3;
+  optional domain.common.v1.Error error = 4;
+}
+
+// VoidRecoveryDocument voids an ISSUED document (refused while an ISSUED credit note corrects it).
+message VoidRecoveryDocumentRequest {
+  string recovery_document_id = 1;
+  string reason = 2;
+}
+
+message VoidRecoveryDocumentResponse {
+  optional RecoveryDocument data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+// Recoverable balance per currency: billed (ISSUED statements net of credit notes) minus applied CASH applications.
+message RecoveryCurrencyBalance {
+  string currency = 1;
+  int64 billed = 2;
+  int64 applied = 3;
+  // billed - applied (negative = credit owed to the client).
+  int64 balance = 4;
+}
+
+message GetRecoveryBalanceRequest {
+  string client_id = 1;
+}
+
+message GetRecoveryBalanceResponse {
+  string client_id = 1;
+  repeated RecoveryCurrencyBalance by_currency = 2;
+  bool success = 3;
+  optional domain.common.v1.Error error = 4;
+}
+
+// Recoverables aging row (per client+currency; client_id unset on the per-currency totals rows).
+message RecoverablesAgingRow {
+  optional string client_id = 1;
+  string currency = 2;
+  // Buckets mirror service/reporting/ar_aging AgingBuckets naming (centavos, by days past due).
+  int64 days_0_30 = 3;
+  int64 days_31_60 = 4;
+  int64 days_61_90 = 5;
+  int64 days_over_90 = 6;
+  int64 total = 7;
+  int32 document_count = 8;
+}
+
+message ListRecoverablesAgingRequest {
+  // ISO date; unset = today (UTC).
+  optional string as_of = 1;
+  optional string client_id = 2;
+}
+
+message ListRecoverablesAgingResponse {
+  string as_of = 1;
+  repeated RecoverablesAgingRow rows = 2;
+  repeated RecoverablesAgingRow totals = 3;
+  bool success = 4;
+  optional domain.common.v1.Error error = 5;
+}

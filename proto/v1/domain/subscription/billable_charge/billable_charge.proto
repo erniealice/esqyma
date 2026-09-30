@@ -1,0 +1,163 @@
+syntax = "proto3";
+
+package domain.subscription.v1;
+
+option go_package = "github.com/erniealice/esqyma/golang/v1/domain/subscription/billable_charge";
+
+import "domain/common/error.proto";
+import "domain/common/pagination.proto";
+import "domain/common/filter.proto";
+import "domain/common/sort.proto";
+import "domain/common/search.proto";
+
+import "options/db.proto";
+
+enum BillableChargeKind {
+  BILLABLE_CHARGE_KIND_UNSPECIFIED = 0;
+  BILLABLE_CHARGE_KIND_ORIGINAL = 1;
+  BILLABLE_CHARGE_KIND_CORRECTION = 2;
+}
+
+enum BillableChargeStatus {
+  BILLABLE_CHARGE_STATUS_UNSPECIFIED = 0;
+  BILLABLE_CHARGE_STATUS_OPEN = 1;
+  BILLABLE_CHARGE_STATUS_ISSUED = 2;
+  BILLABLE_CHARGE_STATUS_CANCELLED = 3;
+}
+
+// A receivable obligation derived from an allocation share (or later a rating). Immutable once issued; corrections are new CORRECTION rows pointing at the predecessor. Idempotent by (workspace_id, obligation_key) + content_hash.
+message BillableCharge {
+  option (options.v1.table).table = true;
+  option (options.v1.table).unique_together = "workspace_id,obligation_key";
+
+  string id = 1;
+  string workspace_id = 2 [(options.v1.db).references = "workspace", (options.v1.db).index = true];
+  string obligation_key = 3 [(options.v1.db).check = "btrim(obligation_key) <> ''"];
+  string content_hash = 4;
+  optional string subscription_id = 5 [(options.v1.db).references = "subscription", (options.v1.db).index = true];
+  optional string client_id = 6 [(options.v1.db).references = "client", (options.v1.db).index = true];
+  optional string agreement_line_term_id = 7 [(options.v1.db).references = "agreement_line_term", (options.v1.db).index = true];
+  optional string charge_policy_version_id = 8 [(options.v1.db).references = "charge_policy_version", (options.v1.db).index = true];
+  optional string allocation_share_id = 9 [(options.v1.db).references = "allocation_share", (options.v1.db).index = true];
+  domain.subscription.v1.BillableChargeKind charge_kind = 10 [(options.v1.db).check = "(charge_kind IN ('BILLABLE_CHARGE_KIND_ORIGINAL', 'BILLABLE_CHARGE_KIND_CORRECTION')) AND (charge_kind <> 'BILLABLE_CHARGE_KIND_CORRECTION' OR predecessor_id IS NOT NULL)"];
+  optional string predecessor_id = 11 [(options.v1.db).references = "billable_charge", (options.v1.db).index = true];
+  int32 evidence_revision = 12 [(options.v1.db).default = "1"];
+  int32 rating_revision = 13 [(options.v1.db).default = "1"];
+  int64 amount = 14 [(options.v1.db).default = "0"];
+  string currency = 15;
+  optional string service_from = 16;
+  optional string service_to = 17;
+  optional string accounting_date = 18;
+  domain.subscription.v1.BillableChargeStatus status = 19 [(options.v1.db).check = "status IN ('BILLABLE_CHARGE_STATUS_OPEN', 'BILLABLE_CHARGE_STATUS_ISSUED', 'BILLABLE_CHARGE_STATUS_CANCELLED')"];
+  optional string reason = 20;
+  bool active = 21 [(options.v1.db).default = "true"];
+  optional int64 date_created = 22;
+  optional string date_created_string = 23 [(options.v1.db).ignore = true];
+  optional int64 date_modified = 24;
+  optional string date_modified_string = 25 [(options.v1.db).ignore = true];
+}
+
+service BillableChargeDomainService {
+  rpc CreateBillableCharge(CreateBillableChargeRequest) returns (CreateBillableChargeResponse);
+  rpc ReadBillableCharge(ReadBillableChargeRequest) returns (ReadBillableChargeResponse);
+  rpc UpdateBillableCharge(UpdateBillableChargeRequest) returns (UpdateBillableChargeResponse);
+  rpc DeleteBillableCharge(DeleteBillableChargeRequest) returns (DeleteBillableChargeResponse);
+  rpc ListBillableCharges(ListBillableChargesRequest) returns (ListBillableChargesResponse);
+  rpc GetBillableChargeListPageData(GetBillableChargeListPageDataRequest) returns (GetBillableChargeListPageDataResponse);
+  rpc GetBillableChargeItemPageData(GetBillableChargeItemPageDataRequest) returns (GetBillableChargeItemPageDataResponse);
+  rpc AdjustBillableCharge(AdjustBillableChargeRequest) returns (AdjustBillableChargeResponse);
+}
+
+message CreateBillableChargeRequest {
+  BillableCharge data = 1;
+}
+
+message CreateBillableChargeResponse {
+  repeated BillableCharge data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message ReadBillableChargeRequest {
+  BillableCharge data = 1;
+}
+
+message ReadBillableChargeResponse {
+  repeated BillableCharge data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message UpdateBillableChargeRequest {
+  BillableCharge data = 1;
+}
+
+message UpdateBillableChargeResponse {
+  repeated BillableCharge data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message DeleteBillableChargeRequest {
+  BillableCharge data = 1;
+}
+
+message DeleteBillableChargeResponse {
+  bool success = 1;
+  optional domain.common.v1.Error error = 2;
+}
+
+message ListBillableChargesRequest {
+  optional domain.common.v1.SearchRequest search = 1;
+  optional domain.common.v1.FilterRequest filters = 2;
+  optional domain.common.v1.SortRequest sort = 3;
+  optional domain.common.v1.PaginationRequest pagination = 4;
+  // Scope: only charges in this status.
+  optional BillableChargeStatus status = 5;
+}
+
+message ListBillableChargesResponse {
+  repeated BillableCharge data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+  optional domain.common.v1.PaginationResponse pagination = 4;
+}
+
+message GetBillableChargeListPageDataRequest {
+  optional domain.common.v1.PaginationRequest pagination = 1;
+  optional domain.common.v1.FilterRequest filters = 2;
+  optional domain.common.v1.SortRequest sort = 3;
+  optional domain.common.v1.SearchRequest search = 4;
+}
+
+message GetBillableChargeListPageDataResponse {
+  repeated BillableCharge billable_charge_list = 1;
+  optional domain.common.v1.PaginationResponse pagination = 2;
+  repeated domain.common.v1.SearchResult search_results = 3;
+  bool success = 4;
+  optional domain.common.v1.Error error = 5;
+}
+
+message GetBillableChargeItemPageDataRequest {
+  string billable_charge_id = 1;
+}
+
+message GetBillableChargeItemPageDataResponse {
+  optional BillableCharge billable_charge = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+// AdjustBillableCharge corrects an ISSUED charge by writing a CORRECTION row (delta) that points at the
+// predecessor; an OPEN charge is re-rated in place. data = the resulting charge row.
+message AdjustBillableChargeRequest {
+  string billable_charge_id = 1;
+  int64 new_amount = 2;
+  string reason = 3;
+}
+
+message AdjustBillableChargeResponse {
+  optional BillableCharge data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}

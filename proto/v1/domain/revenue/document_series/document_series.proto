@@ -1,0 +1,138 @@
+syntax = "proto3";
+
+package domain.revenue.v1;
+
+option go_package = "github.com/erniealice/esqyma/golang/v1/domain/revenue/document_series";
+
+import "domain/common/error.proto";
+import "domain/common/pagination.proto";
+import "domain/common/filter.proto";
+import "domain/common/sort.proto";
+import "domain/common/search.proto";
+
+import "domain/ledger/enums/enums.proto";
+import "options/db.proto";
+
+enum DocumentSeriesFiscalReset {
+  DOCUMENT_SERIES_FISCAL_RESET_UNSPECIFIED = 0;
+  DOCUMENT_SERIES_FISCAL_RESET_NONE = 1;
+  DOCUMENT_SERIES_FISCAL_RESET_YEARLY = 2;
+}
+
+enum DocumentSeriesStatus {
+  DOCUMENT_SERIES_STATUS_UNSPECIFIED = 0;
+  DOCUMENT_SERIES_STATUS_ACTIVE = 1;
+  DOCUMENT_SERIES_STATUS_RETIRED = 2;
+}
+
+// A numbered document series (prefix + zero-padded sequence). next_number is allocated under a FOR UPDATE lock on the series row.
+message DocumentSeries {
+  option (options.v1.table).table = true;
+  option (options.v1.table).unique_together = "workspace_id,code";
+
+  string id = 1;
+  string workspace_id = 2 [(options.v1.db).references = "workspace", (options.v1.db).index = true];
+  string code = 3 [(options.v1.db).check = "btrim(code) <> ''"];
+  optional string name = 4;
+  string issuer_name = 5;
+  optional string issuer_tax_id = 6;
+  domain.ledger.v1.ChargeDocumentKind document_kind = 7 [(options.v1.db).check = "document_kind IN ('CHARGE_DOCUMENT_KIND_INVOICE', 'CHARGE_DOCUMENT_KIND_RECOVERY_DOCUMENT')"];
+  optional string prefix = 8;
+  optional string branch_code = 9;
+  domain.revenue.v1.DocumentSeriesFiscalReset fiscal_reset = 10 [(options.v1.db).check = "fiscal_reset IN ('DOCUMENT_SERIES_FISCAL_RESET_NONE', 'DOCUMENT_SERIES_FISCAL_RESET_YEARLY')"];
+  int64 next_number = 11 [(options.v1.db).default = "1", (options.v1.db).check = "next_number > 0"];
+  int32 number_padding = 12 [(options.v1.db).default = "6"];
+  domain.revenue.v1.DocumentSeriesStatus status = 13 [(options.v1.db).check = "status IN ('DOCUMENT_SERIES_STATUS_ACTIVE', 'DOCUMENT_SERIES_STATUS_RETIRED')"];
+  bool active = 14 [(options.v1.db).default = "true"];
+  optional int64 date_created = 15;
+  optional string date_created_string = 16 [(options.v1.db).ignore = true];
+  optional int64 date_modified = 17;
+  optional string date_modified_string = 18 [(options.v1.db).ignore = true];
+}
+
+service DocumentSeriesDomainService {
+  rpc CreateDocumentSeries(CreateDocumentSeriesRequest) returns (CreateDocumentSeriesResponse);
+  rpc ReadDocumentSeries(ReadDocumentSeriesRequest) returns (ReadDocumentSeriesResponse);
+  rpc UpdateDocumentSeries(UpdateDocumentSeriesRequest) returns (UpdateDocumentSeriesResponse);
+  rpc DeleteDocumentSeries(DeleteDocumentSeriesRequest) returns (DeleteDocumentSeriesResponse);
+  rpc ListDocumentSeries(ListDocumentSeriesRequest) returns (ListDocumentSeriesResponse);
+  rpc GetDocumentSeriesListPageData(GetDocumentSeriesListPageDataRequest) returns (GetDocumentSeriesListPageDataResponse);
+  rpc GetDocumentSeriesItemPageData(GetDocumentSeriesItemPageDataRequest) returns (GetDocumentSeriesItemPageDataResponse);
+}
+
+message CreateDocumentSeriesRequest {
+  DocumentSeries data = 1;
+}
+
+message CreateDocumentSeriesResponse {
+  repeated DocumentSeries data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message ReadDocumentSeriesRequest {
+  DocumentSeries data = 1;
+}
+
+message ReadDocumentSeriesResponse {
+  repeated DocumentSeries data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message UpdateDocumentSeriesRequest {
+  DocumentSeries data = 1;
+}
+
+message UpdateDocumentSeriesResponse {
+  repeated DocumentSeries data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message DeleteDocumentSeriesRequest {
+  DocumentSeries data = 1;
+}
+
+message DeleteDocumentSeriesResponse {
+  bool success = 1;
+  optional domain.common.v1.Error error = 2;
+}
+
+message ListDocumentSeriesRequest {
+  optional domain.common.v1.SearchRequest search = 1;
+  optional domain.common.v1.FilterRequest filters = 2;
+  optional domain.common.v1.SortRequest sort = 3;
+  optional domain.common.v1.PaginationRequest pagination = 4;
+}
+
+message ListDocumentSeriesResponse {
+  repeated DocumentSeries data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message GetDocumentSeriesListPageDataRequest {
+  optional domain.common.v1.PaginationRequest pagination = 1;
+  optional domain.common.v1.FilterRequest filters = 2;
+  optional domain.common.v1.SortRequest sort = 3;
+  optional domain.common.v1.SearchRequest search = 4;
+}
+
+message GetDocumentSeriesListPageDataResponse {
+  repeated DocumentSeries document_series_list = 1;
+  optional domain.common.v1.PaginationResponse pagination = 2;
+  repeated domain.common.v1.SearchResult search_results = 3;
+  bool success = 4;
+  optional domain.common.v1.Error error = 5;
+}
+
+message GetDocumentSeriesItemPageDataRequest {
+  string document_series_id = 1;
+}
+
+message GetDocumentSeriesItemPageDataResponse {
+  optional DocumentSeries document_series = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}

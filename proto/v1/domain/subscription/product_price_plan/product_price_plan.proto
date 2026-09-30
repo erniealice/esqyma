@@ -69,6 +69,14 @@ message ProductPricePlan {
   // at config time (a seat's contracted_amount must fall within [min, max] when both set).
   optional int64 billing_amount_min = 22;  // centavos — advertised band floor
   optional int64 billing_amount_max = 23;  // centavos — advertised band ceiling
+
+  // Usage & pass-through charges (Slice A): opt-in charge policy for this package line.
+  // NULL = legacy path (unchanged behaviour). When set, use cases require the policy to be
+  // same-workspace, ACTIVE, with an APPROVED version, and billing_treatment USAGE_BASED.
+  optional string charge_policy_id = 24 [(options.v1.db).references = "charge_policy", (options.v1.db).index = true];
+  // Markup in basis points over cost. CHECK (markup_bps >= 0) in the migration. Must be
+  // null/0 while the S1 policy matrix only allows at-cost recovery.
+  optional int32 markup_bps = 25;
 }
 
 service ProductPricePlanDomainService {

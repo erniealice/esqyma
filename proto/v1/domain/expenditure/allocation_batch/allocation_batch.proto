@@ -1,0 +1,168 @@
+syntax = "proto3";
+
+package domain.expenditure.v1;
+
+option go_package = "github.com/erniealice/esqyma/golang/v1/domain/expenditure/allocation_batch";
+
+import "domain/common/error.proto";
+import "domain/common/pagination.proto";
+import "domain/common/filter.proto";
+import "domain/common/sort.proto";
+import "domain/common/search.proto";
+import "domain/subscription/billable_charge/billable_charge.proto";
+import "domain/expenditure/allocation_share/allocation_share.proto";
+
+import "options/db.proto";
+
+enum AllocationBatchStatus {
+  ALLOCATION_BATCH_STATUS_UNSPECIFIED = 0;
+  ALLOCATION_BATCH_STATUS_DRAFT = 1;
+  ALLOCATION_BATCH_STATUS_PUBLISHED = 2;
+  ALLOCATION_BATCH_STATUS_SUPERSEDED = 3;
+}
+
+// A revisioned split of one cost source component across participants. Only one PUBLISHED batch per component (partial unique index in the migration).
+message AllocationBatch {
+  option (options.v1.table).table = true;
+  option (options.v1.table).unique_together = "cost_source_component_id,revision";
+
+  string id = 1;
+  string workspace_id = 2 [(options.v1.db).references = "workspace", (options.v1.db).index = true];
+  string cost_source_component_id = 3 [(options.v1.db).references = "cost_source_component", (options.v1.db).index = true];
+  int32 revision = 4 [(options.v1.db).check = "revision > 0"];
+  optional string supersedes_id = 5 [(options.v1.db).references = "allocation_batch", (options.v1.db).index = true];
+  domain.expenditure.v1.AllocationBatchStatus status = 6 [(options.v1.db).check = "status IN ('ALLOCATION_BATCH_STATUS_DRAFT', 'ALLOCATION_BATCH_STATUS_PUBLISHED', 'ALLOCATION_BATCH_STATUS_SUPERSEDED')"];
+  string rule_code = 7 [(options.v1.db).default = "'LARGEST_REMAINDER'"];
+  int32 rule_version = 8 [(options.v1.db).default = "1"];
+  optional int64 total_amount = 9;
+  optional string currency = 10;
+  optional int64 published_at = 11;
+  optional string published_by = 12;
+  optional string prepared_by = 13;
+  bool active = 14 [(options.v1.db).default = "true"];
+  optional int64 date_created = 15;
+  optional string date_created_string = 16 [(options.v1.db).ignore = true];
+  optional int64 date_modified = 17;
+  optional string date_modified_string = 18 [(options.v1.db).ignore = true];
+}
+
+service AllocationBatchDomainService {
+  rpc CreateAllocationBatch(CreateAllocationBatchRequest) returns (CreateAllocationBatchResponse);
+  rpc ReadAllocationBatch(ReadAllocationBatchRequest) returns (ReadAllocationBatchResponse);
+  rpc UpdateAllocationBatch(UpdateAllocationBatchRequest) returns (UpdateAllocationBatchResponse);
+  rpc DeleteAllocationBatch(DeleteAllocationBatchRequest) returns (DeleteAllocationBatchResponse);
+  rpc ListAllocationBatches(ListAllocationBatchesRequest) returns (ListAllocationBatchesResponse);
+  rpc GetAllocationBatchListPageData(GetAllocationBatchListPageDataRequest) returns (GetAllocationBatchListPageDataResponse);
+  rpc GetAllocationBatchItemPageData(GetAllocationBatchItemPageDataRequest) returns (GetAllocationBatchItemPageDataResponse);
+  rpc UpdateAllocationBatchShares(UpdateAllocationBatchSharesRequest) returns (UpdateAllocationBatchSharesResponse);
+  rpc PublishAllocationBatch(PublishAllocationBatchRequest) returns (PublishAllocationBatchResponse);
+}
+
+message CreateAllocationBatchRequest {
+  AllocationBatch data = 1;
+  // The proposed shares (kind, subscription_id, client_id, basis_numerator, basis_denominator);
+  // amount/sequence_order are computed by the use case (largest remainder).
+  repeated domain.expenditure.v1.AllocationShare shares = 2;
+}
+
+message CreateAllocationBatchResponse {
+  repeated AllocationBatch data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+  repeated domain.expenditure.v1.AllocationShare shares = 4;
+}
+
+message ReadAllocationBatchRequest {
+  AllocationBatch data = 1;
+}
+
+message ReadAllocationBatchResponse {
+  repeated AllocationBatch data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message UpdateAllocationBatchRequest {
+  AllocationBatch data = 1;
+}
+
+message UpdateAllocationBatchResponse {
+  repeated AllocationBatch data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message DeleteAllocationBatchRequest {
+  AllocationBatch data = 1;
+}
+
+message DeleteAllocationBatchResponse {
+  bool success = 1;
+  optional domain.common.v1.Error error = 2;
+}
+
+message ListAllocationBatchesRequest {
+  optional domain.common.v1.SearchRequest search = 1;
+  optional domain.common.v1.FilterRequest filters = 2;
+  optional domain.common.v1.SortRequest sort = 3;
+  optional domain.common.v1.PaginationRequest pagination = 4;
+}
+
+message ListAllocationBatchesResponse {
+  repeated AllocationBatch data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message GetAllocationBatchListPageDataRequest {
+  optional domain.common.v1.PaginationRequest pagination = 1;
+  optional domain.common.v1.FilterRequest filters = 2;
+  optional domain.common.v1.SortRequest sort = 3;
+  optional domain.common.v1.SearchRequest search = 4;
+}
+
+message GetAllocationBatchListPageDataResponse {
+  repeated AllocationBatch allocation_batch_list = 1;
+  optional domain.common.v1.PaginationResponse pagination = 2;
+  repeated domain.common.v1.SearchResult search_results = 3;
+  bool success = 4;
+  optional domain.common.v1.Error error = 5;
+}
+
+message GetAllocationBatchItemPageDataRequest {
+  string allocation_batch_id = 1;
+}
+
+message GetAllocationBatchItemPageDataResponse {
+  optional AllocationBatch allocation_batch = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+// UpdateAllocationBatchShares replaces the shares of a DRAFT batch and recomputes the amounts.
+message UpdateAllocationBatchSharesRequest {
+  string allocation_batch_id = 1;
+  repeated domain.expenditure.v1.AllocationShare shares = 2;
+}
+
+message UpdateAllocationBatchSharesResponse {
+  optional AllocationBatch data = 1;
+  repeated domain.expenditure.v1.AllocationShare shares = 2;
+  bool success = 3;
+  optional domain.common.v1.Error error = 4;
+}
+
+// PublishAllocationBatch publishes a DRAFT batch, supersedes the previous PUBLISHED one and writes
+// the derived billable charges (idempotent by obligation_key); replayed_count = charges that already existed.
+message PublishAllocationBatchRequest {
+  string allocation_batch_id = 1;
+}
+
+message PublishAllocationBatchResponse {
+  optional AllocationBatch data = 1;
+  repeated domain.expenditure.v1.AllocationShare shares = 2;
+  repeated domain.subscription.v1.BillableCharge charges = 3;
+  int32 replayed_count = 4;
+  bool success = 5;
+  optional domain.common.v1.Error error = 6;
+}

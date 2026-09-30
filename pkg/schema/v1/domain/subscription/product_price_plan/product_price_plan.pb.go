@@ -109,8 +109,15 @@ type ProductPricePlan struct {
 	// at config time (a seat's contracted_amount must fall within [min, max] when both set).
 	BillingAmountMin *int64 `protobuf:"varint,22,opt,name=billing_amount_min,json=billingAmountMin,proto3,oneof" json:"billing_amount_min,omitempty"` // centavos — advertised band floor
 	BillingAmountMax *int64 `protobuf:"varint,23,opt,name=billing_amount_max,json=billingAmountMax,proto3,oneof" json:"billing_amount_max,omitempty"` // centavos — advertised band ceiling
-	unknownFields    protoimpl.UnknownFields
-	sizeCache        protoimpl.SizeCache
+	// Usage & pass-through charges (Slice A): opt-in charge policy for this package line.
+	// NULL = legacy path (unchanged behaviour). When set, use cases require the policy to be
+	// same-workspace, ACTIVE, with an APPROVED version, and billing_treatment USAGE_BASED.
+	ChargePolicyId *string `protobuf:"bytes,24,opt,name=charge_policy_id,json=chargePolicyId,proto3,oneof" json:"charge_policy_id,omitempty"`
+	// Markup in basis points over cost. CHECK (markup_bps >= 0) in the migration. Must be
+	// null/0 while the S1 policy matrix only allows at-cost recovery.
+	MarkupBps     *int32 `protobuf:"varint,25,opt,name=markup_bps,json=markupBps,proto3,oneof" json:"markup_bps,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
 }
 
 func (x *ProductPricePlan) Reset() {
@@ -279,6 +286,20 @@ func (x *ProductPricePlan) GetBillingAmountMin() int64 {
 func (x *ProductPricePlan) GetBillingAmountMax() int64 {
 	if x != nil && x.BillingAmountMax != nil {
 		return *x.BillingAmountMax
+	}
+	return 0
+}
+
+func (x *ProductPricePlan) GetChargePolicyId() string {
+	if x != nil && x.ChargePolicyId != nil {
+		return *x.ChargePolicyId
+	}
+	return ""
+}
+
+func (x *ProductPricePlan) GetMarkupBps() int32 {
+	if x != nil && x.MarkupBps != nil {
+		return *x.MarkupBps
 	}
 	return 0
 }
@@ -1071,7 +1092,7 @@ var File_domain_subscription_product_price_plan_product_price_plan_proto protore
 
 const file_domain_subscription_product_price_plan_product_price_plan_proto_rawDesc = "" +
 	"\n" +
-	"?domain/subscription/product_price_plan/product_price_plan.proto\x12\x16domain.subscription.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/search.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a.domain/product/product_plan/product_plan.proto\x1a/domain/subscription/price_plan/price_plan.proto\x1a\x10options/db.proto\"\xb8\v\n" +
+	"?domain/subscription/product_price_plan/product_price_plan.proto\x12\x16domain.subscription.v1\x1a\x19domain/common/error.proto\x1a\x1edomain/common/pagination.proto\x1a\x1adomain/common/search.proto\x1a\x1adomain/common/filter.proto\x1a\x18domain/common/sort.proto\x1a.domain/product/product_plan/product_plan.proto\x1a/domain/subscription/price_plan/price_plan.proto\x1a\x10options/db.proto\"\xc6\f\n" +
 	"\x10ProductPricePlan\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12&\n" +
 	"\fdate_created\x18\x02 \x01(\x03H\x00R\vdateCreated\x88\x01\x01\x12;\n" +
@@ -1102,7 +1123,11 @@ const file_domain_subscription_product_price_plan_product_price_plan_proto_rawDe
 	"\ttax_class\x18\x01H\n" +
 	"R\x12withholdingClassId\x88\x01\x01\x121\n" +
 	"\x12billing_amount_min\x18\x16 \x01(\x03H\vR\x10billingAmountMin\x88\x01\x01\x121\n" +
-	"\x12billing_amount_max\x18\x17 \x01(\x03H\fR\x10billingAmountMax\x88\x01\x01:%\x8a\xb5\x18!\b\x01\x1a\x1dprice_plan_id,product_plan_idB\x0f\n" +
+	"\x12billing_amount_max\x18\x17 \x01(\x03H\fR\x10billingAmountMax\x88\x01\x01\x12D\n" +
+	"\x10charge_policy_id\x18\x18 \x01(\tB\x15\x82\xb5\x18\x11\n" +
+	"\rcharge_policy\x18\x01H\rR\x0echargePolicyId\x88\x01\x01\x12\"\n" +
+	"\n" +
+	"markup_bps\x18\x19 \x01(\x05H\x0eR\tmarkupBps\x88\x01\x01:%\x8a\xb5\x18!\b\x01\x1a\x1dprice_plan_id,product_plan_idB\x0f\n" +
 	"\r_date_createdB\x16\n" +
 	"\x14_date_created_stringB\x10\n" +
 	"\x0e_date_modifiedB\x17\n" +
@@ -1115,7 +1140,9 @@ const file_domain_subscription_product_price_plan_product_price_plan_proto_rawDe
 	"\x11_tax_treatment_idB\x17\n" +
 	"\x15_withholding_class_idB\x15\n" +
 	"\x13_billing_amount_minB\x15\n" +
-	"\x13_billing_amount_maxJ\x04\b\t\x10\n" +
+	"\x13_billing_amount_maxB\x13\n" +
+	"\x11_charge_policy_idB\r\n" +
+	"\v_markup_bpsJ\x04\b\t\x10\n" +
 	"J\x04\b\n" +
 	"\x10\vJ\x04\b\x10\x10\x11R\aproductR\n" +
 	"product_idR\x12product_variant_id\"]\n" +

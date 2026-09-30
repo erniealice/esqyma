@@ -1,0 +1,122 @@
+syntax = "proto3";
+
+package domain.subscription.v1;
+
+option go_package = "github.com/erniealice/esqyma/golang/v1/domain/subscription/charge_component";
+
+import "domain/common/error.proto";
+import "domain/common/pagination.proto";
+import "domain/common/filter.proto";
+import "domain/common/sort.proto";
+import "domain/common/search.proto";
+
+import "domain/ledger/enums/enums.proto";
+import "options/db.proto";
+
+// One component of a billable charge, carrying the pinned policy's role / document kind / book presentation / tax position (Slice A enums).
+message ChargeComponent {
+  option (options.v1.table).table = true;
+
+  string id = 1;
+  string workspace_id = 2 [(options.v1.db).references = "workspace", (options.v1.db).index = true];
+  string billable_charge_id = 3 [(options.v1.db).references = "billable_charge", (options.v1.db).index = true];
+  domain.ledger.v1.ChargeComponentRole component_role = 4 [(options.v1.db).check = "component_role IN ('CHARGE_COMPONENT_ROLE_OWN_REVENUE', 'CHARGE_COMPONENT_ROLE_RECOVERY_COST', 'CHARGE_COMPONENT_ROLE_FEE')"];
+  domain.ledger.v1.ChargeDocumentKind document_kind = 5 [(options.v1.db).check = "document_kind IN ('CHARGE_DOCUMENT_KIND_INVOICE', 'CHARGE_DOCUMENT_KIND_RECOVERY_DOCUMENT')"];
+  domain.ledger.v1.BookPresentation book_presentation = 6 [(options.v1.db).check = "book_presentation IN ('BOOK_PRESENTATION_REVENUE', 'BOOK_PRESENTATION_EXCLUDED_REIMBURSEMENT')"];
+  domain.ledger.v1.TaxPosition tax_position = 7 [(options.v1.db).check = "tax_position IN ('TAX_POSITION_OWN_SUPPLY', 'TAX_POSITION_EXCLUDED_REIMBURSEMENT')"];
+  int64 amount = 8 [(options.v1.db).default = "0"];
+  string currency = 9;
+  optional string cost_source_component_id = 10 [(options.v1.db).references = "cost_source_component", (options.v1.db).index = true];
+  bool active = 11 [(options.v1.db).default = "true"];
+  optional int64 date_created = 12;
+  optional string date_created_string = 13 [(options.v1.db).ignore = true];
+  optional int64 date_modified = 14;
+  optional string date_modified_string = 15 [(options.v1.db).ignore = true];
+}
+
+service ChargeComponentDomainService {
+  rpc CreateChargeComponent(CreateChargeComponentRequest) returns (CreateChargeComponentResponse);
+  rpc ReadChargeComponent(ReadChargeComponentRequest) returns (ReadChargeComponentResponse);
+  rpc UpdateChargeComponent(UpdateChargeComponentRequest) returns (UpdateChargeComponentResponse);
+  rpc DeleteChargeComponent(DeleteChargeComponentRequest) returns (DeleteChargeComponentResponse);
+  rpc ListChargeComponents(ListChargeComponentsRequest) returns (ListChargeComponentsResponse);
+  rpc GetChargeComponentListPageData(GetChargeComponentListPageDataRequest) returns (GetChargeComponentListPageDataResponse);
+  rpc GetChargeComponentItemPageData(GetChargeComponentItemPageDataRequest) returns (GetChargeComponentItemPageDataResponse);
+}
+
+message CreateChargeComponentRequest {
+  ChargeComponent data = 1;
+}
+
+message CreateChargeComponentResponse {
+  repeated ChargeComponent data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message ReadChargeComponentRequest {
+  ChargeComponent data = 1;
+}
+
+message ReadChargeComponentResponse {
+  repeated ChargeComponent data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message UpdateChargeComponentRequest {
+  ChargeComponent data = 1;
+}
+
+message UpdateChargeComponentResponse {
+  repeated ChargeComponent data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message DeleteChargeComponentRequest {
+  ChargeComponent data = 1;
+}
+
+message DeleteChargeComponentResponse {
+  bool success = 1;
+  optional domain.common.v1.Error error = 2;
+}
+
+message ListChargeComponentsRequest {
+  optional domain.common.v1.SearchRequest search = 1;
+  optional domain.common.v1.FilterRequest filters = 2;
+  optional domain.common.v1.SortRequest sort = 3;
+  optional domain.common.v1.PaginationRequest pagination = 4;
+}
+
+message ListChargeComponentsResponse {
+  repeated ChargeComponent data = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}
+
+message GetChargeComponentListPageDataRequest {
+  optional domain.common.v1.PaginationRequest pagination = 1;
+  optional domain.common.v1.FilterRequest filters = 2;
+  optional domain.common.v1.SortRequest sort = 3;
+  optional domain.common.v1.SearchRequest search = 4;
+}
+
+message GetChargeComponentListPageDataResponse {
+  repeated ChargeComponent charge_component_list = 1;
+  optional domain.common.v1.PaginationResponse pagination = 2;
+  repeated domain.common.v1.SearchResult search_results = 3;
+  bool success = 4;
+  optional domain.common.v1.Error error = 5;
+}
+
+message GetChargeComponentItemPageDataRequest {
+  string charge_component_id = 1;
+}
+
+message GetChargeComponentItemPageDataResponse {
+  optional ChargeComponent charge_component = 1;
+  bool success = 2;
+  optional domain.common.v1.Error error = 3;
+}

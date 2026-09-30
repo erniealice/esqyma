@@ -1,0 +1,74 @@
+syntax = "proto3";
+
+package domain.ledger.v1;
+
+option go_package = "github.com/erniealice/esqyma/golang/v1/domain/ledger/enums";
+
+// Shared enums for the charge policy entities (charge_policy, charge_policy_version,
+// charge_policy_component, charge_policy_posting). Values are stored as their proto
+// name strings (protojson bridge). Extracted to avoid circular imports between the
+// four charge policy protos.
+
+// Policy status. There is deliberately no DRAFT: the "draft" list is computed
+// (a policy with no APPROVED version and not retired).
+enum ChargePolicyStatus {
+  CHARGE_POLICY_STATUS_UNSPECIFIED = 0;
+  CHARGE_POLICY_STATUS_ACTIVE = 1;
+  CHARGE_POLICY_STATUS_RETIRED = 2;
+}
+
+enum ChargePolicyVersionStatus {
+  CHARGE_POLICY_VERSION_STATUS_UNSPECIFIED = 0;
+  CHARGE_POLICY_VERSION_STATUS_DRAFT = 1;
+  CHARGE_POLICY_VERSION_STATUS_APPROVED = 2;
+  CHARGE_POLICY_VERSION_STATUS_SUPERSEDED = 3;
+}
+
+enum AccountingRole {
+  ACCOUNTING_ROLE_UNSPECIFIED = 0;
+  ACCOUNTING_ROLE_PRINCIPAL = 1;
+  ACCOUNTING_ROLE_AGENT = 2;
+}
+
+enum BookPresentation {
+  BOOK_PRESENTATION_UNSPECIFIED = 0;
+  BOOK_PRESENTATION_REVENUE = 1;
+  BOOK_PRESENTATION_EXCLUDED_REIMBURSEMENT = 2;
+}
+
+enum TaxPosition {
+  TAX_POSITION_UNSPECIFIED = 0;
+  TAX_POSITION_OWN_SUPPLY = 1;
+  TAX_POSITION_EXCLUDED_REIMBURSEMENT = 2;
+}
+
+enum ChargeComponentRole {
+  CHARGE_COMPONENT_ROLE_UNSPECIFIED = 0;
+  CHARGE_COMPONENT_ROLE_OWN_REVENUE = 1;
+  CHARGE_COMPONENT_ROLE_RECOVERY_COST = 2;
+  CHARGE_COMPONENT_ROLE_FEE = 3;
+}
+
+enum ChargeDocumentKind {
+  CHARGE_DOCUMENT_KIND_UNSPECIFIED = 0;
+  CHARGE_DOCUMENT_KIND_INVOICE = 1;
+  CHARGE_DOCUMENT_KIND_RECOVERY_DOCUMENT = 2;
+}
+
+enum ChargePostingEvent {
+  CHARGE_POSTING_EVENT_UNSPECIFIED = 0;
+  CHARGE_POSTING_EVENT_ALLOCATION = 1;
+  CHARGE_POSTING_EVENT_ISSUE = 2;
+  CHARGE_POSTING_EVENT_APPLICATION = 3;
+  CHARGE_POSTING_EVENT_REVERSAL = 4;
+}
+
+enum ChargePostingRole {
+  CHARGE_POSTING_ROLE_UNSPECIFIED = 0;
+  CHARGE_POSTING_ROLE_RECEIVABLE = 1;
+  CHARGE_POSTING_ROLE_CLEARING = 2;
+  CHARGE_POSTING_ROLE_REVENUE = 3;
+  CHARGE_POSTING_ROLE_REFUND_LIABILITY = 4;
+  CHARGE_POSTING_ROLE_EXPENSE = 5;
+  CHARGE_POSTING_ROLE_CASH = 6;
+}
