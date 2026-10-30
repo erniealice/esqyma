@@ -190,12 +190,73 @@ export type JobTemplateSummary = Message<"service.operation.v1.JobTemplateSummar
      * @generated from field: bool template_grain_fallback = 22;
      */
     templateGrainFallback: boolean;
+    /**
+     * PER-PHASE GROUP+TEMPLATE grain (23): one entry per ACTIVE
+     * job_template_phase of the row's template, ordered by phase_order (id
+     * tie-break), restricted to THIS row's (subscription_group, template) slice
+     * of the SAME resolver-scoped job set as 18–21. 18–21 fold these phases into
+     * one quadruple; 23 keeps them apart so a list can show each phase's own
+     * state. Empty for a template with no active phase, for a row with no
+     * subscription_group, and for template_grain_fallback rows.
+     *
+     * @generated from field: repeated service.operation.v1.JobTemplateSummaryPhaseStatus group_phase_statuses = 23;
+     */
+    groupPhaseStatuses: JobTemplateSummaryPhaseStatus[];
 };
 /**
  * Describes the message service.operation.v1.JobTemplateSummary.
  * Use `create(JobTemplateSummarySchema)` to create a new message.
  */
 export declare const JobTemplateSummarySchema: GenMessage<JobTemplateSummary>;
+/**
+ * JobTemplateSummaryPhaseStatus is ONE job_template_phase's approval state over
+ * a summary row's (subscription_group, template) slice. Unlike fields 14–21 it
+ * does NOT exclude no-data sheets: has_data says whether the slice bears data,
+ * so a consumer can render the derived not-started overlay (IN_PROGRESS with no
+ * data). lowest_status is the conservative LOWEST ladder rank across the
+ * slice's active job_phase rows for this phase; mixed_attention is true when
+ * those rows sit at differing statuses. A phase with no job_phase row in the
+ * slice is PHASE_APPROVAL_STATUS_UNSPECIFIED (never persisted). code/name are
+ * the phase's own data (job_template_phase.code / .name) — display vocabulary
+ * comes from data, never from this message.
+ *
+ * @generated from message service.operation.v1.JobTemplateSummaryPhaseStatus
+ */
+export type JobTemplateSummaryPhaseStatus = Message<"service.operation.v1.JobTemplateSummaryPhaseStatus"> & {
+    /**
+     * @generated from field: string job_template_phase_id = 1;
+     */
+    jobTemplatePhaseId: string;
+    /**
+     * @generated from field: string code = 2;
+     */
+    code: string;
+    /**
+     * @generated from field: string name = 3;
+     */
+    name: string;
+    /**
+     * @generated from field: int32 phase_order = 4;
+     */
+    phaseOrder: number;
+    /**
+     * @generated from field: domain.operation.v1.PhaseApprovalStatus lowest_status = 5;
+     */
+    lowestStatus: PhaseApprovalStatus;
+    /**
+     * @generated from field: bool mixed_attention = 6;
+     */
+    mixedAttention: boolean;
+    /**
+     * @generated from field: bool has_data = 7;
+     */
+    hasData: boolean;
+};
+/**
+ * Describes the message service.operation.v1.JobTemplateSummaryPhaseStatus.
+ * Use `create(JobTemplateSummaryPhaseStatusSchema)` to create a new message.
+ */
+export declare const JobTemplateSummaryPhaseStatusSchema: GenMessage<JobTemplateSummaryPhaseStatus>;
 /**
  * JobCategorySummaryCount is the number of rows in one job-category partition
  * of the status-scoped summary universe before selected-category pagination and

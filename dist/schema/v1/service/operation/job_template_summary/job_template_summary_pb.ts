@@ -20,7 +20,7 @@ import type { Message } from "@bufbuild/protobuf";
  * Describes the file service/operation/job_template_summary/job_template_summary.proto.
  */
 export const file_service_operation_job_template_summary_job_template_summary: GenFile = /*@__PURE__*/
-  fileDesc("CkFzZXJ2aWNlL29wZXJhdGlvbi9qb2JfdGVtcGxhdGVfc3VtbWFyeS9qb2JfdGVtcGxhdGVfc3VtbWFyeS5wcm90bxIUc2VydmljZS5vcGVyYXRpb24udjEiMQoJRGVsaXZlcmVyEhAKCHN0YWZmX2lkGAEgASgJEhIKCnN0YWZmX25hbWUYAiABKAkixAUKEkpvYlRlbXBsYXRlU3VtbWFyeRIXCg9qb2JfdGVtcGxhdGVfaWQYASABKAkSGQoRam9iX3RlbXBsYXRlX25hbWUYAiABKAkSHQoVc3Vic2NyaXB0aW9uX2dyb3VwX2lkGAMgASgJEh8KF3N1YnNjcmlwdGlvbl9ncm91cF9uYW1lGAQgASgJEhEKCWpvYl9jb3VudBgHIAEoBRIZChFwcmljZV9zY2hlZHVsZV9pZBgIIAEoCRIbChNwcmljZV9zY2hlZHVsZV9uYW1lGAkgASgJEhkKEW91dHB1dF9wcm9kdWN0X2lkGAogASgJEhsKE291dHB1dF9wcm9kdWN0X25hbWUYCyABKAkSMwoKZGVsaXZlcmVycxgMIAMoCzIfLnNlcnZpY2Uub3BlcmF0aW9uLnYxLkRlbGl2ZXJlchIXCg9qb2JfY2F0ZWdvcnlfaWQYDSABKAkSFwoPcHVibGlzaGVkX2NvdW50GA4gASgFEhMKC3BoYXNlX2NvdW50GA8gASgFEj8KDWxvd2VzdF9zdGF0dXMYECABKA4yKC5kb21haW4ub3BlcmF0aW9uLnYxLlBoYXNlQXBwcm92YWxTdGF0dXMSFwoPbWl4ZWRfYXR0ZW50aW9uGBEgASgIEh0KFWdyb3VwX3B1Ymxpc2hlZF9jb3VudBgSIAEoBRIZChFncm91cF9waGFzZV9jb3VudBgTIAEoBRJFChNncm91cF9sb3dlc3Rfc3RhdHVzGBQgASgOMiguZG9tYWluLm9wZXJhdGlvbi52MS5QaGFzZUFwcHJvdmFsU3RhdHVzEh0KFWdyb3VwX21peGVkX2F0dGVudGlvbhgVIAEoCBIfChd0ZW1wbGF0ZV9ncmFpbl9mYWxsYmFjaxgWIAEoCEoECAUQBkoECAYQB1IIc3RhZmZfaWRSCnN0YWZmX25hbWUiSQoXSm9iQ2F0ZWdvcnlTdW1tYXJ5Q291bnQSFwoPam9iX2NhdGVnb3J5X2lkGAEgASgJEhUKDXN1bW1hcnlfY291bnQYAiABKAUi7gMKH0xpc3RKb2JUZW1wbGF0ZVN1bW1hcmllc1JlcXVlc3QSDgoGc3RhdHVzGAEgASgJEiIKFXN1YnNjcmlwdGlvbl9ncm91cF9pZBgCIAEoCUgAiAEBEjwKCnBhZ2luYXRpb24YAyABKAsyIy5kb21haW4uY29tbW9uLnYxLlBhZ2luYXRpb25SZXF1ZXN0SAGIAQESIgoVcHJpY2Vfc2NoZWR1bGVfYWN0aXZlGAQgASgISAKIAQESHAoPam9iX2NhdGVnb3J5X2lkGAUgASgJSAOIAQESNAoGc2VhcmNoGAYgASgLMh8uZG9tYWluLmNvbW1vbi52MS5TZWFyY2hSZXF1ZXN0SASIAQESMAoEc29ydBgHIAEoCzIdLmRvbWFpbi5jb21tb24udjEuU29ydFJlcXVlc3RIBYgBARImChlpbmNsdWRlX3RlbXBsYXRlX2ZhbGxiYWNrGAggASgISAaIAQFCGAoWX3N1YnNjcmlwdGlvbl9ncm91cF9pZEINCgtfcGFnaW5hdGlvbkIYChZfcHJpY2Vfc2NoZWR1bGVfYWN0aXZlQhIKEF9qb2JfY2F0ZWdvcnlfaWRCCQoHX3NlYXJjaEIHCgVfc29ydEIcChpfaW5jbHVkZV90ZW1wbGF0ZV9mYWxsYmFjayLBAgogTGlzdEpvYlRlbXBsYXRlU3VtbWFyaWVzUmVzcG9uc2USOwoJc3VtbWFyaWVzGAEgAygLMiguc2VydmljZS5vcGVyYXRpb24udjEuSm9iVGVtcGxhdGVTdW1tYXJ5Eg8KB3N1Y2Nlc3MYAiABKAgSPQoKcGFnaW5hdGlvbhgDIAEoCzIkLmRvbWFpbi5jb21tb24udjEuUGFnaW5hdGlvblJlc3BvbnNlSACIAQESKwoFZXJyb3IYBCABKAsyFy5kb21haW4uY29tbW9uLnYxLkVycm9ySAGIAQESSgoTam9iX2NhdGVnb3J5X2NvdW50cxgFIAMoCzItLnNlcnZpY2Uub3BlcmF0aW9uLnYxLkpvYkNhdGVnb3J5U3VtbWFyeUNvdW50Qg0KC19wYWdpbmF0aW9uQggKBl9lcnJvcjKnAQoZSm9iVGVtcGxhdGVTdW1tYXJ5U2VydmljZRKJAQoYTGlzdEpvYlRlbXBsYXRlU3VtbWFyaWVzEjUuc2VydmljZS5vcGVyYXRpb24udjEuTGlzdEpvYlRlbXBsYXRlU3VtbWFyaWVzUmVxdWVzdBo2LnNlcnZpY2Uub3BlcmF0aW9uLnYxLkxpc3RKb2JUZW1wbGF0ZVN1bW1hcmllc1Jlc3BvbnNlQoQCChhjb20uc2VydmljZS5vcGVyYXRpb24udjFCF0pvYlRlbXBsYXRlU3VtbWFyeVByb3RvUAFaXWdpdGh1Yi5jb20vZXJuaWVhbGljZS9lc3F5bWEvcGtnL3NjaGVtYS92MS9zZXJ2aWNlL29wZXJhdGlvbi9qb2JfdGVtcGxhdGVfc3VtbWFyeTtvcGVyYXRpb252MaICA1NPWKoCFFNlcnZpY2UuT3BlcmF0aW9uLlYxygIUU2VydmljZVxPcGVyYXRpb25cVjHiAiBTZXJ2aWNlXE9wZXJhdGlvblxWMVxHUEJNZXRhZGF0YeoCFlNlcnZpY2U6Ok9wZXJhdGlvbjo6VjFiBnByb3RvMw", [file_domain_common_error, file_domain_common_pagination, file_domain_common_search, file_domain_common_sort, file_domain_operation_job_phase_job_phase]);
+  fileDesc("CkFzZXJ2aWNlL29wZXJhdGlvbi9qb2JfdGVtcGxhdGVfc3VtbWFyeS9qb2JfdGVtcGxhdGVfc3VtbWFyeS5wcm90bxIUc2VydmljZS5vcGVyYXRpb24udjEiMQoJRGVsaXZlcmVyEhAKCHN0YWZmX2lkGAEgASgJEhIKCnN0YWZmX25hbWUYAiABKAkilwYKEkpvYlRlbXBsYXRlU3VtbWFyeRIXCg9qb2JfdGVtcGxhdGVfaWQYASABKAkSGQoRam9iX3RlbXBsYXRlX25hbWUYAiABKAkSHQoVc3Vic2NyaXB0aW9uX2dyb3VwX2lkGAMgASgJEh8KF3N1YnNjcmlwdGlvbl9ncm91cF9uYW1lGAQgASgJEhEKCWpvYl9jb3VudBgHIAEoBRIZChFwcmljZV9zY2hlZHVsZV9pZBgIIAEoCRIbChNwcmljZV9zY2hlZHVsZV9uYW1lGAkgASgJEhkKEW91dHB1dF9wcm9kdWN0X2lkGAogASgJEhsKE291dHB1dF9wcm9kdWN0X25hbWUYCyABKAkSMwoKZGVsaXZlcmVycxgMIAMoCzIfLnNlcnZpY2Uub3BlcmF0aW9uLnYxLkRlbGl2ZXJlchIXCg9qb2JfY2F0ZWdvcnlfaWQYDSABKAkSFwoPcHVibGlzaGVkX2NvdW50GA4gASgFEhMKC3BoYXNlX2NvdW50GA8gASgFEj8KDWxvd2VzdF9zdGF0dXMYECABKA4yKC5kb21haW4ub3BlcmF0aW9uLnYxLlBoYXNlQXBwcm92YWxTdGF0dXMSFwoPbWl4ZWRfYXR0ZW50aW9uGBEgASgIEh0KFWdyb3VwX3B1Ymxpc2hlZF9jb3VudBgSIAEoBRIZChFncm91cF9waGFzZV9jb3VudBgTIAEoBRJFChNncm91cF9sb3dlc3Rfc3RhdHVzGBQgASgOMiguZG9tYWluLm9wZXJhdGlvbi52MS5QaGFzZUFwcHJvdmFsU3RhdHVzEh0KFWdyb3VwX21peGVkX2F0dGVudGlvbhgVIAEoCBIfChd0ZW1wbGF0ZV9ncmFpbl9mYWxsYmFjaxgWIAEoCBJRChRncm91cF9waGFzZV9zdGF0dXNlcxgXIAMoCzIzLnNlcnZpY2Uub3BlcmF0aW9uLnYxLkpvYlRlbXBsYXRlU3VtbWFyeVBoYXNlU3RhdHVzSgQIBRAGSgQIBhAHUghzdGFmZl9pZFIKc3RhZmZfbmFtZSLbAQodSm9iVGVtcGxhdGVTdW1tYXJ5UGhhc2VTdGF0dXMSHQoVam9iX3RlbXBsYXRlX3BoYXNlX2lkGAEgASgJEgwKBGNvZGUYAiABKAkSDAoEbmFtZRgDIAEoCRITCgtwaGFzZV9vcmRlchgEIAEoBRI/Cg1sb3dlc3Rfc3RhdHVzGAUgASgOMiguZG9tYWluLm9wZXJhdGlvbi52MS5QaGFzZUFwcHJvdmFsU3RhdHVzEhcKD21peGVkX2F0dGVudGlvbhgGIAEoCBIQCghoYXNfZGF0YRgHIAEoCCJJChdKb2JDYXRlZ29yeVN1bW1hcnlDb3VudBIXCg9qb2JfY2F0ZWdvcnlfaWQYASABKAkSFQoNc3VtbWFyeV9jb3VudBgCIAEoBSLuAwofTGlzdEpvYlRlbXBsYXRlU3VtbWFyaWVzUmVxdWVzdBIOCgZzdGF0dXMYASABKAkSIgoVc3Vic2NyaXB0aW9uX2dyb3VwX2lkGAIgASgJSACIAQESPAoKcGFnaW5hdGlvbhgDIAEoCzIjLmRvbWFpbi5jb21tb24udjEuUGFnaW5hdGlvblJlcXVlc3RIAYgBARIiChVwcmljZV9zY2hlZHVsZV9hY3RpdmUYBCABKAhIAogBARIcCg9qb2JfY2F0ZWdvcnlfaWQYBSABKAlIA4gBARI0CgZzZWFyY2gYBiABKAsyHy5kb21haW4uY29tbW9uLnYxLlNlYXJjaFJlcXVlc3RIBIgBARIwCgRzb3J0GAcgASgLMh0uZG9tYWluLmNvbW1vbi52MS5Tb3J0UmVxdWVzdEgFiAEBEiYKGWluY2x1ZGVfdGVtcGxhdGVfZmFsbGJhY2sYCCABKAhIBogBAUIYChZfc3Vic2NyaXB0aW9uX2dyb3VwX2lkQg0KC19wYWdpbmF0aW9uQhgKFl9wcmljZV9zY2hlZHVsZV9hY3RpdmVCEgoQX2pvYl9jYXRlZ29yeV9pZEIJCgdfc2VhcmNoQgcKBV9zb3J0QhwKGl9pbmNsdWRlX3RlbXBsYXRlX2ZhbGxiYWNrIsECCiBMaXN0Sm9iVGVtcGxhdGVTdW1tYXJpZXNSZXNwb25zZRI7CglzdW1tYXJpZXMYASADKAsyKC5zZXJ2aWNlLm9wZXJhdGlvbi52MS5Kb2JUZW1wbGF0ZVN1bW1hcnkSDwoHc3VjY2VzcxgCIAEoCBI9CgpwYWdpbmF0aW9uGAMgASgLMiQuZG9tYWluLmNvbW1vbi52MS5QYWdpbmF0aW9uUmVzcG9uc2VIAIgBARIrCgVlcnJvchgEIAEoCzIXLmRvbWFpbi5jb21tb24udjEuRXJyb3JIAYgBARJKChNqb2JfY2F0ZWdvcnlfY291bnRzGAUgAygLMi0uc2VydmljZS5vcGVyYXRpb24udjEuSm9iQ2F0ZWdvcnlTdW1tYXJ5Q291bnRCDQoLX3BhZ2luYXRpb25CCAoGX2Vycm9yMqcBChlKb2JUZW1wbGF0ZVN1bW1hcnlTZXJ2aWNlEokBChhMaXN0Sm9iVGVtcGxhdGVTdW1tYXJpZXMSNS5zZXJ2aWNlLm9wZXJhdGlvbi52MS5MaXN0Sm9iVGVtcGxhdGVTdW1tYXJpZXNSZXF1ZXN0GjYuc2VydmljZS5vcGVyYXRpb24udjEuTGlzdEpvYlRlbXBsYXRlU3VtbWFyaWVzUmVzcG9uc2VChAIKGGNvbS5zZXJ2aWNlLm9wZXJhdGlvbi52MUIXSm9iVGVtcGxhdGVTdW1tYXJ5UHJvdG9QAVpdZ2l0aHViLmNvbS9lcm5pZWFsaWNlL2VzcXltYS9wa2cvc2NoZW1hL3YxL3NlcnZpY2Uvb3BlcmF0aW9uL2pvYl90ZW1wbGF0ZV9zdW1tYXJ5O29wZXJhdGlvbnYxogIDU09YqgIUU2VydmljZS5PcGVyYXRpb24uVjHKAhRTZXJ2aWNlXE9wZXJhdGlvblxWMeICIFNlcnZpY2VcT3BlcmF0aW9uXFYxXEdQQk1ldGFkYXRh6gIWU2VydmljZTo6T3BlcmF0aW9uOjpWMWIGcHJvdG8z", [file_domain_common_error, file_domain_common_pagination, file_domain_common_search, file_domain_common_sort, file_domain_operation_job_phase_job_phase]);
 
 /**
  * Deliverer is one staff-of-record on a template. A template can have MORE THAN
@@ -226,6 +226,19 @@ export type JobTemplateSummary = Message<"service.operation.v1.JobTemplateSummar
    * @generated from field: bool template_grain_fallback = 22;
    */
   templateGrainFallback: boolean;
+
+  /**
+   * PER-PHASE GROUP+TEMPLATE grain (23): one entry per ACTIVE
+   * job_template_phase of the row's template, ordered by phase_order (id
+   * tie-break), restricted to THIS row's (subscription_group, template) slice
+   * of the SAME resolver-scoped job set as 18–21. 18–21 fold these phases into
+   * one quadruple; 23 keeps them apart so a list can show each phase's own
+   * state. Empty for a template with no active phase, for a row with no
+   * subscription_group, and for template_grain_fallback rows.
+   *
+   * @generated from field: repeated service.operation.v1.JobTemplateSummaryPhaseStatus group_phase_statuses = 23;
+   */
+  groupPhaseStatuses: JobTemplateSummaryPhaseStatus[];
 };
 
 /**
@@ -234,6 +247,64 @@ export type JobTemplateSummary = Message<"service.operation.v1.JobTemplateSummar
  */
 export const JobTemplateSummarySchema: GenMessage<JobTemplateSummary> = /*@__PURE__*/
   messageDesc(file_service_operation_job_template_summary_job_template_summary, 1);
+
+/**
+ * JobTemplateSummaryPhaseStatus is ONE job_template_phase's approval state over
+ * a summary row's (subscription_group, template) slice. Unlike fields 14–21 it
+ * does NOT exclude no-data sheets: has_data says whether the slice bears data,
+ * so a consumer can render the derived not-started overlay (IN_PROGRESS with no
+ * data). lowest_status is the conservative LOWEST ladder rank across the
+ * slice's active job_phase rows for this phase; mixed_attention is true when
+ * those rows sit at differing statuses. A phase with no job_phase row in the
+ * slice is PHASE_APPROVAL_STATUS_UNSPECIFIED (never persisted). code/name are
+ * the phase's own data (job_template_phase.code / .name) — display vocabulary
+ * comes from data, never from this message.
+ *
+ * @generated from message service.operation.v1.JobTemplateSummaryPhaseStatus
+ */
+export type JobTemplateSummaryPhaseStatus = Message<"service.operation.v1.JobTemplateSummaryPhaseStatus"> & {
+  /**
+   * @generated from field: string job_template_phase_id = 1;
+   */
+  jobTemplatePhaseId: string;
+
+  /**
+   * @generated from field: string code = 2;
+   */
+  code: string;
+
+  /**
+   * @generated from field: string name = 3;
+   */
+  name: string;
+
+  /**
+   * @generated from field: int32 phase_order = 4;
+   */
+  phaseOrder: number;
+
+  /**
+   * @generated from field: domain.operation.v1.PhaseApprovalStatus lowest_status = 5;
+   */
+  lowestStatus: PhaseApprovalStatus;
+
+  /**
+   * @generated from field: bool mixed_attention = 6;
+   */
+  mixedAttention: boolean;
+
+  /**
+   * @generated from field: bool has_data = 7;
+   */
+  hasData: boolean;
+};
+
+/**
+ * Describes the message service.operation.v1.JobTemplateSummaryPhaseStatus.
+ * Use `create(JobTemplateSummaryPhaseStatusSchema)` to create a new message.
+ */
+export const JobTemplateSummaryPhaseStatusSchema: GenMessage<JobTemplateSummaryPhaseStatus> = /*@__PURE__*/
+  messageDesc(file_service_operation_job_template_summary_job_template_summary, 2);
 
 /**
  * JobCategorySummaryCount is the number of rows in one job-category partition
@@ -262,7 +333,7 @@ export type JobCategorySummaryCount = Message<"service.operation.v1.JobCategoryS
  * Use `create(JobCategorySummaryCountSchema)` to create a new message.
  */
 export const JobCategorySummaryCountSchema: GenMessage<JobCategorySummaryCount> = /*@__PURE__*/
-  messageDesc(file_service_operation_job_template_summary_job_template_summary, 2);
+  messageDesc(file_service_operation_job_template_summary_job_template_summary, 3);
 
 /**
  * @generated from message service.operation.v1.ListJobTemplateSummariesRequest
@@ -337,7 +408,7 @@ export type ListJobTemplateSummariesRequest = Message<"service.operation.v1.List
  * Use `create(ListJobTemplateSummariesRequestSchema)` to create a new message.
  */
 export const ListJobTemplateSummariesRequestSchema: GenMessage<ListJobTemplateSummariesRequest> = /*@__PURE__*/
-  messageDesc(file_service_operation_job_template_summary_job_template_summary, 3);
+  messageDesc(file_service_operation_job_template_summary_job_template_summary, 4);
 
 /**
  * @generated from message service.operation.v1.ListJobTemplateSummariesResponse
@@ -374,7 +445,7 @@ export type ListJobTemplateSummariesResponse = Message<"service.operation.v1.Lis
  * Use `create(ListJobTemplateSummariesResponseSchema)` to create a new message.
  */
 export const ListJobTemplateSummariesResponseSchema: GenMessage<ListJobTemplateSummariesResponse> = /*@__PURE__*/
-  messageDesc(file_service_operation_job_template_summary_job_template_summary, 4);
+  messageDesc(file_service_operation_job_template_summary_job_template_summary, 5);
 
 /**
  * @generated from service service.operation.v1.JobTemplateSummaryService

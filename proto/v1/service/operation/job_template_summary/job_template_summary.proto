@@ -143,6 +143,34 @@ message JobTemplateSummary {
   // blank/zero on this row; consumers use this marker rather than inferring the
   // grain from a nullable related id.
   bool template_grain_fallback = 22;
+  // PER-PHASE GROUP+TEMPLATE grain (23): one entry per ACTIVE
+  // job_template_phase of the row's template, ordered by phase_order (id
+  // tie-break), restricted to THIS row's (subscription_group, template) slice
+  // of the SAME resolver-scoped job set as 18–21. 18–21 fold these phases into
+  // one quadruple; 23 keeps them apart so a list can show each phase's own
+  // state. Empty for a template with no active phase, for a row with no
+  // subscription_group, and for template_grain_fallback rows.
+  repeated JobTemplateSummaryPhaseStatus group_phase_statuses = 23;
+}
+
+// JobTemplateSummaryPhaseStatus is ONE job_template_phase's approval state over
+// a summary row's (subscription_group, template) slice. Unlike fields 14–21 it
+// does NOT exclude no-data sheets: has_data says whether the slice bears data,
+// so a consumer can render the derived not-started overlay (IN_PROGRESS with no
+// data). lowest_status is the conservative LOWEST ladder rank across the
+// slice's active job_phase rows for this phase; mixed_attention is true when
+// those rows sit at differing statuses. A phase with no job_phase row in the
+// slice is PHASE_APPROVAL_STATUS_UNSPECIFIED (never persisted). code/name are
+// the phase's own data (job_template_phase.code / .name) — display vocabulary
+// comes from data, never from this message.
+message JobTemplateSummaryPhaseStatus {
+  string job_template_phase_id = 1;
+  string code = 2;
+  string name = 3;
+  int32 phase_order = 4;
+  domain.operation.v1.PhaseApprovalStatus lowest_status = 5;
+  bool mixed_attention = 6;
+  bool has_data = 7;
 }
 
 // JobCategorySummaryCount is the number of rows in one job-category partition
